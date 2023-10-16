@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SavingsDialogProps {
+interface SavingsDialogProps {
     open: boolean
     onClose?: () => void
 }

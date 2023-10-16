@@ -9,7 +9,7 @@ import { OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shar
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 
-export interface HubContentProps {
+interface HubContentProps {
     onClose?: () => void
 }
 

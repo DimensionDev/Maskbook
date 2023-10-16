@@ -186,7 +186,7 @@ function resetTwitterActivatedContent() {
     }
 }
 
-export function ProfileTabForTokenAndPersona() {
+function ProfileTabForTokenAndPersona() {
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
@@ -228,7 +228,7 @@ export function ProfileTabForTokenAndPersona() {
     )
 }
 
-export function ProfileTabForDAO() {
+function ProfileTabForDAO() {
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
     const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)

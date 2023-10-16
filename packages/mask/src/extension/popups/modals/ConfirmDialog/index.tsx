@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmit' | 'onClose'> {
+interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmit' | 'onClose'> {
     title?: string
     message?: ReactNode | string
     description?: ReactNode | string
@@ -65,7 +65,7 @@ export interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmi
 }
 
 // Yet, another Confirm Dialog
-export const Dialog = memo(
+const Dialog = memo(
     ({
         title,
         message,

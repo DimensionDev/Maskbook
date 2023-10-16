@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AccountsManagePopoverProps {
+interface AccountsManagePopoverProps {
     open: boolean
     anchorEl: HTMLElement | null
     onClose: () => void

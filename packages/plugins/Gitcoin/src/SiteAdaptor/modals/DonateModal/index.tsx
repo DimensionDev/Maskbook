@@ -9,7 +9,7 @@ export interface DonateModalOpenProps extends Omit<InjectedDialogProps, 'open'> 
     grant: GitcoinGrant
 }
 
-export interface DonateModalProps {}
+interface DonateModalProps {}
 
 export const DonateModal = forwardRef<SingletonModalRefCreator<DonateModalOpenProps>, DonateModalProps>(
     (props, ref) => {

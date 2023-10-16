@@ -7,4 +7,4 @@ export interface TipTask {
     accounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 
-export type TipNFTKeyPair = [address: string, tokenId: string]
+type TipNFTKeyPair = [address: string, tokenId: string]

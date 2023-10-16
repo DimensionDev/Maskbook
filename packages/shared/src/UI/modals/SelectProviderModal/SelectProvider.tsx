@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectProviderProps {
+interface SelectProviderProps {
     open: boolean
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]

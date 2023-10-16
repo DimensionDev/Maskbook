@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import type { ChainDescriptor } from '@masknet/web3-shared-base'
 
-export interface ExplorerOptions {
+interface ExplorerOptions {
     addressPathname?: string
     blockPathname?: string
     transactionPathname?: string
@@ -60,15 +60,6 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
 
         return urlcat(explorerUrl.url, this.options.transactionPathname, {
             id,
-            ...explorerUrl?.parameters,
-        })
-    }
-
-    domainLink = (chainId: ChainId, domain: string) => {
-        const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return
-        return urlcat(explorerUrl.url, this.options.domainPathname, {
-            domain,
             ...explorerUrl?.parameters,
         })
     }

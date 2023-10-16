@@ -24,7 +24,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface TransactionSnackbarProps<T extends NetworkPluginID> {
+interface TransactionSnackbarProps<T extends NetworkPluginID> {
     pluginID: T
 }
 

@@ -1,6 +1,6 @@
 import { PopupRoutes } from '@masknet/shared-base'
 import type { Permissions } from 'webextension-polyfill'
-export function getPopupRouteURLWithNoParam(kind: PopupRoutes) {
+function getPopupRouteURLWithNoParam(kind: PopupRoutes) {
     return browser.runtime.getURL(`/popups.html#${kind}`)
 }
 export function getPermissionRequestURL(permission: Permissions.Permissions) {

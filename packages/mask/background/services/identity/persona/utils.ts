@@ -42,27 +42,10 @@ export async function deriveLocalKeyFromECDHKey(
 // coinType = ether
 const path = "m/44'/60'/0'/0/0"
 
-export type MnemonicGenerationInformation = {
+type MnemonicGenerationInformation = {
     key: JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>
     password: string
     mnemonicRecord: NonNullable<PersonaRecord['mnemonic']>
-}
-export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(
-    password: string,
-): Promise<MnemonicGenerationInformation> {
-    const mnemonicWord = bip39.generateMnemonic()
-    const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
-    const masterKey = wallet.HDKey.parseMasterSeed(seed)
-    const derivedKey = masterKey.derive(path)
-    const key = await split_ec_k256_key_pair_into_pub_priv(await HDKeyToJwk(derivedKey))
-    return {
-        key,
-        password,
-        mnemonicRecord: {
-            parameter: { path, withPassword: password.length > 0 },
-            words: mnemonicWord,
-        },
-    }
 }
 
 export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(

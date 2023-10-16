@@ -22,7 +22,6 @@ import { Web3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
-import { DialogTabs } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
@@ -75,7 +74,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
-    const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
@@ -103,10 +101,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
-        const [, setValue] = state
-        setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state, step])
+    }, [props, step])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()

@@ -42,7 +42,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
     }),
 )
 
-export interface SearchResultInspectorProps {
+interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity | null
     isProfilePage?: boolean

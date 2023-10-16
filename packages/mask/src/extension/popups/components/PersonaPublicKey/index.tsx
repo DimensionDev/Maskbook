@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, { iconSize }) => ({
     },
 }))
 
-export interface PersonaPublicKeyProps extends withClasses<'text' | 'icon'> {
+interface PersonaPublicKeyProps extends withClasses<'text' | 'icon'> {
     rawPublicKey: string
     publicHexString: string
     iconSize: number

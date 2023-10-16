@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WordsProps extends withClasses<'container' | 'wordCard' | 'text'> {
+interface WordsProps extends withClasses<'container' | 'wordCard' | 'text'> {
     words: string[]
 }
 

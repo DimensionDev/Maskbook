@@ -10,7 +10,7 @@ export interface PersonaSelectPanelModalOpenProps {
     position?: PositionOption
 }
 
-export interface PersonaSelectPanelModalProps {}
+interface PersonaSelectPanelModalProps {}
 
 export const PersonaSelectPanelModal = forwardRef<
     SingletonModalRefCreator<PersonaSelectPanelModalOpenProps>,

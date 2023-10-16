@@ -40,7 +40,7 @@ const isFortmaticSupported = (chainId: ChainId): chainId is ChainIdFortmatic => 
     return [ChainId.Mainnet, ChainId.BSC].includes(chainId)
 }
 
-export type ChainIdFortmatic =
+type ChainIdFortmatic =
     | ChainId.Mainnet
     | ChainId.BSC
     | ChainId.Matic

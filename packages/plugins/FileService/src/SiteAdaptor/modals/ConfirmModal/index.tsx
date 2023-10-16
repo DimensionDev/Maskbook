@@ -13,7 +13,7 @@ export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title'
 
 export type ConfirmModalCloseProps = boolean
 
-export interface ConfirmModalProps {}
+interface ConfirmModalProps {}
 
 export const ConfirmModal = forwardRef<
     SingletonModalRefCreator<ConfirmModalOpenProps, ConfirmModalCloseProps>,

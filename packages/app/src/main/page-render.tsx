@@ -9,9 +9,7 @@ const GlobalInjection = createInjectHooksRenderer(
     (x) => x.GlobalInjection,
 )
 
-export interface PageInspectorProps {}
-
-export default function PageInspectorRender(props: PageInspectorProps) {
+export default function PageInspectorRender() {
     return (
         <DisableShadowRootContext.Provider value={false}>
             <ShadowRootIsolation>

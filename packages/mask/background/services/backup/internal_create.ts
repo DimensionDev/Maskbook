@@ -8,7 +8,7 @@ import { queryPostsDB } from '../../database/post/index.js'
 import { internal_wallet_backup } from './internal_wallet_backup.js'
 
 /** @internal */
-export interface InternalBackupOptions {
+interface InternalBackupOptions {
     hasPrivateKeyOnly?: boolean
     noPosts?: boolean
     noWallets?: boolean

@@ -151,7 +151,7 @@ const useStyles = makeStyles<{
     }
 })
 
-export interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
+interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
     stats: Stat[]
     currency: Currency
     currentTab: ContentTab

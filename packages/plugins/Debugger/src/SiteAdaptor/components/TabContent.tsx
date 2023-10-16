@@ -4,7 +4,7 @@ import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-export interface TabContentProps {
+interface TabContentProps {
     identity?: SocialIdentity | null
     socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
 }

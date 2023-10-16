@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PersonaItemProps extends Omit<ListItemProps, 'onSelect'> {
+interface PersonaItemProps extends Omit<ListItemProps, 'onSelect'> {
     persona: PersonaInformation
     isSelected: boolean
     onSelect: (persona: PersonaInformation) => void

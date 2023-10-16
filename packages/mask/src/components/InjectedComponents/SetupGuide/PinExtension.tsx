@@ -11,7 +11,7 @@ interface PinExtensionProps {
     onClose?: () => void
 }
 
-export const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     button: {
         minWidth: 150,
         height: 40,

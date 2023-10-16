@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DesktopMnemonicConfirmProps {
+interface DesktopMnemonicConfirmProps {
     puzzleWords: string[]
     indexes?: number[]
     onChange(word: string, index: number): void

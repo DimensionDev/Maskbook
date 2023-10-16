@@ -14,7 +14,7 @@ export interface FeedDetailsModalOpenProps
     scopedDomainsMap: Record<string, string>
 }
 
-export interface FeedDetailsModalProps {}
+interface FeedDetailsModalProps {}
 
 export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsModalOpenProps>, FeedDetailsModalProps>(
     (props, ref) => {

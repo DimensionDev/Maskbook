@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export interface SettingsStorage {
+interface SettingsStorage {
     currencyType: CurrencyType
     gasOptionType: GasOptionType
     fungibleAssetSourceType: SourceType

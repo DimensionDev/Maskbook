@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SocialAccountsProps {
+interface SocialAccountsProps {
     accounts: ProfileAccount[]
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void

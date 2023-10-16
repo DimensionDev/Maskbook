@@ -44,12 +44,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CoinMarketTableProps {
+interface CoinMarketTableProps {
     result: Web3Helper.TokenResultAll
     trending: Trending
 }
 
-export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
+function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const t = useTraderTrans()
     const { trending, result } = props
     const chainId = result.chainId ?? trending.coin.chainId

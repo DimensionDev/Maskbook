@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivityListProps {}
+interface ActivityListProps {}
 
 export const ActivityList = memo<ActivityListProps>(function ActivityList() {
     const { t } = useMaskSharedTrans()

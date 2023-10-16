@@ -112,7 +112,7 @@ const useStyles = makeStyles<{ isPopper: boolean; themeMode?: 'dim' | 'dark' | '
     }),
 )
 
-export interface NonFungibleTickersTableProps {
+interface NonFungibleTickersTableProps {
     id: string
     chainId: Web3Helper.ChainIdAll
     result: Web3Helper.TokenResultAll

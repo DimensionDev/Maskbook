@@ -6,7 +6,7 @@ import { RedPacket } from './RedPacket/index.js'
 import { RedPacketRPC } from '../messages.js'
 import type { RedPacketJSONPayload, RedPacketRecord } from '@masknet/web3-providers/types'
 
-export interface RedPacketInPostProps {
+interface RedPacketInPostProps {
     payload: RedPacketJSONPayload
 }
 

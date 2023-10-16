@@ -9,7 +9,7 @@ export interface TransactionMethodABI {
     }>
 }
 
-export interface TransactionComputationContext {
+interface TransactionComputationContext {
     /** the from address. */
     from: string
     /** the to address */

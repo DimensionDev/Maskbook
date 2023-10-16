@@ -60,18 +60,6 @@ export function useCurrentVisitingIdentity() {
     )
 }
 
-export function useCurrentLinkedPersona() {
-    const currentIdentity = useCurrentIdentity()
-    return useQuery(
-        ['current-linked-persona', currentIdentity?.linkedPersona],
-        async () => {
-            if (!currentIdentity?.linkedPersona) return
-            return Services.Identity.queryPersona(currentIdentity.linkedPersona)
-        },
-        { networkMode: 'always' },
-    )
-}
-
 /**
  * Get the social identity of the given identity
  */
@@ -112,22 +100,6 @@ export function useSocialIdentityByUserId(userId?: string) {
         },
         { networkMode: 'always' },
     )
-    return useSocialIdentity(identity)
-}
-
-/**
- * Get the social identity of the last recognized identity
- */
-export function useLastRecognizedSocialIdentity() {
-    const identity = useLastRecognizedIdentity()
-    return useSocialIdentity(identity)
-}
-
-/**
- * Get the social identity of the current visiting identity
- */
-export function useCurrentVisitingSocialIdentity() {
-    const identity = useCurrentVisitingIdentity()
     return useSocialIdentity(identity)
 }
 

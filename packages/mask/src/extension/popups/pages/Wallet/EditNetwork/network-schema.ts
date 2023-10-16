@@ -11,7 +11,7 @@ type NameValidator = (name: string) => boolean | Promise<boolean>
  * duplicated name validator is injected as dependency, both frontend and
  * background can provide their own validator
  */
-export function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
+function createBaseSchema(t: I18NFunction, duplicateNameValidator: NameValidator) {
     const schema = z.object({
         name: z.string().trim().nonempty().refine(duplicateNameValidator, t('network_already_exists')),
         rpc: z

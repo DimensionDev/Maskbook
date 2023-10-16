@@ -24,7 +24,7 @@ export type NFTApprovalInfoAccountMap = Record<
     >
 >
 
-export class ApprovalListState {
+class ApprovalListState {
     private _token_state: TokenApprovalInfoAccountMap = {}
     private _nft_state: NFTApprovalInfoAccountMap = {}
 

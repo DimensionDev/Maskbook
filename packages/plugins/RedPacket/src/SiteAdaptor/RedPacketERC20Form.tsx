@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RedPacketFormProps {
+interface RedPacketFormProps {
     onChange(settings: RedPacketSettings): void
     onClose: () => void
     origin?: RedPacketSettings

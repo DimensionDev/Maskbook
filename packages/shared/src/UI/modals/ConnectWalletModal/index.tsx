@@ -12,7 +12,7 @@ export interface ConnectWalletModalOpenProps {
 
 export type ConnectWalletModalCloseProps = boolean
 
-export interface ConnectWalletModalProps {}
+interface ConnectWalletModalProps {}
 
 export const ConnectWalletModal = forwardRef<
     SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>,

@@ -4,7 +4,7 @@ import { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSiteAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 
-export interface ProfileCoverProps extends withClasses<'root'> {}
+interface ProfileCoverProps extends withClasses<'root'> {}
 
 const useStyles = makeStyles()(() => ({
     root: {

@@ -6,7 +6,7 @@ import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { WidgetContent } from './WidgetContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
-export interface WidgetDialogProps {}
+interface WidgetDialogProps {}
 
 export function WidgetDialog(props: WidgetDialogProps) {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.widgetDialogUpdated)

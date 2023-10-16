@@ -16,6 +16,6 @@ export function injectProfileCover(signal: AbortSignal) {
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileCoverAtTwitter />)
 }
 
-export function ProfileCoverAtTwitter() {
+function ProfileCoverAtTwitter() {
     return <ProfileCover />
 }

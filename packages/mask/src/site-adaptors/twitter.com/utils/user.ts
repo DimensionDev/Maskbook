@@ -2,15 +2,7 @@ import { isNull } from 'lodash-es'
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import type { SiteAdaptor } from '@masknet/types'
-import { collectNodeText } from '../../../utils/index.js'
 import { twitterBase } from '../base.js'
-import {
-    personalHomepageSelector,
-    profileBioSelector,
-    searchAvatarSelector,
-    searchNFTAvatarSelector,
-    searchNickNameSelector,
-} from './selector.js'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -23,44 +15,6 @@ export const usernameValidator: NonNullable<SiteAdaptor.Utils['isValidUsername']
     }
     if (name.length < 4) return false
     return true
-}
-
-export const getNickname = () => {
-    const node = searchNickNameSelector().evaluate()
-    if (!node) return ''
-
-    return collectNodeText(node)
-}
-
-export const getTwitterId = () => {
-    const ele = searchAvatarSelector().evaluate()?.closest('a') || searchNFTAvatarSelector().evaluate()?.closest('a')
-    if (!ele) return ''
-
-    const link = ele.getAttribute('href')
-    if (!link) return ''
-
-    const [, userId] = link.match(/^\/(\w+)\/(photo|nft)$/) ?? []
-    return userId
-}
-
-export const getBio = () => {
-    const node = profileBioSelector().evaluate()
-    return node ? collectNodeText(node) : ''
-}
-
-export const getPersonalHomepage = () => {
-    const node = personalHomepageSelector().evaluate()
-    return node?.getAttribute('href') ?? ''
-}
-
-export const getAvatar = () => {
-    const node = searchAvatarSelector().evaluate() || searchNFTAvatarSelector().evaluate()
-    if (node) {
-        const imageURL = node.getAttribute('src') ?? ''
-        return imageURL.trim()
-    }
-
-    return ''
 }
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {

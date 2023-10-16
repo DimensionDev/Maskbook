@@ -19,7 +19,7 @@ export type AddCollectiblesModalCloseProps =
     | [contract: NonFungibleTokenContract<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, tokenIds: string[]]
     | undefined
 
-export interface AddCollectiblesModalProps {}
+interface AddCollectiblesModalProps {}
 
 export const AddCollectiblesModal = forwardRef<
     SingletonModalRefCreator<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>,

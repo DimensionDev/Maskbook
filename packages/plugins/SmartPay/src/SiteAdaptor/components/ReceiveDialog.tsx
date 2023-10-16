@@ -66,7 +66,7 @@ interface Props {
     open: boolean
     onClose(): void
 }
-export const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
+const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
     const t = useSmartPayTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

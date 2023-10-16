@@ -87,7 +87,7 @@ function Web3ProfileSettingButton() {
     )
 }
 
-export interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
+interface ProfileCardTitleProps extends HTMLProps<HTMLDivElement> {
     identity?: SocialIdentity
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string

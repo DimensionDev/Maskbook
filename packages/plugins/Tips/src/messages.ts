@@ -2,7 +2,7 @@ import { PluginID } from '@masknet/shared-base'
 import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { TipTask } from './types/index.js'
 
-export interface TipMessage {
+interface TipMessage {
     tipTask: TipTask
     tipTaskUpdate: TipTask
 }

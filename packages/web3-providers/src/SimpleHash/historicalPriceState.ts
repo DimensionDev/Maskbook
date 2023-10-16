@@ -6,10 +6,10 @@ import type { TrendingAPI } from '../entry-types.js'
 import { BigNumber } from 'bignumber.js'
 import { leftShift } from '@masknet/web3-shared-base'
 
-export type HistoricalPriceMap = Record<string, TrendingAPI.Stat[]>
-export type PaymentTokenMap = Record<string, PaymentToken>
+type HistoricalPriceMap = Record<string, TrendingAPI.Stat[]>
+type PaymentTokenMap = Record<string, PaymentToken>
 
-export class HistoricalPriceState {
+class HistoricalPriceState {
     private _priceState: HistoricalPriceMap = {}
     private _paymentTokenState: PaymentTokenMap = {}
     private _allLoadedIdListState: string[] = []

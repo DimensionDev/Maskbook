@@ -11,7 +11,7 @@ import {
 import { useMaskSharedTrans } from '../../../utils/index.js'
 import type { Permissions } from 'webextension-polyfill'
 
-export interface RequestPermissionProps extends Permissions.AnyPermissions {
+interface RequestPermissionProps extends Permissions.AnyPermissions {
     onRequestApprove(): void
     onCancel(): void
 }

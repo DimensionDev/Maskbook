@@ -61,7 +61,7 @@ interface CreateParams {
     gasError: Error | null
 }
 
-export function useCreateParamsCallback(
+function useCreateParamsCallback(
     expectedChainId: ChainId,
     redPacketSettings: RedPacketSettings | undefined,
     version: number,

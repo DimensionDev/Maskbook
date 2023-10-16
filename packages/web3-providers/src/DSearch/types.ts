@@ -1,6 +1,6 @@
 import type { SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 
-export interface Rule<ChainId, SchemaType> {
+interface Rule<ChainId, SchemaType> {
     key: string
     type: 'exact' | 'fuzzy'
     filter?: (

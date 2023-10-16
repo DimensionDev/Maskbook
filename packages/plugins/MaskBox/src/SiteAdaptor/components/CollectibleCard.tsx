@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CollectibleCardProps {
+interface CollectibleCardProps {
     className?: string
     provider: SourceType
     wallet?: Wallet

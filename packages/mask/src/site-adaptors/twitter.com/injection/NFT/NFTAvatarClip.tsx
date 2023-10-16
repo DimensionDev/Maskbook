@@ -86,7 +86,7 @@ interface NFTAvatarClipOrSquareProps {
     size: number
     avatarType: AvatarType
 }
-export function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
+function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
     const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)

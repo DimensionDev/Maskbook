@@ -12,7 +12,7 @@ export interface BackupPreviewModalOpenProps {
     abstract?: string
 }
 
-export interface BackupPreviewModalProps {}
+interface BackupPreviewModalProps {}
 
 export const BackupPreviewModal = forwardRef<
     SingletonModalRefCreator<BackupPreviewModalOpenProps>,

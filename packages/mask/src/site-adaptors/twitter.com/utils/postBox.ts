@@ -8,8 +8,6 @@ export const getEditorContent = () => {
     return (editorNode as HTMLTextAreaElement).value
 }
 
-export const isMobile = () => globalThis.location.host.includes('mobile')
-
 export const isCompose = () => globalThis.location.pathname.includes('compose')
 
 export const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate() === document.activeElement

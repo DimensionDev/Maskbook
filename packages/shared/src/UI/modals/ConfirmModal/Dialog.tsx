@@ -23,7 +23,7 @@ const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     },
 }))
 
-export interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
+interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
     open: boolean
     title?: string
     confirmLabel?: React.ReactNode | string

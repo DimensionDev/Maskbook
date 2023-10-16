@@ -30,7 +30,7 @@ export const Footer: ComponentType<JSX.IntrinsicElements['footer']> = styled('fo
     },
 }))
 
-export const LogoBoxStyled = styled(Box)(({ theme }) => ({
+const LogoBoxStyled = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(10),
     display: 'flex',
     flexDirection: 'column',

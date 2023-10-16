@@ -19,7 +19,7 @@ import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 
-export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
+const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
         root: {
             borderRadius: theme.spacing(2),
@@ -126,7 +126,7 @@ export const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated 
     }
 })
 
-export interface RedPacketProps {
+interface RedPacketProps {
     payload: RedPacketJSONPayload
 }
 

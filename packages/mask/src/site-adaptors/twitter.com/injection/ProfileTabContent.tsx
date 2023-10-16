@@ -95,7 +95,7 @@ const useStyles = makeStyles()((theme) => {
 interface Props {
     floating?: boolean
 }
-export const ProfileTabContentAtTwitter = memo(function ProfileTabContentAtTwitter({ floating }: Props) {
+const ProfileTabContentAtTwitter = memo(function ProfileTabContentAtTwitter({ floating }: Props) {
     const { classes } = useStyles()
     const content = (
         <ProfileTabContent

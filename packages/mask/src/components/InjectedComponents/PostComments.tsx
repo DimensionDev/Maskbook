@@ -21,8 +21,8 @@ const useStyle = makeStyles()({
         textOverflow: 'clip',
     },
 })
-export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
-export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
+type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
+function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     const { classes } = useStyle(undefined, { props: props.ChipProps || {} })
     return (
         <>

@@ -17,7 +17,7 @@ export interface FT_Price {
     updated_at: string
 }
 
-export interface FT_Metadata {
+interface FT_Metadata {
     contract_address: string
     name: string
     symbol: string
@@ -109,7 +109,7 @@ export interface ENSRecord {
     text_records: Record<string, string>
 }
 
-export interface Event {
+interface Event {
     block_number: number
     function: string
     method_id: string

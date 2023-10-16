@@ -6,7 +6,7 @@ import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { HubContent } from './HubContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
-export interface HubDialogProps {}
+interface HubDialogProps {}
 
 export function HubDialog(props: HubDialogProps) {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)

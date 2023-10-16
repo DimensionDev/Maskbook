@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface HandlerDescriptionProps extends withClasses<'container'> {
+interface HandlerDescriptionProps extends withClasses<'container'> {
     profile?: {
         avatar?: string
         handle: string

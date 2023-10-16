@@ -3,12 +3,12 @@ import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { classNames } from '../helpers/classNames.js'
 
-export interface DropdownMenuItem {
+interface DropdownMenuItem {
     id: string
     label: string
 }
 
-export interface DropdownMenuProps {
+interface DropdownMenuProps {
     items: DropdownMenuItem[]
     activeItemId: string
     onItemChange: (item: DropdownMenuItem) => void

@@ -2,7 +2,7 @@ import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-
 import { serializer } from '@masknet/shared-base'
 import { PetsPluginID } from './constants.js'
 import type { PetsDialogEvent } from './types.js'
-export interface PetMessage {
+interface PetMessage {
     /**
      * Pets essay set dialog
      */

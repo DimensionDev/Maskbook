@@ -2,7 +2,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { useCallback } from 'react'
 import { useLocalStorage } from 'react-use'
 
-export const PLUGIN_GUIDE_INIT = 1
+const PLUGIN_GUIDE_INIT = 1
 
 export const usePluginGuideRecord = (pluginID: PluginID, totalStep: number, key?: string, onFinish?: () => void) => {
     const [setting = PLUGIN_GUIDE_INIT, setSetting] = useLocalStorage<number>(

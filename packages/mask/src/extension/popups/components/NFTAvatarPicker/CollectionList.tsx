@@ -7,7 +7,7 @@ import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 
-export interface CollectionListProps extends BoxProps {
+interface CollectionListProps extends BoxProps {
     loading: boolean
     tokens: Web3Helper.NonFungibleAssetAll[]
     account?: string

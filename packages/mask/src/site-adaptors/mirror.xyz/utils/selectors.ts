@@ -7,12 +7,9 @@ export const querySelector = <T extends E, SingleMode extends boolean = true>(se
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-export const querySelectorAll = <T extends E>(selector: string) => {
+const querySelectorAll = <T extends E>(selector: string) => {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
-
-export const entryInfoSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('div+button').map((x) => x.parentElement?.firstElementChild?.lastElementChild as HTMLElement)
 
 export const postsContentSelector = () =>
     querySelectorAll(

@@ -2,9 +2,9 @@ import urlcat from 'urlcat'
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { GITCOIN_API_GRANTS_V1, type TenantTypes } from '../constants.js'
 
-export interface Metadata {}
+interface Metadata {}
 
-export interface AdminProfile {
+interface AdminProfile {
     id: number
     url: string
     handle: string

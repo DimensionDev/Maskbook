@@ -65,7 +65,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
     }),
 )
 
-export interface ApprovalDialogProps {
+interface ApprovalDialogProps {
     open: boolean
     onClose?: () => void
 }

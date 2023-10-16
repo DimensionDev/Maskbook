@@ -8,7 +8,7 @@ import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 import { resolveTradeProviderName } from '../../helpers/index.js'
 
-export interface TraderInfoProps {
+interface TraderInfoProps {
     trade: AsyncStateRetry<TraderAPI.TradeInfo>
     isBest?: boolean
     isFocus?: boolean

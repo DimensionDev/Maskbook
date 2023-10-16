@@ -1,14 +1,5 @@
 import { regexMatch } from '../../../utils/utils.js'
 
-export const twitterUrl = {
-    hostIdentifier: 'twitter.com',
-    hostLeadingUrl: 'https://twitter.com',
-    hostLeadingUrlMobile: 'https://mobile.twitter.com',
-}
-
-export const hostLeadingUrlAutoTwitter = (isMobile: boolean) =>
-    isMobile ? twitterUrl.hostLeadingUrlMobile : twitterUrl.hostLeadingUrl
-
 // more about twitter photo url formatting:
 // https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
 export const canonifyImgUrl = (url: string) => {

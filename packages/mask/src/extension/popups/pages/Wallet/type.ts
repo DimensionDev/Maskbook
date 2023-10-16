@@ -7,7 +7,7 @@ export enum ReplaceType {
     SPEED_UP = 'SPEED_UP',
 }
 
-export enum TransferAddressError {
+enum TransferAddressError {
     SAME_ACCOUNT = 'SAME_ACCOUNT',
     CONTRACT_ADDRESS = 'CONTRACT_ADDRESS',
     RESOLVE_FAILED = 'RESOLVE_FAILED',

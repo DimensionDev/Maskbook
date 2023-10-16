@@ -168,7 +168,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PersonaHomeUIProps {
+interface PersonaHomeUIProps {
     hasProofs?: boolean
     avatar?: string | null
     fingerprint?: string

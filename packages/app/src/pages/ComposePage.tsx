@@ -9,7 +9,7 @@ import { createPostInfoContext } from '../helpers/createPostInfoContext.js'
 import { DecryptMessage } from '../main/DecryptMessage.js'
 import { usePostPayload } from '../hooks/usePostPayload.js'
 
-export interface ComposePageProps {}
+interface ComposePageProps {}
 
 async function throws(): Promise<never> {
     throw new Error('Unreachable')

@@ -2,7 +2,7 @@ import type { EventBasedChannel } from 'async-call-rpc'
 import type { PluginRuntime } from './runtime.js'
 import { combineAbortSignal } from '@masknet/kit'
 
-export interface PluginListItem {
+interface PluginListItem {
     normal?: boolean
     local?: boolean
     locales?: Array<{ url: string; language: string }>

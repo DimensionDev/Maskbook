@@ -120,7 +120,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectRecipientsDialogUIProps {
+interface SelectRecipientsDialogUIProps {
     open: boolean
     items: Profile[]
     selected: Profile[]

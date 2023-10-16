@@ -57,7 +57,7 @@ export async function getThumbCoins(keyword: string) {
 // #endregion
 
 // #region price chart
-export type Stat = [number, number]
+type Stat = [number, number]
 
 export async function getPriceStats(coinId: string, currencyId: string, days: number) {
     return fetchFromCoinGecko<{
@@ -83,21 +83,7 @@ export async function getTokenPrice(platform_id: string, address: string, curren
     return currencies?.[currencyType] ? Number(currencies[currencyType]) : undefined
 }
 
-export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {
-    const response = await fetchFromCoinGecko<Record<string, Record<CurrencyType, number>>>(
-        urlcat(COINGECKO_URL_BASE, '/simple/price', {
-            ids: listOfAddress,
-            vs_currencies: currencyType,
-        }),
-        undefined,
-    )
-
-    return Object.fromEntries(
-        Object.keys(response).map((address) => [address, response[address.toLowerCase()][currencyType]]),
-    )
-}
-
-export async function getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
+async function getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
     return fetchFromCoinGecko<Record<string, Price>>(
         urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
             platform_id,

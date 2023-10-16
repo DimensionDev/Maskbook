@@ -36,16 +36,6 @@ export async function getAllFiles() {
     return files.sort((a, b) => compareDesc(new Date(a.createdAt), new Date(b.createdAt)))
 }
 
-export async function getRecentFiles() {
-    const files = await getAllFiles()
-    return files.slice(0, 4)
-}
-
-export async function getFileInfo(checksum: string) {
-    await migrationV1()
-    return Database.get('file', checksum)
-}
-
 export async function setFileInfo(info: FileInfo) {
     await migrationV1()
     return Database.add(info)

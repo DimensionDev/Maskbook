@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DrawDialogProps {
+interface DrawDialogProps {
     boxInfo: BoxInfo
     open: boolean
     drawing?: boolean

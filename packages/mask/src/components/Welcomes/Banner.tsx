@@ -41,7 +41,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export function BannerUI(props: BannerUIProps) {
+function BannerUI(props: BannerUIProps) {
     const { classes } = useStyles(undefined, { props })
 
     return props.nextStep === 'hidden' ? null : (
@@ -51,7 +51,7 @@ export function BannerUI(props: BannerUIProps) {
     )
 }
 
-export interface BannerProps extends Partial<BannerUIProps> {}
+interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()

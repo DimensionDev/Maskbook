@@ -1,4 +1,4 @@
-export enum OrderStatus {
+enum OrderStatus {
     CANCELLED = 'CANCELLED',
     ERC_APPROVAL = 'ERC_APPROVAL',
     ERC20_APPROVAL = 'ERC20_APPROVAL',
@@ -9,7 +9,7 @@ export enum OrderStatus {
     VALID = 'VALID',
 }
 
-export enum EventType {
+enum EventType {
     MINT = 'MINT',
     TRANSFER = 'TRANSFER',
     LIST = 'LIST',
@@ -19,14 +19,14 @@ export enum EventType {
     CANCEL_OFFER = 'CANCEL_OFFER',
 }
 
-export enum TokenFlag {
+enum TokenFlag {
     NO_IMAGE = 'NO_IMAGE',
     NONE = 'NONE',
     PORNOGRAPHY = 'PORNOGRAPHY',
     TRIAGE = 'TRIAGE',
 }
 
-export interface Account {
+interface Account {
     address: string
     profile_img_url: string
     user?: {
@@ -34,7 +34,7 @@ export interface Account {
     }
 }
 
-export interface Attribute {
+interface Attribute {
     traitType: string
     value: string
     displayType: string

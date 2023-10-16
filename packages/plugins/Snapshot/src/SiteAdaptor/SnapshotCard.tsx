@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SnapshotCardProps {
+interface SnapshotCardProps {
     title: (JSX.Element & React.ReactNode) | string
     children?: React.ReactNode
     lazy?: boolean

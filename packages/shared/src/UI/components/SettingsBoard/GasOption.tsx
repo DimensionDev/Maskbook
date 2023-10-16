@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface GasOptionProps {
+interface GasOptionProps {
     type: GasOptionType
     option: Web3Helper.GasOptionAll
     lang?: SupportedLanguages

@@ -29,7 +29,7 @@ export interface SelectGasSettings {
     transaction?: Web3Helper.TransactionAll
 }
 
-export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+interface SelectGasSettingsDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']

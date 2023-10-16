@@ -5,7 +5,7 @@ import { Web3ContextProvider, useChainIdValid, useNetworkContext } from '@maskne
 import { CardDialog } from './CardDialog/CardDialog.js'
 import { Context } from './Context/index.js'
 
-export interface DialogInspectorProps {}
+interface DialogInspectorProps {}
 
 export function DialogInspector(props: DialogInspectorProps) {
     const { pluginID: parentPluginID } = useNetworkContext()

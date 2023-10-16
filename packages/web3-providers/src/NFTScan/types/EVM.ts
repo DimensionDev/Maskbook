@@ -90,7 +90,7 @@ export namespace EVM {
     /**
      * Unstable API.
      */
-    export interface NFTPlatformInfo {
+    interface NFTPlatformInfo {
         description: string
         royalty: string
         trendingVolumeAverage_24h?: number
@@ -126,7 +126,7 @@ export namespace EVM {
         pageView?: number
     }
 
-    export interface SearchNFTPlatformNameResult {
+    interface SearchNFTPlatformNameResult {
         /** url */
         image: string
         address: string
@@ -140,14 +140,14 @@ export namespace EVM {
         average_price: number
         volume: number
     }
-    export interface VolumeAndFloorRecord {
+    interface VolumeAndFloorRecord {
         /** timestamp */
         time: number
         price: number
         volume: number
         sales: number
     }
-    export interface VolumeAndFloor {
+    interface VolumeAndFloor {
         code: number
         result: VolumeAndFloorRecord[]
         sales: number

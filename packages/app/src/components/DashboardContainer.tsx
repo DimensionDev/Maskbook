@@ -10,7 +10,7 @@ import { SearchBox } from './SearchBox.js'
 import { useSetThemeMode } from '../hooks/useSetThemeMode.js'
 import { useThemeMode } from '../hooks/useThemeMode.js'
 
-export interface DashboardContainerProps {
+interface DashboardContainerProps {
     children: React.ReactNode
 }
 

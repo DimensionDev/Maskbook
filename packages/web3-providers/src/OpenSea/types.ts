@@ -8,7 +8,7 @@ export enum EventType {
     Approve = 'approve',
 }
 
-export interface OpenSeaFees {
+interface OpenSeaFees {
     /**
      * @deprecated
      * use fee instead
@@ -19,7 +19,7 @@ export interface OpenSeaFees {
     dev_buyer_fee_basis_points: number
 }
 
-export interface Asset {
+interface Asset {
     token_id: string
     token_address: string
     schema_name?: string
@@ -28,7 +28,7 @@ export interface Asset {
     decimals?: number
 }
 
-export interface AssetToken {
+interface AssetToken {
     image_url?: string
     eth_price?: string
     usd_price?: string
@@ -38,7 +38,7 @@ export interface AssetToken {
     address: string
 }
 
-export interface AssetOrder {
+interface AssetOrder {
     created_time?: string
     current_price?: string
     current_bounty?: string
@@ -57,7 +57,7 @@ export interface AssetOrder {
     order_hash: string
 }
 
-export interface AssetEvent {
+interface AssetEvent {
     event_type: string
     event_timestamp: number
     auction_type: string
@@ -239,19 +239,19 @@ export interface OpenSeaAssetEvent {
     created_date: string
 }
 
-export interface OrderAccount {
+interface OrderAccount {
     user: number
     address: string
     profile_img_url?: string
     config: string
 }
 
-export interface OrderFee {
+interface OrderFee {
     account: OrderAccount
     basis_points: string
 }
 
-export interface OrderConsideration {
+interface OrderConsideration {
     itemType: number
     token: string
     identifierOrCriteria: string
@@ -260,7 +260,7 @@ export interface OrderConsideration {
     recipient: string
 }
 
-export interface OrderProtocol {
+interface OrderProtocol {
     parameters: {
         offerer: string
         offer: OrderConsideration[]
@@ -277,9 +277,9 @@ export interface OrderProtocol {
     }
 }
 
-export interface OrderAssetBundle {}
+interface OrderAssetBundle {}
 
-export interface OpenSeaAssetOrder {
+interface OpenSeaAssetOrder {
     created_date?: string
     closing_data?: string
     listing_time?: number

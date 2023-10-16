@@ -1,6 +1,5 @@
-import { remove } from 'lodash-es'
 import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
-import { type NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { type NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useSubscription } from 'use-subscription'
 import { useCallback } from 'react'
@@ -38,28 +37,8 @@ export function getStorage() {
     return storage.storage
 }
 
-export const TIPS_GUIDE_TOTAL = 1
-export const TIPS_GUIDE_INIT = 1
-
-export function getTokens() {
-    return storage.storage.addedTokens.value
-}
-
-export async function storeToken(token: NonFungibleToken<ChainId, SchemaType>) {
-    const tokens = [token, ...getTokens()]
-    await storage.storage.addedTokens.setValue(tokens)
-}
-
-export function deleteToken(address: string, tokenId: string) {
-    const tokens = getTokens()
-    remove(tokens, (t) => t.tokenId === tokenId && isSameAddress(t.contract?.address, address))
-    storage.storage.addedTokens.setValue(tokens)
-}
-
-export async function finishUserGuide(site: EnhanceableSite) {
-    const settings = guideStorage.storage.userGuide.value
-    await guideStorage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
-}
+const TIPS_GUIDE_TOTAL = 1
+const TIPS_GUIDE_INIT = 1
 
 export const useTipsUserGuide = (site: EnhanceableSite) => {
     const settings = useSubscription(guideStorage?.storage?.userGuide.subscription)

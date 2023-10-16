@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<'root'> {
+interface BuyTokenDialogProps extends withClasses<'root'> {
     code: string
     address: string
     open: boolean

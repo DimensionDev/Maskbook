@@ -4,14 +4,14 @@ export function isManifest(_manifest: any): _manifest is Manifest {
 }
 
 // TODO: Those type definitions should be moved to mask-plugin-infra /packages/manifest/manifest.d.ts
-export interface Manifest {
+interface Manifest {
     manifest_version: 1
     id: string
     entries?: Entries
     contributes?: Contributes
     locales?: string
 }
-export interface Entries {
+interface Entries {
     rpc?: string
     rpcGenerator?: string
     background?: string
@@ -19,6 +19,6 @@ export interface Entries {
     popup?: string
     dashboard?: string
 }
-export interface Contributes {
+interface Contributes {
     backup?: string
 }

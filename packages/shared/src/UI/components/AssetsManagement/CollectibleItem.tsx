@@ -206,7 +206,7 @@ export const CollectibleItem = memo(
 
 CollectibleItem.displayName = 'collectibleItem'
 
-export interface CollectibleItemSkeletonProps extends HTMLProps<HTMLDivElement> {
+interface CollectibleItemSkeletonProps extends HTMLProps<HTMLDivElement> {
     omitInfo?: boolean
     omitName?: boolean
 }

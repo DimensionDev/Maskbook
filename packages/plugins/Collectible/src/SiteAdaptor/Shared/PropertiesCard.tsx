@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PropertiesCardProps {
+interface PropertiesCardProps {
     asset: Web3Helper.NonFungibleAssetScope
     rank?: number
     timeline?: boolean

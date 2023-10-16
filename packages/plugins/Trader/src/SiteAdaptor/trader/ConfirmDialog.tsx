@@ -23,7 +23,7 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { PluginTraderMessages } from '../../messages.js'
 
-export interface ConfirmDialogProps {
+interface ConfirmDialogProps {
     open: boolean
     onClose: () => void
     trade: TraderAPI.TradeComputed

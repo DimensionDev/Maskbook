@@ -18,7 +18,7 @@ export interface SelectGasSettingsModalCloseProps {
     settings?: SelectGasSettings | null
 }
 
-export interface SelectGasSettingsModalProps {}
+interface SelectGasSettingsModalProps {}
 
 export const SelectGasSettingsModal = forwardRef<
     SingletonModalRefCreator<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>,

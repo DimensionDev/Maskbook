@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RankProps {
+interface RankProps {
     rank: number
 }
 

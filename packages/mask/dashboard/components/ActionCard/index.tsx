@@ -26,7 +26,7 @@ const ActionCardButton = styled('div')(
 `,
 )
 
-export interface ISetupActionCardProps {
+interface ISetupActionCardProps {
     icon: ReactNode
     title: string
     subtitle?: string

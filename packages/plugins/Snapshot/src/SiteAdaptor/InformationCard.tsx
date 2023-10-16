@@ -14,9 +14,9 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
 import { useSnapshotTrans } from '../locales/index.js'
 
-export interface InformationCardProps {}
+interface InformationCardProps {}
 
-export interface InfoFieldProps extends withClasses<'field'> {
+interface InfoFieldProps extends withClasses<'field'> {
     title: string
     children: React.ReactNode
 }

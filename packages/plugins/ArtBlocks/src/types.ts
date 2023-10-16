@@ -1,10 +1,10 @@
-export interface Token {
+interface Token {
     tokenId: bigint
     contract: Contract
     project: Project
 }
 
-export interface Contract {
+interface Contract {
     id: string
 }
 

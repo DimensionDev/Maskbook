@@ -16,7 +16,7 @@ import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
 import { useSetupGuideStepInfo } from './useSetupGuideStepInfo.js'
 import { queryClient } from '@masknet/shared-base-ui'
 
-export const useFindUsernameStyles = makeStyles()((theme) => ({
+const useFindUsernameStyles = makeStyles()((theme) => ({
     main: {
         display: 'flex',
         flexDirection: 'column',
@@ -48,7 +48,7 @@ export const useFindUsernameStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FindUsernameProps extends BindingDialogProps {
+interface FindUsernameProps extends BindingDialogProps {
     persona: PersonaIdentifier
     onDone?: () => void
 }

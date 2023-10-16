@@ -13,7 +13,7 @@ interface AvatarMetadataRecord {
     lastUpdateTime: Date
     lastAccessTime: Date
 }
-export interface AvatarDBSchema extends DBSchema {
+interface AvatarDBSchema extends DBSchema {
     /** Use out-of-line keys */
     avatars: {
         value: AvatarRecord

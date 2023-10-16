@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SlippageToleranceSectionProps {}
+interface SlippageToleranceSectionProps {}
 
 export function SlippageToleranceSection(props: SlippageToleranceSectionProps) {
     const t = useSharedTrans()

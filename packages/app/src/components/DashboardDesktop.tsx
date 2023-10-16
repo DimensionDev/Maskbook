@@ -3,7 +3,7 @@ import { WalletItem } from './Wallet.js'
 import { Navigation } from './Navigation.js'
 import { InstallExtension } from './Install.js'
 
-export interface SidebarForDesktopProps {}
+interface SidebarForDesktopProps {}
 
 export function DashboardForDesktop(props: SidebarForDesktopProps) {
     return (

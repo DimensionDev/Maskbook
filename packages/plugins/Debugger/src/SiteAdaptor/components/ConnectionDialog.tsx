@@ -5,7 +5,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ConnectionContent } from './ConnectionContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
-export interface ConnectionDialogProps {}
+interface ConnectionDialogProps {}
 
 export function ConnectionDialog(props: ConnectionDialogProps) {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.connectionDialogUpdated)

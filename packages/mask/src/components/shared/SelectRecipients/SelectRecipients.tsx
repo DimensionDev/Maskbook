@@ -9,7 +9,7 @@ import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } fr
 import { useContacts } from './useContacts.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
 
-export interface SelectRecipientsUIProps {
+interface SelectRecipientsUIProps {
     items: LazyRecipients
     selected: Profile[]
     disabled?: boolean

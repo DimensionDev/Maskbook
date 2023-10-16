@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SmartPayBannerProps extends PropsWithChildren {}
+interface SmartPayBannerProps extends PropsWithChildren {}
 
 export const SmartPayBanner = memo<SmartPayBannerProps>(({ children }) => {
     const { classes } = useStyles()

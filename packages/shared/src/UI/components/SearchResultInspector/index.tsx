@@ -40,7 +40,7 @@ const useStyles = makeStyles<{ maxHeight: string | number; isProfilePage?: boole
     }),
 )
 
-export interface SearchResultInspectorProps {
+interface SearchResultInspectorProps {
     keyword?: string
     identity?: SocialIdentity | null
     isProfilePage?: boolean

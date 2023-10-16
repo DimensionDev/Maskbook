@@ -399,12 +399,7 @@ export function createWalletFromMnemonicWords(
     return addWalletFromMnemonicWords(ImportSource.LocalGenerated, name, mnemonic, derivationPath)
 }
 
-export function createWalletFromPrivateKey(
-    name: string,
-    privateKey: string,
-    mnemonicId?: string,
-    derivationPath?: string,
-) {
+function createWalletFromPrivateKey(name: string, privateKey: string, mnemonicId?: string, derivationPath?: string) {
     return addWalletFromPrivateKey(ImportSource.LocalGenerated, name, privateKey, mnemonicId, derivationPath)
 }
 

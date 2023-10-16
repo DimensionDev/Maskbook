@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
+interface WalletItemProps extends Omit<ListItemProps, 'onSelect'> {
     wallet: Wallet
     isSelected: boolean
     onSelect(wallet: Wallet): void

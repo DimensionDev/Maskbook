@@ -32,9 +32,6 @@ export abstract class ChainResolverAPI_Base<ChainId, SchemaType, NetworkType> {
     chainName = (chainId: ChainId) => this.getDescriptor(chainId)?.name ?? 'Custom Network'
 
     chainFullName = (chainId: ChainId) => this.getDescriptor(chainId)?.fullName ?? 'Custom Network'
-
-    chainShortName = (chainId: ChainId) => this.getDescriptor(chainId)?.shortName ?? 'CUSTOM'
-
     chainColor = (chainId: ChainId) => this.getDescriptor(chainId)?.color ?? 'rgb(138, 138, 138)'
 
     chainPrefix = (chainId: ChainId) => ''

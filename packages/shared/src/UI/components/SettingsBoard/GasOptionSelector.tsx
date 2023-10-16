@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface GasOptionSelectorProps {
+interface GasOptionSelectorProps {
     chainId: ChainId
     options?: Record<GasOptionType, GasOption>
     onChange?: (option: Partial<Transaction>) => void

@@ -14,7 +14,7 @@ export interface AssetsReducerState {
     verifiedMap: Record<string, string[]>
 }
 
-export type AssetsAction =
+type AssetsAction =
     | {
           type: 'SET_LOADING_STATUS'
           id: string

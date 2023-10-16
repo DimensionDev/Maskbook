@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface RedpacketMessagePanelProps {
+interface RedpacketMessagePanelProps {
     message: string
     onChange: (val: string) => void
 }

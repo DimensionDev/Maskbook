@@ -2,7 +2,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { BigNumber } from 'bignumber.js'
 
-export interface SwappedTokenType {
+interface SwappedTokenType {
     pids: string[]
     amount: BigNumber
     token: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
@@ -10,7 +10,7 @@ export interface SwappedTokenType {
     unlockTime: Date
 }
 
-export interface Availability {
+interface Availability {
     exchange_addrs: string[]
     remaining: number
     started: boolean

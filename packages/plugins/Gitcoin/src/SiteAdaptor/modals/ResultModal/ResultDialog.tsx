@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ResultDialogProps extends PropsWithChildren<InjectedDialogProps> {
+interface ResultDialogProps extends PropsWithChildren<InjectedDialogProps> {
     token?: FungibleToken<ChainId, SchemaType>
     uiAmount: string
     confirmLabel?: string

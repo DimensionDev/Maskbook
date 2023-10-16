@@ -7,7 +7,7 @@ import { TransactionConfirm, type TransactionConfirmProps } from './TokenTransac
 
 export interface TransactionConfirmModalOpenProps extends Omit<TransactionConfirmProps, 'open' | 'onClose'> {}
 
-export interface TransactionConfirmModalProps {}
+interface TransactionConfirmModalProps {}
 
 export const TransactionConfirmModal = forwardRef<
     SingletonModalRefCreator<TransactionConfirmModalOpenProps>,

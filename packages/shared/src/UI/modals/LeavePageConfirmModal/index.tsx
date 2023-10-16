@@ -8,7 +8,7 @@ export interface LeavePageConfirmModalOpenProps {
     info?: OpenPageConfirm
 }
 
-export interface LeavePageConfirmModalProps {}
+interface LeavePageConfirmModalProps {}
 
 export const LeavePageConfirmModal = forwardRef<
     SingletonModalRefCreator<LeavePageConfirmModalOpenProps>,

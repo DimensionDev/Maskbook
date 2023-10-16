@@ -45,7 +45,7 @@ function ContentUI(props: ContentUIProps) {
     }
 }
 
-export const useWizardDialogStyles = makeStyles()((theme) => ({
+const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(3),
         position: 'relative',
@@ -85,7 +85,7 @@ export const useWizardDialogStyles = makeStyles()((theme) => ({
     footer: {},
 }))
 
-export interface WizardDialogProps {
+interface WizardDialogProps {
     small?: boolean
     title?: string
     dialogType: SetupGuideStep

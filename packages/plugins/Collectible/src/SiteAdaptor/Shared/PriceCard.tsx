@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PriceCardProps {
+interface PriceCardProps {
     topListing?: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 

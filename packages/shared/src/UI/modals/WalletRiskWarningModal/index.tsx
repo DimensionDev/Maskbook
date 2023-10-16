@@ -8,7 +8,7 @@ export interface WalletRiskWarningModalOpenProps {
     account: string
 }
 
-export interface WalletRiskWarningModalProps {}
+interface WalletRiskWarningModalProps {}
 
 export const WalletRiskWarningModal = forwardRef<
     SingletonModalRefCreator<WalletRiskWarningModalOpenProps>,

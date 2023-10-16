@@ -10,6 +10,6 @@ export function injectFacebookProfileCover(signal: AbortSignal) {
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileCoverAtFacebook />)
 }
 
-export function ProfileCoverAtFacebook() {
+function ProfileCoverAtFacebook() {
     return <ProfileCover />
 }

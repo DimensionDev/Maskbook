@@ -3,4 +3,4 @@ import type { ConnectionOptions_Base } from '../../Base/apis/ConnectionOptionsAP
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 
 export type ConnectionOptions = ConnectionOptions_Base<ChainId, ProviderType, Transaction>
-export type HubOptions = HubOptions_Base<ChainId>
+type HubOptions = HubOptions_Base<ChainId>

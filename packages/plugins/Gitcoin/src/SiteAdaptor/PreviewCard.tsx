@@ -122,7 +122,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PreviewCardProps {
+interface PreviewCardProps {
     grantId: string
 }
 

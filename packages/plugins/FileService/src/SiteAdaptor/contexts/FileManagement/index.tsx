@@ -24,7 +24,7 @@ interface UploadState {
     progress: number
 }
 type UploadStateMap = Record<string, UploadState>
-export interface FileManagementContextOptions {
+interface FileManagementContextOptions {
     files: FileInfo[]
     recentFiles: FileInfo[]
     refetchFiles: () => void
@@ -36,7 +36,7 @@ export interface FileManagementContextOptions {
     attachToPost: (info: FileInfo | FileInfo[]) => void
 }
 
-export const FileManagementContext = createContext<FileManagementContextOptions>({
+const FileManagementContext = createContext<FileManagementContextOptions>({
     files: [],
     recentFiles: [],
     refetchFiles: noop,

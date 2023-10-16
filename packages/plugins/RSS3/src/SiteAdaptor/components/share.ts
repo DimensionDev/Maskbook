@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import type { GeneratedIconNonSquareProps } from '@masknet/icons'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
-export type IconComponent =
+type IconComponent =
     | ComponentType<GeneratedIconNonSquareProps>
     | ComponentType<GeneratedIconNonSquareProps<'light'>>
     | ComponentType<GeneratedIconNonSquareProps<'dark'>>

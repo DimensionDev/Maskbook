@@ -26,7 +26,7 @@ const IN_MEMORY_CACHE: {
     lastSelectedGasSettingsType: GasSettingsType.Basic,
 }
 
-export function useSettingsContext(initial?: {
+function useSettingsContext(initial?: {
     pluginID?: NetworkPluginID
     chainId?: Web3Helper.ChainIdAll
     slippageTolerance?: number

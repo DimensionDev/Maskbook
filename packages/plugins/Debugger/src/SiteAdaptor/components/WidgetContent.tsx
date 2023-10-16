@@ -2,7 +2,7 @@ import { Box, Paper, Typography } from '@mui/material'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor, Widget } from '@masknet/plugin-infra/content-script'
 
-export interface WidgetContentProps {
+interface WidgetContentProps {
     onClose?: () => void
 }
 

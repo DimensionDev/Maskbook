@@ -44,7 +44,7 @@ interface AvatarManagementContextOptions {
     setSelectedTokenInfo: Dispatch<SetStateAction<SelectTokenInfo | undefined>>
 }
 
-export const AvatarManagementContext = createContext<AvatarManagementContextOptions>({
+const AvatarManagementContext = createContext<AvatarManagementContextOptions>({
     isLoading: false,
     binding: undefined,
     targetAccount: '',

@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-shared-solana'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-export interface NetworkPlugin<T extends NetworkPluginID> {
+interface NetworkPlugin<T extends NetworkPluginID> {
     readonly chain: ReadonlyArray<Web3Helper.ChainDescriptorScope<void, T>>
     readonly network: ReadonlyArray<Web3Helper.Web3NetworkDescriptor<T>>
     readonly provider: ReadonlyArray<Web3Helper.Web3ProviderDescriptor<T>>

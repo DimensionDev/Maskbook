@@ -134,7 +134,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface InputTokenPanelUIProps extends withClasses<'root'> {
+interface InputTokenPanelUIProps extends withClasses<'root'> {
     balance: string
     amount: string
     chainId: Web3Helper.ChainIdAll

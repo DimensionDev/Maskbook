@@ -42,7 +42,7 @@ interface StyleProps {
     borderTop?: string
 }
 
-export function NFTAvatarButtonInDialog() {
+function NFTAvatarButtonInDialog() {
     const { t } = useMaskSharedTrans()
     const [style, setStyle] = useState<StyleProps>({
         fontSize: 12,

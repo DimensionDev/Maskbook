@@ -11,7 +11,7 @@ import { useManagers } from '../../hooks/useManagers.js'
 import { useSmartPayTrans } from '../../locales/index.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
-export interface ManagePopoverProps {
+interface ManagePopoverProps {
     open: boolean
     anchorEl: HTMLElement | null
     onClose: () => void

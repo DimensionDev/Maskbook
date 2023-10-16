@@ -169,7 +169,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ConfirmDialogUIProps {
+interface ConfirmDialogUIProps {
     open: boolean
     currentSlippage: number
     inputTokenPrice: number

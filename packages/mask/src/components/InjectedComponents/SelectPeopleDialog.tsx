@@ -12,7 +12,7 @@ import { useMaskSharedTrans } from '../../utils/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
-export interface SelectProfileDialogProps {
+interface SelectProfileDialogProps {
     open: boolean
     profiles: Profile[]
     selectedProfiles: Profile[]

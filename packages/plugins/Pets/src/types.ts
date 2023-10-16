@@ -61,7 +61,7 @@ export interface NonFungibleContract {
     tokens: Record<string, OwnerERC721TokenInfo>
 }
 
-export enum MenuType {
+enum MenuType {
     Setting = 0,
     About = 1,
 }

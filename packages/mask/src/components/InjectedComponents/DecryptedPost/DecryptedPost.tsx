@@ -48,7 +48,7 @@ function progressReducer(
     return [...state]
 }
 
-export interface DecryptPostProps {
+interface DecryptPostProps {
     whoAmI: ProfileIdentifier | null
 }
 function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {

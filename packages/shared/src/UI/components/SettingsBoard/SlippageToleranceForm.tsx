@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface SlippageToleranceFormProps {
+interface SlippageToleranceFormProps {
     slippageTolerance: number
     slippageTolerances: number[]
     onChange?: (data?: zod.infer<ReturnType<typeof useSlippageToleranceSchema>>) => void

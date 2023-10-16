@@ -190,7 +190,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         background: theme.palette.common.white,
     },
 }))
-export interface RedPacketNftProps {
+interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
 }
 

@@ -1,4 +1,3 @@
-export * from './createCard.js'
 export * from './createTweet.js'
 export * from './getObjectStore.js'
 export * from './getSettings.js'

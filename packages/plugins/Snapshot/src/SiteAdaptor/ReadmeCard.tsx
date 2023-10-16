@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-export interface ReadMeCardProps {}
+interface ReadMeCardProps {}
 
 export function ReadMeCard(props: ReadMeCardProps) {
     const { classes } = useStyles()

@@ -1,7 +1,6 @@
 import { JSONSerialization } from 'async-call-rpc/base.min'
 import type { Serialization } from 'async-call-rpc/base.min'
 import { MaskEthereumProviderRpcError } from './error.js'
-export type { Serialization } from 'async-call-rpc/base.min'
 export const serializer: Serialization = JSONSerialization([
     (key, value) => {
         if (value === undefined) return { $type: 'undefined' }

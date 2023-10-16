@@ -284,7 +284,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     }
 }
 
-export async function loadSiteAdaptorUI(identifier: string): Promise<SiteAdaptorUI.Definition> {
+async function loadSiteAdaptorUI(identifier: string): Promise<SiteAdaptorUI.Definition> {
     if (definedSiteAdaptorsResolved.has(identifier)) return definedSiteAdaptorsResolved.get(identifier)!
     const define = definedSiteAdaptorsUI.get(identifier)
     if (!define) throw new Error('Site adaptor not found')

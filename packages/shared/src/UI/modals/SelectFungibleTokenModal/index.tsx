@@ -21,7 +21,7 @@ export interface SelectFungibleTokenModalOpenProps {
 
 export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
-export interface SelectFungibleTokenModalProps {}
+interface SelectFungibleTokenModalProps {}
 
 export const SelectFungibleTokenModal = forwardRef<
     SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>,

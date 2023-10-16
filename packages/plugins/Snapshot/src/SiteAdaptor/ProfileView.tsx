@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileViewProps extends withClasses<'content' | 'footer'> {
+interface ProfileViewProps extends withClasses<'content' | 'footer'> {
     ProfileCardProps?: Partial<ProfileCardProps>
     spaceList: Array<DAOResult<ChainId.Mainnet>>
 }

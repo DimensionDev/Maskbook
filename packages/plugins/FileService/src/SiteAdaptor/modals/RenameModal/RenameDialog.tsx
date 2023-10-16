@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit'> {
+interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit'> {
     title?: string
     currentName: string
     message?: ReactNode | string

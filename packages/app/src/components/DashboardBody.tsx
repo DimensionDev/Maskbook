@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { classNames } from '../helpers/classNames.js'
 
-export interface DashboardBodyProps {
+interface DashboardBodyProps {
     borderless?: boolean
     clipEdge?: boolean
     children?: React.ReactNode

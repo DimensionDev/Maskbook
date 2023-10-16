@@ -8,5 +8,4 @@ export { encryptComment, decryptComment } from './comment.js'
 // Steganography
 export { steganographyEncodeImage } from './steganography.js'
 
-export { queryPagedPostHistory, type QueryPagedPostHistoryOptions } from './posts.js'
 export { getRecipients, hasRecipientAvailable, getIncompleteRecipientsOfPost } from './recipients.js'

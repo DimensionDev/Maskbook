@@ -62,4 +62,4 @@ export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {
     type: 'arweave'
 }
 
-export type DialogCloseCallback = () => void
+type DialogCloseCallback = () => void

@@ -3,7 +3,7 @@ import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { type AccountMeta, type PublicKey, type Signer, TransactionInstruction } from '@solana/web3.js'
 import * as BufferLayout from '@solana/buffer-layout'
 
-export enum TokenInstruction {
+enum TokenInstruction {
     InitializeMint = 0,
     InitializeAccount = 1,
     InitializeMultisig = 2,
@@ -73,7 +73,7 @@ export function createTransferInstruction(
     return new TransactionInstruction({ keys, programId, data })
 }
 
-export function addSigners(keys: AccountMeta[], ownerOrAuthority: PublicKey, multiSigners: Signer[]): AccountMeta[] {
+function addSigners(keys: AccountMeta[], ownerOrAuthority: PublicKey, multiSigners: Signer[]): AccountMeta[] {
     if (multiSigners.length) {
         keys.push({ pubkey: ownerOrAuthority, isSigner: false, isWritable: false })
         for (const signer of multiSigners) {

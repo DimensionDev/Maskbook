@@ -22,7 +22,6 @@ import {
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
 import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
-import { ContractReadonlyAPI } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
 import type { EVM } from '../types/EVM.js'
 import { resolveNFTScanHostName } from './utils.js'
@@ -43,16 +42,6 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
         },
         cache: 'no-cache',
     })
-}
-
-export async function getContractSymbol(chainId: ChainId, address: string) {
-    try {
-        const contract = new ContractReadonlyAPI().getERC721Contract(address, { chainId })
-        const symbol = await contract?.methods.symbol().call({})
-        return symbol ?? ''
-    } catch {
-        return ''
-    }
 }
 
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {

@@ -1,4 +1,4 @@
-export interface EstimateSuggestOption {
+interface EstimateSuggestOption {
     maxWaitTimeEstimate: number
     minWaitTimeEstimate: number
     suggestedMaxFeePerGas: string
@@ -15,12 +15,12 @@ export interface EstimateSuggestResponse {
     timestamp: number
 }
 
-export interface Eip1559 {
+interface Eip1559 {
     priorityFeePerGas: Tip
     baseFeePerGas: string
 }
 
-export interface Tip {
+interface Tip {
     average: string
     slow: string
     fast: string

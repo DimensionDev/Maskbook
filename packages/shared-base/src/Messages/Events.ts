@@ -50,7 +50,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents 
     popupRouteUpdated: string
 }
 
-export interface UpdateEvent<Data> {
+interface UpdateEvent<Data> {
     readonly reason: 'update' | 'delete' | 'new'
     readonly of: Data
 }
@@ -148,7 +148,7 @@ export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }
 
-export interface SettingsUpdateEvent {
+interface SettingsUpdateEvent {
     key: string
     value: any
 }
@@ -175,7 +175,7 @@ export enum ProfileTabs {
     WEB3 = 'web3',
     DAO = 'dao',
 }
-export interface ProfileTabEvent {
+interface ProfileTabEvent {
     show: boolean
     type?: ProfileTabs
 }

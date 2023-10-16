@@ -7,7 +7,7 @@ export interface WalletConnectQRCodeOpenProps {
     uri: string
 }
 
-export interface WalletConnectQRCodeDialogProps {}
+interface WalletConnectQRCodeDialogProps {}
 
 export const WalletConnectQRCodeModal = forwardRef<
     SingletonModalRefCreator<WalletConnectQRCodeOpenProps>,

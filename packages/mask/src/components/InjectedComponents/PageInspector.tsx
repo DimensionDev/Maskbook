@@ -12,9 +12,7 @@ const GlobalInjection = createInjectHooksRenderer(
     (x) => x.GlobalInjection,
 )
 
-export interface PageInspectorProps {}
-
-export function PageInspector(props: PageInspectorProps) {
+export function PageInspector() {
     const { t } = useMaskSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()

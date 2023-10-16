@@ -185,5 +185,3 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
 
     return <div>{renderDatePicker()}</div>
 }
-
-export default DatePicker

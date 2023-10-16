@@ -82,7 +82,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface GuideStepProps {
+interface GuideStepProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement

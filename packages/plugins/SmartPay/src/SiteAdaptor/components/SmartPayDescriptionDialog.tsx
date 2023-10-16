@@ -35,7 +35,7 @@ interface Props {
     open: boolean
     onClose(): void
 }
-export const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open, onClose }: Props) {
+const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open, onClose }: Props) {
     const t = useSmartPayTrans()
     const { classes } = useStyles()
     return (

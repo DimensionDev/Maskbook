@@ -91,11 +91,6 @@ export async function queryCurrentPopupWindowId() {
     return currentPopupWindowId
 }
 
-export async function openWalletStartUpWindow() {
-    await removePopupWindow()
-    return openPopupWindow(PopupRoutes.Wallet, {})
-}
-
 export async function removePopupWindow(): Promise<void> {
     if (!currentPopupWindowId) return
     browser.windows.remove(currentPopupWindowId)

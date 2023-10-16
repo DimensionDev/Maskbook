@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DetailsTabProps {
+interface DetailsTabProps {
     boxInfo: BoxInfo
     boxMetadata?: BoxMetadata
 }

@@ -45,7 +45,7 @@ const Action = styled(Button)(({ theme }) => ({
     },
 }))
 
-export interface HeaderProps {
+interface HeaderProps {
     title: string
     subtitle?: string
     action: {

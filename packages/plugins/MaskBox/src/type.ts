@@ -1,11 +1,6 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
-export enum CardTab {
-    Articles = 0,
-    Details = 1,
-}
-
 export enum BoxState {
     UNKNOWN = 0,
     NOT_READY = 1,
@@ -29,12 +24,12 @@ export enum BoxState {
     NOT_QUALIFIED = 11,
 }
 
-export interface PaymentOption {
+interface PaymentOption {
     tokenAddress: string
     price: string
 }
 
-export interface PaymentInfo {
+interface PaymentInfo {
     token: FungibleToken<ChainId, SchemaType>
     price: string
     receivableAmount: string

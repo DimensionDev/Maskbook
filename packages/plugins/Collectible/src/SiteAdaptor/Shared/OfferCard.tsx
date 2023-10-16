@@ -48,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface OfferCardProps extends HTMLProps<HTMLDivElement> {
+interface OfferCardProps extends HTMLProps<HTMLDivElement> {
     offer: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 

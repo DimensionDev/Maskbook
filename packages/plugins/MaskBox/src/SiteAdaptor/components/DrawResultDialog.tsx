@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     token: {},
 }))
 
-export interface DrawResultDialogProps {
+interface DrawResultDialogProps {
     open: boolean
     onClose: () => void
     boxInfo: BoxInfo

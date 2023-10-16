@@ -16,7 +16,7 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     ): void
 }
 
-export interface SelectNonFungibleContractModalProps {}
+interface SelectNonFungibleContractModalProps {}
 
 export const SelectNonFungibleContractModal = forwardRef<
     SingletonModalRefCreator<SelectNonFungibleContractModalOpenProps>,

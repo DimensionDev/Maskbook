@@ -14,7 +14,7 @@ export interface MergeBackupModalOpenProps {
     type: AccountType
 }
 
-export interface MergeBackupModalProps {}
+interface MergeBackupModalProps {}
 
 export const MergeBackupModal = forwardRef<SingletonModalRefCreator<MergeBackupModalOpenProps>, MergeBackupModalProps>(
     (props, ref) => {

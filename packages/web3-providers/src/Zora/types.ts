@@ -1,11 +1,11 @@
 /* cspell:disable */
-export interface Page {
+interface Page {
     limit: number
     endCursor?: string
     hasNextPage: boolean
 }
 
-export interface CurrencyAmount {
+interface CurrencyAmount {
     currency: {
         name: string
         address: string
@@ -15,19 +15,19 @@ export interface CurrencyAmount {
     decimal: number
 }
 
-export interface PriceAtTime {
+interface PriceAtTime {
     nativePrice: CurrencyAmount
     chainTokenPrice?: CurrencyAmount
     usdcPrice?: CurrencyAmount
     blockNumber: number
 }
 
-export interface Network {
+interface Network {
     network: 'ETHEREUM'
     chain: 'MAINNET' | 'GOERLI' | 'RINKEBY'
 }
 
-export interface Transaction {
+interface Transaction {
     blockNumber: number
     // e.g., 2021-09-07T11:48:32+00:00
     blockTimestamp: string
@@ -35,19 +35,19 @@ export interface Transaction {
     logIndex?: number
 }
 
-export interface Media {
+interface Media {
     url?: string
     mimeType?: string
     size?: string
 }
 
-export interface Attribute {
+interface Attribute {
     value?: string
     traitType?: string
     displayType?: string
 }
 
-export interface CollectionAttribute {
+interface CollectionAttribute {
     traitType?: string
     valueMetrics: Array<{
         value: string
@@ -118,12 +118,12 @@ export enum EventType {
     V3_RESERVE_AUCTION_EVENT = 'V3_RESERVE_AUCTION_EVENT',
 }
 
-export enum ApprovalEventType {
+enum ApprovalEventType {
     APPROVAL = 'APPROVAL',
     APPROVAL_FOR_ALL = 'APPROVAL_FOR_ALL',
 }
 
-export enum LilNounsAuctionEventType {
+enum LilNounsAuctionEventType {
     LIL_NOUNS_AUCTION_HOUSE_AUCTION_CREATED_EVENT = 'LIL_NOUNS_AUCTION_HOUSE_AUCTION_CREATED_EVENT',
     LIL_NOUNS_AUCTION_HOUSE_AUCTION_BID_EVENT = 'LIL_NOUNS_AUCTION_HOUSE_AUCTION_BID_EVENT',
     LIL_NOUNS_AUCTION_HOUSE_AUCTION_EXTENDED_EVENT = 'LIL_NOUNS_AUCTION_HOUSE_AUCTION_EXTENDED_EVENT',
@@ -133,7 +133,7 @@ export enum LilNounsAuctionEventType {
     LIL_NOUNS_AUCTION_HOUSE_AUCTION_MIN_BID_INCREMENT_PERCENTAGE_UPDATED = 'LIL_NOUNS_AUCTION_HOUSE_AUCTION_MIN_BID_INCREMENT_PERCENTAGE_UPDATED',
 }
 
-export enum NounsAuctionEventType {
+enum NounsAuctionEventType {
     NOUNS_AUCTION_HOUSE_AUCTION_CREATED_EVENT = 'NOUNS_AUCTION_HOUSE_AUCTION_CREATED_EVENT',
     NOUNS_AUCTION_HOUSE_AUCTION_BID_EVENT = 'NOUNS_AUCTION_HOUSE_AUCTION_BID_EVENT',
     NOUNS_AUCTION_HOUSE_AUCTION_EXTENDED_EVENT = 'NOUNS_AUCTION_HOUSE_AUCTION_EXTENDED_EVENT',
@@ -143,7 +143,7 @@ export enum NounsAuctionEventType {
     NOUNS_AUCTION_HOUSE_AUCTION_MIN_BID_INCREMENT_PERCENTAGE_UPDATED = 'NOUNS_AUCTION_HOUSE_AUCTION_MIN_BID_INCREMENT_PERCENTAGE_UPDATED',
 }
 
-export enum SaleType {
+enum SaleType {
     FOUNDATION_SALE = 'FOUNDATION_SALE',
     NOUNS_AUCTION_SALE = 'NOUNS_AUCTION_SALE',
     LIL_NOUNS_AUCTION_SALE = 'LIL_NOUNS_AUCTION_SALE',
@@ -159,14 +159,14 @@ export enum SaleType {
     ZORA_V3_ASK_SALE = 'ZORA_V3_ASK_SALE',
 }
 
-export enum SeaportEventType {
+enum SeaportEventType {
     SEAPORT_COUNTER_INCREMENTED_EVENT = 'SEAPORT_COUNTER_INCREMENTED_EVENT',
     SEAPORT_ORDER_CANCELLED_EVENT = 'SEAPORT_ORDER_CANCELLED_EVENT',
     SEAPORT_ORDER_FULFILLED_EVENT = 'SEAPORT_ORDER_FULFILLED_EVENT',
     SEAPORT_ORDER_VALIDATED_EVENT = 'SEAPORT_ORDER_VALIDATED_EVENT',
 }
 
-export enum V1MarketEventType {
+enum V1MarketEventType {
     V1_MARKET_BID_CREATED = 'V1_MARKET_BID_CREATED',
     V1_MARKET_BID_REMOVED = 'V1_MARKET_BID_REMOVED',
     V1_MARKET_BID_FINALIZED = 'V1_MARKET_BID_FINALIZED',
@@ -175,7 +175,7 @@ export enum V1MarketEventType {
     V1_MARKET_BID_SHARE_UPDATED = 'V1_MARKET_BID_SHARE_UPDATED',
 }
 
-export enum V2AuctionEventType {
+enum V2AuctionEventType {
     V2_AUCTION_CREATED = 'V2_AUCTION_CREATED',
     V2_AUCTION_CANCELED = 'V2_AUCTION_CANCELED',
     V2_AUCTION_RESERVE_PRICE_UPDATED = 'V2_AUCTION_RESERVE_PRICE_UPDATED',
@@ -185,7 +185,7 @@ export enum V2AuctionEventType {
     V2_AUCTION_ENDED = 'V2_AUCTION_ENDED',
 }
 
-export enum V3AskEventType {
+enum V3AskEventType {
     V3_ASK_CREATED = 'V3_ASK_CREATED',
     V3_ASK_CANCELED = 'V3_ASK_CANCELED',
     V3_ASK_PRICE_UPDATED = 'V3_ASK_PRICE_UPDATED',
@@ -196,7 +196,7 @@ export enum V3AskEventType {
     V3_PRIVATE_ASK_FILLED = 'V3_PRIVATE_ASK_FILLED',
 }
 
-export enum V3ReserveAuctionEventType {
+enum V3ReserveAuctionEventType {
     V3_RESERVE_AUCTION_CREATED = 'V3_RESERVE_AUCTION_CREATED',
     V3_RESERVE_AUCTION_CANCELED = 'V3_RESERVE_AUCTION_CANCELED',
     V3_RESERVE_AUCTION_RESERVE_PRICE_UPDATED = 'V3_RESERVE_AUCTION_RESERVE_PRICE_UPDATED',
@@ -204,7 +204,7 @@ export enum V3ReserveAuctionEventType {
     V3_RESERVE_AUCTION_ENDED = 'V3_RESERVE_AUCTION_ENDED',
 }
 
-export interface ApprovalEventProperty {
+interface ApprovalEventProperty {
     approvalEventType: ApprovalEventType
     collectionAddress: string
     ownerAddress: string
@@ -213,7 +213,7 @@ export interface ApprovalEventProperty {
     approved?: boolean
 }
 
-export interface LilNounsAuctionEventProperty<T = unknown> {
+interface LilNounsAuctionEventProperty<T = unknown> {
     lilNounsAuctionEventType: LilNounsAuctionEventType
     address: string
     properties: T[]
@@ -227,7 +227,7 @@ export interface MintEventProperty {
     price: PriceAtTime
 }
 
-export interface NounsAuctionEventProperty<T = unknown> {
+interface NounsAuctionEventProperty<T = unknown> {
     nounsAuctionEventType: NounsAuctionEventType
     address: string
     properties: T[]
@@ -245,7 +245,7 @@ export interface SaleEventProperty {
     tokenId: string
 }
 
-export interface SeaportEventProperty<T = unknown> {
+interface SeaportEventProperty<T = unknown> {
     address: string
     eventType: SeaportEventType
     offerer: string
@@ -259,20 +259,20 @@ export interface TransferEventProperty {
     toAddress: string
 }
 
-export interface V1MarketEventProperty<T = unknown> {
+interface V1MarketEventProperty<T = unknown> {
     v1MarketEventType: V1MarketEventType
     address: string
     properties: T
 }
 
-export interface V2AuctionEventProperty<T = unknown> {
+interface V2AuctionEventProperty<T = unknown> {
     v2AuctionEventType: V2AuctionEventType
     address: string
     auctionId: number
     properties: T
 }
 
-export interface V3AskEventProperty<T = unknown> {
+interface V3AskEventProperty<T = unknown> {
     v3AskEventType: V3AskEventType
     address: string
     // only for V3_ASK_CREATED
@@ -286,7 +286,7 @@ export interface V3AskEventProperty<T = unknown> {
     }
 }
 
-export interface V3ReserveAuctionEventProperty<T = unknown> {
+interface V3ReserveAuctionEventProperty<T = unknown> {
     eventType: V3ReserveAuctionEventType
     address: string
     tokenContract: string

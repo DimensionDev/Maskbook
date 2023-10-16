@@ -35,7 +35,7 @@ export type ExpectedTargetAmountResponse = {
     amount: string
 }
 
-export type ExpectedSourceAmountResponse = {
+type ExpectedSourceAmountResponse = {
     amount: string
 }
 

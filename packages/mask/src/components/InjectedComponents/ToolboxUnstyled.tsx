@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 18,
     },
 }))
-export interface ToolboxHintProps {
+interface ToolboxHintProps {
     Container?: React.ComponentType<React.PropsWithChildren<{}>>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
     ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>

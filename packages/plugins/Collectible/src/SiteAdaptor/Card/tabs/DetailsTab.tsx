@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface DetailsTabProps {
+interface DetailsTabProps {
     asset: Web3Helper.NonFungibleAssetAll | null | undefined
     isLoading: boolean
 }

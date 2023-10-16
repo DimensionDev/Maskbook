@@ -9,7 +9,7 @@ import { SmartPayBundler } from '@masknet/web3-providers'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { SmartPayEntry } from './components/SmartPayEntry.js'
-import { SmartPayDialog } from './components/index.js'
+import { SmartPayDialog } from './components/SmartPayDialog.js'
 import { InjectReceiveDialog } from './components/ReceiveDialog.js'
 import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
 

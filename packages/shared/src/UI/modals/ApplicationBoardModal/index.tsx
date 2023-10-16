@@ -27,7 +27,7 @@ export interface ApplicationBoardModalOpenProps {
     focusPluginID?: PluginID
 }
 
-export interface ApplicationBoardModalProps {}
+interface ApplicationBoardModalProps {}
 
 export const ApplicationBoardModal = forwardRef<
     SingletonModalRefCreator<ApplicationBoardModalOpenProps>,
@@ -89,7 +89,7 @@ export interface ApplicationBoardSettingsModalOpenProps {
     tab?: ApplicationSettingTabs
 }
 
-export type ApplicationBoardSettingsModalProps = {}
+interface ApplicationBoardSettingsModalProps {}
 
 export const ApplicationBoardSettingsModal = forwardRef<
     SingletonModalRefCreator<ApplicationBoardSettingsModalOpenProps>,

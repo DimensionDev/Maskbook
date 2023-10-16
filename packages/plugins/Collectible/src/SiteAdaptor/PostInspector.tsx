@@ -5,7 +5,7 @@ import type { CollectiblePayload } from '../types.js'
 import { Collectible } from './Card/Collectible.js'
 import { Context } from './Context/index.js'
 
-export interface PostInspectorProps {
+interface PostInspectorProps {
     payload: CollectiblePayload
 }
 

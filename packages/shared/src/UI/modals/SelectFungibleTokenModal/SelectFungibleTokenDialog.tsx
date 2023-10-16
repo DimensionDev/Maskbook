@@ -41,7 +41,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     },
 }))
 
-export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     enableManage?: boolean
     pluginID?: T

@@ -2,8 +2,7 @@ import type { EC_Public_CryptoKey, EC_Private_CryptoKey } from '@masknet/base'
 import { EC_KeyCurve } from '../payload/index.js'
 import type { EncryptIO } from './Encryption.js'
 
-/** @internal */
-export type EphemeralKeys = Map<
+type EphemeralKeys = Map<
     EC_KeyCurve,
     readonly [EC_Public_CryptoKey, EC_Private_CryptoKey] | Promise<readonly [EC_Public_CryptoKey, EC_Private_CryptoKey]>
 >

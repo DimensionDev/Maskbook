@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface MnemonicDisplayProps {
+interface MnemonicDisplayProps {
     mnemonic?: string[]
 }
 

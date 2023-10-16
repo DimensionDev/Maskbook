@@ -13,7 +13,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface LoadingPlaceholderProps extends HTMLProps<HTMLDivElement> {
+interface LoadingPlaceholderProps extends HTMLProps<HTMLDivElement> {
     title?: string
 }
 

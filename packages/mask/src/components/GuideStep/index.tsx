@@ -91,7 +91,7 @@ const NextButton = styled(ActionButton)({
     background: '#fff',
 })
 
-export interface GuideStepProps {
+interface GuideStepProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
     children: ReactElement

@@ -10,7 +10,7 @@ import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
 import { useCurrentUserId, usePersonaConnected, usePostContent } from './hooks.js'
 
-export const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'column',

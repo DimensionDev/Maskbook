@@ -99,7 +99,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface UnlockERC20TokenProps {
+interface UnlockERC20TokenProps {
     transaction: TransactionDetail
     handleChange: (amount: string) => void
     paymentToken?: string

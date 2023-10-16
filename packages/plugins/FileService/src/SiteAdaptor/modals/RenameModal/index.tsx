@@ -13,7 +13,7 @@ export interface RenameModalOpenProps extends Omit<InjectedDialogProps, 'title' 
 
 export type RenameModalCloseProps = string | void
 
-export interface RenameModalProps {}
+interface RenameModalProps {}
 
 export const RenameModal = forwardRef<
     SingletonModalRefCreator<RenameModalOpenProps, RenameModalCloseProps>,

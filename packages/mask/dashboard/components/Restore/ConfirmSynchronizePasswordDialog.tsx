@@ -4,7 +4,7 @@ import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useDashboardTrans } from '../../locales/index.js'
 
-export interface ConfirmSynchronizePasswordDialogProps {
+interface ConfirmSynchronizePasswordDialogProps {
     open: boolean
     onClose(): void
     onConform(): void

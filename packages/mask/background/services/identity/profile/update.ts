@@ -25,7 +25,7 @@ import {
 } from '../../../database/persona/db.js'
 import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web.js'
 
-export interface UpdateProfileInfo {
+interface UpdateProfileInfo {
     nickname?: string | null
     avatarURL?: string | null
 }

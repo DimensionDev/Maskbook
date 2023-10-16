@@ -64,7 +64,7 @@ const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: 
     }),
 )
 
-export interface TickersTableProps {
+interface TickersTableProps {
     tickers: Ticker[]
 }
 

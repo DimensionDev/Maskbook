@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme, props) => ({
     },
 }))
 
-export interface SavingsTableProps {
+interface SavingsTableProps {
     tab: TabType
     loadingProtocols: boolean
     protocols: SavingsProtocol[]

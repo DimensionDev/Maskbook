@@ -99,7 +99,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
         return promise
     }
 }
-export interface IDBPSafeObjectStore<
+interface IDBPSafeObjectStore<
     DBTypes extends DBSchema,
     TxStores extends Array<StoreNames<DBTypes>> = Array<StoreNames<DBTypes>>,
     StoreName extends StoreNames<DBTypes> = StoreNames<DBTypes>,

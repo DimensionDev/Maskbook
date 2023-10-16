@@ -28,7 +28,7 @@ import { BIPS_BASE, ZRX_AFFILIATE_ADDRESS, ZRX_NATIVE_TOKEN_ADDRESS } from '../c
 
 const ZRX_BASE_URL = 'https://zrx-proxy.r2d2.to/'
 
-export function getNativeTokenLabel(networkType: NetworkType) {
+function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'

@@ -1,12 +1,5 @@
 import { AvatarType } from '@masknet/plugin-avatar'
-import {
-    searchTwitterAvatarNFTSelector,
-    searchTwitterAvatarNFTStyleSelector,
-    searchTwitterAvatarNormalSelector,
-    searchTwitterAvatarSelector,
-    searchTwitterCircleAvatarSelector,
-    searchTwitterSquareAvatarSelector,
-} from './selector.js'
+import { searchTwitterAvatarNFTStyleSelector, searchTwitterAvatarNormalSelector } from './selector.js'
 
 export function getAvatarType(ele?: HTMLElement) {
     const dom =
@@ -24,20 +17,4 @@ export function getAvatarType(ele?: HTMLElement) {
 
 export function isVerifiedUser(ele: HTMLElement) {
     return !!ele.closest('[data-testid="tweet"]')?.querySelector('[data-testid="icon-verified"]')
-}
-
-export function getInjectedDom() {
-    const avatarType = getAvatarType()
-    switch (avatarType) {
-        case AvatarType.Square:
-            return searchTwitterAvatarNormalSelector().evaluate()
-                ? searchTwitterAvatarNormalSelector().querySelector('div img')
-                : searchTwitterSquareAvatarSelector()
-        case AvatarType.Default:
-            return searchTwitterAvatarSelector()
-        case AvatarType.Clip:
-            return searchTwitterAvatarNFTSelector()
-        default:
-            return searchTwitterCircleAvatarSelector()
-    }
 }

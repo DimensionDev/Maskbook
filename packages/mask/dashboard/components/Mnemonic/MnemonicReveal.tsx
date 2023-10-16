@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface MnemonicRevealProps extends withClasses<'container' | 'wordCard' | 'text'> {
+interface MnemonicRevealProps extends withClasses<'container' | 'wordCard' | 'text'> {
     words: string[]
     indexed?: boolean
     wordClass?: string

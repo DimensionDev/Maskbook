@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PersonaAvatarProps extends withClasses<'root'> {
+interface PersonaAvatarProps extends withClasses<'root'> {
     avatar?: string | null
     hasProofs?: boolean
     size: number

@@ -212,7 +212,7 @@ export const Collection = memo(
 
 Collection.displayName = 'Collection'
 
-export interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
+interface CollectionSkeletonProps extends HTMLProps<HTMLDivElement> {
     id: string
     /** Render variants according to count */
     count: number

@@ -3,21 +3,14 @@ import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostInspector, type PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
-import { makeStyles } from '@masknet/theme'
 import { noop } from 'lodash-es'
 
-export function injectPostInspectorDefault<T extends string>(
+export function injectPostInspectorDefault(
     config: InjectPostInspectorDefaultConfig = {},
-    additionalPropsToPostInspector: (classes: Record<T, string>) => Partial<PostInspectorProps> = () => ({}),
-    useCustomStyles: (props?: any) => {
-        classes: Record<T, string>
-    } = makeStyles()({}) as any,
+    props?: Pick<PostInspectorProps, 'slotPosition'>,
 ) {
-    const PostInspectorDefault = memo(function PostInspectorDefault(props: Pick<PostInspectorProps, 'zipPost'>) {
-        const { zipPost } = props
-        const { classes } = useCustomStyles()
-        const additionalProps = additionalPropsToPostInspector(classes)
-        return <PostInspector zipPost={zipPost} {...additionalProps} />
+    const PostInspectorDefault = memo(function PostInspectorDefault(props: { zipPost(): void }) {
+        return <PostInspector {...props} zipPost={props.zipPost} />
     })
 
     const { zipPost, injectionPoint } = config

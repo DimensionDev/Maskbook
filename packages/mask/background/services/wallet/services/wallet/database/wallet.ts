@@ -31,22 +31,10 @@ export async function hasWallet(address: string) {
     return walletDatabase.has('wallet', formatEthereumAddress(address))
 }
 
-export async function hasWalletRequired(address: string) {
-    const has = await hasWallet(address)
-    if (!has) throw new Error('The wallet does not exist.')
-    return has
-}
-
 export async function hasStoredKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
     const wallets = await getWallets()
     if (!storedKeyInfo) return false
     return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo?.hash)
-}
-
-export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInfo) {
-    const has = await hasStoredKeyInfo(storedKeyInfo)
-    if (!has) throw new Error('The stored key info does not exist.')
-    return has
 }
 
 async function getWalletRecords() {

@@ -1,17 +1,8 @@
-import {
-    allPersonas,
-    currentPersona,
-    lastRecognizedProfile,
-    currentVisitingProfile,
-} from '@masknet/plugin-infra/content-script/context'
+import { allPersonas, currentPersona, lastRecognizedProfile } from '@masknet/plugin-infra/content-script/context'
 import { useSubscription } from 'use-subscription'
 
 export function useCurrentPersona() {
     return useSubscription(currentPersona)
-}
-
-export function useCurrentVisitingProfile() {
-    return useSubscription(currentVisitingProfile)
 }
 
 export function useLastRecognizedProfile() {

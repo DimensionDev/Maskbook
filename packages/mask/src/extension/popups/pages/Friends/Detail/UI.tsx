@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FriendsDetailUIProps {
+interface FriendsDetailUIProps {
     avatar?: string
     profiles: Profile[]
     nextId: string

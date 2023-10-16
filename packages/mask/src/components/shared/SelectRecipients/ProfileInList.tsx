@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileInListProps {
+interface ProfileInListProps {
     profile: ProfileInformationFromNextID
     highlightText?: string
     selected?: boolean

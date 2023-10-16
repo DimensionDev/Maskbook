@@ -66,7 +66,7 @@ export interface MagicEdenToken {
 /**
  * /tokens/:token_mint/listings
  */
-export interface TokenInListings {
+interface TokenInListings {
     /** address */
     pdaAddress: string
     auctionHouse: string
@@ -84,7 +84,7 @@ export interface TokenInListings {
  * tokens/:token_mint/offer_received
  *
  */
-export interface TokenOffer {
+interface TokenOffer {
     /** address */
     pdaAddress: string
     /** address */
@@ -123,7 +123,7 @@ export interface TokenActivity {
  * /wallets/:wallet_address/tokens
  * Token owned by a wallet.
  */
-export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
+interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
     /** Either "listed", "unlisted" or "both". Default "both". */
     listStatus: 'listed' | 'unlisted' | 'both'
 }
@@ -132,7 +132,7 @@ export interface WalletToken extends Omit<MagicEdenToken, 'animationUrl'> {
  * Activity of a wallet.
  * /wallets/:wallet_address/activities
  */
-export interface WalletActivity extends Omit<TokenActivity, 'collectionSymbol'> {
+interface WalletActivity extends Omit<TokenActivity, 'collectionSymbol'> {
     type: LiteralUnion<'buyNow'>
     collection: string
     /** address */
@@ -155,7 +155,7 @@ export interface WalletOffer extends Omit<TokenOffer, 'buyerReferral'> {
  * Escrow balance for a wallet.
  * /wallets/:wallet_address/escrow_balance
  */
-export interface WalletEscrowBalance {
+interface WalletEscrowBalance {
     /** address */
     buyerEscrow: string
     balance: 0.03
@@ -165,7 +165,7 @@ export interface WalletEscrowBalance {
  * Escrow balance for a wallet.
  * /wallets/:wallet_address
  */
-export interface WalletAddress {
+interface WalletAddress {
     displayName: string
     /** mint address of NFT */
     avatar: string
@@ -220,13 +220,13 @@ export interface MagicEdenNFT {
  * Collection in listings
  * /collections/:symbol/listings
  */
-export interface CollectionInListings extends TokenInListings {}
+interface CollectionInListings extends TokenInListings {}
 
 /**
  * Activity of a collection
  * /collections/:symbol/activities
  */
-export interface CollectionActivity extends TokenActivity {
+interface CollectionActivity extends TokenActivity {
     type: 'cancelBid'
 }
 
@@ -234,7 +234,7 @@ export interface CollectionActivity extends TokenActivity {
  * Stats of a collection
  * /collections/:symbol/stats
  */
-export interface CollectionStats {
+interface CollectionStats {
     symbol: string
     floorPrice: number
     listedCount: number
@@ -246,7 +246,7 @@ export interface CollectionStats {
  * launchpad collections
  * /launchpad/collections
  */
-export interface LaunchpadCollection
+interface LaunchpadCollection
     extends Omit<MagicEdenCollection, 'twitter' | 'discord' | 'website' | 'categories'> {
     featured: boolean
     edition: string
@@ -278,7 +278,7 @@ export interface LaunchpadCollection
  * - Instruction to withdraw from escrow
  *   /instructions/withdraw
  */
-export interface Instruction {
+interface Instruction {
     tx: {
         type: 'Buffer'
         data: number[]

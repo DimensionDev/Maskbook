@@ -59,7 +59,7 @@ export interface OpenPageConfirm {
     position?: 'center' | 'top-right'
 }
 
-export interface LeavePageConfirmProps {
+interface LeavePageConfirmProps {
     open: boolean
     onClose: () => void
     openDashboard?: (route?: DashboardRoutes, search?: string) => void

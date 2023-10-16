@@ -182,28 +182,6 @@ export const GetTokenQuery = gql`
     }
 `
 
-export const GetTokensQuery = gql`
-    query getTokens($ownerAddresses: [String!], $size: Int = 20) {
-        tokens(
-            pagination: {
-                limit: $size
-            },
-            where: {
-                ownerAddresses: $ownerAddresses
-            }
-        ) {
-            nodes {
-                Token {
-                    ${Token}
-                }
-            }
-            pageInfo {
-                ${Page}
-            }
-        }
-    }
-`
-
 export const GetEventsQuery = gql`
     query getEvents($address: String!, $tokenId: String!, $eventTypes: [EventType!], $size: Int = 20) {
         events(
@@ -224,40 +202,6 @@ export const GetEventsQuery = gql`
         ) {
             nodes {
                 ${Event}
-            }
-            pageInfo {
-                ${Page}
-            }
-        }
-    }
-`
-
-export const GetCollectionsByKeywordQuery = gql`
-    query getCollections($keyword: String!, $size: Int = 20) {
-        search(
-            pagination: {
-                limit: $size
-            },
-            query: {
-                text: $keyword
-            },
-            filter: {
-                entityType: COLLECTION
-            }
-        ) {
-            nodes {
-                name
-                description
-                entityType
-                collectionAddress
-                entity {
-                    ... on Collection {
-                        ${Collection}
-                    }
-                }
-                networkInfo {
-                    ${Network}
-                }
             }
             pageInfo {
                 ${Page}

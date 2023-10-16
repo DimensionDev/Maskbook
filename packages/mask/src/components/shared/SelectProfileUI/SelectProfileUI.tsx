@@ -12,7 +12,7 @@ import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
-export interface SelectProfileUIProps extends withClasses<'root'> {
+interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
     selected: Profile[]
     frozenSelected: Profile[]

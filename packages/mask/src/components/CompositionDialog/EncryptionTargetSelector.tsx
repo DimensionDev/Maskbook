@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EncryptionTargetSelectorProps {
+interface EncryptionTargetSelectorProps {
     target: EncryptionTargetType
     e2eDisabled: E2EUnavailableReason | undefined
     onClick(v: EncryptionTargetType): void

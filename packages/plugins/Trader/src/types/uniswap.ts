@@ -3,9 +3,6 @@ import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Token, Currency, TradeType } from '@uniswap/sdk-core'
 
-// [target, gasLimit, callData]
-export type Call = [string, number, string]
-
 export type TokenPair = [Token, Token]
 
 export enum PairState {

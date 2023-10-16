@@ -15,7 +15,7 @@ export namespace Solana {
         uri: string
     }
 
-    export interface Trait {
+    interface Trait {
         trait_type: string
         value: string
     }
@@ -117,7 +117,7 @@ export namespace Solana {
     }
 
     /** Not official documented */
-    export interface BasicInfo {
+    interface BasicInfo {
         launch_foundry_address: null
         fee: number
         link: string

@@ -6,7 +6,7 @@ import { openPopupWindow } from '../../helper/popup-opener.js'
 
 let deferred: DeferTuple<MaskAccount[], Error> | undefined
 
-export interface MaskAccount {
+interface MaskAccount {
     address: string
     owner?: string
     identifier?: ECKeyIdentifier

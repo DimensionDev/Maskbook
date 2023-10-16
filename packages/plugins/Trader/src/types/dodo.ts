@@ -1,6 +1,6 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
 
-export interface SwapRouteRequest {
+interface SwapRouteRequest {
     isNativeSellToken: boolean
     fromToken: Web3Helper.FungibleTokenAll
     toToken: Web3Helper.FungibleTokenAll
@@ -11,7 +11,7 @@ export interface SwapRouteRequest {
     chainId: number
 }
 
-export type SwapRouteResponse = SwapRouteSuccessResponse | SwapRouteErrorResponse
+type SwapRouteResponse = SwapRouteSuccessResponse | SwapRouteErrorResponse
 
 export interface SwapRouteSuccessResponse {
     code: number
@@ -20,13 +20,13 @@ export interface SwapRouteSuccessResponse {
     value: string
 }
 
-export interface SwapRouteErrorResponse {
+interface SwapRouteErrorResponse {
     code: number
     status: number
     data: string | undefined
 }
 
-export interface SwapRouteData {
+interface SwapRouteData {
     data: string
     priceImpact: number
     resAmount: number

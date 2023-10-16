@@ -8,11 +8,11 @@ import { memo, useCallback, useMemo } from 'react'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { Icons } from '@masknet/icons'
 
-export enum AdditionalIcon {
+enum AdditionalIcon {
     check = 'check',
     error = 'error',
 }
-export interface AdditionalContentProps {
+interface AdditionalContentProps {
     title: string
     titleIcon?: keyof typeof AdditionalIcon
     headerActions?: React.ReactNode

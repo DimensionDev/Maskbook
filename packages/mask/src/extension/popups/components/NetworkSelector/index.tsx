@@ -67,13 +67,13 @@ export const NetworkSelector = memo(() => {
     )
 })
 
-export interface NetworkSelectorUIProps {
+interface NetworkSelectorUIProps {
     currentNetwork?: ReasonableNetwork<ChainId, SchemaType, NetworkType>
     networks: Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
     onChainChange: (network: ReasonableNetwork<ChainId, SchemaType, NetworkType>) => void
 }
 
-export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange, networks }) => {
+const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange, networks }) => {
     const { classes } = useStyles()
 
     const [menu, openMenu] = useMenuConfig(

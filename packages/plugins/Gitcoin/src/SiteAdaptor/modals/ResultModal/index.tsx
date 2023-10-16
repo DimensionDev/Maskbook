@@ -13,7 +13,7 @@ export interface ResultModalOpenProps extends Omit<PropsWithChildren<InjectedDia
     onShare?(): void
 }
 
-export interface ResultModalProps {}
+interface ResultModalProps {}
 
 export const ResultModal = forwardRef<SingletonModalRefCreator<ResultModalOpenProps>, ResultModalProps>(
     (props, ref) => {

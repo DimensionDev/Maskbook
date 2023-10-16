@@ -18,7 +18,7 @@ export async function INTERNAL_getMasterPasswordRequired() {
     return password_
 }
 
-export function INTERNAL_setPassword(newPassword: string) {
+function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
     inMemoryPassword = newPassword
 }
@@ -96,7 +96,7 @@ export async function validatePassword(unverifiedPassword: string) {
     return true
 }
 
-export async function validatePasswordRequired(unverifiedPassword: string) {
+async function validatePasswordRequired(unverifiedPassword: string) {
     if (!validatePassword(unverifiedPassword)) throw new Error('The password is not satisfied the requirement.')
     return true
 }

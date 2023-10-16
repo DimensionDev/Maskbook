@@ -9,7 +9,7 @@ import {
 import { hasLocalKeyOf } from '../../../database/persona/helper.js'
 import { toProfileInformation } from '../../__utils__/convert.js'
 
-export interface MobileQueryProfilesOptions {
+interface MobileQueryProfilesOptions {
     network?: string
     identifiers?: ProfileIdentifier[]
 }

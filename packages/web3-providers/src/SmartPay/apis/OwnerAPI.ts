@@ -135,24 +135,6 @@ export class SmartPayOwnerAPI {
         )
     }
 
-    async getAccountByNonce(chainId: ChainId, owner: string, nonce: number) {
-        const create2Factory = await this.createCreate2Factory(chainId, owner)
-        const contractWallet = await this.createContractWallet(chainId, owner)
-        const address = create2Factory.derive(contractWallet.initCode, nonce)
-
-        const operations = await this.Funder.getOperationsByOwner(chainId, owner)
-
-        // TODO: ensure account is deployed
-        return this.createContractAccount(
-            chainId,
-            address,
-            owner,
-            owner,
-            false,
-            operations.some((operation) => isSameAddress(operation.walletAddress, address)),
-        )
-    }
-
     async getAccountsByOwner(
         chainId: ChainId,
         owner: string,

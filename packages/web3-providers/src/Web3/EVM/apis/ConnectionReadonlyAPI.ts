@@ -62,13 +62,13 @@ import type { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOption
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
 
-export interface ERC721Metadata {
+interface ERC721Metadata {
     name: string
     description: string
     image: string
 }
 
-export interface ERC1155Metadata {
+interface ERC1155Metadata {
     name: string
     decimals: number
     description: string

@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']

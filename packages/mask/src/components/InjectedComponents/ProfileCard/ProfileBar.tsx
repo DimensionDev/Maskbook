@@ -105,7 +105,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     },
 }))
 
-export interface ProfileBarProps extends BoxProps {
+interface ProfileBarProps extends BoxProps {
     identity: SocialIdentity
     socialAccounts: Array<SocialAccount<Web3Helper.ChainIdAll>>
     address?: string
@@ -240,7 +240,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
     )
 })
 
-export type ProfileBarSkeletonProps = Omit<ProfileBarProps, 'identity' | 'onAddressChange'>
+type ProfileBarSkeletonProps = Omit<ProfileBarProps, 'identity' | 'onAddressChange'>
 
 // This Skeleton is not fully empty, but also has user address
 export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function ProfileBarSkeleton({

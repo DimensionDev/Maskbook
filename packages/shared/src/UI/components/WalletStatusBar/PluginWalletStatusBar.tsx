@@ -23,7 +23,7 @@ import { WalletDescription } from './WalletDescription.js'
 import { Action } from './Action.js'
 import { SelectProviderModal, WalletStatusModal } from '../../../index.js'
 
-export const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',

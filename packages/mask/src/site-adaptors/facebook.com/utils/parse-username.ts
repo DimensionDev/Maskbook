@@ -40,7 +40,7 @@ export function getProfilePageUrlAtFacebook(user: ProfileIdentifier) {
     if (Number.parseFloat(username)) return `${host}/profile.php?id=${username}`
     return `${host}/${username}`
 }
-export function getFacebookHostName() {
+function getFacebookHostName() {
     if (isMobileFacebook) return 'https://m.facebook.com'
     return 'https://www.facebook.com'
 }

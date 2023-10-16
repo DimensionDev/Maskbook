@@ -37,7 +37,7 @@ function resolveDaysName(days: number) {
     if (days === 1) return '24H'
     return `${days}d`
 }
-export interface PriceChartDaysControlProps extends StackProps {
+interface PriceChartDaysControlProps extends StackProps {
     days: number
     rangeOptions?: Days[]
     onDaysChange?: (days: number) => void

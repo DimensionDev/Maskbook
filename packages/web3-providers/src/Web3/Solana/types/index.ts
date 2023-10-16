@@ -10,18 +10,18 @@ export interface RpcOptions {
     params?: unknown[]
 }
 
-export interface RpcResponse<T> {
+interface RpcResponse<T> {
     jsonrpc: '2.0'
     result: T | null
 }
 
-export interface AccountInfo {
+interface AccountInfo {
     data: [string, string] | object
     executable: boolean
     lamports: number
 }
 
-export interface ProgramAccount {
+interface ProgramAccount {
     account: {
         data: {
             parsed: {
@@ -49,13 +49,13 @@ export interface ProgramAccount {
     pubkey: string
 }
 
-export type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
+type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
 
 export type GetBalanceResponse = RpcResponse<{ value: number }>
 
 export type GetProgramAccountsResponse = RpcResponse<ProgramAccount[]>
 
-export interface SplToken {
+interface SplToken {
     symbol: string
     name: string
     mint: string

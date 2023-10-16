@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface UploadingFileProps extends FileBaseProps {
+interface UploadingFileProps extends FileBaseProps {
     file: FileInfo
     progress?: number
 }
