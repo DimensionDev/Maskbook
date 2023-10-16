@@ -214,7 +214,6 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                 variant="text"
                                 className={classes.max}
                                 onClick={() => {
-                                    const result = leftShift(balance, token?.decimals).toString()
                                     setValue(leftShift(balance, token?.decimals).toString())
                                     handleChange(balance)
                                 }}>

@@ -9,10 +9,6 @@ import {
 import { hasLocalKeyOf } from '../../../database/persona/helper.js'
 import { toProfileInformation } from '../../__utils__/convert.js'
 
-interface MobileQueryProfilesOptions {
-    network?: string
-    identifiers?: ProfileIdentifier[]
-}
 export async function queryProfilesInformation(identifiers: ProfileIdentifier[]): Promise<ProfileInformation[]> {
     const profiles = await queryProfilesDB({ identifiers })
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction

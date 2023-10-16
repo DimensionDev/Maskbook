@@ -87,7 +87,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         onClose()
     }, [onClose])
 
-    const { value: encrypted, error } = useAsync(async () => {
+    const { value: encrypted } = useAsync(async () => {
         if (!downloadLink || !open) return
 
         const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })

@@ -1,6 +1,6 @@
 import { Box, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { BoxInfo, BoxMetadata } from '../../type.js'
+import type { BoxMetadata } from '../../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -42,12 +42,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface DetailsTabProps {
-    boxInfo: BoxInfo
     boxMetadata?: BoxMetadata
 }
 
 export function DetailsTab(props: DetailsTabProps) {
-    const { boxInfo, boxMetadata } = props
+    const { boxMetadata } = props
     const { classes, theme } = useStyles()
 
     const definitions = boxMetadata?.activities.map((x) => ({

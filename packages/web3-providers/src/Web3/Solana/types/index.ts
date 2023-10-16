@@ -14,13 +14,6 @@ interface RpcResponse<T> {
     jsonrpc: '2.0'
     result: T | null
 }
-
-interface AccountInfo {
-    data: [string, string] | object
-    executable: boolean
-    lamports: number
-}
-
 interface ProgramAccount {
     account: {
         data: {
@@ -48,8 +41,6 @@ interface ProgramAccount {
     }
     pubkey: string
 }
-
-type GetAccountInfoResponse = RpcResponse<{ value: AccountInfo }>
 
 export type GetBalanceResponse = RpcResponse<{ value: number }>
 

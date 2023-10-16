@@ -1,9 +1,3 @@
-interface Token {
-    tokenId: bigint
-    contract: Contract
-    project: Project
-}
-
 interface Contract {
     id: string
 }

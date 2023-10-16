@@ -24,11 +24,6 @@ export interface Contract {
     symbol: string
 }
 
-interface ContractStats {
-    /** Amount in Wei */
-    floor_price: string
-}
-
 interface Token {
     token_id: number
     contract: string

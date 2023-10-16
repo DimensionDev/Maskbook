@@ -344,7 +344,7 @@ export function PreviewCard() {
                         {boxInfo ? <ArticlesTab boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
                     <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
-                        {boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                        {boxInfo ? <DetailsTab boxMetadata={boxMetadata} /> : null}
                     </TabPanel>
                 </Paper>
 

@@ -84,7 +84,7 @@ const useStyles = makeStyles<{
 })
 
 export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
-    const { open, title, children, action, publisher, publisherLink, content, wrapperProps, ID } = props
+    const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
     const { classes } = useStyles({
         backgroundGradient: wrapperProps?.backgroundGradient,
         borderRadius: wrapperProps?.borderRadius,

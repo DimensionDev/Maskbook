@@ -117,7 +117,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     // #region profile information
     const { value, loading } = useAsyncRetry(async () => {

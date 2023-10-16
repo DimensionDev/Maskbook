@@ -28,16 +28,6 @@ interface Asset {
     decimals?: number
 }
 
-interface AssetToken {
-    image_url?: string
-    eth_price?: string
-    usd_price?: string
-    name: string
-    symbol: string
-    decimals: number
-    address: string
-}
-
 interface AssetEvent {
     event_type: string
     event_timestamp: number
@@ -218,27 +208,6 @@ export interface OpenSeaAssetEvent {
         id: string
     }
     created_date: string
-}
-
-interface OrderAccount {
-    user: number
-    address: string
-    profile_img_url?: string
-    config: string
-}
-
-interface OrderFee {
-    account: OrderAccount
-    basis_points: string
-}
-
-interface OrderConsideration {
-    itemType: number
-    token: string
-    identifierOrCriteria: string
-    startAmount: string
-    endAmount: string
-    recipient: string
 }
 
 export interface OpenSeaCollectionStats {

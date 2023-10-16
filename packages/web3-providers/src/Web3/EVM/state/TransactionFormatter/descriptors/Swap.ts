@@ -308,8 +308,6 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                         [key: string]: string[]
                     }
                     let path: string
-                    let fee: string
-                    let deadline: string
                     let tokenInAddress: string
                     let tokenOutAddress: string
                     let recipient: string
@@ -318,14 +316,13 @@ export class SwapDescriptor extends BaseDescriptor implements TransactionDescrip
                     if (context.chainId === ChainId.Arbitrum) {
                         const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
 
-                        ;[tokenInAddress, tokenOutAddress, fee, recipient, deadline, amountIn, amountOutMinimum] =
-                            results['0']
+                        ;[tokenInAddress, tokenOutAddress, , recipient, , amountIn, amountOutMinimum] = results['0']
 
                         if (isSameAddress(WETH_ADDRESS, tokenOutAddress) && isNativeTokenAddress(recipient)) {
                             tokenOutAddress = nativeToken?.address ?? ''
                         }
                     } else {
-                        ;[path, tokenOutAddress, fee, amountIn, amountOutMinimum] = results['0']
+                        ;[path, tokenOutAddress, , amountIn, amountOutMinimum] = results['0']
                         tokenInAddress = path.slice(0, 42)
                     }
 

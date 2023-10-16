@@ -7,14 +7,6 @@ export interface Status {
     timestamp: string
 }
 
-interface Currency {
-    id: number
-    name: string
-    symbol: string
-    token: string
-    space: string
-}
-
 export interface ResultData<T> {
     data: T
     status: Status

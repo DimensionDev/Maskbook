@@ -17,14 +17,6 @@ export interface FT_Price {
     updated_at: string
 }
 
-interface FT_Metadata {
-    contract_address: string
-    name: string
-    symbol: string
-    decimals: string
-    total_supply: string
-}
-
 export interface NFT {
     contract_address: string
     token_id: string
@@ -107,12 +99,4 @@ export interface ENSRecord {
     expiration_time: string
     token_id: string
     text_records: Record<string, string>
-}
-
-interface Event {
-    block_number: number
-    function: string
-    method_id: string
-    transaction_hash: string
-    transaction_index: number
 }

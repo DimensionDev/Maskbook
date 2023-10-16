@@ -22,15 +22,8 @@ import { internal_wallet_restore } from './internal_wallet_restore.js'
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
 
-    {
-        const tag = `[Backup] Restore ${backup.personas.size} personas, ${backup.profiles.size} profiles, ${backup.relations.length} relations`
-        await restorePersonas(backup)
-    }
-
-    {
-        const tag = `[Backup] Restore ${backup.posts.size} posts`
-        await restorePosts(posts.values())
-    }
+    await restorePersonas(backup)
+    await restorePosts(posts.values())
     if (wallets.length) {
         await internal_wallet_restore(wallets)
     }

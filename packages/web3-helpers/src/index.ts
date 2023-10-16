@@ -8,9 +8,7 @@ import type {
     FungibleAsset,
     NonFungibleAsset,
     RecentTransaction,
-    FungibleTokenSecurity,
     NonFungibleTokenActivity,
-    NonFungibleTokenSecurity,
     SearchResult,
     TokenResult,
     FungibleTokenResult,
@@ -210,16 +208,6 @@ export declare namespace Web3Helper {
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = NonFungibleToken<ChainIdScope<S, T>, SchemaTypeScope<S, T>>
-
-    export type FungibleTokenSecurityScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = FungibleTokenSecurity
-
-    export type NonFungibleTokenSecurityScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = NonFungibleTokenSecurity
 
     export type FungibleAssetScope<
         S extends 'all' | void = void,

@@ -9,7 +9,7 @@ import { useAppearance } from '../../../shared-ui/index.js'
 export function usePopupTheme() {
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
-    const [localization, isRTL] = useThemeLanguage(useValueRef(languageSettings))
+    const [localization] = useThemeLanguage(useValueRef(languageSettings))
 
     return unstable_createMuiStrictModeTheme(
         (appearance === 'default' ? mode : appearance) === ThemeMode.Dark ? MaskDarkTheme : MaskLightTheme,

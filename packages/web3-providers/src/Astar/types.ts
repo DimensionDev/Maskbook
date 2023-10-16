@@ -1,10 +1,3 @@
-interface EstimateSuggestOption {
-    maxWaitTimeEstimate: number
-    minWaitTimeEstimate: number
-    suggestedMaxFeePerGas: string
-    suggestedMaxPriorityFeePerGas: string
-}
-
 export interface EstimateSuggestResponse {
     tip: Tip
     slow?: string

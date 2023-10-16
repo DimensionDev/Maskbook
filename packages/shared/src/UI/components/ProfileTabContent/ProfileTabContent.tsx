@@ -140,7 +140,6 @@ function Content(props: ProfileTabContentProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const {
-        value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,

@@ -77,28 +77,6 @@ export interface Strategy {
     __typename: string
 }
 
-interface ProposalPayload {
-    body: string
-    choices: string[]
-    start: number
-    end: number
-    snapshot: string
-    name: string
-    metadata: {
-        strategies: Strategy[]
-        network: string
-    }
-}
-
-interface ProposalMessage {
-    payload: ProposalPayload
-    timestamp: string
-    token: string
-    type: 'proposal'
-    version: string
-    space: string
-}
-
 /**
  * Payload of a vote
  */
@@ -122,10 +100,6 @@ export interface VoteItem {
     choiceIndex: number | undefined
     choiceIndexes: number[] | undefined
     timestamp: number
-}
-
-type VoteItemList = {
-    [key in string]: VoteItem
 }
 
 export interface ProposalResult {

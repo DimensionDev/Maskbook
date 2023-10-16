@@ -17,12 +17,6 @@ export interface IFollowIdentity {
     ens: string
     namespace: string
 }
-interface IFollowPageInfo {
-    endCursor: number
-    hasNextPage: boolean
-    hasPreviousPage: boolean
-    startCursor: number
-}
 
 interface IIdentity {
     address: string

@@ -24,11 +24,6 @@ export enum BoxState {
     NOT_QUALIFIED = 11,
 }
 
-interface PaymentOption {
-    tokenAddress: string
-    price: string
-}
-
 interface PaymentInfo {
     token: FungibleToken<ChainId, SchemaType>
     price: string

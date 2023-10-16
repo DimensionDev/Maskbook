@@ -26,14 +26,6 @@ enum TokenFlag {
     TRIAGE = 'TRIAGE',
 }
 
-interface Account {
-    address: string
-    profile_img_url: string
-    user?: {
-        username: string
-    }
-}
-
 interface Attribute {
     traitType: string
     value: string

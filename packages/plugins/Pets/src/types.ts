@@ -60,8 +60,3 @@ export interface NonFungibleContract {
     chainId: ChainId | undefined
     tokens: Record<string, OwnerERC721TokenInfo>
 }
-
-enum MenuType {
-    Setting = 0,
-    About = 1,
-}

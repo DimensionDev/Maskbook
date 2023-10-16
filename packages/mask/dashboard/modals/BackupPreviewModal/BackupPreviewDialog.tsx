@@ -90,7 +90,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             setError,
             control,
             handleSubmit,
-            reset,
             resetField,
             formState: { errors, isDirty, isValid },
         },

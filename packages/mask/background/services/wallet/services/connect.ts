@@ -65,7 +65,7 @@ export async function getEIP2255PermissionDetail(id: string) {
 }
 export async function grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
     if (!requests.has(id)) throw new Error('Invalid request id')
-    const { origin, request, promise } = requests.get(id)!
+    const { origin, promise } = requests.get(id)!
     for (const wallet of grantedWalletAddress) {
         const data = await walletDatabase.get('granted_permission', wallet)
         const newData = produce<WalletGrantedPermission>(

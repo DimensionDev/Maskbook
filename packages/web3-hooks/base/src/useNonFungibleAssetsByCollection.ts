@@ -34,7 +34,7 @@ export function useNonFungibleAssetsByCollection<
         const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         toggleLoading(true)
         try {
-            for (const v of Array.from({ length: options?.size ?? 36 })) {
+            for (const _ of Array.from({ length: options?.size ?? 36 })) {
                 const { value, done: iteratorDone } = await iterator.next()
                 if (value instanceof Error) {
                     // Controlled error

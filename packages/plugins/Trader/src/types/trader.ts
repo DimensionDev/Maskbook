@@ -9,14 +9,6 @@ export type ERC20TokenCustomizedBase = Readonly<ChainIdOptionalRecord<ERC20Token
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 
-enum WarningLevel {
-    LOW = 1,
-    MEDIUM = 2,
-    HIGH = 3,
-    CONFIRMATION_REQUIRED = 4,
-    BLOCKED = 5,
-}
-
 export enum ContentTab {
     Market = 'market',
     Price = 'price',

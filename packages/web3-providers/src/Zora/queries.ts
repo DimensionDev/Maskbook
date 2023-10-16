@@ -94,25 +94,6 @@ const Token = gql`
     }
 `
 
-const Collection = gql`
-    address
-    description
-    name
-    symbol
-    totalSupply
-    networkInfo {
-        ${Network}
-    }
-    attributes {
-        traitType
-        valueMetrics {
-            value
-            count
-            percent
-        }
-    }
-`
-
 const Event = gql`
     networkInfo {
         ${Network}

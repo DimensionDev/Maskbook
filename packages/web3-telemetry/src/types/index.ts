@@ -93,9 +93,11 @@ export interface UserOptions {
     account?: string
 }
 
+export interface DeviceOptions {}
+
 export interface CommonOptions {
     user?: UserOptions
-    device?: unknown
+    device?: DeviceOptions
     network?: NetworkOptions
     // default to 1 (100%)
     sampleRate?: number
@@ -115,7 +117,7 @@ export interface ExceptionOptions extends CommonOptions {
 
 export interface Provider {
     user?: UserOptions
-    device?: unknown
+    device?: DeviceOptions
     network?: NetworkOptions
 
     enable(): void
