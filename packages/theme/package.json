@@ -6,20 +6,15 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
+      "types": "./dist/index.d.ts",
       "mask-src": "./src/index.ts",
-      "default": "./dist/src/index.d.ts"
+      "default": "./dist/index.d.ts"
     }
-  },
-  "scripts": {
-    "build-storybook": "build -- build-storybook",
-    "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@masknet/storybook-shared": "workspace:^",
     "@types/tinycolor2": "^1.4.3",
     "fuse.js": "6.6.2",
     "notistack": "2.0.8",
@@ -29,14 +24,6 @@
     "tss-react": "^4.9.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.11",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.13",
-    "@storybook/manager-webpack5": "^6.5.13",
-    "@storybook/react": "^6.5.13",
-    "@types/react-window": "^1.8.5",
-    "babel-loader": "^9.1.3"
+    "@types/react-window": "^1.8.5"
   }
 }

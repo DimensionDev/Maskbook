@@ -24,7 +24,6 @@ jobs:
     env:
       WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
       MASK_SENTRY_DSN: ${{ secrets.MASK_SENTRY_DSN }}
-      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
     steps:
       - name: Get cache date
         id: get-date
