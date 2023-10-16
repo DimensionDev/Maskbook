@@ -73,15 +73,19 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
     const { RiskWarning } = useWeb3State(pluginID)
 
     const onConfirm = useCallback(async () => {
-        if (!account) {
-            showSnackbar(t.wallet_risk_warning_no_select_wallet(), {
-                variant: 'error',
-                preventDuplicate: true,
-            })
-            return
+        try {
+            if (!account) {
+                showSnackbar(t.wallet_risk_warning_no_select_wallet(), {
+                    variant: 'error',
+                    preventDuplicate: true,
+                })
+                return
+            }
+            await RiskWarning?.approve?.(account)
+            onClose()
+        } catch {
+            // do nothing
         }
-        await RiskWarning?.approve?.(account)
-        onClose()
     }, [showSnackbar, account, onClose])
 
     return (
