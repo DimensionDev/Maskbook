@@ -18,5 +18,22 @@
     "plugin_snapshot_vote_choice": "옵션",
     "plugin_snapshot_vote_power": "투표 파워",
     "plugin_snapshot_vote_title": "투표하세요.",
-    "plugin_snapshot_my_vote": "나의 투표"
+    "plugin_snapshot_my_vote": "나의 투표",
+    "plugin_snapshot_space_info_followers_count": "{{followersCount}} 맴버",
+    "plugin_snapshot_proposal_not_start": "시작 시간 {{date}}",
+    "plugin_snapshot_proposal_started": "종료 시간 {{date}} ",
+    "plugin_snapshot_proposal_ended": "{{date}} 종료됨",
+    "plugin_snapshot_proposal_no_results": "해당한 결과가 없습니다.",
+    "plugin_snapshot_space": "스페이스",
+    "plugin_snapshot_space_join": "참가",
+    "plugin_snapshot_space_view": "살펴보기",
+    "plugin_snapshot_proposal": "프로포절",
+    "plugin_snapshot_progress": "진행",
+    "plugin_snapshot_load_failed": "Snapshot API 시비스 고장으로 인해 로딩 실패",
+    "plugin_snapshot_vote_confirm_dialog_title": "투표 개요",
+    "plugin_snapshot_vote_confirm_dialog_choice": "\"{{- choiceText}}\" 투표하시겠습니까?",
+    "plugin_snapshot_vote_confirm_dialog_warning": "이 조작은 취소할 수 없습니다.",
+    "plugin_snapshot_current_result_title": "현재 결과",
+    "plugin_snapshot_download_report": "리포트 다운로드",
+    "loading": "로딩 중"
 }

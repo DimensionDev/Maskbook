@@ -10,5 +10,6 @@
     "news": "뉴스",
     "event": "이벤트",
     "nfts": "NFTs",
-    "content_end": "콘텐츠가 완전히 로드되었습니다."
+    "content_end": "콘텐츠가 완전히 로드되었습니다.",
+    "expired": "만료됨"
 }
