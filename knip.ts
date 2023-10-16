@@ -3,29 +3,51 @@ import type { KnipConfig } from 'knip'
 
 // https://github.com/webpro/knip
 const config: KnipConfig = {
+    ignore: ['**/*.d.ts', '**/locales/index.ts', '.storybook/**', 'stories/**'],
     webpack: false,
     workspaces: {
+        '.': {
+            entry: ['*.js', '*.cjs'],
+            ignoreDependencies: ['@typescript/lib-dom', 'ses'],
+        },
         'packages/mask': {
+            ignore: ['public'],
             entry: [
+                '.webpack/webpack.config.ts',
                 'background/mv2-entry.ts',
                 'background/mv3-entry.ts',
                 'src/extension/dashboard/index.ts',
                 'src/extension/popups/entry.ts',
                 'src/content-script.ts',
+                'web-workers/wallet.ts',
                 'devtools/content-script/index.ts',
                 'devtools/panels/index.tsx',
             ],
         },
+        'packages/web3-constants': {
+            entry: ['constants.ts'],
+        },
+        'packages/web3-contracts': {
+            ignoreDependencies: ['@typechain/web3-v1'],
+        },
         'packages/injected-script': {
+            ignore: ['main/debugger.ts'],
             entry: ['main/index.ts'],
         },
         'packages/app': {
-            entry: ['src/background-worker/init.ts', 'src/index.tsx'],
+            entry: ['webpack.config.js', 'postcss.config.cjs', 'src/background-worker/init.ts', 'src/index.tsx'],
+            ignoreDependencies: ['autoprefixer'],
         },
         'packages/mask-sdk': {
+            ignore: ['public-api'],
             entry: ['main/index.ts'],
         },
+        'packages/sentry': {
+            ignoreDependencies: ['@sentry/browser'],
+        },
     },
+    ignoreWorkspaces: ['packages/polyfills', 'packages/sandboxed-plugins', 'packages/xcode'],
+    ignoreDependencies: ['buffer', 'https-browserify', 'punycode'],
 }
 
 export default config

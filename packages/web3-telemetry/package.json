@@ -32,7 +32,6 @@
     "@masknet/shared-base": "workspace:^",
     "@sentry/browser": "^7.66.0",
     "@sentry/tracing": "^7.66.0",
-    "@sentry/types": "^7.66.0",
     "urlcat": "^3.1.0",
     "uuid": "^9.0.0"
   },
