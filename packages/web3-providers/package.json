@@ -58,7 +58,6 @@
     "@solana/web3.js": "^1.75.0",
     "@walletconnect/client": "1.7.8",
     "@walletconnect/sign-client": "^2.7.3",
-    "@walletconnect/types": "^2.7.3",
     "@walletconnect/utils": "^2.7.3",
     "bignumber.js": "9.1.2",
     "bloom-filters": "^3.0.0",

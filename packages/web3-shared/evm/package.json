@@ -29,7 +29,6 @@
     "web3-utils": "1.10.2"
   },
   "devDependencies": {
-    "@masknet/injected-script": "*",
     "@types/punycode": "^2.1.0"
   }
 }

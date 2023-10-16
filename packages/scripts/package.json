@@ -5,7 +5,9 @@
   "type": "module",
   "bin": {
     "build": "./src/bin/build.mjs",
-    "dev": "./src/bin/dev.mjs"
+    "dev": "./src/bin/dev.mjs",
+    "__build": "./src/bin/build.ts",
+    "__dev": "./src/bin/dev.ts"
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.4.1",

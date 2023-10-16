@@ -6,34 +6,18 @@
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
-approvedList.set('ethereumjs-abi', [
-    // wyvern-js
-    'https://github.com/ProjectWyvern/ethereumjs-abi.git',
-    // eth-sig-util
-    'git+https://github.com/ethereumjs/ethereumjs-abi.git',
-])
-
 approvedList.set('webpack', [
     'Jack-Works/webpack#lazy-import',
     'Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770',
 ])
+
+// glob -> jackspeak -> @isaacs/cliui -> ...
 approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
 approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
 approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])
 
-approvedList.set('wyvern-js', [
-    // wyvern-schemas
-    'github:ProjectOpenSea/wyvern-js#semver:^3.2.1',
-])
-
-// openseajs -> wyvern-schemas -> web3-provider-engine -> eth-block-tracker
-approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
-
-// pnpm -r why web3@0.20.7
-approvedList.set('bignumber.js', [
-    'git+https://github.com/frozeman/bignumber.js-nolookahead.git',
-    'git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934',
-])
+// knip -> @pnpm/* -> ...
+approvedList.set('ramda', 'npm:@pnpm/ramda@0.28.1')
 
 // @magic-works/i18n-codegen -> i18next-translation-parser
 // https://github.com/i18next/i18next-translation-parser/issues/11
