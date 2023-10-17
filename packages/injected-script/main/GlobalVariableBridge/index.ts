@@ -11,6 +11,19 @@ interface Ref extends NullPrototype {
 }
 
 function __unsafe__Get(path: string): Ref | undefined {
+    // presets
+    if (path === '__metamask__') {
+        try {
+            return {
+                __unsafe__value: __unsafe__window.ethereum?.providerMap?.get('MetaMask') || __unsafe__window.ethereum,
+                __unsafe__this: __unsafe__window,
+                __proto__: null,
+            }
+        } catch {
+            // do nothing
+        }
+    }
+
     const fragments = $.setPrototypeOf($.StringSplit(path, '.' as any), $safe.ArrayPrototype)
     let __unsafe__this: any = __unsafe__window
     let __unsafe__value: unknown = __unsafe__window
