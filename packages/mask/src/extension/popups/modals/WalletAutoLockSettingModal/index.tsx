@@ -9,7 +9,6 @@ import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
-import { isZero } from '@masknet/web3-shared-base'
 import { isUndefined } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
@@ -70,9 +69,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
     const error = Number.isNaN(isUndefined(time) ? initialTime : time)
 
     const [{ loading }, setAutoLockerTime] = useAsyncFn(async (time: number) => {
-        await Services.Wallet.setAutoLockerTime(
-            time > ONE_DAY_IN_MILLISECONDS || isZero(time) ? 0 : Math.max(time, DEFAULT_MIN_AUTO_LOCKER_TIME),
-        )
+        await Services.Wallet.setAutoLockerTime(time)
         props.onClose?.()
     }, [])
 
@@ -134,7 +131,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                 disabled={error || loading}
                 loading={loading}
                 sx={{ marginTop: '16px' }}
-                onClick={() => setAutoLockerTime(minutesToMilliseconds(Number(time)))}>
+                onClick={() => setAutoLockerTime(minutesToMilliseconds(Number(time ?? initialTime)))}>
                 {t('confirm')}
             </ActionButton>
         </BottomDrawer>

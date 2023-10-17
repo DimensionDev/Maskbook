@@ -1,11 +1,7 @@
 import { combineAbortSignal } from '@masknet/kit'
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { attachReactTreeWithoutContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide.js'
-
-function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier }) {
-    return <SetupGuide persona={persona} onClose={unmount} />
-}
+import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide/index.js'
 
 export function createTaskStartSetupGuideDefault() {
     return (signal: AbortSignal, persona: PersonaIdentifier) => {
@@ -13,7 +9,7 @@ export function createTaskStartSetupGuideDefault() {
         const combinedSignal = combineAbortSignal(controller.signal, signal)
         attachReactTreeWithoutContainer(
             'setup-guide',
-            <UI persona={persona} unmount={() => controller.abort()} />,
+            <SetupGuide persona={persona} onClose={() => controller.abort()} />,
             combinedSignal,
         )
     }

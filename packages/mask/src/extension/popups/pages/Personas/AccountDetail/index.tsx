@@ -111,7 +111,7 @@ const AccountDetail = memo(() => {
     }, [pendingUnlistedConfig, t, updateConfig])
 
     const pubkey = currentPersona?.identifier.publicKeyAsHex
-    const handleConfirmReleaseBind = useCallback(async () => {
+    const releaseBinding = useCallback(async () => {
         try {
             if (!pubkey || !selectedAccount?.identity || !selectedAccount?.platform) return
 
@@ -148,6 +148,7 @@ const AccountDetail = memo(() => {
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             MaskMessages.events.ownPersonaChanged.sendToAll()
+            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
 
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
@@ -198,22 +199,20 @@ const AccountDetail = memo(() => {
                                     }}
                                     values={{
                                         identity: selectedAccount?.identifier.userId,
-                                        personaName: currentPersona?.nickname,
+                                        personaName: currentPersona.nickname,
                                     }}
                                 />
                             ),
                         })
                         if (confirmed) {
-                            await handleConfirmReleaseBind()
-                            MaskMessages.events.ownPersonaChanged.sendToAll()
-                            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+                            await releaseBinding()
                         }
                     }}
                 />
             ),
         )
         return () => setExtension(undefined)
-    }, [selectedAccount, handleDetachProfile, currentPersona, handleConfirmReleaseBind])
+    }, [selectedAccount, handleDetachProfile, currentPersona, releaseBinding])
 
     useUpdateEffect(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)
@@ -222,19 +221,17 @@ const AccountDetail = memo(() => {
     if (!selectedAccount) return null
 
     return (
-        <>
-            <AccountDetailUI
-                account={selectedAccount}
-                onVerify={onVerify}
-                isSupportNextDotID={isSupportNextDotID}
-                walletProofs={walletProofs}
-                toggleUnlisted={toggleUnlisted}
-                listingAddresses={listingAddresses}
-                loading={isInitialLoading}
-                onSubmit={handleSubmit}
-                submitting={submitting}
-            />
-        </>
+        <AccountDetailUI
+            account={selectedAccount}
+            onVerify={onVerify}
+            isSupportNextDotID={isSupportNextDotID}
+            walletProofs={walletProofs}
+            toggleUnlisted={toggleUnlisted}
+            listingAddresses={listingAddresses}
+            loading={isInitialLoading}
+            onSubmit={handleSubmit}
+            submitting={submitting}
+        />
     )
 })
 

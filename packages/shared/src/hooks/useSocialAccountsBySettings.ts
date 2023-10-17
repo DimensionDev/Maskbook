@@ -27,7 +27,7 @@ export function useSocialAccountsBySettings(
     } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId, signWithPersona)
 
     const addresses = useMemo(() => {
-        if (!hiddenAddress || !socialAccounts) return
+        if (!hiddenAddress || !socialAccounts) return socialAccounts
 
         return socialAccounts.filter((x) => {
             if (!x.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)) return true
