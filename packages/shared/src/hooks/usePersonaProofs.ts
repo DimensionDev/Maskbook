@@ -7,7 +7,6 @@ import { delay } from '@masknet/kit'
 export function usePersonaProofs(publicKey?: string) {
     const result = useQuery<BindingProof[], Error>({
         queryKey: ['next-id', 'bindings-by-persona', publicKey],
-        enabled: !!publicKey,
         queryFn: async () => {
             if (Sniffings.is_popup_page) await NextIDProof.clearPersonaQueryCache(publicKey!)
             const binding = await NextIDProof.queryExistedBindingByPersona(publicKey!)

@@ -289,6 +289,8 @@ export class NextIDProof {
     static async queryExistedBindingByPersona(personaPublicKey: string) {
         const { ids } = await this.fetchFromProofService<NextIDBindings>(
             getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
+            undefined,
+            true,
         )
         // Will have only one item when query by personaPublicKey
         return first(ids)

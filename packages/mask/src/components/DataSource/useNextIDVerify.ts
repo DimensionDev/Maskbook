@@ -43,7 +43,7 @@ export function useNextIDVerify() {
             const { signature, payload } = message
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            postMessage?.(postContent, { recover: false, reason: 'verify' })
+            await postMessage?.(postContent, { recover: false, reason: 'verify' })
             await new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
                     const postId = getPostIdFromNewPostToast?.()
