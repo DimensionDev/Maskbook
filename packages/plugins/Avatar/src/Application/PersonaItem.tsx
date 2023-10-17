@@ -102,7 +102,7 @@ export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
 
             <NFTInfo loading={loading} tooltip={inactive ? t.inactive_persona_tooltip() : ''} isNFT={!!nftAvatar} />
 
-            <Icons.RightArrow sx={{ color: (theme) => theme.palette.maskColor.borderSecondary, marginLeft: 8 }} />
+            <Icons.RightArrow sx={{ color: (theme) => theme.palette.maskColor.borderSecondary, marginLeft: '8px' }} />
         </ListItemButton>
     )
 })

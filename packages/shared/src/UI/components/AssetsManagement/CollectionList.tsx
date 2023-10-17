@@ -40,7 +40,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
         sidebar: {
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
             paddingLeft: theme.spacing(1.5),
-            paddingRight: theme.spacing(0.5),
+            paddingRight: theme.spacing(0.25),
         },
         main: {
             display: 'flex',

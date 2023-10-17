@@ -1,7 +1,7 @@
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { millisecondsToMinutes, minutesToMilliseconds, hoursToMilliseconds } from 'date-fns'
-import { Box, TextField, Typography, useTheme } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
@@ -9,8 +9,8 @@ import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
-import { isPositive, isZero } from '@masknet/web3-shared-base'
-import { isEmpty, isUndefined } from 'lodash-es'
+import { isZero } from '@masknet/web3-shared-base'
+import { isUndefined } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -108,41 +108,6 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                 sx={{ marginTop: '12px' }}>
                 {t('popups_wallet_settings_auto_lock_tips')}
             </Typography>
-            <Box display="flex" justifyContent="center" mx={0.5}>
-                <TextField
-                    sx={{ mt: 2 }}
-                    error={error}
-                    fullWidth
-                    value={isUndefined(time) ? (!isZero(initialTime) ? initialTime : '') : time}
-                    disabled={!isUndefined(time) ? isEmpty(time) : isZero(initialTime)}
-                    onChange={(e) => {
-                        if (!e.target.value) setTime('')
-                        if (!isPositive(e.target.value)) {
-                            return
-                        }
-                        setTime(e.target.value)
-                    }}
-                    InputProps={{
-                        endAdornment: (
-                            <Typography color={theme.palette.maskColor.third}>
-                                {t('popups_wallet_settings_minutes')}
-                            </Typography>
-                        ),
-                        disableUnderline: true,
-                        inputProps: {
-                            min: 0,
-                            type: 'number',
-                        },
-                    }}
-                />
-            </Box>
-
-            {error ? (
-                <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
-                    {t('popups_wallet_settings_auto_lock_number_only')}
-                </Typography>
-            ) : null}
-
             <Box className={classes.list}>
                 {options.map((option, index) => (
                     <Box

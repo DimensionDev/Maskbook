@@ -84,7 +84,7 @@ export function SelectFungibleTokenDialog({
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
     const FixedSizeListProps = useMemo(
-        () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
+        () => ({ itemSize: rowSize + 18.5, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
     )
     return (
@@ -114,6 +114,7 @@ export function SelectFungibleTokenDialog({
                     SearchTextFieldProps={{
                         InputProps: { classes: { root: classes.search } },
                     }}
+                    isHiddenChainIcon={false}
                 />
             </DialogContent>
         </InjectedDialog>

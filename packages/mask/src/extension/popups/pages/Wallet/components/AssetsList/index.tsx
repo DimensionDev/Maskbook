@@ -26,9 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             backgroundColor: theme.palette.maskColor.bg,
         },
-        '&:not(:last-of-type)': {
-            marginBottom: theme.spacing(1),
-        },
     },
     tokenIcon: {
         width: 36,

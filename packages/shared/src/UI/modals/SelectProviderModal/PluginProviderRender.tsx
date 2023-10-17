@@ -61,9 +61,9 @@ const useStyles = makeStyles()((theme) => {
         wallets: {
             width: '100%',
             display: 'grid',
+            padding: 0,
             gridTemplateColumns: 'repeat(3, 1fr)',
             gridGap: '12px 12px',
-            margin: theme.spacing(2, 0, 0),
             [smallQuery]: {
                 gridAutoRows: '110px',
                 gridTemplateColumns: 'repeat(2, 1fr)',
