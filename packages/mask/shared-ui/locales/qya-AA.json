@@ -87,6 +87,7 @@
     "connected_already": "crwdns22488:0{{- account}}crwdne22488:0",
     "switch_for_more_connections": "crwdns22490:0crwdne22490:0",
     "send_post_successfully": "crwdns22492:0crwdne22492:0",
+    "connect_successfully": "crwdns22500:0crwdne22500:0",
     "application_tooltip_hint_sns_persona_unmatched": "crwdns16532:0{{currentSNSConnectedPersonaPublicKey}}crwdnd16532:0{{currentPersonaPublicKey}}crwdnd16532:0{{currentSNSConnectedPersonaPublicKey}}crwdne16532:0",
     "application_tooltip_hint_verify": "crwdns16534:0crwdne16534:0",
     "application_tooltip_hint_create_persona": "crwdns16536:0crwdne16536:0",
