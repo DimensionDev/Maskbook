@@ -123,15 +123,17 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
             },
         ] as Array<SocialAddress<ChainId>>
     }, [currentAddress])
-    const { data: allSocialAccounts = fallbackAccounts, refetch: retrySocialAddress } = useSocialAccountsBySettings(
-        identity,
-        undefined,
-        addressSorter,
-        (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
+    const {
+        data: allSocialAccounts,
+        isLoading,
+        refetch: retrySocialAddress,
+    } = useSocialAccountsBySettings(identity, undefined, addressSorter, (a, b, c, d) =>
+        Services.Identity.signWithPersona(a, b, c, location.origin, d),
     )
     const socialAccounts = useMemo(() => {
-        return allSocialAccounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM)
-    }, [allSocialAccounts])
+        const accounts = isLoading && !allSocialAccounts.length ? fallbackAccounts : allSocialAccounts
+        return accounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM)
+    }, [allSocialAccounts, fallbackAccounts, isLoading])
 
     const [selectedAddress, setSelectedAddress] = useState<string | undefined>(currentAddress)
     const firstAddress = first(socialAccounts)?.address
