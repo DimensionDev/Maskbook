@@ -3,13 +3,16 @@ import { ActionButtonPromise, EmojiAvatar } from '@masknet/shared'
 import { formatPersonaFingerprint, type PersonaIdentifier } from '@masknet/shared-base'
 import { MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useMaskSharedTrans } from '../../../utils/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
-import { useCurrentUserId, useConnectedVerified, usePostContent, useConnectPersona } from './hooks.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
+import { usePostContent } from './hooks/usePostContent.js'
+import { useCurrentUserId } from './hooks/useCurrentUserId.js'
+import { useConnectedVerified } from './hooks/useConnectedVerified.js'
+import { useConnectPersona } from './hooks/useConnectPersona.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -159,6 +162,12 @@ export function VerifyNextID({
     const [completed, setCompleted] = useState(!platform)
     useConnectPersona(personaIdentifier)
 
+    const executor = useCallback(async () => {
+        if (platform) return onVerify()
+        onDone?.()
+        setCompleted(true)
+    }, [onVerify, onDone])
+
     if (currentUserId !== userId || loadingCurrentUserId || connected) {
         return (
             <AccountConnectStatus
@@ -181,11 +190,6 @@ export function VerifyNextID({
     ) : (
         t('ok')
     )
-    const executor = async () => {
-        if (platform) return onVerify()
-        onDone?.()
-        setCompleted(true)
-    }
     const disabled = !(userId || customUserId) || !personaName || disableVerify
 
     return (

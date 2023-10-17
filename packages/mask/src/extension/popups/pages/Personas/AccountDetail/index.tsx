@@ -221,19 +221,17 @@ const AccountDetail = memo(() => {
     if (!selectedAccount) return null
 
     return (
-        <>
-            <AccountDetailUI
-                account={selectedAccount}
-                onVerify={onVerify}
-                isSupportNextDotID={isSupportNextDotID}
-                walletProofs={walletProofs}
-                toggleUnlisted={toggleUnlisted}
-                listingAddresses={listingAddresses}
-                loading={isInitialLoading}
-                onSubmit={handleSubmit}
-                submitting={submitting}
-            />
-        </>
+        <AccountDetailUI
+            account={selectedAccount}
+            onVerify={onVerify}
+            isSupportNextDotID={isSupportNextDotID}
+            walletProofs={walletProofs}
+            toggleUnlisted={toggleUnlisted}
+            listingAddresses={listingAddresses}
+            loading={isInitialLoading}
+            onSubmit={handleSubmit}
+            submitting={submitting}
+        />
     )
 })
 

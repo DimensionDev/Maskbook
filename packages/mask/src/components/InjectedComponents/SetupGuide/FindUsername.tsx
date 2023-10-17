@@ -8,7 +8,7 @@ import { Trans } from 'react-i18next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
-import { useSetupGuideStepInfo } from './useSetupGuideStepInfo.js'
+import { useSetupGuideStepInfo } from './hooks/useSetupGuideStepInfo.js'
 
 const useFindUsernameStyles = makeStyles()((theme) => ({
     main: {

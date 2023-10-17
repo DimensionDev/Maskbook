@@ -13,10 +13,10 @@ import {
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
-import { useCurrentUserId } from './hooks.js'
+import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/index.js'
+import { useLastRecognizedIdentity } from '../../../DataSource/useActivatedUI.js'
+import { useSetupGuideStatus } from '../../../GuideStep/useSetupGuideStatus.js'
+import { useCurrentUserId } from './useCurrentUserId.js'
 
 export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
     // #region parse setup status
@@ -92,9 +92,11 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
             isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), personaConnectedProfile?.identifier)
         )
     })
-    if (!verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID) {
-        return composeInfo(SetupGuideStep.VerifyOnNextID)
-    }
+
+    if (lastSettingState.status === SetupGuideStep.VerifyOnNextID) return composeInfo(SetupGuideStep.VerifyOnNextID)
+
+    if (verifiedProfile) return composeInfo(SetupGuideStep.Verified)
+
     if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername)
 
     // NextID is available on this site.
