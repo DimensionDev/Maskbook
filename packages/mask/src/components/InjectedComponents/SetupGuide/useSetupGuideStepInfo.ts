@@ -1,21 +1,21 @@
-import { useEffect } from 'react'
+import Services from '#services'
 import { usePersonaProofs } from '@masknet/shared'
 import {
     EnhanceableSite,
-    isSameProfile,
-    type PersonaIdentifier,
+    MaskMessages,
     ProfileIdentifier,
+    SetupGuideStep,
+    isSameProfile,
     resolveNextIDIdentityToProfile,
     userPinExtension,
-    MaskMessages,
-    SetupGuideStep,
+    type PersonaIdentifier,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import Services from '#services'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
-import { useQuery } from '@tanstack/react-query'
 import { useCurrentUserId } from './hooks.js'
 
 export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
@@ -30,11 +30,14 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
     const username = lastSettingState.username || currentUserId || ''
     // #endregion
 
-    const { data: persona, refetch } = useQuery(['query-persona-info', destinedPersona?.publicKeyAsHex], async () => {
-        if (!destinedPersona?.publicKeyAsHex) return null
-        return Services.Identity.queryPersona(destinedPersona)
-    })
-    const { networkIdentifier, configuration } = activatedSiteAdaptorUI!
+    const { data: personaInfo, refetch } = useQuery(
+        ['query-persona-info', destinedPersona?.publicKeyAsHex],
+        async () => {
+            if (!destinedPersona?.publicKeyAsHex) return null
+            return Services.Identity.queryPersona(destinedPersona)
+        },
+    )
+    const { networkIdentifier } = activatedSiteAdaptorUI!
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
 
@@ -54,53 +57,46 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
         }
     }, [username])
 
-    const composeInfo = (step: SetupGuideStep, stepType: 'close' | 'done' | 'doing' = 'close') => {
+    const composeInfo = (step: SetupGuideStep) => {
         return {
             step,
             userId: username,
             loadingCurrentUserId,
             currentIdentityResolved: lastRecognized,
-            destinedPersonaInfo: persona,
-            type: stepType,
+            destinedPersonaInfo: personaInfo,
         }
     }
 
     const { data: proofs } = usePersonaProofs(destinedPersona?.publicKeyAsHex)
 
-    if (!persona) return composeInfo(SetupGuideStep.Close, 'close')
-    if (!username) return composeInfo(SetupGuideStep.FindUsername, 'doing')
+    if (!personaInfo) return composeInfo(SetupGuideStep.Close)
+    if (!username) return composeInfo(SetupGuideStep.FindUsername)
 
     // Not set status
     if (!lastSettingState.status) {
         // Should show pin extension when not set
         if (!lastPinExtensionSetting) {
-            return composeInfo(SetupGuideStep.PinExtension, 'doing')
+            return composeInfo(SetupGuideStep.PinExtension)
         } else {
-            return composeInfo(SetupGuideStep.Close, 'close')
+            return composeInfo(SetupGuideStep.Close)
         }
     }
 
     // Should connected persona
-    const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
-        isSameProfile(
-            x.identifier,
-            ProfileIdentifier.of(networkIdentifier, username).expect(`${username} should be a valid user id`),
-        ),
-    )
+    const profile = ProfileIdentifier.of(networkIdentifier, username).expect(`${username} should be a valid user id`)
+    const personaConnectedProfile = personaInfo.linkedProfiles.find((x) => isSameProfile(x.identifier, profile))
     // Should verified persona
     const verifiedProfile = proofs?.find((x) => {
         return (
-            isSameProfile(
-                resolveNextIDIdentityToProfile(x.identity, x.platform),
-                personaConnectedProfile?.identifier,
-            ) && x.is_valid
+            x.is_valid &&
+            isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), personaConnectedProfile?.identifier)
         )
     })
     if (!verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID) {
-        return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
+        return composeInfo(SetupGuideStep.VerifyOnNextID)
     }
-    if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
+    if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername)
 
     // NextID is available on this site.
-    return composeInfo(SetupGuideStep.Close, configuration.nextIDConfig?.platform ? 'close' : 'done')
+    return composeInfo(SetupGuideStep.Close)
 }

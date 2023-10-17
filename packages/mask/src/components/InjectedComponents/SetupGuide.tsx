@@ -54,7 +54,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const disableVerify = useMemo(() => {
         return !currentIdentityResolved?.identifier || !userId
             ? false
-            : currentIdentityResolved?.identifier.userId !== userId
+            : currentIdentityResolved.identifier.userId !== userId
     }, [currentIdentityResolved, userId])
 
     const onVerify = useCallback(async () => {
