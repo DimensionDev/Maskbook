@@ -27,7 +27,6 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     const { t } = useMaskSharedTrans()
     const { classes } = useStyles()
     const lang = useLanguage()
-    const { t } = useMaskSharedTrans()
     const handleLanguageChange = useCallback(async (target: LanguageOptions) => {
         await Services.Settings.setLanguage(target)
     }, [])
