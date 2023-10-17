@@ -37,8 +37,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { showSnackbar } = useCustomSnackbar()
     const [, handleVerifyNextID] = useNextIDVerify()
 
-    const { step, userId, currentIdentityResolved, destinedPersonaInfo, setConfirmConnected } =
-        useSetupGuideStepInfo(persona)
+    const { step, userId, currentIdentityResolved, destinedPersonaInfo } = useSetupGuideStepInfo(persona)
 
     // #region should not show notification
     const notify = useCallback(
@@ -74,15 +73,15 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (isBound) return
 
         await handleVerifyNextID(destinedPersonaInfo, userId)
-        notify()
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
-    }, [userId, destinedPersonaInfo, notify])
+    }, [userId, destinedPersonaInfo])
 
     const onVerifyDone = useCallback(() => {
         if (step !== SetupGuideStep.VerifyOnNextID) return
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
-    }, [step])
+        notify()
+    }, [step, notify])
 
     const onClose = useCallback(() => {
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
@@ -128,7 +127,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         },
     })
     const handleNext = useCallback(() => {
-        setConfirmConnected(true)
         currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { usePersonaProofs } from '@masknet/shared'
 import {
     EnhanceableSite,
@@ -16,8 +16,9 @@ import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 import { useQuery } from '@tanstack/react-query'
+import { useCurrentUserId } from './hooks.js'
 
-export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
+export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
     // #region parse setup status
     const lastPinExtensionSetting = useValueRef(userPinExtension)
     const lastSettingState = useSetupGuideStatus()
@@ -25,10 +26,12 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
 
     // #region Get username
     const lastRecognized = useLastRecognizedIdentity()
-    const username = lastSettingState.username || lastRecognized.identifier?.userId || ''
+    const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
+    const username = lastSettingState.username || currentUserId || ''
     // #endregion
 
-    const { data: persona, refetch } = useQuery(['query-persona-info', destinedPersona.publicKeyAsHex], async () => {
+    const { data: persona, refetch } = useQuery(['query-persona-info', destinedPersona?.publicKeyAsHex], async () => {
+        if (!destinedPersona?.publicKeyAsHex) return null
         return Services.Identity.queryPersona(destinedPersona)
     })
     const { networkIdentifier, configuration } = activatedSiteAdaptorUI!
@@ -51,19 +54,18 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
         }
     }, [username])
 
-    const [confirmConnected, setConfirmConnected] = useState(false)
     const composeInfo = (step: SetupGuideStep, stepType: 'close' | 'done' | 'doing' = 'close') => {
         return {
             step,
             userId: username,
+            loadingCurrentUserId,
             currentIdentityResolved: lastRecognized,
             destinedPersonaInfo: persona,
             type: stepType,
-            setConfirmConnected,
         }
     }
 
-    const { data: proofs } = usePersonaProofs(destinedPersona.publicKeyAsHex)
+    const { data: proofs } = usePersonaProofs(destinedPersona?.publicKeyAsHex)
 
     if (!persona) return composeInfo(SetupGuideStep.Close, 'close')
     if (!username) return composeInfo(SetupGuideStep.FindUsername, 'doing')
@@ -94,13 +96,10 @@ export function useSetupGuideStepInfo(destinedPersona: PersonaIdentifier) {
             ) && x.is_valid
         )
     })
-    if (personaConnectedProfile && !verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID) {
-        // NextID is available on this site.
-        // Should show pin extension when not set
-        if (!configuration.nextIDConfig?.platform) return composeInfo(SetupGuideStep.Close, 'close')
+    if (!verifiedProfile && lastSettingState.status === SetupGuideStep.VerifyOnNextID) {
         return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
     }
-    if (!personaConnectedProfile || !confirmConnected) return composeInfo(SetupGuideStep.FindUsername, 'doing')
+    if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
     // NextID is available on this site.
     return composeInfo(SetupGuideStep.Close, configuration.nextIDConfig?.platform ? 'close' : 'done')

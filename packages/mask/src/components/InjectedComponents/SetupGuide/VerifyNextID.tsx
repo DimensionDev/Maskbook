@@ -8,7 +8,8 @@ import { Trans } from 'react-i18next'
 import { useMaskSharedTrans } from '../../../utils/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
-import { useCurrentUserId, usePersonaConnected, usePostContent } from './hooks.js'
+import { useCurrentUserId, useConnectedVerified, usePostContent, useConnectPersona } from './hooks.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -153,8 +154,10 @@ export function VerifyNextID({
     const [customUserId, setCustomUserId] = useState('')
     const postContent = usePostContent(personaIdentifier, userId || customUserId)
     const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
-    const connected = usePersonaConnected(personaIdentifier?.publicKeyAsHex, userId)
-    const [completed, setCompleted] = useState(false)
+    const connected = useConnectedVerified(personaIdentifier?.publicKeyAsHex, userId)
+    const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
+    const [completed, setCompleted] = useState(!platform)
+    useConnectPersona(personaIdentifier)
 
     if (currentUserId !== userId || loadingCurrentUserId || connected) {
         return (
@@ -170,12 +173,19 @@ export function VerifyNextID({
 
     if (!personaIdentifier) return null
 
-    const buttonLabel = (
+    const buttonLabel = platform ? (
         <>
             <Icons.Send size={18} className={classes.send} />
             {t('send')}
         </>
+    ) : (
+        t('ok')
     )
+    const executor = async () => {
+        if (platform) return onVerify()
+        onDone?.()
+        setCompleted(true)
+    }
     const disabled = !(userId || customUserId) || !personaName || disableVerify
 
     return (
@@ -231,7 +241,10 @@ export function VerifyNextID({
                     </Box>
                     {completed ? (
                         <Typography className={classes.text}>
-                            <Trans i18nKey="send_post_successfully" components={{ br: <br /> }} />
+                            <Trans
+                                i18nKey={platform ? 'send_post_successfully' : 'connect_successfully'}
+                                components={{ br: <br /> }}
+                            />
                         </Typography>
                     ) : postContent ? (
                         <>
@@ -255,7 +268,7 @@ export function VerifyNextID({
                         waiting={buttonLabel}
                         complete={t('ok')}
                         failed={buttonLabel}
-                        executor={onVerify}
+                        executor={executor}
                         completeOnClick={onDone}
                         disabled={disabled}
                         completeIcon={null}
