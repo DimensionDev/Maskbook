@@ -14,8 +14,10 @@ import {
 import { collectNodeText } from '../../../utils/index.js'
 import { isMobileFacebook } from './isMobile.js'
 
-export function getNickName() {
-    const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()
+export function getNickName(userId?: string) {
+    const node = isMobileFacebook
+        ? searchNickNameSelectorOnMobile().evaluate()
+        : searchNickNameSelector(userId).evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
