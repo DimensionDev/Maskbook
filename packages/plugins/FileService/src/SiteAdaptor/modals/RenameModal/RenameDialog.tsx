@@ -8,9 +8,10 @@ import { useFileServiceTrans } from '../../../locales/i18n_generated.js'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         minWidth: 320,
-        width: 320,
+        width: 330,
         minHeight: 243,
-        height: 243,
+        borderRadius: '24px',
+        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     title: {
         fontSize: 24,
@@ -34,7 +35,9 @@ const useStyles = makeStyles()((theme) => ({
     message: {
         marginTop: theme.spacing(1.5),
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.third,
+        fontSize: 14,
+        fontWeight: 400,
     },
     inputBox: {
         flexGrow: 1,
