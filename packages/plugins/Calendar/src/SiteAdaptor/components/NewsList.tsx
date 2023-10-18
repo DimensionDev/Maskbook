@@ -146,7 +146,7 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
                                 {list[key].map((v) => (
                                     <div
                                         className={classes.eventCard}
-                                        key={v.eventt_url}
+                                        key={v.event_url}
                                         onClick={() => {
                                             window.open(v.event_url)
                                         }}>
