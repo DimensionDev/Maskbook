@@ -21,5 +21,6 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Conflux]: '',
     [NetworkType.Astar]: '',
     [NetworkType.Moonbeam]: '',
+    [NetworkType.Scroll]: '',
     [NetworkType.CustomNetwork]: '',
 }
