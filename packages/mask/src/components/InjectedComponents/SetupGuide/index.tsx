@@ -38,9 +38,12 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [, handleVerifyNextID] = useNextIDVerify()
 
     const { step, userId, currentIdentityResolved, destinedPersonaInfo } = useSetupGuideStepInfo(persona)
+    const { configuration, networkIdentifier } = activatedSiteAdaptorUI!
+    const platform = configuration.nextIDConfig?.platform
 
     // #region should not show notification
     const notify = useCallback(() => {
+        if (!platform) return
         showSnackbar(t('setup_guide_connected_title'), {
             variant: 'success',
             message: t('setup_guide_connected_description'),
@@ -58,8 +61,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const onVerify = useCallback(async () => {
         if (!userId) return
         if (!destinedPersonaInfo) return
-
-        const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
         if (!platform) return
 
         const isBound = await NextIDProof.queryIsBound(
@@ -76,18 +77,18 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onVerifyDone = useCallback(() => {
         if (step !== SetupGuideStep.VerifyOnNextID) return
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
+        currentSetupGuideStatus[networkIdentifier].value = ''
         notify()
     }, [step, notify])
 
     const onClose = useCallback(() => {
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = ''
+        currentSetupGuideStatus[networkIdentifier].value = ''
         userPinExtension.value = true
     }, [])
 
     const onCreate = useCallback(() => {
         let content = t('setup_guide_say_hello_content')
-        if (activatedSiteAdaptorUI!.networkIdentifier === EnhanceableSite.Twitter) {
+        if (networkIdentifier === EnhanceableSite.Twitter) {
             content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
         }
 
@@ -102,7 +103,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [])
 
     const onPinDone = useCallback(() => {
-        const network = activatedSiteAdaptorUI!.networkIdentifier
+        const network = networkIdentifier
         if (!userPinExtension.value) {
             userPinExtension.value = true
         }
@@ -125,7 +126,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         },
     })
     const handleNext = useCallback(() => {
-        currentSetupGuideStatus[activatedSiteAdaptorUI!.networkIdentifier].value = stringify({
+        currentSetupGuideStatus[networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })
     }, [])
@@ -141,7 +142,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     personaName={destinedPersonaInfo?.nickname}
                     username={currentIdentityResolved.nickname}
                     userId={userId}
-                    network={activatedSiteAdaptorUI!.networkIdentifier}
+                    network={networkIdentifier}
                     avatar={currentIdentityResolved?.avatar}
                     personaAvatar={personaAvatar}
                     onVerify={onVerify}
