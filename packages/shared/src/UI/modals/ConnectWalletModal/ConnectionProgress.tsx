@@ -97,10 +97,10 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                             <Typography className={classes.connectWith}>
                                 {loading
-                                    ? t.plugin_wallet_connect_with()
+                                    ? t.plugin_wallet_connect_to()
                                     : connected
-                                    ? t.plugin_wallet_connected_with()
-                                    : t.plugin_wallet_connect_with()}{' '}
+                                    ? t.plugin_wallet_connected_to()
+                                    : t.plugin_wallet_connect_to()}{' '}
                                 {Others.providerResolver.providerName(providerType)}
                             </Typography>
                             {loading ? (
@@ -129,7 +129,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                                 onClick={retry}
                                 disabled={loading}
                                 className={classes.retryButton}>
-                                {t.plugin_wallet_connect_with_retry()}
+                                {t.plugin_wallet_connect_to_retry()}
                             </ActionButton>
                         ) : null}
                     </Box>
