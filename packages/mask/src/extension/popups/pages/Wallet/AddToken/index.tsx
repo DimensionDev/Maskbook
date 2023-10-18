@@ -129,7 +129,7 @@ const AddToken = memo(function AddToken() {
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
             const [contract, tokenIds] = result
-            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+            await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
 
             for await (const tokenId of tokenIds) {
                 await Token?.addToken?.(account, {

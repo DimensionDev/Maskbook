@@ -228,7 +228,7 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
         this.blockOrUnblockToken(address, token, 'block')
         this.addOrRemoveToken(address, token, 'add')
     }
-    async addNonFungibleCollection(
+    async addNonFungibleTokens(
         owner: string,
         contract: NonFungibleTokenContract<ChainId, SchemaType>,
         tokenIds: string[],

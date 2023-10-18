@@ -143,7 +143,7 @@ export const SelectNonFungibleContractDialog = memo(
             })
             if (!results) return
             const [contract, tokenIds] = results
-            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+            await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
         }, [account, pluginID, chainId])
 
         const handleSelectCollection = useCallback(

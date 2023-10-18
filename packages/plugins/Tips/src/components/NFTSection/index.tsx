@@ -144,7 +144,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
 
         setNonFungibleTokenAddress(tokens[0].address)
         setNonFungibleTokenId(tokens[0].tokenId)
-    }, [account, pluginID, chainId, Token?.addNonFungibleCollection])
+    }, [account, pluginID, chainId, Token?.addNonFungibleTokens])
 
     // fetched tokens are all filtered out, keep fetching next page
     useEffect(() => {
