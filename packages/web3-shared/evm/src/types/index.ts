@@ -83,6 +83,8 @@ export enum ChainId {
     // Astar
     Astar = 592,
 
+    Scroll = 534352,
+
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
@@ -272,6 +274,7 @@ export enum NetworkType {
     Optimism = 'Optimism',
     Conflux = 'Conflux',
     Astar = 'Astar',
+    Scroll = 'Scroll',
     Moonbeam = 'Moonbeam',
     CustomNetwork = 'CustomNetwork',
 }

@@ -256,6 +256,17 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_scroll`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Scroll,
+        type: NetworkType.Scroll,
+        name: 'Scroll',
+        icon: new URL('../assets/scroll.png', import.meta.url).href,
+        iconColor: 'rgb(255, 248, 243)',
+        averageBlockDelay: 9,
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_optimism`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Optimism,

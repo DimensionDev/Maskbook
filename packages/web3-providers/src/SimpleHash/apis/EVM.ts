@@ -300,7 +300,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
             .filter((x) => {
-                if (!x?.id || x.spam_score >= SPAM_SCORE) return false
+                if (!x?.id || (x.spam_score !== null && x.spam_score >= SPAM_SCORE)) return false
                 return (
                     isValidChainId(resolveChainId(x.chain)) &&
                     x.top_contracts.length > 0 &&

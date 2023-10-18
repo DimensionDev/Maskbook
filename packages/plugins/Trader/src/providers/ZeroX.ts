@@ -47,6 +47,7 @@ function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Optimism:
         case NetworkType.Conflux:
         case NetworkType.Astar:
+        case NetworkType.Scroll:
         case NetworkType.Moonbeam:
         case NetworkType.CustomNetwork:
             return ZRX_NATIVE_TOKEN_ADDRESS

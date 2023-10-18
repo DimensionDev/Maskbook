@@ -12,7 +12,8 @@ export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<Cha
     const address = asset.contract_address
     const schema = SchemaType.NonFungible
 
-    if (!chainId || !isValidChainId(chainId) || !address || asset.collection.spam_score >= SPAM_SCORE) return
+    const spam_score = asset.collection.spam_score
+    if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE)) return
     // On Solana the contract is synonymous with the mint address - the field name on collection is recommended instead
     const name = isValidDomain(asset.name)
         ? asset.name

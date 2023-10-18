@@ -125,6 +125,8 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     const { data: token } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         transaction.formattedTransaction?.tokenInAddress,
+        undefined,
+        { chainId },
     )
 
     const { data: balance = '0' } = useFungibleTokenBalance(
@@ -243,7 +245,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 ) : null}
                 <Typography className={classes.name}>{t('popups_wallet_unlock_erc20_requested_by')}</Typography>
                 {transaction.formattedTransaction.popup?.spender ? (
-                    <Typography className={classes.spender}>
+                    <Typography className={classes.spender} component="div">
                         {t('contract')}:
                         <Typography className={classes.spenderAddress}>
                             {transaction.formattedTransaction.popup?.spender}{' '}
