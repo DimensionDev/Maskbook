@@ -129,6 +129,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
     ): NftRedPacketJSONPayload[] {
         if (!transactions) return EMPTY_LIST
 
+        const chainResolver = new ChainResolverAPI()
         return transactions.flatMap((tx) => {
             try {
                 const decodedInputParam = nftRedPacketInterFace.decodeFunctionData(
@@ -141,7 +142,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                     txid: tx.hash ?? '',
                     contract_version: 1,
                     shares: decodedInputParam._erc721_token_ids.length,
-                    network: new ChainResolverAPI().networkType(tx.chainId),
+                    network: chainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     chainId: tx.chainId,
                     sender: {

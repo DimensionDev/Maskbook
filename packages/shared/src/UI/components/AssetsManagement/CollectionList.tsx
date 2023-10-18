@@ -86,7 +86,8 @@ function getTopOffset() {
 }
 export interface CollectionListProps
     extends BoxProps,
-        Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'> {
+        Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'>,
+        withClasses<'sidebar'> {
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
@@ -121,7 +122,7 @@ export const CollectionList = memo(function CollectionList({
     ...rest
 }: CollectionListProps) {
     const t = useSharedI18N()
-    const { classes, cx } = useStyles(gridProps)
+    const { classes, cx } = useStyles(gridProps, { props: rest })
 
     const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
     const { collections, currentCollection, setCurrentCollectionId, loading, error, retry } =
