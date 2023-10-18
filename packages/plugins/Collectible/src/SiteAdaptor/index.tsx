@@ -1,16 +1,17 @@
-import { useCallback } from 'react'
-import { Trans } from 'react-i18next'
-import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
 import { CollectionList, UserAssetsProvider } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID, PluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Box } from '@mui/material'
+import { useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
@@ -39,6 +40,11 @@ function useInspectCollectible(pluginID?: NetworkPluginID) {
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
+const usePopupCollectionStyles = makeStyles()({
+    sidebar: {
+        paddingBottom: 48,
+    },
+})
 const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
@@ -101,6 +107,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             UI: {
                 TabContent({ socialAccount }) {
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
+                    const { classes } = usePopupCollectionStyles()
 
                     if (!socialAccount) return null
 
@@ -110,6 +117,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 <CollectionList
                                     height={392}
                                     gridProps={gridProps}
+                                    classes={{ sidebar: classes.sidebar }}
                                     disableWindowScroll
                                     from="profileCard"
                                     onItemClick={(asset) => inspectCollectible(asset, 'profileCard')}

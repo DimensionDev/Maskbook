@@ -16,8 +16,8 @@ import {
     type NftRedPacketJSONPayload,
     type CreateNFTRedpacketParam,
 } from './types.js'
-import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 
 export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     private ContractRedPacket = new ContractRedPacketAPI()
