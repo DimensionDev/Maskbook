@@ -49,7 +49,7 @@ export const ConnectWalletModal = forwardRef<
         }
 
         return true
-    }, [])
+    }, [networkType, providerType, pluginID, Others, Web3])
 
     const [open, dispatch] = useSingletonModal(ref, {
         async onOpen(props) {
