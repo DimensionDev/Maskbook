@@ -52,14 +52,16 @@ export const ConnectWalletModal = forwardRef<
     }, [networkType, providerType, pluginID, Others, Web3])
 
     const [open, dispatch] = useSingletonModal(ref, {
-        async onOpen(props) {
+        onOpen(props) {
             setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
             setProviderType(props.providerType)
             setNetworkType(props.networkType)
 
             // connect to wallet
-            await onConnect()
-            dispatch?.close(true)
+            setTimeout(async () => {
+                await onConnect()
+                dispatch?.close(true)
+            })
         },
     })
 
