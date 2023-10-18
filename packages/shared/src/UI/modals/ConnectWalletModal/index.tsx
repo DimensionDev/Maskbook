@@ -1,5 +1,7 @@
 import { forwardRef, useState } from 'react'
-import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useAsyncFn } from 'react-use'
+import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
+import { NetworkPluginID, getSiteType, type SingletonModalRefCreator, pluginIDsSettings } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ConnectWallet } from './ConnectWallet.js'
@@ -19,11 +21,45 @@ export const ConnectWalletModal = forwardRef<
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
 
+    const Web3 = useWeb3Connection(pluginID, { providerType })
+    const Others = useWeb3Others(pluginID)
+
+    const [connection, onConnect] = useAsyncFn<() => Promise<true>>(async () => {
+        if (!networkType || !providerType) throw new Error('Failed to connect to provider.')
+
+        const chainId = Others.networkResolver.networkChainId(networkType)
+        if (!chainId) throw new Error('Failed to connect to provider.')
+
+        try {
+            const account = await Web3.connect({
+                chainId,
+            })
+            if (!account) throw new Error('Failed to build connection.')
+        } catch (err) {
+            throw new Error(err instanceof Error ? err.message : 'Failed to connect to provider.')
+        }
+
+        const site = getSiteType()
+
+        if (pluginID && site) {
+            pluginIDsSettings.value = {
+                ...pluginIDsSettings.value,
+                [site]: pluginID,
+            }
+        }
+
+        return true
+    }, [])
+
     const [open, dispatch] = useSingletonModal(ref, {
-        onOpen(props) {
+        async onOpen(props) {
             setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
             setProviderType(props.providerType)
             setNetworkType(props.networkType)
+
+            // connect to wallet
+            await onConnect()
+            dispatch?.close(true)
         },
     })
 
@@ -31,11 +67,12 @@ export const ConnectWalletModal = forwardRef<
 
     return (
         <ConnectWallet
-            open
             pluginID={pluginID}
             providerType={providerType}
             networkType={networkType}
-            onConnect={() => dispatch?.close(true)}
+            connection={connection}
+            open
+            onConnect={onConnect}
             onClose={() => dispatch?.close(false)}
         />
     )

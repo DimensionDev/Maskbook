@@ -1,10 +1,9 @@
-import { useAsyncRetry } from 'react-use'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import { DialogContent, dialogClasses } from '@mui/material'
 import { InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { getSiteType, type NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import { ConnectionProgress } from './ConnectionProgress.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,47 +23,22 @@ interface ConnectWalletProps {
     networkType?: Web3Helper.NetworkTypeAll
     providerType?: Web3Helper.ProviderTypeAll
     open: boolean
-    onConnect: () => void
+    onConnect: () => Promise<true>
     onClose: () => void
+    connection: AsyncFnReturn<() => Promise<true>>[0]
 }
 
-export function ConnectWallet({ pluginID, networkType, providerType, open, onConnect, onClose }: ConnectWalletProps) {
+export function ConnectWallet({
+    pluginID,
+    networkType,
+    providerType,
+    connection,
+    open,
+    onConnect,
+    onClose,
+}: ConnectWalletProps) {
     const { classes } = useStyles()
     const t = useSharedTrans()
-
-    const Web3 = useWeb3Connection(pluginID, { providerType })
-    const Others = useWeb3Others(pluginID)
-
-    const connection = useAsyncRetry<true>(async () => {
-        if (!open) return true
-
-        if (!networkType || !providerType) throw new Error('Failed to connect to provider.')
-
-        const chainId = Others.networkResolver.networkChainId(networkType)
-        if (!chainId) throw new Error('Failed to connect to provider.')
-
-        try {
-            const account = await Web3.connect({
-                chainId,
-            })
-            if (!account) throw new Error('Failed to build connection.')
-        } catch (err) {
-            throw new Error('Failed to connect to provider.')
-        }
-
-        const site = getSiteType()
-
-        if (pluginID && site) {
-            pluginIDsSettings.value = {
-                ...pluginIDsSettings.value,
-                [site]: pluginID,
-            }
-        }
-
-        onConnect?.()
-
-        return true
-    }, [open])
 
     if (!pluginID || !providerType || !networkType) return null
 
@@ -81,6 +55,7 @@ export function ConnectWallet({ pluginID, networkType, providerType, open, onCon
                     providerType={providerType}
                     networkType={networkType}
                     connection={connection}
+                    onRetry={onConnect}
                 />
             </DialogContent>
         </InjectedDialog>

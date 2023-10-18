@@ -1,5 +1,5 @@
 import { Trans } from 'react-i18next'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
+import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn.js'
 import { Icons } from '@masknet/icons'
 import { WalletIcon, useSharedTrans } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -68,12 +68,13 @@ interface ConnectionProgressProps {
     pluginID: NetworkPluginID
     providerType: Web3Helper.ProviderTypeAll
     networkType: Web3Helper.NetworkTypeAll
-    connection: AsyncStateRetry<true>
+    connection: AsyncFnReturn<() => Promise<true>>[0]
+    onRetry: () => Promise<true>
 }
 
 export function ConnectionProgress(props: ConnectionProgressProps) {
-    const { pluginID, providerType, networkType, connection } = props
-    const { value: connected, loading, error, retry } = connection
+    const { pluginID, providerType, networkType, connection, onRetry } = props
+    const { value: connected, loading, error } = connection
 
     const t = useSharedTrans()
 
@@ -126,7 +127,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             <ActionButton
                                 loading={loading}
                                 color="primary"
-                                onClick={retry}
+                                onClick={onRetry}
                                 disabled={loading}
                                 className={classes.retryButton}>
                                 {t.plugin_wallet_connect_to_retry()}
