@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         width: 'auto',
         padding: 0,
-        margin: theme.spacing(0, 2, 1.5),
+        margin: theme.spacing(0, 2),
     },
     disabled: {
         opacity: 0.5,
