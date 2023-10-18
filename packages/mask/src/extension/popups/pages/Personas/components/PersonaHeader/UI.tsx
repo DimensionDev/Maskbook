@@ -3,12 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
-// import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+        background: theme.palette.maskColor.modalTitleBg,
         padding: '11px 16px',
         lineHeight: 0,
         display: 'flex',
@@ -20,7 +18,11 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
     },
     action: {
-        background: 'rgba(255, 255, 255, 0.8)',
+        background: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 6px 0px rgba(0, 0, 0, 0.10)'
+                : '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
         borderRadius: 99,
         padding: '5px 8px 5px 4px',
         display: 'flex',
@@ -33,13 +35,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
     },
     nickname: {
-        color: '#07101B',
+        color: theme.palette.maskColor.main,
         lineHeight: '18px',
         fontWeight: 700,
     },
     identifier: {
         fontSize: 10,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.second,
         lineHeight: 1,
         display: 'flex',
         alignItems: 'center',
@@ -47,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 12,
         height: 12,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.main,
         cursor: 'pointer',
         marginLeft: 4,
     },
