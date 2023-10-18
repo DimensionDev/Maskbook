@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
 import { type CalendarBaseAPI } from '../types/Calendar.js'
 
-const BASE_URL = 'https://mask-network.firefly.land/v1/calendar/crypto_event_list'
+const BASE_URL = 'https://api.dimension.im/v1/calendar/crypto_event_list'
 
 export class CalendarAPI implements CalendarBaseAPI.Provider {
     async getNewsList(startDate: number, endDate?: number) {
