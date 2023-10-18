@@ -7,8 +7,8 @@ import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-b
 import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
-import { TokenIcon, useSharedI18N } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
+import { TokenIcon, useSharedI18N } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -54,7 +54,7 @@ export function useGasCurrencyMenu(
     const { data: maskToken } = useFungibleToken(pluginId, maskAddress)
 
     const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)
+    const { data: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)
     const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const handleChange = useCallback(

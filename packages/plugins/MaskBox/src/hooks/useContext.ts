@@ -295,7 +295,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         proofBytes,
         openBoxTransactionOverrides,
     )
-    const { value: erc20Allowance, retry: retryAllowance } = useERC20TokenAllowance(
+    const { data: erc20Allowance, refetch: retryAllowance } = useERC20TokenAllowance(
         isNativeToken ? undefined : paymentTokenAddress,
         MASK_BOX_CONTRACT_ADDRESS,
     )
