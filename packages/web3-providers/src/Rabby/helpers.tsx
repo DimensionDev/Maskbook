@@ -19,7 +19,7 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Celo]: '',
         [NetworkType.Conflux]: '',
         [NetworkType.Astar]: '',
-        [NetworkType.Scroll]: '',
+        [NetworkType.Scroll]: 'scroll',
         [NetworkType.Moonbeam]: '',
         [NetworkType.CustomNetwork]: '',
     },
