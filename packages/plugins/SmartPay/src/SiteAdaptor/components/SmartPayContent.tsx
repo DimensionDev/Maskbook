@@ -212,7 +212,7 @@ export const SmartPayContent = memo(() => {
     const { data: maskToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, maskAddress, undefined, { chainId })
 
     const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { value: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
+    const { data: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS, {
         chainId,
     })
 
