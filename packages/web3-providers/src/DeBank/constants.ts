@@ -52,6 +52,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
     wan: ChainId.Wanchain,
     xdai: ChainId.xDai,
     base: ChainId.Base,
+    scrl: ChainId.Scroll,
 }
 
 /**
@@ -99,6 +100,7 @@ export const CHIAN_ID_TO_DEBANK_CHAIN_MAP: Record<number, DebankChains> = {
     42220: 'celo',
     43114: 'avax',
     53935: 'dfk',
+    534352: 'scrl',
     73772: 'swm',
     1313161554: 'aurora',
     1666600000: 'hmy',
