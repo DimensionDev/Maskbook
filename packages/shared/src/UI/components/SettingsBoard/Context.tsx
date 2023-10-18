@@ -5,7 +5,6 @@ import {
     useGasOptions,
     useNetworkContext,
     useChainContext,
-    useSingleBlockBeatRetry,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -86,11 +85,6 @@ function useSettingsContext(initial?: {
         gasOptionRetry()
         onClearInMemoryCache()
     }, [gasOptionRetry, onClearInMemoryCache])
-
-    useSingleBlockBeatRetry(pluginID, async () => {
-        if (initial?.disableGasPrice) return
-        gasOptionRetry()
-    })
 
     // sync in-memory cache
     useEffect(() => {
