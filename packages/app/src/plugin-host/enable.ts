@@ -16,7 +16,6 @@ import {
 } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
-import { SharedContext } from '../helpers/createSharedContext.js'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')
@@ -35,6 +34,12 @@ __setUIContext__({
     openPopupWindow: reject,
     signWithPersona: reject,
     hasPaymentPassword: reject,
+    attachProfile: undefined,
+    createPersona: reject,
+    hasHostPermission: undefined,
+    requestHostPermission: undefined,
+    setCurrentPersonaIdentifier: undefined,
+    setPluginMinimalModeEnabled: undefined,
 })
 __setSiteAdaptorContext__({
     lastRecognizedProfile: UNDEFINED,
@@ -43,6 +48,11 @@ __setSiteAdaptorContext__({
     currentPersonaIdentifier: UNDEFINED,
     getPostURL: () => null,
     share: undefined,
+    connectPersona: reject,
+    getPostIdFromNewPostToast: undefined,
+    getSearchedKeyword: undefined,
+    getUserIdentity: undefined,
+    postMessage: undefined,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {
@@ -62,7 +72,8 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
             setMinimalMode(enabled) {
                 console.warn('setMinimalMode is ignored.')
             },
-            ...SharedContext,
+            connectPersona: reject,
+            createPersona: reject,
         }
     },
     permission: {

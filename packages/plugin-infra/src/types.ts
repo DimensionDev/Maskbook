@@ -8,7 +8,6 @@ import type {
     BindingProof,
     ECKeyIdentifier,
     NetworkPluginID,
-    PersonaIdentifier,
     PluginID,
     ProfileIdentifier,
     ScopedStorage,
@@ -20,7 +19,6 @@ import type {
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
-import type { LinkedProfileDetails } from '@masknet/public-api'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -221,24 +219,7 @@ export namespace Plugin.Shared {
 
 /** This part runs in the Site Adaptor */
 export namespace Plugin.SiteAdaptor {
-    export interface SiteAdaptorContext extends Shared.SharedUIContext {
-        getPostPayload?: () => [string, '1' | '2'] | undefined
-        connectPersona: () => Promise<void>
-        createPersona: () => void
-        fetchManifest?: (addr: string) => Promise<any>
-        setCurrentPersonaIdentifier?: (x?: PersonaIdentifier) => Promise<void>
-        attachProfile?: (
-            source: ProfileIdentifier,
-            target: ProfileIdentifier | PersonaIdentifier,
-            data: LinkedProfileDetails,
-        ) => Promise<void>
-        getPostIdFromNewPostToast?: () => string
-        postMessage?: (text: string, options?: any) => Promise<void>
-        setPluginMinimalModeEnabled?: (id: string, enabled: boolean) => Promise<void>
-        getSearchedKeyword?: () => string
-        hasHostPermission?: (origins: readonly string[]) => Promise<boolean>
-        requestHostPermission?: (origins: readonly string[]) => Promise<boolean>
-    }
+    export interface SiteAdaptorContext extends Shared.SharedUIContext {}
 
     export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<SiteAdaptorContext> {
         /** This UI will be rendered for each post found. */

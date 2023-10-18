@@ -3,12 +3,7 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import {
-    type Plugin,
-    startPluginSiteAdaptor,
-    SiteAdaptorContextRef,
-    __setSiteAdaptorContext__,
-} from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSiteAdaptor, __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script'
 import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
     createSubscriptionFromValueRef,
@@ -152,20 +147,12 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
         share: ui.utils.share,
-    })
-    SiteAdaptorContextRef.value = {
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
-        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
-        fetchManifest: Services.Helper.fetchSandboxedPluginManifest,
-        attachProfile: Services.Identity.attachProfile,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
-        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
-        setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
-        hasHostPermission: Services.Helper.hasHostPermission,
-        requestHostPermission: Services.Helper.requestHostPermission,
-    }
+        getUserIdentity: undefined,
+    })
 
     startPluginSiteAdaptor(
         ui.networkIdentifier,
@@ -177,7 +164,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
                         Services.Settings.setPluginMinimalModeEnabled(id, enabled)
                     },
                     ...createSharedContext(id, signal),
-                    ...SiteAdaptorContextRef.value,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

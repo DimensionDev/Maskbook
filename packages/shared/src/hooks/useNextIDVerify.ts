@@ -10,12 +10,15 @@ import {
     MaskMessages,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
-import { currentNextIDPlatform, signWithPersona } from '@masknet/plugin-infra/content-script/context'
+import {
+    currentNextIDPlatform,
+    getPostIdFromNewPostToast,
+    postMessage,
+} from '@masknet/plugin-infra/content-script/context'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const { getPostIdFromNewPostToast, postMessage } = useSiteAdaptorContext()
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
@@ -72,6 +75,6 @@ export function useNextIDVerify() {
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
             await verifiedCallback?.()
         },
-        [postMessage, signWithPersona],
+        [],
     )
 }

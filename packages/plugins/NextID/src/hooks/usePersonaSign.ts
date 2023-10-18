@@ -10,5 +10,5 @@ export function usePersonaSign(message?: string, currentIdentifier?: ECKeyIdenti
         } catch {
             return
         }
-    }, [message, currentIdentifier, signWithPersona])
+    }, [message, currentIdentifier])
 }

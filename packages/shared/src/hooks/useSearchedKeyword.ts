@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { getSearchedKeyword } from '@masknet/plugin-infra/content-script/context'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
-    const { getSearchedKeyword } = useSiteAdaptorContext()
-
     useEffect(() => {
         const onLocationChange = () => {
             if (!getSearchedKeyword) return
@@ -16,6 +14,6 @@ export function useSearchedKeyword() {
         return () => {
             window.removeEventListener('locationchange', onLocationChange)
         }
-    }, [getSearchedKeyword])
+    }, [])
     return keyword
 }

@@ -13,7 +13,8 @@ import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
 } from '@masknet/plugin-infra/content-script'
-import { currentPersonaIdentifier, openDashboard } from '@masknet/plugin-infra/content-script/context'
+import { currentPersonaIdentifier } from '@masknet/plugin-infra/content-script/context'
+import { openDashboard } from '@masknet/plugin-infra/dom/context'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
