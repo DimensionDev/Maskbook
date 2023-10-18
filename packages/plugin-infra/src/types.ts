@@ -2,10 +2,7 @@
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
 import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type {
     BindingProof,
@@ -13,24 +10,17 @@ import type {
     NetworkPluginID,
     PersonaIdentifier,
     PluginID,
-    PopupRoutes,
-    DashboardRoutes,
     ProfileIdentifier,
     ScopedStorage,
-    SignType,
-    Wallet,
     SocialAccount,
     SocialIdentity,
     BooleanPreference,
-    ImportSource,
-    PopupRoutesParamsMap,
     EnhanceableSite,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
 import type { LinkedProfileDetails } from '@masknet/public-api'
-import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
@@ -102,80 +92,9 @@ export namespace Plugin.Shared {
 
     export interface SharedUIContext extends SharedContext {
         setMinimalMode(enabled: boolean): void
-        /** Get all wallets */
-        wallets: Subscription<Wallet[]>
-
-        /** Select a Mask Wallet account */
-        selectMaskWalletAccount(
-            chainId: ChainId,
-            defaultAccount?: string,
-            source?: string,
-        ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
-
-        /** Open Dashboard with a new window */
-        openDashboard(route?: DashboardRoutes, search?: string): Promise<void>
-
-        /** Open popup window */
-        openPopupWindow<T extends PopupRoutes>(
-            route: T,
-            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-            evenWhenWalletLocked?: boolean,
-        ): Promise<void>
-
-        /** Close popup window */
-        closePopupWindow(): Promise<void>
-        /** Open walletconnect dialog */
-        openWalletConnectDialog(uri: string): Promise<void>
-
-        /** Close walletconnect dialog */
-        closeWalletConnectDialog(): void
-
-        /** Connect origin to Mask wallet  */
-        grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
-        /** Disconnect origin from Mask wallet  */
-        disconnectAllWalletsFromOrigin(origin: string): Promise<void>
-
-        /** Sign a message with persona (w or w/o popups) */
-        signWithPersona<T>(type: SignType, message: T, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
-
-        /** Sign a message with wallet */
-        signWithWallet<T>(type: SignType, message: T, account?: string): Promise<string>
-
-        /** Get all wallets */
-        getWallets(): Promise<Wallet[]>
-
-        /** Add a new wallet */
-        addWallet(
-            source: ImportSource,
-            id: string,
-            updates?: {
-                name?: string
-                derivationPath?: string
-                storedKeyInfo?: api.IStoredKeyInfo
-            },
-        ): Promise<string>
-
-        /** Update a wallet */
-        updateWallet(
-            id: string,
-            updates?: {
-                name?: string
-                derivationPath?: string
-                storedKeyInfo?: api.IStoredKeyInfo
-            },
-        ): Promise<void>
-
-        /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
-        hasPaymentPassword(): Promise<boolean>
     }
 
-    export interface Definition<
-        ChainId = unknown,
-        SchemaType = unknown,
-        ProviderType = unknown,
-        NetworkType = unknown,
-    > {
+    export interface Definition {
         /**
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"

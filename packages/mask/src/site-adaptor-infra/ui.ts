@@ -31,7 +31,7 @@ import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
-import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
+import '../../shared-ui/initUIContext.js'
 import { definedSiteAdaptorsUI } from './define.js'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
@@ -148,23 +148,12 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
-        allPersonas: NextSharedUIContext.allPersonas,
-        currentPersona: NextSharedUIContext.currentPersonaIdentifier,
-        queryPersonaAvatar: Services.Identity.getPersonaAvatar,
         currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
-        querySocialIdentity: Services.Identity.querySocialIdentity,
-        fetchJSON: Services.Helper.fetchJSON,
-        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         share: ui.utils.share,
-        getUserIdentity: ui.utils.getUserIdentity,
-        openDashboard: Services.Helper.openDashboard,
-        openPopupWindow: Services.Helper.openPopupWindow,
-        signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
     })
     SiteAdaptorContextRef.value = {
-        ...RestPartOfPluginUIContextShared,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,

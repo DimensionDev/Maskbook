@@ -6,7 +6,7 @@ import { DashboardForDesktop } from './components/DashboardDesktop.js'
 import { DashboardForMobile } from './components/DashboardMobile.js'
 import { DashboardContext } from './contexts/DashboardContext.js'
 import { ApplicationRoutes } from './constants/ApplicationRoutes.js'
-import { createSharedContext } from './helpers/createSharedContext.js'
+import { SharedContext } from './helpers/createSharedContext.js'
 import ComposePage from './pages/ComposePage.js'
 import { Spinner } from './components/Spinner.js'
 
@@ -20,7 +20,7 @@ const PageInspectorRender = lazy(() => import('./main/page-render.js'))
 
 export function MainUI() {
     useEffect(() => {
-        SiteAdaptorContextRef.value = createSharedContext()
+        SiteAdaptorContextRef.value = SharedContext
     }, [])
 
     return (

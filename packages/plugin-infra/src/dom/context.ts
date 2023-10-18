@@ -42,6 +42,7 @@ export interface __UIContext__ {
     ): Promise<void>
     /** Sign a message with persona (w or w/o popups) */
     signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
+    hasPaymentPassword(): Promise<boolean>
 }
 export let allPersonas: __UIContext__['allPersonas']
 export let currentPersona: __UIContext__['currentPersona']
@@ -52,6 +53,7 @@ export let queryPersonaByProfile: __UIContext__['queryPersonaByProfile']
 export let openDashboard: __UIContext__['openDashboard']
 export let openPopupWindow: __UIContext__['openPopupWindow']
 export let signWithPersona: __UIContext__['signWithPersona']
+export let hasPaymentPassword: __UIContext__['hasPaymentPassword']
 export function __setUIContext__(value: __UIContext__) {
     ;({
         allPersonas,
@@ -63,5 +65,6 @@ export function __setUIContext__(value: __UIContext__) {
         openDashboard,
         openPopupWindow,
         signWithPersona,
+        hasPaymentPassword,
     } = value)
 }

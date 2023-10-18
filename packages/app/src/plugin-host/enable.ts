@@ -1,7 +1,11 @@
 import './register.js'
 
 import { Emitter } from '@servie/events'
-import { startPluginSiteAdaptor, __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script'
+import {
+    startPluginSiteAdaptor,
+    __setSiteAdaptorContext__,
+    __setUIContext__,
+} from '@masknet/plugin-infra/content-script'
 import {
     BooleanPreference,
     EMPTY_ARRAY,
@@ -12,14 +16,12 @@ import {
 } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
 import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
-import { createSharedContext } from '../helpers/createSharedContext.js'
+import { SharedContext } from '../helpers/createSharedContext.js'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
-__setSiteAdaptorContext__({
-    lastRecognizedProfile: UNDEFINED,
-    currentVisitingProfile: UNDEFINED,
+__setUIContext__({
     currentPersona: UNDEFINED,
     allPersonas: EMPTY_ARRAY,
     queryPersonaByProfile: reject,
@@ -28,14 +30,19 @@ __setSiteAdaptorContext__({
         return undefined
     },
     querySocialIdentity: reject,
-    currentNextIDPlatform: undefined,
-    currentPersonaIdentifier: UNDEFINED,
-    getPostURL: () => null,
     fetchJSON: reject,
-    share: undefined,
     openDashboard: reject,
     openPopupWindow: reject,
     signWithPersona: reject,
+    hasPaymentPassword: reject,
+})
+__setSiteAdaptorContext__({
+    lastRecognizedProfile: UNDEFINED,
+    currentVisitingProfile: UNDEFINED,
+    currentNextIDPlatform: undefined,
+    currentPersonaIdentifier: UNDEFINED,
+    getPostURL: () => null,
+    share: undefined,
 })
 
 startPluginSiteAdaptor(EnhanceableSite.App, {
@@ -55,7 +62,7 @@ startPluginSiteAdaptor(EnhanceableSite.App, {
             setMinimalMode(enabled) {
                 console.warn('setMinimalMode is ignored.')
             },
-            ...createSharedContext(),
+            ...SharedContext,
         }
     },
     permission: {
