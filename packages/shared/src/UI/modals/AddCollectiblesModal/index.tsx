@@ -38,7 +38,7 @@ export const AddCollectiblesModal = forwardRef<
     return (
         <AddCollectiblesDialog
             open
-            onClose={(results) => dispatch?.close(results)}
+            onAdd={(results) => dispatch?.close(results)}
             pluginID={pluginID}
             account={account}
             chainId={chainId}
