@@ -649,6 +649,32 @@
         ]
     },
     {
+        "chainId": 534352,
+        "type": "Scroll",
+        "name": "Scroll",
+        "network": "mainnet",
+        "fullName": "Scroll",
+        "shortName": "Scroll",
+        "rpc": ["https://rpc.scroll.io"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 534352,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "infoURL": "https://scrollscan.com/",
+        "explorers": [
+            {
+                "name": "blockscout",
+                "url": "https://scrollscan.com/",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
         "chainId": 25,
         "name": "Cronos",
         "type": "Cronos Mainnet Beta",

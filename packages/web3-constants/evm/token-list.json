@@ -24,6 +24,7 @@
         "Aurora": ["https://tokens.r2d2.to/latest/1313161554/tokens.json"],
         "Aurora_Testnet": [],
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
-        "Astar": ["https://tokens.r2d2.to/latest/592/tokens.json"]
+        "Astar": ["https://tokens.r2d2.to/latest/592/tokens.json"],
+        "Scroll": ["https://tokens.r2d2.to/latest/534352/tokens.json"]
     }
 }

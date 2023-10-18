@@ -2,7 +2,7 @@ import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
 import { ActionButton, type ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, type FungibleToken, isGte } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
@@ -69,21 +69,22 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         account,
     })
 
-    const approved = !!spenders?.find(
-        (x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender),
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback] = useERC20TokenApproveCallback(
+        token?.address ?? '',
+        amount,
+        spender ?? '',
+        () => {
+            callback?.()
+            refetch()
+        },
+        token?.chainId,
     )
+    console.log('allowance', allowance)
 
-    const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
-        useERC20TokenApproveCallback(
-            token?.address ?? '',
-            amount,
-            spender ?? '',
-            () => {
-                callback?.()
-                refetch()
-            },
-            token?.chainId,
-        )
+    const approved =
+        spenders?.some(
+            (x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender),
+        ) || isGte(allowance, amount)
 
     const loading =
         spendersLoading ||

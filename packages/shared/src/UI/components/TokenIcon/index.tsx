@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -18,7 +18,7 @@ export interface TokenIconProps extends IconProps {
 
 export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const {
-        pluginID,
+        pluginID = NetworkPluginID.PLUGIN_EVM,
         chainId: propChainId,
         address,
         logoURL,
