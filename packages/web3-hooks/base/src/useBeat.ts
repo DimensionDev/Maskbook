@@ -25,26 +25,6 @@ export function useBeatRetry<T>(fn: () => Promise<T>, delay = 1000, deps: Depend
     return useAsyncRetry(fn, deps.concat(beat))
 }
 
-export function useSingleBlockBeatRetry<T extends NetworkPluginID, R>(
-    pluginID: T,
-    fn: () => Promise<R>,
-    deps: DependencyList = [],
-): AsyncStateRetry<R> {
-    const { chainId } = useChainContext()
-    const Others = useWeb3Others(pluginID)
-    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId) ?? DEFAULT_SINGLE_BLOCK_DELAY, deps)
-}
-
-export function useDoubleBlockBeatRetry<T extends NetworkPluginID, R>(
-    pluginID: T,
-    fn: () => Promise<R>,
-    deps: DependencyList = [],
-): AsyncStateRetry<R> {
-    const { chainId } = useChainContext()
-    const Others = useWeb3Others(pluginID)
-    return useBeatRetry(fn, Others.getAverageBlockDelay?.(chainId, 2) ?? DEFAULT_DOUBLE_BLOCK_DELAY, deps)
-}
-
 export function useCustomBlockBeatRetry<T extends NetworkPluginID, R>(
     pluginID: T,
     fn: () => Promise<R>,
