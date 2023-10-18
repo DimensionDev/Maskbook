@@ -17,9 +17,15 @@ function __unsafe__Get(path: string): Ref | undefined {
 
     for (const fragment of fragments) {
         if (__unsafe__this === undefined || __unsafe__this === null) return undefined
+
         try {
-            __unsafe__this = __unsafe__value
-            __unsafe__value = __unsafe__this[fragment]
+            if (fragment === '__metamask__') {
+                __unsafe__value = __unsafe__window.ethereum?.providerMap?.get('MetaMask') || __unsafe__window.ethereum
+                __unsafe__this = __unsafe__window
+            } else {
+                __unsafe__this = __unsafe__value
+                __unsafe__value = __unsafe__this[fragment]
+            }
         } catch {
             return undefined
         }
