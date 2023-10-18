@@ -51,6 +51,7 @@ export type DebankChains =
     | 'tlos'
     | 'wan'
     | 'xdai'
+    | 'scrl'
 
 export interface DictItem {
     name: string
