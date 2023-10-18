@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     primaryItem: {
         margin: 0,
         cursor: 'default',
+        borderRadius: 8,
         background:
             theme.palette.mode === 'light'
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.90) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.20) 1.03%, rgba(98, 152, 234, 0.20) 1.04%, rgba(98, 126, 234, 0.20) 100%)'
@@ -53,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     secondItem: {
         margin: 0,
+        borderRadius: 8,
         cursor: 'default',
         background: theme.palette.maskColor.bottom,
         border: `1px solid ${theme.palette.maskColor.line}`,
