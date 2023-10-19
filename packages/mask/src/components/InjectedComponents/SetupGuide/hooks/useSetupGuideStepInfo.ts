@@ -70,7 +70,6 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
     const { data: proofs } = usePersonaProofs(destinedPersona?.publicKeyAsHex)
 
     if (!personaInfo) return composeInfo(SetupGuideStep.Close)
-    if (!username) return composeInfo(SetupGuideStep.FindUsername)
 
     // Not set status
     if (!lastSettingState.status) {
@@ -81,6 +80,7 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
             return composeInfo(SetupGuideStep.Close)
         }
     }
+    if (!username) return composeInfo(SetupGuideStep.FindUsername)
 
     // Should connected persona
     const profile = ProfileIdentifier.of(networkIdentifier, username).expect(`${username} should be a valid user id`)
