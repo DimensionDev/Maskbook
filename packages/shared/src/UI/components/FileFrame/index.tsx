@@ -5,16 +5,15 @@ import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/t
 
 const useStyles = makeStyles()((theme) => ({
     file: {
-        boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backgroundColor: theme.palette.maskColor.bottom,
         borderRadius: 8,
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(1.5),
         overflow: 'auto',
+        ['&:hover']: {
+            background: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : theme.palette.maskColor.bg,
+        },
     },
     content: {
         flexGrow: 1,

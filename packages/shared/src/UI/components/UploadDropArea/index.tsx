@@ -55,12 +55,8 @@ const useStyles = makeStyles()((theme) => ({
         width: 164,
         marginTop: 10,
         boxShadow: theme.palette.mode === 'dark' ? 'none' : '0px 8px 25px rgba(0, 0, 0, 0.2)',
-        backgroundColor: theme.palette.maskColor.primary,
-        color: theme.palette.maskColor.white,
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.primary,
-            color: theme.palette.maskColor.white,
-        },
+        backgroundColor: theme.palette.maskColor.main,
+        color: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
     },
 }))
 

@@ -48,5 +48,6 @@
     "delete_file_message$failed": "crwdns19189:0crwdne19189:0",
     "upload_tips": "crwdns19191:0crwdne19191:0",
     "file_chip_single": "crwdns19193:0{{name}}crwdnd19193:0{{size}}crwdne19193:0",
-    "file_chip_multiple": "crwdns19195:0{{count}}crwdne19195:0"
+    "file_chip_multiple": "crwdns19195:0{{count}}crwdne19195:0",
+    "size": "crwdns22502:0crwdne22502:0"
 }
