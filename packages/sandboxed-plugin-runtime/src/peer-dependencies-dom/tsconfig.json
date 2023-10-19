@@ -6,5 +6,9 @@
     "tsBuildInfoFile": "../../dist/peer-dependencies-dom.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../peer-dependencies" }, { "path": "../runtime" }, { "path": "../../../theme" }]
+  "references": [
+    { "path": "../peer-dependencies/tsconfig.json" },
+    { "path": "../runtime/tsconfig.json" },
+    { "path": "../../../theme/tsconfig.json" }
+  ]
 }

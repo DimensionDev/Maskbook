@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../../theme" }, { "path": "../../web3-shared/base" }, { "path": "../../web3-shared/evm" }]
+  "references": [{ "path": "../../web3-shared/base/tsconfig.json" }, { "path": "../../web3-shared/evm/tsconfig.json" }]
 }

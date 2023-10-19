@@ -5,5 +5,5 @@
     "noEmit": true
   },
   "include": ["./"],
-  "references": [{ "path": "../base/" }]
+  "references": [{ "path": "../base/tsconfig.json" }]
 }

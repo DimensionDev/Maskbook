@@ -6,5 +6,5 @@
     "outDir": "dist"
   },
   "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }, { "path": "../../shared" }]
+  "references": [{ "path": "../../plugin-infra/tsconfig.json" }, { "path": "../../shared/tsconfig.json" }]
 }

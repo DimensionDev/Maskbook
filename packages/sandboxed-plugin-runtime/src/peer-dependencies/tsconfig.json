@@ -7,8 +7,8 @@
   },
   "include": ["./"],
   "references": [
-    { "path": "../../../shared-base" },
-    { "path": "../../../typed-message/base" },
-    { "path": "../runtime" }
+    { "path": "../../../shared-base/tsconfig.json" },
+    { "path": "../../../typed-message/base/tsconfig.json" },
+    { "path": "../runtime/tsconfig.json" }
   ]
 }

@@ -7,9 +7,9 @@
   },
   "include": ["./src", "./src/**/*.json"],
   "references": [
-    { "path": "../base" },
-    { "path": "../encryption/" },
-    { "path": "../public-api" },
-    { "path": "../typed-message/base" }
+    { "path": "../base/tsconfig.json" },
+    { "path": "../encryption/tsconfig.json" },
+    { "path": "../public-api/tsconfig.json" },
+    { "path": "../typed-message/base/tsconfig.json" }
   ]
 }

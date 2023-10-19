@@ -9,9 +9,8 @@
   "include": ["./"],
   "exclude": ["./plugin-infra/register.js"],
   "references": [
-    { "path": "../../shared-base" },
-    { "path": "../../web3-providers" },
-    { "path": "../../plugin-infra" },
-    { "path": "../../sandboxed-plugin-runtime/src/runtime" }
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../sandboxed-plugin-runtime/src/runtime/tsconfig.json" }
   ]
 }

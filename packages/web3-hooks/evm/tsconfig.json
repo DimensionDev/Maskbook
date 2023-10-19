@@ -6,5 +6,12 @@
     "tsBuildInfoFile": "./dist/src.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../base" }, { "path": "../../shared-base" }, { "path": "../../injected-script/sdk" }]
+  "references": [
+    { "path": "../base/tsconfig.json" },
+    { "path": "../../web3-helpers/tsconfig.json" },
+    { "path": "../../web3-hooks/base/tsconfig.json" },
+    { "path": "../../web3-shared/base/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" }
+  ]
 }

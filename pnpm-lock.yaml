@@ -3216,6 +3216,9 @@ importers:
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
+      '@types/twitter-text':
+        specifier: ^3.1.7
+        version: 3.1.7
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
@@ -10022,6 +10025,10 @@ packages:
   /@types/trusted-types@2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}
     dev: false
+
+  /@types/twitter-text@3.1.7:
+    resolution: {integrity: sha512-8I5BMG2vSMV6pCL3X+aseuCUX6YpXeb2dBErA4p0dOi18fXNpy2401ovJk+jF8unIpXKO2MhWdJV3obrqo8C8A==}
+    dev: true
 
   /@types/undertaker-registry@1.0.1:
     resolution: {integrity: sha512-Z4TYuEKn9+RbNVk1Ll2SS4x1JeLHecolIbM/a8gveaHsW0Hr+RQMraZACwTO2VD7JvepgA6UO1A1VrbktQrIbQ==}
@@ -28583,6 +28590,7 @@ time:
   /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
   /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
+  /@types/twitter-text@3.1.7: '2023-10-18T16:50:37.249Z'
   /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
   /buffer@6.0.3: '2020-11-23T02:51:27.107Z'
   /eslint-import-resolver-typescript@3.6.1: '2023-09-22T10:03:30.716Z'

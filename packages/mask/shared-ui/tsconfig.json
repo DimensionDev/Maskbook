@@ -8,13 +8,11 @@
   },
   "include": ["./", "./**/*.json"],
   "references": [
-    { "path": "../utils-pure" },
-    { "path": "../background" },
-    { "path": "../../shared/" },
-    { "path": "../../shared-base" },
-    { "path": "../../typed-message/base" },
-    { "path": "../../typed-message/react" },
-    { "path": "../../theme" },
-    { "path": "../../plugin-infra" }
+    { "path": "../background/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../typed-message/base/tsconfig.json" },
+    { "path": "../../typed-message/react/tsconfig.json" },
+    { "path": "../../plugin-infra/tsconfig.json" }
   ]
 }

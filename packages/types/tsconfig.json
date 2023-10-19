@@ -7,12 +7,11 @@
   },
   "include": ["./src", "./src/**/*.json"],
   "references": [
-    { "path": "../encryption" },
-    { "path": "../plugin-infra" },
-    { "path": "../shared" },
-    { "path": "../shared-base" },
-    { "path": "../typed-message/base" },
-    { "path": "../typed-message/react" },
-    { "path": "../injected-script/sdk" }
+    { "path": "../encryption/tsconfig.json" },
+    { "path": "../plugin-infra/tsconfig.json" },
+    { "path": "../shared/tsconfig.json" },
+    { "path": "../shared-base/tsconfig.json" },
+    { "path": "../typed-message/base/tsconfig.json" },
+    { "path": "../typed-message/react/tsconfig.json" }
   ]
 }

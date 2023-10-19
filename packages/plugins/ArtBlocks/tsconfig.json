@@ -7,10 +7,16 @@
   },
   "include": ["src", "src/**/*.json"],
   "references": [
-    { "path": "../../plugin-infra" },
-    { "path": "../../shared-base" },
-    { "path": "../../shared-base-ui" },
-    { "path": "../../web3-hooks/evm" },
-    { "path": "../../shared" }
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../typed-message/base/tsconfig.json" },
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../web3-hooks/base/tsconfig.json" },
+    { "path": "../../web3-hooks/evm/tsconfig.json" },
+    { "path": "../../web3-shared/base/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../web3-providers/tsconfig.json" }
   ]
 }
