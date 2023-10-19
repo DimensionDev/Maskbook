@@ -1,12 +1,13 @@
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { EMPTY_ARRAY } from '@masknet/shared-base'
+import { initWallet } from '@masknet/web3-providers'
 import type { WalletAPI } from '@masknet/web3-providers/types'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')
 }
 
-export const WalletIO: WalletAPI.IOContext = {
+const WalletIO: WalletAPI.IOContext = {
     wallets: EMPTY_ARRAY,
     hasPaymentPassword: reject,
     openPopupWindow: reject,
@@ -25,3 +26,4 @@ export const WalletIO: WalletAPI.IOContext = {
     signWithPersona: reject,
     send: reject,
 }
+initWallet(WalletIO)
