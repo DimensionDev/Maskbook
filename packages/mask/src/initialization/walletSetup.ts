@@ -1,11 +1,10 @@
 import Services from '#services'
 import { initWallet } from '@masknet/web3-providers'
-import { allPersonas, setupUIContext } from '../../shared-ui/initUIContext.js'
+import { allPersonas } from '../../shared-ui/initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { defer, delay } from '@masknet/kit'
 
-setupUIContext()
 initWallet({
     addWallet: Services.Wallet.addWallet,
     signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
