@@ -7,5 +7,5 @@
     "emitDeclarationOnly": true
   },
   "include": ["./"],
-  "references": [{ "path": "../shared" }, { "path": "../../shared-base/" }]
+  "references": [{ "path": "../../flags/tsconfig.json" }, { "path": "../../shared-base/tsconfig.json" }]
 }

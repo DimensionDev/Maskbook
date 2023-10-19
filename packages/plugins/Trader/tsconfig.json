@@ -7,11 +7,11 @@
   },
   "include": ["src", "src/**/*.json"],
   "references": [
-    { "path": "../Transak" },
-    { "path": "../GoPlusSecurity" },
-    { "path": "../../plugin-infra" },
-    { "path": "../../plugin-infra" },
-    { "path": "../../shared-base" },
-    { "path": "../../shared" }
+    { "path": "../Transak/tsconfig.json" },
+    { "path": "../GoPlusSecurity/tsconfig.json" },
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" }
   ]
 }

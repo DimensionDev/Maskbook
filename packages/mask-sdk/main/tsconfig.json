@@ -7,5 +7,5 @@
     "emitDeclarationOnly": true
   },
   "include": ["./"],
-  "references": [{ "path": "../public-api" }, { "path": "../shared" }]
+  "references": [{ "path": "../public-api/tsconfig.json" }, { "path": "../shared/tsconfig.json" }]
 }

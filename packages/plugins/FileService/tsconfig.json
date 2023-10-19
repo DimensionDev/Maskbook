@@ -7,12 +7,12 @@
   },
   "include": ["src", "src/**/*.json"],
   "references": [
-    { "path": "../../theme" },
-    { "path": "../../plugin-infra" },
-    { "path": "../../shared-base" },
-    { "path": "../../shared-base-ui" },
-    { "path": "../../typed-message/base" },
-    { "path": "../../typed-message/react" },
-    { "path": "../../shared" }
+    { "path": "../../theme/tsconfig.json" },
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../shared-base-ui/tsconfig.json" },
+    { "path": "../../typed-message/base/tsconfig.json" },
+    { "path": "../../typed-message/react/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" }
   ]
 }

@@ -7,10 +7,10 @@
   },
   "include": ["./"],
   "references": [
-    { "path": "../runtime" },
-    { "path": "../types" },
-    { "path": "../peer-dependencies" },
-    { "path": "../utils" },
-    { "path": "../../../shared-base" }
+    { "path": "../runtime/tsconfig.json" },
+    { "path": "../types/tsconfig.json" },
+    { "path": "../peer-dependencies/tsconfig.json" },
+    { "path": "../utils/tsconfig.json" },
+    { "path": "../../../shared-base/tsconfig.json" }
   ]
 }

@@ -7,9 +7,9 @@
   },
   "include": ["src", "src/**/*.json"],
   "references": [
-    { "path": "../../plugin-infra" },
-    { "path": "../../shared-base" },
-    { "path": "../../shared" },
-    { "path": "../../web3-shared/base" }
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../shared/tsconfig.json" },
+    { "path": "../../web3-shared/base/tsconfig.json" }
   ]
 }

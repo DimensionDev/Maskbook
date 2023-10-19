@@ -85,6 +85,7 @@
     "@types/bn.js": "^4.11.6",
     "@types/bs58": "^4.0.1",
     "@types/socket.io-client": "^1.4.36",
+    "@types/twitter-text": "^3.1.7",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^9.0.3"
   }

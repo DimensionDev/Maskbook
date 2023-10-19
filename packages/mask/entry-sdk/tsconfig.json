@@ -8,5 +8,10 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
   "include": ["./"],
-  "references": [{ "path": "../utils-pure" }, { "path": "../../mask-sdk/server" }]
+  "references": [
+    { "path": "../utils-pure/tsconfig.json" },
+    { "path": "../../mask-sdk/server/tsconfig.json" },
+    { "path": "../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../shared-base/tsconfig.json" }
+  ]
 }

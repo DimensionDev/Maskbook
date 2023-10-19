@@ -6,5 +6,5 @@
     "tsBuildInfoFile": "../dist/server.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../public-api" }, { "path": "../shared" }]
+  "references": [{ "path": "../public-api/tsconfig.json" }, { "path": "../shared/tsconfig.json" }]
 }

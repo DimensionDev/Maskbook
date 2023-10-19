@@ -19,5 +19,5 @@
     "Clover.ts",
     "utils.ts"
   ],
-  "references": [{ "path": "../shared/" }]
+  "references": [{ "path": "../shared/tsconfig.json" }]
 }
