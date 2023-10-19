@@ -38,6 +38,9 @@ export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
         getPostURL,
         share,
         getUserIdentity,
+        getPostIdFromNewPostToast,
+        postMessage,
+        getSearchedKeyword,
         connectPersona,
     } = value)
 }
