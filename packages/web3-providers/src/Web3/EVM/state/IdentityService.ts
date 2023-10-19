@@ -121,6 +121,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         chainId?: ChainId,
         updatedAt?: string,
         createdAt?: string,
+        verified?: boolean,
     ): SocialAddress<ChainId> | undefined {
         if (isValidAddress(address) && !isZeroAddress(address)) {
             return {
@@ -131,6 +132,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
                 address,
                 updatedAt,
                 createdAt,
+                verified,
             }
         }
         return
@@ -271,7 +273,15 @@ export class IdentityService extends IdentityServiceState<ChainId> {
             chainId: ChainId.Mainnet,
         })
         if (!ownerAddress || !isValidAddress(ownerAddress)) return
-        return this.createSocialAddress(SocialAddressType.TwitterBlue, ownerAddress)
+        return this.createSocialAddress(
+            SocialAddressType.TwitterBlue,
+            ownerAddress,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            true,
+        )
     }
 
     /** Read social addresses from MaskX */
@@ -330,6 +340,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const verifiedResult = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
+                if (x.verified) return address
                 const isReliable = await Firefly.verifyTwitterHandleByAddress(address, handle)
                 return isReliable ? address : null
             }),

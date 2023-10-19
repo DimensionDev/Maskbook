@@ -61,6 +61,8 @@ export interface SocialAddress<ChainId> {
     updatedAt?: string
     /** Create timestamp (unix timestamp) */
     createdAt?: string
+    /** Data from official sources indicate validation, e.g. twitter blue  */
+    verified?: boolean
 }
 
 /**
