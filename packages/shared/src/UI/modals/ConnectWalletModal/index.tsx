@@ -1,8 +1,7 @@
-import { forwardRef, useState } from 'react'
+import { forwardRef, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Trans } from 'react-i18next'
 import { DialogContent, Box, Card, Typography, Paper, Link, dialogClasses } from '@mui/material'
-import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { WalletIcon, useSharedTrans } from '@masknet/shared'
 import {
@@ -95,15 +94,25 @@ export const ConnectWalletModal = forwardRef<
 >((props, ref) => {
     const t = useSharedTrans()
 
-    const [pluginID, setPluginID] = useState<NetworkPluginID>()
-    const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
-    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
+    const connectionRef = useRef<{
+        pluginID: NetworkPluginID
+        networkType: Web3Helper.NetworkTypeAll
+        providerType: Web3Helper.ProviderTypeAll
+    }>()
+    const { pluginID, providerType, networkType } = connectionRef.current ?? {}
+
+    const providerDescriptor = useProviderDescriptor(pluginID, providerType)
+    const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
+
+    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
 
     const Web3 = useWeb3Connection(pluginID, { providerType })
     const Others = useWeb3Others(pluginID)
 
     const [{ loading, value: connected, error }, onConnect] = useAsyncFn(async () => {
-        if (!networkType || !providerType) throw new Error('Failed to connect to provider.')
+        if (!connectionRef.current) throw new Error('Failed to connect to provider.')
+
+        const { pluginID, providerType, networkType } = connectionRef.current
 
         const chainId = Others.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
@@ -128,23 +137,18 @@ export const ConnectWalletModal = forwardRef<
         }
 
         return true
-    }, [pluginID, networkType, providerType, Others, Web3])
-
-    const providerDescriptor = useProviderDescriptor(pluginID, providerType)
-    const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
-
-    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
+    }, [connectionRef.current, Others, Web3])
 
     const [open, dispatch] = useSingletonModal(ref, {
         async onOpen(props) {
-            setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
-            setProviderType(props.providerType)
-            setNetworkType(props.networkType)
+            connectionRef.current = {
+                pluginID: props.pluginID ?? NetworkPluginID.PLUGIN_EVM,
+                networkType: props.networkType,
+                providerType: props.providerType,
+            }
 
-            await delay(300)
-            const rr = await onConnect()
-            console.log(`DEBUG: rr: ${rr}`)
-            dispatch?.close(true)
+            const connected = await onConnect()
+            if (connected === true) dispatch?.close(true)
         },
     })
 
