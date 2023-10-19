@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash-es'
+import { uniq, uniqBy } from 'lodash-es'
 import { produce, type Draft } from 'immer'
 import type { Subscription } from 'use-subscription'
 import {
@@ -228,7 +228,7 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
         this.blockOrUnblockToken(address, token, 'block')
         this.addOrRemoveToken(address, token, 'add')
     }
-    async addNonFungibleCollection(
+    async addNonFungibleTokens(
         owner: string,
         contract: NonFungibleTokenContract<ChainId, SchemaType>,
         tokenIds: string[],
@@ -244,15 +244,54 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             const index = draft.findIndex(
                 (x) => x.contract.chainId === contract.chainId && isSameAddress(x.contract.address, contract.address),
             )
-            const newRecord = {
-                contract,
-                tokenIds,
-            }
-            if (index > -1) {
+            const oldRecord = draft[index]
+            if (oldRecord) {
                 // Just override the original record
-                Object.assign(draft[index], newRecord)
+                Object.assign(draft[index], {
+                    contract,
+                    tokenIds: uniq([...oldRecord.tokenIds, ...tokenIds]),
+                })
             } else {
-                draft.push(newRecord as Draft<StorageCollection>)
+                draft.push({ contract, tokenIds } as Draft<StorageCollection>)
+            }
+        })
+        await collectionMap.setValue({
+            ...collectionMap.value,
+            [key]: newList,
+        })
+
+        // Also remove from block ids
+        const ids = tokenIds.map((x) => `${contract.chainId}.${contract.address.toLowerCase()}.${x}`)
+        const blockIds = blockedBy.value[key]
+        if (!blockIds?.length) return
+        await blockedBy.setValue({
+            ...blockedBy.value,
+            [key]: blockIds.filter((x) => !ids.includes(x)),
+        })
+    }
+    async removeNonFungibleTokens(
+        owner: string,
+        contract: NonFungibleTokenContract<ChainId, SchemaType>,
+        tokenIds: string[],
+    ) {
+        type StorageCollection = {
+            contract: NonFungibleTokenContract<ChainId, SchemaType>
+            tokenIds: string[]
+        }
+        const key = owner.toLowerCase()
+        const { nonFungibleCollectionMap: collectionMap, nonFungibleTokenBlockedBy: blockedBy } = this.storage
+        const list: StorageCollection[] = collectionMap.value[key] || []
+        const newList = produce(list, (draft) => {
+            const index = draft.findIndex(
+                (x) => x.contract.chainId === contract.chainId && isSameAddress(x.contract.address, contract.address),
+            )
+            const record = draft[index]
+            if (record) {
+                // Just override the original record
+                Object.assign(draft[index], {
+                    contract: record.contract,
+                    tokenIds: record.tokenIds.filter((tokenId) => !tokenIds.includes(tokenId)),
+                })
             }
         })
         await collectionMap.setValue({

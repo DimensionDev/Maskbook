@@ -5,7 +5,14 @@ import { TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@maskne
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
-import { SchemaType, formatTrait, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    formatTrait,
+    isLensCollect,
+    isLensFollower,
+    isLensProfileAddress,
+    resolveImageURL,
+} from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -48,6 +55,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    fallbackImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: '100%',
+        height: '100%',
     },
     icon: {
         marginRight: 4,
@@ -185,6 +198,16 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                         address: availableAsset.address,
                         tokenId: availableAsset.tokenId,
                     })
+                    await Token.removeNonFungibleTokens?.(
+                        account,
+                        {
+                            chainId: availableAsset.chainId,
+                            name: '', // Name is not necessary but satisfies typing.
+                            address: availableAsset.address,
+                            schema: SchemaType.ERC721,
+                        },
+                        [availableAsset.tokenId],
+                    )
                     showSnackbar(t('hided_token_successfully'))
                     navigate(-1)
                 }}>
@@ -203,13 +226,21 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
         return true
     }, [availableAsset])
 
+    const fallbackImage = availableAsset
+        ? resolveImageURL(
+              undefined,
+              availableAsset.metadata?.name,
+              availableAsset.collection?.name,
+              availableAsset.contract?.address,
+          )
+        : NFTFallbackImage
     return (
         <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (
                 <AssetPreviewer
-                    classes={{ root: classes.image }}
+                    classes={{ root: classes.image, fallbackImage: classes.fallbackImage }}
                     url={availableAsset?.metadata?.imageURL}
-                    fallbackImage={NFTFallbackImage}
+                    fallbackImage={fallbackImage}
                 />
             ) : (
                 <Skeleton className={classes.image} />

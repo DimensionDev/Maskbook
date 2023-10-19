@@ -129,12 +129,13 @@ const AddToken = memo(function AddToken() {
     const [{ loading: loadingAddCustomNFTs }, addCustomNFTs] = useAsyncFn(
         async (result: [contract: NonFungibleTokenContract<ChainId, SchemaType>, tokenIds: string[]]) => {
             const [contract, tokenIds] = result
-            await Token?.addNonFungibleCollection?.(account, contract, tokenIds)
+            await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
 
             for await (const tokenId of tokenIds) {
                 await Token?.addToken?.(account, {
                     id: `${contract.chainId}.${contract.address}.${tokenId}`,
                     chainId: contract.chainId,
+                    tokenId,
                     type: TokenType.NonFungible,
                     schema: contract.schema,
                     address: contract.address,
@@ -189,7 +190,7 @@ const AddToken = memo(function AddToken() {
                         <AddCollectibles
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={chainId}
-                            onClose={addCustomNFTs}
+                            onAdd={addCustomNFTs}
                             disabled={loadingAddCustomNFTs}
                             classes={{ grid: classes.grid, form: classes.form, main: classes.nftContent }}
                         />

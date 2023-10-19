@@ -297,6 +297,8 @@ export interface Token<ChainId, SchemaType> {
     type: TokenType
     schema: SchemaType
     address: string
+    /** NFT has tokenId */
+    tokenId?: string
     /** Added by user */
     isCustomToken?: boolean
 }
@@ -1002,7 +1004,12 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
             }>
         >
     >
-    addNonFungibleCollection?(
+    addNonFungibleTokens?(
+        owner: string,
+        contract: NonFungibleTokenContract<ChainId, SchemaType>,
+        tokenIds: string[],
+    ): Promise<void>
+    removeNonFungibleTokens?(
         owner: string,
         contract: NonFungibleTokenContract<ChainId, SchemaType>,
         tokenIds: string[],

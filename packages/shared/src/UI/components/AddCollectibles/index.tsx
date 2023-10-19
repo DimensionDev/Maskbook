@@ -1,26 +1,28 @@
 import { Icons } from '@masknet/icons'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
+    useAddressType,
     useChainContext,
     useWeb3Connection,
     useWeb3Hub,
     useWeb3Others,
-    useAddressType,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { CollectibleItem, CollectibleItemSkeleton } from '../AssetsManagement/CollectibleItem.js'
 import { useSharedTrans } from '../../../locales/index.js'
-import { EmptyStatus, LoadingStatus, ReloadStatus } from '../index.js'
-import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { type NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { CollectibleItem, CollectibleItemSkeleton } from '../AssetsManagement/CollectibleItem.js'
+import { EmptyStatus } from '../EmptyStatus/index.js'
+import { LoadingStatus } from '../LoadingStatus/index.js'
+import { ReloadStatus } from '../ReloadStatus/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -90,6 +92,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+type AddingNFTs<T extends NetworkPluginID = NetworkPluginID> = [
+    contract: NonFungibleTokenContract<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+    tokenIds: string[],
+]
+
 export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginID>
     extends withClasses<'grid' | 'form' | 'main'> {
     pluginID?: T
@@ -99,15 +106,7 @@ export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginI
      * For example, in PFP, we can add collectibles from verified wallets if no wallet connected.
      */
     account?: string
-    onClose(
-        result?: [
-            contract: NonFungibleTokenContract<
-                Web3Helper.Definition[T]['ChainId'],
-                Web3Helper.Definition[T]['SchemaType']
-            >,
-            tokenIds: string[],
-        ],
-    ): void
+    onAdd(result?: AddingNFTs<T>): void
     disabled?: boolean
 }
 
@@ -122,8 +121,8 @@ function isValidTokenIds(rawIds: string) {
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
-    const { pluginID, chainId: chainId_, account: defaultAccount, onClose } = props
-    const { chainId } = useChainContext({ chainId: chainId_ })
+    const { pluginID, chainId: defaultChainId, account: defaultAccount, onAdd } = props
+    const { chainId } = useChainContext({ chainId: defaultChainId })
     const t = useSharedTrans()
     const theme = useTheme()
     const walletAccount = useAccount()
@@ -149,7 +148,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const { value: addressType, loading: loadingAddressType } = useAddressType(
         pluginID,
-        Others.isValidAddress?.(address) ? address : '',
+        Others.isValidAddress(address) ? address : '',
         {
             chainId,
         },
@@ -182,7 +181,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const assetsQueries = useQueries({
         queries: tokenIds.map((tokenId) => ({
             enabled: isValid,
-            queryKey: ['nft-asset', pluginID, chainId, address, tokenId],
+            queryKey: ['nft-asset', account, pluginID, chainId, address, tokenId],
             queryFn: async () => {
                 try {
                     return await hub.getNonFungibleAsset(address, tokenId, { chainId, account })
@@ -223,10 +222,10 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         [address],
     )
 
-    const handleClose = useCallback(() => {
+    const handleAdd = useCallback(() => {
         if (!contract) return
-        onClose([contract, selectedTokenIds])
-    }, [contract, selectedTokenIds, onClose])
+        onAdd([contract, selectedTokenIds])
+    }, [contract, selectedTokenIds, onAdd])
 
     const disabled = !selectedTokenIds.length || isLoadingContract || isValidating || props.disabled
 
@@ -337,11 +336,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 )}
             </div>
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
-                <ActionButton
-                    fullWidth
-                    startIcon={<Icons.Avatar size={18} />}
-                    disabled={disabled}
-                    onClick={handleClose}>
+                <ActionButton fullWidth startIcon={<Icons.Avatar size={18} />} disabled={disabled} onClick={handleAdd}>
                     {t.add_collectibles()}
                 </ActionButton>
             </Stack>

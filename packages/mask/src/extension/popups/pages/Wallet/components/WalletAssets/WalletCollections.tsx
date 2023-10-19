@@ -1,15 +1,16 @@
 import { CollectionList, type CollectionListProps } from '@masknet/shared'
-import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useBlockedNonFungibleTokens, useTrustedNonFungibleTokens } from '@masknet/web3-hooks-base'
+import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
+import { useSubscription } from 'use-subscription'
 import { useMaskSharedTrans } from '../../../../../../utils/index.js'
-import { WalletAssetTabs } from '../../type.js'
 import { useParamTab } from '../../../../hooks/index.js'
+import { WalletAssetTabs } from '../../type.js'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -25,6 +26,40 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+function useAdditionalAssets() {
+    const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const collectionMap = useSubscription(Token?.nonFungibleCollectionMap ?? EMPTY_ENTRY)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const additionalAssets = useMemo(() => {
+        const collections = collectionMap[account?.toLowerCase()]
+        if (!collections) return EMPTY_LIST
+        return collections.flatMap((collection) => {
+            const { contract } = collection
+            const tokens = collection.tokenIds.map((tokenId) => {
+                return {
+                    tokenId,
+                    chainId: contract.chainId,
+                    ownerId: account,
+                    address: contract.address,
+                    contract,
+                    metadata: {
+                        chainId: contract.chainId,
+                        name: contract.name,
+                        tokenId,
+                        symbol: contract.symbol,
+                    },
+                    collection: {
+                        name: contract.name,
+                        symbol: contract.symbol,
+                    },
+                } as Web3Helper.NonFungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>
+            })
+            return tokens
+        })
+    }, [collectionMap, account])
+    return additionalAssets
+}
+
 interface Props {
     onAddToken: (assetTab: WalletAssetTabs) => void
     scrollTargetRef: CollectionListProps['scrollElementRef']
@@ -36,14 +71,8 @@ export const WalletCollections = memo<Props>(
         const { classes } = useStyles()
         const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
         const [, setParams] = useSearchParams()
-        const trustedTokens = useTrustedNonFungibleTokens(NetworkPluginID.PLUGIN_EVM)
-        const blockedTokens = useBlockedNonFungibleTokens()
-        const additionalAssets = useMemo(() => {
-            const ids = blockedTokens.map((x) => x.id)
-            return ids.length ? trustedTokens.filter((x) => !ids.includes(x.id)) : trustedTokens
-        }, [trustedTokens, blockedTokens])
+        const additionalAssets = useAdditionalAssets()
         const navigate = useNavigate()
-        const SEARCH_KEY = 'collectionId'
         const handleItemClick = useCallback(
             (asset: Web3Helper.NonFungibleTokenAll) => {
                 const path = urlcat(PopupRoutes.CollectibleDetail, {
@@ -57,6 +86,7 @@ export const WalletCollections = memo<Props>(
         )
         const handleCollectionChange = useCallback(
             (id: string | undefined) => {
+                const SEARCH_KEY = 'collectionId'
                 setParams(
                     (params) => {
                         if (!id) params.delete(SEARCH_KEY)
