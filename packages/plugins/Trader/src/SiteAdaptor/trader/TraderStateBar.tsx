@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
 import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
-import { useIsMinimalModeDashboard } from '@masknet/plugin-infra/dashboard'
+import { useIsMinimalModeExtensionPage } from '@masknet/plugin-infra/extension-page'
 import {
     PluginWalletStatusBar,
     WalletConnectedBoundary,
@@ -102,9 +102,9 @@ export function TraderStateBar({
 
     const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
     const isGoPlusMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
-    const isDashboardClosed = useIsMinimalModeDashboard(PluginID.GoPlusSecurity)
+    const isClosedInExtensionPage = useIsMinimalModeExtensionPage(PluginID.GoPlusSecurity)
 
-    const isTokenSecurityEnable = !isGoPlusMinimal && !isDashboardClosed
+    const isTokenSecurityEnable = !isGoPlusMinimal && !isClosedInExtensionPage
 
     const { value: tokenSecurityInfo } = useTokenSecurity(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,

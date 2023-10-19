@@ -49,7 +49,7 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
  * ! DO NOT use this directly to query the plugin status !
  *
  * use `useActivatedPluginsSiteAdaptor().find((x) => x.ID === PLUGIN_ID)` or
- * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
+ * `useActivatedPluginsExtensionPage().find((x) => x.ID === PLUGIN_ID)` instead
  * @deprecated DO NOT EXPORT THIS
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.

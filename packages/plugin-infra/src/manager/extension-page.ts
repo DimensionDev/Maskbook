@@ -5,29 +5,29 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
 
-const { activated, startDaemon, events, minimalMode } = createManager((def) => def.Dashboard)
+const { activated, startDaemon, events, minimalMode } = createManager((def) => def.ExtensionPage)
 
-const activatedSub = new ValueRefWithReady<Plugin.Dashboard.Definition[]>([], isEqual)
+const activatedSub = new ValueRefWithReady<Plugin.ExtensionPage.Definition[]>([], isEqual)
 events.on(ALL_EVENTS, () => (activatedSub.value = [...activated.plugins]))
 
 const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
 events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
 
-export function useIsMinimalModeDashboard(pluginID: string) {
+export function useIsMinimalModeExtensionPage(pluginID: string) {
     return useValueRef(minimalModeSub).includes(pluginID)
 }
 
-export function useActivatedPluginsDashboard() {
+export function useActivatedPluginsExtensionPage() {
     return useValueRef(activatedSub)
 }
 
-export function useActivatedPluginDashboard(pluginID: string) {
+export function useActivatedPluginExtensionPage(pluginID: string) {
     const plugins = useValueRef(activatedSub)
     return plugins.find((x) => x.ID === pluginID)
 }
 
-export function startPluginDashboard(
-    host: Plugin.__Host.Host<Plugin.Dashboard.Definition, Plugin.Dashboard.DashboardContext>,
+export function startPluginHostExtensionPage(
+    host: Plugin.__Host.Host<Plugin.ExtensionPage.Definition, Plugin.ExtensionPage.ExtensionPageContext>,
 ) {
     startDaemon(host)
 }

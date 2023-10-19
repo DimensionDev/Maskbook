@@ -8,10 +8,10 @@ registerPlugin({
         hotModuleReload: (hot) =>
             import.meta.webpackHot?.accept('./SiteAdaptor', () => hot(import('./SiteAdaptor/index.js'))),
     },
-    Dashboard: {
-        load: () => import('./Dashboard/index.js'),
+    ExtensionPage: {
+        load: () => import('./ExtensionPage/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./Dashboard', () => hot(import('./Dashboard/index.js'))),
+            import.meta.webpackHot?.accept('./ExtensionPage', () => hot(import('./ExtensionPage/index.js'))),
     },
     Worker: {
         load: () => import('./Worker/index.js'),

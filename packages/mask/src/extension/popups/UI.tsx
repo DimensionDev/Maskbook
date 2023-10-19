@@ -1,4 +1,4 @@
-import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
+import { createInjectHooksRenderer, useActivatedPluginsExtensionPage } from '@masknet/plugin-infra/extension-page'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
@@ -52,7 +52,7 @@ const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/ind
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
 const Settings = lazy(() => import('./pages/Settings/index.js'))
 
-const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
+const PluginRender = createInjectHooksRenderer(useActivatedPluginsExtensionPage, (x) => x.GlobalInjection)
 
 function PluginRenderDelayed() {
     const [canRenderPlugin, setRenderPlugins] = useState(false)

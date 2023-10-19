@@ -6,7 +6,6 @@ packages:
   - 'packages/polyfills/types'
   - 'packages/web3-hooks/base'
   - 'packages/web3-hooks/evm'
-  - 'packages/web3-providers'
   - 'packages/web3-shared/base'
   - 'packages/web3-shared/evm'
   - 'packages/web3-shared/flow'

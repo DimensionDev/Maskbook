@@ -1,5 +1,4 @@
-import { activateSiteAdaptorUI } from '../../setup.ui.js'
-import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
+import { startPluginHostExtensionPage } from '@masknet/plugin-infra/extension-page'
 import { createNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
 import Services from '#services'
@@ -28,14 +27,13 @@ if (navigator.userAgent.includes('Firefox')) {
         )
     }, 200)
 }
-await activateSiteAdaptorUI()
 createNormalReactRoot(<Popups />)
 startPluginHost()
 
 function startPluginHost() {
     // TODO: Should only load plugins when the page is plugin-aware.
 
-    startPluginDashboard(
+    startPluginHostExtensionPage(
         createPluginHost(
             undefined,
             (id, def, signal) => ({
