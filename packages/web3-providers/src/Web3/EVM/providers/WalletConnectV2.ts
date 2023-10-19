@@ -75,8 +75,7 @@ export class WalletConnectV2Provider
 
     constructor() {
         super(ProviderType.WalletConnectV2)
-
-        if (Flags.wc_v2_enabled) this.resume()
+        this.resume()
     }
 
     private get currentChainId() {

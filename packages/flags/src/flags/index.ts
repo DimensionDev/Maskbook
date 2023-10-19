@@ -52,8 +52,8 @@ export const flags = {
     wc_v2_relay_url: 'wss://relay.walletconnect.com',
     wc_v2_project_id: '8f1769933420afe8873860925fcca14f',
     wc_v2_mode: isProd ? 'error' : 'debug',
-    wc_v1_enabled: true,
-    wc_v2_enabled: false,
+    wc_v1_enabled: false,
+    wc_v2_enabled: true,
 } as const
 
 Object.freeze(flags.shadowRootInit)

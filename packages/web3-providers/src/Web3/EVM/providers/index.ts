@@ -1,3 +1,4 @@
+import { Flags } from '@masknet/flags'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { NoneProvider } from './None.js'
 import { BrowserProvider } from './Browser.js'
@@ -21,8 +22,8 @@ export const Providers = {
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.Browser]: new BrowserProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
-    [ProviderType.WalletConnect]: new WalletConnectProvider(),
-    [ProviderType.WalletConnectV2]: new WalletConnectV2Provider(),
+    [ProviderType.WalletConnect]: Flags.wc_v1_enabled ? new WalletConnectProvider() : new NoneProvider(),
+    [ProviderType.WalletConnectV2]: Flags.wc_v2_enabled ? new WalletConnectV2Provider() : new NoneProvider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.Coinbase]: new CoinbaseProvider(),
     [ProviderType.OKX]: new OKXProvider(),
