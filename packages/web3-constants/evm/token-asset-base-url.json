@@ -24,7 +24,8 @@
         "Aurora": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora"],
         "Aurora_Testnet": [],
         "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux"],
-        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar"]
+        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar"],
+        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll"]
     },
     "ERC20_TOKEN_ASSET_BASE_URI": {
         "Mainnet": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/assets"],
@@ -51,6 +52,7 @@
         "Aurora": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora/assets"],
         "Aurora_Testnet": [],
         "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux/assets"],
-        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar/assets"]
+        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar/assets"],
+        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll/assets"]
     }
 }

@@ -33,6 +33,7 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
     networks: EMPTY_LIST,
 })
 
+//  https://docs.simplehash.com/reference/chains
 const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_EVM]: [
         ChainId.Mainnet,
@@ -43,6 +44,7 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
         ChainId.Optimism,
         ChainId.Avalanche,
         ChainId.xDai,
+        ChainId.Scroll,
     ],
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
     [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],

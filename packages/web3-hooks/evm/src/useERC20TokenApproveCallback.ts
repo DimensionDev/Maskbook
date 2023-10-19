@@ -35,10 +35,10 @@ export function useERC20TokenApproveCallback(
         refetch: revalidateBalance,
     } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId: tokenChainId })
     const {
-        value: allowance = '0',
-        loading: loadingAllowance,
+        data: allowance = '0',
+        isLoading: loadingAllowance,
         error: errorAllowance,
-        retry: revalidateAllowance,
+        refetch: revalidateAllowance,
     } = useERC20TokenAllowance(address, spender, { chainId: tokenChainId })
 
     // the computed approve state
@@ -86,7 +86,7 @@ export function useERC20TokenApproveCallback(
     const resetCallback = useCallback(() => {
         revalidateBalance()
         revalidateAllowance()
-    }, [revalidateBalance, revalidateAllowance])
+    }, [revalidateBalance])
 
     return [
         {

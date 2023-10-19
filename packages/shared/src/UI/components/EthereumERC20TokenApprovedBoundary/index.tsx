@@ -1,14 +1,14 @@
 import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
-import { ActionButton, type ActionButtonProps, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, ShadowRootTooltip, makeStyles, type ActionButtonProps } from '@masknet/theme'
+import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
+import { isGte, isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
-import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},
@@ -47,7 +47,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         amount,
         spender,
         token,
-        fallback,
         infiniteUnlockContent,
         contractName,
         showHelperToken = true,
@@ -69,21 +68,20 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         account,
     })
 
-    const approved = !!spenders?.find(
-        (x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender),
+    const [{ type: approveStateType, allowance }, transactionState, approveCallback] = useERC20TokenApproveCallback(
+        token?.address ?? '',
+        amount,
+        spender ?? '',
+        () => {
+            callback?.()
+            refetch()
+        },
+        token?.chainId,
     )
 
-    const [{ type: approveStateType, allowance }, transactionState, approveCallback, _resetApproveCallback] =
-        useERC20TokenApproveCallback(
-            token?.address ?? '',
-            amount,
-            spender ?? '',
-            () => {
-                callback?.()
-                refetch()
-            },
-            token?.chainId,
-        )
+    const approved =
+        isGte(allowance, amount) ||
+        spenders?.some((x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender))
 
     const loading =
         spendersLoading ||

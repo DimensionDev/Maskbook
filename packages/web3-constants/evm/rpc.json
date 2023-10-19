@@ -69,7 +69,8 @@
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev"],
         "Conflux": ["https://evm.confluxrpc.com"],
-        "Astar": ["https://astar.api.onfinality.io/public"]
+        "Astar": ["https://astar.api.onfinality.io/public"],
+        "Scroll": ["https://rpc.scroll.io"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -96,7 +97,8 @@
         "Aurora": ["https://mainnet.aurora.dev"],
         "Aurora_Testnet": ["https://testnet.aurora.dev/"],
         "Conflux": ["https://evm.confluxrpc.com"],
-        "Astar": ["https://rpc.astar.network:8545"]
+        "Astar": ["https://rpc.astar.network:8545"],
+        "Scroll": ["https://rpc.scroll.io"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -123,6 +125,7 @@
         "Aurora": [0, 0, 0, 0, 0],
         "Aurora_Testnet": [0, 0, 0, 0, 0],
         "Conflux": [0, 0, 0, 0, 0],
-        "Astar": [0, 0, 0, 0, 0]
+        "Astar": [0, 0, 0, 0, 0],
+        "Scroll": [0, 0, 0, 0, 0]
     }
 }

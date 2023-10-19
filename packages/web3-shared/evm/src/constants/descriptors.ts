@@ -256,6 +256,19 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_scroll`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Scroll,
+        type: NetworkType.Scroll,
+        name: 'Scroll',
+        icon: new URL('../assets/scroll.svg', import.meta.url).href,
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%), rgba(255, 255, 255, 0.2)',
+        iconColor: 'rgb(255, 248, 243)',
+        averageBlockDelay: 9,
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_optimism`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Optimism,
