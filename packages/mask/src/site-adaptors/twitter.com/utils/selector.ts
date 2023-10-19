@@ -15,9 +15,7 @@ export const querySelectorAll = <T extends E>(selector: string) => {
 // #region "Enhanced Profile"
 export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        [
-            '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"] div[role="presentation"]:last-of-type a[role="tab"]',
-        ].join(','),
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"] div[role="presentation"]:last-of-type a[role="tab"]',
     ).closest(1)
 export const nextTabListSelector: () => LiveSelector<E, true> = () =>
     querySelector('[data-testid="ScrollSnap-nextButtonWrapper"]')
