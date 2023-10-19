@@ -39,8 +39,9 @@ export async function publishPostTwitter(
         variables,
     })
 
-    const response = await Twitter.createTweet(variables)
+    const postId = await Twitter.createTweet(variables)
 
     console.log('DEBUG: response create tweet')
-    console.log(response)
+    console.log(postId)
+    return postId
 }

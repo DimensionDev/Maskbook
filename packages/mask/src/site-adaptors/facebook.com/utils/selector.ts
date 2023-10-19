@@ -24,7 +24,7 @@ export const searchNickNameSelector: (userId?: string | null) => LiveSelector<HT
     userId?: string | null,
 ) => {
     return querySelector<HTMLHeadingElement>(
-        compact(['span[dir="auto"] div h1', userId ? `a[href$="id=${userId}"]` : undefined]).join(','),
+        compact([userId ? `a[href$="id=${userId}"]` : undefined, 'span[dir="auto"] div h1']).join(','),
     )
 }
 

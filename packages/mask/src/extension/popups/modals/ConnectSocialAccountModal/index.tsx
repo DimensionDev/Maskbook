@@ -19,7 +19,7 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (!currentPersona) return
-            await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, 'local', undefined)
+            await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined)
 
             const eventID = EventMap[networkIdentifier]
             if (eventID) Telemetry.captureEvent(EventType.Access, eventID)

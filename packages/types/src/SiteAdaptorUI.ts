@@ -165,7 +165,7 @@ export namespace SiteAdaptorUI {
             newsFeed?(): void
         }
         export interface Endpoint {
-            publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<void>
+            publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<string>
         }
     }
     export namespace CollectingCapabilities {

@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import { NextIDAction, type PersonaInformation, SignType, MaskMessages, toBase64, fromHex } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -29,8 +28,6 @@ async function createAndSignMessage(persona: PersonaInformation, username: strin
 }
 
 export function useNextIDVerify() {
-    const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const getPostIdFromNewPostToast = activatedSiteAdaptorUI!.configuration.nextIDConfig?.getPostIdFromNewPostToast
     const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.attachText
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
 
@@ -43,34 +40,24 @@ export function useNextIDVerify() {
             const { signature, payload } = message
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            await postMessage?.(postContent, { recover: false, reason: 'verify' })
-            await new Promise<void>((resolve, reject) => {
-                verifyPostCollectTimer.current = setInterval(async () => {
-                    const postId = getPostIdFromNewPostToast?.()
-                    if (postId && persona.identifier.publicKeyAsHex) {
-                        clearInterval(verifyPostCollectTimer.current!)
-                        await NextIDProof.bindProof(
-                            payload.uuid,
-                            persona.identifier.publicKeyAsHex,
-                            NextIDAction.Create,
-                            platform,
-                            username,
-                            payload.createdAt,
-                            {
-                                signature,
-                                proofLocation: postId,
-                            },
-                        )
-                        resolve()
-                    }
-                }, 1000)
-
-                setTimeout(() => {
-                    clearInterval(verifyPostCollectTimer.current!)
-                    // reject({ message: t('setup_guide_verify_post_not_found') })
-                    reject()
-                }, 1000 * 20)
+            const postId = await activatedSiteAdaptorUI!.automation.endpoint?.publishPost?.([postContent], {
+                reason: 'verify',
             })
+            if (!postId) throw new Error('Failed to verify.')
+            if (persona.identifier.publicKeyAsHex) {
+                await NextIDProof.bindProof(
+                    payload.uuid,
+                    persona.identifier.publicKeyAsHex,
+                    NextIDAction.Create,
+                    platform,
+                    username,
+                    payload.createdAt,
+                    {
+                        signature,
+                        proofLocation: postId,
+                    },
+                )
+            }
 
             const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
             if (!isBound) throw new Error('Failed to verify.')

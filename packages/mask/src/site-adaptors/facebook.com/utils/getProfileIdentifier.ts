@@ -26,7 +26,7 @@ export function getProfileIdentifierAtFacebook(links: link[] | link, allowCollec
         if (!Array.isArray(links)) links = [links]
         const result = links
             .filter(Boolean)
-            .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
+            .map((x) => ({ nickname: x!.ariaLabel || x!.textContent.trim(), id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
         const identifier = ProfileIdentifier.of(EnhanceableSite.Facebook, id).unwrapOr(null)

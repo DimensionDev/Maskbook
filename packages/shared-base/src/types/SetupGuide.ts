@@ -5,6 +5,8 @@ export interface SetupGuideContext {
     username?: string
     /** The WIP step */
     status?: SetupGuideStep
+    /** Specified tab id to activate setup guide */
+    tabId?: string
 }
 
 export enum SetupGuideStep {
