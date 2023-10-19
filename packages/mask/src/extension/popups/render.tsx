@@ -4,8 +4,9 @@ import { createNormalReactRoot } from '../../utils/index.js'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
 import Services from '#services'
 import Popups from './UI.js'
-import { allPersonas } from '../../../shared-ui/initUIContext.js'
+import { allPersonas, setupUIContext } from '../../../shared-ui/initUIContext.js'
 
+setupUIContext()
 if (location.hash === '') location.assign('#/personas')
 
 /**

@@ -26,7 +26,7 @@ import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
-import '../../shared-ui/initUIContext.js'
+import { setupUIContext } from '../../shared-ui/initUIContext.js'
 import { definedSiteAdaptorsUI } from './define.js'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
@@ -140,6 +140,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         })
     }
 
+    setupUIContext()
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,

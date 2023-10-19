@@ -20,21 +20,24 @@ export const currentPersona = createSubscriptionFromAsync(
     undefined,
     MaskMessages.events.currentPersonaIdentifier.on,
 )
-__setUIContext__({
-    allPersonas,
-    currentPersona,
-    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
-    querySocialIdentity: Services.Identity.querySocialIdentity,
-    fetchJSON: Services.Helper.fetchJSON,
-    queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
-    openDashboard: Services.Helper.openDashboard,
-    openPopupWindow: Services.Helper.openPopupWindow,
-    signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
-    hasPaymentPassword: Services.Wallet.hasPassword,
-    createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
-    attachProfile: Services.Identity.attachProfile,
-    setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
-    setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
-    hasHostPermission: Services.Helper.hasHostPermission,
-    requestHostPermission: Services.Helper.requestHostPermission,
-})
+
+export function setupUIContext() {
+    __setUIContext__({
+        allPersonas,
+        currentPersona,
+        queryPersonaAvatar: Services.Identity.getPersonaAvatar,
+        querySocialIdentity: Services.Identity.querySocialIdentity,
+        fetchJSON: Services.Helper.fetchJSON,
+        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
+        openDashboard: Services.Helper.openDashboard,
+        openPopupWindow: Services.Helper.openPopupWindow,
+        signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
+        hasPaymentPassword: Services.Wallet.hasPassword,
+        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
+        attachProfile: Services.Identity.attachProfile,
+        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
+        setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
+        hasHostPermission: Services.Helper.hasHostPermission,
+        requestHostPermission: Services.Helper.requestHostPermission,
+    })
+}

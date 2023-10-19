@@ -3,10 +3,11 @@ import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { createSharedContext, createPluginHost } from '../../../shared/plugin-infra/host.js'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot.js'
-import { allPersonas } from '../../../shared-ui/initUIContext.js'
+import { allPersonas, setupUIContext } from '../../../shared-ui/initUIContext.js'
 import Services from '#services'
 import { Modals } from '@masknet/shared'
 
+setupUIContext()
 startPluginDashboard(
     createPluginHost(
         undefined,
