@@ -2,7 +2,7 @@
 import type { SiteAdaptorUI } from '@masknet/types'
 import { makeStyles } from '@masknet/theme'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { activatedSiteAdaptor_state, stateCreator } from '../../site-adaptor-infra/index.js'
+import { activatedSiteAdaptor_state, creator, stateCreator } from '../../site-adaptor-infra/index.js'
 import { injectPostCommentsDefault } from '../../site-adaptor-infra/defaults/index.js'
 import { injectPageInspectorDefault } from '../../site-adaptor-infra/defaults/inject/PageInspector.js'
 import { createTaskStartSetupGuideDefault } from '../../site-adaptor-infra/defaults/inject/StartSetupGuide.js'
@@ -25,12 +25,17 @@ import { injectPostReplacerAtMinds } from './injection/PostReplacer.js'
 import { injectSearchResultInspectorAtMinds } from './injection/SearchResultInspector.js'
 import { injectBannerAtMinds } from './injection/Banner.js'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint.js'
-import { CurrentVisitingIdentityProviderDefault } from '../browser-action/collecting/identity.js'
 import { MindsRenderFragments } from './customization/render-fragments.js'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer.js'
 import { injectMindsProfileCover } from './injection/ProfileCover.js'
 import { injectAvatar } from './injection/Avatar/index.js'
 import { mindsShared } from './shared.js'
+
+const CurrentVisitingIdentityProviderDefault: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
+    hasDeprecatedPlaceholderName: false,
+    recognized: creator.EmptyIdentityResolveProviderState(),
+    start(signal) {},
+}
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

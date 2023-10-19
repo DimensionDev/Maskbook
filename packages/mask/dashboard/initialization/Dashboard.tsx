@@ -11,7 +11,6 @@ import {
 } from '@masknet/theme'
 import { I18NextProviderHMR, PersonaContext, SharedContextProvider, persistOptions } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
-import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
@@ -31,8 +30,6 @@ const GlobalCss = (
         }}
     />
 )
-
-const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 const PersonaContextIO = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -71,7 +68,6 @@ export default function DashboardRoot(props: React.PropsWithChildren<{}>) {
                                                 <SharedContextProvider>
                                                     {GlobalCss}
                                                     <Pages />
-                                                    <PluginRender />
                                                     {props.children}
                                                 </SharedContextProvider>
                                             </CustomSnackbarProvider>

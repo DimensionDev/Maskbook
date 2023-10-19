@@ -71,8 +71,8 @@ export declare namespace Plugin {
     export interface DeferredDefinition extends Shared.Definition {
         /** Load the Site Adaptor part of the plugin. */
         SiteAdaptor?: Loader<SiteAdaptor.Definition>
-        /** Load the Dashboard part of the plugin. */
-        Dashboard?: Loader<Dashboard.Definition>
+        /** Load the extension page part of the plugin. */
+        ExtensionPage?: Loader<ExtensionPage.Definition>
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
     }
@@ -142,7 +142,7 @@ export namespace Plugin.Shared {
     }
 
     /**
-     * This part is shared between Dashboard, Site Adaptor and Worker part
+     * This part is shared between ExtensionPage, Site Adaptor and Worker part
      * which you should include the information above in those three parts.
      */
     export interface DefinitionDeferred<Context extends SharedContext = SharedContext> extends Definition, Utilities {
@@ -690,12 +690,12 @@ export namespace Plugin.SiteAdaptor {
     }
 }
 
-/** This part runs in the dashboard */
-export namespace Plugin.Dashboard {
-    export interface DashboardContext extends Shared.SharedUIContext {}
+/** This part runs in the Popup */
+export namespace Plugin.ExtensionPage {
+    export interface ExtensionPageContext extends Shared.SharedUIContext {}
 
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<DashboardContext> {
+    export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<ExtensionPageContext> {
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
         __general_ui__?: GeneralUI.Definition
     }
@@ -851,7 +851,6 @@ export namespace Plugin.GeneralUI {
          * Here is some example of *possible* environments.
          * - inside site adaptor, given "composition" context, running in the CompositionDialog.
          * - inside site adaptor, given "post" context,        running in the DecryptedPost.
-         * - inside Dashboard,    given "post" context,        running in the PostHistory as the previewer.
          * - inside Popups,       given "post" context,        running in the PostInspector (Isolated mode).
          * - on mask.io,          given "post" context,        allowing preview the message without extension installed.
          *

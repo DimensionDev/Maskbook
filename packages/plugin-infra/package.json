@@ -24,10 +24,10 @@
       "mask-src": "./src/entry-background-worker.ts",
       "default": "./dist/entry-background-worker.js"
     },
-    "./dashboard": {
-      "types": "./dist/entry-dashboard.d.ts",
-      "mask-src": "./src/entry-dashboard.ts",
-      "default": "./dist/entry-dashboard.js"
+    "./extension-page": {
+      "types": "./dist/entry-extension-page.d.ts",
+      "mask-src": "./src/entry-extension-page.ts",
+      "default": "./dist/entry-extension-page.js"
     },
     "./content-script": {
       "types": "./dist/entry-content-script.d.ts",

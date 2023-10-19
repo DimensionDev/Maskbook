@@ -4,7 +4,7 @@ import { TraderDialog } from '../SiteAdaptor/trader/TraderDialog.js'
 import { base } from '../base.js'
 import { shareToTwitterAsPopup } from '@masknet/shared-base-ui'
 
-const dashboard: Plugin.Dashboard.Definition = {
+const extensionPage: Plugin.ExtensionPage.Definition = {
     ...base,
     GlobalInjection() {
         return (
@@ -15,4 +15,4 @@ const dashboard: Plugin.Dashboard.Definition = {
     },
 }
 
-export default dashboard
+export default extensionPage
