@@ -1,3 +1,4 @@
+import { compact } from 'lodash-es'
 import { collectNodeText } from '../../../utils/index.js'
 import {
     bioDescriptionSelector,
@@ -26,7 +27,7 @@ export const getNickname = () => {
 export const getUserId = () => {
     const node = searchInstagramHandleSelector().evaluate()
     if (!node) return
-    return collectNodeText(node) ?? ''
+    return compact(node.getAttribute('href')?.split('/')).pop()
 }
 
 export const getAvatar = () => {
