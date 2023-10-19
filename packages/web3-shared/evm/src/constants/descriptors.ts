@@ -261,7 +261,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         chainId: ChainId.Scroll,
         type: NetworkType.Scroll,
         name: 'Scroll',
-        icon: new URL('../assets/scroll.png', import.meta.url).href,
+        icon: new URL('../assets/scroll.svg', import.meta.url).href,
         iconColor: 'rgb(255, 248, 243)',
         averageBlockDelay: 9,
         isMainnet: true,
