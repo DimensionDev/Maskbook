@@ -43,7 +43,7 @@ interface ModalClosePayload {
     params: []
 }
 
-export default class WalletConnectProvider
+export class WalletConnectProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {

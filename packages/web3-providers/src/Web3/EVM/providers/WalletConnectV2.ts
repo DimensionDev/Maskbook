@@ -15,15 +15,15 @@ import {
     type Web3,
     type Web3Provider,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseProvider } from './Base.js'
+import { ChainResolver } from '../apis/ResolverAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 class Client {
     constructor(private emitter: Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>) {}
 
-    client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
+    public client: UnboxPromise<ReturnType<typeof SignClient.init>> | undefined
 
     get session() {
         const key = this.client?.session.keys.at(-1)
@@ -67,7 +67,7 @@ class Client {
     }
 }
 
-export default class WalletConnectV2Provider
+export class WalletConnectV2Provider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
