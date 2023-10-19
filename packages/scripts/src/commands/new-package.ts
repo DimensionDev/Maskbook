@@ -125,7 +125,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         await changeFile.JSON(new URL('packages/plugins/tsconfig.json', ROOT_PATH), (content) => {
             Array.from(content.references)
                 .sort((a: any, b: any) => String(a.path).localeCompare(b.path, 'en'))
-                .push({ path: `./${NormativeName}/` })
+                .push({ path: `./${NormativeName}/tsconfig.json` })
         })
         await changeFile.typescript(new URL('packages/plugin-infra/src/types.ts', ROOT_PATH), (content) =>
             content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
@@ -139,13 +139,16 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replaceAll(/workspace:\^undefined/g, 'workspace:^'),
         )
         await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
-            content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
+            content.replace(
+                INSERT_HERE + ' 3',
+                `"${npmName}": ["./${path}/src/tsconfig.json"],\n      ${INSERT_HERE} 3`,
+            ),
         )
     } else {
         await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
             content
                 .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
-                .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),
+                .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src/tsconfig.json"],\n      ${INSERT_HERE} 2`),
         )
         await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}\n`)
     }
