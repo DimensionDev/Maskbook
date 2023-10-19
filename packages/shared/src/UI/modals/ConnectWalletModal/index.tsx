@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next'
 import { DialogContent, Box, Card, Typography, Paper, Link, dialogClasses } from '@mui/material'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
-import { WalletIcon, useSharedI18N } from '@masknet/shared'
+import { WalletIcon, useSharedTrans } from '@masknet/shared'
 import {
     NetworkPluginID,
     Sniffings,
@@ -93,7 +93,7 @@ export type ConnectWalletModalCloseProps = boolean
 export const ConnectWalletModal = forwardRef<
     SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>
 >((props, ref) => {
-    const t = useSharedI18N()
+    const t = useSharedTrans()
 
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
