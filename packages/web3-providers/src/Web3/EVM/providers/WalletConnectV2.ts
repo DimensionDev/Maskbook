@@ -71,10 +71,11 @@ export class WalletConnectV2Provider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private SignClient = new Client(this.emitter)
+    private client: Client = null!
 
     constructor() {
         super(ProviderType.WalletConnectV2)
+        this.client = new Client(this.emitter)
         this.resume()
     }
 
@@ -83,21 +84,21 @@ export class WalletConnectV2Provider
     }
 
     override get connected() {
-        return !!this.SignClient.session
+        return !!this.client.session
     }
 
     private async resume() {
-        if (!this.SignClient.client) await this.SignClient.setup()
-        if (this.SignClient.account) await this.login(this.SignClient.account.chainId)
+        if (!this.client.client) await this.client.setup()
+        if (this.client.account) await this.login(this.client.account.chainId)
     }
 
     private async login(chainId: ChainId) {
         const editor = EIP155Editor.fromChainId(chainId)
         if (!editor) throw new Error('Invalid chain id.')
 
-        if (this.SignClient.account) return this.SignClient.account
+        if (this.client.account) return this.client.account
 
-        const connected = await this.SignClient.client?.connect({
+        const connected = await this.client.client?.connect({
             requiredNamespaces: {
                 eip155: editor.eip155Namespace,
             },
@@ -111,13 +112,13 @@ export class WalletConnectV2Provider
 
         if (uri) this.context?.closeWalletConnectDialog()
 
-        return this.SignClient.account
+        return this.client.account
     }
 
     private async logout() {
-        if (!this.SignClient.session?.topic) return
-        await this.SignClient.client?.disconnect({
-            topic: this.SignClient.session.topic,
+        if (!this.client.session?.topic) return
+        await this.client.client?.disconnect({
+            topic: this.client.session.topic,
             reason: getSdkError('USER_DISCONNECTED'),
         })
     }
@@ -138,8 +139,8 @@ export class WalletConnectV2Provider
         })
     }
     override async connect(chainId: ChainId) {
-        await this.SignClient.destroy()
-        await this.SignClient.setup()
+        await this.client.destroy()
+        await this.client.setup()
 
         const account = await this.login(chainId)
         if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}.`)
@@ -155,12 +156,12 @@ export class WalletConnectV2Provider
         const editor = EIP155Editor.fromChainId(this.currentChainId)
         if (!editor) throw new Error('Invalid chain id.')
 
-        if (!this.SignClient.client) await this.SignClient.setup()
-        if (!this.SignClient.session) await this.login(this.currentChainId)
-        if (!this.SignClient.client || !this.SignClient.session) throw new Error('The client is not initialized')
+        if (!this.client.client) await this.client.setup()
+        if (!this.client.session) await this.login(this.currentChainId)
+        if (!this.client.client || !this.client.session) throw new Error('The client is not initialized')
 
-        return this.SignClient.client.request<T>({
-            topic: this.SignClient.session.topic,
+        return this.client.client.request<T>({
+            topic: this.client.session.topic,
             chainId: editor.eip155ChainId,
             request: {
                 method: requestArguments.method,

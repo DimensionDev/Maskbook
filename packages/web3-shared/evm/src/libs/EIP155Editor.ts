@@ -25,7 +25,7 @@ export class EIP155Editor {
                 EthereumMethodType.PERSONAL_SIGN,
             ],
             chains: [this.eip155ChainId],
-            events: ['chainChanged', 'accountsChanged'],
+            events: ['chainChanged', 'accountsChanged', 'message', 'disconnect', 'connect'],
         }
     }
 
