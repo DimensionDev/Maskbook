@@ -18,13 +18,13 @@ import { ApplicationBoardModal, LeavePageConfirmModal, useSharedTrans } from '..
 import { ErrorPanel } from './ErrorPanel.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@masknet/plugin-infra/dom/context'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { openDashboard } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,7 +67,6 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { data: personas = EMPTY_LIST, isLoading, error, refetch } = useConnectedPersonas()
-    const { attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -87,7 +86,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             })
             await setCurrentPersonaIdentifier?.(personaIdentifier)
         },
-        [attachProfile, setCurrentPersonaIdentifier],
+        [],
     )
 
     useLayoutEffect(() => {
@@ -104,7 +103,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 actionHint: t.applications_create_persona_action(),
             },
         })
-    }, [!personas.length, isLoading, !error, openDashboard])
+    }, [!personas.length, isLoading, !error])
 
     const actionButton = useMemo(() => {
         let isConnected = true

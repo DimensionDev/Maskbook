@@ -12,7 +12,7 @@ import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/content-script/context'
+import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
 

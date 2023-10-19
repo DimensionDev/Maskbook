@@ -16,7 +16,7 @@ import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, ProxyActionType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
-import { fetchJSON } from '@masknet/plugin-infra/content-script/context'
+import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
@@ -167,7 +167,7 @@ export function useFollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, fetchJSON, showSingletonSnackbar, onFailed],
+        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, showSingletonSnackbar, onFailed],
     )
 
     return { loading, handleFollow }

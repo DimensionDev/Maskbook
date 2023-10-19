@@ -2,10 +2,11 @@ import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/shared-base'
-import { useIsMinimalMode, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { Stack, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { useSharedTrans } from '../../../locales/index.js'
+import { setPluginMinimalModeEnabled } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,12 +27,11 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const t = useSharedTrans()
     const { children, pluginID } = props
     const { classes } = useStyles(undefined, { props })
-    const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()
     const disabled = useIsMinimalMode(pluginID)
 
     const [{ loading }, onEnablePlugin] = useAsyncFn(async () => {
         await setPluginMinimalModeEnabled?.(pluginID, false)
-    }, [pluginID, setPluginMinimalModeEnabled])
+    }, [pluginID])
 
     if (disabled) {
         return (

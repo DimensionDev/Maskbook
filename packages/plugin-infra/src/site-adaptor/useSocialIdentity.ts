@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import { MaskMessages, type SocialIdentity } from '@masknet/shared-base'
 import type { IdentityResolved } from '../types.js'
 import { useQuery } from '@tanstack/react-query'
-import { currentNextIDPlatform, querySocialIdentity } from './context.js'
+import { currentNextIDPlatform } from './context.js'
+import { querySocialIdentity } from '../dom/context.js'
 
 /**
  * Get the social identity of the given identity

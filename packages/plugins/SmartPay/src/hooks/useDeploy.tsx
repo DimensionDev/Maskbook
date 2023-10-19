@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import { getUnixTime } from 'date-fns'
 import { Typography } from '@mui/material'
-import { useLastRecognizedIdentity, useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import {
     type NetworkPluginID,
     type PersonaInformation,
@@ -20,7 +20,7 @@ import { Web3 } from '@masknet/web3-providers'
 import type { ManagerAccount } from '../type.js'
 import { useSmartPayTrans } from '../locales/index.js'
 import { PluginSmartPayMessages } from '../message.js'
-import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
+import { openPopupWindow, signWithPersona, hasPaymentPassword } from '@masknet/plugin-infra/dom/context'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -34,7 +34,6 @@ export function useDeploy(
     const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
-    const { signWithPersona, hasPaymentPassword } = useSiteAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 

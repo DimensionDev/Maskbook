@@ -3,12 +3,7 @@ import stringify from 'json-stable-stringify'
 import { assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
-import {
-    type Plugin,
-    startPluginSiteAdaptor,
-    SiteAdaptorContextRef,
-    __setSiteAdaptorContext__,
-} from '@masknet/plugin-infra/content-script'
+import { type Plugin, startPluginSiteAdaptor, __setSiteAdaptorContext__ } from '@masknet/plugin-infra/content-script'
 import { Modals, sharedUIComponentOverwrite, sharedUINetworkIdentifier, type ModalProps } from '@masknet/shared'
 import {
     createSubscriptionFromValueRef,
@@ -31,7 +26,7 @@ import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
 import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
-import { NextSharedUIContext, RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
+import { setupUIContext } from '../../shared-ui/initUIContext.js'
 import { definedSiteAdaptorsUI } from './define.js'
 
 const definedSiteAdaptorsResolved = new Map<string, SiteAdaptorUI.Definition>()
@@ -145,38 +140,20 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         })
     }
 
+    setupUIContext()
     __setSiteAdaptorContext__({
         lastRecognizedProfile: lastRecognizedSub,
         currentVisitingProfile: currentVisitingSub,
-        allPersonas: NextSharedUIContext.allPersonas,
-        currentPersona: NextSharedUIContext.currentPersonaIdentifier,
-        queryPersonaAvatar: Services.Identity.getPersonaAvatar,
         currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
-        querySocialIdentity: Services.Identity.querySocialIdentity,
-        fetchJSON: Services.Helper.fetchJSON,
-        queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         share: ui.utils.share,
-        getUserIdentity: ui.utils.getUserIdentity,
-        openDashboard: Services.Helper.openDashboard,
-        openPopupWindow: Services.Helper.openPopupWindow,
-        signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
-    })
-    SiteAdaptorContextRef.value = {
-        ...RestPartOfPluginUIContextShared,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
-        createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),
         connectPersona,
-        fetchManifest: Services.Helper.fetchSandboxedPluginManifest,
-        attachProfile: Services.Identity.attachProfile,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
-        setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
-        setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
-        hasHostPermission: Services.Helper.hasHostPermission,
-        requestHostPermission: Services.Helper.requestHostPermission,
-    }
+        getUserIdentity: undefined,
+    })
 
     startPluginSiteAdaptor(
         ui.networkIdentifier,
@@ -188,7 +165,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
                         Services.Settings.setPluginMinimalModeEnabled(id, enabled)
                     },
                     ...createSharedContext(id, signal),
-                    ...SiteAdaptorContextRef.value,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

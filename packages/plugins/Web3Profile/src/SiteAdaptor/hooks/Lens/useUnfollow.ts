@@ -116,7 +116,7 @@ export function useUnfollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, fetchJSON, showSingletonSnackbar],
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, showSingletonSnackbar],
     )
 
     return { loading, handleUnfollow }
