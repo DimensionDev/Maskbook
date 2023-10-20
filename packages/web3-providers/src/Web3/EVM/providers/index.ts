@@ -1,14 +1,15 @@
+import { Flags } from '@masknet/flags'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { NoneProvider } from './None.js'
 import { BrowserProvider } from './Browser.js'
 import { MetaMaskProvider } from './MetaMask.js'
-import WalletConnectProvider from './WalletConnect.js'
-import WalletConnectV2Provider from './WalletConnectV2.js'
+import { WalletConnectProvider } from './WalletConnect.js'
+import { WalletConnectV2Provider } from './WalletConnectV2.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { CloverProvider } from './Clover.js'
-import FortmaticProvider from './Fortmatic.js'
+import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { MaskWalletProvider } from './MaskWallet.js'
 import { CustomNetworkProvider } from './CustomNetwork.js'
@@ -21,8 +22,8 @@ export const Providers = {
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.Browser]: new BrowserProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
-    [ProviderType.WalletConnect]: new WalletConnectProvider(),
-    [ProviderType.WalletConnectV2]: new WalletConnectV2Provider(),
+    [ProviderType.WalletConnect]: Flags.wc_v1_enabled ? new WalletConnectProvider() : new NoneProvider(),
+    [ProviderType.WalletConnectV2]: Flags.wc_v2_enabled ? new WalletConnectV2Provider() : new NoneProvider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.Coinbase]: new CoinbaseProvider(),
     [ProviderType.OKX]: new OKXProvider(),

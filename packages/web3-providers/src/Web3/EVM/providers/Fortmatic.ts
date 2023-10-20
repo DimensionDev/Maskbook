@@ -48,7 +48,7 @@ type ChainIdFortmatic =
     | ChainId.Ropsten
     | ChainId.Kovan
 
-export default class FortmaticProvider
+export class FortmaticProvider
     extends BaseProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
