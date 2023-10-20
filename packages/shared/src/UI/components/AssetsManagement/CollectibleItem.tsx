@@ -1,5 +1,12 @@
 import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
-import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
+import {
+    isENSContractAddress,
+    isENSNameWrapperContractAddress,
+    isLens,
+    isLensCollect,
+    isLensFollower,
+    isXnsContractAddress,
+} from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
@@ -140,8 +147,11 @@ export const CollectibleItem = memo(
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
+            if (isENSContractAddress(asset.address) || isENSNameWrapperContractAddress(asset.address))
+                return asset.metadata?.name
+            if (disableName && asset.tokenId) return `#${asset.tokenId}`
             return asset.metadata?.name || (asset.tokenId ? `#${asset.tokenId}` : '')
-        }, [asset])
+        }, [asset, disableName])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
         const [identityOverflow, identityRef] = useDetectOverflow()
