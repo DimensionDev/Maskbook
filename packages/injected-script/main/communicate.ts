@@ -19,6 +19,10 @@ document.addEventListener(CustomEventId, (e) => {
     if (args.length < 1) return
 
     switch (type) {
+        case 'rejectPromise':
+        case 'resolvePromise':
+            return
+
         case 'input':
             return dispatchInput(...args)
         case 'paste':
@@ -29,9 +33,16 @@ document.addEventListener(CustomEventId, (e) => {
             return dispatchPasteImage(...args)
         case 'hookInputUploadOnce':
             return hookInputUploadOnce(...args)
-        case 'rejectPromise':
-        case 'resolvePromise':
-            return
+
+        // wagmi
+        case 'wagmiAccountChangedEvent':
+        case 'wagmiChainChangedEvent':
+        case 'wagmiConnectedEvent':
+        case 'wagmiDisconnectedEvent':
+        case 'wagmiConnect':
+        case 'wagmiDisconnect':
+        case 'wagmiRequest':
+            break
 
         // web3
         case 'web3BridgeBindEvent':

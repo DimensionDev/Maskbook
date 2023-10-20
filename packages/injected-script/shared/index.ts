@@ -16,6 +16,16 @@ export interface InternalEvents {
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[], triggerOnActiveElementNow: boolean]
 
+    // #region wagmi
+    wagmiAccountChangedEvent: [providerType: string, account: string]
+    wagmiChainChangedEvent: [providerType: string, chainId: number]
+    wagmiConnectedEvent: [providerType: string, account: string, chainId: number]
+    wagmiDisconnectedEvent: [providerType: string]
+    wagmiConnect: [providerType: string, req_id: number, chainId?: number]
+    wagmiDisconnect: [providerType: string, req_id: number]
+    wagmiRequest: [providerType: string, req_id: number, requestArguments?: RequestArguments]
+    // #endregion
+
     // #region web3 bridge
     /** Request the bridge to listen on an event. */
     web3BridgeBindEvent: [path: string, responseEventName: keyof InternalEvents, eventName: string]

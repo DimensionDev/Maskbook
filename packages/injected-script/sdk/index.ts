@@ -73,16 +73,29 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
         case 'rejectPromise':
             return rejectPromise(...r[1])
 
+        // wagmi
+        case 'wagmiAccountChangedEvent':
+        case 'wagmiChainChangedEvent':
+        case 'wagmiConnectedEvent':
+        case 'wagmiDisconnectedEvent':
+        case 'wagmiConnect':
+        case 'wagmiDisconnect':
+        case 'wagmiRequest':
+            break
+
+        // web3
         case 'web3BridgeEmitEvent':
             const [pathname, eventName, data] = r[1]
             Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
             return
-
         case 'web3BridgeBindEvent':
         case 'web3BridgeSendRequest':
         case 'web3BridgeExecute':
         case 'web3UntilBridgeOnline':
         case 'web3BridgePrimitiveAccess':
+            break
+
+        // misc
         case 'input':
         case 'paste':
         case 'pasteImage':
