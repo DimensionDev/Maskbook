@@ -35,11 +35,18 @@ export class WagmiProvider {
     /**
      * Send RPC request to the sdk object.
      */
-    request<T>(requestArguments: RequestArguments): Promise<T> {
+    async request<T>(requestArguments: RequestArguments): Promise<T> {
         console.log('DEBUG: requestArguments', requestArguments)
 
-        throw new Error('To be implemented - request.')
-        // return createPromise((id) => sendEvent('wagmiExecute', this.providerType, id, requestArguments))
+        switch (requestArguments.method) {
+            case 'eth_chainId':
+                const network = await createPromise<{ chain: { chainId: number } }>((id) =>
+                    sendEvent('wagmiExecute', this.providerType, id, 'getNetwork', []),
+                )
+                return network.chain.chainId as T
+            default:
+                throw new Error('To be implemented - request.')
+        }
     }
 
     /**

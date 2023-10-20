@@ -575,6 +575,12 @@ importers:
         specifier: ^1.16.6
         version: 1.16.6(typescript@5.3.0-beta)(zod@3.22.4)
     devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4(rollup@3.28.1)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.2.1
+        version: 15.2.1(rollup@3.28.1)
       rollup:
         specifier: ^3.28.1
         version: 3.28.1
@@ -29299,6 +29305,8 @@ time:
   /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
   /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
+  /@rollup/plugin-commonjs@25.0.4: '2023-08-11T17:13:52.902Z'
+  /@rollup/plugin-node-resolve@15.2.1: '2023-08-22T04:58:47.775Z'
   /@types/twitter-text@3.1.7: '2023-10-18T16:50:37.249Z'
   /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
   /@wagmi/core@1.4.4: '2023-10-17T04:42:37.820Z'

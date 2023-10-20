@@ -21,6 +21,8 @@
     "start": "rollup -c -w"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "rollup": "^3.28.1",
     "rollup-plugin-swc3": "^0.10.1"
   },
