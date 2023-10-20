@@ -16,7 +16,7 @@ const config: KnipConfig = {
                 '.webpack/webpack.config.ts',
                 'background/mv2-entry.ts',
                 'background/mv3-entry.ts',
-                'src/extension/dashboard/index.ts',
+                'dashboard/index.ts',
                 'src/extension/popups/entry.ts',
                 'src/content-script.ts',
                 'web-workers/wallet.ts',

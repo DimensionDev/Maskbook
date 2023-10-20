@@ -1,8 +1,10 @@
 import Services from '#services'
 
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+
 const { fetch: original_fetch } = globalThis
 
-export function contentFetch(input: RequestInfo, init?: RequestInit) {
+function contentFetch(input: RequestInfo | URL, init?: RequestInit) {
     const request = new Request(input, init)
 
     if (canAccessAsContent(request.url)) {
@@ -54,3 +56,5 @@ function isHostName(url: URL | Location, domain: string) {
     // either example.com or *.example.com
     return url.hostname === domain || url.hostname.endsWith('.' + domain)
 }
+
+globalThis.fetch = contentFetch

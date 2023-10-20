@@ -24,7 +24,6 @@ import { createSharedContext, createPluginHost } from '../../shared/plugin-infra
 import Services from '#services'
 import { getCurrentIdentifier } from '../site-adaptors/utils.js'
 import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
-import '../utils/debug/general.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { setupUIContext } from '../../shared-ui/initUIContext.js'
 import { definedSiteAdaptorsUI } from './define.js'
