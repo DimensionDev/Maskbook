@@ -45,10 +45,10 @@ declare var trustedTypes: TrustedTypePolicyFactory | undefined
 interface DOMParser {
     parseFromString(string: string | TrustedHTML, type: DOMParserSupportedType): Document
 }
-declare namespace React {
-    interface HTMLAttributes<T> {
-        dangerouslySetInnerHTML?: { __html: string | TrustedHTML } | undefined
-        'data-hide-scrollbar'?: boolean
-    }
-}
+// declare namespace React {
+//     interface HTMLAttributes<T> {
+//         dangerouslySetInnerHTML?: { __html: string | TrustedHTML } | undefined
+//         'data-hide-scrollbar'?: boolean
+//     }
+// }
 // #endregion
