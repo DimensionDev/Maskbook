@@ -405,7 +405,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         ID: `${PLUGIN_ID}_walletconnect_V2`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.WalletConnectV2,
-        name: 'WalletConnect V2',
+        name: 'WalletConnect',
         icon: new URL('../assets/walletconnect.png', import.meta.url).href,
         enableRequirements: Flags.wc_v2_enabled
             ? {
