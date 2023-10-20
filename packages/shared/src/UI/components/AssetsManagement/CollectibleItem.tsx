@@ -1,5 +1,12 @@
 import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
-import { isLens, isLensCollect, isLensFollower, isXnsContractAddress } from '@masknet/web3-shared-evm'
+import {
+    isENSContractAddress,
+    isENSNameWrapperContractAddress,
+    isLens,
+    isLensCollect,
+    isLensFollower,
+    isXnsContractAddress,
+} from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo, type HTMLProps } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
@@ -134,14 +141,17 @@ export const CollectibleItem = memo(
             onItemClick?.(asset)
         }, [onItemClick, asset])
 
-        const identity = useMemo(() => {
+        const assetName = useMemo(() => {
             if (!asset.collection) return
             if (isLensCollect(asset.collection.name)) return asset.metadata?.name
             if (isLensFollower(asset.collection.name)) return asset.collection.name
             if (isLens(asset.metadata?.name)) return asset.metadata?.name
             if (isXnsContractAddress(asset.address)) return asset.metadata?.name
-            return asset.metadata?.name || (asset.tokenId ? `#${asset.tokenId}` : '')
-        }, [asset])
+            if (isENSContractAddress(asset.address) || isENSNameWrapperContractAddress(asset.address))
+                return asset.metadata?.name
+            if (disableName && asset.tokenId) return `#${asset.tokenId}`
+            return asset.metadata?.name || (asset.tokenId ? `#${asset.tokenId}` : '') || asset.collection.name
+        }, [asset, disableName])
 
         const [nameOverflow, nameRef] = useDetectOverflow()
         const [identityOverflow, identityRef] = useDetectOverflow()
@@ -149,7 +159,7 @@ export const CollectibleItem = memo(
             nameOverflow || identityOverflow ? (
                 <Typography component="div">
                     {disableName ? null : <div>{name}</div>}
-                    {identity}
+                    {assetName}
                 </Typography>
             ) : undefined
 
@@ -172,7 +182,7 @@ export const CollectibleItem = memo(
                         {disableName ? null : (
                             <div className={classes.nameRow}>
                                 <Typography ref={nameRef} className={classes.name} variant="body2">
-                                    {name || identity}
+                                    {name || assetName}
                                 </Typography>
 
                                 {verifiedBy.length ? (
@@ -183,7 +193,7 @@ export const CollectibleItem = memo(
                             </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">
-                            {name ? identity : `#${asset.tokenId}`}
+                            {assetName}
                         </Typography>
                     </div>
                     {disableAction ? null : (

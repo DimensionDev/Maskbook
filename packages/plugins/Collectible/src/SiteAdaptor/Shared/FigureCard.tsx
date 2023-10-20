@@ -1,5 +1,5 @@
 import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -83,9 +83,11 @@ export function FigureCard(props: FigureCardProps) {
                 </div>
             </div>
 
-            <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                {asset.metadata?.name ?? '-'}
-            </Typography>
+            <TextOverflowTooltip title={asset.metadata?.name} as={ShadowRootTooltip}>
+                <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                    {asset.metadata?.name ?? '-'}
+                </Typography>
+            </TextOverflowTooltip>
 
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
