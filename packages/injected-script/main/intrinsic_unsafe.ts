@@ -1,5 +1,6 @@
 import { takeThisF } from './intrinsic_content.js'
-import { noop } from './utils.js'
+
+function noop() {}
 
 /** Clone a high privileged object into an unsafe one. This uses structuredClone on Firefox.  */
 export const structuredCloneFromSafe: <T extends object>(value: T) => T =

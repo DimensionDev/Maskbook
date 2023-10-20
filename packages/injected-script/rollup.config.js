@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import { nodeResolve } from '@rollup/plugin-node-resolve'
+import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 
 const require = createRequire(import.meta.url)
@@ -10,9 +10,11 @@ export default {
     output: {
         file: 'dist/injected-script.js',
         format: 'iife',
+        name: 'injectedScript',
+        inlineDynamicImports: true,
     },
     plugins: [
-        nodeResolve(),
+        resolve({ browser: true, preferBuiltins: false }),
         commonjs(),
         swc({
             tsconfig: '../../tsconfig.json',

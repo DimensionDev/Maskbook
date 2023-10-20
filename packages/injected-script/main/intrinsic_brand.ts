@@ -1,4 +1,5 @@
-import { $, $safe } from './intrinsic.js'
+import * as $ from './intrinsic_content.js'
+import * as $safe from './intrinsic_blessed.js'
 
 const isNodeCache = $safe.WeakMap<object, boolean>()
 export function isNode(item: unknown): item is Node {

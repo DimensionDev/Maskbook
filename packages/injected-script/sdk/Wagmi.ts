@@ -40,10 +40,11 @@ export class WagmiProvider {
 
         switch (requestArguments.method) {
             case 'eth_chainId':
-                const network = await createPromise<{ chain: { chainId: number } }>((id) =>
+                const network = await createPromise<{ chain?: { chainId: number } }>((id) =>
                     sendEvent('wagmiExecute', this.providerType, id, 'getNetwork', []),
                 )
-                return network.chain.chainId as T
+                if (!network.chain) throw new Error('No connection found.')
+                return `0x${network.chain.chainId.toString(16)}` as T
             default:
                 throw new Error('To be implemented - request.')
         }

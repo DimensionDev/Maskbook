@@ -18,6 +18,7 @@
     "Opera.ts",
     "Clover.ts",
     "Wagmi.ts",
+    "WalletConnect.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/tsconfig.json" }]

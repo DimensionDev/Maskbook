@@ -38,8 +38,10 @@ export class MetaMaskProvider
         return Promise.resolve()
     }
 
-    override async connect() {
-        const account = await this.bridge.connect({})
+    override async connect(chainId?: number) {
+        const account = await this.bridge.connect({
+            chainId,
+        })
 
         console.log('DEBUG: account', account)
 

@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { Web3All, OthersAll, getAllPluginsWeb3State } from '@masknet/web3-providers'
+import { OthersAll, getAllPluginsWeb3State } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -180,17 +180,10 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 return
             }
 
-            const Web3 = Web3All.use(provider.providerAdaptorPluginID, {
-                providerType: provider.type,
-            })
-
-            const chainId = expectedChainId ?? (await Web3?.getChainId({ providerType: provider.type }))
-            if (!chainId) return
+            const chainId = expectedChainId ?? ChainId.Mainnet
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
-            const networkDescriptor =
-                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId) ??
-                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === ChainId.Mainnet)
+            const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
             if (!networkDescriptor) return
 
             onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
