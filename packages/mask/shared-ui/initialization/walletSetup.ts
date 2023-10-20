@@ -1,6 +1,6 @@
 import Services from '#services'
 import { initWallet } from '@masknet/web3-providers'
-import { allPersonas } from '../../shared-ui/initUIContext.js'
+import { allPersonas } from '../initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { WalletConnectQRCodeModal } from '@masknet/shared'
 import { defer, delay } from '@masknet/kit'
