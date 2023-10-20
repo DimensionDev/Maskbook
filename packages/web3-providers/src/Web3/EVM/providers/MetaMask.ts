@@ -1,5 +1,5 @@
 import { isInPageEthereumInjected, isEthereumInjected } from '@masknet/shared-base'
-import { injectedMetaMaskProvider } from '@masknet/injected-script'
+import { wagmiMetaMaskProvider } from '@masknet/injected-script'
 import createMetaMaskProvider, { type MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
 import { BaseInjectedProvider } from './BaseInjected.js'
@@ -7,7 +7,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 function getInjectedProvider() {
     if (isEthereumInjected()) return Reflect.get(window, 'ethereum')
-    if (isInPageEthereumInjected()) return injectedMetaMaskProvider
+    if (isInPageEthereumInjected()) return wagmiMetaMaskProvider
     return createMetaMaskProvider()
 }
 

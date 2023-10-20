@@ -3,6 +3,7 @@
 import './communicate.js'
 import './sceneChange/index.js'
 import './locationChange.js'
+import './WagmiBridge/wagmi.js'
 // uncomment this when debugging this script
 // import './debugger.js'
 

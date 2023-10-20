@@ -17,12 +17,13 @@ export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.E
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
-export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedBrowserProvider = new BrowserProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
+
+export const wagmiMetaMaskProvider = new MetaMaskProvider()
 
 // Please keep this list update to date
 const Providers = [
@@ -31,11 +32,12 @@ const Providers = [
     injectedOperaProvider,
     injectedCloverProvider,
     injectedBrowserProvider,
-    injectedMetaMaskProvider,
     injectedCoin98EVMProvider,
     injectedCoin98SolanaProvider,
     injectedPhantomProvider,
 ]
+
+const WagmiProviders = [wagmiMetaMaskProvider]
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -74,20 +76,20 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
             return rejectPromise(...r[1])
 
         // wagmi
-        case 'wagmiAccountChangedEvent':
-        case 'wagmiChainChangedEvent':
-        case 'wagmiConnectedEvent':
-        case 'wagmiDisconnectedEvent':
-        case 'wagmiConnect':
-        case 'wagmiDisconnect':
-        case 'wagmiRequest':
+        case 'wagmiEmitEvent': {
+            const [providerType, eventName, data] = r[1]
+            WagmiProviders.filter((x) => x.providerType === providerType).forEach((x) => x?.emit(eventName, data))
+            break
+        }
+        case 'wagmiExecute':
             break
 
         // web3
-        case 'web3BridgeEmitEvent':
+        case 'web3BridgeEmitEvent': {
             const [pathname, eventName, data] = r[1]
             Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
-            return
+            break
+        }
         case 'web3BridgeBindEvent':
         case 'web3BridgeSendRequest':
         case 'web3BridgeExecute':

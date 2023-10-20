@@ -17,6 +17,7 @@
     "MetaMask.ts",
     "Opera.ts",
     "Clover.ts",
+    "Wagmi.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/tsconfig.json" }]

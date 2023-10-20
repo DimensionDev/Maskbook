@@ -77,6 +77,7 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
             event,
             $unsafe.expose((...args: any[]) => {
                 $.setPrototypeOf(args, null)
+                // send send back
                 sendEvent(bridgeEvent, path, event, args)
             }),
         ])
