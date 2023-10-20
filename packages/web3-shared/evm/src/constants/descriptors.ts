@@ -376,7 +376,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         },
         homeLink: 'https://metamask.io',
         shortenLink: 'metamask.io',
-        downloadLink: 'https://metamask.io/download.html',
+        downloadLink: 'https://metamask.io/download/',
         iconFilterColor: 'rgba(216, 124, 48, 0.3)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',

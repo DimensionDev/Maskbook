@@ -26,7 +26,7 @@ export class WagmiProvider {
      * Wait until the sdk object injected into the page.
      */
     async untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
-        await createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname, id))
+        await createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname.split('.')[0], id))
         if (await validator()) {
             this.isReadyInternal = true
         }
@@ -36,7 +36,9 @@ export class WagmiProvider {
      * Send RPC request to the sdk object.
      */
     request<T>(requestArguments: RequestArguments): Promise<T> {
-        throw new Error('To be implemented.')
+        console.log('DEBUG: requestArguments', requestArguments)
+
+        throw new Error('To be implemented - request.')
         // return createPromise((id) => sendEvent('wagmiExecute', this.providerType, id, requestArguments))
     }
 

@@ -1,4 +1,4 @@
-import { isInPageEthereumInjected, isEthereumInjected } from '@masknet/shared-base'
+import { isInPageEthereumInjected, isEthereumInjected, type Account } from '@masknet/shared-base'
 import { wagmiMetaMaskProvider } from '@masknet/injected-script'
 import createMetaMaskProvider, { type MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
@@ -38,12 +38,15 @@ export class MetaMaskProvider
         return Promise.resolve()
     }
 
-    override async disconnect(): Promise<void> {
-        // do nothing
+    override async connect() {
+        const account = await this.bridge.connect({})
+
+        console.log('DEBUG: account', account)
+
+        return account as Account<ChainId>
     }
 
-    override onDisconnect() {
-        // MetaMask will emit disconnect after switching chain id
-        // since then, override to stop listening to the disconnect event with MetaMask
+    override async disconnect(): Promise<void> {
+        return this.bridge.disconnect()
     }
 }

@@ -163,8 +163,8 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
 
     const [, handleClick] = useAsyncFn(
-        async (provider: Web3Helper.ProviderDescriptorAll, fortmaticChainId?: Web3Helper.ChainIdAll) => {
-            if (provider.type === ProviderType.Fortmatic && !fortmaticChainId) {
+        async (provider: Web3Helper.ProviderDescriptorAll, expectedChainId?: Web3Helper.ChainIdAll) => {
+            if (provider.type === ProviderType.Fortmatic && !expectedChainId) {
                 setSelectChainDialogOpen(true)
                 return
             }
@@ -184,18 +184,14 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 providerType: provider.type,
             })
 
-            const chainId =
-                fortmaticChainId ??
-                (provider.type === ProviderType.WalletConnect || provider.type === ProviderType.WalletConnectV2
-                    ? ChainId.Mainnet
-                    : await Web3?.getChainId({ providerType: provider.type }))
+            const chainId = expectedChainId ?? (await Web3?.getChainId({ providerType: provider.type }))
+            if (!chainId) return
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
             const networkDescriptor =
                 descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId) ??
                 descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === ChainId.Mainnet)
-
-            if (!chainId || !networkDescriptor) return
+            if (!networkDescriptor) return
 
             onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
         },
@@ -256,7 +252,14 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                         )}
                                         disabled={getDisabled(provider)}
                                         onClick={() => {
-                                            handleClick(provider)
+                                            if (
+                                                provider.type === ProviderType.WalletConnect ||
+                                                provider.type === ProviderType.WalletConnectV2
+                                            ) {
+                                                handleClick(provider, ChainId.Mainnet)
+                                            } else {
+                                                handleClick(provider)
+                                            }
                                         }}>
                                         <ProviderIcon
                                             className={classes.providerIcon}
