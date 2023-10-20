@@ -11,6 +11,7 @@ import {
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
+import type { Tabs } from 'webextension-polyfill'
 
 const hasPermission = async (origin: string): Promise<boolean> => {
     return browser.permissions.contains({
@@ -118,31 +119,25 @@ export async function requestPermissionBySite(network: string) {
 export async function connectSite(
     identifier: PersonaIdentifier,
     network: string,
-    type?: 'local' | 'nextID',
     profile?: ProfileIdentifier,
     openInNewTab = true,
 ) {
-    const worker = definedSiteAdaptors.get(network)
-    if (!worker) return
+    const site = definedSiteAdaptors.get(network)
+    if (!site) return
 
-    const permissionGranted = await requestSiteAdaptorsPermission([worker])
+    const permissionGranted = await requestSiteAdaptorsPermission([site])
     if (!permissionGranted) return
 
-    currentSetupGuideStatus[network].value = stringify({
-        status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
-        persona: identifier.toText(),
-        username: profile?.userId,
-    })
-
-    const url = worker.homepage
+    const url = site.homepage
     if (!url) return
 
     await delay(100)
+    let targetTab: Tabs.Tab | undefined
     if (openInNewTab) {
-        await browser.tabs.create({ active: true, url: worker.homepage })
+        targetTab = await browser.tabs.create({ active: true, url: site.homepage })
     } else {
         const openedTabs = await browser.tabs.query({ url: `${url}/*` })
-        const targetTab = openedTabs.find((x: { active: boolean }) => x.active) ?? first(openedTabs)
+        targetTab = openedTabs.find((x: { active: boolean }) => x.active) ?? first(openedTabs)
 
         if (targetTab?.id && targetTab.windowId) {
             await browser.tabs.update(targetTab.id, { active: true })
@@ -151,4 +146,20 @@ export async function connectSite(
             await browser.tabs.create({ active: true, url })
         }
     }
+    currentSetupGuideStatus[network].value = stringify({
+        status: SetupGuideStep.VerifyOnNextID,
+        persona: identifier.toText(),
+        username: profile?.userId,
+        tabId: targetTab?.id,
+    })
+}
+
+export async function disconnectSite(network: string) {
+    const site = definedSiteAdaptors.get(network)
+    if (!site) return
+
+    const permissionGranted = await requestSiteAdaptorsPermission([site])
+    if (!permissionGranted) return
+
+    currentSetupGuideStatus[network].value = ''
 }

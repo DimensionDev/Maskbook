@@ -1,4 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
+import { compact } from 'lodash-es'
 
 type E = HTMLElement
 
@@ -19,8 +20,13 @@ export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = 
         '[role="navigation"] svg g image, [role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
     )
 
-export const searchNickNameSelector: () => LiveSelector<HTMLHeadingElement, true> = () =>
-    querySelector<HTMLHeadingElement>('span[dir="auto"] div h1')
+export const searchNickNameSelector: (userId?: string | null) => LiveSelector<HTMLHeadingElement, true> = (
+    userId?: string | null,
+) => {
+    return querySelector<HTMLHeadingElement>(
+        compact([userId ? `a[href$="id=${userId}"]` : undefined, 'span[dir="auto"] div h1']).join(','),
+    )
+}
 
 export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
 

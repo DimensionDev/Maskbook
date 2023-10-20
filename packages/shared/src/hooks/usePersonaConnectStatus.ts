@@ -17,6 +17,7 @@ export function usePersonaConnectStatus(): {
         const id = lastRecognized?.identifier
         const currentPersona = personas.find((x) => id && x.linkedProfiles.some((x) => x.identifier === id))
         return {
+            /** @deprecated */
             action: !personas.length ? createPersona : !currentPersona ? connectPersona : undefined,
             currentPersona,
             connected: !!currentPersona,

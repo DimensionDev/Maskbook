@@ -79,6 +79,7 @@ const AccountDetail = memo(() => {
     const handleDetachProfile = useCallback(async () => {
         try {
             if (!selectedAccount?.identifier) return
+            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
@@ -143,6 +144,7 @@ const AccountDetail = memo(() => {
                 { signature },
             )
 
+            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
             await Service.Identity.detachProfile(selectedAccount.identifier)
 
             // Broadcast updates
@@ -166,7 +168,6 @@ const AccountDetail = memo(() => {
         await Service.SiteAdaptor.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,
-            'nextID',
             selectedAccount.identifier,
         )
         window.close()
