@@ -38,7 +38,7 @@ export interface NFT_Metadata {
 }
 
 export interface NFT_TransferEvent {
-    // e.g., 2022-01-22T04:53:39Z
+    /** e.g., 2022-05-17T20:41:19Z */
     block_timestamp: string
     block_number: number
     transaction_hash: string
@@ -56,7 +56,7 @@ export interface NFT_FloorPrice {
     floor_price: number
     symbol: 'eth' | Omit<string, 'eth'>
     source: 'opensea' | Omit<string, 'opensea'>
-    // e.g., 2022-05-18T07:44:18Z
+    /** e.g., 2022-05-17T20:41:19Z */
     updated_at: string
 }
 
@@ -67,7 +67,7 @@ export interface Tx {
     type: 0 | 2
     status: TxStatus
     block_number: string
-    // e.g., 2022-05-17T20:41:19Z
+    /** e.g., 2022-05-17T20:41:19Z */
     block_timestamp: string
     transaction_hash: string
     transaction_index: number

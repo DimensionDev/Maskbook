@@ -1,4 +1,3 @@
-import { useAsyncRetry } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import type { BigNumber } from 'bignumber.js'
 import { decodeEvents, useRedPacketConstants } from '@masknet/web3-shared-evm'
@@ -7,12 +6,13 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Web3 } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 
 export function useCreateRedPacketReceipt(txid: string) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
-    return useAsyncRetry(async () => {
+    return useQuery(['red-packet-create-receipt', chainId, txid], async () => {
         if (!txid) return null
 
         const receipt = await Web3.getTransactionReceipt(txid, { chainId })
@@ -32,5 +32,5 @@ export function useCreateRedPacketReceipt(txid: string) {
             rpid: eventParams.CreationSuccess.id ?? '',
             creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
         }
-    }, [txid, HAPPY_RED_PACKET_ADDRESS_V4, chainId])
+    })
 }

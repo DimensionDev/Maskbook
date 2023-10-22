@@ -1,18 +1,18 @@
-import { useAsyncRetry } from 'react-use'
-import { useMemo } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { type ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
-import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { RedPacketRPC } from '../../messages.js'
+import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/types'
+import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { RedPacketRPC } from '../../messages.js'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const wallet = useWallet()
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
-    const result = useAsyncRetry(async () => {
+    const result = useQuery(['red-packet-history', chainId, address, wallet?.owner], async () => {
         if (!HAPPY_RED_PACKET_ADDRESS_V4) return EMPTY_LIST as RedPacketJSONPayloadFromChain[]
 
         if (wallet?.owner) {
@@ -38,12 +38,12 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
         if (!payloadList) return EMPTY_LIST as RedPacketJSONPayloadFromChain[]
 
         return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
-    }, [address, chainId, wallet?.owner])
+    })
 
-    const value = useMemo(
-        () => result.value?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
-        [chainId, result.value],
+    const data = useMemo(
+        () => result.data?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
+        [chainId, result.data],
     )
 
-    return { ...result, value }
+    return { ...result, data }
 }

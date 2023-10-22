@@ -32,27 +32,28 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         return attemptUntil(
             [
-                async () =>
-                    this.ContractRedPacket.getHistories(
+                async () => {
+                    const transactions = await this.getHistoryTransactions(
                         chainId,
                         senderAddress,
                         contractAddress,
                         methodId,
                         fromBlock,
                         endBlock,
-                    ),
-                async () =>
-                    this.parseRedPacketCreationTransactions(
-                        await this.getHistoryTransactions(
-                            chainId,
-                            senderAddress,
-                            contractAddress,
-                            methodId,
-                            fromBlock,
-                            endBlock,
-                        ),
+                    )
+                    return this.parseRedPacketCreationTransactions(transactions, senderAddress)
+                },
+                () => {
+                    // block range might be too large
+                    return this.ContractRedPacket.getHistories(
+                        chainId,
                         senderAddress,
-                    ),
+                        contractAddress,
+                        methodId,
+                        fromBlock,
+                        endBlock,
+                    )
+                },
             ],
             [],
         )
@@ -82,18 +83,19 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
     ) {
         return attemptUntil(
             [
-                async () =>
-                    await EtherscanRedPacket.getHistoryTransactions(
+                () => {
+                    return ChainbaseRedPacket.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId)
+                },
+                () => {
+                    return EtherscanRedPacket.getHistoryTransactions(
                         chainId,
                         senderAddress,
                         contractAddress,
                         methodId,
                         fromBlock,
                         endBlock,
-                    ),
-
-                async () =>
-                    await ChainbaseRedPacket.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId),
+                    )
+                },
             ],
             [],
         )

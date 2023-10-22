@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
@@ -25,7 +25,7 @@ interface Props {
     onClose?: () => void
 }
 
-export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
+export const RedPacketPast = memo(function RedPacketPast({ onSelect, onClose, tabs }: Props) {
     const { classes } = useStyles()
 
     const currentIdentity = useCurrentVisitingIdentity()
@@ -68,4 +68,4 @@ export function RedPacketPast({ onSelect, onClose, tabs }: Props) {
             </Box>
         </>
     )
-}
+})

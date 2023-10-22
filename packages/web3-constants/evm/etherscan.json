@@ -16,6 +16,7 @@
         "Aurora": "https://etherscan-proxy.r2d2.to",
         "Aurora_Testnet": "https://etherscan-proxy.r2d2.to",
         "Conflux": "https://etherscan-proxy.r2d2.to",
-        "Astar": "https://etherscan-proxy.r2d2.to"
+        "Astar": "https://etherscan-proxy.r2d2.to",
+        "Scroll": "https://etherscan-proxy.r2d2.to"
     }
 }
