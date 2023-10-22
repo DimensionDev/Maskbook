@@ -130,7 +130,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             ApplicationBoardModal.close()
             onClose()
         },
-        [chainId, senderName],
+        [senderName],
     )
 
     const onBack = useCallback(() => {

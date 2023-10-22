@@ -21,7 +21,7 @@ class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
         methodId: string,
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
         try {
-            const txs = await asyncIteratorToArray(
+            const txes = await asyncIteratorToArray(
                 pageableToIterator(async (indicator) => {
                     const { records } = await fetchJSON<{ records: { data: { result: Tx[] } } }>(
                         urlcat(TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, {
@@ -42,21 +42,20 @@ class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
                 }),
             )
 
-            if (!txs?.length) return
+            if (!txes?.length) return
 
-            return txs
+            return txes
                 .sort((a, b) => new Date(b.block_timestamp).getTime() - new Date(a.block_timestamp).getTime())
-                .map(
-                    (x) =>
-                        ({
-                            input: x.input,
-                            to: x.to_address,
-                            from: x.from_address,
-                            hash: x.transaction_hash,
-                            chainId,
-                            blockNumber: Number(x.block_number),
-                        }) as Transaction<ChainId, SchemaType>,
-                )
+                .map((x) => {
+                    return {
+                        input: x.input,
+                        to: x.to_address,
+                        from: x.from_address,
+                        hash: x.transaction_hash,
+                        chainId,
+                        blockNumber: Number(x.block_number),
+                    } as Transaction<ChainId, SchemaType>
+                })
         } catch {
             return
         }

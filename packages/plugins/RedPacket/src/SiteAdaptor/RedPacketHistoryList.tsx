@@ -1,13 +1,13 @@
-import { Typography, List, Box } from '@mui/material'
-import { makeStyles, LoadingBase } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { type NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { List } from '@mui/material'
+import { memo } from 'react'
+import { useRedPacketTrans } from '../locales/index.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
-import { useRedPacketTrans } from '../locales/index.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
-import { type NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -28,23 +28,8 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         placeholder: {
-            display: 'flex',
-            flexDirection: 'column',
             height: 474,
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            width: 360,
-            margin: '0 auto',
-        },
-        emptyIcon: {
-            width: 36,
-            height: 36,
-            marginBottom: 13,
-        },
-        loading: {
-            fontSize: 14,
-            marginTop: 13,
+            boxSizing: 'border-box',
         },
     }
 })
@@ -53,46 +38,23 @@ interface RedPacketHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 
-export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
-    const { onSelect } = props
+export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelect }: RedPacketHistoryListProps) {
     const t = useRedPacketTrans()
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: histories, loading } = useRedPacketHistory(account, chainId)
+    const { data: histories, isLoading } = useRedPacketHistory(account, chainId)
 
-    if (loading) {
-        return (
-            <Box
-                style={{
-                    height: 474,
-                    alignItems: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}>
-                <LoadingBase size={30} />
-                <Typography className={classes.loading}>{sharedI18N.loading()}</Typography>
-            </Box>
-        )
-    }
+    if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
-    if (!histories?.length) {
-        return (
-            <Typography className={classes.placeholder} color="textSecondary">
-                <Icons.EmptySimple className={classes.emptyIcon} />
-                {t.search_no_result()}
-            </Typography>
-        )
-    }
+    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
 
     return (
         <div className={classes.root}>
             <List style={{ padding: '16px 0 0' }}>
-                {histories.map((history, i) => (
-                    <RedPacketInHistoryList key={i} history={history} onSelect={onSelect} />
+                {histories.map((history) => (
+                    <RedPacketInHistoryList key={history.rpid} history={history} onSelect={onSelect} />
                 ))}
             </List>
         </div>
     )
-}
+})

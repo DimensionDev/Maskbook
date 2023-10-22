@@ -1,22 +1,22 @@
-import { type MouseEvent, useCallback, useState, useMemo, useRef, useEffect } from 'react'
-import { nextDay, intervalToDuration } from 'date-fns'
-import { useIntersectionObserver } from '@react-hookz/web'
-import { Box, Typography, Popper, useMediaQuery, type Theme, ListItem } from '@mui/material'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import {
+    RedPacketStatus,
     type RedPacketJSONPayload,
     type RedPacketJSONPayloadFromChain,
-    RedPacketStatus,
 } from '@masknet/web3-providers/types'
+import { formatBalance, minus, type FungibleToken } from '@masknet/web3-shared-base'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { Box, ListItem, Popper, Typography, useMediaQuery, type Theme } from '@mui/material'
+import { intervalToDuration, nextDay } from 'date-fns'
+import { memo, useCallback, useMemo, useState, type MouseEvent } from 'react'
+import { useEverSeen } from '../../../../shared-base-ui/src/hooks/useEverSeen.js'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
 import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { formatBalance, type FungibleToken, minus } from '@masknet/web3-shared-base'
-import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from './utils/formatDate.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
@@ -198,20 +198,18 @@ interface RedPacketInHistoryListProps {
     history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
     onSelect: (payload: RedPacketJSONPayload) => void
 }
-export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
+export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useRedPacketTrans()
-    const [isViewed, setIsViewed] = useState(false)
 
-    const ref = useRef<HTMLLIElement | null>(null)
-    const entry = useIntersectionObserver(ref, {})
+    const [seen, ref] = useEverSeen()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { value: receipt } = useCreateRedPacketReceipt(isViewed && !history.rpid ? history.txid : '')
+    const { data: receipt } = useCreateRedPacketReceipt(seen && !history.rpid ? history.txid : '')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const rpid = history.rpid ?? receipt?.rpid ?? ''
-    const creation_time = history.creation_time ?? receipt?.creation_time ?? 0
+    const rpid = history.rpid || receipt?.rpid || ''
+    const creation_time = history.creation_time || receipt?.creation_time || 0
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
@@ -222,10 +220,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         () => ({ ...props.history, rpid, creation_time }),
         [props.history, rpid, creation_time],
     )
-
-    useEffect(() => {
-        if (entry?.isIntersecting) setIsViewed(true)
-    }, [entry?.isIntersecting])
 
     const {
         value: availability,
@@ -249,10 +243,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         chainId,
     })
 
-    const historyToken = {
-        ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
-        address: tokenAddress,
-    } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    const historyToken = useMemo(() => {
+        return {
+            ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
+            address: tokenAddress,
+        } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    }, [tokenDetailed, patchedHistory, tokenAddress])
 
     const onSendOrRefund = useCallback(async () => {
         if (canRefund) {
@@ -328,7 +324,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     </ActionButton>
                                     <Popper
                                         className={classes.popper}
-                                        id="popper"
                                         open={openPopper}
                                         anchorEl={anchorEl}
                                         transition
@@ -353,28 +348,28 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         shares: String(patchedHistory.shares),
                                         amount: formatBalance(
                                             patchedHistory.total,
-                                            historyToken?.decimals ?? 18,
+                                            historyToken.decimals ?? 18,
                                             6,
                                             true,
                                         ),
                                         claimedAmount: rpid
                                             ? formatBalance(
                                                   minus(patchedHistory.total, total_remaining ?? 0),
-                                                  historyToken?.decimals ?? 18,
+                                                  historyToken.decimals,
                                                   6,
                                                   true,
                                               )
                                             : '',
-                                        symbol: historyToken?.symbol,
+                                        symbol: historyToken.symbol,
                                     }}
                                 />
                             </Typography>
-                            {historyToken?.logoURL ? (
+                            {historyToken.logoURL ? (
                                 <TokenIcon
                                     className={classes.icon}
-                                    address={historyToken?.address ?? ''}
-                                    name={historyToken?.name}
-                                    logoURL={historyToken?.logoURL}
+                                    address={historyToken.address}
+                                    name={historyToken.name}
+                                    logoURL={historyToken.logoURL}
                                 />
                             ) : null}
                         </section>
@@ -383,4 +378,4 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             </section>
         </ListItem>
     )
-}
+})
