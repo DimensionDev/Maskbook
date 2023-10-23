@@ -1,18 +1,12 @@
+import { getCookie } from '@masknet/shared-base'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
 const UPLOAD_AVATAR_URL = 'https://www.instagram.com/accounts/web_change_profile_picture/'
 
-function getCSRFToken() {
-    const csrfToken = document.cookie.split('; ').find((x) => x.includes('csrftoken'))
-    if (!csrfToken) return ''
-    const [, value] = csrfToken.split('=')
-    return value
-}
-
 export class Instagram {
     static async uploadUserAvatar(image: File | Blob, userId: string) {
         const formData = new FormData()
-        const csrfToken = getCSRFToken()
+        const csrfToken = getCookie('csrfToken')
         formData.append('profile_pic', image)
 
         return fetchJSON<{

@@ -1,5 +1,5 @@
 import { delay } from '@masknet/kit'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, getCookie } from '@masknet/shared-base'
 import { Mirror } from '@masknet/web3-providers'
 import type { Writer } from '@masknet/web3-providers/types'
 import type { SiteAdaptorUI } from '@masknet/types'
@@ -8,7 +8,7 @@ import { formatWriter, getMirrorUserId } from './utils.js'
 
 const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
-    const userAddress = localStorage.getItem('mirror.userAddress')
+    const userAddress = getCookie('user_wallet')
 
     if (!userAddress) return
     return Mirror.getWriter(userAddress)
