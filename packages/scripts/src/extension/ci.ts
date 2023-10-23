@@ -18,7 +18,14 @@ export const ciBuild: TaskFunction = series(
     zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV2),
     zipTo('MaskNetwork.chromium-mv3.zip', ManifestFile.ChromiumMV3),
 )
+export const buildChrome: TaskFunction = series(
+    codegen,
+    buildBaseExtension,
+    zipTo('MaskNetwork.chromium.zip', ManifestFile.ChromiumMV2),
+)
 task(ciBuild, 'build-ci', 'Build the extension on CI')
+task(buildChrome, 'build-chrome', 'Build the extension for Chrome only')
+
 function zipTo(
     fileName: string,
     withManifestFile: BuildFlagsExtended['manifestFile'],
