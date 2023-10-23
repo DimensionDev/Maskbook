@@ -49,6 +49,7 @@ interface Props extends BindingDialogProps {
     loading?: boolean
     /** Persona is verified with expectAccount */
     connected?: boolean
+    onConfirm?: () => void
 }
 
 export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
@@ -56,6 +57,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
     currentUserId,
     loading,
     connected,
+    onConfirm,
     ...rest
 }) {
     const { classes } = useStyles()
@@ -89,8 +91,8 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                             {t('switch_for_more_connections')}
                         </Typography>
                         <Box mt="auto" width="100%">
-                            <Button fullWidth onClick={() => rest.onClose?.()}>
-                                {t('done')}
+                            <Button fullWidth onClick={onConfirm}>
+                                {t('ok')}
                             </Button>
                         </Box>
                     </>

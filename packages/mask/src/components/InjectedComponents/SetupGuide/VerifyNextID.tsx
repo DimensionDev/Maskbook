@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, usePersonaProofs } from '@masknet/shared'
-import { SetupGuideStep, currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
+import { currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -152,7 +152,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
-    const { step, userId, currentIdentityResolved, destinedPersonaInfo } = SetupGuideContext.useContainer()
+    const { userId, currentIdentityResolved, destinedPersonaInfo } = SetupGuideContext.useContainer()
     const { nickname: username, avatar } = currentIdentityResolved
     const personaName = destinedPersonaInfo?.nickname
     const personaIdentifier = destinedPersonaInfo?.identifier
@@ -204,31 +204,19 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
 
         await handleVerifyNextID(destinedPersonaInfo, userId)
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
-        await delay(3000)
+        await delay(2500)
     }, [userId, destinedPersonaInfo])
 
     const notify = useNotifyConnected()
-    const onVerifyDone = useCallback(() => {
-        if (step !== SetupGuideStep.VerifyOnNextID) return
-        currentSetupGuideStatus[networkIdentifier].value = ''
-        notify()
-    }, [step, notify])
 
-    const executor = useCallback(async () => {
-        if (platform) return onVerify()
-        onVerifyDone?.()
+    const onConfirm = useCallback(() => {
+        if (platform) {
+            currentSetupGuideStatus[networkIdentifier].value = ''
+            notify()
+            return
+        }
         setCompleted(true)
-    }, [onVerify, onVerifyDone])
-
-    const buttonLabel = useMemo(() => {
-        if (!platform || (platform && verified)) return t('ok')
-        return (
-            <>
-                <Icons.Send size={18} className={classes.send} />
-                {t('send')}
-            </>
-        )
-    }, [platform, verified, t])
+    }, [platform, notify])
 
     if (currentUserId !== userId || loadingCurrentUserId || verified) {
         return (
@@ -238,6 +226,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 loading={loadingCurrentUserId}
                 connected={verified}
                 onClose={onClose}
+                onConfirm={onConfirm}
             />
         )
     }
@@ -318,15 +307,27 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 </Box>
 
                 <Box className={classes.footer}>
-                    <ActionButton
-                        className={classes.button}
-                        fullWidth
-                        variant="contained"
-                        disabled={disabled}
-                        loading={verifying}
-                        onClick={executor}>
-                        {buttonLabel}
-                    </ActionButton>
+                    {!platform || (platform && verified) ? (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            disabled={disabled}
+                            onClick={onConfirm}>
+                            {t('ok')}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            disabled={disabled}
+                            loading={verifying}
+                            onClick={onVerify}>
+                            <Icons.Send size={18} className={classes.send} />
+                            {t('send')}
+                        </ActionButton>
+                    )}
                 </Box>
             </div>
         </BindingDialog>
