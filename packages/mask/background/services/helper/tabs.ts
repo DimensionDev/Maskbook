@@ -1,4 +1,4 @@
-export async function getCurrentTabId() {
-    const tabs = await browser.tabs.query({ currentWindow: true, active: true })
+export async function getActiveTabId() {
+    const tabs = await browser.tabs.query({ currentWindow: true, active: true, windowType: 'normal' })
     return tabs[0].id
 }

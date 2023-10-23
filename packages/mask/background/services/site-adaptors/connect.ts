@@ -131,7 +131,6 @@ export async function connectSite(
     const url = site.homepage
     if (!url) return
 
-    await delay(100)
     let targetTab: Tabs.Tab | undefined
     if (openInNewTab) {
         targetTab = await browser.tabs.create({ active: true, url: site.homepage })
@@ -139,13 +138,14 @@ export async function connectSite(
         const openedTabs = await browser.tabs.query({ url: `${url}/*` })
         targetTab = openedTabs.find((x: { active: boolean }) => x.active) ?? first(openedTabs)
 
-        if (targetTab?.id && targetTab.windowId) {
-            await browser.tabs.update(targetTab.id, { active: true })
-            await browser.windows.update(targetTab.windowId, { focused: true })
-        } else {
+        if (!targetTab?.id || !targetTab.windowId) {
             await browser.tabs.create({ active: true, url })
         }
     }
+    await delay(100)
+    if (!targetTab?.windowId) return
+    await browser.tabs.update(targetTab.id, { active: true })
+    await browser.windows.update(targetTab.windowId, { focused: true })
     currentSetupGuideStatus[network].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
         persona: identifier.toText(),
