@@ -3,9 +3,9 @@ import { SetupGuideContext } from '../SetupGuideContext.js'
 
 export function usePersonaConnected() {
     const site = activatedSiteAdaptorUI!.networkIdentifier
-    const { userId, destinedPersonaInfo: personaInfo } = SetupGuideContext.useContainer()
+    const { userId, personaInfo, checkingConnected } = SetupGuideContext.useContainer()
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )
-    return connected
+    return [checkingConnected, connected] as const
 }

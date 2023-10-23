@@ -52,7 +52,7 @@ export function FindUsername({ onClose, onDone }: FindUsernameProps) {
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[site] || Icons.Globe
-    const { userId, loadingCurrentUserId, destinedPersonaInfo: personaInfo } = SetupGuideContext.useContainer()
+    const { userId, loadingCurrentUserId, personaInfo } = SetupGuideContext.useContainer()
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )

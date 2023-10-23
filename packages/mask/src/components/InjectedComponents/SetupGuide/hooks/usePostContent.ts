@@ -7,7 +7,7 @@ import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 export function usePostContent(personaIdentifier: PersonaIdentifier | undefined, userId: string) {
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
 
-    const { data: postContent } = useQuery({
+    return useQuery({
         queryKey: ['create-persona-payload', personaIdentifier?.publicKeyAsHex, userId, platform],
         queryFn: async () => {
             if (!personaIdentifier?.publicKeyAsHex || !platform) return null
@@ -29,5 +29,4 @@ export function usePostContent(personaIdentifier: PersonaIdentifier | undefined,
             return payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
         },
     })
-    return postContent
 }
