@@ -55,7 +55,7 @@ import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 
 class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private async getCollectionByContractAddress(
+    async getCollectionByContractAddress(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
     ): Promise<Collection | undefined> {

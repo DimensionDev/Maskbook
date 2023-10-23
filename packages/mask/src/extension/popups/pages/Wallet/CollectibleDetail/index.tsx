@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { AssetPreviewer, Image, NFTFallbackImage, ProgressiveText } from '@masknet/shared'
+import { AssetPreviewer, Image, NFTFallbackImage, NFTSpamBadge, ProgressiveText, useReportSpam } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
@@ -13,7 +13,7 @@ import {
     isLensProfileAddress,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
-import { Button, Skeleton, Typography } from '@mui/material'
+import { Button, IconButton, Skeleton, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -56,6 +56,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    collectionNameLabel: {
+        marginLeft: 4,
+        marginRight: 4,
+    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
@@ -63,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
     },
     icon: {
-        marginRight: 4,
         borderRadius: '50%',
         overflow: 'hidden',
     },
@@ -142,6 +145,16 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         minWidth: 'auto',
         width: 'auto',
+    },
+    reportButton: {
+        color: theme.palette.maskColor.main,
+        height: 20,
+        width: 20,
+        padding: 0,
+        borderRadius: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 }))
 
@@ -234,6 +247,10 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
               availableAsset.contract?.address,
           )
         : NFTFallbackImage
+    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(
+        availableAsset?.address,
+        availableAsset?.chainId,
+    )
     return (
         <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (
@@ -257,9 +274,19 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 {availableAsset?.collection?.iconURL ? (
                     <Image size={24} classes={{ container: classes.icon }} src={availableAsset.collection.iconURL} />
                 ) : null}
-                <ProgressiveText loading={isLoading || !collectionName} skeletonWidth={80}>
+                <ProgressiveText
+                    className={classes.collectionNameLabel}
+                    loading={isLoading || !collectionName}
+                    skeletonWidth={80}>
                     {collectionName}
                 </ProgressiveText>
+                {isSpam ? (
+                    <NFTSpamBadge />
+                ) : isUndetermined ? (
+                    <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                        {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                    </IconButton>
+                ) : null}
             </div>
             <div className={classes.prices}>
                 <div className={classes.price}>

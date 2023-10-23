@@ -1,4 +1,5 @@
 export * from './useMenu.js'
+export * from './useReportSpam.js'
 export * from './useRemarkable.js'
 export * from './useOpenShareTxDialog.js'
 export * from './useSnackbarCallback.js'

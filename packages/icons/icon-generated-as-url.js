@@ -196,6 +196,7 @@ export function file_url() { return new URL("./general/File.svg", import.meta.ur
 export function file_message_url() { return new URL("./general/FileMessage.svg", import.meta.url) }
 export function fill_success_url() { return new URL("./general/FillSuccess.svg", import.meta.url) }
 export function filter_url() { return new URL("./general/Filter.svg", import.meta.url) }
+export function flag_url() { return new URL("./general/Flag.svg", import.meta.url) }
 export function folder_url() { return new URL("./general/Folder.svg", import.meta.url) }
 export function gas_url() { return new URL("./general/Gas.svg", import.meta.url) }
 export function gas_station_url() { return new URL("./general/GasStation.svg", import.meta.url) }

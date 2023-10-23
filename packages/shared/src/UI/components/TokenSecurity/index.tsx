@@ -83,3 +83,22 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
         </Stack>
     )
 })
+
+export const NFTSpamBadge = memo(function NFTSpamBadge() {
+    const t = useSharedTrans()
+
+    return (
+        <Stack
+            direction="row"
+            alignItems="center"
+            borderRadius="4px"
+            padding="4px 8px"
+            bgcolor={DefineMapping[SecurityMessageLevel.High].bgColor}
+            spacing={0.5}>
+            {DefineMapping[SecurityMessageLevel.High].icon(14)}
+            <Typography component="span" fontSize="12px" color={DefineMapping[SecurityMessageLevel.High].titleColor}>
+                {t.spam()}
+            </Typography>
+        </Stack>
+    )
+})

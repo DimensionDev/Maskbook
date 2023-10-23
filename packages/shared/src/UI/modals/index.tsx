@@ -21,6 +21,7 @@ import { ShareSelectNetworkModal } from './ShareSelectNetwork/index.js'
 
 import { noop } from 'lodash-es'
 import * as modals from './modals.js'
+import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
 export * from './modals.js'
 
 export interface ModalProps {
@@ -31,6 +32,7 @@ export const Modals = memo(function Modals(props: ModalProps) {
         <RootWeb3ContextProvider>
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
+            <ConfirmDialogComponent ref={modals.ConfirmDialog.register} />
             <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
             <WalletStatusModal ref={modals.WalletStatusModal.register} />
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
@@ -62,3 +64,7 @@ export const SwapPageModals = memo(function SwapPageModals() {
         </>
     )
 })
+
+// Common modals
+export { ConfirmDialogComponent } from './ConfirmDialog/index.js'
+export { ConfirmDialog } from './modals.js'

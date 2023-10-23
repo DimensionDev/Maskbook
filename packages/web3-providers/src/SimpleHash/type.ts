@@ -17,6 +17,10 @@ export interface Collection {
     collection_id: string
     description: string
     external_url: string
+    /**
+     * The score is a numeric value from 0 to 100, with 0 being deemed not spam, and 100 being deemed likely spam.
+     * null means undetermined
+     */
     spam_score: number | null
     discord_url: string
     floor_prices: Array<{
