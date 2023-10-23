@@ -22,6 +22,7 @@ import { useConnectedVerified } from './hooks/useConnectedVerified.js'
 import { useCurrentUserId } from './hooks/useCurrentUserId.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
 import { usePostContent } from './hooks/usePostContent.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -203,6 +204,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
 
         await handleVerifyNextID(destinedPersonaInfo, userId)
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
+        await delay(3000)
     }, [userId, destinedPersonaInfo])
 
     const notify = useNotifyConnected()
@@ -242,8 +244,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
 
     if (!personaIdentifier) return null
 
-    const disabled = !(userId || customUserId) || !personaName || disableVerify
-    const load = verifying || connecting || isLoadingProofs
+    const disabled = !(userId || customUserId) || !personaName || disableVerify || connecting || isLoadingProofs
 
     return (
         <BindingDialog onClose={onClose}>
@@ -322,7 +323,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                         fullWidth
                         variant="contained"
                         disabled={disabled}
-                        loading={load}
+                        loading={verifying}
                         onClick={executor}>
                         {buttonLabel}
                     </ActionButton>
