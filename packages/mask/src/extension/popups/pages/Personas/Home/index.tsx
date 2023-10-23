@@ -46,7 +46,7 @@ const PersonaHome = memo(() => {
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (currentPersona) {
-                await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined, false)
+                await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined, true)
             }
         },
         [currentPersona],
