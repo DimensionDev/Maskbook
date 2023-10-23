@@ -10,9 +10,9 @@ export interface SetupGuideContext {
 }
 
 export enum SetupGuideStep {
-    FindUsername = 'find-username',
+    // FindUsername = 'find-username',
     VerifyOnNextID = 'next-id-verify',
-    Verified = 'verified',
+    // Verified = 'verified',
     PinExtension = 'pin-extension',
     Close = 'close',
 }

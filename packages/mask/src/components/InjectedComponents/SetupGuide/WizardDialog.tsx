@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 function ContentUI(props: ContentUIProps) {
     const { classes } = useStyles()
     switch (props.dialogType) {
-        case SetupGuideStep.FindUsername:
+        // case SetupGuideStep.FindUsername:
         case SetupGuideStep.VerifyOnNextID:
         case SetupGuideStep.PinExtension:
             return (

@@ -13,18 +13,16 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import { memo, useCallback } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useMaskSharedTrans } from '../../../utils/index.js'
-import { FindUsername } from './FindUsername.js'
 import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { VerifyNextID } from './VerifyNextID.js'
-import { useConnectPersona } from './hooks/useConnectPersona.js'
 
 // #region setup guide ui
 
 function SetupGuideUI() {
     const { t } = useMaskSharedTrans()
 
-    const { step, setStep } = SetupGuideContext.useContainer()
+    const { step } = SetupGuideContext.useContainer()
     const { networkIdentifier } = activatedSiteAdaptorUI!
 
     const onClose = useCallback(() => {
@@ -60,15 +58,7 @@ function SetupGuideUI() {
         }
     }, [onCreate])
 
-    const [, connectPersona] = useConnectPersona()
-    const handleNext = useCallback(async () => {
-        await connectPersona()
-        setStep(SetupGuideStep.VerifyOnNextID)
-    }, [connectPersona])
-
     switch (step) {
-        case SetupGuideStep.FindUsername:
-            return <FindUsername onClose={onClose} onDone={handleNext} />
         case SetupGuideStep.VerifyOnNextID:
             return <VerifyNextID onClose={onClose} />
         case SetupGuideStep.PinExtension:

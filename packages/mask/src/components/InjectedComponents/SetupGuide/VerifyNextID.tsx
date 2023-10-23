@@ -1,4 +1,5 @@
 import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
 import { EmojiAvatar, usePersonaProofs } from '@masknet/shared'
 import { currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
@@ -22,7 +23,6 @@ import { useConnectedVerified } from './hooks/useConnectedVerified.js'
 import { useCurrentUserId } from './hooks/useCurrentUserId.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
 import { usePostContent } from './hooks/usePostContent.js'
-import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -152,7 +152,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
-    const { userId, currentIdentityResolved, destinedPersonaInfo } = SetupGuideContext.useContainer()
+    const { userId, currentIdentityResolved, destinedPersonaInfo, isFirstConnection } = SetupGuideContext.useContainer()
     const { nickname: username, avatar } = currentIdentityResolved
     const personaName = destinedPersonaInfo?.nickname
     const personaIdentifier = destinedPersonaInfo?.identifier
@@ -162,8 +162,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
     const verified = useConnectedVerified(personaIdentifier?.publicKeyAsHex, userId)
     const { configuration, networkIdentifier } = activatedSiteAdaptorUI!
-    const platform = configuration.nextIDConfig?.platform
-    const [completed, setCompleted] = useState(!platform)
+    const nextIdPlatform = configuration.nextIDConfig?.platform
 
     const { data: personaAvatar } = useQuery({
         queryKey: ['my-own-persona-info'],
@@ -181,6 +180,8 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
             : currentIdentityResolved.identifier.userId !== userId
     }, [currentIdentityResolved, userId])
 
+    // Show connect result for the first time.
+    const [completed, setCompleted] = useState(!nextIdPlatform)
     const [{ loading: connecting }, connectPersona] = useConnectPersona()
     useEffect(() => {
         connectPersona()
@@ -192,11 +193,11 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const [{ loading: verifying }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
         if (!destinedPersonaInfo) return
-        if (!platform) return
+        if (!nextIdPlatform) return
 
         const isBound = await NextIDProof.queryIsBound(
             destinedPersonaInfo.identifier.publicKeyAsHex,
-            platform,
+            nextIdPlatform,
             userId,
             true,
         )
@@ -210,30 +211,26 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const notify = useNotifyConnected()
 
     const onConfirm = useCallback(() => {
-        if (platform) {
-            currentSetupGuideStatus[networkIdentifier].value = ''
-            notify()
-            return
-        }
+        currentSetupGuideStatus[networkIdentifier].value = ''
+        notify()
         setCompleted(true)
-    }, [platform, notify])
+    }, [nextIdPlatform, notify])
 
-    if (currentUserId !== userId || loadingCurrentUserId || verified) {
+    // Need to verify for next id platform
+    if (currentUserId !== userId || loadingCurrentUserId || connecting || !isFirstConnection) {
         return (
             <AccountConnectStatus
                 expectAccount={userId}
                 currentUserId={currentUserId}
-                loading={loadingCurrentUserId}
-                connected={verified}
+                loading={loadingCurrentUserId || connecting}
                 onClose={onClose}
-                onConfirm={onConfirm}
             />
         )
     }
 
     if (!personaIdentifier) return null
 
-    const disabled = !(userId || customUserId) || !personaName || disableVerify || connecting || isLoadingProofs
+    const disabled = !(userId || customUserId) || !personaName || disableVerify || isLoadingProofs
 
     return (
         <BindingDialog onClose={onClose}>
@@ -286,10 +283,10 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {completed ? (
+                    {completed || verified ? (
                         <Typography className={classes.text}>
                             <Trans
-                                i18nKey={platform ? 'send_post_successfully' : 'connect_successfully'}
+                                i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
                                 components={{ br: <br /> }}
                             />
                         </Typography>
@@ -307,7 +304,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 </Box>
 
                 <Box className={classes.footer}>
-                    {!platform || (platform && verified) ? (
+                    {!nextIdPlatform || (nextIdPlatform && verified) ? (
                         <ActionButton
                             className={classes.button}
                             fullWidth

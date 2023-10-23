@@ -10,18 +10,24 @@ import { SetupGuideContext } from '../SetupGuideContext.js'
 import { usePersonaConnected } from './usePersonaConnected.js'
 
 export function useConnectPersona() {
-    const { step, userId, currentIdentityResolved, destinedPersonaInfo: personaInfo } = SetupGuideContext.useContainer()
+    const {
+        userId,
+        currentIdentityResolved,
+        destinedPersonaInfo: personaInfo,
+        setIsFirstConnection,
+    } = SetupGuideContext.useContainer()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const persona = personaInfo?.identifier
     const connected = usePersonaConnected()
     return useAsyncFn(async () => {
-        if (!persona || connected) return
+        if (!persona || !userId || connected) return
         const id = ProfileIdentifier.of(site, userId)
         if (!id.isSome()) return
         // attach persona with site profile
         await Services.Identity.attachProfile(id.value, persona, {
             connectionConfirmState: 'confirmed',
         })
+        setIsFirstConnection(true)
 
         if (currentIdentityResolved.avatar) {
             await Services.Identity.updateProfileInfo(id.value, {
@@ -35,5 +41,5 @@ export function useConnectPersona() {
         MaskMessages.events.ownPersonaChanged.sendToAll()
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
-    }, [site, personaInfo, step, persona, userId, currentIdentityResolved.avatar, connected])
+    }, [site, personaInfo, persona, userId, currentIdentityResolved.avatar, connected])
 }

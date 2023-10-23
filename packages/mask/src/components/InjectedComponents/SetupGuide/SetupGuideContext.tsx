@@ -66,10 +66,11 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
                 return SetupGuideStep.Close
             }
         }
-        if (!username) return SetupGuideStep.FindUsername
-        return SetupGuideStep.Close
+        return SetupGuideStep.VerifyOnNextID
     })
     const skip = !personaInfo || currentTabId !== setupGuide.tabId
+    // Will show connect result the first time for sites that don't need to verify nextId.
+    const [isFirstConnection, setIsFirstConnection] = useState(false)
     const composeInfo = useMemo(() => {
         return {
             step: skip ? SetupGuideStep.Close : step,
@@ -79,6 +80,8 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
             currentIdentityResolved: lastRecognized,
             destinedPersonaInfo: personaInfo,
             destinedPersona,
+            isFirstConnection,
+            setIsFirstConnection,
         }
     }, [step, username, loadingCurrentUserId, lastRecognized, personaInfo, destinedPersona, skip])
 
