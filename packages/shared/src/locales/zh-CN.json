@@ -245,6 +245,7 @@
     "wallet_transfer_error_gas_price_absence": "请输入Gas Price",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "Gas 限制至少 {{limit}}",
     "popups_wallet_gas_fee_settings": "Gas 费用设置",
+    "plugin_wallet_connect_to_retry": "请重试",
     "initializing": "初始化中...",
     "plugin_wallet_metamask_error_already_request": "您已打开弹出窗口，请确认。",
     "applications": "应用程序",
