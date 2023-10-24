@@ -147,13 +147,15 @@ const AccountDetail = memo(() => {
                 { signature },
             )
 
-            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
+            await delay(1000)
 
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             MaskMessages.events.ownPersonaChanged.sendToAll()
-            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+            await queryClient.refetchQueries(['next-id', 'bindings-by-persona', pubkey])
+            await queryClient.refetchQueries(['my-own-persona-info'])
 
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
