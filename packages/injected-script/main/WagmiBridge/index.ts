@@ -9,6 +9,21 @@ config.subscribe((state) => {
     console.log(state)
 })
 
+const getConnector = (providerType: string) => {
+    switch (providerType) {
+        case 'MetaMask':
+            return new MetaMaskConnector()
+        case 'WalletConnect':
+            return new WalletConnectConnector({
+                options: {
+                    projectId: '8f1769933420afe8873860925fcca14f',
+                },
+            })
+        default:
+            throw new Error('To be implemented - getConnector.')
+    }
+}
+
 export function __wagmi__execute(providerType: string, id: number, methodName: string, args: unknown[]) {
     console.log('DEBUG: wagmi execute')
     console.log({
@@ -19,21 +34,6 @@ export function __wagmi__execute(providerType: string, id: number, methodName: s
     })
 
     handlePromise(id, async () => {
-        const getConnector = () => {
-            switch (providerType) {
-                case 'MetaMask':
-                    return new MetaMaskConnector()
-                case 'WalletConnect':
-                    return new WalletConnectConnector({
-                        options: {
-                            projectId: '8f1769933420afe8873860925fcca14f',
-                        },
-                    })
-                default:
-                    throw new Error('To be implemented - getConnector.')
-            }
-        }
-
         try {
             switch (methodName) {
                 case 'connect':
@@ -41,7 +41,7 @@ export function __wagmi__execute(providerType: string, id: number, methodName: s
                     console.log(methodName)
 
                     const connected = await connect({
-                        connector: getConnector(),
+                        connector: getConnector(providerType),
                     })
 
                     console.log(connected)
