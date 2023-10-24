@@ -20,8 +20,8 @@ export function useConnectPersona() {
         await Services.Identity.attachProfile(id.value, persona, {
             connectionConfirmState: 'confirmed',
         })
-        setIsFirstConnection(true)
 
+        setIsFirstConnection(true)
         if (myIdentity.avatar) {
             await Services.Identity.updateProfileInfo(id.value, {
                 avatarURL: myIdentity.avatar,

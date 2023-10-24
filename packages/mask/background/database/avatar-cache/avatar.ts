@@ -67,7 +67,10 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
             )
             if (isOutdated) {
                 // ! must fetch before create the transaction
-                const buffer = await (await fetch(avatar)).arrayBuffer()
+                const buffer = await fetch(avatar).then(
+                    (r) => r.arrayBuffer(),
+                    () => avatar,
+                )
                 {
                     const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('avatars', 'metadata')
                     await storeAvatarDB(t, identifier, buffer)
