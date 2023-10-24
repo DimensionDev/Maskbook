@@ -6,14 +6,21 @@ import { type ChainId, type Transaction as EvmTransaction, type SchemaType } fro
 import { List } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
 import { useMaskSharedTrans } from '../../../../../../utils/i18n-next-ui.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
+    container: {
+        paddingBottom: hasNav ? 72 : undefined,
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
+    },
     list: {
         backgroundColor: theme.palette.maskColor.bottom,
         padding: theme.spacing(2),
@@ -27,7 +34,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export const ActivityList = memo(function ActivityList() {
     const { t } = useMaskSharedTrans()
-    const { classes } = useStyles()
+    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const { data: transactions, localeTxes, isLoading, isFetching, fetchNextPage } = useTransactions()
 
@@ -57,7 +65,7 @@ export const ActivityList = memo(function ActivityList() {
         return <EmptyStatus height="100%">{t('no_data')}</EmptyStatus>
 
     return (
-        <>
+        <div className={classes.container} data-hide-scrollbar>
             <List dense className={classes.list}>
                 {localeTxes.map((transaction) => (
                     <RecentActivityItem
@@ -79,6 +87,6 @@ export const ActivityList = memo(function ActivityList() {
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} className={classes.item} />) : null}
             </List>
             <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />
-        </>
+        </div>
     )
 })

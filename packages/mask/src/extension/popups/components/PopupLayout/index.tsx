@@ -29,7 +29,7 @@ const GlobalCss = (
     />
 )
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hasNav: boolean }>()((theme, { hasNav }) => ({
     container: {
         height: '100%',
         minHeight: 600,
@@ -48,31 +48,28 @@ const useStyles = makeStyles()((theme) => ({
     navigator: {
         flexShrink: 0,
         flexGrow: 0,
+        position: 'absolute',
+        bottom: 0,
+        zIndex: 9999,
     },
 }))
 
-const PATTERNS = [
-    PopupRoutes.Personas,
-    PopupRoutes.Wallet,
-    PopupRoutes.SetPaymentPassword,
-    PopupRoutes.Friends,
-    PopupRoutes.Settings,
-]
+const PATTERNS = [PopupRoutes.Personas, PopupRoutes.Wallet, PopupRoutes.Friends, PopupRoutes.Settings]
 
 const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
 
 export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {
-    const { classes } = useStyles()
-
     const location = useLocation()
     const matched = PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const outletContext = useMemo(() => ({ hasNavigator: matched }), [matched])
+
+    const { classes } = useStyles({ hasNav: matched })
 
     return (
         <>
             {GlobalCss}
             <Paper elevation={0} sx={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
-                <div className={classes.container}>
+                <div className={classes.container} data-hide-scrollbar>
                     <div className={classes.body} data-hide-scrollbar>
                         {children ?? <Outlet context={outletContext} />}
                     </div>
