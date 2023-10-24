@@ -48,5 +48,6 @@
     "delete_file_message$failed": "删除失败，请重试",
     "upload_tips": "请点击浏览文件按钮选择要上传的文件。",
     "file_chip_single": "附件： {{name}} ({{size}})",
-    "file_chip_multiple": "已选择 {{count}} 个文件"
+    "file_chip_multiple": "已选择 {{count}} 个文件",
+    "size": "大小"
 }
