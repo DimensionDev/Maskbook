@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 
@@ -14,6 +15,9 @@ export default {
         inlineDynamicImports: true,
     },
     plugins: [
+        nodePolyfills({
+            include: ['crypto'],
+        }),
         resolve({ browser: true, preferBuiltins: false }),
         commonjs(),
         swc({

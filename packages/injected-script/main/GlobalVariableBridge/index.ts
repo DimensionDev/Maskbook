@@ -77,7 +77,6 @@ export function __unsafe__onEvent(path: string, bridgeEvent: keyof InternalEvent
             event,
             $unsafe.expose((...args: any[]) => {
                 $.setPrototypeOf(args, null)
-                // send send back
                 sendEvent(bridgeEvent, path, event, args)
             }),
         ])
@@ -101,7 +100,5 @@ function __unsafe__untilInner(name: string) {
 }
 
 export function __unsafe__until(path: string, id: number) {
-    console.log('DEBUG: __unsafe__until', path, id)
-
     handlePromise(id, () => __unsafe__untilInner(path))
 }

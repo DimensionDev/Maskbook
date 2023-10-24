@@ -18,22 +18,22 @@ export function __wagmi__execute(providerType: string, id: number, methodName: s
         args,
     })
 
-    const getConnector = () => {
-        switch (providerType) {
-            case 'MetaMask':
-                return new MetaMaskConnector()
-            case 'WalletConnect':
-                return new WalletConnectConnector({
-                    options: {
-                        projectId: '8f1769933420afe8873860925fcca14f',
-                    },
-                })
-            default:
-                throw new Error('To be implemented - getConnector.')
-        }
-    }
-
     handlePromise(id, async () => {
+        const getConnector = () => {
+            switch (providerType) {
+                case 'MetaMask':
+                    return new MetaMaskConnector()
+                case 'WalletConnect':
+                    return new WalletConnectConnector({
+                        options: {
+                            projectId: '8f1769933420afe8873860925fcca14f',
+                        },
+                    })
+                default:
+                    throw new Error('To be implemented - getConnector.')
+            }
+        }
+
         try {
             switch (methodName) {
                 case 'connect':

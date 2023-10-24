@@ -7,7 +7,7 @@ export class WagmiProvider {
 
     constructor(
         public providerType: string,
-        public pathname: string,
+        public pathname?: string,
     ) {}
 
     get isReady() {
@@ -26,7 +26,14 @@ export class WagmiProvider {
      * Wait until the sdk object injected into the page.
      */
     async untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
-        await createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname.split('.')[0], id))
+        const pathname = this.pathname
+
+        if (!pathname) {
+            this.isReadyInternal = true
+            return
+        }
+
+        await createPromise((id) => sendEvent('web3UntilBridgeOnline', pathname.split('.')[0], id))
         if (await validator()) {
             this.isReadyInternal = true
         }
@@ -85,6 +92,8 @@ export class WagmiProvider {
      * Access primitive property on the sdk object.
      */
     getProperty<T = unknown>(key: string): Promise<T | null> {
-        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
+        const pathname = this.pathname
+        if (!pathname) throw new Error('No pathname found.')
+        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', pathname, id, key))
     }
 }
