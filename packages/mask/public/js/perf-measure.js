@@ -22,7 +22,7 @@
                 console.log('LCP result:', entry)
                 console.log('Type measure to see the graph.', this)
                 console.log(
-                    '- Modules',
+                    '- Modules:',
                     this.#modules.size,
                     '\n- First module:',
                     this.first_request,
