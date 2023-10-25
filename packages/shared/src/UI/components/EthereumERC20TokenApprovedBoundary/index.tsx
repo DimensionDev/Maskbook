@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, ShadowRootTooltip, makeStyles, type ActionButtonProps } from '@masknet/theme'
-import { useChainContext, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { isGte, isSameAddress, type FungibleToken } from '@masknet/web3-shared-base'
+import { isGte, isSameAddress, type FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
 import { useSharedTrans } from '../../../locales/index.js'
@@ -29,6 +29,7 @@ const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
 
 export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'button' | 'container'> {
     amount: string
+    balance?: string
     spender?: string
     token?: FungibleToken<ChainId, SchemaType>
     fallback?: React.ReactNode
@@ -45,6 +46,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const {
         children = null,
         amount,
+        balance,
         spender,
         token,
         infiniteUnlockContent,
@@ -57,6 +59,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     const t = useSharedTrans()
     const { classes } = useStyles(undefined, { props })
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: token?.chainId })
+    const { data: tokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address, {
+        chainId,
+    })
 
     const {
         data: spenders,
@@ -68,9 +73,10 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         account,
     })
 
+    const approveAmount = balance || tokenBalance || amount
     const [{ type: approveStateType, allowance }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         token?.address ?? '',
-        amount,
+        approveAmount,
         spender ?? '',
         () => {
             callback?.()
@@ -78,10 +84,17 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         },
         token?.chainId,
     )
-
-    const approved =
-        isGte(allowance, amount) ||
-        spenders?.some((x) => isSameAddress(x.tokenInfo.address, token?.address) && isSameAddress(x.address, spender))
+    const approved = useMemo(() => {
+        if (isGte(allowance, amount)) return true
+        if (!token?.address || !spenders?.length) return false
+        return spenders.some((x) => {
+            return (
+                isSameAddress(x.tokenInfo.address, token.address) &&
+                isSameAddress(x.address, spender) &&
+                isGte(rightShift(x.amount || 0, x.tokenInfo.decimals || token.decimals), amount)
+            )
+        })
+    }, [allowance, amount, spenders, token?.address, token?.decimals, spender])
 
     const loading =
         spendersLoading ||

@@ -413,25 +413,27 @@
         ]
     },
     {
-        "chainId": 250,
-        "type": "Fantom",
-        "name": "Fantom",
-        "fullName": "Fantom Opera",
+        "chainId": 534352,
+        "type": "Scroll",
+        "name": "Scroll",
         "network": "mainnet",
-        "shortName": "ftm",
+        "fullName": "Scroll",
+        "shortName": "Scroll",
+        "rpc": ["https://rpc.scroll.io"],
+        "faucets": [],
         "features": [],
         "nativeCurrency": {
-            "chainId": 250,
-            "name": "Fantom",
-            "symbol": "FTM",
+            "chainId": 534352,
+            "name": "Ether",
+            "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fantom/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
-        "infoURL": "https://fantom.foundation",
+        "infoURL": "https://scrollscan.com/",
         "explorers": [
             {
-                "name": "ftmscan",
-                "url": "https://ftmscan.com",
+                "name": "blockscout",
+                "url": "https://scrollscan.com/",
                 "standard": "EIP3091"
             }
         ]
@@ -649,27 +651,25 @@
         ]
     },
     {
-        "chainId": 534352,
-        "type": "Scroll",
-        "name": "Scroll",
+        "chainId": 250,
+        "type": "Fantom",
+        "name": "Fantom",
+        "fullName": "Fantom Opera",
         "network": "mainnet",
-        "fullName": "Scroll",
-        "shortName": "Scroll",
-        "rpc": ["https://rpc.scroll.io"],
-        "faucets": [],
+        "shortName": "ftm",
         "features": [],
         "nativeCurrency": {
-            "chainId": 534352,
-            "name": "Ether",
-            "symbol": "ETH",
+            "chainId": 250,
+            "name": "Fantom",
+            "symbol": "FTM",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fantom/info/logo.png/quality=85"
         },
-        "infoURL": "https://scrollscan.com/",
+        "infoURL": "https://fantom.foundation",
         "explorers": [
             {
-                "name": "blockscout",
-                "url": "https://scrollscan.com/",
+                "name": "ftmscan",
+                "url": "https://ftmscan.com",
                 "standard": "EIP3091"
             }
         ]
