@@ -1,5 +1,5 @@
 import { produce } from 'immer'
-import type { PaymentToken, PriceStat } from './type.js'
+import { type SimpleHash } from '../types/SimpleHash.js'
 import { maxBy, uniqBy } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { TrendingAPI } from '../entry-types.js'
@@ -7,7 +7,7 @@ import { BigNumber } from 'bignumber.js'
 import { leftShift } from '@masknet/web3-shared-base'
 
 type HistoricalPriceMap = Record<string, TrendingAPI.Stat[]>
-type PaymentTokenMap = Record<string, PaymentToken>
+type PaymentTokenMap = Record<string, SimpleHash.PaymentToken>
 
 class HistoricalPriceState {
     private _priceState: HistoricalPriceMap = {}
@@ -35,7 +35,11 @@ class HistoricalPriceState {
         )
     }
 
-    public updatePriceState(id: string, priceStats: PriceStat[], paymentToken: PaymentToken | undefined) {
+    public updatePriceState(
+        id: string,
+        priceStats: SimpleHash.PriceStat[],
+        paymentToken: SimpleHash.PaymentToken | undefined,
+    ) {
         if (!paymentToken) return
 
         this._priceState = produce(this._priceState, (draft) => {

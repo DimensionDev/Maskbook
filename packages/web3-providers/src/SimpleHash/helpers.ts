@@ -16,9 +16,9 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL, SPAM_SCORE } from './constants.js'
-import { ActivityType as ActivityTypeSimpleHash, type Asset, type Collection } from './type.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { SimpleHash } from '../types/SimpleHash.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     return queryClient.fetchQuery<T>({
@@ -34,7 +34,7 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     })
 }
 
-export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
+export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
@@ -117,7 +117,9 @@ export function createNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, 
     }
 }
 
-export function createNonFungibleCollection(collection: Collection): NonFungibleCollection<ChainId, SchemaType> {
+export function createNonFungibleCollection(
+    collection: SimpleHash.Collection,
+): NonFungibleCollection<ChainId, SchemaType> {
     const chainId = resolveChainId(collection.chain)!
 
     const verifiedMarketplaces = collection.marketplace_pages?.filter((x) => x.verified) || []
@@ -217,15 +219,15 @@ export const resolveSimpleHashRange = createLookupTableResolver<Days, number>(
     () => 0,
 )
 
-export function resolveEventType(event: ActivityTypeSimpleHash) {
+export function resolveEventType(event: SimpleHash.ActivityType) {
     switch (event) {
-        case ActivityTypeSimpleHash.Sale:
+        case SimpleHash.ActivityType.Sale:
             return ActivityType.Sale
-        case ActivityTypeSimpleHash.Transfer:
+        case SimpleHash.ActivityType.Transfer:
             return ActivityType.Transfer
-        case ActivityTypeSimpleHash.Burn:
+        case SimpleHash.ActivityType.Burn:
             return ActivityType.Burn
-        case ActivityTypeSimpleHash.Mint:
+        case SimpleHash.ActivityType.Mint:
             return ActivityType.Mint
         default:
             unreachable(event)

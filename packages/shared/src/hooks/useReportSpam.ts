@@ -1,10 +1,10 @@
 import { useCustomSnackbar } from '@masknet/theme'
 import { NFTSpam, SPAM_SCORE, SimpleHashEVM } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
-import { useAsyncFn } from 'react-use'
-import { useSharedTrans } from '../locales/i18n_generated.js'
 import { useCallback } from 'react'
+import { useAsyncFn } from 'react-use'
 import { ConfirmDialog } from '../UI/modals/modals.js'
+import { useSharedTrans } from '../locales/i18n_generated.js'
 
 export function useReportSpam(address?: string, chainId?: number) {
     const t = useSharedTrans()
