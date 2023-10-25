@@ -17,16 +17,20 @@
             const observer = new PerformanceObserver((entryList) => {
                 this.#freeze()
                 console.clear()
-                console.log(
-                    'LCP happened. Total',
-                    this.#modules.size,
-                    'modules loaded. Access globalThis.measure to see the graph.',
-                    this,
-                )
 
-                for (const entry of entryList.getEntries()) {
-                    console.log('LCP costs:', entry.startTime, entry)
-                }
+                const [entry] = entryList.getEntries()
+                console.log('LCP result:', entry)
+                console.log('Type measure to see the graph.', this)
+                console.log(
+                    'Modules',
+                    this.#modules.size,
+                    '\nFirst module:',
+                    this.first_request,
+                    '\nTotal time:',
+                    this.total_time,
+                    '\nLargest contentful paint:',
+                    entry.startTime,
+                )
             })
             observer.observe({ type: 'largest-contentful-paint', buffered: false })
         }
@@ -244,8 +248,8 @@
                 return [
                     'div',
                     { style: INDENT_1_STYLE },
+                    ['div', { style: PROP_STYLE }, 'First module run: ', ['object', { object: obj.first_request }]],
                     ['div', { style: PROP_STYLE }, 'Total time: ', ['object', { object: obj.total_time }]],
-                    ['div', { style: PROP_STYLE }, 'Start time: ', ['object', { object: obj.first_request }]],
                     ['div', { style: PROP_STYLE }, 'Modules:', ['object', { object: obj.modules }]],
                     ['div', { style: PROP_STYLE }, 'Root/Async/Deferred modules:', ['object', { object: r }]],
                 ]
