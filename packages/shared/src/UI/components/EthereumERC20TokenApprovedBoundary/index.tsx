@@ -1,3 +1,4 @@
+import React, { useCallback, useMemo } from 'react'
 import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -7,7 +8,6 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { isGte, isSameAddress, type FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
-import React, { useCallback } from 'react'
 import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
