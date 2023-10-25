@@ -22,13 +22,13 @@
                 console.log('LCP result:', entry)
                 console.log('Type measure to see the graph.', this)
                 console.log(
-                    'Modules',
+                    '- Modules',
                     this.#modules.size,
-                    '\nFirst module:',
+                    '\n- First module:',
                     this.first_request,
-                    '\nTotal time:',
+                    '\n- Total time:',
                     this.total_time,
-                    '\nLargest contentful paint:',
+                    '\n- Largest contentful paint:',
                     entry.startTime,
                 )
             })
