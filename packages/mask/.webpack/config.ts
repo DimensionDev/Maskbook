@@ -19,6 +19,7 @@ import { createRequire } from 'node:module'
 
 import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
+import { ProfilingPlugin } from './ProfilingPlugin.js'
 
 import './clean-hmr.js'
 
@@ -195,6 +196,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
+            flags.profiling && new ProfilingPlugin(),
             ...emitManifestFile(flags, computedFlags),
             new CopyPlugin({
                 patterns: [
@@ -309,14 +311,20 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
     baseConfig.plugins!.push(
-        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
-        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
-        await addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
-        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
+        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
+        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
+        await addHTMLEntry({
+            chunks: ['contentScript'],
+            filename: 'generated__content__script.html',
+            perf: flags.profiling,
+        }),
+        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true, perf: flags.profiling }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
-        baseConfig.plugins!.push(await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
+        baseConfig.plugins!.push(
+            await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', perf: flags.profiling }),
+        )
     }
     return baseConfig
 
@@ -327,17 +335,19 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         return entry
     }
 }
-async function addHTMLEntry(
-    options: HTMLPlugin.Options & {
-        gun?: boolean
-    },
-) {
+async function addHTMLEntry({
+    gun,
+    perf,
+    ...options
+}: HTMLPlugin.Options & {
+    gun?: boolean
+    perf: boolean
+}) {
     let template = await templateContent
-    if (options.gun) {
-        template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
-    }
+    if (gun) template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
+    if (perf) template = template.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
     return new HTMLPlugin({
-        templateContent,
+        templateContent: template,
         inject: 'body',
         scriptLoading: 'defer',
         minify: false,
