@@ -31,6 +31,7 @@
                     '\n- Largest contentful paint:',
                     entry.startTime,
                 )
+                observer.disconnect()
             })
             observer.observe({ type: 'largest-contentful-paint', buffered: false })
         }
