@@ -30,6 +30,7 @@ import { PageTitleContext } from '../../../context.js'
 import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
 import { queryClient } from '@masknet/shared-base-ui'
+import { delay } from '@masknet/kit'
 
 const AccountDetail = memo(() => {
     const { t } = useMaskSharedTrans()
@@ -83,10 +84,12 @@ const AccountDetail = memo(() => {
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+            queryClient.invalidateQueries(['my-own-persona-info'])
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
             Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
+            await delay(300)
             navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
@@ -144,13 +147,15 @@ const AccountDetail = memo(() => {
                 { signature },
             )
 
-            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
+            await delay(1000)
 
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             MaskMessages.events.ownPersonaChanged.sendToAll()
-            queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
+            await queryClient.refetchQueries(['next-id', 'bindings-by-persona', pubkey])
+            await queryClient.refetchQueries(['my-own-persona-info'])
 
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',

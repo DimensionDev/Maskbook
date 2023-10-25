@@ -19,9 +19,9 @@ import {
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
-import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
+import { fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { Duration, Expiration, stableSquashedCached } from '../entry-helpers.js'
+import { stableSquashedCached } from '../entry-helpers.js'
 import { env } from '@masknet/flags'
 
 const BASE_URL =
@@ -223,13 +223,8 @@ const getExistedBindingQueryURL = (platform: string, identity: string, personaPu
     })
 
 export class NextIDProof {
-    static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit, disableCache?: boolean) {
-        return disableCache
-            ? fetchJSON<T>(request, init)
-            : fetchCachedJSON<T>(request, init, {
-                  squashExpiration: Expiration.THIRTY_MINUTES,
-                  cacheDuration: Duration.THIRTY_MINUTES,
-              })
+    static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
+        return fetchJSON<T>(request, init)
     }
 
     static async clearPersonaQueryCache(personaPublicKey: string) {
@@ -290,7 +285,6 @@ export class NextIDProof {
         const { ids } = await this.fetchFromProofService<NextIDBindings>(
             getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
             undefined,
-            true,
         )
         // Will have only one item when query by personaPublicKey
         return first(ids)
@@ -324,12 +318,7 @@ export class NextIDProof {
         return first(result) ?? null
     }
 
-    static async queryAllExistedBindingsByPlatform(
-        platform: NextIDPlatform,
-        identity: string,
-        exact?: boolean,
-        disableCache?: boolean,
-    ) {
+    static async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, exact?: boolean) {
         if (!platform && !identity) return []
 
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
@@ -344,7 +333,6 @@ export class NextIDProof {
                     order: 'desc',
                 }),
                 undefined,
-                disableCache,
             )
             const personaBindings = result.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
@@ -358,19 +346,13 @@ export class NextIDProof {
         return []
     }
 
-    static async queryIsBound(
-        personaPublicKey: string,
-        platform: NextIDPlatform,
-        identity: string,
-        disableCache = false,
-    ) {
+    static async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string) {
         try {
             if (!platform && !identity) return false
 
             const result = await this.fetchFromProofService<BindingProof | undefined>(
                 getExistedBindingQueryURL(platform, identity, personaPublicKey),
                 undefined,
-                disableCache,
             )
             return !!result?.is_valid
         } catch {

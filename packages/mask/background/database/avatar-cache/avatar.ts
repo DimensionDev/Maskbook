@@ -22,7 +22,12 @@ const impl = memoizePromise(
             // Must not await here. Because we insert non-idb async operation (blobToDataURL).
             promises.push(
                 queryAvatarDB(t, id)
-                    .then((buffer) => buffer && blobToDataURL(new Blob([buffer], { type: 'image/png' })))
+                    .then((avatar) => {
+                        if (!avatar) return
+                        return typeof avatar === 'string'
+                            ? avatar
+                            : blobToDataURL(new Blob([avatar], { type: 'image/png' }))
+                    })
                     .then((url) => url && map.set(id, url)),
             )
         }
@@ -67,7 +72,10 @@ export async function storeAvatar(identifier: IdentifierWithAvatar, avatar: Arra
             )
             if (isOutdated) {
                 // ! must fetch before create the transaction
-                const buffer = await (await fetch(avatar)).arrayBuffer()
+                const buffer = await fetch(avatar).then(
+                    (r) => r.arrayBuffer(),
+                    () => avatar,
+                )
                 {
                     const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('avatars', 'metadata')
                     await storeAvatarDB(t, identifier, buffer)

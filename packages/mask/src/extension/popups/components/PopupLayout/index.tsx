@@ -29,7 +29,7 @@ const GlobalCss = (
     />
 )
 
-const useStyles = makeStyles<{ hasNav: boolean }>()((theme, { hasNav }) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         height: '100%',
         minHeight: 600,
@@ -50,7 +50,7 @@ const useStyles = makeStyles<{ hasNav: boolean }>()((theme, { hasNav }) => ({
         flexGrow: 0,
         position: 'absolute',
         bottom: 0,
-        zIndex: 9999,
+        zIndex: 999, // Setting too large will make it over popup modal
     },
 }))
 
@@ -59,11 +59,11 @@ const PATTERNS = [PopupRoutes.Personas, PopupRoutes.Wallet, PopupRoutes.Friends,
 const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
 
 export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {
+    const { classes } = useStyles()
+
     const location = useLocation()
     const matched = PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const outletContext = useMemo(() => ({ hasNavigator: matched }), [matched])
-
-    const { classes } = useStyles({ hasNav: matched })
 
     return (
         <>

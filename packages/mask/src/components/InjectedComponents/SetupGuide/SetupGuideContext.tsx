@@ -14,33 +14,43 @@ import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 import { useCurrentUserId } from './hooks/useCurrentUserId.js'
+import { useConnectedVerified } from './hooks/useConnectedVerified.js'
 
-export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
+export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     // #region parse setup status
     const lastPinExtensionSetting = useValueRef(userPinExtension)
     const setupGuide = useSetupGuideStatus()
     // #endregion
 
-    // #region Get username
-    const lastRecognized = useLastRecognizedIdentity()
+    const myIdentity = useLastRecognizedIdentity()
     const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
-    const username = setupGuide.username || currentUserId || ''
-    // #endregion
+    const userId = setupGuide.username || currentUserId || ''
 
-    const { data: personaInfo, refetch } = useQuery(
-        ['query-persona-info', destinedPersona?.publicKeyAsHex],
-        async () => {
-            if (!destinedPersona?.publicKeyAsHex) return null
-            return Services.Identity.queryPersona(destinedPersona)
+    const {
+        data: personaInfo,
+        isFetching: checkingConnected,
+        refetch,
+    } = useQuery({
+        enabled: !!persona?.publicKeyAsHex,
+        queryKey: ['query-persona-info', persona?.publicKeyAsHex],
+        queryFn: async () => {
+            if (!persona?.publicKeyAsHex) return null
+            return Services.Identity.queryPersona(persona)
         },
-    )
-    const { data: currentTabId } = useQuery(['current-tab-id'], async () => Services.Helper.getCurrentTabId())
-    const { networkIdentifier } = activatedSiteAdaptorUI!
-
+    })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
+    const { data: currentTabId } = useQuery(['current-tab-id'], async () => Services.Helper.getActiveTabId(), {
+        refetchOnWindowFocus: true,
+    })
+    const { networkIdentifier: site, configuration } = activatedSiteAdaptorUI!
+    const nextIdPlatform = configuration.nextIDConfig?.platform
+    const [checkingVerified, verified] = useConnectedVerified(personaInfo?.identifier?.publicKeyAsHex, userId)
+    const connected = personaInfo?.linkedProfiles.some(
+        (x) => x.identifier.network === site && x.identifier.userId === userId,
+    )
 
     useEffect(() => {
-        if (username || networkIdentifier !== EnhanceableSite.Twitter) return
+        if (userId || site !== EnhanceableSite.Twitter) return
         // In order to collect user info after login, need to reload twitter once
         let reloaded = false
         const handler = () => {
@@ -50,12 +60,11 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
             location.reload()
         }
         window.addEventListener('locationchange', handler)
-        return () => {
-            window.removeEventListener('locationchange', handler)
-        }
-    }, [username])
+        return () => window.removeEventListener('locationchange', handler)
+    }, [userId])
 
-    const [step, setStep] = useState<SetupGuideStep>(() => {
+    const [isFirstConnection, setIsFirstConnection] = useState(false)
+    const step = useMemo(() => {
         if (!setupGuide.status) {
             // Should show pin extension when not set
             if (!lastPinExtensionSetting) {
@@ -64,23 +73,37 @@ export function useSetupGuideStepInfo(destinedPersona?: PersonaIdentifier) {
                 return SetupGuideStep.Close
             }
         }
-        if (!username) return SetupGuideStep.FindUsername
-        return SetupGuideStep.Close
-    })
-    const skip = !personaInfo || currentTabId !== setupGuide.tabId
-    const composeInfo = useMemo(() => {
-        return {
-            step: skip ? SetupGuideStep.Close : step,
-            setStep,
-            userId: username,
-            loadingCurrentUserId,
-            currentIdentityResolved: lastRecognized,
-            destinedPersonaInfo: personaInfo,
-            destinedPersona,
+        const nextStep = isFirstConnection ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.CheckConnection
+        if (checkingVerified || checkingConnected || loadingCurrentUserId) return nextStep
+        if (!connected || (nextIdPlatform && !verified)) {
+            return SetupGuideStep.VerifyOnNextID
         }
-    }, [step, username, loadingCurrentUserId, lastRecognized, personaInfo, destinedPersona, skip])
-
-    return composeInfo
+        return nextStep
+    }, [
+        setupGuide.status,
+        checkingVerified,
+        checkingConnected,
+        connected,
+        verified,
+        isFirstConnection,
+        loadingCurrentUserId,
+    ])
+    const skip = !personaInfo || currentTabId !== setupGuide.tabId
+    // Will show connect result the first time for sites that don't need to verify nextId.
+    return {
+        step: skip ? SetupGuideStep.Close : step,
+        userId,
+        currentUserId,
+        loadingCurrentUserId,
+        myIdentity,
+        personaInfo,
+        isFirstConnection,
+        setIsFirstConnection,
+        checkingConnected,
+        checkingVerified,
+        verified,
+        connected,
+    }
 }
 
 export const SetupGuideContext = createContainer(useSetupGuideStepInfo)

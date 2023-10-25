@@ -18,5 +18,5 @@ export {
 export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
 export { getTelemetryID, setTelemetryID } from './telemetry-id.js'
 export { fetchSandboxedPluginManifest } from './sandboxed.js'
-export { getCurrentTabId } from './tabs.js'
+export { getActiveTabId } from './tabs.js'
 Reflect.set(globalThis, 'fetch', fetchGlobal)

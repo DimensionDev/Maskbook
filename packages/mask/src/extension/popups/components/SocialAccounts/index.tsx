@@ -1,12 +1,12 @@
+import { Icons } from '@masknet/icons'
 import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
-import { memo } from 'react'
-import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { memo } from 'react'
 import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
-import { Icons } from '@masknet/icons'
-import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
+import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {

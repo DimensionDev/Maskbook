@@ -27,7 +27,6 @@ export function useConnectedPersonas() {
                 NextIDPlatform.NextID,
                 allPersonaPublicKeys.join(','),
                 undefined,
-                true,
             )
 
             return personasInDB.map((x) => {

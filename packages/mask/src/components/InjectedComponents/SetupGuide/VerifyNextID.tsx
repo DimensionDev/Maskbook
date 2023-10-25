@@ -1,13 +1,15 @@
 import { Icons } from '@masknet/icons'
-import { EmojiAvatar, usePersonaProofs } from '@masknet/shared'
-import { SetupGuideStep, currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
+import { delay } from '@masknet/kit'
+import { EmojiAvatar } from '@masknet/shared'
+import { currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Skeleton, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
@@ -18,8 +20,6 @@ import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
-import { useConnectedVerified } from './hooks/useConnectedVerified.js'
-import { useCurrentUserId } from './hooks/useCurrentUserId.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
 import { usePostContent } from './hooks/usePostContent.js'
 
@@ -151,90 +151,63 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { t } = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
-    const { step, userId, currentIdentityResolved, destinedPersonaInfo } = SetupGuideContext.useContainer()
-    const { nickname: username, avatar } = currentIdentityResolved
-    const personaName = destinedPersonaInfo?.nickname
-    const personaIdentifier = destinedPersonaInfo?.identifier
+    const { userId, myIdentity, personaInfo, checkingVerified, verified, loadingCurrentUserId, currentUserId } =
+        SetupGuideContext.useContainer()
+    const { nickname: username, avatar } = myIdentity
+    const personaName = personaInfo?.nickname
+    const personaIdentifier = personaInfo?.identifier
 
     const [customUserId, setCustomUserId] = useState('')
-    const postContent = usePostContent(personaIdentifier, userId || customUserId)
-    const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
-    const verified = useConnectedVerified(personaIdentifier?.publicKeyAsHex, userId)
+    const { data: post, isLoading: creatingPostContent } = usePostContent(personaIdentifier, userId || customUserId)
     const { configuration, networkIdentifier } = activatedSiteAdaptorUI!
-    const platform = configuration.nextIDConfig?.platform
-    const [completed, setCompleted] = useState(!platform)
+    const nextIdPlatform = configuration.nextIDConfig?.platform
 
     const { data: personaAvatar } = useQuery({
         queryKey: ['my-own-persona-info'],
         queryFn: () => Services.Identity.queryOwnedPersonaInformation(false),
         select(data) {
-            const pubkey = destinedPersonaInfo?.identifier.publicKeyAsHex
+            const pubkey = personaInfo?.identifier.publicKeyAsHex
             const info = data.find((x) => x.identifier.publicKeyAsHex === pubkey)
             return info?.avatar
         },
     })
 
     const disableVerify = useMemo(() => {
-        return !currentIdentityResolved?.identifier || !userId
-            ? false
-            : currentIdentityResolved.identifier.userId !== userId
-    }, [currentIdentityResolved, userId])
+        return !myIdentity?.identifier || !userId ? false : myIdentity.identifier.userId !== userId
+    }, [myIdentity, userId])
 
-    const [{ loading: connecting }, connectPersona] = useConnectPersona()
-    useEffect(() => {
-        connectPersona()
-    }, [connectPersona])
+    // Show connect result for the first time.
+    const { loading: connecting } = useConnectPersona()
 
-    // Loading proofs to check verification
-    const { isLoading: isLoadingProofs } = usePersonaProofs(destinedPersonaInfo?.identifier.publicKeyAsHex)
     const [, handleVerifyNextID] = useNextIDVerify()
     const [{ loading: verifying }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
-        if (!destinedPersonaInfo) return
-        if (!platform) return
+        if (!personaInfo) return
+        if (!nextIdPlatform) return
 
-        const isBound = await NextIDProof.queryIsBound(
-            destinedPersonaInfo.identifier.publicKeyAsHex,
-            platform,
-            userId,
-            true,
-        )
-        if (isBound) return
-
-        await handleVerifyNextID(destinedPersonaInfo, userId)
-        Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
-    }, [userId, destinedPersonaInfo])
+        const isBound = await NextIDProof.queryIsBound(personaInfo.identifier.publicKeyAsHex, nextIdPlatform, userId)
+        if (!isBound) {
+            await handleVerifyNextID(personaInfo, userId)
+            Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
+        }
+        await queryClient.invalidateQueries(['next-id', 'bindings-by-persona'])
+        await delay(1000)
+    }, [userId, personaInfo])
 
     const notify = useNotifyConnected()
-    const onVerifyDone = useCallback(() => {
-        if (step !== SetupGuideStep.VerifyOnNextID) return
+
+    const onConfirm = useCallback(() => {
         currentSetupGuideStatus[networkIdentifier].value = ''
         notify()
-    }, [step, notify])
+    }, [nextIdPlatform, notify])
 
-    const executor = useCallback(async () => {
-        if (platform) return onVerify()
-        onVerifyDone?.()
-        setCompleted(true)
-    }, [onVerify, onVerifyDone])
-
-    const buttonLabel = useMemo(() => {
-        if (!platform || (platform && verified)) return t('ok')
-        return (
-            <>
-                <Icons.Send size={18} className={classes.send} />
-                {t('send')}
-            </>
-        )
-    }, [platform, verified, t])
-
-    if (currentUserId !== userId || loadingCurrentUserId || verified) {
+    // Need to verify for next id platform
+    if (currentUserId !== userId || loadingCurrentUserId || connecting) {
         return (
             <AccountConnectStatus
                 expectAccount={userId}
                 currentUserId={currentUserId}
-                loading={loadingCurrentUserId}
-                connected={verified}
+                loading={loadingCurrentUserId || connecting}
                 onClose={onClose}
             />
         )
@@ -242,8 +215,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
 
     if (!personaIdentifier) return null
 
-    const disabled = !(userId || customUserId) || !personaName || disableVerify
-    const load = verifying || connecting || isLoadingProofs
+    const disabled = !(userId || customUserId) || !personaName || disableVerify || checkingVerified
 
     return (
         <BindingDialog onClose={onClose}>
@@ -296,19 +268,36 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {completed ? (
+                    {!nextIdPlatform || verified ? (
                         <Typography className={classes.text}>
                             <Trans
-                                i18nKey={platform ? 'send_post_successfully' : 'connect_successfully'}
+                                i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
                                 components={{ br: <br /> }}
                             />
                         </Typography>
-                    ) : postContent ? (
+                    ) : creatingPostContent ? (
                         <>
                             <Typography className={classes.postContentTitle}>
                                 {t('setup_guide_post_content')}
                             </Typography>
-                            <Typography className={classes.postContent}>{postContent}</Typography>
+                            <Typography className={classes.postContent}>
+                                <Skeleton variant="text" />
+                                <Skeleton variant="text" />
+                                <Skeleton variant="text" />
+                                <Skeleton variant="text" width="50%" />
+                                <Skeleton variant="text" />
+                                <Skeleton variant="text" width="50%" />
+                            </Typography>
+                            <Typography className={classes.tip} component="div">
+                                {t('setup_guide_verify_tip')}
+                            </Typography>
+                        </>
+                    ) : post ? (
+                        <>
+                            <Typography className={classes.postContentTitle}>
+                                {t('setup_guide_post_content')}
+                            </Typography>
+                            <Typography className={classes.postContent}>{post}</Typography>
                             <Typography className={classes.tip} component="div">
                                 {t('setup_guide_verify_tip')}
                             </Typography>
@@ -317,15 +306,27 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 </Box>
 
                 <Box className={classes.footer}>
-                    <ActionButton
-                        className={classes.button}
-                        fullWidth
-                        variant="contained"
-                        disabled={disabled}
-                        loading={load}
-                        onClick={executor}>
-                        {buttonLabel}
-                    </ActionButton>
+                    {!nextIdPlatform || (nextIdPlatform && verified) ? (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            disabled={disabled}
+                            onClick={onConfirm}>
+                            {t('ok')}
+                        </ActionButton>
+                    ) : (
+                        <ActionButton
+                            className={classes.button}
+                            fullWidth
+                            variant="contained"
+                            disabled={disabled}
+                            loading={verifying}
+                            onClick={onVerify}>
+                            <Icons.Send size={18} className={classes.send} />
+                            {t('send')}
+                        </ActionButton>
+                    )}
                 </Box>
             </div>
         </BindingDialog>
