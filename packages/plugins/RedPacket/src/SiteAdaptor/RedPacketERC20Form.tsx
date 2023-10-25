@@ -373,6 +373,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     actualPluginID={pluginID}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
+                        balance={balance}
                         classes={{ container: classes.unlockContainer }}
                         ActionButtonProps={{
                             size: 'medium',
