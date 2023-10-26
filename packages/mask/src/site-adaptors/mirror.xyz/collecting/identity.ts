@@ -49,10 +49,15 @@ function resolveCurrentVisitingIdentityInner(
                 return
             }
         }
+        // Could be `/dashboard` or `/dashboard/settings`
+        if (location.pathname.startsWith('/dashboard')) {
+            ref.value = {}
+            return
+        }
 
         // get from local
         // why local as second option?
-        // when location change, then __NEXT_DATA__ data maybe not update,
+        // when location change, then __NEXT_DATA__ data could be stale,
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return
         const INIT_DATA = JSON.parse(script)
@@ -60,15 +65,6 @@ function resolveCurrentVisitingIdentityInner(
 
         const writer = (INIT_DATA.props?.pageProps?.publicationLayoutProject ??
             INIT_DATA.props?.pageProps?.project) as Writer
-        if (!writer) {
-            if (!location.pathname.startsWith('/dashboard')) return
-
-            // when current page is dashboard
-            const currentUser = await getCurrentUserInfo()
-            if (!currentUser) return
-            ref.value = formatWriter(currentUser, isOwner)
-            return
-        }
         ref.value = formatWriter(writer, isOwner)
     }
 
