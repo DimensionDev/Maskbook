@@ -4,15 +4,20 @@
     const regex = /^\.\/node_modules\/\.pnpm\/(?<key>[^_\/]+)/
     const npm_name_cache = Object.create(null)
     const readable_name_cache = Object.create(null)
-    const PROP_STYLE = `color: rgb(125, 31, 124);`
     const IMPORT_STYLE = `color: purple;`
     const USED_BY_STYLE = `color: green;`
     const FAST_TIME_STYLE = `color: gray;`
+    const MERGED_MODULE_STYLE = `color: gray;`
     const SLOW_TIME_STYLE = `color: red;`
     const TIME_STYLE = `color: brown;`
-    const INDENT_1_STYLE = 'margin-left: 2em'
+    const EMPTY = Object.freeze([])
 
     class Graph {
+        /** @type {readonly Module[]} */
+        modules
+        /** @type {readonly Module[]} */
+        root_or_async_or_deferred_module
+        total_time = 0
         constructor() {
             const observer = new PerformanceObserver((entryList) => {
                 this.#freeze()
@@ -20,12 +25,12 @@
 
                 const [entry] = entryList.getEntries()
                 console.log('LCP result:', entry)
-                console.log('Type measure to see the graph.', this)
+                console.log('Type measure to see the graph.\n', this)
                 console.log(
                     '- Modules:',
                     this.#modules.size,
                     '\n- First module:',
-                    this.first_request,
+                    this.#first_request,
                     '\n- Total time:',
                     this.total_time,
                     '\n- Largest contentful paint:',
@@ -43,27 +48,53 @@
         /** @type {Map<string, Module>} */
         #root_or_async_or_deferred_module = new Map()
         /** @type {number} */
-        first_request
-        /** @type {readonly Module[]} */
-        modules
-        /** @type {readonly Module[]} */
-        root_or_async_or_deferred_module
-        total_time = 0
-
+        #first_request
         #freeze() {
-            this.total_time = performance.now() - this.first_request
+            this.total_time = performance.now() - this.#first_request
             this.#stack.forEach((module) => this.leave(module.module_id))
             this.#finalized = true
+            this.#async_compile_info.forEach((targets, from) => {
+                const from_mod = this.#modules.get(String(from))
+                if (!from_mod) return
+                targets.forEach((x) => this.#modules.get(x)?.add_used_by(from_mod, 'async'))
+            })
+            this.#defer_compile_info.forEach((targets, from) => {
+                const from_mod = this.#modules.get(String(from))
+                if (!from_mod) return
+                targets.forEach((x) => this.#modules.get(x)?.add_used_by(from_mod, 'defer'))
+            })
             this.#merge_npm_nodes()
-            this.modules = Object.freeze([...this.#modules.values()])
-            this.root_or_async_or_deferred_module = Object.freeze([...this.#root_or_async_or_deferred_module.values()])
+
+            this.modules = module_set_to_array(this.#modules)
+            this.root_or_async_or_deferred_module = module_set_to_array(this.#root_or_async_or_deferred_module)
 
             delete Graph.prototype.connect
             delete Graph.prototype.enter
             delete Graph.prototype.leave
-            this.modules.forEach((x) =>
-                Object.defineProperty(x, 'self_time', { configurable: true, writable: true, value: x.self_time }),
-            )
+            delete Graph.prototype.set_compile_info
+            this.modules.forEach((x) => x.freeze())
+            delete Module.prototype.freeze
+        }
+        /** @type {Map<string, Set<string>>} */
+        #async_compile_info = new Map()
+        /** @type {Map<string, Set<string>>} */
+        #defer_compile_info = new Map()
+        /** @param {Array<[from: string | number, asyncTarget: string[], deferTarget: string[]]>} arr */
+        set_compile_info(arr) {
+            if (this.#finalized) return
+            for (let [name, async, defer] of arr) {
+                const n = (readable_name_cache[name] ??= simplified_name(String(name)))
+                if (async.length) {
+                    this.#async_compile_info.has(n) || this.#async_compile_info.set(n, new Set())
+                    const s = this.#async_compile_info.get(n)
+                    for (const x of async) s.add((readable_name_cache[x] ??= simplified_name(String(x))))
+                }
+                if (defer.length) {
+                    this.#defer_compile_info.has(n) || this.#defer_compile_info.set(n, new Set())
+                    const s = this.#defer_compile_info.get(n)
+                    for (const x of async) s.add((readable_name_cache[x] ??= simplified_name(String(x))))
+                }
+            }
         }
         /**
          * @private
@@ -71,7 +102,7 @@
          */
         connect(dependency) {
             if (this.#finalized) return
-            this.first_request ??= performance.now()
+            this.#first_request ??= performance.now()
             dependency = readable_name_cache[dependency] ??= simplified_name(dependency)
             const dep = this.#modules.get(dependency)
             const current = this.#stack.at(-1)
@@ -87,7 +118,7 @@
          */
         enter(current) {
             if (this.#finalized) return
-            this.first_request ??= performance.now()
+            this.#first_request ??= performance.now()
             current = readable_name_cache[current] ??= simplified_name(current)
             const new_mod = new Module(current)
             this.#modules.set(current, new_mod)
@@ -174,88 +205,114 @@
                 }
             }
         }
-
-        /**
-         * @param {string} module
-         */
-        get(module) {
-            return this.#modules.get(module)
-        }
     }
     class Module {
+        module_id
         constructor(/** @type {string} */ module_id) {
             this.module_id = module_id
         }
-        /**
-         * Modules that depend on this
-         * @type {Set<Module>}
-         */
-        used_by = new Set()
-        /**
-         * Modules that this module depends
-         * @type {Set<Module>}
-         */
-        imports = new Set()
+        /** @type {Set<Module>} */
+        #used_by = new Set()
+        /** @type {readonly Module[]} */
+        get used_by() {
+            return Object.freeze([...this.#used_by.values()])
+        }
+        /** @type {Set<Module>} */
+        #imports = new Set()
+        /** @type {readonly Module[]} */
+        get imports() {
+            return Object.freeze([...this.#imports.values()])
+        }
+        /** @type {Set<Module>} */
+        #defer_used_by = new Set()
+        /** @type {readonly Module[]} */
+        get defer_used_by() {
+            return Object.freeze([...this.#defer_used_by.values()])
+        }
+        /** @type {Set<Module>} */
+        #async_used_by = new Set()
+        /** @type {readonly Module[]} */
+        get async_used_by() {
+            return Object.freeze([...this.#async_used_by.values()])
+        }
+        /** @type {Set<Module>} */
+        #defer_imports = new Set()
+        /** @type {readonly Module[]} */
+        get defer_imports() {
+            return Object.freeze([...this.#defer_imports.values()])
+        }
+        /** @type {Set<Module>} */
+        #async_imports = new Set()
+        /** @type {readonly Module[]} */
+        get async_imports() {
+            return Object.freeze([...this.#async_imports.values()])
+        }
         /**
          * Modules that this module depends
          * @type {Set<string> | undefined}
          */
         concat_modules
-        module_id
         start_time = performance.now()
         end_time = NaN
         child_span_time = 0
         get self_time() {
             return this.end_time - this.start_time - this.child_span_time
         }
-
-        add_used_by(/** @type {Module} */ module) {
+        add_used_by(/** @type {Module} */ module, /** @type {'normal' | 'async' | 'defer'} */ type = 'normal') {
             if (this === module) return
-            this.used_by.add(module)
-            module.imports.add(this)
+            if (type === 'normal') {
+                this.#used_by.add(module)
+                module.#imports.add(this)
+            } else if (type === 'async') {
+                this.#async_used_by.add(module)
+                module.#async_imports.add(this)
+            } else if (type === 'defer') {
+                this.#defer_used_by.add(module)
+                module.#defer_imports.add(this)
+            }
         }
         #remove_used_by(/** @type {Module} */ module) {
-            this.used_by.delete(module)
-            module.imports.delete(this)
+            this.#used_by.delete(module)
+            module.#imports.delete(this)
         }
         concat_with(/** @type {Module} */ removing_node) {
             if (removing_node === this) return
             this.concat_modules ??= new Set()
             this.concat_modules.add(removing_node.module_id)
 
-            removing_node.imports.forEach((m) => m.#remove_used_by(removing_node))
-            removing_node.used_by.forEach((m) => removing_node.#remove_used_by(m))
+            const imports = [...removing_node.#imports]
+            const used_by = [...removing_node.#used_by]
+            imports.forEach((m) => {
+                m.#remove_used_by(removing_node)
+                m.add_used_by(this)
+            })
+            used_by.forEach((m) => {
+                removing_node.#remove_used_by(m)
+                this.add_used_by(m)
+            })
         }
+        freeze() {
+            Object.defineProperties(this, {
+                start_time: { value: this.start_time },
+                end_time: { value: this.end_time },
+                self_time: { value: this.self_time },
+                used_by: { value: this.used_by },
+                imports: { value: this.imports },
+                async_used_by: { value: module_set_to_array(this.#async_used_by) },
+                async_imports: { value: module_set_to_array(this.#async_imports) },
+                defer_used_by: { value: module_set_to_array(this.#defer_used_by) },
+                defer_imports: { value: module_set_to_array(this.#defer_imports) },
+            })
+        }
+    }
+    function of(object, config) {
+        return ['object', { object, config }]
+    }
+    function line(...object) {
+        return ['div', {}].concat(object)
     }
     globalThis.devtoolsFormatters = [
         ...(globalThis.devtoolsFormatters || []),
-        {
-            header: (obj) =>
-                obj instanceof Graph
-                    ? [
-                          'div',
-                          {},
-                          'Graph (',
-                          ['object', { object: obj.modules.length }],
-                          ' modules, ',
-                          ['object', { object: obj.total_time }],
-                          'ms)',
-                      ]
-                    : null,
-            hasBody: () => true,
-            body: function (obj, config) {
-                if (!(obj instanceof Graph)) return null
-                const r = obj.root_or_async_or_deferred_module
-                return [
-                    'div',
-                    { style: INDENT_1_STYLE },
-                    ['div', { style: PROP_STYLE }, 'First module run: ', ['object', { object: obj.first_request }]],
-                    ['div', { style: PROP_STYLE }, 'Total time: ', ['object', { object: obj.total_time }]],
-                    ['div', { style: PROP_STYLE }, 'Modules:', ['object', { object: obj.modules }]],
-                    ['div', { style: PROP_STYLE }, 'Root/Async/Deferred modules:', ['object', { object: r }]],
-                ]
-            },
-        },
         {
             header: function (m) {
                 if (!(m instanceof Module)) return null
@@ -263,47 +320,64 @@
                 const total_time = parseInt((m.end_time - m.start_time).toFixed(2))
 
                 const self_fast = self_time < 4
-                const result = [
-                    'div',
-                    {},
-                    ['span', self_fast ? { style: FAST_TIME_STYLE } : {}, m.module_id],
-                    ' ',
-                    ['span', { style: get_time_style(self_time) }, self_time],
-                ]
+                const result = line(['span', self_fast ? { style: FAST_TIME_STYLE } : {}, m.module_id])
+
+                if (self_time !== 0 || self_time !== total_time)
+                    result.push(['span', { style: get_time_style(self_time) }, ' ', self_time])
                 if (self_time !== total_time)
                     result.push(
                         ['span', { style: FAST_TIME_STYLE }, '/'],
                         ['span', { style: get_time_style(total_time) }, total_time, 'ms'],
                     )
-                else result.push(['span', { style: get_time_style(self_time) }, 'ms'])
+                else if (self_time !== 0) result.push(['span', { style: get_time_style(self_time) }, 'ms'])
 
-                if (m.imports.size || m.used_by.size) result.push(' (')
-                if (m.used_by.size) result.push(['span', { style: USED_BY_STYLE }, `by ${m.used_by.size}`])
-                if (m.imports.size && m.used_by.size) result.push(' ')
-                if (m.imports.size) result.push(['span', { style: IMPORT_STYLE }, `to ${m.imports.size}`])
-                if (m.imports.size || m.used_by.size) result.push(')')
+                if (m.imports.length || m.used_by.length) result.push(' (')
+                if (m.used_by.length) result.push(['span', { style: USED_BY_STYLE }, `by ${m.used_by.length}`])
+                if (m.imports.length && m.used_by.length) result.push(' ')
+                if (m.imports.length) result.push(['span', { style: IMPORT_STYLE }, `to ${m.imports.length}`])
+                if (m.imports.length || m.used_by.length) result.push(')')
+
+                if (m.concat_modules?.size)
+                    result.push(['span', { style: MERGED_MODULE_STYLE }, ` +${m.concat_modules.size} modules`])
                 return result
             },
-            hasBody: () => true,
+            hasBody: (m) =>
+                m instanceof Module &&
+                (m.used_by.length ||
+                    m.imports.length ||
+                    m.async_imports.length ||
+                    m.async_used_by.length ||
+                    m.defer_imports.length ||
+                    m.defer_used_by.length),
             body: function (m, config) {
                 if (!(m instanceof Module)) return null
                 const level = config?.level ?? 1
                 const next_config = { level: level + 1 }
                 const import_style = { style: `margin-left: ${level * 1}em;${IMPORT_STYLE}` }
                 const used_by_style = { style: `margin-left: ${level * 1}em;${USED_BY_STYLE}` }
-                const import_next =
-                    m.imports.size >= 10
-                        ? ['object', { object: [...m.imports], config: next_config }]
-                        : ['div', {}, ...[...m.imports].map((x) => ['div', {}, ['object', { object: x }]])]
-                const used_by_next =
-                    m.used_by.size >= 10
-                        ? ['object', { object: [...m.used_by], config: next_config }]
-                        : ['div', {}, ...[...m.used_by].map((x) => ['div', {}, ['object', { object: x }]])]
                 return [
                     'div',
                     {},
-                    m.used_by.size && ['div', used_by_style, 'used by', used_by_next],
-                    m.imports.size && ['div', import_style, 'imports', import_next],
+                    m.used_by.length && [
+                        'div',
+                        used_by_style,
+                        'used by',
+                        m.used_by.length >= 10
+                            ? line(of(m.used_by, next_config))
+                            : line(...m.used_by.map((x) => line(of(x)))),
+                    ],
+                    m.imports.length && [
+                        'div',
+                        import_style,
+                        'imports',
+                        m.imports.length >= 10
+                            ? line(of(m.imports, next_config))
+                            : line(...m.imports.map((x) => line(of(x)))),
+                    ],
+                    m.async_used_by.length && ['div', used_by_style, 'async used by', line(of(m.async_used_by))],
+                    m.defer_used_by.length && ['div', used_by_style, 'defer used by', line(of(m.defer_used_by))],
+                    m.async_imports.length && ['div', import_style, 'async imports', line(of(m.async_imports))],
+                    m.defer_imports.length && ['div', import_style, 'defer imports', line(of(m.defer_imports))],
                 ].filter(Boolean)
             },
         },
@@ -311,6 +385,14 @@
     Object.setPrototypeOf(Graph.prototype, null)
     Object.setPrototypeOf(Module.prototype, null)
     globalThis.measure = new Graph()
+
+    function module_set_to_array(/** @type {Set<Module> | Map<any, Module>} */ set) {
+        if (set.size === 0) return EMPTY
+        const arr = [...set.values()]
+        Object.assign(arr, Object.fromEntries(set instanceof Map ? set : arr.map((x) => [x.module_id, x])))
+        Object.freeze(arr)
+        return arr
+    }
 
     /**
      * @template T
@@ -351,13 +433,15 @@
      * @returns {string}
      */
     function get_module_name(module) {
-        return (npm_name_cache[module] ??= module.match(regex)?.groups?.key)
+        return module.startsWith('@')
+            ? module.slice(0, module.indexOf('/', module.indexOf('/')))
+            : module.slice(0, module.indexOf('/'))
     }
     /**
      * @param {string} module
      */
     function simplified_name(module) {
-        const npm_name = get_module_name(module)
+        const npm_name = (npm_name_cache[module] ??= module.match(regex)?.groups?.key)
         if (npm_name) {
             const no_version = npm_name.startsWith('@')
                 ? '@' + npm_name.split('@')[1].replace('+', '/')
