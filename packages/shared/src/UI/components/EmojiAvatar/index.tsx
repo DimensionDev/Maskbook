@@ -6,9 +6,10 @@ import { EMOJI_LIST } from './constants.js'
 
 interface Props extends AvatarProps {
     value: string
+    size?: number
 }
 
-export function EmojiAvatar({ value, ...props }: Props) {
+export function EmojiAvatar({ value, size, ...props }: Props) {
     const theme = useTheme()
 
     const { emoji, backgroundColor } = useMemo(() => {
@@ -26,6 +27,8 @@ export function EmojiAvatar({ value, ...props }: Props) {
         <MuiAvatar
             style={{
                 backgroundColor,
+                height: size,
+                width: size,
             }}
             {...props}>
             {emoji}

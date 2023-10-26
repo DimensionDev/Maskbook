@@ -5,7 +5,7 @@ import {
     fromHex,
     toBase64,
     type BindingProof,
-    type NextIDAction,
+    NextIDAction,
     type NextIDBindings,
     type NextIDErrorBody,
     type NextIDIdentity,
@@ -204,6 +204,11 @@ interface CreatePayloadResponse {
     sign_payload: string
     uuid: string
     created_at: string
+}
+
+interface RestorePubkeyResponse {
+    /** hex public key */
+    public_key: string
 }
 
 type NeighborNode = {
@@ -557,6 +562,20 @@ export class NextIDProof {
                   uuid: response.uuid,
               }
             : null
+    }
+
+    static async restorePubkey(payload: string, platform: NextIDPlatform, identity: string) {
+        const url = urlcat(BASE_URL, '/v1/proof/restore_pubkey')
+        const response = await fetchJSON<RestorePubkeyResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                action: NextIDAction.Create,
+                platform,
+                identity,
+                proof_post: payload,
+            }),
+        })
+        return response.public_key
     }
 }
 

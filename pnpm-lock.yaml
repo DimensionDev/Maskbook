@@ -1753,6 +1753,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.4
 
   packages/plugins/Pets:
     dependencies:
@@ -28064,3 +28067,4 @@ time:
   /rollup-plugin-polyfill-node@0.12.0: '2023-01-24T00:16:21.182Z'
   /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
   /url@0.11.3: '2023-09-14T22:38:37.401Z'
+  /zod@3.22.4: '2023-10-04T21:53:36.013Z'
