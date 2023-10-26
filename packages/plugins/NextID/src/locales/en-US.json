@@ -39,6 +39,7 @@
     "please_connect_persona": "Please connect persona",
     "unbind_persona_tip": "Choose either your Persona or the currently connected wallet to sign to disconnect.",
     "unbind_wallet_tip": "Choose either your Persona or the currently connected wallet to sign to disconnect.",
+    "view": "View",
     "done": "Done",
     "confirm": "Confirm",
     "cancel": "Cancel",

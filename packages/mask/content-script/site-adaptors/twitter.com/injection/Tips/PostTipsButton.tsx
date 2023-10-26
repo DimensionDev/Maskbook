@@ -52,7 +52,6 @@ export function injectTipsButtonOnPost(signal: AbortSignal) {
                 const root = attachReactTreeWithContainer(proxy.afterShadow, {
                     signal,
                     tag: createRootElement,
-                    // untilVisible: true,
                 })
                 root.render(<PostTipsSlot userId={userId} />)
                 remover = root.destroy
