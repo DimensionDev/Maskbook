@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node ./builder.js"
+    "build": "rollup -c"
   },
   "dependencies": {
     "@types/webextension-polyfill": "^0.10.2",
@@ -16,8 +16,9 @@
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-virtual": "^3.0.2",
     "@types/node": "20.5.7",
-    "core-js-builder": "3.33.0",
+    "core-js-compat": "3.33.0",
     "regenerator-runtime": "^0.14.0",
     "rollup": "^3.28.1",
     "rollup-plugin-swc3": "^0.10.1",
