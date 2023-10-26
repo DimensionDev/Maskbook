@@ -140,10 +140,11 @@ export function Collectible() {
             setOutVerified(scrollWidth > offsetWidth)
         }
     }, [])
-    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(
-        asset.data?.address,
-        asset.data?.chainId,
-    )
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: asset.data?.address,
+        chainId: asset.data?.chainId,
+        collectionId: asset.data?.collection?.id,
+    })
 
     const offers = useMemo(() => orders.data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [orders.data?.pages])
 
@@ -221,14 +222,14 @@ export function Collectible() {
 
                             {isSpam ? (
                                 <NFTSpamBadge />
-                            ) : isUndetermined ? (
+                            ) : (
                                 <IconButton
                                     className={classes.reportButton}
                                     onClick={promptReport}
                                     disabled={isReporting}>
                                     {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
                                 </IconButton>
-                            ) : null}
+                            )}
                         </Typography>
                     }
                     subheader={

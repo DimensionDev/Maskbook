@@ -358,12 +358,9 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getCollectionVerifiedBy(id: string) {
-        const path = urlcat('/api/v0/nfts/collections/ids', {
-            collection_ids: id,
-        })
-        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
-        if (!response.collections.length) return []
-        const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
+        const collection = await this.getSimpleHashCollection(id)
+        if (!collection) return []
+        const marketplaces = collection.marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
     }
 
@@ -557,6 +554,14 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             },
             tickers,
         }
+    }
+
+    async getSimpleHashCollection(id: string): Promise<SimpleHash.Collection | undefined> {
+        const path = urlcat('/api/v0/nfts/collections/ids', {
+            collection_ids: id,
+        })
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
+        return response.collections[0]
     }
 }
 export const SimpleHashEVM = new SimpleHashAPI_EVM()

@@ -247,10 +247,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
               availableAsset.contract?.address,
           )
         : NFTFallbackImage
-    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(
-        availableAsset?.address,
-        availableAsset?.chainId,
-    )
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: availableAsset?.address,
+        chainId: availableAsset?.chainId,
+        collectionId: availableAsset?.collection?.id,
+    })
     return (
         <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (
@@ -282,11 +283,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 </ProgressiveText>
                 {isSpam ? (
                     <NFTSpamBadge />
-                ) : isUndetermined ? (
+                ) : (
                     <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
                         {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
                     </IconButton>
-                ) : null}
+                )}
             </div>
             <div className={classes.prices}>
                 <div className={classes.price}>

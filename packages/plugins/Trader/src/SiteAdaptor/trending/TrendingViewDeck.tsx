@@ -257,7 +257,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         [identity, isCollectionProjectPopper, anchorBounding, anchorEl],
     )
 
-    const { isReporting, isReliable, promptReport } = useReportSpam(coin.address, coin.chainId)
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: coin.address,
+        chainId: coin.chainId,
+    })
 
     useEffect(() => {
         if (timer) clearTimeout(timer)
@@ -391,7 +394,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t.plugin_trader_no_data()}
                                         </Typography>
                                     )}
-                                    {isNFT && !isReliable ? (
+                                    {isNFT && !isSpam ? (
                                         <IconButton onClick={promptReport} disabled={isReporting}>
                                             {isReporting ? (
                                                 <LoadingBase size={16} />
@@ -410,7 +413,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     ) : null}
                                 </Stack>
-                                {isNFT && !isReliable ? (
+                                {isNFT && isSpam ? (
                                     <NFTSpamBadge />
                                 ) : isTokenSecurityEnable && tokenSecurity && !error ? (
                                     <TokenSecurityBar tokenSecurity={tokenSecurity} />

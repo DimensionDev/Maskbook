@@ -77,7 +77,11 @@ export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
-    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(asset.address, asset.chainId)
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: asset.address,
+        chainId: asset.chainId,
+        collectionId: asset.collection?.id,
+    })
 
     return (
         <div className={classes.root}>
@@ -102,11 +106,11 @@ export function FigureCard(props: FigureCardProps) {
                 </TextOverflowTooltip>
                 {isSpam ? (
                     <NFTSpamBadge />
-                ) : isUndetermined ? (
+                ) : (
                     <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
                         {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
                     </IconButton>
-                ) : null}
+                )}
             </Box>
 
             {!hideSubTitle && (

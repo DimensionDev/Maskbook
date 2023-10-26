@@ -48,10 +48,11 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
-    const { isReporting, isReliable, promptReport } = useReportSpam(
-        currentCollection?.address,
-        currentCollection?.chainId,
-    )
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: currentCollection?.address,
+        chainId: currentCollection?.chainId,
+        collectionId: currentCollection?.id,
+    })
 
     if (!currentCollection) return null
     const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
@@ -68,14 +69,16 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
                 ) : null}
-                {!isReliable ? <NFTSpamBadge /> : null}
+                {isSpam ? <NFTSpamBadge /> : null}
             </Box>
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
-            <Button variant="text" className={classes.backButton} onClick={promptReport}>
-                {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
-            </Button>
+            {isSpam ? (
+                <Button variant="text" className={classes.backButton} onClick={promptReport}>
+                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                </Button>
+            ) : null}
         </div>
     )
 })
