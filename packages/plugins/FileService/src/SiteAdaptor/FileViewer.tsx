@@ -1,7 +1,7 @@
 import { Paper } from '@mui/material'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../types.js'
-import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { DisplayingFileList } from './components/FileList.js'
 import { useCallback } from 'react'
 import { PluginFileServiceRPC } from '../Worker/rpc.js'
@@ -45,6 +45,17 @@ export function FileViewer({ files }: { files: FileInfo[] }) {
         },
         [showSnackbar, showSnackbar, t],
     )
+
+    const author = usePostInfoDetails.author()
+    const coAuthors = usePostInfoDetails.coAuthors()
+    const identifier = usePostInfoDetails.identifier()
+
+    console.log('DEBUG: File Service')
+    console.log({
+        author,
+        coAuthors,
+        identifier,
+    })
 
     return (
         <Paper elevation={0} className={classes.root}>

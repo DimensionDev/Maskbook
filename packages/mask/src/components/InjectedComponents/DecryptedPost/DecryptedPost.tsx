@@ -72,6 +72,9 @@ export function DecryptPost(props: DecryptPostProps) {
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
     const postInfo = useContext(PostInfoContext)!
 
+    console.log('DEBUG: Post Info')
+    console.log(postInfo)
+
     const [progress, dispatch] = useReducer(progressReducer, [])
 
     useEffect(() => {
