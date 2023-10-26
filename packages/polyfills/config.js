@@ -25,7 +25,7 @@ export default defineConfig([
             banner: `
 /**
  * @license
- * This file includes the following runtimes/polyfills.
+ * This file includes the following runtime/polyfills.
  * regenerator-runtime
  * tslib
  * reflect-metadata
@@ -41,7 +41,7 @@ globalThis[Symbol.for('mask_init_polyfill')] = true;
             virtual({
                 entry: list
                     .map((item) => require.resolve(`core-js/modules/${item}.js`))
-                    .concat(require.resolve('./runtimes/transpiler.js'))
+                    .concat(require.resolve('./runtime/transpiler.js'))
                     .map((x) => `import '${x}'\n`)
                     .join(''),
             }),
