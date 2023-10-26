@@ -136,5 +136,10 @@
     "powered_by": "crwdns21043:0crwdne21043:0",
     "available_balance": "crwdns21045:0crwdne21045:0",
     "wallet_balance": "crwdns21047:0crwdne21047:0",
-    "edit": "crwdns21049:0crwdne21049:0"
+    "edit": "crwdns21049:0crwdne21049:0",
+    "report_nft": "crwdns22516:0crwdne22516:0",
+    "confirm_to_report_nft": "crwdns22518:0crwdne22518:0",
+    "report_spam": "crwdns22520:0crwdne22520:0",
+    "report_spam_success": "crwdns22522:0crwdne22522:0",
+    "report_spam_fail": "crwdns22524:0crwdne22524:0"
 }
