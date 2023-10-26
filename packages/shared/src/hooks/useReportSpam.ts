@@ -17,7 +17,7 @@ interface Options {
  */
 export function useReportSpam({ address, chainId, collectionId }: Options) {
     const t = useSharedTrans()
-    const { data: collectionByAddress, isLoading } = useQuery({
+    const { data: collectionByAddress } = useQuery({
         enabled: !collectionId,
         queryKey: ['simple-hash', 'collection', chainId, address],
         queryFn: async () => {
@@ -60,15 +60,10 @@ export function useReportSpam({ address, chainId, collectionId }: Options) {
         })
     }, [colId, reportSpam])
     const isSpam = !!collection && collection.spam_score !== null && collection?.spam_score > SPAM_SCORE
-    const isReliable = isLoading || !isSpam
-    // Is surely not spam
-    const isUndetermined = !!collection && collection.spam_score === null
 
     return {
         isReporting: state.loading,
-        isReliable,
         isSpam,
-        isUndetermined,
         collection,
         promptReport,
     }

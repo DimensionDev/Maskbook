@@ -48,7 +48,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
-    const { isReporting, isReliable, promptReport, isUndetermined } = useReportSpam({
+    const { isReporting, isSpam, promptReport } = useReportSpam({
         address: currentCollection?.address,
         chainId: currentCollection?.chainId,
         collectionId: currentCollection?.id,
@@ -69,12 +69,12 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
                 ) : null}
-                {!isReliable ? <NFTSpamBadge /> : null}
+                {isSpam ? <NFTSpamBadge /> : null}
             </Box>
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
-            {isUndetermined ? (
+            {isSpam ? (
                 <Button variant="text" className={classes.backButton} onClick={promptReport}>
                     {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
                 </Button>
