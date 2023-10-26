@@ -35,16 +35,6 @@ import {
     checkBlurToken,
     isLensFollower,
 } from '../helpers.js'
-import {
-    type Asset,
-    type Ownership,
-    type Collection,
-    type PaymentToken,
-    type PriceStat,
-    type CollectionOverview,
-    type Activity,
-    ActivityType,
-} from '../type.js'
 import { LooksRare } from '../../LooksRare/index.js'
 import { OpenSea } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
@@ -53,12 +43,13 @@ import { ChainResolver, ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI
 import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
+import { SimpleHash } from '../../types/SimpleHash.js'
 
 class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private async getCollectionByContractAddress(
+    async getCollectionByContractAddress(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
-    ): Promise<Collection | undefined> {
+    ): Promise<SimpleHash.Collection | undefined> {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/collections/:chain/:address', {
@@ -66,7 +57,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             address,
         })
 
-        const { collections } = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        const { collections } = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
 
         return collections[0]
     }
@@ -83,7 +74,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             address,
             tokenId,
         })
-        const response = await fetchFromSimpleHash<Asset>(path)
+        const response = await fetchFromSimpleHash<SimpleHash.Asset>(path)
         const asset = createNonFungibleAsset(response)
 
         if (asset?.schema === SchemaType.ERC1155 && account) {
@@ -93,7 +84,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 contract_addresses: asset.address,
             })
 
-            const ownershipResponse = await fetchFromSimpleHash<{ wallets: Ownership[] }>(pathToQueryOwner)
+            const ownershipResponse = await fetchFromSimpleHash<{ wallets: SimpleHash.Ownership[] }>(pathToQueryOwner)
 
             if (ownershipResponse.wallets?.[0]?.contracts?.[0].token_ids?.includes(asset.tokenId)) {
                 asset.owner = { address: account }
@@ -108,7 +99,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             collection_ids: id,
         })
 
-        const response = await fetchFromSimpleHash<{ collections: CollectionOverview[] }>(path)
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.CollectionOverview[] }>(path)
         const overview = response.collections[0]
 
         const floorPricePath = urlcat('/api/v0/nfts/floor_prices/collection/:id/opensea', {
@@ -139,7 +130,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
-        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
         const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
@@ -165,7 +156,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
-        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
 
         const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
@@ -199,8 +190,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
             const response = await fetchFromSimpleHash<{
                 next_cursor: string
-                floor_prices: PriceStat[]
-                payment_token: PaymentToken
+                floor_prices: SimpleHash.PriceStat[]
+                payment_token: SimpleHash.PaymentToken
             }>(path)
 
             const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
@@ -232,8 +223,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
             const response = await fetchFromSimpleHash<{
                 next_cursor: string
-                floor_prices: PriceStat[]
-                payment_token: PaymentToken
+                floor_prices: SimpleHash.PriceStat[]
+                payment_token: SimpleHash.PaymentToken
             }>(path)
 
             cursor = response.next_cursor
@@ -295,7 +286,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             nft_ids: 1,
         })
 
-        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
 
         const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
@@ -318,7 +309,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 })
 
                 const batchAssetsResponse = await fetchFromSimpleHash<{
-                    nfts: Asset[]
+                    nfts: SimpleHash.Asset[]
                 }>(batchAssetsPath)
 
                 erc721CollectionIdList = erc721CollectionIdList.concat(
@@ -353,7 +344,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             limit: size,
         })
 
-        const response = await fetchFromSimpleHash<{ nfts: Asset[]; next_cursor: string }>(path)
+        const response = await fetchFromSimpleHash<{ nfts: SimpleHash.Asset[]; next_cursor: string }>(path)
 
         const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
@@ -370,7 +361,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const path = urlcat('/api/v0/nfts/collections/ids', {
             collection_ids: id,
         })
-        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
@@ -394,7 +385,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
         const response = await fetchFromSimpleHash<{
             next_cursor: string
-            transfers: Activity[]
+            transfers: SimpleHash.Activity[]
         }>(path)
 
         if (!response?.transfers?.length) return
@@ -404,7 +395,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
 
         const batchAssetsResponse = await fetchFromSimpleHash<{
-            nfts: Asset[]
+            nfts: SimpleHash.Asset[]
         }>(batchAssetsPath)
 
         return {
@@ -434,8 +425,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     transaction_link: ExplorerResolver.transactionLink(chainId, x.transaction),
                     event_type: resolveEventType(x.event_type),
                     send: x.from_address,
-                    receive: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
-                    to: x.event_type === ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    receive: x.event_type === SimpleHash.ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
+                    to: x.event_type === SimpleHash.ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
                     trade_token,
                     timestamp: new Date(x.timestamp).getTime(),
                     trade_price: x.sale_details?.total_price

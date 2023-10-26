@@ -341,5 +341,11 @@
     "reset": "Reset",
     "editor": "Editor",
     "typed_message_text_alert": "Only TypedMessageText is supported currently.",
-    "share_to_social_networks": "Share to Social Networks"
+    "share_to_social_networks": "Share to Social Networks",
+    "report_nft": "Report NFT Scam Contract?",
+    "confirm_to_report_nft": "Are you sure to report Loot? After approving, this NFT will be marked as spam.",
+    "spam": "Spam",
+    "report_spam": "Report Spam",
+    "report_spam_success": "Successfully reported.",
+    "report_spam_fail": "Failed to report spam."
 }

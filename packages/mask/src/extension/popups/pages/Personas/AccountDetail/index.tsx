@@ -14,7 +14,7 @@ import {
     SignType,
     MaskMessages,
 } from '@masknet/shared-base'
-import { PersonaContext } from '@masknet/shared'
+import { ConfirmDialog, PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
@@ -27,7 +27,6 @@ import { useMaskSharedTrans } from '../../../../../utils/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
-import { ConfirmDialog } from '../../../modals/modals.js'
 import { DisconnectEventMap } from '../common.js'
 import { queryClient } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'

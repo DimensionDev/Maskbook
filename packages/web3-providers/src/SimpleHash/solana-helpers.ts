@@ -3,10 +3,12 @@ import { isValidDomain, ChainId, SchemaType, isValidChainId } from '@masknet/web
 import { isEmpty } from 'lodash-es'
 import { createPermalink as SolanaCreatePermalink } from '../NFTScan/helpers/Solana.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
-import type { Asset, Collection } from './type.js'
+import { type SimpleHash } from '../types/SimpleHash.js'
 import { SPAM_SCORE } from './constants.js'
 
-export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
+export function createSolanaNonFungibleAsset(
+    asset: SimpleHash.Asset,
+): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveSolanaChainId(asset.chain)
     const address = asset.contract_address
@@ -68,7 +70,9 @@ export function createSolanaNonFungibleAsset(asset: Asset): NonFungibleAsset<Cha
     }
 }
 
-export function createSolanaNonFungibleCollection(collection: Collection): NonFungibleCollection<ChainId, SchemaType> {
+export function createSolanaNonFungibleCollection(
+    collection: SimpleHash.Collection,
+): NonFungibleCollection<ChainId, SchemaType> {
     const chainId = resolveSolanaChainId(collection.chain)!
 
     const verifiedMarketplaces = collection.marketplace_pages?.filter((x) => x.verified) || []

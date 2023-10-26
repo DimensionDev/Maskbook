@@ -1,6 +1,6 @@
-import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
-import { makeStyles, MaskColorVar, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { AssetPreviewer, NFTFallbackImage, NFTSpamBadge, useReportSpam } from '@masknet/shared'
+import { LoadingBase, makeStyles, MaskColorVar, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { Box, IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -25,13 +25,13 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
     },
     nameSm: {
-        marginTop: 36,
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        marginRight: 'auto',
     },
     nameLg: {
         fontSize: 18,
@@ -55,6 +55,16 @@ const useStyles = makeStyles()((theme) => ({
     unset: {
         color: 'unset',
     },
+    reportButton: {
+        color: theme.palette.maskColor.main,
+        height: 20,
+        width: 20,
+        padding: 0,
+        borderRadius: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 }))
 
 interface FigureCardProps {
@@ -67,6 +77,7 @@ export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(asset.address, asset.chainId)
 
     return (
         <div className={classes.root}>
@@ -83,11 +94,20 @@ export function FigureCard(props: FigureCardProps) {
                 </div>
             </div>
 
-            <TextOverflowTooltip title={asset.metadata?.name} as={ShadowRootTooltip}>
-                <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                    {asset.metadata?.name ?? '-'}
-                </Typography>
-            </TextOverflowTooltip>
+            <Box display="flex" alignItems="center" mt={4}>
+                <TextOverflowTooltip title={asset.metadata?.name} as={ShadowRootTooltip}>
+                    <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                        {asset.metadata?.name ?? '-'}
+                    </Typography>
+                </TextOverflowTooltip>
+                {isSpam ? (
+                    <NFTSpamBadge />
+                ) : isUndetermined ? (
+                    <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                        {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
+                    </IconButton>
+                ) : null}
+            </Box>
 
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

@@ -10,6 +10,7 @@ import type {
 } from './ApplicationBoardModal/index.js'
 import type { GasSettingModalOpenOrCloseProps } from './GasSettingModal/index.js'
 import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
+import type { ConfirmDialogOpenProps } from './ConfirmDialog/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
 import type {
@@ -36,6 +37,7 @@ export const GasSettingModal = new SingletonModal<GasSettingModalOpenOrCloseProp
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const TransactionSnackbar = new SingletonModal()
 export const ConfirmModal = new SingletonModal<ConfirmModalOpenProps, ConfirmModalCloseProps>()
+export const ConfirmDialog = new SingletonModal<ConfirmDialogOpenProps, boolean>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
 export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalOpenProps,
