@@ -257,7 +257,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         [identity, isCollectionProjectPopper, anchorBounding, anchorEl],
     )
 
-    const { isReporting, isReliable, promptReport } = useReportSpam(coin.address, coin.chainId)
+    const { isReporting, isReliable, promptReport } = useReportSpam({
+        address: coin.address,
+        chainId: coin.chainId,
+    })
 
     useEffect(() => {
         if (timer) clearTimeout(timer)

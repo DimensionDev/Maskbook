@@ -247,10 +247,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
               availableAsset.contract?.address,
           )
         : NFTFallbackImage
-    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam(
-        availableAsset?.address,
-        availableAsset?.chainId,
-    )
+    const { isReporting, isUndetermined, isSpam, promptReport } = useReportSpam({
+        address: availableAsset?.address,
+        chainId: availableAsset?.chainId,
+        collectionId: availableAsset?.collection?.id,
+    })
     return (
         <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (

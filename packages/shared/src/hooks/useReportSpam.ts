@@ -6,25 +6,44 @@ import { useAsyncFn } from 'react-use'
 import { ConfirmDialog } from '../UI/modals/modals.js'
 import { useSharedTrans } from '../locales/i18n_generated.js'
 
-export function useReportSpam(address?: string, chainId?: number) {
+interface Options {
+    address?: string
+    chainId?: number
+    collectionId?: string
+}
+
+/**
+ * collectionId is more accurate
+ */
+export function useReportSpam({ address, chainId, collectionId }: Options) {
     const t = useSharedTrans()
-    const { data: collection, isLoading } = useQuery({
+    const { data: collectionByAddress, isLoading } = useQuery({
+        enabled: !collectionId,
         queryKey: ['simple-hash', 'collection', chainId, address],
         queryFn: async () => {
             if (!address || !chainId) return null
             return SimpleHashEVM.getCollectionByContractAddress(address, { chainId })
         },
     })
-    const collectionId = collection?.collection_id
+    const { data: collectionById } = useQuery({
+        enabled: !!collectionId,
+        queryKey: ['simple-hash', 'collection', collectionId],
+        queryFn: async () => {
+            if (!collectionId) return null
+            return SimpleHashEVM.getSimpleHashCollection(collectionId)
+        },
+    })
+    const collection = collectionById || collectionByAddress
+    const colId = collectionId || collection?.collection_id
     const [state, reportSpam] = useAsyncFn(async () => {
-        if (!collectionId) return
+        if (!colId) return
         const res = await NFTSpam.report({
-            collection_id: collectionId,
+            collection_id: colId,
             source: 'mask-network',
             status: 'reporting',
         })
         return res.code === 200
-    }, [collectionId])
+    }, [colId])
 
     const { showSnackbar } = useCustomSnackbar()
     const promptReport = useCallback(async () => {
@@ -33,13 +52,13 @@ export function useReportSpam(address?: string, chainId?: number) {
             message: t.confirm_to_report_nft(),
             confirmVariant: 'warning',
         })
-        if (!confirmed || !collectionId) return
+        if (!confirmed || !colId) return
         const result = await reportSpam()
         showSnackbar(t.report_spam(), {
             variant: result ? 'success' : 'error',
             message: result ? t.report_spam_success() : t.report_spam_fail(),
         })
-    }, [collectionId, reportSpam])
+    }, [colId, reportSpam])
     const isSpam = !!collection && collection.spam_score !== null && collection?.spam_score > SPAM_SCORE
     const isReliable = isLoading || !isSpam
     // Is surely not spam
