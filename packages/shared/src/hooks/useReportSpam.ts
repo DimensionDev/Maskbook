@@ -49,7 +49,7 @@ export function useReportSpam({ address, chainId, collectionId }: Options) {
     const promptReport = useCallback(async () => {
         const confirmed = await ConfirmDialog.openAndWaitForClose({
             title: t.report_nft(),
-            message: t.confirm_to_report_nft(),
+            message: t.confirm_to_report_nft({ name: collection?.name || 'this NFT' }),
             confirmVariant: 'warning',
         })
         if (!confirmed || !colId) return
@@ -58,7 +58,7 @@ export function useReportSpam({ address, chainId, collectionId }: Options) {
             variant: result ? 'success' : 'error',
             message: result ? t.report_spam_success() : t.report_spam_fail(),
         })
-    }, [colId, reportSpam])
+    }, [colId, reportSpam, collection?.name])
     const isSpam = !!collection && collection.spam_score !== null && collection?.spam_score > SPAM_SCORE
 
     return {

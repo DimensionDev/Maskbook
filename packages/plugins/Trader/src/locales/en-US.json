@@ -136,10 +136,5 @@
     "powered_by": "Powered by",
     "available_balance": "Available Balance",
     "wallet_balance": "Balance",
-    "edit": "Edit",
-    "report_nft": "Report NFT Scam Contract?",
-    "confirm_to_report_nft": "Are you sure to report Loot? After approving, this NFT will be marked as spam.",
-    "report_spam": "Report Spam",
-    "report_spam_success": "Successfully reported.",
-    "report_spam_fail": "Failed to report spam."
+    "edit": "Edit"
 }
