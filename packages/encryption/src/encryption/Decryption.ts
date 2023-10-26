@@ -22,8 +22,11 @@ import {
 } from './DecryptionTypes.js'
 import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh.js'
 export * from './DecryptionTypes.js'
+
 const ErrorReasons = DecryptError.Reasons
+
 type Version = PayloadParseResult.Payload['version']
+
 export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIterableIterator<DecryptProgress> {
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
     const { authorPublicKey: _authorPublicKey } = options.message

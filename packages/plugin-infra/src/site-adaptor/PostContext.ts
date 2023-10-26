@@ -12,7 +12,7 @@ import {
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessage } from '@masknet/typed-message'
-import type { SupportedPayloadVersions } from '@masknet/encryption'
+import type { EC_Key, SupportedPayloadVersions } from '@masknet/encryption'
 
 export interface PostContextActions {
     hasPayloadLike(content: string): boolean
@@ -22,6 +22,7 @@ export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>
+    readonly authorPublicKey: Subscription<EC_Key | null>
     /** post id on the network. */
     readonly postID: Subscription<string | null>
 }

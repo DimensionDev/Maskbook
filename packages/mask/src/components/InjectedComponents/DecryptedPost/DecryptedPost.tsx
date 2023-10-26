@@ -220,6 +220,7 @@ async function makeProgress(
     let iv: Uint8Array | undefined
     for await (const progress of GeneratorServices.decrypt(payload, context)) {
         if (signal.aborted) return
+
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())
         } else if (progress.type === DecryptProgressKind.Info) {

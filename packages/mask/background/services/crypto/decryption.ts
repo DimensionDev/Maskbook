@@ -210,6 +210,7 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
     )
 
     yield* progress
+
     return null
 }
 

@@ -1,6 +1,6 @@
 import { difference, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import type { SupportedPayloadVersions } from '@masknet/encryption'
+import type { EC_Key, SupportedPayloadVersions } from '@masknet/encryption'
 import {
     ValueRef,
     ObservableMap,
@@ -54,6 +54,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
+            authorPublicKey: opt.authorPublicKey,
             postID: opt.postID,
         }
         const postIdentifier = debug({
@@ -75,6 +76,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
+            authorPublicKey: author.authorPublicKey,
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
@@ -141,6 +143,7 @@ export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
+    const postByPublicKey = new ValueRef<EC_Key | null>(null)
     const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessage>(makeTypedMessageEmpty())
@@ -154,6 +157,7 @@ export function createRefsForCreatePostContext() {
         }),
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),
+        authorPublicKey: createSubscriptionFromValueRef(postByPublicKey),
         postID: createSubscriptionFromValueRef(postID),
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
