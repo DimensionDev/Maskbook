@@ -48,7 +48,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
-    const { isReporting, isReliable, promptReport } = useReportSpam(
+    const { isReporting, isReliable, promptReport, isUndetermined } = useReportSpam(
         currentCollection?.address,
         currentCollection?.chainId,
     )
@@ -73,9 +73,11 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
-            <Button variant="text" className={classes.backButton} onClick={promptReport}>
-                {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
-            </Button>
+            {isUndetermined ? (
+                <Button variant="text" className={classes.backButton} onClick={promptReport}>
+                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                </Button>
+            ) : null}
         </div>
     )
 })
