@@ -261,7 +261,6 @@
     "export": "エクスポート",
     "confirm_swap_risk": "スワップリスクを確認する",
     "wallet_load_retry": "{{symbol}}の読み込みに失敗しました。クリックして再試行してください。",
-    "wallet_name": "ウォレット名",
     "wallet_rename": "ウォレット名を変更",
     "wallet_loading_nft_contract": "NFT コントラクトを読み込み中...",
     "wallet_search_contract_no_result": "検索結果またはコントラクトアドレスがクエリ条件に一致しません。",
@@ -735,5 +734,6 @@
     "popups_wallet_backup_json_file_click_tip": "ここにファイルをクリックまたはドラッグしてください",
     "popups_wallet_backup_mnemonic_title": "ニーモニックワードを書き留めてください",
     "popups_wallet_backup_mnemonic_tips": "以下の単語を正しい順序で書き留めてください。安全に保管し、誰とも共有しないでください！",
-    "popups_wallet_backup_mnemonic_view_tips": "タップしてニーモニックワードを表示します。誰もあなたの画面を見ていないことを確認してください"
+    "popups_wallet_backup_mnemonic_view_tips": "タップしてニーモニックワードを表示します。誰もあなたの画面を見ていないことを確認してください",
+    "wallet_name": "ウォレット名"
 }
