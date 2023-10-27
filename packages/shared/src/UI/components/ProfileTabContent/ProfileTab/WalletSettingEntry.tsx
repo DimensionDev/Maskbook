@@ -22,12 +22,12 @@ function openWeb3ProfileSettingDialog() {
 }
 export const WalletSettingEntry = memo(function WalletSettingEntry() {
     const t = useSharedTrans()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     return (
         <>
             <Stack flex={1}>
-                <Typography fontWeight={400} fontSize={14}>
+                <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
                     {t.show_wallet_setting_intro()}
                 </Typography>
             </Stack>
