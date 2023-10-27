@@ -1,8 +1,8 @@
+import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo } from 'react'
 import { useSharedI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,12 +22,12 @@ function openWeb3ProfileSettingDialog() {
 }
 export const WalletSettingEntry = memo(function WalletSettingEntry() {
     const t = useSharedI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     return (
         <>
             <Stack flex={1}>
-                <Typography fontWeight={400} fontSize={14}>
+                <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
                     {t.show_wallet_setting_intro()}
                 </Typography>
             </Stack>

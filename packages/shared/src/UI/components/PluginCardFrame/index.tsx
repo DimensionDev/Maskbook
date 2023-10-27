@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        color: theme.palette.maskColor.main,
     },
     container: {
         background:

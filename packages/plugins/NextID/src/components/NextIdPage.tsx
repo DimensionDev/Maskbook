@@ -82,11 +82,11 @@ export const NextIdPage = memo(function NextIdPage() {
 
     return (
         <>
-            <PluginCardFrameMini>
-                <ThemeProvider theme={MaskLightTheme}>
+            <ThemeProvider theme={MaskLightTheme}>
+                <PluginCardFrameMini>
                     <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{ActionComponent}</PluginEnableBoundary>
-                </ThemeProvider>
-            </PluginCardFrameMini>
+                </PluginCardFrameMini>
+            </ThemeProvider>
             {openBindDialog && currentPersona && isOwn ? (
                 <BindDialog
                     open={openBindDialog}
