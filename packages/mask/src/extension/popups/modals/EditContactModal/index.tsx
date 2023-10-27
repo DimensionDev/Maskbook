@@ -134,7 +134,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     inputProps={{ style: { textAlign: 'center' } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}
-                    placeholder={t('wallet_name_wallet')}
+                    placeholder={t('name')}
                     className={classes.input}
                     value={name}
                     onChange={(ev) => {
