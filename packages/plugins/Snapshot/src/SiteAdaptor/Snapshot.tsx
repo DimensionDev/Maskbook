@@ -1,17 +1,24 @@
-import { useContext } from 'react'
-import Color from 'color'
-import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
-import { makeStyles, MaskTabList, ShadowRootTooltip, TextOverflowTooltip, useTabs } from '@masknet/theme'
-import { SnapshotContext } from '../context.js'
-import { useProposal } from './hooks/useProposal.js'
-import { ProposalTab } from './ProposalTab.js'
-import { ProgressTab } from './ProgressTab.js'
 import { ChainBoundary } from '@masknet/shared'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import {
+    MaskLightTheme,
+    MaskTabList,
+    ShadowRootTooltip,
+    TextOverflowTooltip,
+    makeStyles,
+    useTabs,
+} from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Avatar, Box, Chip, Tab, ThemeProvider, Typography } from '@mui/material'
+import Color from 'color'
+import { useContext } from 'react'
+import { SnapshotContext } from '../context.js'
 import { useSnapshotTrans } from '../locales/index.js'
+import { ProgressTab } from './ProgressTab.js'
+import { ProposalTab } from './ProposalTab.js'
+import { useProposal } from './hooks/useProposal.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -101,57 +108,63 @@ export function Snapshot() {
         <TabContext value={currentTab}>
             <Box className={classes.header}>
                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
-                <Box className={classes.title}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <TextOverflowTooltip
-                            as={ShadowRootTooltip}
+                <ThemeProvider theme={MaskLightTheme}>
+                    <Box className={classes.title}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <TextOverflowTooltip
+                                as={ShadowRootTooltip}
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                title={
+                                    <Typography fontSize={18} fontWeight="bold">
+                                        {proposal.space.name}
+                                    </Typography>
+                                }
+                                placement="top"
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                arrow>
+                                <Typography
+                                    fontSize={18}
+                                    fontWeight="bold"
+                                    color={theme.palette.maskColor.publicMain}
+                                    sx={{
+                                        width: 150,
+                                        whiteSpace: 'nowrap',
+                                        textOverflow: 'ellipsis',
+                                        overflow: 'hidden',
+                                    }}>
+                                    {proposal.space.name}
+                                </Typography>
+                            </TextOverflowTooltip>
+                            <Box sx={{ display: 'flex' }} color={theme.palette.maskColor.publicSecond}>
+                                <Typography fontSize={14} sx={{ paddingRight: 1 }}>
+                                    by
+                                </Typography>
+                                <Typography fontSize={14} fontWeight="700">
+                                    {proposal.space.id}
+                                </Typography>
+                            </Box>
+                        </Box>
+
+                        <ShadowRootTooltip
                             PopperProps={{
                                 disablePortal: true,
                             }}
-                            title={
-                                <Typography fontSize={18} fontWeight="bold">
-                                    {proposal.space.name}
-                                </Typography>
-                            }
+                            title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                             placement="top"
                             classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                             arrow>
                             <Typography
-                                fontSize={18}
-                                fontWeight="bold"
-                                sx={{ width: 150, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                {proposal.space.name}
-                            </Typography>
-                        </TextOverflowTooltip>
-                        <Box sx={{ display: 'flex' }}>
-                            <Typography
                                 fontSize={14}
-                                sx={{ paddingRight: 1 }}
-                                color={theme.palette.maskColor.publicSecond}>
-                                by
+                                fontWeight="700"
+                                color={theme.palette.maskColor.publicSecond}
+                                sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                                {proposal.title}
                             </Typography>
-                            <Typography fontSize={14} fontWeight="700">
-                                {proposal.space.id}
-                            </Typography>
-                        </Box>
+                        </ShadowRootTooltip>
                     </Box>
-
-                    <ShadowRootTooltip
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
-                        title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
-                        placement="top"
-                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                        arrow>
-                        <Typography
-                            fontSize={14}
-                            fontWeight="700"
-                            sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                            {proposal.title}
-                        </Typography>
-                    </ShadowRootTooltip>
-                </Box>
+                </ThemeProvider>
                 <Box>
                     <Chip
                         className={proposal.status === 'Active' ? classes.active : classes.default}
