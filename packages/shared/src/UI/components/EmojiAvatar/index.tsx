@@ -1,4 +1,4 @@
-import { generateContactAvatarColor } from '@masknet/shared-base'
+import { generateContactAvatarColor, calculateHash } from '@masknet/shared-base'
 import { isZeroAddress } from '@masknet/web3-shared-evm'
 import { Avatar as MuiAvatar, alpha, useTheme, type AvatarProps } from '@mui/material'
 import { useMemo } from 'react'
@@ -11,12 +11,13 @@ interface Props extends AvatarProps {
 export function EmojiAvatar({ value, ...props }: Props) {
     const theme = useTheme()
 
-    const config = useMemo(() => {
-        if (isZeroAddress(value)) {
+    const { emoji, backgroundColor } = useMemo(() => {
+        if (isZeroAddress(value) || !value) {
             return { emoji: '🐼', backgroundColor: alpha('#627EEA', 0.2) }
         }
+        const hash = calculateHash(value)
         return {
-            emoji: EMOJI_LIST[Number.parseInt(value.slice(0, 6), 16) % EMOJI_LIST.length],
+            emoji: EMOJI_LIST[hash % EMOJI_LIST.length],
             backgroundColor: generateContactAvatarColor(value, theme.palette.mode),
         }
     }, [value, theme.palette.mode])
@@ -24,10 +25,10 @@ export function EmojiAvatar({ value, ...props }: Props) {
     return (
         <MuiAvatar
             style={{
-                backgroundColor: config.backgroundColor,
+                backgroundColor,
             }}
             {...props}>
-            {config.emoji}
+            {emoji}
         </MuiAvatar>
     )
 }
