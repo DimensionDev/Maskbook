@@ -1,24 +1,24 @@
+import Services from '#services'
+import { env } from '@masknet/flags'
+import { Icons } from '@masknet/icons'
+import { Appearance, LanguageOptions } from '@masknet/public-api'
+import { DashboardRoutes, PopupModalRoutes, Sniffings } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
-import { useTitle } from '../../hooks/useTitle.js'
-import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { NormalHeader, useModalNavigate } from '../../components/index.js'
-import { env } from '@masknet/flags'
 import { UserContext, useAppearance, useLanguage } from '../../../../../shared-ui/index.js'
-import { Appearance, LanguageOptions } from '@masknet/public-api'
-import { openWindow } from '@masknet/shared-base-ui'
-import { DashboardRoutes, PopupModalRoutes, Sniffings } from '@masknet/shared-base'
+import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
-import Services from '#services'
+import { useTitle } from '../../hooks/useTitle.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         flex: 1,
-        maxHeight: 474,
+        paddingBottom: 80,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',

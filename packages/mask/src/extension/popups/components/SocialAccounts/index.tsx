@@ -94,7 +94,11 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
                         isValid={account.is_valid}
                         classes={{ avatar: classes.avatar }}
                     />
-                    <Typography className={classes.identity}>@{account.identity}</Typography>
+                    <Typography className={classes.identity}>
+                        {/* identity could mistakenly start with an `@` */}
+                        {account.identity?.startsWith('@') ? '' : '@'}
+                        {account.identity}
+                    </Typography>
                 </Box>
             ))}
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.ConnectSocialAccount)}>

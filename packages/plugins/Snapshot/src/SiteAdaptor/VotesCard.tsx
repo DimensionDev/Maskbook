@@ -104,7 +104,7 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {votes.map(function voteItemIter(v) {
+                {votes?.map(function voteItemIter(v) {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
