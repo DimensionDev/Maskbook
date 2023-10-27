@@ -18,7 +18,6 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         flex: 1,
-        maxHeight: 474,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
