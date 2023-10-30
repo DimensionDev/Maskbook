@@ -124,7 +124,7 @@ export function TipButton(props: Props) {
     useEffect(() => {
         if (disabled || !info?.actionsElement?.realCurrent) return
         info.actionsElement.realCurrent.style.flex = '1'
-    }, [disabled, info])
+    }, [disabled, info?.actionsElement?.realCurrent])
 
     if (disabled) return null
 
