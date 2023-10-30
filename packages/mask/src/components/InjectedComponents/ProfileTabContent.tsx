@@ -57,6 +57,7 @@ import Services from '#services'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: Sniffings.is_facebook_page ? 876 : 'auto',
+        color: theme.palette.maskColor.main,
     },
     container: {
         background:
