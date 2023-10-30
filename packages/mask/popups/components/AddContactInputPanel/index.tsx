@@ -32,6 +32,9 @@ const useStyles = makeStyles()((theme) => ({
     inputText: {
         fontSize: 10,
         paddingRight: '0px !important',
+        '&&::placeholder': {
+            color: theme.palette.maskColor.third,
+        },
     },
     save: {
         color: theme.palette.maskColor.main,
