@@ -20,16 +20,25 @@
             body {
                 background: #ffffff;
                 margin: 0;
-                width: 400px;
-                height: 600px;
+                min-width: 400px;
+                min-height: 600px;
             }
-            @media (prefers-color-scheme: dark) {
-                body {
-                    background: #030303;
-                }
-                .app-spinner-container {
-                    color: #ffffff;
-                }
+            .text {
+                margin: 0;
+                font-family: Helvetica;
+                font-size: 14px;
+                color: #767f8d;
+                font-weight: 400;
+                margin-top: 12px;
+                margin-bottom: 0;
+                line-height: 1.5;
+            }
+            .spinner-box {
+                padding: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
             }
             .app-spinner-container {
                 display: flex;
@@ -38,6 +47,17 @@
                 justify-content: center;
                 align-items: center;
                 overflow: hidden;
+            }
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background: #030303;
+                }
+                .app-spinner-container {
+                    color: #ffffff;
+                }
+                .text {
+                    color: rgba(255, 255, 255, 0.78);
+                }
             }
             @keyframes loadingAnimation {
                 0% {
@@ -61,15 +81,18 @@
     </head>
     <body>
         <div class="app-spinner-container" id="app-spinner">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" class="animate">
-                <g fill="currentColor">
-                    <path
-                        d="M34.5 18c0 9.113-7.387 16.5-16.5 16.5S1.5 27.113 1.5 18 8.887 1.5 18 1.5 34.5 8.887 34.5 18ZM4.8 18c0 7.29 5.91 13.2 13.2 13.2 7.29 0 13.2-5.91 13.2-13.2 0-7.29-5.91-13.2-13.2-13.2-7.29 0-13.2 5.91-13.2 13.2Z"
-                        opacity=".5" />
-                    <path
-                        d="M18 32.85c0 .911-.74 1.658-1.647 1.568A16.5 16.5 0 1 1 31.595 8.65c.517.751.218 1.76-.58 2.199-.799.439-1.794.14-2.33-.598a13.2 13.2 0 1 0-12.33 20.846c.903.114 1.645.842 1.645 1.753Z" />
-                </g>
-            </svg>
+            <div class="spinner-box">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="24" height="24" class="animate">
+                    <g fill="currentColor">
+                        <path
+                            d="M34.5 18c0 9.113-7.387 16.5-16.5 16.5S1.5 27.113 1.5 18 8.887 1.5 18 1.5 34.5 8.887 34.5 18ZM4.8 18c0 7.29 5.91 13.2 13.2 13.2 7.29 0 13.2-5.91 13.2-13.2 0-7.29-5.91-13.2-13.2-13.2-7.29 0-13.2 5.91-13.2 13.2Z"
+                            opacity=".5" />
+                        <path
+                            d="M18 32.85c0 .911-.74 1.658-1.647 1.568A16.5 16.5 0 1 1 31.595 8.65c.517.751.218 1.76-.58 2.199-.799.439-1.794.14-2.33-.598a13.2 13.2 0 1 0-12.33 20.846c.903.114 1.645.842 1.645 1.753Z" />
+                    </g>
+                </svg>
+                <p class="text">Loading</p>
+            </div>
         </div>
     </body>
 </html>
