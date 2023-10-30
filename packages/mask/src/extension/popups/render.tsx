@@ -27,6 +27,8 @@ if (navigator.userAgent.includes('Firefox')) {
         )
     }, 200)
 }
+const spinner = document.getElementById('app-spinner')
+if (spinner) spinner.remove()
 createNormalReactRoot(<Popups />)
 startPluginHost()
 
