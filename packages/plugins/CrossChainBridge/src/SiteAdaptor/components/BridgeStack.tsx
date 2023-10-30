@@ -55,7 +55,7 @@ export function BridgeStack() {
                             {bridge.name}
                             {bridge.isOfficial ? (
                                 <Typography className={classes.officialTag} component="span">
-                                    {t.official()}
+                                    Official
                                 </Typography>
                             ) : null}
                         </Typography>

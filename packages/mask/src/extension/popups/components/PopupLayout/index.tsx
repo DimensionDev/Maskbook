@@ -54,7 +54,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const PATTERNS = [PopupRoutes.Personas, PopupRoutes.Wallet, PopupRoutes.Friends, PopupRoutes.Settings]
+const PATTERNS = [
+    PopupRoutes.Personas,
+    PopupRoutes.Wallet,
+    PopupRoutes.Friends,
+    PopupRoutes.Settings,
+    PopupRoutes.SetPaymentPassword,
+]
 
 const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
 
