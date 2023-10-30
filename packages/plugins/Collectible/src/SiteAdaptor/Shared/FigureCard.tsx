@@ -38,12 +38,16 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         wordBreak: 'break-word',
         alignItems: 'center',
+        marginRight: 'auto',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     nameLgBox: {
         display: 'flex',
-        placeSelf: 'center',
         gap: 6,
         marginTop: 12,
+        alignItems: 'center',
     },
     image: {},
     fallbackImage: {
@@ -64,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        marginLeft: 7,
     },
 }))
 
@@ -104,23 +109,22 @@ export function FigureCard(props: FigureCardProps) {
                         {asset.metadata?.name ?? '-'}
                     </Typography>
                 </TextOverflowTooltip>
-                {isSpam ? (
-                    <NFTSpamBadge />
-                ) : (
-                    <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
-                        {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
-                    </IconButton>
-                )}
             </Box>
 
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>
-                        {asset.collection?.name}
-                        {asset.collection?.verified ? (
-                            <Icons.Verification style={{ transform: 'translate(4px, 5px)' }} />
-                        ) : null}
-                    </Typography>
+                    <TextOverflowTooltip title={asset.collection?.name} as={ShadowRootTooltip}>
+                        <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
+                    </TextOverflowTooltip>
+                    {asset.collection?.verified ? <Icons.Verification /> : null}
+
+                    {isSpam ? (
+                        <NFTSpamBadge ml="7px" />
+                    ) : (
+                        <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                            {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
+                        </IconButton>
+                    )}
                 </div>
             )}
         </div>

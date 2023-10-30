@@ -74,7 +74,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
-            {isSpam ? (
+            {!isSpam ? (
                 <Button variant="text" className={classes.backButton} onClick={promptReport}>
                     {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
                 </Button>
