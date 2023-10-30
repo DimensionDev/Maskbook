@@ -52,9 +52,19 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, options)
 
-    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal: options.signal }).render(
-        <PostDialogHintAtTwitter reason={reason} />,
-    )
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, {
+        signal: options.signal,
+        tag: () => {
+            // Vertical center the button when font size of Twitter is set to `large` or `very large`
+            const tag = document.createElement('span')
+            Object.assign(tag.style, {
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: '100%',
+            })
+            return tag
+        },
+    }).render(<PostDialogHintAtTwitter reason={reason} />)
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
