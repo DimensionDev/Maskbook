@@ -22,7 +22,7 @@ interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconBut
 const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : '7px',
+        padding: isMobileFacebook ? 0 : '10px',
     },
     text: {
         color: theme.palette.grey[300],
@@ -42,12 +42,12 @@ const ICON_MAP: Record<string, JSX.Element> = {
     default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
 }
 
-const EntryIconButton = memo((props: PostDialogHintUIProps) => {
+const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIProps) {
     const { t } = useMaskSharedTrans()
     const { tooltip, disableGuideTip } = props
     const { classes, cx } = useStyles(undefined, { props })
 
-    const getEntry = () => (
+    const Entry = (
         <ShadowRootTooltip
             title={t('mask_network')}
             placement={tooltip?.placement}
@@ -66,10 +66,10 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     )
 
     return disableGuideTip ? (
-        getEntry()
+        Entry
     ) : (
         <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
-            {getEntry()}
+            {Entry}
         </GuideStep>
     )
 })

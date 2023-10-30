@@ -88,7 +88,9 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
         '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
+    querySelector<E>(
+        '[aria-labelledby="modal-header"]  div[data-testid="toolBar"] [role="presentation"]:has(> div[data-testid="geoButton"])',
+    )
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
@@ -267,7 +269,7 @@ export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href
 
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
-        'div[data-testid="geoButton"]',
+        '[role="presentation"]:has(> div[data-testid="geoButton"])',
     )
 
 // nameTag dom
