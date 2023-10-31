@@ -7,18 +7,9 @@ import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderI
 import { startWatch } from '../../../utils/startWatch.js'
 import {
     searchNewTweetButtonSelector,
-    searchProfileEmptySelector,
     searchProfileTabLoseConnectionPageSelector,
     searchProfileTabPageSelector,
 } from '../utils/selector.js'
-
-function injectProfileTabContentForEmptyState(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
-    startWatch(watcher, { signal, shadowRootDelegatesFocus: false })
-    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <ProfileTabContentAtTwitter floating />,
-    )
-}
 
 function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
@@ -35,15 +26,9 @@ export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
         MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
     )
 
-    const emptyContentWatcher = new MutationObserverWatcher(searchProfileEmptySelector()).useForeach(() =>
-        MaskMessages.events.profileTabHidden.sendToLocal({ hidden: false }),
-    )
-
     startWatch(lostConnectionContentWatcher, { signal, shadowRootDelegatesFocus: false })
     startWatch(contentWatcher, { signal, shadowRootDelegatesFocus: false })
-    startWatch(emptyContentWatcher, { signal, shadowRootDelegatesFocus: false })
 
-    injectProfileTabContentForEmptyState(signal)
     injectProfileTabContentState(signal)
 }
 
