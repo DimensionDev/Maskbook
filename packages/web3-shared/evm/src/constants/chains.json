@@ -476,11 +476,11 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/avalanchec/info/logo.png/quality=85"
         },
-        "infoURL": "https://snowtrace.io/",
+        "infoURL": "https://snowtrace.dev/",
         "explorers": [
             {
                 "name": "snowtrace",
-                "url": "https://snowtrace.io/",
+                "url": "https://snowtrace.dev/",
                 "standard": "EIP3091"
             }
         ]

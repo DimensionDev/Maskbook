@@ -97,7 +97,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <EmojiAvatar address={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <MaskTextField
                 spellCheck={false}
-                placeholder={t('wallet_name_wallet')}
+                placeholder={t('name')}
                 className={classes.input}
                 value={name}
                 onChange={(ev) => {

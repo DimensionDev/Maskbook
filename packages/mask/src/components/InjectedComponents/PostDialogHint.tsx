@@ -22,7 +22,7 @@ export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | '
 const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : '7px',
+        padding: isMobileFacebook ? 0 : 'var(--icon-padding, 10px)',
     },
     text: {
         color: theme.palette.grey[300],
@@ -39,15 +39,23 @@ const useStyles = makeStyles()((theme) => ({
 
 const ICON_MAP: Record<string, JSX.Element> = {
     minds: <Icons.MaskInMinds size={18} />,
-    default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
+    default: (
+        <Icons.SharpMask
+            style={{
+                height: 'var(--icon-size, 17px)',
+                width: 'var(--icon-size, 17px)',
+            }}
+            color={MaskColors.light.maskColor.publicTwitter}
+        />
+    ),
 }
 
-const EntryIconButton = memo((props: PostDialogHintUIProps) => {
+const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIProps) {
     const { t } = useI18N()
     const { tooltip, disableGuideTip } = props
     const { classes, cx } = useStyles(undefined, { props })
 
-    const getEntry = () => (
+    const Entry = (
         <ShadowRootTooltip
             title={t('mask_network')}
             placement={tooltip?.placement}
@@ -66,10 +74,10 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     )
 
     return disableGuideTip ? (
-        getEntry()
+        Entry
     ) : (
         <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
-            {getEntry()}
+            {Entry}
         </GuideStep>
     )
 })
