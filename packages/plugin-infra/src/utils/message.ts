@@ -23,7 +23,7 @@ export let getPluginMessage = <T>(pluginID: string, type?: typeof DOMAIN_RPC): P
 }
 
 export function __workaround__replaceImplementationOfCreatePluginMessage__(
-    newImpl: <T>(pluginID: string) => PluginMessageEmitter<any>,
+    newImpl: (pluginID: string) => PluginMessageEmitter<any>,
 ) {
     getPluginMessage = newImpl
 }
