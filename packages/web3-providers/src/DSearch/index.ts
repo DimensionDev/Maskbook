@@ -232,14 +232,13 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 this.CoinGeckoClient.get(),
                 this.CoinMarketCapClient.get(),
             ])
-        ).flatMap(
-            (v) =>
-                (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
-                    | FungibleTokenResult<ChainId, SchemaType>
-                    | NonFungibleTokenResult<ChainId, SchemaType>
-                    | NonFungibleCollectionResult<ChainId, SchemaType>
-                >,
-        )
+        ).flatMap((v) => {
+            return (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                | FungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleTokenResult<ChainId, SchemaType>
+                | NonFungibleCollectionResult<ChainId, SchemaType>
+            >
+        })
 
         return {
             specificTokens,
@@ -251,23 +250,25 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         const { specificTokens, normalTokens } = await this.searchTokens()
 
         const specificTokensFiltered = specificTokens
-            .filter(
-                (x) =>
+            .filter((x) => {
+                return (
                     isSameAddress(address, x.address) &&
                     (x.type === SearchResultType.FungibleToken ||
                         x.type === SearchResultType.NonFungibleToken ||
-                        x.type === SearchResultType.CollectionListByTwitterHandler),
-            )
+                        x.type === SearchResultType.CollectionListByTwitterHandle)
+                )
+            })
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         const normalTokensFiltered = normalTokens
-            .filter(
-                (x) =>
+            .filter((x) => {
+                return (
                     isSameAddress(address, x.address) &&
                     (x.type === SearchResultType.FungibleToken ||
                         x.type === SearchResultType.NonFungibleToken ||
-                        x.type === SearchResultType.CollectionListByTwitterHandler),
-            )
+                        x.type === SearchResultType.CollectionListByTwitterHandle)
+                )
+            })
             .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
 
         if (specificTokensFiltered.length > 0) return [specificTokensFiltered[0]]
@@ -341,8 +342,8 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                                 | NonFungibleTokenResult<ChainId, SchemaType>
                                 | NonFungibleCollectionResult<ChainId, SchemaType>
                             >(name, filtered)
-                            ?.map((x) => ({ ...x, keyword: name }))
-                        if (items?.length) result = [...result, ...items]
+                            .map((x) => ({ ...x, keyword: name }))
+                        if (items.length) result = [...result, ...items]
                     }
                 }
             }
@@ -383,8 +384,8 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
     }
 
-    private async searchCollectionListByTwitterHandler(
-        twitterHandler: string,
+    private async searchCollectionListByTwitterHandle(
+        twitterHandle: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const collections = uniqWith(
             (
@@ -401,14 +402,13 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                         >,
                 )
                 .filter((x) => {
-                    const resultTwitterHandler =
+                    const resultTwitterHandle =
                         (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
                         (x as FungibleTokenResult<ChainId, SchemaType>).socialLinks?.twitter
+                    if (!resultTwitterHandle) return false
+                    const handle = twitterHandle.toLowerCase()
                     return (
-                        resultTwitterHandler &&
-                        [twitterHandler.toLowerCase(), `https://twitter.com/${twitterHandler.toLowerCase()}`].includes(
-                            resultTwitterHandler.toLowerCase(),
-                        ) &&
+                        [handle, `https://twitter.com/${handle}`].includes(resultTwitterHandle.toLowerCase()) &&
                         ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                     )
                 })
@@ -443,8 +443,8 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         const [_, name = ''] = keyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
-        if (type === SearchResultType.CollectionListByTwitterHandler)
-            return this.searchCollectionListByTwitterHandler(keyword) as Promise<T[]>
+        if (type === SearchResultType.CollectionListByTwitterHandle)
+            return this.searchCollectionListByTwitterHandle(keyword) as Promise<T[]>
 
         // token:MASK
         const { word, field } = this.parseKeyword(keyword)
