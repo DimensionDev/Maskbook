@@ -1,5 +1,10 @@
 import { Icons } from '@masknet/icons'
 import {
+    PostInfoContext,
+    useCurrentVisitingIdentity,
+    useSocialIdentityByUserId,
+} from '@masknet/plugin-infra/content-script'
+import {
     EMPTY_LIST,
     NetworkPluginID,
     SocialAddressType,
@@ -9,15 +14,11 @@ import {
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler, useContext } from 'react'
+import { useCallback, useContext, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
+import { useLocation } from 'react-use'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
-import {
-    PostInfoContext,
-    useCurrentVisitingIdentity,
-    useSocialIdentityByUserId,
-} from '@masknet/plugin-infra/content-script'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
@@ -121,10 +122,11 @@ export function TipButton(props: Props) {
         })
     }, [recipient, receiverUserId, accounts])
 
+    const location = useLocation()
     useEffect(() => {
         if (disabled || !info?.actionsElement?.realCurrent) return
         info.actionsElement.realCurrent.style.flex = '1'
-    }, [disabled, info?.actionsElement?.realCurrent])
+    }, [disabled, info?.actionsElement?.realCurrent, location.pathname])
 
     if (disabled) return null
 

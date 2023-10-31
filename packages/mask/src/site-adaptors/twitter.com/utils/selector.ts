@@ -159,8 +159,8 @@ export const postsContentSelector = () =>
     querySelectorAll(
         [
             // tweets on timeline page
-            '[data-testid="tweet"] div + div div[lang]',
-            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]',
+            '[data-testid="tweet"] [data-testid="tweetText"]',
+            '[data-testid="tweet"]:not(:has([data-testid="tweetText"])) [data-testid="tweetPhoto"]', // tweets with only image.
 
             // tweets on detailed page
             '[data-testid="tweet"] + div > div:first-child div[lang]',
@@ -170,9 +170,6 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] [aria-labelledby] div[role="link"] div[lang]',
             // quoted tweets in detail page
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
-
-            // reply-tweets
-            '[data-testid="tweet"] + div div div[lang][dir]',
         ].join(','),
     )
 
