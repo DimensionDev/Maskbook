@@ -1,16 +1,17 @@
-import { useCallback } from 'react'
-import { alpha } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { makeTypedMessageText } from '@masknet/typed-message'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages, sayHelloShowed } from '@masknet/shared-base'
-import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
-import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeTypedMessageText } from '@masknet/typed-message'
+import { alpha } from '@mui/material'
+import { clamp } from 'lodash-es'
+import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { twitterBase } from '../base.js'
 import { useI18N } from '../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
+import { twitterBase } from '../base.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
+import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -48,7 +49,11 @@ export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     )
 }
 
-function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T, true>, options: WatchOptions) {
+function renderPostDialogHintTo<T extends HTMLElement>(
+    reason: 'timeline' | 'popup',
+    ls: LiveSelector<T, true>,
+    options: WatchOptions,
+) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, options)
 
@@ -62,6 +67,13 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
                 alignItems: 'center',
                 height: '100%',
             })
+            const svgIcon = document.querySelector('[data-testid="geoButton"] svg')
+            const size = svgIcon ? clamp(svgIcon.getBoundingClientRect().width, 18, 24) : undefined
+            const geoButton = document.querySelector('[data-testid="geoButton"]')
+            const padding = geoButton && size ? (geoButton.getBoundingClientRect().width - size) / 2 : undefined
+            if (padding) tag.style.setProperty('--icon-padding', `${padding}px`)
+            if (size) tag.style.setProperty('--icon-size', `${size}px`)
+
             return tag
         },
     }).render(<PostDialogHintAtTwitter reason={reason} />)
