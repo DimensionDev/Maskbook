@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { useAsync } from 'react-use'
 import { ListItem, List, Typography, Link } from '@mui/material'
-import { TokenIcon, ChainBoundary } from '@masknet/shared'
+import { TokenIcon, ChainBoundary, LoadingStatus, EmptyStatus } from '@masknet/shared'
 import { type ChainId, type NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, parseColor } from '@masknet/theme'
@@ -22,11 +21,14 @@ import {
     type NonFungibleCollection,
 } from '@masknet/web3-shared-base'
 import { useApprovalTrans } from '../locales/index.js'
-import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
-import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
+        statusBox: {
+            height: '100%',
+            boxSizing: 'border-box',
+        },
         approvalContentWrapper: {
             flexGrow: 1,
             width: 565,
@@ -150,10 +152,10 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 )
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
+    const t = useApprovalTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: spenderList, loading } = useAsync(
-        async () => Hub.getNonFungibleTokenSpenders(chainId, account),
-        [chainId, account],
+    const { data: spenders, isLoading } = useQuery(['non-fungible-tokens', 'spenders', chainId, account], async () =>
+        Hub.getNonFungibleTokenSpenders(chainId, account),
     )
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -167,13 +169,18 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
         account,
     })
 
-    if (loading) return <ApprovalLoadingContent />
+    if (isLoading) return <LoadingStatus iconSize={36} className={classes.statusBox} />
 
-    if (!spenderList || spenderList.length === 0) return <ApprovalEmptyContent />
+    if (!spenders || spenders.length === 0)
+        return (
+            <EmptyStatus iconSize={36} className={classes.statusBox}>
+                {t.no_approved_contract_records()}
+            </EmptyStatus>
+        )
 
     return (
         <List className={classes.approvalContentWrapper}>
-            {spenderList.map((spender, i) => (
+            {spenders.map((spender, i) => (
                 <ApprovalNFTItem
                     key={i}
                     spender={spender}
