@@ -1,6 +1,6 @@
 import Services from '#services'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 
 const { fetch: original_fetch } = globalThis
 

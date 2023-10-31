@@ -18,7 +18,7 @@ import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { META_KEY_3, RoutePaths } from '../../../constants.js'
 import { digest, makeFileKey } from '../../../helpers.js'
 import type { FileInfo, Provider } from '../../../types.js'
-import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../../Worker/rpc.js'
+import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../rpc.js'
 
 interface UploadState {
     progress: number

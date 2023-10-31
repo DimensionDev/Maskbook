@@ -130,12 +130,9 @@ if (typeof SharedWorker === 'function') {
         cache.set(domain, emitter)
         return emitter
     }
-    __workaround__replaceImplementationOfCreatePluginMessage__(function (
-        pluginID: string,
-        serializer: Serialization | undefined,
-    ): PluginMessageEmitter<unknown> {
-        return createEmitter('plugin:' + pluginID, serializer)
-    })
+    __workaround__replaceImplementationOfCreatePluginMessage__((pluginID: string) =>
+        createEmitter('plugin:' + pluginID, serializer),
+    )
     __workaround__replaceImplementationOfCrossIsolationMessage__(createEmitter('cross-isolation', undefined))
     __workaround__replaceImplementationOfMaskMessage__(createEmitter('mask', serializer))
 }

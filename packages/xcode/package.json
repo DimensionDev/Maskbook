@@ -1,4 +1,6 @@
 {
     "name": "@masknet/mask-xcode",
-    "private": true
+    "private": true,
+    "type": "module",
+    "sideEffects": false
 }

@@ -106,10 +106,7 @@ function createEmitter(domain: string, serializer: Serialization | undefined): P
     cache.set(domain, emitter)
     return emitter
 }
-__workaround__replaceImplementationOfCreatePluginMessage__(function (
-    pluginID: string,
-    serializer: Serialization | undefined,
-): PluginMessageEmitter<unknown> {
+__workaround__replaceImplementationOfCreatePluginMessage__(function (pluginID: string): PluginMessageEmitter<unknown> {
     return createEmitter('plugin:' + pluginID, serializer)
 })
 __workaround__replaceImplementationOfCrossIsolationMessage__(createEmitter('cross-isolation', undefined))

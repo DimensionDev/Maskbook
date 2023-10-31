@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-infra",
   "private": true,
+  "sideEffects": false,
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "exports": {
@@ -58,7 +59,6 @@
     }
   },
   "dependencies": {
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/encryption": "workspace:^",
     "@masknet/flags": "workspace:^",
     "@masknet/public-api": "workspace:^",
@@ -68,12 +68,10 @@
     "@masknet/typed-message": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "@masknet/web3-shared-evm": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "async-call-rpc": "^6.3.1",
     "react-use": "^17.4.0",
-    "use-subscription": "^1.8.0",
-    "web3-core-helpers": "1.10.2"
+    "use-subscription": "^1.8.0"
   }
 }

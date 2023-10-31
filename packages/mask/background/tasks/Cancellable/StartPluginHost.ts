@@ -12,7 +12,7 @@ function createWorkerContext(
     pluginID: string,
     def: Plugin.Worker.Definition,
     signal: AbortSignal,
-): Plugin.Worker.WorkerContext {
+): Plugin.__Host.WorkerContext {
     let storage: Plugin.Worker.DatabaseStorage<any> = undefined!
 
     return {

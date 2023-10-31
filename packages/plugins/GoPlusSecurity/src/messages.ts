@@ -1,4 +1,4 @@
-import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
+import { getPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants.js'
 
@@ -29,6 +29,6 @@ export interface PluginGoPlusSecurityMessage {
     rpc: unknown
 }
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 export const PluginGoPlusSecurityMessages: PluginMessageEmitter<PluginGoPlusSecurityMessage> =
-    createPluginMessage(PLUGIN_ID)
+    getPluginMessage(PLUGIN_ID)

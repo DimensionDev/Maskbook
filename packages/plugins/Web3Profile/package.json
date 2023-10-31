@@ -1,6 +1,7 @@
 {
     "name": "@masknet/plugin-web3-profile",
     "private": true,
+    "sideEffects": ["./src/register.ts"],
     "type": "module",
     "exports": {
         ".": {

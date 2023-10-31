@@ -5,7 +5,7 @@ import AnimatePic from './Animate.js'
 import { PetDialog } from './PetDialog.js'
 
 export const PetsGlobalInjection = memo(function PetsGlobalInjection() {
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
     return (
         <>
             <AnimatePic />

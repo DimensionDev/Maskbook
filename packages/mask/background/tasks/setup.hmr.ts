@@ -5,4 +5,4 @@ import './Cancellable/SettingsListener.js'
 import './Cancellable/StartPluginHost.js'
 import './Cancellable/StartSandboxedPluginHost.js'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()

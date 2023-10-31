@@ -990,9 +990,6 @@ importers:
 
   packages/plugin-infra:
     dependencies:
-      '@dimensiondev/mask-wallet-core':
-        specifier: 0.1.0-20211013082857-eb62e5f
-        version: 0.1.0-20211013082857-eb62e5f(protobufjs@6.11.4)
       '@masknet/encryption':
         specifier: workspace:^
         version: link:../encryption
@@ -1020,9 +1017,6 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../web3-shared/evm
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
@@ -1038,9 +1032,6 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-0a360642d-20230711)
-      web3-core-helpers:
-        specifier: 1.10.2
-        version: 1.10.2
 
   packages/plugins/Approval:
     dependencies:

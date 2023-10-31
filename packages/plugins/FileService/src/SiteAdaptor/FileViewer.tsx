@@ -4,7 +4,7 @@ import type { FileInfo } from '../types.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { DisplayingFileList } from './components/FileList.js'
 import { useCallback } from 'react'
-import { PluginFileServiceRPC } from '../Worker/rpc.js'
+import { PluginFileServiceRPC } from './rpc.js'
 import { downloadFile } from '../helpers.js'
 import { useFileServiceTrans } from '../locales/i18n_generated.js'
 

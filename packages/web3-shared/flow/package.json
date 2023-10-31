@@ -1,6 +1,7 @@
 {
   "name": "@masknet/web3-shared-flow",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {

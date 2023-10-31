@@ -7,7 +7,7 @@ import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../helpers/index.js'
-import { ZeroX } from '../providers/index.js'
+import { ZeroX } from '../providers/ZeroX.js'
 
 export function useZeroX(
     inputAmount_: string,

@@ -1,4 +1,4 @@
-import type { Proposal, VoteSuccess, Strategy } from '../../types.js'
+import type { Proposal, VoteSuccess, Strategy } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export async function fetchProposal(id: string) {
@@ -28,17 +28,17 @@ async function fetchVotesFromGraphql(id: string, first: number, skip: number, sp
         body: JSON.stringify({
             operationName: 'Votes',
             query: `query Votes(
-                $id: String!, 
-                $first: Int, 
-                $skip: Int, 
-                $orderBy: String, 
-                $orderDirection: OrderDirection, 
-                $voter: String, 
+                $id: String!,
+                $first: Int,
+                $skip: Int,
+                $orderBy: String,
+                $orderDirection: OrderDirection,
+                $voter: String,
                 $space: String
             ) {
                 votes(
                     first: $first
-                    skip: $skip                    
+                    skip: $skip
                     where: {proposal: $id, vp_gt: 0, voter: $voter, space: $space}
                     orderBy: $orderBy
                     orderDirection: $orderDirection

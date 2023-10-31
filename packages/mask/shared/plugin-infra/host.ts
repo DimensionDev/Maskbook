@@ -2,8 +2,14 @@
 import './register.js'
 import { Emitter } from '@servie/events'
 import type { Plugin } from '@masknet/plugin-infra'
-import { type BooleanPreference, MaskMessages, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
-import { InMemoryStorages, PersistentStorages } from '../index.js'
+import {
+    type BooleanPreference,
+    MaskMessages,
+    createI18NBundle,
+    i18NextInstance,
+    InMemoryStorages,
+    PersistentStorages,
+} from '@masknet/shared-base'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {

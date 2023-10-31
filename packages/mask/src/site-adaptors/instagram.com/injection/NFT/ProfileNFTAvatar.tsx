@@ -5,7 +5,8 @@ import { MaskMessages } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
-import { attachReactTreeWithContainer, useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {

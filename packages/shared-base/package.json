@@ -3,6 +3,7 @@
   "description": "This package MUST be pure (have no side effects when imported).",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -33,6 +34,5 @@
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"
-  },
-  "sideEffects": false
+  }
 }

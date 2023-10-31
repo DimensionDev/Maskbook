@@ -2,6 +2,7 @@
   "name": "@masknet/web3-shared-solana",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.js",

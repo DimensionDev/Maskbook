@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
+import { MaskMessages, NetworkPluginID, InMemoryStorages } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     searchFacebookAvatarListSelector,
@@ -19,7 +19,6 @@ import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
-import { InMemoryStorages } from '../../../../../shared/index.js'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
     if (!isMobileFacebook) {

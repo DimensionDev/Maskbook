@@ -1,37 +1,31 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { PluginMessageEmitterItem } from '@masknet/plugin-infra'
-import type { Serialization } from 'async-call-rpc/base'
+import { serializer } from '@masknet/shared-base'
 
+/** @internal */
+export const DOMAIN_RPC = Symbol('create RPC instead of normal message')
 /**
  * Create a plugin message emitter
  * @param pluginID The plugin ID
  *
  * @example
- * export const MyPluginMessage = createPluginMessage(PLUGIN_ID)
+ * export const MyPluginMessage = getPluginMessage(PLUGIN_ID)
  */
-export let createPluginMessage = <T = DefaultPluginMessage>(
-    pluginID: string,
-    serializer?: Serialization,
-): PluginMessageEmitter<T> => {
-    const domain = '@plugin/' + pluginID
+export let getPluginMessage = <T>(pluginID: string, type?: typeof DOMAIN_RPC): PluginMessageEmitter<T> => {
+    const domain = (type === DOMAIN_RPC ? '@plugin-rpc/' : '@plugin/') + pluginID
     if (cache.has(domain)) return cache.get(domain) as any
 
     const messageCenter = new WebExtensionMessage<T>({ domain })
     const events = messageCenter.events
-    if (serializer) messageCenter.serialization = serializer
+    messageCenter.serialization = serializer
     cache.set(domain, events)
     return events
 }
 
 export function __workaround__replaceImplementationOfCreatePluginMessage__(
-    newImpl: (pluginID: string, serializer?: Serialization | undefined) => PluginMessageEmitter<unknown>,
+    newImpl: <T>(pluginID: string) => PluginMessageEmitter<any>,
 ) {
-    createPluginMessage = newImpl as any
-}
-
-export interface DefaultPluginMessage {
-    /** This one is for plugin RPC */
-    rpc: unknown
+    getPluginMessage = newImpl
 }
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }
 const cache = new Map<string, PluginMessageEmitter<unknown>>()

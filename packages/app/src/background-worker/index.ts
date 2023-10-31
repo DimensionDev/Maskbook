@@ -22,7 +22,7 @@ startPluginWorker({
     },
     createContext(pluginID, def, signal) {
         let storage: Plugin.Worker.DatabaseStorage<any> = undefined!
-        const context: Plugin.Worker.WorkerContext = {
+        const context: Plugin.__Host.WorkerContext = {
             createKVStorage(type, defaultValues) {
                 if (type === 'memory') return inMemoryStorage(pluginID, defaultValues, signal)
                 else return indexedDBStorage(pluginID, defaultValues, signal)

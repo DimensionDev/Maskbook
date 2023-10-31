@@ -35,7 +35,7 @@ function AnimatePic() {
 
     useEffect(() => {
         const refreshHandle = async (data: number) => setRefresh(data)
-        PluginPetMessages.events.setResult.on(refreshHandle)
+        PluginPetMessages.setResult.on(refreshHandle)
         let count = 0
         const timer = setInterval(() => {
             const check = count % 9 < 5
@@ -44,7 +44,7 @@ function AnimatePic() {
         }, 1000)
         return () => {
             clearInterval(timer)
-            PluginPetMessages.events.setResult.off(refreshHandle)
+            PluginPetMessages.setResult.off(refreshHandle)
         }
     }, [])
     if (!petShow || !visitor.userId || visitor.userId === '$unknown' || !showMeta?.image) return null

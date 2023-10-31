@@ -348,11 +348,11 @@ async function addHTMLEntry({
     gun?: boolean
     perf: boolean
 }) {
-    let template = await (options.filename === 'popups.html' ? popupTemplateContent : templateContent)
+    let template = await (options.filename === 'popups.html' && !perf ? popupTemplateContent : templateContent)
     if (gun) template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
     if (perf) template = template.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
     return new HTMLPlugin({
-        templateContent: options.filename === 'popups.html' ? popupTemplateContent : templateContent,
+        templateContent: template,
         inject: 'body',
         scriptLoading: 'defer',
         minify: false,

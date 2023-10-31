@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-go-plus-security",
   "private": true,
+  "sideEffects": ["./src/register.ts"],
   "type": "module",
   "exports": {
     ".": {

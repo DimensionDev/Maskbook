@@ -1,5 +1,5 @@
 import { startPluginHostExtensionPage } from '@masknet/plugin-infra/extension-page'
-import { createNormalReactRoot } from '../../utils/index.js'
+import { createNormalReactRoot } from '../../../shared-ui/utils/createNormalReactRoot.js'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
 import Services from '#services'
 import Popups from './UI.js'

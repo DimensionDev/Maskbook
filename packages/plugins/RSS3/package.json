@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-rss3",
   "private": true,
+  "sideEffects": ["./src/register.ts"],
   "type": "module",
   "exports": {
     ".": {

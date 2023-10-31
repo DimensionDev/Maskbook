@@ -22,7 +22,7 @@ import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { OPENOCEAN_BASE_URL, OPENOCEAN_SUPPORTED_CHAINS } from '../constants/index.js'
 import type { SwapOOData, SwapOORequest } from '../types/index.js'
 
-export class OpenOceanAPI implements TraderAPI.Provider {
+class OpenOceanAPI implements TraderAPI.Provider {
     public provider = TradeProvider.OPENOCEAN
 
     async swapOO(request: SwapOORequest) {
@@ -222,3 +222,4 @@ export class OpenOceanAPI implements TraderAPI.Provider {
         return Web3Readonly.estimateTransaction(config, 0, { chainId })
     }
 }
+export const OpenOcean = new OpenOceanAPI()

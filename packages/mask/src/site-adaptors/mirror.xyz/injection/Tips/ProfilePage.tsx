@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
 import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { attachReactTreeWithContainer } from '../../../../utils/index.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { querySelector } from '../../utils/selectors.js'
 import { TipsButtonWrapper } from './TipsButtonWrapper.js'
