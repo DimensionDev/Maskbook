@@ -22,7 +22,7 @@ interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconBut
 const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : '10px',
+        padding: isMobileFacebook ? 0 : 'var(--icon-padding, 10px)',
     },
     text: {
         color: theme.palette.grey[300],
@@ -39,7 +39,15 @@ const useStyles = makeStyles()((theme) => ({
 
 const ICON_MAP: Record<string, JSX.Element> = {
     minds: <Icons.MaskInMinds size={18} />,
-    default: <Icons.SharpMask size={17} color={MaskColors.light.maskColor.publicTwitter} />,
+    default: (
+        <Icons.SharpMask
+            style={{
+                height: 'var(--icon-size, 17px)',
+                width: 'var(--icon-size, 17px)',
+            }}
+            color={MaskColors.light.maskColor.publicTwitter}
+        />
+    ),
 }
 
 const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIProps) {
