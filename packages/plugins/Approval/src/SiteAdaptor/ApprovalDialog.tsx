@@ -88,7 +88,7 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
                 onClose={onClose}
                 classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
                 titleTabs={
-                    <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                    <MaskTabList variant="base" onChange={onChange}>
                         <Tab label={t.tokens()} value={Tabs.tokens} />
                         <Tab label={t.collectibles()} value={Tabs.collectibles} />
                     </MaskTabList>
@@ -105,9 +105,7 @@ interface ApprovalWrapperProps {
     tab: Tabs
 }
 
-function ApprovalWrapper(props: ApprovalWrapperProps) {
-    const { tab } = props
-
+function ApprovalWrapper({ tab }: ApprovalWrapperProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const chainIdList = useMemo(() => {
