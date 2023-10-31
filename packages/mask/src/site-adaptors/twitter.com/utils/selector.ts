@@ -178,7 +178,8 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
 
             // reply-tweets
-            '[data-testid="tweet"] + div div div[lang][dir]',
+            '[data-testid="tweet"] div div[lang][dir]',
+            '[data-testid="tweet"] [data-testid="tweetPhoto"]',
         ].join(','),
     )
 
