@@ -48,7 +48,7 @@ export interface PluginCardFrameMiniProps {
 
 export function PluginCardFrameMini({ icon, title, provider, providerLink, children }: PluginCardFrameMiniProps) {
     const t = useSharedI18N()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     const PluginName = useMemo(() => {
         return (
@@ -84,7 +84,11 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
                 </Stack>
             </Stack>
             <Stack flex={1} justifyContent="center" alignItems="center" p={1.5}>
-                {children ?? <LoadingStatus iconSize={24}>{t.plugin_card_frame_loading()}</LoadingStatus>}
+                {children ?? (
+                    <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
+                        {t.plugin_card_frame_loading()}
+                    </LoadingStatus>
+                )}
             </Stack>
         </Stack>
     )
