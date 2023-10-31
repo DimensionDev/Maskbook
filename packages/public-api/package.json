@@ -1,6 +1,7 @@
 {
   "name": "@masknet/public-api",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {

@@ -7,7 +7,7 @@ import {
 } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
 import { SiteUIProvider } from '@masknet/shared'
-import { ShadowRootAttachPointRoot } from '../../ShadowRootAttachPointRoot.js'
+import { ShadowRootAttachPointRoot } from './ShadowRootAttachPointRoot.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
     'paste',

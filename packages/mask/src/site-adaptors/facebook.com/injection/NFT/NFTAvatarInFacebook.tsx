@@ -8,11 +8,10 @@ import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '
 import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useWallet } from '@masknet/plugin-avatar'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
-import { type NFTAvatarEvent, NetworkPluginID, MaskMessages } from '@masknet/shared-base'
+import { type NFTAvatarEvent, NetworkPluginID, MaskMessages, InMemoryStorages } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
 import { isMobileFacebook } from '../../utils/isMobile.js'
-import { InMemoryStorages } from '../../../../../shared/index.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {

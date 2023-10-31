@@ -14,8 +14,8 @@ import {
 } from './Files/index.js'
 import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
-import { PluginFileServiceRPC } from '../../Worker/rpc.js'
-import { ConfirmModal, RenameModal } from '../modals/index.js'
+import { PluginFileServiceRPC } from '../rpc.js'
+import { ConfirmModal, RenameModal } from '../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

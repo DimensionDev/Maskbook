@@ -8,7 +8,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { Web3 } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
-import { Bancor } from '../../providers/index.js'
+import { Bancor } from '../../providers/Bancor.js'
 import type { SwapBancorRequest } from '../../types/index.js'
 
 export function useTradeCallback(

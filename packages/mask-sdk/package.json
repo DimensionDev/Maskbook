@@ -2,6 +2,7 @@
   "name": "@masknet/sdk",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": ["./server/index.ts"],
   "type": "module",
   "exports": {
     ".": {

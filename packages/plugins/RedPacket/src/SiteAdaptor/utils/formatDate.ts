@@ -1,7 +1,7 @@
 import { i18NextInstance } from '@masknet/shared-base'
 
-export const dateTimeFormat = (date: Date, includeTime = true) =>
-    new Intl.DateTimeFormat(
+export function dateTimeFormat(date: Date, includeTime = true) {
+    return new Intl.DateTimeFormat(
         i18NextInstance.language,
         includeTime
             ? {
@@ -18,3 +18,4 @@ export const dateTimeFormat = (date: Date, includeTime = true) =>
                   day: 'numeric',
               },
     ).format(date)
+}

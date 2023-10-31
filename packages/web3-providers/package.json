@@ -1,6 +1,7 @@
 {
   "name": "@masknet/web3-providers",
   "private": true,
+  "sideEffects": ["./src/entry.ts"],
   "type": "module",
   "exports": {
     ".": {

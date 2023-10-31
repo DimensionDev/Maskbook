@@ -57,7 +57,7 @@ function getNativeTokenLabel(networkType: NetworkType) {
     }
 }
 
-export class ZeroX_API implements TraderAPI.Provider {
+class ZeroX_API implements TraderAPI.Provider {
     public provider = TradeProvider.ZRX
 
     async swapQuote(request: SwapQuoteRequest, chainId: ChainId) {
@@ -251,3 +251,4 @@ export class ZeroX_API implements TraderAPI.Provider {
         return Web3Readonly.estimateTransaction(config, 0, { chainId })
     }
 }
+export const ZeroX = new ZeroX_API()

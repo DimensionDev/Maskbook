@@ -6,7 +6,7 @@
 import * as base /* webpackDefer: true */ from '@masknet/shared-base'
 import { TelemetryID } from '../../../../shared-base/src/Telemetry/index.js'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 
 export async function getTelemetryID(): Promise<string> {
     const { telemetry_id } = await browser.storage.local.get('telemetry_id')

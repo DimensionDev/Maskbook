@@ -143,7 +143,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
         setTipVisible(true)
         onClose()
         isReady() ? setTipVisible(false) : cancel()
-        PluginPetMessages.events.setResult.sendToAll(Math.random())
+        PluginPetMessages.setResult.sendToAll(Math.random())
     }
 
     const saveHandle = async () => {

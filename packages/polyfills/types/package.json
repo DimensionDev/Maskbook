@@ -1,6 +1,7 @@
 {
   "name": "@types/masknet__global-types",
   "private": true,
+  "sideEffects": false,
   "types": "./__all.d.ts",
   "type": "module",
   "exports": {

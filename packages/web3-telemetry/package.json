@@ -2,6 +2,7 @@
   "name": "@masknet/web3-telemetry",
   "type": "module",
   "private": true,
+  "sideEffects": ["./src/providers/index.ts"],
   "exports": {
     ".": {
       "types": "./dist/entry.d.ts",

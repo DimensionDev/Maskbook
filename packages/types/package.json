@@ -1,6 +1,7 @@
 {
   "name": "@masknet/types",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {

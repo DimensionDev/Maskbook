@@ -2,6 +2,7 @@
   "name": "@masknet/cli",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "bin": {
     "build": "./src/bin/build.mjs",

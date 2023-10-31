@@ -1,6 +1,7 @@
 {
     "name": "@masknet/plugin-smart-pay",
     "private": true,
+    "sideEffects": ["./src/register.ts"],
     "type": "module",
     "exports": {
         ".": {

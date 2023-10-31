@@ -55,7 +55,7 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
         }
         await this.bindRPC(instance, rpc, rpcGenerator)
         if (background) await runtime.imports(getURL(id, background, isLocal))
-        await this.startRPC(instance, !!rpc, !!rpcGenerator)
+        await this.startService(instance, !!rpc, !!rpcGenerator)
         return instance
     }
 
@@ -71,7 +71,7 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
             })
         instance.runtime.addReExportModule('@masknet/plugin/utils/rpc', ...rpcReExports)
     }
-    private async startRPC(instance: BackgroundInstance, hasRPC: boolean, hasRPCGenerator: boolean) {
+    private async startService(instance: BackgroundInstance, hasRPC: boolean, hasRPCGenerator: boolean) {
         const rpcReExport = await instance.runtime.imports('@masknet/plugin/utils/rpc')
         if (hasRPC) {
             AsyncCall(rpcReExport.worker, {

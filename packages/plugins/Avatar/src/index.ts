@@ -1,4 +1,4 @@
-export * from './SiteAdaptor/index.js'
+export * from './SiteAdaptor/exports.js'
 export * from './types.js'
 export * from './constants.js'
 export * from './utils/index.js'

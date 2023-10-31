@@ -1,65 +1,16 @@
-// key = channel; value = local implementation
-const RPCCache = new WeakMap<object, object>()
+const cache = new WeakMap<object, object>()
 /**
- * This function provides a localImplementation that is HMR ready.
- * To update, call this function with the SAME CHANNEL object.
- * It will "clone" all methods that impl returns.
- * @param isBackground If the current environment is background.
- * @param name The name of the local implementation, used for logging
+ * This function provides a localImplementation that has HMR support.
+ * To update, call this function with the SAME key object.
  * @param impl The implementation. Can be an async function.
- * @param ref The reference object that must be the same if you're updating.
+ * @param key The reference object that must be the same if you're updating.
  */
-export async function getLocalImplementation<T extends object>(
-    isBackground: boolean,
-    name: string,
-    impl: () => T | Promise<T>,
-    ref: object,
-) {
-    if (!isBackground) return {} as T
-
-    const isUpdate = RPCCache.has(ref)
-    const localImpl: T = RPCCache.get(ref) || ({} as any)
-    RPCCache.set(ref, localImpl)
+export async function getOrUpdateLocalImplementationHMR<T extends object>(impl: () => T | Promise<T>, key: object) {
+    if (!import.meta.webpackHot) return impl()
 
     const result: any = await impl()
-    for (const key of Object.keys(localImpl) as Array<keyof T & string>) {
-        if (!Reflect.has(result, key)) {
-            delete localImpl[key]
-            isUpdate && console.log(`[HMR] ${name}.${key} removed.`)
-        } else if (result[key] !== localImpl[key]) {
-            isUpdate && console.log(`[HMR] ${name}.${key} updated.`)
-        }
-    }
-    for (const key of Object.keys(result)) {
-        if (!Reflect.has(localImpl, key)) isUpdate && console.log(`[HMR] ${name}.${key} added.`)
-        Object.defineProperty(localImpl, key, { configurable: true, enumerable: true, value: result[key] })
-    }
+    if (!cache.has(key)) cache.set(key, Object.create(null))
+    const localImpl = cache.get(key)
+    Object.setPrototypeOf(localImpl, result)
     return localImpl
-}
-
-export async function getLocalImplementationExotic<T extends object>(
-    isBackground: boolean,
-    name: string,
-    impl: () => T | Promise<T>,
-    ref: object,
-) {
-    if (!isBackground) return {}
-
-    RPCCache.set(ref, await impl())
-    return new Proxy(
-        {},
-        {
-            get(_, key) {
-                if (key === 'then') return
-                const target = RPCCache.get(ref)
-                if (!target) return undefined
-                return Reflect.get(target, key)
-            },
-            getOwnPropertyDescriptor(_, key) {
-                const target = RPCCache.get(ref)
-                if (!target) return undefined
-                return Reflect.getOwnPropertyDescriptor(target, key)
-            },
-        },
-    )
 }

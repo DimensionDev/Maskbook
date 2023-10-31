@@ -26,3 +26,4 @@ export { buildSPA } from './projects/app.js'
 
 // Linter
 export { fixPluginsTSConfig } from './linter/plugin-projects.js'
+export { lintPackageJson as lintSideEffects } from './linter/package-json.js'

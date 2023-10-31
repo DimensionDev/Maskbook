@@ -7,7 +7,7 @@ import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { getEVMAvailableTraderProviders } from '../helpers/index.js'
-import { OpenOcean } from '../providers/index.js'
+import { OpenOcean } from '../providers/OpenOcean.js'
 
 export function useOpenOcean(
     inputAmount_: string,

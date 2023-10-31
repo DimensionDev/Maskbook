@@ -2,6 +2,7 @@
   "name": "@masknet/serializer",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "main": "./index.js",
   "type": "module",
   "dependencies": {

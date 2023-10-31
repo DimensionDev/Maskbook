@@ -1,4 +1,4 @@
-import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
+import { getPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
 type DialogUpdated = {
@@ -27,4 +27,4 @@ interface DebuggerMessages {
     widgetDialogUpdated: DialogUpdated
 }
 
-export const PluginDebuggerMessages: PluginMessageEmitter<DebuggerMessages> = createPluginMessage(PLUGIN_ID)
+export const PluginDebuggerMessages: PluginMessageEmitter<DebuggerMessages> = getPluginMessage(PLUGIN_ID)

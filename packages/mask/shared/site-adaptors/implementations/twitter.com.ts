@@ -3,7 +3,7 @@ import { EnhanceableSite } from '@masknet/shared-base'
 import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const TwitterAdaptor: SiteAdaptor.Definition = {
