@@ -5,6 +5,7 @@ import { ROOT_PATH } from '../utils/paths.js'
 const pattern = 'packages/**/package.json'
 export async function lintPackageJson() {
     const { glob } = await import('glob')
+    /* cspell:disable-next-line */
     const filePaths = await glob(pattern, { cwd: ROOT_PATH, nodir: true, ignore: ['**/node_modules/**'] })
 
     const sideEffects: string[] = []
