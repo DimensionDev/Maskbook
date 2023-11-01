@@ -100,7 +100,7 @@ export class WalletConnectProvider
 
         const connected = await this.client.client?.connect({
             requiredNamespaces: {
-                eip155: editor.eip155Namespace,
+                eip155: editor.proposalNamespace,
             },
         })
         if (!connected) throw new Error('Failed to create connection.')
