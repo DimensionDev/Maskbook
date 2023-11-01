@@ -310,8 +310,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: withReactDevTools(join(__dirname, '../dashboard/index.ts')),
-        popups: withReactDevTools(join(__dirname, '../src/extension/popups/entry.ts')),
-        contentScript: withReactDevTools(join(__dirname, '../src/content-script.ts')),
+        popups: withReactDevTools(join(__dirname, '../popups/index.ts')),
+        contentScript: withReactDevTools(join(__dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
