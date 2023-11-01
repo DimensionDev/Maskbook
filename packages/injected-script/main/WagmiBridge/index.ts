@@ -9,7 +9,7 @@ config.subscribe((state) => {
     console.log(state)
 })
 
-const getConnector = (providerType: string) => {
+function getConnector(providerType: string) {
     switch (providerType) {
         case 'MetaMask':
             return new MetaMaskConnector()
