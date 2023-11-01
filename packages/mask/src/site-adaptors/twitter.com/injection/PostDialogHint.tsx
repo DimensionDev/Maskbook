@@ -6,7 +6,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { alpha } from '@mui/material'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { twitterBase } from '../base.js'
@@ -81,14 +81,13 @@ function renderPostDialogHintTo<T extends HTMLElement>(
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const onHintButtonClicked = useCallback(() => {
         const content = sayHelloShowed[twitterBase.networkIdentifier].value
             ? undefined
             : makeTypedMessageText(
-                  t('setup_guide_say_hello_content') +
-                      t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
+                  t.setup_guide_say_hello_content() + t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' }),
               )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

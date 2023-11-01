@@ -5,7 +5,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { BottomDrawer } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 export type GasSettingModalOpenProps = {
     chainId: ChainId
@@ -23,7 +23,7 @@ const initGasSetting = {
 export const GasSettingModal = forwardRef<
     SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
 >(function GasSettingModal(_, ref) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
     const [gasConfig = initGasSetting, setGasConfig] = useState<GasSetting>()
@@ -39,11 +39,11 @@ export const GasSettingModal = forwardRef<
     const title = useMemo(() => {
         switch (replaceType) {
             case ReplaceType.CANCEL:
-                return t('cancel')
+                return t.cancel()
             case ReplaceType.SPEED_UP:
-                return t('speed_up')
+                return t.speed_up()
             default:
-                return t('popups_wallet_gas_fee')
+                return t.popups_wallet_gas_fee()
         }
     }, [replaceType])
 

@@ -3,7 +3,7 @@ import { SetupGuideStep } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { WizardDialog } from './WizardDialog.js'
 
 interface PinExtensionProps {
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 export function PinExtension({ onDone, onClose }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     return (
         <WizardDialog
@@ -86,25 +86,25 @@ export function PinExtension({ onDone, onClose }: PinExtensionProps) {
             }
             tip={
                 <Typography className={classes.tip} component="div">
-                    <div>{t('setup_guide_pin_tip')}</div>
+                    <div>{t.setup_guide_pin_tip()}</div>
                     <ol style={{ paddingLeft: '24px' }}>
                         <li>
-                            {t('setup_guide_pin_tip_step_click_left')}
+                            {t.setup_guide_pin_tip_step_click_left()}
                             <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
-                            {t('setup_guide_pin_tip_step_click_right')}
+                            {t.setup_guide_pin_tip_step_click_right()}
                         </li>
                         <li>
-                            {t('setup_guide_pin_tip_step_find_left')}
+                            {t.setup_guide_pin_tip_step_find_left()}
                             <Icons.Pin size={16} />
-                            {t('setup_guide_pin_tip_step_find_right')}
+                            {t.setup_guide_pin_tip_step_find_right()}
                         </li>
-                        <li>{t('setup_guide_pin_tip_successfully')}</li>
+                        <li>{t.setup_guide_pin_tip_successfully()}</li>
                     </ol>
                 </Typography>
             }
             footer={
                 <Button className={classes.button} variant="contained" onClick={onDone}>
-                    {t('start')}
+                    {t.start()}
                 </Button>
             }
             onClose={onClose}

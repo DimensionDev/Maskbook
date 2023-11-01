@@ -9,7 +9,7 @@ import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/sh
 import { Web3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 interface StyleProps {
     loading: boolean
@@ -65,7 +65,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
 }))
 
 export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectProviderModal({ ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
@@ -123,7 +123,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             if (error instanceof Error) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
-                    showSnackbar(t('popups_cancel_connect_provider'), {
+                    showSnackbar(t.popups_cancel_connect_provider(), {
                         variant: 'warning',
                     })
                     handleClose()
@@ -146,21 +146,18 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
         <ActionModal
             header={
                 providerExist
-                    ? t('popups_wait_for_provider_connect_title', { providerType })
-                    : t('popups_not_connected_third_party_wallet_title')
+                    ? t.popups_wait_for_provider_connect_title({ providerType: String(providerType) })
+                    : t.popups_not_connected_third_party_wallet_title()
             }
             keepMounted
             {...rest}
             onClose={handleClose}>
             <Typography className={classes.tips}>
                 {isTimeout
-                    ? t('popups_wait_for_provider_connect_timeout')
-                    : t(
-                          providerExist
-                              ? 'popups_wait_for_provider_connect_tips'
-                              : 'popups_not_connected_third_party_wallet_tips',
-                          { providerType },
-                      )}
+                    ? t.popups_wait_for_provider_connect_timeout()
+                    : providerExist
+                    ? t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
+                    : t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 {provider?.icon ? (
@@ -170,16 +167,16 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 ) : null}
                 {isTimeout ? (
                     <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
-                        {t('retry')}
+                        {t.retry()}
                     </Button>
                 ) : null}
                 {!providerExist ? (
                     <>
                         <Typography fontSize={14} lineHeight="18px" my={1.25}>
-                            {t('popups_not_connected_third_party_wallet_description')}
+                            {t.popups_not_connected_third_party_wallet_description()}
                         </Typography>
                         <Button variant="roundedContained" size="small" onClick={handleChooseAnotherWallet}>
-                            {t('popups_choose_another_wallet')}
+                            {t.popups_choose_another_wallet()}
                         </Button>
                     </>
                 ) : null}

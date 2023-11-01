@@ -11,11 +11,11 @@ import {
     useFriendsFromSearch,
     useFriendFromList,
 } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 
 const FriendsHome = memo(function FriendsHome() {
-    const { t } = useMaskSharedTrans()
-    useTitle(t('popups_encrypted_friends'))
+    const t = useMaskSharedTrans()
+    useTitle(t.popups_encrypted_friends())
 
     const { data, fetchNextPage, isLoading, refetch, status, fetchRelationStatus, records } = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])

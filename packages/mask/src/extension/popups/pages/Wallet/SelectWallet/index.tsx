@@ -10,7 +10,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { Web3 } from '@masknet/web3-providers'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const SelectWallet = memo(function SelectWallet() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -149,12 +149,12 @@ const SelectWallet = memo(function SelectWallet() {
         Network,
     ])
 
-    useTitle(external_request ? 'Connecting External Site' : t('popups_select_wallet'))
+    useTitle(external_request ? 'Connecting External Site' : t.popups_select_wallet())
 
     if (!chainIdValid)
         return (
             <Box className={classes.placeholder}>
-                <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+                <Typography>{t.popups_wallet_unsupported_network()}</Typography>
             </Box>
         )
 
@@ -193,7 +193,7 @@ const SelectWallet = memo(function SelectWallet() {
             </Box>
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 <ActionButton
                     fullWidth
@@ -203,7 +203,7 @@ const SelectWallet = memo(function SelectWallet() {
                             ? !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
                             : false
                     }>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </BottomController>
         </Box>

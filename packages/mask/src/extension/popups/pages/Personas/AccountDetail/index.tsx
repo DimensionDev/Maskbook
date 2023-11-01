@@ -23,7 +23,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { AccountDetailUI } from './UI.js'
 import Service from '#services'
 import { PageTitleContext } from '../../../context.js'
@@ -32,7 +32,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
 
 const AccountDetail = memo(() => {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const theme = useTheme()
     const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()
@@ -84,14 +84,14 @@ const AccountDetail = memo(() => {
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.invalidateQueries(['next-id', 'bindings-by-persona', pubkey])
             queryClient.invalidateQueries(['my-own-persona-info'])
-            showSnackbar(t('popups_disconnect_success'), {
+            showSnackbar(t.popups_disconnect_success(), {
                 variant: 'success',
             })
             Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
             await delay(300)
             navigate(-1)
         } catch {
-            showSnackbar(t('popups_disconnect_failed'), {
+            showSnackbar(t.popups_disconnect_failed(), {
                 variant: 'error',
             })
         }
@@ -100,12 +100,12 @@ const AccountDetail = memo(() => {
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(t('popups_save_successfully'), {
+            showSnackbar(t.popups_save_successfully(), {
                 variant: 'success',
                 autoHideDuration: 2000,
             })
         } catch {
-            showSnackbar(t('popups_save_failed'), {
+            showSnackbar(t.popups_save_failed(), {
                 variant: 'error',
             })
         }
@@ -156,12 +156,12 @@ const AccountDetail = memo(() => {
             await queryClient.refetchQueries(['next-id', 'bindings-by-persona', pubkey])
             await queryClient.refetchQueries(['my-own-persona-info'])
 
-            showSnackbar(t('popups_disconnect_success'), {
+            showSnackbar(t.popups_disconnect_success(), {
                 variant: 'success',
             })
             navigate(-1)
         } catch {
-            showSnackbar(t('popups_disconnect_failed'), {
+            showSnackbar(t.popups_disconnect_failed(), {
                 variant: 'error',
             })
         }
@@ -177,7 +177,7 @@ const AccountDetail = memo(() => {
         window.close()
     }, [selectedAccount, currentPersona])
 
-    useTitle(t('popups_social_account'))
+    useTitle(t.popups_social_account())
 
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })
@@ -190,7 +190,7 @@ const AccountDetail = memo(() => {
                     onClick={async () => {
                         if (!currentPersona) return
                         const confirmed = await ConfirmDialog.openAndWaitForClose({
-                            title: t('popups_disconnect_persona'),
+                            title: t.popups_disconnect_persona(),
                             confirmVariant: 'warning',
                             message: (
                                 <Trans

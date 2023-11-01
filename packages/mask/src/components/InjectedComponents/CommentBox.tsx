@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {
@@ -38,13 +38,13 @@ export interface CommentBoxProps {
 }
 export function CommentBox(props: CommentBoxProps) {
     const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
             <InputBase
                 className={classes.root}
                 inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-                placeholder={t('comment_box__placeholder')}
+                placeholder={t.comment_box__placeholder()}
                 onKeyDown={(event) => {
                     const node = event.target as HTMLInputElement
                     if (!node.value) return

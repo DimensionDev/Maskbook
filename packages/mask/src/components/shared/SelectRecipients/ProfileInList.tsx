@@ -6,7 +6,7 @@ import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Avatar } from '../../../../shared-ui/components/Avatar.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -85,7 +85,7 @@ interface ProfileInListProps {
 }
 
 export const ProfileInList = memo(function ProfileInList(props: ProfileInListProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { profile, selected, disabled, highlightText, onChange } = props
     const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])
@@ -102,9 +102,9 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames ?? []
         if (linkedNames.length < 2)
-            return `${t('select_friends_dialog_persona_connect', { count: 1 })} @${profile.identifier.userId}.`
+            return `${t.select_friends_dialog_persona_connect({ count: 1 })} @${profile.identifier.userId}.`
         const mentions = profile.linkedTwitterNames?.map((username) => '@' + username) ?? []
-        return `${t('select_friends_dialog_persona_connect', { count: linkedNames.length })} ${mentions.join(', ')}.`
+        return `${t.select_friends_dialog_persona_connect({ count: linkedNames.length })} ${mentions.join(', ')}.`
     })()
 
     const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])

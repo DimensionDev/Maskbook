@@ -3,7 +3,7 @@ import { styled, ListItemButton, Typography, ListItemIcon, Box, useMediaQuery } 
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
 import GuideStep from '../../../components/GuideStep/index.js'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { searchHomeLinkName } from '../utils/selector.js'
 import { ButtonStyle } from '../constant.js'
@@ -98,11 +98,11 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
 }
 
 export function ProfileLinkAtTwitter() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     return (
         <>
-            <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
+            <GuideStep step={3} total={4} tip={t.user_guide_tip_3()}>
                 <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
             </GuideStep>
         </>

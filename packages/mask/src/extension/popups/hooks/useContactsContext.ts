@@ -6,7 +6,7 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from 'unstated-next'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 interface ContextOptions {
     defaultName: string
@@ -17,7 +17,7 @@ interface ContextOptions {
 function useContactsContext(
     { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
 ) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
     const wallets = useWallets()
@@ -56,19 +56,19 @@ function useContactsContext(
     const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 1
 
     const inputValidationMessage = useMemo(() => {
-        if (isMaliciousAddress) return t('wallets_transfer_error_address_scam')
+        if (isMaliciousAddress) return t.wallets_transfer_error_address_scam()
         if (!userInput || address) return ''
         if (!(isValidAddress(userInput) || isValidDomain(userInput))) {
-            return t('wallets_transfer_error_invalid_address')
+            return t.wallets_transfer_error_invalid_address()
         }
         if (isValidDomain(userInput) && (resolveDomainError || !registeredAddress)) {
-            return t('wallets_transfer_error_invalid_domain')
+            return t.wallets_transfer_error_invalid_domain()
         }
         return ''
     }, [userInput, resolveDomainError, registeredAddress, isMaliciousAddress])
 
     const inputWarningMessage = useMemo(() => {
-        if (addressType === AddressType.Contract) return t('wallets_transfer_warning_contract_address')
+        if (addressType === AddressType.Contract) return t.wallets_transfer_warning_contract_address()
         return ''
     }, [addressType])
 

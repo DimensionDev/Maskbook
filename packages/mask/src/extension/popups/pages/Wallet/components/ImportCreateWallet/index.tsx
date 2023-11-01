@@ -3,7 +3,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import urlcat from 'urlcat'
@@ -56,7 +56,7 @@ interface Props {
 }
 
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const [params] = useSearchParams()
     const external_request = params.get('external_request')
@@ -85,8 +85,8 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                     <Icons.Wallet size={20} color={theme.palette.maskColor.white} />
                 </div>
                 <div>
-                    <Typography className={classes.subTitle}>{t('popups_create_a_new_wallet_title')}</Typography>
-                    <Typography className={classes.description}>{t('popups_generate_a_new_wallet_address')}</Typography>
+                    <Typography className={classes.subTitle}>{t.popups_create_a_new_wallet_title()}</Typography>
+                    <Typography className={classes.description}>{t.popups_generate_a_new_wallet_address()}</Typography>
                 </div>
             </Box>
 
@@ -95,8 +95,8 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                     <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
                 </div>
                 <div>
-                    <Typography className={classes.subTitle}>{t('popups_import_wallets')}</Typography>
-                    <Typography className={classes.description}>{t('popups_import_wallets_description')}</Typography>
+                    <Typography className={classes.subTitle}>{t.popups_import_wallets()}</Typography>
+                    <Typography className={classes.description}>{t.popups_import_wallets_description()}</Typography>
                 </div>
             </Box>
         </>

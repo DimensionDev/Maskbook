@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
@@ -13,16 +13,16 @@ interface DecryptPostAwaitingProps {
 }
 export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: DecryptPostAwaitingProps) {
     const { author, postedBy, type } = props
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const key = {
-        finding_post_key: t('decrypted_postbox_decrypting_finding_post_key'),
-        finding_person_public_key: t('decrypted_postbox_decrypting_finding_person_key'),
-        init: t('decrypted_postbox_decrypting'),
-        decode_post: t('decrypted_postbox_decoding'),
-        iv_decrypted: t('decrypted_postbox_decoding'),
-        payload_decrypted: t('decrypted_postbox_decoding'),
+        finding_post_key: t.decrypted_postbox_decrypting_finding_post_key(),
+        finding_person_public_key: t.decrypted_postbox_decrypting_finding_person_key(),
+        init: t.decrypted_postbox_decrypting(),
+        decode_post: t.decrypted_postbox_decoding(),
+        iv_decrypted: t.decrypted_postbox_decoding(),
+        payload_decrypted: t.decrypted_postbox_decoding(),
         intermediate_success: 'unreachable case. it should display success UI',
-        undefined: t('decrypted_postbox_decrypting'),
+        undefined: t.decrypted_postbox_decrypting(),
     } as const
     return (
         <AdditionalContent

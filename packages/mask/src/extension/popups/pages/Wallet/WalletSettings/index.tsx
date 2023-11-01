@@ -9,7 +9,7 @@ import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletRemoveModal } from '../../../modals/modals.js'
@@ -30,7 +30,7 @@ function getPathIndex(path?: string) {
     return Number.parseInt(rawIndex, 10)
 }
 const WalletSettings = memo(() => {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -40,7 +40,7 @@ const WalletSettings = memo(() => {
         modalNavigate(PopupModalRoutes.WalletAccount)
     }, [modalNavigate])
 
-    useTitle(t('popups_wallet_setting'))
+    useTitle(t.popups_wallet_setting())
     const siblingWallets = useMemo(() => {
         if (!wallet?.mnemonicId) return EMPTY_LIST
         return allWallets
@@ -109,7 +109,7 @@ const WalletSettings = memo(() => {
                                     .map((x) => formatEthereumAddress(x.address, 4))
                                     .join(',')
                                 const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: t('remove_wallet_title'),
+                                    title: t.remove_wallet_title(),
                                     message: (
                                         <Typography className={classes.confirmMessage}>
                                             <Trans
@@ -129,14 +129,14 @@ const WalletSettings = memo(() => {
                                 if (!confirmed) return
                             }
                             await WalletRemoveModal.openAndWaitForClose({
-                                title: t('remove'),
+                                title: t.remove(),
                                 wallet,
                             })
                         }}
                         width={368}
                         color="error"
                         className={classes.removeWalletButton}>
-                        {t('popups_wallet_settings_remove_wallet')}
+                        {t.popups_wallet_settings_remove_wallet()}
                     </ActionButton>
                 </Box>
             )}

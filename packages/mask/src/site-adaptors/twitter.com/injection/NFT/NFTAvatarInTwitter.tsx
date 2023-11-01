@@ -22,7 +22,7 @@ import { Twitter, Hub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -124,7 +124,7 @@ export function NFTAvatarInTwitter() {
 }
 
 function useNFTCircleAvatar(size: number) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const identity = useCurrentVisitingIdentity()
     const { value: nftAvatar } = usePersonaNFTAvatar(
@@ -191,18 +191,18 @@ function useNFTCircleAvatar(size: number) {
         })
 
         const confirmed = await ConfirmModal.openAndWaitForClose({
-            title: t('plugin_avatar_setup_share_title'),
+            title: t.plugin_avatar_setup_share_title(),
             content: (
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <AssetPreviewer url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL} />
                     <Typography mt={3} fontSize="18px">
-                        {t('plugin_avatar_setup_success')}
+                        {t.plugin_avatar_setup_success()}
                     </Typography>
                 </Box>
             ),
-            confirmLabel: t('share'),
+            confirmLabel: t.share(),
         })
-        if (confirmed) activatedSiteAdaptorUI!.utils.share?.(t('plugin_avatar_setup_pfp_share'))
+        if (confirmed) activatedSiteAdaptorUI!.utils.share?.(t.plugin_avatar_setup_pfp_share())
 
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {

@@ -3,7 +3,7 @@ import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@ma
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
@@ -73,7 +73,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
     onConnect,
     onAccountClick,
 }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
 
@@ -81,7 +81,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
         return (
             <Box>
                 <ConnectSocialAccounts networks={networks} onConnect={onConnect} />
-                <Typography className={classes.tips}>{t('popups_connect_social_tips')}</Typography>
+                <Typography className={classes.tips}>{t.popups_connect_social_tips()}</Typography>
             </Box>
         )
     return (
@@ -104,7 +104,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.ConnectSocialAccount)}>
                 <Icons.Connect size={16} />
                 <Typography fontSize={12} fontWeight={700} lineHeight="18px">
-                    {t('connect')}
+                    {t.connect()}
                 </Typography>
             </Box>
         </Box>

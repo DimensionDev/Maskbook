@@ -8,8 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { UserContext, useAppearance, useLanguage } from '../../../../../shared-ui/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { UserContext, useAppearance, useLanguage, useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { useTitle } from '../../hooks/useTitle.js'
@@ -102,7 +101,7 @@ const HOME_LINK = 'Mask.io'
 
 const Settings = memo(function Settings() {
     const theme = useTheme()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
 
@@ -113,7 +112,7 @@ const Settings = memo(function Settings() {
 
     const LANGUAGE_OPTIONS_MAP = useMemo(
         () => ({
-            [LanguageOptions.__auto__]: t('popups_settings_language_auto'),
+            [LanguageOptions.__auto__]: t.popups_settings_language_auto(),
             [LanguageOptions.enUS]: 'English',
             [LanguageOptions.zhCN]: '简体中文',
             [LanguageOptions.zhTW]: '繁体中文',
@@ -125,9 +124,9 @@ const Settings = memo(function Settings() {
 
     const APPEARANCE_OPTIONS_MAP = useMemo(
         () => ({
-            [Appearance.default]: t('popups_settings_appearance_default'),
-            [Appearance.light]: t('popups_settings_appearance_light'),
-            [Appearance.dark]: t('popups_settings_appearance_dark'),
+            [Appearance.default]: t.popups_settings_appearance_default(),
+            [Appearance.light]: t.popups_settings_appearance_light(),
+            [Appearance.dark]: t.popups_settings_appearance_dark(),
         }),
         [t],
     )
@@ -142,21 +141,21 @@ const Settings = memo(function Settings() {
     )
 
     const localBackupTip = useMemo(() => {
-        if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
+        if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
         const backupMethod = localStorage.getItem('backupMethod')
         // old data
-        if (backupMethod === 'local' && !user.localBackupAt) return t('popups_settings_local_backup_exist')
-        if (!user.localBackupAt) return t('popups_settings_no_backup')
-        return t('popups_settings_backup_on', { time: user.localBackupAt })
+        if (backupMethod === 'local' && !user.localBackupAt) return t.popups_settings_local_backup_exist()
+        if (!user.localBackupAt) return t.popups_settings_no_backup()
+        return t.popups_settings_backup_on({ time: user.localBackupAt })
     }, [user])
 
     const cloudBackupTip = useMemo(() => {
-        if (!user.backupPassword) return t('popups_settings_set_backup_password_tips')
+        if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
         const backupMethod = localStorage.getItem('backupMethod')
         // old data
-        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t('popups_settings_cloud_backup_exist')
-        if (!user.cloudBackupAt) return t('popups_settings_no_backup')
-        return t('popups_settings_backup_on', { time: user.cloudBackupAt })
+        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t.popups_settings_cloud_backup_exist()
+        if (!user.cloudBackupAt) return t.popups_settings_no_backup()
+        return t.popups_settings_backup_on({ time: user.cloudBackupAt })
     }, [user])
 
     const { data } = useSupportedSites()
@@ -172,7 +171,7 @@ const Settings = memo(function Settings() {
         await Services.Helper.removePopupWindow()
     }, [])
 
-    useTitle(t('settings'))
+    useTitle(t.settings())
 
     return (
         <>
@@ -184,9 +183,9 @@ const Settings = memo(function Settings() {
                             <Icons.Filter size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t('popups_settings_general')}</Typography>
+                            <Typography className={classes.title}>{t.popups_settings_general()}</Typography>
                             <Typography className={classes.titleDescription}>
-                                {t('popups_settings_basic_setting')}
+                                {t.popups_settings_basic_setting()}
                             </Typography>
                         </Box>
                     </Box>
@@ -196,7 +195,7 @@ const Settings = memo(function Settings() {
                             onClick={() => modalNavigate(PopupModalRoutes.SelectLanguage)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_language')}
+                                primary={t.popups_settings_language()}
                                 secondary={LANGUAGE_OPTIONS_MAP[lang]}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -206,7 +205,7 @@ const Settings = memo(function Settings() {
                             onClick={() => modalNavigate(PopupModalRoutes.SelectAppearance)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_appearance')}
+                                primary={t.popups_settings_appearance()}
                                 secondary={APPEARANCE_OPTIONS_MAP[mode]}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -216,7 +215,7 @@ const Settings = memo(function Settings() {
                             onClick={() => modalNavigate(PopupModalRoutes.SupportedSitesModal)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_supported_sites')}
+                                primary={t.popups_settings_supported_sites()}
                                 secondary={
                                     <Trans
                                         i18nKey="popups_settings_supported_website"
@@ -237,11 +236,9 @@ const Settings = memo(function Settings() {
                             <Icons.History size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>
-                                {t('popups_settings_backup_and_recovery')}
-                            </Typography>
+                            <Typography className={classes.title}>{t.popups_settings_backup_and_recovery()}</Typography>
                             <Typography className={classes.titleDescription}>
-                                {t('popups_settings_data_correlation')}
+                                {t.popups_settings_data_correlation()}
                             </Typography>
                         </Box>
                     </Box>
@@ -257,7 +254,7 @@ const Settings = memo(function Settings() {
                             }}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_cloud_backup')}
+                                primary={t.popups_settings_cloud_backup()}
                                 secondary={cloudBackupTip}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -273,7 +270,7 @@ const Settings = memo(function Settings() {
                             }}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_local_backup')}
+                                primary={t.popups_settings_local_backup()}
                                 secondary={localBackupTip}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -283,8 +280,8 @@ const Settings = memo(function Settings() {
                             onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_restore_database')}
-                                secondary={t('popups_settings_restore_database_description')}
+                                primary={t.popups_settings_restore_database()}
+                                secondary={t.popups_settings_restore_database_description()}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
@@ -299,11 +296,11 @@ const Settings = memo(function Settings() {
                             }>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_backup_password')}
+                                primary={t.popups_settings_backup_password()}
                                 secondary={
                                     user.backupPassword
-                                        ? t('popups_settings_change_backup_password')
-                                        : t('popups_settings_not_set')
+                                        ? t.popups_settings_change_backup_password()
+                                        : t.popups_settings_not_set()
                                 }
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -316,9 +313,9 @@ const Settings = memo(function Settings() {
                             <Icons.Questions size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t('popups_settings_support')}</Typography>
+                            <Typography className={classes.title}>{t.popups_settings_support()}</Typography>
                             <Typography className={classes.titleDescription}>
-                                {t('popups_settings_basic_setting')}
+                                {t.popups_settings_basic_setting()}
                             </Typography>
                         </Box>
                     </Box>
@@ -326,7 +323,7 @@ const Settings = memo(function Settings() {
                         <ListItem className={classes.listItem} onClick={() => openWindow(`mailto:${FEEDBACK_MAIL}`)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_feedback')}
+                                primary={t.popups_settings_feedback()}
                                 secondary={FEEDBACK_MAIL}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -336,7 +333,7 @@ const Settings = memo(function Settings() {
                             onClick={() => openWindow(`https://${FAQ_LINK}`, '_blank', { referrer: false })}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_faq')}
+                                primary={t.popups_settings_faq()}
                                 secondary={'realmasknetwork.notion.site'}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -346,7 +343,7 @@ const Settings = memo(function Settings() {
                             onClick={() => openWindow(`https://${HOME_LINK}`, '_blank', { referrer: false })}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_website')}
+                                primary={t.popups_settings_website()}
                                 secondary={HOME_LINK}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -359,7 +356,7 @@ const Settings = memo(function Settings() {
                             <Icons.Appearance size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t('popups_settings_about')}</Typography>
+                            <Typography className={classes.title}>{t.popups_settings_about()}</Typography>
                         </Box>
                     </Box>
                     <List className={classes.list}>
@@ -370,7 +367,7 @@ const Settings = memo(function Settings() {
                             }>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t('popups_settings_version')}
+                                primary={t.popups_settings_version()}
                                 secondary={env.VERSION}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -384,7 +381,7 @@ const Settings = memo(function Settings() {
                                     { referrer: false },
                                 )
                             }>
-                            <ListItemText classes={itemClasses} secondary={t('popups_settings_service_agreement')} />
+                            <ListItemText classes={itemClasses} secondary={t.popups_settings_service_agreement()} />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
@@ -394,7 +391,7 @@ const Settings = memo(function Settings() {
                                     referrer: false,
                                 })
                             }>
-                            <ListItemText classes={itemClasses} secondary={t('popups_settings_primary_policy')} />
+                            <ListItemText classes={itemClasses} secondary={t.popups_settings_primary_policy()} />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>

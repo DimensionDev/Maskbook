@@ -5,7 +5,7 @@ import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography, alpha } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
 
@@ -61,10 +61,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkManagement = memo(function NetworkManagement() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    useTitle(t('manage_network'))
+    useTitle(t.manage_network())
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
@@ -99,7 +99,7 @@ export const NetworkManagement = memo(function NetworkManagement() {
             {process.env.NODE_ENV === 'development' ? (
                 <div className={classes.footer}>
                     <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
-                        {t('network_management_add_network')}
+                        {t.network_management_add_network()}
                     </ActionButton>
                 </div>
             ) : null}

@@ -9,7 +9,7 @@ import { Box, List, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Services from '#services'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const SwitchWallet = memo(function SwitchWallet() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
     const { closeModal } = useActionModal()
@@ -116,7 +116,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 onClick={handleClickCreate}>
                 <Icons.Wallet size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
-                    {t('popups_add_wallet')}
+                    {t.popups_add_wallet()}
                 </Typography>
             </ActionButton>
             <ActionButton
@@ -127,7 +127,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 onClick={handleImport}>
                 <Icons.Download2 size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
-                    {t('popups_import_wallet')}
+                    {t.popups_import_wallet()}
                 </Typography>
             </ActionButton>
             <ActionButton
@@ -138,7 +138,7 @@ const SwitchWallet = memo(function SwitchWallet() {
                 onClick={handleLock}>
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
-                    {t('popups_lock_wallet')}
+                    {t.popups_lock_wallet()}
                 </Typography>
             </ActionButton>
             <ActionButton
@@ -149,14 +149,14 @@ const SwitchWallet = memo(function SwitchWallet() {
                 onClick={handleClickSettings}>
                 <Icons.WalletSetting size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.actionLabel} component="span">
-                    {t('popups_wallet_settings')}
+                    {t.popups_wallet_settings()}
                 </Typography>
             </ActionButton>
         </Box>
     )
 
     return (
-        <ActionModal header={t('wallet_account')} action={action}>
+        <ActionModal header={t.wallet_account()} action={action}>
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item) =>

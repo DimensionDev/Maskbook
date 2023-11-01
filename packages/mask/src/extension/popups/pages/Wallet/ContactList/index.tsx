@@ -9,7 +9,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { ExplorerResolver } from '@masknet/web3-providers'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useTitle, ContactsContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
@@ -136,7 +136,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
 )
 
 const ContactListUI = memo(function ContactListUI() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { setExtension } = useContext(PageTitleContext)
     const state = useLocation().state as
@@ -152,7 +152,7 @@ const ContactListUI = memo(function ContactListUI() {
 
     const addContact = useCallback(() => {
         return AddContactModal.openAndWaitForClose({
-            title: t('wallet_add_contact'),
+            title: t.wallet_add_contact(),
             address: '',
             name: '',
         })
@@ -164,7 +164,7 @@ const ContactListUI = memo(function ContactListUI() {
         return () => setExtension(undefined)
     }, [isManage])
 
-    useTitle(isManage ? t('contacts') : t('popups_send'))
+    useTitle(isManage ? t.contacts() : t.popups_send())
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -191,7 +191,7 @@ const ContactListUI = memo(function ContactListUI() {
                 <Box className={classes.contactsPanel}>
                     {contacts.length ? (
                         <Typography className={classes.contactTitle}>
-                            {t('wallet_transfer_my_contacts_title')}
+                            {t.wallet_transfer_my_contacts_title()}
                         </Typography>
                     ) : null}
                     <List className={classes.contactsList}>
@@ -207,7 +207,7 @@ const ContactListUI = memo(function ContactListUI() {
                             )
                         })}
                     </List>
-                    <Typography className={classes.contactTitle}>{t('wallet_transfer_my_wallets_title')}</Typography>
+                    <Typography className={classes.contactTitle}>{t.wallet_transfer_my_wallets_title()}</Typography>
                     <List className={classes.contactsList}>
                         {wallets.map((wallet, index) => {
                             return (
@@ -238,7 +238,7 @@ const ContactListUI = memo(function ContactListUI() {
                             width={368}
                             className={classes.confirmButton}
                             disabled={!!inputValidationMessage || !userInput}>
-                            {t('next')}
+                            {t.next()}
                         </ActionButton>
                     </Box>
                 )}
@@ -255,14 +255,14 @@ interface ContactListItemProps extends ListItemProps {
 }
 
 function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles({ showDivideLine: contactType === ContactType.Recipient })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
 
     const editContact = useCallback(() => {
         return EditContactModal.openAndWaitForClose({
-            title: t('wallet_edit_contact'),
+            title: t.wallet_edit_contact(),
             address,
             name,
             type: contactType,
@@ -271,7 +271,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
-            title: t('wallet_delete_contact'),
+            title: t.wallet_delete_contact(),
             address,
             name,
         })
@@ -279,12 +279,12 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const menuOptions = [
         {
-            name: t('edit'),
+            name: t.edit(),
             icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
             handler: editContact,
         },
         {
-            name: t('delete'),
+            name: t.delete(),
             icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
             handler: deleteContact,
         },

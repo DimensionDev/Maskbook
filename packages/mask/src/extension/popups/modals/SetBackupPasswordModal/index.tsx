@@ -4,13 +4,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans, UserContext } from '../../../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const [params] = useSearchParams()
 
@@ -30,7 +29,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
         if (newPassword.length < 8 || newPassword.length > 20) {
             return
         } else if (!MATCH_PASSWORD_RE.test(newPassword)) {
-            setPasswordValidError(t('popups_settings_backup_password_invalid'))
+            setPasswordValidError(t.popups_settings_backup_password_invalid())
             return
         }
         setPasswordValidError('')
@@ -47,7 +46,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
             backupPassword: newPassword,
         })
 
-        showSnackbar(t('popups_backup_password_set_successfully'))
+        showSnackbar(t.popups_backup_password_set_successfully())
 
         if (to) {
             navigate(to, { replace: true })
@@ -69,15 +68,15 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     return (
         <ActionModal
-            header={t('popups_backup_password')}
+            header={t.popups_backup_password()}
             action={
                 <ActionButton onClick={handleClick} loading={loading} disabled={disabled}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             }>
             <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" rowGap={2} m={0.5}>
                 <PasswordField
-                    placeholder={t('password')}
+                    placeholder={t.password()}
                     onChange={(e) => setNewPassword(e.target.value)}
                     autoFocus
                     onBlur={validPassword}
@@ -86,20 +85,20 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     helperText={passwordValidError}
                 />
                 <PasswordField
-                    placeholder={t('reenter')}
+                    placeholder={t.reenter()}
                     onChange={(e) => setRepeatPassword(e.target.value)}
                     value={repeatPassword}
                     onBlur={validRepeatPassword}
                     error={!passwordMatched}
-                    helperText={!passwordMatched ? t('popups_backup_password_inconsistency') : ''}
+                    helperText={!passwordMatched ? t.popups_backup_password_inconsistency() : ''}
                 />
                 <Box>
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>
-                        {t('popups_backup_password_rules_tips')}
+                        {t.popups_backup_password_rules_tips()}
                     </Typography>
                     {to ? (
                         <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
-                            {t('popups_backup_password_tips')}
+                            {t.popups_backup_password_tips()}
                         </Typography>
                     ) : null}
                 </Box>

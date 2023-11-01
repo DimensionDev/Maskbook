@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useNavigate } from 'react-router-dom'
 import { Trans } from 'react-i18next'
 import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
@@ -57,7 +57,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
         onSubmit,
         submitting,
     }) => {
-        const { t } = useMaskSharedTrans()
+        const t = useMaskSharedTrans()
         const { classes } = useStyles()
         const navigate = useNavigate()
         const handleBack = useCallback(() => navigate(-1), [])
@@ -76,9 +76,9 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                     </Box>
                     <Typography className={classes.tips}>
                         {account.is_valid ? (
-                            t('popups_display_web3_address_tips')
+                            t.popups_display_web3_address_tips()
                         ) : isSupportNextDotID ? (
-                            t('popups_verify_account_tips')
+                            t.popups_verify_account_tips()
                         ) : (
                             <Trans i18nKey="popups_other_social_accounts_tips" components={{ strong: <strong /> }} />
                         )}
@@ -97,10 +97,10 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 {isSupportNextDotID ? (
                     <BottomController>
                         <Button variant="outlined" fullWidth onClick={handleBack}>
-                            {t('back')}
+                            {t.back()}
                         </Button>
                         <ActionButton loading={submitting} fullWidth onClick={account.is_valid ? onSubmit : onVerify}>
-                            {t(account.is_valid ? 'save' : 'popups_verify_account')}
+                            {account.is_valid ? t.save() : t.popups_verify_account()}
                         </ActionButton>
                     </BottomController>
                 ) : null}

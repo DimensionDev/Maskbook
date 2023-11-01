@@ -19,7 +19,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
@@ -127,7 +127,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
     ...rest
 }) {
     const { classes, theme, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { current: avatarClipPathId } = useRef<string>(uuid())
     const { anchorEl, anchorBounding } = useAnchor()
 
@@ -184,7 +184,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         <Link
                             href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
-                            title={t('view_on_explorer')}
+                            title={t.view_on_explorer()}
                             rel="noopener noreferrer"
                             onClick={(event) => {
                                 event.stopPropagation()
@@ -251,7 +251,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
     ...rest
 }) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const Others = useWeb3Others()
     const { chainId } = useChainContext()
@@ -276,7 +276,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
                         <Link
                             href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
-                            title={t('view_on_explorer')}
+                            title={t.view_on_explorer()}
                             rel="noopener noreferrer"
                             onClick={(event) => {
                                 event.stopPropagation()

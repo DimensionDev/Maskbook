@@ -14,7 +14,7 @@ import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { useMaskSharedTrans } from '../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
@@ -148,7 +148,7 @@ const useStyles = makeStyles()((theme) => ({
 interface VerifyNextIDProps extends BindingDialogProps {}
 
 export function VerifyNextID({ onClose }: VerifyNextIDProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
     const { userId, myIdentity, personaInfo, checkingVerified, verified, loadingCurrentUserId, currentUserId } =
@@ -277,9 +277,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                         </Typography>
                     ) : creatingPostContent ? (
                         <>
-                            <Typography className={classes.postContentTitle}>
-                                {t('setup_guide_post_content')}
-                            </Typography>
+                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
                             <Typography className={classes.postContent}>
                                 <Skeleton variant="text" />
                                 <Skeleton variant="text" />
@@ -289,17 +287,15 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 <Skeleton variant="text" width="50%" />
                             </Typography>
                             <Typography className={classes.tip} component="div">
-                                {t('setup_guide_verify_tip')}
+                                {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
                     ) : post ? (
                         <>
-                            <Typography className={classes.postContentTitle}>
-                                {t('setup_guide_post_content')}
-                            </Typography>
+                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
                             <Typography className={classes.postContent}>{post}</Typography>
                             <Typography className={classes.tip} component="div">
-                                {t('setup_guide_verify_tip')}
+                                {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
                     ) : null}
@@ -313,7 +309,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             variant="contained"
                             disabled={disabled}
                             onClick={onConfirm}>
-                            {t('ok')}
+                            {t.ok()}
                         </ActionButton>
                     ) : (
                         <ActionButton
@@ -324,7 +320,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             loading={verifying}
                             onClick={onVerify}>
                             <Icons.Send size={18} className={classes.send} />
-                            {t('send')}
+                            {t.send()}
                         </ActionButton>
                     )}
                 </Box>
