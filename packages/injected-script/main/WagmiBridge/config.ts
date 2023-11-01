@@ -3,7 +3,7 @@ import { arbitrum, aurora, avalanche, bsc, fantom, gnosis, mainnet, optimism, po
 import { configureChains, createConfig, type Config, type WebSocketPublicClient } from '@wagmi/core'
 import { publicProvider } from '@wagmi/core/providers/public'
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+const { chains, publicClient } = configureChains(
     [mainnet, bsc, polygon, arbitrum, gnosis, fantom, avalanche, aurora, optimism],
     [publicProvider()],
 )
@@ -14,5 +14,4 @@ export const config: Config<
 > = createConfig({
     autoConnect: true,
     publicClient,
-    webSocketPublicClient,
 })

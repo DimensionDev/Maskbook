@@ -5,7 +5,6 @@ import { OKXProvider } from './OKX.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { MetaMaskProvider } from './MetaMask.js'
-import { WalletConnectProvider } from './WalletConnect.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
@@ -27,7 +26,6 @@ export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
 
 export const wagmiMetaMaskProvider = new MetaMaskProvider()
-export const wagmiWalletConnectProvider = new WalletConnectProvider()
 
 // Please keep this list update to date
 const Providers = [
@@ -41,7 +39,7 @@ const Providers = [
     injectedPhantomProvider,
 ]
 
-const WagmiProviders = [wagmiMetaMaskProvider, wagmiWalletConnectProvider]
+const WagmiProviders = [wagmiMetaMaskProvider]
 
 export function pasteText(text: string) {
     sendEvent('paste', text)

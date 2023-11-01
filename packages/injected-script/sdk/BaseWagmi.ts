@@ -1,13 +1,13 @@
-import { type RequestArguments } from '../shared/index.js'
 import { BaseProvider } from './Base.js'
 import { createPromise, sendEvent } from './utils.js'
+import { type RequestArguments } from '../shared/index.js'
 
 export class BaseWagmiProvider extends BaseProvider {
     constructor(
         public providerType: string,
         public override pathname: string,
     ) {
-        super(pathname ?? '')
+        super(pathname)
     }
 
     override connect(chainId?: number): Promise<unknown> {
@@ -30,6 +30,7 @@ export class BaseWagmiProvider extends BaseProvider {
         }
 
         await createPromise((id) => sendEvent('web3UntilBridgeOnline', pathname.split('.')[0], id))
+
         if (await validator()) {
             this.isReadyInternal = true
         }

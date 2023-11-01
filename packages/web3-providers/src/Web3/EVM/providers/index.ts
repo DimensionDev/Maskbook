@@ -3,8 +3,7 @@ import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@maskn
 import { NoneProvider } from './None.js'
 import { BrowserProvider } from './Browser.js'
 import { MetaMaskProvider } from './MetaMask.js'
-import { WalletConnectV1Provider } from './WalletConnectV1.js'
-import { WalletConnectV2Provider } from './WalletConnectV2.js'
+import { WalletConnectProvider } from './WalletConnect.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
@@ -13,7 +12,6 @@ import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { MaskWalletProvider } from './MaskWallet.js'
 import { CustomNetworkProvider } from './CustomNetwork.js'
-import { WalletConnectProvider } from './WalletConnect.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 interface EVM_Provider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {}
@@ -23,9 +21,7 @@ export const Providers = {
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.Browser]: new BrowserProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
-    [ProviderType.WalletConnect]: new WalletConnectProvider(),
-    [ProviderType.WalletConnectV1]: Flags.wc_v1_enabled ? new WalletConnectV1Provider() : new NoneProvider(),
-    [ProviderType.WalletConnectV2]: Flags.wc_v2_enabled ? new WalletConnectV2Provider() : new NoneProvider(),
+    [ProviderType.WalletConnect]: Flags.wc_enabled ? new WalletConnectProvider() : new NoneProvider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.Coinbase]: new CoinbaseProvider(),
     [ProviderType.OKX]: new OKXProvider(),

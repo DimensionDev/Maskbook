@@ -387,55 +387,14 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.WalletConnect,
         name: 'WalletConnect',
         icon: new URL('../assets/walletconnect.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: difference(EnhanceableSiteList, [
-                EnhanceableSite.Localhost,
-                EnhanceableSite.App,
-            ]),
-            supportedExtensionSites: ExtensionSiteList,
-        },
-        homeLink: 'https://walletconnect.com',
-        shortenLink: 'walletconnect.com',
-        downloadLink: 'https://walletconnect.com',
-        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
-        ID: `${PLUGIN_ID}_walletconnect_V1`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.WalletConnect,
-        name: 'WalletConnect',
-        icon: new URL('../assets/walletconnect.png', import.meta.url).href,
-        enableRequirements: Flags.wc_v1_enabled
-            ? {
-                  supportedChainIds: ChainIdList,
-                  supportedEnhanceableSites: EnhanceableSiteList,
-                  supportedExtensionSites: ExtensionSiteList,
-              }
-            : undefined,
-        homeLink: 'https://walletconnect.com',
-        shortenLink: 'walletconnect.com',
-        downloadLink: 'https://walletconnect.com',
-        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
-        ID: `${PLUGIN_ID}_walletconnect_V2`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.WalletConnectV2,
-        name: 'WalletConnect',
-        icon: new URL('../assets/walletconnect.png', import.meta.url).href,
-        enableRequirements: Flags.wc_v2_enabled
+        enableRequirements: Flags.wc_enabled
             ? {
                   supportedChainIds: ChainIdList,
                   supportedEnhanceableSites: difference(EnhanceableSiteList, [
                       EnhanceableSite.Localhost,
                       EnhanceableSite.App,
                   ]),
-                  supportedExtensionSites: Flags.wc_v2_enabled ? ExtensionSiteList : [],
+                  supportedExtensionSites: Flags.wc_enabled ? ExtensionSiteList : [],
               }
             : undefined,
         homeLink: 'https://walletconnect.com',
