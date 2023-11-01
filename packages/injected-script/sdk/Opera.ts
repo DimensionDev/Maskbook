@@ -1,6 +1,6 @@
-import { BaseProvider } from './Base.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
-export class OperaProvider extends BaseProvider {
+export class OperaProvider extends BaseInjectedProvider {
     constructor() {
         super('ethereum')
     }

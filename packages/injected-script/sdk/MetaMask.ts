@@ -1,8 +1,8 @@
-import { BaseWagmiProvider } from './BaseWagmi.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
-export class MetaMaskProvider extends BaseWagmiProvider {
+export class MetaMaskProvider extends BaseInjectedProvider {
     constructor() {
-        super('MetaMask', 'ethereum.__metamask__')
+        super('ethereum.__metamask__')
     }
 
     override async untilAvailable(): Promise<void> {

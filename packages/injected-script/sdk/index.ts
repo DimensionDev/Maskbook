@@ -4,28 +4,26 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
-import { MetaMaskProvider } from './MetaMask.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
+import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
 export { BaseProvider } from './Base.js'
 export { BaseInjectedProvider as InjectedProvider } from './BaseInjected.js'
-export { BaseWagmiProvider as WagmiProvider } from './BaseWagmi.js'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
 export const injectedBrowserProvider = new BrowserProvider()
+export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
-
-export const wagmiMetaMaskProvider = new MetaMaskProvider()
 
 // Please keep this list update to date
 const Providers = [
@@ -38,8 +36,6 @@ const Providers = [
     injectedCoin98SolanaProvider,
     injectedPhantomProvider,
 ]
-
-const WagmiProviders = [wagmiMetaMaskProvider]
 
 export function pasteText(text: string) {
     sendEvent('paste', text)
@@ -77,15 +73,6 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
             return resolvePromise(...r[1])
         case 'rejectPromise':
             return rejectPromise(...r[1])
-
-        // wagmi
-        case 'wagmiEmitEvent': {
-            const [providerType, eventName, data] = r[1]
-            WagmiProviders.filter((x) => x.providerType === providerType).forEach((x) => x?.emit(eventName, data))
-            break
-        }
-        case 'wagmiExecute':
-            break
 
         // web3
         case 'web3BridgeEmitEvent': {

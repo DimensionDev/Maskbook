@@ -9,17 +9,15 @@
     "index.ts",
     "Base.ts",
     "BaseInjected.ts",
-    "BaseWagmi.ts",
     "Browser.ts",
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
     "Coinbase.ts",
-    "OKX.ts",
     "MetaMask.ts",
+    "OKX.ts",
     "Opera.ts",
     "Clover.ts",
-    "WalletConnect.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/tsconfig.json" }]

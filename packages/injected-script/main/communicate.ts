@@ -11,7 +11,6 @@ import {
     __unsafe__call,
     __unsafe__until,
 } from './GlobalVariableBridge/index.js'
-import { __wagmi__execute } from './WagmiBridge/index.js'
 import { hookInputUploadOnce } from './Patches/hookInputUploadOnce.js'
 
 document.addEventListener(CustomEventId, (e) => {
@@ -34,12 +33,6 @@ document.addEventListener(CustomEventId, (e) => {
             return dispatchPasteImage(...args)
         case 'hookInputUploadOnce':
             return hookInputUploadOnce(...args)
-
-        // wagmi
-        case 'wagmiEmitEvent':
-            break
-        case 'wagmiExecute':
-            return __wagmi__execute(...args)
 
         // web3
         case 'web3BridgeBindEvent':

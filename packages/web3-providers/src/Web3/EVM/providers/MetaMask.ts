@@ -1,18 +1,18 @@
 import { isInPageEthereumInjected, isEthereumInjected } from '@masknet/shared-base'
-import { wagmiMetaMaskProvider } from '@masknet/injected-script'
-import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
+import { injectedMetaMaskProvider } from '@masknet/injected-script'
+import createMetaMaskProvider, { type MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
-import { BaseWagmiProvider } from './BaseWagmi.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 function getInjectedProvider() {
     if (isEthereumInjected()) return Reflect.get(window, 'ethereum')
-    if (isInPageEthereumInjected()) return wagmiMetaMaskProvider
+    if (isInPageEthereumInjected()) return injectedMetaMaskProvider
     return createMetaMaskProvider()
 }
 
 export class MetaMaskProvider
-    extends BaseWagmiProvider
+    extends BaseInjectedProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     constructor() {
@@ -28,12 +28,22 @@ export class MetaMaskProvider
     override get ready() {
         if (isEthereumInjected()) return true
         if (isInPageEthereumInjected()) return super.ready
-        return this.bridge.isConnected
+        const isConnected = (this.bridge as unknown as MetaMaskInpageProvider).isConnected()
+        return isConnected
     }
 
     override get readyPromise() {
         if (isEthereumInjected()) return Promise.resolve()
         if (isInPageEthereumInjected()) return super.readyPromise
         return Promise.resolve()
+    }
+
+    override async disconnect(): Promise<void> {
+        // do nothing
+    }
+
+    override onDisconnect() {
+        // MetaMask will emit disconnect after switching chain id
+        // since then, override to stop listening to the disconnect event with MetaMask
     }
 }

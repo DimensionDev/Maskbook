@@ -16,11 +16,6 @@ export interface InternalEvents {
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[], triggerOnActiveElementNow: boolean]
 
-    // #region wagmi
-    wagmiEmitEvent: [providerType: string, eventName: string, data: unknown[]]
-    wagmiExecute: [providerType: string, req_id: number, methodName: string, data: unknown[]]
-    // #endregion
-
     // #region web3 bridge
     /** Request the bridge to listen on an event. */
     web3BridgeBindEvent: [path: string, responseEventName: keyof InternalEvents, eventName: string]

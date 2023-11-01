@@ -1,6 +1,4 @@
-import { createPromise, sendEvent } from './utils.js'
-
-export class BaseProvider {
+export abstract class BaseProvider {
     protected events = new Map<string, Set<(data: unknown) => void>>()
     protected isReadyInternal = false
     protected isConnectedInternal = false
@@ -36,56 +34,40 @@ export class BaseProvider {
     /**
      * Build the connection.
      */
-    connect(options: unknown): Promise<unknown> {
-        throw new Error('To be implemented.')
-    }
+    abstract connect(options: unknown): Promise<unknown>
 
     /**
      * Break the connections.
      */
-    async disconnect(): Promise<void> {
-        throw new Error('To be implemented.')
-    }
+    abstract disconnect(): Promise<void>
 
     /**
      * Wait until the sdk object injected into the page.
      */
-    async untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
-        return
-    }
+    abstract untilAvailable(validator?: () => Promise<boolean>): Promise<void>
 
     /**
      * Send RPC request to the sdk object.
      */
-    request<T>(data: unknown): Promise<T> {
-        throw new Error('To be implemented.')
-    }
+    abstract request<T>(data: unknown): Promise<T>
 
     /**
      * Add event listener on the sdk object.
      */
-    on(event: string, callback: (...args: any) => void): () => void {
-        throw new Error('To be implemented.')
-    }
+    abstract on(event: string, callback: (...args: any) => void): () => void
 
     /**
      * Remove event listener from the sdk object.
      */
-    off(event: string, callback: (...args: any) => void): void {
-        throw new Error('To be implemented.')
-    }
+    abstract off(event: string, callback: (...args: any) => void): void
 
     /**
      * Emit event and invoke registered listeners
      */
-    emit(event: string, data: unknown[]) {
-        throw new Error('To be implemented.')
-    }
+    abstract emit(event: string, data: unknown[]): void
 
     /**
      * Access primitive property on the sdk object.
      */
-    getProperty<T = unknown>(key: string): Promise<T | null> {
-        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
-    }
+    abstract getProperty<T = unknown>(key: string): Promise<T | null>
 }

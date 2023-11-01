@@ -1,6 +1,6 @@
-import { BaseProvider } from './Base.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
-export class SolflareProvider extends BaseProvider {
+export class SolflareProvider extends BaseInjectedProvider {
     constructor() {
         super('solflare')
     }
