@@ -11,7 +11,7 @@ import { PopoverListItem } from './PopoverListItem.js'
 import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,7 +57,7 @@ interface EncryptionTargetSelectorProps {
     selectedRecipientLength: number
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -68,7 +68,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const e2eDisabledMessage =
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
-                <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+                <Typography className={classes.mainTitle}>{t.persona_required()}</Typography>
                 <Box flex={1} />
                 <ConnectPersonaBoundary
                     personas={allPersonas}
@@ -80,10 +80,10 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     enableVerify={false}
                     createConfirm={false}>
                     {(s) => {
-                        if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
+                        if (!s.hasPersona) return <Typography className={classes.create}>{t.create()}</Typography>
                         // TODO: how to handle verified
                         if (!s.connected || !s.verified)
-                            return <Typography className={classes.create}>{t('connect')}</Typography>
+                            return <Typography className={classes.create}>{t.connect()}</Typography>
 
                         return null
                     }}
@@ -92,7 +92,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         ) : null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
         <div className={classes.flex}>
-            <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
+            <Typography className={classes.mainTitle}>{t.compose_no_local_key()}</Typography>
         </div>
     )
 
@@ -101,15 +101,15 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E)
             return shareWithNum > 1
-                ? t('compose_shared_friends_other', { count: shareWithNum })
-                : t('compose_shared_friends_one')
-        else if (selected === EncryptionTargetType.Public) return t('compose_encrypt_visible_to_all')
-        else if (selected === EncryptionTargetType.Self) return t('compose_encrypt_visible_to_private')
+                ? t.compose_shared_friends_other({ count: shareWithNum })
+                : t.compose_shared_friends_one()
+        else if (selected === EncryptionTargetType.Public) return t.compose_encrypt_visible_to_all()
+        else if (selected === EncryptionTargetType.Self) return t.compose_encrypt_visible_to_private()
         unreachable(selected)
     }
     return (
         <>
-            <Typography className={classes.optionTitle}>{t('post_dialog_visible_to')}</Typography>
+            <Typography className={classes.optionTitle}>{t.post_dialog_visible_to()}</Typography>
             <PopoverListTrigger
                 selected={props.target}
                 selectedTitle={selectedTitle()}
@@ -121,15 +121,15 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 }}>
                 <PopoverListItem
                     value={EncryptionTargetType.Public}
-                    title={t('compose_encrypt_visible_to_all')}
-                    subTitle={t('compose_encrypt_visible_to_all_sub')}
+                    title={t.compose_encrypt_visible_to_all()}
+                    subTitle={t.compose_encrypt_visible_to_all_sub()}
                 />
                 <div className={classes.divider} />
                 <PopoverListItem
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.Self}
-                    title={t('compose_encrypt_visible_to_private')}
-                    subTitle={t('compose_encrypt_visible_to_private_sub')}
+                    title={t.compose_encrypt_visible_to_private()}
+                    subTitle={t.compose_encrypt_visible_to_private_sub()}
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
@@ -138,8 +138,8 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     itemTail={<Icons.RightArrow className={classes.rightIcon} />}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.E2E}
-                    title={t('compose_encrypt_visible_to_share')}
-                    subTitle={t('compose_encrypt_visible_to_share_sub')}
+                    title={t.compose_encrypt_visible_to_share()}
+                    subTitle={t.compose_encrypt_visible_to_share_sub()}
                     onClick={(v: string) => {
                         if (props.e2eDisabled) return
                         props.onClick(v as EncryptionTargetType)

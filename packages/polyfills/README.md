@@ -26,10 +26,6 @@ Those features are not easy to polyfill.
 
 Check and polyfill before using.
 
-### Simply polyfilled
-
-- Intl.ListFormat
-
 ### Using polyfill
 
 - navigator.clipboard (with `ClipboardItem`) (Firefox not supported: <https://caniuse.com/mdn-api_clipboarditem>)

@@ -28,7 +28,7 @@ export const handleSelector = () =>
     querySelector<HTMLAnchorElement>('.m-sidebarNavigation__item--user [data-ref="sidenav-channel"]')
 
 export const selfInfoSelectors = () => ({
-    handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1),
+    handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1).replace(/^@/, ''), // Could include `@` by chance.
     avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
 })
 

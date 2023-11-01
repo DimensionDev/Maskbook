@@ -25,5 +25,4 @@ export * from './resolver.js'
 export * from './squashPromise.js'
 export * from './token.js'
 export * from './types.js'
-
-export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
+export * from './HD_PATH_WITHOUT_INDEX_ETHEREUM.js'

@@ -62,7 +62,7 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
         return <Component identity={visitingIdentity.identifier} slot={slot} accounts={accounts} />
     }, [visitingIdentity.identifier, accounts, slot])
 
-    if (!component || !visitingIdentity.identifier || isMinimalMode || location.href === '/') return null
+    if (!component || !visitingIdentity.identifier || isMinimalMode || location.pathname === '/') return null
 
     return (
         <span className={slot === Plugin.SiteAdaptor.TipsSlot.MirrorMenu ? classes.root : undefined}>{component}</span>

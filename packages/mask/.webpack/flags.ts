@@ -94,7 +94,7 @@ export function computedBuildFlags(
         if (process.env.CI) sourceMapKind = false
     }
 
-    const reactProductionProfiling = flags.mode === 'production' && flags.profiling
+    const reactProductionProfiling = flags.profiling
     return { sourceMapKind, reactProductionProfiling }
 }
 

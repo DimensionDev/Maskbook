@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNextID_Trans } from '../../locales/index.js'
 import { PersonaSelectPanel } from '@masknet/shared'
@@ -64,11 +64,11 @@ interface AddWalletPersonaActionProps {
 
 export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAddWallet }) => {
     const t = useNextID_Trans()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     return (
         <>
             <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
-                <Typography fontWeight={400} fontSize={14}>
+                <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
                     {t.add_wallet_intro()}
                 </Typography>
             </Stack>
@@ -84,9 +84,10 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAdd
 
 export const OtherLackWalletAction = memo(() => {
     const t = useNextID_Trans()
+    const theme = useTheme()
     return (
         <Stack justifyContent="center" alignItems="center" flex={1}>
-            <Typography fontWeight={400} fontSize={14}>
+            <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
                 {t.others_lack_wallet()}
             </Typography>
         </Stack>

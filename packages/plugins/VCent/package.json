@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-vcent",
   "private": true,
+  "sideEffects": ["./src/register.ts"],
   "type": "module",
   "exports": {
     ".": {

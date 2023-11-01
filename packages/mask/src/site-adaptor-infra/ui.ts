@@ -23,8 +23,7 @@ import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createSharedContext, createPluginHost } from '../../shared/plugin-infra/host.js'
 import Services from '#services'
 import { getCurrentIdentifier } from '../site-adaptors/utils.js'
-import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/index.js'
-import '../utils/debug/general.js'
+import { attachReactTreeWithoutContainer, setupReactShadowRootEnvironment } from '../utils/shadow-root.js'
 import { configureSelectorMissReporter } from '../utils/startWatch.js'
 import { setupUIContext } from '../../shared-ui/initUIContext.js'
 import { definedSiteAdaptorsUI } from './define.js'
@@ -152,7 +151,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         connectPersona,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
-        getUserIdentity: undefined,
+        getUserIdentity: ui.utils.getUserIdentity,
     })
 
     startPluginSiteAdaptor(

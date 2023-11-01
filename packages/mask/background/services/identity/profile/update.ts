@@ -27,7 +27,7 @@ import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../data
 
 interface UpdateProfileInfo {
     nickname?: string | null
-    avatarURL?: string | null
+    avatarURL?: ArrayBuffer | string | null
 }
 export async function updateProfileInfo(identifier: ProfileIdentifier, data: UpdateProfileInfo): Promise<void> {
     if (data.nickname) {

@@ -44,7 +44,7 @@ const calculateMinimumReturn = ({
     return leftShift(minReturnWei, toToken.decimals).toFixed()
 }
 
-export class BancorAPI implements TraderAPI.Provider {
+class BancorAPI implements TraderAPI.Provider {
     public provider = TradeProvider.BANCOR
 
     async swapTransactionBancor(request: SwapBancorRequest) {
@@ -245,3 +245,4 @@ export class BancorAPI implements TraderAPI.Provider {
         })
     }
 }
+export const Bancor = new BancorAPI()

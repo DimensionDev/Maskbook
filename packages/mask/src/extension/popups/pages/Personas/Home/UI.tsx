@@ -12,7 +12,7 @@ import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
@@ -203,7 +203,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         hasPaymentPassword,
     }) => {
         const theme = useTheme()
-        const { t } = useMaskSharedTrans()
+        const t = useMaskSharedTrans()
         const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()
@@ -267,8 +267,8 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onChange={onChangeTab}
                                 aria-label="persona-tabs"
                                 classes={{ root: classes.tabs, grouped: classes.groupedButton }}>
-                                <Tab label={t('popups_social_account')} value={PopupHomeTabType.SocialAccounts} />
-                                <Tab label={t('popups_connected_wallets')} value={PopupHomeTabType.ConnectedWallets} />
+                                <Tab label={t.popups_social_account()} value={PopupHomeTabType.SocialAccounts} />
+                                <Tab label={t.popups_connected_wallets()} value={PopupHomeTabType.ConnectedWallets} />
                             </MaskTabList>
                         </Box>
                         <TabPanel className={classes.panel} value={PopupHomeTabType.SocialAccounts} data-hide-scrollbar>
@@ -293,9 +293,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         </Box>
                         <Box className={classes.content}>
                             <Box className={classes.titleWrapper}>
-                                <Typography className={classes.title}>{t('welcome_to_mask')}</Typography>
+                                <Typography className={classes.title}>{t.welcome_to_mask()}</Typography>
                                 <Typography className={classes.placeholderDescription}>
-                                    {t('popups_add_persona_description')}
+                                    {t.popups_add_persona_description()}
                                 </Typography>
                             </Box>
                             <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
@@ -303,9 +303,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
                                 </div>
                                 <div>
-                                    <Typography className={classes.subTitle}>{t('popups_create_persona')}</Typography>
+                                    <Typography className={classes.subTitle}>{t.popups_create_persona()}</Typography>
                                     <Typography className={classes.description}>
-                                        {t('popups_generate_a_new_persona')}
+                                        {t.popups_generate_a_new_persona()}
                                     </Typography>
                                 </div>
                             </Box>
@@ -315,11 +315,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
                                 </div>
                                 <div>
-                                    <Typography className={classes.subTitle}>
-                                        {t('popups_restore_and_login')}
-                                    </Typography>
+                                    <Typography className={classes.subTitle}>{t.popups_restore_and_login()}</Typography>
                                     <Typography className={classes.description}>
-                                        {t('popups_import_persona_description')}
+                                        {t.popups_import_persona_description()}
                                     </Typography>
                                 </div>
                             </Box>

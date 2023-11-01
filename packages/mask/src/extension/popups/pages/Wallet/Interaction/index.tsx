@@ -23,7 +23,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
 import { WalletAssetTabs } from '../type.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
@@ -102,7 +102,7 @@ const approveParametersType = [
 ]
 
 const Interaction = memo(function Interaction() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -231,7 +231,7 @@ const Interaction = memo(function Interaction() {
         } catch (error) {
             showSnackbar(
                 <Typography textAlign="center" width="275px">
-                    {t('popups_wallet_rpc_error')}
+                    {t.popups_wallet_rpc_error()}
                 </Typography>,
                 {
                     variant: 'error',
@@ -353,7 +353,7 @@ const Interaction = memo(function Interaction() {
                         style={{ cursor: 'pointer' }}
                         onClick={() => setExpand(!expand)}>
                         <Typography className={classes.text}>
-                            {t('popups_wallet_view_full_detail_transaction')}
+                            {t.popups_wallet_view_full_detail_transaction()}
                         </Typography>
                         <Icons.ArrowDrop
                             size={16}
@@ -371,13 +371,13 @@ const Interaction = memo(function Interaction() {
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>
                                     <Typography className={classes.itemTitle}>
-                                        {t('popups_wallet_unlock_erc20_approve_amount')}
+                                        {t.popups_wallet_unlock_erc20_approve_amount()}
                                     </Typography>
                                     <Typography className={classes.itemValue}>{approveAmount}</Typography>
                                 </Box>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>
                                     <Typography className={classes.itemTitle}>
-                                        {t('popups_wallet_unlock_erc20_granted_to')}
+                                        {t.popups_wallet_unlock_erc20_granted_to()}
                                     </Typography>
                                     <Typography className={classes.itemValue}>
                                         {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
@@ -387,11 +387,11 @@ const Interaction = memo(function Interaction() {
                         ) : null}
                         <Box display="flex" columnGap={0.5} alignItems="center">
                             <Icons.Documents className={classes.document} size={16} />
-                            <Typography className={classes.text}>{t('data')}</Typography>
+                            <Typography className={classes.text}>{t.data()}</Typography>
                         </Box>
                         {transaction?.formattedTransaction?.popup?.method ? (
                             <Typography className={classes.text}>
-                                {t('popups_wallet_transaction_function_name', {
+                                {t.popups_wallet_transaction_function_name({
                                     name: transaction?.formattedTransaction.popup.method,
                                 })}
                             </Typography>
@@ -416,7 +416,10 @@ const Interaction = memo(function Interaction() {
                                 }}
                             />
                             <Typography className={classes.text}>
-                                {t('popups_wallet_multiple_requests', { index: index + 1, total: messages.length })}
+                                {t.popups_wallet_multiple_requests({
+                                    index: String(index + 1),
+                                    total: String(messages.length),
+                                })}
                             </Typography>
                             <Icons.ArrowDrop
                                 size={16}
@@ -436,17 +439,17 @@ const Interaction = memo(function Interaction() {
                             color="info"
                             onClick={handleCancelAllRequest}
                             loading={cancelAllLoading}>
-                            {t('popups_wallet_reject_all_requests', { total: messages.length })}
+                            {t.popups_wallet_reject_all_requests({ total: String(messages.length) })}
                         </ActionButton>
                     </Box>
                 ) : null}
             </Box>
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
-                    {t('cancel')}
+                    {t.cancel()}
                 </ActionButton>
                 <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
-                    {signRequest.includes(currentRequest?.request.arguments.method) ? t('sign') : t('confirm')}
+                    {signRequest.includes(currentRequest?.request.arguments.method) ? t.sign() : t.confirm()}
                 </ActionButton>
             </BottomController>
         </Box>

@@ -17,7 +17,8 @@ import {
     Typography,
     alpha,
 } from '@mui/material'
-import { attachNextIDToProfile, useMaskSharedTrans } from '../../../utils/index.js'
+import { attachNextIDToProfile } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -134,7 +135,7 @@ interface SelectRecipientsDialogUIProps {
     onSetSelected(selected: Profile[]): void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')
@@ -201,7 +202,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         <InjectedDialog
             className={classes.root}
             open={props.open}
-            title={t('select_specific_friends_dialog__title')}
+            title={t.select_specific_friends_dialog__title()}
             onClose={handleClose}>
             <DialogContent className={classes.paper}>
                 <InputBase
@@ -221,12 +222,12 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={t('post_dialog_share_with_input_placeholder')}
+                    placeholder={t.post_dialog_share_with_input_placeholder()}
                 />
                 {props.loading ? (
                     <div className={cx(classes.empty, classes.mainText)}>
                         <LoadingBase />
-                        <Typography>{t('loading')}</Typography>
+                        <Typography>{t.loading()}</Typography>
                     </div>
                 ) : (
                     <Boundary>
@@ -235,7 +236,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 <div className={classes.list}>
                                     {results.length === 0 ? (
                                         <EmptyStatus className={classes.empty}>
-                                            {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
+                                            {props.searchEmptyText ?? t.compose_encrypt_share_dialog_empty()}
                                         </EmptyStatus>
                                     ) : (
                                         results.map((item, index) => {
@@ -262,7 +263,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                         sx={{ width: 20, height: 20 }}
                                         onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
                                     />
-                                    <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
+                                    <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
                                 </Stack>
                             ) : null}
                         </div>
@@ -277,7 +278,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         variant="roundedContained"
                         disabled={props.submitDisabled}
                         onClick={handleClose}>
-                        {t('back')}
+                        {t.back()}
                     </Button>
                     <ActionButtonPromise
                         className={classes.done}
@@ -288,9 +289,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"
-                        complete={t('done')}
-                        init={t('done')}
-                        waiting={t('done')}
+                        complete={t.done()}
+                        init={t.done()}
+                        waiting={t.done()}
                     />
                 </div>
             </DialogActions>

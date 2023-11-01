@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
@@ -16,7 +16,7 @@ interface WalletRenameDrawerProps extends BottomDrawerProps {
 }
 
 function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const [name, setName] = useState('')
     const [error, setError] = useState('')
@@ -26,14 +26,14 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
         if (!name || !wallet) return
         const _name = name.trim()
         if (_name.length > 18 || _name.length < 3) {
-            setError(t('popups_wallet_settings_rename_tips'))
+            setError(t.popups_wallet_settings_rename_tips())
             return
         }
 
         const nameExists = contacts.some((x) => x.name === _name)
 
         if (nameExists) {
-            setError(t('popups_wallet_settings_name_exists'))
+            setError(t.popups_wallet_settings_name_exists())
             return
         }
 
@@ -54,7 +54,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t('popups_wallet_settings_rename_tips')}
+                {t.popups_wallet_settings_rename_tips()}
             </Typography>
             <Box display="flex" justifyContent="center" mx={0.5}>
                 <TextField
@@ -93,7 +93,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 disabled={loading || !name.length || !!error}
                 onClick={handleClick}
                 sx={{ marginTop: '16px' }}>
-                {t('confirm')}
+                {t.confirm()}
             </ActionButton>
         </BottomDrawer>
     )

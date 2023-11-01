@@ -15,7 +15,8 @@ import {
     useForkRef,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatTokenBalance, useMaskSharedTrans } from '../../../../utils/index.js'
+import { formatTokenBalance } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -89,7 +90,7 @@ export const TokenItem = memo(function TokenItem({
     ...rest
 }: TokenItemProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const Others = useWeb3Others()
     const explorerLink = useMemo(() => {
@@ -176,7 +177,7 @@ export const TokenItem = memo(function TokenItem({
                                 <Icons.LinkOut size={18} />
                             </Link>
                         </Typography>
-                        {asset.isCustomToken ? <Typography>{t('added_by_user')}</Typography> : null}
+                        {asset.isCustomToken ? <Typography>{t.added_by_user()}</Typography> : null}
                     </>
                 }>
                 <Typography className={classes.text}>{asset.symbol}</Typography>

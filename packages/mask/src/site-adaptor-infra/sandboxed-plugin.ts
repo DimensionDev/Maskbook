@@ -8,7 +8,7 @@ import { hmr } from '../../utils-pure/index.js'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 
 let hot:
     | Map<

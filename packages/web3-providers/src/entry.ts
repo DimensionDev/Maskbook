@@ -36,7 +36,7 @@ export const Multicall = new MulticallAPI()
 export { Lens } from './Lens/index.js'
 export const RedPacket = new RedPacketAPI()
 export { TheGraphRedPacket } from './TheGraph/index.js'
-export { SimpleHashEVM } from './SimpleHash/index.js'
+export { SimpleHashEVM, SPAM_SCORE } from './SimpleHash/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 
@@ -136,3 +136,6 @@ export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
 
 // Calendar
 export { Calendar } from './Calendar/index.js'
+
+// NFT Spam
+export { NFTSpam } from './NFTSpam/index.js'

@@ -5,7 +5,10 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { createManager } from './manage.js'
 import type { Plugin } from '../types.js'
 
-const { activated, startDaemon, events, minimalMode } = createManager((def) => def.ExtensionPage)
+const { activated, startDaemon, events, minimalMode } = createManager(
+    (def) => def.ExtensionPage,
+    createManager.NoManagedContext,
+)
 
 const activatedSub = new ValueRefWithReady<Plugin.ExtensionPage.Definition[]>([], isEqual)
 events.on(ALL_EVENTS, () => (activatedSub.value = [...activated.plugins]))

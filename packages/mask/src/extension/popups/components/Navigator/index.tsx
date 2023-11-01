@@ -15,8 +15,6 @@ const useStyle = makeStyles()((theme) => ({
         backdropFilter: 'blur(8px)',
         boxShadow: theme.palette.maskColor.bottomBg,
         borderRadius: '12px 12px 0 0',
-        position: 'absolute',
-        bottom: 0,
     },
     action: {
         color: theme.palette.maskColor.third,

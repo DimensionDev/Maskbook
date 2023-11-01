@@ -48,15 +48,18 @@ const useStyles = makeStyles()((theme) => ({
     navigator: {
         flexShrink: 0,
         flexGrow: 0,
+        position: 'absolute',
+        bottom: 0,
+        zIndex: 999, // Setting too large will make it over popup modal
     },
 }))
 
 const PATTERNS = [
     PopupRoutes.Personas,
     PopupRoutes.Wallet,
-    PopupRoutes.SetPaymentPassword,
     PopupRoutes.Friends,
     PopupRoutes.Settings,
+    PopupRoutes.SetPaymentPassword,
 ]
 
 const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
@@ -72,7 +75,7 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
         <>
             {GlobalCss}
             <Paper elevation={0} sx={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
-                <div className={classes.container}>
+                <div className={classes.container} data-hide-scrollbar>
                     <div className={classes.body} data-hide-scrollbar>
                         {children ?? <Outlet context={outletContext} />}
                     </div>

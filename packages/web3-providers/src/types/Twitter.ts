@@ -342,6 +342,7 @@ export namespace TwitterBaseAPI {
             [key in 'create_tweet' | 'notetweet_create' | 'posttweet_created']: {
                 tweet_results: {
                     result: {
+                        /** post id */
                         rest_id: string
                         core: {
                             user_results: {

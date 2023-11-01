@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { AssetPreviewer, Image, NFTFallbackImage, ProgressiveText } from '@masknet/shared'
+import { AssetPreviewer, Image, NFTFallbackImage, NFTSpamBadge, ProgressiveText, useReportSpam } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, TextOverflowTooltip, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleAsset, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
@@ -13,11 +13,11 @@ import {
     isLensProfileAddress,
     resolveImageURL,
 } from '@masknet/web3-shared-evm'
-import { Button, Skeleton, Typography } from '@mui/material'
+import { Button, IconButton, Skeleton, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
@@ -56,6 +56,10 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    collectionNameLabel: {
+        marginLeft: 4,
+        marginRight: 4,
+    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
@@ -63,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
     },
     icon: {
-        marginRight: 4,
         borderRadius: '50%',
         overflow: 'hidden',
     },
@@ -143,11 +146,21 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'auto',
         width: 'auto',
     },
+    reportButton: {
+        color: theme.palette.maskColor.main,
+        height: 20,
+        width: 20,
+        padding: 0,
+        borderRadius: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 }))
 
 export const CollectibleDetail = memo(function CollectibleDetail() {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
     const { chainId, address, params } = useTokenParams()
@@ -161,7 +174,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
     useEffect(() => {
         if (!asset && !isLoading) navigate(-1)
     }, [!asset && !isLoading, navigate])
-    useTitle(asset?.metadata?.name || t('collectible_title'))
+    useTitle(asset?.metadata?.name || t.collectible_title())
 
     const availableAsset = asset || stateAsset
 
@@ -186,8 +199,8 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 className={classes.iconButton}
                 onClick={async () => {
                     const result = await ConfirmModal.openAndWaitForClose({
-                        title: t('hide_collectible', { name }),
-                        message: t('hide_collectible_description', { name }),
+                        title: t.hide_collectible({ name: String(name) }),
+                        message: t.hide_collectible_description({ name: String(name) }),
                     })
                     if (!result || !Token?.blockToken || !availableAsset) return
                     await Token.blockToken(account, {
@@ -208,7 +221,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                         },
                         [availableAsset.tokenId],
                     )
-                    showSnackbar(t('hided_token_successfully'))
+                    showSnackbar(t.hided_token_successfully())
                     navigate(-1)
                 }}>
                 <Icons.Trash size={24} />
@@ -234,6 +247,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
               availableAsset.contract?.address,
           )
         : NFTFallbackImage
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: availableAsset?.address,
+        chainId: availableAsset?.chainId,
+        collectionId: availableAsset?.collection?.id,
+    })
     return (
         <article className={classes.page} data-hide-scrollbar>
             {availableAsset ? (
@@ -257,44 +275,54 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 {availableAsset?.collection?.iconURL ? (
                     <Image size={24} classes={{ container: classes.icon }} src={availableAsset.collection.iconURL} />
                 ) : null}
-                <ProgressiveText loading={isLoading || !collectionName} skeletonWidth={80}>
+                <ProgressiveText
+                    className={classes.collectionNameLabel}
+                    loading={isLoading || !collectionName}
+                    skeletonWidth={80}>
                     {collectionName}
                 </ProgressiveText>
+                {isSpam ? (
+                    <NFTSpamBadge />
+                ) : (
+                    <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                        {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                    </IconButton>
+                )}
             </div>
             <div className={classes.prices}>
                 <div className={classes.price}>
                     <Typography variant="h2" className={classes.priceLabel}>
-                        {t('collectible_last_sale_price')}
+                        {t.collectible_last_sale_price()}
                     </Typography>
                     <Typography className={cx(classes.priceValue, lastSale ? '' : classes.noneValue)}>
                         {lastSale
                             ? `${formatBalance(lastSale.amount, lastSale.token.decimals)} ${lastSale.token.symbol}`
-                            : t('none')}
+                            : t.none()}
                     </Typography>
                 </div>
                 <div className={classes.price}>
                     <Typography variant="h2" className={classes.priceLabel}>
-                        {t('floor_price')}
+                        {t.floor_price()}
                     </Typography>
                     <Typography className={cx(classes.priceValue, floorPrice ? '' : classes.noneValue)}>
                         {floorPrice
                             ? `${formatBalance(floorPrice.value, floorPrice.payment_token.decimals)} ${
                                   floorPrice.payment_token.symbol
                               }`
-                            : t('none')}
+                            : t.none()}
                     </Typography>
                 </div>
             </div>
             <Typography variant="h2" className={classes.sectionTitle}>
-                {t('collectible_description')}
+                {t.collectible_description()}
             </Typography>
             <Typography variant="body1" className={classes.text}>
-                {assetDesc || t('none')}
+                {assetDesc || t.none()}
             </Typography>
             {isLoading || asset?.traits?.length ? (
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
-                        {t('collectible_properties')}
+                        {t.collectible_properties()}
                     </Typography>
                     <div className={classes.traits}>
                         {asset?.traits?.map((trait, index) => {
@@ -317,7 +345,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             {isLoading || collectionDesc ? (
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
-                        {t('about_collection', { name: collectionName })}
+                        {t.about_collection({ name: String(collectionName) })}
                     </Typography>
                     <ProgressiveText variant="body1" loading={isLoading} className={classes.text} skeletonWidth={100}>
                         {collectionDesc}
@@ -337,7 +365,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                         navigate(path)
                     }}>
                     <Icons.Send size={16} style={{ marginRight: 4 }} />
-                    {t('send')}
+                    {t.send()}
                 </Button>
             ) : null}
         </article>

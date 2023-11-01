@@ -7,7 +7,7 @@ let pendingUpdateTimer: ReturnType<typeof setTimeout> | null
 
 // #region Schema
 export type IdentifierWithAvatar = ProfileIdentifier | PersonaIdentifier
-type AvatarRecord = ArrayBuffer
+type AvatarRecord = ArrayBuffer | string
 interface AvatarMetadataRecord {
     identifier: string
     lastUpdateTime: Date
@@ -41,7 +41,7 @@ export const createAvatarDBAccess = createDBAccess(() => {
 export async function storeAvatarDB(
     t: IDBPSafeTransaction<AvatarDBSchema, ['metadata', 'avatars'], 'readwrite'>,
     id: IdentifierWithAvatar,
-    avatar: ArrayBuffer,
+    avatar: ArrayBuffer | string,
 ): Promise<void> {
     const meta: AvatarMetadataRecord = {
         identifier: id.toText(),
@@ -57,7 +57,7 @@ export async function storeAvatarDB(
 export async function queryAvatarDB(
     t: IDBPSafeTransaction<AvatarDBSchema, ['avatars']>,
     id: IdentifierWithAvatar,
-): Promise<ArrayBuffer | null> {
+): Promise<AvatarRecord | null> {
     const result = await t.objectStore('avatars').get(id.toText())
     if (result) scheduleAvatarMetaUpdate(id, { lastAccessTime: new Date() })
     return result || null

@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { NextIDProof } from '@masknet/web3-providers'
 import { EMPTY_LIST, type BindingProof, MaskMessages, Sniffings } from '@masknet/shared-base'
-import { delay } from '@masknet/kit'
 
 export function usePersonaProofs(publicKey?: string) {
     const result = useQuery<BindingProof[], Error>({
@@ -20,7 +19,6 @@ export function usePersonaProofs(publicKey?: string) {
             // Clearing the query cache when the proof relation changes
             if (publicKey) {
                 await NextIDProof.clearPersonaQueryCache(publicKey)
-                await delay(2000)
             }
             refetch()
         })

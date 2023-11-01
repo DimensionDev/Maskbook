@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { Image } from '@masknet/shared'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
+import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
 import { useSharedTrans } from '../../../locales/index.js'
@@ -11,12 +11,12 @@ const useStyles = makeStyles()((theme) => {
     return {
         collectionHeader: {
             display: 'flex',
-            justifyContent: 'space-between',
             color: theme.palette.maskColor.main,
         },
         info: {
             display: 'flex',
             alignItems: 'center',
+            marginRight: 'auto',
         },
         icon: {
             width: 24,
@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 32,
             color: theme.palette.maskColor.main,
             backgroundColor: theme.palette.maskColor.thirdMain,
+            marginLeft: theme.spacing(1),
         },
     }
 })
@@ -47,6 +48,11 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: currentCollection?.address,
+        chainId: currentCollection?.chainId,
+        collectionId: currentCollection?.id,
+    })
 
     if (!currentCollection) return null
     const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
@@ -63,10 +69,16 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
                 ) : null}
+                {isSpam ? <NFTSpamBadge /> : null}
             </Box>
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
+            {!isSpam ? (
+                <Button variant="text" className={classes.backButton} onClick={promptReport}>
+                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                </Button>
+            ) : null}
         </div>
     )
 })

@@ -30,7 +30,7 @@ import {
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 
@@ -80,7 +80,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     nonce,
     config,
 }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const gasRatio = useGasRatio(config.paymentToken)
@@ -125,9 +125,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     const gasPriceError = useMemo(() => {
         if (isSupport1559) return
-        if (isZero(gasPrice)) return t('popups_wallet_gas_price_should_greater_than_zero')
+        if (isZero(gasPrice)) return t.popups_wallet_gas_price_should_greater_than_zero()
         if (gasOptions && isGreaterThan(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
-            return t('popups_wallet_gas_price_too_low')
+            return t.popups_wallet_gas_price_too_low()
         }
         return
     }, [gasPrice, gasOptions, isSupport1559])
@@ -136,7 +136,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         if (!isSupport1559) return
         const formattedMaxPriorityFee = formatGweiToWei(maxPriorityFeePerGas)
         if (isZero(maxPriorityFeePerGas)) {
-            return t('popups_wallet_priority_fee_is_zero')
+            return t.popups_wallet_priority_fee_is_zero()
         } else if (
             gasOptions &&
             isGreaterThan(
@@ -144,9 +144,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                 new BigNumber(gasOptions.fast.suggestedMaxPriorityFeePerGas).multipliedBy(2),
             )
         ) {
-            return t('popups_wallet_priority_fee_is_too_high')
+            return t.popups_wallet_priority_fee_is_too_high()
         } else if (gasOptions && isLessThan(formattedMaxPriorityFee, gasOptions.slow.suggestedMaxPriorityFeePerGas)) {
-            return t('popups_wallet_priority_fee_is_too_low')
+            return t.popups_wallet_priority_fee_is_too_low()
         }
         return
     }, [maxPriorityFeePerGas, gasOptions, isSupport1559])
@@ -160,7 +160,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         if (formattedMaxPriorityFee.isZero()) return
 
         if (isGreaterThan(miniumMaxFeePerGas, formattedMaxFee)) {
-            return t('popups_wallet_max_fee_is_too_low', {
+            return t.popups_wallet_max_fee_is_too_low({
                 minimum: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP),
             })
         }
@@ -180,9 +180,9 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const tips = useMemo(() => {
         switch (replaceType) {
             case ReplaceType.CANCEL:
-                return t('popups_wallet_cancel_transaction_tips')
+                return t.popups_wallet_cancel_transaction_tips()
             case ReplaceType.SPEED_UP:
-                return t('popups_wallet_speed_up_transaction_tips')
+                return t.popups_wallet_speed_up_transaction_tips()
             default:
                 return
         }
@@ -261,12 +261,14 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             ) : null}
             {estimateSecond && !replaceType ? (
                 <Typography className={classes.seconds}>
-                    {t('popups_wallet_gas_price_estimate_second', { seconds: estimateSecond })}
+                    {}
+                    {/* @ts-expect-error https://github.com/Jack-Works/i18n-codegen/issues/10 */}
+                    {t.popups_wallet_gas_price_estimate_second({ seconds: String(estimateSecond) })}
                 </Typography>
             ) : null}
             {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ? (
                 <Alert severity="info">
-                    {t('popups_wallet_gas_price_current_base_fee', {
+                    {t.popups_wallet_gas_price_current_base_fee({
                         baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP),
                     })}
                 </Alert>
@@ -275,7 +277,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                 <>
                     <Box>
                         <Typography className={classes.title}>
-                            {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
+                            {replaceType ? t.nonce() : t.popups_wallet_gas_fee_settings_gas_limit()}
                         </Typography>
                         <TextField
                             value={toFixed(replaceType ? nonce : config.gas, 0)}
@@ -290,7 +292,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
                         <Box>
                             <Typography className={classes.title}>
-                                {t('popups_wallet_gas_fee_settings_max_priority_fee')}
+                                {t.popups_wallet_gas_fee_settings_max_priority_fee()}
                             </Typography>
                             <TextField
                                 error={!!maxPriorityFeePerGasError}
@@ -321,7 +323,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                     )
                                 }}
                                 InputProps={{
-                                    endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
+                                    endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     disableUnderline: true,
                                     inputProps: {
                                         min: 0,
@@ -332,7 +334,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         </Box>
                         <Box>
                             <Typography className={classes.title}>
-                                {t('popups_wallet_gas_fee_settings_max_fee')}
+                                {t.popups_wallet_gas_fee_settings_max_fee()}
                             </Typography>
                             <TextField
                                 error={!!maxFeePerGasError}
@@ -357,7 +359,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 }}
                                 value={maxFeePerGas}
                                 InputProps={{
-                                    endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
+                                    endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     disableUnderline: true,
                                     type: 'number',
                                     inputProps: {
@@ -371,7 +373,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             ) : (
                 <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
                     <Box>
-                        <Typography className={classes.title}>{t('popups_wallet_gas_price')}</Typography>
+                        <Typography className={classes.title}>{t.popups_wallet_gas_price()}</Typography>
                         <TextField
                             error={!!gasPriceError}
                             value={gasPrice}
@@ -393,7 +395,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                                 setGasPrice(e.target.value || '0')
                             }}
                             InputProps={{
-                                endAdornment: <Typography className={classes.unit}>{t('gwei')}</Typography>,
+                                endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                 disableUnderline: true,
                                 type: 'number',
                                 inputProps: {
@@ -404,7 +406,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     </Box>
                     <Box>
                         <Typography className={classes.title}>
-                            {replaceType ? t('nonce') : t('popups_wallet_gas_fee_settings_gas_limit')}
+                            {replaceType ? t.nonce() : t.popups_wallet_gas_fee_settings_gas_limit()}
                         </Typography>
                         <TextField
                             value={toFixed(replaceType ? nonce : config.gas, 0)}
@@ -420,7 +422,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             )}
             {error ? <Alert severity="error">{error}</Alert> : null}
             <Button onClick={handleConfirm} disabled={disabled}>
-                {t('confirm')}
+                {t.confirm()}
             </Button>
         </Box>
     )

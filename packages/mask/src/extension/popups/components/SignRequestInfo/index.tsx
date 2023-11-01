@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -52,21 +52,21 @@ interface SignRequestInfoProps {
 }
 
 export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestInfo({ message, source }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     return (
         <main className={classes.container}>
-            <Typography className={classes.title}>{t('popups_wallet_signature_request_title')}</Typography>
+            <Typography className={classes.title}>{t.popups_wallet_signature_request_title()}</Typography>
             {source ? (
                 <Box className={classes.source}>
                     <Typography fontSize={16} fontWeight={700}>
-                        {t('popups_wallet_request_source')}
+                        {t.popups_wallet_request_source()}
                     </Typography>
                     <Typography className={classes.sourceText}>{source}</Typography>
                 </Box>
             ) : null}
-            <Typography className={classes.messageTitle}>{t('popups_wallet_sign_message')}</Typography>
+            <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
             <Typography className={classes.message}>{message}</Typography>
         </main>
     )

@@ -8,7 +8,7 @@ export {
     typescript,
     typescriptWatch,
 } from './codegen/index.js'
-export { ciBuild, extensionWatch } from './extension/index.js'
+export { ciBuild, buildChrome, extensionWatch } from './extension/index.js'
 export { buildCloudflare } from './cloudflare/index.js'
 
 // Tools
@@ -26,3 +26,4 @@ export { buildSPA } from './projects/app.js'
 
 // Linter
 export { fixPluginsTSConfig } from './linter/plugin-projects.js'
+export { lintPackageJson as lintSideEffects } from './linter/package-json.js'

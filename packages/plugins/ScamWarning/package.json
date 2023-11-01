@@ -1,6 +1,7 @@
 {
   "name": "@masknet/plugin-scam-warning",
   "private": true,
+  "sideEffects": ["./src/register.ts"],
   "type": "module",
   "exports": {
     ".": {

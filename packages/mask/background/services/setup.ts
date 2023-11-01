@@ -5,7 +5,7 @@
 
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { getLocalImplementation, serializer, setDebugObject } from '@masknet/shared-base'
+import { getOrUpdateLocalImplementationHMR, serializer, setDebugObject } from '@masknet/shared-base'
 import type { GeneratorServices, Services } from './types.js'
 // #endregion
 
@@ -42,7 +42,7 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
     const channel = message.events[key].bind(MessageTarget.Broadcast)
 
     async function load() {
-        const val = await getLocalImplementation(true, `Services.${key}`, implementation, channel)
+        const val = await getOrUpdateLocalImplementationHMR(implementation, channel)
         DebugService[key] = val
         return val
     }

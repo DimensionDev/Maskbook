@@ -50,7 +50,8 @@ export const searchInstagramPostAvatarSelector = () =>
 export const inpageAvatarSelector = () =>
     querySelectorAll<HTMLDivElement>('[role=main] article[role=presentation] header [role=button]')
 
-export const searchInstagramHandleSelector = () => querySelector<HTMLAnchorElement>('section main header section a h2')
+export const searchInstagramHandleSelector = () =>
+    querySelector<HTMLAnchorElement>('a[role=link]:has(img[alt$=" profile picture"])')
 export const searchInstagramSelfAvatarSelector = () =>
     querySelector(
         'div[style="transform: translateX(0px);"] > div > div > div:last-child > div > span[aria-describedby] > div > a img[crossorigin="anonymous"]',

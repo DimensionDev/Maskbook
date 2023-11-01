@@ -10,7 +10,6 @@ import {
 } from '@masknet/shared-base'
 import { type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-solana'
-import { type Asset, type Collection } from '../type.js'
 import { fetchFromSimpleHash, resolveChain } from '../helpers.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 import {
@@ -19,6 +18,7 @@ import {
     resolveSolanaChainId,
 } from '../solana-helpers.js'
 import { SPAM_SCORE } from '../constants.js'
+import type { SimpleHash } from '../../types/SimpleHash.js'
 
 class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
@@ -29,7 +29,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             address,
             tokenId,
         })
-        const response = await fetchFromSimpleHash<Asset>(path)
+        const response = await fetchFromSimpleHash<SimpleHash.Asset>(path)
         return createSolanaNonFungibleAsset(response)
     }
 
@@ -45,7 +45,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
-        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
         const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
@@ -71,7 +71,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
-        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
 
         const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
@@ -97,7 +97,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             wallet_addresses: account,
         })
 
-        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
 
         const collections = response.collections
             // Might got bad data responded including id field and other fields empty
@@ -130,7 +130,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             limit: size,
         })
 
-        const response = await fetchFromSimpleHash<{ nfts: Asset[]; next_cursor: string }>(path)
+        const response = await fetchFromSimpleHash<{ nfts: SimpleHash.Asset[]; next_cursor: string }>(path)
 
         const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
@@ -147,7 +147,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         const path = urlcat('/api/v0/nfts/collections/ids', {
             collection_ids: id,
         })
-        const response = await fetchFromSimpleHash<{ collections: Collection[] }>(path)
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)

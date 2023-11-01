@@ -1,4 +1,4 @@
-import { type PluginMessageEmitter, createPluginMessage } from '@masknet/plugin-infra'
+import { type PluginMessageEmitter, getPluginMessage } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants.js'
 
 export interface PluginClaimMessage {
@@ -10,5 +10,5 @@ export interface PluginClaimMessage {
     }
 }
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginClaimMessage: PluginMessageEmitter<PluginClaimMessage> = createPluginMessage(PLUGIN_ID)
+import.meta.webpackHot?.accept()
+export const PluginClaimMessage: PluginMessageEmitter<PluginClaimMessage> = getPluginMessage(PLUGIN_ID)

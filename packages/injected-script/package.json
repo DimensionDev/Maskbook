@@ -3,6 +3,7 @@
   "type": "module",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": ["./sdk/index.ts", "./main/**"],
   "exports": {
     ".": {
       "types": "./dist/sdk/index.d.ts",

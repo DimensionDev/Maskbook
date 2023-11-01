@@ -375,17 +375,20 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             return inputTokenBalance
 
         return toFixed(
-            minus(
-                inputTokenBalance,
+            BigNumber.max(
+                minus(
+                    inputTokenBalance,
 
-                new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
-                    .multipliedBy(
-                        focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas)
-                            ? addGasMargin(focusedTrade?.value.gas)
-                            : '150000',
-                    )
-                    .integerValue()
-                    .multipliedBy(smartPayConfig?.ratio ?? 1),
+                    new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
+                        .multipliedBy(
+                            focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas)
+                                ? addGasMargin(focusedTrade?.value.gas)
+                                : '150000',
+                        )
+                        .integerValue()
+                        .multipliedBy(smartPayConfig?.ratio ?? 1),
+                ),
+                0,
             ),
             0,
         )

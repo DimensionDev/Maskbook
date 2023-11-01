@@ -58,6 +58,8 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
 /**
  * Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
  * but they might not list all, for example, missing 369:pls
+ *
+ * Rabby use this map as well.
  */
 export const CHIAN_ID_TO_DEBANK_CHAIN_MAP: Record<number, DebankChains> = {
     1: 'eth',

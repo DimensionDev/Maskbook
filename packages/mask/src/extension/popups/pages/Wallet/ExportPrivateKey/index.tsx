@@ -10,7 +10,7 @@ import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { NormalHeader } from '../../../components/index.js'
@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ExportPrivateKey = memo(function ExportPrivateKey() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const wallet = useWallet()
@@ -114,14 +114,14 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                 tabList={
                     !getMnemonicLoading && mnemonic ? (
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                            <Tab label={t('popups_wallet_name_mnemonic')} value={TabType.Mnemonic} />
-                            <Tab label={t('popups_wallet_name_private_key')} value={TabType.PrivateKey} />
-                            <Tab label={t('popups_wallet_name_keystore')} value={TabType.JsonFile} />
+                            <Tab label={t.popups_wallet_name_mnemonic()} value={TabType.Mnemonic} />
+                            <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
+                            <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
                         </MaskTabList>
                     ) : (
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                            <Tab label={t('popups_wallet_name_private_key')} value={TabType.PrivateKey} />
-                            <Tab label={t('popups_wallet_name_keystore')} value={TabType.JsonFile} />
+                            <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
+                            <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
                         </MaskTabList>
                     )
                 }
@@ -130,18 +130,18 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                 {!getMnemonicLoading && mnemonic ? (
                     <TabPanel className={classes.panel} value={TabType.Mnemonic}>
                         <Typography sx={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}>
-                            {t('popups_wallet_backup_mnemonic_title')}
+                            {t.popups_wallet_backup_mnemonic_title()}
                         </Typography>
                         <Typography
                             sx={{ py: 2, color: theme.palette.maskColor.second, fontSize: 14, lineHeight: '18px' }}>
-                            {t('popups_wallet_backup_mnemonic_tips')}
+                            {t.popups_wallet_backup_mnemonic_tips()}
                         </Typography>
                         <MnemonicDisplay mnemonic={mnemonic} />
                     </TabPanel>
                 ) : null}
                 <TabPanel className={classes.panel} value={TabType.PrivateKey}>
                     <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
-                        {t('popups_wallet_settings_export_private_key_title')}
+                        {t.popups_wallet_settings_export_private_key_title()}
                     </Typography>
                     <Box
                         display="flex"
@@ -166,14 +166,14 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                     <Box className={classes.iconWrapper}>
                         <Icons.EncryptedFiles size={36} />
                     </Box>
-                    <Typography color={theme.palette.maskColor.danger}>{t('popups_export_keystore_tips')}</Typography>
+                    <Typography color={theme.palette.maskColor.danger}>{t.popups_export_keystore_tips()}</Typography>
                 </TabPanel>
             </Box>
 
             {currentTab === TabType.JsonFile ? (
                 <BottomController>
                     <ActionButton onClick={onExport} fullWidth loading={loading} disabled={loading}>
-                        {t('export')}
+                        {t.export()}
                     </ActionButton>
                 </BottomController>
             ) : null}

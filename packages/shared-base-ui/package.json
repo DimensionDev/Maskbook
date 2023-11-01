@@ -3,6 +3,7 @@
   "description": "This package MUST be pure.",
   "type": "module",
   "private": true,
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -20,6 +21,5 @@
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "urlcat": "^3.1.0"
-  },
-  "sideEffects": false
+  }
 }

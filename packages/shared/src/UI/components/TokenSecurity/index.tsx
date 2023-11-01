@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, type StackProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -80,6 +80,26 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Icons.RightArrow size={14} color="#1C68F3" />
                 </Stack>
             )}
+        </Stack>
+    )
+})
+
+export const NFTSpamBadge = memo(function NFTSpamBadge(props: StackProps) {
+    const t = useSharedTrans()
+
+    return (
+        <Stack
+            direction="row"
+            alignItems="center"
+            borderRadius="4px"
+            padding="4px 8px"
+            bgcolor={DefineMapping[SecurityMessageLevel.High].bgColor}
+            spacing={0.5}
+            {...props}>
+            {DefineMapping[SecurityMessageLevel.High].icon(14)}
+            <Typography component="span" fontSize="12px" color={DefineMapping[SecurityMessageLevel.High].titleColor}>
+                {t.spam()}
+            </Typography>
         </Stack>
     )
 })

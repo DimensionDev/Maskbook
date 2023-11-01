@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'
@@ -13,7 +13,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 
 const ExportPrivateKey = memo(function ExportPrivateKey() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()
     const { currentPersona } = PersonaContext.useContainer()
@@ -33,7 +33,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         if (!value) return
         copyToClipboard(value)
 
-        showSnackbar(t('copied'))
+        showSnackbar(t.copied())
     }, [value])
 
     useTitle(currentPersona?.nickname ?? '')
@@ -41,7 +41,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
     return (
         <Box>
             <Box p={2} display="flex" flexDirection="column" rowGap={2}>
-                <Typography fontWeight={700}>{t('popups_wallet_backup_private_key')}</Typography>
+                <Typography fontWeight={700}>{t.popups_wallet_backup_private_key()}</Typography>
                 {value ? (
                     <Typography
                         p={1.5}
@@ -66,10 +66,10 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
             </Box>
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleBack}>
-                    {t('back')}
+                    {t.back()}
                 </Button>
                 <ActionButton onClick={handleCopy} fullWidth>
-                    {t('copy')}
+                    {t.copy()}
                 </ActionButton>
             </BottomController>
         </Box>

@@ -32,7 +32,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .then((x) => x.url)
         .then(getUserID)
         .then((id) => {
-            const nickname = getNickName()
+            const nickname = getNickName(id)
             const avatar = getAvatar()
             assign({
                 ...ref.value,

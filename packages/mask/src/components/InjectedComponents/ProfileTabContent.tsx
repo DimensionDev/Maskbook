@@ -42,7 +42,7 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -57,6 +57,7 @@ import Services from '#services'
 const useStyles = makeStyles()((theme) => ({
     root: {
         width: Sniffings.is_facebook_page ? 876 : 'auto',
+        color: theme.palette.maskColor.main,
     },
     container: {
         background:
@@ -138,7 +139,7 @@ function openWeb3ProfileSettingDialog() {
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
 
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const translate = usePluginTransField()
 
     const [hidden, setHidden] = useState(true)
@@ -372,10 +373,10 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.danger}>
-                                {t('load_failed')}
+                                {t.load_failed()}
                             </Typography>
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
-                                {t('reload')}
+                                {t.reload()}
                             </Button>
                         </Stack>
                     </PluginCardFrameMini>
@@ -396,7 +397,7 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.publicMain}>
-                                {t('web3_profile_no_social_address_list')}
+                                {t.web3_profile_no_social_address_list()}
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
@@ -468,14 +469,14 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={700}
                                 marginRight="5px"
                                 color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                {t('powered_by')}
+                                {t.powered_by()}
                             </Typography>
                             <Typography
                                 fontSize="14px"
                                 fontWeight={700}
                                 marginRight="4px"
                                 color={(theme) => theme.palette.maskColor.dark}>
-                                {t('mask_network')}
+                                {t.mask_network()}
                             </Typography>
                             {isOwnerIdentity && isOnTwitter ? (
                                 <ConnectPersonaBoundary

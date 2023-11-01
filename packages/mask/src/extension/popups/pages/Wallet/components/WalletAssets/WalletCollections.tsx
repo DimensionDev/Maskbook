@@ -5,10 +5,10 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
-import { useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 
@@ -16,7 +16,10 @@ const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
     gap: '8px',
 }
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hasNav: boolean }>()((theme, { hasNav }) => ({
+    grid: {
+        paddingBottom: hasNav ? 72 : undefined,
+    },
     importNft: {
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
@@ -67,8 +70,9 @@ interface Props {
 
 export const WalletCollections = memo<Props>(
     forwardRef<HTMLDivElement, Props>(function WalletCollections({ onAddToken, scrollTargetRef }, ref) {
-        const { t } = useMaskSharedTrans()
-        const { classes } = useStyles()
+        const t = useMaskSharedTrans()
+        const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+        const { classes } = useStyles({ hasNav: hasNavigator })
         const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
         const [, setParams] = useSearchParams()
         const additionalAssets = useAdditionalAssets()
@@ -101,15 +105,16 @@ export const WalletCollections = memo<Props>(
 
         const collectiblesEmptyText = (
             <>
-                <Typography component="div">{t('do_not_see_your_nft')}</Typography>
+                <Typography component="div">{t.do_not_see_your_nft()}</Typography>
                 <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
-                    {t('import_nft')}
+                    {t.import_nft()}
                 </Typography>
             </>
         )
         return (
             <CollectionList
                 ref={ref}
+                classes={{ grid: classes.grid }}
                 gridProps={gridProps}
                 disableSidebar
                 disableWindowScroll

@@ -19,6 +19,7 @@ import { createRequire } from 'node:module'
 
 import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
+import { ProfilingPlugin } from './ProfilingPlugin.js'
 
 import './clean-hmr.js'
 
@@ -26,6 +27,8 @@ const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
 const patchesDir = join(__dirname, '../../../patches')
 const templateContent = readFile(join(__dirname, './template.html'), 'utf8')
+const popupTemplateContent = readFile(join(__dirname, './popups.html'), 'utf8')
+
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
@@ -84,7 +87,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 https: require.resolve('https-browserify'),
                 stream: require.resolve('stream-browserify'),
                 crypto: require.resolve('crypto-browserify'),
-                buffer: require.resolve('buffer'),
                 zlib: require.resolve('zlib-browserify'),
                 'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
@@ -195,6 +197,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
+            flags.profiling && new ProfilingPlugin(),
             ...emitManifestFile(flags, computedFlags),
             new CopyPlugin({
                 patterns: [
@@ -302,21 +305,27 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     }
 
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
-        dashboard: withReactDevTools(join(__dirname, '../src/extension/dashboard/index.ts')),
+        dashboard: withReactDevTools(join(__dirname, '../dashboard/index.ts')),
         popups: withReactDevTools(join(__dirname, '../src/extension/popups/entry.ts')),
         contentScript: withReactDevTools(join(__dirname, '../src/content-script.ts')),
         background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
     })
     baseConfig.plugins!.push(
-        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
-        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
-        await addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
-        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true }),
+        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
+        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
+        await addHTMLEntry({
+            chunks: ['contentScript'],
+            filename: 'generated__content__script.html',
+            perf: flags.profiling,
+        }),
+        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true, perf: flags.profiling }),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
-        baseConfig.plugins!.push(await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html' }))
+        baseConfig.plugins!.push(
+            await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', perf: flags.profiling }),
+        )
     }
     return baseConfig
 
@@ -327,17 +336,19 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         return entry
     }
 }
-async function addHTMLEntry(
-    options: HTMLPlugin.Options & {
-        gun?: boolean
-    },
-) {
-    let template = await templateContent
-    if (options.gun) {
-        template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
-    }
+async function addHTMLEntry({
+    gun,
+    perf,
+    ...options
+}: HTMLPlugin.Options & {
+    gun?: boolean
+    perf: boolean
+}) {
+    let template = await (options.filename === 'popups.html' && !perf ? popupTemplateContent : templateContent)
+    if (gun) template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
+    if (perf) template = template.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
     return new HTMLPlugin({
-        templateContent,
+        templateContent: template,
         inject: 'body',
         scriptLoading: 'defer',
         minify: false,

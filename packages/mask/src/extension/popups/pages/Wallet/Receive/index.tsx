@@ -6,7 +6,7 @@ import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 
@@ -112,7 +112,7 @@ const avatarProps: AvatarProps = {
 }
 export default memo(function Receive() {
     const { classes } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { chainId, address, rawAddress } = useTokenParams()
     // No specific token but only for chain
@@ -122,7 +122,7 @@ export default memo(function Receive() {
 
     const asset = useAsset(chainId, address ?? '', account)
 
-    useTitle(t('wallet_receive'))
+    useTitle(t.wallet_receive())
 
     const name = isChain ? currentNetwork?.name : asset?.symbol
     const MainIcon = isChain ? (
@@ -174,7 +174,7 @@ export default memo(function Receive() {
                     </Box>
                 </div>
             </div>
-            <Typography className={classes.tip}>{t('scan_address_to_payment')}</Typography>
+            <Typography className={classes.tip}>{t.scan_address_to_payment()}</Typography>
         </Box>
     )
 })

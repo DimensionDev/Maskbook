@@ -341,5 +341,11 @@
     "reset": "crwdns21981:0crwdne21981:0",
     "editor": "crwdns21983:0crwdne21983:0",
     "typed_message_text_alert": "crwdns21985:0crwdne21985:0",
-    "share_to_social_networks": "crwdns22147:0crwdne22147:0"
+    "share_to_social_networks": "crwdns22147:0crwdne22147:0",
+    "report_nft": "crwdns22526:0crwdne22526:0",
+    "confirm_to_report_nft": "crwdns22528:0{{name}}crwdne22528:0",
+    "spam": "crwdns22530:0crwdne22530:0",
+    "report_spam": "crwdns22532:0crwdne22532:0",
+    "report_spam_success": "crwdns22534:0crwdne22534:0",
+    "report_spam_fail": "crwdns22536:0crwdne22536:0"
 }

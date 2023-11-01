@@ -20,7 +20,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const { openDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated)
+                    const { openDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated)
 
                     return (
                         <ApplicationEntry

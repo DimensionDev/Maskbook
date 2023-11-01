@@ -1,6 +1,6 @@
-import { AssetPreviewer, NFTFallbackImage } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { AssetPreviewer, NFTFallbackImage, NFTSpamBadge, useReportSpam } from '@masknet/shared'
+import { LoadingBase, makeStyles, MaskColorVar, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { Box, IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -25,25 +25,29 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
     },
     nameSm: {
-        marginTop: 36,
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.publicMain,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        marginRight: 'auto',
     },
     nameLg: {
         fontSize: 18,
         fontWeight: 700,
         wordBreak: 'break-word',
         alignItems: 'center',
+        marginRight: 'auto',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     nameLgBox: {
         display: 'flex',
-        placeSelf: 'center',
         gap: 6,
         marginTop: 12,
+        alignItems: 'center',
     },
     image: {},
     fallbackImage: {
@@ -54,6 +58,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     unset: {
         color: 'unset',
+    },
+    reportButton: {
+        color: theme.palette.maskColor.main,
+        height: 20,
+        width: 20,
+        padding: 0,
+        borderRadius: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 7,
     },
 }))
 
@@ -67,6 +82,11 @@ export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: asset.address,
+        chainId: asset.chainId,
+        collectionId: asset.collection?.id,
+    })
 
     return (
         <div className={classes.root}>
@@ -83,18 +103,28 @@ export function FigureCard(props: FigureCardProps) {
                 </div>
             </div>
 
-            <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
-                {asset.metadata?.name ?? '-'}
-            </Typography>
+            <Box display="flex" alignItems="center" mt={4}>
+                <TextOverflowTooltip title={asset.metadata?.name} as={ShadowRootTooltip}>
+                    <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                        {asset.metadata?.name ?? '-'}
+                    </Typography>
+                </TextOverflowTooltip>
+            </Box>
 
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>
-                        {asset.collection?.name}
-                        {asset.collection?.verified ? (
-                            <Icons.Verification style={{ transform: 'translate(4px, 5px)' }} />
-                        ) : null}
-                    </Typography>
+                    <TextOverflowTooltip title={asset.collection?.name} as={ShadowRootTooltip}>
+                        <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
+                    </TextOverflowTooltip>
+                    {asset.collection?.verified ? <Icons.Verification /> : null}
+
+                    {isSpam ? (
+                        <NFTSpamBadge ml="7px" />
+                    ) : (
+                        <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                            {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
+                        </IconButton>
+                    )}
                 </div>
             )}
         </div>

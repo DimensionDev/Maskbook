@@ -5,8 +5,7 @@ import { LanguageOptions } from '@masknet/public-api'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
-import { useLanguage } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans, useLanguage } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLanguageModal({ ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const lang = useLanguage()
     const handleLanguageChange = useCallback(async (target: LanguageOptions) => {
@@ -32,7 +31,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     }, [])
     const LANGUAGE_OPTIONS_MAP = useMemo(
         () => ({
-            [LanguageOptions.__auto__]: t('popups_settings_language_auto'),
+            [LanguageOptions.__auto__]: t.popups_settings_language_auto(),
             [LanguageOptions.enUS]: 'English',
             [LanguageOptions.zhCN]: '简体中文',
             [LanguageOptions.zhTW]: '繁体中文',
@@ -43,7 +42,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     )
 
     return (
-        <ActionModal header={t('popups_settings_select_language')} {...rest}>
+        <ActionModal header={t.popups_settings_select_language()} {...rest}>
             <List>
                 {getEnumAsArray(LanguageOptions).map((x) => {
                     return (

@@ -7,7 +7,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
@@ -110,7 +110,7 @@ interface WalletAssetsUIProps {
 }
 
 const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [params] = useSearchParams()
 
     const { classes } = useStyles()
@@ -128,17 +128,17 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
                     <StyledTabList value={currentTab} onChange={handleTabChange}>
                         <Tab
                             className={classes.tab}
-                            label={t('popups_wallet_tab_assets')}
+                            label={t.popups_wallet_tab_assets()}
                             value={WalletAssetTabs.Tokens}
                         />
                         <Tab
                             className={classes.tab}
-                            label={t('popups_wallet_tab_collectibles')}
+                            label={t.popups_wallet_tab_collectibles()}
                             value={WalletAssetTabs.Collectibles}
                         />
                         <Tab
                             className={classes.tab}
-                            label={t('popups_wallet_tab_activity')}
+                            label={t.popups_wallet_tab_activity()}
                             value={WalletAssetTabs.Activity}
                         />
                     </StyledTabList>

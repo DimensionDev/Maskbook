@@ -3,7 +3,7 @@ import urlcat from 'urlcat'
 import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
+import.meta.webpackHot?.accept()
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const MindsAdaptor: SiteAdaptor.Definition = {

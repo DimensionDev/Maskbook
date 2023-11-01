@@ -7,7 +7,10 @@ import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
 
-const { events, activated, startDaemon, minimalMode } = createManager((def) => def.SiteAdaptor)
+const { events, activated, startDaemon, minimalMode } = createManager(
+    (def) => def.SiteAdaptor,
+    createManager.NoManagedContext,
+)
 const activatedSub = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([], isEqual)
 events.on('activateChanged', () => (activatedSub.value = [...activated.plugins]))
 

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import {
     toPNG,
@@ -30,7 +30,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTAvatarSettingDialog() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
     const { account } = useChainContext()
@@ -88,7 +88,7 @@ export function NFTAvatarSettingDialog() {
         SelectProviderModal.open()
     }, [])
     return (
-        <InjectedDialog keepMounted open={open} onClose={onClose} title={t('set_nft_profile_photo')}>
+        <InjectedDialog keepMounted open={open} onClose={onClose} title={t.set_nft_profile_photo()}>
             <DialogContent style={{ padding: 16 }}>
                 {account ? (
                     <NFTAvatar
@@ -99,7 +99,7 @@ export function NFTAvatarSettingDialog() {
                     />
                 ) : (
                     <div className={classes.wallet}>
-                        <Button onClick={onClick}>{t('connect_your_wallet')}</Button>
+                        <Button onClick={onClick}>{t.connect_your_wallet()}</Button>
                     </div>
                 )}
             </DialogContent>

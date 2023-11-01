@@ -28,7 +28,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '#services'
@@ -93,7 +93,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ConnectWalletPage = memo(function ConnectWalletPage() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -149,7 +149,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
                 return true
             } catch {
-                showSnackbar(t('popups_verify_wallet_bind_fail_tips'), {
+                showSnackbar(t.popups_verify_wallet_bind_fail_tips(), {
                     variant: 'error',
                 })
                 return false
@@ -187,13 +187,13 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
             const result = await bindProof(payload, walletSignature, personaSignature)
 
-            if (result) showSnackbar(t('popups_verify_wallet_sign_success_tips'))
+            if (result) showSnackbar(t.popups_verify_wallet_sign_success_tips())
 
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             return true
         } catch (error) {
-            showSnackbar(t('popups_verify_wallet_sign_fail_tips'), {
+            showSnackbar(t.popups_verify_wallet_sign_fail_tips(), {
                 variant: 'error',
             })
             return false
@@ -232,7 +232,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         })
     }, [])
 
-    useTitle(t('plugin_wallet_connect_a_wallet'), handleBack)
+    useTitle(t.plugin_wallet_connect_a_wallet(), handleBack)
 
     return (
         <Box>
@@ -251,7 +251,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                                         className={classes.link}
                                         href={account ? ExplorerResolver.addressLink(chainId, account) : '#'}
                                         target="_blank"
-                                        title={t('plugin_wallet_view_on_explorer')}
+                                        title={t.plugin_wallet_view_on_explorer()}
                                         rel="noopener noreferrer">
                                         <Icons.LinkOut size={12} />
                                     </Link>
@@ -259,16 +259,16 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                             </Box>
                         </Box>
                         <Button size="small" onClick={handleChooseAnotherWallet}>
-                            {t('wallet_status_button_change')}
+                            {t.wallet_status_button_change()}
                         </Button>
                     </Box>
                     {isBound ? (
                         <Typography className={classes.bounded}>
-                            {t('popups_verify_wallet_bounded_tips', { persona: currentPersona?.nickname })}
+                            {t.popups_verify_wallet_bounded_tips({ persona: String(currentPersona?.nickname) })}
                         </Typography>
                     ) : null}
-                    <Typography className={classes.description}>{t('popups_verify_wallet_description')}</Typography>
-                    {loading ? <LoadingMask text={t('signing')} /> : null}
+                    <Typography className={classes.description}>{t.popups_verify_wallet_description()}</Typography>
+                    {loading ? <LoadingMask text={t.signing()} /> : null}
                 </Box>
             ) : (
                 <Box p={2} display="flex" flexDirection="column" alignItems="center">
@@ -276,11 +276,11 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                         &#x1F389;
                     </Typography>
                     <Typography fontSize={24} lineHeight="120%" fontWeight={700} my={1.5}>
-                        {t('congratulations')}
+                        {t.congratulations()}
                     </Typography>
                     <Typography className={classes.congratulation}>
-                        {t('popups_verify_wallet_congratulation_tips', {
-                            persona: currentPersona?.nickname,
+                        {t.popups_verify_wallet_congratulation_tips({
+                            persona: String(currentPersona?.nickname),
                             wallet: walletName,
                         })}
                     </Typography>
@@ -303,15 +303,15 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
             )}
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 {!signResult ? (
                     <ActionButton fullWidth onClick={handleSign} disabled={loading || isBound}>
-                        {t('sign')}
+                        {t.sign()}
                     </ActionButton>
                 ) : (
                     <ActionButton fullWidth onClick={handleDone}>
-                        {t('done')}
+                        {t.done()}
                     </ActionButton>
                 )}
             </BottomController>

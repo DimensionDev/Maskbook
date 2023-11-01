@@ -2,7 +2,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { forwardRef, memo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { BottomDrawer, TokenPicker, type BottomDrawerProps, type TokenPickerProps } from '../../components/index.js'
 
 interface ChooseTokenModalProps extends BottomDrawerProps, Omit<TokenPickerProps, 'title' | 'classes'> {}
@@ -25,7 +25,7 @@ export type ChooseTokenModalCloseProps = Web3Helper.FungibleAssetAll | void
 export const ChooseTokenModal = forwardRef<
     SingletonModalRefCreator<ChooseTokenModalOpenProps, ChooseTokenModalCloseProps>
 >(function ChooseTokenModal(_, ref) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [props, setProps] = useState<ChooseTokenModalOpenProps>({})
 
     const [open, dispatch] = useSingletonModal(ref, {
@@ -38,7 +38,7 @@ export const ChooseTokenModal = forwardRef<
         <ChooseTokenDrawer
             {...props}
             open={open}
-            title={t('popups_wallet_choose_token')}
+            title={t.popups_wallet_choose_token()}
             onClose={() => dispatch?.close()}
             onSelect={(asset) => dispatch?.close(asset)}
         />

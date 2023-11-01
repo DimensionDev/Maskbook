@@ -1,4 +1,4 @@
-import { MaskMessages, ProfileIdentifier, type PersonaIdentifier } from '@masknet/shared-base'
+import { MaskMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
@@ -6,15 +6,14 @@ import { useAsync } from 'react-use'
 import Services from '../../../../../shared-ui/service.js'
 import { EventMap } from '../../../../extension/popups/pages/Personas/common.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
-import { usePersonaConnected } from './usePersonaConnected.js'
-import { useSetupGuideStepInfo } from './useSetupGuideStepInfo.js'
+import { SetupGuideContext } from '../SetupGuideContext.js'
 
-export function useConnectPersona(persona?: PersonaIdentifier) {
-    const { step, userId, currentIdentityResolved, destinedPersonaInfo: personaInfo } = useSetupGuideStepInfo(persona)
+export function useConnectPersona() {
+    const { userId, myIdentity, personaInfo, setIsFirstConnection, connected } = SetupGuideContext.useContainer()
     const site = activatedSiteAdaptorUI!.networkIdentifier
-    const connected = usePersonaConnected(persona)
-    const { loading } = useAsync(async () => {
-        if (!persona || connected) return
+    const persona = personaInfo?.identifier
+    return useAsync(async () => {
+        if (!persona || !userId || connected) return
         const id = ProfileIdentifier.of(site, userId)
         if (!id.isSome()) return
         // attach persona with site profile
@@ -22,9 +21,10 @@ export function useConnectPersona(persona?: PersonaIdentifier) {
             connectionConfirmState: 'confirmed',
         })
 
-        if (currentIdentityResolved.avatar) {
+        setIsFirstConnection(true)
+        if (myIdentity.avatar) {
             await Services.Identity.updateProfileInfo(id.value, {
-                avatarURL: currentIdentityResolved.avatar,
+                avatarURL: myIdentity.avatar,
             })
         }
         // auto-finish the setup process
@@ -34,7 +34,5 @@ export function useConnectPersona(persona?: PersonaIdentifier) {
         MaskMessages.events.ownPersonaChanged.sendToAll()
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
-    }, [site, personaInfo, step, persona, userId, currentIdentityResolved.avatar, connected])
-
-    return loading
+    }, [site, persona, userId, myIdentity.avatar, connected])
 }

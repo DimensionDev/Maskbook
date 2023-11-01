@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ResetWallet = memo(function ResetWallet() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [answer, setAnswer] = useState('')
@@ -94,16 +94,16 @@ const ResetWallet = memo(function ResetWallet() {
         <Box className={classes.container}>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
-                    <Typography className={classes.title}>{t('popups_wallet_reset_wallet')}</Typography>
+                    <Typography className={classes.title}>{t.popups_wallet_reset_wallet()}</Typography>
                 </Box>
-                <Typography className={classes.description}>{t('popups_wallet_reset_wallet_description_1')}</Typography>
+                <Typography className={classes.description}>{t.popups_wallet_reset_wallet_description_1()}</Typography>
                 <Typography className={classes.description}>
                     <Trans
                         i18nKey="popups_wallet_reset_wallet_description_2"
                         components={{ strong: <strong className={classes.strong} /> }}
                     />
                 </Typography>
-                <Typography className={classes.description}>{t('popups_wallet_reset_wallet_description_3')}</Typography>
+                <Typography className={classes.description}>{t.popups_wallet_reset_wallet_description_3()}</Typography>
                 <StyledInput
                     type="text"
                     autoFocus
@@ -116,7 +116,7 @@ const ResetWallet = memo(function ResetWallet() {
             </Box>
             <Box className={classes.bottomAction}>
                 <Button onClick={onBack} variant="outlined" className={classes.button}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 <ActionButton
                     variant="contained"
@@ -124,7 +124,7 @@ const ResetWallet = memo(function ResetWallet() {
                     onClick={onConfirm}
                     className={classes.button}
                     disabled={disabled}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </Box>
         </Box>

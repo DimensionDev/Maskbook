@@ -88,7 +88,7 @@ function getTopOffset() {
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'>,
-        withClasses<'sidebar'> {
+        withClasses<'sidebar' | 'grid'> {
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean

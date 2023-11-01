@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import {
     TransactionDescriptorType,
     formatBalance,
@@ -82,7 +82,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     paymentToken,
     onPaymentTokenChange,
 }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
@@ -99,14 +99,14 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 )?.parameters?.to
 
                 return {
-                    title: transaction.formattedTransaction?.title ?? t('popups_wallet_contract_interaction'),
+                    title: transaction.formattedTransaction?.title ?? t.popups_wallet_contract_interaction(),
                     to: to && isString(to) ? to : transaction.computedPayload?.to,
                     tokenAddress: transaction.formattedTransaction?.tokenInAddress,
                     amount: transaction.formattedTransaction?.tokenInAmount ?? transaction.computedPayload.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
-                    title: t('wallet_transfer_send'),
+                    title: t.wallet_transfer_send(),
                     to: transaction.computedPayload.to,
                     tokenAddress: '',
                     amount: transaction.computedPayload.value,
@@ -180,7 +180,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                     {receiver ? <Typography className={classes.title}>{receiver}</Typography> : null}
                 </Box>
                 <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
-                    <Typography className={classes.addressTitle}>{t('to')}:</Typography>
+                    <Typography className={classes.addressTitle}>{t.to()}:</Typography>
                     <Typography fontSize={11} fontWeight={700} lineHeight="16px">
                         {to}
                     </Typography>
@@ -227,7 +227,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 ) : null}
             </Box>
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography className={classes.gasFeeTitle}>{t('popups_wallet_gas_fee')}</Typography>
+                <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
                 {transaction.computedPayload.gas && !!initConfig ? (
                     <GasSettingMenu
                         minimumGas={transaction.computedPayload.gas}

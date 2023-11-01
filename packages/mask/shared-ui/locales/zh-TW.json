@@ -91,7 +91,6 @@
     "sharing": "分享中",
     "transfer": "傳送",
     "export": "導出",
-    "wallet_name": "錢包名稱",
     "wallet_rename": "重新命名錢包",
     "wallet_loading_nft_contract": "加載NFT合約中...",
     "wallet_search_no_result": "無結果",
@@ -214,5 +213,6 @@
     "plugin_snapshot_vote_confirm_dialog_warning": "這項操作無法復原。",
     "plugin_snapshot_current_result_title": "目前的結果",
     "plugin_snapshot_download_report": "下載報告",
-    "plugin_collectible_insufficient_balance": "餘額不足"
+    "plugin_collectible_insufficient_balance": "餘額不足",
+    "wallet_name": "錢包名稱"
 }

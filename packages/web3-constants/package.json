@@ -1,6 +1,7 @@
 {
   "name": "@masknet/web3-constants",
   "private": true,
+  "sideEffects": false,
   "type": "commonjs",
   "scripts": {
     "start": "ts-node compile-constants.ts"

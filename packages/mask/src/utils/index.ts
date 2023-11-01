@@ -1,11 +1,6 @@
+// Do not re-export shadow-root folder from this file.
 export * from './collectNodeText.js'
 export * from './formatTokenBalance.js'
-export * from './components/index.js'
-export * from './createNormalReactRoot.js'
-export * from './debug/index.js'
 export * from './dom.js'
-export * from './i18n-next-ui.js'
-export * from './shadow-root/index.js'
-export * from './theme/index.js'
-export * from './type-transform/index.js'
+export * from './hasPayloadLike.js'
 export * from './utils.js'

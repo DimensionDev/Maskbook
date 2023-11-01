@@ -1,14 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import { SOCIAL_MEDIA_NAME, type PersonaIdentifier } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { Trans } from 'react-i18next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
-import { useSetupGuideStepInfo } from './hooks/useSetupGuideStepInfo.js'
+import { SetupGuideContext } from './SetupGuideContext.js'
 
 const useFindUsernameStyles = makeStyles()((theme) => ({
     main: {
@@ -43,17 +43,16 @@ const useFindUsernameStyles = makeStyles()((theme) => ({
 }))
 
 interface FindUsernameProps extends BindingDialogProps {
-    persona: PersonaIdentifier
     onDone?: () => void
 }
 
-export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
-    const { t } = useMaskSharedTrans()
+export function FindUsername({ onClose, onDone }: FindUsernameProps) {
+    const t = useMaskSharedTrans()
     const { classes } = useFindUsernameStyles()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[site] || Icons.Globe
-    const { userId, loadingCurrentUserId, destinedPersonaInfo: personaInfo } = useSetupGuideStepInfo(persona)
+    const { userId, loadingCurrentUserId, personaInfo } = SetupGuideContext.useContainer()
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )
@@ -67,7 +66,7 @@ export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
         <BindingDialog onClose={onClose}>
             <div className={classes.main}>
                 <Icon size={48} className={classes.icon} />
-                <Typography className={classes.title}>{t('connect_persona')}</Typography>
+                <Typography className={classes.title}>{t.connect_persona()}</Typography>
                 {loadingCurrentUserId ? (
                     <div className={classes.loadingBox}>
                         <LoadingStatus omitText />
@@ -86,17 +85,17 @@ export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
                             />
                         </Typography>
                         <Typography className={classes.text} mt="1.5em">
-                            {t('switch_for_more_connections')}
+                            {t.switch_for_more_connections()}
                         </Typography>
                         <Box mt="auto" width="100%">
                             <Button fullWidth onClick={() => onDone?.()}>
-                                {t('done')}
+                                {t.done()}
                             </Button>
                         </Box>
                     </>
                 ) : userId ? (
                     <>
-                        <Typography className={classes.text}>{t('not_current_account')}</Typography>
+                        <Typography className={classes.text}>{t.not_current_account()}</Typography>
                         <Typography className={classes.text} mt="1.5em">
                             <Trans
                                 i18nKey="request_to_switch_account"
@@ -110,7 +109,7 @@ export function FindUsername({ persona, onClose, onDone }: FindUsernameProps) {
                         </Typography>
                     </>
                 ) : (
-                    <Typography className={classes.text}>{t('request_to_login', { siteName })}</Typography>
+                    <Typography className={classes.text}>{t.request_to_login({ siteName })}</Typography>
                 )}
             </div>
         </BindingDialog>

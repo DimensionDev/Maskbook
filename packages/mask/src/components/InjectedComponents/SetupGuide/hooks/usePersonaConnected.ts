@@ -1,12 +1,11 @@
-import type { PersonaIdentifier } from '@masknet/shared-base'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
-import { useSetupGuideStepInfo } from './useSetupGuideStepInfo.js'
+import { SetupGuideContext } from '../SetupGuideContext.js'
 
-export function usePersonaConnected(persona?: PersonaIdentifier) {
+export function usePersonaConnected() {
     const site = activatedSiteAdaptorUI!.networkIdentifier
-    const { userId, destinedPersonaInfo: personaInfo } = useSetupGuideStepInfo(persona)
+    const { userId, personaInfo, checkingConnected } = SetupGuideContext.useContainer()
     const connected = personaInfo?.linkedProfiles.some(
         (x) => x.identifier.network === site && x.identifier.userId === userId,
     )
-    return connected
+    return [checkingConnected, connected] as const
 }

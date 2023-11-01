@@ -21,4 +21,4 @@ export async function uploadLandingPage(provider: Provider, metadata: LandingPag
     return allProviders[provider]?.uploadLandingPage(metadata)
 }
 
-export * from './database.js'
+export { deleteFile, getAllFiles, renameFile, setFileInfo } from './database.js'

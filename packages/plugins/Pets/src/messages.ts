@@ -1,5 +1,4 @@
-import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
-import { serializer } from '@masknet/shared-base'
+import { getPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PetsPluginID } from './constants.js'
 import type { PetsDialogEvent } from './types.js'
 interface PetMessage {
@@ -10,9 +9,5 @@ interface PetMessage {
     setResult: number
 }
 
-if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginPetMessages: {
-    events: PluginMessageEmitter<PetMessage>
-} = {
-    events: createPluginMessage<PetMessage>(PetsPluginID, serializer),
-}
+import.meta.webpackHot?.accept()
+export const PluginPetMessages: PluginMessageEmitter<PetMessage> = getPluginMessage<PetMessage>(PetsPluginID)

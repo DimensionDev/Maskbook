@@ -705,6 +705,16 @@ export namespace Plugin.ExtensionPage {
 export namespace Plugin.Worker {
     export interface WorkerContext extends Shared.SharedContext {
         getDatabaseStorage<T extends IndexableTaggedUnion>(): DatabaseStorage<T>
+        /**
+         * Start the background service.
+         * @param impl Implementation of the RPC
+         */
+        startService(impl: object): void
+        /**
+         * Start the background generator service.
+         * @param impl Implementation of the RPC
+         */
+        startGeneratorService(impl: object): void
     }
 
     export interface Definition extends Shared.DefinitionDeferred<WorkerContext> {
@@ -1002,6 +1012,7 @@ export namespace Plugin.__Host {
         permission: PermissionReporter
     }
 
+    export interface WorkerContext extends Omit<Worker.WorkerContext, 'startService' | 'startGeneratorService'> {}
     export interface PermissionReporter {
         hasPermission(host_permission: string[]): Promise<boolean>
 

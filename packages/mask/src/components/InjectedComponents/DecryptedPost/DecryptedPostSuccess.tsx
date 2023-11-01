@@ -1,5 +1,6 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { attachNextIDToProfile, useMaskSharedTrans } from '../../../utils/index.js'
+import { attachNextIDToProfile } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
@@ -51,7 +52,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,
 ) {
     const { message, author, postedBy } = props
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const iv = usePostInfoDetails.postIVIdentifier()
 
     useEffect(() => {
@@ -62,7 +63,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     return (
         <>
             <AdditionalContent
-                title={t('decrypted_postbox_title')}
+                title={t.decrypted_postbox_title()}
                 headerActions={useAuthorDifferentMessage(author, postedBy, props.children)}
                 message={message}
             />
@@ -97,7 +98,7 @@ const useStyles = makeStyles<{ canAppendShareTarget: boolean }>()((theme, { canA
 export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: DecryptPostSuccessProps) {
     const canAppendShareTarget = useCanAppendShareTarget(props.whoAmI)
     const { classes } = useStyles({ canAppendShareTarget })
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [showDialog, setShowDialog] = useState(false)
     const theme = useTheme()
     const recipients = useRecipientsList()
@@ -112,7 +113,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                     ) : (
                         <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
                             <Typography color="textPrimary" fontSize={12} fontWeight={500}>
-                                {t('decrypted_postbox_only_visible_to_yourself')}
+                                {t.decrypted_postbox_only_visible_to_yourself()}
                             </Typography>
                             <div className={classes.iconAdd}>
                                 <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
@@ -133,7 +134,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
             ) : (
                 <section className={classes.visibilityBox}>
                     <Typography color="textPrimary" fontSize={12} fontWeight={500}>
-                        {t('decrypted_postbox_visible_to_all')}
+                        {t.decrypted_postbox_visible_to_all()}
                     </Typography>
                 </section>
             )

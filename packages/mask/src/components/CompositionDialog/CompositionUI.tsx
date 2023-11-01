@@ -25,7 +25,7 @@ import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
@@ -126,7 +126,7 @@ export interface CompositionRef {
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     function CompositionDialogUI(props, ref) {
         const { classes, cx } = useStyles()
-        const { t } = useMaskSharedTrans()
+        const t = useMaskSharedTrans()
 
         const [currentPostSize, __updatePostSize] = useState(0)
 
@@ -230,7 +230,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     </div>
 
                     <div className={classes.flex}>
-                        <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
+                        <Typography className={classes.optionTitle}>{t.plugins()}</Typography>
                         <PluginEntryRender
                             readonly={sending}
                             ref={PluginEntry}
@@ -284,7 +284,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                                 variant="roundedContained"
                                 onClick={props.onRequestClipboardPermission}
                                 sx={{ marginRight: 1 }}>
-                                {t('post_dialog_enable_paste_auto')}
+                                {t.post_dialog_enable_paste_auto()}
                             </Button>
                         ) : null}
                         <LoadingButton
@@ -295,7 +295,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             variant="roundedContained"
                             onClick={onSubmit}
                             startIcon={<Icons.Send className={classes.icon} />}>
-                            {t('post_dialog__button')}
+                            {t.post_dialog__button()}
                         </LoadingButton>
                     </div>
                 </DialogActions>

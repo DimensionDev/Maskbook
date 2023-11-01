@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans, UserContext } from '../../../../../shared-ui/index.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { Controller, useForm } from 'react-hook-form'
@@ -9,14 +9,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
-import { UserContext } from '../../../../../shared-ui/index.js'
 type FormInputs = {
     oldPassword: string
     newPassword: string
     repeatPassword: string
 }
 export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function ChangeBackupPasswordModal({ ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
 
     const navigate = useNavigate()
@@ -48,19 +47,19 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         .max(20)
                         .refine(
                             (oldPassword) => oldPassword === user.backupPassword,
-                            t('popups_backup_password_incorrect'),
+                            t.popups_backup_password_incorrect(),
                         )
                         .refine(
                             (oldPassword) => MATCH_PASSWORD_RE.test(oldPassword),
-                            t('popups_settings_backup_password_invalid'),
+                            t.popups_settings_backup_password_invalid(),
                         ),
                     newPassword: z
-                        .string(t('popups_settings_backup_password_invalid'))
+                        .string()
                         .min(8)
                         .max(20)
                         .refine(
                             (newPassword) => MATCH_PASSWORD_RE.test(newPassword),
-                            t('popups_settings_backup_password_invalid'),
+                            t.popups_settings_backup_password_invalid(),
                         ),
                     repeatPassword: z
                         .string()
@@ -68,15 +67,15 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         .max(20)
                         .refine(
                             (repeatPassword) => MATCH_PASSWORD_RE.test(repeatPassword),
-                            t('popups_settings_backup_password_invalid'),
+                            t.popups_settings_backup_password_invalid(),
                         ),
                 })
                 .refine((data) => data.newPassword !== data.oldPassword, {
-                    message: t('popups_settings_new_backup_password_error_tips'),
+                    message: t.popups_settings_new_backup_password_error_tips(),
                     path: ['newPassword'],
                 })
                 .refine((data) => data.newPassword === data.repeatPassword, {
-                    message: t('popups_backup_password_inconsistency'),
+                    message: t.popups_backup_password_inconsistency(),
                     path: ['repeatPassword'],
                 }),
         ),
@@ -88,7 +87,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                 backupPassword: data.newPassword,
             })
 
-            showSnackbar(t('popups_backup_password_set_successfully'))
+            showSnackbar(t.popups_backup_password_set_successfully())
 
             navigate(-1)
         },
@@ -97,13 +96,13 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
 
     return (
         <ActionModal
-            header={t('popups_settings_change_backup_password')}
+            header={t.popups_settings_change_backup_password()}
             action={
                 <ActionButton
                     onClick={handleSubmit(handleFormSubmit)}
                     loading={isSubmitting}
                     disabled={!isDirty || !isValid}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             }
             {...rest}>
@@ -122,7 +121,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         return (
                             <PasswordField
                                 {...field}
-                                placeholder={t('password')}
+                                placeholder={t.password()}
                                 autoFocus
                                 error={
                                     errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big'
@@ -145,7 +144,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     render={({ field }) => (
                         <PasswordField
                             {...field}
-                            placeholder={t('popups_settings_new_backup_password')}
+                            placeholder={t.popups_settings_new_backup_password()}
                             error={
                                 errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big'
                                     ? !!errors.newPassword?.message
@@ -165,7 +164,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     render={({ field }) => (
                         <PasswordField
                             {...field}
-                            placeholder={t('reenter')}
+                            placeholder={t.reenter()}
                             error={
                                 errors.repeatPassword?.type !== 'too_small' && errors.repeatPassword?.type !== 'too_big'
                                     ? !!errors.repeatPassword?.message
@@ -180,7 +179,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     )}
                 />
                 <Typography fontSize={12} color={theme.palette.maskColor.second}>
-                    {t('popups_backup_password_rules_tips')}
+                    {t.popups_backup_password_rules_tips()}
                 </Typography>
             </Box>
         </ActionModal>

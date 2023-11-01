@@ -1,5 +1,35 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { first, last } from 'lodash-es'
+import { Icons } from '@masknet/icons'
+import { useActivatedPluginsSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
+import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
+import {
+    EnhanceableSite_RSS3_NFT_SITE_KEY_map,
+    Linking,
+    NFTSpamBadge,
+    PriceChange,
+    TokenSecurityBar,
+    TokenWithSocialGroupMenu,
+    useReportSpam,
+    useSocialAccountsBySettings,
+    useTokenMenuCollectionList,
+    useTokenSecurity,
+} from '@masknet/shared'
+import {
+    CrossIsolationMessages,
+    EMPTY_LIST,
+    PluginID,
+    type EnhanceableSite,
+    type NetworkPluginID,
+    type SocialIdentity,
+} from '@masknet/shared-base'
+import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { LoadingBase, MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
     Avatar,
     Button,
@@ -11,43 +41,14 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { useActivatedPluginsSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
-import {
-    Linking,
-    TokenSecurityBar,
-    useTokenSecurity,
-    useSocialAccountsBySettings,
-    TokenWithSocialGroupMenu,
-    useTokenMenuCollectionList,
-    EnhanceableSite_RSS3_NFT_SITE_KEY_map,
-    PriceChange,
-} from '@masknet/shared'
-import {
-    type NetworkPluginID,
-    PluginID,
-    EMPTY_LIST,
-    type EnhanceableSite,
-    CrossIsolationMessages,
-    type SocialIdentity,
-} from '@masknet/shared-base'
-import { useAnchor, useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { first, last } from 'lodash-es'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useTraderTrans } from '../../locales/index.js'
 import { ContentTab, type Currency, type Stat } from '../../types/index.js'
+import { CoinIcon } from './CoinIcon.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
-import { CoinIcon } from './CoinIcon.js'
 import { TrendingViewContext } from './context.js'
-import { useTraderTrans } from '../../locales/index.js'
-import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -203,8 +204,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
     const isTokenSecurityEnable = !isNFT && !minimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
-    const { value: tokenSecurityInfo, error } = useTokenSecurity(
-        coin.chainId ?? ChainId.Mainnet,
+    const { value: tokenSecurity, error } = useTokenSecurity(
+        coin.chainId,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )
@@ -253,8 +254,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             })
             setActive?.(false)
         },
-        [JSON.stringify(identity), isCollectionProjectPopper, anchorBounding, anchorEl],
+        [identity, isCollectionProjectPopper, anchorBounding, anchorEl],
     )
+
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: coin.address,
+        chainId: coin.chainId,
+    })
 
     useEffect(() => {
         if (timer) clearTimeout(timer)
@@ -388,6 +394,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {t.plugin_trader_no_data()}
                                         </Typography>
                                     )}
+                                    {isNFT && !isSpam ? (
+                                        <IconButton onClick={promptReport} disabled={isReporting}>
+                                            {isReporting ? (
+                                                <LoadingBase size={16} />
+                                            ) : (
+                                                <Icons.Flag size={16} color={theme.palette.maskColor.dark} />
+                                            )}
+                                        </IconButton>
+                                    ) : null}
                                     {market && !isNFT ? (
                                         <PriceChange
                                             change={
@@ -398,8 +413,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     ) : null}
                                 </Stack>
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error && !isNFT ? (
-                                    <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
+                                {isNFT && isSpam ? (
+                                    <NFTSpamBadge />
+                                ) : isTokenSecurityEnable && tokenSecurity && !error ? (
+                                    <TokenSecurityBar tokenSecurity={tokenSecurity} />
                                 ) : null}
                             </Stack>
                         </Stack>

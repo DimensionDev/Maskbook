@@ -7,7 +7,7 @@ import { ExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modals.js'
 
@@ -73,7 +73,7 @@ interface Props extends BoxProps {
 }
 
 const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, autoFocus, ...props }: Props) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
@@ -91,7 +91,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
     const openAddContactModal = useCallback(() => {
         if (!address) return
         return AddContactModal.openAndWaitForClose({
-            title: t('wallet_add_contact'),
+            title: t.wallet_add_contact(),
             address,
             name: '',
         })
@@ -107,10 +107,10 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
 
     return (
         <Box padding={2} {...props} className={cx(classes.receiverPanel, props.className)}>
-            {isManage ? null : <Typography className={classes.toText}>{t('popups_wallet_transfer_to')}</Typography>}
+            {isManage ? null : <Typography className={classes.toText}>{t.popups_wallet_transfer_to()}</Typography>}
             <div className={classes.fieldWrapper}>
                 <MaskTextField
-                    placeholder={t('wallet_transfer_placeholder')}
+                    placeholder={t.wallet_transfer_placeholder()}
                     value={userInput}
                     onChange={(ev) => setUserInput(ev.target.value)}
                     wrapperProps={{ className: classes.input }}
@@ -119,7 +119,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                         spellCheck: false,
                         endAdornment: addable ? (
                             <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                <Typography className={classes.save}>{t('save')}</Typography>
+                                <Typography className={classes.save}>{t.save()}</Typography>
                                 <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
                             </div>
                         ) : undefined,

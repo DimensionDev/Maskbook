@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, Markdown, RetryHint } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, Markdown, NFTSpamBadge, RetryHint, useReportSpam } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { LoadingBase, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { Box, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
+import { Box, CardContent, CardHeader, IconButton, Paper, Tab, Typography } from '@mui/material'
 import { format as formatDateTime, isAfter, isValid as isValidDate } from 'date-fns'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useCollectibleTrans } from '../../locales/i18n_generated.js'
@@ -104,6 +104,17 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             overflow: 'hidden',
             width: 380,
         },
+        reportButton: {
+            marginLeft: 'auto',
+            backgroundColor: theme.palette.maskColor.bg,
+            width: 24,
+            height: 24,
+            borderRadius: 4,
+            color: theme.palette.maskColor.main,
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.bg,
+            },
+        },
         empty: {
             height: 150,
         },
@@ -129,6 +140,11 @@ export function Collectible() {
             setOutVerified(scrollWidth > offsetWidth)
         }
     }, [])
+    const { isReporting, isSpam, promptReport } = useReportSpam({
+        address: asset.data?.address,
+        chainId: asset.data?.chainId,
+        collectionId: asset.data?.collection?.id,
+    })
 
     const offers = useMemo(() => orders.data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [orders.data?.pages])
 
@@ -203,6 +219,17 @@ export function Collectible() {
                             {_asset.collection?.verified && outVerified ? (
                                 <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}
+
+                            {isSpam ? (
+                                <NFTSpamBadge />
+                            ) : (
+                                <IconButton
+                                    className={classes.reportButton}
+                                    onClick={promptReport}
+                                    disabled={isReporting}>
+                                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                                </IconButton>
+                            )}
                         </Typography>
                     }
                     subheader={

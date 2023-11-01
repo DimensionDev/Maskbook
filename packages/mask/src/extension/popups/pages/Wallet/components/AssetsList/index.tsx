@@ -8,13 +8,21 @@ import { isNativeTokenAddress, ChainId, type SchemaType } from '@masknet/web3-sh
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { formatTokenBalance, useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { formatTokenBalance } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
+    container: {
+        paddingBottom: hasNav ? 72 : undefined,
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
+    },
     list: {
         backgroundColor: theme.palette.maskColor.bottom,
         padding: theme.spacing(2),
@@ -83,8 +91,9 @@ interface AssetItemProps extends ListItemProps {
 }
 
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
-    const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const { classes, cx } = useStyles({ hasNav: hasNavigator })
+    const t = useMaskSharedTrans()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const network = networks.find((x) => x.chainId === asset.chainId)
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
@@ -153,7 +162,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                             </ProgressiveText>
                         </TextOverflowTooltip>
                         {asset.isCustomToken ? (
-                            <Typography className={classes.customToken}>{t('added_by_user')}</Typography>
+                            <Typography className={classes.customToken}>{t.added_by_user()}</Typography>
                         ) : null}
                     </>
                 }>
@@ -166,7 +175,8 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
 })
 
 export const AssetsList = memo(function AssetsList() {
-    const { classes } = useStyles()
+    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const { data: assets, isLoading } = useWalletAssets()
     const [assetsIsExpand, setAssetsIsExpand] = useAssetExpand()
@@ -190,7 +200,7 @@ export const AssetsList = memo(function AssetsList() {
         (asset) => assetsIsExpand || isNativeTokenAddress(asset.address) || isGte(asset.value?.usd ?? 0, 1),
     )
     return (
-        <>
+        <div className={classes.container} data-hide-scrollbar>
             {isLoading ? (
                 <AssetsListSkeleton />
             ) : (
@@ -203,12 +213,12 @@ export const AssetsList = memo(function AssetsList() {
             {hasLowValueToken ? (
                 <MoreBar isExpand={assetsIsExpand} onClick={onSwitch} className={classes.more} />
             ) : null}
-        </>
+        </div>
     )
 })
 
 const AssetsListSkeleton = memo(function AssetsListSkeleton() {
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     return (
         <List dense className={classes.list}>
             {range(10).map((i) => (

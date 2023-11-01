@@ -1,13 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useContacts, useWallet, useWallets } from '@masknet/web3-hooks-base'
 
 export function Contacts() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const wallet = useWallet()
     const wallets = useWallets()
     const contacts = useContacts()
@@ -21,7 +21,7 @@ export function Contacts() {
             onClick={() => navigate(`${PopupRoutes.Contacts}/${wallet?.address}`, { state: { type: 'manage' } })}>
             <Box className={classes.itemBox}>
                 <Icons.BaseUser size={20} color={theme.palette.maskColor.second} />
-                <Typography className={classes.itemText}>{t('contacts')}</Typography>
+                <Typography className={classes.itemText}>{t.contacts()}</Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={classes.itemText}>{totalContacts}</Typography>

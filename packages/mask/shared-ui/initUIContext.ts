@@ -15,7 +15,7 @@ export const allPersonas = createSubscriptionFromAsync(
         }
     },
 )
-export const currentPersona = createSubscriptionFromAsync(
+const currentPersona = createSubscriptionFromAsync(
     Services.Settings.getCurrentPersonaIdentifier,
     undefined,
     MaskMessages.events.currentPersonaIdentifier.on,

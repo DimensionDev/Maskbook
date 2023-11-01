@@ -7,7 +7,7 @@ import { Fuse } from '@masknet/web3-providers'
 import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileUI(props: SelectProfileUIProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')
@@ -154,7 +154,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={t('post_dialog_share_with_input_placeholder')}
+                    placeholder={t.post_dialog_share_with_input_placeholder()}
                     disabled={disabled}
                 />
             </Box>
@@ -169,7 +169,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Box className={classes.list}>
                                 {profiles.length === 0 ? (
                                     <EmptyStatus className={classes.empty}>
-                                        {t('compose_encrypt_share_dialog_empty')}
+                                        {t.compose_encrypt_share_dialog_empty()}
                                     </EmptyStatus>
                                 ) : (
                                     profiles.map((item) => {
@@ -195,7 +195,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                     sx={{ width: 20, height: 20 }}
                                     onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
                                 />
-                                <Typography sx={{ paddingLeft: 1 }}>{t('select_all')}</Typography>
+                                <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
                             </Stack>
                         ) : null}
                     </div>

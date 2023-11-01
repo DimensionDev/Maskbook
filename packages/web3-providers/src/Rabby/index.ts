@@ -2,22 +2,21 @@ import urlcat from 'urlcat'
 import { omit } from 'lodash-es'
 import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, type NonFungibleContractSpender, type FungibleTokenSpender } from '@masknet/web3-shared-base'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import { resolveNetworkOnRabby } from './helpers.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.js'
 import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI } from '../entry-types.js'
+import { CHIAN_ID_TO_DEBANK_CHAIN_MAP } from '../DeBank/constants.js'
 
 class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const networkType = ChainResolver.networkType(chainId)
+        const debankChainId = CHIAN_ID_TO_DEBANK_CHAIN_MAP[chainId]
 
-        if (!networkType || !account || !isValidChainId(chainId)) return []
+        if (!debankChainId || !account || !isValidChainId(chainId)) return []
         const rawData = await fetchJSON<{ contracts: NFTInfo[] }>(
-            urlcat(NON_FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
+            urlcat(NON_FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: debankChainId }),
         )
 
         return rawData.contracts
@@ -61,12 +60,12 @@ class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-        const networkType = ChainResolver.networkType(chainId)
+        const debankChainId = CHIAN_ID_TO_DEBANK_CHAIN_MAP[chainId]
 
-        if (!networkType || !account || !isValidChainId(chainId)) return []
+        if (!debankChainId || !account || !isValidChainId(chainId)) return []
 
         const rawData = await fetchJSON<RawTokenInfo[]>(
-            urlcat(FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
+            urlcat(FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: debankChainId }),
         )
         return rawData
             .reduce<TokenSpender[]>((acc, cur) => {

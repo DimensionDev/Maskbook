@@ -12,7 +12,11 @@ import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './sto
 export function createManager<
     T extends Plugin.Shared.DefinitionDeferred<Context>,
     Context extends Plugin.Shared.SharedContext,
->(selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>) {
+    ManagedContext extends keyof Context = never,
+>(
+    selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>,
+    getManagedContext: (pluginID: string, signal: AbortSignal) => Pick<Context, ManagedContext>,
+) {
     interface ActivatedPluginInstance {
         instance: T
         controller: AbortController
@@ -29,14 +33,14 @@ export function createManager<
         }
         return value
     })()
-    let _host: Plugin.__Host.Host<T, Context> = undefined!
+    let _host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>> = undefined!
     const events = new Emitter<{
         activateChanged: [id: string, enabled: boolean]
         minimalModeChanged: [id: string, enabled: boolean]
     }>()
 
     return {
-        configureHostHooks: (host: Plugin.__Host.Host<T, Context>) => (_host = host),
+        configureHostHooks: (host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>>) => (_host = host),
         activatePlugin,
         stopPlugin,
         isMinimalMode,
@@ -70,7 +74,10 @@ export function createManager<
         result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
     }
 
-    function startDaemon(host: Plugin.__Host.Host<T, Context>, extraCheck?: (id: PluginID) => boolean) {
+    function startDaemon(
+        host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>>,
+        extraCheck?: (id: PluginID) => boolean,
+    ) {
         _host = host
         const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => updateCompositedMinimalMode(id))
@@ -137,7 +144,13 @@ export function createManager<
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,
-            context: _host.createContext(id, definition, abort.signal),
+            // Type 'Pick<Context, ManagedContext> & Omit<Context, ManagedContext>' is not assignable to type 'Context'. but it does.
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            context: {
+                ...getManagedContext(id, abort.signal),
+                ..._host.createContext(id, definition, abort.signal),
+            },
         }
         activated.set(id, activatedPlugin)
         if (definition.init) {
@@ -189,3 +202,5 @@ export function createManager<
         return definition
     }
 }
+
+createManager.NoManagedContext = () => ({})
