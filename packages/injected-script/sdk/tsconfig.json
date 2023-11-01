@@ -8,6 +8,8 @@
   "files": [
     "index.ts",
     "Base.ts",
+    "BaseInjected.ts",
+    "BaseWagmi.ts",
     "Browser.ts",
     "Phantom.ts",
     "Solflare.ts",
@@ -17,7 +19,6 @@
     "MetaMask.ts",
     "Opera.ts",
     "Clover.ts",
-    "Wagmi.ts",
     "WalletConnect.ts",
     "utils.ts"
   ],

@@ -1,8 +1,8 @@
-import { isInPageEthereumInjected, isEthereumInjected, type Account } from '@masknet/shared-base'
+import { isInPageEthereumInjected, isEthereumInjected } from '@masknet/shared-base'
 import { wagmiMetaMaskProvider } from '@masknet/injected-script'
 import createMetaMaskProvider from '@dimensiondev/metamask-extension-provider'
 import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { BaseWagmiProvider } from './BaseWagmi.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 function getInjectedProvider() {
@@ -12,7 +12,7 @@ function getInjectedProvider() {
 }
 
 export class MetaMaskProvider
-    extends BaseInjectedProvider
+    extends BaseWagmiProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
     constructor() {
@@ -35,19 +35,5 @@ export class MetaMaskProvider
         if (isEthereumInjected()) return Promise.resolve()
         if (isInPageEthereumInjected()) return super.readyPromise
         return Promise.resolve()
-    }
-
-    override async connect(chainId?: number) {
-        const account = await this.bridge.connect({
-            chainId,
-        })
-
-        console.log('DEBUG: account', account)
-
-        return account as Account<ChainId>
-    }
-
-    override async disconnect(): Promise<void> {
-        return this.bridge.disconnect()
     }
 }

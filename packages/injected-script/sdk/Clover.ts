@@ -1,6 +1,6 @@
-import { InjectedProvider } from './Base.js'
+import { BaseProvider } from './Base.js'
 
-export class CloverProvider extends InjectedProvider {
+export class CloverProvider extends BaseProvider {
     constructor() {
         super('clover')
     }

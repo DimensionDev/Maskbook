@@ -12,7 +12,9 @@ import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
-export { InjectedProvider } from './Base.js'
+export { BaseProvider } from './Base.js'
+export { BaseInjectedProvider as InjectedProvider } from './BaseInjected.js'
+export { BaseWagmiProvider as WagmiProvider } from './BaseWagmi.js'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)

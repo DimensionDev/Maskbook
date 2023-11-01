@@ -1,5 +1,5 @@
 import type { RequestArguments } from '../shared/index.js'
-import { InjectedProvider } from './Base.js'
+import { BaseProvider } from './Base.js'
 
 export enum Coin98ProviderType {
     EVM = 1,
@@ -7,7 +7,7 @@ export enum Coin98ProviderType {
     Near = 3,
 }
 
-export class Coin98Provider extends InjectedProvider {
+export class Coin98Provider extends BaseProvider {
     constructor(protected type: Coin98ProviderType) {
         const pathnameMap: Record<Coin98ProviderType, string> = {
             [Coin98ProviderType.EVM]: 'coin98.provider',

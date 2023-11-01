@@ -1,6 +1,6 @@
-import { WagmiProvider } from './Wagmi.js'
+import { BaseWagmiProvider } from './BaseWagmi.js'
 
-export class MetaMaskProvider extends WagmiProvider {
+export class MetaMaskProvider extends BaseWagmiProvider {
     constructor() {
         super('MetaMask', 'ethereum.__metamask__')
     }

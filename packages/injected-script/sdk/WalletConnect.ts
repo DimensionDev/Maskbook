@@ -1,8 +1,8 @@
-import { WagmiProvider } from './Wagmi.js'
+import { BaseWagmiProvider } from './BaseWagmi.js'
 
-export class WalletConnectProvider extends WagmiProvider {
+export class WalletConnectProvider extends BaseWagmiProvider {
     constructor() {
-        super('WalletConnect')
+        super('WalletConnect', '')
     }
 
     override async untilAvailable(): Promise<void> {
