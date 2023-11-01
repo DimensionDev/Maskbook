@@ -151,7 +151,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         connectPersona,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
-        getUserIdentity: undefined,
+        getUserIdentity: ui.utils.getUserIdentity,
     })
 
     startPluginSiteAdaptor(
