@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'

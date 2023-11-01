@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'

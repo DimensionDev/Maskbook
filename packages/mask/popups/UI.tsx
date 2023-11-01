@@ -15,7 +15,7 @@ import {
     useLocation,
     type HistoryRouterProps,
 } from 'react-router-dom'
-import { usePopupTheme } from '../../utils/theme/usePopupTheme.js'
+import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
@@ -42,7 +42,7 @@ import {
 } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
-import { UserContext } from '../../../shared-ui/index.js'
+import { UserContext } from '../shared-ui/index.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))

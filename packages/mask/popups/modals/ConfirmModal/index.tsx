@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {

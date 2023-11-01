@@ -12,7 +12,7 @@ import { Web3, Web3State } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({

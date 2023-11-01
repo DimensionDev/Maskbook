@@ -6,7 +6,7 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from 'unstated-next'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../shared-ui/index.js'
 
 interface ContextOptions {
     defaultName: string

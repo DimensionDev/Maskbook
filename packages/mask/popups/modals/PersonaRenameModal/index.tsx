@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '@masknet/shared'

@@ -15,8 +15,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
-import { useCurrentPersona } from '../../DataSource/useCurrentPersona.js'
-import { usePersonasFromDB } from '../../DataSource/usePersonasFromDB.js'
+import { useCurrentPersona, usePersonasFromDB } from '../../../../shared-ui/hooks/index.js'
 import { ProfileBar, ProfileBarSkeleton } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {

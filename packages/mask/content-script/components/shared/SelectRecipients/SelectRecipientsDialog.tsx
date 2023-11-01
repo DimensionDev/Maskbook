@@ -17,7 +17,7 @@ import {
     Typography,
     alpha,
 } from '@mui/material'
-import { attachNextIDToProfile } from '../../../utils/index.js'
+import { attachNextIDToProfile } from '../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
 

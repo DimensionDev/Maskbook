@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'

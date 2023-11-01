@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { ContactCard } from '../ContactCard/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { type Friend } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({

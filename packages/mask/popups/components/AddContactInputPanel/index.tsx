@@ -7,7 +7,7 @@ import { ExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modals.js'
 

@@ -11,7 +11,7 @@ import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {

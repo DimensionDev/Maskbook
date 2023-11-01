@@ -25,7 +25,7 @@ import {
 } from '@mui/material'
 import { useMemo, useCallback, memo } from 'react'
 import { Trans } from 'react-i18next'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { LoadingBase } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'

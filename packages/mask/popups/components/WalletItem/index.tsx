@@ -14,7 +14,7 @@ import {
     listItemSecondaryActionClasses,
 } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { WalletBalance } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({

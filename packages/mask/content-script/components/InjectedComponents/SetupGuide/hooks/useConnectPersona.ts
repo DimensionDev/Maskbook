@@ -4,7 +4,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { useAsync } from 'react-use'
 import Services from '../../../../../shared-ui/service.js'
-import { EventMap } from '../../../../extension/popups/pages/Personas/common.js'
+import { EventMap } from '../../../../../shared/definitions/event.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 import { SetupGuideContext } from '../SetupGuideContext.js'
 

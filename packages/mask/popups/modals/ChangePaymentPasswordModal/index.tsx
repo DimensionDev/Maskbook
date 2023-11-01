@@ -4,7 +4,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'

@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Web3State } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

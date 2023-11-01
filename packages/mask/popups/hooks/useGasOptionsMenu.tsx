@@ -6,7 +6,7 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { formatWeiToGwei, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../shared-ui/index.js'
 import { GasSettingModal } from '../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({

@@ -30,7 +30,7 @@ import {
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 

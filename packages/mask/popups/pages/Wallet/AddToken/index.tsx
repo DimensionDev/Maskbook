@@ -11,7 +11,7 @@ import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-b
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'

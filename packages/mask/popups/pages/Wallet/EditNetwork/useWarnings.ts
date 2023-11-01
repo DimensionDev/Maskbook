@@ -3,7 +3,7 @@ import { useNetworks } from '@masknet/web3-hooks-base'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 export function useWarnings(formChainId: number, formSymbol?: string) {
     const t = useMaskSharedTrans()

@@ -5,7 +5,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { BottomDrawer } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 export type GasSettingModalOpenProps = {
     chainId: ChainId

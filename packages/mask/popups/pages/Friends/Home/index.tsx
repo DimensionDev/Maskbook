@@ -11,7 +11,7 @@ import {
     useFriendsFromSearch,
     useFriendFromList,
 } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const t = useMaskSharedTrans()

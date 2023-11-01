@@ -12,7 +12,7 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hooks/index.js'

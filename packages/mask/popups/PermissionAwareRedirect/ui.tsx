@@ -1,5 +1,5 @@
 import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../shared-ui/index.js'
 import { Trans } from 'react-i18next'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {

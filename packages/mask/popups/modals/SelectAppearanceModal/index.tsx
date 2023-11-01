@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, useAppearance } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans, useAppearance } from '../../../shared-ui/index.js'
 import { Appearance } from '@masknet/public-api'
 import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'

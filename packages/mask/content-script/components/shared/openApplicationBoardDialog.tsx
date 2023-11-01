@@ -3,7 +3,7 @@ import type { PluginID } from '@masknet/shared-base'
 import { ApplicationBoardModal } from '@masknet/shared'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteConnectStatus.js'
 import Services from '#services'
 

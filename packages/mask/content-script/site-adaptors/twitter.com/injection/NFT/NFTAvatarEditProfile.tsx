@@ -11,7 +11,7 @@ import { searchEditProfileSelector } from '../../utils/selector.js'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, type ButtonProps } from '../../constant.js'
 import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
-import { usePersonasFromDB } from '../../../../components/DataSource/usePersonasFromDB.js'
+import { usePersonasFromDB } from '../../../../../shared-ui/hooks/usePersonasFromDB.js'
 import Services from '#services'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {

@@ -3,8 +3,7 @@ import { MaskDarkTheme, MaskLightTheme, useSystemPreferencePalette } from '@mask
 import { languageSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ThemeMode } from '@masknet/web3-shared-base'
-import { useThemeLanguage } from './useThemeLanguage.js'
-import { useAppearance } from '../../../shared-ui/index.js'
+import { useAppearance, useThemeLanguage } from '../../shared-ui/index.js'
 
 export function usePopupTheme() {
     const appearance = useAppearance()

@@ -51,7 +51,7 @@ import {
 } from '../DataSource/useActivatedUI.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({

@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'

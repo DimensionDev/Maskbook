@@ -3,7 +3,7 @@ import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@ma
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'

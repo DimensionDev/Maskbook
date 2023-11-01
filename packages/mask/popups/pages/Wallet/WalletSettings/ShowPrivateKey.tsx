@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { ShowPrivateKeyModal } from '../../../modals/modals.js'
 

@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Box, List } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'

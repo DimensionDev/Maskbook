@@ -19,7 +19,7 @@ import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
 import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {

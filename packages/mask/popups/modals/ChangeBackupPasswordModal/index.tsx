@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { Controller, useForm } from 'react-hook-form'

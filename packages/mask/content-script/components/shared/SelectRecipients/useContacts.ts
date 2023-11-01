@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, type ProfileInformation } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import { useCurrentPersona } from '../../DataSource/useCurrentPersona.js'
+import { useCurrentPersona } from '../../../../shared-ui/hooks/index.js'
 import Services from '#services'
 import { isProfileIdentifier } from '@masknet/shared'
 

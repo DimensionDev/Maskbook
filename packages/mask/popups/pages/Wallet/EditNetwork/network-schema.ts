@@ -2,7 +2,7 @@ import { fetchChainId } from '@masknet/web3-providers/helpers'
 import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
-import type { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import type { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 type NameValidator = (name: string) => boolean | Promise<boolean>
 

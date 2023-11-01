@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'

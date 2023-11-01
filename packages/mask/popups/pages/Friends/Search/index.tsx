@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Icons } from '@masknet/icons'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 

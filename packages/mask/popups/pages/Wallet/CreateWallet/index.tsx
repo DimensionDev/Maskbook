@@ -9,7 +9,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

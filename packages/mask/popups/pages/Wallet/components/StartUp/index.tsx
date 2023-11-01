@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import Services from '#services'
 import { ImportCreateWallet } from '../ImportCreateWallet/index.js'
 

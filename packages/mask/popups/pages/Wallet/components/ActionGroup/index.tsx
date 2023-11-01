@@ -8,7 +8,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => {

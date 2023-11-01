@@ -3,12 +3,12 @@ import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { useSupportSocialNetworks } from '../../hooks/index.js'
 import Services from '#services'
-import { EventMap } from '../../pages/Personas/common.js'
+import { EventMap } from '../../../shared/definitions/event.js'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal({ ...rest }) {
     const t = useMaskSharedTrans()

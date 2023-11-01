@@ -7,7 +7,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
 import { isUndefined } from 'lodash-es'
 

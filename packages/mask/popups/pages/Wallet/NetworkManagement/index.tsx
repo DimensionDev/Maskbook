@@ -5,7 +5,7 @@ import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography, alpha } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
 

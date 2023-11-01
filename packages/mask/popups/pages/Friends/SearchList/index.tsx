@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
 

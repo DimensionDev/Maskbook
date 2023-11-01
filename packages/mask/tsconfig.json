@@ -2,12 +2,10 @@
   "extends": "../../tsconfig.json",
   "files": [],
   "references": [
-    // this folder contains codes to be moved out
-    { "path": "./src/tsconfig.json" },
     // entries of Mask extension
     { "path": "./dashboard/tsconfig.json" },
     { "path": "./devtools/tsconfig.json" },
     { "path": "./entry-sdk/tsconfig.json" },
-    { "path": "./popup/tsconfig.json" }
+    { "path": "./popups/tsconfig.json" }
   ]
 }

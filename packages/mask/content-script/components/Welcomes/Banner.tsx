@@ -9,7 +9,7 @@ import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
+import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 
 interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string

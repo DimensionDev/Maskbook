@@ -4,7 +4,7 @@ import { MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
 import { languageSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ThemeMode } from '@masknet/web3-shared-base'
-import { useThemeLanguage } from './useThemeLanguage.js'
+import { useThemeLanguage } from '../../../shared-ui/hooks/useThemeLanguage.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useThemeSettings } from '../../components/DataSource/useActivatedUI.js'
 

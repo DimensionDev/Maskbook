@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Typography, useTheme } from '@mui/material'
 import { type ActionModalBaseProps, ActionModal } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { SelectProvider } from '../../components/SelectProvider/index.js'
 import { useSearchParams } from 'react-router-dom'
 

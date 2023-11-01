@@ -1,5 +1,5 @@
 import { memo, useContext, useEffect, useState } from 'react'
-import { attachNextIDToProfile } from '../../../utils/index.js'
+import { attachNextIDToProfile } from '../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import { SelectProfileDialog } from '../SelectPeopleDialog.js'

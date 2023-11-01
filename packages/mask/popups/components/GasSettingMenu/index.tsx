@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import { type EIP1559GasConfig, type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useGasOptionsMenu } from '../../hooks/index.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 

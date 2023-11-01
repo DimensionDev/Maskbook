@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography, useTheme } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'

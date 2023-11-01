@@ -9,7 +9,7 @@ import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/sh
 import { Web3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 interface StyleProps {
     loading: boolean

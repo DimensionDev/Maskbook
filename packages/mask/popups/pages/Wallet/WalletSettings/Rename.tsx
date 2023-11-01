@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletRenameModal } from '../../../modals/modals.js'
 

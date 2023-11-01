@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useWalletGroup } from '../../hooks/useWalletGroup.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

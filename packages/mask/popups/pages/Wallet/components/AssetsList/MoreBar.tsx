@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean

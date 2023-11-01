@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({

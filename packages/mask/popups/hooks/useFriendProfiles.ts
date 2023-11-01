@@ -7,7 +7,7 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
-import { useCurrentPersona } from '../../../components/DataSource/useCurrentPersona.js'
+import { useCurrentPersona } from '../../shared-ui/hooks/index.js'
 import { PlatformSort, UnsupportedPlatforms } from '../pages/Friends/common.js'
 import { useMemo } from 'react'
 

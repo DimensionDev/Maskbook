@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

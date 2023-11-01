@@ -7,7 +7,7 @@ import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/share
 import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { Profile } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({

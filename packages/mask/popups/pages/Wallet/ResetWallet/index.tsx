@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 
 const useStyles = makeStyles()((theme) => ({

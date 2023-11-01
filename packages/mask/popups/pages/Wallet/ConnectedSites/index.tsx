@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OriginCard from '../components/OriginCard/index.js'

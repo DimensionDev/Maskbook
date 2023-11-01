@@ -8,7 +8,7 @@ import { forwardRef, memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 

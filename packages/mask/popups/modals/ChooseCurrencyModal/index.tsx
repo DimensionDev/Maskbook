@@ -5,7 +5,7 @@ import { Web3State } from '@masknet/web3-providers'
 import { CurrencyType, resolveCurrencyFullName } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({

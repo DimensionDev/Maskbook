@@ -15,8 +15,8 @@ import {
     useForkRef,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatTokenBalance } from '../../../../utils/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { formatTokenBalance } from '../../../shared/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'

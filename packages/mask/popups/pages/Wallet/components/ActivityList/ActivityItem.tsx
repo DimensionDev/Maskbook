@@ -34,8 +34,8 @@ import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItem
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { formatTokenBalance } from '../../../../../../utils/index.js'
-import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
+import { formatTokenBalance } from '../../../../../shared/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {

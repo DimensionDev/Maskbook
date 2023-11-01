@@ -6,7 +6,7 @@ import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
 

@@ -8,7 +8,7 @@ import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/we
 import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useNonFungibleTokenParams } from '../../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {

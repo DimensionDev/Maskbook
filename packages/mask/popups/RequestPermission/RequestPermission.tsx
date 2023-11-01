@@ -8,7 +8,7 @@ import {
     DialogActions,
     DialogContent,
 } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../shared-ui/index.js'
 import type { Permissions } from 'webextension-polyfill'
 
 interface RequestPermissionProps extends Permissions.AnyPermissions {

@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useMemo } from 'react'
 import { format } from 'date-fns'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { TransactionState } from './types.js'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'

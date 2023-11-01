@@ -21,7 +21,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { Web3 } from '@masknet/web3-providers'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     TransactionDescriptorType,
     formatBalance,

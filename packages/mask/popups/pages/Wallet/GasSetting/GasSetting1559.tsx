@@ -27,7 +27,7 @@ import {
 import { Web3 } from '@masknet/web3-providers'
 import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
