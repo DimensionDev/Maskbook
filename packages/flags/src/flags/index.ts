@@ -51,10 +51,11 @@ export const flags = {
     wc_relay_url: 'wss://relay.walletconnect.com',
     wc_project_id: '8f1769933420afe8873860925fcca14f',
     wc_mode: isProd ? 'error' : 'debug',
-    wc_enabled: true,
+    wc_enabled: process.env.NODE_ENV !== 'test',
 } as const
 
 Object.freeze(flags.shadowRootInit)
+
 if (process.env.NODE_ENV === 'development') {
     console.debug('[mask] flags:', flags)
 }
