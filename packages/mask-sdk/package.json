@@ -6,7 +6,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/server/index.d.ts",
       "mask-src": "./server/index.ts",
       "default": "./dist/server/index.js"
     }
