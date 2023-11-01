@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Switch, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal({ ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { data = EMPTY_LIST, isLoading, refetch } = useSupportedSites()
 
@@ -65,8 +65,8 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
     )
 
     return (
-        <ActionModal header={t('popups_settings_supported_sites')} {...rest}>
-            <Typography className={classes.description}>{t('popups_settings_supported_sites_description')}</Typography>
+        <ActionModal header={t.popups_settings_supported_sites()} {...rest}>
+            <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
             <List className={classes.list}>
                 {!isLoading && data
                     ? data?.map((x) => {

@@ -12,7 +12,7 @@ import {
     useNFT,
     useNFTContainerAtTwitter,
 } from '@masknet/plugin-avatar'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -87,7 +87,7 @@ interface NFTAvatarClipOrSquareProps {
     avatarType: AvatarType
 }
 function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAvatarClipOrSquareProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
     const { account } = useChainContext()
@@ -100,14 +100,14 @@ function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAva
     )
 
     const name = useMemo(() => {
-        if (loading || loadingNFT) return t('loading')
+        if (loading || loadingNFT) return t.loading()
         return `${formatText(value.name, avatarMetadata?.token_id ?? '')} ${
             value.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
         }`
     }, [JSON.stringify(value), loading, loadingNFT, avatarMetadata?.token_id])
 
     const price = useMemo(() => {
-        if (loading || loadingNFT) return t('loading')
+        if (loading || loadingNFT) return t.loading()
         return formatPrice(value.amount, value.symbol)
     }, [JSON.stringify(value), loading, loadingNFT])
 

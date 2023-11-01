@@ -8,12 +8,12 @@ import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@m
 import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB.js'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '#services'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 
 const PersonaSignRequest = memo(() => {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const [requestID, setRequestID] = useState<string>()
@@ -114,10 +114,10 @@ const PersonaSignRequest = memo(() => {
             <SignRequestInfo message={message} source={source} />
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
-                    {t('cancel')}
+                    {t.cancel()}
                 </ActionButton>
                 <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
-                    {t('sign')}
+                    {t.sign()}
                 </ActionButton>
             </BottomController>
         </Box>

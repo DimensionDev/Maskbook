@@ -12,7 +12,7 @@ import { Box, List, ListItem, Tooltip, Typography } from '@mui/material'
 import { memo, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
@@ -79,7 +79,7 @@ async function pollResult(address: string) {
 }
 
 const DeriveWallet = memo(function DeriveWallet() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
 
@@ -115,7 +115,7 @@ const DeriveWallet = memo(function DeriveWallet() {
         setIsDeriving(false)
     }, [mnemonicId])
 
-    useTitle(t('popups_add_wallet'))
+    useTitle(t.popups_add_wallet())
 
     const loading = creating || isDeriving
 
@@ -147,7 +147,7 @@ const DeriveWallet = memo(function DeriveWallet() {
                             onClick={() => {
                                 WalletRenameModal.open({
                                     wallet,
-                                    title: t('rename'),
+                                    title: t.rename(),
                                 })
                             }}
                         />
@@ -155,7 +155,7 @@ const DeriveWallet = memo(function DeriveWallet() {
                 ))}
             </List>
             <ActionButton loading={loading} fullWidth disabled={loading} onClick={create}>
-                {t('add')}
+                {t.add()}
             </ActionButton>
         </div>
     )

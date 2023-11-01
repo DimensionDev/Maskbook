@@ -8,7 +8,7 @@ import {
     DialogActions,
     DialogContent,
 } from '@mui/material'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { Permissions } from 'webextension-polyfill'
 
 interface RequestPermissionProps extends Permissions.AnyPermissions {
@@ -16,14 +16,14 @@ interface RequestPermissionProps extends Permissions.AnyPermissions {
     onCancel(): void
 }
 export function RequestPermission(props: RequestPermissionProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { origins, permissions } = props
     return (
         <>
-            <DialogTitle>{t('popups_mask_requests_permission')}</DialogTitle>
+            <DialogTitle>{t.popups_mask_requests_permission()}</DialogTitle>
             <DialogContent>
                 {origins?.length ? (
-                    <List dense subheader={<ListSubheader>{t('popups_sites')}</ListSubheader>}>
+                    <List dense subheader={<ListSubheader>{t.popups_sites()}</ListSubheader>}>
                         {origins?.map((origin, key) => (
                             <ListItem key={key}>
                                 <ListItemText primary={origin} />
@@ -32,7 +32,7 @@ export function RequestPermission(props: RequestPermissionProps) {
                     </List>
                 ) : null}
                 {permissions?.length ? (
-                    <List dense subheader={<ListSubheader>{t('popups_permissions')}</ListSubheader>}>
+                    <List dense subheader={<ListSubheader>{t.popups_permissions()}</ListSubheader>}>
                         {permissions?.map((permission, key) => (
                             <ListItem key={key}>
                                 <ListItemText primary={permission} />
@@ -43,10 +43,10 @@ export function RequestPermission(props: RequestPermissionProps) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onCancel} variant="text">
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 <Button onClick={props.onRequestApprove} variant="contained">
-                    {t('approve')}
+                    {t.approve()}
                 </Button>
             </DialogActions>
         </>

@@ -22,7 +22,6 @@ import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheK
 import { ProfilingPlugin } from './ProfilingPlugin.js'
 
 import './clean-hmr.js'
-import { OptOutLiveBindingPlugin } from './OptOutLiveBindingPlugin.js'
 
 const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
@@ -172,9 +171,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         },
         plugins: [
             new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
-            new OptOutLiveBindingPlugin((req, ids) => {
-                return req.includes('node_modules') && (ids[0]?.includes('jsx') || req.includes('react'))
-            }),
             flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
                     shouldIgnorePath: (path) => {

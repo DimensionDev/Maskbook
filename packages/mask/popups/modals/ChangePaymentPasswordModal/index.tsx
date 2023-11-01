@@ -4,7 +4,7 @@ import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
 import { forwardRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'
@@ -44,7 +44,7 @@ function ChangePaymentPasswordDrawer({
     setOriginalPasswordWrong,
     ...rest
 }: ChangePaymentPasswordDrawer) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -52,16 +52,16 @@ function ChangePaymentPasswordDrawer({
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (newPassword !== confirmNewPassword) {
-            setPasswordNotMatch(t('popups_wallet_new_password_not_match'))
+            setPasswordNotMatch(t.popups_wallet_new_password_not_match())
             return
         }
         if ([oldPassword, newPassword, confirmNewPassword].some((x) => x.length < 6)) {
-            setPasswordTooShort(t('popups_wallet_password_length_error'))
+            setPasswordTooShort(t.popups_wallet_password_length_error())
             return
         }
         try {
             await Services.Wallet.changePassword(oldPassword, newPassword)
-            showSnackbar(t('popups_wallet_password_change_successful'))
+            showSnackbar(t.popups_wallet_password_change_successful())
             rest.onClose?.()
         } catch (error) {
             setOriginalPasswordWrong((error as Error).message)
@@ -82,14 +82,14 @@ function ChangePaymentPasswordDrawer({
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t('popups_wallet_create_payment_password_tip')}
+                {t.popups_wallet_create_payment_password_tip()}
             </Typography>
             <Box display="flex" justifyContent="center" flexDirection="column">
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t('popups_wallet_old_payment_password')}
+                    placeholder={t.popups_wallet_old_payment_password()}
                     error={!!originalPasswordWrong}
                     value={oldPassword}
                     onChange={(e) => {
@@ -102,7 +102,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={t('popups_wallet_new_payment_password')}
+                    placeholder={t.popups_wallet_new_payment_password()}
                     error={false}
                     value={newPassword}
                     onChange={(e) => {
@@ -115,7 +115,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={t('popups_wallet_confirm_password')}
+                    placeholder={t.popups_wallet_confirm_password()}
                     error={false}
                     value={confirmNewPassword}
                     onChange={(e) => {
@@ -130,7 +130,7 @@ function ChangePaymentPasswordDrawer({
                 {passwordTooShort || passwordNotMatch || originalPasswordWrong}
             </Typography>
             <ActionButton loading={loading} disabled={loading} onClick={handleClick} sx={{ marginTop: '16px' }}>
-                {t('confirm')}
+                {t.confirm()}
             </ActionButton>
         </BottomDrawer>
     )

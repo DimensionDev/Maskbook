@@ -4,7 +4,7 @@ import { Box, Modal, styled, Typography } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -103,7 +103,7 @@ interface GuideStepProps {
 }
 
 export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()
@@ -205,15 +205,15 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                         <div className={classes.buttonContainer}>
                                             {step === total ? (
                                                 <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
-                                                    {t('try')}
+                                                    {t.try()}
                                                 </NextButton>
                                             ) : (
                                                 <>
                                                     <ActionButton type="button" onClick={onSkip}>
-                                                        {t('skip')}
+                                                        {t.skip()}
                                                     </ActionButton>
                                                     <NextButton type="button" onClick={onNext}>
-                                                        {t('next')}
+                                                        {t.next()}
                                                     </NextButton>
                                                 </>
                                             )}

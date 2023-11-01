@@ -10,7 +10,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 import { Web3State } from '@masknet/web3-providers'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -62,7 +62,7 @@ interface AddContactModalProps extends BottomDrawerProps {
 
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
 
     const contacts = useContacts()
@@ -81,14 +81,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await Web3State.state.AddressBook?.addContact({ name, address })
-        showSnackbar(t('wallet_add_contact_successfully'))
+        showSnackbar(t.wallet_add_contact_successfully())
         onConfirm?.()
     }, [name, address, onConfirm, t])
 
     const validationMessage = useMemo(() => {
-        if (addressError) return t('wallets_transfer_error_invalid_address')
-        if (nameExistError) return t('wallets_transfer_contact_wallet_name_already_exist')
-        if (addressExistError) return t('popups_wallet_settings_address_exists')
+        if (addressError) return t.wallets_transfer_error_invalid_address()
+        if (nameExistError) return t.wallets_transfer_contact_wallet_name_already_exist()
+        if (addressExistError) return t.popups_wallet_settings_address_exists()
         return ''
     }, [t, addressError, nameExistError, addressExistError])
 
@@ -97,7 +97,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <MaskTextField
                 spellCheck={false}
-                placeholder={t('name')}
+                placeholder={t.name()}
                 className={classes.input}
                 value={name}
                 onChange={(ev) => {
@@ -109,7 +109,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             />
             <MaskTextField
                 spellCheck={false}
-                placeholder={t('address')}
+                placeholder={t.address()}
                 wrapperProps={{ className: classes.input }}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
@@ -128,14 +128,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </ActionButton>
                 <ActionButton
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
                     disabled={addressError || nameExistError || addressExistError || !name.trim() || !address}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </div>
         </BottomDrawer>

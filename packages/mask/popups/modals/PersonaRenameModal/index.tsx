@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '@masknet/shared'
@@ -11,7 +11,7 @@ import { ActionButton } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 
 export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRenameModal() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const [name, setName] = useState('')
     const [error, setError] = useState('')
@@ -28,7 +28,7 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
         try {
             await Services.Identity.renamePersona(currentPersona.identifier, name)
         } catch (error) {
-            setError(t('popups_persona_persona_name_exists'))
+            setError(t.popups_persona_persona_name_exists())
             return
         }
 
@@ -37,14 +37,14 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
 
     return (
         <ActionModal
-            header={t('popups_rename')}
+            header={t.popups_rename()}
             action={
                 <ActionButton disabled={loading || !name.length || !!error} onClick={handleClick}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             }>
             <Typography fontWeight={700} textAlign="center" color={theme.palette.maskColor.third}>
-                {t('popups_persona_rename_tips')}
+                {t.popups_persona_rename_tips()}
             </Typography>
             <Box display="flex" justifyContent="center" mx={0.5} mb={0.5}>
                 <TextField

@@ -12,7 +12,7 @@ import { Web3, Web3State } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -94,7 +94,7 @@ interface EditContactModalProps extends BottomDrawerProps {
 
 function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
     const { classes, cx } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const contacts = useContacts()
     const wallets = useWallets()
@@ -107,7 +107,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     )
 
     const validationMessage = useMemo(() => {
-        if (nameAlreadyExist) return t('wallets_transfer_contact_wallet_name_already_exist')
+        if (nameAlreadyExist) return t.wallets_transfer_contact_wallet_name_already_exist()
         return ''
     }, [t, nameAlreadyExist])
 
@@ -119,7 +119,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
-        showSnackbar(t('wallet_edit_contact_successfully'))
+        showSnackbar(t.wallet_edit_contact_successfully())
 
         onConfirm?.()
     }, [name, address, type, onConfirm])
@@ -134,7 +134,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     inputProps={{ style: { textAlign: 'center' } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}
-                    placeholder={t('name')}
+                    placeholder={t.name()}
                     className={classes.input}
                     value={name}
                     onChange={(ev) => {
@@ -148,14 +148,14 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </ActionButton>
                 <ActionButton
                     onClick={edit}
                     loading={loading}
                     className={classes.button}
                     disabled={nameAlreadyExist || !name.trim()}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </ActionButton>
             </div>
         </BottomDrawer>

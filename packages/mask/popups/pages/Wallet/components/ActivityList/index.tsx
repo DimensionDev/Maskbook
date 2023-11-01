@@ -11,7 +11,7 @@ import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
-import { useMaskSharedTrans } from '../../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
 }))
 
 export const ActivityList = memo(function ActivityList() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
@@ -62,7 +62,7 @@ export const ActivityList = memo(function ActivityList() {
     )
 
     if (!isLoading && !localeTxes.length && !transactions.length)
-        return <EmptyStatus height="100%">{t('no_data')}</EmptyStatus>
+        return <EmptyStatus height="100%">{t.no_data()}</EmptyStatus>
 
     return (
         <div className={classes.container} data-hide-scrollbar>

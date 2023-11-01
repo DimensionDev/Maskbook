@@ -13,14 +13,13 @@ import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } f
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans, UserContext } from '../../../../../../shared-ui/index.js'
 import Services from '#services'
 import { useTitle, PopupContext, useHasPassword } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
-import { UserContext } from '../../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     infoBox: {
@@ -47,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Logout = memo(() => {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const wallet = useWallet()
@@ -88,10 +87,10 @@ const Logout = memo(() => {
                 await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
             }
 
-            showSnackbar(t('popups_log_out_successfully'))
+            showSnackbar(t.popups_log_out_successfully())
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(t('popups_log_out_failed'), { variant: 'error' })
+            showSnackbar(t.popups_log_out_failed(), { variant: 'error' })
         }
     }, [currentPersona, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
 
@@ -134,7 +133,7 @@ const LogoutUI = memo<LogoutUIProps>(
         verifyPaymentPassword,
         chainId,
     }) => {
-        const { t } = useMaskSharedTrans()
+        const t = useMaskSharedTrans()
         const theme = useTheme()
         const modalNavigate = useModalNavigate()
         const { classes } = useStyles()
@@ -143,14 +142,14 @@ const LogoutUI = memo<LogoutUIProps>(
         const [error, setError] = useState(false)
         const [paymentPasswordError, setPaymentPasswordError] = useState('')
 
-        useTitle(t('popups_log_out'))
+        useTitle(t.popups_log_out())
 
         const onConfirm = useCallback(async () => {
             if (manageWallets.length) {
                 if (hasPassword) {
                     const verified = await verifyPaymentPassword(paymentPassword)
                     if (!verified) {
-                        setPaymentPassword(t('popups_wallet_persona_log_out_error_payment_password'))
+                        setPaymentPassword(t.popups_wallet_persona_log_out_error_payment_password())
                         return
                     }
                 } else if (!backupPassword) {
@@ -191,7 +190,7 @@ const LogoutUI = memo<LogoutUIProps>(
                 if (hasPassword) {
                     return (
                         <PasswordField
-                            placeholder={t('popups_wallet_logout_input_payment_password')}
+                            placeholder={t.popups_wallet_logout_input_payment_password()}
                             value={paymentPassword}
                             error={!!paymentPasswordError}
                             helperText={paymentPasswordError}
@@ -204,14 +203,14 @@ const LogoutUI = memo<LogoutUIProps>(
                 } else if (backupPassword) {
                     return (
                         <PasswordField
-                            placeholder={t('popups_wallet_backup_input_password')}
+                            placeholder={t.popups_wallet_backup_input_password()}
                             value={password}
                             onChange={(e) => {
                                 if (error) setError(false)
                                 setPassword(e.target.value)
                             }}
                             error={error}
-                            helperText={error ? t('popups_password_do_not_match') : ''}
+                            helperText={error ? t.popups_password_do_not_match() : ''}
                         />
                     )
                 }
@@ -222,14 +221,14 @@ const LogoutUI = memo<LogoutUIProps>(
             if (backupPassword) {
                 return (
                     <PasswordField
-                        placeholder={t('popups_wallet_backup_input_password')}
+                        placeholder={t.popups_wallet_backup_input_password()}
                         value={password}
                         onChange={(e) => {
                             if (error) setError(false)
                             setPassword(e.target.value)
                         }}
                         error={error}
-                        helperText={error ? t('popups_password_do_not_match') : ''}
+                        helperText={error ? t.popups_password_do_not_match() : ''}
                     />
                 )
             }
@@ -287,7 +286,7 @@ const LogoutUI = memo<LogoutUIProps>(
                         </Box>
                     ) : null}
                     <Typography className={classes.tips}>
-                        {t('popups_log_out_tips')}
+                        {t.popups_log_out_tips()}
                         {currentPersona && manageWallets.length ? (
                             <Typography mt={2}>
                                 <Trans
@@ -307,7 +306,7 @@ const LogoutUI = memo<LogoutUIProps>(
                 </Box>
                 <BottomController>
                     <Button variant="outlined" fullWidth onClick={onCancel}>
-                        {t('cancel')}
+                        {t.cancel()}
                     </Button>
                     <ActionButton
                         variant="contained"
@@ -315,7 +314,7 @@ const LogoutUI = memo<LogoutUIProps>(
                         fullWidth
                         onClick={onConfirm}
                         disabled={disabled}>
-                        {!backupPassword && manageWallets.length && !hasPassword ? t('backup') : t('popups_log_out')}
+                        {!backupPassword && manageWallets.length && !hasPassword ? t.backup() : t.popups_log_out()}
                     </ActionButton>
                 </BottomController>
             </Box>

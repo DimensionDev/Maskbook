@@ -7,7 +7,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
 import { isUndefined } from 'lodash-es'
 
@@ -57,7 +57,7 @@ const DEFAULT_MIN_AUTO_LOCKER_TIME = 1000 * 60 * 15 // 15 minutes
 const ONE_DAY_IN_MILLISECONDS = hoursToMilliseconds(24)
 
 function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes, cx } = useStyles()
     const { value: autoLockerTime = DEFAULT_MIN_AUTO_LOCKER_TIME } = useWalletAutoLockTime()
@@ -103,7 +103,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t('popups_wallet_settings_auto_lock_tips')}
+                {t.popups_wallet_settings_auto_lock_tips()}
             </Typography>
             <Box className={classes.list}>
                 {options.map((option, index) => (
@@ -132,7 +132,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                 loading={loading}
                 sx={{ marginTop: '16px' }}
                 onClick={() => setAutoLockerTime(minutesToMilliseconds(Number(time ?? initialTime)))}>
-                {t('confirm')}
+                {t.confirm()}
             </ActionButton>
         </BottomDrawer>
     )

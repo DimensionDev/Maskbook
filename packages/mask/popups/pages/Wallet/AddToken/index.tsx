@@ -11,7 +11,7 @@ import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-b
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
@@ -97,7 +97,7 @@ enum TabType {
 }
 
 const AddToken = memo(function AddToken() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
@@ -120,7 +120,7 @@ const AddToken = memo(function AddToken() {
             : ChainId.Mainnet,
     )
 
-    useTitle(t('add_assets'))
+    useTitle(t.add_assets())
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -142,7 +142,7 @@ const AddToken = memo(function AddToken() {
                 })
             }
 
-            showSnackbar(t('popups_wallet_collectible_added_successfully'), {
+            showSnackbar(t.popups_wallet_collectible_added_successfully(), {
                 variant: 'success',
             })
             navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
@@ -155,8 +155,8 @@ const AddToken = memo(function AddToken() {
             <NormalHeader
                 tabList={
                     <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                        <Tab label={t('popups_wallet_token')} value={TabType.Tokens} />
-                        <Tab label={t('popups_wallet_collectible')} value={TabType.Collectibles} />
+                        <Tab label={t.popups_wallet_token()} value={TabType.Tokens} />
+                        <Tab label={t.popups_wallet_collectible()} value={TabType.Collectibles} />
                     </MaskTabList>
                 }
             />

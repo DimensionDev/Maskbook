@@ -9,7 +9,7 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { forwardRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import Services from '#services'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
@@ -23,7 +23,7 @@ interface WalletRemoveDrawerProps extends BottomDrawerProps {
 }
 
 function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ...rest }: WalletRemoveDrawerProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -35,7 +35,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
             const verified = await Services.Wallet.verifyPassword(password)
 
             if (!verified) {
-                setError(t('create_wallet_incorrect_payment_password'))
+                setError(t.create_wallet_incorrect_payment_password())
                 return
             }
             const index = wallets.findIndex((x) => isSameAddress(x.address, wallet.address))
@@ -67,7 +67,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t('popups_wallet_settings_are_you_sure_remove_wallet')}
+                {t.popups_wallet_settings_are_you_sure_remove_wallet()}
             </Typography>
             <Typography
                 fontWeight={700}
@@ -81,7 +81,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t('popups_wallet_payment_password')}
+                    placeholder={t.popups_wallet_payment_password()}
                     error={!!error}
                     value={password}
                     onChange={(e) => {
@@ -101,7 +101,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 onClick={handleClick}
                 color="error"
                 sx={{ marginTop: '16px' }}>
-                {t('remove')}
+                {t.remove()}
             </ActionButton>
         </BottomDrawer>
     )

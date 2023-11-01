@@ -2,15 +2,14 @@ import { memo, useCallback, useState } from 'react'
 import { ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans, UserContext } from '../../../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const [password, setPassword] = useState('')
     const [passwordMatched, setPasswordMatched] = useState(true)
@@ -27,15 +26,15 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
 
     return (
         <ActionModal
-            header={t('popups_backup_persona')}
+            header={t.popups_backup_persona()}
             action={
                 <ActionButton onClick={handleExport} disabled={!passwordValid || !passwordMatched || !password.length}>
-                    {t('export')}
+                    {t.export()}
                 </ActionButton>
             }>
             <Box display="flex" flexDirection="column" m={0.5}>
                 <PasswordField
-                    placeholder={t('password')}
+                    placeholder={t.password()}
                     onFocus={() => setPasswordMatched(true)}
                     onChange={(e) => {
                         setPassword(e.target.value)
@@ -45,9 +44,9 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     error={!passwordMatched}
                     helperText={
                         !passwordValid
-                            ? t('popups_backup_password_invalid')
+                            ? t.popups_backup_password_invalid()
                             : !passwordMatched
-                            ? t('popups_backup_password_incorrect')
+                            ? t.popups_backup_password_incorrect()
                             : null
                     }
                 />

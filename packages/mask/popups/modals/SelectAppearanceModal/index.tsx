@@ -1,13 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans, useAppearance } from '../../../../../shared-ui/index.js'
 import { Appearance } from '@masknet/public-api'
 import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import Services from '#services'
-import { useAppearance } from '../../../../../shared-ui/index.js'
 const useStyles = makeStyles()((theme) => ({
     item: {
         padding: theme.spacing(1.5),
@@ -39,14 +38,14 @@ const APPEARANCE_ICON_MAP = {
 }
 
 export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectAppearanceModal(...rest) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mode = useAppearance()
     const APPEARANCE_OPTIONS_MAP = useMemo(
         () => ({
-            [Appearance.default]: t('popups_settings_appearance_default'),
-            [Appearance.light]: t('popups_settings_appearance_light'),
-            [Appearance.dark]: t('popups_settings_appearance_dark'),
+            [Appearance.default]: t.popups_settings_appearance_default(),
+            [Appearance.light]: t.popups_settings_appearance_light(),
+            [Appearance.dark]: t.popups_settings_appearance_dark(),
         }),
         [t],
     )
@@ -56,7 +55,7 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
     }, [])
 
     return (
-        <ActionModal header={t('popups_settings_appearance')}>
+        <ActionModal header={t.popups_settings_appearance()}>
             <List>
                 {getEnumAsArray(Appearance).map((x) => {
                     const icon = APPEARANCE_ICON_MAP[x.value]

@@ -1,4 +1,4 @@
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
@@ -32,13 +32,13 @@ export enum EncryptionMethodType {
     Image = 'image',
 }
 export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     return (
         <>
-            <Typography className={classes.optionTitle}>{t('post_dialog_encryption_method')}</Typography>
+            <Typography className={classes.optionTitle}>{t.post_dialog_encryption_method()}</Typography>
             <PopoverListTrigger
                 selected={props.method ?? EncryptionMethodType.Text}
                 anchorEl={anchorEl}
@@ -46,20 +46,20 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                 onChange={props.onChange}
                 selectedTitle={
                     props.method === EncryptionMethodType.Text
-                        ? t('compose_encrypt_method_text')
-                        : t('compose_encrypt_method_image')
+                        ? t.compose_encrypt_method_text()
+                        : t.compose_encrypt_method_image()
                 }>
                 <PopoverListItem
                     value={EncryptionMethodType.Text}
-                    title={t('compose_encrypt_method_text')}
-                    subTitle={t('compose_encrypt_method_text_sub_title')}
+                    title={t.compose_encrypt_method_text()}
+                    subTitle={t.compose_encrypt_method_text_sub_title()}
                     disabled={props.textDisabled}
                 />
                 <div className={classes.divider} />
                 <PopoverListItem
                     value={EncryptionMethodType.Image}
-                    title={t('compose_encrypt_method_image')}
-                    subTitle={t('compose_encrypt_method_image_sub_title')}
+                    title={t.compose_encrypt_method_image()}
+                    subTitle={t.compose_encrypt_method_image_sub_title()}
                     disabled={props.imageDisabled}
                 />
             </PopoverListTrigger>
