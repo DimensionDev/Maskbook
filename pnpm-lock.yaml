@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -254,7 +254,7 @@ importers:
         version: 3.0.2
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.3.0-beta)
+        version: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.2.2)
       typescript:
         specifier: 5.3.0-beta
         version: 5.3.0-beta
@@ -568,9 +568,21 @@ importers:
 
   packages/injected-script:
     devDependencies:
+      '@rollup/plugin-commonjs':
+        specifier: ^25.0.4
+        version: 25.0.4(rollup@3.28.1)
+      '@rollup/plugin-node-resolve':
+        specifier: ^15.2.1
+        version: 15.2.1(rollup@3.28.1)
+      '@rollup/plugin-replace':
+        specifier: ^5.0.2
+        version: 5.0.2(rollup@3.28.1)
       rollup:
         specifier: ^3.28.1
         version: 3.28.1
+      rollup-plugin-polyfill-node:
+        specifier: ^0.12.0
+        version: 0.12.0(rollup@3.28.1)
       rollup-plugin-swc3:
         specifier: ^0.10.1
         version: 0.10.1(@swc/core@1.3.81)(rollup@3.28.1)
@@ -7111,7 +7123,7 @@ packages:
     resolution: {integrity: sha512-bSoJEKCENtmJrJDECHUe9PiqztIUACuSskyqw9ypqE7Dz3WxL3e8puFsWBkUsz+WOCjXh4B4Xljn88Ucxxv5HA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
@@ -7145,7 +7157,7 @@ packages:
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@mui/material': ^5.0.0
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
       '@mui/material':
@@ -7168,7 +7180,7 @@ packages:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
       '@mui/material': ^5.0.0
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
@@ -7207,7 +7219,7 @@ packages:
     peerDependencies:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
@@ -7245,7 +7257,7 @@ packages:
     resolution: {integrity: sha512-I/W0QyTLRdEx6py3lKAquKO/rNF/7j+nIOM/xCyI9kU0fcotVTcTY08mKMsS6vrzdWpi6pAkD0wP0KwWy5R5VA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
       '@types/react':
@@ -7290,7 +7302,7 @@ packages:
     peerDependencies:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
-      '@types/react': 18.2.21
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-0a360642d-20230711
     peerDependenciesMeta:
       '@emotion/react':
@@ -7319,7 +7331,7 @@ packages:
   /@mui/types@7.2.0(@types/react@18.2.21):
     resolution: {integrity: sha512-lGXtFKe5lp3UxTBGqKI1l7G8sE2xBik8qCfrLHD5olwP/YU0/ReWoWT7Lp1//ri32dK39oPMrJN8TgbkCSbsNA==}
     peerDependencies:
-      '@types/react': 18.2.21
+      '@types/react': '*'
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -7662,7 +7674,7 @@ packages:
     resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>= 5'
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
@@ -8138,7 +8150,7 @@ packages:
       react-refresh: '>=0.10.0 <1.0.0'
       sockjs-client: ^1.4.0
       type-fest: '>=0.17.0 <5.0.0'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>=4.43.0 <6.0.0'
       webpack-dev-server: 3.x || 4.x
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
@@ -8457,6 +8469,21 @@ packages:
       rollup: 3.28.1
     dev: true
 
+  /@rollup/plugin-inject@5.0.5(rollup@3.28.1):
+    resolution: {integrity: sha512-2+DEJbNBoPROPkgTDNe8/1YXWcqxbN5DTjASVIOx8HS+pITXushyNiBV56RB08zuptzz8gT3YfkqriTBVycepg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0 || ^3.0.0 || ^4.0.0 || 3
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.4(rollup@3.28.1)
+      estree-walker: 2.0.2
+      magic-string: 0.30.3
+      rollup: 3.28.1
+    dev: true
+
   /@rollup/plugin-json@6.0.0(rollup@3.28.1):
     resolution: {integrity: sha512-i/4C5Jrdr1XUarRhVu27EEwjt4GObltD7c+MkCIpO2QIbojw8MUs+CCTqOphQi3Qtg1FLmYt+l+6YeoIf51J7w==}
     engines: {node: '>=14.0.0'}
@@ -8497,7 +8524,7 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.28.1)
+      '@rollup/pluginutils': 5.0.4(rollup@3.28.1)
       magic-string: 0.27.0
       rollup: 3.28.1
     dev: true
@@ -10816,7 +10843,7 @@ packages:
     resolution: {integrity: sha512-wy0mglZpDSiSS0XHrVR+BAdId2+yxPSoJW8fsna3ZpYSlufjvxnP4YbKTCBZnNIcGN4r6ZPXV55X4mYExOfLmw==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
@@ -10827,7 +10854,7 @@ packages:
     resolution: {integrity: sha512-zLHQdI/Qs1UyT5UBdWNqsARasIA+AaF8t+4u2aS2nEpBQh2mWIVb8qAklq0eUENnC5mOItrIB4LiS9xMtph18A==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
@@ -10838,7 +10865,7 @@ packages:
     resolution: {integrity: sha512-lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -13242,7 +13269,7 @@ packages:
     resolution: {integrity: sha512-fX2MWpamkW0hZxMEg0+mYnA40LTosOSa5TqZ9GYIBzyJa9C3QUaMPSE2xAi/buNr8u89SfD9wHSQVBzrRa/SOQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.1.0
     dependencies:
       fast-glob: 3.2.12
       glob-parent: 6.0.2
@@ -13293,7 +13320,7 @@ packages:
     resolution: {integrity: sha512-BabizFdC3wBHhbI4kJh0VkQP9GkBfoHPydD0COMce1nJ1kJAB3F2TmJ/I7diULBKtmEWSwEbuN/KDtgnmUUVmw==}
     engines: {node: '>=v14.21.3'}
     peerDependencies:
-      '@types/node': 20.5.7
+      '@types/node': '*'
       cosmiconfig: '>=7'
       ts-node: '>=10'
       typescript: '>=4 || 5'
@@ -13662,7 +13689,7 @@ packages:
     resolution: {integrity: sha512-xDAXtEVGlD0gJ07iclwWVkLoZOpEvAWaSyf6W18S2pOC//K8+qUDIx8IIT3D+HjnmkJPQeesOPv5aiUaJsCM2g==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.0.0
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.29)
       postcss: 8.4.29
@@ -14342,7 +14369,7 @@ packages:
     resolution: {integrity: sha512-pJ/NGZTQxK1VDoyy8fLm0UV3ugOanostztLKUmzqYnUIKqyUm2ZkIpon6No0gWlpOSMoSpBWTnzrx1cdsbpuyw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.20.0
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
@@ -17112,7 +17139,7 @@ packages:
       solc: 0.7.3(debug@4.3.4)
       source-map-support: 0.5.21
       stacktrace-parser: 0.1.10
-      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.3.0-beta)
+      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.2.2)
       tsort: 0.0.1
       typescript: 5.3.0-beta
       undici: 5.23.0
@@ -17416,7 +17443,7 @@ packages:
     resolution: {integrity: sha512-6YrDKTuqaP/TquFH7h4srYWsZx+x6k6+FbsTm0ziCwGHDP78Unr1r9F/H4+sGmMbX08GQcJ+K64x55b+7VM/jg==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.20.0
     dependencies:
       '@types/html-minifier-terser': 6.0.0
       html-minifier-terser: 6.0.2
@@ -18821,7 +18848,7 @@ packages:
     resolution: {integrity: sha512-MG3INjByJ0J4AsNBm7T3hsuxKQqFIiRo/AUqb1q9LRKI5UU6Aar9JHbr9Ivn1TVwfUD9KirRoM/T6u8XlcQPHQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     peerDependencies:
-      '@types/node': 20.5.7
+      '@types/node': '*'
       ts-node: '>=9.0.0'
     peerDependenciesMeta:
       '@types/node':
@@ -18852,7 +18879,7 @@ packages:
       pretty-format: 28.1.3
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.3.0-beta)
+      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.2.2)
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -22374,7 +22401,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.29
-      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.3.0-beta)
+      ts-node: 10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.2.2)
       yaml: 2.1.3
     dev: false
 
@@ -23036,7 +23063,7 @@ packages:
   /react-markdown@8.0.7(@types/react@18.2.21)(react@0.0.0-experimental-0a360642d-20230711):
     resolution: {integrity: sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==}
     peerDependencies:
-      '@types/react': 18.2.21
+      '@types/react': '>=16'
       react: '>=16 || 0.0.0-experimental-0a360642d-20230711'
     peerDependenciesMeta:
       react:
@@ -23848,6 +23875,15 @@ packages:
       bn.js: 5.2.1
     dev: false
 
+  /rollup-plugin-polyfill-node@0.12.0(rollup@3.28.1):
+    resolution: {integrity: sha512-PWEVfDxLEKt8JX1nZ0NkUAgXpkZMTb85rO/Ru9AQ69wYW8VUCfDgP4CGRXXWYni5wDF0vIeR1UoF3Jmw/Lt3Ug==}
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0 || ^3.0.0 || 3
+    dependencies:
+      '@rollup/plugin-inject': 5.0.5(rollup@3.28.1)
+      rollup: 3.28.1
+    dev: true
+
   /rollup-plugin-swc3@0.10.1(@swc/core@1.3.81)(rollup@3.28.1):
     resolution: {integrity: sha512-cRjkK5CqqOO1GTPPcdxPqczR5YNibxKyO7OY1tWbHzEhd/VDlnc30WROdnvz6wc13dJg3HO8xGUfjIvyZTx+Gg==}
     engines: {node: '>=12'}
@@ -24541,7 +24577,7 @@ packages:
     resolution: {integrity: sha512-oqXpzDIByKONVY8g1NUPOTQhe0UTU5bWUl32GSkqK2LjJj0HmwTMVKxcUip0RgAYhY1mqgOxjbQM48a0mmeNfA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.72.1
     dependencies:
       abab: 2.0.6
       iconv-lite: 0.6.3
@@ -25076,7 +25112,7 @@ packages:
     resolution: {integrity: sha512-53BiGLXAcll9maCYtZi2RCQZKa8NQQai5C4horqKyRmHj9H7QmcUyucrH+4KW/gBQbXM2AsB0axoEcFZPlfPcw==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.0.0
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
@@ -25210,7 +25246,7 @@ packages:
     resolution: {integrity: sha512-D1p6XXURfSPleZZA/Lipb3A8pZ17fP4NObZvFCDjK/OKljroqDpPmsBdTraWhVBqUNpcWBQY1imWdoPScRlQ7A==}
     peerDependencies:
       '@swc/core': ^1.2.147
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>=2'
     dependencies:
       '@swc/core': 1.3.81
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
@@ -25307,7 +25343,7 @@ packages:
       '@swc/core': '*'
       esbuild: '*'
       uglify-js: '*'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.1.0
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -25730,7 +25766,7 @@ packages:
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
-      '@types/node': 20.5.7
+      '@types/node': '*'
       typescript: '>=2.7 || 5'
     peerDependenciesMeta:
       '@swc/core':
@@ -25758,7 +25794,6 @@ packages:
       typescript: 5.2.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node@10.9.1(@swc/core@1.3.81)(@types/node@20.5.7)(typescript@5.3.0-beta):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -25766,7 +25801,7 @@ packages:
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
-      '@types/node': 20.5.7
+      '@types/node': '*'
       typescript: '>=2.7 || 5'
     peerDependenciesMeta:
       '@swc/core':
@@ -26650,7 +26685,7 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': 20.5.7
+      '@types/node': '>= 14'
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -27197,7 +27232,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@webpack-cli/generators': '*'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-bundle-analyzer: '*'
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -27229,7 +27264,7 @@ packages:
     resolution: {integrity: sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^4.0.0 || ^5.0.0
     dependencies:
       colorette: 2.0.19
       memfs: 3.4.10
@@ -27244,7 +27279,7 @@ packages:
     engines: {node: '>= 12.13.0'}
     hasBin: true
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^4.37.0 || ^5.0.0
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -27308,7 +27343,7 @@ packages:
     resolution: {integrity: sha512-ip7ljKtjRmXKjuLZLo8jzcQjV3nuVPI1U+AUcx6PGJXC/+7apt20wbSVfOKnXDhHhijzP44qe/1qSgR8C+HgZg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.0.0
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.81)(webpack-cli@5.1.4)
     dev: true
@@ -28013,6 +28048,9 @@ time:
   /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
   /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
+  /@rollup/plugin-commonjs@25.0.4: '2023-08-11T17:13:52.902Z'
+  /@rollup/plugin-node-resolve@15.2.1: '2023-08-22T04:58:47.775Z'
+  /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
   /@rollup/plugin-virtual@3.0.2: '2023-10-05T12:50:16.732Z'
   /@types/twitter-text@3.1.7: '2023-10-18T16:50:37.249Z'
   /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
@@ -28023,5 +28061,6 @@ time:
   /eslint-plugin-i@2.28.1: '2023-09-06T08:19:37.937Z'
   /guess-calling-code@1.1.8: '2023-06-26T16:50:23.300Z'
   /knip@2.33.3: '2023-10-12T09:53:43.922Z'
+  /rollup-plugin-polyfill-node@0.12.0: '2023-01-24T00:16:21.182Z'
   /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
   /url@0.11.3: '2023-09-14T22:38:37.401Z'

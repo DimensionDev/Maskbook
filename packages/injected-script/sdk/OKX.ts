@@ -1,7 +1,7 @@
-import { InjectedProvider } from './Base.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 import { createPromise, sendEvent } from './utils.js'
 
-export class OKXProvider extends InjectedProvider {
+export class OKXProvider extends BaseInjectedProvider {
     constructor() {
         super('okxwallet')
     }

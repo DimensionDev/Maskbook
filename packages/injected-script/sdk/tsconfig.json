@@ -8,13 +8,14 @@
   "files": [
     "index.ts",
     "Base.ts",
+    "BaseInjected.ts",
     "Browser.ts",
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
     "Coinbase.ts",
-    "OKX.ts",
     "MetaMask.ts",
+    "OKX.ts",
     "Opera.ts",
     "Clover.ts",
     "utils.ts"

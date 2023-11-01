@@ -48,15 +48,14 @@ export const flags = {
     mixpanel_project_token: 'b815b822fd131650e92ff8539eb5e793',
 
     // wallet connect
-    wc_v1_bridge_url: 'https://bridge.walletconnect.org',
-    wc_v2_relay_url: 'wss://relay.walletconnect.com',
-    wc_v2_project_id: '8f1769933420afe8873860925fcca14f',
-    wc_v2_mode: isProd ? 'error' : 'debug',
-    wc_v1_enabled: false,
-    wc_v2_enabled: process.env.NODE_ENV !== 'test',
+    wc_relay_url: 'wss://relay.walletconnect.com',
+    wc_project_id: '8f1769933420afe8873860925fcca14f',
+    wc_mode: isProd ? 'error' : 'debug',
+    wc_enabled: process.env.NODE_ENV !== 'test',
 } as const
 
 Object.freeze(flags.shadowRootInit)
+
 if (process.env.NODE_ENV === 'development') {
     console.debug('[mask] flags:', flags)
 }

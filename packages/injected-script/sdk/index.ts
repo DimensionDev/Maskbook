@@ -4,21 +4,22 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
-import { MetaMaskProvider } from './MetaMask.js'
 import { OperaProvider } from './Opera.js'
 import { CloverProvider } from './Clover.js'
+import { MetaMaskProvider } from './MetaMask.js'
 import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
 import { CustomEventId, decodeEvent } from '../shared/index.js'
 
 export type { EthereumProvider, InternalEvents } from '../shared/index.js'
-export { InjectedProvider } from './Base.js'
+export { BaseProvider } from './Base.js'
+export { BaseInjectedProvider as InjectedProvider } from './BaseInjected.js'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)
 export const injectedPhantomProvider = new PhantomProvider()
 export const injectedSolflareProvider = new SolflareProvider()
-export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedBrowserProvider = new BrowserProvider()
+export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedOperaProvider = new OperaProvider()
@@ -31,7 +32,6 @@ const Providers = [
     injectedOperaProvider,
     injectedCloverProvider,
     injectedBrowserProvider,
-    injectedMetaMaskProvider,
     injectedCoin98EVMProvider,
     injectedCoin98SolanaProvider,
     injectedPhantomProvider,
@@ -63,6 +63,7 @@ if (typeof location === 'object' && location.protocol.includes('extension')) {
         'This package is not expected to be imported in background script or the extension script. Please check your code.',
     )
 }
+
 globalThis.document?.addEventListener?.(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
     if (r[1].length < 1) return
@@ -73,16 +74,20 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
         case 'rejectPromise':
             return rejectPromise(...r[1])
 
-        case 'web3BridgeEmitEvent':
+        // web3
+        case 'web3BridgeEmitEvent': {
             const [pathname, eventName, data] = r[1]
             Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
-            return
-
+            break
+        }
         case 'web3BridgeBindEvent':
         case 'web3BridgeSendRequest':
         case 'web3BridgeExecute':
         case 'web3UntilBridgeOnline':
         case 'web3BridgePrimitiveAccess':
+            break
+
+        // misc
         case 'input':
         case 'paste':
         case 'pasteImage':

@@ -1,5 +1,5 @@
 import { isExtensionSiteType, type Account } from '@masknet/shared-base'
-import type { InjectedProvider } from '@masknet/injected-script'
+import type { BaseProvider as BaseBridge } from '@masknet/injected-script'
 import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
 import { BaseProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -10,7 +10,7 @@ export class BaseInjectedProvider
 {
     constructor(
         protected providerType: ProviderType,
-        protected bridge: InjectedProvider,
+        protected bridge: BaseBridge,
     ) {
         super()
     }
