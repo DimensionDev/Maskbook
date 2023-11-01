@@ -2,16 +2,15 @@ import { compact, uniqBy } from 'lodash-es'
 import type { WalletAPI } from '../../../entry-types.js'
 import {
     EMPTY_LIST,
-    EnhanceableSite,
     NetworkPluginID,
     NextIDPlatform,
     PluginID,
     SocialAddressType,
     createLookupTableResolver,
-    getSiteType,
     type BindingProof,
     type SocialAddress,
     type SocialIdentity,
+    Sniffings,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
@@ -69,7 +68,7 @@ function getAddress(text: string) {
 }
 
 function getNextIDPlatform() {
-    if (getSiteType() === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
+    if (Sniffings.is_twitter_page) return NextIDPlatform.Twitter
     return
 }
 

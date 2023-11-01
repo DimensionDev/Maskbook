@@ -1,7 +1,7 @@
 import { memo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { AccountIcon, ReversedAddress } from '@masknet/shared'
+import { AccountIcons, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
 import { useDefaultChainId, useWeb3Others } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -182,7 +182,7 @@ export const RecipientSelect = memo(({ className }: Props) => {
                         />
                     )}
                     <ExternalLink account={account} />
-                    <AccountIcon socialAccount={account} classes={{ icon: classes.icon }} />
+                    <AccountIcons socialAccount={account} classes={{ icon: classes.icon }} />
                     {isSameAddress(account.address, recipientAddress) ? (
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}

@@ -19,7 +19,7 @@ const supportSources: SocialAddressType[] = [
  * Get Tips accounts, removing the hidden ones,
  * and put the default one at the front.
  */
-export function useTipsAccounts(identity: IdentityResolved | undefined, personaPubkey: string | undefined) {
+export function useTipsAccounts(identity: IdentityResolved | null | undefined, personaPubkey: string | undefined) {
     const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
     const userId = identity?.identifier?.userId
     const { data: hiddenAddresses } = useHiddenAddressConfigOf(
