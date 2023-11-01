@@ -205,14 +205,10 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
     const getDisabled = useCallback(
         (provider: Web3Helper.ProviderDescriptorAll) => {
-            if (requiredSupportPluginID) {
-                if (provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
-            }
+            if (requiredSupportPluginID && provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
 
-            if (requiredSupportChainIds) {
-                if (requiredSupportChainIds.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
-                    return true
-            }
+            if (requiredSupportChainIds?.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
+                return true
 
             return false
         },
@@ -245,10 +241,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                         )}
                                         disabled={getDisabled(provider)}
                                         onClick={() => {
-                                            if (
-                                                provider.type === ProviderType.WalletConnect ||
-                                                provider.type === ProviderType.WalletConnectV2
-                                            ) {
+                                            if (provider.type === ProviderType.WalletConnect) {
                                                 handleClick(provider, ChainId.Mainnet)
                                             } else {
                                                 handleClick(provider)
