@@ -18,7 +18,7 @@ import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB } from '../DataSource/usePersonasFromDB.js'
 import { useCurrentPersona } from '../DataSource/useCurrentPersona.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -48,7 +48,7 @@ interface PostDialogProps {
 }
 
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()
@@ -130,7 +130,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
             open={open}
             onClose={onClose}
-            title={t('post_dialog__title')}
+            title={t.post_dialog__title()}
             independent>
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI

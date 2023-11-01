@@ -5,7 +5,7 @@ import { MaskMessages } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 
@@ -43,7 +43,7 @@ interface StyleProps {
 }
 
 function NFTAvatarButtonInDialog() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const [style, setStyle] = useState<StyleProps>({
         fontSize: 12,
         minHeight: 48,
@@ -74,7 +74,7 @@ function NFTAvatarButtonInDialog() {
 
     return (
         <div className={classes.root} onClick={onClick}>
-            &#x1F525; {t('use_nft')}
+            &#x1F525; {t.use_nft()}
         </div>
     )
 }

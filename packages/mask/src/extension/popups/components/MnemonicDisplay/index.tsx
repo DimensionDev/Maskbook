@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +79,7 @@ interface MnemonicDisplayProps {
 }
 
 export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDisplay({ mnemonic = EMPTY_LIST }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [display, toggle] = useToggle(false)
 
@@ -109,7 +109,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                         variant="text"
                         startIcon={<Icons.EyeColor size={20} className={classes.icon} />}
                         className={classes.button}>
-                        {t('popups_wallet_backup_mnemonic_hidden')}
+                        {t.popups_wallet_backup_mnemonic_hidden()}
                     </Button>
                 </Box>
             ) : null}

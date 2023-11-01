@@ -10,7 +10,8 @@ import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { formatTokenBalance, useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { formatTokenBalance } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 
@@ -92,7 +93,7 @@ interface AssetItemProps extends ListItemProps {
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes, cx } = useStyles({ hasNav: hasNavigator })
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const network = networks.find((x) => x.chainId === asset.chainId)
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
@@ -161,7 +162,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                             </ProgressiveText>
                         </TextOverflowTooltip>
                         {asset.isCustomToken ? (
-                            <Typography className={classes.customToken}>{t('added_by_user')}</Typography>
+                            <Typography className={classes.customToken}>{t.added_by_user()}</Typography>
                         ) : null}
                     </>
                 }>

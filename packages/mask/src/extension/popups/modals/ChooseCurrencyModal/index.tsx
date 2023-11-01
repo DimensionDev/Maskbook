@@ -5,7 +5,7 @@ import { Web3State } from '@masknet/web3-providers'
 import { CurrencyType, resolveCurrencyFullName } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -69,13 +69,13 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
 })
 
 export const ChooseCurrencyModal = memo(function ChooseCurrencyModal({ ...rest }: ActionModalBaseProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const currencies = [CurrencyType.USD, CurrencyType.CNY, CurrencyType.HKD, CurrencyType.JPY, CurrencyType.EUR]
 
     return (
-        <ActionModal header={t('currency')} keepMounted {...rest}>
+        <ActionModal header={t.currency()} keepMounted {...rest}>
             <ul className={classes.networkList}>
                 {currencies.map((fiatCurrencyType, index) => (
                     <CurrencyItem key={index} fiatCurrencyType={fiatCurrencyType} />

@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
@@ -98,7 +98,7 @@ interface DisconnectModalProps {
 }
 
 const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -109,7 +109,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, []),
         onMutate: async () => {
             await queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
-            showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
+            showSnackbar(t.popups_wallet_disconnect_site_success(), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
@@ -123,7 +123,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, [wallet?.address]),
         onMutate: async () => {
             await queryClient.invalidateQueries(['wallet-granted-origins', wallet?.address])
-            showSnackbar(t('popups_wallet_disconnect_site_success'), { variant: 'success' })
+            showSnackbar(t.popups_wallet_disconnect_site_success(), { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
@@ -133,24 +133,24 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
     return (
         <Box className={classes.container}>
             <Box className={classes.card}>
-                <Typography className={classes.title}>{t('plugin_wallet_disconnect')}</Typography>
-                <Typography className={classes.desc}>{t('popups_wallet_disconnect_confirm')}</Typography>
+                <Typography className={classes.title}>{t.plugin_wallet_disconnect()}</Typography>
+                <Typography className={classes.desc}>{t.popups_wallet_disconnect_confirm()}</Typography>
                 <button
                     type="button"
                     className={classes.confirmButton}
                     disabled={!wallet}
                     onClick={() => onDisconnect()}>
-                    {t('confirm')}
+                    {t.confirm()}
                 </button>
                 <button type="button" className={classes.cancelButton} onClick={() => setOpen(false)}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </button>
                 <button
                     type="button"
                     className={classes.disconnectAll}
                     disabled={!wallet}
                     onClick={() => onDisconnectAll()}>
-                    {t('popups_wallet_disconnect_all')}
+                    {t.popups_wallet_disconnect_all()}
                 </button>
             </Box>
         </Box>

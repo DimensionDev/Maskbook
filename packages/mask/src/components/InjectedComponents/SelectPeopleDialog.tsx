@@ -8,7 +8,7 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
 import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 
@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose, onSelect }: SelectProfileDialogProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
@@ -118,7 +118,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const canCommit = committed || people.length === 0
 
     return (
-        <InjectedDialog onClose={handleClose} open={open} title={t('select_specific_friends_dialog__title')}>
+        <InjectedDialog onClose={handleClose} open={open} title={t.select_specific_friends_dialog__title()}>
             <DialogContent className={classes.body}>
                 <SelectProfileUI
                     frozenSelected={selectedProfiles}
@@ -139,7 +139,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
             ) : null}
             <DialogActions className={classes.action}>
                 <Button className={classes.cancel} fullWidth onClick={handleClose} variant="roundedContained">
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 <ActionButton
                     fullWidth
@@ -148,7 +148,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
                     className={classes.share}
                     disabled={canCommit}
                     onClick={share}>
-                    {t('done')}
+                    {t.done()}
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>

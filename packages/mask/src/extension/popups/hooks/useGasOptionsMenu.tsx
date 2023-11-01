@@ -6,7 +6,7 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { formatWeiToGwei, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
-import { useMaskSharedTrans } from '../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { GasSettingModal } from '../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,7 +54,7 @@ export function useGasOptionsMenu(
     callback: (config: GasConfig, type?: GasOptionType) => void,
     paymentToken?: string,
 ) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { data: gasOptions } = useGasOptions()
 
@@ -108,34 +108,34 @@ export function useGasOptionsMenu(
                 key="medium"
                 className={classes.item}
                 onClick={() => handleClick(GasOptionType.SLOW, gasOptions?.slow)}>
-                <Typography className={classes.optionName}>{t('popups_wallet_gas_fee_settings_medium')}</Typography>
+                <Typography className={classes.optionName}>{t.popups_wallet_gas_fee_settings_medium()}</Typography>
                 <Typography className={classes.optionValue}>
                     {formatWeiToGwei(gasOptions?.slow.suggestedMaxFeePerGas ?? 0).toFixed(2)}
-                    <Typography component="span">{t('wallet_transfer_gwei')}</Typography>
+                    <Typography component="span">{t.wallet_transfer_gwei()}</Typography>
                 </Typography>
             </MenuItem>,
             <MenuItem
                 key="high"
                 className={classes.item}
                 onClick={() => handleClick(GasOptionType.NORMAL, gasOptions?.normal)}>
-                <Typography className={classes.optionName}>{t('popups_wallet_gas_fee_settings_high')}</Typography>
+                <Typography className={classes.optionName}>{t.popups_wallet_gas_fee_settings_high()}</Typography>
                 <Typography className={classes.optionValue}>
                     {formatWeiToGwei(gasOptions?.normal.suggestedMaxFeePerGas ?? 0).toFixed(2)}
-                    <Typography component="span">{t('wallet_transfer_gwei')}</Typography>
+                    <Typography component="span">{t.wallet_transfer_gwei()}</Typography>
                 </Typography>
             </MenuItem>,
             <MenuItem
                 key="instant"
                 className={classes.item}
                 onClick={() => handleClick(GasOptionType.FAST, gasOptions?.fast)}>
-                <Typography className={classes.optionName}>{t('popups_wallet_gas_fee_settings_instant')}</Typography>
+                <Typography className={classes.optionName}>{t.popups_wallet_gas_fee_settings_instant()}</Typography>
                 <Typography className={classes.optionValue}>
                     {formatWeiToGwei(gasOptions?.fast.suggestedMaxFeePerGas ?? 0).toFixed(2)}
-                    <Typography component="span">{t('wallet_transfer_gwei')}</Typography>
+                    <Typography component="span">{t.wallet_transfer_gwei()}</Typography>
                 </Typography>
             </MenuItem>,
             <MenuItem key="custom" className={classes.item} onClick={handleClickCustom}>
-                <Typography className={classes.optionName}>{t('popups_wallet_gas_fee_settings_custom')}</Typography>
+                <Typography className={classes.optionName}>{t.popups_wallet_gas_fee_settings_custom()}</Typography>
             </MenuItem>,
         ],
         {

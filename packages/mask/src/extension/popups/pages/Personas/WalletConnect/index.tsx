@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default memo(function WalletConnect() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const location = useLocation()
@@ -106,7 +106,7 @@ export default memo(function WalletConnect() {
                     <Icons.MaskWallet size={64} />
                 </Box>
             </Box>
-            <Typography className={classes.title}>{t('wallet_connect')}</Typography>
+            <Typography className={classes.title}>{t.wallet_connect()}</Typography>
 
             <div className={classes.halo}>
                 <div className={classes.qrcodeContainer}>
@@ -115,7 +115,7 @@ export default memo(function WalletConnect() {
                     </Box>
                 </div>
             </div>
-            <Typography className={classes.tip}>{t('wallet_connect_tips')}</Typography>
+            <Typography className={classes.tip}>{t.wallet_connect_tips()}</Typography>
         </Box>
     )
 })

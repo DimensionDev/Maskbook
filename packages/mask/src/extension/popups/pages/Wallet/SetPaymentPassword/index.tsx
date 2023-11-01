@@ -20,7 +20,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -174,7 +174,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 })
 
 const SetPaymentPassword = memo(function SetPaymentPassword() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -210,7 +210,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
-                    showSnackbar(t('popups_wallet_set_payment_password_successfully'), { variant: 'success' })
+                    showSnackbar(t.popups_wallet_set_payment_password_successfully(), { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     params.delete('from')
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
@@ -234,12 +234,12 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>
                         {isCreating
-                            ? t('popups_wallet_create_payment_password')
-                            : t('popups_set_the_payment_password_title')}
+                            ? t.popups_wallet_create_payment_password()
+                            : t.popups_set_the_payment_password_title()}
                     </Typography>
                     {isCreating ? (
                         <Typography className={classes.description} fontSize={14} fontWeight={700}>
-                            {t('popups_wallet_create_payment_password_tip')}
+                            {t.popups_wallet_create_payment_password_tip()}
                         </Typography>
                     ) : null}
                 </Box>
@@ -255,7 +255,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                             autoFocus
                                             type="password"
                                             variant="filled"
-                                            placeholder={t('popups_wallet_payment_password')}
+                                            placeholder={t.popups_wallet_payment_password()}
                                             error={!isValid && !!errors.password?.message}
                                         />
                                     )}
@@ -270,7 +270,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                             error={!isValid && !!errors.confirm?.message}
                                             type="password"
                                             variant="filled"
-                                            placeholder={t('popups_wallet_confirm_password')}
+                                            placeholder={t.popups_wallet_confirm_password()}
                                         />
                                     )}
                                     name="confirm"
@@ -326,7 +326,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                         </Box>
                         <div className={classes.setPasswordButtonWrapper}>
                             <ActionButton fullWidth onClick={() => setIsCreating(true)}>
-                                {t('popups_set_the_payment_password_title')}
+                                {t.popups_set_the_payment_password_title()}
                             </ActionButton>
                         </div>
                     </>
@@ -341,7 +341,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                         loading={loading}
                         width={368}
                         className={classes.confirmButton}>
-                        {t('confirm')}
+                        {t.confirm()}
                     </ActionButton>
                 </div>
             ) : null}

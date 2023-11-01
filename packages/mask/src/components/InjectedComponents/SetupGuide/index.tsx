@@ -12,7 +12,7 @@ import { makeStyles } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { memo, useCallback } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import { useMaskSharedTrans } from '../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { VerifyNextID } from './VerifyNextID.js'
@@ -21,7 +21,7 @@ import { CheckConnection } from './CheckConnection.js'
 // #region setup guide ui
 
 function SetupGuideUI() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
 
     const { step } = SetupGuideContext.useContainer()
     const { networkIdentifier } = activatedSiteAdaptorUI!
@@ -32,9 +32,9 @@ function SetupGuideUI() {
     }, [])
 
     const onCreate = useCallback(() => {
-        let content = t('setup_guide_say_hello_content')
+        let content = t.setup_guide_say_hello_content()
         if (networkIdentifier === EnhanceableSite.Twitter) {
-            content += t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' })
+            content += t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' })
         }
 
         activatedSiteAdaptorUI!.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {

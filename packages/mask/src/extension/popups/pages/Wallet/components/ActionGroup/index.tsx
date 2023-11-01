@@ -8,7 +8,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => {
@@ -65,7 +65,7 @@ interface Props extends BoxProps {
 
 export const ActionGroup = memo(function ActionGroup({ className, chainId, address, asset, ...rest }: Props) {
     const { classes, cx, theme } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
@@ -111,7 +111,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                     })
                 }}>
                 <Icons.Send size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>{t('wallet_send')}</Typography>
+                <Typography className={classes.label}>{t.wallet_send()}</Typography>
             </button>
             <button
                 type="button"
@@ -125,7 +125,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                     )
                 }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>{t('wallet_receive')}</Typography>
+                <Typography className={classes.label}>{t.wallet_receive()}</Typography>
             </button>
             <button
                 disabled={disabledSwap}
@@ -133,7 +133,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 className={cx(classes.button, disabledSwap ? classes.disabled : undefined)}
                 onClick={handleSwap}>
                 <Icons.Cached size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>{t('wallet_swap')}</Typography>
+                <Typography className={classes.label}>{t.wallet_swap()}</Typography>
             </button>
         </Box>
     )

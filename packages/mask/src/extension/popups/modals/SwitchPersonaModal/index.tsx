@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Box, List } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPersonaModal({ ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { personas, currentPersona } = PersonaContext.useContainer()
@@ -58,7 +58,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.PopupRestore size={18} />}
                 onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
-                {t('popups_recovery')}
+                {t.popups_recovery()}
             </ActionButton>
             <ActionButton
                 fullWidth
@@ -66,7 +66,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.History size={18} />}
                 onClick={() => navigate(PopupRoutes.Settings)}>
-                {t('backup')}
+                {t.backup()}
             </ActionButton>
             <ActionButton
                 fullWidth
@@ -74,13 +74,13 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.AddUser size={18} />}
                 onClick={() => handleOpenDashboard(DashboardRoutes.SignUpPersona)}>
-                {t('add')}
+                {t.add()}
             </ActionButton>
         </Box>
     )
 
     return (
-        <ActionModal header={t('popups_switch_persona')} action={action} {...rest}>
+        <ActionModal header={t.popups_switch_persona()} action={action} {...rest}>
             <Box className={classes.content}>
                 <List dense className={classes.list}>
                     {personas.map((item, index) => (

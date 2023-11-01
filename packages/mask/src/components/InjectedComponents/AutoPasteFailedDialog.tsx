@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useMaskSharedTrans } from '../../utils/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { format as formatDateTime } from 'date-fns'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 
 function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const { onClose, data } = props
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()
@@ -51,13 +51,13 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         <IconButton size="small" onClick={onClose}>
                             <CloseIcon />
                         </IconButton>
-                        <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
+                        <span className={classes.title}>{t.auto_paste_failed_dialog_title()}</span>
                     </DialogTitle>
                 </nav>
                 <DialogContent sx={{ paddingTop: 0 }}>
                     <DialogContentText>
                         <Typography color="textPrimary" sx={{ marginBottom: 1 }}>
-                            {t('auto_paste_failed_dialog_content')}
+                            {t.auto_paste_failed_dialog_content()}
                         </Typography>
                     </DialogContentText>
                     {props.data.text ? (
@@ -73,7 +73,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    showSnackbar(t('copy_success_of_text'), {
+                                    showSnackbar(t.copy_success_of_text(), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -83,7 +83,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                     })
                                     data.image ?? onClose()
                                 }}>
-                                {t('copy_text')}
+                                {t.copy_text()}
                             </Button>
                         </>
                     ) : null}
@@ -100,7 +100,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             onClick={async () => {
                                 if (!data.image) return
                                 await navigator.clipboard.write([new ClipboardItem({ [data.image.type]: data.image })])
-                                showSnackbar(t('copy_success_of_image'), {
+                                showSnackbar(t.copy_success_of_image(), {
                                     variant: 'success',
                                     preventDuplicate: true,
                                     anchorOrigin: {
@@ -109,7 +109,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                     },
                                 })
                             }}>
-                            {t('copy_image')}
+                            {t.copy_image()}
                         </Button>
                         {url ? (
                             <Button
@@ -117,7 +117,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="text"
                                 onClick={() => saveFileFromUrl(url, fileName)}
                                 startIcon={<Download />}>
-                                {t('download')}
+                                {t.download()}
                             </Button>
                         ) : null}
                         {url ? (
@@ -128,7 +128,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 href={url}
                                 target="_blank"
                                 startIcon={<OpenInBrowser />}>
-                                {t('auto_paste_failed_dialog_image_caption')}
+                                {t.auto_paste_failed_dialog_image_caption()}
                             </Button>
                         ) : null}
                     </Box>

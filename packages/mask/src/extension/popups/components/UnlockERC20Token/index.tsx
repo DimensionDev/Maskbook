@@ -10,7 +10,7 @@ import { Icons } from '@masknet/icons'
 import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -114,7 +114,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     onPaymentTokenChange,
     paymentToken,
 }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const theme = useTheme()
     const [value, setValue] = useState('')
@@ -154,13 +154,13 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
 
     const tips = useMemo(() => {
         if (isZero(value)) {
-            return t('popups_wallet_unlock_erc20_revoke_tips')
+            return t.popups_wallet_unlock_erc20_revoke_tips()
         }
         if (isGreaterThan(value, leftShift(balance, token?.decimals))) {
-            return t('popups_wallet_unlock_erc20_balance_too_high_tips')
+            return t.popups_wallet_unlock_erc20_balance_too_high_tips()
         }
 
-        return t('popups_wallet_unlock_erc20_balance_tips', { amount: value, symbol: token?.symbol })
+        return t.popups_wallet_unlock_erc20_balance_tips({ amount: value, symbol: String(token?.symbol) })
     }, [value, balance, token])
 
     if (!transaction.formattedTransaction) return null
@@ -204,7 +204,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             <Box className={classes.amountInfo}>
                 <TextField
                     fullWidth
-                    placeholder={t('popups_wallet_unlock_erc20_placeholder')}
+                    placeholder={t.popups_wallet_unlock_erc20_placeholder()}
                     value={value}
                     onChange={(e) => {
                         setValue(e.target.value)
@@ -219,7 +219,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                     setValue(leftShift(balance, token?.decimals).toString())
                                     handleChange(balance)
                                 }}>
-                                {t('max')}
+                                {t.max()}
                             </Button>
                         ),
                         disableUnderline: true,
@@ -243,10 +243,10 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         {tips}
                     </Typography>
                 ) : null}
-                <Typography className={classes.name}>{t('popups_wallet_unlock_erc20_requested_by')}</Typography>
+                <Typography className={classes.name}>{t.popups_wallet_unlock_erc20_requested_by()}</Typography>
                 {transaction.formattedTransaction.popup?.spender ? (
                     <Typography className={classes.spender} component="div">
-                        {t('contract')}:
+                        {t.contract()}:
                         <Typography className={classes.spenderAddress}>
                             {transaction.formattedTransaction.popup?.spender}{' '}
                             <Link
@@ -266,7 +266,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             </Box>
 
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography className={classes.gasFeeTitle}>{t('popups_wallet_gas_fee')}</Typography>
+                <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
                 {transaction.computedPayload.gas && initConfig ? (
                     <GasSettingMenu
                         minimumGas={transaction.computedPayload.gas}

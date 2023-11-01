@@ -12,7 +12,7 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type z, type ZodCustomIssue } from 'zod'
-import { useMaskSharedTrans, type AvailableLocaleKeys } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { createSchema } from './network-schema.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle } from '../../../hooks/index.js'
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const QUERY_KEY = ['system', 'wallet', 'networks']
 export const EditNetwork = memo(function EditNetwork() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const id = useParams<{ id: string }>().id
@@ -90,7 +90,7 @@ export const EditNetwork = memo(function EditNetwork() {
     // #endregion
 
     const { showSnackbar } = usePopupCustomSnackbar()
-    useTitle(network ? network.name : t('network_management_add_network'))
+    useTitle(network ? network.name : t.network_management_add_network())
     const { setExtension } = useContext(PageTitleContext)
 
     const isBuiltIn = network ? !network.isCustomized : false
@@ -108,7 +108,7 @@ export const EditNetwork = memo(function EditNetwork() {
                         setChainId(ChainId.Mainnet)
                     }
                     await Network?.removeNetwork(id)
-                    showSnackbar(t('deleted_network_successfully'))
+                    showSnackbar(t.deleted_network_successfully())
                     // Trigger UI update.
                     queryClient.invalidateQueries(QUERY_KEY)
                     navigate(-1)
@@ -149,7 +149,8 @@ export const EditNetwork = memo(function EditNetwork() {
                 issues.forEach((issue) => {
                     // We assume there is no multiple paths.
                     setError(issue.path[0] as keyof FormInputs, {
-                        message: t(issue.message as AvailableLocaleKeys, issue.params),
+                        // @ts-expect-error i18n-todo: figure out type of issue.message.
+                        message: t[issue.message](issue.params),
                     })
                 })
             } catch {}
@@ -203,16 +204,16 @@ export const EditNetwork = memo(function EditNetwork() {
                 }
                 if (isEditing) {
                     await Network.updateNetwork(id, network)
-                    showSnackbar(t('saved_network_successfully'))
+                    showSnackbar(t.saved_network_successfully())
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(t('adding_network_successfully'))
+                    showSnackbar(t.adding_network_successfully())
                 }
                 navigate(-1)
                 queryClient.invalidateQueries(QUERY_KEY)
             } catch (err) {
                 checkZodError((err as Error).message)
-                showSnackbar(t('failed_to_save_network'))
+                showSnackbar(t.failed_to_save_network())
             }
             setIsSubmitting(false)
         },
@@ -238,7 +239,7 @@ export const EditNetwork = memo(function EditNetwork() {
     return (
         <main className={classes.main}>
             <form className={classes.form} data-hide-scrollbar>
-                <Typography className={classes.label}>{t('network_name')}</Typography>
+                <Typography className={classes.label}>{t.network_name()}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -253,7 +254,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 />
                 {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
 
-                <Typography className={classes.label}>{t('rpc_url')}</Typography>
+                <Typography className={classes.label}>{t.rpc_url()}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -264,7 +265,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 />
                 {errors.rpc ? <Typography className={classes.error}>{errors.rpc.message}</Typography> : null}
 
-                <Typography className={classes.label}>{t('chain_id')}</Typography>
+                <Typography className={classes.label}>{t.chain_id()}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -279,7 +280,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     <Typography className={classes.warn}>{chainIdWarning}</Typography>
                 ) : null}
 
-                <Typography className={classes.label}>{t('optional_currency_symbol')}</Typography>
+                <Typography className={classes.label}>{t.optional_currency_symbol()}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -290,7 +291,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 />
                 {symbolWarning ? <Typography className={classes.warn}>{symbolWarning}</Typography> : null}
 
-                <Typography className={classes.label}>{t('optional_block_explorer_url')}</Typography>
+                <Typography className={classes.label}>{t.optional_block_explorer_url()}</Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -303,10 +304,10 @@ export const EditNetwork = memo(function EditNetwork() {
             {!isBuiltIn ? (
                 <div className={classes.footer}>
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
-                        {t('cancel')}
+                        {t.cancel()}
                     </ActionButton>
                     <ActionButton fullWidth onClick={handleSubmit} disabled={disabled}>
-                        {t('confirm')}
+                        {t.confirm()}
                     </ActionButton>
                 </div>
             ) : null}

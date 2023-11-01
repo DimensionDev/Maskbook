@@ -1,24 +1,24 @@
 import { Icons } from '@masknet/icons'
 import { ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../../shared-ui/index.js'
 
 interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean
 }
 
 export const MoreBar = memo<MoreBarProps>(function MoreBar({ isExpand, ...rest }) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     if (isExpand)
         return (
             <ActionButton variant="roundedOutlined" {...rest}>
-                <span>{t('popups_wallet_more_collapse')}</span>
+                <span>{t.popups_wallet_more_collapse()}</span>
                 <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
             </ActionButton>
         )
     return (
         <ActionButton variant="roundedOutlined" {...rest}>
-            <span>{t('popups_wallet_more_expand')}</span>
+            <span>{t.popups_wallet_more_expand()}</span>
             <Icons.ArrowDrop />
         </ActionButton>
     )

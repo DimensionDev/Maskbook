@@ -1,12 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletRenameModal } from '../../../modals/modals.js'
 
 export function Rename() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const wallet = useWallet()
     const { classes, theme } = useStyles()
 
@@ -18,12 +18,12 @@ export function Rename() {
             onClick={() =>
                 WalletRenameModal.open({
                     wallet,
-                    title: t('rename'),
+                    title: t.rename(),
                 })
             }>
             <Box className={classes.itemBox}>
                 <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />
-                <Typography className={classes.itemText}>{t('rename')}</Typography>
+                <Typography className={classes.itemText}>{t.rename()}</Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={classes.itemText}>{wallet.name}</Typography>

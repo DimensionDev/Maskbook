@@ -1,6 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base'
@@ -20,7 +20,7 @@ interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
 }
 
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const wallet = useWallet()
     const navigate = useNavigate()
@@ -29,7 +29,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
         const verified = await Services.Wallet.verifyPassword(password)
 
         if (!verified) {
-            setError(t('create_wallet_incorrect_payment_password'))
+            setError(t.create_wallet_incorrect_payment_password())
             return
         }
         if (!wallet) return
@@ -51,7 +51,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t('popups_wallet_payment_password')}
+                    placeholder={t.popups_wallet_payment_password()}
                     error={!!error}
                     value={password}
                     onChange={(e) => {
@@ -70,7 +70,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 disabled={loading || !!error || !password}
                 onClick={handleClick}
                 sx={{ marginTop: '16px' }}>
-                {t('confirm')}
+                {t.confirm()}
             </ActionButton>
         </BottomDrawer>
     )

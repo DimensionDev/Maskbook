@@ -3,7 +3,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
 import { memo, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import {
@@ -50,10 +50,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Transfer = memo(function Transfer() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
-    useTitle(t('popups_send'))
+    useTitle(t.popups_send())
     const [params, setParams] = useSearchParams()
     const undecided = params.get('undecided') === 'true'
 
@@ -80,8 +80,8 @@ const Transfer = memo(function Transfer() {
                                 onChange={handleTabChange}
                                 aria-label="persona-tabs"
                                 classes={{ root: classes.tabs }}>
-                                <Tab label={t('popups_wallet_token')} value={TransferTabType.Token} />
-                                <Tab label={t('popups_wallet_collectible')} value={TransferTabType.NFT} />
+                                <Tab label={t.popups_wallet_token()} value={TransferTabType.Token} />
+                                <Tab label={t.popups_wallet_collectible()} value={TransferTabType.NFT} />
                             </MaskTabList>
                         ) : null
                     }

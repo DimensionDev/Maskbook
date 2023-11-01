@@ -21,7 +21,7 @@ import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
 import { PageTitleContext } from '../../../context.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modals.js'
@@ -132,7 +132,7 @@ const useStyles = makeStyles()((theme) => {
 
 const TokenDetail = memo(function TokenDetail() {
     const { classes, theme } = useStyles()
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -169,8 +169,8 @@ const TokenDetail = memo(function TokenDetail() {
                 className={classes.deleteButton}
                 onClick={async () => {
                     const result = await ConfirmModal.openAndWaitForClose({
-                        title: t('hide_token_symbol', { symbol: asset.symbol }),
-                        message: t('hide_token_description', { symbol: asset.symbol }),
+                        title: t.hide_token_symbol({ symbol: asset.symbol }),
+                        message: t.hide_token_description({ symbol: asset.symbol }),
                     })
                     if (!result) return
                     // Actually, blocking.
@@ -181,7 +181,7 @@ const TokenDetail = memo(function TokenDetail() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
-                    showSnackbar(t('hided_token_successfully'))
+                    showSnackbar(t.hided_token_successfully())
                     navigate(-1)
                 }}>
                 <Icons.Trash size={24} />
@@ -210,7 +210,7 @@ const TokenDetail = memo(function TokenDetail() {
                         />
                     ) : !isLoadingStats && !stats.length ? (
                         <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
-                            {t('not_enough_data_to_present')}
+                            {t.not_enough_data_to_present()}
                         </EmptyStatus>
                     ) : (
                         <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />
@@ -218,7 +218,7 @@ const TokenDetail = memo(function TokenDetail() {
 
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
-                            <Typography className={classes.label}>{t('balance')}</Typography>
+                            <Typography className={classes.label}>{t.balance()}</Typography>
                             {asset ? (
                                 <Typography component="div" className={classes.value} justifyContent="flex-start">
                                     <TokenIcon
@@ -244,7 +244,7 @@ const TokenDetail = memo(function TokenDetail() {
                             )}
                         </Box>
                         <Box textAlign="right">
-                            <Typography className={classes.label}>{t('value')}</Typography>
+                            <Typography className={classes.label}>{t.value()}</Typography>
                             <Typography component="div" className={classes.value} justifyContent="flex-end">
                                 <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                             </Typography>

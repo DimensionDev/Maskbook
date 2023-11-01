@@ -5,7 +5,7 @@ import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../../utils/index.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default function SwapPage() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)
@@ -71,7 +71,7 @@ export default function SwapPage() {
                     <div className={classes.container}>
                         <header className={classes.header}>
                             <Typography variant="h1" className={classes.title}>
-                                {t('plugin_trader_swap')}
+                                {t.plugin_trader_swap()}
                             </Typography>
                             <NetworkSelector />
                         </header>

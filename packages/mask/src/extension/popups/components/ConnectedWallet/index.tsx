@@ -10,7 +10,7 @@ import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { Trans } from 'react-i18next'
-import { useMaskSharedTrans } from '../../../../utils/i18n-next-ui.js'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import Services from '#services'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { useModalNavigate } from '../ActionModal/index.js'
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ConnectedWallet = memo(function ConnectedWallet() {
-    const { t } = useMaskSharedTrans()
+    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -138,9 +138,9 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
 
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
-                showSnackbar(t('popups_wallet_disconnect_success'))
+                showSnackbar(t.popups_wallet_disconnect_success())
             } catch {
-                showSnackbar(t('popups_wallet_disconnect_failed'))
+                showSnackbar(t.popups_wallet_disconnect_failed())
             }
         },
         [currentPersona],
@@ -189,7 +189,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                             onClick={async () => {
                                 if (!currentPersona) return
                                 const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: t('popups_release_bind_wallet_title'),
+                                    title: t.popups_release_bind_wallet_title(),
                                     confirmVariant: 'warning',
                                     message: (
                                         <Trans
@@ -212,7 +212,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
                 <Typography fontSize={12} fontWeight={700} lineHeight="16px">
-                    {t('connect')}
+                    {t.connect()}
                 </Typography>
             </Box>
         </Box>
