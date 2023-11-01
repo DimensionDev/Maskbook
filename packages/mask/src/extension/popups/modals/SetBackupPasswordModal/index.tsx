@@ -4,10 +4,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans , UserContext } from '../../../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
     const t = useMaskSharedTrans()

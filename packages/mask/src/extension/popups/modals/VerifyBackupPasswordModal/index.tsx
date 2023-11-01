@@ -2,12 +2,11 @@ import { memo, useCallback, useState } from 'react'
 import { ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans , UserContext } from '../../../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { UserContext } from '../../../../../shared-ui/index.js'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
     const t = useMaskSharedTrans()

@@ -13,14 +13,13 @@ import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } f
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { ExplorerResolver, Providers, Web3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans } from '../../../../../../shared-ui/index.js'
+import { useMaskSharedTrans , UserContext } from '../../../../../../shared-ui/index.js'
 import Services from '#services'
 import { useTitle, PopupContext, useHasPassword } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
-import { UserContext } from '../../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     infoBox: {

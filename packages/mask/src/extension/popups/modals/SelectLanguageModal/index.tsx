@@ -5,8 +5,7 @@ import { LanguageOptions } from '@masknet/public-api'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { useLanguage } from '../../../../../shared-ui/index.js'
+import { useMaskSharedTrans , useLanguage } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
