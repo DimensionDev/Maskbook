@@ -38,7 +38,7 @@ import {
     GUN_queryPostKey_version37,
     GUN_queryPostKey_version39Or38,
     GUN_queryPostKey_version40,
-} from '../../network/gun/encryption/queryPostKey.js'
+} from '../../network/queryPostKey.js'
 
 export interface DecryptionContext {
     encryptPayloadNetwork: EncryptPayloadNetwork

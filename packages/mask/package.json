@@ -1,7 +1,19 @@
 {
   "name": "@masknet/extension",
   "private": true,
-  "sideEffects": true,
+  "sideEffects": [
+    "./background/initialization/",
+    "./background/tasks/",
+    "./background/services/setup.ts",
+    "./content-script",
+    "./dashboard",
+    "./devtools",
+    "./entry-sdk/",
+    "./popups/",
+    "./shared/plugin-infra/register.js",
+    "./shared-ui/initialization/",
+    "./web-workers/"
+  ],
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "imports": {

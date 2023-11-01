@@ -9,7 +9,7 @@ import {
     getEcKeyCurve,
 } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
-import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
+import { CryptoKeyToJsonWebKey } from '../../utils-pure/index.js'
 import * as gun_utils from /* webpackDefer: true */ '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-es'

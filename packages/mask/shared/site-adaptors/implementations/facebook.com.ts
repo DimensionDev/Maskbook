@@ -1,9 +1,6 @@
 import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
-
-import.meta.webpackHot?.accept()
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
 export const FacebookAdaptor: SiteAdaptor.Definition = {
@@ -22,4 +19,3 @@ export const FacebookAdaptor: SiteAdaptor.Definition = {
         return new URL(url)
     },
 }
-defineSiteAdaptor(FacebookAdaptor)

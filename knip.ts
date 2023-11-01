@@ -14,8 +14,8 @@ const config: KnipConfig = {
             ignore: ['public'],
             entry: [
                 '.webpack/webpack.config.ts',
-                'background/mv2-entry.ts',
-                'background/mv3-entry.ts',
+                'background/initialization/mv2-entry.ts',
+                'background/initialization/mv3-entry.ts',
                 'dashboard/index.ts',
                 'popups/index.ts',
                 'content-script/index.ts',

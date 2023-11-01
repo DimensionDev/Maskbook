@@ -308,8 +308,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         dashboard: withReactDevTools(join(__dirname, '../dashboard/index.ts')),
         popups: withReactDevTools(join(__dirname, '../popups/index.ts')),
         contentScript: withReactDevTools(join(__dirname, '../content-script/index.ts')),
-        background: normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts')),
-        backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/mv3-entry.ts')),
+        background: normalizeEntryDescription(join(__dirname, '../background/initialization/mv2-entry.ts')),
+        backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/initialization/mv3-entry.ts')),
     })
     baseConfig.plugins!.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),

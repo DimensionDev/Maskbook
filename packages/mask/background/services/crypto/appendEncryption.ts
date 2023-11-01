@@ -2,10 +2,7 @@ import { appendEncryptionTarget, type EncryptPayloadNetwork, type SupportedPaylo
 import type { PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { deriveAESByECDH } from '../../database/persona/helper.js'
 import { updatePostDB, queryPostDB } from '../../database/post/index.js'
-import {
-    publishPostAESKey_version37,
-    publishPostAESKey_version39Or38,
-} from '../../network/gun/encryption/queryPostKey.js'
+import { publishPostAESKey_version37, publishPostAESKey_version39Or38 } from '../../network/queryPostKey.js'
 import { getPostKeyCache } from './decryption.js'
 import { prepareEncryptTarget, type EncryptTargetE2EFromProfileIdentifier } from './encryption.js'
 

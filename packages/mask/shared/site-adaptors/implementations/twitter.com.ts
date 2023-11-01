@@ -1,9 +1,6 @@
 import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
-
-import.meta.webpackHot?.accept()
 
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const TwitterAdaptor: SiteAdaptor.Definition = {
@@ -19,4 +16,3 @@ export const TwitterAdaptor: SiteAdaptor.Definition = {
         return new URL(url)
     },
 }
-defineSiteAdaptor(TwitterAdaptor)

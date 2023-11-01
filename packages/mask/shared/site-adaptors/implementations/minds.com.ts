@@ -1,9 +1,6 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { defineSiteAdaptor } from '../definitions.js'
 import type { SiteAdaptor } from '../types.js'
-
-import.meta.webpackHot?.accept()
 
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const MindsAdaptor: SiteAdaptor.Definition = {
@@ -21,4 +18,3 @@ export const MindsAdaptor: SiteAdaptor.Definition = {
         return new URL(url)
     },
 }
-defineSiteAdaptor(MindsAdaptor)
