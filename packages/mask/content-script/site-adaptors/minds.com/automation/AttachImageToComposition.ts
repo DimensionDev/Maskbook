@@ -1,5 +1,5 @@
 import type { SiteAdaptorUI } from '@masknet/types'
-import { downloadUrl } from '../../../utils/utils.js'
+import { downloadUrl } from '../../../utils/downloadUrl.js'
 import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector.js'
 import { pasteTextToCompositionMinds } from './pasteTextToComposition.js'
 import { MaskMessages } from '@masknet/shared-base'

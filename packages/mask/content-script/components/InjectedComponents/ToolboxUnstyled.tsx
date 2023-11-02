@@ -32,7 +32,7 @@ import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     title: {
         display: 'flex',
         alignItems: 'center',

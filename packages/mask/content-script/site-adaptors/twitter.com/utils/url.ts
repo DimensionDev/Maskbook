@@ -1,4 +1,4 @@
-import { regexMatch } from '../../../utils/utils.js'
+import { regexMatch } from '../../../utils/regexMatch.js'
 
 // more about twitter photo url formatting:
 // https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format

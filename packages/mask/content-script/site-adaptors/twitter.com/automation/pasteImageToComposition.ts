@@ -2,7 +2,7 @@ import { delay } from '@masknet/kit'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
-import { untilElementAvailable } from '../../../utils/dom.js'
+import { untilElementAvailable } from '../../../utils/untilElementAvailable.js'
 import { pasteImageToCompositionDefault } from '../../../site-adaptor-infra/defaults/automation/AttachImageToComposition.js'
 
 export async function pasteImageToCompositionTwitter(

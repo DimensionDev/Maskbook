@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { regexMatch } from '../../../utils/utils.js'
+import { regexMatch } from '../../../utils/regexMatch.js'
 import { isCompose } from './postBox.js'
 
 type E = HTMLElement

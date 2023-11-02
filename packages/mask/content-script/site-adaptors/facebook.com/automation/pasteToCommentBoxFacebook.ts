@@ -1,4 +1,4 @@
-import { selectElementContents } from '../../../utils/utils.js'
+import { selectElementContents } from '../../../utils/selectElementContents.js'
 import { delay } from '@masknet/kit'
 import { isMobileFacebook } from '../utils/isMobile.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'

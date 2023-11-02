@@ -1,6 +1,6 @@
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { delay } from '@masknet/kit'
-import { selectElementContents } from '../../../utils/utils.js'
+import { selectElementContents } from '../../../utils/selectElementContents.js'
 import { pasteText } from '@masknet/injected-script'
 import { MaskMessages } from '@masknet/shared-base'
 

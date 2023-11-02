@@ -7,11 +7,11 @@ import { CommentBox, type CommentBoxProps } from '../../../components/InjectedCo
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 
-const defaultOnPasteToCommentBox = async (
+async function defaultOnPasteToCommentBox(
     encryptedComment: string,
     _current: PostInfo,
     _realCurrent: HTMLElement | null,
-) => {
+) {
     MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
 }
 

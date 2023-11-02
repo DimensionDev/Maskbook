@@ -1,6 +1,6 @@
 import type { SiteAdaptorUI } from '@masknet/types'
-import { untilElementAvailable } from '../../../utils/dom.js'
-import { selectElementContents } from '../../../utils/utils.js'
+import { untilElementAvailable } from '../../../utils/untilElementAvailable.js'
+import { selectElementContents } from '../../../utils/selectElementContents.js'
 import { delay } from '@masknet/kit'
 import { inputText } from '@masknet/injected-script'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'

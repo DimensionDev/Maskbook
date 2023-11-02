@@ -1,11 +1,5 @@
 import type { Option } from 'ts-results-es'
-
-export function collectTwitterEmoji(points: readonly number[]) {
-    if (points.length === 0) return ''
-    if (points[0] < 0x23 || points[0] > 0x39) return String.fromCodePoint(...points)
-    if (points.includes(0xfe0f)) return String.fromCodePoint(...points)
-    return String.fromCodePoint(points[0], 0xfe0f, ...points.slice(1))
-}
+import { collectTwitterEmoji } from './collectTwitterEmoji.js'
 
 interface CollectNodeTextOptions {
     onHTMLAnchorElement?(node: HTMLAnchorElement): Option<string>

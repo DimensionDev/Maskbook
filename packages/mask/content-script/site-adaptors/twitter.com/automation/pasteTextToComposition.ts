@@ -4,8 +4,8 @@ import type { SiteAdaptorUI } from '@masknet/types'
 import { MaskMessages } from '@masknet/shared-base'
 import { newPostButtonSelector, postEditorDraftContentSelector } from '../utils/selector.js'
 import { getEditorContent, hasEditor, hasFocus, isCompose } from '../utils/postBox.js'
-import { untilElementAvailable } from '../../../utils/dom.js'
-import { selectElementContents } from '../../../utils/utils.js'
+import { untilElementAvailable } from '../../../utils/untilElementAvailable.js'
+import { selectElementContents } from '../../../utils/selectElementContents.js'
 
 /**
  * Wait for up to 5000 ms

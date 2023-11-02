@@ -4,7 +4,7 @@ import { SharedContextProvider } from '@masknet/shared'
 import { CSSVariableInjector, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Sniffings, compose } from '@masknet/shared-base'
-import { useMaskSiteAdaptorMixedTheme } from '../theme/useMaskSiteAdaptorMixedTheme.js'
+import { useMaskSiteAdaptorMixedTheme } from '../../components/useMaskSiteAdaptorMixedTheme.js'
 
 export function ShadowRootAttachPointRoot(children: React.ReactNode) {
     return compose(
