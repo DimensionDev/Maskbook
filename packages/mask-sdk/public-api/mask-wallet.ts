@@ -1,16 +1,6 @@
-export declare namespace Mask {
-    /**
-     * @see https://eips.ethereum.org/EIPS/eip-1193
-     * A EIP-1193 compatible Ethereum provider.
-     * @public
-     * @remarks Since API=0
-     */
-    export const ethereum: Ethereum.ProviderObject
-}
 // Defined in EIP-1193
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-export declare namespace Mask.Ethereum {
+export declare namespace Ethereum {
     export interface ProviderObject extends EIP1193Provider, EthereumEventEmitter {}
     export interface EIP1193Provider {
         /**
@@ -68,8 +58,7 @@ export declare namespace Mask.Ethereum {
 
 // Defined in EIP-6963
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-export declare namespace Mask.Ethereum {
+export declare namespace Ethereum {
     export interface EIP6963ProviderInfo {
         uuid: string
         name: string
@@ -85,7 +74,7 @@ export declare namespace Mask.Ethereum {
 // Implemented RPCs
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-export declare namespace Mask.Ethereum.RPC {
+export declare namespace Ethereum.RPC {
     export interface Block {
         hash: string
         parentHash: string
@@ -254,8 +243,7 @@ export declare namespace Mask.Ethereum.RPC {
 
 // Mask specific part
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-export declare namespace Mask.Ethereum {
+export declare namespace Ethereum {
     export interface ProviderObject extends EIP1193Provider, ExperimentalProvider, EthereumEventEmitter {}
 
     /** Extra APIs that only can be used with Mask Network is defined here. */

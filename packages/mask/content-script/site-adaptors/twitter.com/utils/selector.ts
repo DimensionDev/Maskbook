@@ -16,7 +16,7 @@ export function querySelectorAll<T extends E>(selector: string) {
 export function searchProfileTabListLastChildSelector() {
     return querySelector<E>(
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"] div[role="presentation"]:last-of-type a[role="tab"]',
-    ).closest(1)
+    ).closest<E>(1)
 }
 export function nextTabListSelector() {
     return querySelector('[data-testid="ScrollSnap-nextButtonWrapper"]')
@@ -74,13 +74,13 @@ export function normalFollowButtonSelector() {
 export function searchProfileCoverSelector() {
     return querySelector<E>(
         '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
-    ).closest(1)
+    ).closest<E>(1)
 }
 
 export function searchEditProfileSelector() {
     return querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
         .closest(1)
-        .querySelector('a[href="/settings/profile"]')
+        .querySelector<E>('a[href="/settings/profile"]')
 }
 // #endregion
 

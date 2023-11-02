@@ -1,4 +1,4 @@
-/// <reference path="../dist/public-api.d.ts" />
+import type { Mask } from '../public-api/index.js'
 import { contentScript, readyPromise } from './bridge.js'
 import { ethereum } from './wallet.js'
 
@@ -13,9 +13,9 @@ const promise = readyPromise.then((init) => {
 
     if (init.debuggerMode) MaskSDK.reload = () => contentScript.reload()
 
-    globalThis.Mask = MaskSDK as any
+    Object.assign(globalThis, { Mask: MaskSDK })
     return MaskSDK
 })
-if (!('Mask' in globalThis)) globalThis.Mask = promise as any
+if (!('Mask' in globalThis)) Object.assign(globalThis, { Mask: promise })
 
 undefined
