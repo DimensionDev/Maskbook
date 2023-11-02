@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         rowGap: 6,
     },
 }))
-export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupModal({ ...rest }) {
+export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupModal(props) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const walletGroup = useWalletGroup()
@@ -68,7 +68,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
 
     if (!walletGroup) return
     return (
-        <ActionModal header={t.wallet_account()} {...rest}>
+        <ActionModal header={t.wallet_account()} {...props}>
             <Box className={classes.root}>
                 {Object.entries(walletGroup.groups).map(([key, value], index) => {
                     return (

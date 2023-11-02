@@ -1,4 +1,3 @@
-export { BackupAccountType as AccountType } from '@masknet/shared-base'
 export interface BackupFileInfo {
     downloadURL: string
     size: number

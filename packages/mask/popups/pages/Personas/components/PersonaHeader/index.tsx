@@ -4,7 +4,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { useLocation, useMatch } from 'react-router-dom'
 import { NormalHeader } from '../../../../components/index.js'
-import { PageTitleContext } from '../../../../context.js'
+import { PageTitleContext } from '../../../../hooks/index.js'
 import { PersonaHeaderUI } from './UI.js'
 
 export const PersonaHeader = memo(function PersonaHeader() {

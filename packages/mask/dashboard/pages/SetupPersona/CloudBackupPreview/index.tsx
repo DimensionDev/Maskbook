@@ -10,7 +10,7 @@ import { formatFileSize } from '@masknet/kit'
 import { EmptyStatus } from '@masknet/shared'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
-import type { AccountType } from '../../../type.js'
+import type { BackupAccountType } from '@masknet/shared-base'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -87,7 +87,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             uploadedAt: previewInfo.uploadedAt,
             code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as AccountType,
+            type: previewInfo.type as BackupAccountType,
         })
     }, [t, previewInfo])
 
@@ -97,7 +97,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             isOverwrite: false,
             code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as AccountType,
+            type: previewInfo.type as BackupAccountType,
             account: previewInfo.account,
         })
     }, [t, previewInfo])
@@ -119,7 +119,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                     isOverwrite: true,
                     code: previewInfo.code,
                     abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-                    type: previewInfo.type as AccountType,
+                    type: previewInfo.type as BackupAccountType,
                     account: previewInfo.account,
                 })
             },

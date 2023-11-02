@@ -4,12 +4,11 @@
   "sideEffects": [
     "./background/initialization/",
     "./background/tasks/",
-    "./background/services/setup.ts",
     "./content-script",
-    "./dashboard",
+    "./dashboard/initialization/",
     "./devtools",
     "./entry-sdk/",
-    "./popups/",
+    "./popups/initialization/",
     "./shared/plugin-infra/register.js",
     "./shared-ui/initialization/",
     "./web-workers/"

@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const getCollectibleKey = (token: Web3Helper.NonFungibleAssetAll) => {
+function getCollectibleKey(token: Web3Helper.NonFungibleAssetAll) {
     return `${token.chainId}.${token.address}.${token.tokenId}`
 }
 export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {

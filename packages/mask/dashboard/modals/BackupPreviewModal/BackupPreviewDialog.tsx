@@ -7,7 +7,7 @@ import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '#services'
-import type { AccountType } from '../../type.js'
+import type { BackupAccountType } from '@masknet/shared-base'
 import { fetchDownloadLink, fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
 import { encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
@@ -60,7 +60,7 @@ interface BackupPreviewDialogProps {
     onClose: () => void
     isOverwrite: boolean
     code: string
-    type: AccountType
+    type: BackupAccountType
     account: string
     abstract?: string
 }

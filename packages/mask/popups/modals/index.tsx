@@ -14,7 +14,6 @@ import { ChooseTokenModal } from './ChooseToken/index.js'
 
 import * as modals from './modals.js'
 import { ConfirmDialog, ConfirmDialogComponent } from '@masknet/shared'
-export * from './modals.js'
 
 export const Modals = memo(function Modals() {
     return (

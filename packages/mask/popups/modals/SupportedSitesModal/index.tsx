@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal({ ...rest }) {
+export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal(props) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { data = EMPTY_LIST, isLoading, refetch } = useSupportedSites()
@@ -65,7 +65,7 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
     )
 
     return (
-        <ActionModal header={t.popups_settings_supported_sites()} {...rest}>
+        <ActionModal header={t.popups_settings_supported_sites()} {...props}>
             <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
             <List className={classes.list}>
                 {!isLoading && data

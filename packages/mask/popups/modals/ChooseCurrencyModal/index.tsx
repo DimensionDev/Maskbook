@@ -68,14 +68,14 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
     )
 })
 
-export const ChooseCurrencyModal = memo(function ChooseCurrencyModal({ ...rest }: ActionModalBaseProps) {
+export const ChooseCurrencyModal = memo(function ChooseCurrencyModal(props: ActionModalBaseProps) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const currencies = [CurrencyType.USD, CurrencyType.CNY, CurrencyType.HKD, CurrencyType.JPY, CurrencyType.EUR]
 
     return (
-        <ActionModal header={t.currency()} keepMounted {...rest}>
+        <ActionModal header={t.currency()} keepMounted {...props}>
             <ul className={classes.networkList}>
                 {currencies.map((fiatCurrencyType, index) => (
                     <CurrencyItem key={index} fiatCurrencyType={fiatCurrencyType} />

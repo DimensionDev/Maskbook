@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSettingModal({ ...rest }) {
+export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSettingModal(props) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
@@ -63,7 +63,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                     {t.popups_log_out()}
                 </ActionButton>
             }
-            {...rest}>
+            {...props}>
             <Box className={classes.avatarItem}>
                 <Typography className={classes.text}>{t.popups_profile_photo()}</Typography>
                 <Box className={classes.right}>

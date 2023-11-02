@@ -10,7 +10,7 @@ import { useSupportSocialNetworks } from '../../hooks/index.js'
 import Services from '#services'
 import { EventMap } from '../../../shared/definitions/event.js'
 
-export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal({ ...rest }) {
+export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal(props) {
     const t = useMaskSharedTrans()
     const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
@@ -30,7 +30,7 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     if (!definedSocialNetworks.length) return null
 
     return (
-        <ActionModal header={t.popups_connect_social_account()} keepMounted {...rest}>
+        <ActionModal header={t.popups_connect_social_account()} keepMounted {...props}>
             <ConnectSocialAccounts networks={definedSocialNetworks} onConnect={handleConnect} />
         </ActionModal>
     )

@@ -5,14 +5,14 @@ import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { SelectProvider } from '../../components/SelectProvider/index.js'
 import { useSearchParams } from 'react-router-dom'
 
-export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectProviderModal({ ...rest }) {
+export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectProviderModal(props) {
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const [params] = useSearchParams()
     const onlyMask = params.get('onlyMask')
 
     return (
-        <ActionModal header={onlyMask ? t.connect_your_wallet() : t.connect()} keepMounted {...rest}>
+        <ActionModal header={onlyMask ? t.connect_your_wallet() : t.connect()} keepMounted {...props}>
             <Typography
                 textAlign="center"
                 fontSize={14}

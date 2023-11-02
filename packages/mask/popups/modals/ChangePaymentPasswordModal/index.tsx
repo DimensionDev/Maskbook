@@ -9,7 +9,7 @@ import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     title: {
         paddingLeft: 0,
     },

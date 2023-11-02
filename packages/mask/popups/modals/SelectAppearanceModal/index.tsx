@@ -37,7 +37,7 @@ const APPEARANCE_ICON_MAP = {
     [Appearance.dark]: <Icons.Dark />,
 }
 
-export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectAppearanceModal(...rest) {
+export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectAppearanceModal() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mode = useAppearance()

@@ -6,12 +6,12 @@ import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
 
-const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
+const Home = lazy(() => import(/* webpackMode: 'eager' */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
-const PersonaSignRequest = lazy(() => import('./PersonaSignRequest/index.js'))
-const AccountDetail = lazy(() => import('./AccountDetail/index.js'))
-const ConnectWallet = lazy(() => import('./ConnectWallet/index.js'))
-const WalletConnect = lazy(() => import('./WalletConnect/index.js'))
+const PersonaSignRequest = lazy(() => import(/* webpackMode: 'eager' */ './PersonaSignRequest/index.js'))
+const AccountDetail = lazy(() => import(/* webpackMode: 'eager' */ './AccountDetail/index.js'))
+const ConnectWallet = lazy(() => import(/* webpackMode: 'eager' */ './ConnectWallet/index.js'))
+const WalletConnect = lazy(() => import(/* webpackMode: 'eager' */ './WalletConnect/index.js'))
 const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
 const PersonaAvatarSetting = lazy(() => import('./PersonaAvatarSetting/index.js'))
 

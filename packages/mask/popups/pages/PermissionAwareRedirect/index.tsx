@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useLocation } from 'react-router-dom'
 import { parseURL } from '@masknet/shared-base'
-import { MissingParameter } from '../MissingParameter/index.js'
+import { MissingParameter } from '../../components/MissingParameter/index.js'
 import { PermissionAwareRedirectUI } from './ui.js'
 import { getHostPermissionFieldFromURL, isValidURL } from './utils.js'
 

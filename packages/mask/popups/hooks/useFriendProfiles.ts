@@ -11,7 +11,7 @@ import { useCurrentPersona } from '../../shared-ui/hooks/index.js'
 import { PlatformSort, UnsupportedPlatforms } from '../pages/Friends/common.js'
 import { useMemo } from 'react'
 
-export const profilesFilter = (x: BindingProof) => {
+export function profilesFilter(x: BindingProof) {
     return (x.platform === NextIDPlatform.ENS && x.name.endsWith('.eth')) || !UnsupportedPlatforms.includes(x.platform)
 }
 

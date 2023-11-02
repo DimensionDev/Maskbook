@@ -14,7 +14,7 @@ type FormInputs = {
     newPassword: string
     repeatPassword: string
 }
-export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function ChangeBackupPasswordModal({ ...rest }) {
+export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function ChangeBackupPasswordModal(props) {
     const t = useMaskSharedTrans()
     const theme = useTheme()
 
@@ -105,7 +105,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     {t.confirm()}
                 </ActionButton>
             }
-            {...rest}>
+            {...props}>
             <Box
                 component="form"
                 display="flex"

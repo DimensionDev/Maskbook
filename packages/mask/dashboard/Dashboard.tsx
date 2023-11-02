@@ -15,8 +15,8 @@ import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, NetworkPluginID, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
-import { Pages } from '../pages/routes.js'
-import { UserContext, useAppearance } from '../../shared-ui/index.js'
+import { Pages } from './pages/routes.js'
+import { UserContext, useAppearance } from '../shared-ui/index.js'
 import Services from '#services'
 
 const GlobalCss = (

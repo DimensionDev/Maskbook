@@ -64,7 +64,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
     },
 }))
 
-export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectProviderModal({ ...rest }) {
+export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectProviderModal(props) {
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
@@ -150,7 +150,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                     : t.popups_not_connected_third_party_wallet_title()
             }
             keepMounted
-            {...rest}
+            {...props}
             onClose={handleClose}>
             <Typography className={classes.tips}>
                 {isTimeout

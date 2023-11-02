@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { memo, useCallback, useLayoutEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box } from '@mui/material'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, BackupAccountType } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
 import { useDashboardTrans } from '../../../locales/index.js'
@@ -15,7 +15,6 @@ import { RestoreStep } from './restoreReducer.js'
 import { InputForm } from './InputForm.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
 import { UserContext } from '../../../../shared-ui/index.js'
-import { AccountType } from '../../../type.js'
 import { BackupPreview } from '../../BackupPreview/index.js'
 import { PersonaContext } from '@masknet/shared'
 
@@ -62,7 +61,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
             }
         }
         if (account) {
-            if (!user.email && accountType === AccountType.Email) {
+            if (!user.email && accountType === BackupAccountType.Email) {
                 updateUser({ email: account })
             } else if (!user.phone) {
                 updateUser({ phone: account })

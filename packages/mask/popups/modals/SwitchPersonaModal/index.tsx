@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPersonaModal({ ...rest }) {
+export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPersonaModal(props) {
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
@@ -80,7 +80,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
     )
 
     return (
-        <ActionModal header={t.popups_switch_persona()} action={action} {...rest}>
+        <ActionModal header={t.popups_switch_persona()} action={action} {...props}>
             <Box className={classes.content}>
                 <List dense className={classes.list}>
                     {personas.map((item, index) => (

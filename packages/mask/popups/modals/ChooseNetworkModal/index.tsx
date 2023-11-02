@@ -127,7 +127,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
     )
 })
 
-export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: ActionModalBaseProps) {
+export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: ActionModalBaseProps) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -143,7 +143,7 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal({ ...rest }: 
     const currentNetworkId = network?.ID
 
     return (
-        <ActionModal header={t.network()} action={action} keepMounted {...rest}>
+        <ActionModal header={t.network()} action={action} keepMounted {...props}>
             <ul className={classes.networkList}>
                 {networks.map((network) => (
                     <NetworkItem key={network.ID} currentNetworkId={currentNetworkId} network={network} />

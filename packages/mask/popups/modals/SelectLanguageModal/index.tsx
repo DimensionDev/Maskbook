@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLanguageModal({ ...rest }) {
+export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLanguageModal(props) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const lang = useLanguage()
@@ -42,7 +42,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     )
 
     return (
-        <ActionModal header={t.popups_settings_select_language()} {...rest}>
+        <ActionModal header={t.popups_settings_select_language()} {...props}>
             <List>
                 {getEnumAsArray(LanguageOptions).map((x) => {
                     return (

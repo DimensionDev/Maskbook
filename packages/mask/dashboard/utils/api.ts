@@ -1,10 +1,11 @@
-import type { AccountType, BackupFileInfo, Scenario, Locale } from '../type.js'
+import type { BackupAccountType } from '@masknet/shared-base'
+import type { BackupFileInfo, Scenario, Locale } from './type.js'
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {
     account: string
-    type: AccountType
+    type: BackupAccountType
 }
 
 interface SendCodeRequest extends BackupBaseRequest {
@@ -26,30 +27,30 @@ export interface RestoreQueryError {
     message: string
 }
 
-const withErrorMiddleware =
-    <T>(handler: (res: Response) => Promise<T>) =>
-    async (res: Response) => {
+function withErrorMiddleware<T>(handler: (res: Response) => Promise<T>) {
+    return async (res: Response) => {
         const result = await handler(res)
         if (!res.ok) {
             throw { status: res.status, ...result }
         }
         return result
     }
+}
 
-const fetchBase = <T = any>(
+function fetchBase<T = any>(
     input: RequestInfo,
     init?: RequestInit,
     handler: (res: Response) => Promise<T> = (res) => res.json(),
-) => fetch(input, init).then(withErrorMiddleware<T>(handler))
-
-const fetchBaseInstance = (baseURL: string) => (input: RequestInfo, init?: RequestInit) => {
-    // TODO: handle the rest properties on input?
-    return fetchBase(`${baseURL}/${typeof input === 'string' ? input : input.url}`, init)
+) {
+    return fetch(input, init).then(withErrorMiddleware<T>(handler))
 }
 
-const fetchBackupInstance = fetchBaseInstance(BASE_RUL)
+function fetchBackupInstance(input: RequestInfo, init?: RequestInit) {
+    // TODO: handle the rest properties on input?
+    return fetchBase(`${BASE_RUL}/${typeof input === 'string' ? input : input.url}`, init)
+}
 
-export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) => {
+export function sendCode({ account, type, scenario, locale }: SendCodeRequest) {
     return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
@@ -61,7 +62,7 @@ export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =
     })
 }
 
-export const fetchUploadLink = async ({ code, account, abstract, type }: UploadLinkRequest) => {
+export async function fetchUploadLink({ code, account, abstract, type }: UploadLinkRequest) {
     const res = await fetchBackupInstance('v1/backup/upload', {
         method: 'POST',
         body: JSON.stringify({
@@ -75,7 +76,7 @@ export const fetchUploadLink = async ({ code, account, abstract, type }: UploadL
     return result
 }
 
-export const fetchDownloadLink = async ({ account, code, type }: VerifyCodeRequest) => {
+export async function fetchDownloadLink({ account, code, type }: VerifyCodeRequest) {
     return fetchBackupInstance('v1/backup/download', {
         method: 'POST',
         body: JSON.stringify({
@@ -93,11 +94,11 @@ export const fetchDownloadLink = async ({ account, code, type }: VerifyCodeReque
     })
 }
 
-export const fetchBackupValue = (downloadLink: string) => {
+export function fetchBackupValue(downloadLink: string) {
     return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
 }
 
-export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer, signal: AbortSignal) => {
+export function uploadBackupValue(uploadLink: string, content: ArrayBuffer, signal: AbortSignal) {
     return fetch(uploadLink, {
         method: 'PUT',
         // mode: 'no-cors',

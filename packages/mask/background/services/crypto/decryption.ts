@@ -59,7 +59,10 @@ export type EncodedPayload =
           type: 'image-url'
           image: string
       }
-const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x) => x.arrayBuffer())
+async function downloadImage(url: string): Promise<ArrayBuffer> {
+    const x = await fetch(url)
+    return await x.arrayBuffer()
+}
 
 /**
  *

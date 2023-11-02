@@ -20,13 +20,11 @@ const HeaderContainer = styled('header')(({ theme }) => ({
     },
 }))
 
-const TitleContainer = styled('div')(
-    ({ theme }) => `
+const TitleContainer = styled('div')`
     display: flex;
     justify-content: space-between;
     align-items: center;
-`,
-)
+`
 
 const Subtitle = styled(Typography)(
     ({ theme }) => `

@@ -1,12 +1,12 @@
 import { useCallback, useReducer } from 'react'
 import { createContainer } from 'unstated-next'
 import { fetchDownloadLink } from '../../../utils/api.js'
-import { type AccountType } from '../../../type.js'
+import type { BackupAccountType } from '@masknet/shared-base'
 import { initialState, restoreReducer } from './restoreReducer.js'
 
 function useRestoreState() {
     const [state, dispatch] = useReducer(restoreReducer, initialState)
-    const downloadBackupInfo = useCallback((type: AccountType, account: string, code: string) => {
+    const downloadBackupInfo = useCallback((type: BackupAccountType, account: string, code: string) => {
         return fetchDownloadLink({ type, account, code })
     }, [])
 

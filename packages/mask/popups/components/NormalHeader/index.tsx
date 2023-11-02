@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PageTitleContext } from '../../context.js'
+import { PageTitleContext } from '../../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

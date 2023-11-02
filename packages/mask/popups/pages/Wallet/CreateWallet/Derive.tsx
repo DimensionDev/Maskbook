@@ -16,7 +16,7 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
-import { WalletRenameModal } from '../../../modals/index.js'
+import { WalletRenameModal } from '../../../modals/modals.js'
 import { DeriveStateContext } from './context.js'
 
 const useStyles = makeStyles()((theme) => ({

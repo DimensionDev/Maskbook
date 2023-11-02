@@ -20,15 +20,13 @@ import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
 import { wrapModal } from './components/index.js'
-import { PageTitleContext } from './context.js'
-import { PopupContext } from './hooks/index.js'
+import { PopupContext, PageTitleContext } from './hooks/index.js'
 import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
 import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
 import {
     ChooseCurrencyModal,
     ChooseNetworkModal,
     ConnectSocialAccountModal,
-    Modals,
     PersonaRenameModal,
     PersonaSettingModal,
     SetBackupPasswordModal,
@@ -39,7 +37,8 @@ import {
     SelectAppearanceModal,
     SupportedSitesModal,
     ChangeBackupPasswordModal,
-} from './modals/index.js'
+} from './modals/modals.js'
+import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
 import { UserContext } from '../shared-ui/index.js'
@@ -47,8 +46,8 @@ import { UserContext } from '../shared-ui/index.js'
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
 const SwapPage = lazy(() => import('./pages/Swap/index.js'))
-const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
-const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
+const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index.js'))
+const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
 const Settings = lazy(() => import('./pages/Settings/index.js'))
 

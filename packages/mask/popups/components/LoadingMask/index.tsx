@@ -2,7 +2,7 @@ import { LoadingBase } from '@masknet/theme'
 import { Box, Typography, alpha, useTheme } from '@mui/material'
 import { memo } from 'react'
 
-export const LoadingMask = memo<{ text: string }>(function LoadingMask({ text }) {
+export const LoadingMask = memo(function LoadingMask({ text }: { text: string }) {
     const theme = useTheme()
 
     return (

@@ -2,7 +2,7 @@ import Services from '#services'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { useQuery } from '@tanstack/react-query'
 
-export const useSupportedSites = () => {
+export function useSupportedSites() {
     return useQuery({
         queryKey: ['supported-sites'],
         networkMode: 'always',

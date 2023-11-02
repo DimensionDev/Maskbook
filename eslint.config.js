@@ -429,6 +429,11 @@ const moduleSystemRules = {
         {
             zones: [
                 {
+                    target: './packages/mask/background/**',
+                    from: './packages/mask/shared-ui/',
+                    message: 'Use background cannot import Ui specific code.',
+                },
+                {
                     target: './packages/mask/!(background)/**',
                     from: './packages/mask/background/',
                     message: 'Use Services.* instead.',

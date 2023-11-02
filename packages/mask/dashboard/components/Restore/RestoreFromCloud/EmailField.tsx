@@ -6,7 +6,8 @@ import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
 import { useDashboardTrans } from '../../../locales/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { emailRegexp } from '../../../utils/regexp.js'
-import { AccountType, Locale, Scenario } from '../../../type.js'
+import { BackupAccountType } from '@masknet/shared-base'
+import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { RestoreContext } from './RestoreProvider.js'
@@ -27,7 +28,7 @@ export const EmailField = memo(function EmailField() {
     }, [])
 
     const [{ error: sendCodeError }, handleSendCodeFn] = useAsyncFn(async () => {
-        const type = AccountType.Email
+        const type = BackupAccountType.Email
         await sendCode({
             account,
             type,
@@ -55,7 +56,7 @@ export const EmailField = memo(function EmailField() {
                 onClick={async () => {
                     dispatch({ type: 'SET_LOADING', loading: true })
                     try {
-                        const backupFileInfo = await downloadBackupInfo(AccountType.Email, account, code)
+                        const backupFileInfo = await downloadBackupInfo(BackupAccountType.Email, account, code)
                         dispatch({ type: 'SET_BACKUP_INFO', info: backupFileInfo })
                         dispatch({ type: 'NEXT_STEP' })
                     } catch (err) {

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Avatar } from '@mui/material'
 import { memo } from 'react'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     root: {
         borderRadius: '50%',
     },

@@ -4,11 +4,11 @@ import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { ResetWalletContext } from './context.js'
 import { SetupFrame } from '../../components/SetupFrame/index.js'
 
-const CreateWalletForm = lazy(() => import('./CreateWalletForm/index.js'))
-const CreateMnemonic = lazy(() => import('./CreateMnemonic/index.js'))
-const OnBoarding = lazy(() => import('./Onboarding/index.js'))
-const OnRecovery = lazy(() => import('./Recovery/index.js'))
-const AddDeriveWallet = lazy(() => import('./AddDeriveWallet/index.js'))
+const CreateWalletForm = lazy(() => import(/* webpackMode: 'eager' */ './CreateWalletForm/index.js'))
+const CreateMnemonic = lazy(() => import(/* webpackMode: 'eager' */ './CreateMnemonic/index.js'))
+const OnBoarding = lazy(() => import(/* webpackMode: 'eager' */ './Onboarding/index.js'))
+const OnRecovery = lazy(() => import(/* webpackMode: 'eager' */ './Recovery/index.js'))
+const AddDeriveWallet = lazy(() => import(/* webpackMode: 'eager' */ './AddDeriveWallet/index.js'))
 
 const r = relativeRouteOf(DashboardRoutes.CreateMaskWallet)
 export default function CreateWallet() {

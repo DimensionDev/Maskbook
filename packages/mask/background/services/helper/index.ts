@@ -1,5 +1,3 @@
-import { fetchGlobal } from '@masknet/web3-providers/helpers'
-
 export { fetchBlob, fetchJSON, fetchText, fetchGlobal } from '@masknet/web3-providers/helpers'
 export { resolveTCOLink } from './short-link-resolver.js'
 export {
@@ -19,4 +17,3 @@ export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query.js'
 export { getTelemetryID, setTelemetryID } from './telemetry-id.js'
 export { fetchSandboxedPluginManifest } from './sandboxed.js'
 export { getActiveTabId } from './tabs.js'
-Reflect.set(globalThis, 'fetch', fetchGlobal)
