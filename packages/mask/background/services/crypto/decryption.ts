@@ -38,7 +38,7 @@ import {
     GUN_queryPostKey_version37,
     GUN_queryPostKey_version39Or38,
     GUN_queryPostKey_version40,
-} from '../../network/gun/encryption/queryPostKey.js'
+} from '../../network/queryPostKey.js'
 
 export interface DecryptionContext {
     encryptPayloadNetwork: EncryptPayloadNetwork
@@ -59,7 +59,10 @@ export type EncodedPayload =
           type: 'image-url'
           image: string
       }
-const downloadImage = (url: string): Promise<ArrayBuffer> => fetch(url).then((x) => x.arrayBuffer())
+async function downloadImage(url: string): Promise<ArrayBuffer> {
+    const x = await fetch(url)
+    return await x.arrayBuffer()
+}
 
 /**
  *

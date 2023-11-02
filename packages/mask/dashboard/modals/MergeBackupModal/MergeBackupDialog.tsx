@@ -16,7 +16,7 @@ import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import Services from '#services'
 import { BackupPreviewModal } from '../modals.js'
-import type { AccountType } from '../../type.js'
+import type { BackupAccountType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     account: {
@@ -55,7 +55,7 @@ interface MergeBackupDialogProps {
     account: string
     uploadedAt: string
     size: string
-    type?: AccountType
+    type?: BackupAccountType
     abstract?: string
     code: string
 }

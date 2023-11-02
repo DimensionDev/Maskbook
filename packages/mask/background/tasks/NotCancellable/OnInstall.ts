@@ -1,5 +1,6 @@
 // ALL IMPORTS MUST BE DEFERRED
-import { PersistentStorages, type DashboardRoutes } from '@masknet/shared-base'
+import type { DashboardRoutes } from '@masknet/shared-base'
+import * as base from /* webpackDefer: true */ '@masknet/shared-base'
 
 type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
 function openWelcome() {
@@ -21,7 +22,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
             const backupPassword = localStorage.getItem('backupPassword')
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
-                PersistentStorages.Settings.storage.backupConfig.setValue({
+                base.PersistentStorages.Settings.storage.backupConfig.setValue({
                     backupPassword,
                     email: localStorage.getItem('email'),
                     phone: localStorage.getItem('phone'),

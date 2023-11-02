@@ -9,7 +9,8 @@ import { useDashboardTrans } from '../../../locales/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { phoneRegexp } from '../../../utils/regexp.js'
-import { AccountType, Locale, Scenario } from '../../../type.js'
+import { BackupAccountType } from '@masknet/shared-base'
+import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { PhoneNumberField } from '@masknet/shared'
@@ -49,7 +50,7 @@ export const PhoneField = memo(function PhoneField() {
         setInvalidPhone(!isValid)
     }
     const [{ error: sendCodeError }, handleSendCode] = useAsyncFn(async () => {
-        const type = AccountType.Phone
+        const type = BackupAccountType.Phone
         showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
         await sendCode({
             account,
@@ -70,7 +71,7 @@ export const PhoneField = memo(function PhoneField() {
                 onClick={async () => {
                     dispatch({ type: 'SET_LOADING', loading: true })
                     try {
-                        const backupInfo = await downloadBackupInfo(AccountType.Phone, account, code)
+                        const backupInfo = await downloadBackupInfo(BackupAccountType.Phone, account, code)
                         dispatch({ type: 'SET_BACKUP_INFO', info: backupInfo })
                         dispatch({ type: 'NEXT_STEP' })
                     } catch (err) {

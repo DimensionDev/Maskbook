@@ -2,8 +2,8 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "./dist/dashboard/",
-    "tsBuildInfoFile": "./dist/dashboard.tsbuildinfo"
+    "outDir": "../dist/dashboard/",
+    "tsBuildInfoFile": "../dist/dashboard.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
   "references": [

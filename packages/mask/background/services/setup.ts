@@ -7,9 +7,7 @@ import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { getOrUpdateLocalImplementationHMR, serializer, setDebugObject } from '@masknet/shared-base'
 import type { GeneratorServices, Services } from './types.js'
-// #endregion
 
-// #region Setup GeneratorServices
 import { decryptWithDecoding } from './crypto/decryption.js'
 assertEnvironment(Environment.ManifestBackground)
 
@@ -17,16 +15,42 @@ const debugMode = process.env.NODE_ENV === 'development'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 
-// #region Setup services
-setup('Crypto', () => import(/* webpackPreload: true */ './crypto/index.js'))
-setup('Identity', () => import(/* webpackPreload: true */ './identity/index.js'))
-setup('Backup', () => import(/* webpackPreload: true */ './backup/index.js'))
-setup('Helper', () => import(/* webpackPreload: true */ './helper/index.js'))
-setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors/index.js'))
-setup('Settings', () => import(/* webpackPreload: true */ './settings/index.js'), false)
-setup('Wallet', () => import(/* webpackPreload: true */ './wallet/services/index.js'))
 const DebugService = Object.create(null)
-setDebugObject('Service', DebugService)
+export function startServices() {
+    setup('Crypto', () => import(/* webpackMode: 'eager' */ './crypto/index.js'))
+    setup('Identity', () => import(/* webpackMode: 'eager' */ './identity/index.js'))
+    setup('Backup', () => import(/* webpackMode: 'eager' */ './backup/index.js'))
+    setup('Helper', () => import(/* webpackMode: 'eager' */ './helper/index.js'))
+    setup('SiteAdaptor', () => import(/* webpackMode: 'eager' */ './site-adaptors/index.js'))
+    setup('Settings', () => import(/* webpackMode: 'eager' */ './settings/index.js'), false)
+    setup('Wallet', () => import(/* webpackMode: 'eager' */ './wallet/services/index.js'))
+    setDebugObject('Service', DebugService)
+
+    const GeneratorService: GeneratorServices = {
+        decrypt: decryptWithDecoding,
+    }
+    import.meta.webpackHot?.accept(['./crypto/decryption'], async () => {
+        GeneratorService.decrypt = (
+            await import(/* webpackMode: 'eager' */ './crypto/decryption.js')
+        ).decryptWithDecoding
+    })
+    const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
+    setDebugObject('GeneratorService', GeneratorService)
+
+    AsyncGeneratorCall(GeneratorService, {
+        key: 'GeneratorService',
+        serializer,
+        channel,
+        log: {
+            beCalled: false,
+            remoteError: false,
+            type: 'pretty',
+            requestReplay: false,
+        },
+        preferLocalImplementation: true,
+        thenable: false,
+    })
+}
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -61,38 +85,6 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
                   requestReplay: debugMode,
               }
             : false,
-        strict: true,
         thenable: false,
     })
 }
-{
-    const GeneratorService: GeneratorServices = {
-        decrypt: decryptWithDecoding,
-    }
-    import.meta.webpackHot?.accept(['./crypto/decryption'], async () => {
-        GeneratorService.decrypt = (
-            await import(/* webpackPreload: true */ './crypto/decryption.js')
-        ).decryptWithDecoding
-    })
-    const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
-
-    if (debugMode) {
-        Reflect.defineProperty(globalThis, 'GeneratorService', { configurable: true, value: GeneratorService })
-    }
-
-    AsyncGeneratorCall(GeneratorService, {
-        key: 'GeneratorService',
-        serializer,
-        channel,
-        log: {
-            beCalled: false,
-            remoteError: false,
-            type: 'pretty',
-            requestReplay: false,
-        },
-        preferLocalImplementation: true,
-        strict: true,
-        thenable: false,
-    })
-}
-// #endregion

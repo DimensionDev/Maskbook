@@ -4,6 +4,10 @@
     "typescript.preferences.importModuleSpecifierEnding": "js",
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
+    "explorer.fileNesting.patterns": {
+        "README.md": ".commitlintrc*, .ecrc, .markdownlint*, .node-version, .npm*, .prettier*, .unlock*, .ignore, CNAME, gulp*, LICENSE, lint-staged*, cspell*, svgo*, *.ts, crowdin*",
+        "package.json": "pnpm-*.yaml, .pnpmfile.cjs"
+    },
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
@@ -18,7 +22,7 @@
             "url": "http://json.schemastore.org/chrome-manifest"
         },
         {
-            "fileMatch": ["/packages/mask/src/plugins/*/schema.json"],
+            "fileMatch": ["/packages/plugins/*/schema.json"],
             "url": "http://json-schema.org/draft-07/schema"
         },
         {

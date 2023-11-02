@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, FormControlLabel, Radio, RadioGroup, type BoxProps } from '@mui/material'
 import { memo, useState } from 'react'
-import { AccountType } from '../../../type.js'
+import { BackupAccountType } from '@masknet/shared-base'
 import { RestoreContext } from './RestoreProvider.js'
 import { EmailField } from './EmailField.js'
 import { PhoneField } from './PhoneField.js'
@@ -40,14 +40,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const StepMap = {
-    [AccountType.Email]: RestoreStep.InputEmail,
-    [AccountType.Phone]: RestoreStep.InputPhone,
+    [BackupAccountType.Email]: RestoreStep.InputEmail,
+    [BackupAccountType.Phone]: RestoreStep.InputPhone,
 } as const
 
 export const InputForm = memo(function InputForm(props: BoxProps) {
     const { classes, theme } = useStyles()
     const { state, dispatch } = RestoreContext.useContainer()
-    const [accountType, setAccountType] = useState(AccountType.Email)
+    const [accountType, setAccountType] = useState(BackupAccountType.Email)
 
     if (![RestoreStep.InputEmail, RestoreStep.InputPhone].includes(state.step)) return null
 
@@ -57,21 +57,23 @@ export const InputForm = memo(function InputForm(props: BoxProps) {
                 className={classes.purposes}
                 value={accountType}
                 onChange={(e) => {
-                    const accountType = e.currentTarget.value as AccountType
+                    const accountType = e.currentTarget.value as BackupAccountType
                     dispatch({ type: 'TO_STEP', step: StepMap[accountType] })
                     dispatch({ type: 'SET_ACCOUNT_TYPE', accountType })
                     setAccountType(accountType)
                 }}>
                 <FormControlLabel
                     className={classes.purpose}
-                    classes={{ label: state.accountType === AccountType.Email ? classes.selectedLabel : classes.label }}
+                    classes={{
+                        label: state.accountType === BackupAccountType.Email ? classes.selectedLabel : classes.label,
+                    }}
                     label="E-Mail"
-                    value={AccountType.Email}
+                    value={BackupAccountType.Email}
                     control={
                         <Radio
                             classes={{ root: classes.control, checked: classes.checked }}
                             color="primary"
-                            value={AccountType.Email}
+                            value={BackupAccountType.Email}
                             icon={<Icons.RadioButtonUnChecked color={theme.palette.maskColor.line} size={18} />}
                             checkedIcon={<Icons.RadioButtonChecked size={18} />}
                         />
@@ -80,13 +82,15 @@ export const InputForm = memo(function InputForm(props: BoxProps) {
                 <FormControlLabel
                     className={classes.purpose}
                     label="Mobile"
-                    classes={{ label: state.accountType === AccountType.Phone ? classes.selectedLabel : classes.label }}
-                    value={AccountType.Phone}
+                    classes={{
+                        label: state.accountType === BackupAccountType.Phone ? classes.selectedLabel : classes.label,
+                    }}
+                    value={BackupAccountType.Phone}
                     control={
                         <Radio
                             classes={{ root: classes.control, checked: classes.checked }}
                             color="primary"
-                            value={AccountType.Phone}
+                            value={BackupAccountType.Phone}
                             icon={<Icons.RadioButtonUnChecked color={theme.palette.maskColor.line} size={18} />}
                             checkedIcon={<Icons.RadioButtonChecked size={18} />}
                         />

@@ -2,8 +2,9 @@ import { contentScript } from './bridge.js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import image from '../../icons/brands/MaskBlue.svg'
+import type { Ethereum } from '../public-api/mask-wallet.js'
 
-class EthereumEventEmitter extends EventTarget implements Mask.Ethereum.MaskEthereumEventEmitter {
+class EthereumEventEmitter extends EventTarget implements Ethereum.MaskEthereumEventEmitter {
     #mapping = new WeakMap()
     #getMappedFunction(listener: unknown) {
         if (typeof listener !== 'function') return undefined
@@ -29,7 +30,7 @@ class EthereumEventEmitter extends EventTarget implements Mask.Ethereum.MaskEthe
         return this
     }
 }
-class MaskProvider extends EthereumEventEmitter implements Mask.Ethereum.ProviderObject {
+class MaskProvider extends EthereumEventEmitter implements Ethereum.ProviderObject {
     async request(param: any): Promise<any> {
         return contentScript.eth_request(param)
     }
@@ -37,7 +38,7 @@ class MaskProvider extends EthereumEventEmitter implements Mask.Ethereum.Provide
 export const ethereum = new MaskProvider()
 
 {
-    const detail: Mask.Ethereum.EIP6963ProviderDetail = {
+    const detail: Ethereum.EIP6963ProviderDetail = {
         info: {
             uuid: 'f113ee3f-49e3-4576-8f77-c3991d82af41',
             name: 'Mask Wallet',

@@ -12,8 +12,7 @@ import { CloudBackupFormContext, type CloudBackupFormInputs } from '../../../con
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../utils/api.js'
-import { AccountType } from '../../../type.js'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { PhoneForm } from './PhoneForm.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -70,7 +69,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
         async (data: CloudBackupFormInputs) => {
             const response = await fetchDownloadLink({
                 account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
-                type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
+                type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
                 code: data.code,
             }).catch((error) => {
                 if (error.status === 400) {
@@ -82,7 +81,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     // No cloud backup file
                     navigate(
                         urlcat(DashboardRoutes.CloudBackupPreview, {
-                            type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
+                            type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
                             account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
                             code: data.code,
                         }),
@@ -99,7 +98,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
             navigate(
                 urlcat(DashboardRoutes.CloudBackupPreview, {
                     ...response,
-                    type: currentTab === tabs.email ? AccountType.Email : AccountType.Phone,
+                    type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
                     account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
                     code: data.code,
                 }),
@@ -109,14 +108,14 @@ const CloudBackupInner = memo(function CloudBackupInner() {
     )
 
     const description = useMemo(() => {
-        if (user.cloudBackupMethod === AccountType.Email && user.email)
+        if (user.cloudBackupMethod === BackupAccountType.Email && user.email)
             return (
                 <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.email }}
                 />
             )
-        if (user.cloudBackupMethod === AccountType.Phone && user.phone)
+        if (user.cloudBackupMethod === BackupAccountType.Phone && user.phone)
             return (
                 <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}

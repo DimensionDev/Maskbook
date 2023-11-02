@@ -40,7 +40,7 @@ const LogoBoxStyled = styled(Box)(({ theme }) => ({
     },
 })) as any as typeof Box
 
-export const SignUpAccountLogo = styled(Icons.SignUpAccount)(({ theme }) => ({
+export const SignUpAccountLogo = styled(Icons.SignUpAccount)(() => ({
     width: '100%',
     height: '96px',
 })) as any as typeof Icons.SignUpAccount

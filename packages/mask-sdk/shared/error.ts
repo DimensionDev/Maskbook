@@ -1,7 +1,9 @@
+import type { Ethereum } from '../public-api/mask-wallet.js'
+
 export interface MaskEthereumProviderRpcErrorOptions extends ErrorOptions {
     // data?: unknown
 }
-export class MaskEthereumProviderRpcError extends Error implements Mask.Ethereum.ProviderRpcError {
+export class MaskEthereumProviderRpcError extends Error implements Ethereum.ProviderRpcError {
     constructor(code: ErrorCode, message: ErrorMessages | string, options: MaskEthereumProviderRpcErrorOptions = {}) {
         const { cause = undefined } = options
         super(message, { cause })

@@ -8,7 +8,6 @@
     "./dom": { "types": "./dom.d.ts" },
     "./env": { "types": "./env.d.ts" },
     "./firefox": { "types": "./firefox.d.ts" },
-    "./flag": { "types": "./flag.d.ts" },
     "./global": { "types": "./global.d.ts" },
     "./theme-global": { "types": "./theme-global.d.cts" },
     "./webpack": { "types": "./webpack.d.ts" },

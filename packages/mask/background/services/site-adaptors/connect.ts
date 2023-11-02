@@ -13,7 +13,7 @@ import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 import type { Tabs } from 'webextension-polyfill'
 
-const hasPermission = async (origin: string): Promise<boolean> => {
+async function hasPermission(origin: string): Promise<boolean> {
     return browser.permissions.contains({
         origins: [origin],
     })

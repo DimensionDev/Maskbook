@@ -1,4 +1,4 @@
-import { type NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
     NetworkDescriptor,

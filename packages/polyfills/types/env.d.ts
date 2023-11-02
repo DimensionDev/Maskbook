@@ -1,4 +1,3 @@
-/// <reference path="./env.d.ts" />
 declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production' | 'test'

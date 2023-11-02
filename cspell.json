@@ -1,5 +1,5 @@
 {
-    "version": "0.1",
+    "version": "0.2",
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
@@ -485,10 +485,6 @@
         {
             "filename": "**/*.html",
             "enabled": false
-        },
-        {
-            "filename": ".circleci/config.yml",
-            "ignoreWords": ["cimg"]
         }
     ]
 }

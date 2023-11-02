@@ -1,4 +1,4 @@
-/// <reference path="../dist/public-api.d.ts" />
+/// <reference path="../public-api/index.ts" />
 export interface BridgeAPI {
     eth_request(request: unknown): Promise<unknown>
     reload(): Promise<void>

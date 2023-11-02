@@ -4,7 +4,8 @@ import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import { Box, TextField } from '@mui/material'
 import { sendCode } from '../../../utils/api.js'
-import { AccountType, Locale, Scenario } from '../../../type.js'
+import { BackupAccountType } from '@masknet/shared-base'
+import { Locale, Scenario } from '../../../utils/type.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
 
@@ -36,7 +37,7 @@ export const EmailForm = memo(function EmailForm() {
     const handleSendVerificationCode = useCallback(async () => {
         const response = await sendCode({
             account: email,
-            type: AccountType.Email,
+            type: BackupAccountType.Email,
             scenario: user.email ? Scenario.change : Scenario.create,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {

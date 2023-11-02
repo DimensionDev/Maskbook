@@ -1,6 +1,7 @@
 import type { BackupSummary } from '@masknet/backup-format'
 import { produce } from 'immer'
-import { AccountType, type BackupFileInfo } from '../../../type.js'
+import { type BackupFileInfo } from '../../../utils/type.js'
+import { BackupAccountType } from '@masknet/shared-base'
 
 export enum RestoreStep {
     InputEmail = 'InputEmail',
@@ -11,7 +12,7 @@ export enum RestoreStep {
 
 export interface RestoreState {
     loading: boolean
-    accountType: AccountType
+    accountType: BackupAccountType
     account: string
     password: string
     step: RestoreStep
@@ -32,7 +33,7 @@ export interface RestoreState {
 
 export const initialState: RestoreState = {
     loading: false,
-    accountType: AccountType.Email,
+    accountType: BackupAccountType.Email,
     account: '',
     password: '',
     step: RestoreStep.InputEmail,
@@ -54,7 +55,7 @@ export const initialState: RestoreState = {
 type Action =
     | {
           type: 'SET_ACCOUNT_TYPE'
-          accountType: AccountType
+          accountType: BackupAccountType
       }
     | {
           type: 'NEXT_STEP'
@@ -120,7 +121,8 @@ export function restoreReducer(state: RestoreState, action: Action) {
                 draft.step = action.step
                 break
             case 'TO_INPUT':
-                draft.step = draft.accountType === AccountType.Email ? RestoreStep.InputEmail : RestoreStep.InputPhone
+                draft.step =
+                    draft.accountType === BackupAccountType.Email ? RestoreStep.InputEmail : RestoreStep.InputPhone
                 break
             case 'SET_EMAIL':
                 Object.assign(draft.emailForm, action.form)
@@ -149,6 +151,7 @@ export function restoreReducer(state: RestoreState, action: Action) {
         }
 
         // Update current account
-        draft.account = draft.accountType === AccountType.Email ? draft.emailForm.account : draft.phoneForm.account
+        draft.account =
+            draft.accountType === BackupAccountType.Email ? draft.emailForm.account : draft.phoneForm.account
     })
 }

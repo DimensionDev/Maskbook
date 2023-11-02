@@ -6,7 +6,8 @@ import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
-import { AccountType, Scenario, Locale } from '../../../type.js'
+import { BackupAccountType } from '@masknet/shared-base'
+import { Scenario, Locale } from '../../../utils/type.js'
 import { sendCode } from '../../../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -38,7 +39,7 @@ export const PhoneForm = memo(function PhoneForm() {
     const handleSendVerificationCode = useCallback(async () => {
         const response = await sendCode({
             account: `+${countryCode}${phone}`,
-            type: AccountType.Phone,
+            type: BackupAccountType.Phone,
             scenario: user.phone ? Scenario.change : Scenario.create,
             locale: lang.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {

@@ -4,10 +4,10 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { TermsGuard } from './TermsGuard.js'
 import { Modals } from '../modals/index.js'
 
-const SetupPersona = lazy(() => import(/* webpackPrefetch: true */ './SetupPersona/index.js'))
-const SignUp = lazy(() => import('./SignUp/index.js'))
-const PrivacyPolicy = lazy(() => import('./PrivacyPolicy/index.js'))
-const CreateWallet = lazy(() => import('./CreateMaskWallet/index.js'))
+const SetupPersona = lazy(() => import(/* webpackMode: 'eager' */ './SetupPersona/index.js'))
+const SignUp = lazy(() => import(/* webpackMode: 'eager' */ './SignUp/index.js'))
+const PrivacyPolicy = lazy(() => import(/* webpackMode: 'eager' */ './PrivacyPolicy/index.js'))
+const CreateWallet = lazy(() => import(/* webpackMode: 'eager' */ './CreateMaskWallet/index.js'))
 
 export function Pages() {
     return (

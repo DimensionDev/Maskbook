@@ -2,8 +2,7 @@ import type { ReactNode } from 'react'
 import { Box, Button, Card, Stack, Typography } from '@mui/material'
 import { experimentalStyled as styled } from '@mui/material/styles'
 
-const ActionCardIcon = styled('div')(
-    ({ theme }) => `
+const ActionCardIcon = styled('div')`
     width: 36px;
     height: 36px;
 
@@ -12,8 +11,7 @@ const ActionCardIcon = styled('div')(
         width: 100%;
         height: 100%;
     }
-`,
-)
+`
 
 const ActionCardButton = styled('div')(
     ({ theme }) => `

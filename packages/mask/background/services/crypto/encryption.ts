@@ -14,10 +14,7 @@ import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../databa
 import { savePostKeyToDB } from '../../database/post/helper.js'
 import { noop } from 'lodash-es'
 import { queryProfileDB } from '../../database/persona/db.js'
-import {
-    publishPostAESKey_version39Or38,
-    publishPostAESKey_version37,
-} from '../../network/gun/encryption/queryPostKey.js'
+import { publishPostAESKey_version39Or38, publishPostAESKey_version37 } from '../../network/queryPostKey.js'
 import { None, Some } from 'ts-results-es'
 
 export interface EncryptTargetE2EFromProfileIdentifier {

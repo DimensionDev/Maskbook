@@ -1,7 +1,25 @@
 {
   "name": "@masknet/extension",
   "private": true,
-  "sideEffects": true,
+  "sideEffects": [
+    "./background/initialization/**",
+    "./background/tasks/**",
+    "./content-script/site-adaptor-infra/sandboxed-plugin.ts",
+    "./content-script/site-adaptors/index.ts",
+    "./content-script/site-adaptors/facebook.com/index.ts",
+    "./content-script/site-adaptors/instagram.com/index.ts",
+    "./content-script/site-adaptors/minds.com/index.ts",
+    "./content-script/site-adaptors/mirror.xyz/index.ts",
+    "./content-script/site-adaptors/twitter.com/index.ts",
+    "./content-script/index.ts",
+    "./dashboard/initialization/**",
+    "./devtools/**",
+    "./entry-sdk/**",
+    "./popups/initialization/**",
+    "./shared/plugin-infra/register.js",
+    "./shared-ui/initialization/**",
+    "./web-workers/**"
+  ],
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "imports": {
