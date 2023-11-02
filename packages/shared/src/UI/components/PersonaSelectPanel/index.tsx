@@ -1,5 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@masknet/plugin-infra/dom/context'
 import {
     CrossIsolationMessages,
     DashboardRoutes,
@@ -10,27 +12,32 @@ import {
     type PersonaIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { ApplicationBoardModal, LeavePageConfirmModal, useSharedTrans } from '../../../index.js'
-import { ErrorPanel } from './ErrorPanel.js'
-import type { PersonaNextIDMixture } from './PersonaItemUI.js'
-import { PersonaItemUI } from './PersonaItemUI.js'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@masknet/plugin-infra/dom/context'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { ApplicationBoardModal, LeavePageConfirmModal, LoadingStatus, useSharedTrans } from '../../../index.js'
+import type { PersonaNextIDMixture } from './PersonaItemUI.js'
+import { PersonaItemUI } from './PersonaItemUI.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         items: {
             overflow: 'auto',
             maxHeight: 225,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        reloadStatus: {
+            padding: theme.spacing(1, 2, 2, 2),
+            minHeight: 148,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -205,21 +212,11 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         selectedPersona?.persona.linkedProfiles,
     ])
 
-    if (isLoading) {
-        return (
-            <Stack justifyContent="center" alignItems="center" height="100%">
-                <LoadingBase size={24} />
-            </Stack>
-        )
-    }
+    if (isLoading) return <LoadingStatus iconSize={24} />
 
-    if (error) {
-        return <ErrorPanel onRetry={refetch} />
-    }
+    if (error) return <ReloadStatus className={classes.reloadStatus} onRetry={refetch} />
 
-    if (!personas.length) {
-        return <Stack height="100%" justifyContent="space-between" />
-    }
+    if (!personas.length) return <Stack height="100%" justifyContent="space-between" />
 
     return (
         <Stack height="100%" justifyContent="space-between">

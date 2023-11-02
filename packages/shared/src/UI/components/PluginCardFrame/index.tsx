@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -17,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
         minHeight: '196px',
         justifyContent: 'space-between',
+        color: theme.palette.maskColor.main,
     },
     web3Icon: {
         marginRight: 6,
@@ -50,16 +50,14 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
     const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
-    const PluginName = useMemo(() => {
-        return (
-            <Stack className={classes.title} direction="row">
-                {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
-                <Typography fontSize={16} fontWeight={700}>
-                    {title ?? t.plugin_card_frame_default_title()}
-                </Typography>
-            </Stack>
-        )
-    }, [icon, title])
+    const PluginName = (
+        <Stack className={classes.title} direction="row">
+            {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
+            <Typography fontSize={16} fontWeight={700} color={theme.palette.maskColor.main}>
+                {title ?? t.plugin_card_frame_default_title()}
+            </Typography>
+        </Stack>
+    )
 
     return (
         <Stack className={classes.container}>
