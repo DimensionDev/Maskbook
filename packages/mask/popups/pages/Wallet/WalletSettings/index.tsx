@@ -23,6 +23,7 @@ import { Contacts } from './Contacts.js'
 import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
+import { HidingScamTx } from './HidingScamTx.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -83,6 +84,7 @@ const WalletSettings = memo(() => {
                 {wallet.owner ? <ChangeOwner /> : null}
                 <Rename />
                 <Contacts />
+                <HidingScamTx />
                 <ConnectedOrigins />
                 <AutoLock />
                 <ChangeCurrency />
