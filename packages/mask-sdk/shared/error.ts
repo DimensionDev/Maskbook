@@ -1,3 +1,5 @@
+import type { Mask } from '../public-api/mask-wallet.js'
+
 export interface MaskEthereumProviderRpcErrorOptions extends ErrorOptions {
     // data?: unknown
 }

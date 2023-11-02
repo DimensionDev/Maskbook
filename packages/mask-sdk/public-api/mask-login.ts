@@ -1,4 +1,4 @@
-declare namespace Mask {
+export declare namespace Mask {
     /**
      * Mask Login is following the same API as WebAuthn.
      *

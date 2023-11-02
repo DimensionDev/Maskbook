@@ -3,7 +3,7 @@
  * Mask SDK that provides the ability of interacting with Mask Network.
  */
 
-declare namespace Mask {
+export declare namespace Mask {
     /**
      * Current Mask SDK version.
      * @public

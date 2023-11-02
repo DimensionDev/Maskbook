@@ -2,14 +2,10 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
+    "outDir": "../dist/public-api/",
     "tsBuildInfoFile": "../dist/public-api.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "isolatedModules": false,
-    "module": "None",
-    "moduleResolution": "Classic",
-    "resolveJsonModule": false,
-    "verbatimModuleSyntax": false,
-    "outFile": "../dist/public-api"
+    "declarationMap": false
   },
   "include": ["./"],
   "references": []

@@ -1,4 +1,4 @@
-declare namespace Mask {
+export declare namespace Mask {
     /**
      * Provide the ability to interact with Persona.
      *
