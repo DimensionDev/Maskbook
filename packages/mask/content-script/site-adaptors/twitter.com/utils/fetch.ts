@@ -17,7 +17,7 @@ import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 /**
  * Get post id from dom, including normal tweet, quoted tweet and retweet one
  */
-export const getPostId = (node: HTMLElement) => {
+export function getPostId(node: HTMLElement) {
     let idNode: HTMLAnchorElement | undefined | null = null
     let timeNode = node.querySelector('a[href*="/status/"] time')
     if (timeNode) {
@@ -44,7 +44,7 @@ export const getPostId = (node: HTMLElement) => {
     return isRetweet ? `retweet:${pid}` : pid
 }
 
-const postNameParser = (node: HTMLElement) => {
+function postNameParser(node: HTMLElement) {
     const tweetElement = node.querySelector<HTMLElement>('[data-testid="tweet"]') ?? node
     const name = collectNodeText(tweetElement.querySelector<HTMLElement>('[data-testid^="User-Name"] a div div > span'))
     // Note: quoted tweet has no [data-testid^="User-Name"]
@@ -81,7 +81,7 @@ const postNameParser = (node: HTMLElement) => {
     }
 }
 
-const postAvatarParser = (node: HTMLElement) => {
+function postAvatarParser(node: HTMLElement) {
     const tweetElement = node.querySelector('[data-testid="tweet"]') ?? node
     const avatarElement = tweetElement.children[0].querySelector<HTMLImageElement>('img[src*="twimg.com"]')
     return avatarElement ? avatarElement.src : undefined
@@ -147,7 +147,7 @@ function getElementStyle(element: Element | null): Meta | undefined {
     return undefined
 }
 
-export const postImagesParser = async (node: HTMLElement): Promise<string[]> => {
+export async function postImagesParser(node: HTMLElement): Promise<string[]> {
     const isQuotedTweet = !!node.closest('div[role="link"]')
     const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
     if (!imgNodes.length) return []
@@ -159,7 +159,7 @@ export const postImagesParser = async (node: HTMLElement): Promise<string[]> => 
     return imgUrls
 }
 
-export const postParser = (node: HTMLElement) => {
+export function postParser(node: HTMLElement) {
     return {
         ...postNameParser(node),
         avatar: postAvatarParser(node),

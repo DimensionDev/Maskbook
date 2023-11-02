@@ -11,7 +11,7 @@ const SideBarNativeItemTextMarginLeftRef = new ValueRef('20px')
 const SideBarNativeItemIconSize = new ValueRef('24px')
 const SideBarNativeItemPaddingRef = new ValueRef('11px')
 
-const toolboxInSidebarSelector: () => LiveSelector<HTMLElement, true> = () => {
+function toolboxInSidebarSelector() {
     // Organization account don't have a [data-testid=AppTabBar_More_Menu] in page. see MF-3866
     return querySelector<HTMLElement>('[role="banner"] nav[role="navigation"] > div[data-testid=AppTabBar_More_Menu]')
 }

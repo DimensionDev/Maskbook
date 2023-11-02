@@ -99,7 +99,6 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
     },
 }
 
-// #region LS
 // Try to resolve my identities
 const myUsernameLiveSelectorPC = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
@@ -110,5 +109,3 @@ const myUsernameLiveSelectorPC = new LiveSelector()
 const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchorElement>(
     '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
 )
-
-// #endregion

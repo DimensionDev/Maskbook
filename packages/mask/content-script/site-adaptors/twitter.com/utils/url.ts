@@ -2,7 +2,7 @@ import { regexMatch } from '../../../utils/regexMatch.js'
 
 // more about twitter photo url formatting:
 // https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
-export const canonifyImgUrl = (url: string) => {
+export function canonifyImgUrl(url: string) {
     const parsed = new URL(url)
     if (parsed.hostname !== 'pbs.twimg.com') return url
     const { searchParams } = parsed
@@ -18,6 +18,6 @@ export const canonifyImgUrl = (url: string) => {
     return parsed.href
 }
 
-export const parseId = (t: string) => {
+export function parseId(t: string) {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }

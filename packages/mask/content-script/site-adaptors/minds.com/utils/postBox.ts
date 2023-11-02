@@ -1,14 +1,20 @@
 import type { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { composerModalSelector, postEditorDraftContentSelector } from './selector.js'
 
-export const getEditorContent = () => {
+export function getEditorContent() {
     const editorNode = postEditorDraftContentSelector().evaluate()
     if (!editorNode) return ''
     return (editorNode as HTMLTextAreaElement).value
 }
 
-export const isCompose = () => !!composerModalSelector().evaluate()
+export function isCompose() {
+    return !!composerModalSelector().evaluate()
+}
 
-export const hasFocus = (x: LiveSelector<HTMLElement, true>) => x.evaluate() === document.activeElement
+export function hasFocus(x: LiveSelector<HTMLElement, true>) {
+    return x.evaluate() === document.activeElement
+}
 
-export const hasEditor = () => !!postEditorDraftContentSelector().evaluate()
+export function hasEditor() {
+    return !!postEditorDraftContentSelector().evaluate()
+}

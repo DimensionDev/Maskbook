@@ -2,66 +2,86 @@ import { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
+function querySelector<T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-app')
+export function rootSelector() {
+    return querySelector<E>('m-app')
+}
 
-export const composerModalSelector: () => LiveSelector<E, true> = () => querySelector<E>('m-composer__modal')
+export function composerModalSelector() {
+    return querySelector<E>('m-composer__modal')
+}
 
-export const postEditorInDialogSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('m-composer__modal m-composer__titlebar m-composertitlebar__dropdown', true)
+export function postEditorInDialogSelector() {
+    return querySelector<E>('m-composer__modal m-composer__titlebar m-composertitlebar__dropdown', true)
+}
 
-export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('m-composer m-composer__toolbar > div > :nth-child(6)', true)
+export function postEditorInTimelineSelector() {
+    return querySelector<E>('m-composer m-composer__toolbar > div > :nth-child(6)', true)
+}
 
-export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
+export function toolboxInSidebarSelector() {
+    return querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
+}
 
-export const postEditorDraftContentSelector = () => {
+export function postEditorDraftContentSelector() {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () =>
-    querySelector<HTMLAnchorElement>('.m-sidebarNavigation__item--user [data-ref="sidenav-channel"]')
+export function handleSelector() {
+    return querySelector<HTMLAnchorElement>('.m-sidebarNavigation__item--user [data-ref="sidenav-channel"]')
+}
 
-export const selfInfoSelectors = () => ({
-    handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1).replace(/^@/, ''), // Could include `@` by chance.
-    avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
-})
+export function selfInfoSelectors() {
+    return {
+        handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1).replace(/^@/, ''), // Could include `@` by chance.
+        avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
+    }
+}
 
-export const inpageAvatarSelector = () =>
-    new LiveSelector().querySelectorAll<HTMLDivElement>('.m-activityOwnerBlock__avatar')
+export function inpageAvatarSelector() {
+    return new LiveSelector().querySelectorAll<HTMLDivElement>('.m-activityOwnerBlock__avatar')
+}
 
-export const composeButtonSelector = () =>
-    querySelector(
+export function composeButtonSelector() {
+    return querySelector(
         [
             '.m-sidebarNavigation__item m-sidebarNavigation__item--compose',
             '.m-sidebarNavigation__item--compose a', // legacy
         ].join(','),
         true,
     )
+}
 
-export const composeTextareaSelector = () =>
-    new LiveSelector().querySelector<HTMLTextAreaElement>('m-composer__textarea textarea').enableSingleMode()
+export function composeTextareaSelector() {
+    return new LiveSelector().querySelector<HTMLTextAreaElement>('m-composer__textarea textarea').enableSingleMode()
+}
 
-export const composeDialogIndicatorSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>('m-composer__modal')
+export function composeDialogIndicatorSelector() {
+    return new LiveSelector().querySelector<HTMLDivElement>('m-composer__modal')
+}
 
-export const composerModalTextAreaSelector = () =>
-    new LiveSelector()
+export function composerModalTextAreaSelector() {
+    return new LiveSelector()
         .querySelector<HTMLTextAreaElement>('m-composer__modal m-composer__textArea .m-composer__textArea textarea')
         .enableSingleMode()
+}
 
-export const composerPreviewSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>('m-composer__modal m-composer__preview img').enableSingleMode()
+export function composerPreviewSelector() {
+    return new LiveSelector()
+        .querySelector<HTMLDivElement>('m-composer__modal m-composer__preview img')
+        .enableSingleMode()
+}
 
-export const searchResultHeadingSelector = () => querySelector('m-discovery__search')
+export function searchResultHeadingSelector() {
+    return querySelector('m-discovery__search')
+}
 
-export const postContentSelector = () =>
-    new LiveSelector().querySelectorAll<HTMLDivElement>(
+export function postContentSelector() {
+    return new LiveSelector().querySelectorAll<HTMLDivElement>(
         [
             'm-activity m-activity__content .m-activityTop__mainColumn',
             'm-activity m-activity__content .m-activityContentText__body > m-readmore > span:first-child',
@@ -69,5 +89,8 @@ export const postContentSelector = () =>
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(','),
     )
+}
 
-export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')
+export function searchMindsProfileCover() {
+    return querySelector('div[data-cy="data-minds-channel-banner"]')
+}

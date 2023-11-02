@@ -8,7 +8,7 @@ import { TwitterDecoder } from '@masknet/encryption'
 import { getUserIdentity, usernameValidator } from './utils/user.js'
 import { TwitterAdaptor } from '../../../shared/site-adaptors/implementations/twitter.com.js'
 
-const getPostURL = (post: PostIdentifier): URL | null => {
+function getPostURL(post: PostIdentifier): URL | null {
     if (!(post.identifier instanceof ProfileIdentifier)) return null
     return new URL(`https://twitter.com/${post.identifier.userId}/status/${post.postId}`)
 }

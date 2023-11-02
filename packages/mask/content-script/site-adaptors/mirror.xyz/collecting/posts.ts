@@ -26,7 +26,7 @@ function queryInjectPoint(node: HTMLElement) {
     return allANode.item(allANode.length - 1) as HTMLElement
 }
 
-const getPostId = (node: HTMLElement | HTMLLinkElement) => {
+function getPostId(node: HTMLElement | HTMLLinkElement) {
     // Handle entry detail page post id
     if (getMirrorPageType(location.href) === MirrorPageType.Post) {
         return location.pathname.match(MIRROR_ENTRY_ID)?.[0]

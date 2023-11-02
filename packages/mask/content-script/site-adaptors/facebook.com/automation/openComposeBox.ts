@@ -4,8 +4,8 @@ import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, type SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 
-const nativeComposeButtonSelector = () =>
-    new LiveSelector()
+function nativeComposeButtonSelector() {
+    return new LiveSelector()
         .querySelector<HTMLDivElement>(
             [
                 '[role="region"] [role="link"]+[role="button"]',
@@ -13,18 +13,20 @@ const nativeComposeButtonSelector = () =>
             ].join(','),
         )
         .enableSingleMode()
+}
 
-const nativeComposeTextareaSelector = () =>
-    new LiveSelector()
+function nativeComposeTextareaSelector() {
+    return new LiveSelector()
         .querySelector<HTMLTextAreaElement>(
             [
                 '#structured_composer_form .mentions textarea', // mobile
             ].join(','),
         )
         .enableSingleMode()
+}
 
-const nativeComposeDialogIndicatorSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>(
+function nativeComposeDialogIndicatorSelector() {
+    return new LiveSelector().querySelector<HTMLDivElement>(
         [
             // PC -  the form of compose dialog
             '[role="dialog"] form[method="post"]',
@@ -33,9 +35,11 @@ const nativeComposeDialogIndicatorSelector = () =>
             '#composer-main-view-id button[type="submit"]',
         ].join(','),
     )
+}
 
-const nativeComposeDialogCloseButtonSelector = () =>
-    new LiveSelector().querySelector<HTMLDivElement>('[role="dialog"] form[method="post"] [role="button"]')
+function nativeComposeDialogCloseButtonSelector() {
+    return new LiveSelector().querySelector<HTMLDivElement>('[role="dialog"] form[method="post"] [role="button"]')
+}
 
 export async function taskOpenComposeBoxFacebook(
     content: string | SerializableTypedMessages,

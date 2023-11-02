@@ -7,7 +7,7 @@ import { querySelectorAll } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 
-const selector = () => {
+function selector() {
     // [href^="/search"] is a hash tag
     return querySelectorAll<HTMLElement>(
         '[data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
@@ -47,7 +47,7 @@ interface Props {
     userId: string
 }
 
-const createRootElement = () => {
+function createRootElement() {
     const span = document.createElement('span')
     Object.assign(span.style, {
         verticalAlign: 'bottom',

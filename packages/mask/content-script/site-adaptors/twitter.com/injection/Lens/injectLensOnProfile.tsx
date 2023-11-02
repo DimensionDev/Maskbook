@@ -7,8 +7,9 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelector } from '../../utils/selector.js'
 
-const selector: () => LiveSelector<HTMLElement, true> = () =>
-    querySelector<HTMLElement>('[data-testid=UserName] div[dir]')
+function selector() {
+    return querySelector<HTMLElement>('[data-testid=UserName] div[dir]')
+}
 
 export function injectLensOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())

@@ -4,77 +4,93 @@ import { isCompose } from './postBox.js'
 
 type E = HTMLElement
 
-export const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
+export function querySelector<T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
-export const querySelectorAll = <T extends E>(selector: string) => {
+export function querySelectorAll<T extends E>(selector: string) {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
 // #region "Enhanced Profile"
-export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function searchProfileTabListLastChildSelector() {
+    return querySelector<E>(
         '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"] div[role="presentation"]:last-of-type a[role="tab"]',
     ).closest(1)
-export const nextTabListSelector: () => LiveSelector<E, true> = () =>
-    querySelector('[data-testid="ScrollSnap-nextButtonWrapper"]')
-export const searchProfileTabPageSelector = () =>
-    searchProfileTabListLastChildSelector()
+}
+export function nextTabListSelector() {
+    return querySelector('[data-testid="ScrollSnap-nextButtonWrapper"]')
+}
+export function searchProfileTabPageSelector() {
+    return searchProfileTabListLastChildSelector()
         .closest(5)
         .querySelector<E>('section > div[aria-label]:not([role="progressbar"])')
+}
 
-export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function searchProfileTabLoseConnectionPageSelector() {
+    return querySelector<E>(
         '[data-testid="primaryColumn"] [role="navigation"] + * > div[dir="auto"]:not([role="progressbar"])',
     )
+}
 
-export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
-export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
-export const searchAppBarBackSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="app-bar-back"] > div')
-export const searchProfileTabListSelector = () =>
-    querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
-export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
+export function searchProfileEmptySelector() {
+    return querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
+}
+export function searchProfileTabSelector() {
+    return querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+}
+export function searchAppBarBackSelector() {
+    return querySelector<E>('[data-testid="app-bar-back"] > div')
+}
+export function searchProfileTabListSelector() {
+    return querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
+}
+export function searchNewTweetButtonSelector() {
     const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
     if (q.evaluate()) return q
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
 
-querySelector<E>('[data-testid="primaryColumn"] [data-testid="UserName"] div[dir="auto"] > span > span')
-export const searchAvatarSelector = () =>
-    querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+export function searchAvatarSelector() {
+    return querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
+}
 querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
-export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head meta[property="og:image"]')
+export function searchAvatarMetaSelector() {
+    return querySelector<E>('head meta[property="og:image"]')
+}
 
-export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function profileFollowButtonSelector() {
+    return querySelector<E>(
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
+}
 
-export const normalFollowButtonSelector = () =>
-    // Follow button and unfollow button in following and followers list
-    querySelectorAll('[data-testid="primaryColumn"] [role="button"][data-testid="UserCell"] [data-testid$="follow"]')
+export function normalFollowButtonSelector() {
+    return querySelectorAll(
+        '[data-testid="primaryColumn"] [role="button"][data-testid="UserCell"] [data-testid$="follow"]',
+    )
+}
 
-export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function searchProfileCoverSelector() {
+    return querySelector<E>(
         '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
     ).closest(1)
+}
 
-export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
+export function searchEditProfileSelector() {
+    return querySelector<E>('[data-testid="primaryColumn"] [data-testid^="UserAvatar-Container-"]')
         .closest(1)
         .querySelector('a[href="/settings/profile"]')
+}
 // #endregion
 
-export const rootSelector: () => LiveSelector<E, true> = () => querySelector<E>('#react-root')
+export function rootSelector() {
+    return querySelector<E>('#react-root')
+}
 
 // `aside *` selectors are for mobile mode
-export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>(
+export function composeAnchorSelector() {
+    return querySelector<HTMLAnchorElement>(
         [
             'header[role=banner] a[href="/compose/tweet"]',
             'aside a[href="/compose/tweet"]',
@@ -82,22 +98,31 @@ export const composeAnchorSelector: () => LiveSelector<HTMLAnchorElement, true> 
             '[role=main] [role=button][data-testid=tweetButton]',
         ].join(','),
     )
+}
 
-export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function postEditorContentInPopupSelector() {
+    return querySelector<E>(
         '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
     )
-export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+}
+export function postEditorInPopupSelector() {
+    return querySelector<E>(
         '[aria-labelledby="modal-header"]  div[data-testid="toolBar"] [role="presentation"]:has(> div[data-testid="geoButton"])',
     )
-export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
-export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)')
+}
+export function sideBarProfileSelector() {
+    return querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
+}
+export function postEditorInTimelineSelector() {
+    return querySelector<E>(
+        '[role="main"] :not(aside) > [role="progressbar"] ~ div [role="button"][aria-label]:nth-child(6)',
+    )
+}
 
-export const isReplyPageSelector = () => !!location.pathname.match(/^\/\w+\/status\/\d+$/)
-export const postEditorDraftContentSelector = () => {
+export function isReplyPageSelector() {
+    return !!location.pathname.match(/^\/\w+\/status\/\d+$/)
+}
+export function postEditorDraftContentSelector() {
     if (location.pathname === '/compose/tweet') {
         return querySelector<HTMLDivElement>(
             '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
@@ -111,16 +136,19 @@ export const postEditorDraftContentSelector = () => {
     )
 }
 
-export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
-    // To match the scenario with no results in timeline.
-    querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > :nth-child(2)')
+export function searchResultHeadingSelector() {
+    return querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > :nth-child(2)')
+}
 
-export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+export function newPostButtonSelector() {
+    return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+}
 
-export const bioPageUserNickNameSelector = () =>
-    querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
+export function bioPageUserNickNameSelector() {
+    return querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)
         .querySelector<HTMLDivElement>('div[dir]')
+}
 
 export function isProfilePageLike() {
     // starts with exclude
@@ -129,34 +157,40 @@ export function isProfilePageLike() {
     if (location.pathname.match(/\/(topics|recommended|not_interested|lists)$/)) return false
     return !!location.pathname.match(/^\/[\dA-Za-z]+\/?$/)
 }
-export const bioPageUserIDSelector = (selector: () => LiveSelector<HTMLSpanElement, true>) =>
-    selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+export function bioPageUserIDSelector(selector: () => LiveSelector<HTMLSpanElement, true>) {
+    return selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
+}
 
-export const floatingBioCardSelector = () =>
-    querySelector<HTMLSpanElement>(
+export function floatingBioCardSelector() {
+    return querySelector<HTMLSpanElement>(
         '[style~="left:"] a[role=link] > div:first-child > div:first-child > div:first-child[dir="auto"]',
     )
+}
 
-export const postsImageSelector = (node: HTMLElement) =>
-    new LiveSelector([node]).querySelectorAll<HTMLElement>(
+export function postsImageSelector(node: HTMLElement) {
+    return new LiveSelector([node]).querySelectorAll<HTMLElement>(
         [
             '[data-testid="tweet"] > div > div img[src*="media"]',
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
         ].join(','),
     )
+}
 
-export const timelinePostContentSelector = () =>
-    querySelectorAll(
+export function timelinePostContentSelector() {
+    return querySelectorAll(
         [
             '[data-testid="tweet"] div + div div[lang]',
             '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
         ].join(','),
     )
+}
 
-export const toastLinkSelector = () => querySelector<HTMLLinkElement>('[data-testid="toast"] a')
+export function toastLinkSelector() {
+    return querySelector<HTMLLinkElement>('[data-testid="toast"] a')
+}
 
-export const postsContentSelector = () =>
-    querySelectorAll(
+export function postsContentSelector() {
+    return querySelectorAll(
         [
             // tweets on timeline page
             '[data-testid="tweet"] [data-testid="tweetText"]',
@@ -172,10 +206,14 @@ export const postsContentSelector = () =>
             '[data-testid="tweet"] > div:last-child div[role="link"] div[lang]',
         ].join(','),
     )
+}
 
-export const postAvatarSelector = () => querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
-export const followUserAvatarSelector = () =>
-    querySelectorAll('[data-testid=UserCell] [data-testid^=UserAvatar-Container-]')
+export function postAvatarSelector() {
+    return querySelectorAll('[data-testid=tweet] [data-testid^=UserAvatar-Container-]')
+}
+export function followUserAvatarSelector() {
+    return querySelectorAll('[data-testid=UserCell] [data-testid^=UserAvatar-Container-]')
+}
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
 const handle = /"screen_name":"(.*?)"/
@@ -186,18 +224,20 @@ const avatar = /"profile_image_url_https":"(.*?)"/
  * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match
  */
-const p = (regex: RegExp, index: number) => {
+function p(regex: RegExp, index: number) {
     return base.clone().map((x) => regexMatch(x.innerText, regex, index))
 }
-export const selfInfoSelectors = () => ({
-    handle: p(handle, 1),
-    name: p(name, 1),
-    bio: p(bio, 1),
-    userAvatar: p(avatar, 1),
-})
+export function selfInfoSelectors() {
+    return {
+        handle: p(handle, 1),
+        name: p(name, 1),
+        bio: p(bio, 1),
+        userAvatar: p(avatar, 1),
+    }
+}
 
 // #region self info
-export const searchSelfHandleSelector = () => {
+export function searchSelfHandleSelector() {
     return querySelector<HTMLSpanElement>(
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] > div > div[data-testid^="UserAvatar-Container-"]', // desktop
@@ -206,7 +246,7 @@ export const searchSelfHandleSelector = () => {
     )
 }
 
-export const searchSelfNicknameSelector = () => {
+export function searchSelfNicknameSelector() {
     return querySelector<HTMLSpanElement>(
         [
             '[data-testid="SideNav_AccountSwitcher_Button"] span span:first-child',
@@ -215,10 +255,11 @@ export const searchSelfNicknameSelector = () => {
     )
 }
 
-export const searchWatcherAvatarSelector = () =>
-    querySelector<HTMLImageElement>('[data-testid="SideNav_AccountSwitcher_Button"] img')
+export function searchWatcherAvatarSelector() {
+    return querySelector<HTMLImageElement>('[data-testid="SideNav_AccountSwitcher_Button"] img')
+}
 
-export const searchSelfAvatarSelector = () => {
+export function searchSelfAvatarSelector() {
     return querySelector<HTMLImageElement>(
         [
             '#layers ~ div [role="banner"] [role="button"] img',
@@ -230,46 +271,67 @@ export const searchSelfAvatarSelector = () => {
 // #endregion
 
 // #region twitter nft avatar
-export const searchProfileAvatarSelector = () => {
+export function searchProfileAvatarSelector() {
     return querySelector<E>('[data-testid="Profile_Save_Button"]')
         .closest<E>(8)
         .querySelector('[data-testid="UserAvatar-Container-unknown"]')
         .closest<E>(3)
 }
 
-export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
+export function searchProfileSaveSelector() {
+    return querySelector<E>('[data-testid="Profile_Save_Button"]')
+}
 
 // #region avatar selector
-export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+export function searchTwitterAvatarLinkSelector() {
+    return querySelector<E>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+}
 
-export const searchTwitterAvatarSelector = () =>
-    querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+export function searchTwitterAvatarSelector() {
+    return querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
+}
 
-export const searchTwitterAvatarNormalSelector = () => querySelector<E>('a[href$="/photo"]')
+export function searchTwitterAvatarNormalSelector() {
+    return querySelector<E>('a[href$="/photo"]')
+}
 
 // #endregion
 
-export const searchTwitterSquareAvatarSelector = () => querySelector<E>('a[href$="/nft"] > div img')
+export function searchTwitterSquareAvatarSelector() {
+    return querySelector<E>('a[href$="/nft"] > div img')
+}
 
-export const searchTweetAvatarSelector = () =>
-    querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
+export function searchTweetAvatarSelector() {
+    return querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
+}
 
-export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
+export function searchRetweetAvatarSelector() {
+    return querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
+}
 
-export const searchTwitterAvatarNFTSelector = () =>
-    querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
+export function searchTwitterAvatarNFTSelector() {
+    return querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
+}
 
-export const searchTwitterAvatarNFTStyleSelector = () => querySelector<E>('a[href$="/nft"] > div')
+export function searchTwitterAvatarNFTStyleSelector() {
+    return querySelector<E>('a[href$="/nft"] > div')
+}
 
-export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
+export function searchTwitterAvatarNFTLinkSelector() {
+    return querySelector<E>('a[href$="/nft"]')
+}
 
-export const searchReplyToolbarSelector = () =>
-    querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
+export function searchReplyToolbarSelector() {
+    return querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
         '[role="presentation"]:has(> div[data-testid="geoButton"])',
     )
+}
 
 // nameTag dom
-export const searchNameTag = () => querySelector<E>('#nft-gallery')
+export function searchNameTag() {
+    return querySelector<E>('#nft-gallery')
+}
 
-export const searchHomeLinkName = () => querySelector<E>('[data-testid="AppTabBar_Home_Link"]')
+export function searchHomeLinkName() {
+    return querySelector<E>('[data-testid="AppTabBar_Home_Link"]')
+}

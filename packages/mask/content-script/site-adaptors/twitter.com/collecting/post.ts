@@ -59,7 +59,7 @@ function getTweetNode(node: HTMLElement) {
     // then normal tweet
     return root || node.closest<HTMLDivElement>('article > div')
 }
-const shouldSkipDecrypt = (node: HTMLElement, tweetNode: HTMLElement) => {
+function shouldSkipDecrypt(node: HTMLElement, tweetNode: HTMLElement) {
     const isCardNode = node.matches('[data-testid="card.wrapper"]')
     const hasTextNode = !!tweetNode.querySelector(
         [

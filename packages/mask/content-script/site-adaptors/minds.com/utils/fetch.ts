@@ -9,7 +9,7 @@ import {
 } from '@masknet/typed-message'
 import { assertNonNull } from '@masknet/kit'
 
-const parseNameArea = (nameArea: HTMLAnchorElement) => {
+function parseNameArea(nameArea: HTMLAnchorElement) {
     const displayNameNode = nameArea.querySelector('span')
 
     return {
@@ -18,12 +18,12 @@ const parseNameArea = (nameArea: HTMLAnchorElement) => {
     }
 }
 
-const postIdParser = (node: HTMLElement) => {
+function postIdParser(node: HTMLElement) {
     const idNode = node.querySelector<HTMLAnchorElement>('m-activity__permalink .m-activityPermalink__wrapper--link')
     return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
 }
 
-const postNameParser = (node: HTMLElement) => {
+function postNameParser(node: HTMLElement) {
     return parseNameArea(
         assertNonNull(
             node.querySelector<HTMLAnchorElement>(
@@ -36,7 +36,7 @@ const postNameParser = (node: HTMLElement) => {
     )
 }
 
-const postAvatarParser = (node: HTMLElement) => {
+function postAvatarParser(node: HTMLElement) {
     const avatarElement = node.querySelector<HTMLImageElement>('m-hovercard img')
     return avatarElement ? avatarElement.src : undefined
 }
@@ -47,7 +47,7 @@ function resolveType(content: string) {
     if (content.startsWith('$')) return 'cash'
     return 'normal'
 }
-const postContentMessageParser = (node: HTMLElement) => {
+function postContentMessageParser(node: HTMLElement) {
     function make(node: Node): TypedMessage | TypedMessage[] {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
@@ -78,7 +78,7 @@ const postContentMessageParser = (node: HTMLElement) => {
     return content ? Array.from(content.childNodes).flatMap(make) : []
 }
 
-export const postParser = (node: HTMLElement) => {
+export function postParser(node: HTMLElement) {
     return {
         ...postNameParser(node),
         avatar: postAvatarParser(node),

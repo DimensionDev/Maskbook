@@ -7,7 +7,7 @@ import { mindsBase } from './base.js'
 import { usernameValidator } from './utils/user.js'
 import { MindsAdaptor } from '../../../shared/site-adaptors/implementations/minds.com.js'
 
-const getPostURL = (post: PostIdentifier): URL => {
+function getPostURL(post: PostIdentifier): URL {
     return new URL(`https://minds.com/newsfeed/${post.postId}`)
 }
 export const mindsShared: SiteAdaptor.Shared & SiteAdaptor.Base = {

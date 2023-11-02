@@ -4,7 +4,9 @@ import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils
 import { pasteTextToCompositionMinds } from './pasteTextToComposition.js'
 import { MaskMessages } from '@masknet/shared-base'
 
-const hasSucceed = () => composerPreviewSelector().evaluate()
+function hasSucceed() {
+    return composerPreviewSelector().evaluate()
+}
 
 export function pasteImageToCompositionMinds() {
     return async function (

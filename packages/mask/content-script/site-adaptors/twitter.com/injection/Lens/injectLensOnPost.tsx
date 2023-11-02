@@ -7,7 +7,7 @@ import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
-const selector = () => {
+function selector() {
     return querySelectorAll<HTMLElement>('[data-testid=User-Name] div').filter((node) => {
         return node.firstElementChild?.matches('a[role=link]:not([tabindex])')
     })
@@ -50,7 +50,7 @@ interface Props {
     userId: string
 }
 
-const createRootElement = () => {
+function createRootElement() {
     const span = document.createElement('span')
     Object.assign(span.style, {
         alignItems: 'center',

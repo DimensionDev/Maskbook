@@ -7,7 +7,7 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { querySelectorAll } from '../../utils/selector.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 
-const selector = () => {
+function selector() {
     return querySelectorAll<HTMLElement>('[data-testid=conversation] div:not([tabindex]) div[dir] + div[dir]')
 }
 
@@ -30,7 +30,7 @@ interface Props {
     userId: string
 }
 
-const createRootElement = () => {
+function createRootElement() {
     const span = document.createElement('span')
     Object.assign(span.style, {
         verticalAlign: 'bottom',

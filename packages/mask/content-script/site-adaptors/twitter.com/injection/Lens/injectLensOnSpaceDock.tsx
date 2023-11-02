@@ -7,7 +7,7 @@ import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelectorAll } from '../../utils/selector.js'
 
-const avatarSelector = () => {
+function avatarSelector() {
     return querySelectorAll<HTMLElement>(
         '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-],[data-testid=sheetDialog] [data-testid^=UserAvatar-Container-]',
     ).map((node) => {
@@ -54,7 +54,7 @@ interface Props {
     userId: string
 }
 
-const createRootElement = () => {
+function createRootElement() {
     const span = document.createElement('span')
     Object.assign(span.style, {
         verticalAlign: 'bottom',

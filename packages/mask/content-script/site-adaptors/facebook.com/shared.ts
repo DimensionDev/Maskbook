@@ -7,7 +7,7 @@ import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infr
 import { openWindow } from '@masknet/shared-base-ui'
 import { FacebookAdaptor } from '../../../shared/site-adaptors/implementations/facebook.com.js'
 
-const getPostURL = (post: PostIdentifier): URL | null => {
+function getPostURL(post: PostIdentifier): URL | null {
     return new URL(getPostUrlAtFacebook(post))
 }
 export const facebookShared: SiteAdaptor.Shared & SiteAdaptor.Base = {

@@ -106,7 +106,7 @@ function getColor() {
     return style.color
 }
 
-const handler = () => {
+function handler() {
     MaskMessages.events.profileTabActive.sendToLocal({ active: false })
     MaskMessages.events.profileTabHidden.sendToLocal({ hidden: true })
     const activeTab = searchProfileActiveTabSelector().evaluate()
@@ -144,7 +144,7 @@ function ProfileTabAtInstagram() {
     }, [])
 
     const { classes } = useStyles(styles)
-    const reset = () => {
+    function reset() {
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
             activeTab.style.borderTop = ''
@@ -168,7 +168,7 @@ function ProfileTabAtInstagram() {
             ele.style.display = ''
         }
     }
-    const clear = () => {
+    function clear() {
         const style = getStyleProps({ activeColor, color })
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {

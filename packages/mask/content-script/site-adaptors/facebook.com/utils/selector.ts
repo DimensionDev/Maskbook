@@ -3,147 +3,183 @@ import { compact } from 'lodash-es'
 
 type E = HTMLElement
 
-const querySelector = <T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) => {
+function querySelector<T extends E, SingleMode extends boolean = true>(selector: string, singleMode = true) {
     const ls = new LiveSelector<T, SingleMode>().querySelector<T>(selector)
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
-const querySelectorAll = <T extends E>(selector: string) => {
+function querySelectorAll<T extends E>(selector: string) {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export const searchUserIdOnMobileSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')
+export function searchUserIdOnMobileSelector() {
+    return querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')
+}
 
-export const searchAvatarSelector: () => LiveSelector<HTMLImageElement, true> = () =>
-    querySelector<HTMLImageElement>(
+export function searchAvatarSelector() {
+    return querySelector<HTMLImageElement>(
         '[role="navigation"] svg g image, [role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
     )
+}
 
-export const searchNickNameSelector: (userId?: string | null) => LiveSelector<HTMLHeadingElement, true> = (
-    userId?: string | null,
-) => {
+export function searchNickNameSelector(userId?: string | null) {
     return querySelector<HTMLHeadingElement>(
         compact([userId ? `a[href$="id=${userId}"]` : undefined, 'span[dir="auto"] div h1']).join(','),
     )
 }
 
-export const searchNickNameSelectorOnMobile: () => LiveSelector<E, true> = () => querySelector<E>('#cover-name-root h3')
+export function searchNickNameSelectorOnMobile() {
+    return querySelector<E>('#cover-name-root h3')
+}
 
-export const bioDescriptionSelectorOnMobile: () => LiveSelector<HTMLDivElement, true> = () => querySelector('#bio div')
+export function bioDescriptionSelectorOnMobile() {
+    return querySelector('#bio div')
+}
 
-export const searchUserIdSelector: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
+export function searchUserIdSelector() {
+    return querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
+}
 
-export const searchUserIdSelectorOnMobile: () => LiveSelector<HTMLAnchorElement, true> = () =>
-    querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
+export function searchUserIdSelectorOnMobile() {
+    return querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
+}
 // #endregion facebook nft avatar
 
-export const searchFacebookAvatarListSelector = () =>
-    querySelector('[role="dialog"] > div:nth-child(3)  input[type=file] + [role="button"]')
+export function searchFacebookAvatarListSelector() {
+    return querySelector('[role="dialog"] > div:nth-child(3)  input[type=file] + [role="button"]')
         .closest(3)
         .querySelector('div')
+}
 
-export const searchFacebookAvatarMobileListSelector = () => querySelector('#nuxChoosePhotoButton').closest<E>(6)
+export function searchFacebookAvatarMobileListSelector() {
+    return querySelector('#nuxChoosePhotoButton').closest<E>(6)
+}
 
-export const searchFacebookAvatarSelector = () =>
-    querySelector('[role="main"] [role="button"] svg[role="img"],[role="main"] [role="link"] svg[role="img"]')
+export function searchFacebookAvatarSelector() {
+    return querySelector('[role="main"] [role="button"] svg[role="img"],[role="main"] [role="link"] svg[role="img"]')
+}
 
-export const searchFacebookAvatarOnMobileSelector = () =>
-    querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
+export function searchFacebookAvatarOnMobileSelector() {
+    return querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
+}
 
-export const searchFaceBookPostAvatarSelector = () =>
-    new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>(
+export function searchFaceBookPostAvatarSelector() {
+    return new LiveSelector<SVGElement, false>().querySelectorAll<SVGElement>(
         '[type="nested/pressable"] > a > div > svg, ul div[role="article"] a > div > svg[role="none"]',
     )
+}
 
-export const searchFaceBookPostAvatarOnMobileSelector = () => querySelectorAll('[data-gt=\'{"tn":"~"}\']')
+export function searchFaceBookPostAvatarOnMobileSelector() {
+    return querySelectorAll('[data-gt=\'{"tn":"~"}\']')
+}
 
-export const searchFacebookAvatarOpenFilesSelector = () => querySelector('[role="dialog"] input[type=file] ~ div')
+export function searchFacebookAvatarOpenFilesSelector() {
+    return querySelector('[role="dialog"] input[type=file] ~ div')
+}
 
-export const searchFacebookAvatarOpenFilesOnMobileSelector = () =>
-    querySelector<HTMLInputElement>('#nuxChoosePhotoButton ~ input')
+export function searchFacebookAvatarOpenFilesOnMobileSelector() {
+    return querySelector<HTMLInputElement>('#nuxChoosePhotoButton ~ input')
+}
 
-export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="main"] > div > div > div > div > div input[accept*="image"] + div[role="button"]').closest<E>(
-        2,
-    )
+export function searchFacebookProfileSettingButtonSelector() {
+    return querySelector(
+        '[role="main"] > div > div > div > div > div input[accept*="image"] + div[role="button"]',
+    ).closest<E>(2)
+}
 
-export const searchFacebookProfileCoverSelector = () =>
-    querySelector('[role="button"] [role="img"]')
+export function searchFacebookProfileCoverSelector() {
+    return querySelector('[role="button"] [role="img"]')
         .closest(10)
         .querySelector('input[type="file"] ~ div')
         .closest<E>(6)
         .querySelector('div')
+}
 
-export const searchFacebookEditProfileSelector = () =>
-    querySelector('[role="main"] [role="button"] [role="img"]')
+export function searchFacebookEditProfileSelector() {
+    return querySelector('[role="main"] [role="button"] [role="img"]')
         .closest(1)
         .querySelector<E>('i[data-visualcompletion="css-img"]')
+}
 
-export const searchFacebookSaveAvatarButtonSelector = () =>
-    new LiveSelector()
+export function searchFacebookSaveAvatarButtonSelector() {
+    return new LiveSelector()
         .querySelector('[role="dialog"] [role="slider"]')
         .closest(7)
         .querySelectorAll('div')
         .map((x) => x.parentElement?.parentElement)
         .at(-1)
+}
 
-export const searchFacebookConfirmAvatarImageSelector = () =>
-    querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
+export function searchFacebookConfirmAvatarImageSelector() {
+    return querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
+}
 
-export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
+export function inpageAvatarSelector() {
+    return querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
+}
 // #region
 
-export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
-    /* cspell:disable-next-line */
-    querySelector<E>('[data-pagelet="LeftRail"] > div > div > :nth-child(2) > ul > li:nth-child(2)')
+export function toolboxInSidebarSelector() {
+    return querySelector<E>('[data-pagelet="LeftRail"] > div > div > :nth-child(2) > ul > li:nth-child(2)')
+}
 
-export const toolboxInSpecialSidebarSelector: () => LiveSelector<E> = () =>
-    querySelector(
+export function toolboxInSpecialSidebarSelector() {
+    return querySelector(
         '[role="navigation"] > div > div > div > :nth-child(2) > div > div > :nth-child(2) ul > li:nth-child(2)',
     )
-export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E> = () =>
-    /* cspell:disable-next-line */
-    querySelector<E, false>('[role="banner"]')
+}
+export function toolboxInSidebarSelectorWithNoLeftRailStart() {
+    return querySelector<E, false>('[role="banner"]')
         .closest(1)
         .querySelector('div + div > div > div > div > div > div > div > div > ul')
         .closest(1)
         .querySelector('div:nth-child(2) > ul > li:nth-child(2)')
+}
 
 // for getting normal tab style
-export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] a[aria-selected="false"]')
+export function profileTabUnselectedSelector() {
+    return querySelector<E>('[role="tablist"] a[aria-selected="false"]')
+}
 
 // for getting activated tab style
-export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] a[aria-selected="true"]')
+export function profileTabSelectedSelector() {
+    return querySelector<E>('[role="tablist"] a[aria-selected="true"]')
+}
 
 // for inserting web3 tab
-export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="tablist"] > div > div > :last-child')
+export function searchProfileTabSelector() {
+    return querySelector<E>('[role="tablist"] > div > div > :last-child')
+}
 
 // for getting the inserted web3 tab
-export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[role="tablist"] a:nth-child(7)+span')
+export function web3TabSelector() {
+    return querySelector<HTMLSpanElement>('[role="tablist"] a:nth-child(7)+span')
+}
 
 // for inserting web3 tab content
-export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] > div:last-child > div')
+export function searchProfileTabPageSelector() {
+    return querySelector<E>('[role="main"] > div:last-child > div')
+}
 
 // for getting profile section style
-export const profileSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"]').querySelector('[style]')
+export function profileSectionSelector() {
+    return querySelector<E>('[role="main"]').querySelector('[style]')
+}
 
-export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] > div:last-child > div:last-child')
+export function searchIntroSectionSelector() {
+    return querySelector<E>('[role="main"] > div:last-child > div:last-child')
+}
 
-export const searchBioSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
+export function searchBioSelector() {
+    return querySelector<E>(
         '[role="main"] > div:last-child > div:last-child > div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
     )
+}
 
-export const searchResultHeadingSelector = () => querySelector('[role="article"]')
+export function searchResultHeadingSelector() {
+    return querySelector('[role="article"]')
+}
 
-export const searchHomepageSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTilesFeed_0"] ul a span[dir="auto"]')
+export function searchHomepageSelector() {
+    return querySelector<HTMLSpanElement>('[data-pagelet="ProfileTilesFeed_0"] ul a span[dir="auto"]')
+}

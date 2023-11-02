@@ -54,7 +54,7 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
     )
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     disabled: {
         display: 'none',
     },

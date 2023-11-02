@@ -4,19 +4,19 @@ import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { CalendarContent } from '@masknet/plugin-calendar'
 
-const sidebarSearchSelector: () => LiveSelector<HTMLElement, true> = () => {
+function sidebarSearchSelector() {
     return querySelector<HTMLElement>(
         '[data-testid="sidebarColumn"] > div > div > div > div[tabindex="0"] > div > div:not(div[tabindex="0"]):empty',
     )
 }
 
-const sidebarExplorePageSelector: () => LiveSelector<HTMLElement, true> = () => {
+function sidebarExplorePageSelector() {
     return querySelector<HTMLElement>('[data-testid="settingsAppBar"]')
         .closest(12)
         .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div')
 }
 
-const sidebarSearchPageSelector: () => LiveSelector<HTMLElement, true> = () => {
+function sidebarSearchPageSelector() {
     return querySelector<HTMLElement>('[data-testid="searchBoxOverflowButton"]')
         .closest(11)
         .querySelector('[data-testid="sidebarColumn"] [tabindex="0"] > div > div')

@@ -7,7 +7,7 @@ import { twitterBase } from '../base.js'
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
  */
-export const usernameValidator: NonNullable<SiteAdaptor.Utils['isValidUsername']> = (name: string) => {
+export function usernameValidator(name: string) {
     for (const v of [/(twitter|admin)/i, /.{16,}/, /\W/]) {
         if (!isNull(v.exec(name))) {
             return false

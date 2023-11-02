@@ -12,25 +12,25 @@ export function getBioDescription() {
     return bio ? collectNodeText(bio) : ''
 }
 
-export const getPersonalHomepage = () => {
+export function getPersonalHomepage() {
     const node = searchInstagramHandleSelector().evaluate()
 
     if (!node) return
     return node.href
 }
 
-export const getNickname = () => {
+export function getNickname() {
     const node = searchNickNameSelector().evaluate()
     return node ? collectNodeText(node) : ''
 }
 
-export const getUserId = () => {
+export function getUserId() {
     const node = searchInstagramHandleSelector().evaluate()
     if (!node) return
     return compact(node.getAttribute('href')?.split('/')).pop()
 }
 
-export const getAvatar = () => {
+export function getAvatar() {
     const node = searchInstagramSelfAvatarSelector().evaluate()
 
     if (!node) return ''
@@ -40,7 +40,7 @@ export const getAvatar = () => {
 
 const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/
 
-export const getAvatarId = (avatarURL: string) => {
+export function getAvatarId(avatarURL: string) {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
     const match = _url.pathname.match(INSTAGRAM_AVATAR_ID_MATCH)

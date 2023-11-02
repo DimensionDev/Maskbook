@@ -10,7 +10,7 @@ async function resolveLastRecognizedIdentityInner(
     ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const assign = async () => {
+    async function assign() {
         const { handle, avatar } = selfInfoSelectors()
 
         ref.value = {
@@ -28,7 +28,7 @@ async function resolveLastRecognizedIdentityInner(
             }
         }
     }
-    const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
+    function createWatcher(selector: LiveSelector<HTMLElement, boolean>) {
         new MutationObserverWatcher(selector)
             .addListener('onAdd', () => assign())
             .addListener('onChange', () => assign())

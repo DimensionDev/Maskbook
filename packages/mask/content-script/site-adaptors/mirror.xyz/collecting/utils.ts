@@ -5,7 +5,9 @@ import type { Writer } from '@masknet/web3-providers/types'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { mirrorBase } from '../base.js'
 
-export const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
+export function getMirrorProfileUrl(id: string) {
+    return urlcat('https://mirror.xyz/:id', { id })
+}
 
 export function formatWriter(writer: Writer, isOwner: boolean) {
     return {

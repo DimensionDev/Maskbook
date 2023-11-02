@@ -13,8 +13,8 @@ function getTwitterId(ele: HTMLElement) {
     return profileLink.getAttribute('href')?.slice(1)
 }
 
-const inpageAvatarSelector = () =>
-    querySelectorAll<HTMLDivElement>(
+function inpageAvatarSelector() {
+    return querySelectorAll<HTMLDivElement>(
         [
             // Avatars in post
             'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
@@ -26,6 +26,7 @@ const inpageAvatarSelector = () =>
             '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-]',
         ].join(','),
     )
+}
 
 export async function injectAvatar(signal: AbortSignal) {
     startWatch(
