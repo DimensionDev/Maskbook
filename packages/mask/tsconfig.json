@@ -3,6 +3,7 @@
   "files": [],
   "references": [
     // entries of Mask extension
+    { "path": "./content-script/tsconfig.json" },
     { "path": "./dashboard/tsconfig.json" },
     { "path": "./devtools/tsconfig.json" },
     { "path": "./entry-sdk/tsconfig.json" },
