@@ -9,7 +9,7 @@
     // but we cannot build the same code in two env
     "lib": ["ES2022", "WebWorker", "DOM.Iterable"]
   },
-  "include": ["./"],
+  "include": ["./", "./env.d.ts"],
   "references": [
     { "path": "../shared/tsconfig.json" },
     { "path": "../utils-pure/tsconfig.json" },
