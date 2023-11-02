@@ -7,6 +7,7 @@ import {
     getDefaultWalletPassword,
     type Wallet,
 } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { ExplorerResolver } from '@masknet/web3-providers'
@@ -16,29 +17,29 @@ import { Box, Link, Typography, useTheme } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { Trans } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
-import { queryClient } from '@masknet/shared-base-ui'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
         display: 'flex',
         flexGrow: 1,
         flexDirection: 'column',
         background: theme.palette.maskColor.secondaryBottom,
+        paddingBottom: hasNav ? 72 : undefined,
     },
     content: {
         position: 'relative',
         padding: 16,
         display: 'flex',
-        height: 386,
         justifyContent: 'flex-start',
         flexDirection: 'column',
+        flexGrow: 1,
     },
     titleWrapper: {
         paddingTop: 8,
@@ -93,12 +94,8 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
-        position: 'absolute',
+        marginTop: 'auto',
         backdropFilter: 'blur(8px)',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 100,
     },
     confirmButton: {
         margin: '16px 0',
@@ -132,7 +129,7 @@ interface WalletItemProps {
 }
 
 const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const { address, owner } = wallet
     const chainId = owner ? ChainId.Matic : ChainId.Mainnet
     const { data: balance = '0', isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
@@ -175,7 +172,8 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 
 const SetPaymentPassword = memo(function SetPaymentPassword() {
     const t = useMaskSharedTrans()
-    const { classes } = useStyles()
+    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const wallets = useWallets()
     const [params] = useSearchParams()

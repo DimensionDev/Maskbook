@@ -1,6 +1,4 @@
-import { createPromise, sendEvent } from './utils.js'
-
-export class InjectedProvider {
+export abstract class BaseProvider {
     protected events = new Map<string, Set<(data: unknown) => void>>()
     protected isReadyInternal = false
     protected isConnectedInternal = false
@@ -36,76 +34,40 @@ export class InjectedProvider {
     /**
      * Build the connection.
      */
-    connect(options: unknown): Promise<unknown> {
-        return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'connect'].join('.'), id, options))
-    }
+    abstract connect(options: unknown): Promise<unknown>
 
     /**
      * Break the connections.
      */
-    async disconnect(): Promise<void> {
-        try {
-            // some providers do not support disconnect
-            return await createPromise((id) =>
-                sendEvent('web3BridgeExecute', [this.pathname, 'disconnect'].join('.'), id),
-            )
-        } catch {
-            return
-        }
-    }
+    abstract disconnect(): Promise<void>
 
     /**
      * Wait until the sdk object injected into the page.
      */
-    async untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
-        await createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname.split('.')[0], id))
-        if (await validator()) {
-            this.isReadyInternal = true
-        }
-    }
+    abstract untilAvailable(validator?: () => Promise<boolean>): Promise<void>
 
     /**
      * Send RPC request to the sdk object.
      */
-    request<T>(data: unknown): Promise<T> {
-        return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'request'].join('.'), id, data))
-    }
+    abstract request<T>(data: unknown): Promise<T>
 
     /**
      * Add event listener on the sdk object.
      */
-    on(event: string, callback: (...args: any) => void): () => void {
-        if (!this.events.has(event)) {
-            this.events.set(event, new Set())
-            sendEvent('web3BridgeBindEvent', this.pathname, 'web3BridgeEmitEvent', event)
-        }
-        const set = this.events.get(event)!
-        set.add(callback)
-        return () => void set.delete(callback)
-    }
+    abstract on(event: string, callback: (...args: any) => void): () => void
 
     /**
      * Remove event listener from the sdk object.
      */
-    off(event: string, callback: (...args: any) => void): void {
-        this.events.get(event)?.delete(callback)
-    }
+    abstract off(event: string, callback: (...args: any) => void): void
 
     /**
      * Emit event and invoke registered listeners
      */
-    emit(event: string, data: unknown[]) {
-        for (const f of this.events.get(event) || []) {
-            try {
-                Reflect.apply(f, null, data)
-            } catch {}
-        }
-    }
+    abstract emit(event: string, data: unknown[]): void
 
     /**
      * Access primitive property on the sdk object.
      */
-    getProperty<T = unknown>(key: string): Promise<T | null> {
-        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
-    }
+    abstract getProperty<T = unknown>(key: string): Promise<T | null>
 }

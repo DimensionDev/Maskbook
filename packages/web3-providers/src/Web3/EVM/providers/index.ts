@@ -4,7 +4,6 @@ import { NoneProvider } from './None.js'
 import { BrowserProvider } from './Browser.js'
 import { MetaMaskProvider } from './MetaMask.js'
 import { WalletConnectProvider } from './WalletConnect.js'
-import { WalletConnectV2Provider } from './WalletConnectV2.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
@@ -22,8 +21,7 @@ export const Providers = {
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.Browser]: new BrowserProvider(),
     [ProviderType.MetaMask]: new MetaMaskProvider(),
-    [ProviderType.WalletConnect]: Flags.wc_v1_enabled ? new WalletConnectProvider() : new NoneProvider(),
-    [ProviderType.WalletConnectV2]: Flags.wc_v2_enabled ? new WalletConnectV2Provider() : new NoneProvider(),
+    [ProviderType.WalletConnect]: Flags.wc_enabled ? new WalletConnectProvider() : new NoneProvider(),
     [ProviderType.Coin98]: new EVM_Coin98Provider(),
     [ProviderType.Coinbase]: new CoinbaseProvider(),
     [ProviderType.OKX]: new OKXProvider(),

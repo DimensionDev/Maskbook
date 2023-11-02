@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import { isInPageEthereumInjected } from '@masknet/shared-base'
-import type { InjectedProvider } from '@masknet/injected-script'
+import { type BaseProvider as BaseBridge } from '@masknet/injected-script'
 import {
     type ChainId,
     EthereumMethodType,
@@ -18,7 +18,7 @@ export class BaseInjectedProvider
 {
     constructor(
         protected override providerType: ProviderType,
-        protected bridge: InjectedProvider,
+        protected bridge: BaseBridge,
     ) {
         super(providerType)
     }

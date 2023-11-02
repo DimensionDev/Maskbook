@@ -1,5 +1,7 @@
 import { CustomEventId, encodeEvent, type InternalEvents } from '../shared/index.js'
-import { $unsafe, $, $safe } from './intrinsic.js'
+import * as $ from './intrinsic_content.js'
+import * as $unsafe from './intrinsic_unsafe.js'
+import * as $safe from './intrinsic_blessed.js'
 
 export function PatchDescriptor(patchedProps: PropertyDescriptorMap & NullPrototype, targetPrototype: object) {
     const __unsafe__targetPrototype = $unsafe.unwrapXRayVision(targetPrototype)

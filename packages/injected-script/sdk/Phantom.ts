@@ -1,6 +1,6 @@
-import { InjectedProvider } from './Base.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
-export class PhantomProvider extends InjectedProvider {
+export class PhantomProvider extends BaseInjectedProvider {
     constructor() {
         super('phantom.solana')
     }

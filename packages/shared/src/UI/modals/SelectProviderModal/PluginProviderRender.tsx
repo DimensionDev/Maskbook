@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { Web3All, OthersAll, getAllPluginsWeb3State } from '@masknet/web3-providers'
+import { OthersAll, getAllPluginsWeb3State } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -163,8 +163,8 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
 
     const [, handleClick] = useAsyncFn(
-        async (provider: Web3Helper.ProviderDescriptorAll, fortmaticChainId?: Web3Helper.ChainIdAll) => {
-            if (provider.type === ProviderType.Fortmatic && !fortmaticChainId) {
+        async (provider: Web3Helper.ProviderDescriptorAll, expectedChainId?: Web3Helper.ChainIdAll) => {
+            if (provider.type === ProviderType.Fortmatic && !expectedChainId) {
                 setSelectChainDialogOpen(true)
                 return
             }
@@ -180,22 +180,11 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 return
             }
 
-            const Web3 = Web3All.use(provider.providerAdaptorPluginID, {
-                providerType: provider.type,
-            })
-
-            const chainId =
-                fortmaticChainId ??
-                (provider.type === ProviderType.WalletConnect || provider.type === ProviderType.WalletConnectV2
-                    ? ChainId.Mainnet
-                    : await Web3?.getChainId({ providerType: provider.type }))
+            const chainId = expectedChainId ?? ChainId.Mainnet
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
-            const networkDescriptor =
-                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId) ??
-                descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === ChainId.Mainnet)
-
-            if (!chainId || !networkDescriptor) return
+            const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
+            if (!networkDescriptor) return
 
             onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
         },
@@ -216,14 +205,10 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
     const getDisabled = useCallback(
         (provider: Web3Helper.ProviderDescriptorAll) => {
-            if (requiredSupportPluginID) {
-                if (provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
-            }
+            if (requiredSupportPluginID && provider.providerAdaptorPluginID !== requiredSupportPluginID) return true
 
-            if (requiredSupportChainIds) {
-                if (requiredSupportChainIds.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
-                    return true
-            }
+            if (requiredSupportChainIds?.some((x) => !provider.enableRequirements?.supportedChainIds?.includes(x)))
+                return true
 
             return false
         },
@@ -256,7 +241,11 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                         )}
                                         disabled={getDisabled(provider)}
                                         onClick={() => {
-                                            handleClick(provider)
+                                            if (provider.type === ProviderType.WalletConnect) {
+                                                handleClick(provider, ChainId.Mainnet)
+                                            } else {
+                                                handleClick(provider)
+                                            }
                                         }}>
                                         <ProviderIcon
                                             className={classes.providerIcon}

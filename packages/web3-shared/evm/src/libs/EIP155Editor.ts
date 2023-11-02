@@ -14,18 +14,16 @@ export class EIP155Editor {
         }
     }
 
-    get eip155Namespace() {
+    get proposalNamespace() {
         return {
-            accounts: isValidAddress(this.account.account) ? [this.eip155Address] : [],
+            accounts: [],
             methods: [
                 EthereumMethodType.ETH_SIGN,
-                EthereumMethodType.ETH_SIGN_TYPED_DATA,
                 EthereumMethodType.ETH_SEND_TRANSACTION,
-                EthereumMethodType.ETH_SIGN_TRANSACTION,
                 EthereumMethodType.PERSONAL_SIGN,
             ],
             chains: [this.eip155ChainId],
-            events: ['chainChanged', 'accountsChanged', 'message', 'disconnect', 'connect'],
+            events: ['chainChanged', 'accountsChanged', 'disconnect', 'connect'],
         }
     }
 

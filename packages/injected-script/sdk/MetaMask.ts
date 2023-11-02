@@ -1,6 +1,6 @@
-import { InjectedProvider } from './Base.js'
+import { BaseInjectedProvider } from './BaseInjected.js'
 
-export class MetaMaskProvider extends InjectedProvider {
+export class MetaMaskProvider extends BaseInjectedProvider {
     constructor() {
         super('ethereum.__metamask__')
     }
