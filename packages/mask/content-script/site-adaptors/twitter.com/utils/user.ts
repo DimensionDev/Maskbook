@@ -1,7 +1,6 @@
 import { isNull } from 'lodash-es'
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import type { SiteAdaptor } from '@masknet/types'
 import { twitterBase } from '../base.js'
 
 /**

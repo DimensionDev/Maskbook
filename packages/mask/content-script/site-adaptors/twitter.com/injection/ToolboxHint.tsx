@@ -1,7 +1,7 @@
 import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelector, sideBarProfileSelector } from '../utils/selector.js'

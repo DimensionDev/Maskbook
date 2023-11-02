@@ -1,4 +1,4 @@
-import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { querySelector } from '../utils/selector.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'

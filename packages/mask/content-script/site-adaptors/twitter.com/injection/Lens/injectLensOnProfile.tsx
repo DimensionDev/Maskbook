@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { startWatch } from '../../../../utils/startWatch.js'
