@@ -329,7 +329,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     }
 }
 
-
 async function addHTMLEntry(
     options: HTMLPlugin.Options & {
         gun?: boolean
