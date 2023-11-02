@@ -1,5 +1,5 @@
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, hidingScamSettings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { RecentTransaction, Transaction } from '@masknet/web3-shared-base'
 import { type ChainId, type Transaction as EvmTransaction, type SchemaType } from '@masknet/web3-shared-evm'
@@ -76,14 +76,16 @@ export const ActivityList = memo(function ActivityList() {
                         onView={handleView}
                     />
                 ))}
-                {transactions.map((transaction) => (
-                    <ActivityItem
-                        key={transaction.id}
-                        className={classes.item}
-                        transaction={transaction}
-                        onView={handleView}
-                    />
-                ))}
+                {transactions.map((transaction) =>
+                    !transaction.isScam || !hidingScamSettings.value ? (
+                        <ActivityItem
+                            key={transaction.id}
+                            className={classes.item}
+                            transaction={transaction}
+                            onView={handleView}
+                        />
+                    ) : null,
+                )}
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} className={classes.item} />) : null}
             </List>
             <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />

@@ -83,6 +83,11 @@ export const Danger = /*#__PURE__*/ __createIcon('Danger', [
         u: () => new URL('./brands/Danger.svg', import.meta.url).href,
     },
 ])
+export const DangerOutline = /*#__PURE__*/ __createIcon('DangerOutline', [
+    {
+        u: () => new URL('./brands/DangerOutline.svg', import.meta.url),
+    },
+])
 export const Debank = /*#__PURE__*/ __createIcon('Debank', [
     {
         u: () => new URL('./brands/Debank.svg', import.meta.url).href,

@@ -10,12 +10,12 @@ export const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     list: {
-        padding: '12px 16px 0px 16px',
+        padding: '0px 16px 0px 16px',
         overflow: 'auto',
         flexGrow: 1,
     },
     primaryItem: {
-        margin: '16px 16px 0 16px',
+        margin: '16px 16px 12px 16px',
         background: theme.palette.maskColor.primary,
     },
     primaryItemText: {
@@ -36,7 +36,7 @@ export const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         justifyContent: 'space-between',
         background: theme.palette.maskColor.bottom,
-        borderRadius: 8,
+        borderRadius: '8px',
         boxShadow: `0px 0px 20px 0px ${alpha(theme.palette.maskColor.main, 0.05)}`,
     },
     itemText: {
