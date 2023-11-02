@@ -431,7 +431,7 @@ const moduleSystemRules = {
                 {
                     target: './packages/mask/background/**',
                     from: './packages/mask/shared-ui/',
-                    message: 'Use background cannot import Ui specific code.',
+                    message: 'Background cannot import Ui specific code.',
                 },
                 {
                     target: './packages/mask/!(background)/**',
