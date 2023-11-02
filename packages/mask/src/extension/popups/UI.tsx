@@ -69,6 +69,12 @@ const personaInitialState = {
 const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()
     const mainLocation = location.state?.mainLocation as Location | undefined
+
+    useEffect(() => {
+        const spinner = document.getElementById('app-spinner')
+        if (spinner) spinner.remove()
+    }, [])
+
     return (
         <Suspense
             fallback={
