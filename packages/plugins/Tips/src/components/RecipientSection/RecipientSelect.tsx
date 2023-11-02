@@ -28,6 +28,7 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
         text: {
             fontWeight: 700,
             marginLeft: theme.spacing(0.5),
+            fontSize: '0.825rem',
         },
         select: {
             display: 'flex',
