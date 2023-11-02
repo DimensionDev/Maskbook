@@ -27,12 +27,12 @@ interface CreatePersonaActionProps {
 
 export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, onCreate }) => {
     const t = useNextID_Trans()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     return (
         <>
             <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
-                <Typography fontWeight={400} fontSize={14}>
+                <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
                     {t.create_persona_intro()}
                 </Typography>
             </Stack>

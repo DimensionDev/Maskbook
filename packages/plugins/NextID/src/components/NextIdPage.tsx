@@ -76,7 +76,11 @@ export const NextIdPage = memo(function NextIdPage() {
     }, [isOwn, statusLoading, handleAddWallets, personaConnectStatus])
 
     if ((!proofs.data && proofs.isFetching) || loadingPersona) {
-        return <PluginCardFrameMini />
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <PluginCardFrameMini />
+            </ThemeProvider>
+        )
     }
 
     return (
