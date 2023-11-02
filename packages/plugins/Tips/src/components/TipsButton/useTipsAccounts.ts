@@ -1,26 +1,16 @@
 import { useMemo } from 'react'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { EMPTY_LIST, PluginID, SocialAddressType } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { signWithPersona } from '@masknet/plugin-infra/dom/context'
-
-// In Tips, we don't list address from MaskX.
-const supportSources: SocialAddressType[] = [
-    SocialAddressType.Address,
-    SocialAddressType.ENS,
-    SocialAddressType.SPACE_ID,
-    SocialAddressType.NEXT_ID,
-    SocialAddressType.TwitterBlue,
-    SocialAddressType.SOL,
-]
 
 /**
  * Get Tips accounts, removing the hidden ones,
  * and put the default one at the front.
  */
 export function useTipsAccounts(identity: IdentityResolved | null | undefined, personaPubkey: string | undefined) {
-    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity, supportSources)
+    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity)
     const userId = identity?.identifier?.userId
     const { data: hiddenAddresses } = useHiddenAddressConfigOf(
         personaPubkey,
