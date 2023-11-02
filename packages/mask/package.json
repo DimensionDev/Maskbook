@@ -4,7 +4,6 @@
   "sideEffects": [
     "./background/initialization/",
     "./background/tasks/",
-    "./content-script",
     "./content-script/site-adaptor-infra/sandboxed-plugin.ts",
     "./content-script/site-adaptors/",
     "./content-script/index.ts",
