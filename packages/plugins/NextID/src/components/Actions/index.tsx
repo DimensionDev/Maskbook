@@ -49,11 +49,9 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
 export const SelectConnectPersonaAction = memo(() => {
     const { classes } = useStyles()
     return (
-        <>
-            <Stack p={1.25} pb={0} width="100%" boxSizing="border-box">
-                <PersonaSelectPanel classes={{ unchecked: classes.unchecked, button: classes.button }} />
-            </Stack>
-        </>
+        <Stack p={1.25} pb={0} width="100%" boxSizing="border-box">
+            <PersonaSelectPanel classes={{ unchecked: classes.unchecked, button: classes.button }} />
+        </Stack>
     )
 })
 
