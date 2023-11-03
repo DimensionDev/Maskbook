@@ -1,25 +1,30 @@
-import { memo, useMemo, useState } from 'react'
-import { noop } from 'lodash-es'
-import { Flags } from '@masknet/flags'
-import { makeStyles } from '@masknet/theme'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { Flags } from '@masknet/flags'
+import { Plugin, createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { makeStyles } from '@masknet/theme'
+import { noop } from 'lodash-es'
+import { memo, useMemo, useState } from 'react'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { TipButtonStyle } from '../../constant.js'
-import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
-import { isVerifiedUser } from '../../utils/AvatarType.js'
+import { querySelectorAll } from '../../utils/selector.js'
 import { useUserIdentity } from './hooks.js'
 
-function getUserId(ele: HTMLElement) {
-    const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
-    if (!profileLink) return
-    return profileLink.getAttribute('href')?.slice(1)
+function postShareButtonSelector() {
+    return querySelectorAll('article[data-testid="tweet"] [role="group"] > div:has([aria-haspopup="menu"]):last-child')
 }
 
-export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(selector())
+function getUserId(ele: HTMLElement) {
+    const avatar = ele
+        .closest('[data-testid="tweet"]')
+        ?.querySelector<HTMLElement>('[data-testid^="UserAvatar-Container-"]')
+    if (!avatar) return
+    return avatar.dataset.testid?.slice(21) // "UserAvatar-Container-".length === 21
+}
+
+export function injectTipsButtonOnPost(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(postShareButtonSelector())
     startWatch(
         watcher.useForeach((ele) => {
             let remover = noop
@@ -32,11 +37,10 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele
+                ele.style.flex = '1'
 
-                const isVerified = isVerifiedUser(ele)
-
-                const root = attachReactTreeWithContainer(proxy.beforeShadow, { signal })
-                root.render(isVerified ? <FollowButtonTipsSlot userId={userId} /> : <div />)
+                const root = attachReactTreeWithContainer(proxy.afterShadow, { signal })
+                root.render(<PostTipsSlot userId={userId} />)
                 remover = root.destroy
             }
 
@@ -58,10 +62,6 @@ const useStyles = makeStyles()(() => ({
     slot: {
         height: 36,
         width: 36,
-        position: 'absolute',
-        left: -10,
-        top: 1,
-        transform: 'translate(-100%)',
     },
 }))
 
@@ -69,7 +69,7 @@ interface Props {
     userId: string
 }
 
-const FollowButtonTipsSlot = memo(function FollowButtonTipsSlot({ userId }: Props) {
+const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
     const { classes, cx } = useStyles()
@@ -87,7 +87,7 @@ const FollowButtonTipsSlot = memo(function FollowButtonTipsSlot({ userId }: Prop
                 identity={identity?.identifier}
                 buttonSize={tipStyle.buttonSize}
                 iconSize={tipStyle.iconSize}
-                slot={Plugin.SiteAdaptor.TipsSlot.FollowButton}
+                slot={Plugin.SiteAdaptor.TipsSlot.Post}
                 onStatusUpdate={setDisabled}
             />
         )
