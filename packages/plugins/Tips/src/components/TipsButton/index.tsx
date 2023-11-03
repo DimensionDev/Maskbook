@@ -15,7 +15,6 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCallback, useContext, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
-import { useLocation } from 'react-use'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
@@ -121,12 +120,6 @@ export function TipButton(props: Props) {
             accounts,
         })
     }, [recipient, receiverUserId, accounts])
-
-    const location = useLocation()
-    useEffect(() => {
-        if (disabled || !info?.actionsElement?.realCurrent) return
-        info.actionsElement.realCurrent.style.flex = '1'
-    }, [disabled, info?.actionsElement?.realCurrent, location.pathname])
 
     if (disabled) return null
 
