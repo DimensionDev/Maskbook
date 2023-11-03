@@ -5,10 +5,10 @@ import { makeStyles } from '@masknet/theme'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
-import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
-import { startWatch } from '../../../../utils/startWatch.js'
 import { TipButtonStyle } from '../../constant.js'
 import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
+import { startWatch } from '../../../../utils/startWatch.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { isVerifiedUser } from '../../utils/AvatarType.js'
 import { useUserIdentity } from './hooks.js'
 
@@ -28,14 +28,15 @@ export function injectTipsButtonOnFollowButton(signal: AbortSignal) {
             const run = async () => {
                 const userId = getUserId(ele)
                 if (!userId) return
+
                 const proxy = DOMProxy({
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = ele
 
                 const isVerified = isVerifiedUser(ele)
-
                 const root = attachReactTreeWithContainer(proxy.beforeShadow, { signal })
+
                 root.render(isVerified ? <FollowButtonTipsSlot userId={userId} /> : <div />)
                 remover = root.destroy
             }
