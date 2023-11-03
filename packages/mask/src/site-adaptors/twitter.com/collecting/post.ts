@@ -1,7 +1,7 @@
-import { DOMProxy, IntervalWatcher, type DOMProxyEvents } from '@dimensiondev/holoflows-kit'
+import Services from '#services'
+import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { parseId } from '../utils/url.js'
 import {
     FlattenTypedMessage,
     extractTextFromTypedMessage,
@@ -12,11 +12,9 @@ import {
     makeTypedMessageTupleFromList,
 } from '@masknet/typed-message'
 import type { SiteAdaptorUI } from '@masknet/types'
-import type { EventListener } from '@servie/events'
-import { memoize, noop } from 'lodash-es'
+import { memoize } from 'lodash-es'
 import utils from 'web3-utils'
-import Services from '#services'
-import { creator, activatedSiteAdaptor_state } from '../../../site-adaptor-infra/index.js'
+import { activatedSiteAdaptor_state, creator } from '../../../site-adaptor-infra/index.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/dom.js'
 import { getCurrentIdentifier } from '../../utils.js'
@@ -30,6 +28,7 @@ import {
     timelinePostContentSelector,
     toastLinkSelector,
 } from '../utils/selector.js'
+import { parseId } from '../utils/url.js'
 import { IdentityProviderTwitter } from './identity.js'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
@@ -95,21 +94,9 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) return
             const refs = createRefsForCreatePostContext()
-            let actionsElementProxy: DOMProxy | undefined = undefined
-            const actionsInjectPoint = getPostActionsNode(proxy.current)
-            let unwatchPostNodeChange = noop
-            if (actionsInjectPoint && !isQuotedTweet(tweetNode)) {
-                actionsElementProxy = DOMProxy({})
-                actionsElementProxy.realCurrent = actionsInjectPoint
-                const handleChanged: EventListener<DOMProxyEvents<HTMLElement>, 'currentChanged'> = (e) => {
-                    actionsElementProxy!.realCurrent = getPostActionsNode(e.new) || null
-                }
-                unwatchPostNodeChange = proxy.on('currentChanged', handleChanged)
-            }
             const info = twitterShared.utils.createPostContext({
                 comments: undefined,
                 rootElement: proxy,
-                actionsElement: actionsElementProxy,
                 isFocusing: isDetailTweet(tweetNode),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
@@ -133,7 +120,6 @@ function registerPostCollectorInner(
                 onTargetChanged: run,
                 onRemove: () => {
                     postStore.delete(proxy)
-                    unwatchPostNodeChange()
                 },
                 onNodeMutation: run,
             }
