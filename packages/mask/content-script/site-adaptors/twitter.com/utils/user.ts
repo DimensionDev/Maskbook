@@ -17,6 +17,8 @@ export function usernameValidator(name: string) {
 }
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
+    console.log('DEBUG: getUserIdentity', twitterId)
+
     const user = await Twitter.getUserByScreenName(twitterId)
     if (!user) return
 

@@ -129,7 +129,10 @@ export const ProfileCard = memo(function ProfileCard({
     const [expanded, setExpanded] = useState(initialExpanded)
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', profile.identity],
-        queryFn: () => Twitter.getUserByScreenName(profile.identity),
+        queryFn: () => {
+            console.log('DEBUG: Profile Card', profile.identity)
+            return Twitter.getUserByScreenName(profile.identity)
+        },
     })
     const nickname = user?.nickname || profile.name || profile.identity
     // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.

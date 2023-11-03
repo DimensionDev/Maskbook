@@ -47,7 +47,10 @@ function ProfileCardHolder() {
 
     const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
-        queryFn: () => Twitter.getUserByScreenName(twitterId),
+        queryFn: () => {
+            console.log('DEBUG: Profile Card Holder', twitterId)
+            return Twitter.getUserByScreenName(twitterId)
+        },
         select: (user) => {
             if (!user) return null
             return {

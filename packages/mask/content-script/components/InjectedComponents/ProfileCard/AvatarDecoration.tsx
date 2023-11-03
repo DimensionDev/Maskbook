@@ -13,6 +13,7 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
         queryKey: ['twitter', 'profile', 'check-nft-avatar', userId],
         queryFn: () => {
             if (!userId) return null
+            console.log('DEBUG: Avatar Decoration', userId)
             return Twitter.getUserByScreenName(userId, true)
         },
     })

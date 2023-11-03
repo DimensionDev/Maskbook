@@ -125,7 +125,10 @@ function resolveCurrentVisitingIdentityInner(
     const update = async (twitterId: string) => {
         const user = await queryClient.fetchQuery({
             queryKey: ['twitter', 'profile', twitterId],
-            queryFn: () => Twitter.getUserByScreenName(twitterId),
+            queryFn: () => {
+                console.log('DEBUG: resolveCurrentVisitingIdentityInner', twitterId)
+                return Twitter.getUserByScreenName(twitterId)
+            },
         })
         if (process.env.NODE_ENV === 'development') {
             console.assert(user, `Can't get get user by screen name ${twitterId}`)
