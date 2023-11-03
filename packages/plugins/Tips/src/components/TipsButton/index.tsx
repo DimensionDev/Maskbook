@@ -1,9 +1,5 @@
 import { Icons } from '@masknet/icons'
-import {
-    PostInfoContext,
-    useCurrentVisitingIdentity,
-    useSocialIdentityByUserId,
-} from '@masknet/plugin-infra/content-script'
+import { useCurrentVisitingIdentity, useSocialIdentityByUserId } from '@masknet/plugin-infra/content-script'
 import {
     EMPTY_LIST,
     NetworkPluginID,
@@ -14,7 +10,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { useCallback, useContext, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
+import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
@@ -56,7 +52,6 @@ export function TipButton(props: Props) {
         ...rest
     } = props
     const { classes, cx } = useStyles({ iconSize })
-    const info = useContext(PostInfoContext)
 
     const { data: personaPubkey, isLoading: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId

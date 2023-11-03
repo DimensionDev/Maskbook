@@ -23,6 +23,16 @@ function getUserId(ele: HTMLElement) {
     return avatar.dataset.testid?.slice(21) // "UserAvatar-Container-".length === 21
 }
 
+function createRootElement() {
+    const root = document.createElement('div')
+    Object.assign(root.style, {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+    })
+    return root
+}
+
 export function injectTipsButtonOnPost(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(postShareButtonSelector())
     startWatch(
@@ -39,7 +49,11 @@ export function injectTipsButtonOnPost(signal: AbortSignal) {
                 proxy.realCurrent = ele
                 ele.style.flex = '1'
 
-                const root = attachReactTreeWithContainer(proxy.afterShadow, { signal })
+                const root = attachReactTreeWithContainer(proxy.afterShadow, {
+                    signal,
+                    tag: createRootElement,
+                    // untilVisible: true,
+                })
                 root.render(<PostTipsSlot userId={userId} />)
                 remover = root.destroy
             }
@@ -59,10 +73,6 @@ const useStyles = makeStyles()(() => ({
     disabled: {
         display: 'none',
     },
-    slot: {
-        height: 36,
-        width: 36,
-    },
 }))
 
 interface Props {
@@ -72,7 +82,7 @@ interface Props {
 const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
     const themeSetting = useThemeSettings()
     const tipStyle = TipButtonStyle[themeSetting.size]
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const identity = useUserIdentity(userId)
 
     const [disabled, setDisabled] = useState(true)
@@ -95,5 +105,5 @@ const PostTipsSlot = memo(function PostTipsSlot({ userId }: Props) {
 
     if (!identity?.identifier) return null
 
-    return <span className={cx(classes.slot, disabled ? classes.disabled : null)}>{component}</span>
+    return <span className={disabled ? classes.disabled : undefined}>{component}</span>
 })
