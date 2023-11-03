@@ -1,4 +1,4 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, hidingScamSettings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
@@ -22,7 +22,13 @@ export function useTransactions() {
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
     })
     const data = result.data
-    const transactions = useMemo(() => data?.pages.flatMap((p) => p.data) || EMPTY_LIST, [data?.pages])
+    const transactions = useMemo(
+        () =>
+            data?.pages
+                .flatMap((p) => p.data)
+                .filter((transaction) => !hidingScamSettings.value || !transaction.isScam) || EMPTY_LIST,
+        [data?.pages],
+    )
 
     const networks = useNetworks()
 
@@ -62,5 +68,9 @@ export function useTransactions() {
         )
     }, [allLocaleTxes, transactions])
 
-    return { ...result, data: transactions, localeTxes }
+    return {
+        ...result,
+        data: transactions,
+        localeTxes,
+    }
 }
