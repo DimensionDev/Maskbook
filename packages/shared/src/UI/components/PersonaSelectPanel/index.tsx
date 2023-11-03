@@ -21,9 +21,12 @@ import { useAsyncFn } from 'react-use'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
-import { ApplicationBoardModal, LeavePageConfirmModal, LoadingStatus, useSharedTrans } from '../../../index.js'
+import { ReloadStatus } from '../ReloadStatus/index.js'
+import { LoadingStatus } from '../LoadingStatus/index.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
+import { useSharedTrans } from '../../../locales/index.js'
+import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
