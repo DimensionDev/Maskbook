@@ -144,7 +144,7 @@ export const ProfileCard = memo(function ProfileCard({
     const listingAddresses = useMemo(() => {
         const addresses = walletProofs.map((x) => x.identity)
         return addresses.filter((x) => !pendingUnlistedAddresses.includes(x))
-    }, [pendingUnlistedAddresses])
+    }, [walletProofs, pendingUnlistedAddresses])
 
     const action = walletProofs.length ? (
         <>
