@@ -1,7 +1,7 @@
-import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { memo } from 'react'
 import { Navigate, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
+import { PopupRoutes } from '@masknet/shared-base'
+import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import Unlock from '../Unlock/index.js'
 import { WalletStartUp } from '../components/StartUp/index.js'
 import { WalletSetupHeaderUI } from '../components/WalletHeader/WalletSetupHeaderUI.js'
@@ -21,7 +21,15 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
 
-    if (hitPaymentPasswordGuard && wallets.length) {
+    if (!wallet || !wallets.length) {
+        return (
+            <>
+                <WalletHeader />
+                <WalletStartUp />
+            </>
+        )
+    }
+    if (hitPaymentPasswordGuard) {
         params.set('from', location.pathname)
         return <Navigate to={{ pathname: PopupRoutes.SetPaymentPassword, search: params.toString() }} />
     }
@@ -38,7 +46,7 @@ export const WalletGuard = memo(function WalletGuard() {
     return (
         <>
             <WalletHeader />
-            {!wallet || !wallets.length ? <WalletStartUp /> : <Outlet context={outletContext} />}
+            <Outlet context={outletContext} />
         </>
     )
 })
