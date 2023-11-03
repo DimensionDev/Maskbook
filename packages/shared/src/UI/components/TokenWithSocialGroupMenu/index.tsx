@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { AccountIcon, AddressItem, TokenMenuList, useTokenMenuCollectionList } from '@masknet/shared'
+import { AccountIcons, AddressItem, TokenMenuList, useTokenMenuCollectionList } from '@masknet/shared'
 import type { SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -161,7 +161,7 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
                             }}>
                             <div className={classes.addressItem}>
                                 <AddressItem socialAccount={x} linkIconClassName={classes.secondLinkIcon} />
-                                <AccountIcon socialAccount={x} />
+                                <AccountIcons socialAccount={x} />
                             </div>
                             {isSameAddress(currentAddress, x.address) && (
                                 <Icons.CheckCircle size={20} className={classes.selectedIcon} />

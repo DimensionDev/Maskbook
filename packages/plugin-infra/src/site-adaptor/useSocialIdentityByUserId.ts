@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { getUserIdentity } from './context.js'
-import { useSocialIdentity } from './index.js'
+import { useSocialIdentity } from './useSocialIdentity.js'
 
 export function useSocialIdentityByUserId(userId?: string) {
     const { value: identity } = useAsync(async () => {
