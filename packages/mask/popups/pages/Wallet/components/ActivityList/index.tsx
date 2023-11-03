@@ -76,16 +76,16 @@ export const ActivityList = memo(function ActivityList() {
                         onView={handleView}
                     />
                 ))}
-                {transactions.map((transaction) =>
-                    !transaction.isScam || !hidingScamSettings.value ? (
+                {transactions
+                    .filter((transaction) => !hidingScamSettings.value || !transaction.isScam)
+                    .map((transaction) => (
                         <ActivityItem
                             key={transaction.id}
                             className={classes.item}
                             transaction={transaction}
                             onView={handleView}
                         />
-                    ) : null,
-                )}
+                    ))}
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} className={classes.item} />) : null}
             </List>
             <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />
