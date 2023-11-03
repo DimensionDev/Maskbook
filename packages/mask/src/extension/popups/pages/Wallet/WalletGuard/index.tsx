@@ -21,6 +21,14 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
 
+    if (!wallet || !wallets.length) {
+        return (
+            <>
+                <WalletHeader />
+                <WalletStartUp />
+            </>
+        )
+    }
     if (hitPaymentPasswordGuard) {
         params.set('from', location.pathname)
         return <Navigate to={{ pathname: PopupRoutes.SetPaymentPassword, search: params.toString() }} />
@@ -38,7 +46,7 @@ export const WalletGuard = memo(function WalletGuard() {
     return (
         <>
             <WalletHeader />
-            {!wallet || !wallets.length ? <WalletStartUp /> : <Outlet context={outletContext} />}
+            <Outlet context={outletContext} />
         </>
     )
 })
