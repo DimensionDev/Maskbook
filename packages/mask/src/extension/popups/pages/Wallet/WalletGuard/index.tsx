@@ -1,5 +1,5 @@
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet, useWallets } from '@masknet/web3-hooks-base'
+import { useWallets } from '@masknet/web3-hooks-base'
 import { memo } from 'react'
 import { Navigate, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
 import Unlock from '../Unlock/index.js'
@@ -11,7 +11,6 @@ import { useMessageGuard } from './useMessageGuard.js'
 import { usePaymentPasswordGuard } from './usePaymentPasswordGuard.js'
 
 export const WalletGuard = memo(function WalletGuard() {
-    const wallet = useWallet()
     const wallets = useWallets()
     const outletContext = useOutletContext()
     const location = useLocation()
@@ -21,7 +20,7 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
 
-    if (!wallet || !wallets.length) {
+    if (!wallets.length) {
         return (
             <>
                 <WalletHeader />
