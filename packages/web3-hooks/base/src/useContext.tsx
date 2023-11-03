@@ -8,6 +8,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
+import { useLocation } from 'react-use'
 
 interface ReadonlyNetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -95,17 +96,17 @@ export const ChainContextProvider = memo(function ChainContextProvider({
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
+    const location = useLocation()
+    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes('/wallet')
     const account = controlled
         ? value.account
-        : _account ?? value.account ?? (Sniffings.is_popup_wallet_page ? maskAccount : globalAccount)
+        : _account ?? value.account ?? (is_popup_wallet_page ? maskAccount : globalAccount)
     const chainId = controlled
         ? value.chainId
-        : _chainId ?? value.chainId ?? (Sniffings.is_popup_wallet_page ? maskChainId : globalChainId)
+        : _chainId ?? value.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId)
     const providerType = controlled
         ? value.providerType
-        : _providerType ??
-          value.providerType ??
-          (Sniffings.is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
+        : _providerType ?? value.providerType ?? (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
 
     const context = useMemo(
         () => ({
