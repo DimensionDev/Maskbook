@@ -114,7 +114,7 @@ async function generateIcons() {
             const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
             const identifier = importPath.includes('countries') ? `countries_${snakeCase(name)}` : snakeCase(name)
 
-            const url = `new URL(${JSON.stringify(importPath)}, import.meta.url)`
+            const url = `new URL(${JSON.stringify(importPath)}, import.meta.url).href`
             asURL.js.push(`export function ${identifier}_url() { return ${url} }`)
 
             let currentLine = `/** ${createLink(importPath)} !${createLink(importPath)} */ export const `
@@ -145,7 +145,7 @@ async function generateIcons() {
                     `{` +
                     [
                         variant.length === 0 ? null : `c: ${JSON.stringify(variant.sort())}`,
-                        `u: () => ${url}`,
+                        variant.length === 0 && jsx ? null : `u: () => ${url}`,
                         jsx ? `j: () => ${jsx}` : null,
                         isColorful ? 's: true' : null,
                     ]

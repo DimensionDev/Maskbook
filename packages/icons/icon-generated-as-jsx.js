@@ -2,582 +2,581 @@ import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime'
 import { __createIcon } from './utils/internal.js'
 export const Aave = /*#__PURE__*/ __createIcon('Aave', [
     {
-        u: () => new URL('./brands/Aave.svg', import.meta.url),
+        u: () => new URL('./brands/Aave.svg', import.meta.url).href,
     },
 ])
 export const Algorand = /*#__PURE__*/ __createIcon('Algorand', [
     {
-        u: () => new URL('./brands/Algorand.svg', import.meta.url),
+        u: () => new URL('./brands/Algorand.svg', import.meta.url).href,
     },
 ])
 export const Arbitrum = /*#__PURE__*/ __createIcon('Arbitrum', [
     {
-        u: () => new URL('./brands/Arbitrum.svg', import.meta.url),
+        u: () => new URL('./brands/Arbitrum.svg', import.meta.url).href,
     },
 ])
 export const Arweave = /*#__PURE__*/ __createIcon('Arweave', [
     {
-        u: () => new URL('./brands/Arweave.png', import.meta.url),
+        u: () => new URL('./brands/Arweave.png', import.meta.url).href,
     },
 ])
 export const Avalanche = /*#__PURE__*/ __createIcon('Avalanche', [
     {
-        u: () => new URL('./brands/Avalanche.svg', import.meta.url),
+        u: () => new URL('./brands/Avalanche.svg', import.meta.url).href,
     },
 ])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [
     {
-        u: () => new URL('./brands/BSC.svg', import.meta.url),
+        u: () => new URL('./brands/BSC.svg', import.meta.url).href,
     },
 ])
 export const Celo = /*#__PURE__*/ __createIcon('Celo', [
     {
-        u: () => new URL('./brands/Celo.svg', import.meta.url),
+        u: () => new URL('./brands/Celo.svg', import.meta.url).href,
     },
 ])
 export const Coincarp = /*#__PURE__*/ __createIcon('Coincarp', [
     {
-        u: () => new URL('./brands/Coincarp.svg', import.meta.url),
+        u: () => new URL('./brands/Coincarp.svg', import.meta.url).href,
     },
 ])
 export const CoinGecko = /*#__PURE__*/ __createIcon('CoinGecko', [
     {
-        u: () => new URL('./brands/CoinGecko.svg', import.meta.url),
+        u: () => new URL('./brands/CoinGecko.svg', import.meta.url).href,
     },
 ])
 export const CoinMarketCap = /*#__PURE__*/ __createIcon('CoinMarketCap', [
     {
-        u: () => new URL('./brands/CoinMarketCap.svg', import.meta.url),
+        u: () => new URL('./brands/CoinMarketCap.svg', import.meta.url).href,
     },
 ])
 export const Cosmos = /*#__PURE__*/ __createIcon('Cosmos', [
     {
-        u: () => new URL('./brands/Cosmos.svg', import.meta.url),
+        u: () => new URL('./brands/Cosmos.svg', import.meta.url).href,
     },
 ])
 export const Crossbell = /*#__PURE__*/ __createIcon('Crossbell', [
     {
-        u: () => new URL('./brands/Crossbell.svg', import.meta.url),
+        u: () => new URL('./brands/Crossbell.svg', import.meta.url).href,
     },
 ])
 export const CrossSync = /*#__PURE__*/ __createIcon('CrossSync', [
     {
-        u: () => new URL('./brands/CrossSync.svg', import.meta.url),
+        u: () => new URL('./brands/CrossSync.svg', import.meta.url).href,
     },
 ])
 export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
     {
-        u: () => new URL('./brands/CyberConnect.svg', import.meta.url),
+        u: () => new URL('./brands/CyberConnect.svg', import.meta.url).href,
     },
     {
         c: ['dark'],
-        u: () => new URL('./plugins/CyberConnect.dark.svg', import.meta.url),
+        u: () => new URL('./plugins/CyberConnect.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./plugins/CyberConnect.light.svg', import.meta.url),
+        u: () => new URL('./plugins/CyberConnect.light.svg', import.meta.url).href,
     },
 ])
 export const Danger = /*#__PURE__*/ __createIcon('Danger', [
     {
-        u: () => new URL('./brands/Danger.svg', import.meta.url),
+        u: () => new URL('./brands/Danger.svg', import.meta.url).href,
     },
 ])
 export const Debank = /*#__PURE__*/ __createIcon('Debank', [
     {
-        u: () => new URL('./brands/Debank.svg', import.meta.url),
+        u: () => new URL('./brands/Debank.svg', import.meta.url).href,
     },
 ])
 export const Discord = /*#__PURE__*/ __createIcon('Discord', [
     {
-        u: () => new URL('./brands/Discord.svg', import.meta.url),
+        u: () => new URL('./brands/Discord.svg', import.meta.url).href,
     },
 ])
 export const DiscordRound = /*#__PURE__*/ __createIcon('DiscordRound', [
     {
-        u: () => new URL('./brands/DiscordRound.svg', import.meta.url),
+        u: () => new URL('./brands/DiscordRound.svg', import.meta.url).href,
     },
 ])
 export const DiscordRoundBlack = /*#__PURE__*/ __createIcon('DiscordRoundBlack', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/DiscordRoundBlack.dark.svg', import.meta.url),
+        u: () => new URL('./brands/DiscordRoundBlack.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/DiscordRoundBlack.light.svg', import.meta.url),
+        u: () => new URL('./brands/DiscordRoundBlack.light.svg', import.meta.url).href,
     },
 ])
 export const DiscordRoundGray = /*#__PURE__*/ __createIcon('DiscordRoundGray', [
     {
-        u: () => new URL('./brands/DiscordRoundGray.svg', import.meta.url),
+        u: () => new URL('./brands/DiscordRoundGray.svg', import.meta.url).href,
     },
 ])
 export const EIP1577 = /*#__PURE__*/ __createIcon('EIP1577', [
     {
-        u: () => new URL('./brands/EIP1577.svg', import.meta.url),
+        u: () => new URL('./brands/EIP1577.svg', import.meta.url).href,
     },
 ])
 export const ETH = /*#__PURE__*/ __createIcon('ETH', [
     {
-        u: () => new URL('./brands/ETH.svg', import.meta.url),
+        u: () => new URL('./brands/ETH.svg', import.meta.url).href,
     },
 ])
 export const EtherScan = /*#__PURE__*/ __createIcon('EtherScan', [
     {
-        u: () => new URL('./brands/EtherScan.svg', import.meta.url),
+        u: () => new URL('./brands/EtherScan.svg', import.meta.url).href,
     },
 ])
 export const FacebookColored = /*#__PURE__*/ __createIcon('FacebookColored', [
     {
-        u: () => new URL('./brands/FacebookColored.svg', import.meta.url),
+        u: () => new URL('./brands/FacebookColored.svg', import.meta.url).href,
     },
 ])
 export const FacebookRound = /*#__PURE__*/ __createIcon('FacebookRound', [
     {
-        u: () => new URL('./brands/FacebookRound.svg', import.meta.url),
+        u: () => new URL('./brands/FacebookRound.svg', import.meta.url).href,
     },
 ])
 export const FacebookRoundGray = /*#__PURE__*/ __createIcon('FacebookRoundGray', [
     {
-        u: () => new URL('./brands/FacebookRoundGray.svg', import.meta.url),
+        u: () => new URL('./brands/FacebookRoundGray.svg', import.meta.url).href,
     },
 ])
 export const Fantom = /*#__PURE__*/ __createIcon('Fantom', [
     {
-        u: () => new URL('./brands/Fantom.svg', import.meta.url),
+        u: () => new URL('./brands/Fantom.svg', import.meta.url).href,
     },
 ])
 export const Farcaster = /*#__PURE__*/ __createIcon('Farcaster', [
     {
-        u: () => new URL('./brands/Farcaster.svg', import.meta.url),
+        u: () => new URL('./brands/Farcaster.svg', import.meta.url).href,
     },
 ])
 export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/Firefly.dark.svg', import.meta.url),
+        u: () => new URL('./brands/Firefly.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/Firefly.light.svg', import.meta.url),
+        u: () => new URL('./brands/Firefly.light.svg', import.meta.url).href,
     },
 ])
 export const Flow = /*#__PURE__*/ __createIcon('Flow', [
     {
-        u: () => new URL('./brands/Flow.svg', import.meta.url),
+        u: () => new URL('./brands/Flow.svg', import.meta.url).href,
     },
 ])
 export const Gem = /*#__PURE__*/ __createIcon('Gem', [
     {
-        u: () => new URL('./brands/Gem.svg', import.meta.url),
+        u: () => new URL('./brands/Gem.svg', import.meta.url).href,
     },
 ])
 export const GitHub = /*#__PURE__*/ __createIcon('GitHub', [
     {
-        u: () => new URL('./brands/GitHub.svg', import.meta.url),
+        u: () => new URL('./brands/GitHub.svg', import.meta.url).href,
     },
 ])
 export const GitHubGray = /*#__PURE__*/ __createIcon('GitHubGray', [
     {
-        u: () => new URL('./brands/GitHubGray.svg', import.meta.url),
+        u: () => new URL('./brands/GitHubGray.svg', import.meta.url).href,
     },
 ])
 export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
     {
-        u: () => new URL('./brands/Gnosis.svg', import.meta.url),
+        u: () => new URL('./brands/Gnosis.svg', import.meta.url).href,
     },
 ])
 export const Instagram = /*#__PURE__*/ __createIcon('Instagram', [
     {
-        u: () => new URL('./brands/Instagram.svg', import.meta.url),
+        u: () => new URL('./brands/Instagram.svg', import.meta.url).href,
     },
 ])
 export const InstagramColored = /*#__PURE__*/ __createIcon('InstagramColored', [
     {
-        u: () => new URL('./brands/InstagramColored.svg', import.meta.url),
+        u: () => new URL('./brands/InstagramColored.svg', import.meta.url).href,
     },
 ])
 export const InstagramRoundColored = /*#__PURE__*/ __createIcon('InstagramRoundColored', [
     {
-        u: () => new URL('./brands/InstagramRoundColored.svg', import.meta.url),
+        u: () => new URL('./brands/InstagramRoundColored.svg', import.meta.url).href,
     },
 ])
 export const InstagramRoundGray = /*#__PURE__*/ __createIcon('InstagramRoundGray', [
     {
-        u: () => new URL('./brands/InstagramRoundGray.svg', import.meta.url),
+        u: () => new URL('./brands/InstagramRoundGray.svg', import.meta.url).href,
     },
 ])
 export const IPFS = /*#__PURE__*/ __createIcon('IPFS', [
     {
-        u: () => new URL('./brands/IPFS.svg', import.meta.url),
+        u: () => new URL('./brands/IPFS.svg', import.meta.url).href,
     },
 ])
 export const Keybase = /*#__PURE__*/ __createIcon('Keybase', [
     {
-        u: () => new URL('./brands/Keybase.svg', import.meta.url),
+        u: () => new URL('./brands/Keybase.svg', import.meta.url).href,
     },
 ])
 export const Kusama = /*#__PURE__*/ __createIcon('Kusama', [
     {
-        u: () => new URL('./brands/Kusama.svg', import.meta.url),
+        u: () => new URL('./brands/Kusama.svg', import.meta.url).href,
     },
 ])
 export const Leaderboard = /*#__PURE__*/ __createIcon('Leaderboard', [
     {
-        u: () => new URL('./brands/Leaderboard.png', import.meta.url),
+        u: () => new URL('./brands/Leaderboard.png', import.meta.url).href,
     },
 ])
 export const Lens = /*#__PURE__*/ __createIcon('Lens', [
     {
-        u: () => new URL('./brands/Lens.svg', import.meta.url),
+        u: () => new URL('./brands/Lens.svg', import.meta.url).href,
     },
 ])
 export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
     {
-        u: () => new URL('./brands/Link3.svg', import.meta.url),
+        u: () => new URL('./brands/Link3.svg', import.meta.url).href,
     },
 ])
 export const LooksRare = /*#__PURE__*/ __createIcon('LooksRare', [
     {
-        u: () => new URL('./brands/LooksRare.svg', import.meta.url),
+        u: () => new URL('./brands/LooksRare.svg', import.meta.url).href,
     },
 ])
 export const Mask = /*#__PURE__*/ __createIcon('Mask', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/Mask.dark.svg', import.meta.url),
+        u: () => new URL('./brands/Mask.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/Mask.light.svg', import.meta.url),
+        u: () => new URL('./brands/Mask.light.svg', import.meta.url).href,
     },
 ])
 export const MaskBanner = /*#__PURE__*/ __createIcon('MaskBanner', [
     {
-        u: () => new URL('./brands/MaskBanner.svg', import.meta.url),
+        u: () => new URL('./brands/MaskBanner.svg', import.meta.url).href,
     },
 ])
 export const MaskBlue = /*#__PURE__*/ __createIcon('MaskBlue', [
     {
-        u: () => new URL('./brands/MaskBlue.svg', import.meta.url),
+        u: () => new URL('./brands/MaskBlue.svg', import.meta.url).href,
     },
 ])
 export const MaskGrey = /*#__PURE__*/ __createIcon('MaskGrey', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/MaskGrey.dark.svg', import.meta.url),
+        u: () => new URL('./brands/MaskGrey.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/MaskGrey.light.svg', import.meta.url),
+        u: () => new URL('./brands/MaskGrey.light.svg', import.meta.url).href,
     },
 ])
 export const MaskPlaceholder = /*#__PURE__*/ __createIcon('MaskPlaceholder', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/MaskPlaceholder.dark.svg', import.meta.url),
+        u: () => new URL('./brands/MaskPlaceholder.dark.svg', import.meta.url).href,
     },
     {
         c: ['dim'],
-        u: () => new URL('./brands/MaskPlaceholder.dim.svg', import.meta.url),
+        u: () => new URL('./brands/MaskPlaceholder.dim.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/MaskPlaceholder.light.svg', import.meta.url),
+        u: () => new URL('./brands/MaskPlaceholder.light.svg', import.meta.url).href,
     },
 ])
 export const MaskSquare = /*#__PURE__*/ __createIcon('MaskSquare', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/MaskSquare.dark.svg', import.meta.url),
+        u: () => new URL('./brands/MaskSquare.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/MaskSquare.light.svg', import.meta.url),
+        u: () => new URL('./brands/MaskSquare.light.svg', import.meta.url).href,
     },
 ])
 export const MaskText = /*#__PURE__*/ __createIcon('MaskText', [
     {
-        u: () => new URL('./brands/MaskText.svg', import.meta.url),
+        u: () => new URL('./brands/MaskText.svg', import.meta.url).href,
     },
 ])
 export const MaskTextNightly = /*#__PURE__*/ __createIcon('MaskTextNightly', [
     {
-        u: () => new URL('./brands/MaskTextNightly.svg', import.meta.url),
+        u: () => new URL('./brands/MaskTextNightly.svg', import.meta.url).href,
     },
 ])
 export const MaskWallet = /*#__PURE__*/ __createIcon('MaskWallet', [
     {
-        u: () => new URL('./brands/MaskWallet.png', import.meta.url),
+        u: () => new URL('./brands/MaskWallet.png', import.meta.url).href,
     },
 ])
 export const Medium = /*#__PURE__*/ __createIcon('Medium', [
     {
-        u: () => new URL('./brands/Medium.svg', import.meta.url),
+        u: () => new URL('./brands/Medium.svg', import.meta.url).href,
     },
 ])
 export const MediumGray = /*#__PURE__*/ __createIcon('MediumGray', [
     {
-        u: () => new URL('./brands/MediumGray.svg', import.meta.url),
+        u: () => new URL('./brands/MediumGray.svg', import.meta.url).href,
     },
 ])
 export const MetaMask = /*#__PURE__*/ __createIcon('MetaMask', [
     {
-        u: () => new URL('./brands/MetaMask.svg', import.meta.url),
+        u: () => new URL('./brands/MetaMask.svg', import.meta.url).href,
     },
 ])
 export const Minds = /*#__PURE__*/ __createIcon('Minds', [
     {
-        u: () => new URL('./brands/Minds.svg', import.meta.url),
+        u: () => new URL('./brands/Minds.svg', import.meta.url).href,
     },
 ])
 export const MindsRound = /*#__PURE__*/ __createIcon('MindsRound', [
     {
-        u: () => new URL('./brands/MindsRound.svg', import.meta.url),
+        u: () => new URL('./brands/MindsRound.svg', import.meta.url).href,
     },
 ])
 export const MiniMask = /*#__PURE__*/ __createIcon('MiniMask', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/MiniMask.dark.svg', import.meta.url),
+        u: () => new URL('./brands/MiniMask.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/MiniMask.light.svg', import.meta.url),
+        u: () => new URL('./brands/MiniMask.light.svg', import.meta.url).href,
     },
 ])
 export const Mirror = /*#__PURE__*/ __createIcon('Mirror', [
     {
-        u: () => new URL('./brands/Mirror.svg', import.meta.url),
+        u: () => new URL('./brands/Mirror.svg', import.meta.url).href,
     },
 ])
 export const Momoka = /*#__PURE__*/ __createIcon('Momoka', [
     {
-        u: () => new URL('./brands/Momoka.svg', import.meta.url),
+        u: () => new URL('./brands/Momoka.svg', import.meta.url).href,
     },
 ])
 export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/NextIDMini.dark.svg', import.meta.url),
+        u: () => new URL('./brands/NextIDMini.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/NextIDMini.light.svg', import.meta.url),
+        u: () => new URL('./brands/NextIDMini.light.svg', import.meta.url).href,
     },
 ])
 export const Nftgo = /*#__PURE__*/ __createIcon('Nftgo', [
     {
-        u: () => new URL('./brands/Nftgo.svg', import.meta.url),
+        u: () => new URL('./brands/Nftgo.svg', import.meta.url).href,
     },
 ])
 export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
     {
-        u: () => new URL('./brands/NFTScan.svg', import.meta.url),
+        u: () => new URL('./brands/NFTScan.svg', import.meta.url).href,
     },
 ])
 export const OpenSea = /*#__PURE__*/ __createIcon('OpenSea', [
     {
-        u: () => new URL('./brands/OpenSea.svg', import.meta.url),
+        u: () => new URL('./brands/OpenSea.svg', import.meta.url).href,
     },
 ])
 export const OpenSeaColored = /*#__PURE__*/ __createIcon('OpenSeaColored', [
     {
-        u: () => new URL('./brands/OpenSeaColored.svg', import.meta.url),
+        u: () => new URL('./brands/OpenSeaColored.svg', import.meta.url).href,
     },
 ])
 export const Optimism = /*#__PURE__*/ __createIcon('Optimism', [
     {
-        u: () => new URL('./brands/Optimism.svg', import.meta.url),
+        u: () => new URL('./brands/Optimism.svg', import.meta.url).href,
     },
 ])
 export const PancakeSwap = /*#__PURE__*/ __createIcon('PancakeSwap', [
     {
-        u: () => new URL('./brands/PancakeSwap.png', import.meta.url),
+        u: () => new URL('./brands/PancakeSwap.png', import.meta.url).href,
     },
 ])
 export const Pets = /*#__PURE__*/ __createIcon('Pets', [
     {
-        u: () => new URL('./brands/Pets.svg', import.meta.url),
+        u: () => new URL('./brands/Pets.svg', import.meta.url).href,
     },
 ])
 export const Planet = /*#__PURE__*/ __createIcon('Planet', [
     {
-        u: () => new URL('./brands/Planet.png', import.meta.url),
+        u: () => new URL('./brands/Planet.png', import.meta.url).href,
     },
 ])
 export const PolkaDot = /*#__PURE__*/ __createIcon('PolkaDot', [
     {
-        u: () => new URL('./brands/PolkaDot.svg', import.meta.url),
+        u: () => new URL('./brands/PolkaDot.svg', import.meta.url).href,
     },
 ])
 export const Polygon = /*#__PURE__*/ __createIcon('Polygon', [
     {
-        u: () => new URL('./brands/Polygon.svg', import.meta.url),
+        u: () => new URL('./brands/Polygon.svg', import.meta.url).href,
     },
 ])
 export const PolygonScan = /*#__PURE__*/ __createIcon('PolygonScan', [
     {
-        u: () => new URL('./brands/PolygonScan.svg', import.meta.url),
+        u: () => new URL('./brands/PolygonScan.svg', import.meta.url).href,
     },
 ])
 export const Rarible = /*#__PURE__*/ __createIcon('Rarible', [
     {
-        u: () => new URL('./brands/Rarible.svg', import.meta.url),
+        u: () => new URL('./brands/Rarible.svg', import.meta.url).href,
     },
 ])
 export const RedditRound = /*#__PURE__*/ __createIcon('RedditRound', [
     {
-        u: () => new URL('./brands/RedditRound.svg', import.meta.url),
+        u: () => new URL('./brands/RedditRound.svg', import.meta.url).href,
     },
 ])
 export const RedditRoundGray = /*#__PURE__*/ __createIcon('RedditRoundGray', [
     {
-        u: () => new URL('./brands/RedditRoundGray.svg', import.meta.url),
+        u: () => new URL('./brands/RedditRoundGray.svg', import.meta.url).href,
     },
 ])
 export const Rsk = /*#__PURE__*/ __createIcon('Rsk', [
     {
-        u: () => new URL('./brands/Rsk.svg', import.meta.url),
+        u: () => new URL('./brands/Rsk.svg', import.meta.url).href,
     },
 ])
 export const RSS3 = /*#__PURE__*/ __createIcon('RSS3', [
     {
-        u: () => new URL('./brands/RSS3.svg', import.meta.url),
+        u: () => new URL('./brands/RSS3.svg', import.meta.url).href,
     },
 ])
 export const SimpleHash = /*#__PURE__*/ __createIcon('SimpleHash', [
     {
-        u: () => new URL('./brands/SimpleHash.png', import.meta.url),
+        u: () => new URL('./brands/SimpleHash.png', import.meta.url).href,
     },
 ])
 export const Solana = /*#__PURE__*/ __createIcon('Solana', [
     {
-        u: () => new URL('./brands/Solana.svg', import.meta.url),
+        u: () => new URL('./brands/Solana.svg', import.meta.url).href,
     },
 ])
 export const SushiSwap = /*#__PURE__*/ __createIcon('SushiSwap', [
     {
-        u: () => new URL('./brands/SushiSwap.png', import.meta.url),
+        u: () => new URL('./brands/SushiSwap.png', import.meta.url).href,
     },
 ])
 export const Sybil = /*#__PURE__*/ __createIcon('Sybil', [
     {
-        u: () => new URL('./brands/Sybil.png', import.meta.url),
+        u: () => new URL('./brands/Sybil.png', import.meta.url).href,
     },
 ])
 export const TelegramRound = /*#__PURE__*/ __createIcon('TelegramRound', [
     {
-        u: () => new URL('./brands/TelegramRound.svg', import.meta.url),
+        u: () => new URL('./brands/TelegramRound.svg', import.meta.url).href,
     },
 ])
 export const TwitterColored = /*#__PURE__*/ __createIcon('TwitterColored', [
     {
-        u: () => new URL('./brands/TwitterColored.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterColored.svg', import.meta.url).href,
     },
 ])
 export const TwitterOtherColored = /*#__PURE__*/ __createIcon('TwitterOtherColored', [
     {
-        u: () => new URL('./brands/TwitterOtherColored.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterOtherColored.svg', import.meta.url).href,
     },
 ])
 export const TwitterRound = /*#__PURE__*/ __createIcon('TwitterRound', [
     {
-        u: () => new URL('./brands/TwitterRound.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterRound.svg', import.meta.url).href,
     },
 ])
 export const TwitterRoundGray = /*#__PURE__*/ __createIcon('TwitterRoundGray', [
     {
-        u: () => new URL('./brands/TwitterRoundGray.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterRoundGray.svg', import.meta.url).href,
     },
 ])
 export const TwitterX = /*#__PURE__*/ __createIcon('TwitterX', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/TwitterX.dark.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterX.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/TwitterX.light.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterX.light.svg', import.meta.url).href,
     },
 ])
 export const TwitterXRound = /*#__PURE__*/ __createIcon('TwitterXRound', [
     {
         c: ['dark'],
-        u: () => new URL('./brands/TwitterXRound.dark.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterXRound.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./brands/TwitterXRound.light.svg', import.meta.url),
+        u: () => new URL('./brands/TwitterXRound.light.svg', import.meta.url).href,
     },
 ])
 export const Uniswap = /*#__PURE__*/ __createIcon('Uniswap', [
     {
-        u: () => new URL('./brands/Uniswap.svg', import.meta.url),
+        u: () => new URL('./brands/Uniswap.svg', import.meta.url).href,
     },
 ])
 export const WETH = /*#__PURE__*/ __createIcon('WETH', [
     {
-        u: () => new URL('./brands/WETH.svg', import.meta.url),
+        u: () => new URL('./brands/WETH.svg', import.meta.url).href,
     },
 ])
 export const X2Y2 = /*#__PURE__*/ __createIcon('X2Y2', [
     {
-        u: () => new URL('./brands/X2Y2.svg', import.meta.url),
+        u: () => new URL('./brands/X2Y2.svg', import.meta.url).href,
     },
 ])
 export const XLog = /*#__PURE__*/ __createIcon('XLog', [
     {
-        u: () => new URL('./brands/XLog.svg', import.meta.url),
+        u: () => new URL('./brands/XLog.svg', import.meta.url).href,
     },
     {
         c: ['dark'],
-        u: () => new URL('./brands/XLog.dark.svg', import.meta.url),
+        u: () => new URL('./brands/XLog.dark.svg', import.meta.url).href,
     },
 ])
 export const YouTube = /*#__PURE__*/ __createIcon('YouTube', [
     {
-        u: () => new URL('./brands/YouTube.svg', import.meta.url),
+        u: () => new URL('./brands/YouTube.svg', import.meta.url).href,
     },
 ])
 export const YouTubeGray = /*#__PURE__*/ __createIcon('YouTubeGray', [
     {
-        u: () => new URL('./brands/YouTubeGray.svg', import.meta.url),
+        u: () => new URL('./brands/YouTubeGray.svg', import.meta.url).href,
     },
 ])
 export const Zerion = /*#__PURE__*/ __createIcon('Zerion', [
     {
-        u: () => new URL('./brands/Zerion.svg', import.meta.url),
+        u: () => new URL('./brands/Zerion.svg', import.meta.url).href,
     },
 ])
 export const ZeroX = /*#__PURE__*/ __createIcon('ZeroX', [
     {
-        u: () => new URL('./brands/ZeroX.svg', import.meta.url),
+        u: () => new URL('./brands/ZeroX.svg', import.meta.url).href,
     },
     {
         c: ['dark'],
-        u: () => new URL('./brands/ZeroX.dark.svg', import.meta.url),
+        u: () => new URL('./brands/ZeroX.dark.svg', import.meta.url).href,
     },
 ])
 export const Zilliqa = /*#__PURE__*/ __createIcon('Zilliqa', [
     {
-        u: () => new URL('./brands/Zilliqa.svg', import.meta.url),
+        u: () => new URL('./brands/Zilliqa.svg', import.meta.url).href,
     },
 ])
 export const ZkScan = /*#__PURE__*/ __createIcon('zkScan', [
     {
-        u: () => new URL('./brands/zkScan.svg', import.meta.url),
+        u: () => new URL('./brands/zkScan.svg', import.meta.url).href,
     },
 ])
 export const Zora = /*#__PURE__*/ __createIcon('Zora', [
     {
-        u: () => new URL('./brands/Zora.svg', import.meta.url),
+        u: () => new URL('./brands/Zora.svg', import.meta.url).href,
     },
 ])
 export const Add = /*#__PURE__*/ __createIcon('Add', [
     {
-        u: () => new URL('./general/Add.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -611,7 +610,6 @@ export const AddNoBorder = /*#__PURE__*/ __createIcon(
     'AddNoBorder',
     [
         {
-            u: () => new URL('./general/AddNoBorder.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -639,7 +637,6 @@ export const AddNoBorder = /*#__PURE__*/ __createIcon(
 )
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
-        u: () => new URL('./general/AddUser.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -666,12 +663,11 @@ export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
 ])
 export const America = /*#__PURE__*/ __createIcon('America', [
     {
-        u: () => new URL('./general/America.svg', import.meta.url),
+        u: () => new URL('./general/America.svg', import.meta.url).href,
     },
 ])
 export const Appearance = /*#__PURE__*/ __createIcon('Appearance', [
     {
-        u: () => new URL('./general/Appearance.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -687,17 +683,16 @@ export const Appearance = /*#__PURE__*/ __createIcon('Appearance', [
 ])
 export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
     {
-        u: () => new URL('./general/Appendices.svg', import.meta.url),
+        u: () => new URL('./general/Appendices.svg', import.meta.url).href,
     },
 ])
 export const ApplicationNFT = /*#__PURE__*/ __createIcon('ApplicationNFT', [
     {
-        u: () => new URL('./general/ApplicationNFT.svg', import.meta.url),
+        u: () => new URL('./general/ApplicationNFT.svg', import.meta.url).href,
     },
 ])
 export const Approve = /*#__PURE__*/ __createIcon('Approve', [
     {
-        u: () => new URL('./general/Approve.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -723,12 +718,11 @@ export const Approve = /*#__PURE__*/ __createIcon('Approve', [
 ])
 export const ArrowBack = /*#__PURE__*/ __createIcon('ArrowBack', [
     {
-        u: () => new URL('./general/ArrowBack.svg', import.meta.url),
+        u: () => new URL('./general/ArrowBack.svg', import.meta.url).href,
     },
 ])
 export const ArrowDownRound = /*#__PURE__*/ __createIcon('ArrowDownRound', [
     {
-        u: () => new URL('./general/ArrowDownRound.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -747,7 +741,6 @@ export const ArrowDownRound = /*#__PURE__*/ __createIcon('ArrowDownRound', [
 ])
 export const ArrowDownward = /*#__PURE__*/ __createIcon('ArrowDownward', [
     {
-        u: () => new URL('./general/ArrowDownward.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -771,7 +764,6 @@ export const ArrowDownward = /*#__PURE__*/ __createIcon('ArrowDownward', [
 ])
 export const ArrowDrop = /*#__PURE__*/ __createIcon('ArrowDrop', [
     {
-        u: () => new URL('./general/ArrowDrop.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -786,7 +778,6 @@ export const ArrowDrop = /*#__PURE__*/ __createIcon('ArrowDrop', [
 ])
 export const ArrowRight = /*#__PURE__*/ __createIcon('ArrowRight', [
     {
-        u: () => new URL('./general/ArrowRight.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -803,7 +794,6 @@ export const ArrowRight = /*#__PURE__*/ __createIcon('ArrowRight', [
 ])
 export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
     {
-        u: () => new URL('./general/ArrowUp.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -818,7 +808,6 @@ export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
 ])
 export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
     {
-        u: () => new URL('./general/ArrowUpRound.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -837,22 +826,21 @@ export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
 ])
 export const BackUp = /*#__PURE__*/ __createIcon('BackUp', [
     {
-        u: () => new URL('./general/BackUp.svg', import.meta.url),
+        u: () => new URL('./general/BackUp.svg', import.meta.url).href,
     },
 ])
 export const BaseClose = /*#__PURE__*/ __createIcon('BaseClose', [
     {
         c: ['dark'],
-        u: () => new URL('./general/BaseClose.dark.svg', import.meta.url),
+        u: () => new URL('./general/BaseClose.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/BaseClose.light.svg', import.meta.url),
+        u: () => new URL('./general/BaseClose.light.svg', import.meta.url).href,
     },
 ])
 export const BaseContacts = /*#__PURE__*/ __createIcon('BaseContacts', [
     {
-        u: () => new URL('./general/BaseContacts.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -886,7 +874,6 @@ export const BaseUpload = /*#__PURE__*/ __createIcon(
     'BaseUpload',
     [
         {
-            u: () => new URL('./general/BaseUpload.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -912,7 +899,6 @@ export const BaseUpload = /*#__PURE__*/ __createIcon(
 )
 export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
     {
-        u: () => new URL('./general/BaseUser.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -944,22 +930,21 @@ export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
 ])
 export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
     {
-        u: () => new URL('./general/BestTrade.svg', import.meta.url),
+        u: () => new URL('./general/BestTrade.svg', import.meta.url).href,
     },
 ])
 export const BluePin = /*#__PURE__*/ __createIcon('BluePin', [
     {
-        u: () => new URL('./general/BluePin.svg', import.meta.url),
+        u: () => new URL('./general/BluePin.svg', import.meta.url).href,
     },
 ])
 export const BorderedSuccess = /*#__PURE__*/ __createIcon('BorderedSuccess', [
     {
-        u: () => new URL('./general/BorderedSuccess.svg', import.meta.url),
+        u: () => new URL('./general/BorderedSuccess.svg', import.meta.url).href,
     },
 ])
 export const BusyWalletNav = /*#__PURE__*/ __createIcon('BusyWalletNav', [
     {
-        u: () => new URL('./general/BusyWalletNav.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -995,12 +980,11 @@ export const BusyWalletNav = /*#__PURE__*/ __createIcon('BusyWalletNav', [
 ])
 export const Buy = /*#__PURE__*/ __createIcon('Buy', [
     {
-        u: () => new URL('./general/Buy.svg', import.meta.url),
+        u: () => new URL('./general/Buy.svg', import.meta.url).href,
     },
 ])
 export const Cached = /*#__PURE__*/ __createIcon('Cached', [
     {
-        u: () => new URL('./general/Cached.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1019,17 +1003,16 @@ export const Cached = /*#__PURE__*/ __createIcon('Cached', [
 ])
 export const Candle = /*#__PURE__*/ __createIcon('candle', [
     {
-        u: () => new URL('./general/candle.svg', import.meta.url),
+        u: () => new URL('./general/candle.svg', import.meta.url).href,
     },
 ])
 export const Card = /*#__PURE__*/ __createIcon('Card', [
     {
-        u: () => new URL('./general/Card.svg', import.meta.url),
+        u: () => new URL('./general/Card.svg', import.meta.url).href,
     },
 ])
 export const Check = /*#__PURE__*/ __createIcon('Check', [
     {
-        u: () => new URL('./general/Check.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1046,7 +1029,6 @@ export const Check = /*#__PURE__*/ __createIcon('Check', [
 ])
 export const Checkbox = /*#__PURE__*/ __createIcon('Checkbox', [
     {
-        u: () => new URL('./general/Checkbox.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1069,7 +1051,6 @@ export const Checkbox = /*#__PURE__*/ __createIcon('Checkbox', [
 ])
 export const CheckboxBlank = /*#__PURE__*/ __createIcon('CheckboxBlank', [
     {
-        u: () => new URL('./general/CheckboxBlank.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1090,7 +1071,6 @@ export const CheckboxBlank = /*#__PURE__*/ __createIcon('CheckboxBlank', [
 ])
 export const CheckboxBorder = /*#__PURE__*/ __createIcon('CheckboxBorder', [
     {
-        u: () => new URL('./general/CheckboxBorder.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1110,7 +1090,6 @@ export const CheckboxBorder = /*#__PURE__*/ __createIcon('CheckboxBorder', [
 ])
 export const CheckboxNo = /*#__PURE__*/ __createIcon('CheckboxNo', [
     {
-        u: () => new URL('./general/CheckboxNo.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1131,12 +1110,11 @@ export const CheckboxNo = /*#__PURE__*/ __createIcon('CheckboxNo', [
 ])
 export const CheckCircle = /*#__PURE__*/ __createIcon('CheckCircle', [
     {
-        u: () => new URL('./general/CheckCircle.svg', import.meta.url),
+        u: () => new URL('./general/CheckCircle.svg', import.meta.url).href,
     },
 ])
 export const ChevronUp = /*#__PURE__*/ __createIcon('ChevronUp', [
     {
-        u: () => new URL('./general/ChevronUp.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1155,17 +1133,16 @@ export const ChevronUp = /*#__PURE__*/ __createIcon('ChevronUp', [
 ])
 export const China = /*#__PURE__*/ __createIcon('China', [
     {
-        u: () => new URL('./general/China.svg', import.meta.url),
+        u: () => new URL('./general/China.svg', import.meta.url).href,
     },
 ])
 export const CircleClose = /*#__PURE__*/ __createIcon('CircleClose', [
     {
-        u: () => new URL('./general/CircleClose.svg', import.meta.url),
+        u: () => new URL('./general/CircleClose.svg', import.meta.url).href,
     },
 ])
 export const CircleLoading = /*#__PURE__*/ __createIcon('CircleLoading', [
     {
-        u: () => new URL('./general/CircleLoading.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1188,22 +1165,21 @@ export const CircleLoading = /*#__PURE__*/ __createIcon('CircleLoading', [
 ])
 export const CircleWarning = /*#__PURE__*/ __createIcon('CircleWarning', [
     {
-        u: () => new URL('./general/CircleWarning.svg', import.meta.url),
+        u: () => new URL('./general/CircleWarning.svg', import.meta.url).href,
     },
 ])
 export const Clear = /*#__PURE__*/ __createIcon('Clear', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Clear.dark.svg', import.meta.url),
+        u: () => new URL('./general/Clear.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Clear.light.svg', import.meta.url),
+        u: () => new URL('./general/Clear.light.svg', import.meta.url).href,
     },
 ])
 export const Close = /*#__PURE__*/ __createIcon('Close', [
     {
-        u: () => new URL('./general/Close.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1221,7 +1197,6 @@ export const Close = /*#__PURE__*/ __createIcon('Close', [
 ])
 export const Cloud = /*#__PURE__*/ __createIcon('Cloud', [
     {
-        u: () => new URL('./general/Cloud.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1261,12 +1236,11 @@ export const Cloud = /*#__PURE__*/ __createIcon('Cloud', [
 ])
 export const CloudBackup = /*#__PURE__*/ __createIcon('CloudBackup', [
     {
-        u: () => new URL('./general/CloudBackup.png', import.meta.url),
+        u: () => new URL('./general/CloudBackup.png', import.meta.url).href,
     },
 ])
 export const CloudBackup2 = /*#__PURE__*/ __createIcon('CloudBackup2', [
     {
-        u: () => new URL('./general/CloudBackup2.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1309,19 +1283,18 @@ export const CloudBackup2 = /*#__PURE__*/ __createIcon('CloudBackup2', [
 ])
 export const CloudLink = /*#__PURE__*/ __createIcon('CloudLink', [
     {
-        u: () => new URL('./general/CloudLink.png', import.meta.url),
+        u: () => new URL('./general/CloudLink.png', import.meta.url).href,
     },
 ])
 export const CNY = /*#__PURE__*/ __createIcon('CNY', [
     {
-        u: () => new URL('./general/CNY.svg', import.meta.url),
+        u: () => new URL('./general/CNY.svg', import.meta.url).href,
     },
 ])
 export const Collectible = /*#__PURE__*/ __createIcon(
     'Collectible',
     [
         {
-            u: () => new URL('./general/Collectible.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -1340,7 +1313,6 @@ export const Collectible = /*#__PURE__*/ __createIcon(
 )
 export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
     {
-        u: () => new URL('./general/Comeback.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1356,7 +1328,6 @@ export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
 ])
 export const Connect = /*#__PURE__*/ __createIcon('Connect', [
     {
-        u: () => new URL('./general/Connect.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1378,7 +1349,6 @@ export const Connect = /*#__PURE__*/ __createIcon('Connect', [
 ])
 export const Contacts = /*#__PURE__*/ __createIcon('Contacts', [
     {
-        u: () => new URL('./general/Contacts.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1398,7 +1368,6 @@ export const Copy = /*#__PURE__*/ __createIcon(
     'Copy',
     [
         {
-            u: () => new URL('./general/Copy.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -1426,7 +1395,6 @@ export const Copy = /*#__PURE__*/ __createIcon(
 )
 export const Currency = /*#__PURE__*/ __createIcon('Currency', [
     {
-        u: () => new URL('./general/Currency.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1457,7 +1425,6 @@ export const Currency = /*#__PURE__*/ __createIcon('Currency', [
 ])
 export const Dark = /*#__PURE__*/ __createIcon('Dark', [
     {
-        u: () => new URL('./general/Dark.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1473,7 +1440,6 @@ export const Dark = /*#__PURE__*/ __createIcon('Dark', [
 ])
 export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
     {
-        u: () => new URL('./general/decrease.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1502,20 +1468,19 @@ export const Decrease = /*#__PURE__*/ __createIcon('decrease', [
 export const DefaultToken = /*#__PURE__*/ __createIcon('DefaultToken', [
     {
         c: ['dark'],
-        u: () => new URL('./general/DefaultToken.dark.svg', import.meta.url),
+        u: () => new URL('./general/DefaultToken.dark.svg', import.meta.url).href,
     },
     {
         c: ['dim'],
-        u: () => new URL('./general/DefaultToken.dim.svg', import.meta.url),
+        u: () => new URL('./general/DefaultToken.dim.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/DefaultToken.light.svg', import.meta.url),
+        u: () => new URL('./general/DefaultToken.light.svg', import.meta.url).href,
     },
 ])
 export const Delete = /*#__PURE__*/ __createIcon('Delete', [
     {
-        u: () => new URL('./general/Delete.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1534,7 +1499,6 @@ export const Delete = /*#__PURE__*/ __createIcon('Delete', [
 ])
 export const Disconnect = /*#__PURE__*/ __createIcon('Disconnect', [
     {
-        u: () => new URL('./general/Disconnect.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1560,12 +1524,11 @@ export const Disconnect = /*#__PURE__*/ __createIcon('Disconnect', [
 ])
 export const Document = /*#__PURE__*/ __createIcon('Document', [
     {
-        u: () => new URL('./general/Document.svg', import.meta.url),
+        u: () => new URL('./general/Document.svg', import.meta.url).href,
     },
 ])
 export const Documents = /*#__PURE__*/ __createIcon('Documents', [
     {
-        u: () => new URL('./general/Documents.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1591,7 +1554,6 @@ export const Documents = /*#__PURE__*/ __createIcon('Documents', [
 ])
 export const Download = /*#__PURE__*/ __createIcon('Download', [
     {
-        u: () => new URL('./general/Download.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1610,7 +1572,6 @@ export const Download = /*#__PURE__*/ __createIcon('Download', [
 ])
 export const Download2 = /*#__PURE__*/ __createIcon('Download2', [
     {
-        u: () => new URL('./general/Download2.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1644,7 +1605,6 @@ export const Drop = /*#__PURE__*/ __createIcon(
     'Drop',
     [
         {
-            u: () => new URL('./general/Drop.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -1661,7 +1621,6 @@ export const Drop = /*#__PURE__*/ __createIcon(
 )
 export const Dump = /*#__PURE__*/ __createIcon('Dump', [
     {
-        u: () => new URL('./general/Dump.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1693,7 +1652,6 @@ export const Dump = /*#__PURE__*/ __createIcon('Dump', [
 ])
 export const Edit = /*#__PURE__*/ __createIcon('Edit', [
     {
-        u: () => new URL('./general/Edit.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1712,7 +1670,6 @@ export const Edit = /*#__PURE__*/ __createIcon('Edit', [
 ])
 export const Edit2 = /*#__PURE__*/ __createIcon('Edit2', [
     {
-        u: () => new URL('./general/Edit2.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1727,42 +1684,41 @@ export const Edit2 = /*#__PURE__*/ __createIcon('Edit2', [
 ])
 export const Empty = /*#__PURE__*/ __createIcon('Empty', [
     {
-        u: () => new URL('./general/Empty.png', import.meta.url),
+        u: () => new URL('./general/Empty.png', import.meta.url).href,
     },
 ])
 export const EmptySimple = /*#__PURE__*/ __createIcon('EmptySimple', [
     {
         c: ['dark'],
-        u: () => new URL('./general/EmptySimple.dark.svg', import.meta.url),
+        u: () => new URL('./general/EmptySimple.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/EmptySimple.light.svg', import.meta.url),
+        u: () => new URL('./general/EmptySimple.light.svg', import.meta.url).href,
     },
 ])
 export const EncryptedFiles = /*#__PURE__*/ __createIcon('EncryptedFiles', [
     {
-        u: () => new URL('./general/EncryptedFiles.svg', import.meta.url),
+        u: () => new URL('./general/EncryptedFiles.svg', import.meta.url).href,
     },
 ])
 export const Europe = /*#__PURE__*/ __createIcon('Europe', [
     {
-        u: () => new URL('./general/Europe.svg', import.meta.url),
+        u: () => new URL('./general/Europe.svg', import.meta.url).href,
     },
 ])
 export const Eye = /*#__PURE__*/ __createIcon('Eye', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Eye.dark.svg', import.meta.url),
+        u: () => new URL('./general/Eye.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Eye.light.svg', import.meta.url),
+        u: () => new URL('./general/Eye.light.svg', import.meta.url).href,
     },
 ])
 export const EyeColor = /*#__PURE__*/ __createIcon('EyeColor', [
     {
-        u: () => new URL('./general/EyeColor.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1789,36 +1745,35 @@ export const EyeColor = /*#__PURE__*/ __createIcon('EyeColor', [
 export const EyeOff = /*#__PURE__*/ __createIcon('EyeOff', [
     {
         c: ['dark'],
-        u: () => new URL('./general/EyeOff.dark.svg', import.meta.url),
+        u: () => new URL('./general/EyeOff.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/EyeOff.light.svg', import.meta.url),
+        u: () => new URL('./general/EyeOff.light.svg', import.meta.url).href,
     },
 ])
 export const Facebook = /*#__PURE__*/ __createIcon('Facebook', [
     {
-        u: () => new URL('./general/Facebook.svg', import.meta.url),
+        u: () => new URL('./general/Facebook.svg', import.meta.url).href,
     },
 ])
 export const File = /*#__PURE__*/ __createIcon('File', [
     {
-        u: () => new URL('./general/File.svg', import.meta.url),
+        u: () => new URL('./general/File.svg', import.meta.url).href,
     },
 ])
 export const FileMessage = /*#__PURE__*/ __createIcon('FileMessage', [
     {
-        u: () => new URL('./general/FileMessage.svg', import.meta.url),
+        u: () => new URL('./general/FileMessage.svg', import.meta.url).href,
     },
 ])
 export const FillSuccess = /*#__PURE__*/ __createIcon('FillSuccess', [
     {
-        u: () => new URL('./general/FillSuccess.svg', import.meta.url),
+        u: () => new URL('./general/FillSuccess.svg', import.meta.url).href,
     },
 ])
 export const Filter = /*#__PURE__*/ __createIcon('Filter', [
     {
-        u: () => new URL('./general/Filter.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1836,7 +1791,6 @@ export const Filter = /*#__PURE__*/ __createIcon('Filter', [
 ])
 export const Flag = /*#__PURE__*/ __createIcon('Flag', [
     {
-        u: () => new URL('./general/Flag.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1861,7 +1815,6 @@ export const Flag = /*#__PURE__*/ __createIcon('Flag', [
 ])
 export const Folder = /*#__PURE__*/ __createIcon('Folder', [
     {
-        u: () => new URL('./general/Folder.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1887,12 +1840,11 @@ export const Folder = /*#__PURE__*/ __createIcon('Folder', [
 ])
 export const Gas = /*#__PURE__*/ __createIcon('Gas', [
     {
-        u: () => new URL('./general/Gas.svg', import.meta.url),
+        u: () => new URL('./general/Gas.svg', import.meta.url).href,
     },
 ])
 export const GasStation = /*#__PURE__*/ __createIcon('GasStation', [
     {
-        u: () => new URL('./general/GasStation.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1919,21 +1871,20 @@ export const GasStation = /*#__PURE__*/ __createIcon('GasStation', [
 export const Gear = /*#__PURE__*/ __createIcon('Gear', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Gear.dark.svg', import.meta.url),
+        u: () => new URL('./general/Gear.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Gear.light.svg', import.meta.url),
+        u: () => new URL('./general/Gear.light.svg', import.meta.url).href,
     },
 ])
 export const GearSettings = /*#__PURE__*/ __createIcon('GearSettings', [
     {
-        u: () => new URL('./general/GearSettings.svg', import.meta.url),
+        u: () => new URL('./general/GearSettings.svg', import.meta.url).href,
     },
 ])
 export const Globe = /*#__PURE__*/ __createIcon('Globe', [
     {
-        u: () => new URL('./general/Globe.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1949,12 +1900,11 @@ export const Globe = /*#__PURE__*/ __createIcon('Globe', [
 ])
 export const GrayMasks = /*#__PURE__*/ __createIcon('GrayMasks', [
     {
-        u: () => new URL('./general/GrayMasks.svg', import.meta.url),
+        u: () => new URL('./general/GrayMasks.svg', import.meta.url).href,
     },
 ])
 export const HamburgerMenu = /*#__PURE__*/ __createIcon('HamburgerMenu', [
     {
-        u: () => new URL('./general/HamburgerMenu.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -1992,7 +1942,6 @@ export const HamburgerMenu = /*#__PURE__*/ __createIcon('HamburgerMenu', [
 ])
 export const History = /*#__PURE__*/ __createIcon('History', [
     {
-        u: () => new URL('./general/History.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2030,32 +1979,32 @@ export const History = /*#__PURE__*/ __createIcon('History', [
 ])
 export const HKD = /*#__PURE__*/ __createIcon('HKD', [
     {
-        u: () => new URL('./general/HKD.svg', import.meta.url),
+        u: () => new URL('./general/HKD.svg', import.meta.url).href,
     },
 ])
 export const HongKong = /*#__PURE__*/ __createIcon('HongKong', [
     {
-        u: () => new URL('./general/HongKong.svg', import.meta.url),
+        u: () => new URL('./general/HongKong.svg', import.meta.url).href,
     },
 ])
 export const Identity = /*#__PURE__*/ __createIcon('Identity', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Identity.dark.svg', import.meta.url),
+        u: () => new URL('./general/Identity.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Identity.light.svg', import.meta.url),
+        u: () => new URL('./general/Identity.light.svg', import.meta.url).href,
     },
 ])
 export const Info = /*#__PURE__*/ __createIcon('Info', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Info.dark.svg', import.meta.url),
+        u: () => new URL('./general/Info.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Info.light.svg', import.meta.url),
+        u: () => new URL('./general/Info.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2081,12 +2030,11 @@ export const Info = /*#__PURE__*/ __createIcon('Info', [
 ])
 export const Interaction = /*#__PURE__*/ __createIcon('Interaction', [
     {
-        u: () => new URL('./general/Interaction.svg', import.meta.url),
+        u: () => new URL('./general/Interaction.svg', import.meta.url).href,
     },
 ])
 export const InteractionCircle = /*#__PURE__*/ __createIcon('InteractionCircle', [
     {
-        u: () => new URL('./general/InteractionCircle.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2118,19 +2066,18 @@ export const InteractionCircle = /*#__PURE__*/ __createIcon('InteractionCircle',
 ])
 export const Japan = /*#__PURE__*/ __createIcon('Japan', [
     {
-        u: () => new URL('./general/Japan.svg', import.meta.url),
+        u: () => new URL('./general/Japan.svg', import.meta.url).href,
     },
 ])
 export const JPY = /*#__PURE__*/ __createIcon('JPY', [
     {
-        u: () => new URL('./general/JPY.svg', import.meta.url),
+        u: () => new URL('./general/JPY.svg', import.meta.url).href,
     },
 ])
 export const KeySquare = /*#__PURE__*/ __createIcon(
     'KeySquare',
     [
         {
-            u: () => new URL('./general/KeySquare.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -2168,7 +2115,6 @@ export const KeySquare = /*#__PURE__*/ __createIcon(
 )
 export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
     {
-        u: () => new URL('./general/LeftArrow.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2186,21 +2132,20 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
 export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
         c: ['dark'],
-        u: () => new URL('./general/LinearCalendar.dark.svg', import.meta.url),
+        u: () => new URL('./general/LinearCalendar.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/LinearCalendar.light.svg', import.meta.url),
+        u: () => new URL('./general/LinearCalendar.light.svg', import.meta.url).href,
     },
 ])
 export const Link = /*#__PURE__*/ __createIcon('Link', [
     {
-        u: () => new URL('./general/Link.svg', import.meta.url),
+        u: () => new URL('./general/Link.svg', import.meta.url).href,
     },
 ])
 export const LinkOut = /*#__PURE__*/ __createIcon('LinkOut', [
     {
-        u: () => new URL('./general/LinkOut.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2217,29 +2162,28 @@ export const LinkOut = /*#__PURE__*/ __createIcon('LinkOut', [
 ])
 export const Loader = /*#__PURE__*/ __createIcon('Loader', [
     {
-        u: () => new URL('./general/Loader.svg', import.meta.url),
+        u: () => new URL('./general/Loader.svg', import.meta.url).href,
     },
 ])
 export const LoadingBase = /*#__PURE__*/ __createIcon('LoadingBase', [
     {
         c: ['dark'],
-        u: () => new URL('./general/LoadingBase.dark.svg', import.meta.url),
+        u: () => new URL('./general/LoadingBase.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/LoadingBase.light.svg', import.meta.url),
+        u: () => new URL('./general/LoadingBase.light.svg', import.meta.url).href,
     },
 ])
 export const LocalBackup = /*#__PURE__*/ __createIcon('LocalBackup', [
     {
-        u: () => new URL('./general/LocalBackup.png', import.meta.url),
+        u: () => new URL('./general/LocalBackup.png', import.meta.url).href,
     },
 ])
 export const Lock = /*#__PURE__*/ __createIcon(
     'Lock',
     [
         {
-            u: () => new URL('./general/Lock.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -2267,21 +2211,20 @@ export const Lock = /*#__PURE__*/ __createIcon(
 export const MaskAvatar = /*#__PURE__*/ __createIcon('MaskAvatar', [
     {
         c: ['dark'],
-        u: () => new URL('./general/MaskAvatar.dark.svg', import.meta.url),
+        u: () => new URL('./general/MaskAvatar.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/MaskAvatar.light.svg', import.meta.url),
+        u: () => new URL('./general/MaskAvatar.light.svg', import.meta.url).href,
     },
 ])
 export const MaskInMinds = /*#__PURE__*/ __createIcon('MaskInMinds', [
     {
-        u: () => new URL('./general/MaskInMinds.svg', import.meta.url),
+        u: () => new URL('./general/MaskInMinds.svg', import.meta.url).href,
     },
 ])
 export const MaskMe = /*#__PURE__*/ __createIcon('MaskMe', [
     {
-        u: () => new URL('./general/MaskMe.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2299,19 +2242,18 @@ export const MaskMe = /*#__PURE__*/ __createIcon('MaskMe', [
 ])
 export const Masks = /*#__PURE__*/ __createIcon('Masks', [
     {
-        u: () => new URL('./general/Masks.svg', import.meta.url),
+        u: () => new URL('./general/Masks.svg', import.meta.url).href,
     },
 ])
 export const Message = /*#__PURE__*/ __createIcon('Message', [
     {
-        u: () => new URL('./general/Message.svg', import.meta.url),
+        u: () => new URL('./general/Message.svg', import.meta.url).href,
     },
 ])
 export const Mnemonic = /*#__PURE__*/ __createIcon(
     'Mnemonic',
     [
         {
-            u: () => new URL('./general/Mnemonic.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -2350,7 +2292,6 @@ export const Mnemonic = /*#__PURE__*/ __createIcon(
 )
 export const More = /*#__PURE__*/ __createIcon('More', [
     {
-        u: () => new URL('./general/More.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2367,33 +2308,32 @@ export const More = /*#__PURE__*/ __createIcon('More', [
 export const NextIdAvatar = /*#__PURE__*/ __createIcon('NextIdAvatar', [
     {
         c: ['dark'],
-        u: () => new URL('./general/NextIdAvatar.dark.svg', import.meta.url),
+        u: () => new URL('./general/NextIdAvatar.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/NextIdAvatar.light.svg', import.meta.url),
+        u: () => new URL('./general/NextIdAvatar.light.svg', import.meta.url).href,
     },
 ])
 export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWarning', [
     {
-        u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url),
+        u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url).href,
     },
 ])
 export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
     {
-        u: () => new URL('./general/NFTRedPacket.svg', import.meta.url),
+        u: () => new URL('./general/NFTRedPacket.svg', import.meta.url).href,
     },
 ])
 export const OutlinedMask = /*#__PURE__*/ __createIcon('OutlinedMask', [
     {
-        u: () => new URL('./general/OutlinedMask.svg', import.meta.url),
+        u: () => new URL('./general/OutlinedMask.svg', import.meta.url).href,
     },
 ])
 export const PersonasOutline = /*#__PURE__*/ __createIcon(
     'PersonasOutline',
     [
         {
-            u: () => new URL('./general/PersonasOutline.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -2420,35 +2360,34 @@ export const PersonasOutline = /*#__PURE__*/ __createIcon(
 export const Pin = /*#__PURE__*/ __createIcon('Pin', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Pin.dark.svg', import.meta.url),
+        u: () => new URL('./general/Pin.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Pin.light.svg', import.meta.url),
+        u: () => new URL('./general/Pin.light.svg', import.meta.url).href,
     },
 ])
 export const Play = /*#__PURE__*/ __createIcon('Play', [
     {
-        u: () => new URL('./general/Play.svg', import.meta.url),
+        u: () => new URL('./general/Play.svg', import.meta.url).href,
     },
     {
         c: ['dark'],
-        u: () => new URL('./general/Play.dark.svg', import.meta.url),
+        u: () => new URL('./general/Play.dark.svg', import.meta.url).href,
     },
 ])
 export const Plugin = /*#__PURE__*/ __createIcon('Plugin', [
     {
-        u: () => new URL('./general/Plugin.svg', import.meta.url),
+        u: () => new URL('./general/Plugin.svg', import.meta.url).href,
     },
 ])
 export const Plugins = /*#__PURE__*/ __createIcon('Plugins', [
     {
-        u: () => new URL('./general/Plugins.svg', import.meta.url),
+        u: () => new URL('./general/Plugins.svg', import.meta.url).href,
     },
 ])
 export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
     {
-        u: () => new URL('./general/PopupClose.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2466,7 +2405,6 @@ export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
 ])
 export const PopupLink = /*#__PURE__*/ __createIcon('PopupLink', [
     {
-        u: () => new URL('./general/PopupLink.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2483,7 +2421,6 @@ export const PopupLink = /*#__PURE__*/ __createIcon('PopupLink', [
 ])
 export const PopupRestore = /*#__PURE__*/ __createIcon('PopupRestore', [
     {
-        u: () => new URL('./general/PopupRestore.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2512,32 +2449,31 @@ export const PopupRestore = /*#__PURE__*/ __createIcon('PopupRestore', [
 ])
 export const PopupTrash = /*#__PURE__*/ __createIcon('PopupTrash', [
     {
-        u: () => new URL('./general/PopupTrash.svg', import.meta.url),
+        u: () => new URL('./general/PopupTrash.svg', import.meta.url).href,
     },
 ])
 export const PrimaryInfo = /*#__PURE__*/ __createIcon('PrimaryInfo', [
     {
-        u: () => new URL('./general/PrimaryInfo.svg', import.meta.url),
+        u: () => new URL('./general/PrimaryInfo.svg', import.meta.url).href,
     },
 ])
 export const Provider = /*#__PURE__*/ __createIcon('Provider', [
     {
-        u: () => new URL('./general/Provider.svg', import.meta.url),
+        u: () => new URL('./general/Provider.svg', import.meta.url).href,
     },
 ])
 export const PublicKey = /*#__PURE__*/ __createIcon('PublicKey', [
     {
         c: ['dark'],
-        u: () => new URL('./general/PublicKey.dark.svg', import.meta.url),
+        u: () => new URL('./general/PublicKey.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/PublicKey.light.svg', import.meta.url),
+        u: () => new URL('./general/PublicKey.light.svg', import.meta.url).href,
     },
 ])
 export const PublicKey2 = /*#__PURE__*/ __createIcon('PublicKey2', [
     {
-        u: () => new URL('./general/PublicKey2.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2569,7 +2505,6 @@ export const PublicKey2 = /*#__PURE__*/ __createIcon('PublicKey2', [
 ])
 export const Questions = /*#__PURE__*/ __createIcon('Questions', [
     {
-        u: () => new URL('./general/Questions.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2599,12 +2534,11 @@ export const Questions = /*#__PURE__*/ __createIcon('Questions', [
 ])
 export const RadioButtonChecked = /*#__PURE__*/ __createIcon('RadioButtonChecked', [
     {
-        u: () => new URL('./general/RadioButtonChecked.svg', import.meta.url),
+        u: () => new URL('./general/RadioButtonChecked.svg', import.meta.url).href,
     },
 ])
 export const RadioButtonUnChecked = /*#__PURE__*/ __createIcon('RadioButtonUnChecked', [
     {
-        u: () => new URL('./general/RadioButtonUnChecked.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2624,7 +2558,7 @@ export const RadioButtonUnChecked = /*#__PURE__*/ __createIcon('RadioButtonUnChe
 export const RadioNo = /*#__PURE__*/ __createIcon('RadioNo', [
     {
         c: ['dark'],
-        u: () => new URL('./general/RadioNo.dark.svg', import.meta.url),
+        u: () => new URL('./general/RadioNo.dark.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2643,7 +2577,7 @@ export const RadioNo = /*#__PURE__*/ __createIcon('RadioNo', [
     },
     {
         c: ['light'],
-        u: () => new URL('./general/RadioNo.light.svg', import.meta.url),
+        u: () => new URL('./general/RadioNo.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2663,17 +2597,16 @@ export const RadioNo = /*#__PURE__*/ __createIcon('RadioNo', [
 ])
 export const ReceiveColorful = /*#__PURE__*/ __createIcon('ReceiveColorful', [
     {
-        u: () => new URL('./general/ReceiveColorful.svg', import.meta.url),
+        u: () => new URL('./general/ReceiveColorful.svg', import.meta.url).href,
     },
 ])
 export const RedPacket = /*#__PURE__*/ __createIcon('RedPacket', [
     {
-        u: () => new URL('./general/RedPacket.svg', import.meta.url),
+        u: () => new URL('./general/RedPacket.svg', import.meta.url).href,
     },
 ])
 export const Refresh = /*#__PURE__*/ __createIcon('Refresh', [
     {
-        u: () => new URL('./general/Refresh.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2697,32 +2630,31 @@ export const Refresh = /*#__PURE__*/ __createIcon('Refresh', [
 ])
 export const Restore = /*#__PURE__*/ __createIcon('Restore', [
     {
-        u: () => new URL('./general/Restore.svg', import.meta.url),
+        u: () => new URL('./general/Restore.svg', import.meta.url).href,
     },
 ])
 export const RestoreColorful = /*#__PURE__*/ __createIcon('RestoreColorful', [
     {
-        u: () => new URL('./general/RestoreColorful.svg', import.meta.url),
+        u: () => new URL('./general/RestoreColorful.svg', import.meta.url).href,
     },
 ])
 export const Retweet = /*#__PURE__*/ __createIcon('Retweet', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Retweet.dark.svg', import.meta.url),
+        u: () => new URL('./general/Retweet.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Retweet.light.svg', import.meta.url),
+        u: () => new URL('./general/Retweet.light.svg', import.meta.url).href,
     },
 ])
 export const Right = /*#__PURE__*/ __createIcon('Right', [
     {
-        u: () => new URL('./general/Right.svg', import.meta.url),
+        u: () => new URL('./general/Right.svg', import.meta.url).href,
     },
 ])
 export const RightArrow = /*#__PURE__*/ __createIcon('RightArrow', [
     {
-        u: () => new URL('./general/RightArrow.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2739,12 +2671,11 @@ export const RightArrow = /*#__PURE__*/ __createIcon('RightArrow', [
 ])
 export const Risk = /*#__PURE__*/ __createIcon('Risk', [
     {
-        u: () => new URL('./general/Risk.svg', import.meta.url),
+        u: () => new URL('./general/Risk.svg', import.meta.url).href,
     },
 ])
 export const Search = /*#__PURE__*/ __createIcon('Search', [
     {
-        u: () => new URL('./general/Search.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2761,18 +2692,18 @@ export const Search = /*#__PURE__*/ __createIcon('Search', [
 ])
 export const SecurityRisk = /*#__PURE__*/ __createIcon('SecurityRisk', [
     {
-        u: () => new URL('./general/SecurityRisk.svg', import.meta.url),
+        u: () => new URL('./general/SecurityRisk.svg', import.meta.url).href,
     },
 ])
 export const SecurityWarning = /*#__PURE__*/ __createIcon('SecurityWarning', [
     {
-        u: () => new URL('./general/SecurityWarning.svg', import.meta.url),
+        u: () => new URL('./general/SecurityWarning.svg', import.meta.url).href,
     },
 ])
 export const Selected = /*#__PURE__*/ __createIcon('Selected', [
     {
         c: ['dark'],
-        u: () => new URL('./general/Selected.dark.svg', import.meta.url),
+        u: () => new URL('./general/Selected.dark.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2801,7 +2732,7 @@ export const Selected = /*#__PURE__*/ __createIcon('Selected', [
     },
     {
         c: ['light'],
-        u: () => new URL('./general/Selected.light.svg', import.meta.url),
+        u: () => new URL('./general/Selected.light.svg', import.meta.url).href,
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2831,7 +2762,6 @@ export const Selected = /*#__PURE__*/ __createIcon('Selected', [
 ])
 export const Self = /*#__PURE__*/ __createIcon('Self', [
     {
-        u: () => new URL('./general/Self.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2849,7 +2779,6 @@ export const Self = /*#__PURE__*/ __createIcon('Self', [
 ])
 export const Send = /*#__PURE__*/ __createIcon('Send', [
     {
-        u: () => new URL('./general/Send.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2866,12 +2795,11 @@ export const Send = /*#__PURE__*/ __createIcon('Send', [
 ])
 export const SendColorful = /*#__PURE__*/ __createIcon('SendColorful', [
     {
-        u: () => new URL('./general/SendColorful.svg', import.meta.url),
+        u: () => new URL('./general/SendColorful.svg', import.meta.url).href,
     },
 ])
 export const Setting = /*#__PURE__*/ __createIcon('Setting', [
     {
-        u: () => new URL('./general/Setting.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2894,7 +2822,6 @@ export const Setting = /*#__PURE__*/ __createIcon('Setting', [
 ])
 export const Settings = /*#__PURE__*/ __createIcon('Settings', [
     {
-        u: () => new URL('./general/Settings.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2909,7 +2836,6 @@ export const Settings = /*#__PURE__*/ __createIcon('Settings', [
 ])
 export const Settings2 = /*#__PURE__*/ __createIcon('Settings2', [
     {
-        u: () => new URL('./general/Settings2.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2927,7 +2853,6 @@ export const Settings2 = /*#__PURE__*/ __createIcon('Settings2', [
 ])
 export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
     {
-        u: () => new URL('./general/SharpMask.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2943,17 +2868,16 @@ export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
 ])
 export const SignUpAccount = /*#__PURE__*/ __createIcon('SignUpAccount', [
     {
-        u: () => new URL('./general/SignUpAccount.png', import.meta.url),
+        u: () => new URL('./general/SignUpAccount.png', import.meta.url).href,
     },
 ])
 export const SmartPay = /*#__PURE__*/ __createIcon('SmartPay', [
     {
-        u: () => new URL('./general/SmartPay.svg', import.meta.url),
+        u: () => new URL('./general/SmartPay.svg', import.meta.url).href,
     },
 ])
 export const Star = /*#__PURE__*/ __createIcon('Star', [
     {
-        u: () => new URL('./general/Star.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2968,17 +2892,16 @@ export const Star = /*#__PURE__*/ __createIcon('Star', [
 ])
 export const Success = /*#__PURE__*/ __createIcon('Success', [
     {
-        u: () => new URL('./general/Success.svg', import.meta.url),
+        u: () => new URL('./general/Success.svg', import.meta.url).href,
     },
 ])
 export const SuccessForSnackBar = /*#__PURE__*/ __createIcon('SuccessForSnackBar', [
     {
-        u: () => new URL('./general/SuccessForSnackBar.svg', import.meta.url),
+        u: () => new URL('./general/SuccessForSnackBar.svg', import.meta.url).href,
     },
 ])
 export const Sun = /*#__PURE__*/ __createIcon('Sun', [
     {
-        u: () => new URL('./general/Sun.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -2994,37 +2917,36 @@ export const Sun = /*#__PURE__*/ __createIcon('Sun', [
 ])
 export const Swap = /*#__PURE__*/ __createIcon('Swap', [
     {
-        u: () => new URL('./general/Swap.svg', import.meta.url),
+        u: () => new URL('./general/Swap.svg', import.meta.url).href,
     },
 ])
 export const SwapColorful = /*#__PURE__*/ __createIcon('SwapColorful', [
     {
-        u: () => new URL('./general/SwapColorful.svg', import.meta.url),
+        u: () => new URL('./general/SwapColorful.svg', import.meta.url).href,
     },
 ])
 export const SwitchLogo = /*#__PURE__*/ __createIcon('SwitchLogo', [
     {
         c: ['dark'],
-        u: () => new URL('./general/SwitchLogo.dark.svg', import.meta.url),
+        u: () => new URL('./general/SwitchLogo.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/SwitchLogo.light.svg', import.meta.url),
+        u: () => new URL('./general/SwitchLogo.light.svg', import.meta.url).href,
     },
 ])
 export const TelegramRoundGray = /*#__PURE__*/ __createIcon('TelegramRoundGray', [
     {
-        u: () => new URL('./general/TelegramRoundGray.svg', import.meta.url),
+        u: () => new URL('./general/TelegramRoundGray.svg', import.meta.url).href,
     },
 ])
 export const Tick = /*#__PURE__*/ __createIcon('Tick', [
     {
-        u: () => new URL('./general/Tick.svg', import.meta.url),
+        u: () => new URL('./general/Tick.svg', import.meta.url).href,
     },
 ])
 export const Time = /*#__PURE__*/ __createIcon('Time', [
     {
-        u: () => new URL('./general/Time.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3056,19 +2978,18 @@ export const Time = /*#__PURE__*/ __createIcon('Time', [
 ])
 export const Tips = /*#__PURE__*/ __createIcon('Tips', [
     {
-        u: () => new URL('./general/Tips.svg', import.meta.url),
+        u: () => new URL('./general/Tips.svg', import.meta.url).href,
     },
 ])
 export const TransactionFailed = /*#__PURE__*/ __createIcon('TransactionFailed', [
     {
-        u: () => new URL('./general/TransactionFailed.svg', import.meta.url),
+        u: () => new URL('./general/TransactionFailed.svg', import.meta.url).href,
     },
 ])
 export const Trash = /*#__PURE__*/ __createIcon(
     'Trash',
     [
         {
-            u: () => new URL('./general/Trash.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -3102,12 +3023,11 @@ export const Trash = /*#__PURE__*/ __createIcon(
 )
 export const TrashLine = /*#__PURE__*/ __createIcon('TrashLine', [
     {
-        u: () => new URL('./general/TrashLine.svg', import.meta.url),
+        u: () => new URL('./general/TrashLine.svg', import.meta.url).href,
     },
 ])
 export const Tutorial = /*#__PURE__*/ __createIcon('Tutorial', [
     {
-        u: () => new URL('./general/Tutorial.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3122,7 +3042,6 @@ export const Tutorial = /*#__PURE__*/ __createIcon('Tutorial', [
 ])
 export const Twitter = /*#__PURE__*/ __createIcon('Twitter', [
     {
-        u: () => new URL('./general/Twitter.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3139,7 +3058,6 @@ export const TwitterStroke = /*#__PURE__*/ __createIcon(
     'TwitterStroke',
     [
         {
-            u: () => new URL('./general/TwitterStroke.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsxs('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -3173,7 +3091,6 @@ export const TwitterStroke = /*#__PURE__*/ __createIcon(
 )
 export const TxIn = /*#__PURE__*/ __createIcon('TxIn', [
     {
-        u: () => new URL('./general/TxIn.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3192,12 +3109,11 @@ export const TxIn = /*#__PURE__*/ __createIcon('TxIn', [
 ])
 export const TxOut = /*#__PURE__*/ __createIcon('TxOut', [
     {
-        u: () => new URL('./general/TxOut.svg', import.meta.url),
+        u: () => new URL('./general/TxOut.svg', import.meta.url).href,
     },
 ])
 export const Undo = /*#__PURE__*/ __createIcon('Undo', [
     {
-        u: () => new URL('./general/Undo.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3226,7 +3142,6 @@ export const Undo = /*#__PURE__*/ __createIcon('Undo', [
 ])
 export const Upload = /*#__PURE__*/ __createIcon('Upload', [
     {
-        u: () => new URL('./general/Upload.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3258,17 +3173,16 @@ export const Upload = /*#__PURE__*/ __createIcon('Upload', [
 ])
 export const USD = /*#__PURE__*/ __createIcon('USD', [
     {
-        u: () => new URL('./general/USD.svg', import.meta.url),
+        u: () => new URL('./general/USD.svg', import.meta.url).href,
     },
 ])
 export const User = /*#__PURE__*/ __createIcon('User', [
     {
-        u: () => new URL('./general/User.svg', import.meta.url),
+        u: () => new URL('./general/User.svg', import.meta.url).href,
     },
 ])
 export const Verification = /*#__PURE__*/ __createIcon('Verification', [
     {
-        u: () => new URL('./general/Verification.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3295,7 +3209,6 @@ export const Verification = /*#__PURE__*/ __createIcon('Verification', [
 ])
 export const Wallet = /*#__PURE__*/ __createIcon('Wallet', [
     {
-        u: () => new URL('./general/Wallet.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3322,7 +3235,6 @@ export const Wallet = /*#__PURE__*/ __createIcon('Wallet', [
 ])
 export const WalletNav = /*#__PURE__*/ __createIcon('WalletNav', [
     {
-        u: () => new URL('./general/WalletNav.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3346,7 +3258,6 @@ export const WalletNav = /*#__PURE__*/ __createIcon('WalletNav', [
 ])
 export const WalletSetting = /*#__PURE__*/ __createIcon('WalletSetting', [
     {
-        u: () => new URL('./general/WalletSetting.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3368,72 +3279,71 @@ export const WalletSetting = /*#__PURE__*/ __createIcon('WalletSetting', [
 ])
 export const Warning = /*#__PURE__*/ __createIcon('Warning', [
     {
-        u: () => new URL('./general/Warning.svg', import.meta.url),
+        u: () => new URL('./general/Warning.svg', import.meta.url).href,
     },
 ])
 export const WarningTriangle = /*#__PURE__*/ __createIcon('WarningTriangle', [
     {
-        u: () => new URL('./general/WarningTriangle.svg', import.meta.url),
+        u: () => new URL('./general/WarningTriangle.svg', import.meta.url).href,
     },
 ])
 export const Web = /*#__PURE__*/ __createIcon('Web', [
     {
-        u: () => new URL('./general/Web.svg', import.meta.url),
+        u: () => new URL('./general/Web.svg', import.meta.url).href,
     },
 ])
 export const WebBlack = /*#__PURE__*/ __createIcon('WebBlack', [
     {
         c: ['dark'],
-        u: () => new URL('./general/WebBlack.dark.svg', import.meta.url),
+        u: () => new URL('./general/WebBlack.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./general/WebBlack.light.svg', import.meta.url),
+        u: () => new URL('./general/WebBlack.light.svg', import.meta.url).href,
     },
 ])
 export const MenuPersonas = /*#__PURE__*/ __createIcon('MenuPersonas', [
     {
-        u: () => new URL('./menus/MenuPersonas.png', import.meta.url),
+        u: () => new URL('./menus/MenuPersonas.png', import.meta.url).href,
     },
 ])
 export const MenuPersonasActive = /*#__PURE__*/ __createIcon('MenuPersonasActive', [
     {
-        u: () => new URL('./menus/MenuPersonasActive.png', import.meta.url),
+        u: () => new URL('./menus/MenuPersonasActive.png', import.meta.url).href,
     },
 ])
 export const MenuSettings = /*#__PURE__*/ __createIcon('MenuSettings', [
     {
-        u: () => new URL('./menus/MenuSettings.png', import.meta.url),
+        u: () => new URL('./menus/MenuSettings.png', import.meta.url).href,
     },
 ])
 export const MenuSettingsActive = /*#__PURE__*/ __createIcon('MenuSettingsActive', [
     {
-        u: () => new URL('./menus/MenuSettingsActive.png', import.meta.url),
+        u: () => new URL('./menus/MenuSettingsActive.png', import.meta.url).href,
     },
 ])
 export const MenuWallets = /*#__PURE__*/ __createIcon('MenuWallets', [
     {
-        u: () => new URL('./menus/MenuWallets.png', import.meta.url),
+        u: () => new URL('./menus/MenuWallets.png', import.meta.url).href,
     },
 ])
 export const MenuWalletsActive = /*#__PURE__*/ __createIcon('MenuWalletsActive', [
     {
-        u: () => new URL('./menus/MenuWalletsActive.png', import.meta.url),
+        u: () => new URL('./menus/MenuWalletsActive.png', import.meta.url).href,
     },
 ])
 export const Approval = /*#__PURE__*/ __createIcon('Approval', [
     {
-        u: () => new URL('./plugins/Approval.svg', import.meta.url),
+        u: () => new URL('./plugins/Approval.svg', import.meta.url).href,
     },
 ])
 export const ArtBlocks = /*#__PURE__*/ __createIcon('ArtBlocks', [
     {
-        u: () => new URL('./plugins/ArtBlocks.png', import.meta.url),
+        u: () => new URL('./plugins/ArtBlocks.png', import.meta.url).href,
     },
 ])
 export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
     {
-        u: () => new URL('./plugins/Avatar.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3449,289 +3359,288 @@ export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
 ])
 export const Bit = /*#__PURE__*/ __createIcon('Bit', [
     {
-        u: () => new URL('./plugins/Bit.svg', import.meta.url),
+        u: () => new URL('./plugins/Bit.svg', import.meta.url).href,
     },
 ])
 export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
     {
-        u: () => new URL('./plugins/Calendar.svg', import.meta.url),
+        u: () => new URL('./plugins/Calendar.svg', import.meta.url).href,
     },
 ])
 export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
     {
-        u: () => new URL('./plugins/Collectibles.svg', import.meta.url),
+        u: () => new URL('./plugins/Collectibles.svg', import.meta.url).href,
     },
 ])
 export const CrossBridge = /*#__PURE__*/ __createIcon('CrossBridge', [
     {
-        u: () => new URL('./plugins/CrossBridge.png', import.meta.url),
+        u: () => new URL('./plugins/CrossBridge.png', import.meta.url).href,
     },
 ])
 export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSearch', [
     {
-        u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url),
+        u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url).href,
     },
 ])
 export const ENS = /*#__PURE__*/ __createIcon('ENS', [
     {
-        u: () => new URL('./plugins/ENS.png', import.meta.url),
+        u: () => new URL('./plugins/ENS.png', import.meta.url).href,
     },
 ])
 export const ENSCover = /*#__PURE__*/ __createIcon('ENSCover', [
     {
-        u: () => new URL('./plugins/ENSCover.svg', import.meta.url),
+        u: () => new URL('./plugins/ENSCover.svg', import.meta.url).href,
     },
 ])
 export const FileService = /*#__PURE__*/ __createIcon('FileService', [
     {
-        u: () => new URL('./plugins/FileService.svg', import.meta.url),
+        u: () => new URL('./plugins/FileService.svg', import.meta.url).href,
     },
 ])
 export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
     {
-        u: () => new URL('./plugins/FindTruman.png', import.meta.url),
+        u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
     },
 ])
 export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [
     {
         c: ['dark'],
-        u: () => new URL('./plugins/Gitcoin.dark.svg', import.meta.url),
+        u: () => new URL('./plugins/Gitcoin.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./plugins/Gitcoin.light.svg', import.meta.url),
+        u: () => new URL('./plugins/Gitcoin.light.svg', import.meta.url).href,
     },
 ])
 export const GoodGhosting = /*#__PURE__*/ __createIcon('GoodGhosting', [
     {
         c: ['dark'],
-        u: () => new URL('./plugins/GoodGhosting.dark.svg', import.meta.url),
+        u: () => new URL('./plugins/GoodGhosting.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./plugins/GoodGhosting.light.svg', import.meta.url),
+        u: () => new URL('./plugins/GoodGhosting.light.svg', import.meta.url).href,
     },
 ])
 export const Markets = /*#__PURE__*/ __createIcon('Markets', [
     {
-        u: () => new URL('./plugins/Markets.png', import.meta.url),
+        u: () => new URL('./plugins/Markets.png', import.meta.url).href,
     },
 ])
 export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
     {
-        u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url),
+        u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
     },
 ])
 export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
     {
-        u: () => new URL('./plugins/MaskBox.svg', import.meta.url),
+        u: () => new URL('./plugins/MaskBox.svg', import.meta.url).href,
     },
 ])
 export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
     {
-        u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url),
+        u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
     },
 ])
 export const PoolTogether = /*#__PURE__*/ __createIcon('PoolTogether', [
     {
-        u: () => new URL('./plugins/PoolTogether.png', import.meta.url),
+        u: () => new URL('./plugins/PoolTogether.png', import.meta.url).href,
     },
 ])
 export const Savings = /*#__PURE__*/ __createIcon('Savings', [
     {
-        u: () => new URL('./plugins/Savings.svg', import.meta.url),
+        u: () => new URL('./plugins/Savings.svg', import.meta.url).href,
     },
 ])
 export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
     {
-        u: () => new URL('./plugins/ScamSniffer.svg', import.meta.url),
+        u: () => new URL('./plugins/ScamSniffer.svg', import.meta.url).href,
     },
 ])
 export const SecurityChecker = /*#__PURE__*/ __createIcon('SecurityChecker', [
     {
-        u: () => new URL('./plugins/SecurityChecker.svg', import.meta.url),
+        u: () => new URL('./plugins/SecurityChecker.svg', import.meta.url).href,
     },
 ])
 export const SettingInfo = /*#__PURE__*/ __createIcon('SettingInfo', [
     {
         c: ['dark'],
-        u: () => new URL('./plugins/SettingInfo.dark.svg', import.meta.url),
+        u: () => new URL('./plugins/SettingInfo.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./plugins/SettingInfo.light.svg', import.meta.url),
+        u: () => new URL('./plugins/SettingInfo.light.svg', import.meta.url).href,
     },
 ])
 export const Shared = /*#__PURE__*/ __createIcon('shared', [
     {
-        u: () => new URL('./plugins/shared.svg', import.meta.url),
+        u: () => new URL('./plugins/shared.svg', import.meta.url).href,
     },
 ])
 export const Snapshot = /*#__PURE__*/ __createIcon('Snapshot', [
     {
-        u: () => new URL('./plugins/Snapshot.svg', import.meta.url),
+        u: () => new URL('./plugins/Snapshot.svg', import.meta.url).href,
     },
 ])
 export const SpaceId = /*#__PURE__*/ __createIcon('SpaceId', [
     {
-        u: () => new URL('./plugins/SpaceId.svg', import.meta.url),
+        u: () => new URL('./plugins/SpaceId.svg', import.meta.url).href,
     },
 ])
 export const TipCoin = /*#__PURE__*/ __createIcon('TipCoin', [
     {
-        u: () => new URL('./plugins/TipCoin.svg', import.meta.url),
+        u: () => new URL('./plugins/TipCoin.svg', import.meta.url).href,
     },
 ])
 export const Transak = /*#__PURE__*/ __createIcon('Transak', [
     {
-        u: () => new URL('./plugins/Transak.png', import.meta.url),
+        u: () => new URL('./plugins/Transak.png', import.meta.url).href,
     },
 ])
 export const Unstoppable = /*#__PURE__*/ __createIcon('Unstoppable', [
     {
-        u: () => new URL('./plugins/Unstoppable.svg', import.meta.url),
+        u: () => new URL('./plugins/Unstoppable.svg', import.meta.url).href,
     },
 ])
 export const Valuables = /*#__PURE__*/ __createIcon('Valuables', [
     {
         c: ['dark'],
-        u: () => new URL('./plugins/Valuables.dark.svg', import.meta.url),
+        u: () => new URL('./plugins/Valuables.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./plugins/Valuables.light.svg', import.meta.url),
+        u: () => new URL('./plugins/Valuables.light.svg', import.meta.url).href,
     },
 ])
 export const Web3Profile = /*#__PURE__*/ __createIcon('Web3Profile', [
     {
-        u: () => new URL('./plugins/Web3Profile.svg', import.meta.url),
+        u: () => new URL('./plugins/Web3Profile.svg', import.meta.url).href,
     },
 ])
 export const Web3ProfileCard = /*#__PURE__*/ __createIcon('Web3ProfileCard', [
     {
-        u: () => new URL('./plugins/Web3ProfileCard.svg', import.meta.url),
+        u: () => new URL('./plugins/Web3ProfileCard.svg', import.meta.url).href,
     },
 ])
 export const AchievementBurn = /*#__PURE__*/ __createIcon('AchievementBurn', [
     {
-        u: () => new URL('./rss3/AchievementBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/AchievementBurn.svg', import.meta.url).href,
     },
 ])
 export const AchievementReceive = /*#__PURE__*/ __createIcon('AchievementReceive', [
     {
-        u: () => new URL('./rss3/AchievementReceive.svg', import.meta.url),
+        u: () => new URL('./rss3/AchievementReceive.svg', import.meta.url).href,
     },
 ])
 export const ApprovalApprove = /*#__PURE__*/ __createIcon('ApprovalApprove', [
     {
-        u: () => new URL('./rss3/ApprovalApprove.svg', import.meta.url),
+        u: () => new URL('./rss3/ApprovalApprove.svg', import.meta.url).href,
     },
 ])
 export const CollectibleApprove = /*#__PURE__*/ __createIcon('CollectibleApprove', [
     {
-        u: () => new URL('./rss3/CollectibleApprove.svg', import.meta.url),
+        u: () => new URL('./rss3/CollectibleApprove.svg', import.meta.url).href,
     },
 ])
 export const CollectibleBurn = /*#__PURE__*/ __createIcon('CollectibleBurn', [
     {
-        u: () => new URL('./rss3/CollectibleBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/CollectibleBurn.svg', import.meta.url).href,
     },
 ])
 export const CollectibleIn = /*#__PURE__*/ __createIcon('CollectibleIn', [
     {
-        u: () => new URL('./rss3/CollectibleIn.svg', import.meta.url),
+        u: () => new URL('./rss3/CollectibleIn.svg', import.meta.url).href,
     },
 ])
 export const CollectibleMint = /*#__PURE__*/ __createIcon('CollectibleMint', [
     {
-        u: () => new URL('./rss3/CollectibleMint.svg', import.meta.url),
+        u: () => new URL('./rss3/CollectibleMint.svg', import.meta.url).href,
     },
 ])
 export const CollectibleOut = /*#__PURE__*/ __createIcon('CollectibleOut', [
     {
-        u: () => new URL('./rss3/CollectibleOut.svg', import.meta.url),
+        u: () => new URL('./rss3/CollectibleOut.svg', import.meta.url).href,
     },
 ])
 export const DonationDonate = /*#__PURE__*/ __createIcon('DonationDonate', [
     {
-        u: () => new URL('./rss3/DonationDonate.svg', import.meta.url),
+        u: () => new URL('./rss3/DonationDonate.svg', import.meta.url).href,
     },
 ])
 export const DonationLaunch = /*#__PURE__*/ __createIcon('DonationLaunch', [
     {
-        u: () => new URL('./rss3/DonationLaunch.svg', import.meta.url),
+        u: () => new URL('./rss3/DonationLaunch.svg', import.meta.url).href,
     },
 ])
 export const Follow = /*#__PURE__*/ __createIcon('Follow', [
     {
-        u: () => new URL('./rss3/Follow.svg', import.meta.url),
+        u: () => new URL('./rss3/Follow.svg', import.meta.url).href,
     },
 ])
 export const GovernancePropose = /*#__PURE__*/ __createIcon('GovernancePropose', [
     {
-        u: () => new URL('./rss3/GovernancePropose.svg', import.meta.url),
+        u: () => new URL('./rss3/GovernancePropose.svg', import.meta.url).href,
     },
 ])
 export const GovernanceVote = /*#__PURE__*/ __createIcon('GovernanceVote', [
     {
-        u: () => new URL('./rss3/GovernanceVote.svg', import.meta.url),
+        u: () => new URL('./rss3/GovernanceVote.svg', import.meta.url).href,
     },
 ])
 export const NoteBurn = /*#__PURE__*/ __createIcon('NoteBurn', [
     {
-        u: () => new URL('./rss3/NoteBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/NoteBurn.svg', import.meta.url).href,
     },
 ])
 export const NoteCreate = /*#__PURE__*/ __createIcon('NoteCreate', [
     {
-        u: () => new URL('./rss3/NoteCreate.svg', import.meta.url),
+        u: () => new URL('./rss3/NoteCreate.svg', import.meta.url).href,
     },
 ])
 export const NoteEdit = /*#__PURE__*/ __createIcon('NoteEdit', [
     {
-        u: () => new URL('./rss3/NoteEdit.svg', import.meta.url),
+        u: () => new URL('./rss3/NoteEdit.svg', import.meta.url).href,
     },
 ])
 export const NoteLink = /*#__PURE__*/ __createIcon('NoteLink', [
     {
-        u: () => new URL('./rss3/NoteLink.svg', import.meta.url),
+        u: () => new URL('./rss3/NoteLink.svg', import.meta.url).href,
     },
 ])
 export const NoteMint = /*#__PURE__*/ __createIcon('NoteMint', [
     {
-        u: () => new URL('./rss3/NoteMint.svg', import.meta.url),
+        u: () => new URL('./rss3/NoteMint.svg', import.meta.url).href,
     },
 ])
 export const ProfileBurn = /*#__PURE__*/ __createIcon('ProfileBurn', [
     {
-        u: () => new URL('./rss3/ProfileBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/ProfileBurn.svg', import.meta.url).href,
     },
 ])
 export const ProfileCreate = /*#__PURE__*/ __createIcon('ProfileCreate', [
     {
-        u: () => new URL('./rss3/ProfileCreate.svg', import.meta.url),
+        u: () => new URL('./rss3/ProfileCreate.svg', import.meta.url).href,
     },
 ])
 export const ProfileLink = /*#__PURE__*/ __createIcon('ProfileLink', [
     {
-        u: () => new URL('./rss3/ProfileLink.svg', import.meta.url),
+        u: () => new URL('./rss3/ProfileLink.svg', import.meta.url).href,
     },
 ])
 export const ProfileProxy = /*#__PURE__*/ __createIcon('ProfileProxy', [
     {
-        u: () => new URL('./rss3/ProfileProxy.svg', import.meta.url),
+        u: () => new URL('./rss3/ProfileProxy.svg', import.meta.url).href,
     },
 ])
 export const ProfileUpdate = /*#__PURE__*/ __createIcon('ProfileUpdate', [
     {
-        u: () => new URL('./rss3/ProfileUpdate.svg', import.meta.url),
+        u: () => new URL('./rss3/ProfileUpdate.svg', import.meta.url).href,
     },
 ])
 export const RSS3Link = /*#__PURE__*/ __createIcon(
     'RSS3Link',
     [
         {
-            u: () => new URL('./rss3/RSS3Link.svg', import.meta.url),
             j: () =>
                 /*#__PURE__*/ _jsx('svg', {
                     xmlns: 'http://www.w3.org/2000/svg',
@@ -3749,82 +3658,81 @@ export const RSS3Link = /*#__PURE__*/ __createIcon(
 )
 export const TokenBridge = /*#__PURE__*/ __createIcon('TokenBridge', [
     {
-        u: () => new URL('./rss3/TokenBridge.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenBridge.svg', import.meta.url).href,
     },
 ])
 export const TokenBurn = /*#__PURE__*/ __createIcon('TokenBurn', [
     {
-        u: () => new URL('./rss3/TokenBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenBurn.svg', import.meta.url).href,
     },
 ])
 export const TokenIn = /*#__PURE__*/ __createIcon('TokenIn', [
     {
-        u: () => new URL('./rss3/TokenIn.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenIn.svg', import.meta.url).href,
     },
 ])
 export const TokenLiquidity = /*#__PURE__*/ __createIcon('TokenLiquidity', [
     {
-        u: () => new URL('./rss3/TokenLiquidity.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenLiquidity.svg', import.meta.url).href,
     },
 ])
 export const TokenMint = /*#__PURE__*/ __createIcon('TokenMint', [
     {
-        u: () => new URL('./rss3/TokenMint.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenMint.svg', import.meta.url).href,
     },
 ])
 export const TokenOut = /*#__PURE__*/ __createIcon('TokenOut', [
     {
-        u: () => new URL('./rss3/TokenOut.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenOut.svg', import.meta.url).href,
     },
 ])
 export const TokenStake = /*#__PURE__*/ __createIcon('TokenStake', [
     {
-        u: () => new URL('./rss3/TokenStake.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenStake.svg', import.meta.url).href,
     },
 ])
 export const TokenSwap = /*#__PURE__*/ __createIcon('TokenSwap', [
     {
-        u: () => new URL('./rss3/TokenSwap.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenSwap.svg', import.meta.url).href,
     },
 ])
 export const TokenUnstake = /*#__PURE__*/ __createIcon('TokenUnstake', [
     {
-        u: () => new URL('./rss3/TokenUnstake.svg', import.meta.url),
+        u: () => new URL('./rss3/TokenUnstake.svg', import.meta.url).href,
     },
 ])
 export const Unfollow = /*#__PURE__*/ __createIcon('Unfollow', [
     {
-        u: () => new URL('./rss3/Unfollow.svg', import.meta.url),
+        u: () => new URL('./rss3/Unfollow.svg', import.meta.url).href,
     },
 ])
 export const UnknownBurn = /*#__PURE__*/ __createIcon('UnknownBurn', [
     {
-        u: () => new URL('./rss3/UnknownBurn.svg', import.meta.url),
+        u: () => new URL('./rss3/UnknownBurn.svg', import.meta.url).href,
     },
 ])
 export const UnknownCancel = /*#__PURE__*/ __createIcon('UnknownCancel', [
     {
-        u: () => new URL('./rss3/UnknownCancel.svg', import.meta.url),
+        u: () => new URL('./rss3/UnknownCancel.svg', import.meta.url).href,
     },
 ])
 export const UnknownIn = /*#__PURE__*/ __createIcon('UnknownIn', [
     {
-        u: () => new URL('./rss3/UnknownIn.svg', import.meta.url),
+        u: () => new URL('./rss3/UnknownIn.svg', import.meta.url).href,
     },
 ])
 export const UnknownOut = /*#__PURE__*/ __createIcon('UnknownOut', [
     {
-        u: () => new URL('./rss3/UnknownOut.svg', import.meta.url),
+        u: () => new URL('./rss3/UnknownOut.svg', import.meta.url).href,
     },
 ])
 export const CN = /*#__PURE__*/ __createIcon('CN', [
     {
-        u: () => new URL('./settings/CN.svg', import.meta.url),
+        u: () => new URL('./settings/CN.svg', import.meta.url).href,
     },
 ])
 export const Email = /*#__PURE__*/ __createIcon('Email', [
     {
-        u: () => new URL('./settings/Email.svg', import.meta.url),
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
@@ -3840,96 +3748,96 @@ export const Email = /*#__PURE__*/ __createIcon('Email', [
 ])
 export const JP = /*#__PURE__*/ __createIcon('JP', [
     {
-        u: () => new URL('./settings/JP.svg', import.meta.url),
+        u: () => new URL('./settings/JP.svg', import.meta.url).href,
     },
 ])
 export const KR = /*#__PURE__*/ __createIcon('KR', [
     {
-        u: () => new URL('./settings/KR.svg', import.meta.url),
+        u: () => new URL('./settings/KR.svg', import.meta.url).href,
     },
 ])
 export const SettingsAppearance = /*#__PURE__*/ __createIcon('SettingsAppearance', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsAppearance.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsAppearance.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsAppearance.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsAppearance.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsBackup = /*#__PURE__*/ __createIcon('SettingsBackup', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsBackup.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsBackup.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsBackup.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsBackup.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsEmail = /*#__PURE__*/ __createIcon('SettingsEmail', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsEmail.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsEmail.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsEmail.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsEmail.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsLanguage = /*#__PURE__*/ __createIcon('SettingsLanguage', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsLanguage.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsLanguage.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsLanguage.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsLanguage.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsPassword = /*#__PURE__*/ __createIcon('SettingsPassword', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsPassword.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsPassword.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsPassword.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsPassword.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsPhone = /*#__PURE__*/ __createIcon('SettingsPhone', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsPhone.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsPhone.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsPhone.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsPhone.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsRestore = /*#__PURE__*/ __createIcon('SettingsRestore', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsRestore.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsRestore.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsRestore.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsRestore.light.svg', import.meta.url).href,
     },
 ])
 export const SettingsSync = /*#__PURE__*/ __createIcon('SettingsSync', [
     {
         c: ['dark'],
-        u: () => new URL('./settings/SettingsSync.dark.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsSync.dark.svg', import.meta.url).href,
     },
     {
         c: ['light'],
-        u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url),
+        u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url).href,
     },
 ])
 export const UK = /*#__PURE__*/ __createIcon('UK', [
     {
-        u: () => new URL('./settings/UK.svg', import.meta.url),
+        u: () => new URL('./settings/UK.svg', import.meta.url).href,
     },
 ])

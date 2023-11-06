@@ -6,7 +6,7 @@ export interface __RawIcon__ {
     // currentVariant
     c?: string[]
     // URL
-    u: () => URL
+    u?: () => URL | null
     // JSX
     j?: () => object
     // supportColor

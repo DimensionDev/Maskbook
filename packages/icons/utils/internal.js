@@ -21,7 +21,6 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
 
         const defaultPalette = useDefaultPalette()
         const selected = selectVariant(variants, variant || defaultPalette)
-        const url = React.useMemo(selected.u, [selected])
         const jsx = React.useMemo(selected.j || undefine_f, [selected])
         const supportColor = selected.s
 
@@ -29,7 +28,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             const bg = supportColor
                 ? null
                 : {
-                      backgroundImage: `url(${url})`,
+                      backgroundImage: `url(${selected.u()})`,
                       backgroundSize: 'contain',
                   }
             const base = {
