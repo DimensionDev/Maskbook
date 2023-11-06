@@ -89,7 +89,6 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                 throw ErrorEditor.from(error, null, 'Failed to deploy.').error
             }
         case EthereumMethodType.ETH_DECRYPT:
-            throw new Error('Method not implemented.')
         case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
             throw new Error('Method not implemented.')
         default:

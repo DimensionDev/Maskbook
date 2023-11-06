@@ -190,7 +190,7 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     },
 }
 
-export const getAllChainNames = (pluginID: NetworkPluginID) => {
+export function getAllChainNames(pluginID: NetworkPluginID) {
     return Object.values(ChainNameMap[pluginID]).join(',')
 }
 

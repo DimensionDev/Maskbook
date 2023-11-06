@@ -2,9 +2,12 @@ import { parseInt } from 'lodash-es'
 import { type SecurityMessage, SecurityType, SecurityMessageLevel } from './types.js'
 import type { SecurityAPI } from '../entry-types.js'
 
-const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
-const isUnset = (name: keyof SecurityAPI.TokenSecurityType) => (info: SecurityAPI.TokenSecurityType) =>
-    info[name] === undefined
+function percentageToNumber(value?: string) {
+    return parseInt((value ?? '').replace('%', '')) * 100
+}
+function isUnset(name: keyof SecurityAPI.TokenSecurityType) {
+    return (info: SecurityAPI.TokenSecurityType) => info[name] === undefined
+}
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source
