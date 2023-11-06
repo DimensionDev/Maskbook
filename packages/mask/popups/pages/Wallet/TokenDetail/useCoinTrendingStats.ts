@@ -16,7 +16,7 @@ export function useCoinTrendingStats(chainId: number, address?: string, days?: n
             const currency = trending.getCurrency(chainId, SourceType.CoinGecko)
             if (!currency) return
 
-            return CoinGeckoTrending.getCoinPriceStats(chainId, coinId, currency, days)
+            return CoinGeckoTrending.getCoinPriceStats(coinId, currency, days)
         },
     })
 }
