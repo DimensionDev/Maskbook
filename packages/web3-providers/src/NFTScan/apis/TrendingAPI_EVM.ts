@@ -8,7 +8,7 @@ import {
     type NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
@@ -26,22 +26,6 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         })
         const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection>>(chainId, path)
         return response?.data
-    }
-
-    private async searchNFTCollection(chainId: ChainId, keyword: string): Promise<NonFungibleTokenAPI.Collection[]> {
-        if (!isValidChainId(chainId)) return EMPTY_LIST
-        const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<Response<NonFungibleTokenAPI.Collection[]>>(chainId, path, {
-            method: 'POST',
-            body: JSON.stringify({
-                name: keyword,
-                symbol: keyword,
-                sort_direction: 'desc',
-                sort_field: 'floor_price',
-                name_fuzzy_search: true,
-            }),
-        })
-        return response?.data ?? EMPTY_LIST
     }
 
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
