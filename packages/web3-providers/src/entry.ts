@@ -109,7 +109,7 @@ export {
 export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
 
 // Zerion
-export { Zerion, ZerionGas, ZerionNonFungibleToken, ZerionTrending } from './Zerion/index.js'
+export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
 
 // Fuse
 export { Fuse, FuseCoin } from './Fuse/index.js'

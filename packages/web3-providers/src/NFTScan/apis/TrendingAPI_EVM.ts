@@ -9,7 +9,6 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { COIN_RECOMMENDATION_SIZE } from '../../Trending/constants.js'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
@@ -119,36 +118,7 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         return response?.data ?? EMPTY_LIST
     }
 
-    getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        return Promise.resolve(EMPTY_LIST)
-    }
-
-    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        if (!keyword || !isValidChainId(chainId)) return EMPTY_LIST
-        const nfts = await this.searchNFTCollection(chainId, keyword)
-
-        const coins: TrendingAPI.Coin[] = nfts.map((nft) => ({
-            id: nft.contract_address,
-            name: nft.name,
-            symbol: nft.symbol,
-            type: TokenType.NonFungible,
-            address: nft.contract_address,
-            contract_address: nft.contract_address,
-            image_url: nft.logo_url,
-        }))
-        return coins.slice(0, COIN_RECOMMENDATION_SIZE)
-    }
-
-    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
-        throw new Error('To be implemented.')
-    }
-
-    async getCoinPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
+    async getCoinPriceStats(chainId: ChainId, coinId: string, days: number): Promise<TrendingAPI.Stat[]> {
         const range = resolveNFTScanRange(days)
         const records = await this.getCollectionTrending(chainId, coinId, range)
         return records.map((x) => [x.begin_timestamp, x.average_price])
@@ -279,9 +249,6 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             },
             tickers,
         }
-    }
-    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('Method not implemented.')
     }
 }
 export const NFTScanTrending_EVM = new NFTScanTrendingAPI_EVM()

@@ -55,14 +55,15 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case SourceType.CoinGecko:
-            return CoinGeckoTrending.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return CoinGeckoTrending.getCoinPriceStats(id, currency, days)
         case SourceType.CoinMarketCap:
-            return CoinMarketCap.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days)
+            return CoinMarketCap.getCoinPriceStats(id, currency, days)
         case SourceType.NFTScan:
             return attemptUntil(
-                [SimpleHashEVM, NFTScanTrending_EVM].map(
-                    (x) => () => x.getCoinPriceStats(chainId as ChainIdEVM, id, currency, days),
-                ),
+                [
+                    () => SimpleHashEVM.getCoinPriceStats(id, days),
+                    () => NFTScanTrending_EVM.getCoinPriceStats(chainId as ChainIdEVM, id, days),
+                ],
                 EMPTY_LIST,
             )
 
