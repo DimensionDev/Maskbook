@@ -42,6 +42,11 @@ const useStyles = makeStyles()((theme) => {
         tooltip: {
             maxWidth: 'unset',
         },
+        ellipsis: {
+            position: 'relative',
+            zIndex: 1,
+            fontSize: 14,
+        },
     }
 })
 
@@ -81,6 +86,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     )
 }
 
+// class icon would be used to hide icon in selected item.
 export interface AccountIconProps extends withClasses<'icon'> {
     socialAccount: SocialAccount<Web3Helper.ChainIdAll>
 }
@@ -236,13 +242,14 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
                 </Typography>
             }>
             <span className={classes.iconStack}>
-                {configs.map(({ icon }, i) => {
+                {configs.slice(0, 3).map(({ icon }, i) => {
                     return (
                         <span className={classes.stackedIcon} key={i}>
                             {icon}
                         </span>
                     )
                 })}
+                <span className={cx(classes.ellipsis, classes.icon)}>...</span>
             </span>
         </ShadowRootTooltip>
     )
