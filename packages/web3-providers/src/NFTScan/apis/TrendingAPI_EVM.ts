@@ -172,7 +172,7 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
                 ? {
-                      logo_url: MaskIconURLs.open_sea_url().toString(),
+                      logo_url: MaskIconURLs.open_sea_url(),
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${address}`,
                       market_name: NonFungibleMarketplace.OpenSea,
@@ -184,7 +184,7 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 : null,
             looksrareStats
                 ? {
-                      logo_url: MaskIconURLs.looks_rare_url().toString(),
+                      logo_url: MaskIconURLs.looks_rare_url(),
                       trade_url: `https://looksrare.org/collections/${address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
                       volume_24h: looksrareStats.volume24h,

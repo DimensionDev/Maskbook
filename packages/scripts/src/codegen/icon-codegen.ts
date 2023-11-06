@@ -123,7 +123,7 @@ async function generateIcons() {
                 original: voidMapping,
                 source: importPath,
             })
-            currentLine += `${identifier}_url: () => URL`
+            currentLine += `${identifier}_url: () => string`
             asURL.dts.push(currentLine)
 
             const isDynamicColor = sourceMap.has(path)
