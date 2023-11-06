@@ -222,7 +222,7 @@ function createTokenSecurity(
     }
 }
 
-const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
+function isHighRisk(tokenSecurity?: SecurityAPI.TokenSecurityType) {
     if (!tokenSecurity) return false
     return tokenSecurity.trust_list === '1'
         ? false
@@ -239,8 +239,8 @@ const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
           }).length > 0
 }
 
-const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
-    tokenSecurity.trust_list === '1'
+function getMessageList(tokenSecurity: SecurityAPI.TokenSecurityType) {
+    return tokenSecurity.trust_list === '1'
         ? []
         : SecurityMessages.filter(
               (x) =>
@@ -250,3 +250,4 @@ const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
               if (z.level === SecurityMessageLevel.High) return 1
               return 0
           })
+}

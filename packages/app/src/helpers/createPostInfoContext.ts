@@ -39,8 +39,8 @@ export function createPostInfoContext(): PostInfo {
         publicShared: TRUE,
         isAuthorOfPost: FALSE,
         version: UNDEFINED,
-        decryptedReport(content) {
-            throw new Error('To be implemented.')
+        decryptedReport() {
+            throw new Error('Method not implemented.')
         },
     }
 }

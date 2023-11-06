@@ -11,7 +11,9 @@ interface ResponseData {
         value: string
     }
 }
-const genKey = (namespace: string, userId: string) => `${namespace}-${userId.replaceAll('.', '%2E')}`
+function genKey(namespace: string, userId: string) {
+    return `${namespace}-${userId.replaceAll('.', '%2E')}`
+}
 
 export class FireflyGetterSetter {
     async get<T>(namespace: string, userId: string, address: string) {

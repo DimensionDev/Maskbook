@@ -46,15 +46,15 @@ import { getHandlers } from './rules.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { fetchFromDSearch } from './helpers.js'
 
-const isValidAddress = (address?: string): boolean => {
+function isValidAddress(address?: string): boolean {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
 }
 
-const isZeroAddress = (address?: string): boolean => {
+function isZeroAddress(address?: string): boolean {
     return isZeroAddressEVM(address) || isZeroAddressFlow(address) || isZeroAddressSolana(address)
 }
 
-const isValidDomain = (domain?: string): boolean => {
+function isValidDomain(domain?: string): boolean {
     return isValidDomainEVM(domain) || isValidDomainFlow(domain) || isValidDomainSolana(domain)
 }
 
@@ -80,7 +80,7 @@ const handleRe = new RegExp(
     'i',
 )
 
-const isValidHandle = (handle: string): boolean => {
+function isValidHandle(handle: string): boolean {
     return handleRe.test(handle)
 }
 

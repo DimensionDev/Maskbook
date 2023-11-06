@@ -6,8 +6,8 @@ const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
 
 const BASE_URL = BASE_URL_MAP[process.env.NODE_ENV]
 
-class RiskWarningAPI {
-    async approve(address: string, pluginID = '') {
+export class RiskWarning {
+    static async approve(address: string, pluginID = '') {
         await fetch(`${BASE_URL}/v1/risk_warning/confirm`, {
             method: 'POST',
             body: JSON.stringify({
@@ -17,4 +17,3 @@ class RiskWarningAPI {
         })
     }
 }
-export const RiskWarning = new RiskWarningAPI()

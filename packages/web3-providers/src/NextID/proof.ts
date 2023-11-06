@@ -27,7 +27,8 @@ import { env } from '@masknet/flags'
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
-const relationServiceDomainQuery = (depth?: number) => `domain(domainSystem: $domainSystem, name: $domain) {
+function relationServiceDomainQuery(depth?: number) {
+    return `domain(domainSystem: $domainSystem, name: $domain) {
     source
     system
     name
@@ -106,8 +107,10 @@ const relationServiceDomainQuery = (depth?: number) => `domain(domainSystem: $do
       }
     }
     }`
+}
 
-const relationServiceIdentityQuery = (depth?: number) => `
+function relationServiceIdentityQuery(depth?: number) {
+    return `
     identity(platform: $platform, identity: $identity) {
         platform
         identity
@@ -183,6 +186,7 @@ const relationServiceIdentityQuery = (depth?: number) => `
           }
         }
       }`
+}
 
 interface CreatePayloadBody {
     action: string
@@ -209,18 +213,20 @@ type NeighborNode = {
 }
 type NeighborList = NeighborNode[]
 
-const getPersonaQueryURL = (platform: string, identity: string) =>
-    urlcat(BASE_URL, '/v1/proof', {
+function getPersonaQueryURL(platform: string, identity: string) {
+    return urlcat(BASE_URL, '/v1/proof', {
         platform,
         identity,
     })
+}
 
-const getExistedBindingQueryURL = (platform: string, identity: string, personaPublicKey: string) =>
-    urlcat(BASE_URL, '/v1/proof/exists', {
+function getExistedBindingQueryURL(platform: string, identity: string, personaPublicKey: string) {
+    return urlcat(BASE_URL, '/v1/proof/exists', {
         platform,
         identity,
         public_key: personaPublicKey,
     })
+}
 
 export class NextIDProof {
     static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
