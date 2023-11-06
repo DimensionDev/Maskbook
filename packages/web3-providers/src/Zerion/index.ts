@@ -18,11 +18,10 @@ import {
     ChainIdList,
 } from '@masknet/web3-shared-evm'
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection, ZerionCoin } from './types.js'
+import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection } from './types.js'
 import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
 import {
     getAssetsList,
-    getCoinsByKeyword,
     getGasOptions,
     getNonFungibleAsset,
     getNonFungibleAssets,
@@ -38,7 +37,6 @@ import type {
     HistoryAPI,
     HubOptions_Base,
     NonFungibleTokenAPI,
-    TrendingAPI,
 } from '../entry-types.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
@@ -213,42 +211,6 @@ class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId,
     }
 }
 
-class ZerionTrendingAPI implements TrendingAPI.Provider<ChainId> {
-    private createCoinFromData(data: ZerionCoin) {
-        return {
-            id: data.asset.id,
-            name: data.asset.name,
-            symbol: data.asset.symbol,
-            type: TokenType.Fungible,
-            decimals: data.asset.decimals,
-        }
-    }
-    async getAllCoins(keyword?: string): Promise<TrendingAPI.Coin[]> {
-        if (!keyword) return EMPTY_LIST
-        const response = await getCoinsByKeyword(keyword)
-
-        if (!response?.payload?.info?.length) return EMPTY_LIST
-
-        return response.payload.info.filter((x) => !x.asset.type).map(this.createCoinFromData)
-    }
-
-    getCoinsByKeyword(): Promise<TrendingAPI.Coin[]> {
-        throw new Error('Method not implemented.')
-    }
-    getCoinInfoByAddress(): Promise<TrendingAPI.CoinInfo | undefined> {
-        throw new Error('To be implemented.')
-    }
-    getCoinTrending(): Promise<TrendingAPI.Trending> {
-        throw new Error('Method not implemented.')
-    }
-    getCoinPriceStats(): Promise<TrendingAPI.Stat[]> {
-        throw new Error('Method not implemented.')
-    }
-    getCoinMarketInfo(): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('Method not implemented.')
-    }
-}
-
 class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption> | undefined> {
         if (!isValidChainId(chainId)) return
@@ -279,5 +241,4 @@ class ZerionGasAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
 }
 export const Zerion = new ZerionAPI()
 export const ZerionNonFungibleToken = new ZerionNonFungibleTokenAPI()
-export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()

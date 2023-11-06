@@ -4,10 +4,8 @@ import { TokenType, SourceType } from '@masknet/web3-shared-base'
 import { type ChainId, isValidChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../constants.js'
 import { fetchFromCoinMarketCap, resolveCoinMarketCapChainId, resolveCoinMarketCapAddress } from '../helpers.js'
-import type { Coin, Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
-import { FuseCoin } from '../../Fuse/index.js'
+import type { Pair, ResultData, Status, QuotesInfo, CoinInfo } from '../types.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
-import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
 // #regin get quote info
@@ -107,36 +105,6 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         })
 
         return response.data
-    }
-
-    async getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        const response = await fetchFromCoinMarketCap<ResultData<Coin[]>>(
-            `${CMC_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
-            { cache: 'force-cache' },
-        )
-        if (!response.data) return []
-        return response.data
-            .filter((x) => x.status === 'active')
-            .map((x) => ({
-                id: String(x.id),
-                name: x.name,
-                symbol: x.symbol,
-                type: TokenType.Fungible,
-                contract_address: x.platform?.token_address,
-                market_cap_rank: x.rank,
-            }))
-    }
-
-    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        return FuseCoin.create(await this.getAllCoins())
-            .search(keyword)
-            .map((x) => x.item)
-            .filter((y) => y.market_cap_rank && y.market_cap_rank < VALID_TOP_RANK)
-            .slice(0, COIN_RECOMMENDATION_SIZE)
-    }
-
-    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
-        throw new Error('To be implemented.')
     }
 
     async getCoinTrending(
@@ -245,12 +213,7 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         return trending
     }
 
-    async getCoinPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
+    async getCoinPriceStats(coinId: string, currency: TrendingAPI.Currency, days: number): Promise<TrendingAPI.Stat[]> {
         const interval = (() => {
             if (days === 0) return '1d' // max
             if (days > 365) return '1d' // 1y
@@ -271,9 +234,6 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
         )
         if (stats.is_active === 0) return []
         return Object.entries(stats).map(([date, x]) => [new Date(date).getTime(), x[currency.name.toUpperCase()][0]])
-    }
-    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('Method not implemented.')
     }
 }
 export const CoinMarketCap = new CoinMarketCapTrendingAPI()

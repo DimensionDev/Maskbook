@@ -169,12 +169,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getCoinPriceStats(
-        chainId: ChainId,
-        collectionId: string,
-        currency: TrendingAPI.Currency,
-        days: Days,
-    ): Promise<TrendingAPI.Stat[]> {
+    async getCoinPriceStats(collectionId: string, days: Days): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = millisecondsToSeconds(Date.now())
         const isLoadAll = !range

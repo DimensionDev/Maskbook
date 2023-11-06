@@ -1,54 +1,21 @@
-import { compact, uniq, uniqBy } from 'lodash-es'
+import { uniq, uniqBy } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, getTokenConstant, isNativeTokenSymbol } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { COINGECKO_CHAIN_ID_LIST, COINGECKO_URL_BASE } from '../constants.js'
 import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
-import { COIN_RECOMMENDATION_SIZE, VALID_TOP_RANK } from '../../Trending/constants.js'
-import { getAllCoins, getCoinInfo, getPriceStats as getStats, getThumbCoins } from './base.js'
+import { getCoinInfo, getPriceStats as getStats } from './base.js'
 import type { CoinInfo, Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
-import { FuseCoin } from '../../Fuse/index.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TrendingAPI } from '../../entry-types.js'
 import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 
 class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
-    private coins: Map<string, TrendingAPI.Coin> = new Map()
-
-    private async createCoins() {
-        if (this.coins.size) return
-
-        const coins = await this.getAllCoins()
-        coins.forEach((x) => this.coins.set(x.id, x))
-    }
-
     private async getSupportedPlatform() {
         const response = await fetchJSON<Platform[]>(`${COINGECKO_URL_BASE}/asset_platforms`)
         return response.filter((x) => x.id && x.chain_identifier) ?? []
-    }
-
-    async getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        const coins = await getAllCoins()
-        return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
-    }
-
-    async getCoinsByKeyword(chainId: Web3Helper.ChainIdAll, keyword: string): Promise<TrendingAPI.Coin[]> {
-        try {
-            await this.createCoins()
-            const thumbCoins = await getThumbCoins(keyword)
-            return compact(
-                thumbCoins
-                    .filter((x) => x?.market_cap_rank && x.market_cap_rank < VALID_TOP_RANK)
-                    .map((y) => this.coins.get(y.id)),
-            ).slice(0, COIN_RECOMMENDATION_SIZE)
-        } catch {
-            return FuseCoin.create(await this.getAllCoins())
-                .search(keyword)
-                .map((x) => x.item)
-                .slice(0, COIN_RECOMMENDATION_SIZE)
-        }
     }
 
     async getCoinInfoByAddress(address: string, chainId?: number): Promise<TrendingAPI.CoinInfo | undefined> {
@@ -179,12 +146,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
         }
     }
 
-    async getCoinPriceStats(
-        chainId: Web3Helper.ChainIdAll,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
+    async getCoinPriceStats(coinId: string, currency: TrendingAPI.Currency, days: number): Promise<TrendingAPI.Stat[]> {
         return (await getStats(coinId, currency.id, days)).prices
     }
 

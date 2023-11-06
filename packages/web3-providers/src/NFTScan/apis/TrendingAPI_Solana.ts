@@ -57,27 +57,6 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
         }
     }
 
-    getAllCoins(): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
-    }
-
-    async getCoinsByKeyword(chainId: ChainId, keyword: string): Promise<TrendingAPI.Coin[]> {
-        throw new Error('To be implemented.')
-    }
-
-    getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
-        throw new Error('To be implemented.')
-    }
-
-    async getCoinPriceStats(
-        chainId: ChainId,
-        coinId: string,
-        currency: TrendingAPI.Currency,
-        days: number,
-    ): Promise<TrendingAPI.Stat[]> {
-        throw new Error('Method not implemented.')
-    }
-
     async getCoinTrending(
         chainId: ChainId,
         /** address as id */ id: string,
@@ -173,10 +152,6 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
             },
             tickers: [],
         }
-    }
-
-    getCoinMarketInfo(symbol: string): Promise<TrendingAPI.MarketInfo> {
-        throw new Error('Method not implemented.')
     }
 }
 export const NFTScanTrending_Solana = new NFTScanTrendingAPI_Solana()

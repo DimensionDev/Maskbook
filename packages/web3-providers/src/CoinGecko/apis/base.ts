@@ -4,16 +4,12 @@ import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { COINGECKO_URL_BASE } from '../constants.js'
 import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
-import type { TrendingAPI } from '../../entry-types.js'
 
 function fetchFromCoinGecko<T>(request: RequestInfo | URL, init?: RequestInit) {
     return fetchCachedJSON<T>(request, init)
 }
 
 // #region coins
-export async function getAllCoins() {
-    return fetchFromCoinGecko<TrendingAPI.Coin[]>(urlcat(COINGECKO_URL_BASE, '/coins/list'), { cache: 'force-cache' })
-}
 
 export async function getCoinInfo(coinId: string) {
     return fetchFromCoinGecko<
