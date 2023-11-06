@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'flex-start',
     },
     inputText: {
-        fontSize: 10,
+        fontSize: 14,
         paddingRight: '0px !important',
         '&&::placeholder': {
             color: theme.palette.maskColor.third,
