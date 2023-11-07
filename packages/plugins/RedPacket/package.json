@@ -1,7 +1,9 @@
 {
   "name": "@masknet/plugin-redpacket",
   "private": true,
-  "sideEffects": ["./src/register.ts"],
+  "sideEffects": [
+    "./src/register.ts"
+  ],
   "type": "module",
   "exports": {
     ".": {
