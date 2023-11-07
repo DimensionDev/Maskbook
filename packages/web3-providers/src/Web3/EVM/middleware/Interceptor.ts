@@ -8,11 +8,10 @@ import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import { SmartPayAccountAPI, SmartPayBundler, SmartPayFunder } from '../../../SmartPay/index.js'
+import { SmartPayAccount, SmartPayBundler, SmartPayFunder } from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
-    private Account = new SmartPayAccountAPI()
     constructor(private signWithPersona: WalletAPI.IOContext['signWithPersona']) {
         this.composers = {
             [ProviderType.None]: Composer.from(new NoneWallet()),
@@ -21,7 +20,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
                 CustomNetwork,
                 new ContractWallet(
                     ProviderType.MaskWallet,
-                    this.Account,
+                    SmartPayAccount,
                     SmartPayBundler,
                     SmartPayFunder,
                     this.signWithPersona,

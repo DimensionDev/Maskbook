@@ -10,15 +10,14 @@ import {
     isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-import { RequestReadonlyAPI } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
+import { RequestReadonly } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { SmartPayBundler } from './BundlerAPI.js'
 import { SmartPayOwner } from './OwnerAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { UserTransaction } from '../libs/UserTransaction.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
-export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
-    private Request = new RequestReadonlyAPI()
+class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await SmartPayBundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
@@ -72,12 +71,12 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
             return
         }
 
-        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }), await getOverrides())
+        await userTransaction.fillUserOperation(RequestReadonly.getWeb3({ chainId }), await getOverrides())
         return SmartPayBundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        await userTransaction.fillUserOperation(this.Request.getWeb3({ chainId }))
+        await userTransaction.fillUserOperation(RequestReadonly.getWeb3({ chainId }))
         return userTransaction.estimateUserOperation()
     }
 
@@ -165,3 +164,4 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
         throw new Error('Method not implemented.')
     }
 }
+export const SmartPayAccount = new SmartPayAccountAPI()

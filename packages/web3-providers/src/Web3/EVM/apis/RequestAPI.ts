@@ -1,5 +1,5 @@
 import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
-import { ComposerAPI } from './ComposerAPI.js'
+import { Composer } from './ComposerAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
@@ -10,7 +10,7 @@ import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 
 export class RequestAPI extends RequestReadonlyAPI {
-    private Composer = new ComposerAPI()
+    static override Default = new RequestAPI()
     private Request = new RequestReadonlyAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
@@ -27,7 +27,7 @@ export class RequestAPI extends RequestReadonlyAPI {
                 const context = createContext(requestArguments, options)
 
                 try {
-                    await this.Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
+                    await Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
                         if (!context.writeable) return
                         try {
                             switch (context.method) {
@@ -99,3 +99,4 @@ export class RequestAPI extends RequestReadonlyAPI {
         return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options))
     }
 }
+export const Request = RequestAPI.Default

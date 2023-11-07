@@ -17,6 +17,7 @@ import { createWeb3ProviderFromURL } from '../../../helpers/createWeb3ProviderFr
 import type { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
 
 export class RequestReadonlyAPI {
+    static Default = new RequestReadonlyAPI()
     constructor(protected options?: ConnectionOptions) {
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(options)
     }
@@ -47,3 +48,4 @@ export class RequestReadonlyAPI {
         return createWeb3ProviderFromURL(options.providerURL ?? ProviderURL.from(options.chainId))
     }
 }
+export const RequestReadonly = new RequestReadonlyAPI()
