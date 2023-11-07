@@ -27,6 +27,6 @@ export class FlowHubOptionsAPI extends HubOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new FlowOthersAPI()
+        return FlowOthersAPI
     }
 }

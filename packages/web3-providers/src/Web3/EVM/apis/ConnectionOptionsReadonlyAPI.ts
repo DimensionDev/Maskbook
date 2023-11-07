@@ -26,5 +26,5 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
     TransactionParameter
 > {
     readonly Web3StateRef = EmptyRef
-    readonly Web3Others = new OthersAPI()
+    readonly Web3Others = OthersAPI
 }

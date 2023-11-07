@@ -27,6 +27,6 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new SolanaOthersAPI()
+        return SolanaOthersAPI
     }
 }

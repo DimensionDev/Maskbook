@@ -27,6 +27,6 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new FlowOthersAPI()
+        return FlowOthersAPI
     }
 }

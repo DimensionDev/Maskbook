@@ -27,6 +27,6 @@ export class HubOptionsAPI extends HubOptionsAPI_Base<
     }
 
     override get Web3Others() {
-        return new OthersAPI()
+        return OthersAPI
     }
 }

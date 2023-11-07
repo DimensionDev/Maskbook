@@ -41,7 +41,7 @@ function useSettingsContext(initial?: {
     const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
 
     const networkSignature = `${pluginID}_${chainId}`
-    const transactionSignature = Others.getTransactionSignature(chainId, transactionOptions) ?? ''
+    const transactionSignature = Others.getTransactionSignature!(chainId, transactionOptions) ?? ''
     const needToResetByNetwork =
         !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =
