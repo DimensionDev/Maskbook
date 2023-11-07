@@ -14,7 +14,7 @@ export class ComposerAPI {
         if (this.instance) return this.instance
 
         const instance = Composer.from<ConnectionContext>(
-            new Nonce(),
+            Nonce,
             new Translator(),
             new Interceptor(signWithPersona),
             new RecentTransaction(),

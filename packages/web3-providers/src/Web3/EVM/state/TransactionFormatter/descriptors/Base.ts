@@ -2,12 +2,12 @@ import type { TransactionContext, TransactionDescriptor as TransactionDescriptor
 import { getTokenConstants, type ChainId, type Transaction, type TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
-import { ConnectionReadonlyAPI } from '../../../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../../../apis/ConnectionReadonlyAPI.js'
 import { HubAPI } from '../../../apis/HubAPI.js'
 
 export class BaseDescriptor implements TransactionDescriptor {
-    protected Hub = new HubAPI().create()
-    protected Web3 = new ConnectionReadonlyAPI()
+    protected Hub = HubAPI.create()
+    protected Web3 = Web3Readonly
 
     async compute(
         context: TransactionContext<ChainId, TransactionParameter>,

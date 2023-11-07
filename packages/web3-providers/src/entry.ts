@@ -1,11 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SmartPayAccountAPI, SmartPayFunderAPI } from './SmartPay/index.js'
+import { SmartPayAccountAPI } from './SmartPay/index.js'
 import { DSearchAPI } from './DSearch/index.js'
-import { MulticallAPI } from './Multicall/index.js'
-import { RedPacketAPI } from './RedPacket/index.js'
-import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
-import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { RequestAPI } from './Web3/EVM/apis/RequestAPI.js'
 import { RequestReadonlyAPI } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
@@ -30,9 +26,9 @@ export const DSearch = new DSearchAPI()
 export { CoinMarketCap } from './CoinMarketCap/index.js'
 export { Mirror } from './Mirror/index.js'
 export { CryptoScamDB } from './CryptoScamDB/index.js'
-export const Multicall = new MulticallAPI()
+export { Multicall } from './Multicall/index.js'
 export { Lens } from './Lens/index.js'
-export const RedPacket = new RedPacketAPI()
+export { RedPacket } from './RedPacket/index.js'
 export { TheGraphRedPacket } from './TheGraph/index.js'
 export { SimpleHashEVM, SPAM_SCORE } from './SimpleHash/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
@@ -54,7 +50,7 @@ export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { Web3Storage } from './Storage/apis/Storage.js'
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
-export const Web3Readonly = new ConnectionReadonlyAPI()
+export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export const Request = new RequestAPI()
 export const RequestReadonly = new RequestReadonlyAPI()
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
@@ -115,8 +111,8 @@ export { FuseNonFungibleCollection } from './Fuse/apis/NonFungibleCollection.js'
 
 // Smart Pay
 export { SmartPayBundler } from './SmartPay/index.js'
-export const SmartPayFunder = new SmartPayFunderAPI()
-export const SmartPayOwner = new SmartPayOwnerAPI()
+export { SmartPayFunder } from './SmartPay/index.js'
+export { SmartPayOwner } from './SmartPay/apis/OwnerAPI.js'
 export const SmartPayAccount = new SmartPayAccountAPI()
 
 // RSS3

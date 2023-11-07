@@ -3,10 +3,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getSmartPayConstants, isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
-import { MulticallAPI } from '../../Multicall/index.js'
+import { Multicall } from '../../Multicall/index.js'
 import { ContractReadonly } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { SmartPayBundler } from './BundlerAPI.js'
-import { SmartPayFunderAPI } from './FunderAPI.js'
+import { SmartPayFunder } from './FunderAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { Create2Factory } from '../libs/Create2Factory.js'
 import { MAX_ACCOUNT_LENGTH, THE_GRAPH_PROD } from '../constants.js'
@@ -20,24 +20,21 @@ interface OwnerShip {
     creator: string
 }
 
-export class SmartPayOwnerAPI {
-    private Multicall = new MulticallAPI()
-    private Funder = new SmartPayFunderAPI()
-
-    private async getEntryPoint(chainId: ChainId) {
+export class SmartPayOwner {
+    private static async getEntryPoint(chainId: ChainId) {
         const entryPoints = await SmartPayBundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
         if (!entryPoint || !isValidAddress(entryPoint)) throw new Error(`Not supported ${chainId}`)
         return entryPoint
     }
 
-    private createWalletContract(chainId: ChainId, address: string) {
+    private static createWalletContract(chainId: ChainId, address: string) {
         return ContractReadonly.getWalletContract(address, {
             chainId,
         })
     }
 
-    private async createContractWallet(chainId: ChainId, owner: string) {
+    private static async createContractWallet(chainId: ChainId, owner: string) {
         if (!owner) throw new Error('No owner address.')
         return new ContractWallet(
             chainId,
@@ -47,7 +44,7 @@ export class SmartPayOwnerAPI {
         )
     }
 
-    private async createCreate2Factory(chainId: ChainId, owner: string) {
+    private static async createCreate2Factory(chainId: ChainId, owner: string) {
         if (!owner) throw new Error('No owner address.')
 
         const { CREATE2_FACTORY_CONTRACT_ADDRESS } = getSmartPayConstants(chainId)
@@ -56,7 +53,7 @@ export class SmartPayOwnerAPI {
         return new Create2Factory(CREATE2_FACTORY_CONTRACT_ADDRESS)
     }
 
-    private filterAccounts(accounts: Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>) {
+    private static filterAccounts(accounts: Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>) {
         const countMap = new Map<string, number>()
         accounts.forEach((x) => {
             const address = x.address.toLowerCase()
@@ -66,7 +63,7 @@ export class SmartPayOwnerAPI {
         return accounts.filter((x) => countMap.get(x.address.toLowerCase()) === 1 || x.creator)
     }
 
-    private createContractAccount(
+    private static createContractAccount(
         chainId: ChainId,
         address: string,
         owner: string,
@@ -92,11 +89,11 @@ export class SmartPayOwnerAPI {
      * @param options
      * @returns
      */
-    private async getAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
+    private static async getAccountsFromMulticall(chainId: ChainId, owner: string, options: string[]) {
         const contracts = options.map((x) => this.createWalletContract(chainId, x)!)
         const names = Array.from<'owner'>({ length: options.length }).fill('owner')
-        const calls = this.Multicall.createMultipleContractSingleData(contracts, names, [])
-        const results = await this.Multicall.call(chainId, contracts, names, calls)
+        const calls = Multicall.createMultipleContractSingleData(contracts, names, [])
+        const results = await Multicall.call(chainId, contracts, names, calls)
         const accounts = results.flatMap((x) => (x.succeed && x.value ? x.value : ''))
 
         if (!accounts.length) {
@@ -110,7 +107,7 @@ export class SmartPayOwnerAPI {
         )
     }
 
-    private async getAccountsFromTheGraph(chainId: ChainId, owner: string) {
+    private static async getAccountsFromTheGraph(chainId: ChainId, owner: string) {
         const response = await fetchJSON<{
             data: {
                 ownerShips: OwnerShip[]
@@ -134,7 +131,7 @@ export class SmartPayOwnerAPI {
         )
     }
 
-    async getAccountsByOwner(
+    static async getAccountsByOwner(
         chainId: ChainId,
         owner: string,
         exact = true,
@@ -145,7 +142,7 @@ export class SmartPayOwnerAPI {
             queryFn: async () => {
                 const create2Factory = await this.createCreate2Factory(chainId, owner)
                 const contractWallet = await this.createContractWallet(chainId, owner)
-                const operations = await this.Funder.getOperationsByOwner(chainId, owner)
+                const operations = await SmartPayFunder.getOperationsByOwner(chainId, owner)
 
                 const allSettled = await Promise.allSettled([
                     this.getAccountsFromMulticall(
@@ -171,7 +168,7 @@ export class SmartPayOwnerAPI {
         return accounts ?? []
     }
 
-    async getAccountsByOwners(
+    static async getAccountsByOwners(
         chainId: ChainId,
         owners: string[],
         exact = true,

@@ -12,15 +12,13 @@ import {
 } from '@masknet/web3-shared-evm'
 import { RequestReadonlyAPI } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { SmartPayBundler } from './BundlerAPI.js'
-import { SmartPayOwnerAPI } from './OwnerAPI.js'
+import { SmartPayOwner } from './OwnerAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
 import { UserTransaction } from '../libs/UserTransaction.js'
 import type { AbstractAccountAPI } from '../../entry-types.js'
 
 export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction> {
     private Request = new RequestReadonlyAPI()
-    private Owner = new SmartPayOwnerAPI()
-
     private async getEntryPoint(chainId: ChainId) {
         const entryPoints = await SmartPayBundler.getSupportedEntryPoints(chainId)
         const entryPoint = first(entryPoints)
@@ -55,7 +53,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
     ) {
         const getOverrides = async () => {
             if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
+                const accounts = await SmartPayOwner.getAccountsByOwner(chainId, owner, false)
                 const target = accounts.find((x) => isSameAddress(x.address, userTransaction.operation.sender))
                 const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
@@ -131,7 +129,7 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, 
         if (!isValidAddress(owner)) throw new Error('Invalid owner address.')
 
         const initCode = await this.getInitCode(chainId, owner)
-        const accounts = await this.Owner.getAccountsByOwner(chainId, owner, false)
+        const accounts = await SmartPayOwner.getAccountsByOwner(chainId, owner, false)
         const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
         return this.sendUserOperation(

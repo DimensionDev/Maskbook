@@ -15,7 +15,7 @@ import { HubAPI } from '../apis/HubAPI.js'
 import { ChainResolver } from '../apis/ResolverAPI.js'
 
 export class Token extends TokenState<ChainId, SchemaType> {
-    private Hub = new HubAPI().create()
+    private Hub = HubAPI.create()
 
     constructor(
         context: WalletAPI.IOContext,

@@ -3,16 +3,14 @@ import { abiCoder, type ChainId, type SchemaType } from '@masknet/web3-shared-ev
 import { isSameAddress } from '@masknet/web3-shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
 
 const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')?.inputs!
 
-export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    private Web3 = new ConnectionReadonlyAPI()
-
+class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistories(
         chainId: ChainId,
         senderAddress: string,
@@ -23,7 +21,7 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
-        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await Web3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,
             fromBlock,
@@ -81,3 +79,5 @@ export class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, 
             )
     }
 }
+
+export const ContractRedPacket = new ContractRedPacketAPI()

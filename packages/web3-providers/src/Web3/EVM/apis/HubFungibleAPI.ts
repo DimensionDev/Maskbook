@@ -9,13 +9,13 @@ import {
     type Transaction,
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
+import { Web3Readonly } from './ConnectionReadonlyAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
-import { ApprovalAPI } from '../../../Approval/index.js'
+import { Approval } from '../../../Approval/index.js'
 import { ChainbaseFungibleToken } from '../../../Chainbase/index.js'
 import { Cloudflare } from '../../../Cloudflare/index.js'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
@@ -35,10 +35,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Approval = new ApprovalAPI()
     protected override HubOptions = new HubOptionsAPI(this.options)
-
-    private Web3 = new ConnectionReadonlyAPI()
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {
         const { indicator } = this.HubOptions.fill(initial)
@@ -59,14 +56,14 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
                 [SourceType.Zerion]: Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby,
-                [SourceType.Approval]: this.Approval,
+                [SourceType.Approval]: Approval,
                 [SourceType.R2D2]: R2D2TokenList,
                 [SourceType.CF]: Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
             [
                 DeBankFungibleToken,
-                this.Approval,
+                Approval,
                 Zerion,
                 ChainbaseFungibleToken,
                 Rabby,
@@ -88,7 +85,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<
             [
                 () => Web3StateRef.value?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
                 () =>
-                    this.Web3.getFungibleToken(address, {
+                    Web3Readonly.getFungibleToken(address, {
                         ...initial,
                         providerURL: currentNetwork?.isCustomized ? currentNetwork?.rpcUrl : undefined,
                     }),

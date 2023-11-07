@@ -23,7 +23,7 @@ import {
 import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
 import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
-import { SmartPayOwnerAPI } from '../../../SmartPay/apis/OwnerAPI.js'
+import { SmartPayOwner } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
@@ -59,7 +59,7 @@ export class MaskWalletProvider
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
-        const accounts = await new SmartPayOwnerAPI().getAccountsByOwners(chainId, [
+        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
             ...compact(allPersonas.map((x) => x.address)),
         ])

@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import { type IdentityServiceState as Web3SocialIdentityState } from '@masknet/web3-shared-base'
 
-export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
+export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentityState<ChainId> {
     protected cache = new LRUCache<string, Promise<Array<SocialAddress<ChainId>>>>({
         max: 20,
         ttl: Number.MAX_SAFE_INTEGER,
@@ -31,9 +31,7 @@ export class IdentityServiceState<ChainId> implements Web3SocialIdentityState<Ch
         return this.cache.get(this.getIdentityID(identity))
     }
 
-    protected getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>> {
-        throw new Error('Method not implemented.')
-    }
+    protected abstract getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 
     async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>> {
         const ID = this.getIdentityID(identity)

@@ -7,12 +7,10 @@ import {
     checksumAddress,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
-export class Nonce implements Middleware<ConnectionContext> {
+class NonceAPI implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
-
-    private Web3 = new ConnectionReadonlyAPI()
 
     // account address => chainId => nonce
     private nonces = new Map<string, Map<ChainId, number>>()
@@ -25,11 +23,11 @@ export class Nonce implements Middleware<ConnectionContext> {
             chainId,
             commitment +
                 Math.max(
-                    await this.Web3.getTransactionNonce(address, {
+                    await Web3Readonly.getTransactionNonce(address, {
                         chainId,
                         providerURL,
                     }),
-                    addressNonces.get(chainId) ?? Nonce.INITIAL_NONCE,
+                    addressNonces.get(chainId) ?? NonceAPI.INITIAL_NONCE,
                 ),
         )
 
@@ -77,3 +75,4 @@ export class Nonce implements Middleware<ConnectionContext> {
         }
     }
 }
+export const Nonce = new NonceAPI()

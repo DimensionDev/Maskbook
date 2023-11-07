@@ -14,7 +14,7 @@ import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { HubOptions } from '../types/index.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 import { AlchemyEVM } from '../../../Alchemy/index.js'
-import { ApprovalAPI } from '../../../Approval/index.js'
+import { Approval } from '../../../Approval/index.js'
 import { ChainbaseNonFungibleToken } from '../../../Chainbase/index.js'
 import { Gem } from '../../../Gem/index.js'
 import { GoPlusAuthorization } from '../../../GoPlusLabs/index.js'
@@ -37,7 +37,6 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
     Transaction,
     TransactionParameter
 > {
-    private Approval_ = new ApprovalAPI()
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions) {
@@ -53,7 +52,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                 [SourceType.Zerion]: ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.OpenSea]: OpenSea,
-                [SourceType.Approval]: this.Approval_,
+                [SourceType.Approval]: Approval,
                 [SourceType.Alchemy_EVM]: AlchemyEVM,
                 [SourceType.Zora]: Zora,
                 [SourceType.Gem]: Gem,
@@ -72,7 +71,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       AlchemyEVM,
                       Zora,
                       Gem,
-                      this.Approval_,
+                      Approval,
                       GoPlusAuthorization,
                       Rabby,
                       R2D2TokenList,
@@ -84,7 +83,7 @@ export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
                       AlchemyEVM,
                       OpenSea,
                       Zora,
-                      this.Approval_,
+                      Approval,
                       Gem,
                       GoPlusAuthorization,
                       Rabby,
