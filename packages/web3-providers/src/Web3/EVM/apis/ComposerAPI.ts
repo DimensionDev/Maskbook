@@ -1,4 +1,4 @@
-import { Composer } from '@masknet/web3-shared-evm'
+import { Composer as EVMComposer } from '@masknet/web3-shared-evm'
 import { Nonce } from '../middleware/Nonce.js'
 import { Translator } from '../middleware/Translator.js'
 import { Interceptor } from '../middleware/Interceptor.js'
@@ -7,21 +7,18 @@ import { TransactionWatcher } from '../middleware/TransactionWatcher.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class ComposerAPI {
-    private instance: Composer<ConnectionContext> | undefined
+let instance: EVMComposer<ConnectionContext> | undefined
+export class Composer {
+    static compose(signWithPersona: WalletAPI.IOContext['signWithPersona']) {
+        if (instance) return instance
 
-    compose(signWithPersona: WalletAPI.IOContext['signWithPersona']) {
-        if (this.instance) return this.instance
-
-        const instance = Composer.from<ConnectionContext>(
+        instance = EVMComposer.from<ConnectionContext>(
             Nonce,
             new Translator(),
             new Interceptor(signWithPersona),
             new RecentTransaction(),
             new TransactionWatcher(),
         )
-
-        this.instance = instance
         return instance
     }
 }

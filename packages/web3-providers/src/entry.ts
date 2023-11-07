@@ -1,9 +1,4 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SmartPayAccountAPI } from './SmartPay/index.js'
-import { DSearchAPI } from './DSearch/index.js'
-import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
-import { RequestAPI } from './Web3/EVM/apis/RequestAPI.js'
-import { RequestReadonlyAPI } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
 import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
@@ -22,7 +17,7 @@ export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
 export { Minds } from './Minds/index.js'
 export { Instagram } from './Instagram/index.js'
-export const DSearch = new DSearchAPI()
+export { DSearch } from './DSearch/index.js'
 export { CoinMarketCap } from './CoinMarketCap/index.js'
 export { Mirror } from './Mirror/index.js'
 export { CryptoScamDB } from './CryptoScamDB/index.js'
@@ -45,14 +40,14 @@ export const Web3All = new AllConnectionAPI()
 export const OthersAll = new AllOthersAPI()
 
 export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
-export const Contract = new ContractAPI()
+export { Contract } from './Web3/EVM/apis/ContractAPI.js'
 export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { Web3Storage } from './Storage/apis/Storage.js'
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
 export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
-export const Request = new RequestAPI()
-export const RequestReadonly = new RequestReadonlyAPI()
+export { Request } from './Web3/EVM/apis/RequestAPI.js'
+export { RequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
 export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
 
@@ -113,7 +108,7 @@ export { FuseNonFungibleCollection } from './Fuse/apis/NonFungibleCollection.js'
 export { SmartPayBundler } from './SmartPay/index.js'
 export { SmartPayFunder } from './SmartPay/index.js'
 export { SmartPayOwner } from './SmartPay/apis/OwnerAPI.js'
-export const SmartPayAccount = new SmartPayAccountAPI()
+export { SmartPayAccount } from './SmartPay/apis/AbstractAccountAPI.js'
 
 // RSS3
 export { RSS3 } from './RSS3/index.js'

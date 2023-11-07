@@ -22,7 +22,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ChainResolver } from '../apis/ResolverAPI.js'
 import { BaseContractWalletProvider } from './BaseContractWallet.js'
-import { RequestReadonlyAPI } from '../apis/RequestReadonlyAPI.js'
+import { RequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwner } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -31,8 +31,6 @@ export class MaskWalletProvider
     extends BaseContractWalletProvider
     implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
 {
-    private Request = new RequestReadonlyAPI()
-
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
         await this.context?.MaskWalletContext?.renameWallet(address, name)
@@ -229,7 +227,7 @@ export class MaskWalletProvider
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return this.Request.request<T>(
+        return RequestReadonly.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
             initial,
         )

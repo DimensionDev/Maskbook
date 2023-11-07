@@ -21,7 +21,7 @@ import {
     isSameURL,
 } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
-import { SmartPayAccountAPI, SmartPayBundler } from '../../../SmartPay/index.js'
+import { SmartPayAccount, SmartPayBundler } from '../../../SmartPay/index.js'
 import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
@@ -29,8 +29,6 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
-    private AbstractAccount = new SmartPayAccountAPI()
-
     private get networks() {
         if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
         return Web3StateRef.value.Network.networks?.getCurrentValue()
@@ -61,7 +59,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
-            const gas = await this.AbstractAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
+            const gas = await SmartPayAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
                 paymentToken: maskAddress,
             })
 

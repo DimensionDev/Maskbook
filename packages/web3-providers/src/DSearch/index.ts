@@ -84,7 +84,7 @@ function isValidHandle(handle: string): boolean {
     return handleRe.test(handle)
 }
 
-export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll> {
+class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.SchemaTypeAll> {
     private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
     private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
@@ -496,3 +496,4 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         return EMPTY_LIST
     }
 }
+export const DSearch = new DSearchAPI()
