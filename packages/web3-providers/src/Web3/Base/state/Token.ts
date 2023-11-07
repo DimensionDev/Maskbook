@@ -78,7 +78,7 @@ export class TokenState<ChainId extends number, SchemaType> implements Web3Token
             storage.nonFungibleTokenBlockedBy.initializedPromise,
             storage.credibleFungibleTokenList.initializedPromise,
             storage.credibleNonFungibleTokenList.initializedPromise,
-            storage.nonFungibleCollectionMap.initialized,
+            storage.nonFungibleCollectionMap.initializedPromise,
         ]).then(() => {})
     }
 

@@ -76,9 +76,7 @@ export class MessageState<Request, Response> implements Web3MessageState<Request
         })
     }
 
-    async applyRequest<T>(
-        message: TransferableMessage<Request, Response>,
-    ): Promise<ReasonableMessage<Request, Response>> {
+    async applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>> {
         await this.validateMessage(message)
 
         const ID = uuid()
