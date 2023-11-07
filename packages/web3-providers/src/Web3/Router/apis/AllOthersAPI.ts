@@ -7,9 +7,9 @@ import type { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 
 export class AllOthersAPI {
     private creators = {
-        [NetworkPluginID.PLUGIN_EVM]: new OthersAPI(),
-        [NetworkPluginID.PLUGIN_FLOW]: new FlowOthersAPI(),
-        [NetworkPluginID.PLUGIN_SOLANA]: new SolanaOthersAPI(),
+        [NetworkPluginID.PLUGIN_EVM]: OthersAPI,
+        [NetworkPluginID.PLUGIN_FLOW]: FlowOthersAPI,
+        [NetworkPluginID.PLUGIN_SOLANA]: SolanaOthersAPI,
     }
 
     use<T extends NetworkPluginID>(pluginID: T) {

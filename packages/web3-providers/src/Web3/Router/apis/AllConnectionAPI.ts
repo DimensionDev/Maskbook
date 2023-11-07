@@ -17,19 +17,19 @@ const createCreator = <T extends NetworkPluginID>(networkPluginID: T) => {
         case NetworkPluginID.PLUGIN_EVM:
             return new ConnectionCreatorAPI_Base<NetworkPluginID.PLUGIN_EVM>(
                 (initial) => new ConnectionAPI(initial),
-                new OthersAPI(),
+                OthersAPI,
                 new ConnectionOptionsAPI(),
             )
         case NetworkPluginID.PLUGIN_FLOW:
             return new ConnectionCreatorAPI_Base<NetworkPluginID.PLUGIN_FLOW>(
                 (initial) => new FlowConnectionAPI(initial),
-                new FlowOthersAPI(),
+                FlowOthersAPI,
                 new FlowConnectionOptionsAPI(),
             )
         case NetworkPluginID.PLUGIN_SOLANA:
             return new ConnectionCreatorAPI_Base<NetworkPluginID.PLUGIN_SOLANA>(
                 (initial) => new SolanaConnectionAPI(initial),
-                new SolanaOthersAPI(),
+                SolanaOthersAPI,
                 new SolanaConnectionOptionsAPI(),
             )
         default:

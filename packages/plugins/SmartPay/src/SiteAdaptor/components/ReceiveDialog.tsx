@@ -4,7 +4,6 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Others } from '@masknet/web3-providers'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
@@ -87,11 +86,7 @@ const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose
                 <Typography className={classes.title}>{name}</Typography>
             </DialogTitle>
             <DialogContent className={classes.content}>
-                <QRCode
-                    text={`${Others.chainResolver.chainPrefix(chainId)}:${address}`}
-                    options={{ width: 250 }}
-                    canvasProps={{ width: 250, height: 250 }}
-                />
+                <QRCode text={`:${address}`} options={{ width: 250 }} canvasProps={{ width: 250, height: 250 }} />
                 <Typography className={classes.tips}>{t.scan_address_to_payment()}</Typography>
                 <Typography className={classes.warning}>{t.can_only_receive_polygon_assets()}</Typography>
             </DialogContent>

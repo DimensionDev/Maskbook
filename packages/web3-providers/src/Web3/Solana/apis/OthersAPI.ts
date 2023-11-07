@@ -25,8 +25,8 @@ import {
     formatSchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-solana'
-import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
-import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { type OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import {
     SolanaChainResolver,
     SolanaExplorerResolver,
@@ -34,36 +34,39 @@ import {
     SolanaNetworkResolver,
 } from './ResolverAPI.js'
 
-export class SolanaOthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override chainResolver: typeof SolanaChainResolver = SolanaChainResolver
-    override explorerResolver: typeof SolanaExplorerResolver = SolanaExplorerResolver
-    override providerResolver: typeof SolanaProviderResolver = SolanaProviderResolver
-    override networkResolver: typeof SolanaNetworkResolver = SolanaNetworkResolver
+export const SolanaOthersAPI = {
+    isSameAddress,
+    chainResolver: SolanaChainResolver,
+    explorerResolver: SolanaExplorerResolver,
+    providerResolver: SolanaProviderResolver,
+    networkResolver: SolanaNetworkResolver,
 
-    override isValidDomain = isValidDomain
-    override isValidChainId = isValidChainId
-    override isValidAddress = isValidAddress
-    override isZeroAddress = isZeroAddress
-    override isNativeTokenAddress = isNativeTokenAddress
+    isValidDomain,
+    isValidChainId,
+    isValidAddress,
+    isZeroAddress,
+    isNativeTokenAddress,
 
-    override isNativeTokenSchemaType = isNativeTokenSchemaType
-    override isFungibleTokenSchemaType = isFungibleTokenSchemaType
-    override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
+    isNativeTokenSchemaType,
+    isFungibleTokenSchemaType,
+    isNonFungibleTokenSchemaType,
 
-    override getNetworkPluginID = getNetworkPluginID
-    override getDefaultChainId = getDefaultChainId
-    override getInvalidChainId = getInvalidChainId
-    override getDefaultNetworkType = getDefaultNetworkType
-    override getDefaultProviderType = getDefaultProviderType
-    override getZeroAddress = getZeroAddress
-    override getMaskTokenAddress = getMaskTokenAddress
-    override getNativeTokenAddress = getNativeTokenAddress
+    getNetworkPluginID,
+    getDefaultChainId,
+    getInvalidChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
+    getZeroAddress,
+    getMaskTokenAddress,
+    getNativeTokenAddress,
 
-    override formatAddress = formatAddress
-    override formatDomainName = formatDomainName
-    override formatTokenId = formatTokenId
-    override formatSchemaType = formatSchemaType
-    override createNativeToken = (chainId: ChainId) => this.chainResolver.nativeCurrency(chainId)
-    override createFungibleToken = createFungibleToken
-    override createNonFungibleToken = createNonFungibleToken
-}
+    formatAddress,
+    formatDomainName,
+    formatTokenId,
+    formatSchemaType,
+    createNativeToken(chainId: ChainId) {
+        return SolanaChainResolver.nativeCurrency(chainId)
+    },
+    createFungibleToken,
+    createNonFungibleToken,
+} satisfies OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

@@ -10,9 +10,11 @@ interface ExplorerOptions {
     nonFungibleTokenPathname?: string
 }
 
-export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
-    protected abstract readonly descriptors: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>
-    protected abstract initial?: ExplorerOptions
+export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+    constructor(
+        private descriptors: () => ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
+        private initial?: ExplorerOptions,
+    ) {}
     private get options() {
         const defaults = {
             addressPathname: '/address/:address',
@@ -29,13 +31,15 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
     }
 
     private getExplorerURL(chainId: ChainId) {
-        const chainDescriptor = this.descriptors.find((x) => x.chainId === chainId)
+        const chainDescriptor = this.descriptors().find((x) => x.chainId === chainId)
         return chainDescriptor?.explorerUrl ?? { url: '' }
     }
 
-    explorerUrl = (chainId: ChainId) => this.getExplorerURL(chainId)
+    explorerUrl(chainId: ChainId) {
+        return this.getExplorerURL(chainId)
+    }
 
-    addressLink = (chainId: ChainId, address: string, tokenId?: string) => {
+    addressLink(chainId: ChainId, address: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.addressPathname, {
@@ -44,7 +48,7 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
         })
     }
 
-    blockLink = (chainId: ChainId, blockNumber: number) => {
+    blockLink(chainId: ChainId, blockNumber: number) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!explorerUrl.url) return
 
@@ -54,7 +58,7 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
         })
     }
 
-    transactionLink = (chainId: ChainId, id: string) => {
+    transactionLink(chainId: ChainId, id: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!explorerUrl.url) return
 
@@ -64,7 +68,7 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
         })
     }
 
-    fungibleTokenLink = (chainId: ChainId, address: string) => {
+    fungibleTokenLink(chainId: ChainId, address: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!address || !explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.fungibleTokenPathname, {
@@ -73,7 +77,7 @@ export abstract class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
         })
     }
 
-    nonFungibleTokenLink = (chainId: ChainId, address: string, tokenId: string) => {
+    nonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.nonFungibleTokenPathname, {

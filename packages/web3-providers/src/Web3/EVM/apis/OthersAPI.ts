@@ -1,4 +1,4 @@
-import { createFungibleToken, createNonFungibleToken } from '@masknet/web3-shared-base'
+import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
@@ -28,40 +28,43 @@ import {
     formatSchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import type { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
 import { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './ResolverAPI.js'
 
-export class OthersAPI extends OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    override chainResolver: typeof ChainResolver = ChainResolver
-    override explorerResolver: typeof ExplorerResolver = ExplorerResolver
-    override providerResolver: typeof ProviderResolver = ProviderResolver
-    override networkResolver: typeof NetworkResolver = NetworkResolver
+export const OthersAPI = {
+    isSameAddress,
+    chainResolver: ChainResolver,
+    explorerResolver: ExplorerResolver,
+    providerResolver: ProviderResolver,
+    networkResolver: NetworkResolver,
 
-    override isValidDomain = isValidDomain
-    override isValidChainId = isValidChainId
-    override isValidAddress = isValidAddress
-    override isZeroAddress = isZeroAddress
-    override isNativeTokenAddress = isNativeTokenAddress
-    override isNativeTokenSchemaType = isNativeTokenSchemaType
-    override isFungibleTokenSchemaType = isFungibleTokenSchemaType
-    override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
+    isValidDomain,
+    isValidChainId,
+    isValidAddress,
+    isZeroAddress,
+    isNativeTokenAddress,
+    isNativeTokenSchemaType,
+    isFungibleTokenSchemaType,
+    isNonFungibleTokenSchemaType,
 
-    override getNetworkPluginID = getNetworkPluginID
-    override getDefaultChainId = getDefaultChainId
-    override getInvalidChainId = getInvalidChainId
-    override getDefaultNetworkType = getDefaultNetworkType
-    override getDefaultProviderType = getDefaultProviderType
-    override getZeroAddress = getZeroAddress
-    override getMaskTokenAddress = getMaskTokenAddress
-    override getNativeTokenAddress = getNativeTokenAddress
-    override getTransactionSignature = getTransactionSignature
-    override getAverageBlockDelay = getAverageBlockDelay
+    getNetworkPluginID,
+    getDefaultChainId,
+    getInvalidChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
+    getZeroAddress,
+    getMaskTokenAddress,
+    getNativeTokenAddress,
+    getTransactionSignature,
+    getAverageBlockDelay,
 
-    override formatAddress = formatEthereumAddress
-    override formatTokenId = formatTokenId
-    override formatDomainName = formatDomainName
-    override formatSchemaType = formatSchemaType
-    override createNativeToken = (chainId: ChainId) => ChainResolver.nativeCurrency(chainId)
-    override createFungibleToken = createFungibleToken
-    override createNonFungibleToken = createNonFungibleToken
-}
+    formatAddress: formatEthereumAddress,
+    formatTokenId,
+    formatDomainName,
+    formatSchemaType,
+    createNativeToken(chainId: ChainId) {
+        return ChainResolver.nativeCurrency(chainId)
+    },
+    createFungibleToken,
+    createNonFungibleToken,
+} satisfies OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

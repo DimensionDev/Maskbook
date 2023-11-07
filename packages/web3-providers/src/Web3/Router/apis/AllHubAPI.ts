@@ -24,7 +24,7 @@ export class AllHubAPI {
             (initial) => {
                 return mixin(new HubBaseAPI(initial), new HubFungibleAPI(initial), new HubNonFungibleAPI(initial))
             },
-            new OthersAPI(),
+            OthersAPI,
             new HubOptionsAPI(),
         ),
         [NetworkPluginID.PLUGIN_FLOW]: new HubCreatorAPI_Base<NetworkPluginID.PLUGIN_FLOW>(
@@ -35,7 +35,7 @@ export class AllHubAPI {
                     new FlowHubNonFungibleAPI(initial),
                 )
             },
-            new FlowOthersAPI(),
+            FlowOthersAPI,
             new FlowHubOptionsAPI(),
         ),
         [NetworkPluginID.PLUGIN_SOLANA]: new HubCreatorAPI_Base<NetworkPluginID.PLUGIN_SOLANA>(
@@ -46,7 +46,7 @@ export class AllHubAPI {
                     new SolanaHubNonFungibleAPI(initial),
                 )
             },
-            new SolanaOthersAPI(),
+            SolanaOthersAPI,
             new SolanaHubOptionsAPI(),
         ),
     }
