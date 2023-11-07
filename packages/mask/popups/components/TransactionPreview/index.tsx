@@ -204,14 +204,12 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 className={classes.tokenIcon}
                             />
                             {amount
-                                ? formatBalance(
-                                      amount,
-                                      token?.decimals,
-                                      4,
-                                      false,
-                                      true,
-                                      leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
-                                  )
+                                ? formatBalance(amount, token?.decimals, {
+                                      significant: 4,
+                                      isPrecise: false,
+                                      isFixed: true,
+                                      fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                  })
                                 : null}
                         </>
                     ) : null}

@@ -728,6 +728,7 @@
     "popups_wallet_settings_auto_lock_number_only": "crwdns22085:0crwdne22085:0",
     "popups_wallet_settings_current_management_account": "crwdns22087:0crwdne22087:0",
     "popups_wallet_settings_local_persona_or_wallet_only": "crwdns22089:0crwdne22089:0",
+    "popups_wallet_settings_hiding_scam_transactions": "crwdns22548:0crwdne22548:0",
     "popups_wallet_connected_sites": "crwdns22223:0crwdne22223:0",
     "popups_wallet_connected_sites_description": "crwdns22225:0crwdne22225:0",
     "popups_wallet_disconnect_confirm": "crwdns22227:0crwdne22227:0",

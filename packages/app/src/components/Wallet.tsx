@@ -157,7 +157,9 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                                 <Typography className={cx(classes.balance, 'text-black dark:text-white')}>
                                     {loadingNativeToken || loadingBalance
                                         ? '-'
-                                        : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                                        : `${formatBalance(balance, nativeToken?.decimals, {
+                                              significant: 3,
+                                          })} ${nativeToken?.symbol}`}
                                 </Typography>
                             </div>
                         )}

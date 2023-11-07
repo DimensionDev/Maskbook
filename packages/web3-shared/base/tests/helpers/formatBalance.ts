@@ -33,7 +33,7 @@ describe('formatBalance util test', () => {
         { give: 11, decimals: 9, significant: 20, expected: '0.00000001' },
         { give: 11, decimals: 10, significant: 20, expected: '<0.000001' },
     ])('.format($give $decimals $significant) should return $expected', ({ give, decimals, significant, expected }) => {
-        expect(formatBalance(give, decimals, significant)).toBe(expected)
+        expect(formatBalance(give, decimals, { significant })).toBe(expected)
     })
 
     describe('fixed mode', () => {
@@ -48,7 +48,9 @@ describe('formatBalance util test', () => {
         ])(
             '.format($give $decimals $isFixed, $fixedDecimals)',
             ({ give, decimals, expected, isFixed, fixedDecimals }) => {
-                expect(formatBalance(give, decimals, 0, false, isFixed, fixedDecimals)).toBe(expected)
+                expect(
+                    formatBalance(give, decimals, { significant: 0, isPrecise: false, isFixed, fixedDecimals }),
+                ).toBe(expected)
             },
         )
     })

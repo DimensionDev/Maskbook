@@ -115,7 +115,11 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                     loading={loadingBalance}
                     skeletonWidth={60}
                     skeletonHeight={16}>
-                    {`${formatBalance(balance, token?.decimals, 0, false, true)} ${token?.symbol}`}
+                    {`${formatBalance(balance, token?.decimals, {
+                        significant: 0,
+                        isPrecise: false,
+                        isFixed: true,
+                    })} ${token?.symbol}`}
                 </ProgressiveText>
             </div>
             {selected ? (

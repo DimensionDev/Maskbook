@@ -231,7 +231,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
                         </Typography>
                         <div className={classes.contribution}>
                             <Typography mr={1} fontSize={24} fontWeight={700}>
-                                {formatBalance(total, token.decimals, 6)}
+                                {formatBalance(total, token.decimals, { significant: 6 })}
                             </Typography>
                             <TokenIcon chainId={chainId} address={token.address} size={18} />
                             <Typography ml={1}>{token.symbol}</Typography>
