@@ -13,7 +13,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ChainResolver } from './ResolverAPI.js'
 import { HubBaseAPI_Base } from '../../Base/apis/HubBaseAPI.js'
-import { GasOptionAPI } from './GasOptionAPI.js'
+import { GasOptions } from './GasOptionAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { HubOptions } from '../types/index.js'
 import { MetaSwap } from '../../../MetaSwap/index.js'
@@ -32,7 +32,6 @@ export class HubBaseAPI extends HubBaseAPI_Base<
     TransactionParameter,
     GasOption
 > {
-    private GasOptions = new GasOptionAPI()
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     async getGasOptions(chainId: ChainId, initial?: HubOptions) {
@@ -43,11 +42,11 @@ export class HubBaseAPI extends HubBaseAPI_Base<
         try {
             const isEIP1559 = ChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
-            if (chainId === ChainId.Aurora) return this.GasOptions.getGasOptions(options.chainId)
+            if (chainId === ChainId.Aurora) return GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.getGasOptions()
             return await DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {
-            return this.GasOptions.getGasOptions(options.chainId)
+            return GasOptions.getGasOptions(options.chainId)
         }
     }
 

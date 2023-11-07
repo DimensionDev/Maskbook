@@ -2,14 +2,12 @@ import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
-import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
+import { Web3Readonly } from './ConnectionReadonlyAPI.js'
 import type { GasOptionAPI_Base } from '../../../entry-types.js'
 import { ChainResolver } from './ResolverAPI.js'
 
-export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     static HISTORICAL_BLOCKS = 4
-
-    private Web3 = new ConnectionReadonlyAPI()
 
     private avg(arr: number[]) {
         const sum = arr.reduce((a, v) => a + v)
@@ -36,7 +34,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const history = await this.Web3.getWeb3({ chainId }).eth.getFeeHistory(
+        const history = await Web3Readonly.getWeb3({ chainId }).eth.getFeeHistory(
             GasOptionAPI.HISTORICAL_BLOCKS,
             'pending',
             [25, 50, 75],
@@ -47,7 +45,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
         const fast = this.avg(blocks.map((b) => b.priorityFeePerGas[2]))
 
         // get the base fee per gas from the latest block
-        const block = await this.Web3.getBlock('latest', {
+        const block = await Web3Readonly.getBlock('latest', {
             chainId,
         })
         const baseFeePerGas = block?.baseFeePerGas ?? 0
@@ -83,7 +81,7 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const gasPrice = await this.Web3.getGasPrice({
+        const gasPrice = await Web3Readonly.getGasPrice({
             chainId,
         })
         return {
@@ -118,3 +116,4 @@ export class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOpti
         else return this.getGasOptionsForPriorEIP1559(chainId)
     }
 }
+export const GasOptions = new GasOptionAPI()

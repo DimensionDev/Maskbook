@@ -3,11 +3,9 @@ import { isSameURL } from '@masknet/web3-shared-base'
 import { ErrorEditor, isMaskOnlyMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
-import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
-export class CustomNetwork implements Middleware<ConnectionContext> {
-    private Web3 = new ConnectionReadonlyAPI()
-
+class CustomNetworkAPI implements Middleware<ConnectionContext> {
     private get networks() {
         if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
         return Web3StateRef.value.Network.networks?.getCurrentValue()
@@ -27,7 +25,7 @@ export class CustomNetwork implements Middleware<ConnectionContext> {
         }
 
         try {
-            const response = await this.Web3.getWeb3Provider({
+            const response = await Web3Readonly.getWeb3Provider({
                 chainId: context.chainId,
                 account: context.account,
                 providerURL:
@@ -50,3 +48,4 @@ export class CustomNetwork implements Middleware<ConnectionContext> {
         await next()
     }
 }
+export const CustomNetwork = new CustomNetworkAPI()

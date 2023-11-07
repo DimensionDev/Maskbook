@@ -6,7 +6,7 @@ import { HubNonFungibleAPI } from './HubNonFungibleAPI.js'
 import type { HubOptions_Base } from '../../../entry-types.js'
 
 export class HubAPI {
-    create(initial?: HubOptions_Base<ChainId>) {
+    static create(initial?: HubOptions_Base<ChainId>) {
         return mixin(new HubBaseAPI(initial), new HubFungibleAPI(initial), new HubNonFungibleAPI(initial))
     }
 }

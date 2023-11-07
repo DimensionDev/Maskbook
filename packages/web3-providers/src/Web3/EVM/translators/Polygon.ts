@@ -1,11 +1,9 @@
 import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { Base } from './Base.js'
-import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class Polygon extends Base {
-    private Web3 = new ConnectionReadonlyAPI()
-
     override async encode(context: ConnectionContext): Promise<void> {
         await super.encode(context)
         if (!context.config) return
@@ -21,7 +19,8 @@ export class Polygon extends Base {
             ...(PayloadEditor.fromPayload(context.request)
                 ? {}
                 : {
-                      gasPrice: context.config.gasPrice ?? (await this.Web3.getGasPrice({ chainId: context.chainId })),
+                      gasPrice:
+                          context.config.gasPrice ?? (await Web3Readonly.getGasPrice({ chainId: context.chainId })),
                   }),
         }
 

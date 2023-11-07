@@ -10,7 +10,7 @@ import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainbaseRedPacket } from '../Chainbase/index.js'
 import { EtherscanRedPacket } from '../Etherscan/index.js'
-import { ContractRedPacketAPI } from './api.js'
+import { ContractRedPacket } from './api.js'
 import {
     type RedPacketJSONPayloadFromChain,
     type NftRedPacketJSONPayload,
@@ -19,9 +19,7 @@ import {
 import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
 
-export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    private ContractRedPacket = new ContractRedPacketAPI()
-
+class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     getHistories(
         chainId: ChainId,
         senderAddress: string,
@@ -45,7 +43,7 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
                 },
                 () => {
                     // block range might be too large
-                    return this.ContractRedPacket.getHistories(
+                    return ContractRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -206,3 +204,4 @@ export class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaTy
         })
     }
 }
+export const RedPacket = new RedPacketAPI()

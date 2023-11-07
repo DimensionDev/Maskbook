@@ -22,14 +22,13 @@ import {
 } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SmartPayAccountAPI, SmartPayBundler } from '../../../SmartPay/index.js'
-import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
-    private Web3 = new ConnectionReadonlyAPI()
     private AbstractAccount = new SmartPayAccountAPI()
 
     private get networks() {
@@ -77,7 +76,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 0,
             )
 
-            const maskBalance = await this.Web3.getFungibleTokenBalance(maskAddress, undefined, {
+            const maskBalance = await Web3Readonly.getFungibleTokenBalance(maskAddress, undefined, {
                 account: context.account,
                 chainId: context.chainId,
             })
@@ -103,7 +102,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     : nativeTokenAddress,
             }
         } catch (error) {
-            const nativeBalance = await this.Web3.getNativeTokenBalance({
+            const nativeBalance = await Web3Readonly.getNativeTokenBalance({
                 account: context.account,
                 chainId: context.chainId,
             })

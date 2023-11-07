@@ -25,7 +25,7 @@ class TTL<T> {
  * Fetch latest tx list of the the given account. It creates a signature for each transaction.
  * Treat two transactions the same with the identical transaction hash or signature.
  */
-export class AccountChecker implements TransactionChecker<ChainId, Transaction> {
+class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
     static CHECK_LATEST_TRANSACTION_SIZE = 5
 
     private ttl = new TTL<ExplorerAPI.Transaction[]>()
@@ -48,7 +48,7 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
         if (hit) return hit
 
         const transactions = await EtherscanExplorer.getLatestTransactions(chainId, account, {
-            offset: AccountChecker.CHECK_LATEST_TRANSACTION_SIZE,
+            offset: AccountCheckerAPI.CHECK_LATEST_TRANSACTION_SIZE,
         })
         this.ttl.set(key, transactions, 15 * 1000)
         return transactions
@@ -65,3 +65,4 @@ export class AccountChecker implements TransactionChecker<ChainId, Transaction> 
         return tx.status === '1' ? TransactionStatusType.SUCCEED : TransactionStatusType.FAILED
     }
 }
+export const AccountChecker = new AccountCheckerAPI()

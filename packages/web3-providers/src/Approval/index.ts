@@ -15,13 +15,11 @@ import {
     type TokenApprovalInfoAccountMap,
     type NFTApprovalInfoAccountMap,
 } from './approvalListState.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import type { AuthorizationAPI } from '../entry-types.js'
 
-export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
-    private Web3 = new ConnectionReadonlyAPI()
-
+class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         try {
             const { toBlock, records: tokenSpenderRecords } = await this.parseSpenderRecords(
@@ -156,9 +154,9 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
-        const toBlock = await this.Web3.getBlockNumber({ chainId })
+        const toBlock = await Web3Readonly.getBlockNumber({ chainId })
 
-        const logs = await this.Web3.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await Web3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [topic, abiCoder.encodeParameter('address', account)],
             fromBlock,
             toBlock,
@@ -167,6 +165,7 @@ export class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         return { records: parseLogs(logs), toBlock }
     }
 }
+export const Approval = new ApprovalAPI()
 
 function parseLogs(logs: Log[]) {
     return logs

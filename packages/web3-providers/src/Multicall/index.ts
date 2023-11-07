@@ -1,5 +1,5 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
+import type { Multicall as MulticallAPI } from '@masknet/web3-contracts/types/Multicall.js'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import {
     type ChainId,
@@ -9,21 +9,19 @@ import {
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
 import { ContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
-export class MulticallAPI {
-    private Web3 = new ConnectionReadonlyAPI()
-
-    private results: {
+export class Multicall {
+    private static results: {
         [chainId: number]: {
             blockNumber: number
             results: Record<string, MulticallBaseAPI.Result>
         }
     } = {}
 
-    private createContract(chainId: ChainId) {
+    private static createContract(chainId: ChainId) {
         const address = getEthereumConstant(chainId, 'MULTICALL_ADDRESS')
         if (!address) throw new Error('Failed to create multicall contract.')
 
@@ -33,18 +31,18 @@ export class MulticallAPI {
         return contract
     }
 
-    private toCallKey(call: MulticallBaseAPI.Call) {
+    private static toCallKey(call: MulticallBaseAPI.Call) {
         return call.join('-')
     }
 
-    private getCallResult(call: MulticallBaseAPI.Call, chainId: ChainId, blockNumber: number) {
+    private static getCallResult(call: MulticallBaseAPI.Call, chainId: ChainId, blockNumber: number) {
         const cache = this.results[chainId]
         const blockNumber_ = cache?.blockNumber ?? 0
         if (blockNumber_ < blockNumber) return
         return cache.results[this.toCallKey(call)]
     }
 
-    private setCallResult(
+    private static setCallResult(
         call: MulticallBaseAPI.Call,
         result: MulticallBaseAPI.Result,
         chainId: ChainId,
@@ -62,7 +60,7 @@ export class MulticallAPI {
     }
 
     // evenly distributes items among the chunks
-    private chunkArray(
+    private static chunkArray(
         items: MulticallBaseAPI.Call[],
         gasLimit = CONSERVATIVE_BLOCK_GAS_LIMIT * 10,
     ): MulticallBaseAPI.Call[][] {
@@ -90,7 +88,7 @@ export class MulticallAPI {
         return chunks
     }
 
-    async call<
+    static async call<
         T extends BaseContract,
         K extends keyof T['methods'],
         R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
@@ -107,7 +105,7 @@ export class MulticallAPI {
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
-        const blockNumber_ = blockNumber ?? (await this.Web3.getBlockNumber({ chainId }))
+        const blockNumber_ = blockNumber ?? (await Web3Readonly.getBlockNumber({ chainId }))
 
         // filter out cached calls
         const unresolvedCalls = calls.filter((call_) => !this.getCallResult(call_, chainId, blockNumber_))
@@ -118,10 +116,10 @@ export class MulticallAPI {
                 this.chunkArray(unresolvedCalls).map(async (chunk) => {
                     // we don't mind the actual block number of the current call
                     const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
-                    const hex = await this.Web3.callTransaction(tx, { chainId })
+                    const hex = await Web3Readonly.callTransaction(tx, { chainId })
 
                     const result = decodeOutputString(contract.options.jsonInterface, hex, 'multicall') as
-                        | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
+                        | UnboxTransactionObject<ReturnType<MulticallAPI['methods']['multicall']>>
                         | undefined
 
                     if (!result) return
@@ -152,7 +150,7 @@ export class MulticallAPI {
         })
     }
 
-    createSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
+    static createSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
         contract: T,
         names: K[],
         callDatas: Array<Parameters<T['methods'][K]>>,
@@ -165,7 +163,7 @@ export class MulticallAPI {
         ])
     }
 
-    createMultipleContractSingleData<T extends BaseContract, K extends keyof T['methods']>(
+    static createMultipleContractSingleData<T extends BaseContract, K extends keyof T['methods']>(
         contracts: T[],
         names: K[],
         callData: Parameters<T['methods'][K]>,

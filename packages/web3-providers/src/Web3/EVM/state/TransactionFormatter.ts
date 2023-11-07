@@ -32,11 +32,9 @@ import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.
 import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
-import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
+import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
-    private Web3 = new ConnectionReadonlyAPI()
-
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
@@ -108,10 +106,8 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         if (to) {
             let code = ''
             try {
-                code = await this.Web3.getCode(to, { chainId })
-            } catch {
-                code = ''
-            }
+                code = await Web3Readonly.getCode(to, { chainId })
+            } catch {}
 
             // send ether tx
             if (isEmptyHex(code)) {

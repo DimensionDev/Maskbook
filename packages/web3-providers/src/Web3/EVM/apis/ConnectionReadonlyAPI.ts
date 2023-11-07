@@ -93,6 +93,7 @@ export class ConnectionReadonlyAPI
             Web3Provider
         >
 {
+    static Default = new ConnectionReadonlyAPI()
     constructor(protected options?: ConnectionOptions) {
         this.Contract = new ContractReadonlyAPI(this.options)
         this.Request = new RequestReadonlyAPI(this.options)
@@ -833,3 +834,4 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 }
+export const Web3Readonly = ConnectionReadonlyAPI.Default
