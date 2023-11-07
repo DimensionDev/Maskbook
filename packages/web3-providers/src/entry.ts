@@ -4,9 +4,7 @@ import { DSearchAPI } from './DSearch/index.js'
 import { MulticallAPI } from './Multicall/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
 import { SmartPayOwnerAPI } from './SmartPay/apis/OwnerAPI.js'
-import { AirdropAPI } from './Airdrop/index.js'
 import { ContractAPI } from './Web3/EVM/apis/ContractAPI.js'
-import { ContractReadonlyAPI } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 import { ConnectionReadonlyAPI } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { RequestAPI } from './Web3/EVM/apis/RequestAPI.js'
 import { RequestReadonlyAPI } from './Web3/EVM/apis/RequestReadonlyAPI.js'
@@ -52,7 +50,7 @@ export const OthersAll = new AllOthersAPI()
 
 export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
 export const Contract = new ContractAPI()
-export const ContractReadonly = new ContractReadonlyAPI()
+export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { Web3Storage } from './Storage/apis/Storage.js'
 export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
@@ -125,7 +123,7 @@ export const SmartPayAccount = new SmartPayAccountAPI()
 export { RSS3 } from './RSS3/index.js'
 
 // Airdrop
-export const Airdrop = new AirdropAPI()
+export { Airdrop } from './Airdrop/index.js'
 
 // Firefly
 

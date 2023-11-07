@@ -8,13 +8,12 @@ import {
     getEthereumConstant,
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { ConnectionReadonlyAPI } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
 export class MulticallAPI {
-    private Contract = new ContractReadonlyAPI()
     private Web3 = new ConnectionReadonlyAPI()
 
     private results: {
@@ -28,7 +27,7 @@ export class MulticallAPI {
         const address = getEthereumConstant(chainId, 'MULTICALL_ADDRESS')
         if (!address) throw new Error('Failed to create multicall contract.')
 
-        const contract = this.Contract.getMulticallContract(address, { chainId })
+        const contract = ContractReadonly.getMulticallContract(address, { chainId })
         if (!contract) throw new Error('Failed to create multicall contract.')
 
         return contract

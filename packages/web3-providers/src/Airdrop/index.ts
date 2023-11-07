@@ -1,15 +1,13 @@
 import { type ChainId, getAirdropClaimersConstants } from '@masknet/web3-shared-evm'
-import { ContractReadonlyAPI } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { ContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
-export class AirdropAPI {
-    private Contract = new ContractReadonlyAPI()
-
-    async getActivity(chainId: ChainId, address?: string) {
+export class Airdrop {
+    static async getActivity(chainId: ChainId, address?: string) {
         const { CLAIMERS, CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CLAIMERS || !CONTRACT_ADDRESS) return
 
-        const airdropContract = this.Contract.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
+        const airdropContract = ContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
         const data = await fetchJSON<Record<string, string>>(`https://cors-next.r2d2.to/?${CLAIMERS}`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -33,11 +31,11 @@ export class AirdropAPI {
         }
     }
 
-    async getPoolInfo(chainId: ChainId, eventIndex: string) {
+    static async getPoolInfo(chainId: ChainId, eventIndex: string) {
         const { CONTRACT_ADDRESS } = getAirdropClaimersConstants(chainId)
         if (!CONTRACT_ADDRESS) return
 
-        const airdropContract = this.Contract.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
+        const airdropContract = ContractReadonly.getAirdropV2Contract(CONTRACT_ADDRESS, { chainId })
         return airdropContract?.methods.claimEvents(eventIndex).call()
     }
 }

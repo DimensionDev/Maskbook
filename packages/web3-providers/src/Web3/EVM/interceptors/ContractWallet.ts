@@ -11,7 +11,7 @@ import {
     type UserOperation,
 } from '@masknet/web3-shared-evm'
 import { ConnectionAPI } from '../apis/ConnectionAPI.js'
-import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
+import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
@@ -19,8 +19,6 @@ import type { BundlerAPI, AbstractAccountAPI, FunderAPI, WalletAPI } from '../..
 
 export class ContractWallet implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionAPI()
-    private Contract = new ContractReadonlyAPI()
-
     constructor(
         protected providerType: ProviderType,
         protected account: AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction>,
@@ -30,7 +28,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     ) {}
 
     private async getNonce(context: ConnectionContext) {
-        const contract = this.Contract.getWalletContract(context.account)
+        const contract = ContractReadonly.getWalletContract(context.account)
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract.methods.nonce().call()
     }

@@ -40,6 +40,7 @@ import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
 
 export class ContractReadonlyAPI {
+    static Default = new ContractReadonlyAPI()
     constructor(protected options?: ConnectionOptions) {
         this.Request = new RequestReadonlyAPI(options)
     }
@@ -120,3 +121,4 @@ export class ContractReadonlyAPI {
         return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
     }
 }
+export const ContractReadonly = ContractReadonlyAPI.Default

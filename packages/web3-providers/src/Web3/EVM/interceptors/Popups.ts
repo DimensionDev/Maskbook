@@ -23,14 +23,13 @@ import {
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SmartPayAccountAPI, SmartPayBundler } from '../../../SmartPay/index.js'
 import { ConnectionReadonlyAPI } from '../apis/ConnectionReadonlyAPI.js'
-import { ContractReadonlyAPI } from '../apis/ContractReadonlyAPI.js'
+import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { Providers } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionReadonlyAPI()
-    private Contract = new ContractReadonlyAPI()
     private AbstractAccount = new SmartPayAccountAPI()
 
     private get networks() {
@@ -83,7 +82,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 chainId: context.chainId,
             })
 
-            const contract = this.Contract.getERC20Contract(maskAddress, { chainId: context.chainId })
+            const contract = ContractReadonly.getERC20Contract(maskAddress, { chainId: context.chainId })
             if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const maskAllowance = await contract.methods
