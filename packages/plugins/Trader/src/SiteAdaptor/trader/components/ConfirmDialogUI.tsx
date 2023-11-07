@@ -379,7 +379,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                                 .shiftedBy(inputToken.decimals)
                                                 .integerValue(),
                                             inputToken.decimals,
-                                            6,
+                                            { significant: 6 },
                                         )}
                                     </span>
                                     {inputToken.symbol}
@@ -396,7 +396,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                                 .shiftedBy(outputToken.decimals)
                                                 .integerValue(),
                                             outputToken.decimals,
-                                            6,
+                                            { significant: 6 },
                                         )}{' '}
                                         {outputToken.symbol}
                                     </span>

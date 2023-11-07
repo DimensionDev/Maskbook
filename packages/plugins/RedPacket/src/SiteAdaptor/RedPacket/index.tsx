@@ -203,14 +203,14 @@ export function RedPacket(props: RedPacketProps) {
         if (isZero(data.claimed_amount)) return
         TransactionConfirmModal.open({
             shareText,
-            amount: formatBalance(data.claimed_amount, token?.decimals, 2),
+            amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
             token,
             tokenType: TokenType.Fungible,
             messageTextForNFT: t.claim_nft_successful({
                 name: 'NFT',
             }),
             messageTextForFT: t.claim_token_successful({
-                amount: formatBalance(data.claimed_amount, token?.decimals, 2),
+                amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
@@ -237,7 +237,7 @@ export function RedPacket(props: RedPacketProps) {
             return t.description_claimed(
                 availability.claimed_amount
                     ? {
-                          amount: formatBalance(availability.claimed_amount, token.decimals, 2),
+                          amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
                           symbol: token.symbol,
                       }
                     : { amount: '-', symbol: '-' },
@@ -250,7 +250,7 @@ export function RedPacket(props: RedPacketProps) {
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
             return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals, 2),
+                balance: formatBalance(availability.balance, token.decimals, { significant: 2 }),
                 symbol: token.symbol ?? '-',
             })
         if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
@@ -258,7 +258,7 @@ export function RedPacket(props: RedPacketProps) {
         if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
         if (!payload.password) return t.description_broken()
         const i18nParams = {
-            total: formatBalance(payload.total, token.decimals, 2),
+            total: formatBalance(payload.total, token.decimals, { significant: 2 }),
             symbol: token.symbol ?? '-',
             count: payload.shares.toString() ?? '-',
         }

@@ -1,15 +1,23 @@
 import { BigNumber } from 'bignumber.js'
 import { addThousandSeparators, isLessThan, leftShift, pow10, scale10, trimZero } from './number.js'
 
-export function formatBalance(
-    rawValue: BigNumber.Value = '0',
-    decimals = 0,
-    significant = decimals,
-    isPrecise = false,
-    isFixed = false,
-    fixedDecimals = 4,
-    hasSeparators = true,
-) {
+export interface FormatBalanceOptions {
+    significant?: number
+    isPrecise?: boolean
+    isFixed?: boolean
+    fixedDecimals?: number
+    hasSeparators?: boolean
+}
+
+export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, options?: FormatBalanceOptions) {
+    const {
+        significant = decimals,
+        isPrecise = false,
+        isFixed = false,
+        fixedDecimals = 4,
+        hasSeparators = true,
+    } = options ?? {}
+
     let balance = new BigNumber(rawValue)
     if (!balance.isInteger()) {
         const message = `Expected an integer but got ${balance.toFixed()}`

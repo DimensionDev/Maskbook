@@ -236,7 +236,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Box className={classes.content}>
                                 <Typography color="textPrimary">
-                                    {formatBalance(paymentTokenBalance, paymentTokenDetailed?.decimals ?? 0, 6)}{' '}
+                                    {formatBalance(paymentTokenBalance, paymentTokenDetailed?.decimals ?? 0, {
+                                        significant: 6,
+                                    })}{' '}
                                     {paymentTokenDetailed?.symbol}
                                 </Typography>
                             </Box>

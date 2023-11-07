@@ -28,7 +28,7 @@ export function SlippageToleranceSection() {
                 additions={
                     <Typography className={classes.additions} component="span">
                         <span className={classes.percentage}>
-                            {formatBalance(multipliedBy(slippageTolerance, 100), 2, 2)}%
+                            {formatBalance(multipliedBy(slippageTolerance, 100), 2, { significant: 2 })}%
                         </span>
                     </Typography>
                 }>

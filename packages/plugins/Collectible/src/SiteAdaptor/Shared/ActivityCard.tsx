@@ -123,7 +123,9 @@ export function ActivityCard(props: ActivityCardProps) {
                             </Typography>
                         )}
                         <Typography className={classes.salePriceText}>
-                            {formatBalance(activity.priceInToken.amount, activity.priceInToken.token.decimals || 18, 2)}
+                            {formatBalance(activity.priceInToken.amount, activity.priceInToken.token.decimals || 18, {
+                                significant: 2,
+                            })}
                         </Typography>
                     </div>
                 ) : null}

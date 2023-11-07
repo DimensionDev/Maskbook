@@ -297,9 +297,9 @@ export const TransactionDetail = memo(function TransactionDetail() {
                     <Typography className={classes.fieldName}>{t.amount()}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx && nativeToken
-                            ? `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, 6)} ${
-                                  nativeToken.symbol
-                              }`
+                            ? `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, {
+                                  significant: 6,
+                              })} ${nativeToken.symbol}`
                             : ''}
                     </ProgressiveText>
                 </Box>

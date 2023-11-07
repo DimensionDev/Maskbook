@@ -47,7 +47,9 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
             loading={trade.loading}
             providerName={resolveTradeProviderName(trade.value.provider)}
             onClick={onClick}
-            balance={formatBalance(trade.value?.value?.outputAmount ?? 0, trade?.value.value?.outputToken?.decimals, 2)}
+            balance={formatBalance(trade.value?.value?.outputAmount ?? 0, trade?.value.value?.outputToken?.decimals, {
+                significant: 2,
+            })}
             gasFee={gasFee}
             gasFeeValueUSD={gasFeeValueUSD}
             nativeToken={nativeToken}

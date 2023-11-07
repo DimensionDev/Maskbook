@@ -88,7 +88,9 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong>
-                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
+                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, {
+                                    significant: 6,
+                                })}
                             </strong>
                         </Typography>
                         {offer.price?.usd ? (
