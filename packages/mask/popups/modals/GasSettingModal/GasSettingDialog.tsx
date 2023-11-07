@@ -234,7 +234,13 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     return (
         <Box display="flex" flexDirection="column" rowGap={1.5} mt={1.5}>
             <Typography className={classes.preview}>
-                {formatBalance(totalGas, token?.decimals, 4, false, true, 6)} {token?.symbol} ≈{' '}
+                {formatBalance(totalGas, token?.decimals, {
+                    significant: 4,
+                    isPrecise: false,
+                    isFixed: true,
+                    fixedDecimals: 6,
+                })}{' '}
+                {token?.symbol} ≈{' '}
                 <FormattedCurrency
                     value={formatWeiToEther(totalGas).times(tokenPrice ?? 0)}
                     formatter={formatCurrency}

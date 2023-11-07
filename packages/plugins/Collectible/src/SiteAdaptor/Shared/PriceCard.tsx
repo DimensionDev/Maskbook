@@ -104,7 +104,7 @@ export function PriceCard(props: PriceCardProps) {
                                 {formatBalance(
                                     topListing?.priceInToken?.amount,
                                     topListing?.priceInToken?.token.decimals || 18,
-                                    6,
+                                    { significant: 6 },
                                 )}
                             </strong>
                         </Typography>

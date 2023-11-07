@@ -38,12 +38,12 @@ export class GitcoinDescriptor extends BaseDescriptor implements TransactionDesc
                     tokenInAmount: amount,
                     title: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_gitcoin_submitted', {
-                        amount: formatBalance(amount, token?.decimals, 6),
+                        amount: formatBalance(amount, token?.decimals, { significant: 6 }),
                         symbol: token?.symbol,
                     }),
                     snackbar: {
                         successfulDescription: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_success', {
-                            amount: formatBalance(amount, token?.decimals, 6),
+                            amount: formatBalance(amount, token?.decimals, { significant: 6 }),
                             symbol: token?.symbol,
                         }),
                         failedDescription: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_fail'),

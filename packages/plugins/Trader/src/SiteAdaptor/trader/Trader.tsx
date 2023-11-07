@@ -211,9 +211,13 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         const cashTag = isTwitter ? '$' : ''
         return focusedTrade?.value && inputToken && outputToken
             ? t.share_text({
-                  input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, 6),
+                  input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, {
+                      significant: 6,
+                  }),
                   input_symbol: `${cashTag}${inputToken.symbol}`,
-                  output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, 6),
+                  output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, {
+                      significant: 6,
+                  }),
                   output_symbol: `${cashTag}${outputToken.symbol}`,
                   account_promote: t.account_promote({
                       context: isTwitter ? 'twitter' : isFacebook ? 'facebook' : 'default',

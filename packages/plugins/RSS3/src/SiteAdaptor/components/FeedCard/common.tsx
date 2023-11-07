@@ -56,7 +56,7 @@ export function AddressLabel({ address, pluginID, size, className, ...rest }: Ad
 
 export const formatValue = (value?: { value: string; decimals: number } | null): string => {
     if (!value) return ''
-    return formatBalance(value.value, value.decimals, 5)
+    return formatBalance(value.value, value.decimals, { significant: 5 })
 }
 
 function LinkifyRender({ attributes, content }: IntermediateRepresentation) {

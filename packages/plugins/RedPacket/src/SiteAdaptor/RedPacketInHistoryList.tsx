@@ -346,18 +346,15 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     values={{
                                         claimedShares: String(claimerNumber),
                                         shares: String(patchedHistory.shares),
-                                        amount: formatBalance(
-                                            patchedHistory.total,
-                                            historyToken.decimals ?? 18,
-                                            6,
-                                            true,
-                                        ),
+                                        amount: formatBalance(patchedHistory.total, historyToken.decimals ?? 18, {
+                                            significant: 6,
+                                            isPrecise: true,
+                                        }),
                                         claimedAmount: rpid
                                             ? formatBalance(
                                                   minus(patchedHistory.total, total_remaining ?? 0),
                                                   historyToken.decimals,
-                                                  6,
-                                                  true,
+                                                  { significant: 6, isPrecise: true },
                                               )
                                             : '',
                                         symbol: historyToken.symbol,

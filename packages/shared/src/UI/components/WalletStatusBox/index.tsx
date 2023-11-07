@@ -201,7 +201,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             <Typography className={classes.balance}>
                                 {loadingNativeToken || loadingBalance
                                     ? '-'
-                                    : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                                    : `${formatBalance(balance, nativeToken?.decimals, {
+                                          significant: 3,
+                                      })} ${nativeToken?.symbol}`}
                             </Typography>
                         </div>
                     )}
