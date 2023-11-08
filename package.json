@@ -63,7 +63,7 @@
     "@masknet/config": "workspace:^",
     "@masknet/eslint-plugin": "^0.2.0",
     "@nice-labs/git-rev": "^3.5.1",
-    "@swc/core": "1.3.81",
+    "@swc/core": "1.3.96",
     "@types/lodash-es": "^4.17.9",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
@@ -84,7 +84,7 @@
     "msw": "^1.2.1",
     "prettier": "^3.0.3",
     "svgo": "^3.0.2",
-    "ts-node": "^10.9.1",
+    "@swc-node/register": "^1.6.8",
     "typescript": "5.3.0-beta",
     "vite": "^4.4.9",
     "vitest": "^0.34.3"

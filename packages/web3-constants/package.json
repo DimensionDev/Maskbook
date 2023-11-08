@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node compile-constants.ts"
+    "start": "node -r @swc-node/register compile-constants.ts"
   },
   "dependencies": {
     "@masknet/web3-contracts": "workspace:^"

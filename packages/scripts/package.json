@@ -29,7 +29,6 @@
     "@types/proper-lockfile": "^4.1.2",
     "@types/yargs": "^17.0.24",
     "gulp-cli": "^2.3.0",
-    "ts-node": "^10.9.1",
     "web-ext": "^7.6.2"
   }
 }

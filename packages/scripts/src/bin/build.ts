@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { spawn } from 'child_process'
 import { promisify } from 'util'
 import { series } from 'gulp'

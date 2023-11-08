@@ -1,14 +1,14 @@
-diff --git a/bin/ts-gulp.js b/bin/ts-gulp.js
+diff --git a/bin/swc-gulp.js b/bin/swc-gulp.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..85befe094b23d419bed97c7bb52208fd9fafe2ad
+index 0000000000000000000000000000000000000000..8330dcf1cadce84957987bba93061c4e7a61bb42
 --- /dev/null
-+++ b/bin/ts-gulp.js
++++ b/bin/swc-gulp.js
 @@ -0,0 +1,8 @@
 +#!/usr/bin/env node
 +
 +const { spawnSync } = require('child_process')
 +const { join } = require('path')
-+const child = spawnSync(process.execPath, ['--loader', 'ts-node/esm/transpile-only', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
++const child = spawnSync(process.execPath, ['--loader', 'swc-node/esm', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
 +    stdio: 'inherit',
 +})
 +if (child.status) process.exit(child.status)
@@ -23,7 +23,7 @@ index 0000000000000000000000000000000000000000..598c2a06ad1337aed1e67c3d8cd3c0be
 +export const { dest, lastRun, parallel, registry, series, src, symlink, task, tree, watch } = cjs
 +export default cjs
 diff --git a/package.json b/package.json
-index 256684af31dde66c75e142e05a7db89f22e26bfc..e8f292ebfe7883aecf92e9bd9261131c0f5333a4 100644
+index 256684af31dde66c75e142e05a7db89f22e26bfc..5ea727ed38b7cf19899de84e8817e1f5c326594b 100644
 --- a/package.json
 +++ b/package.json
 @@ -14,13 +14,17 @@
@@ -41,7 +41,7 @@ index 256684af31dde66c75e142e05a7db89f22e26bfc..e8f292ebfe7883aecf92e9bd9261131c
    ],
    "bin": {
 -    "gulp": "./bin/gulp.js"
-+    "gulp": "./bin/ts-gulp.js"
++    "gulp": "./bin/swc-gulp.js"
    },
    "scripts": {
      "lint": "eslint .",

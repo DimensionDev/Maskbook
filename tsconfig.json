@@ -141,12 +141,5 @@
       "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src/index.ts"]
     }
   },
-  "files": [],
-  "ts-node": {
-    "compilerOptions": {
-      "noEmit": false
-    },
-    "esm": true,
-    "swc": true
-  }
+  "files": []
 }

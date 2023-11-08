@@ -55,7 +55,7 @@ function webpack(flags: BuildFlagsExtended) {
     const command = [
         JSON.stringify(process.execPath),
         '--loader',
-        'ts-node/esm/transpile-only',
+        'swc-node/esm',
         'node_modules/webpack/bin/webpack.js',
         flags.mode === 'development' ? 'serve' : undefined,
         '--mode',

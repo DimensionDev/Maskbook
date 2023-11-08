@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { fileURLToPath } from 'url'
 import { series, type TaskFunction } from 'gulp'
 import { buildBaseExtension } from './normal.js'

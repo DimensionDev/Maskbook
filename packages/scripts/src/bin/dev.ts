@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node
 import { spawn } from 'child_process'
 import { codegenWatch } from '../codegen/index.js'
 import { awaitChildProcess, cleanupWhenExit } from '../utils/index.js'

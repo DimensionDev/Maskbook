@@ -6,12 +6,5 @@
     "composite": false,
     "incremental": false
   },
-  "ts-node": {
-    "compilerOptions": {
-      "noEmit": false
-    },
-    "esm": true,
-    "swc": true
-  },
   "include": ["./src"]
 }
