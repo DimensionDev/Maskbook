@@ -67,7 +67,7 @@ patchedDependencies:
     hash: b2o4qvyfvxmpo7347sqko6h22a
     path: patches/fuse.js@6.6.2.patch
   gulp@4.0.2:
-    hash: sk5ysmrrtkzdwaq544aie4yvqi
+    hash: vk5i6uhczh77xgu4hqfcgp4rje
     path: patches/gulp@4.0.2.patch
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
@@ -239,7 +239,7 @@ importers:
         version: 3.0.0(@typescript-eslint/eslint-plugin@6.5.0)(eslint@8.48.0)
       gulp:
         specifier: ^4.0.2
-        version: 4.0.2(patch_hash=sk5ysmrrtkzdwaq544aie4yvqi)
+        version: 4.0.2(patch_hash=vk5i6uhczh77xgu4hqfcgp4rje)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -17060,7 +17060,7 @@ packages:
       - supports-color
     dev: true
 
-  /gulp@4.0.2(patch_hash=sk5ysmrrtkzdwaq544aie4yvqi):
+  /gulp@4.0.2(patch_hash=vk5i6uhczh77xgu4hqfcgp4rje):
     resolution: {integrity: sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==}
     engines: {node: '>= 0.10'}
     hasBin: true

@@ -1,6 +1,6 @@
 diff --git a/bin/swc-gulp.js b/bin/swc-gulp.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..8330dcf1cadce84957987bba93061c4e7a61bb42
+index 0000000000000000000000000000000000000000..fb29b97e049f3994d0974b9369893f5356b01052
 --- /dev/null
 +++ b/bin/swc-gulp.js
 @@ -0,0 +1,8 @@
@@ -8,7 +8,7 @@ index 0000000000000000000000000000000000000000..8330dcf1cadce84957987bba93061c4e
 +
 +const { spawnSync } = require('child_process')
 +const { join } = require('path')
-+const child = spawnSync(process.execPath, ['--loader', 'swc-node/esm', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
++const child = spawnSync(process.execPath, ['--loader', '@swc-node/register/esm', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
 +    stdio: 'inherit',
 +})
 +if (child.status) process.exit(child.status)
