@@ -80,7 +80,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     )
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
-        await Web3State.state.AddressBook?.addContact({ name, address })
+        await Web3State.state!.AddressBook?.addContact({ name, address })
         showSnackbar(t.wallet_add_contact_successfully())
         onConfirm?.()
     }, [name, address, onConfirm, t])

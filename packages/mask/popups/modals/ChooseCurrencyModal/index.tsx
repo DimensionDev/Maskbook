@@ -50,7 +50,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
     const checked = fiatCurrencyType === currentCurrencyType
 
     const setFiatCurrencyType = useCallback(async () => {
-        await Web3State.state.Settings?.setDefaultCurrencyType(fiatCurrencyType)
+        await Web3State.state!.Settings?.setDefaultCurrencyType(fiatCurrencyType)
         closeModal()
     }, [fiatCurrencyType])
 

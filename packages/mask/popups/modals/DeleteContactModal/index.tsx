@@ -73,7 +73,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
-        await Web3State.state.AddressBook?.removeContact(address)
+        await Web3State.state!.AddressBook?.removeContact(address)
         showSnackbar(t.wallet_delete_contact_successfully())
         onConfirm?.()
     }, [address, onConfirm])
