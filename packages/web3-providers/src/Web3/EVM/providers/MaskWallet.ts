@@ -111,9 +111,9 @@ export class MaskWalletProvider
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
                 if (primaryWallet.owner) {
-                    const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+                    const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
                     const target = networks?.find((x) => x.chainId === smartPayChainId)
-                    if (target) Web3StateRef.value.Network?.switchNetwork(target.ID)
+                    if (target) Web3StateRef.value?.Network?.switchNetwork(target.ID)
                 }
             }
         })

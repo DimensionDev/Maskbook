@@ -2,10 +2,10 @@ import Services from '#services'
 import { initWallet } from '@masknet/web3-providers'
 import { allPersonas } from '../initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
-import { WalletConnectQRCodeModal } from '@masknet/shared'
+import * as shared from /* webpackDefer: true */ '@masknet/shared'
 import { defer, delay } from '@masknet/kit'
 
-initWallet({
+await initWallet({
     addWallet: Services.Wallet.addWallet,
     signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
     closeWalletConnectDialog: () => {
@@ -13,7 +13,7 @@ initWallet({
             CrossIsolationMessages.events.popupWalletConnectEvent.sendToAll({ open: false })
             return
         }
-        WalletConnectQRCodeModal.close()
+        shared.WalletConnectQRCodeModal.close()
     },
     openPopupWindow: Services.Helper.openPopupWindow,
     openWalletConnectDialog: async (uri: string) => {
@@ -27,7 +27,7 @@ initWallet({
 
             await promise.finally(() => CrossIsolationMessages.events.popupWalletConnectEvent.off(callback))
         } else {
-            await WalletConnectQRCodeModal.openAndWaitForClose({
+            await shared.WalletConnectQRCodeModal.openAndWaitForClose({
                 uri,
             })
         }

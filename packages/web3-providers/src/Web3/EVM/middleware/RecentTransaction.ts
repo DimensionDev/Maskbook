@@ -17,7 +17,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
 
         await next()
 
-        const { Transaction, BalanceNotifier, BlockNumberNotifier } = Web3StateRef.value
+        const { Transaction, BalanceNotifier, BlockNumberNotifier } = Web3StateRef.value!
 
         try {
             switch (context.method) {

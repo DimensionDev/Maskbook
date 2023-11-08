@@ -7,12 +7,12 @@ export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<ChainId> {
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkPluginID = getNetworkPluginID
     protected override getAccount() {
-        return SolanaWeb3StateRef.value.Provider?.account?.getCurrentValue()
+        return SolanaWeb3StateRef.value?.Provider?.account?.getCurrentValue()
     }
     protected override getChainId() {
-        return SolanaWeb3StateRef.value.Provider?.chainId?.getCurrentValue()
+        return SolanaWeb3StateRef.value?.Provider?.chainId?.getCurrentValue()
     }
     protected override getCurrencyType() {
-        return SolanaWeb3StateRef.value.Settings?.currencyType?.getCurrentValue()
+        return SolanaWeb3StateRef.value?.Settings?.currencyType?.getCurrentValue()
     }
 }

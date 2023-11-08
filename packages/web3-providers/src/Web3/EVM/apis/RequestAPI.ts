@@ -15,7 +15,7 @@ export class RequestAPI extends RequestReadonlyAPI {
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     private get Provider() {
-        if (!Web3StateRef.value.Provider) throw new Error('The web3 state does not load yet.')
+        if (!Web3StateRef.value?.Provider) throw new Error('The web3 state does not load yet.')
         return Web3StateRef.value.Provider
     }
 

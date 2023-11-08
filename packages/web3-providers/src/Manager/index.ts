@@ -43,13 +43,13 @@ export function getAllPluginsWeb3State(): {
     [key in NetworkPluginID]: Web3Helper.Web3State<key>
 } {
     return {
-        [NetworkPluginID.PLUGIN_EVM]: evm.state,
-        [NetworkPluginID.PLUGIN_FLOW]: flow.state,
-        [NetworkPluginID.PLUGIN_SOLANA]: solana.state,
+        [NetworkPluginID.PLUGIN_EVM]: evm.state!,
+        [NetworkPluginID.PLUGIN_FLOW]: flow.state!,
+        [NetworkPluginID.PLUGIN_SOLANA]: solana.state!,
     }
 }
 
 export function getActivatedPluginWeb3State<T extends NetworkPluginID>(pluginID: T): Web3Helper.Web3State<T>
 export function getActivatedPluginWeb3State(pluginID: NetworkPluginID): Web3Helper.Web3State<NetworkPluginID> {
-    return all[pluginID].state
+    return all[pluginID].state!
 }

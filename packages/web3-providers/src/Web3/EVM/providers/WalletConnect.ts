@@ -80,7 +80,7 @@ export class WalletConnectProvider
     }
 
     private get currentChainId() {
-        return Web3StateRef.value.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+        return Web3StateRef.value?.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
     }
 
     override get connected() {

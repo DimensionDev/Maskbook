@@ -297,13 +297,13 @@ export class FlowConnectionAPI
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await FlowWeb3StateRef.value.Provider?.connect(options.providerType, options.chainId)),
+            ...(await FlowWeb3StateRef.value?.Provider?.connect(options.providerType, options.chainId)),
         }
     }
 
     async disconnect(initial?: ConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await FlowWeb3StateRef.value.Provider?.disconnect(options.providerType)
+        await FlowWeb3StateRef.value?.Provider?.disconnect(options.providerType)
     }
 
     async signMessage(type: string, message: string, initial?: ConnectionOptions) {

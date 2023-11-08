@@ -141,10 +141,10 @@ export class Popups implements Middleware<ConnectionContext> {
                         'Failed to locate network. The providerURL must be given when sending risky requests to a custom network.',
                     )
 
-                await Web3StateRef.value.Network?.switchNetwork(network?.ID)
+                await Web3StateRef.value?.Network?.switchNetwork(network?.ID)
             }
 
-            if (!Web3StateRef.value.Message) throw new Error('Failed to approve request.')
+            if (!Web3StateRef.value?.Message) throw new Error('Failed to approve request.')
 
             const request: TransferableMessage<MessageRequest, MessageResponse> = {
                 state: MessageStateType.NOT_DEPEND,

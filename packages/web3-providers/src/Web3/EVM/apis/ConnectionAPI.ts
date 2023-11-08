@@ -1,6 +1,6 @@
 import { toHex } from 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -20,6 +20,7 @@ import {
     getAverageBlockDelay,
     isNativeTokenAddress,
     ContractTransaction,
+    isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Web3StateRef } from './Web3StateAPI.js'
@@ -30,7 +31,7 @@ import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
 import { Providers } from '../providers/index.js'
 import type { ConnectionOptions } from '../types/index.js'
-
+import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
 export class ConnectionAPI
     extends ConnectionReadonlyAPI
     implements
@@ -50,14 +51,6 @@ export class ConnectionAPI
             Web3Provider
         >
 {
-    private get Transaction() {
-        return Web3StateRef.value.Transaction
-    }
-
-    private get TransactionWatcher() {
-        return Web3StateRef.value.TransactionWatcher
-    }
-
     protected override Request = new RequestAPI(this.options)
     protected override Contract = new ContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
@@ -460,7 +453,8 @@ export class ConnectionAPI
         )
 
         return new Promise<string>((resolve, reject) => {
-            if (!this.Transaction || !this.TransactionWatcher) reject(new Error('No context found.'))
+            const { Transaction, TransactionWatcher } = Web3StateRef.value!
+            if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
 
             const onProgress = async (
                 chainId: ChainId,
@@ -470,14 +464,14 @@ export class ConnectionAPI
             ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
                 if (!transaction?.from) return
-                const transactions = await this.Transaction?.getTransactions?.(chainId, transaction.from)
+                const transactions = await Transaction?.getTransactions?.(chainId, transaction.from)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
                 })
                 if (currentTransaction) resolve(currentTransaction.indexId)
             }
-            this.TransactionWatcher?.emitter.on('progress', onProgress)
+            TransactionWatcher?.emitter.on('progress', onProgress)
         })
     }
 
@@ -533,3 +527,10 @@ export class ConnectionAPI
         )
     }
 }
+
+export const createConnection = createConnectionCreator<NetworkPluginID.PLUGIN_EVM>(
+    (initial) => new ConnectionAPI(initial),
+    isValidChainId,
+    new ConnectionOptionsAPI(),
+)
+export const DefaultConnection = createConnection()!
