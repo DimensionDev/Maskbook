@@ -11,25 +11,7 @@ import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenL
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 
-export abstract class HubFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> extends HubProviderAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProviderAPI_Base<ChainId> {
     protected abstract getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<

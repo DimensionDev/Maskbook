@@ -1,7 +1,3 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
-import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
-
 export {
     getRegisteredWeb3Chains,
     getRegisteredWeb3Networks,
@@ -34,8 +30,8 @@ export { SolanaProviders } from './Web3/Solana/providers/index.js'
 export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3
-export const HubAll = new AllHubAPI()
-export const Web3All = new AllConnectionAPI()
+export { getHub } from './Web3/Router/apis/AllHubAPI.js'
+export { getWeb3Connection } from './Web3/Router/apis/AllConnectionAPI.js'
 export { getOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 
 export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
@@ -43,11 +39,11 @@ export { Contract } from './Web3/EVM/apis/ContractAPI.js'
 export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { Web3Storage } from './Storage/apis/Storage.js'
-export const Web3 = Web3All.use(NetworkPluginID.PLUGIN_EVM)!
+export { DefaultConnection as Web3 } from './Web3/EVM/apis/ConnectionOptionsAPI.js'
 export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { Request } from './Web3/EVM/apis/RequestAPI.js'
 export { RequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
-export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
+export { DefaultHub as Hub } from './Web3/EVM/apis/HubAPI.js'
 export { OthersAPI as Others } from './Web3/EVM/apis/OthersAPI.js'
 
 // Smart Pay

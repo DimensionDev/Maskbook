@@ -1,16 +1,6 @@
 import { EMPTY_LIST, type Pageable, createPageable, createIndicator } from '@masknet/shared-base'
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    type GasOption,
-    type SchemaType,
-    type ProviderType,
-    type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
-    type Transaction,
-    type TransactionParameter,
-} from '@masknet/web3-shared-evm'
+import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-evm'
 import { ChainResolver } from './ResolverAPI.js'
 import { HubBaseAPI_Base } from '../../Base/apis/HubBaseAPI.js'
 import { GasOptions } from './GasOptionAPI.js'
@@ -21,17 +11,7 @@ import { AstarGas } from '../../../Astar/index.js'
 import { DeBankGasOption, DeBankHistory } from '../../../DeBank/index.js'
 import { Zerion } from '../../../Zerion/index.js'
 
-export class HubBaseAPI extends HubBaseAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-    GasOption
-> {
+export class HubBaseAPI extends HubBaseAPI_Base<ChainId, SchemaType, GasOption> {
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     async getGasOptions(chainId: ChainId, initial?: HubOptions) {

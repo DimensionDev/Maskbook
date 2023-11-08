@@ -17,25 +17,7 @@ import { HubProviderAPI_Base } from './HubProviderAPI.js'
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
-export abstract class HubNonFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> extends HubProviderAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export abstract class HubNonFungibleAPI_Base<ChainId, SchemaType> extends HubProviderAPI_Base<ChainId> {
     protected abstract getProviders(
         initial?: HubOptions_Base<ChainId>,
     ): Array<

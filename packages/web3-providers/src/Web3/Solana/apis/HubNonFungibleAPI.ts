@@ -1,13 +1,4 @@
-import type {
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-} from '@masknet/web3-shared-solana'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { SourceType } from '@masknet/web3-shared-base'
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
@@ -18,16 +9,7 @@ import { NFTScanNonFungibleTokenSolana } from '../../../NFTScan/index.js'
 import { SimpleHashSolana } from '../../../SimpleHash/index.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
 
-export class SolanaHubNonFungibleAPI extends HubNonFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class SolanaHubNonFungibleAPI extends HubNonFungibleAPI_Base<ChainId, SchemaType> {
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {

@@ -1,7 +1,6 @@
 import { identity, pickBy } from 'lodash-es'
-import type { GasOptionType, Web3State } from '@masknet/web3-shared-base'
+import type { GasOptionType, ProviderState } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, PartialRequired } from '@masknet/shared-base'
-import type { OthersAPI_Base } from './OthersAPI.js'
 
 export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     /** Designate the signer of the transaction. */
@@ -30,46 +29,21 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     gasOptionType?: GasOptionType
 }
 
-export abstract class ConnectionOptionsAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
+export abstract class ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkType, Transaction> {
+    protected abstract getDefaultChainId(): ChainId
+    protected abstract getDefaultProviderType(): ProviderType
+    protected abstract getProvider?(): undefined | ProviderState<ChainId, ProviderType, NetworkType>
     constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
-    abstract readonly Web3StateRef: {
-        readonly value: Web3State<
-            ChainId,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            MessageRequest,
-            MessageResponse,
-            Transaction,
-            TransactionParameter
-        >
-    }
-
-    abstract readonly Web3Others: OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
-
-    protected get defaults(): PartialRequired<
-        ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
-        'account' | 'chainId' | 'providerType'
-    > {
-        const others = this.Web3Others
+    protected get defaults() {
         return {
             account: '',
-            chainId: others.getDefaultChainId(),
-            providerType: others.getDefaultProviderType(),
+            chainId: this.getDefaultChainId(),
+            providerType: this.getDefaultProviderType(),
         }
     }
 
     protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
-        const provider = this.Web3StateRef.value?.Provider
+        const provider = this.getProvider?.()
         if (!provider) return {}
         return {
             account: provider.account?.getCurrentValue(),
@@ -91,12 +65,11 @@ export abstract class ConnectionOptionsAPI_Base<
             ...pickBy(this.options, identity),
             ...pickBy(initials, identity),
             overrides: {
-                ...this.defaults.overrides,
                 ...pickBy(this.refs?.overrides, identity),
                 ...pickBy(this.options?.overrides, identity),
                 ...pickBy(initials?.overrides, identity),
                 ...pickBy(overrides, identity),
-            },
+            } as Partial<Transaction>,
         }
     }
 }

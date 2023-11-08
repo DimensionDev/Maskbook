@@ -1,52 +1,10 @@
 import { memoize } from 'lodash-es'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { HubOptions_Base, HubOptionsAPI_Base } from './HubOptionsAPI.js'
-import type { OthersAPI_Base } from './OthersAPI.js'
-import type { HubAPI_Base } from './HubAPI.js'
+import type { HubOptions_Base } from './HubOptionsAPI.js'
 
-const resolver = <ChainId>(initial?: HubOptions_Base<ChainId>) => {
+function resolver<ChainId>(initial?: HubOptions_Base<ChainId>) {
     return [initial?.chainId, initial?.account, initial?.currencyType, initial?.sourceType].join(',')
 }
 
-export class HubCreatorAPI_Base<T extends NetworkPluginID> {
-    constructor(
-        protected creator: (
-            initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>,
-        ) => HubAPI_Base<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['SchemaType'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['NetworkType'],
-            Web3Helper.Definition[T]['MessageRequest'],
-            Web3Helper.Definition[T]['MessageResponse'],
-            Web3Helper.Definition[T]['Transaction'],
-            Web3Helper.Definition[T]['TransactionParameter'],
-            Web3Helper.Definition[T]['GasOption']
-        >,
-        protected Web3Others: OthersAPI_Base<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['SchemaType'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['NetworkType'],
-            Web3Helper.Definition[T]['Transaction']
-        >,
-        protected Web3HubOptions: HubOptionsAPI_Base<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['SchemaType'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['NetworkType'],
-            Web3Helper.Definition[T]['MessageRequest'],
-            Web3Helper.Definition[T]['MessageResponse'],
-            Web3Helper.Definition[T]['Transaction'],
-            Web3Helper.Definition[T]['TransactionParameter']
-        >,
-    ) {
-        this.createCached = memoize(creator, resolver<Web3Helper.Definition[T]['ChainId']>)
-    }
-    private createCached
-
-    create(initial?: HubOptions_Base<Web3Helper.Definition[T]['ChainId']>) {
-        return this.createCached(initial)
-    }
+export function createHubMemoized<F extends (initial?: HubOptions_Base<any>) => any>(creator: F): F {
+    return memoize(creator, resolver)
 }

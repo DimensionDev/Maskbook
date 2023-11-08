@@ -3,26 +3,7 @@ import type { GasOptionType, Transaction as Web3Transaction } from '@masknet/web
 import type { HubOptions_Base } from './HubOptionsAPI.js'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
 
-export abstract class HubBaseAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-    GasOption,
-> extends HubProviderAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export abstract class HubBaseAPI_Base<ChainId, SchemaType, GasOption> extends HubProviderAPI_Base<ChainId> {
     abstract getGasOptions?(
         chainId: ChainId,
         initial?: HubOptions_Base<ChainId>,

@@ -1,32 +1,18 @@
-import type {
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-} from '@masknet/web3-shared-solana'
+import { getDefaultChainId, getNetworkPluginID } from '@masknet/web3-shared-solana'
+import type { ChainId } from '@masknet/web3-shared-solana'
 import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
-import { SolanaOthersAPI } from './OthersAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 
-export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
-    override get Web3StateRef() {
-        return SolanaWeb3StateRef
+export class SolanaHubOptionsAPI extends HubOptionsAPI_Base<ChainId> {
+    protected override getDefaultChainId = getDefaultChainId
+    protected override getNetworkPluginID = getNetworkPluginID
+    protected override getAccount() {
+        return SolanaWeb3StateRef.value.Provider?.account?.getCurrentValue()
     }
-
-    override get Web3Others() {
-        return SolanaOthersAPI
+    protected override getChainId() {
+        return SolanaWeb3StateRef.value.Provider?.chainId?.getCurrentValue()
+    }
+    protected override getCurrencyType() {
+        return SolanaWeb3StateRef.value.Settings?.currencyType?.getCurrentValue()
     }
 }

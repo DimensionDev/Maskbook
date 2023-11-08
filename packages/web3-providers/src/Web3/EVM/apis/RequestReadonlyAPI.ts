@@ -1,14 +1,10 @@
 import {
     type ChainId,
     ProviderURL,
-    type SchemaType,
     type RequestArguments,
     type ProviderType,
     type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
     type Transaction,
-    type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { ConnectionOptions } from '../types/index.js'
@@ -21,16 +17,7 @@ export class RequestReadonlyAPI {
     constructor(protected options?: ConnectionOptions) {
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(options)
     }
-    protected ConnectionOptions: ConnectionOptionsAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    >
+    protected ConnectionOptions: ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkType, Transaction>
 
     get request() {
         return async <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
