@@ -15,7 +15,7 @@ export class SolanaConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
     protected override getProvider() {
-        return SolanaWeb3StateRef.value.Provider
+        return SolanaWeb3StateRef.value?.Provider
     }
 }
 export const createSolanaConnection = createConnectionCreator<NetworkPluginID.PLUGIN_SOLANA>(

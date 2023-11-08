@@ -139,13 +139,13 @@ export class SolanaConnectionAPI
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await SolanaWeb3StateRef.value.Provider?.connect(options.providerType, options.chainId)),
+            ...(await SolanaWeb3StateRef.value?.Provider?.connect(options.providerType, options.chainId)),
         }
     }
 
     async disconnect(initial?: ConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await SolanaWeb3StateRef.value.Provider?.disconnect(options.providerType)
+        await SolanaWeb3StateRef.value?.Provider?.disconnect(options.providerType)
     }
 
     getWeb3(initial?: ConnectionOptions) {

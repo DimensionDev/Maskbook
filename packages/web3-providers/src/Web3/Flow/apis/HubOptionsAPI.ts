@@ -6,12 +6,12 @@ export class FlowHubOptionsAPI extends HubOptionsAPI_Base<ChainId> {
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkPluginID = getNetworkPluginID
     protected override getAccount() {
-        return FlowWeb3StateRef.value.Provider?.account?.getCurrentValue()
+        return FlowWeb3StateRef.value?.Provider?.account?.getCurrentValue()
     }
     protected override getChainId() {
-        return FlowWeb3StateRef.value.Provider?.chainId?.getCurrentValue()
+        return FlowWeb3StateRef.value?.Provider?.chainId?.getCurrentValue()
     }
     protected override getCurrencyType() {
-        return FlowWeb3StateRef.value.Settings?.currencyType?.getCurrentValue()
+        return FlowWeb3StateRef.value?.Settings?.currencyType?.getCurrentValue()
     }
 }

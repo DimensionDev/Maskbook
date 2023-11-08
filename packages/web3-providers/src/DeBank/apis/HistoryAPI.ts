@@ -14,7 +14,7 @@ const PRESET_CHAIN_IDS = 'eth,aurora,bsc,matic,pls,ftm,op,klay,nova,celo,astar,b
 class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     // Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
     private getChainIds() {
-        const networks = Web3StateRef.value.Network?.networks?.getCurrentValue()
+        const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
         // Fallback to commonly used chains
         if (!networks) return PRESET_CHAIN_IDS
         const RUNTIME_CHAIN_IDS = networks.map((x) => CHIAN_ID_TO_DEBANK_CHAIN_MAP[x.chainId])

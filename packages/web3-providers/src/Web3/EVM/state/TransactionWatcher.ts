@@ -28,7 +28,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         transaction: Transaction,
         status: TransactionStatusType,
     ) {
-        const { Transaction } = Web3StateRef.value
+        const { Transaction } = Web3StateRef.value!
 
         if (Transaction && transaction.from && status !== TransactionStatusType.NOT_DEPEND) {
             await Transaction.updateTransaction?.(chainId, transaction.from, id, status)

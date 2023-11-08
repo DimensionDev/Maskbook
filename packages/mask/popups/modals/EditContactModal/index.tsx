@@ -114,7 +114,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const [{ loading }, edit] = useAsyncFn(async () => {
         const _name = name.trim()
         if (type === ContactType.Recipient) {
-            await Web3State.state.AddressBook?.renameContact({ name: _name, address })
+            await Web3State.state!.AddressBook?.renameContact({ name: _name, address })
         } else if (type === ContactType.Owned) {
             await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }

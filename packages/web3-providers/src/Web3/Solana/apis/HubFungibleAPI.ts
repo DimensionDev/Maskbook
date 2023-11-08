@@ -34,7 +34,10 @@ export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaTyp
         return attemptUntil(
             [
                 () =>
-                    SolanaWeb3StateRef.value.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
+                    SolanaWeb3StateRef.value?.Token?.createFungibleToken?.(
+                        initial?.chainId ?? ChainId.Mainnet,
+                        address,
+                    ),
                 () => this.Web3.getFungibleToken(address, initial),
             ],
             undefined,

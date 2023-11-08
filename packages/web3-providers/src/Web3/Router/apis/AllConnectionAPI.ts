@@ -1,7 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
-import { createConnection } from '../../EVM/apis/ConnectionOptionsAPI.js'
+import { createConnection } from '../../EVM/apis/ConnectionAPI.js'
 import { createFlowConnection } from '../../Flow/apis/ConnectionOptionsAPI.js'
 import { createSolanaConnection } from '../../Solana/apis/ConnectionOptionsAPI.js'
 import type { ConnectionOptions_Base } from '../../Base/apis/ConnectionOptionsAPI.js'

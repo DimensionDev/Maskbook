@@ -16,7 +16,7 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
     protected override getProvider() {
-        return FlowWeb3StateRef.value.Provider
+        return FlowWeb3StateRef.value?.Provider
     }
 }
 export const createFlowConnection = createConnectionCreator<NetworkPluginID.PLUGIN_FLOW>(
