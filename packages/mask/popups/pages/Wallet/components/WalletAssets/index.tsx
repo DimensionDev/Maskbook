@@ -1,14 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { RestorableScroll, UserAssetsProvider } from '@masknet/shared'
+import { RestorableScroll, UserAssetsProvider, useParamTab } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { makeStyles, Boundary } from '@masknet/theme'
+import { Boundary, makeStyles } from '@masknet/theme'
 import { useAccount, useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
@@ -143,7 +142,7 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
                         />
                     </StyledTabList>
                     <Button variant="text" className={classes.addButton} onClick={() => onAddToken(currentTab)}>
-                        <Icons.AddNoBorder size={16} />
+                        <Icons.Plus size={16} />
                     </Button>
                 </Box>
 

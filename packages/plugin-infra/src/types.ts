@@ -259,8 +259,9 @@ export namespace Plugin.SiteAdaptor {
         // }
         /** This UI will be rendered components on the tips realm */
         TipsRealm?: TipsRealm
-        /** This UI will be rendered components on the tips realm */
+        /** This UI will be rendered components on the Lens realm */
         Lens?: LensWidget
+        NameWidget?: NameWidget
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -550,6 +551,28 @@ export namespace Plugin.SiteAdaptor {
              */
             Content: InjectUI<LensOptions>
         }
+    }
+    export enum NameWidgetSlot {
+        ProfileName = 'profile-name',
+        Post = 'post',
+        Sidebar = 'sidebar',
+    }
+    export interface NameWidgetOptions {
+        slot: NameWidgetSlot
+        userId?: string
+        identity?: ProfileIdentifier
+        /** To update enabled/disabled status */
+        onStatusUpdate?(disabled: boolean): void
+    }
+    export interface NameWidget {
+        ID: string
+        UI?: {
+            /**
+             * The injected Lens Content component
+             */
+            Content: InjectUI<NameWidgetOptions>
+        }
+        priority: number
     }
 
     export interface ProfileSlider {

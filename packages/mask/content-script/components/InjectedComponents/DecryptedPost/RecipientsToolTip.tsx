@@ -67,7 +67,7 @@ export function RecipientsToolTip({ recipients, openDialog }: RecipientsToolTipP
                 <Icons.More size={13} className={classes.iconMore} color={theme.palette.text.primary} />
             :   null}
             <div className={classes.iconAdd}>
-                <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
+                <Icons.Plus size={12} color={theme.palette.maskColor.white} />
             </div>
         </div>
     )

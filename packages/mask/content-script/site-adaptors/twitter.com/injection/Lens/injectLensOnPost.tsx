@@ -55,7 +55,7 @@ function createRootElement() {
     Object.assign(span.style, {
         alignItems: 'center',
         display: 'flex',
-    } as CSSStyleDeclaration)
+    })
     return span
 }
 function PostLensSlot({ userId }: Props) {

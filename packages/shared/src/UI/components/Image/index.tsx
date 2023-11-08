@@ -14,6 +14,7 @@ const useStyles = makeStyles<Pick<ImageProps, 'size' | 'rounded'>, 'center'>()((
         position: 'relative',
         borderRadius: rounded ? '50%' : undefined,
         overflow: rounded ? 'hidden' : undefined,
+        flexShrink: 0,
     },
     image: {
         display: 'block',

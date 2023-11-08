@@ -92,10 +92,10 @@ const site: Plugin.SiteAdaptor.Definition = {
                     [isProfile, accounts, nextIdLens],
                 )
 
-                const hasLens = !lensAccounts.length
+                const disabled = !lensAccounts.length
                 useEffect(() => {
-                    onStatusUpdate?.(hasLens)
-                }, [onStatusUpdate, hasLens])
+                    onStatusUpdate?.(disabled)
+                }, [onStatusUpdate, disabled])
 
                 if (!accounts.length || !userId) return null
 

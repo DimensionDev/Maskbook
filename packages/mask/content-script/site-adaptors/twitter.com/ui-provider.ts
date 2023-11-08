@@ -46,6 +46,7 @@ import { injectLens } from './injection/Lens/index.js'
 import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 import { injectSwitchLogoButton } from './injection/SwitchLogo.js'
 import { injectCalendar } from './injection/Calendar.js'
+import { injectNameWidget } from './injection/NameWidget/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -209,6 +210,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         avatar: injectAvatar,
         tips: injectTips,
         lens: injectLens,
+        nameWidget: injectNameWidget,
         profileCard: injectProfileCardHolder,
         switchLogo: injectSwitchLogoButton,
         calendar: injectCalendar,

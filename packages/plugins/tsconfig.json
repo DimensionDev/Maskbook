@@ -11,6 +11,7 @@
     { "path": "./CyberConnect/tsconfig.json" },
     { "path": "./Debugger/tsconfig.json" },
     { "path": "./FileService/tsconfig.json" },
+    { "path": "./FriendTech/tsconfig.json" },
     { "path": "./Gitcoin/tsconfig.json" },
     { "path": "./GoPlusSecurity/tsconfig.json" },
     { "path": "./Handle/tsconfig.json" },

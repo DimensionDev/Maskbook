@@ -616,35 +616,6 @@ export const Add = /*#__PURE__*/ __createIcon('Add', [
         s: true,
     },
 ])
-export const AddNoBorder = /*#__PURE__*/ __createIcon(
-    'AddNoBorder',
-    [
-        {
-            j: () =>
-                /*#__PURE__*/ _jsxs('svg', {
-                    xmlns: 'http://www.w3.org/2000/svg',
-                    fill: 'none',
-                    viewBox: '0 0 13 12',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            fill: 'currentColor',
-                            fillRule: 'evenodd',
-                            d: 'M1.6 6a.4.4 0 0 1 .4-.4h9a.4.4 0 0 1 0 .8H2a.4.4 0 0 1-.4-.4Z',
-                            clipRule: 'evenodd',
-                        }),
-                        /*#__PURE__*/ _jsx('path', {
-                            fill: 'currentColor',
-                            fillRule: 'evenodd',
-                            d: 'M6.5 1.1a.4.4 0 0 1 .4.4v9a.4.4 0 0 1-.8 0v-9a.4.4 0 0 1 .4-.4Z',
-                            clipRule: 'evenodd',
-                        }),
-                    ],
-                }),
-            s: true,
-        },
-    ],
-    [13, 12],
-)
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
         j: () =>
@@ -1712,6 +1683,25 @@ export const EncryptedFiles = /*#__PURE__*/ __createIcon('EncryptedFiles', [
         u: () => new URL('./general/EncryptedFiles.svg', import.meta.url).href,
     },
 ])
+export const ETHSymbol = /*#__PURE__*/ __createIcon(
+    'ETHSymbol',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 24 25',
+                    children: /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        d: 'm12 2.563-6.25 10.5 6.25 3.75 6.25-3.75L12 2.563Zm-6.25 11.75 6.25 8.75 6.25-8.75-6.25 3.75-6.25-3.75Z',
+                    }),
+                }),
+            s: true,
+        },
+    ],
+    [24, 25],
+)
 export const Europe = /*#__PURE__*/ __createIcon('Europe', [
     {
         u: () => new URL('./general/Europe.svg', import.meta.url).href,
@@ -2255,9 +2245,31 @@ export const Masks = /*#__PURE__*/ __createIcon('Masks', [
         u: () => new URL('./general/Masks.svg', import.meta.url).href,
     },
 ])
+export const Medal = /*#__PURE__*/ __createIcon('Medal', [
+    {
+        u: () => new URL('./general/Medal.svg', import.meta.url).href,
+    },
+])
 export const Message = /*#__PURE__*/ __createIcon('Message', [
     {
         u: () => new URL('./general/Message.svg', import.meta.url).href,
+    },
+])
+export const Minus = /*#__PURE__*/ __createIcon('Minus', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M1.8335 9.99919C1.8335 9.631 2.13197 9.33252 2.50016 9.33252H17.5002C17.8684 9.33252 18.1668 9.631 18.1668 9.99919C18.1668 10.3674 17.8684 10.6659 17.5002 10.6659H2.50016C2.13197 10.6659 1.8335 10.3674 1.8335 9.99919Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
     },
 ])
 export const Mnemonic = /*#__PURE__*/ __createIcon(
@@ -2396,6 +2408,35 @@ export const Plugins = /*#__PURE__*/ __createIcon('Plugins', [
         u: () => new URL('./general/Plugins.svg', import.meta.url).href,
     },
 ])
+export const Plus = /*#__PURE__*/ __createIcon(
+    'Plus',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 13 12',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M1.6 6a.4.4 0 0 1 .4-.4h9a.4.4 0 0 1 0 .8H2a.4.4 0 0 1-.4-.4Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M6.5 1.1a.4.4 0 0 1 .4.4v9a.4.4 0 0 1-.8 0v-9a.4.4 0 0 1 .4-.4Z',
+                            clipRule: 'evenodd',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [13, 12],
+)
 export const PopupClose = /*#__PURE__*/ __createIcon('PopupClose', [
     {
         j: () =>
@@ -3410,6 +3451,11 @@ export const FileService = /*#__PURE__*/ __createIcon('FileService', [
 export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
     {
         u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
+    },
+])
+export const FriendTech = /*#__PURE__*/ __createIcon('FriendTech', [
+    {
+        u: () => new URL('./plugins/FriendTech.svg', import.meta.url).href,
     },
 ])
 export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [
