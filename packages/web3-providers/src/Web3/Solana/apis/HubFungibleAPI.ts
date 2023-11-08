@@ -1,14 +1,5 @@
 import { attemptUntil, SourceType } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    type SchemaType,
-    type ProviderType,
-    type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
-    type Transaction,
-    type TransactionParameter,
-} from '@masknet/web3-shared-solana'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
@@ -18,16 +9,7 @@ import { CoinGeckoPriceSolana } from '../../../CoinGecko/index.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
 
-export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
     private Web3 = new SolanaConnectionAPI()
 
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)

@@ -1,14 +1,5 @@
 import { SourceType } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    type SchemaType,
-    type ProviderType,
-    type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
-    type Transaction,
-    type TransactionParameter,
-} from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
 import { HubOptionsAPI } from './HubOptionsAPI.js'
 import type { HubOptions } from '../types/index.js'
@@ -27,16 +18,7 @@ import { X2Y2 } from '../../../X2Y2/index.js'
 import { ZerionNonFungibleToken } from '../../../Zerion/index.js'
 import { Zora } from '../../../Zora/index.js'
 
-export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<ChainId, SchemaType> {
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions) {

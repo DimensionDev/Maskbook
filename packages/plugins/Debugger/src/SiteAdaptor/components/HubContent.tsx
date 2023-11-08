@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { getEnumAsArray } from '@masknet/kit'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Hub } from '@masknet/web3-providers/types'
-import { HubAll } from '@masknet/web3-providers'
+import { getHub } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
@@ -163,7 +163,7 @@ export function HubContent(props: HubContentProps) {
                                                 console.log(`Query ${key}:`)
                                                 console.log(
                                                     // @ts-expect-error the ...parameters call is unsafe
-                                                    await HubAll.use(pluginID)[key]?.(...parameters, {
+                                                    await getHub(pluginID)[key]?.(...parameters, {
                                                         chainId,
                                                         account,
                                                         sourceType,

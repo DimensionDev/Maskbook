@@ -3,11 +3,11 @@ import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToGwei, PayloadEditor, ProviderType, type Translator } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { HubAPI } from '../apis/HubAPI.js'
+import { DefaultHub } from '../apis/HubAPI.js'
 import { ChainResolver } from '../apis/ResolverAPI.js'
 
 export class Base implements Translator<ConnectionContext> {
-    private Hub = HubAPI.create()
+    private Hub = DefaultHub
 
     async encode(context: ConnectionContext) {
         const config = context.config

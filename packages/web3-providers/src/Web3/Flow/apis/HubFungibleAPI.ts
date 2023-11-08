@@ -1,14 +1,5 @@
 import { SourceType } from '@masknet/web3-shared-base'
-import type {
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-} from '@masknet/web3-shared-flow'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 import { FlowFungible } from './FungibleTokenAPI.js'
 import { FlowConnectionAPI } from './ConnectionAPI.js'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
@@ -16,16 +7,7 @@ import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import type { FungibleTokenAPI } from '../../../entry-types.js'
 
-export class FlowHubFungibleAPI extends HubFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class FlowHubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
     private FlowWeb3 = new FlowConnectionAPI()
 
     protected override HubOptions = new FlowHubOptionsAPI(this.options)

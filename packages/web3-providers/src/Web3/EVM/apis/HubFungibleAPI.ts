@@ -1,14 +1,5 @@
 import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    type SchemaType,
-    type ProviderType,
-    type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
-    type Transaction,
-    type TransactionParameter,
-} from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Web3Readonly } from './ConnectionReadonlyAPI.js'
 import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
 import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
@@ -25,16 +16,7 @@ import { R2D2TokenList } from '../../../R2D2/index.js'
 import { Rabby } from '../../../Rabby/index.js'
 import { Zerion } from '../../../Zerion/index.js'
 
-export class HubFungibleAPI extends HubFungibleAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter
-> {
+export class HubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
     protected override HubOptions = new HubOptionsAPI(this.options)
 
     protected override getProviders(initial?: HubOptions_Base<ChainId>) {

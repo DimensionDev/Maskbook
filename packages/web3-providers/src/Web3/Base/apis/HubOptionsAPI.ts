@@ -1,8 +1,7 @@
 import { identity, pickBy } from 'lodash-es'
 import type { NetworkPluginID, PageIndicator, PartialRequired } from '@masknet/shared-base'
-import { CurrencyType, type SourceType, type Web3State } from '@masknet/web3-shared-base'
+import { CurrencyType, type SourceType } from '@masknet/web3-shared-base'
 import { type SchemaType } from '@masknet/web3-shared-evm'
-import type { OthersAPI_Base } from './OthersAPI.js'
 
 export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     /** The user account as the API parameter */
@@ -24,49 +23,29 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     allChains?: boolean
 }
 
-export abstract class HubOptionsAPI_Base<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
+export abstract class HubOptionsAPI_Base<ChainId> {
     constructor(private options?: HubOptions_Base<ChainId>) {}
-
-    abstract readonly Web3StateRef: {
-        readonly value: Web3State<
-            ChainId,
-            SchemaType,
-            ProviderType,
-            NetworkType,
-            MessageRequest,
-            MessageResponse,
-            Transaction,
-            TransactionParameter
-        >
-    }
-
-    abstract readonly Web3Others: OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+    protected abstract getDefaultChainId(): ChainId
+    protected abstract getNetworkPluginID(): NetworkPluginID
+    protected abstract getAccount(): string | undefined
+    protected abstract getChainId(): ChainId | undefined
+    protected abstract getCurrencyType(): CurrencyType | undefined
 
     protected get defaults(): PartialRequired<HubOptions_Base<ChainId>, 'account' | 'chainId'> {
         return {
             account: '',
-            chainId: this.Web3Others.getDefaultChainId(),
-            networkPluginId: this.Web3Others.getNetworkPluginID(),
+            chainId: this.getDefaultChainId(),
+            networkPluginId: this.getNetworkPluginID(),
             currencyType: CurrencyType.USD,
             size: 50,
         }
     }
 
     protected get refs(): HubOptions_Base<ChainId> {
-        if (!this.Web3StateRef.value) return {}
         return {
-            account: this.Web3StateRef.value.Provider?.account?.getCurrentValue(),
-            chainId: this.Web3StateRef.value.Provider?.chainId?.getCurrentValue(),
-            currencyType: this.Web3StateRef.value.Settings?.currencyType?.getCurrentValue(),
+            account: this.getAccount(),
+            chainId: this.getChainId(),
+            currencyType: this.getCurrencyType(),
         }
     }
 

@@ -3,10 +3,10 @@ import { getTokenConstants, type ChainId, type Transaction, type TransactionPara
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
 import { Web3Readonly } from '../../../apis/ConnectionReadonlyAPI.js'
-import { HubAPI } from '../../../apis/HubAPI.js'
+import { DefaultHub } from '../../../apis/HubAPI.js'
 
 export class BaseDescriptor implements TransactionDescriptor {
-    protected Hub = HubAPI.create()
+    protected Hub = DefaultHub
     protected Web3 = Web3Readonly
 
     async compute(
