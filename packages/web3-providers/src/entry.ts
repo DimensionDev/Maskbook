@@ -1,7 +1,6 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { AllHubAPI } from './Web3/Router/apis/AllHubAPI.js'
 import { AllConnectionAPI } from './Web3/Router/apis/AllConnectionAPI.js'
-import { AllOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 
 export {
     getRegisteredWeb3Chains,
@@ -37,7 +36,7 @@ export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWal
 // Web3
 export const HubAll = new AllHubAPI()
 export const Web3All = new AllConnectionAPI()
-export const OthersAll = new AllOthersAPI()
+export { getOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
 
 export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
 export { Contract } from './Web3/EVM/apis/ContractAPI.js'
@@ -49,15 +48,7 @@ export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { Request } from './Web3/EVM/apis/RequestAPI.js'
 export { RequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export const Hub = HubAll.use(NetworkPluginID.PLUGIN_EVM)!
-export const Others = OthersAll.use(NetworkPluginID.PLUGIN_EVM)!
-
-export const FlowWeb3 = Web3All.use(NetworkPluginID.PLUGIN_FLOW)!
-export const FlowHub = HubAll.use(NetworkPluginID.PLUGIN_FLOW)!
-export const FlowOthers = OthersAll.use(NetworkPluginID.PLUGIN_FLOW)!
-
-export const SolanaWeb3 = Web3All.use(NetworkPluginID.PLUGIN_SOLANA)!
-export const SolanaHub = HubAll.use(NetworkPluginID.PLUGIN_SOLANA)!
-export const SolanaOthers = OthersAll.use(NetworkPluginID.PLUGIN_SOLANA)!
+export { OthersAPI as Others } from './Web3/EVM/apis/OthersAPI.js'
 
 // Smart Pay
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
