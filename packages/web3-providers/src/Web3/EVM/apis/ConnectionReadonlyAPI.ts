@@ -28,9 +28,6 @@ import {
     getTokenConstant,
     createAccount,
     type NetworkType,
-    type MessageRequest,
-    type MessageResponse,
-    type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import {
     type FungibleToken,
@@ -101,16 +98,7 @@ export class ConnectionReadonlyAPI
     }
     protected Request
     protected Contract
-    protected ConnectionOptions: ConnectionOptionsAPI_Base<
-        ChainId,
-        SchemaType,
-        ProviderType,
-        NetworkType,
-        MessageRequest,
-        MessageResponse,
-        Transaction,
-        TransactionParameter
-    >
+    protected ConnectionOptions: ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkType, Transaction>
 
     getWeb3(initial?: ConnectionOptions) {
         return this.Request.getWeb3(initial)
