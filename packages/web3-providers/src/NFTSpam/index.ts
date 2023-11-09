@@ -47,6 +47,9 @@ export class NFTSpam {
     static async report(params: ReportParams) {
         const res = await fetchJSON<SpamResponse<ReportRecord>>(ENDPOINT, {
             method: 'post',
+            headers: {
+                'content-type': 'application/json',
+            },
             body: JSON.stringify(params),
         })
         return res
