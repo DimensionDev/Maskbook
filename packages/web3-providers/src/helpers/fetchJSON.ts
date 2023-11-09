@@ -9,7 +9,6 @@ export async function fetchJSON<T = unknown>(
     options?: NextFetchersOptions,
 ): Promise<T> {
     const response = await fetch(input, init, getNextFetchers(options))
-    if (!response.ok) throw new Error('Failed to fetch as JSON.')
     return response.json()
 }
 
