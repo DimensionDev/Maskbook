@@ -31,7 +31,7 @@ import {
 import { Icons } from '@masknet/icons'
 import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
-import { ChainResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { EVMChainResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
@@ -107,7 +107,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
-    const nativeTokenDetailed = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
+    const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [token = nativeTokenDetailed, setToken] = useState<FungibleToken<ChainId, SchemaType> | undefined>(
         origin?.token,
@@ -198,7 +198,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     }, [creatingParams, onChange, onNext])
 
     // #region gas
-    const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
+    const { account: publicKey } = useMemo(() => EVMWeb3.createAccount(), [])
     const contract_version = 4
     const { value: params } = useCreateParams(chainId, creatingParams, contract_version, publicKey)
     // #endregion

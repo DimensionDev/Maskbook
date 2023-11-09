@@ -19,7 +19,7 @@ import {
     formatWeiToEther,
 } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
@@ -152,7 +152,7 @@ export const Prior1559GasSetting = memo(() => {
                 value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return Web3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0
+                return EVMWeb3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0
             } catch {
                 return 0
             }

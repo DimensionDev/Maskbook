@@ -10,7 +10,7 @@ import {
     useNonFungibleCollections,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
@@ -189,7 +189,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                     <Box display="flex" columnGap={1} alignItems="center">
                         <CopyButton text={contract.address} size={16} />
                         <Link
-                            href={ExplorerResolver.addressLink(chainId, contract.address)}
+                            href={EVMExplorerResolver.addressLink(chainId, contract.address)}
                             className={classes.link}
                             target="_blank"
                             rel="noopener noreferrer">
@@ -208,7 +208,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                             <Link
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={ExplorerResolver.addressLink(
+                                href={EVMExplorerResolver.addressLink(
                                     chainId,
                                     transaction.formattedTransaction.popup.erc721Spender,
                                 )}

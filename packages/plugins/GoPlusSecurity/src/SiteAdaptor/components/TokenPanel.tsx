@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { useGoPlusLabsTrans } from '../../locales/index.js'
 
@@ -62,7 +62,7 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                         </Typography>
                         <Link
                             lineHeight="14px"
-                            href={ExplorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
+                            href={EVMExplorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut
@@ -82,7 +82,7 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                         {tokenSecurity.creator_address ? (
                             <Link
                                 lineHeight="14px"
-                                href={ExplorerResolver.addressLink(
+                                href={EVMExplorerResolver.addressLink(
                                     tokenSecurity.chainId,
                                     tokenSecurity.creator_address,
                                 )}
@@ -106,7 +106,10 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                         {tokenSecurity.owner_address ? (
                             <Link
                                 lineHeight="14px"
-                                href={ExplorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
+                                href={EVMExplorerResolver.addressLink(
+                                    tokenSecurity.chainId,
+                                    tokenSecurity.owner_address,
+                                )}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut size={14} color={theme.palette.text.strong} />

@@ -10,7 +10,7 @@ import {
     isEmptyHex,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
-import { RequestReadonly } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
+import { EVMRequestReadonly } from '../../Web3/EVM/apis/RequestReadonlyAPI.js'
 import { SmartPayBundler } from './BundlerAPI.js'
 import { SmartPayOwner } from './OwnerAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
@@ -71,12 +71,12 @@ class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOpe
             return
         }
 
-        await userTransaction.fillUserOperation(RequestReadonly.getWeb3({ chainId }), await getOverrides())
+        await userTransaction.fillUserOperation(EVMRequestReadonly.getWeb3({ chainId }), await getOverrides())
         return SmartPayBundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        await userTransaction.fillUserOperation(RequestReadonly.getWeb3({ chainId }))
+        await userTransaction.fillUserOperation(EVMRequestReadonly.getWeb3({ chainId }))
         return userTransaction.estimateUserOperation()
     }
 

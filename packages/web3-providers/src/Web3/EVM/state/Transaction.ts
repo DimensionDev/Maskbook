@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { TransactionState } from '../../Base/state/Transaction.js'
 
-export class Transaction extends TransactionState<ChainId, EVM_Transaction> {
+export class EVMTransaction extends TransactionState<ChainId, EVM_Transaction> {
     constructor(
         context: WalletAPI.IOContext,
         subscriptions: {

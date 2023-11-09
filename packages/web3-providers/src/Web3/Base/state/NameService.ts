@@ -3,12 +3,12 @@ import { type StorageItem, NameServiceID, InMemoryStorages, type NetworkPluginID
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 import type { NameServiceAPI, WalletAPI } from '../../../entry-types.js'
 
-export class NameServiceState<
+export abstract class NameServiceState<
     DomainBook extends Record<string, string> = Record<string, string>,
     DomainBooks extends Record<NameServiceID, DomainBook> = Record<NameServiceID, DomainBook>,
 > implements Web3NameServiceState
 {
-    public storage: StorageItem<DomainBooks> = null!
+    public storage: StorageItem<DomainBooks>
 
     constructor(
         protected context: WalletAPI.IOContext,

@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
@@ -61,7 +61,7 @@ export default function ConnectButton({ address }: { address: string }) {
 
     const ccInstance = useMemo(() => {
         return new CyberConnect({
-            provider: Web3.getWeb3Provider(),
+            provider: EVMWeb3.getWeb3Provider(),
             namespace: 'Mask',
             env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
         })

@@ -1,7 +1,7 @@
 import { FiatCurrencyIcon } from '@masknet/shared'
 import { RadioIndicator, makeStyles } from '@masknet/theme'
 import { useCurrencyType } from '@masknet/web3-hooks-base'
-import { Web3State } from '@masknet/web3-providers'
+import { evm } from '@masknet/web3-providers'
 import { CurrencyType, resolveCurrencyFullName } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -50,7 +50,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
     const checked = fiatCurrencyType === currentCurrencyType
 
     const setFiatCurrencyType = useCallback(async () => {
-        await Web3State.state!.Settings?.setDefaultCurrencyType(fiatCurrencyType)
+        await evm.state!.Settings?.setDefaultCurrencyType(fiatCurrencyType)
         closeModal()
     }, [fiatCurrencyType])
 

@@ -3,18 +3,10 @@ import Fortmatic from 'fortmatic'
 import { toHex } from 'web3-utils'
 import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
-import {
-    ChainId,
-    ProviderURL,
-    ProviderType,
-    type RequestArguments,
-    type Web3Provider,
-    type Web3,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ProviderURL, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import { ChainResolver } from '../apis/ResolverAPI.js'
-import { BaseProvider } from './Base.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
+import { BaseEVMWalletProvider } from './Base.js'
 
 // #region create in-page fortmatic provider
 
@@ -48,10 +40,7 @@ type ChainIdFortmatic =
     | ChainId.Ropsten
     | ChainId.Kovan
 
-export class FortmaticProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class FortmaticProvider extends BaseEVMWalletProvider {
     /**
      * If the internal chain id exists, it means the connection was created.
      * Otherwise, no connection was created before.
@@ -123,7 +112,8 @@ export class FortmaticProvider
         try {
             this.chainId = chainId
             const accounts = await this.login()
-            if (!accounts.length) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(this.chainId)}.`)
+            if (!accounts.length)
+                throw new Error(`Failed to connect to ${EVMChainResolver.chainFullName(this.chainId)}.`)
 
             const connected = {
                 account: first(accounts)!,

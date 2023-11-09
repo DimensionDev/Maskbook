@@ -9,6 +9,6 @@ import { useWeb3State } from './useWeb3State.js'
 export function useSocialAccountsFrom(socialAddresses: Array<SocialAddress<Web3Helper.ChainIdAll>>) {
     const { IdentityService } = useWeb3State()
     return useMemo(() => {
-        return IdentityService?.__mergeSocialAddressesAll__(socialAddresses)
+        return IdentityService?.mergeSocialAddressesAllDoNotOverride(socialAddresses)
     }, [socialAddresses, IdentityService])
 }

@@ -12,7 +12,7 @@ export function useBlockTimestamp<T extends NetworkPluginID = NetworkPluginID>(
     const Web3 = useWeb3Connection(pluginID, {
         chainId,
         ...options,
-    })
+    } as ConnectionOptions<T>)
 
     return useAsyncRetry(async () => {
         return Web3.getBlockTimestamp()

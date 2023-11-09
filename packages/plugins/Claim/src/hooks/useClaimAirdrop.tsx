@@ -16,7 +16,7 @@ import {
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { PluginClaimMessage } from '../message.js'
 import { useClaimTrans } from '../locales/i18n_generated.js'
 
@@ -55,7 +55,7 @@ export function useClaimAirdrop(
             if (!airdropContract || !amount || !merkleProof) return
 
             if (chainId !== globalChainId && providerType === ProviderType.WalletConnect) {
-                await Web3.switchChain?.(chainId, {
+                await EVMWeb3.switchChain?.(chainId, {
                     providerType: ProviderType.WalletConnect,
                 })
             }
@@ -72,10 +72,10 @@ export function useClaimAirdrop(
                 },
             )
 
-            const hash = await Web3.sendTransaction(tx, {
+            const hash = await EVMWeb3.sendTransaction(tx, {
                 chainId,
             })
-            const receipt = await Web3.getTransactionReceipt(hash, {
+            const receipt = await EVMWeb3.getTransactionReceipt(hash, {
                 chainId,
             })
 

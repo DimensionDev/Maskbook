@@ -8,7 +8,7 @@ import {
     ProviderType,
     formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
-import { Web3StateRef } from '../../../apis/Web3StateAPI.js'
+import { evm } from '../../../../../Manager/registry.js'
 import { BaseDescriptor } from './Base.js'
 import type { TransactionDescriptor } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
@@ -42,7 +42,7 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                     const revokeFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')
                     const approveFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_fail')
 
-                    if (Web3StateRef.value?.Provider?.providerType?.getCurrentValue() === ProviderType.MetaMask) {
+                    if (evm.state?.Provider?.providerType?.getCurrentValue() === ProviderType.MetaMask) {
                         const spenders = await this.Hub.getFungibleTokenSpenders(context.chainId, context.from, {
                             chainId: context.chainId,
                         })

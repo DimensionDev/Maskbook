@@ -4,7 +4,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import type { AbiItem } from 'web3-utils'
 import { useContainer } from 'unstated-next'
-import { Contract, ExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { EVMContract, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { Box, Link, Popover, Typography, alpha } from '@mui/material'
@@ -205,21 +205,21 @@ export default function ChangeOwner() {
     const managerAddress = walletManager?.address ?? personaManager?.address
 
     const { value: gas } = useAsync(async () => {
-        const contract = Contract.getWeb3Contract<Wallet>(wallet?.address, WalletABI as AbiItem[])
+        const contract = EVMContract.getWeb3Contract<Wallet>(wallet?.address, WalletABI as AbiItem[])
         if (!manageAccount?.address || !wallet?.address) return
         const tx = {
             from: wallet.address,
             to: wallet.address,
             data: contract?.methods.changeOwner(manageAccount.address).encodeABI(),
         }
-        const gas = await Web3.estimateTransaction?.(tx, FALLBACK_GAS)
+        const gas = await EVMWeb3.estimateTransaction?.(tx, FALLBACK_GAS)
         return gas ? Number.parseInt(gas, 16).toString() : FALLBACK_GAS.toString()
     }, [manageAccount?.address, wallet?.address])
 
     const [{ loading: loadingHandleConfirm }, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !wallet) return
 
-        const hash = await Web3.changeOwner?.(manageAccount.address, {
+        const hash = await EVMWeb3.changeOwner?.(manageAccount.address, {
             chainId: smartPayChainId,
             account: wallet?.address,
             providerType: ProviderType.MaskWallet,
@@ -231,13 +231,13 @@ export default function ChangeOwner() {
 
         if (!hash) return
 
-        const receipt = await Web3.confirmTransaction(hash, {
+        const receipt = await EVMWeb3.confirmTransaction(hash, {
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })
 
         if (!receipt.status) return
 
-        await Web3.updateWallet?.(
+        await EVMWeb3.updateWallet?.(
             wallet.address,
             {
                 owner: manageAccount.address,
@@ -266,7 +266,7 @@ export default function ChangeOwner() {
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={wallet.address} />
                                         <Link
-                                            href={ExplorerResolver.addressLink(chainId, wallet.address)}
+                                            href={EVMExplorerResolver.addressLink(chainId, wallet.address)}
                                             target="_blank"
                                             title={t.view_on_explorer()}
                                             rel="noopener noreferrer"
@@ -308,7 +308,7 @@ export default function ChangeOwner() {
                                         <Link
                                             href={
                                                 walletManager
-                                                    ? ExplorerResolver.addressLink(chainId, managerAddress)
+                                                    ? EVMExplorerResolver.addressLink(chainId, managerAddress)
                                                     : urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"

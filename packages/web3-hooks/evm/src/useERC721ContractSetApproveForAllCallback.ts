@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 
 /**
@@ -23,10 +23,10 @@ export function useERC721ContractSetApproveForAllCallback(
     return useAsyncFn(async () => {
         if (!contractAddress || !operator) return
 
-        const hash = await Web3.approveAllNonFungibleTokens(contractAddress, operator, approved, undefined, {
+        const hash = await EVMWeb3.approveAllNonFungibleTokens(contractAddress, operator, approved, undefined, {
             chainId: _chainId,
         })
-        const receipt = await Web3.confirmTransaction(hash, {
+        const receipt = await EVMWeb3.confirmTransaction(hash, {
             chainId: _chainId,
             signal: AbortSignal.timeout(5 * 60 * 1000),
         })

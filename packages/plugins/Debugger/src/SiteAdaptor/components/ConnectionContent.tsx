@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Web3, Contract, ChainResolver } from '@masknet/web3-providers'
+import { EVMWeb3, EVMContract, EVMChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
@@ -38,7 +38,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             coinGeckoPlatformId: '',
             name: 'Mainnet',
             network: 'mainnet',
-            nativeCurrency: ChainResolver.nativeCurrency(ChainId.Mainnet),
+            nativeCurrency: EVMChainResolver.nativeCurrency(ChainId.Mainnet),
             rpcUrl: 'https://cloudflare-eth.com',
             explorerUrl: {
                 url: 'https://etherscan.io/',
@@ -73,10 +73,10 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [])
 
     const onEstimateCallback = useCallback(async () => {
-        const contract = Contract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
+        const contract = EVMContract.getERC20Contract('0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7', {
             chainId: ChainId.Mainnet,
         })
-        const estimatedGas = await Web3.estimateTransaction?.(
+        const estimatedGas = await EVMWeb3.estimateTransaction?.(
             {
                 from: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 to: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
@@ -102,7 +102,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [])
 
     const onTransferCallback = useCallback(() => {
-        return Web3.transferFungibleToken(
+        return EVMWeb3.transferFungibleToken(
             '0x0000000000000000000000000000000000000000',
             '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             '100',
@@ -115,14 +115,14 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [])
 
     const onDeployCallback = useCallback(() => {
-        return Web3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
+        return EVMWeb3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
             chainId: ChainId.Matic,
             account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
         })
     }, [])
 
     const onFundCallback = useCallback(() => {
-        return Web3.fund?.(
+        return EVMWeb3.fund?.(
             {
                 publicKey: '',
                 type: ProofType.Persona,
@@ -140,7 +140,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     }, [])
 
     const onChangeOwnerChange = useCallback(() => {
-        return Web3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
+        return EVMWeb3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
             chainId: ChainId.Matic,
             account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
         })
@@ -148,7 +148,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
-        return Web3.approveFungibleToken(
+        return EVMWeb3.approveFungibleToken(
             '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
@@ -221,11 +221,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
             const sign = async () => {
                 switch (type) {
                     case 'message':
-                        return Web3.signMessage('message', message)
+                        return EVMWeb3.signMessage('message', message)
                     case 'typedData':
-                        return Web3.signMessage('typedData', typedData)
+                        return EVMWeb3.signMessage('typedData', typedData)
                     case 'transaction':
-                        return Web3.signTransaction(transaction)
+                        return EVMWeb3.signTransaction(transaction)
                     default:
                         return ''
                 }
@@ -240,12 +240,12 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onSwitchChain = useCallback(async (chainId: ChainId) => {
         try {
-            await Web3.switchChain?.(chainId)
+            await EVMWeb3.switchChain?.(chainId)
         } catch (error: unknown) {
             // eslint-disable-next-line no-alert
             if (error instanceof Error) alert(error.message)
         } finally {
-            if ((await Web3.getChainId()) === chainId) {
+            if ((await EVMWeb3.getChainId()) === chainId) {
                 // eslint-disable-next-line no-alert
                 alert(`Switched to chain ${chainId}`)
             } else {
@@ -257,7 +257,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onConnect = useCallback(async (chainId: ChainId, providerType: ProviderType) => {
         try {
-            await Web3.connect({
+            await EVMWeb3.connect({
                 chainId,
                 providerType,
             })
@@ -269,7 +269,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onDisconnect = useCallback(async (providerType: ProviderType) => {
         try {
-            await Web3.disconnect({
+            await EVMWeb3.disconnect({
                 providerType,
             })
         } catch (error: unknown) {

@@ -8,12 +8,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { isEmpty } from 'lodash-es'
 import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenListAPI } from '../../../entry-types.js'
-import type { HubOptions_Base } from './HubOptionsAPI.js'
-import { HubProviderAPI_Base } from './HubProviderAPI.js'
+import type { BaseHubOptions } from './HubOptionsAPI.js'
+import { AbstractBaseHubProvider } from './HubProviderAPI.js'
 
-export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProviderAPI_Base<ChainId> {
-    protected abstract getProviders(
-        initial?: HubOptions_Base<ChainId>,
+export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseHubProvider<ChainId> {
+    protected abstract getProvidersFungible(
+        initial?: BaseHubOptions<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
             FungibleTokenAPI.Provider<ChainId, SchemaType> &
@@ -24,10 +24,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
 
     async getFungibleTokensFromTokenList(
         chainId: ChainId,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, chainId })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return queryClient.fetchQuery(['get-fungible-token-list', options.chainId, initial], async () => {
             return attemptUntil(
                 providers.map((x) => () => x.getFungibleTokenList?.(options.chainId)),
@@ -39,10 +39,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
     async getFungibleTokenIconURLs(
         chainId: ChainId,
         address: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<string[]> {
         const options = this.HubOptions.fill({ ...initial, chainId })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getFungibleTokenIconURLs?.(options.chainId, address)),
             EMPTY_LIST,
@@ -52,10 +52,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
     async getFungibleTokenPrice(
         chainId: ChainId,
         address: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<number | undefined> {
         const options = this.HubOptions.fill({ ...initial, chainId })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getFungibleTokenPrice?.(options.chainId, address)),
             undefined,
@@ -65,10 +65,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
     async getFungibleTokenSpenders(
         chainId: ChainId,
         account: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, chainId, account })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getFungibleTokenSpenders?.(options.chainId, options.account)),
             EMPTY_LIST,
@@ -78,10 +78,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
 
     async getFungibleAsset(
         address: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<FungibleAsset<ChainId, SchemaType> | undefined> {
         const options = this.HubOptions.fill(initial)
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAsset?.(address, options)),
             undefined,
@@ -90,10 +90,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
 
     async getFungibleAssets(
         account: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, account })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAssets?.(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
@@ -103,10 +103,10 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
     async getTrustedFungibleAssets(
         account: string,
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, account })
-        const providers = this.getProviders(initial)
+        const providers = this.getProvidersFungible(initial)
         return attemptUntil(
             providers.map((x) => () => x.getTrustedAssets?.(options.account, trustedFungibleTokens, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
@@ -115,6 +115,6 @@ export abstract class HubFungibleAPI_Base<ChainId, SchemaType> extends HubProvid
 
     abstract getFungibleToken(
         address: string,
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ): Promise<FungibleToken<ChainId, SchemaType> | undefined>
 }

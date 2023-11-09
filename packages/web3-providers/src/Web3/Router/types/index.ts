@@ -1,22 +1,36 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
-import type { ConnectionOptions_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
-import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
-import type { HubAPI_Base } from '../../Base/apis/HubAPI.js'
+import type { BaseUtils } from '../../Base/apis/OthersAPI.js'
+import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseHubProvider } from '../../Base/apis/HubBaseAPI.js'
+import type { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
+import type { BaseHubNonFungible } from '../../Base/apis/HubNonFungibleAPI.js'
+import type { EVMConnectionOptions, EVMHubOptions } from '../../EVM/types/index.js'
+import type { FlowConnectionOptions, FlowHubOptions } from '../../Flow/types/index.js'
+import type { SolanaConnectionOptions, SolanaHubOptions } from '../../Solana/types/index.js'
+import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
 
 export interface ConnectionOptions<T extends NetworkPluginID>
-    extends ConnectionOptions_Base<
+    extends BaseConnectionOptions<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['Transaction']
     > {}
-
-export interface HubOptions<T extends NetworkPluginID> extends HubOptions_Base<Web3Helper.Definition[T]['ChainId']> {}
+export interface ConnectionOptionsMap {
+    [NetworkPluginID.PLUGIN_EVM]: EVMConnectionOptions
+    [NetworkPluginID.PLUGIN_FLOW]: FlowConnectionOptions
+    [NetworkPluginID.PLUGIN_SOLANA]: SolanaConnectionOptions
+}
+export interface HubOptions<T extends NetworkPluginID> extends BaseHubOptions<Web3Helper.Definition[T]['ChainId']> {}
+export interface HubOptionsMap {
+    [NetworkPluginID.PLUGIN_EVM]: EVMHubOptions
+    [NetworkPluginID.PLUGIN_FLOW]: FlowHubOptions
+    [NetworkPluginID.PLUGIN_SOLANA]: SolanaHubOptions
+}
 
 export interface Connection<T extends NetworkPluginID>
-    extends ConnectionAPI_Base<
+    extends BaseConnection<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['AddressType'],
         Web3Helper.Definition[T]['SchemaType'],
@@ -33,14 +47,16 @@ export interface Connection<T extends NetworkPluginID>
     > {}
 
 export interface Hub<T extends NetworkPluginID>
-    extends HubAPI_Base<
-        Web3Helper.Definition[T]['ChainId'],
-        Web3Helper.Definition[T]['SchemaType'],
-        Web3Helper.Definition[T]['GasOption']
-    > {}
+    extends BaseHubProvider<
+            Web3Helper.Definition[T]['ChainId'],
+            Web3Helper.Definition[T]['SchemaType'],
+            Web3Helper.Definition[T]['GasOption']
+        >,
+        BaseHubFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+        BaseHubNonFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> {}
 
-export interface Others<T extends NetworkPluginID>
-    extends OthersAPI_Base<
+export interface Utils<T extends NetworkPluginID>
+    extends BaseUtils<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['SchemaType'],
         Web3Helper.Definition[T]['ProviderType'],

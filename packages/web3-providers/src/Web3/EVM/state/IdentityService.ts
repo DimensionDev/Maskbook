@@ -14,8 +14,8 @@ import {
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
-import { MaskX_BaseAPI } from '../../../entry-types.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { BaseMaskX } from '../../../entry-types.js'
 import { ARBID } from '../../../ARBID/index.js'
 import { ENS } from '../../../ENS/index.js'
 import { Firefly } from '../../../Firefly/index.js'
@@ -89,24 +89,24 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
     )
 }
 
-const resolveMaskXAddressType = createLookupTableResolver<MaskX_BaseAPI.SourceType, SocialAddressType>(
+const resolveMaskXAddressType = createLookupTableResolver<BaseMaskX.SourceType, SocialAddressType>(
     {
-        [MaskX_BaseAPI.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
-        [MaskX_BaseAPI.SourceType.Firefly]: SocialAddressType.Firefly,
-        [MaskX_BaseAPI.SourceType.HandWriting]: SocialAddressType.Firefly,
-        [MaskX_BaseAPI.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
-        [MaskX_BaseAPI.SourceType.OpenSea]: SocialAddressType.OpenSea,
-        [MaskX_BaseAPI.SourceType.Sybil]: SocialAddressType.Sybil,
-        [MaskX_BaseAPI.SourceType.Uniswap]: SocialAddressType.Sybil,
-        [MaskX_BaseAPI.SourceType.RSS3]: SocialAddressType.RSS3,
-        [MaskX_BaseAPI.SourceType.TwitterHexagon]: SocialAddressType.TwitterBlue,
+        [BaseMaskX.SourceType.CyberConnect]: SocialAddressType.CyberConnect,
+        [BaseMaskX.SourceType.Firefly]: SocialAddressType.Firefly,
+        [BaseMaskX.SourceType.HandWriting]: SocialAddressType.Firefly,
+        [BaseMaskX.SourceType.Leaderboard]: SocialAddressType.Leaderboard,
+        [BaseMaskX.SourceType.OpenSea]: SocialAddressType.OpenSea,
+        [BaseMaskX.SourceType.Sybil]: SocialAddressType.Sybil,
+        [BaseMaskX.SourceType.Uniswap]: SocialAddressType.Sybil,
+        [BaseMaskX.SourceType.RSS3]: SocialAddressType.RSS3,
+        [BaseMaskX.SourceType.TwitterHexagon]: SocialAddressType.TwitterBlue,
     },
     (x) => {
         throw new Error(`Unknown source type: ${x}`)
     },
 )
 
-export class IdentityService extends IdentityServiceState<ChainId> {
+export class EVMIdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: WalletAPI.IOContext) {
         super()
     }
@@ -266,7 +266,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const response = await Twitter.getUserNftContainer(userId)
         if (!response) return
-        const ownerAddress = await Web3Readonly.getNonFungibleTokenOwner(
+        const ownerAddress = await EVMWeb3Readonly.getNonFungibleTokenOwner(
             response.address,
             response.token_id,
             undefined,
@@ -291,7 +291,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId) return
 
-        const response = await MaskX.getIdentitiesExact(userId, MaskX_BaseAPI.PlatformType.Twitter)
+        const response = await MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
         const results = response.records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !x.is_verified) return false
 

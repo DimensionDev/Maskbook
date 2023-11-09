@@ -1,7 +1,7 @@
 import { type HTMLProps, useCallback, useMemo, useEffect } from 'react'
 import { compact, uniqWith } from 'lodash-es'
 import { FormControl, Typography } from '@mui/material'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
 import {
     AddCollectiblesModal,
@@ -131,7 +131,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         const [contract, tokenIds] = results
         const allSettled = await Promise.allSettled(
             tokenIds.map(async (tokenId) => {
-                const token = await Web3.getNonFungibleToken(contract.address, tokenId, SchemaType.ERC721, {
+                const token = await EVMWeb3.getNonFungibleToken(contract.address, tokenId, SchemaType.ERC721, {
                     chainId: chainId as ChainId,
                     account,
                 })

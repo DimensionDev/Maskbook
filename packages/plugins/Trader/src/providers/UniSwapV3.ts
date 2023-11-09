@@ -5,7 +5,7 @@ import { type ChainId, getTraderConstants } from '@masknet/web3-shared-evm'
 import { CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { FeeAmount, Pool, type Route, computePoolAddress, encodeRouteToPath, Trade } from '@uniswap/v3-sdk'
-import { ContractReadonly, Multicall } from '@masknet/web3-providers'
+import { EVMContractReadonly, Multicall } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { isZero } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -69,7 +69,7 @@ export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
         )
 
         const poolAddresses = this.getPoolAddresses(transformed, context)
-        const poolContracts = compact(poolAddresses.map((x) => ContractReadonly.getPoolStateV3(x, { chainId })))
+        const poolContracts = compact(poolAddresses.map((x) => EVMContractReadonly.getPoolStateV3(x, { chainId })))
 
         const slot0sCalls = Multicall.createMultipleContractSingleData(
             poolContracts,
@@ -128,7 +128,7 @@ export class UniSwapV3LikeAPI extends UniSwapV2LikeAPI {
         const { UNISWAP_V3_QUOTER_ADDRESS } = getTraderConstants(chainId)
         if (!UNISWAP_V3_QUOTER_ADDRESS) return null
 
-        const quoterContract = ContractReadonly.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
+        const quoterContract = EVMContractReadonly.getQuoterContract(UNISWAP_V3_QUOTER_ADDRESS, { chainId })
 
         const allCurrencyCombinations = this.getAllCommonPairs(chainId, currencyAmountIn?.currency, currencyOut)
 

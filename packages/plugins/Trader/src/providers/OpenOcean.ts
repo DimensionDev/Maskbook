@@ -16,7 +16,7 @@ import {
     isNativeTokenSchemaType,
 } from '@masknet/web3-shared-evm'
 import { ZERO, isZero, leftShift, pow10 } from '@masknet/web3-shared-base'
-import { ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
+import { EVMContractReadonly, EVMWeb3Readonly } from '@masknet/web3-providers'
 import { TraderAPI } from '@masknet/web3-providers/types'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { OPENOCEAN_BASE_URL, OPENOCEAN_SUPPORTED_CHAINS } from '../constants/index.js'
@@ -170,7 +170,7 @@ class OpenOceanAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = EVMContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TraderAPI.TradeStrategy.ExactIn,
@@ -219,7 +219,7 @@ class OpenOceanAPI implements TraderAPI.Provider {
 
         if (!config.value) return '0'
 
-        return Web3Readonly.estimateTransaction(config, 0, { chainId })
+        return EVMWeb3Readonly.estimateTransaction(config, 0, { chainId })
     }
 }
 export const OpenOcean = new OpenOceanAPI()

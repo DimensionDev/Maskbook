@@ -4,7 +4,7 @@ import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { useSharedTrans } from '../locales/index.js'
 import { ConfirmModal } from '../UI/modals/index.js'
 
@@ -47,7 +47,7 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
     const { classes } = useStyles()
     const t = useSharedTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const link = ExplorerResolver.transactionLink(chainId, hash)
+    const link = EVMExplorerResolver.transactionLink(chainId, hash)
     return (
         <div className={classes.content}>
             <DoneIcon className={classes.icon} />

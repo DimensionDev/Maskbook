@@ -19,7 +19,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
-import { ExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { useRedPacketTrans } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
@@ -162,7 +162,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])!
+    const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!
 
     const duration = 60 * 60 * 24
 
@@ -233,7 +233,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             <Link
                                 color="textPrimary"
                                 className={classes.link}
-                                href={ExplorerResolver.addressLink(chainId, account)}
+                                href={EVMExplorerResolver.addressLink(chainId, account)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={stop}>

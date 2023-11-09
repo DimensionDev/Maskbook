@@ -4,7 +4,7 @@ import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useQuery } from '@tanstack/react-query'
 
-export function useNonFungibleAsset<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNonFungibleAsset<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,
     id?: string,
@@ -14,7 +14,7 @@ export function useNonFungibleAsset<S extends 'all' | void = void, T extends Net
     const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
-    })
+    } as HubOptions<T>)
 
     return useQuery({
         enabled: !!address,

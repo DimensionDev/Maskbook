@@ -9,7 +9,7 @@ import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_E
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import { RSS3BaseAPI, type HubOptions_Base } from '../../entry-types.js'
+import { RSS3BaseAPI, type BaseHubOptions } from '../../entry-types.js'
 
 interface RSS3Result<T> {
     cursor?: string
@@ -56,7 +56,7 @@ export class RSS3 {
         await rss3.files.sync()
         return value
     }
-    static async getDonations(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getDonations(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.donation,
@@ -75,7 +75,7 @@ export class RSS3 {
         })
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    static async getFootprints(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getFootprints(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.collectible,
@@ -98,7 +98,7 @@ export class RSS3 {
      * @deprecated
      * Get feeds in tags of donation, collectible and transaction
      */
-    static async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions_Base<ChainId> = {}) {
+    static async getWeb3Feeds(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
         const queryString = `tag=${tags.join('&tag=')}&${query({
@@ -119,7 +119,7 @@ export class RSS3 {
     static async getAllNotes(
         address: string,
         options: Partial<Record<string, string>> = {},
-        { indicator, size = 100 }: HubOptions_Base<ChainId> = {},
+        { indicator, size = 100 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!address) return createPageable([], createIndicator(indicator))
         const url = urlcat(RSS3_FEED_ENDPOINT, '/:address', {

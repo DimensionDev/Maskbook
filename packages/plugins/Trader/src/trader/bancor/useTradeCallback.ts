@@ -6,7 +6,7 @@ import { ZERO } from '@masknet/web3-shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { Bancor } from '../../providers/Bancor.js'
 import type { SwapBancorRequest } from '../../types/index.js'
@@ -33,7 +33,7 @@ export function useTradeCallback(
             const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
             const config = pick(tradeTransaction.transaction, ['to', 'data', 'from', 'value'])
-            const gas = await Web3.estimateTransaction?.(config, undefined, {
+            const gas = await EVMWeb3.estimateTransaction?.(config, undefined, {
                 chainId,
             })
             const config_ = {
@@ -43,8 +43,8 @@ export function useTradeCallback(
 
             // send transaction and wait for hash
 
-            const hash = await Web3.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
-            const receipt = await Web3.getTransactionReceipt(hash, {
+            const hash = await EVMWeb3.sendTransaction(config_, { chainId, overrides: { ...gasConfig } })
+            const receipt = await EVMWeb3.getTransactionReceipt(hash, {
                 chainId,
             })
 

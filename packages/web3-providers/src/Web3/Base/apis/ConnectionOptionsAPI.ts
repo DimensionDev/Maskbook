@@ -2,7 +2,7 @@ import { identity, pickBy } from 'lodash-es'
 import type { GasOptionType, ProviderState } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, PartialRequired } from '@masknet/shared-base'
 
-export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
+export interface BaseConnectionOptions<ChainId, ProviderType, Transaction> {
     /** Designate the signer of the transaction. */
     account?: string
     /** Designate the sub-network id of the transaction. */
@@ -29,11 +29,11 @@ export interface ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
     gasOptionType?: GasOptionType
 }
 
-export abstract class ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkType, Transaction> {
+export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction> {
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getProvider?(): undefined | ProviderState<ChainId, ProviderType, NetworkType>
-    constructor(private options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>) {}
+    constructor(private options?: BaseConnectionOptions<ChainId, ProviderType, Transaction>) {}
     protected get defaults() {
         return {
             account: '',
@@ -42,7 +42,7 @@ export abstract class ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkTy
         }
     }
 
-    protected get refs(): ConnectionOptions_Base<ChainId, ProviderType, Transaction> {
+    protected get refs(): BaseConnectionOptions<ChainId, ProviderType, Transaction> {
         const provider = this.getProvider?.()
         if (!provider) return {}
         return {
@@ -53,10 +53,10 @@ export abstract class ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkTy
     }
 
     fill(
-        initials?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
+        initials?: BaseConnectionOptions<ChainId, ProviderType, Transaction>,
         overrides?: Partial<Transaction>,
     ): PartialRequired<
-        ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
+        BaseConnectionOptions<ChainId, ProviderType, Transaction>,
         'account' | 'chainId' | 'providerType'
     > {
         return {

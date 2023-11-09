@@ -17,7 +17,7 @@ export function useTransferFungibleToken<T extends NetworkPluginID>(
     const Web3 = useWeb3Connection(pluginID, {
         account,
         ...options,
-    })
+    } as ConnectionOptions<T>)
 
     return useAsyncRetry(async () => {
         if (!token?.address) return

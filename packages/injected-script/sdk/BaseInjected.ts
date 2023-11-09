@@ -1,7 +1,38 @@
-import { BaseProvider } from './Base.js'
 import { createPromise, sendEvent } from './utils.js'
 
-export class BaseInjectedProvider extends BaseProvider {
+export abstract class InjectedWalletBridge {
+    protected events = new Map<string, Set<(data: unknown) => void>>()
+    protected isReadyInternal = false
+    protected isConnectedInternal = false
+
+    constructor(public pathname: string) {
+        this.startup()
+    }
+
+    private async startup() {
+        await this.untilAvailable()
+
+        // if a provider is not ready, it will not be able to connect
+        if (!this.isReady) return
+
+        this.on('connected', () => {
+            this.isConnectedInternal = true
+        })
+        this.on('disconnect', () => {
+            this.isConnectedInternal = false
+        })
+
+        this.isConnectedInternal = (await this.getProperty<boolean | null>('isConnected')) ?? false
+    }
+
+    get isReady() {
+        return this.isReadyInternal
+    }
+
+    get isConnected() {
+        return this.isConnectedInternal
+    }
+
     /**
      * Build the connection.
      */

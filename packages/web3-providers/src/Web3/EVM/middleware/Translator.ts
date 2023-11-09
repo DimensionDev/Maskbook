@@ -1,18 +1,18 @@
 import { ChainId, type Middleware, type Translator as Translator_ } from '@masknet/web3-shared-evm'
-import { Base } from '../translators/Base.js'
-import { Astar } from '../translators/Astar.js'
-import { Polygon } from '../translators/Polygon.js'
+import { DefaultTranslator } from '../translators/Base.js'
+import { AstarTranslator } from '../translators/Astar.js'
+import { PolygonTranslator } from '../translators/Polygon.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 /**
  * JSON RPC transactor for EVM chains.
  */
 export class Translator implements Middleware<ConnectionContext> {
-    private base = new Base()
+    private base = new DefaultTranslator()
 
     private translators: Partial<Record<ChainId, Translator_<ConnectionContext>>> = {
-        [ChainId.Astar]: new Astar(),
-        [ChainId.Matic]: new Polygon(),
+        [ChainId.Astar]: new AstarTranslator(),
+        [ChainId.Matic]: new PolygonTranslator(),
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {

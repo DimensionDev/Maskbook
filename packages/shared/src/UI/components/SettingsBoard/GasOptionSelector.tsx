@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Divider, Skeleton } from '@mui/material'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import type { ChainId, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { GasOption as GasOptionItem } from './GasOption.js'
 import { SettingsContext } from './Context.js'
 
@@ -43,7 +43,7 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     const { classes } = useStyles()
     const { gasOptionType, setGasOptionType } = SettingsContext.useContainer()
 
-    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
+    const isEIP1559 = EVMUtils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
 
     const onClick = useCallback(
         (type: GasOptionType, option: GasOption) => {

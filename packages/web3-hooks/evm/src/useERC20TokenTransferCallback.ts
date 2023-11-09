@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Contract } from '@masknet/web3-providers'
+import { EVMContract } from '@masknet/web3-providers'
 import { type GasConfig, TransactionEventType, isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
 
 export function useERC20TokenTransferCallback(
@@ -22,7 +22,7 @@ export function useERC20TokenTransferCallback(
             // error: invalid recipient address
             if (!isValidAddress(recipient)) return
 
-            const contract = Contract.getERC20Contract(address, { chainId })
+            const contract = EVMContract.getERC20Contract(address, { chainId })
             if (!contract) return
 
             // error: insufficient balance

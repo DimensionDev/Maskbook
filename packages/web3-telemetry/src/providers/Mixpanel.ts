@@ -2,11 +2,11 @@ import { isUndefined, omitBy } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
 import { TelemetryID } from '@masknet/shared-base'
-import { BaseAPI } from './Base.js'
-import type { EventOptions, ExceptionOptions, Provider } from '../types/index.js'
+import { TelemetryProvider } from './Base.js'
+import type { EventOptions, ExceptionOptions } from '../types/index.js'
 import { MixpanelEventAPI, type Event } from '../apis/Mixpanel.js'
 
-export class MixpanelAPI extends BaseAPI implements Provider {
+export class MixpanelAPI extends TelemetryProvider {
     constructor(env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
         this.eventAPI = new MixpanelEventAPI(Flags.mixpanel_project_token, env)

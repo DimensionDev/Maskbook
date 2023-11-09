@@ -2,18 +2,18 @@ import { noop } from 'lodash-es'
 import { isSameURL } from '@masknet/web3-shared-base'
 import { ErrorEditor, isMaskOnlyMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { evm } from '../../../Manager/registry.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
 class CustomNetworkAPI implements Middleware<ConnectionContext> {
     private get networks() {
-        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
-        return Web3StateRef.value.Network.networks?.getCurrentValue()
+        if (!evm.state?.Network) throw new Error('The web3 state does not load yet.')
+        return evm.state.Network.networks?.getCurrentValue()
     }
 
     private get customNetwork() {
-        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
-        const network = Web3StateRef.value.Network.network?.getCurrentValue()
+        if (!evm.state?.Network) throw new Error('The web3 state does not load yet.')
+        const network = evm.state.Network.network?.getCurrentValue()
         return network?.isCustomized ? network : undefined
     }
 
@@ -25,7 +25,7 @@ class CustomNetworkAPI implements Middleware<ConnectionContext> {
         }
 
         try {
-            const response = await Web3Readonly.getWeb3Provider({
+            const response = await EVMWeb3Readonly.getWeb3Provider({
                 chainId: context.chainId,
                 account: context.account,
                 providerURL:

@@ -1,6 +1,6 @@
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { InjectedWalletBridge } from './BaseInjected.js'
 
-export class PhantomProvider extends BaseInjectedProvider {
+export class PhantomProvider extends InjectedWalletBridge {
     constructor() {
         super('phantom.solana')
     }

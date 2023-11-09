@@ -5,7 +5,7 @@ import { CopyButton, SocialAccountList } from '@masknet/shared'
 import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { PluginHeader } from './PluginHeader.js'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
@@ -75,7 +75,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                     <div>
                         {domain ? (
                             <Typography className={classes.domain}>
-                                {Others.formatDomainName(domain) || domain}
+                                {EVMUtils.formatDomainName(domain) || domain}
                             </Typography>
                         ) : null}
                         {reversedAddress ? (
@@ -87,7 +87,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                                     rel="noopener noreferrer"
                                     className={classes.link}
                                     href={
-                                        Others.explorerResolver.addressLink(
+                                        EVMUtils.explorerResolver.addressLink(
                                             (suffix ? SuffixToChainIdMap[suffix] : ChainId.Mainnet) ?? ChainId.Mainnet,
                                             reversedAddress,
                                         ) ?? ''

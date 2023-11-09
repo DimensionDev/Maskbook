@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
@@ -78,7 +78,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const handleSelect = useCallback(
         async (wallet: Wallet) => {
             const address = wallet.address
-            await Web3.connect({
+            await EVMWeb3.connect({
                 account: address,
                 chainId: wallet.owner && smartPayChainId ? smartPayChainId : chainId,
                 providerType: ProviderType.MaskWallet,
@@ -89,7 +89,7 @@ const SwitchWallet = memo(function SwitchWallet() {
             if (wallet.owner && smartPayChainId) {
                 const network = networks.find((x) => x.chainId === smartPayChainId)
                 if (network) await Network?.switchNetwork(network.ID)
-                await Web3.switchChain?.(smartPayChainId, {
+                await EVMWeb3.switchChain?.(smartPayChainId, {
                     providerType: ProviderType.MaskWallet,
                 })
             }

@@ -1,5 +1,5 @@
 import { PluginRuntime } from '../runtime/runtime.js'
-import { type BasicHostHooks, type BasicHostInstance, PluginRunner } from '../runtime/runner.js'
+import { type BasicHostHooks, type BasicHostInstance, SandboxedPluginHost } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dependencies-dom/index.js'
@@ -23,7 +23,7 @@ export interface SiteAdaptorInstance extends BasicHostInstance {
         meta: unknown,
     ): { text: React.ReactNode; tooltip?: React.ReactNode } | null
 }
-export class SiteAdaptorPluginHost extends PluginRunner<SiteAdaptorHostHooks, SiteAdaptorInstance> {
+export class SiteAdaptorPluginHost extends SandboxedPluginHost<SiteAdaptorHostHooks, SiteAdaptorInstance> {
     constructor(
         hooks: SiteAdaptorHostHooks,
         allowLocalOverrides: boolean,

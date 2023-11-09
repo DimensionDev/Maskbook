@@ -69,7 +69,7 @@ class Checker<ChainId extends PropertyKey, Transaction> {
     }
 }
 
-export class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
+export abstract class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionWatcherState<ChainId, Transaction>
 {
     public emitter: Emitter<WatchEvents<ChainId, Transaction>> = new Emitter()
@@ -102,7 +102,10 @@ export class TransactionWatcherState<ChainId extends PropertyKey, Transaction>
         this.emitter.emit('error', error, request)
     }
 
-    async notifyTransaction(chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) {
-        throw new Error('Method not implemented.')
-    }
+    abstract notifyTransaction(
+        chainId: ChainId,
+        id: string,
+        transaction: Transaction,
+        status: TransactionStatusType,
+    ): Promise<void>
 }

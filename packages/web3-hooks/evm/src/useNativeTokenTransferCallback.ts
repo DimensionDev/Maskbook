@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { toHex } from 'web3-utils'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -17,7 +17,7 @@ export function useNativeTransferCallback(expectedChainId?: ChainId) {
             if (!isValidAddress(recipient)) return
 
             // error: insufficient balance
-            const balance = await Web3.getBalance(account)
+            const balance = await EVMWeb3.getBalance(account)
 
             if (isGreaterThan(amount, balance)) return
 
@@ -25,7 +25,7 @@ export function useNativeTransferCallback(expectedChainId?: ChainId) {
             const config = {
                 from: account,
                 to: recipient,
-                gas: await Web3.estimateTransaction?.({
+                gas: await EVMWeb3.estimateTransaction?.({
                     from: account,
                     to: recipient,
                     value: amount,
@@ -42,7 +42,7 @@ export function useNativeTransferCallback(expectedChainId?: ChainId) {
             // send transaction and wait for hash
             return new Promise<string>(async (resolve, reject) => {
                 try {
-                    const transactionHash = await Web3.sendTransaction(config)
+                    const transactionHash = await EVMWeb3.sendTransaction(config)
 
                     resolve(transactionHash)
                 } catch (error) {

@@ -10,7 +10,7 @@ import {
     useNonFungibleTokenContract,
     useNonFungibleCollections,
 } from '@masknet/web3-hooks-base'
-import { Hub, Others } from '@masknet/web3-providers'
+import { EVMHub, EVMUtils } from '@masknet/web3-providers'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -155,7 +155,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const t = useApprovalTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: spenders, isLoading } = useQuery(['non-fungible-tokens', 'spenders', chainId, account], async () =>
-        Hub.getNonFungibleTokenSpenders(chainId, account),
+        EVMHub.getNonFungibleTokenSpenders(chainId, account),
     )
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -260,11 +260,11 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name ?? Others.formatAddress(spender.address, 4)}
+                            {spender.name ?? EVMUtils.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others.explorerResolver.addressLink(chainId, spender.address) ?? ''}
+                            href={EVMUtils.explorerResolver.addressLink(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />

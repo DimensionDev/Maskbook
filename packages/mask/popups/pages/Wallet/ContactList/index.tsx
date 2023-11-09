@@ -8,7 +8,7 @@ import { useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
@@ -323,7 +323,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                         <FormattedAddress address={address} formatter={formatEthereumAddress} size={4} />
                         <Link
                             onClick={(event) => event.stopPropagation()}
-                            href={ExplorerResolver.addressLink(chainId, address ?? '')}
+                            href={EVMExplorerResolver.addressLink(chainId, address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.PopupLink className={classes.icon} color={theme.palette.maskColor.second} />

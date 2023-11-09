@@ -11,7 +11,7 @@ function getFlowAddress(bio: string) {
     return
 }
 
-export class IdentityService extends IdentityServiceState<ChainId> {
+export class FlowIdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: WalletAPI.IOContext) {
         super()
     }

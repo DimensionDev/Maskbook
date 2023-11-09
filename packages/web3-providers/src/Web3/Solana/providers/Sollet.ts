@@ -1,27 +1,18 @@
 import base58 from 'bs58'
 import type { Transaction } from '@solana/web3.js'
 import Wallet from '@project-serum/sol-wallet-adapter'
-import { type ChainId, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-solana'
-import { BaseProvider } from './Base.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { type ChainId, ProviderType } from '@masknet/web3-shared-solana'
+import { BaseSolanaWalletProvider } from './Base.js'
 
-export class SolletProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class SolanaSolletProvider extends BaseSolanaWalletProvider {
     private wallet: Wallet | null = null
-
+    private providerURL = 'https://www.sollet.io'
     private get solanaProvider() {
         if (!this.wallet) throw new Error('No sollet connection.')
         return this.wallet
     }
-
     private set solanaProvider(newWallet: Wallet) {
         this.wallet = newWallet
-    }
-
-    constructor(private providerURL = 'https://www.sollet.io') {
-        super()
     }
 
     override async signMessage(message: string) {

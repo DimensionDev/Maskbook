@@ -15,7 +15,7 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
         chainId,
         providerType,
         ...options,
-    })
+    } as ConnectionOptions<T>)
 
     const web3 = useMemo(() => {
         return Web3.getWeb3()

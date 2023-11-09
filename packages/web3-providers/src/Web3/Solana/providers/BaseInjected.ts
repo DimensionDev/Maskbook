@@ -1,19 +1,12 @@
 import { isExtensionSiteType, type Account } from '@masknet/shared-base'
-import type { BaseProvider as BaseBridge } from '@masknet/injected-script'
-import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
-import { BaseProvider } from './Base.js'
+import type { InjectedWalletBridge } from '@masknet/injected-script'
+import { ChainId, type ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
+import { BaseSolanaWalletProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class BaseInjectedProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
-    constructor(
-        protected providerType: ProviderType,
-        protected bridge: BaseBridge,
-    ) {
-        super()
-    }
+export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvider {
+    protected abstract providerType: ProviderType
+    protected abstract bridge: InjectedWalletBridge
 
     override get ready() {
         return this.bridge.isReady

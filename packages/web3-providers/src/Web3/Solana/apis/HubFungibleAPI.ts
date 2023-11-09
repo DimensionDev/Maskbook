@@ -1,20 +1,20 @@
 import { attemptUntil, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
-import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
+import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
-import { SolanaWeb3StateRef } from './Web3StateAPI.js'
-import type { HubOptions } from '../types/index.js'
+import type { SolanaHubOptions } from '../types/index.js'
 import { CoinGeckoPriceSolana } from '../../../CoinGecko/index.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
+import { solana } from '../../../Manager/registry.js'
 
-export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
+export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     private Web3 = new SolanaConnectionAPI()
 
     protected override HubOptions = new SolanaHubOptionsAPI(this.options)
 
-    protected override getProviders(initial?: HubOptions) {
+    protected override getProvidersFungible(initial?: SolanaHubOptions) {
         const options = this.HubOptions.fill(initial)
 
         // only the first page is available
@@ -30,14 +30,10 @@ export class SolanaHubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaTyp
         )
     }
 
-    override getFungibleToken(address: string, initial?: HubOptions | undefined) {
+    override getFungibleToken(address: string, initial?: SolanaHubOptions | undefined) {
         return attemptUntil(
             [
-                () =>
-                    SolanaWeb3StateRef.value?.Token?.createFungibleToken?.(
-                        initial?.chainId ?? ChainId.Mainnet,
-                        address,
-                    ),
+                () => solana.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
                 () => this.Web3.getFungibleToken(address, initial),
             ],
             undefined,

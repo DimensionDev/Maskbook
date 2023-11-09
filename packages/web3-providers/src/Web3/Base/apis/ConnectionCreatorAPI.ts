@@ -1,23 +1,23 @@
 import { memoize } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { ConnectionAPI_Base } from './ConnectionAPI.js'
-import type { ConnectionOptions_Base, ConnectionOptionsAPI_Base } from './ConnectionOptionsAPI.js'
+import type { BaseConnection } from './ConnectionAPI.js'
+import type { BaseConnectionOptions, ConnectionOptionsProvider } from './ConnectionOptionsAPI.js'
 
 function resolver<ChainId, ProviderType, Transaction>(
-    initial?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
+    initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 ) {
     return [initial?.chainId, initial?.account, initial?.providerType].join(',')
 }
 
 export function createConnectionCreator<T extends NetworkPluginID>(
     creator: (
-        initial?: ConnectionOptions_Base<
+        initial?: BaseConnectionOptions<
             Web3Helper.Definition[T]['ChainId'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['Transaction']
         >,
-    ) => ConnectionAPI_Base<
+    ) => BaseConnection<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['AddressType'],
         Web3Helper.Definition[T]['SchemaType'],
@@ -33,7 +33,7 @@ export function createConnectionCreator<T extends NetworkPluginID>(
         Web3Helper.Definition[T]['Web3Provider']
     >,
     isValidChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => boolean,
-    ConnectionOptions: ConnectionOptionsAPI_Base<
+    ConnectionOptions: ConnectionOptionsProvider<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['NetworkType'],
@@ -49,7 +49,7 @@ export function createConnectionCreator<T extends NetworkPluginID>(
         >,
     )
     return (
-        initial?: ConnectionOptions_Base<
+        initial?: BaseConnectionOptions<
             Web3Helper.Definition[T]['ChainId'],
             Web3Helper.Definition[T]['ProviderType'],
             Web3Helper.Definition[T]['Transaction']

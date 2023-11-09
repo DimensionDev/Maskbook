@@ -14,12 +14,12 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-solana'
-import { SolanaProviders } from '../providers/index.js'
+import { SolanaWalletProviders } from '../providers/index.js'
 import { SolanaChainResolver } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
-export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    protected override providers = SolanaProviders
+export class SolanaProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    protected override providers = SolanaWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId
     protected override isSameAddress = isSameAddress

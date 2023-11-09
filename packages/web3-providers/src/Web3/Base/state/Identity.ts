@@ -48,7 +48,7 @@ export abstract class IdentityServiceState<ChainId> implements Web3SocialIdentit
         return fromRemote
     }
 
-    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<ChainId>>) {
+    mergeSocialAddressesAllDoNotOverride = (socialAddresses: Array<SocialAddress<ChainId>>) => {
         const accountGroups = groupBy(socialAddresses, (x) => `${x.pluginID}_${x.address.toLowerCase()}`)
         const domainAddressTypes = [
             SocialAddressType.ENS,

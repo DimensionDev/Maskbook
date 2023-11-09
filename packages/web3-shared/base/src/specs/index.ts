@@ -943,7 +943,7 @@ export interface RiskWarningState extends Startable {
 
 export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
-    __mergeSocialAddressesAll__(socialAddresses: Array<SocialAddress<ChainId>>): Array<SocialAccount<ChainId>>
+    mergeSocialAddressesAllDoNotOverride(socialAddresses: Array<SocialAddress<ChainId>>): Array<SocialAccount<ChainId>>
     /** Find all social addresses related to the given identity. */
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }

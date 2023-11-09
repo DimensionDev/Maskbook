@@ -11,7 +11,7 @@ import {
     useNetworkDescriptors,
     useReverseAddress,
 } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory, Web3 } from '@masknet/web3-providers'
+import { ChainbaseHistory, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import { DebankTransactionDirection } from '@masknet/web3-providers/types'
 import {
@@ -214,7 +214,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         queryKey: [transaction?.chainId, transaction?.id],
         queryFn: async () => {
             if (!transaction?.chainId || !transaction?.id) return
-            const tx = await Web3.getTransaction(transaction.id, { chainId: transaction.chainId })
+            const tx = await EVMWeb3.getTransaction(transaction.id, { chainId: transaction.chainId })
             return tx?.input
         },
     })

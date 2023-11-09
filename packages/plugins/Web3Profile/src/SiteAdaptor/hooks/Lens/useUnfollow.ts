@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Contract, Lens, Web3 } from '@masknet/web3-providers'
+import { EVMContract, Lens, EVMWeb3 } from '@masknet/web3-providers'
 import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, ContractTransaction, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
 import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
@@ -50,7 +50,7 @@ export function useUnfollow(
 
                 if (!typedData) return
 
-                const signature = await Web3.signMessage(
+                const signature = await EVMWeb3.signMessage(
                     'typedData',
                     JSON.stringify(
                         encodeTypedData(
@@ -76,7 +76,7 @@ export function useUnfollow(
                     onFailed?.()
                     setLoading(true)
 
-                    const followNFTContract = Contract.getWeb3Contract<LensFollowNFT>(
+                    const followNFTContract = EVMContract.getWeb3Contract<LensFollowNFT>(
                         typedData.typedData.domain.verifyingContract,
                         LensFollowNftABI as AbiItem[],
                     )
@@ -84,14 +84,14 @@ export function useUnfollow(
                         followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
                         { from: account },
                     )
-                    hash = await Web3.sendTransaction(tx, { chainId: ChainId.Matic })
+                    hash = await EVMWeb3.sendTransaction(tx, { chainId: ChainId.Matic })
                     onSuccess?.(cloneEvent)
                     setLoading(false)
                 }
 
                 if (!hash) return
 
-                const receipt = await Web3.confirmTransaction(hash, {
+                const receipt = await EVMWeb3.confirmTransaction(hash, {
                     chainId: ChainId.Matic,
                     signal: AbortSignal.timeout(3 * 60 * 1000),
                 })

@@ -1,4 +1,4 @@
-export namespace MaskX_BaseAPI {
+export namespace BaseMaskX {
     export enum PlatformType {
         Ethereum = 'eth',
         Twitter = 'twitter',

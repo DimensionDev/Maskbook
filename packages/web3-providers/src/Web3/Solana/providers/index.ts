@@ -1,12 +1,12 @@
 import { ProviderType, type ChainId, type Web3, type Web3Provider, type Transaction } from '@masknet/web3-shared-solana'
-import { BaseProvider as SolanaBaseProvider } from './Base.js'
-import { PhantomProvider } from './Phantom.js'
-import { SolflareProvider } from './SolflareProvider.js'
-import { SolletProvider } from './Sollet.js'
+import { SolanaPhantomProvider } from './Phantom.js'
+import { NoneProvider } from './None.js'
+import { SolanaSolflareProvider } from './SolflareProvider.js'
+import { SolanaSolletProvider } from './Sollet.js'
 import { SolanaCoin98Provider } from './Coin98.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export interface SolanaProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+export interface SolanaWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
     /** Sign message */
     signMessage(message: string): Promise<string>
     /** Verify signature */
@@ -17,10 +17,10 @@ export interface SolanaProvider extends WalletAPI.Provider<ChainId, ProviderType
     signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
-export const SolanaProviders: Record<ProviderType, SolanaProvider> = {
-    [ProviderType.None]: new SolanaBaseProvider(),
-    [ProviderType.Phantom]: new PhantomProvider(),
-    [ProviderType.Solflare]: new SolflareProvider(),
-    [ProviderType.Sollet]: new SolletProvider(),
+export const SolanaWalletProviders: Record<ProviderType, SolanaWalletProvider> = {
+    [ProviderType.None]: new NoneProvider(),
+    [ProviderType.Phantom]: new SolanaPhantomProvider(),
+    [ProviderType.Solflare]: new SolanaSolflareProvider(),
+    [ProviderType.Sollet]: new SolanaSolletProvider(),
     [ProviderType.Coin98]: new SolanaCoin98Provider(),
 }

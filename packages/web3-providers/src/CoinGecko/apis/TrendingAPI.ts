@@ -10,7 +10,7 @@ import type { CoinInfo, Platform } from '../types.js'
 import { resolveCoinGeckoChainId } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TrendingAPI } from '../../entry-types.js'
-import { ChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import { EVMChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 
 class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll> {
     private async getSupportedPlatform() {
@@ -84,7 +84,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
             currency,
             coin: {
                 id,
-                chainId: isNativeTokenSymbol(info.symbol) ? ChainResolver.chainId(info.name) : undefined,
+                chainId: isNativeTokenSymbol(info.symbol) ? EVMChainResolver.chainId(info.name) : undefined,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
                 type: TokenType.Fungible,
@@ -119,8 +119,8 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                 twitter_url,
                 telegram_url,
                 contract_address:
-                    ChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
-                        ? getTokenConstant(ChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                    EVMChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
+                        ? getTokenConstant(EVMChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
                         : info.contract_address,
             },
             market: (() => {

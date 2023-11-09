@@ -26,7 +26,7 @@ import type {
     GetProgramAccountsResponse,
     RaydiumTokenList,
     MaskToken,
-    HubOptions,
+    SolanaHubOptions,
 } from '../types/index.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
@@ -126,7 +126,7 @@ class SolanaFungibleTokenAPI
         return splTokens
     }
 
-    async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions = {}) {
+    async getAsset(account: string, { chainId = ChainId.Mainnet }: SolanaHubOptions = {}) {
         const price = await CoinGeckoPriceSolana.getFungibleTokenPrice(chainId, getNativeTokenAddress(), {
             currencyType: CurrencyType.USD,
         })
@@ -143,7 +143,7 @@ class SolanaFungibleTokenAPI
 
     async getAssets(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions = {},
+        { chainId = ChainId.Mainnet, indicator }: SolanaHubOptions = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) {
             return createPageable([], createIndicator(indicator))

@@ -3,11 +3,11 @@ import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
-import { TransactionCheckers } from './TransactionWatcher/checker.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { EVMTransactionCheckers } from './TransactionWatcher/checker.js'
+import { evm } from '../../../Manager/registry.js'
 import { TransactionWatcherState } from '../../Base/state/TransactionWatcher.js'
 
-export class TransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
+export class EVMTransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
     constructor(
         context: WalletAPI.IOContext,
         subscriptions: {
@@ -18,7 +18,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         super(context, subscriptions, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             defaultBlockDelay: 15,
-            getTransactionCheckers: () => TransactionCheckers,
+            getTransactionCheckers: () => EVMTransactionCheckers,
         })
     }
 
@@ -28,7 +28,7 @@ export class TransactionWatcher extends TransactionWatcherState<ChainId, Transac
         transaction: Transaction,
         status: TransactionStatusType,
     ) {
-        const { Transaction } = Web3StateRef.value!
+        const { Transaction } = evm.state!
 
         if (Transaction && transaction.from && status !== TransactionStatusType.NOT_DEPEND) {
             await Transaction.updateTransaction?.(chainId, transaction.from, id, status)

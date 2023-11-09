@@ -14,7 +14,7 @@ export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID
     const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
-    })
+    } as HubOptions<T>)
     return useInfiniteQuery({
         queryKey: ['non-fungible', 'events', pluginID, address, id, options],
         queryFn: ({ pageParam: nextIndicator }) => {

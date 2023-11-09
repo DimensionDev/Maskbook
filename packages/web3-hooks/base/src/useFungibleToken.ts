@@ -18,7 +18,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const Hub = useWeb3Hub(pluginID, {
         chainId,
         ...options,
-    })
+    } as HubOptions<T>)
     const networks = useNetworks(pluginID)
 
     return useQuery({

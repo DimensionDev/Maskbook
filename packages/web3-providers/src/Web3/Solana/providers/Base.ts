@@ -3,8 +3,9 @@ import { Emitter } from '@servie/events'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
 import type { WalletAPI } from '../../../entry-types.js'
+import type { SolanaWalletProvider } from './index.js'
 
-export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
     web3: Web3 | null = null
 
     provider: Web3Provider | null = null
@@ -33,9 +34,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         return Promise.resolve()
     }
 
-    setup(): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
+    async setup(): Promise<void> {}
     addWallet(wallet: Wallet): Promise<void> {
         throw new Error('Method not implemented.')
     }
@@ -63,15 +62,11 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    signMessage(message: string): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
+    abstract signMessage(message: string): Promise<string>
     verifyMessage(message: string, signature: string): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    signTransaction(transaction: Transaction): Promise<Transaction> {
-        throw new Error('Method not implemented.')
-    }
+    abstract signTransaction(transaction: Transaction): Promise<Transaction>
     signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }

@@ -2,11 +2,11 @@ import { nth } from 'lodash-es'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
-import { Web3Readonly } from './ConnectionReadonlyAPI.js'
-import type { GasOptionAPI_Base } from '../../../entry-types.js'
-import { ChainResolver } from './ResolverAPI.js'
+import { EVMWeb3Readonly } from './ConnectionReadonlyAPI.js'
+import type { BaseGasOptions } from '../../../entry-types.js'
+import { EVMChainResolver } from './ResolverAPI.js'
 
-class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
+class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
     static HISTORICAL_BLOCKS = 4
 
     private avg(arr: number[]) {
@@ -34,7 +34,7 @@ class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     }
 
     private async getGasOptionsForEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const history = await Web3Readonly.getWeb3({ chainId }).eth.getFeeHistory(
+        const history = await EVMWeb3Readonly.getWeb3({ chainId }).eth.getFeeHistory(
             GasOptionAPI.HISTORICAL_BLOCKS,
             'pending',
             [25, 50, 75],
@@ -45,7 +45,7 @@ class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
         const fast = this.avg(blocks.map((b) => b.priorityFeePerGas[2]))
 
         // get the base fee per gas from the latest block
-        const block = await Web3Readonly.getBlock('latest', {
+        const block = await EVMWeb3Readonly.getBlock('latest', {
             chainId,
         })
         const baseFeePerGas = block?.baseFeePerGas ?? 0
@@ -81,7 +81,7 @@ class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     }
 
     private async getGasOptionsForPriorEIP1559(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const gasPrice = await Web3Readonly.getGasPrice({
+        const gasPrice = await EVMWeb3Readonly.getGasPrice({
             chainId,
         })
         return {
@@ -112,7 +112,7 @@ class GasOptionAPI implements GasOptionAPI_Base.Provider<ChainId, GasOption> {
     }
 
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        if (ChainResolver.isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
+        if (EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')) return this.getGasOptionsForEIP1559(chainId)
         else return this.getGasOptionsForPriorEIP1559(chainId)
     }
 }

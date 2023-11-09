@@ -1,7 +1,7 @@
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { InjectedWalletBridge } from './BaseInjected.js'
 import { createPromise, sendEvent } from './utils.js'
 
-export class CoinbaseProvider extends BaseInjectedProvider {
+export class CoinbaseProvider extends InjectedWalletBridge {
     constructor() {
         super('coinbaseWalletExtension')
     }

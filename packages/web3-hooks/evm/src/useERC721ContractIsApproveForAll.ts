@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Contract } from '@masknet/web3-providers'
+import { EVMContract } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { safeNonPayableTransactionCall } from '@masknet/web3-shared-evm'
 
@@ -22,7 +22,7 @@ export function useERC721ContractIsApproveForAll(
         if (!owner || !operator || !contractAddress) return
 
         return safeNonPayableTransactionCall(
-            Contract.getERC721Contract(contractAddress, { chainId })?.methods.isApprovedForAll(owner, operator),
+            EVMContract.getERC721Contract(contractAddress, { chainId })?.methods.isApprovedForAll(owner, operator),
         )
     }, [owner, operator])
 }

@@ -1,11 +1,8 @@
-import { ChainId, type ProviderType, createClient, type Web3Provider, type Web3 } from '@masknet/web3-shared-flow'
-import { BaseProvider } from './Base.js'
+import { ChainId, createClient } from '@masknet/web3-shared-flow'
+import { BaseFlowWalletProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class BloctoProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class FlowBloctoProvider extends BaseFlowWalletProvider {
     override createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
         return createClient(options?.chainId ?? ChainId.Mainnet)
     }

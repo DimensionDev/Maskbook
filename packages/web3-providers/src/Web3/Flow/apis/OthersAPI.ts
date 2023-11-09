@@ -26,10 +26,10 @@ import {
     isValidChainId,
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
-import { type OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { type BaseUtils } from '../../Base/apis/OthersAPI.js'
 import { FlowChainResolver, FlowExplorerResolver, FlowProviderResolver, FlowNetworkResolver } from './ResolverAPI.js'
 
-export const FlowOthersAPI = {
+export const FlowUtils = {
     isSameAddress,
     chainResolver: FlowChainResolver,
     explorerResolver: FlowExplorerResolver,
@@ -63,4 +63,4 @@ export const FlowOthersAPI = {
     },
     createFungibleToken,
     createNonFungibleToken,
-} satisfies OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+} satisfies BaseUtils<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

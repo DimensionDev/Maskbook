@@ -15,7 +15,7 @@ import {
     type TokenApprovalInfoAccountMap,
     type NFTApprovalInfoAccountMap,
 } from './approvalListState.js'
-import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import type { AuthorizationAPI } from '../entry-types.js'
 
@@ -154,9 +154,9 @@ class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
         state: TokenApprovalInfoAccountMap | NFTApprovalInfoAccountMap,
     ) {
         const fromBlock = state[account]?.get(chainId)?.fromBlock ?? 0
-        const toBlock = await Web3Readonly.getBlockNumber({ chainId })
+        const toBlock = await EVMWeb3Readonly.getBlockNumber({ chainId })
 
-        const logs = await Web3Readonly.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await EVMWeb3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [topic, abiCoder.encodeParameter('address', account)],
             fromBlock,
             toBlock,

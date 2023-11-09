@@ -7,7 +7,7 @@ import {
     checksumAddress,
 } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
 class NonceAPI implements Middleware<ConnectionContext> {
     static INITIAL_NONCE = -1
@@ -23,7 +23,7 @@ class NonceAPI implements Middleware<ConnectionContext> {
             chainId,
             commitment +
                 Math.max(
-                    await Web3Readonly.getTransactionNonce(address, {
+                    await EVMWeb3Readonly.getTransactionNonce(address, {
                         chainId,
                         providerURL,
                     }),

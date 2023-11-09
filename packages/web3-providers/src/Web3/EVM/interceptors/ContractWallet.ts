@@ -11,10 +11,10 @@ import {
     type UserOperation,
 } from '@masknet/web3-shared-evm'
 import { ConnectionAPI } from '../apis/ConnectionAPI.js'
-import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
+import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Providers } from '../providers/index.js'
-import type { BaseContractWalletProvider } from '../providers/BaseContractWallet.js'
+import { EVMWalletProviders } from '../providers/index.js'
+import type { BaseEIP4337WalletProvider } from '../providers/BaseContractWallet.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI, WalletAPI } from '../../../entry-types.js'
 
 export class ContractWallet implements Middleware<ConnectionContext> {
@@ -28,7 +28,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     ) {}
 
     private async getNonce(context: ConnectionContext) {
-        const contract = ContractReadonly.getWalletContract(context.account)
+        const contract = EVMContractReadonly.getWalletContract(context.account)
         if (!contract) throw new Error('Failed to create wallet contract.')
         return contract.methods.nonce().call()
     }
@@ -119,7 +119,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
             return
         }
 
-        const provider = Providers[context.providerType] as BaseContractWalletProvider | undefined
+        const provider = EVMWalletProviders[context.providerType] as BaseEIP4337WalletProvider | undefined
 
         // not a SC wallet provider
         if (!provider?.ownerAccount && !context.owner) {

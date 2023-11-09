@@ -1,7 +1,7 @@
 import { DashboardRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -139,7 +139,7 @@ const Recovery = memo(function Recovery() {
                 const ens = await NameService?.reverse?.(address)
                 const walletName = ens || newWalletName
                 const account = await Services.Wallet.recoverWalletFromPrivateKey(walletName, data.privateKey)
-                await Web3.connect({
+                await EVMWeb3.connect({
                     account,
                     providerType: ProviderType.MaskWallet,
                     silent: true,
@@ -174,7 +174,7 @@ const Recovery = memo(function Recovery() {
                     keyStoreContent,
                     keyStorePassword,
                 )
-                await Web3.connect({
+                await EVMWeb3.connect({
                     account: address,
                     providerType: ProviderType.MaskWallet,
                     silent: true,

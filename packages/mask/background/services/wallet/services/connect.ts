@@ -10,7 +10,7 @@ import { walletDatabase } from '../database/Plugin.db.js'
 import { produce } from 'immer'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { openPopupWindow } from '../../helper/popup-opener.js'
-import { Providers } from '@masknet/web3-providers'
+import { EVMWalletProviders } from '@masknet/web3-providers'
 import { PopupRoutes } from '@masknet/shared-base'
 import { defer, type DeferTuple } from '@masknet/kit'
 import type { WalletGrantedPermission } from '../database/types.js'
@@ -50,7 +50,7 @@ export async function EIP2255_wallet_requestPermissions(
         promise: defer(),
     })
 
-    if (!Providers[ProviderType.MaskWallet].wallets) {
+    if (!EVMWalletProviders[ProviderType.MaskWallet].wallets) {
         await openPopupWindow(PopupRoutes.Wallet, { external_request: id })
     } else {
         await openPopupWindow(PopupRoutes.SelectWallet, {

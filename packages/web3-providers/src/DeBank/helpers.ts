@@ -18,7 +18,7 @@ import {
     isSameAddress,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
     type HistoryResponse,
@@ -31,7 +31,7 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     const resolveNativeAddress = memoize((chainId: ChainId) => {
         try {
             // chainId is beyond builtin chainIds
-            return ChainResolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
+            return EVMChainResolver.nativeCurrency(chainId)?.address || ZERO_ADDRESS
         } catch {
             return ZERO_ADDRESS
         }

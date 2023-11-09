@@ -5,7 +5,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { toFixed } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
 export function useCreateNFTRedpacketGas(
@@ -17,7 +17,7 @@ export function useCreateNFTRedpacketGas(
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nftRedPacketContract = useNftRedPacketContract(chainId)
 
-    const { account: publicKey } = useMemo(() => Web3.createAccount(), [])
+    const { account: publicKey } = useMemo(() => EVMWeb3.createAccount(), [])
 
     return useAsync(async () => {
         if (!nftRedPacketContract || !account) return

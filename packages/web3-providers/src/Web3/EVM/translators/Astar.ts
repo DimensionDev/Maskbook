@@ -1,9 +1,9 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Base } from './Base.js'
+import { BaseTranslator } from './Base.js'
 import { toHex } from 'web3-utils'
 
-export class Astar extends Base {
+export class AstarTranslator extends BaseTranslator {
     override async encode(context: ConnectionContext): Promise<void> {
         await super.encode(context)
         if (context.chainId !== ChainId.Astar) return

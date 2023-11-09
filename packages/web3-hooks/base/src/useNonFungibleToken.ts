@@ -17,7 +17,7 @@ export function useNonFungibleToken<S extends 'all' | void = void, T extends Net
         account,
         chainId,
         ...options,
-    })
+    } as ConnectionOptions<T>)
 
     return useAsyncRetry<Web3Helper.NonFungibleTokenScope<S, T> | undefined>(async () => {
         if (!address || !tokenId) return

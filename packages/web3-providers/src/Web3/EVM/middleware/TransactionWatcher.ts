@@ -1,6 +1,6 @@
 import type { RecognizableError } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class TransactionWatcher implements Middleware<ConnectionContext> {
@@ -20,7 +20,7 @@ export class TransactionWatcher implements Middleware<ConnectionContext> {
             context.method === EthereumMethodType.ETH_ESTIMATE_GAS
 
         if (failedToSendTransaction || failedToEstimateTransaction) {
-            await Web3StateRef.value?.TransactionWatcher?.notifyError(context.error!, context.request)
+            await evm.state?.TransactionWatcher?.notifyError(context.error!, context.request)
         }
     }
 }

@@ -3,7 +3,7 @@ import { ConfirmDialog, FormattedAddress, ImageIcon, PersonaContext, Progressive
 import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { ExplorerResolver, NextIDProof } from '@masknet/web3-providers'
+import { EVMExplorerResolver, NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
 import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
@@ -176,7 +176,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                     />
                                     <Link
                                         style={{ width: 14, height: 14, color: theme.palette.maskColor.main }}
-                                        href={ExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
+                                        href={EVMExplorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
                                         <Icons.LinkOut size={14} sx={{ ml: 0.25 }} />

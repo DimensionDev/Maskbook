@@ -6,7 +6,7 @@ import { SpaceID } from '../../../SpaceID/index.js'
 import type { WalletAPI, NameServiceAPI } from '../../../entry-types.js'
 import { Lens } from '../../../Lens/index.js'
 
-export class NameService extends NameServiceState {
+export class EVMNameService extends NameServiceState {
     constructor(context: WalletAPI.IOContext) {
         super(context, {
             pluginID: NetworkPluginID.PLUGIN_EVM,

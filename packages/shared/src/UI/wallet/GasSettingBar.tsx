@@ -6,7 +6,7 @@ import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { GasSettingModal, TokenPrice } from '@masknet/shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { GasOptionType, multipliedBy } from '@masknet/web3-shared-base'
-import { ChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useFungibleToken, useGasPrice } from '@masknet/web3-hooks-base'
 
@@ -29,7 +29,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     const onOpenGasSettingDialog = useCallback(() => {
         GasSettingModal.open(
-            ChainResolver.isFeatureSupported(chainId, 'EIP1559')
+            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')
                 ? {
                       gasLimit,
                       maxFee,
@@ -49,7 +49,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
         const off = GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange?.(
-                (ChainResolver.isFeatureSupported(chainId, 'EIP1559')
+                (EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')
                     ? {
                           gas: evt?.gasLimit,
                           maxFeePerGas: evt?.maxFee,
@@ -69,7 +69,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const gasFee = useMemo(() => {
         return multipliedBy(
             gasLimit,
-            ChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee
+            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee
                 ? new BigNumber(maxFee)
                 : gasPrice ?? gasPriceDefault,
         )

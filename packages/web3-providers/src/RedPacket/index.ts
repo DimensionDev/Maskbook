@@ -16,8 +16,8 @@ import {
     type NftRedPacketJSONPayload,
     type CreateNFTRedpacketParam,
 } from './types.js'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import type { HubOptions_Base, RedPacketBaseAPI } from '../entry-types.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import type { BaseHubOptions, RedPacketBaseAPI } from '../entry-types.js'
 
 class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     getHistories(
@@ -101,7 +101,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId, indicator }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const result = await fetchFromDSearch<{
             [owner: string]: Array<NonFungibleCollection<ChainId, SchemaType>>
@@ -131,7 +131,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     txid: tx.hash ?? '',
                     contract_version: 1,
                     shares: decodedInputParam._erc721_token_ids.length,
-                    network: ChainResolver.networkType(tx.chainId),
+                    network: EVMChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     chainId: tx.chainId,
                     sender: {
@@ -181,7 +181,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     duration: decodedInputParam._duration.toNumber() * 1000,
                     block_number: Number(tx.blockNumber),
                     contract_version: 4,
-                    network: ChainResolver.networkType(tx.chainId),
+                    network: EVMChainResolver.networkType(tx.chainId),
                     token_address: decodedInputParam._token_addr,
                     sender: {
                         address: senderAddress,

@@ -17,7 +17,7 @@ import {
     type Transaction,
 } from '@masknet/web3-shared-evm'
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { useGasSchema } from './hooks/index.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
@@ -85,7 +85,7 @@ export function GasForm(props: GasFormProps) {
     const t = useSharedTrans()
     const { classes } = useStyles()
 
-    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
+    const isEIP1559 = EVMUtils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)

@@ -19,7 +19,7 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
         account,
         chainId,
         ...options,
-    })
+    } as ConnectionOptions<T>)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({

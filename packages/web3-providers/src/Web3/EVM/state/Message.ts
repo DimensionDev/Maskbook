@@ -14,10 +14,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isUndefined } from '@walletconnect/utils'
 import { MessageState } from '../../Base/state/Message.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class Message extends MessageState<MessageRequest, MessageResponse> {
+export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
     constructor(context: WalletAPI.IOContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }
@@ -47,7 +47,7 @@ export class Message extends MessageState<MessageRequest, MessageResponse> {
 
         // recheck the nonce and update it if needed before sending with the transaction
         if (config.from && typeof config.nonce !== 'undefined') {
-            const nonce = await Web3Readonly.getTransactionNonce(config.from, {
+            const nonce = await EVMWeb3Readonly.getTransactionNonce(config.from, {
                 chainId,
             })
 

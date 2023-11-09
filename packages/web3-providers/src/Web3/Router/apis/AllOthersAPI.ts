@@ -1,13 +1,13 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { OthersAPI } from '../../EVM/apis/OthersAPI.js'
-import { FlowOthersAPI } from '../../Flow/apis/OthersAPI.js'
-import { SolanaOthersAPI } from '../../Solana/apis/OthersAPI.js'
+import { EVMUtils } from '../../EVM/apis/OthersAPI.js'
+import { FlowUtils } from '../../Flow/apis/OthersAPI.js'
+import { SolanaUtils } from '../../Solana/apis/OthersAPI.js'
 import { unreachable } from '@masknet/kit'
-import type { Others } from '../types/index.js'
+import type { Utils } from '../types/index.js'
 
-export function getOthersAPI<T extends NetworkPluginID>(pluginID: T): Others<T> {
-    if (pluginID === NetworkPluginID.PLUGIN_EVM) return OthersAPI as any
-    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) return SolanaOthersAPI as any
-    if (pluginID === NetworkPluginID.PLUGIN_FLOW) return FlowOthersAPI as any
+export function getUtils<T extends NetworkPluginID>(pluginID: T): Utils<T> {
+    if (pluginID === NetworkPluginID.PLUGIN_EVM) return EVMUtils as any
+    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) return SolanaUtils as any
+    if (pluginID === NetworkPluginID.PLUGIN_FLOW) return FlowUtils as any
     unreachable(pluginID)
 }

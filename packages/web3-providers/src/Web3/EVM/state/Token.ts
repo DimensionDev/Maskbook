@@ -11,11 +11,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Subscription } from 'use-subscription'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
-import { DefaultHub } from '../apis/HubAPI.js'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { EVMHub } from '../apis/HubAPI.js'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
 
-export class Token extends TokenState<ChainId, SchemaType> {
-    private Hub = DefaultHub
+export class EVMToken extends TokenState<ChainId, SchemaType> {
+    private Hub = EVMHub
 
     constructor(
         context: WalletAPI.IOContext,
@@ -50,7 +50,7 @@ export class Token extends TokenState<ChainId, SchemaType> {
             // No need to wait for storage
             this.storage.credibleFungibleTokenList.setValue({
                 ...storedTokensMap,
-                [chainId]: fungibleTokenList.length ? fungibleTokenList : [ChainResolver.nativeCurrency(chainId)],
+                [chainId]: fungibleTokenList.length ? fungibleTokenList : [EVMChainResolver.nativeCurrency(chainId)],
             })
             return fungibleTokenList
         })

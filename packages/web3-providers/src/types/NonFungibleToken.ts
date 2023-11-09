@@ -9,7 +9,7 @@ import type {
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
 } from '@masknet/web3-shared-base'
-import type { HubOptions_Base } from '../entry-types.js'
+import type { BaseHubOptions } from '../entry-types.js'
 
 export namespace NonFungibleTokenAPI {
     export interface AttributesValue {
@@ -60,67 +60,67 @@ export namespace NonFungibleTokenAPI {
     }
     export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {
         /** Get balance of a fungible token owned by the given account. */
-        getBalance?: (account: string, options?: HubOptions_Base<ChainId, Indicator>) => Promise<number>
+        getBalance?: (account: string, options?: BaseHubOptions<ChainId, Indicator>) => Promise<number>
         /** Get a non-fungible rarity. */
         getRarity?: (
             address: string,
             tokenId: string,
-            options?: HubOptions_Base<ChainId, Indicator>,
+            options?: BaseHubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
         /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
             tokenId: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         /** Get non-fungible assets owned by the given account. */
         getAssets?: (
             account: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
         /** Get non-fungible assets of the given collection. */
         getAssetsByCollection?: (
             address: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>> | undefined>
         /** Get non-fungible assets of the given collection and owner. */
         getAssetsByCollectionAndOwner?: (
             collectionId: string,
             owner: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
         /** Get non-fungible collection stats */
         getStats?: (
             address: string,
-            options?: HubOptions_Base<ChainId, Indicator>,
+            options?: BaseHubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenStats | undefined>
         /** Get events of a non-fungible token. */
         getEvents?: (
             address: string,
             tokenId: string,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
         /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
-            options?: HubOptions_Base<ChainId>,
+            options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get non-fungible collection by the given address. */
         getCollection?: (
             address: string,
-            options?: HubOptions_Base<ChainId, Indicator>,
+            options?: BaseHubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleCollection<ChainId, SchemaType> | undefined>
         /** Get non-fungible collections owned by the given account. */
         getCollectionsByOwner?: (
             account: string,
-            options?: HubOptions_Base<ChainId, Indicator>,
+            options?: BaseHubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
         /** Get collection verified-by by provider-defined id. */
         getCollectionVerifiedBy?: (id: string) => Promise<string[]>

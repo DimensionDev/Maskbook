@@ -1,8 +1,7 @@
 import { injectedOKXProvider } from '@masknet/injected-script'
 import { isEthereumInjected, isInPageEthereumInjected } from '@masknet/shared-base'
-import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
-import { BaseInjectedProvider } from './BaseInjected.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
     if (isEthereumInjected('okxwallet')) return Reflect.get(window, 'okxwallet')
@@ -11,10 +10,7 @@ function getInjectedProvider() {
     return injectedOKXProvider
 }
 
-export class OKXProvider
-    extends BaseInjectedProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class OKXProvider extends EVMInjectedWalletProvider {
     constructor() {
         super(ProviderType.Coinbase, getInjectedProvider())
     }

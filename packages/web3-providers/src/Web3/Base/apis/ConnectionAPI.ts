@@ -7,9 +7,9 @@ import type {
     NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import type { ConnectionOptions_Base } from './ConnectionOptionsAPI.js'
+import type { BaseConnectionOptions } from './ConnectionOptionsAPI.js'
 
-export interface ConnectionAPI_Base<
+export interface BaseConnection<
     ChainId,
     AddressType,
     SchemaType,
@@ -23,7 +23,7 @@ export interface ConnectionAPI_Base<
     Block,
     Web3,
     Web3Provider,
-    Options = ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
+    Options = BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(initial?: Options): Web3

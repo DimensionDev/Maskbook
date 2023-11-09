@@ -5,7 +5,7 @@ import stringify from 'json-stable-stringify'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import type { SwapRouteSuccessResponse } from '../../types/index.js'
 
@@ -31,17 +31,17 @@ export function useTradeCallback(
         }
 
         try {
-            const gas = await Web3.estimateTransaction?.(config, undefined, {
+            const gas = await EVMWeb3.estimateTransaction?.(config, undefined, {
                 chainId,
             })
-            const hash = await Web3.sendTransaction(
+            const hash = await EVMWeb3.sendTransaction(
                 {
                     ...config,
                     gas,
                 },
                 { chainId, overrides: { ...gasConfig } },
             )
-            const receipt = await Web3.confirmTransaction(hash, { chainId })
+            const receipt = await EVMWeb3.confirmTransaction(hash, { chainId })
             return receipt.transactionHash
         } catch (error) {
             return

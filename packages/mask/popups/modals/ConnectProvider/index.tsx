@@ -6,7 +6,7 @@ import { delay, timeout } from '@masknet/kit'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
@@ -106,8 +106,10 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 // wait for web3 state init
                 await delay(1500)
                 const chainId =
-                    providerType === ProviderType.Fortmatic ? ChainId.Mainnet : await Web3.getChainId({ providerType })
-                return Web3.connect({
+                    providerType === ProviderType.Fortmatic
+                        ? ChainId.Mainnet
+                        : await EVMWeb3.getChainId({ providerType })
+                return EVMWeb3.connect({
                     chainId,
                     providerType: providerType as ProviderType,
                 })

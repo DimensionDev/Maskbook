@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type { ChainId, ProviderType, Transaction } from '@masknet/web3-shared-evm'
-import type { ConnectionOptions_Base } from '@masknet/web3-providers/types'
+import type { BaseConnectionOptions } from '@masknet/web3-providers/types'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ export function useAvailability(
     id: string,
     contract_address: string,
     version: number,
-    options?: ConnectionOptions_Base<ChainId, ProviderType, Transaction>,
+    options?: BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 ) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         account: options?.account,

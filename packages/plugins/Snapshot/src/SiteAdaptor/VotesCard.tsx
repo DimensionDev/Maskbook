@@ -4,7 +4,7 @@ import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { formatCount, formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { EthereumBlockie } from '@masknet/shared'
@@ -122,7 +122,7 @@ function Content() {
                                 className={cx(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={ExplorerResolver.addressLink(chainId, v.address)}>
+                                href={EVMExplorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
                                     <EthereumBlockie address={v.address} />
                                 </Box>

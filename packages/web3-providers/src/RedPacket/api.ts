@@ -2,8 +2,8 @@ import { secondsToMilliseconds } from 'date-fns'
 import { abiCoder, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { EVMWeb3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
@@ -21,7 +21,7 @@ class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaT
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
-        const logs = await Web3Readonly.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await EVMWeb3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,
             fromBlock,
@@ -60,7 +60,7 @@ class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaT
                         duration: secondsToMilliseconds(Number(x.result.duration)),
                         block_number: x.log.blockNumber,
                         contract_version: 4,
-                        network: ChainResolver.networkType(chainId),
+                        network: EVMChainResolver.networkType(chainId),
                         token_address: x.result.token_address,
                         sender: {
                             address: senderAddress,

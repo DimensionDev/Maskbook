@@ -9,7 +9,7 @@ import {
     useFungibleTokenSpenders,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     type NetworkDescriptor,
@@ -242,11 +242,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name || Others.formatAddress(spender.address, 4)}
+                            {spender.name || EVMUtils.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others.explorerResolver.addressLink(chainId, spender.address) ?? ''}
+                            href={EVMUtils.explorerResolver.addressLink(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />

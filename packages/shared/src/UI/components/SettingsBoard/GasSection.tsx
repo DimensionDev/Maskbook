@@ -6,7 +6,7 @@ import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { GasOptionType, isZero, plus, formatCurrency } from '@masknet/web3-shared-base'
 import { type ChainId, formatGweiToWei, formatWeiToGwei, type Transaction } from '@masknet/web3-shared-evm'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { GasOptionSelector } from './GasOptionSelector.js'
 import { SettingsContext } from './Context.js'
 import { Section } from './Section.js'
@@ -65,7 +65,7 @@ export function GasSection(props: GasSectionProps) {
     // EVM only
     if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
 
-    const isEIP1559 = Others.chainResolver.isFeatureSupported(chainId as ChainId, 'EIP1559')
+    const isEIP1559 = EVMUtils.chainResolver.isFeatureSupported(chainId as ChainId, 'EIP1559')
     const suggestedMaxFeePerGas = gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxFeePerGas
     const suggestedMaxPriorityFeePerGas =
         gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas

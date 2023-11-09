@@ -4,7 +4,7 @@ import { type AbiItem } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens, Web3 } from '@masknet/web3-providers'
+import { Lens, EVMWeb3 } from '@masknet/web3-providers'
 import {
     ChainId,
     ContractTransaction,
@@ -70,7 +70,7 @@ export function useFollow(
                     await delay(1000)
                     continue
                 case ProxyActionType.ProxyActionStatusResult:
-                    const receipt = await Web3.confirmTransaction(status.txHash)
+                    const receipt = await EVMWeb3.confirmTransaction(status.txHash)
                     if (!receipt.status) return
                     return proxyAction
                 default:
@@ -105,7 +105,7 @@ export function useFollow(
 
                     if (!typedData) return
 
-                    const signature = await Web3.signMessage(
+                    const signature = await EVMWeb3.signMessage(
                         'typedData',
                         JSON.stringify(
                             encodeTypedData(
@@ -135,14 +135,14 @@ export function useFollow(
                             },
                         )
 
-                        hash = await Web3.sendTransaction(tx)
+                        hash = await EVMWeb3.sendTransaction(tx)
                     }
 
                     if (!hash) return
                     onSuccess?.(cloneEvent)
                     setLoading(false)
 
-                    const receipt = await Web3.confirmTransaction(hash, {
+                    const receipt = await EVMWeb3.confirmTransaction(hash, {
                         signal: AbortSignal.timeout(3 * 60 * 1000),
                     })
                     if (!receipt.status) throw new Error('Failed to Follow')

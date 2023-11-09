@@ -22,16 +22,16 @@ import {
 } from '@masknet/web3-shared-base'
 import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
 import { SmartPayAccount, SmartPayBundler } from '../../../SmartPay/index.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
-import { ContractReadonly } from '../apis/ContractReadonlyAPI.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { Providers } from '../providers/index.js'
+import { EVMWalletProviders } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
     private get networks() {
-        if (!Web3StateRef.value?.Network) throw new Error('The web3 state does not load yet.')
-        return Web3StateRef.value.Network.networks?.getCurrentValue()
+        if (!evm.state?.Network) throw new Error('The web3 state does not load yet.')
+        return evm.state.Network.networks?.getCurrentValue()
     }
 
     private async getPaymentToken(context: ConnectionContext) {
@@ -74,12 +74,12 @@ export class Popups implements Middleware<ConnectionContext> {
                 0,
             )
 
-            const maskBalance = await Web3Readonly.getFungibleTokenBalance(maskAddress, undefined, {
+            const maskBalance = await EVMWeb3Readonly.getFungibleTokenBalance(maskAddress, undefined, {
                 account: context.account,
                 chainId: context.chainId,
             })
 
-            const contract = ContractReadonly.getERC20Contract(maskAddress, { chainId: context.chainId })
+            const contract = EVMContractReadonly.getERC20Contract(maskAddress, { chainId: context.chainId })
             if (!contract) return DEFAULT_PAYMENT_TOKEN_STATE
 
             const maskAllowance = await contract.methods
@@ -100,7 +100,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     : nativeTokenAddress,
             }
         } catch (error) {
-            const nativeBalance = await Web3Readonly.getNativeTokenBalance({
+            const nativeBalance = await EVMWeb3Readonly.getNativeTokenBalance({
                 account: context.account,
                 chainId: context.chainId,
             })
@@ -119,7 +119,7 @@ export class Popups implements Middleware<ConnectionContext> {
         }
 
         try {
-            const MaskProvider = Providers[ProviderType.MaskWallet]
+            const MaskProvider = EVMWalletProviders[ProviderType.MaskWallet]
             const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
 
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
@@ -141,10 +141,10 @@ export class Popups implements Middleware<ConnectionContext> {
                         'Failed to locate network. The providerURL must be given when sending risky requests to a custom network.',
                     )
 
-                await Web3StateRef.value?.Network?.switchNetwork(network?.ID)
+                await evm.state?.Network?.switchNetwork(network?.ID)
             }
 
-            if (!Web3StateRef.value?.Message) throw new Error('Failed to approve request.')
+            if (!evm.state?.Message) throw new Error('Failed to approve request.')
 
             const request: TransferableMessage<MessageRequest, MessageResponse> = {
                 state: MessageStateType.NOT_DEPEND,
@@ -160,7 +160,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     },
                 },
             }
-            const { request: updates, response } = await Web3StateRef.value.Message.applyAndWaitResponse(request)
+            const { request: updates, response } = await evm.state.Message.applyAndWaitResponse(request)
 
             context.config = {
                 ...context.config,

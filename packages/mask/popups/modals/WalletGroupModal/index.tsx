@@ -9,7 +9,7 @@ import { useChainContext, useNetworks, useWallet, useWeb3State } from '@masknet/
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { PopupContext } from '../../hooks/usePopupContext.js'
 import { ECKeyIdentifier, NetworkPluginID, type Wallet } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -47,7 +47,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
     const handleSelect = useCallback(
         async (wallet: Wallet) => {
             const address = wallet.address
-            await Web3.connect({
+            await EVMWeb3.connect({
                 account: address,
                 chainId: wallet.owner && smartPayChainId ? smartPayChainId : chainId,
                 providerType: ProviderType.MaskWallet,
@@ -58,7 +58,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
             if (wallet.owner && smartPayChainId) {
                 const network = networks.find((x) => x.chainId === smartPayChainId)
                 if (network) await Network?.switchNetwork(network.ID)
-                await Web3.switchChain?.(smartPayChainId, {
+                await EVMWeb3.switchChain?.(smartPayChainId, {
                     providerType: ProviderType.MaskWallet,
                 })
             }

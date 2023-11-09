@@ -14,7 +14,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
 import type { TransactionDescriptor } from './TransactionFormatter/types.js'
-import type { WalletAPI } from '../../../entry-types.js'
 
 // built-in descriptors
 import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/TransferToken.js'
@@ -32,9 +31,9 @@ import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.
 import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
 import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
-export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
+export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
@@ -54,11 +53,6 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         [TransactionDescriptorType.RETRY]: [],
         [TransactionDescriptorType.CANCEL]: [new CancelDescriptor()],
     }
-
-    constructor(context: WalletAPI.IOContext) {
-        super(context)
-    }
-
     override async createContext(
         chainId: ChainId,
         transaction: Transaction,
@@ -106,7 +100,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         if (to) {
             let code = ''
             try {
-                code = await Web3Readonly.getCode(to, { chainId })
+                code = await EVMWeb3Readonly.getCode(to, { chainId })
             } catch {}
 
             // send ether tx

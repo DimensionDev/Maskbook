@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isBefore, add } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Lens, Web3 } from '@masknet/web3-providers'
+import { Lens, EVMWeb3 } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { lensTokenStorage as storage } from '../../context.js'
 
@@ -31,7 +31,7 @@ export function useQueryAuthenticate(address: string) {
         const challenge = await Lens.queryChallenge(address)
         if (!challenge) return
 
-        const signature = await Web3.signMessage('message', challenge)
+        const signature = await EVMWeb3.signMessage('message', challenge)
         const authenticate = await Lens.authenticate(address, signature)
         if (!authenticate) return
 

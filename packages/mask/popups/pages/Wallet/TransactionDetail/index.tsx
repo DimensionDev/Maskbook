@@ -3,7 +3,7 @@ import { CopyButton, FormattedCurrency, ProgressiveText, ReversedAddress } from 
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory, ExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { ChainbaseHistory, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import {
     TransactionStatusType,
@@ -175,7 +175,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         queryKey: [transaction?.chainId, transactionId],
         queryFn: async () => {
             if (!chainId || !transactionId) return
-            const tx = await Web3.getTransaction(transactionId, { chainId })
+            const tx = await EVMWeb3.getTransaction(transactionId, { chainId })
             return tx?.input
         },
     })
@@ -214,7 +214,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
     const statusPending = status === undefined && loadingTx
     const isOut = isSameAddress(transaction.from, account)
-    const link = transactionId ? ExplorerResolver.transactionLink(chainId!, transactionId) : undefined
+    const link = transactionId ? EVMExplorerResolver.transactionLink(chainId!, transactionId) : undefined
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined

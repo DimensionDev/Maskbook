@@ -1,6 +1,6 @@
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { InjectedWalletBridge } from './BaseInjected.js'
 
-export class MetaMaskProvider extends BaseInjectedProvider {
+export class MetaMaskProvider extends InjectedWalletBridge {
     constructor() {
         super('ethereum.__metamask__')
     }

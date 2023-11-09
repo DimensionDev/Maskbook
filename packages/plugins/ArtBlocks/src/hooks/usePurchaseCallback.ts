@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useArtBlocksContract } from './useArtBlocksContract.js'
 
 export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {
@@ -21,6 +21,6 @@ export function usePurchaseCallback(chainId: ChainId, projectId: string, amount:
                 value: new BigNumber(schema === SchemaType.Native ? amount : 0).toFixed(),
             },
         )
-        return Web3.sendTransaction(tx, { chainId })
+        return EVMWeb3.sendTransaction(tx, { chainId })
     }, [account, chainId, amount, genArt721MinterContract])
 }

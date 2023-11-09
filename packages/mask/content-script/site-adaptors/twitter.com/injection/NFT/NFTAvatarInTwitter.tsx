@@ -18,7 +18,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { AssetPreviewer, ConfirmModal } from '@masknet/shared'
 import { MaskMessages, NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
-import { Twitter, Hub } from '@masknet/web3-providers'
+import { Twitter, EVMHub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
 import { getAvatarType } from '../../utils/AvatarType.js'
@@ -186,7 +186,7 @@ function useNFTCircleAvatar(size: number) {
             return
         }
 
-        const NFTDetailed = await Hub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
+        const NFTDetailed = await EVMHub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
             chainId: ChainId.Mainnet,
         })
 

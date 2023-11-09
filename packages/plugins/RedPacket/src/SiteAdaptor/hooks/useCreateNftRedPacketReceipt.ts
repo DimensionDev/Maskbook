@@ -6,14 +6,14 @@ import { type ChainId, useNftRedPacketConstants, decodeEvents } from '@masknet/w
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 
 export function useCreateNftRedPacketReceipt(txid: string, expectedChainId: ChainId) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
     return useAsyncRetry(async () => {
-        const receipt = await Web3.getTransactionReceipt(txid, { chainId })
+        const receipt = await EVMWeb3.getTransactionReceipt(txid, { chainId })
         if (!receipt) return null
 
         const log = receipt.logs.find((log) => isSameAddress(log.address, RED_PACKET_NFT_ADDRESS))

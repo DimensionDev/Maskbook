@@ -1,7 +1,7 @@
 import { delay } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
-import { type ProviderType, isValidAddress, type ChainId, type Web3Provider, type Web3 } from '@masknet/web3-shared-evm'
+import { type ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import { BaseHostedProvider } from './BaseHosted.js'
 import { SmartPayBundler } from '../../../SmartPay/index.js'
 import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
@@ -9,10 +9,7 @@ import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
 /**
  * EIP-4337 compatible smart contract based wallet.
  */
-export abstract class BaseContractWalletProvider
-    extends BaseHostedProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
     protected Bundler: BundlerAPI.Provider = SmartPayBundler
 
     private ownerStorage:

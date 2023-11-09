@@ -8,7 +8,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, MaskTabList, makeStyles, usePopupCustomSnackbar, useTabs } from '@masknet/theme'
 import { useUpdateEffect } from '@react-hookz/web'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Web3, Web3Storage } from '@masknet/web3-providers'
+import { EVMWeb3, Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { DefaultWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
@@ -136,7 +136,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                         true,
                     )
                 } else {
-                    sign = await Web3.signMessage('message', JSON.stringify(data), {
+                    sign = await EVMWeb3.signMessage('message', JSON.stringify(data), {
                         account,
                         silent: true,
                     })

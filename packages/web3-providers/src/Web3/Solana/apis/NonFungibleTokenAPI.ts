@@ -3,7 +3,7 @@ import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
 import { type NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import type { GetProgramAccountsResponse, HubOptions } from '../types/index.js'
+import type { GetProgramAccountsResponse, SolanaHubOptions } from '../types/index.js'
 import { requestRPC } from '../helpers/index.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import { getAssetFullName } from '../../../helpers/getAssetFullName.js'
@@ -91,7 +91,10 @@ async function getNonFungibleAssets(
 }
 
 class SolanaNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAssets(address: string, options?: HubOptions): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    async getAssets(
+        address: string,
+        options?: SolanaHubOptions,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         const tokens = await getNonFungibleAssets(options?.chainId ?? ChainId.Mainnet, address)
 
         return createPageable(tokens, createIndicator(options?.indicator))

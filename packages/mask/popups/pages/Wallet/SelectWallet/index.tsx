@@ -9,7 +9,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
@@ -94,7 +94,7 @@ const SelectWallet = memo(function SelectWallet() {
             return Services.Helper.removePopupWindow()
         }
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
-            await Web3.connect({
+            await EVMWeb3.connect({
                 account: selected,
                 chainId,
                 providerType: ProviderType.MaskWallet,
@@ -127,7 +127,7 @@ const SelectWallet = memo(function SelectWallet() {
         ])
 
         if (smartPayChainId && wallet?.owner && chainId !== smartPayChainId) {
-            await Web3.switchChain?.(smartPayChainId, {
+            await EVMWeb3.switchChain?.(smartPayChainId, {
                 providerType: ProviderType.MaskWallet,
             })
 

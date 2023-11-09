@@ -19,7 +19,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     const Web3 = useWeb3Connection(pluginID, {
         account,
         ...options,
-    })
+    } as ConnectionOptions<T>)
     const { BalanceNotifier } = useWeb3State(pluginID)
 
     const result = useQuery({

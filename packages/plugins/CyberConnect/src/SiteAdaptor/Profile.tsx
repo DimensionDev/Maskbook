@@ -6,7 +6,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { FormattedAddress, CopyButton, ReloadStatus, LoadingStatus, EmptyStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import ConnectButton from './ConnectButton.js'
 import { FollowersPage } from './FollowersPage.js'
 import { useCyberConnectTrans } from '../locales/index.js'
@@ -161,7 +161,7 @@ function Profile({ url }: { url: string }) {
                             <Link
                                 onClick={(event) => event.stopPropagation()}
                                 style={{ width: 16, height: 16 }}
-                                href={ExplorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
+                                href={EVMExplorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.PopupLink} size={16} />

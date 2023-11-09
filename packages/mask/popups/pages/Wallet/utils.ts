@@ -1,7 +1,7 @@
 import { mapKeys } from 'lodash-es'
 import type { BigNumber } from 'bignumber.js'
 import { toHex, type AbiItem } from 'web3-utils'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
 import {
@@ -43,11 +43,11 @@ export async function modifyTransaction(
         ...mapKeys(gasSettings, (value) => (typeof value === 'undefined' ? value : toHex(value))),
     }
     if (replaceType === ReplaceType.CANCEL) {
-        await Web3.cancelTransaction(transaction.id, newConfig, {
+        await EVMWeb3.cancelTransaction(transaction.id, newConfig, {
             providerType: ProviderType.MaskWallet,
         })
     } else {
-        await Web3.replaceTransaction(transaction.id, newConfig, {
+        await EVMWeb3.replaceTransaction(transaction.id, newConfig, {
             providerType: ProviderType.MaskWallet,
         })
     }

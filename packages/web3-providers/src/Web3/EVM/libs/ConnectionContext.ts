@@ -12,7 +12,7 @@ import {
     type Transaction,
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
-import type { ConnectionOptions } from '../types/index.js'
+import type { EVMConnectionOptions } from '../types/index.js'
 
 let pid = 0
 
@@ -27,7 +27,7 @@ export class ConnectionContext {
 
     constructor(
         private _requestArguments: RequestArguments,
-        private _options?: ConnectionOptions,
+        private _options?: EVMConnectionOptions,
         private _init?: {
             getDefaultAccount?: (providerType: ProviderType) => string | undefined
             getDefaultChainId?: (providerType: ProviderType) => ChainId | undefined

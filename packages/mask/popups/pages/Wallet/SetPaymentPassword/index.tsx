@@ -10,7 +10,7 @@ import {
 import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
@@ -150,7 +150,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                         underline="none"
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={ExplorerResolver.addressLink(chainId, address)}
+                        href={EVMExplorerResolver.addressLink(chainId, address)}
                         marginLeft="4px"
                         width={16}
                         height={16}>

@@ -17,7 +17,7 @@ import {
     useLastRecognizedIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
@@ -117,7 +117,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
-                    payload.password = await Web3.signMessage('message', sha3(payload.sender.message) ?? '', {
+                    payload.password = await EVMWeb3.signMessage('message', sha3(payload.sender.message) ?? '', {
                         account,
                     })
                     payload.password = payload.password.slice(2)

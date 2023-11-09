@@ -24,7 +24,7 @@ import {
     toFixed,
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
@@ -160,7 +160,7 @@ export const GasSetting1559 = memo(() => {
                 value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return Web3.estimateTransaction?.({
+                return EVMWeb3.estimateTransaction?.({
                     data: value.formatterTransaction._tx.data,
                     from: value.formatterTransaction._tx.from,
                     to: value.formatterTransaction._tx.to,

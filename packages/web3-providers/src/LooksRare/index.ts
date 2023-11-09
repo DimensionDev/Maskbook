@@ -18,7 +18,7 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { getPaymentToken } from '../helpers/getPaymentToken.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import { isSupportedChainId } from './utils.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
+import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
@@ -152,7 +152,7 @@ function createNonFungibleTokenOrderFromOrder(
 }
 
 class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isSupportedChainId(chainId)) return
         const response = await fetchFromLooksRare<{
             data: Token
@@ -168,7 +168,7 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
 
     async getContract(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         if (!isSupportedChainId(chainId)) return
 
@@ -181,7 +181,7 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isSupportedChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{
@@ -211,7 +211,7 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
 
     async getStats(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
         if (!isSupportedChainId(chainId)) return
         const response = await fetchFromLooksRare<{
@@ -236,7 +236,7 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isSupportedChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromLooksRare<{

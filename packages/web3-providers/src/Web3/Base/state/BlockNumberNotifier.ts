@@ -4,6 +4,6 @@ import type {
     BlockNumberNotifierState as Web3BlockNumberNotifierState,
 } from '@masknet/web3-shared-base'
 
-export class BlockNumberNotifierState<ChainId> implements Web3BlockNumberNotifierState<ChainId> {
-    emitter: Emitter<BlockNumberEvent<ChainId>> = new Emitter()
+export abstract class BlockNumberNotifierState<ChainId> implements Web3BlockNumberNotifierState<ChainId> {
+    emitter = new Emitter<BlockNumberEvent<ChainId>>()
 }

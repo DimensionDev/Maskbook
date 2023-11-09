@@ -16,7 +16,7 @@ export function useFungibleTokenSpenders<T extends NetworkPluginID = NetworkPlug
         account,
         chainId,
         ...options,
-    })
+    } as HubOptions<T>)
     return useQuery({
         queryKey: ['fungible-tokens', 'spenders', chainId, account],
         enabled: true,

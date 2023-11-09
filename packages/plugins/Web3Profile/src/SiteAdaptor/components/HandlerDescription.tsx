@@ -10,7 +10,7 @@ import {
     useWallet,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
@@ -71,7 +71,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
         return providerDescriptor?.name
     }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, props.profile?.handle])
 
-    const handleDisconnect = useCallback(() => Web3.disconnect(), [])
+    const handleDisconnect = useCallback(() => EVMWeb3.disconnect(), [])
 
     const avatarUrl = useMemo(() => {
         if (!props.profile?.avatar) return

@@ -1,24 +1,12 @@
 import bs58 from 'bs58'
 import { PublicKey, type Transaction } from '@solana/web3.js'
 import { injectedPhantomProvider } from '@masknet/injected-script'
-import {
-    type ChainId,
-    PhantomMethodType,
-    ProviderType,
-    type Web3,
-    type Web3Provider,
-} from '@masknet/web3-shared-solana'
-import { BaseInjectedProvider } from './BaseInjected.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { PhantomMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
+import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
-export class PhantomProvider
-    extends BaseInjectedProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
-    constructor() {
-        super(ProviderType.Phantom, injectedPhantomProvider)
-    }
-
+export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
+    protected override providerType = ProviderType.Phantom
+    protected override bridge = injectedPhantomProvider
     private async validateSession() {
         if (this.bridge.isConnected) return
         await (this.bridge as unknown as Web3Provider).connect()

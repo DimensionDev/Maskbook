@@ -14,7 +14,7 @@ import type {
 import { formatAlchemyTokenId } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { getAssetFullName } from '../../helpers/getAssetFullName.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
+import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
 
 function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
     if (chainId === ChainId.Matic) {
@@ -133,7 +133,7 @@ function createNonFungibleAsset(
 }
 
 class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType, string> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         const chainInfo = Alchemy_EVM_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return
 
@@ -170,7 +170,7 @@ class AlchemyEVM_API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return createNonFungibleAsset(chainId, metadataResponse, contractMetadataResponse, ownersResponse)
     }
 
-    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
         const chainInfo = Alchemy_EVM_NetworkMap.chains.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 

@@ -16,7 +16,7 @@ import { TradeProvider } from '@masknet/public-api'
 import { ONE, isZero, leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { TraderAPI } from '@masknet/web3-providers/types'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
-import { ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
+import { EVMContractReadonly, EVMWeb3Readonly } from '@masknet/web3-providers'
 import type {
     BancorApiErrorResponse,
     ExpectedTargetAmountResponse,
@@ -188,7 +188,7 @@ class BancorAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = EVMContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TraderAPI.TradeStrategy.ExactIn,
@@ -240,7 +240,7 @@ class BancorAPI implements TraderAPI.Provider {
         // Note that if approval is required, the API will also return the necessary approval transaction.
         const transaction = data.length === 1 ? data[0] : data[1]
 
-        return Web3Readonly.estimateTransaction(pick(transaction.transaction, ['to', 'data', 'value', 'from']), 0, {
+        return EVMWeb3Readonly.estimateTransaction(pick(transaction.transaction, ['to', 'data', 'value', 'from']), 0, {
             chainId,
         })
     }

@@ -3,7 +3,7 @@ import { type NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
@@ -144,7 +144,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                         <Icons.LinkOut
                             size={18}
                             className={classes.linkOut}
-                            onClick={() => openWindow(ExplorerResolver.addressLink(chainId, address))}
+                            onClick={() => openWindow(EVMExplorerResolver.addressLink(chainId, address))}
                         />
                     </Typography>
                 ) : null}

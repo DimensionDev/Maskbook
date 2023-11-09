@@ -13,13 +13,13 @@ import {
     getDefaultProviderType,
     getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
-import { FlowProviders } from '../providers/index.js'
+import { FlowWalletProviders } from '../providers/index.js'
 import { FlowChainResolver } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    protected override providers = FlowProviders
+export class FlowProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    protected override providers = FlowWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId
     protected override isSameAddress = isSameAddress

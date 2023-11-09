@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { toHex } from 'web3-utils'
-import { Contract } from '@masknet/web3-providers'
+import { EVMContract } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
@@ -21,7 +21,7 @@ export function useGasLimit(fallback = DEFAULT_GAS_LIMIT) {
         if (isNativeToken || !isTippingToken) return MIN_GAS_LIMIT
         if (!token?.address) return fallback
 
-        const contract = Contract.getERC20Contract(token.address, {
+        const contract = EVMContract.getERC20Contract(token.address, {
             chainId,
             account,
         })

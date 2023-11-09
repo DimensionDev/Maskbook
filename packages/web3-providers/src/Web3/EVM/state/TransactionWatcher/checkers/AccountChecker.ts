@@ -65,4 +65,4 @@ class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
         return tx.status === '1' ? TransactionStatusType.SUCCEED : TransactionStatusType.FAILED
     }
 }
-export const AccountChecker = new AccountCheckerAPI()
+export const EVMAccountChecker = new AccountCheckerAPI()

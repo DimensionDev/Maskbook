@@ -4,12 +4,12 @@ import { createIndicator, createNextIndicator, createPageable, type Pageable, EM
 import { ChainId, isValidChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { Tx } from '../types.js'
 import { fetchFromChainbase, toTransaction } from '../helpers.js'
-import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
+import type { HistoryAPI, BaseHubOptions } from '../../entry-types.js'
 
 class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const txs = await fetchFromChainbase<Tx[]>(
@@ -42,7 +42,7 @@ class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
         contract_address: string,
         from_block: number,
         to_block: number | 'latest',
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ) {
         const url = urlcat('/v1/contract/events', {
             chain_id: chainId,

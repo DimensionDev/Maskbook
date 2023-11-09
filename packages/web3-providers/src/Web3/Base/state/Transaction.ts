@@ -23,12 +23,12 @@ type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
     | undefined
 >
 
-export class TransactionState<ChainId extends PropertyKey, Transaction>
+export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionState<ChainId, Transaction>
 {
     static MAX_RECORD_SIZE = 20
 
-    public storage: StorageItem<TransactionStorage<ChainId, Transaction>> = null!
+    public storage: StorageItem<TransactionStorage<ChainId, Transaction>>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
