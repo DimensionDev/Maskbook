@@ -105,7 +105,7 @@ const LensListItem = memo<LensListItemProps>(({ account }) => {
         const isFollowing = await Lens.queryFollowStatus(wallet, profile.id)
 
         return {
-            ownedBy: profile.ownedBy,
+            ownedBy: profile.ownedBy.address,
             isFollowing,
         }
     }, [account, wallet])

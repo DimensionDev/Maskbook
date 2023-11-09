@@ -29,27 +29,47 @@ export enum BroadcastType {
 export namespace LensBaseAPI {
     export interface Profile {
         id: string
-        handle: string
-        ownedBy: string
-        name: string
-        picture?: {
-            original?: {
-                url: string
+        handle: {
+            localName: string
+            fullHandle: string
+            id: string
+            namespace: string
+        }
+        ownedBy: {
+            address: string
+            chainId: number
+        }
+        metadata: {
+            bio: string
+            displayName: string
+            picture: {
+                optimized: {
+                    uri: string
+                }
+            }
+            coverPicture: {
+                optimized: {
+                    uri: string
+                }
             }
         }
         stats: {
-            totalFollowers: number
-            totalFollowing: number
+            followers: number
+            following: number
         }
         followModule?: {
             type: FollowModuleType
-            contractAddress?: string
+            contract?: {
+                address: string
+            }
             amount?: {
                 asset: {
                     name: string
                     symbol: string
                     decimals: number
-                    address: string
+                    contract: {
+                        address: string
+                    }
                 }
                 value: string
             }
@@ -57,10 +77,16 @@ export namespace LensBaseAPI {
         }
     }
 
-    export interface DoesFollow {
-        followerAddress: string
+    export interface FollowStatusBulk {
+        follower: string
         profileId: string
-        follows: boolean
+        status: {
+            isFinalisedOnchain: boolean
+            value: boolean
+        }
+        // followerAddress: string
+        // profileId: string
+        // follows: boolean
     }
 
     export interface Challenge {

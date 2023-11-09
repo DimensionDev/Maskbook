@@ -251,8 +251,8 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
                 const profile = await Lens.getProfileByHandle(name)
                 if (!profile) return
                 return [
-                    this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy, name),
-                    this.createSocialAddress(SocialAddressType.Address, profile.ownedBy, name),
+                    this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy.address, name),
+                    this.createSocialAddress(SocialAddressType.Address, profile.ownedBy.address, name),
                 ]
             }),
         )

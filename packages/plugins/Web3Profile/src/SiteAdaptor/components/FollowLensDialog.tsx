@@ -13,7 +13,7 @@ import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
+import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
@@ -125,7 +125,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         const profile = await Lens.getProfileByHandle(handle)
 
         if (!profile) return
-        const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+        const isFollowing = false
 
         const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
 
@@ -134,7 +134,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         setIsFollowing(!!isFollowing)
         return {
             profile,
-            isSelf: isSameAddress(profile.ownedBy, account),
+            isSelf: isSameAddress(profile.ownedBy.address, account),
             isFollowing,
             defaultProfile: defaultProfile ?? first(profiles),
         }
@@ -152,7 +152,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
             return {
                 feeFollowModule: {
-                    currency: profile.followModule.amount.asset.address,
+                    currency: profile.followModule.amount.asset.contract.address,
                     value: profile.followModule.amount.value,
                 },
             }
@@ -163,7 +163,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const approved = useMemo(() => {
         if (!profile?.followModule?.amount?.asset) return { amount: ZERO.toFixed() }
-        const { address, name, symbol, decimals } = profile.followModule.amount.asset
+        const {
+            contract: { address },
+            name,
+            symbol,
+            decimals,
+        } = profile.followModule.amount.asset
         const token = createERC20Token(chainId, address, name, symbol, decimals)
         const amount = formatAmount(profile.followModule.amount.value, decimals)
 
@@ -196,7 +201,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { data: feeTokenBalance, isLoading: getBalanceLoading } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
-        profile?.followModule?.amount?.asset.address ?? '',
+        profile?.followModule?.amount?.asset.contract.address ?? '',
     )
 
     const handleClick = useCallback(
@@ -260,7 +265,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
-        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle })
+        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle.localName })
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
             return t.follow_wallet_tips()
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
@@ -283,9 +288,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf])
 
     const avatar = useMemo(() => {
-        if (!profile?.picture?.original) return
-        return resolveIPFS_URL(profile?.picture?.original.url)
-    }, [profile?.picture?.original])
+        if (!profile?.metadata.picture.optimized.uri) return
+        return profile?.metadata.picture.optimized.uri
+    }, [profile?.metadata.picture.optimized.uri])
 
     return (
         <InjectedDialog
@@ -304,16 +309,16 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
-                        <Typography className={classes.name}>{profile?.name}</Typography>
-                        <Typography className={classes.handle}>@{profile?.handle}</Typography>
+                        <Typography className={classes.name}>{profile?.metadata.displayName}</Typography>
+                        <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
                             <Web3ProfileTrans.followers
                                 components={{ strong: <strong /> }}
-                                values={{ followers: String(profile?.stats?.totalFollowers ?? '0') }}
+                                values={{ followers: String(profile?.stats.followers ?? '0') }}
                             />
                             <Web3ProfileTrans.following
                                 components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats?.totalFollowing ?? '0') }}
+                                values={{ following: String(profile?.stats?.following ?? '0') }}
                             />
                         </Typography>
                         <Box className={classes.actions}>
@@ -321,7 +326,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
-                                    href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                    href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
@@ -331,7 +336,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             ) : (
                                 <>
                                     <EthereumERC20TokenApprovedBoundary
-                                        spender={value?.profile.followModule?.contractAddress}
+                                        spender={value?.profile.followModule?.contract?.address}
                                         amount={approved.amount}
                                         token={!isFollowing ? approved.token : undefined}
                                         showHelperToken={false}
@@ -374,7 +379,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     <Button
                                         className={classes.linkButton}
                                         variant="roundedOutlined"
-                                        href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                        href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
@@ -395,8 +400,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     profile={
                                         defaultProfile
                                             ? {
-                                                  avatar: defaultProfile.picture?.original?.url,
-                                                  handle: defaultProfile.handle,
+                                                  avatar: defaultProfile.metadata.picture?.optimized.uri,
+                                                  handle: defaultProfile.handle.localName,
                                               }
                                             : undefined
                                     }
