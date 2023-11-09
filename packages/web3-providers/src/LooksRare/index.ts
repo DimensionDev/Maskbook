@@ -10,7 +10,7 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { createIndicator, createNextIndicator, createPageable, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createNextIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import type { Collection, Event, Order, Stats, Token } from './types.js'
 import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
@@ -166,13 +166,6 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         return createNonFungibleAssetFromToken(chainId, response?.data)
     }
 
-    async getAssets(
-        account: string,
-        options?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
-    }
-
     async getContract(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
@@ -271,14 +264,6 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
             createIndicator(indicator),
             orders.length ? createNextIndicator(indicator) : undefined,
         )
-    }
-
-    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        return this.getOrders(address, tokenId, OrderSide.Buy, options)
-    }
-
-    async getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 }
 export const LooksRare = new LooksRareAPI()

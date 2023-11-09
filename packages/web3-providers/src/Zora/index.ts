@@ -5,7 +5,6 @@ import {
     createNextIndicator,
     createPageable,
     type PageIndicator,
-    type Pageable,
     EMPTY_LIST,
 } from '@masknet/shared-base'
 import {
@@ -192,13 +191,6 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         })
         if (!token) return
         return this.createNonFungibleAssetFromToken(ChainId.Mainnet, token.token.token)
-    }
-
-    async getAssets(
-        account: string,
-        options?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
     }
 
     private async getEventsFiltered<T>(chainId: ChainId, address: string, tokenId: string, eventTypes: EventType[]) {

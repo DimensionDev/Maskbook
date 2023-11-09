@@ -5,14 +5,13 @@ import {
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
     ActivityType,
-    scale10,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { createIndicator, createNextIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
-import { ChainId, isValidChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { ChainResolver, ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
-import type { NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent } from '../types.js'
+import { ChainId, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import type { NFT, NFT_Metadata, NFT_TransferEvent } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
 import type { HubOptions_Base, NonFungibleTokenAPI } from '../../entry-types.js'
 
@@ -123,38 +122,6 @@ class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<Chain
             },
             source: SourceType.Chainbase,
         }
-    }
-
-    async getFloorPrice(
-        address: string,
-        tokenId: string,
-        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
-    ) {
-        if (!isValidChainId(chainId)) return
-        const floorPrice = await fetchFromChainbase<NFT_FloorPrice>(
-            urlcat('/v1/nft/floor_price', {
-                chain_id: chainId,
-                contract_address: address,
-            }),
-        )
-        if (!floorPrice) return
-        const nativeToken = ChainResolver.nativeCurrency(chainId)
-        return {
-            amount: scale10(floorPrice.floor_price, nativeToken.decimals).toFixed(0),
-            token: nativeToken,
-        }
-    }
-
-    async getOwner(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
-        if (!isValidChainId(chainId)) return ZERO_ADDRESS
-        const owner = await fetchFromChainbase<string>(
-            urlcat('/v1/nft/owner', {
-                chain_id: chainId,
-                contract_address: address,
-                token_id: tokenId,
-            }),
-        )
-        return owner ?? ZERO_ADDRESS
     }
 
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {

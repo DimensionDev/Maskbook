@@ -8,7 +8,6 @@ import type {
     NonFungibleTokenEvent,
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
-    PriceInToken,
 } from '@masknet/web3-shared-base'
 import type { HubOptions_Base } from '../entry-types.js'
 
@@ -58,25 +57,16 @@ export namespace NonFungibleTokenAPI {
         opensea_floor_price: number
         floor_price: number
         price_symbol: string
-        collections_with_same_name: []
     }
     export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions_Base<ChainId, Indicator>) => Promise<number>
-        /** Get owner address. */
-        getOwner?: (address: string, tokenId: string, options?: HubOptions_Base<ChainId, Indicator>) => Promise<string>
         /** Get a non-fungible rarity. */
         getRarity?: (
             address: string,
             tokenId: string,
             options?: HubOptions_Base<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
-        /** Get a non-fungible token floor price. */
-        getFloorPrice?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions_Base<ChainId>,
-        ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
@@ -115,18 +105,6 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions_Base<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
-        /** Get listed orders of a non-fungible token. */
-        getListings?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions_Base<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get offered orders of a non-fungible token. */
-        getOffers?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions_Base<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,

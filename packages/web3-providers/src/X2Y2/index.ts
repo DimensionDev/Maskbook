@@ -122,29 +122,6 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             orders.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        const [data = EMPTY_LIST, next] = await fetchFromX2Y2<Order[]>(
-            urlcat('/v1/offers', {
-                cursor: options?.indicator?.id,
-                contract: address,
-                token_id: tokenId,
-                sort: 'created_at',
-                direction: 'desc',
-                limit: X2Y2_PAGE_SIZE,
-            }),
-        )
-
-        const offers = data.filter((x) => x.type === 'buy').map((x) => this.createOrder(address, tokenId, x))
-
-        return createPageable(
-            offers,
-            createIndicator(options?.indicator),
-            offers.length && next ? createNextIndicator(options?.indicator, next) : undefined,
-        )
-    }
-    getListings(address: string, tokenId: string) {
-        return this.getOrders(address, tokenId, OrderSide.Sell)
-    }
     async getEvents(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
         const cursors = options?.indicator?.id?.split('_')
         const listCursor = first(cursors)

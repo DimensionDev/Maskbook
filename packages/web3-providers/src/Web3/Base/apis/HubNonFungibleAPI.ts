@@ -10,7 +10,6 @@ import {
     type NonFungibleTokenContract,
     type NonFungibleToken,
     type NonFungibleContractSpender,
-    type PriceInToken,
 } from '@masknet/web3-shared-base'
 import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import { HubProviderAPI_Base } from './HubProviderAPI.js'
@@ -68,19 +67,6 @@ export abstract class HubNonFungibleAPI_Base<ChainId, SchemaType> extends HubPro
         )
     }
 
-    async getNonFungibleTokenFloorPrice(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<PriceInToken<ChainId, SchemaType> | undefined> {
-        const options = this.HubOptions.fill(initial)
-        const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getFloorPrice?.(address, tokenId, options)),
-            undefined,
-        )
-    }
-
     async getNonFungibleAssetsByCollection(
         address: string,
         initial?: HubOptions_Base<ChainId>,
@@ -128,33 +114,6 @@ export abstract class HubNonFungibleAPI_Base<ChainId, SchemaType> extends HubPro
         return attemptUntil(
             providers.map((x) => () => x.getEvents?.(address, tokenId, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-        )
-    }
-
-    async getNonFungibleTokenListings(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
-        const options = this.HubOptions.fill(initial)
-        const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getListings?.(address, tokenId, options)),
-            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-        )
-    }
-
-    async getNonFungibleTokenOffers(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions_Base<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
-        const options = this.HubOptions.fill(initial)
-        const providers = this.getProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getOffers?.(address, tokenId, options)),
-            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-            (result) => !result?.data.length,
         )
     }
 

@@ -367,14 +367,6 @@ class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         )
     }
 
-    async getOffers(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        return this.getOrders(address, tokenId, OrderSide.Buy, options)
-    }
-
-    async getListings(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
-        return this.getOrders(address, tokenId, OrderSide.Sell, options)
-    }
-
     async getOrders(
         address: string,
         tokenId: string,
