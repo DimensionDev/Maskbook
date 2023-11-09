@@ -6,7 +6,7 @@ import { BaseAPI } from './Base.js'
 import type { EventOptions, ExceptionOptions, Provider } from '../types/index.js'
 import { MixpanelEventAPI, type Event } from '../apis/Mixpanel.js'
 
-export class MixpanelAPI extends BaseAPI<Event, never> implements Provider {
+export class MixpanelAPI extends BaseAPI implements Provider {
     constructor(env: BuildInfoFile) {
         super(Flags.mixpanel_sample_rate)
         this.eventAPI = new MixpanelEventAPI(Flags.mixpanel_project_token, env)

@@ -11,14 +11,13 @@ import {
 } from '../types/index.js'
 import { telemetrySettings } from '../settings/index.js'
 
-export class BaseAPI<Event, Exception> implements Provider {
+export abstract class BaseAPI implements Provider {
     constructor(protected sampleRate = 1) {
-        // register listener
         telemetrySettings.addListener((x) => (x ? this.enable() : this.disable()))
     }
 
     // The sentry needs to be opened at the runtime.
-    protected status = 'off'
+    protected status: 'on' | 'off' = 'off'
     private userOptions?: UserOptions
     private deviceOptions?: DeviceOptions
     private networkOptions?: NetworkOptions
@@ -95,11 +94,6 @@ export class BaseAPI<Event, Exception> implements Provider {
         this.status = 'off'
     }
 
-    captureEvent(options: EventOptions) {
-        throw new Error('Method not implemented')
-    }
-
-    captureException(options: ExceptionOptions) {
-        throw new Error('Method not implemented')
-    }
+    abstract captureEvent(options: EventOptions): void
+    abstract captureException(options: ExceptionOptions): void
 }

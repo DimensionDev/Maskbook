@@ -46,7 +46,7 @@ const IGNORE_ERRORS = [
     'An attempt was made to break through the security policy of the user agent.',
 ]
 
-export class SentryAPI extends BaseAPI<never, Event> implements Provider {
+export class SentryAPI extends BaseAPI implements Provider {
     constructor(env: BuildInfoFile) {
         super(Flags.sentry_sample_rate)
 
