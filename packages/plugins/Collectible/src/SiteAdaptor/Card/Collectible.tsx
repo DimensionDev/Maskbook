@@ -1,7 +1,15 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus, Markdown, NFTSpamBadge, RetryHint, useReportSpam } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingBase, MaskTabList, makeStyles, useDetectOverflow, useTabs } from '@masknet/theme'
+import {
+    LoadingBase,
+    MaskTabList,
+    ShadowRootTooltip,
+    TextOverflowTooltip,
+    makeStyles,
+    useDetectOverflow,
+    useTabs,
+} from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, IconButton, Paper, Tab, Typography } from '@mui/material'
 import { format as formatDateTime, isAfter, isValid as isValidDate } from 'date-fns'
@@ -203,12 +211,17 @@ export function Collectible() {
                     }
                     title={
                         <Typography component="div" style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle} ref={titleRef}>
-                                {_asset.metadata?.name || '-'}
-                                {_asset.collection?.verified && !outVerified ? (
-                                    <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
-                                ) : null}
-                            </Typography>
+                            <TextOverflowTooltip
+                                as={ShadowRootTooltip}
+                                placement="top"
+                                title={_asset.metadata?.name || '-'}>
+                                <Typography className={classes.cardTitle} ref={titleRef}>
+                                    {_asset.metadata?.name || '-'}
+                                    {_asset.collection?.verified && !outVerified ? (
+                                        <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
+                                    ) : null}
+                                </Typography>
+                            </TextOverflowTooltip>
                             {_asset.collection?.verified && outVerified ? (
                                 <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
                             ) : null}

@@ -23,8 +23,8 @@ import type { SimpleHash } from '../../types/SimpleHash.js'
 class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
-        if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
-        const path = urlcat('/api/v0/nfts/:chain/:address/:tokenId', {
+        if (!chain || !address || !isValidChainId(chainId)) return
+        const path = urlcat('/api/v0/nfts/:chain/:address', {
             chain,
             address,
             tokenId,

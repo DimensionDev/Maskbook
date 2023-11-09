@@ -1,5 +1,6 @@
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { NFTSpam, SPAM_SCORE, SimpleHashEVM } from '@masknet/web3-providers'
+import { NFTSpam, SPAM_SCORE, SimpleHashEVM, SimpleHashSolana } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -9,16 +10,18 @@ import { useSharedTrans } from '../locales/i18n_generated.js'
 interface Options {
     address?: string
     chainId?: number
+    pluginID?: NetworkPluginID
     collectionId?: string
 }
 
 /**
  * collectionId is more accurate
  */
-export function useReportSpam({ address, chainId, collectionId }: Options) {
+export function useReportSpam({ pluginID, chainId, address, collectionId }: Options) {
     const t = useSharedTrans()
+    const isSolana = pluginID === NetworkPluginID.PLUGIN_SOLANA
     const { data: collectionByAddress } = useQuery({
-        enabled: !collectionId,
+        enabled: !collectionId && !isSolana,
         queryKey: ['simple-hash', 'collection', chainId, address],
         queryFn: async () => {
             if (!address || !chainId) return null
@@ -26,14 +29,24 @@ export function useReportSpam({ address, chainId, collectionId }: Options) {
         },
     })
     const { data: collectionById } = useQuery({
-        enabled: !!collectionId,
+        enabled: !!collectionId && !isSolana,
         queryKey: ['simple-hash', 'collection', collectionId],
         queryFn: async () => {
             if (!collectionId) return null
             return SimpleHashEVM.getSimpleHashCollection(collectionId)
         },
     })
-    const collection = collectionById || collectionByAddress
+    const { data: solanaCollection } = useQuery({
+        enabled: isSolana,
+        queryKey: ['simple-hash', 'solana-collection', 'by-mint-address', address],
+        queryFn: async () => {
+            if (!address) return null
+            const asset = await SimpleHashSolana.getAsset(address, address)
+            if (!asset?.collection?.id) return null
+            return SimpleHashEVM.getSimpleHashCollection(asset.collection.id)
+        },
+    })
+    const collection = isSolana ? solanaCollection : collectionById || collectionByAddress
     const colId = collectionId || collection?.collection_id
     const [state, reportSpam] = useAsyncFn(async () => {
         if (!colId) return
