@@ -1,9 +1,9 @@
 import { getDefaultChainId, type ChainId, getNetworkPluginID } from '@masknet/web3-shared-evm'
-import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
+import { HubOptionsProvider } from '../../Base/apis/HubOptionsAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
 import type { CurrencyType } from '@masknet/web3-shared-base'
 
-export class HubOptionsAPI extends HubOptionsAPI_Base<ChainId> {
+export class EVMHubOptionsProvider extends HubOptionsProvider<ChainId> {
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkPluginID = getNetworkPluginID
     protected override getAccount(): string | undefined {

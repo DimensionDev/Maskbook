@@ -4,7 +4,7 @@ import { Box, Button, Link, TextField, Typography, useTheme } from '@mui/materia
 import { makeStyles } from '@masknet/theme'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useChainIdSupport, useFungibleToken, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
@@ -192,7 +192,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                     <Box display="flex" columnGap={1} alignItems="center">
                         <CopyButton text={token.address} size={16} />
                         <Link
-                            href={ExplorerResolver.addressLink(chainId, token.address)}
+                            href={EVMExplorerResolver.addressLink(chainId, token.address)}
                             className={classes.link}
                             target="_blank"
                             rel="noopener noreferrer">
@@ -252,7 +252,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                             <Link
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={ExplorerResolver.addressLink(
+                                href={EVMExplorerResolver.addressLink(
                                     chainId,
                                     transaction.formattedTransaction.popup.spender,
                                 )}

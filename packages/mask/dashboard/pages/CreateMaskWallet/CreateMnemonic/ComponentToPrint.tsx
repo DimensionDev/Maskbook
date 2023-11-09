@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { NetworkType } from '@masknet/web3-shared-evm'
-import { NetworkResolver } from '@masknet/web3-providers'
+import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
@@ -112,7 +112,7 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
                         ecLevel="L"
                         size={136}
                         quietZone={6}
-                        logoImage={NetworkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
+                        logoImage={EVMNetworkResolver.networkIcon(NetworkType.Ethereum)?.toString()}
                     />
                 </div>
             </Box>

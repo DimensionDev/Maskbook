@@ -1,8 +1,8 @@
 import { getDefaultChainId, type ChainId, getNetworkPluginID } from '@masknet/web3-shared-flow'
-import { HubOptionsAPI_Base } from '../../Base/apis/HubOptionsAPI.js'
+import { HubOptionsProvider } from '../../Base/apis/HubOptionsAPI.js'
 import { FlowWeb3StateRef } from './Web3StateAPI.js'
 
-export class FlowHubOptionsAPI extends HubOptionsAPI_Base<ChainId> {
+export class FlowHubOptionsAPI extends HubOptionsProvider<ChainId> {
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkPluginID = getNetworkPluginID
     protected override getAccount() {

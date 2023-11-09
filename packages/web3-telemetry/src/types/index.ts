@@ -114,15 +114,3 @@ export interface ExceptionOptions extends CommonOptions {
     exceptionID: ExceptionID
     error: Error
 }
-
-export interface Provider {
-    user?: UserOptions
-    device?: DeviceOptions
-    network?: NetworkOptions
-
-    enable(): void
-    disable(): void
-
-    captureEvent(options: EventOptions): void
-    captureException(options: ExceptionOptions): void
-}

@@ -28,7 +28,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
-import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
 import { MagicEden } from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
@@ -36,11 +36,11 @@ import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { SolanaChainResolver } from './ResolverAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
-import type { ConnectionOptions } from '../types/index.js'
+import type { SolanaConnectionOptions } from '../types/index.js'
 
 export class SolanaConnectionAPI
     implements
-        ConnectionAPI_Base<
+        BaseConnection<
             ChainId,
             AddressType,
             SchemaType,
@@ -56,7 +56,7 @@ export class SolanaConnectionAPI
             Web3Provider
         >
 {
-    constructor(options?: ConnectionOptions) {
+    constructor(options?: SolanaConnectionOptions) {
         this.Web3 = new SolanaWeb3API(options)
         this.Transfer = new SolanaTransferAPI(options)
         this.ConnectionOptions = new SolanaConnectionOptionsAPI(options)
@@ -64,21 +64,21 @@ export class SolanaConnectionAPI
     private Web3
     private Transfer
     private ConnectionOptions
-    getAccount(initial?: ConnectionOptions | undefined): Promise<string> {
+    getAccount(initial?: SolanaConnectionOptions | undefined): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)
     }
 
-    getChainId(initial?: ConnectionOptions | undefined): Promise<ChainId> {
+    getChainId(initial?: SolanaConnectionOptions | undefined): Promise<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.chainId)
     }
 
-    createAccount(initial?: ConnectionOptions): Account<ChainId> {
+    createAccount(initial?: SolanaConnectionOptions): Account<ChainId> {
         throw new Error('Method not implemented.')
     }
 
-    async switchChain(chainId: ChainId, initial?: ConnectionOptions) {
+    async switchChain(chainId: ChainId, initial?: SolanaConnectionOptions) {
         await this.Web3.getProviderInstance(initial).switchChain(chainId)
     }
 
@@ -86,7 +86,7 @@ export class SolanaConnectionAPI
         address: string,
         recipient: string,
         amount: string,
-        initial?: ConnectionOptions | undefined,
+        initial?: SolanaConnectionOptions | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -96,7 +96,7 @@ export class SolanaConnectionAPI
         recipient: string,
         tokenId: string,
         schema?: SchemaType | undefined,
-        initial?: ConnectionOptions | undefined,
+        initial?: SolanaConnectionOptions | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -106,7 +106,7 @@ export class SolanaConnectionAPI
         recipient: string,
         approved: boolean,
         schema?: SchemaType | undefined,
-        initial?: ConnectionOptions | undefined,
+        initial?: SolanaConnectionOptions | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -116,7 +116,7 @@ export class SolanaConnectionAPI
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<string> {
         return isNativeTokenAddress(address)
             ? this.Transfer.transferSol(recipient, amount, initial)
@@ -129,12 +129,12 @@ export class SolanaConnectionAPI
         recipient: string,
         amount: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<string> {
         return this.Transfer.transferSplToken(address, recipient, amount, initial)
     }
 
-    async connect(initial?: ConnectionOptions): Promise<Account<ChainId>> {
+    async connect(initial?: SolanaConnectionOptions): Promise<Account<ChainId>> {
         const options = this.ConnectionOptions.fill(initial)
         return {
             account: '',
@@ -143,32 +143,36 @@ export class SolanaConnectionAPI
         }
     }
 
-    async disconnect(initial?: ConnectionOptions): Promise<void> {
+    async disconnect(initial?: SolanaConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
         await SolanaWeb3StateRef.value?.Provider?.disconnect(options.providerType)
     }
 
-    getWeb3(initial?: ConnectionOptions) {
+    getWeb3(initial?: SolanaConnectionOptions) {
         return this.Web3.getWeb3(initial)
     }
 
-    getWeb3Provider(initial?: ConnectionOptions) {
+    getWeb3Provider(initial?: SolanaConnectionOptions) {
         return this.Web3.getWeb3Provider(initial)
     }
 
-    async getBalance(account: string, initial?: ConnectionOptions) {
+    async getBalance(account: string, initial?: SolanaConnectionOptions) {
         const balance = await this.Web3.getWeb3Connection(initial).getBalance(decodeAddress(account))
         return balance.toFixed()
     }
 
-    async getNativeTokenBalance(initial?: ConnectionOptions): Promise<string> {
+    async getNativeTokenBalance(initial?: SolanaConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return '0'
         const balance = await this.Web3.getWeb3Connection(options).getBalance(new PublicKey(options.account))
         return balance.toString()
     }
 
-    async getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: ConnectionOptions): Promise<string> {
+    async getFungibleTokenBalance(
+        address: string,
+        schema?: SchemaType,
+        initial?: SolanaConnectionOptions,
+    ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return '0'
         if (isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
@@ -181,14 +185,14 @@ export class SolanaConnectionAPI
         address: string,
         tokenId?: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
     async getFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<Record<string, string>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return EMPTY_OBJECT
@@ -211,66 +215,72 @@ export class SolanaConnectionAPI
         return records
     }
 
-    getNonFungibleTokensBalance(listOfAddress: string[], initial?: ConnectionOptions): Promise<Record<string, string>> {
+    getNonFungibleTokensBalance(
+        listOfAddress: string[],
+        initial?: SolanaConnectionOptions,
+    ): Promise<Record<string, string>> {
         throw new Error('Method not implemented.')
     }
 
-    getGasPrice(initial?: ConnectionOptions): Promise<string> {
+    getGasPrice(initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    getCode(address: string, initial?: ConnectionOptions): Promise<string> {
+    getCode(address: string, initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    getAddressType(address: string, initial?: ConnectionOptions): Promise<AddressType | undefined> {
+    getAddressType(address: string, initial?: SolanaConnectionOptions): Promise<AddressType | undefined> {
         return Promise.resolve(AddressType.Default)
     }
 
-    getSchemaType(address: string, initial?: ConnectionOptions): Promise<SchemaType> {
+    getSchemaType(address: string, initial?: SolanaConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
 
-    async getBlock(no: number, initial?: ConnectionOptions): Promise<BlockResponse | null> {
+    async getBlock(no: number, initial?: SolanaConnectionOptions): Promise<BlockResponse | null> {
         return this.Web3.getWeb3Connection(initial).getBlock(no as number)
     }
 
-    async getBlockNumber(initial?: ConnectionOptions) {
+    async getBlockNumber(initial?: SolanaConnectionOptions) {
         return this.Web3.getWeb3Connection(initial).getSlot()
     }
 
-    async getBlockTimestamp(initial?: ConnectionOptions): Promise<number> {
+    async getBlockTimestamp(initial?: SolanaConnectionOptions): Promise<number> {
         const slot = await this.getBlockNumber(initial)
         const response = await this.Web3.getWeb3Connection(initial).getBlockTime(slot)
         return response ?? 0
     }
 
-    getTransaction(id: string, initial?: ConnectionOptions): Promise<TransactionDetailed | null> {
+    getTransaction(id: string, initial?: SolanaConnectionOptions): Promise<TransactionDetailed | null> {
         return this.Web3.getWeb3Connection(initial).getTransaction(id)
     }
 
-    async getTransactionReceipt(id: string, initial?: ConnectionOptions): Promise<TransactionReceipt | null> {
+    async getTransactionReceipt(id: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt | null> {
         return null
     }
 
-    async getTransactionStatus(id: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(id: string, initial?: SolanaConnectionOptions): Promise<TransactionStatusType> {
         const response = await this.Web3.getWeb3Connection(initial).getSignatureStatus(id)
         if (response.value?.err) return TransactionStatusType.FAILED
         if (response.value?.confirmations && response.value.confirmations > 0) return TransactionStatusType.SUCCEED
         return TransactionStatusType.NOT_DEPEND
     }
 
-    async getTransactionNonce(account: string, initial?: ConnectionOptions): Promise<number> {
+    async getTransactionNonce(account: string, initial?: SolanaConnectionOptions): Promise<number> {
         const response = await this.Web3.getWeb3Connection(initial).getNonce(decodeAddress(account))
         return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
-    async getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    async getNativeToken(initial?: SolanaConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         return SolanaChainResolver.nativeCurrency(options.chainId)
     }
 
-    async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    async getFungibleToken(
+        address: string,
+        initial?: SolanaConnectionOptions,
+    ): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
         const tokens = await SolanaFungible.getFungibleTokenList(options.chainId, [])
@@ -288,7 +298,7 @@ export class SolanaConnectionAPI
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const asset = await MagicEden.getAsset(address, tokenId, {
@@ -310,7 +320,7 @@ export class SolanaConnectionAPI
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -320,7 +330,7 @@ export class SolanaConnectionAPI
         tokenId: string,
         owner: string,
         schema?: SchemaType | undefined,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
@@ -329,7 +339,7 @@ export class SolanaConnectionAPI
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleTokenMetadata<ChainId>> {
         throw new Error('Method not implemented.')
     }
@@ -337,7 +347,7 @@ export class SolanaConnectionAPI
     getNonFungibleTokenContract(
         address: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
@@ -345,40 +355,44 @@ export class SolanaConnectionAPI
     getNonFungibleTokenCollection(
         address: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
 
-    callTransaction(transaction: Transaction, initial?: ConnectionOptions): Promise<string> {
+    callTransaction(transaction: Transaction, initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    confirmTransaction(id: string, initial?: ConnectionOptions): Promise<TransactionReceipt> {
+    confirmTransaction(id: string, initial?: SolanaConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
 
-    estimateTransaction(transaction: Transaction, fallback?: number, initial?: ConnectionOptions): Promise<string> {
+    estimateTransaction(
+        transaction: Transaction,
+        fallback?: number,
+        initial?: SolanaConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async sendTransaction(transaction: Transaction, initial?: ConnectionOptions) {
+    async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
         return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signedTransaction.serialize())
     }
 
-    sendSignedTransaction(signature: TransactionSignature, initial?: ConnectionOptions): Promise<string> {
+    sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
         return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signature.serialize())
     }
 
-    replaceTransaction(hash: string, config: Transaction, options?: ConnectionOptions): Promise<void> {
+    replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelTransaction(hash: string, config: Transaction, options?: ConnectionOptions): Promise<void> {
+    cancelTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async signMessage(type: string, message: string, initial?: ConnectionOptions) {
+    async signMessage(type: string, message: string, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signMessage(message)
     }
 
@@ -386,16 +400,16 @@ export class SolanaConnectionAPI
         type: string,
         message: string,
         signature: string,
-        initial?: ConnectionOptions,
+        initial?: SolanaConnectionOptions,
     ): Promise<boolean> {
         return this.Web3.getProviderInstance(initial).verifyMessage(message, signature)
     }
 
-    async signTransaction(transaction: Transaction, initial?: ConnectionOptions) {
+    async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    signTransactions(transactions: Transaction[], initial?: ConnectionOptions) {
+    signTransactions(transactions: Transaction[], initial?: SolanaConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 }

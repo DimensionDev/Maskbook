@@ -5,7 +5,7 @@ import { Avatar, Box, Link, Typography } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
 import { makeStyles } from '@masknet/theme'
 import { EthereumBlockie } from '@masknet/shared'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { SnapshotContext } from '../context.js'
@@ -86,7 +86,7 @@ export function InformationCard() {
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
-                                href={ExplorerResolver.addressLink(chainId, strategy.params.address)}>
+                                href={EVMExplorerResolver.addressLink(chainId, strategy.params.address)}>
                                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                             </Link>
                         ))}
@@ -97,7 +97,7 @@ export function InformationCard() {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={ExplorerResolver.addressLink(proposal.chainId, proposal.address)}>
+                    href={EVMExplorerResolver.addressLink(proposal.chainId, proposal.address)}>
                     <div className={classes.avatarWrapper}>
                         {proposal.authorAvatar ? (
                             <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
@@ -135,7 +135,7 @@ export function InformationCard() {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={ExplorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
+                    href={EVMExplorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
                     <Typography fontSize={14}>{snapshot}</Typography>
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>

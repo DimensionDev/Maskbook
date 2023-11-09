@@ -28,14 +28,14 @@ import { RequestAPI } from './RequestAPI.js'
 import { ContractAPI } from './ContractAPI.js'
 import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
 import { Providers } from '../providers/index.js'
-import type { ConnectionOptions } from '../types/index.js'
+import type { EVMConnectionOptions } from '../types/index.js'
 import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
 export class ConnectionAPI
     extends ConnectionReadonlyAPI
     implements
-        ConnectionAPI_Base<
+        BaseConnection<
             ChainId,
             AddressType,
             SchemaType,
@@ -55,7 +55,7 @@ export class ConnectionAPI
     protected override Contract = new ContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
-    override async addWallet(wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
+    override async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_ADD_WALLET,
@@ -68,7 +68,7 @@ export class ConnectionAPI
     override async updateWallet(
         address: string,
         wallet: Partial<UpdatableWallet>,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<void> {
         await this.Request.request<void>(
             {
@@ -79,7 +79,7 @@ export class ConnectionAPI
         )
     }
 
-    override async renameWallet(address: string, name: string, initial?: ConnectionOptions): Promise<void> {
+    override async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_RENAME_WALLET,
@@ -92,7 +92,7 @@ export class ConnectionAPI
     override async removeWallet(
         address: string,
         password?: string | undefined,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<void> {
         await this.Request.request<void>(
             {
@@ -103,7 +103,7 @@ export class ConnectionAPI
         )
     }
 
-    override async resetAllWallets(initial?: ConnectionOptions): Promise<void> {
+    override async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
@@ -113,7 +113,7 @@ export class ConnectionAPI
         )
     }
 
-    override async updateWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
+    override async updateWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_UPDATE_WALLETS,
@@ -123,7 +123,7 @@ export class ConnectionAPI
         )
     }
 
-    override async removeWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
+    override async removeWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REMOVE_WALLETS,
@@ -137,7 +137,7 @@ export class ConnectionAPI
         address: string,
         recipient: string,
         amount: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
 
@@ -156,7 +156,7 @@ export class ConnectionAPI
         recipient: string,
         tokenId: string,
         schema: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         // Do not use `approve()`, since it is buggy.
         // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
@@ -168,7 +168,7 @@ export class ConnectionAPI
         recipient: string,
         approved: boolean,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
 
@@ -187,7 +187,7 @@ export class ConnectionAPI
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
 
@@ -221,7 +221,7 @@ export class ConnectionAPI
         recipient: string,
         amount?: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -244,7 +244,7 @@ export class ConnectionAPI
     override signMessage(
         type: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
         message: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ) {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) throw new Error('Unknown account.')
@@ -271,13 +271,13 @@ export class ConnectionAPI
         }
     }
 
-    override async verifyMessage(type: string, message: string, signature: string, initial?: ConnectionOptions) {
+    override async verifyMessage(type: string, message: string, signature: string, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         const dataToSign = await this.getWeb3(options).eth.personal.ecRecover(message, signature)
         return dataToSign === message
     }
 
-    override async signTransaction(transaction: Transaction, initial?: ConnectionOptions) {
+    override async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_SIGN_TRANSACTION,
@@ -287,11 +287,11 @@ export class ConnectionAPI
         )
     }
 
-    override signTransactions(transactions: Transaction[], initial?: ConnectionOptions) {
+    override signTransactions(transactions: Transaction[], initial?: EVMConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
-    override supportedChainIds(initial?: ConnectionOptions) {
+    override supportedChainIds(initial?: EVMConnectionOptions) {
         return this.Request.request<ChainId[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
@@ -301,7 +301,7 @@ export class ConnectionAPI
         )
     }
 
-    override supportedEntryPoints(initial?: ConnectionOptions) {
+    override supportedEntryPoints(initial?: EVMConnectionOptions) {
         return this.Request.request<string[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
@@ -311,7 +311,7 @@ export class ConnectionAPI
         )
     }
 
-    override async callUserOperation(owner: string, operation: UserOperation, initial?: ConnectionOptions) {
+    override async callUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
@@ -328,7 +328,7 @@ export class ConnectionAPI
         )
     }
 
-    override async sendUserOperation(owner: string, operation: UserOperation, initial?: ConnectionOptions) {
+    override async sendUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
@@ -345,7 +345,7 @@ export class ConnectionAPI
         )
     }
 
-    override async transfer(recipient: string, amount: string, initial?: ConnectionOptions) {
+    override async transfer(recipient: string, amount: string, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         const contract = this.Contract.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
@@ -370,7 +370,7 @@ export class ConnectionAPI
         )
     }
 
-    override async changeOwner(recipient: string, initial?: ConnectionOptions) {
+    override async changeOwner(recipient: string, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         const contract = this.Contract.getWalletContract(options.account, options)
         if (!contract) throw new Error('Failed to create contract.')
@@ -395,7 +395,7 @@ export class ConnectionAPI
         )
     }
 
-    override async fund(proof: Proof, initial?: ConnectionOptions) {
+    override async fund(proof: Proof, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.MASK_FUND,
@@ -405,7 +405,7 @@ export class ConnectionAPI
         )
     }
 
-    override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: ConnectionOptions) {
+    override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.MASK_DEPLOY,
@@ -415,7 +415,7 @@ export class ConnectionAPI
         )
     }
 
-    override async connect(initial?: ConnectionOptions): Promise<Account<ChainId>> {
+    override async connect(initial?: EVMConnectionOptions): Promise<Account<ChainId>> {
         return this.Request.request<Account<ChainId>>(
             {
                 method: EthereumMethodType.MASK_LOGIN,
@@ -425,7 +425,7 @@ export class ConnectionAPI
         )
     }
 
-    override async disconnect(initial?: ConnectionOptions): Promise<void> {
+    override async disconnect(initial?: EVMConnectionOptions): Promise<void> {
         await this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_LOGOUT,
@@ -435,12 +435,12 @@ export class ConnectionAPI
         )
     }
 
-    override async switchChain(chainId: ChainId, initial?: ConnectionOptions): Promise<void> {
+    override async switchChain(chainId: ChainId, initial?: EVMConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
         await Providers[options.providerType].switchChain(chainId)
     }
 
-    override async sendTransaction(transaction: Transaction, initial?: ConnectionOptions) {
+    override async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
 
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
@@ -475,7 +475,7 @@ export class ConnectionAPI
         })
     }
 
-    override async confirmTransaction(hash: string, initial?: ConnectionOptions): Promise<TransactionReceipt> {
+    override async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {
         const options = this.ConnectionOptions.fill(initial)
         const times = 49
         const interval = getAverageBlockDelay(options.chainId)
@@ -499,7 +499,7 @@ export class ConnectionAPI
         throw new Error('Not confirm yet')
     }
 
-    override replaceTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions) {
+    override replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
@@ -509,7 +509,7 @@ export class ConnectionAPI
         )
     }
 
-    override cancelTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions) {
+    override cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<void>(
             {
                 method: EthereumMethodType.MASK_REPLACE_TRANSACTION,

@@ -4,7 +4,7 @@ import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@
 import { Icons } from '@masknet/icons'
 import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
@@ -113,7 +113,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                         <Link
                             className={classes.link}
                             href={
-                                ExplorerResolver.fungibleTokenLink?.(
+                                EVMExplorerResolver.fungibleTokenLink?.(
                                     token?.chainId ?? ChainId.Mainnet,
                                     token?.contract ?? ZERO_ADDRESS,
                                 ) ?? ''

@@ -15,7 +15,7 @@ export function useBlockNumber<T extends NetworkPluginID = NetworkPluginID>(
     const Web3 = useWeb3Connection(pluginID, {
         chainId,
         ...options,
-    })
+    } as ConnectionOptions<T>)
     const { BlockNumberNotifier } = useWeb3State(pluginID)
 
     const asyncRetry = useAsyncRetry(async () => {

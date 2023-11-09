@@ -30,7 +30,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         account,
         chainId,
         ...options,
-    })
+    } as HubOptions<T>)
     const Others = useWeb3Others(pluginID)
     const trustedTokens = useTrustedFungibleTokens(pluginID)
     const blockedTokens = useBlockedFungibleTokens(pluginID)

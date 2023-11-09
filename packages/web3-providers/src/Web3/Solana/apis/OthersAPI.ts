@@ -26,7 +26,7 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-solana'
 import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
-import { type OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
+import { type BaseUtils } from '../../Base/apis/OthersAPI.js'
 import {
     SolanaChainResolver,
     SolanaExplorerResolver,
@@ -34,7 +34,7 @@ import {
     SolanaNetworkResolver,
 } from './ResolverAPI.js'
 
-export const SolanaOthersAPI = {
+export const SolanaUtils = {
     isSameAddress,
     chainResolver: SolanaChainResolver,
     explorerResolver: SolanaExplorerResolver,
@@ -69,4 +69,4 @@ export const SolanaOthersAPI = {
     },
     createFungibleToken,
     createNonFungibleToken,
-} satisfies OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+} satisfies BaseUtils<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

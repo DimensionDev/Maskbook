@@ -1,21 +1,10 @@
 import { toHex } from 'web3-utils'
 import { Sniffings } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
-import {
-    type ChainId,
-    EthereumMethodType,
-    ProviderType,
-    type Web3Provider,
-    type Web3,
-    isValidChainId,
-} from '@masknet/web3-shared-evm'
-import { BaseInjectedProvider } from './BaseInjected.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { type ChainId, EthereumMethodType, ProviderType, isValidChainId } from '@masknet/web3-shared-evm'
+import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
-export class OperaProvider
-    extends BaseInjectedProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class OperaProvider extends EVMInjectedWalletProvider {
     constructor() {
         super(ProviderType.Opera, injectedOperaProvider)
     }

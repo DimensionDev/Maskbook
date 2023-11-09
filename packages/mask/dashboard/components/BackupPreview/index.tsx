@@ -4,7 +4,7 @@ import { ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import {
     Card,
     CardContent,
@@ -235,7 +235,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                                 <Link
                                     className={classes.link}
                                     fontSize={0}
-                                    href={ExplorerResolver.addressLink(ChainId.Mainnet, wallet)}
+                                    href={EVMExplorerResolver.addressLink(ChainId.Mainnet, wallet)}
                                     target="_blank">
                                     <ReversedAddress
                                         component="span"

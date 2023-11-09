@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { ChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
@@ -39,7 +39,7 @@ const GasSetting = memo(() => {
                 {t.popups_wallet_gas_fee_settings()}
             </Typography>
             <Typography className={classes.description}>{t.popups_wallet_gas_fee_settings_description()}</Typography>
-            {ChainResolver.isFeatureSupported(chainId, 'EIP1559') ? <GasSetting1559 /> : <Prior1559GasSetting />}
+            {EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ? <GasSetting1559 /> : <Prior1559GasSetting />}
         </main>
     )
 })

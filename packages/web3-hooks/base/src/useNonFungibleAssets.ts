@@ -16,8 +16,8 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: HubOptions<T>,
 ) {
-    const { account, chainId } = useChainContext({ account: options?.account })
-    const Hub = useWeb3Hub(pluginID, { account, chainId, ...options })
+    const { account, chainId } = useChainContext<T>({ account: options?.account })
+    const Hub = useWeb3Hub(pluginID, { account, chainId, ...options } as HubOptions<T>)
     const networks = useNetworkDescriptors(pluginID)
     const availableChainIds = useMemo(() => {
         return networks

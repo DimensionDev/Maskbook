@@ -108,8 +108,8 @@ importers:
         specifier: 11.11.0
         version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.21)(react@0.0.0-experimental-0a360642d-20230711)
       '@masknet/kit':
-        specifier: 0.1.2
-        version: 0.1.2
+        specifier: 0.2.0
+        version: 0.2.0
       '@mui/base':
         specifier: 5.0.0-alpha.100
         version: 5.0.0-alpha.100(patch_hash=ved4raqjjkr2jjhghdp5ouuxk4)(@types/react@18.2.21)(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -507,8 +507,8 @@ importers:
   packages/base:
     dependencies:
       '@masknet/kit':
-        specifier: 0.1.2
-        version: 0.1.2
+        specifier: 0.2.0
+        version: 0.2.0
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
@@ -6874,8 +6874,8 @@ packages:
       eslint: 8.48.0
     dev: true
 
-  /@masknet/kit@0.1.2:
-    resolution: {integrity: sha512-VVnIAJhhy5KseO+NtfIs1lYFtBxYCswD13NZtZgcyXTsxCkp55QIKtP6VZ7+0oFV2PgcqtOKGIz7JH0lIJ864g==}
+  /@masknet/kit@0.2.0:
+    resolution: {integrity: sha512-XAN6dHD2eSnVoDKJdbqwf5sYus94yfE/CgTldzgWMJGXKM0WouwM8zmWFYtYUpnthznI57PxpIj8QIgABS44jQ==}
     dev: false
 
   /@masknet/membrane@0.1.5:
@@ -28066,6 +28066,7 @@ time:
   /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
   /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
+  /@masknet/kit@0.2.0: '2023-11-09T07:45:47.089Z'
   /@rollup/plugin-commonjs@25.0.4: '2023-08-11T17:13:52.902Z'
   /@rollup/plugin-node-resolve@15.2.1: '2023-08-22T04:58:47.775Z'
   /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'

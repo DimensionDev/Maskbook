@@ -21,7 +21,7 @@ import type {
 } from './types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
+import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
@@ -87,7 +87,7 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 }
 
 class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getToken(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
@@ -102,7 +102,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         return createNFTToken(chainId, token, collection)
     }
 
-    async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(address: string, tokenMint: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const [token, auction, nft] = await Promise.all([
             this.getToken(address, tokenMint, {
@@ -140,7 +140,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         }
     }
 
-    async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
+    async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         if ((indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
@@ -192,7 +192,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         return createPageable(data ?? EMPTY_LIST, createIndicator(indicator))
     }
 
-    async getContract(tokenMint: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getContract(tokenMint: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromMagicEden<MagicEdenToken>(
             chainId,
@@ -210,7 +210,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const activities = await fetchFromMagicEden<TokenActivity[]>(
@@ -249,7 +249,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const limit = size || 20
@@ -282,7 +282,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
 
     async getCollectionsByOwner(
         symbol: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const collections = await fetchFromMagicEden<Collection[]>(

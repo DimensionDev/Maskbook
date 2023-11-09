@@ -10,7 +10,7 @@ interface ExplorerOptions {
     nonFungibleTokenPathname?: string
 }
 
-export class ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType> {
+export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
     constructor(
         private descriptors: () => ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
         private initial?: ExplorerOptions,

@@ -15,7 +15,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     type Event,
     EventType,
@@ -28,7 +28,7 @@ import { GetEventsQuery, GetTokenQuery } from './queries.js'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
+import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
 
 class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
@@ -90,7 +90,7 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
                       amount: token.mintInfo?.price.nativePrice.raw,
-                      token: ChainResolver.nativeCurrency(chainId),
+                      token: EVMChainResolver.nativeCurrency(chainId),
                   }
                 : undefined,
             owner: token.owner
@@ -146,7 +146,7 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                     priceInToken: price.nativePrice.raw
                         ? {
                               amount: price.nativePrice.raw,
-                              token: ChainResolver.nativeCurrency(chainId),
+                              token: EVMChainResolver.nativeCurrency(chainId),
                           }
                         : undefined,
                 }
@@ -179,7 +179,7 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         )
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await this.request<{
             token: {
@@ -210,7 +210,7 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getEvents(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ) {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
 

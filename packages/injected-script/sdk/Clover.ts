@@ -1,6 +1,6 @@
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { InjectedWalletBridge } from './BaseInjected.js'
 
-export class CloverProvider extends BaseInjectedProvider {
+export class CloverProvider extends InjectedWalletBridge {
     constructor() {
         super('clover')
     }

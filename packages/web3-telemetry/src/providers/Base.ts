@@ -1,7 +1,6 @@
 /// <reference types="@masknet/global-types/env" />
 import '@sentry/tracing'
 import {
-    type Provider,
     type UserOptions,
     type DeviceOptions,
     type NetworkOptions,
@@ -11,7 +10,7 @@ import {
 } from '../types/index.js'
 import { telemetrySettings } from '../settings/index.js'
 
-export abstract class BaseAPI implements Provider {
+export abstract class TelemetryProvider {
     constructor(protected sampleRate = 1) {
         telemetrySettings.addListener((x) => (x ? this.enable() : this.disable()))
     }

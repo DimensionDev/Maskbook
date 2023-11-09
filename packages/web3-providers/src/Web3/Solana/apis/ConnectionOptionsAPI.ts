@@ -1,12 +1,12 @@
 import { getDefaultChainId, getDefaultProviderType, isValidChainId } from '@masknet/web3-shared-solana'
 import type { ChainId, ProviderType, NetworkType, Transaction } from '@masknet/web3-shared-solana'
-import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
+import { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
 
-export class SolanaConnectionOptionsAPI extends ConnectionOptionsAPI_Base<
+export class SolanaConnectionOptionsAPI extends ConnectionOptionsProvider<
     ChainId,
     ProviderType,
     NetworkType,

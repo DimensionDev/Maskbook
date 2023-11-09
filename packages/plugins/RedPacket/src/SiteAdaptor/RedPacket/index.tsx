@@ -5,7 +5,7 @@ import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
-import { ChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId, signMessage } from '@masknet/web3-shared-evm'
@@ -136,7 +136,7 @@ export function RedPacket(props: RedPacketProps) {
     const t = useRedPacketTrans()
     const token = payload.token
     const { pluginID } = useNetworkContext()
-    const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
+    const payloadChainId = token?.chainId ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId: payloadChainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',

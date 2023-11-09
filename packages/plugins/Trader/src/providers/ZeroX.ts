@@ -16,7 +16,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ZERO, isZero } from '@masknet/web3-shared-base'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 import { TraderAPI } from '@masknet/web3-providers/types'
-import { ChainResolver, ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
+import { EVMChainResolver, ContractReadonly, Web3Readonly } from '@masknet/web3-providers'
 import type {
     SwapErrorResponse,
     SwapQuoteRequest,
@@ -101,7 +101,7 @@ class ZeroX_API implements TraderAPI.Provider {
     ) {
         if (isZero(inputAmount) || !inputToken || !outputToken) return null
 
-        const networkType = ChainResolver.networkType(chainId as ChainId)
+        const networkType = EVMChainResolver.networkType(chainId as ChainId)
 
         if (!networkType) return
         const sellToken = isNativeTokenAddress(inputToken.address)

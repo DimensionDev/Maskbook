@@ -10,7 +10,6 @@ import { isNewerThan } from '../helpers/isNewerThan.js'
 import { isSameVersion } from '../helpers/isSameVersion.js'
 import { removeSensitiveTelemetryInfo } from '../helpers/removeSensitiveTelemetryInfo.js'
 import {
-    type Provider,
     type EventOptions,
     type ExceptionOptions,
     GroupID,
@@ -21,7 +20,7 @@ import {
     type CommonOptions,
 } from '../types/index.js'
 import { telemetrySettings } from '../settings/index.js'
-import { BaseAPI } from './Base.js'
+import { TelemetryProvider } from './Base.js'
 
 const IGNORE_ERRORS = [
     // FIXME
@@ -46,7 +45,7 @@ const IGNORE_ERRORS = [
     'An attempt was made to break through the security policy of the user agent.',
 ]
 
-export class SentryAPI extends BaseAPI implements Provider {
+export class SentryAPI extends TelemetryProvider {
     constructor(env: BuildInfoFile) {
         super(Flags.sentry_sample_rate)
 

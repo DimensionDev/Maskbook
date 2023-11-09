@@ -1,5 +1,5 @@
 import { PluginRuntime } from '../runtime/runtime.js'
-import { type BasicHostHooks, type BasicHostInstance, PluginRunner } from '../runtime/runner.js'
+import { type BasicHostHooks, type BasicHostInstance, SandboxedPluginHost } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
@@ -15,7 +15,7 @@ export interface BackgroundHostHooks extends BasicHostHooks {
 export interface BackgroundInstance extends BasicHostInstance {
     backupHandler?: BackupHandler
 }
-export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, BackgroundInstance> {
+export class BackgroundPluginHost extends SandboxedPluginHost<BackgroundHostHooks, BackgroundInstance> {
     constructor(
         hooks: BackgroundHostHooks,
         allowLocalOverrides: boolean,

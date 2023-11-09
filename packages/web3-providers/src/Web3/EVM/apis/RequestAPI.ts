@@ -5,7 +5,7 @@ import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { Providers } from '../providers/index.js'
-import type { ConnectionOptions } from '../types/index.js'
+import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 
@@ -21,7 +21,7 @@ export class RequestAPI extends RequestReadonlyAPI {
 
     // Hijack RPC requests and process them with koa like middleware
     override get request() {
-        return <T>(requestArguments: RequestArguments, initial?: ConnectionOptions) => {
+        return <T>(requestArguments: RequestArguments, initial?: EVMConnectionOptions) => {
             return new Promise<T>(async (resolve, reject) => {
                 const options = this.ConnectionOptions.fill(initial)
                 const context = createContext(requestArguments, options)
@@ -85,7 +85,7 @@ export class RequestAPI extends RequestReadonlyAPI {
         }
     }
 
-    override getWeb3(initial?: ConnectionOptions) {
+    override getWeb3(initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3(options)
         return createWeb3FromProvider(
@@ -93,7 +93,7 @@ export class RequestAPI extends RequestReadonlyAPI {
         )
     }
 
-    override getWeb3Provider(initial?: ConnectionOptions) {
+    override getWeb3Provider(initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         if (options.readonly) return this.Request.getWeb3Provider(options)
         return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options))

@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedAddress } from '@masknet/shared'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,7 +55,7 @@ export function FollowRow({ identity }: { identity: IFollowIdentity }) {
                     <Link
                         onClick={(event) => event.stopPropagation()}
                         style={{ width: 12, height: 12 }}
-                        href={ExplorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '') ?? ''}
+                        href={EVMExplorerResolver.addressLink(ChainId.Mainnet, identity?.address ?? '') ?? ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Icons.PopupLink className={classes.PopupLink} />

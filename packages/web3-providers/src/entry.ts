@@ -25,16 +25,21 @@ export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 
 export { Providers } from './Web3/EVM/providers/index.js'
-export { FlowProviders } from './Web3/Flow/providers/index.js'
-export { SolanaProviders } from './Web3/Solana/providers/index.js'
-export { BaseContractWalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
+export { FlowWalletProviders as FlowProviders } from './Web3/Flow/providers/index.js'
+export { SolanaWalletProviders as SolanaProviders } from './Web3/Solana/providers/index.js'
+export { BaseEIP4337WalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3
 export { getHub } from './Web3/Router/apis/AllHubAPI.js'
 export { getWeb3Connection } from './Web3/Router/apis/AllConnectionAPI.js'
-export { getOthersAPI } from './Web3/Router/apis/AllOthersAPI.js'
+export { getUtils } from './Web3/Router/apis/AllOthersAPI.js'
 
-export { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './Web3/EVM/apis/ResolverAPI.js'
+export {
+    EVMChainResolver,
+    EVMExplorerResolver,
+    EVMProviderResolver,
+    EVMNetworkResolver,
+} from './Web3/EVM/apis/ResolverAPI.js'
 export { Contract } from './Web3/EVM/apis/ContractAPI.js'
 export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
@@ -44,7 +49,7 @@ export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { Request } from './Web3/EVM/apis/RequestAPI.js'
 export { RequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export { DefaultHub as Hub } from './Web3/EVM/apis/HubAPI.js'
-export { OthersAPI as Others } from './Web3/EVM/apis/OthersAPI.js'
+export { EVMUtils as Others } from './Web3/EVM/apis/OthersAPI.js'
 
 // Smart Pay
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'

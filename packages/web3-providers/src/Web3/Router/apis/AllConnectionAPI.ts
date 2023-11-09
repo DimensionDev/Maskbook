@@ -4,12 +4,12 @@ import { type createConnectionCreator } from '../../Base/apis/ConnectionCreatorA
 import { createConnection } from '../../EVM/apis/ConnectionAPI.js'
 import { createFlowConnection } from '../../Flow/apis/ConnectionOptionsAPI.js'
 import { createSolanaConnection } from '../../Solana/apis/ConnectionOptionsAPI.js'
-import type { ConnectionOptions_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptionsAPI.js'
 import { unreachable } from '@masknet/kit'
 
 export function getWeb3Connection<T extends NetworkPluginID>(
     pluginID: T,
-    initial?: ConnectionOptions_Base<
+    initial?: BaseConnectionOptions<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['Transaction']

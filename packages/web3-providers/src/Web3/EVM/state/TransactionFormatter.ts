@@ -34,7 +34,7 @@ import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
 import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
-export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
+export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [

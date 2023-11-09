@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ChainIcon, CopyButton, FormattedAddress, ImageIcon, ProgressiveText } from '@masknet/shared'
 import type { Wallet } from '@masknet/shared-base'
 import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
@@ -145,7 +145,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     const { classes, cx } = useStyles({ disabled })
     const { data: connectedWallets, isLoading } = useConnectedWallets(origin)
     const connected = connectedWallets?.has(wallet.address)
-    const addressLink = ExplorerResolver.addressLink(chainId, wallet.address)
+    const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
 
     const networkName = currentNetwork?.name || currentNetwork?.fullName
     return (

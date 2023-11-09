@@ -1,14 +1,14 @@
 import { type SourceType, createPredicate } from '@masknet/web3-shared-base'
-import { type HubOptionsAPI_Base, type HubOptions_Base } from './HubOptionsAPI.js'
+import { type HubOptionsProvider, type BaseHubOptions } from './HubOptionsAPI.js'
 
-export abstract class HubProviderAPI_Base<ChainId> {
-    constructor(protected options?: HubOptions_Base<ChainId>) {}
-    protected abstract HubOptions: HubOptionsAPI_Base<ChainId>
+export abstract class AbstractBaseHubProvider<ChainId> {
+    constructor(protected options?: BaseHubOptions<ChainId>) {}
+    protected abstract HubOptions: HubOptionsProvider<ChainId>
 
     protected getPredicateProviders<P>(
         providers: Partial<Record<SourceType, P>>,
         defaultProviders: P[],
-        initial?: HubOptions_Base<ChainId>,
+        initial?: BaseHubOptions<ChainId>,
     ) {
         const options = this.HubOptions.fill(initial)
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)

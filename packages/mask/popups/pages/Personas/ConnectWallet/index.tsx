@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
-import { ExplorerResolver, NextIDProof, ProviderResolver, Web3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, NextIDProof, EVMProviderResolver, Web3 } from '@masknet/web3-providers'
 import {
     useChainContext,
     useNetworkContext,
@@ -116,7 +116,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
     const walletAlias = useMemo(() => {
         if (domain) return formatDomainName(domain)
-        if (providerType !== ProviderType.MaskWallet) return `${ProviderResolver.providerName(providerType)} Wallet`
+        if (providerType !== ProviderType.MaskWallet) return `${EVMProviderResolver.providerName(providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, account))?.name ?? formatEthereumAddress(account, 4)
     }, [JSON.stringify(wallets), account, domain, providerType])
 
@@ -249,7 +249,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                                     <FormattedAddress address={account} size={4} formatter={formatEthereumAddress} />
                                     <Link
                                         className={classes.link}
-                                        href={account ? ExplorerResolver.addressLink(chainId, account) : '#'}
+                                        href={account ? EVMExplorerResolver.addressLink(chainId, account) : '#'}
                                         target="_blank"
                                         title={t.plugin_wallet_view_on_explorer()}
                                         rel="noopener noreferrer">

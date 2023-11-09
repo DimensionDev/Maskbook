@@ -9,12 +9,12 @@ import {
 } from '@masknet/web3-shared-base'
 import { createPageable, createIndicator, createNextIndicator, EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { X2Y2_API_URL, X2Y2_PAGE_SIZE } from './constants.js'
 import type { Contract, Event, Order } from './types.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
-import type { HubOptions_Base, NonFungibleTokenAPI } from '../entry-types.js'
+import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromX2Y2<T>(pathname: string) {
     const response = await fetchSquashedJSON<
@@ -59,7 +59,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             priceInToken: {
                 amount: order.price,
                 token: isZeroAddress(order.currency)
-                    ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                    ? EVMChainResolver.nativeCurrency(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
             source: SourceType.X2Y2,
@@ -82,7 +82,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             },
             timestamp: Number.parseInt(event.created_at, 10) * 1000,
             paymentToken: isZeroAddress(event.order.currency)
-                ? ChainResolver.nativeCurrency(ChainId.Mainnet)
+                ? EVMChainResolver.nativeCurrency(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),
             source: SourceType.X2Y2,
         }
@@ -98,7 +98,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         }
     }
 
-    async getOrders(address: string, tokenId: string, side: OrderSide, options?: HubOptions_Base<ChainId>) {
+    async getOrders(address: string, tokenId: string, side: OrderSide, options?: BaseHubOptions<ChainId>) {
         const [data = EMPTY_LIST, next] = await fetchFromX2Y2<Order[]>(
             urlcat('/v1/orders', {
                 cursor: options?.indicator?.id,
@@ -122,7 +122,7 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             orders.length && next ? createNextIndicator(options?.indicator, next) : undefined,
         )
     }
-    async getEvents(address: string, tokenId: string, options?: HubOptions_Base<ChainId>) {
+    async getEvents(address: string, tokenId: string, options?: BaseHubOptions<ChainId>) {
         const cursors = options?.indicator?.id?.split('_')
         const listCursor = first(cursors)
         const saleCursor = last(cursors)

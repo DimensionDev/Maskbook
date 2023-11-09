@@ -1,24 +1,20 @@
 import { first } from 'lodash-es'
 import { isInPageEthereumInjected } from '@masknet/shared-base'
-import { type BaseProvider as BaseBridge } from '@masknet/injected-script'
+import { type InjectedWalletBridge } from '@masknet/injected-script'
 import {
     type ChainId,
     EthereumMethodType,
     type ProviderType,
     type Web3Provider,
-    type Web3,
     type RequestArguments,
 } from '@masknet/web3-shared-evm'
-import { BaseProvider } from './Base.js'
+import { BaseEVMWalletProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class BaseInjectedProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
     constructor(
         protected override providerType: ProviderType,
-        protected bridge: BaseBridge,
+        protected bridge: InjectedWalletBridge,
     ) {
         super(providerType)
     }

@@ -11,7 +11,7 @@ import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-bas
 import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import { ContractReadonly } from './ContractReadonlyAPI.js'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
-import type { HubOptions } from '../types/index.js'
+import type { EVMHubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
 
 export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, SchemaType> {
@@ -45,7 +45,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
     async getTrustedAssets(
         address: string,
         trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
-        options?: HubOptions,
+        options?: EVMHubOptions,
     ) {
         if (!trustedFungibleTokens) return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 

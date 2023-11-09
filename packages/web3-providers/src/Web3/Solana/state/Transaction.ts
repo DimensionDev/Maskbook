@@ -1,16 +1,10 @@
 import type { Subscription } from 'use-subscription'
 import type { WalletAPI } from '../../../entry-types.js'
-import {
-    type ChainId,
-    type Transaction as SolanaTransaction,
-    formatAddress,
-    isValidChainId,
-    ChainIdList,
-} from '@masknet/web3-shared-solana'
+import { type ChainId, type Transaction, formatAddress, isValidChainId, ChainIdList } from '@masknet/web3-shared-solana'
 import { TransactionState } from '../../Base/state/Transaction.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 
-export class Transaction extends TransactionState<ChainId, SolanaTransaction> {
+export class SolanaTransaction extends TransactionState<ChainId, Transaction> {
     constructor(
         context: WalletAPI.IOContext,
         subscriptions: {

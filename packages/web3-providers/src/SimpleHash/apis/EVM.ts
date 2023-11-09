@@ -39,8 +39,8 @@ import { LooksRare } from '../../LooksRare/index.js'
 import { OpenSea } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
-import { ChainResolver, ExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
-import type { HubOptions_Base, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
+import { EVMChainResolver, EVMExplorerResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
+import type { BaseHubOptions, NonFungibleTokenAPI, TrendingAPI } from '../../entry-types.js'
 import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 import { SimpleHash } from '../../types/SimpleHash.js'
@@ -48,7 +48,7 @@ import { SimpleHash } from '../../types/SimpleHash.js'
 class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getCollectionByContractAddress(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {},
     ): Promise<SimpleHash.Collection | undefined> {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) return
@@ -65,7 +65,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getAsset(
         address: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, account }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, account }: BaseHubOptions<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
@@ -118,7 +118,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {}) {
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -144,7 +144,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getAssetsByCollection(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
@@ -266,7 +266,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getCollectionsByOwner(
         account: string,
-        { chainId, indicator, allChains, schemaType }: HubOptions_Base<ChainId> = {},
+        { chainId, indicator, allChains, schemaType }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         const pluginId = NetworkPluginID.PLUGIN_EVM
         const isERC712Only = schemaType === SchemaType.ERC721
@@ -325,7 +325,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getAssetsByCollectionAndOwner(
         collectionId: string,
         owner: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 50 }: BaseHubOptions<ChainId> = {},
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !isValidChainId(chainId) || !collectionId || !owner)
@@ -396,7 +396,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 const trade_token =
                     !x.sale_details?.payment_token ||
                     checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
-                        ? ChainResolver.nativeCurrency(chainId)
+                        ? EVMChainResolver.nativeCurrency(chainId)
                         : {
                               ...x.sale_details?.payment_token,
                               type: TokenType.Fungible,
@@ -414,7 +414,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     hash: x.transaction,
                     from: x.from_address,
                     token_id: x.token_id,
-                    transaction_link: ExplorerResolver.transactionLink(chainId, x.transaction),
+                    transaction_link: EVMExplorerResolver.transactionLink(chainId, x.transaction),
                     event_type: resolveEventType(x.event_type),
                     send: x.from_address,
                     receive: x.event_type === SimpleHash.ActivityType.Burn ? ZERO_ADDRESS : x.to_address,

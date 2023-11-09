@@ -4,7 +4,7 @@ import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
 import { formatCount } from '@masknet/web3-shared-base'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { InfoField } from './InformationCard.js'
 import { useSnapshotTrans } from '../locales/index.js'
 
@@ -80,7 +80,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         className={classes.link}
                         target="_blank"
                         rel="noopener"
-                        href={ExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                        href={EVMExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
                         {snapshot}
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>

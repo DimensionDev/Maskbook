@@ -16,7 +16,7 @@ import {
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyButton, FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { ExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -184,7 +184,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                     <Icons.LinkOut
                         size={16}
                         className={classes.link}
-                        onClick={() => openWindow(ExplorerResolver.addressLink(ChainId.Mainnet, address))}
+                        onClick={() => openWindow(EVMExplorerResolver.addressLink(ChainId.Mainnet, address))}
                     />
                 </div>
             </TableCell>

@@ -17,16 +17,11 @@ import {
     formatEthereumAddress,
     type ChainId,
     type ProviderType,
-    type Web3Provider,
-    type Web3,
 } from '@masknet/web3-shared-evm'
-import { BaseProvider } from './Base.js'
+import { BaseEVMWalletProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export abstract class BaseHostedProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
     protected abstract io_renameWallet(address: string, name: string): Promise<void>
     protected walletStorage:
         | StorageObject<{

@@ -37,16 +37,20 @@ import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
 import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
 
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import type { ConnectionOptions } from '../types/index.js'
+import type { EVMConnectionOptions } from '../types/index.js'
 
 export class ContractReadonlyAPI {
     static Default = new ContractReadonlyAPI()
-    constructor(protected options?: ConnectionOptions) {
+    constructor(protected options?: EVMConnectionOptions) {
         this.Request = new RequestReadonlyAPI(options)
     }
     protected Request
 
-    getWeb3Contract<T extends BaseContract>(address: string | undefined, ABI: AbiItem[], initial?: ConnectionOptions) {
+    getWeb3Contract<T extends BaseContract>(
+        address: string | undefined,
+        ABI: AbiItem[],
+        initial?: EVMConnectionOptions,
+    ) {
         const web3 = this.Request.getWeb3(initial)
         const options = omitBy(
             {
@@ -57,67 +61,67 @@ export class ContractReadonlyAPI {
         return createContract<T>(web3, address, ABI, options)
     }
 
-    getERC20Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getERC20Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<ERC20>(address, ERC20ABI as AbiItem[], initial)
     }
 
-    getERC20Bytes32Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getERC20Bytes32Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<ERC20Bytes32>(address, ERC20Bytes32ABI as AbiItem[], initial)
     }
 
-    getERC721Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getERC721Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<ERC721>(address, ERC721ABI as AbiItem[], initial)
     }
 
-    getERC1155Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getERC1155Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<ERC1155>(address, ERC1155ABI as AbiItem[], initial)
     }
 
-    getERC165Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getERC165Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], initial)
     }
 
-    getCryptoPunksContract(address: string | undefined, initial?: ConnectionOptions) {
+    getCryptoPunksContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<CryptoPunks>(address, CryptoPunksABI as AbiItem[], initial)
     }
 
-    getBalanceCheckerContract(address: string | undefined, initial?: ConnectionOptions) {
+    getBalanceCheckerContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<BalanceChecker>(address, BalanceCheckerABI as AbiItem[], initial)
     }
 
-    getWalletContract(address: string | undefined, initial?: ConnectionOptions) {
+    getWalletContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<Wallet>(address, WalletABI as AbiItem[], initial)
     }
 
-    getMulticallContract(address: string | undefined, initial?: ConnectionOptions) {
+    getMulticallContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<Multicall>(address, MulticallABI as AbiItem[], initial)
     }
 
-    getAirdropV2Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getAirdropV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<AirdropV2>(address, AirDropV2ABI as AbiItem[], initial)
     }
 
-    getPairContract(address: string | undefined, initial?: ConnectionOptions) {
+    getPairContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<Pair>(address, PairABI as AbiItem[], initial)
     }
 
-    getRouterV2Contract(address: string | undefined, initial?: ConnectionOptions) {
+    getRouterV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<RouterV2>(address, RouterV2ABI as AbiItem[], initial)
     }
 
-    getSwapRouterContract(address: string | undefined, initial?: ConnectionOptions) {
+    getSwapRouterContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<SwapRouter>(address, SwapRouterABI as AbiItem[], initial)
     }
 
-    getWETHContract(address: string | undefined, initial?: ConnectionOptions) {
+    getWETHContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<WETH>(address, WETH_ABI as AbiItem[], initial)
     }
 
-    getQuoterContract(address: string | undefined, initial?: ConnectionOptions) {
+    getQuoterContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<Quoter>(address, QuoterABI as AbiItem[], initial)
     }
 
-    getPoolStateV3(address: string | undefined, initial?: ConnectionOptions) {
+    getPoolStateV3(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
     }
 }

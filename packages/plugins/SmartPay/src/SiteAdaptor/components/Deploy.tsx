@@ -11,7 +11,7 @@ import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
-import { ExplorerResolver, SmartPayOwner, Web3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, SmartPayOwner, Web3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RoutePaths } from '../../constants.js'
@@ -316,7 +316,7 @@ export function Deploy({ open }: { open: boolean }) {
                             }
                             addressLink={
                                 signWallet?.address && chainId
-                                    ? ExplorerResolver.addressLink(chainId, signWallet?.address)
+                                    ? EVMExplorerResolver.addressLink(chainId, signWallet?.address)
                                     : undefined
                             }
                         />

@@ -12,7 +12,7 @@ export function useNativeTokenBalance<T extends NetworkPluginID = NetworkPluginI
     const Web3 = useWeb3Connection(pluginID, {
         account,
         ...options,
-    })
+    } as ConnectionOptions<T>)
 
     return useAsyncRetry(async () => {
         return Web3.getNativeTokenBalance()

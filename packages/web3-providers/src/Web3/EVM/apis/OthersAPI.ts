@@ -28,15 +28,15 @@ import {
     formatSchemaType,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import type { OthersAPI_Base } from '../../Base/apis/OthersAPI.js'
-import { ChainResolver, ExplorerResolver, ProviderResolver, NetworkResolver } from './ResolverAPI.js'
+import type { BaseUtils } from '../../Base/apis/OthersAPI.js'
+import { EVMChainResolver, EVMExplorerResolver, EVMProviderResolver, EVMNetworkResolver } from './ResolverAPI.js'
 
-export const OthersAPI = {
+export const EVMUtils = {
     isSameAddress,
-    chainResolver: ChainResolver,
-    explorerResolver: ExplorerResolver,
-    providerResolver: ProviderResolver,
-    networkResolver: NetworkResolver,
+    chainResolver: EVMChainResolver,
+    explorerResolver: EVMExplorerResolver,
+    providerResolver: EVMProviderResolver,
+    networkResolver: EVMNetworkResolver,
 
     isValidDomain,
     isValidChainId,
@@ -63,8 +63,8 @@ export const OthersAPI = {
     formatDomainName,
     formatSchemaType,
     createNativeToken(chainId: ChainId) {
-        return ChainResolver.nativeCurrency(chainId)
+        return EVMChainResolver.nativeCurrency(chainId)
     },
     createFungibleToken,
     createNonFungibleToken,
-} satisfies OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+} satisfies BaseUtils<ChainId, SchemaType, ProviderType, NetworkType, Transaction>

@@ -1,6 +1,6 @@
 import { compact } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkResolver } from '@masknet/web3-providers'
+import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-providers/types'
 import { useAvailability } from './useAvailability.js'
@@ -12,7 +12,7 @@ import { useAvailability } from './useAvailability.js'
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
     const parsedChainId =
         payload.token?.chainId ??
-        NetworkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
+        EVMNetworkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
         ChainId.Mainnet
 
     const asyncResult = useAvailability(payload.rpid, payload.contract_address, payload.contract_version, {

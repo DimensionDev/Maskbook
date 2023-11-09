@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-flow'
 import { type FungibleAsset, CurrencyType, rightShift } from '@masknet/web3-shared-base'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
-import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
 async function getTokenBalance(
@@ -143,7 +143,7 @@ class FlowFungibleAPI
 {
     async getAssets(
         account: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable([], createIndicator(indicator))
         const allSettled = await Promise.allSettled([

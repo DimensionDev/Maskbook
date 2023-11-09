@@ -1,10 +1,10 @@
 import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Web3Readonly } from './ConnectionReadonlyAPI.js'
-import type { HubOptions_Base } from '../../Base/apis/HubOptionsAPI.js'
-import { HubFungibleAPI_Base } from '../../Base/apis/HubFungibleAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
 import { Web3StateRef } from './Web3StateAPI.js'
-import { HubOptionsAPI } from './HubOptionsAPI.js'
+import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
 import { Approval } from '../../../Approval/index.js'
 import { ChainbaseFungibleToken } from '../../../Chainbase/index.js'
@@ -16,10 +16,10 @@ import { R2D2TokenList } from '../../../R2D2/index.js'
 import { Rabby } from '../../../Rabby/index.js'
 import { Zerion } from '../../../Zerion/index.js'
 
-export class HubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
-    protected override HubOptions = new HubOptionsAPI(this.options)
+export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
+    protected override HubOptions = new EVMHubOptionsProvider(this.options)
 
-    protected override getProviders(initial?: HubOptions_Base<ChainId>) {
+    protected override getProvidersFungible(initial?: BaseHubOptions<ChainId>) {
         const { indicator } = this.HubOptions.fill(initial)
 
         // only the first page is available
@@ -58,7 +58,7 @@ export class HubFungibleAPI extends HubFungibleAPI_Base<ChainId, SchemaType> {
         )
     }
 
-    override getFungibleToken(address: string, initial?: HubOptions_Base<ChainId> | undefined) {
+    override getFungibleToken(address: string, initial?: BaseHubOptions<ChainId> | undefined) {
         const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
         const currentNetwork = initial?.chainId
             ? networks?.find((x) => x.chainId === initial.chainId)

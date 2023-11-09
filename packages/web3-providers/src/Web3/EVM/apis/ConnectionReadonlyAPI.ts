@@ -49,12 +49,12 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import type { ConnectionAPI_Base } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
-import type { ConnectionOptions } from '../types/index.js'
-import type { ConnectionOptions_Base } from '../../../entry-types.js'
-import { ChainResolver } from './ResolverAPI.js'
-import type { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { EVMConnectionOptions } from '../types/index.js'
+import type { BaseConnectionOptions } from '../../../entry-types.js'
+import { EVMChainResolver } from './ResolverAPI.js'
+import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -74,7 +74,7 @@ interface ERC1155Metadata {
 
 export class ConnectionReadonlyAPI
     implements
-        ConnectionAPI_Base<
+        BaseConnection<
             ChainId,
             AddressType,
             SchemaType,
@@ -91,32 +91,32 @@ export class ConnectionReadonlyAPI
         >
 {
     static Default = new ConnectionReadonlyAPI()
-    constructor(protected options?: ConnectionOptions) {
+    constructor(protected options?: EVMConnectionOptions) {
         this.Contract = new ContractReadonlyAPI(this.options)
         this.Request = new RequestReadonlyAPI(this.options)
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
     }
     protected Request
     protected Contract
-    protected ConnectionOptions: ConnectionOptionsAPI_Base<ChainId, ProviderType, NetworkType, Transaction>
+    protected ConnectionOptions: ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction>
 
-    getWeb3(initial?: ConnectionOptions) {
+    getWeb3(initial?: EVMConnectionOptions) {
         return this.Request.getWeb3(initial)
     }
 
-    getWeb3Provider(initial?: ConnectionOptions) {
+    getWeb3Provider(initial?: EVMConnectionOptions) {
         return this.Request.getWeb3Provider(initial)
     }
 
-    async connect(initial?: ConnectionOptions): Promise<Account<ChainId>> {
+    async connect(initial?: EVMConnectionOptions): Promise<Account<ChainId>> {
         throw new Error('Method not implemented.')
     }
 
-    async disconnect(initial?: ConnectionOptions): Promise<void> {
+    async disconnect(initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    getWallets(initial?: ConnectionOptions): Promise<Wallet[]> {
+    getWallets(initial?: EVMConnectionOptions): Promise<Wallet[]> {
         return this.Request.request<Wallet[]>(
             {
                 method: EthereumMethodType.MASK_WALLETS,
@@ -126,31 +126,35 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async addWallet(wallet: UpdatableWallet, initial?: ConnectionOptions): Promise<void> {
+    async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async updateWallet(address: string, wallet: Partial<UpdatableWallet>, initial?: ConnectionOptions): Promise<void> {
+    async updateWallet(
+        address: string,
+        wallet: Partial<UpdatableWallet>,
+        initial?: EVMConnectionOptions,
+    ): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async renameWallet(address: string, name: string, initial?: ConnectionOptions): Promise<void> {
+    async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async removeWallet(address: string, password?: string | undefined, initial?: ConnectionOptions): Promise<void> {
+    async removeWallet(address: string, password?: string | undefined, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async resetAllWallets(initial?: ConnectionOptions): Promise<void> {
+    async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async updateWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
+    async updateWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async removeWallets(wallets: Wallet[], initial?: ConnectionOptions): Promise<void> {
+    async removeWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -158,7 +162,7 @@ export class ConnectionReadonlyAPI
         address: string,
         recipient: string,
         amount: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -168,7 +172,7 @@ export class ConnectionReadonlyAPI
         recipient: string,
         tokenId: string,
         schema: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -178,7 +182,7 @@ export class ConnectionReadonlyAPI
         recipient: string,
         approved: boolean,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -188,7 +192,7 @@ export class ConnectionReadonlyAPI
         recipient: string,
         amount: string,
         memo?: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -199,12 +203,12 @@ export class ConnectionReadonlyAPI
         recipient: string,
         amount?: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async getGasPrice(initial?: ConnectionOptions): Promise<string> {
+    async getGasPrice(initial?: EVMConnectionOptions): Promise<string> {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_GAS_PRICE,
@@ -214,13 +218,13 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getAddressType(address: string, initial?: ConnectionOptions): Promise<AddressType | undefined> {
+    async getAddressType(address: string, initial?: EVMConnectionOptions): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
         const code = await this.getCode(address, initial)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
 
-    async getSchemaType(address: string, initial?: ConnectionOptions): Promise<SchemaType | undefined> {
+    async getSchemaType(address: string, initial?: EVMConnectionOptions): Promise<SchemaType | undefined> {
         const ERC165_INTERFACE_ID = '0x01ffc9a7'
         const EIP5516_INTERFACE_ID = '0x8314f22b'
         const EIP5192_INTERFACE_ID = '0xb45a3c0e'
@@ -261,7 +265,7 @@ export class ConnectionReadonlyAPI
         address: string,
         tokenId: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -300,7 +304,12 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType, initial?: ConnectionOptions) {
+    async getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: EVMConnectionOptions,
+    ) {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
 
@@ -323,7 +332,7 @@ export class ConnectionReadonlyAPI
         tokenId: string,
         owner: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ) {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -344,7 +353,7 @@ export class ConnectionReadonlyAPI
         address: string,
         tokenId: string | undefined,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ) {
         const options = this.ConnectionOptions.fill(initial)
         const processURI = (uri: string) => {
@@ -397,7 +406,7 @@ export class ConnectionReadonlyAPI
     async getNonFungibleTokenContract(
         address: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -442,7 +451,7 @@ export class ConnectionReadonlyAPI
     async getNonFungibleTokenCollection(
         address: string,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -457,7 +466,7 @@ export class ConnectionReadonlyAPI
         return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
     }
 
-    createAccount(initial?: ConnectionOptions_Base<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
+    createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
         const options = this.ConnectionOptions.fill(initial)
         const account = createAccount()
         return {
@@ -467,17 +476,21 @@ export class ConnectionReadonlyAPI
         }
     }
 
-    async switchChain(chainId: ChainId, initial?: ConnectionOptions): Promise<void> {
+    async switchChain(chainId: ChainId, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    async getNativeTokenBalance(initial?: ConnectionOptions): Promise<string> {
+    async getNativeTokenBalance(initial?: EVMConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         if (!isValidAddress(options.account)) return '0'
         return this.getBalance(options.account, options)
     }
 
-    async getFungibleTokenBalance(address: string, schema?: SchemaType, initial?: ConnectionOptions): Promise<string> {
+    async getFungibleTokenBalance(
+        address: string,
+        schema?: SchemaType,
+        initial?: EVMConnectionOptions,
+    ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
 
         // Native
@@ -492,7 +505,7 @@ export class ConnectionReadonlyAPI
         address: string,
         tokenId: string | undefined,
         schema?: SchemaType,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         const actualSchema = schema ?? (await this.getSchemaType(address, options))
@@ -510,7 +523,7 @@ export class ConnectionReadonlyAPI
 
     async getFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<Record<string, string>> {
         if (!listOfAddress.length) return {}
 
@@ -542,7 +555,7 @@ export class ConnectionReadonlyAPI
 
     async getNonFungibleTokensBalance(
         listOfAddress: string[],
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<Record<string, string>> {
         if (!listOfAddress.length) return {}
 
@@ -559,14 +572,17 @@ export class ConnectionReadonlyAPI
         return Object.fromEntries(listOfAddress.map<[string, string]>((x, i) => [x, result[i]]))
     }
 
-    getNativeToken(initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    getNativeToken(initial?: EVMConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
-        const token = ChainResolver.nativeCurrency(options.chainId)
+        const token = EVMChainResolver.nativeCurrency(options.chainId)
         if (!token) throw new Error('Failed to create native token.')
         return Promise.resolve(token)
     }
 
-    async getFungibleToken(address: string, initial?: ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+    async getFungibleToken(
+        address: string,
+        initial?: EVMConnectionOptions,
+    ): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
 
         // Native
@@ -600,7 +616,7 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getAccount(initial?: ConnectionOptions) {
+    async getAccount(initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         const accounts = await this.Request.request<string[]>(
             {
@@ -612,7 +628,7 @@ export class ConnectionReadonlyAPI
         return first(accounts) ?? ''
     }
 
-    async getChainId(initial?: ConnectionOptions) {
+    async getChainId(initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         const chainId = await this.Request.request<string>(
             {
@@ -624,7 +640,7 @@ export class ConnectionReadonlyAPI
         return Number.parseInt(chainId, 16)
     }
 
-    getBlock(noOrId: number | string, initial?: ConnectionOptions) {
+    getBlock(noOrId: number | string, initial?: EVMConnectionOptions) {
         return this.Request.request<Block>(
             {
                 method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
@@ -634,7 +650,7 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    getBlockNumber(initial?: ConnectionOptions) {
+    getBlockNumber(initial?: EVMConnectionOptions) {
         return this.Request.request<number>(
             {
                 method: EthereumMethodType.ETH_BLOCK_NUMBER,
@@ -644,14 +660,14 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getBlockTimestamp(initial?: ConnectionOptions): Promise<number> {
+    async getBlockTimestamp(initial?: EVMConnectionOptions): Promise<number> {
         const options = this.ConnectionOptions.fill(initial)
         const blockNumber = await this.getBlockNumber(options)
         const block = await this.getBlock(blockNumber, options)
         return Number.parseInt(block.timestamp, 16)
     }
 
-    getBalance(address: string, initial?: ConnectionOptions) {
+    getBalance(address: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_GET_BALANCE,
@@ -661,7 +677,7 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    getCode(address: string, initial?: ConnectionOptions) {
+    getCode(address: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_GET_CODE,
@@ -671,7 +687,7 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getTransaction(hash: string, initial?: ConnectionOptions) {
+    async getTransaction(hash: string, initial?: EVMConnectionOptions) {
         return this.Request.request<TransactionDetailed>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
@@ -681,7 +697,7 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: ConnectionOptions) {
+    async estimateTransaction(transaction: Transaction, fallback = 21000, initial?: EVMConnectionOptions) {
         try {
             const options = this.ConnectionOptions.fill(initial)
             return await this.Request.request<string>(
@@ -702,7 +718,7 @@ export class ConnectionReadonlyAPI
         }
     }
 
-    getTransactionReceipt(hash: string, initial?: ConnectionOptions) {
+    getTransactionReceipt(hash: string, initial?: EVMConnectionOptions) {
         return this.Request.request<TransactionReceipt>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
@@ -712,12 +728,12 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async getTransactionStatus(hash: string, initial?: ConnectionOptions): Promise<TransactionStatusType> {
+    async getTransactionStatus(hash: string, initial?: EVMConnectionOptions): Promise<TransactionStatusType> {
         const receipt = await this.getTransactionReceipt(hash, initial)
         return getTransactionStatusType(receipt)
     }
 
-    async getTransactionNonce(address: string, initial?: ConnectionOptions) {
+    async getTransactionNonce(address: string, initial?: EVMConnectionOptions) {
         const nonce = await this.Request.request<number | string>(
             {
                 method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
@@ -731,7 +747,7 @@ export class ConnectionReadonlyAPI
     signMessage(
         type: 'message' | 'typedData' | Omit<string, 'message' | 'typedData'>,
         message: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -740,52 +756,52 @@ export class ConnectionReadonlyAPI
         type: string,
         message: string,
         signature: string,
-        initial?: ConnectionOptions,
+        initial?: EVMConnectionOptions,
     ): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
 
-    async signTransaction(transaction: Transaction, initial?: ConnectionOptions): Promise<string> {
+    async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    signTransactions(transactions: Transaction[], initial?: ConnectionOptions): Promise<string[]> {
+    signTransactions(transactions: Transaction[], initial?: EVMConnectionOptions): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
 
-    supportedChainIds(initial?: ConnectionOptions): Promise<ChainId[]> {
+    supportedChainIds(initial?: EVMConnectionOptions): Promise<ChainId[]> {
         throw new Error('Method not implemented.')
     }
 
-    supportedEntryPoints(initial?: ConnectionOptions): Promise<string[]> {
+    supportedEntryPoints(initial?: EVMConnectionOptions): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
 
-    async callUserOperation(owner: string, operation: UserOperation, initial?: ConnectionOptions): Promise<string> {
+    async callUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async sendUserOperation(owner: string, operation: UserOperation, initial?: ConnectionOptions): Promise<string> {
+    async sendUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async transfer(recipient: string, amount: string, initial?: ConnectionOptions): Promise<string> {
+    async transfer(recipient: string, amount: string, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async changeOwner(recipient: string, initial?: ConnectionOptions): Promise<string> {
+    async changeOwner(recipient: string, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async fund(proof: Proof, initial?: ConnectionOptions): Promise<string> {
+    async fund(proof: Proof, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: ConnectionOptions): Promise<string> {
+    async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    callTransaction(transaction: Transaction, initial?: ConnectionOptions) {
+    callTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
@@ -796,11 +812,11 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async sendTransaction(transaction: Transaction, initial?: ConnectionOptions): Promise<string> {
+    async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    sendSignedTransaction(signature: string, initial?: ConnectionOptions) {
+    sendSignedTransaction(signature: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
@@ -810,15 +826,15 @@ export class ConnectionReadonlyAPI
         )
     }
 
-    async confirmTransaction(hash: string, initial?: ConnectionOptions): Promise<TransactionReceipt> {
+    async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {
         throw new Error('Method not implemented.')
     }
 
-    replaceTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions): Promise<void> {
+    replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    cancelTransaction(hash: string, transaction: Transaction, initial?: ConnectionOptions): Promise<void> {
+    cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 }

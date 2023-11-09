@@ -17,7 +17,7 @@ import { MessageState } from '../../Base/state/Message.js'
 import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class Message extends MessageState<MessageRequest, MessageResponse> {
+export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
     constructor(context: WalletAPI.IOContext) {
         super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
     }

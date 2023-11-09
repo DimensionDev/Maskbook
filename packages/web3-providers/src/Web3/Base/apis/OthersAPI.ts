@@ -2,12 +2,12 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ProviderResolverAPI } from './ProviderResolverAPI.js'
 import type { NetworkResolverAPI } from './NetworkExplorerAPI.js'
-import type { ChainResolverAPI } from './ChainResolverAPI.js'
-import type { ExplorerResolverAPI_Base } from './ExplorerResolverAPI.js'
+import type { ChainResolver } from './ChainResolverAPI.js'
+import type { ExplorerResolver } from './ExplorerResolverAPI.js'
 
-export interface OthersAPI_Base<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
-    readonly chainResolver: ChainResolverAPI<ChainId, SchemaType, NetworkType>
-    readonly explorerResolver: ExplorerResolverAPI_Base<ChainId, SchemaType, NetworkType>
+export interface BaseUtils<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
+    readonly chainResolver: ChainResolver<ChainId, SchemaType, NetworkType>
+    readonly explorerResolver: ExplorerResolver<ChainId, SchemaType, NetworkType>
     readonly providerResolver: ProviderResolverAPI<ChainId, ProviderType>
     readonly networkResolver: NetworkResolverAPI<ChainId, NetworkType>
 

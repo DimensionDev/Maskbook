@@ -2,18 +2,12 @@ import { first } from 'lodash-es'
 import type { Transaction } from '@solana/web3.js'
 import { injectedCoin98SolanaProvider } from '@masknet/injected-script'
 import type { Account } from '@masknet/shared-base'
-import { type ChainId, Coin98MethodType, ProviderType, type Web3Provider, type Web3 } from '@masknet/web3-shared-solana'
-import { BaseInjectedProvider } from './BaseInjected.js'
-import type { WalletAPI } from '../../../entry-types.js'
+import { type ChainId, Coin98MethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
-export class SolanaCoin98Provider
-    extends BaseInjectedProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
-    constructor() {
-        super(ProviderType.Coin98, injectedCoin98SolanaProvider)
-    }
-
+export class SolanaCoin98Provider extends SolanaInjectedWalletProvider {
+    protected override providerType = ProviderType.Coin98
+    protected override bridge = injectedCoin98SolanaProvider
     override async signMessage(message: string): Promise<string> {
         const { signature } = (await this.bridge.request({
             method: Coin98MethodType.SOL_SIGN,

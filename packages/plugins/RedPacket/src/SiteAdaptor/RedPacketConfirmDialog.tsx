@@ -18,7 +18,7 @@ import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { ChainResolver, ExplorerResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -170,7 +170,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
-        network: ChainResolver.chainName(chainId),
+        network: EVMChainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
 
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
@@ -183,10 +183,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         }
         payload.current.contract_address = contractAddress
         payload.current.contract_version = contract_version
-        payload.current.network = ChainResolver.networkType(chainId)
+        payload.current.network = EVMChainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
 
-    const nativeTokenDetailed = useMemo(() => ChainResolver.nativeCurrency(chainId), [chainId])
+    const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
@@ -240,7 +240,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}
-                                    href={ExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                    href={EVMExplorerResolver.fungibleTokenLink(
+                                        chainId,
+                                        settings?.token?.address ?? '',
+                                    )}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={stop}>
@@ -268,7 +271,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={ExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                            href={EVMExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={stop}>

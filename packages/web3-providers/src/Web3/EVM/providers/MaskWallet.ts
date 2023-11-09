@@ -11,26 +11,15 @@ import {
     getExtensionSiteType,
 } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    isValidAddress,
-    PayloadEditor,
-    ProviderType,
-    type Web3,
-    type Web3Provider,
-    type RequestArguments,
-} from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../apis/ResolverAPI.js'
-import { BaseContractWalletProvider } from './BaseContractWallet.js'
+import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
+import { BaseEIP4337WalletProvider } from './BaseContractWallet.js'
 import { RequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwner } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 
-export class MaskWalletProvider
-    extends BaseContractWalletProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
         await this.context?.MaskWalletContext?.renameWallet(address, name)
@@ -196,7 +185,7 @@ export class MaskWalletProvider
             )
 
         const account = first(await this.context?.selectMaskWalletAccount(chainId, address, location.origin))
-        if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}`)
+        if (!account) throw new Error(`Failed to connect to ${EVMChainResolver.chainFullName(chainId)}`)
 
         // switch account
         if (!isSameAddress(this.hostedAccount, account?.address)) {

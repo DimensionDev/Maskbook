@@ -7,18 +7,17 @@ import {
     ProviderURL,
     EthereumMethodType,
     type ProviderType,
-    type Web3Provider,
     type RequestArguments,
-    type Web3,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import type { EVMWalletProvider } from './index.js'
 
-export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
     protected context: WalletAPI.IOContext | undefined
 
     constructor(protected providerType: ProviderType) {}
@@ -117,10 +116,10 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
                     params: [
                         {
                             chainId: toHex(chainId),
-                            chainName: ChainResolver.chainFullName(chainId) ?? ChainResolver.chainName(chainId),
-                            nativeCurrency: ChainResolver.nativeCurrency(chainId),
+                            chainName: EVMChainResolver.chainFullName(chainId) ?? EVMChainResolver.chainName(chainId),
+                            nativeCurrency: EVMChainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],
-                            blockExplorerUrls: [ChainResolver.explorerUrl(chainId)?.url],
+                            blockExplorerUrls: [EVMChainResolver.explorerUrl(chainId)?.url],
                         },
                     ],
                 })
@@ -138,7 +137,7 @@ export class BaseProvider implements WalletAPI.Provider<ChainId, ProviderType, W
         })
 
         if (Number.parseInt(actualChainId, 16) !== chainId)
-            throw new Error(`Failed to switch to ${ChainResolver.chainFullName(chainId)}.`)
+            throw new Error(`Failed to switch to ${EVMChainResolver.chainFullName(chainId)}.`)
     }
 
     // A provider should at least implement a RPC request method.

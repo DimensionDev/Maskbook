@@ -258,7 +258,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { data: asset, isLoading: loadingAsset } = useNonFungibleAsset<'all'>(
+    const { data: asset, isLoading: loadingAsset } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,

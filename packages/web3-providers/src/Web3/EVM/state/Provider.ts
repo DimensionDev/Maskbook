@@ -20,11 +20,11 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { Providers } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
-export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     protected providers = Providers
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId
@@ -34,7 +34,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
     protected override getDefaultProviderType = getDefaultProviderType
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkTypeFromChainId(chainId: ChainId) {
-        return ChainResolver.networkType(chainId) ?? NetworkType.Ethereum
+        return EVMChainResolver.networkType(chainId) ?? NetworkType.Ethereum
     }
 
     private constructor(io: WalletAPI.IOContext) {

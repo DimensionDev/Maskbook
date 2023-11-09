@@ -1,10 +1,10 @@
 import type { Web3State } from '@masknet/web3-shared-flow'
-import { AddressBook } from '../state/AddressBook.js'
-import { Provider } from '../state/Provider.js'
-import { Settings } from '../state/Settings.js'
-import { Transaction } from '../state/Transaction.js'
-import { IdentityService } from '../state/IdentityService.js'
-import { Network } from '../state/Network.js'
+import { FlowAddressBook } from '../state/AddressBook.js'
+import { FlowProvider } from '../state/Provider.js'
+import { FlowSettings } from '../state/Settings.js'
+import { FlowTransaction } from '../state/Transaction.js'
+import { FlowIdentityService } from '../state/IdentityService.js'
+import { FlowNetwork } from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { flow } from '../../../Manager/registry.js'
 
@@ -14,14 +14,14 @@ export const FlowWeb3StateRef = {
     },
 }
 export async function createFlowState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = await Provider.new(context)
+    const Provider_ = await FlowProvider.new(context)
 
     return {
-        AddressBook: new AddressBook(context),
-        IdentityService: new IdentityService(context),
-        Settings: new Settings(context),
-        Network: new Network(context),
-        Transaction: new Transaction(context, {
+        AddressBook: new FlowAddressBook(context),
+        IdentityService: new FlowIdentityService(context),
+        Settings: new FlowSettings(context),
+        Network: new FlowNetwork(context),
+        Transaction: new FlowTransaction(context, {
             chainId: Provider_.chainId,
             account: Provider_.account,
         }),

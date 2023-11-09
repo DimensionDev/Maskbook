@@ -1,6 +1,6 @@
-import { BaseInjectedProvider } from './BaseInjected.js'
+import { InjectedWalletBridge } from './BaseInjected.js'
 
-export class SolflareProvider extends BaseInjectedProvider {
+export class SolflareProvider extends InjectedWalletBridge {
     constructor() {
         super('solflare')
     }

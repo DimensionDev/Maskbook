@@ -5,7 +5,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RiskWarningState } from '../../Base/state/RiskWarning.js'
 import { RiskWarning as Warning } from '../../../RiskWarning/index.js'
 
-export class RiskWarning extends RiskWarningState {
+export class EVMRiskWarning extends RiskWarningState {
     constructor(
         context: WalletAPI.IOContext,
         subscription: {

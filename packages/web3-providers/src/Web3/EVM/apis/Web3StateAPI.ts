@@ -1,18 +1,18 @@
 import type { Web3State } from '@masknet/web3-shared-evm'
-import { AddressBook } from '../state/AddressBook.js'
-import { RiskWarning } from '../state/RiskWarning.js'
-import { Token } from '../state/Token.js'
-import { Transaction } from '../state/Transaction.js'
-import { NameService } from '../state/NameService.js'
-import { Provider } from '../state/Provider.js'
-import { Settings } from '../state/Settings.js'
-import { TransactionFormatter } from '../state/TransactionFormatter.js'
-import { TransactionWatcher } from '../state/TransactionWatcher.js'
-import { IdentityService } from '../state/IdentityService.js'
-import { BalanceNotifier } from '../state/BalanceNotifier.js'
-import { BlockNumberNotifier } from '../state/BlockNumberNotifier.js'
-import { Message } from '../state/Message.js'
-import { Network } from '../state/Network.js'
+import { EVMAddressBook } from '../state/AddressBook.js'
+import { EVMRiskWarning } from '../state/RiskWarning.js'
+import { EVMToken } from '../state/Token.js'
+import { EVMTransaction } from '../state/Transaction.js'
+import { EVMNameService } from '../state/NameService.js'
+import { EVMProvider } from '../state/Provider.js'
+import { EVMSettings } from '../state/Settings.js'
+import { EVMTransactionFormatter } from '../state/TransactionFormatter.js'
+import { EVMTransactionWatcher } from '../state/TransactionWatcher.js'
+import { EVMIdentityService } from '../state/IdentityService.js'
+import { EVMBalanceNotifier } from '../state/BalanceNotifier.js'
+import { EVMBlockNumberNotifier } from '../state/BlockNumberNotifier.js'
+import { EVMMessage } from '../state/Message.js'
+import { EVMNetwork } from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
 
@@ -22,33 +22,33 @@ export const Web3StateRef = {
     },
 }
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = await Provider.new(context)
+    const Provider_ = await EVMProvider.new(context)
 
-    const Transaction_ = new Transaction(context, {
+    const Transaction_ = new EVMTransaction(context, {
         chainId: Provider_.chainId,
         account: Provider_.account,
     })
 
     return {
-        Settings: new Settings(context),
+        Settings: new EVMSettings(context),
         Provider: Provider_,
-        BalanceNotifier: new BalanceNotifier(),
-        BlockNumberNotifier: new BlockNumberNotifier(),
-        Network: new Network(context),
-        AddressBook: new AddressBook(context),
-        IdentityService: new IdentityService(context),
-        NameService: new NameService(context),
-        RiskWarning: new RiskWarning(context, {
+        BalanceNotifier: new EVMBalanceNotifier(),
+        BlockNumberNotifier: new EVMBlockNumberNotifier(),
+        Network: new EVMNetwork(context),
+        AddressBook: new EVMAddressBook(context),
+        IdentityService: new EVMIdentityService(context),
+        NameService: new EVMNameService(context),
+        RiskWarning: new EVMRiskWarning(context, {
             account: Provider_.account,
         }),
-        Message: new Message(context),
-        Token: new Token(context, {
+        Message: new EVMMessage(context),
+        Token: new EVMToken(context, {
             account: Provider_.account,
             chainId: Provider_.chainId,
         }),
         Transaction: Transaction_,
-        TransactionFormatter: new TransactionFormatter(context),
-        TransactionWatcher: new TransactionWatcher(context, {
+        TransactionFormatter: new EVMTransactionFormatter(context),
+        TransactionWatcher: new EVMTransactionWatcher(context, {
             chainId: Provider_.chainId!,
             transactions: Transaction_.transactions!,
         }),

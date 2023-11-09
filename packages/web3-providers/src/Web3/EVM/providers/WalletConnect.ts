@@ -12,11 +12,9 @@ import {
     isValidAddress,
     isValidChainId,
     type RequestArguments,
-    type Web3,
-    type Web3Provider,
 } from '@masknet/web3-shared-evm'
-import { BaseProvider } from './Base.js'
-import { ChainResolver } from '../apis/ResolverAPI.js'
+import { BaseEVMWalletProvider } from './Base.js'
+import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { Web3StateRef } from '../apis/Web3StateAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -67,10 +65,7 @@ class Client {
     }
 }
 
-export class WalletConnectProvider
-    extends BaseProvider
-    implements WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>
-{
+export class WalletConnectProvider extends BaseEVMWalletProvider {
     private client: Client = null!
 
     constructor() {
@@ -143,7 +138,7 @@ export class WalletConnectProvider
         await this.client.setup()
 
         const account = await this.login(chainId)
-        if (!account) throw new Error(`Failed to connect to ${ChainResolver.chainFullName(chainId)}.`)
+        if (!account) throw new Error(`Failed to connect to ${EVMChainResolver.chainFullName(chainId)}.`)
 
         return account
     }

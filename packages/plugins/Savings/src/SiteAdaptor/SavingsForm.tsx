@@ -35,7 +35,7 @@ import {
     rightShift,
 } from '@masknet/web3-shared-base'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { Contract, Others, Web3, ChainResolver } from '@masknet/web3-providers'
+import { Contract, Others, Web3, EVMChainResolver } from '@masknet/web3-providers'
 import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
@@ -190,7 +190,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const promote = {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
-        chain: ChainResolver.chainName(chainId) ?? '',
+        chain: EVMChainResolver.chainName(chainId) ?? '',
         account: Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account(),
     }
     const shareText = isDeposit ? t.promote_savings(promote) : t.promote_withdraw(promote)

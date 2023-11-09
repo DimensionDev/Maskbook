@@ -11,7 +11,7 @@ import { type FungibleAsset, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, isNativeTokenAddress, isValidAddress, isValidChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { FT, FT_Price } from '../types.js'
 import { fetchFromChainbase } from '../helpers.js'
-import type { FungibleTokenAPI, HubOptions_Base } from '../../entry-types.js'
+import type { FungibleTokenAPI, BaseHubOptions } from '../../entry-types.js'
 
 class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
     createFungibleAssetFromFT(chainId: ChainId, token: FT) {
@@ -31,7 +31,7 @@ class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Sc
         }
     }
 
-    async getAsset(address: string, { chainId = ChainId.Mainnet }: HubOptions_Base<ChainId> = {}) {
+    async getAsset(address: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         if (!isValidChainId(chainId)) return
         const token = await fetchFromChainbase<FT>(
             urlcat('/v1/token/metadata', {
@@ -45,7 +45,7 @@ class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Sc
     }
     async getAssets(
         address: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const tokens = await fetchFromChainbase<FT[]>(

@@ -14,7 +14,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
-import { ChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
+import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL, SPAM_SCORE } from './constants.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
@@ -64,7 +64,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
                   // FIXME: cannot get payment token
                   token:
                       asset.last_sale.payment_token?.symbol === 'ETH'
-                          ? ChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                          ? EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
                           : WNATIVE[chainId],
               }
             : undefined,

@@ -8,4 +8,4 @@ class ReceiptCheckerAPI implements TransactionChecker<ChainId, Transaction> {
         return getTransactionStatusType(receipt ?? null)
     }
 }
-export const ReceiptChecker = new ReceiptCheckerAPI()
+export const EVMReceiptChecker = new ReceiptCheckerAPI()

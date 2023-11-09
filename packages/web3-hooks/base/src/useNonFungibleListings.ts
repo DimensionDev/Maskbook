@@ -15,7 +15,7 @@ export function useNonFungibleListings<T extends NetworkPluginID = NetworkPlugin
     const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
-    })
+    } as HubOptions<T>)
 
     return useInfiniteQuery({
         queryKey: ['non-fungible', 'orders', pluginID, address, id, options],

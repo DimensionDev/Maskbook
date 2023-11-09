@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Web3, Contract, ChainResolver } from '@masknet/web3-providers'
+import { Web3, Contract, EVMChainResolver } from '@masknet/web3-providers'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
@@ -38,7 +38,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             coinGeckoPlatformId: '',
             name: 'Mainnet',
             network: 'mainnet',
-            nativeCurrency: ChainResolver.nativeCurrency(ChainId.Mainnet),
+            nativeCurrency: EVMChainResolver.nativeCurrency(ChainId.Mainnet),
             rpcUrl: 'https://cloudflare-eth.com',
             explorerUrl: {
                 url: 'https://etherscan.io/',

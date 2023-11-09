@@ -7,7 +7,7 @@ import { formatTransactions, resolveDeBankAssetIdReversed } from '../helpers.js'
 import type { HistoryRecord } from '../types.js'
 import { CHIAN_ID_TO_DEBANK_CHAIN_MAP, DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
-import type { HistoryAPI, HubOptions_Base } from '../../entry-types.js'
+import type { HistoryAPI, BaseHubOptions } from '../../entry-types.js'
 import { Web3StateRef } from '../../Web3/EVM/apis/Web3StateAPI.js'
 
 const PRESET_CHAIN_IDS = 'eth,aurora,bsc,matic,pls,ftm,op,klay,nova,celo,astar,boba'.split(',')
@@ -22,7 +22,7 @@ class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     }
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions_Base<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -46,7 +46,7 @@ class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
 
     async getAllTransactions(
         address: string,
-        { indicator, size = 20 }: HubOptions_Base<ChainId> = {},
+        { indicator, size = 20 }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const result = await fetchSquashedJSON<HistoryRecord>(
             urlcat(DEBANK_OPEN_API, '/v1/user/all_history_list', {

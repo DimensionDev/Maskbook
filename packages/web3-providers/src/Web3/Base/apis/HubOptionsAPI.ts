@@ -3,7 +3,7 @@ import type { NetworkPluginID, PageIndicator, PartialRequired } from '@masknet/s
 import { CurrencyType, type SourceType } from '@masknet/web3-shared-base'
 import { type SchemaType } from '@masknet/web3-shared-evm'
 
-export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
+export interface BaseHubOptions<ChainId, Indicator = PageIndicator> {
     /** The user account as the API parameter */
     account?: string
     /** The chain id as the API parameter */
@@ -23,15 +23,15 @@ export interface HubOptions_Base<ChainId, Indicator = PageIndicator> {
     allChains?: boolean
 }
 
-export abstract class HubOptionsAPI_Base<ChainId> {
-    constructor(private options?: HubOptions_Base<ChainId>) {}
+export abstract class HubOptionsProvider<ChainId> {
+    constructor(private options?: BaseHubOptions<ChainId>) {}
     protected abstract getDefaultChainId(): ChainId
     protected abstract getNetworkPluginID(): NetworkPluginID
     protected abstract getAccount(): string | undefined
     protected abstract getChainId(): ChainId | undefined
     protected abstract getCurrencyType(): CurrencyType | undefined
 
-    protected get defaults(): PartialRequired<HubOptions_Base<ChainId>, 'account' | 'chainId'> {
+    protected get defaults(): PartialRequired<BaseHubOptions<ChainId>, 'account' | 'chainId'> {
         return {
             account: '',
             chainId: this.getDefaultChainId(),
@@ -41,7 +41,7 @@ export abstract class HubOptionsAPI_Base<ChainId> {
         }
     }
 
-    protected get refs(): HubOptions_Base<ChainId> {
+    protected get refs(): BaseHubOptions<ChainId> {
         return {
             account: this.getAccount(),
             chainId: this.getChainId(),
@@ -49,7 +49,7 @@ export abstract class HubOptionsAPI_Base<ChainId> {
         }
     }
 
-    fill(initial?: HubOptions_Base<ChainId>): PartialRequired<HubOptions_Base<ChainId>, 'account' | 'chainId'> {
+    fill(initial?: BaseHubOptions<ChainId>): PartialRequired<BaseHubOptions<ChainId>, 'account' | 'chainId'> {
         return {
             ...this.defaults,
             ...this.refs,

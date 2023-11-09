@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ChainResolver, ExplorerResolver } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMExplorerResolver } from '@masknet/web3-providers'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import type { Project } from '../types.js'
 import { useArtBlocksTrans } from '../locales/index.js'
@@ -119,12 +119,12 @@ export function DetailsView({ project }: DetailsViewProps) {
 
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t.plugin_artblocks_blockchain_row()}</Typography>
-                    <Typography variant="body2">{ChainResolver.chainName(chainId)}</Typography>
+                    <Typography variant="body2">{EVMChainResolver.chainName(chainId)}</Typography>
                 </Box>
                 <Box className={classes.meta_row}>
                     <Typography variant="body2">{t.plugin_artblocks_contract_row()}</Typography>
                     <Link
-                        href={ExplorerResolver.transactionLink(chainId, project.contract.id)}
+                        href={EVMExplorerResolver.transactionLink(chainId, project.contract.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">

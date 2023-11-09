@@ -24,7 +24,7 @@ function getSolanaDomainAddress(domain: string) {
     return SolanaDomain.lookup(domain)
 }
 
-export class IdentityService extends IdentityServiceState<ChainId> {
+export class SolanaIdentityService extends IdentityServiceState<ChainId> {
     constructor(protected context: WalletAPI.IOContext) {
         super()
     }

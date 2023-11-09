@@ -1,8 +1,8 @@
 import { getDefaultChainId, getDefaultProviderType } from '@masknet/web3-shared-evm'
 import type { ChainId, ProviderType, NetworkType, Transaction } from '@masknet/web3-shared-evm'
-import { ConnectionOptionsAPI_Base } from '../../Base/apis/ConnectionOptionsAPI.js'
+import { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
 
-export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsAPI_Base<
+export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsProvider<
     ChainId,
     ProviderType,
     NetworkType,

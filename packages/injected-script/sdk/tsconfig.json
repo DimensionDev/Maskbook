@@ -7,7 +7,6 @@
   },
   "files": [
     "index.ts",
-    "Base.ts",
     "BaseInjected.ts",
     "Browser.ts",
     "Phantom.ts",

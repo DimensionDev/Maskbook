@@ -1,9 +1,9 @@
 import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
-import { Base } from './Base.js'
+import { BaseTranslator } from './Base.js'
 import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
-export class Polygon extends Base {
+export class PolygonTranslator extends BaseTranslator {
     override async encode(context: ConnectionContext): Promise<void> {
         await super.encode(context)
         if (!context.config) return

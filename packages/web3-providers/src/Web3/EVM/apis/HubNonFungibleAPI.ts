@@ -1,8 +1,8 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { HubNonFungibleAPI_Base } from '../../Base/apis/HubNonFungibleAPI.js'
-import { HubOptionsAPI } from './HubOptionsAPI.js'
-import type { HubOptions } from '../types/index.js'
+import { BaseHubNonFungible } from '../../Base/apis/HubNonFungibleAPI.js'
+import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
+import type { EVMHubOptions } from '../types/index.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 import { AlchemyEVM } from '../../../Alchemy/index.js'
 import { Approval } from '../../../Approval/index.js'
@@ -18,10 +18,10 @@ import { X2Y2 } from '../../../X2Y2/index.js'
 import { ZerionNonFungibleToken } from '../../../Zerion/index.js'
 import { Zora } from '../../../Zora/index.js'
 
-export class HubNonFungibleAPI extends HubNonFungibleAPI_Base<ChainId, SchemaType> {
-    protected override HubOptions = new HubOptionsAPI(this.options)
+export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
+    protected override HubOptions = new EVMHubOptionsProvider(this.options)
 
-    protected override getProviders(initial?: HubOptions) {
+    protected override getProvidersNonFungible(initial?: EVMHubOptions) {
         const options = this.HubOptions.fill(initial)
         return this.getPredicateProviders<
             | AuthorizationAPI.Provider<ChainId>

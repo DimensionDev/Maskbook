@@ -4,7 +4,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import type { AbiItem } from 'web3-utils'
 import { useContainer } from 'unstated-next'
-import { Contract, ExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { Contract, EVMExplorerResolver, Web3 } from '@masknet/web3-providers'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { Box, Link, Popover, Typography, alpha } from '@mui/material'
@@ -266,7 +266,7 @@ export default function ChangeOwner() {
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={wallet.address} />
                                         <Link
-                                            href={ExplorerResolver.addressLink(chainId, wallet.address)}
+                                            href={EVMExplorerResolver.addressLink(chainId, wallet.address)}
                                             target="_blank"
                                             title={t.view_on_explorer()}
                                             rel="noopener noreferrer"
@@ -308,7 +308,7 @@ export default function ChangeOwner() {
                                         <Link
                                             href={
                                                 walletManager
-                                                    ? ExplorerResolver.addressLink(chainId, managerAddress)
+                                                    ? EVMExplorerResolver.addressLink(chainId, managerAddress)
                                                     : urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"

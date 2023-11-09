@@ -14,7 +14,7 @@ export function useNonFungibleRarity<T extends NetworkPluginID = NetworkPluginID
     const Hub = useWeb3Hub(pluginID, {
         account,
         ...options,
-    })
+    } as HubOptions<T>)
 
     return useQuery(['non-fungible-rarity', pluginID, address, id, options], () => {
         // Solana only needs id

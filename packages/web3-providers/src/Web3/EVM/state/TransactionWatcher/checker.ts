@@ -1,4 +1,7 @@
-import { AccountChecker } from './checkers/AccountChecker.js'
-import { ReceiptChecker } from './checkers/ReceiptChecker.js'
+import { EVMAccountChecker } from './checkers/AccountChecker.js'
+import { EVMReceiptChecker } from './checkers/ReceiptChecker.js'
 
-export const TransactionCheckers: [typeof AccountChecker, typeof ReceiptChecker] = [AccountChecker, ReceiptChecker]
+export const EVMTransactionCheckers: [typeof EVMAccountChecker, typeof EVMReceiptChecker] = [
+    EVMAccountChecker,
+    EVMReceiptChecker,
+]

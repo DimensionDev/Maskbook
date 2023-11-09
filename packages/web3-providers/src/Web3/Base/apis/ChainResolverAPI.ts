@@ -1,6 +1,6 @@
 import type { ChainDescriptor } from '@masknet/web3-shared-base'
 
-export class ChainResolverAPI<ChainId, SchemaType, NetworkType> {
+export class ChainResolver<ChainId, SchemaType, NetworkType> {
     constructor(private readonly descriptors: () => ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {}
     private getDescriptor(chainId: ChainId) {
         return this.descriptors().find((x) => x.chainId === chainId)
