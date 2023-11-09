@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         boxSizing: 'border-box',
         padding: 12,
+        hyphens: 'auto',
     },
     textContent: {
         color: theme.palette.maskColor.second,
@@ -54,7 +55,7 @@ export function DescriptionCard(props: DescriptionCardProps) {
     return (
         <div className={classes.root}>
             <Typography className={classes.title}>{t.plugin_collectible_description_title()}</Typography>
-            <div className={classes.content}>
+            <div className={classes.content} lang="en">
                 {asset.metadata?.description ? (
                     <Markdown className={classes.markdownContent}>{asset.metadata?.description}</Markdown>
                 ) : (
