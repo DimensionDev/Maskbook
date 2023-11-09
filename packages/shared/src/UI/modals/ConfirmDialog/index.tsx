@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         fontSize: 14,
         color: theme.palette.maskColor.second,
-        wordBreak: 'break-all',
+        hyphens: 'auto',
     },
     desc: {
         flexGrow: 1,
@@ -83,7 +83,7 @@ const Dialog = memo(function Dialog({
                 <Typography variant="h1" className={classes.title} component="div">
                     {title}
                 </Typography>
-                <Typography className={classes.message} component="div">
+                <Typography className={classes.message} component="div" lang="en">
                     {message}
                 </Typography>
                 <Typography className={classes.desc} component="div">
