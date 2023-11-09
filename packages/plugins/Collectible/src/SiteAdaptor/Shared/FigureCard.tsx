@@ -3,6 +3,7 @@ import { LoadingBase, makeStyles, MaskColorVar, ShadowRootTooltip, TextOverflowT
 import { Box, IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -82,10 +83,12 @@ export function FigureCard(props: FigureCardProps) {
     // TODO: the collection name maybe is wrong
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { pluginID } = Context.useContainer()
     const { isReporting, isSpam, promptReport } = useReportSpam({
         address: asset.address,
         chainId: asset.chainId,
         collectionId: asset.collection?.id,
+        pluginID,
     })
 
     return (

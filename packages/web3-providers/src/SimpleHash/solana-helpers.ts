@@ -57,6 +57,7 @@ export function createSolanaNonFungibleAsset(
             symbol: asset.contract.symbol,
         },
         collection: {
+            id: asset.collection.collection_id,
             chainId,
             name: asset.collection.name || '',
             slug: asset.contract.name,
