@@ -17,7 +17,7 @@ import { createSchema } from './network-schema.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { useWarnings } from './useWarnings.js'
 import { fetchChains } from '@masknet/web3-providers/helpers'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -101,7 +101,7 @@ export const EditNetwork = memo(function EditNetwork() {
                 className={classes.iconButton}
                 onClick={async () => {
                     if (currentChainId === network?.chainId) {
-                        await Web3.switchChain?.(ChainId.Mainnet, {
+                        await EVMWeb3.switchChain?.(ChainId.Mainnet, {
                             providerType: ProviderType.MaskWallet,
                         })
                         setChainId(ChainId.Mainnet)

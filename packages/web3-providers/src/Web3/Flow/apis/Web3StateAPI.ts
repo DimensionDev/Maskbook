@@ -6,13 +6,7 @@ import { FlowTransaction } from '../state/Transaction.js'
 import { FlowIdentityService } from '../state/IdentityService.js'
 import { FlowNetwork } from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { flow } from '../../../Manager/registry.js'
 
-export const FlowWeb3StateRef = {
-    get value() {
-        return flow.state
-    },
-}
 export async function createFlowState(context: WalletAPI.IOContext): Promise<Web3State> {
     const Provider_ = await FlowProvider.new(context)
 

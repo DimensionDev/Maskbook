@@ -36,13 +36,13 @@ import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
 import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
 
-import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
+import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 
-export class ContractReadonlyAPI {
-    static Default = new ContractReadonlyAPI()
+export class EVMContractReadonlyAPI {
+    static Default = new EVMContractReadonlyAPI()
     constructor(protected options?: EVMConnectionOptions) {
-        this.Request = new RequestReadonlyAPI(options)
+        this.Request = new EVMRequestReadonlyAPI(options)
     }
     protected Request
 
@@ -125,4 +125,4 @@ export class ContractReadonlyAPI {
         return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
     }
 }
-export const ContractReadonly = ContractReadonlyAPI.Default
+export const EVMContractReadonly = EVMContractReadonlyAPI.Default

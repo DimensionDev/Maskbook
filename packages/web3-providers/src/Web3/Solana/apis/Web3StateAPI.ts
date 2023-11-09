@@ -6,13 +6,7 @@ import { SolanaTransaction } from '../state/Transaction.js'
 import { SolanaIdentityService } from '../state/IdentityService.js'
 import { SolanaNetwork } from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { solana } from '../../../Manager/registry.js'
 
-export const SolanaWeb3StateRef = {
-    get value() {
-        return solana.state
-    },
-}
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
     const Provider_ = await SolanaProvider.new(context)
 

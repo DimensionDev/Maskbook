@@ -11,11 +11,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { Subscription } from 'use-subscription'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
-import { DefaultHub } from '../apis/HubAPI.js'
+import { EVMHub } from '../apis/HubAPI.js'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 
 export class EVMToken extends TokenState<ChainId, SchemaType> {
-    private Hub = DefaultHub
+    private Hub = EVMHub
 
     constructor(
         context: WalletAPI.IOContext,

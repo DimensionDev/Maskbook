@@ -4,7 +4,7 @@ import type { EventLog, TransactionReceipt } from 'web3-core'
 import { sha3 } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction, type GasConfig, isValidAddress } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { toFixed } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
@@ -74,11 +74,11 @@ export function useCreateNftRedpacketCallback(
                 },
             )
 
-            const hash = await Web3.sendTransaction(tx, {
+            const hash = await EVMWeb3.sendTransaction(tx, {
                 paymentToken: gasOption?.gasCurrency,
                 gasOptionType: gasOption?.gasOptionType,
             })
-            const receipt = await Web3.getTransactionReceipt(hash)
+            const receipt = await EVMWeb3.getTransactionReceipt(hash)
             if (receipt) {
                 const events = decodeEvents(nftRedPacketContract.options.jsonInterface, receipt.logs)
                 return {

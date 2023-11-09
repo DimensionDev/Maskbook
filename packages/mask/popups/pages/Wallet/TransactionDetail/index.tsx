@@ -3,7 +3,7 @@ import { CopyButton, FormattedCurrency, ProgressiveText, ReversedAddress } from 
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useAccount, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { ChainbaseHistory, EVMExplorerResolver, Web3 } from '@masknet/web3-providers'
+import { ChainbaseHistory, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { chainbase } from '@masknet/web3-providers/helpers'
 import {
     TransactionStatusType,
@@ -175,7 +175,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         queryKey: [transaction?.chainId, transactionId],
         queryFn: async () => {
             if (!chainId || !transactionId) return
-            const tx = await Web3.getTransaction(transactionId, { chainId })
+            const tx = await EVMWeb3.getTransaction(transactionId, { chainId })
             return tx?.input
         },
     })

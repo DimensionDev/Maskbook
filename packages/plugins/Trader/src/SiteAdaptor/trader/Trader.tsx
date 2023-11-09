@@ -21,7 +21,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
-import { DepositPaymaster, SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { DepositPaymaster, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { useTraderTrans } from '../../locales/index.js'
 import { isNativeTokenWrapper } from '../../helpers/index.js'
 import { PluginTraderMessages } from '../../messages.js'
@@ -236,7 +236,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         if (typeof hash !== 'string') return
 
-        const result = await Web3.confirmTransaction(hash)
+        const result = await EVMWeb3.confirmTransaction(hash)
         if (!result.status) return
 
         const confirmed = await ConfirmModal.openAndWaitForClose({

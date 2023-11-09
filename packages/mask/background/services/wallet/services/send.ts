@@ -1,6 +1,6 @@
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
-import { RequestReadonly, SmartPayAccount, Web3Readonly } from '@masknet/web3-providers'
+import { EVMRequestReadonly, SmartPayAccount, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
     ChainId,
     createJsonRpcResponse,
@@ -49,7 +49,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
                 } else {
                     return createJsonRpcResponse(
                         pid,
-                        await Web3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
+                        await EVMWeb3Readonly.sendSignedTransaction(await signer.signTransaction(signableConfig), {
                             chainId,
                             providerURL,
                         }),
@@ -93,7 +93,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             throw new Error('Method not implemented.')
         default:
             try {
-                const result = await RequestReadonly.request(
+                const result = await EVMRequestReadonly.request(
                     {
                         method: payload.method as EthereumMethodType,
                         params: payload.params ?? [],

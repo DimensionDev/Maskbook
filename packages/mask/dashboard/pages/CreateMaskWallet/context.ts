@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { createContainer } from 'unstated-next'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { getDefaultWalletPassword, CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import Services from '#services'
 
@@ -13,7 +13,7 @@ function useContext() {
         async (password: string | undefined, isReset: boolean | undefined) => {
             if (!isReset || !wallets.length || !password) return
             await Services.Wallet.resetPassword(password)
-            await Web3.resetAllWallets?.({
+            await EVMWeb3.resetAllWallets?.({
                 providerType: ProviderType.MaskWallet,
             })
             CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useRefundCallback(version: number, from: string, id?: string, expectedChainId?: ChainId) {
@@ -18,7 +18,7 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
         const tx = await new ContractTransaction(redPacketContract).fillAll(redPacketContract.methods.refund(id), {
             from,
         })
-        const hash = await Web3.sendTransaction(tx, {
+        const hash = await EVMWeb3.sendTransaction(tx, {
             chainId,
         })
         setIsRefunded(true)

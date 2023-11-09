@@ -14,10 +14,10 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { BaseEIP4337WalletProvider } from './BaseContractWallet.js'
-import { RequestReadonly } from '../apis/RequestReadonlyAPI.js'
+import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import { SmartPayOwner } from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 
 export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
@@ -100,9 +100,9 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 await this.switchAccount(primaryWallet.address)
                 await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
                 if (primaryWallet.owner) {
-                    const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
+                    const networks = evm.state?.Network?.networks?.getCurrentValue()
                     const target = networks?.find((x) => x.chainId === smartPayChainId)
-                    if (target) Web3StateRef.value?.Network?.switchNetwork(target.ID)
+                    if (target) evm.state?.Network?.switchNetwork(target.ID)
                 }
             }
         })
@@ -216,7 +216,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return RequestReadonly.request<T>(
+        return EVMRequestReadonly.request<T>(
             PayloadEditor.fromMethod(requestArguments.method, requestArguments.params).fill() as RequestArguments,
             initial,
         )

@@ -1,8 +1,8 @@
-import { RequestAPI } from './RequestAPI.js'
-import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
+import { EVMRequestAPI } from './RequestAPI.js'
+import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 
-export class ContractAPI extends ContractReadonlyAPI {
-    static override Default = new ContractAPI()
-    protected override Request = new RequestAPI(this.options)
+export class EVMContractAPI extends EVMContractReadonlyAPI {
+    static override Default = new EVMContractAPI()
+    protected override Request = new EVMRequestAPI(this.options)
 }
-export const Contract = ContractAPI.Default
+export const EVMContract = EVMContractAPI.Default

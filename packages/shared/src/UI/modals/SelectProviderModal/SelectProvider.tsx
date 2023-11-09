@@ -1,5 +1,5 @@
 import { delay, getEnumAsArray } from '@masknet/kit'
-import { getRegisteredWeb3Providers, Providers } from '@masknet/web3-providers'
+import { getRegisteredWeb3Providers, EVMWalletProviders } from '@masknet/web3-providers'
 import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -48,7 +48,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             // Create wallet first if no wallets yet.
             if (
                 provider.type === ProviderType.MaskWallet &&
-                !Providers[ProviderType.MaskWallet].subscription.wallets.getCurrentValue().length
+                !EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets.getCurrentValue().length
             ) {
                 createWallet()
                 return

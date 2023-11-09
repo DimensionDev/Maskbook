@@ -8,7 +8,7 @@ import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Web3State } from '@masknet/web3-providers'
+import { evm } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
@@ -73,7 +73,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
-        await Web3State.state!.AddressBook?.removeContact(address)
+        await evm.state!.AddressBook?.removeContact(address)
         showSnackbar(t.wallet_delete_contact_successfully())
         onConfirm?.()
     }, [address, onConfirm])

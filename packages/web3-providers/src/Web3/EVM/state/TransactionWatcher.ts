@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
 import { EVMTransactionCheckers } from './TransactionWatcher/checker.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import { TransactionWatcherState } from '../../Base/state/TransactionWatcher.js'
 
 export class EVMTransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
@@ -28,7 +28,7 @@ export class EVMTransactionWatcher extends TransactionWatcherState<ChainId, Tran
         transaction: Transaction,
         status: TransactionStatusType,
     ) {
-        const { Transaction } = Web3StateRef.value!
+        const { Transaction } = evm.state!
 
         if (Transaction && transaction.from && status !== TransactionStatusType.NOT_DEPEND) {
             await Transaction.updateTransaction?.(chainId, transaction.from, id, status)

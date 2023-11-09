@@ -6,7 +6,7 @@ import type { SwapParameters } from '@uniswap/v2-sdk'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useSwapErrorCallback } from '../../SiteAdaptor/trader/hooks/useSwapErrorCallback.js'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters.js'
@@ -61,13 +61,13 @@ export function useTradeCallback(
                 }
 
                 try {
-                    const gas = await Web3.estimateTransaction?.(config, undefined, { chainId })
+                    const gas = await EVMWeb3.estimateTransaction?.(config, undefined, { chainId })
                     return {
                         call: x,
                         gasEstimate: new BigNumber(gas ?? 0),
                     }
                 } catch (error) {
-                    return Web3.callTransaction(config, { chainId })
+                    return EVMWeb3.callTransaction(config, { chainId })
                         .then(() => {
                             return {
                                 call: x,
@@ -112,7 +112,7 @@ export function useTradeCallback(
         } = bestCallOption
 
         try {
-            const hash = await Web3.sendTransaction(
+            const hash = await EVMWeb3.sendTransaction(
                 {
                     from: account,
                     to: address,
@@ -126,7 +126,7 @@ export function useTradeCallback(
                     overrides: { ...gasConfig },
                 },
             )
-            const receipt = await Web3.confirmTransaction(hash, { chainId })
+            const receipt = await EVMWeb3.confirmTransaction(hash, { chainId })
             if (!receipt.status) return
             return receipt.transactionHash
         } catch (error: any) {

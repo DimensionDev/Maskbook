@@ -14,7 +14,7 @@ import {
     ContractTransaction,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
@@ -163,12 +163,12 @@ export function useCreateCallback(
             },
         )
 
-        const hash = await Web3.sendTransaction(tx, {
+        const hash = await EVMWeb3.sendTransaction(tx, {
             paymentToken: gasOption?.gasCurrency,
             chainId,
             gasOptionType: gasOption?.gasOptionType,
         })
-        const receipt = await Web3.getTransactionReceipt(hash, { chainId })
+        const receipt = await EVMWeb3.getTransactionReceipt(hash, { chainId })
         if (receipt) {
             const events = decodeEvents(redPacketContract.options.jsonInterface, receipt.logs)
 

@@ -3,9 +3,9 @@ import type { WalletAPI } from '../../../entry-types.js'
 import { EMPTY_LIST, type NetworkPluginID, PersistentStorages, type StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
-export class AddressBookState implements Web3AddressBookState {
-    public storage: StorageItem<Contact[]> = null!
-    public contacts?: Subscription<Contact[]>
+export abstract class AddressBookState implements Web3AddressBookState {
+    public storage: StorageItem<Contact[]>
+    public contacts: Subscription<Contact[]>
 
     constructor(
         protected context: WalletAPI.IOContext,

@@ -12,8 +12,8 @@ import { createWeb3FromURL } from '../../../helpers/createWeb3FromURL.js'
 import { createWeb3ProviderFromURL } from '../../../helpers/createWeb3ProviderFromURL.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
 
-export class RequestReadonlyAPI {
-    static Default = new RequestReadonlyAPI()
+export class EVMRequestReadonlyAPI {
+    static Default = new EVMRequestReadonlyAPI()
     constructor(protected options?: EVMConnectionOptions) {
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(options)
     }
@@ -35,4 +35,4 @@ export class RequestReadonlyAPI {
         return createWeb3ProviderFromURL(options.providerURL ?? ProviderURL.from(options.chainId))
     }
 }
-export const RequestReadonly = new RequestReadonlyAPI()
+export const EVMRequestReadonly = new EVMRequestReadonlyAPI()

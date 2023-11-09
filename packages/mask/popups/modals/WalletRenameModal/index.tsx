@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { type SingletonModalRefCreator, type Wallet } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useContacts } from '@masknet/web3-hooks-base'
 
@@ -38,7 +38,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
         }
 
         try {
-            await Web3?.renameWallet?.(wallet.address, _name, { providerType: ProviderType.MaskWallet })
+            await EVMWeb3?.renameWallet?.(wallet.address, _name, { providerType: ProviderType.MaskWallet })
             setName('')
             rest.onClose?.()
         } catch (error) {

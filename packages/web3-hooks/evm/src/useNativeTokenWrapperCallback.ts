@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isLessThan, isZero } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { type ChainId, ContractTransaction, type GasConfig } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
@@ -27,8 +27,8 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             })
 
             // send transaction and wait for hash
-            const hash = await Web3.sendTransaction(tx, { overrides: { ...gasConfig } })
-            const receipt = await Web3.getTransactionReceipt(hash)
+            const hash = await EVMWeb3.sendTransaction(tx, { overrides: { ...gasConfig } })
+            const receipt = await EVMWeb3.getTransactionReceipt(hash)
 
             if (!receipt?.status) return
             return receipt?.transactionHash
@@ -65,8 +65,8 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             )
 
             // send transaction and wait for hash
-            const hash = await Web3.sendTransaction(tx, { overrides: { ...gasConfig } })
-            const receipt = await Web3.getTransactionReceipt(hash)
+            const hash = await EVMWeb3.sendTransaction(tx, { overrides: { ...gasConfig } })
+            const receipt = await EVMWeb3.getTransactionReceipt(hash)
 
             return receipt?.transactionHash
         },

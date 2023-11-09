@@ -7,7 +7,7 @@ import { ImageIcon, NetworkIcon, useMenuConfig } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { first } from 'lodash-es'
 
@@ -53,9 +53,9 @@ export const NetworkSelector = memo(() => {
     const onChainChange = useCallback(
         async (network: ReasonableNetwork<ChainId, SchemaType, NetworkType>) => {
             await Network?.switchNetwork(network.ID)
-            await Web3.switchChain?.(network.chainId)
+            await EVMWeb3.switchChain?.(network.chainId)
         },
-        [Network, Web3],
+        [Network, EVMWeb3],
     )
 
     return (

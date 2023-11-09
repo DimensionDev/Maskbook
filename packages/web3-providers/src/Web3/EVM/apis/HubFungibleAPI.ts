@@ -1,9 +1,9 @@
 import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Web3Readonly } from './ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from './ConnectionReadonlyAPI.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
 import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
-import { Web3StateRef } from './Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
 import { Approval } from '../../../Approval/index.js'
@@ -59,15 +59,15 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     }
 
     override getFungibleToken(address: string, initial?: BaseHubOptions<ChainId> | undefined) {
-        const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
+        const networks = evm.state?.Network?.networks?.getCurrentValue()
         const currentNetwork = initial?.chainId
             ? networks?.find((x) => x.chainId === initial.chainId)
-            : Web3StateRef.value?.Network?.network?.getCurrentValue()
+            : evm.state?.Network?.network?.getCurrentValue()
         return attemptUntil(
             [
-                () => Web3StateRef.value?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
+                () => evm.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
                 () =>
-                    Web3Readonly.getFungibleToken(address, {
+                    EVMWeb3Readonly.getFungibleToken(address, {
                         ...initial,
                         providerURL: currentNetwork?.isCustomized ? currentNetwork?.rpcUrl : undefined,
                     }),

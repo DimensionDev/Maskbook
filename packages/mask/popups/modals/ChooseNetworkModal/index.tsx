@@ -5,7 +5,7 @@ import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useBalance, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
@@ -89,7 +89,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
             ref={liRef}
             onClick={async () => {
                 await Network?.switchNetwork(network.ID)
-                await Web3.switchChain?.(chainId, {
+                await EVMWeb3.switchChain?.(chainId, {
                     providerType: ProviderType.MaskWallet,
                 })
                 closeModal()

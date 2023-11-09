@@ -4,7 +4,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getSmartPayConstants, isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Multicall } from '../../Multicall/index.js'
-import { ContractReadonly } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { EVMContractReadonly } from '../../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { SmartPayBundler } from './BundlerAPI.js'
 import { SmartPayFunder } from './FunderAPI.js'
 import { ContractWallet } from '../libs/ContractWallet.js'
@@ -29,7 +29,7 @@ export class SmartPayOwner {
     }
 
     private static createWalletContract(chainId: ChainId, address: string) {
-        return ContractReadonly.getWalletContract(address, {
+        return EVMContractReadonly.getWalletContract(address, {
             chainId,
         })
     }

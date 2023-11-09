@@ -10,7 +10,7 @@ import { DeriveWalletTable } from '@masknet/shared'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import {
     HD_PATH_WITHOUT_INDEX_ETHEREUM,
     currySameAddress,
@@ -170,7 +170,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
             }),
         )
 
-        await Web3.connect({
+        await EVMWeb3.connect({
             account: firstWallet,
             providerType: ProviderType.MaskWallet,
             silent: true,

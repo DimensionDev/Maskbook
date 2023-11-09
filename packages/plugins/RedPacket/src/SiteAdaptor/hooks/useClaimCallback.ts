@@ -4,7 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 
@@ -37,7 +37,7 @@ export function useClaimCallback(
                       config,
                   )
 
-        return Web3.sendTransaction(tx, {
+        return EVMWeb3.sendTransaction(tx, {
             chainId,
         })
     }, [id, password, from, chainId, redPacketContract, version])

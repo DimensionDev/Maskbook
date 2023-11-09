@@ -3,7 +3,7 @@ import { InjectedDialog, Linking, type InjectedDialogProps } from '@masknet/shar
 import { parseURL } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { DialogContent, Typography } from '@mui/material'
 import { useMemo, type PropsWithChildren } from 'react'
 import { useRSS3Trans } from '../../../locales/index.js'
@@ -80,9 +80,9 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
         return {
             address,
             name,
-            ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(feed.owner, 4) ?? address,
+            ownerDisplay: name ? EVMUtils.formatDomainName(name) : EVMUtils.formatAddress(feed.owner, 4) ?? address,
         }
-    }, [address, name, Others.formatDomainName, Others.formatAddress, feed.owner])
+    }, [address, name, EVMUtils.formatDomainName, EVMUtils.formatAddress, feed.owner])
 
     return (
         <FeedOwnerContext.Provider value={feedOwner}>

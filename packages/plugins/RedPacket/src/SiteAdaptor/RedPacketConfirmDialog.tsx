@@ -18,7 +18,7 @@ import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -90,7 +90,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const contract_version = 4
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { account: publicKey, privateKey = '' } = useMemo(() => Web3.createAccount(), [])
+    const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // #region amount minus estimate gas fee

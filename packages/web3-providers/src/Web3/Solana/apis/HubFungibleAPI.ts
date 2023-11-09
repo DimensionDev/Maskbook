@@ -3,11 +3,11 @@ import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
 import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
-import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import type { SolanaHubOptions } from '../types/index.js'
 import { CoinGeckoPriceSolana } from '../../../CoinGecko/index.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { FungibleTokenAPI, PriceAPI } from '../../../entry-types.js'
+import { solana } from '../../../Manager/registry.js'
 
 export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     private Web3 = new SolanaConnectionAPI()
@@ -33,11 +33,7 @@ export class SolanaHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     override getFungibleToken(address: string, initial?: SolanaHubOptions | undefined) {
         return attemptUntil(
             [
-                () =>
-                    SolanaWeb3StateRef.value?.Token?.createFungibleToken?.(
-                        initial?.chainId ?? ChainId.Mainnet,
-                        address,
-                    ),
+                () => solana.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
                 () => this.Web3.getFungibleToken(address, initial),
             ],
             undefined,

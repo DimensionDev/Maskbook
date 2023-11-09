@@ -20,13 +20,13 @@ interface SettingsStorage {
     nonFungibleAssetSourceType: SourceType
 }
 
-export class SettingsState implements Web3SettingsState {
-    public storage: StorageObject<SettingsStorage> = null!
-    public allowTestnet?: Subscription<boolean>
-    public currencyType?: Subscription<CurrencyType>
-    public gasOptionType?: Subscription<GasOptionType>
-    public fungibleAssetSourceType?: Subscription<SourceType>
-    public nonFungibleAssetSourceType?: Subscription<SourceType>
+export abstract class SettingsState implements Web3SettingsState {
+    public storage: StorageObject<SettingsStorage>
+    public allowTestnet: Subscription<boolean>
+    public currencyType: Subscription<CurrencyType>
+    public gasOptionType: Subscription<GasOptionType>
+    public fungibleAssetSourceType: Subscription<SourceType>
+    public nonFungibleAssetSourceType: Subscription<SourceType>
 
     constructor(
         context: WalletAPI.IOContext,

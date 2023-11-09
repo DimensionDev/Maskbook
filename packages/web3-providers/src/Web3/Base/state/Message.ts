@@ -9,12 +9,12 @@ import {
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
+export abstract class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
     public storage: StorageObject<{
         messages: Record<string, ReasonableMessage<Request, Response>>
-    }> = null!
+    }>
 
-    public messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
+    public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
     constructor(
         protected context: WalletAPI.IOContext,

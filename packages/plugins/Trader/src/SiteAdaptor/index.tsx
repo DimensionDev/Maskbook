@@ -7,7 +7,7 @@ import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Others } from '@masknet/web3-providers'
+import { EVMUtils } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
@@ -42,7 +42,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             isCollectionProjectPopper={false}
                             isProfilePage={!!isProfilePage}
                             isTokenTagPopper={false}
-                            isPreciseSearch={Others.isValidAddress(keyword)}>
+                            isPreciseSearch={EVMUtils.isValidAddress(keyword)}>
                             <TrendingView
                                 resultList={resultList as Web3Helper.TokenResultAll[]}
                                 identity={identity}

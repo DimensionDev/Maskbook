@@ -1,6 +1,6 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
+import { RedPacket, TheGraphRedPacket, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/types'
 import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
@@ -26,7 +26,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
             return RedPacketRPC.getRedPacketHistoryFromDatabase(historyTransactions)
         }
 
-        const blockNumber = await Web3.getBlockNumber({ chainId })
+        const blockNumber = await EVMWeb3.getBlockNumber({ chainId })
         const payloadList = await RedPacket.getHistories(
             chainId,
             address,

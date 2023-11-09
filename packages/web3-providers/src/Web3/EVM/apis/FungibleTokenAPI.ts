@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
-import { ContractReadonly } from './ContractReadonlyAPI.js'
+import { EVMContractReadonly } from './ContractReadonlyAPI.js'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
 import type { EVMHubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
@@ -19,7 +19,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
         const address = getEthereumConstant(chainId, 'BALANCE_CHECKER_ADDRESS')
         if (!address) throw new Error('Failed to create balance checker contract.')
 
-        const contract = ContractReadonly.getBalanceCheckerContract(address, {
+        const contract = EVMContractReadonly.getBalanceCheckerContract(address, {
             chainId,
         })
         if (!contract) throw new Error('Failed to create balance checker contract.')

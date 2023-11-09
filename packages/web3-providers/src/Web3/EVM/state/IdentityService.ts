@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/Identity.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import { ARBID } from '../../../ARBID/index.js'
 import { ENS } from '../../../ENS/index.js'
@@ -266,7 +266,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const response = await Twitter.getUserNftContainer(userId)
         if (!response) return
-        const ownerAddress = await Web3Readonly.getNonFungibleTokenOwner(
+        const ownerAddress = await EVMWeb3Readonly.getNonFungibleTokenOwner(
             response.address,
             response.token_id,
             undefined,

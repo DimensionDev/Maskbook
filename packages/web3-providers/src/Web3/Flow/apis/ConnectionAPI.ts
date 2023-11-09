@@ -33,8 +33,8 @@ import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { FlowChainResolver } from './ResolverAPI.js'
 import { FlowWeb3API } from './Web3API.js'
-import { FlowWeb3StateRef } from './Web3StateAPI.js'
 import type { FlowConnectionOptions } from '../types/index.js'
+import { flow } from '../../../Manager/registry.js'
 
 export class FlowConnectionAPI
     implements
@@ -303,13 +303,13 @@ export class FlowConnectionAPI
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await FlowWeb3StateRef.value?.Provider?.connect(options.providerType, options.chainId)),
+            ...(await flow.state?.Provider?.connect(options.providerType, options.chainId)),
         }
     }
 
     async disconnect(initial?: FlowConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await FlowWeb3StateRef.value?.Provider?.disconnect(options.providerType)
+        await flow.state?.Provider?.disconnect(options.providerType)
     }
 
     async signMessage(type: string, message: string, initial?: FlowConnectionOptions) {

@@ -1,22 +1,22 @@
 import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { Composer } from './ComposerAPI.js'
-import { Web3StateRef } from './Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
+import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
-import { Providers } from '../providers/index.js'
+import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 
-export class RequestAPI extends RequestReadonlyAPI {
-    static override Default = new RequestAPI()
-    private Request = new RequestReadonlyAPI(this.options)
+export class EVMRequestAPI extends EVMRequestReadonlyAPI {
+    static override Default = new EVMRequestAPI()
+    private Request = new EVMRequestReadonlyAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     private get Provider() {
-        if (!Web3StateRef.value?.Provider) throw new Error('The web3 state does not load yet.')
-        return Web3StateRef.value.Provider
+        if (!evm.state?.Provider) throw new Error('The web3 state does not load yet.')
+        return evm.state.Provider
     }
 
     // Hijack RPC requests and process them with koa like middleware
@@ -52,7 +52,9 @@ export class RequestAPI extends RequestReadonlyAPI {
                                     break
                                 default: {
                                     if (!PayloadEditor.fromPayload(context.request).readonly) {
-                                        const web3Provider = Providers[options.providerType].createWeb3Provider({
+                                        const web3Provider = EVMWalletProviders[
+                                            options.providerType
+                                        ].createWeb3Provider({
                                             account: options.account,
                                             chainId: options.chainId,
                                         })
@@ -99,4 +101,4 @@ export class RequestAPI extends RequestReadonlyAPI {
         return createWeb3ProviderFromRequest((requestArguments) => this.request(requestArguments, options))
     }
 }
-export const Request = RequestAPI.Default
+export const EVMRequest = EVMRequestAPI.Default

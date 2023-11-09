@@ -6,7 +6,7 @@ export {
     getActivatedPluginWeb3State,
     getAllPluginsWeb3State,
 } from './Manager/index.js'
-export { evm as Web3State } from './Manager/registry.js'
+export { evm } from './Manager/registry.js'
 
 export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
@@ -24,9 +24,9 @@ export { SimpleHashEVM, SimpleHashSolana, SPAM_SCORE } from './SimpleHash/index.
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 
-export { Providers } from './Web3/EVM/providers/index.js'
-export { FlowWalletProviders as FlowProviders } from './Web3/Flow/providers/index.js'
-export { SolanaWalletProviders as SolanaProviders } from './Web3/Solana/providers/index.js'
+export { EVMWalletProviders } from './Web3/EVM/providers/index.js'
+export { FlowWalletProviders } from './Web3/Flow/providers/index.js'
+export { SolanaWalletProviders } from './Web3/Solana/providers/index.js'
 export { BaseEIP4337WalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3
@@ -40,16 +40,16 @@ export {
     EVMProviderResolver,
     EVMNetworkResolver,
 } from './Web3/EVM/apis/ResolverAPI.js'
-export { Contract } from './Web3/EVM/apis/ContractAPI.js'
-export { ContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
+export { EVMContract } from './Web3/EVM/apis/ContractAPI.js'
+export { EVMContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { Web3Storage } from './Storage/apis/Storage.js'
-export { DefaultConnection as Web3 } from './Web3/EVM/apis/ConnectionAPI.js'
-export { Web3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
-export { Request } from './Web3/EVM/apis/RequestAPI.js'
-export { RequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
-export { DefaultHub as Hub } from './Web3/EVM/apis/HubAPI.js'
-export { EVMUtils as Others } from './Web3/EVM/apis/OthersAPI.js'
+export { EVMWeb3 } from './Web3/EVM/apis/ConnectionAPI.js'
+export { EVMWeb3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
+export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'
+export { EVMRequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
+export { EVMHub } from './Web3/EVM/apis/HubAPI.js'
+export { EVMUtils } from './Web3/EVM/apis/OthersAPI.js'
 
 // Smart Pay
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'

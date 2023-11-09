@@ -15,7 +15,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 class Client {
@@ -75,7 +75,7 @@ export class WalletConnectProvider extends BaseEVMWalletProvider {
     }
 
     private get currentChainId() {
-        return Web3StateRef.value?.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
+        return evm.state?.Provider?.chainId?.getCurrentValue() ?? ChainId.Mainnet
     }
 
     override get connected() {

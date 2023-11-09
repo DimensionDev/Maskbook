@@ -16,7 +16,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {}
 
-export const Providers = {
+export const EVMWalletProviders = {
     [ProviderType.None]: new EVMNoneProvider(),
     [ProviderType.MaskWallet]: new MaskWalletProvider(),
     [ProviderType.Browser]: new BrowserProvider(),

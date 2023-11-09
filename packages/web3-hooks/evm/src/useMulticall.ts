@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import {
     type ChainId,
     ContractTransaction,
@@ -134,7 +134,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
 
             const blockNumber =
                 targetBlockNumber ??
-                (await Web3.getBlockNumber({
+                (await EVMWeb3.getBlockNumber({
                     chainId,
                 })) ??
                 0
@@ -155,7 +155,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                                 multicallContract.methods.multicall(chunk),
                                 overrides,
                             )
-                            const hex = await Web3.callTransaction(tx, { chainId })
+                            const hex = await EVMWeb3.callTransaction(tx, { chainId })
                             const decodeResult = decodeOutputString(
                                 multicallContract.options.jsonInterface,
                                 hex,

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { isLessThan, toFixed, isZero } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
@@ -62,14 +62,14 @@ export function useERC20TokenApproveCallback(
             }
 
             if (tokenChainId !== chainId) {
-                await Web3.switchChain?.(tokenChainId ?? chainId)
+                await EVMWeb3.switchChain?.(tokenChainId ?? chainId)
             }
 
-            const hash = await Web3.approveFungibleToken(address, spender, useExact ? amount : MaxUint256, {
+            const hash = await EVMWeb3.approveFungibleToken(address, spender, useExact ? amount : MaxUint256, {
                 chainId: tokenChainId,
             })
 
-            const receipt = await Web3.confirmTransaction(hash, {
+            const receipt = await EVMWeb3.confirmTransaction(hash, {
                 chainId: tokenChainId,
                 signal: AbortSignal.timeout(5 * 60 * 1000),
             })

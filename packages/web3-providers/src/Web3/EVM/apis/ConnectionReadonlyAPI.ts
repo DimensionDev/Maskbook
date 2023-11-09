@@ -46,8 +46,8 @@ import {
     isGreaterThan,
 } from '@masknet/web3-shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { RequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import { ContractReadonlyAPI } from './ContractReadonlyAPI.js'
+import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
+import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
 import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
@@ -72,7 +72,7 @@ interface ERC1155Metadata {
     image: string
 }
 
-export class ConnectionReadonlyAPI
+export class EVMConnectionReadonlyAPI
     implements
         BaseConnection<
             ChainId,
@@ -90,10 +90,10 @@ export class ConnectionReadonlyAPI
             Web3Provider
         >
 {
-    static Default = new ConnectionReadonlyAPI()
+    static Default = new EVMConnectionReadonlyAPI()
     constructor(protected options?: EVMConnectionOptions) {
-        this.Contract = new ContractReadonlyAPI(this.options)
-        this.Request = new RequestReadonlyAPI(this.options)
+        this.Contract = new EVMContractReadonlyAPI(this.options)
+        this.Request = new EVMRequestReadonlyAPI(this.options)
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
     }
     protected Request
@@ -838,4 +838,4 @@ export class ConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 }
-export const Web3Readonly = ConnectionReadonlyAPI.Default
+export const EVMWeb3Readonly = EVMConnectionReadonlyAPI.Default

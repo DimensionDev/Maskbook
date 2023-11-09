@@ -8,7 +8,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
-import { Web3State } from '@masknet/web3-providers'
+import { evm } from '@masknet/web3-providers'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
@@ -80,7 +80,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
     )
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
-        await Web3State.state!.AddressBook?.addContact({ name, address })
+        await evm.state!.AddressBook?.addContact({ name, address })
         showSnackbar(t.wallet_add_contact_successfully())
         onConfirm?.()
     }, [name, address, onConfirm, t])

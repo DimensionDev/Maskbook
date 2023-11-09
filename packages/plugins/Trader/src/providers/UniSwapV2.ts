@@ -16,7 +16,7 @@ import {
     ContractTransaction,
 } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ContractReadonly, Web3Readonly, Multicall } from '@masknet/web3-providers'
+import { EVMContractReadonly, EVMWeb3Readonly, Multicall } from '@masknet/web3-providers'
 import { TraderAPI } from '@masknet/web3-providers/types'
 import {
     getPairAddress,
@@ -122,7 +122,7 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
 
         const contracts = compact(
             compact([...new Set(listOfPairAddress)]).map((address) =>
-                ContractReadonly.getPairContract(address, { chainId }),
+                EVMContractReadonly.getPairContract(address, { chainId }),
             ),
         )
 
@@ -180,14 +180,14 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
         allowedSlippage: number = SLIPPAGE_DEFAULT,
     ) {
         const context = getTradeContext(chainId, this.provider)
-        const timestamp = await Web3Readonly.getBlockTimestamp({ chainId })
+        const timestamp = await EVMWeb3Readonly.getBlockTimestamp({ chainId })
         const timestamp_ = new BigNumber(timestamp ?? '0')
         const deadline = timestamp_.plus(
             chainId === ChainId.Mainnet ? DEFAULT_TRANSACTION_DEADLINE : L2_TRANSACTION_DEADLINE,
         )
 
-        const routerV2Contract = ContractReadonly.getRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, { chainId })
-        const swapRouterContract = ContractReadonly.getSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, {
+        const routerV2Contract = EVMContractReadonly.getRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, { chainId })
+        const swapRouterContract = EVMContractReadonly.getSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, {
             chainId,
         })
 
@@ -393,7 +393,7 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
         const tradeAmount = new BigNumber(inputAmount || '0')
         if (tradeAmount.isZero() || !inputToken || !outputToken || !WNATIVE_ADDRESS) return null
 
-        const wrapperContract = ContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
+        const wrapperContract = EVMContractReadonly.getWETHContract(WNATIVE_ADDRESS, { chainId })
 
         const computed = {
             strategy: TraderAPI.TradeStrategy.ExactIn,
@@ -448,13 +448,13 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
                 }
 
                 try {
-                    const gas = await Web3Readonly.estimateTransaction(config, 0, { chainId })
+                    const gas = await EVMWeb3Readonly.estimateTransaction(config, 0, { chainId })
                     return {
                         call: x,
                         gasEstimate: gas ?? '0',
                     }
                 } catch (error) {
-                    return Web3Readonly.callTransaction(config, { chainId })
+                    return EVMWeb3Readonly.callTransaction(config, { chainId })
                         .then(() => {
                             return {
                                 call: x,

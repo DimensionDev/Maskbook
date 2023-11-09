@@ -1,6 +1,6 @@
 import { type ChainId, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
-import { RequestReadonly } from '../apis/RequestReadonlyAPI.js'
+import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class EVMNoneProvider extends BaseEVMWalletProvider {
@@ -12,6 +12,6 @@ export class EVMNoneProvider extends BaseEVMWalletProvider {
         requestArguments: RequestArguments,
         initial?: WalletAPI.ProviderOptions<ChainId>,
     ): Promise<T> {
-        return RequestReadonly.request(requestArguments, initial)
+        return EVMRequestReadonly.request(requestArguments, initial)
     }
 }

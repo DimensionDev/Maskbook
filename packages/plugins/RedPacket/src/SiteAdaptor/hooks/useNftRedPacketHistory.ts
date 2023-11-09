@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { RedPacket, TheGraphRedPacket, Web3 } from '@masknet/web3-providers'
+import { RedPacket, TheGraphRedPacket, EVMWeb3 } from '@masknet/web3-providers'
 import { RedPacketRPC } from '../../messages.js'
 import type { NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 
@@ -24,7 +24,7 @@ export function useNftRedPacketHistory(address: string, chainId: ChainId) {
 
             return RedPacketRPC.getNftRedPacketHistory(historyTransactions)
         }
-        const blockNumber = await Web3.getBlockNumber({ chainId })
+        const blockNumber = await EVMWeb3.getBlockNumber({ chainId })
         const payloadList = await RedPacket.getNFTHistories(
             chainId,
             address,

@@ -6,7 +6,7 @@ import {
     type Middleware,
     getTransactionStatusType,
 } from '@masknet/web3-shared-evm'
-import { Web3StateRef } from '../apis/Web3StateAPI.js'
+import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { UserTransaction } from '../../../SmartPay/libs/UserTransaction.js'
 
@@ -17,7 +17,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
 
         await next()
 
-        const { Transaction, BalanceNotifier, BlockNumberNotifier } = Web3StateRef.value!
+        const { Transaction, BalanceNotifier, BlockNumberNotifier } = evm.state!
 
         try {
             switch (context.method) {

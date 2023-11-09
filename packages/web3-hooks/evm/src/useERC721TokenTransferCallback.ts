@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Contract } from '@masknet/web3-providers'
+import { EVMContract } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isValidAddress, type GasConfig, TransactionEventType, type ChainId } from '@masknet/web3-shared-evm'
 
@@ -16,7 +16,7 @@ export function useERC721TokenTransferCallback(address?: string, expectedChainId
             // error: invalid recipient address
             if (!isValidAddress(recipient)) return
 
-            const contract = Contract.getERC721Contract(address, { chainId })
+            const contract = EVMContract.getERC721Contract(address, { chainId })
             if (!contract) return
 
             // error: invalid ownership

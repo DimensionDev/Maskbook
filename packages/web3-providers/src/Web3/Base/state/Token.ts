@@ -38,15 +38,15 @@ export interface TokenStorage<ChainId extends number, SchemaType> {
     >
 }
 
-export class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
-    public storage: StorageObject<TokenStorage<ChainId, SchemaType>> = null!
+export abstract class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
+    public storage: StorageObject<TokenStorage<ChainId, SchemaType>>
     public trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public trustedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    public nonFungibleCollectionMap?: Subscription<
+    public nonFungibleCollectionMap: Subscription<
         Record<
             string,
             Array<{

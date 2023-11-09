@@ -1,11 +1,11 @@
 import { getDefaultChainId, getDefaultProviderType } from '@masknet/web3-shared-flow'
 import type { ChainId, ProviderType, NetworkType, Transaction } from '@masknet/web3-shared-flow'
 import { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
-import { FlowWeb3StateRef } from './Web3StateAPI.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
 import { FlowConnectionAPI } from './ConnectionAPI.js'
 import { FlowUtils } from './OthersAPI.js'
+import { flow } from '../../../Manager/registry.js'
 
 export class FlowConnectionOptionsAPI extends ConnectionOptionsProvider<
     ChainId,
@@ -16,7 +16,7 @@ export class FlowConnectionOptionsAPI extends ConnectionOptionsProvider<
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
     protected override getProvider() {
-        return FlowWeb3StateRef.value?.Provider
+        return flow.state?.Provider
     }
 }
 export const createFlowConnection = createConnectionCreator<NetworkPluginID.PLUGIN_FLOW>(

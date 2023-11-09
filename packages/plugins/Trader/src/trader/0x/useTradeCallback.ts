@@ -4,7 +4,7 @@ import { pick } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import type { GasConfig, Transaction } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants.js'
@@ -38,7 +38,7 @@ export function useTradeCallback(
         }
 
         try {
-            const gas = await Web3.estimateTransaction?.(
+            const gas = await EVMWeb3.estimateTransaction?.(
                 {
                     from: account,
                     ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
@@ -46,14 +46,14 @@ export function useTradeCallback(
                 undefined,
                 { chainId },
             )
-            const hash = await Web3.sendTransaction(
+            const hash = await EVMWeb3.sendTransaction(
                 {
                     ...config,
                     gas,
                 },
                 { chainId, overrides: { ...gasConfig } },
             )
-            const receipt = await Web3.getTransactionReceipt(hash)
+            const receipt = await EVMWeb3.getTransactionReceipt(hash)
             if (!receipt?.status) return
             return receipt?.transactionHash
         } catch (error: unknown) {

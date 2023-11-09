@@ -9,7 +9,7 @@ import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme }
 import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
@@ -321,7 +321,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setLoadingToken(true)
         const allSettled = await Promise.allSettled(
             tokenIdList.map((tokenId) =>
-                Web3.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
+                EVMWeb3.getNonFungibleToken(contract?.address ?? '', tokenId, SchemaType.ERC721, {
                     account,
                     chainId,
                 }),

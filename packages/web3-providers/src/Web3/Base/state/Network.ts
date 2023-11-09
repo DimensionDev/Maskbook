@@ -16,7 +16,7 @@ import type {
     NetworkState as Web3NetworkState,
 } from '@masknet/web3-shared-base'
 
-export class NetworkState<ChainId, SchemaType, NetworkType>
+export abstract class NetworkState<ChainId, SchemaType, NetworkType>
     implements Web3NetworkState<ChainId, SchemaType, NetworkType>
 {
     /** default network can't be removed */
@@ -24,10 +24,10 @@ export class NetworkState<ChainId, SchemaType, NetworkType>
     public storage: StorageObject<{
         networkID: string
         networks: Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>
-    }> = null!
+    }>
 
-    public networkID?: Subscription<string>
-    public network?: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
+    public networkID: Subscription<string>
+    public network: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
     public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(

@@ -2,7 +2,7 @@ import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@maskne
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography, useTheme } from '@mui/material'
@@ -45,9 +45,9 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
             let nextWallet = wallets[index + 1] || wallets[0]
             if (!remainWallets.includes(nextWallet)) nextWallet = remainWallets[0]
 
-            await Web3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
+            await EVMWeb3.removeWallet?.(wallet.address, password, { providerType: ProviderType.MaskWallet })
 
-            await Web3.connect({
+            await EVMWeb3.connect({
                 providerType: ProviderType.MaskWallet,
                 account: nextWallet?.address ?? '',
             })

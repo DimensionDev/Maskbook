@@ -16,7 +16,7 @@ import {
 } from '@masknet/shared-base'
 import { formatDomainName, formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { FormattedAddress, PersonaContext, PopupHomeTabType, WalletIcon } from '@masknet/shared'
-import { EVMExplorerResolver, NextIDProof, EVMProviderResolver, Web3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, NextIDProof, EVMProviderResolver, EVMWeb3 } from '@masknet/web3-providers'
 import {
     useChainContext,
     useNetworkContext,
@@ -178,7 +178,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                 true,
             )
 
-            const walletSignature = await Web3.signMessage('message', payload.signPayload, {
+            const walletSignature = await EVMWeb3.signMessage('message', payload.signPayload, {
                 chainId,
                 account,
                 providerType,
@@ -213,7 +213,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
     }, [modalNavigate])
 
     const handleDone = useCallback(async () => {
-        if (providerType !== ProviderType.MaskWallet) await Web3.disconnect({ providerType })
+        if (providerType !== ProviderType.MaskWallet) await EVMWeb3.disconnect({ providerType })
         if (providerType === ProviderType.MaskWallet) {
             navigate(-1)
             return

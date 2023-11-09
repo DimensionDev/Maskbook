@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
 import { ChainId, type TransactionReceipt } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, type Proof } from '@masknet/shared-base'
-import { Web3Readonly } from '../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { FUNDER_PROD } from '../constants.js'
 import { fetchJSON, fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import { FunderAPI } from '../../entry-types.js'
@@ -35,7 +35,7 @@ class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
             )
             const allSettled = await Promise.allSettled(
                 operations.map<Promise<TransactionReceipt | null>>((x) =>
-                    Web3Readonly.getTransactionReceipt(x.tokenTransferTx, {
+                    EVMWeb3Readonly.getTransactionReceipt(x.tokenTransferTx, {
                         chainId,
                     }),
                 ),

@@ -1,6 +1,6 @@
 import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseTranslator } from './Base.js'
-import { Web3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
 export class PolygonTranslator extends BaseTranslator {
@@ -20,7 +20,7 @@ export class PolygonTranslator extends BaseTranslator {
                 ? {}
                 : {
                       gasPrice:
-                          context.config.gasPrice ?? (await Web3Readonly.getGasPrice({ chainId: context.chainId })),
+                          context.config.gasPrice ?? (await EVMWeb3Readonly.getGasPrice({ chainId: context.chainId })),
                   }),
         }
 

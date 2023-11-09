@@ -3,7 +3,7 @@ import { abiCoder, type ChainId, type SchemaType } from '@masknet/web3-shared-ev
 import { isSameAddress } from '@masknet/web3-shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
@@ -21,7 +21,7 @@ class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaT
     ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
         if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
 
-        const logs = await Web3Readonly.getWeb3({ chainId }).eth.getPastLogs({
+        const logs = await EVMWeb3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,
             fromBlock,

@@ -14,13 +14,7 @@ import { EVMBlockNumberNotifier } from '../state/BlockNumberNotifier.js'
 import { EVMMessage } from '../state/Message.js'
 import { EVMNetwork } from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { evm } from '../../../Manager/registry.js'
 
-export const Web3StateRef = {
-    get value() {
-        return evm.state
-    },
-}
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
     const Provider_ = await EVMProvider.new(context)
 
@@ -47,7 +41,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
             chainId: Provider_.chainId,
         }),
         Transaction: Transaction_,
-        TransactionFormatter: new EVMTransactionFormatter(context),
+        TransactionFormatter: new EVMTransactionFormatter(),
         TransactionWatcher: new EVMTransactionWatcher(context, {
             chainId: Provider_.chainId!,
             transactions: Transaction_.transactions!,

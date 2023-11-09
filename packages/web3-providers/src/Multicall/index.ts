@@ -8,8 +8,8 @@ import {
     getEthereumConstant,
     type UnboxTransactionObject,
 } from '@masknet/web3-shared-evm'
-import { ContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
-import { Web3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
+import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
+import { EVMWeb3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
 import { CONSERVATIVE_BLOCK_GAS_LIMIT, DEFAULT_GAS_LIMIT, DEFAULT_GAS_REQUIRED } from './constants.js'
 import type { MulticallBaseAPI } from '../entry-types.js'
 
@@ -25,7 +25,7 @@ export class Multicall {
         const address = getEthereumConstant(chainId, 'MULTICALL_ADDRESS')
         if (!address) throw new Error('Failed to create multicall contract.')
 
-        const contract = ContractReadonly.getMulticallContract(address, { chainId })
+        const contract = EVMContractReadonly.getMulticallContract(address, { chainId })
         if (!contract) throw new Error('Failed to create multicall contract.')
 
         return contract
@@ -105,7 +105,7 @@ export class Multicall {
         const contract = this.createContract(chainId)
         if (!contract) return EMPTY_LIST
 
-        const blockNumber_ = blockNumber ?? (await Web3Readonly.getBlockNumber({ chainId }))
+        const blockNumber_ = blockNumber ?? (await EVMWeb3Readonly.getBlockNumber({ chainId }))
 
         // filter out cached calls
         const unresolvedCalls = calls.filter((call_) => !this.getCallResult(call_, chainId, blockNumber_))
@@ -116,7 +116,7 @@ export class Multicall {
                 this.chunkArray(unresolvedCalls).map(async (chunk) => {
                     // we don't mind the actual block number of the current call
                     const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
-                    const hex = await Web3Readonly.callTransaction(tx, { chainId })
+                    const hex = await EVMWeb3Readonly.callTransaction(tx, { chainId })
 
                     const result = decodeOutputString(contract.options.jsonInterface, hex, 'multicall') as
                         | UnboxTransactionObject<ReturnType<MulticallAPI['methods']['multicall']>>

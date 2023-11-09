@@ -5,7 +5,7 @@ import { compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { type FungibleToken, toFixed } from '@masknet/web3-shared-base'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { type ChainId, ContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
@@ -84,7 +84,7 @@ export function useDonateCallback(
                 value: token.schema === SchemaType.Native ? totalAmount : '0',
             },
         )
-        return Web3.sendTransaction(tx)
+        return EVMWeb3.sendTransaction(tx)
     }, [account, totalAmount, token, donations])
 
     return [callbackState, gasState, callback]

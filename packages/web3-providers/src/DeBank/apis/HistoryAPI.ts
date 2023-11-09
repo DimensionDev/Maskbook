@@ -8,13 +8,13 @@ import type { HistoryRecord } from '../types.js'
 import { CHIAN_ID_TO_DEBANK_CHAIN_MAP, DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 import type { HistoryAPI, BaseHubOptions } from '../../entry-types.js'
-import { Web3StateRef } from '../../Web3/EVM/apis/Web3StateAPI.js'
+import { evm } from '../../Manager/registry.js'
 
 const PRESET_CHAIN_IDS = 'eth,aurora,bsc,matic,pls,ftm,op,klay,nova,celo,astar,boba'.split(',')
 class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
     // Collect from https://docs.cloud.debank.com/en/readme/api-pro-reference/chain#returns-1
     private getChainIds() {
-        const networks = Web3StateRef.value?.Network?.networks?.getCurrentValue()
+        const networks = evm.state?.Network?.networks?.getCurrentValue()
         // Fallback to commonly used chains
         if (!networks) return PRESET_CHAIN_IDS
         const RUNTIME_CHAIN_IDS = networks.map((x) => CHIAN_ID_TO_DEBANK_CHAIN_MAP[x.chainId])

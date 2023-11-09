@@ -23,17 +23,17 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-evm'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { Web3StateRef } from './Web3StateAPI.js'
-import { RequestAPI } from './RequestAPI.js'
-import { ContractAPI } from './ContractAPI.js'
-import { ConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
+import { evm } from '../../../Manager/registry.js'
+import { EVMRequestAPI } from './RequestAPI.js'
+import { EVMContractAPI } from './ContractAPI.js'
+import { EVMConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
-import { Providers } from '../providers/index.js'
+import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
 export class ConnectionAPI
-    extends ConnectionReadonlyAPI
+    extends EVMConnectionReadonlyAPI
     implements
         BaseConnection<
             ChainId,
@@ -51,8 +51,8 @@ export class ConnectionAPI
             Web3Provider
         >
 {
-    protected override Request = new RequestAPI(this.options)
-    protected override Contract = new ContractAPI(this.options)
+    protected override Request = new EVMRequestAPI(this.options)
+    protected override Contract = new EVMContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
     override async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
@@ -437,7 +437,7 @@ export class ConnectionAPI
 
     override async switchChain(chainId: ChainId, initial?: EVMConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await Providers[options.providerType].switchChain(chainId)
+        await EVMWalletProviders[options.providerType].switchChain(chainId)
     }
 
     override async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
@@ -453,7 +453,7 @@ export class ConnectionAPI
         )
 
         return new Promise<string>((resolve, reject) => {
-            const { Transaction, TransactionWatcher } = Web3StateRef.value!
+            const { Transaction, TransactionWatcher } = evm.state!
             if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
 
             const onProgress = async (
@@ -533,4 +533,4 @@ export const createConnection = createConnectionCreator<NetworkPluginID.PLUGIN_E
     isValidChainId,
     new ConnectionOptionsAPI(),
 )
-export const DefaultConnection = createConnection()!
+export const EVMWeb3 = createConnection()!

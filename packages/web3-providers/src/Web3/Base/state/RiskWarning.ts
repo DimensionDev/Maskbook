@@ -9,10 +9,10 @@ import {
 } from '@masknet/shared-base'
 import type { RiskWarningState as Web3RiskWarningState } from '@masknet/web3-shared-base'
 
-export class RiskWarningState implements Web3RiskWarningState {
+export abstract class RiskWarningState implements Web3RiskWarningState {
     public storage: StorageItem<{
         [key: string]: boolean
-    }> = null!
+    }>
     public approved?: Subscription<boolean>
 
     constructor(

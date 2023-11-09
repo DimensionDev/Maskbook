@@ -8,7 +8,7 @@ import { type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Web3, Web3State } from '@masknet/web3-providers'
+import { EVMWeb3, evm } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
@@ -114,9 +114,9 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const [{ loading }, edit] = useAsyncFn(async () => {
         const _name = name.trim()
         if (type === ContactType.Recipient) {
-            await Web3State.state!.AddressBook?.renameContact({ name: _name, address })
+            await evm.state!.AddressBook?.renameContact({ name: _name, address })
         } else if (type === ContactType.Owned) {
-            await Web3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
+            await EVMWeb3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
         showSnackbar(t.wallet_edit_contact_successfully())

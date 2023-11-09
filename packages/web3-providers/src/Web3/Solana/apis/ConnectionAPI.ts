@@ -34,9 +34,9 @@ import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { SolanaChainResolver } from './ResolverAPI.js'
-import { SolanaWeb3StateRef } from './Web3StateAPI.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { SolanaConnectionOptions } from '../types/index.js'
+import { solana } from '../../../Manager/registry.js'
 
 export class SolanaConnectionAPI
     implements
@@ -139,13 +139,13 @@ export class SolanaConnectionAPI
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await SolanaWeb3StateRef.value?.Provider?.connect(options.providerType, options.chainId)),
+            ...(await solana.state?.Provider?.connect(options.providerType, options.chainId)),
         }
     }
 
     async disconnect(initial?: SolanaConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await SolanaWeb3StateRef.value?.Provider?.disconnect(options.providerType)
+        await solana.state?.Provider?.disconnect(options.providerType)
     }
 
     getWeb3(initial?: SolanaConnectionOptions) {

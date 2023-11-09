@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { Contract, Web3 } from '@masknet/web3-providers'
+import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useNonFungibleAssets } from '@masknet/web3-hooks-base'
@@ -26,7 +26,7 @@ export function useNonFungibleOwnerTokens(
         if (collectibles.length > 0) return collectibles
         if (!contractAddress || !ownerAccount) return
 
-        const contract = Contract.getERC721Contract(contractAddress, { chainId })
+        const contract = EVMContract.getERC721Contract(contractAddress, { chainId })
         if (!contract) return
 
         const isEnumerable = await contract.methods.supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID).call()
@@ -54,7 +54,7 @@ export function useNonFungibleOwnerTokens(
 
         return Promise.all(
             listOfPairs?.map((x) =>
-                Web3.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
+                EVMWeb3.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                     chainId,
                     account: ownerAccount,
                 }),

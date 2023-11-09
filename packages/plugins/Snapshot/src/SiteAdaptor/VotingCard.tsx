@@ -5,7 +5,7 @@ import { checksumAddress } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useProposal } from './hooks/useProposal.js'
 import { usePower } from './hooks/usePower.js'
@@ -90,7 +90,7 @@ export function VotingCard() {
                 domain,
                 types,
             }
-            const sig = await Web3.signMessage(
+            const sig = await EVMWeb3.signMessage(
                 'typedData',
                 JSON.stringify({
                     domain,

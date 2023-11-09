@@ -16,7 +16,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
-import { Contract } from '@masknet/web3-providers'
+import { EVMContract } from '@masknet/web3-providers'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
@@ -75,7 +75,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
             const address = getAaveConstant(chainId, 'AAVE_PROTOCOL_DATA_PROVIDER_CONTRACT_ADDRESS')
             if (!address) return EMPTY_LIST
 
-            const protocolDataContract = Contract.getWeb3Contract<AaveProtocolDataProvider>(
+            const protocolDataContract = EVMContract.getWeb3Contract<AaveProtocolDataProvider>(
                 address,
                 AaveProtocolDataProviderABI as AbiItem[],
                 {

@@ -9,7 +9,7 @@ import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { Providers, Web3 } from '@masknet/web3-providers'
+import { EVMWalletProviders, EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -167,7 +167,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 async function pollResult(address: string) {
-    const subscription = Providers[ProviderType.MaskWallet].subscription.wallets
+    const subscription = EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
     const [promise, resolve] = defer()
     const unsubscribe = subscription.subscribe(() => {
@@ -219,7 +219,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
         if (!result) return
         const address = await Services.Wallet.createWalletFromMnemonicWords(walletName, words.join(' '))
         await pollResult(address)
-        await Web3.connect({
+        await EVMWeb3.connect({
             silent: true,
             providerType: ProviderType.MaskWallet,
             account: address,

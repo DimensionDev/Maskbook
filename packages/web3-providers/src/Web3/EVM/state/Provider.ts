@@ -21,11 +21,11 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { Providers } from '../providers/index.js'
+import { EVMWalletProviders } from '../providers/index.js'
 import { ProviderState } from '../../Base/state/Provider.js'
 
 export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    protected providers = Providers
+    protected providers = EVMWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId
     protected override isSameAddress = isSameAddress

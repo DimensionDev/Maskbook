@@ -16,7 +16,7 @@ import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import type { OwnerAPI } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { Web3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import type { ManagerAccount } from '../type.js'
 import { useSmartPayTrans } from '../locales/index.js'
 import { PluginSmartPayMessages } from '../message.js'
@@ -74,11 +74,11 @@ export function useDeploy(
             if (!hasPassword) return openPopupWindow(PopupRoutes.SetPaymentPassword, {})
 
             if (contractAccount.funded && !contractAccount.deployed) {
-                const hash = await Web3.deploy?.(signAccount.address, signAccount.identifier, options)
+                const hash = await EVMWeb3.deploy?.(signAccount.address, signAccount.identifier, options)
 
                 if (!hash) return
 
-                const result = await Web3.confirmTransaction(hash, options)
+                const result = await EVMWeb3.confirmTransaction(hash, options)
 
                 if (!result?.status) return
 
@@ -104,14 +104,14 @@ export function useDeploy(
             if (signPersona) {
                 signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
-                signature = await Web3.signMessage('message', payload, options)
+                signature = await EVMWeb3.signMessage('message', payload, options)
             }
             const publicKey = signPersona ? signPersona.identifier.publicKeyAsHex : signWallet?.address
             if (!signature || !publicKey) return
 
             closeSnackbar()
 
-            const hash = await Web3.fund?.(
+            const hash = await EVMWeb3.fund?.(
                 {
                     publicKey,
                     type: signPersona ? ProofType.Persona : ProofType.EOA,
@@ -122,13 +122,13 @@ export function useDeploy(
             )
             if (!hash) throw new Error('Deploy Failed')
 
-            const result = await Web3.confirmTransaction(hash, options)
+            const result = await EVMWeb3.confirmTransaction(hash, options)
             if (!result?.status) return
 
-            const deployHash = await Web3.deploy?.(signAccount.address, signAccount.identifier, options)
+            const deployHash = await EVMWeb3.deploy?.(signAccount.address, signAccount.identifier, options)
             if (!deployHash) return
 
-            const deployResult = await Web3.confirmTransaction(deployHash, options)
+            const deployResult = await EVMWeb3.confirmTransaction(deployHash, options)
             if (!deployResult?.status) return
             await Transaction?.removeTransaction?.(chainId, '', hash)
             await Transaction?.removeTransaction?.(chainId, '', deployHash)

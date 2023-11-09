@@ -1,5 +1,5 @@
 import { EMPTY_LIST, type Wallet } from '@masknet/shared-base'
-import { Providers } from '@masknet/web3-providers'
+import { EVMWalletProviders } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { usePersistSubscription } from '@masknet/shared-base-ui'
@@ -8,7 +8,7 @@ export function useWallets() {
     // We got stored Mask wallets only.
     const wallets = usePersistSubscription(
         '@@mask-wallets',
-        Providers[ProviderType.MaskWallet].subscription.wallets ?? EMPTY_LIST,
+        EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets ?? EMPTY_LIST,
     )
 
     return useMemo(() => {

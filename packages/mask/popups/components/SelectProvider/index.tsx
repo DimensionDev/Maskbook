@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { getRegisteredWeb3Providers, Web3 } from '@masknet/web3-providers'
+import { getRegisteredWeb3Providers, EVMWeb3 } from '@masknet/web3-providers'
 import { ExtensionSite, NetworkPluginID, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -64,7 +64,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 )
                 return
             } else if (providerType === ProviderType.WalletConnect) {
-                const account = await Web3.connect({ providerType })
+                const account = await EVMWeb3.connect({ providerType })
 
                 // wallet connect has been connected
                 if (account) {
