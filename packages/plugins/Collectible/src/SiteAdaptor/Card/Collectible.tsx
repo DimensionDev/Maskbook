@@ -1,11 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus, Markdown, NFTSpamBadge, RetryHint, useReportSpam } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingBase, MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { LoadingBase, MaskTabList, makeStyles, useDetectOverflow, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, IconButton, Paper, Tab, Typography } from '@mui/material'
 import { format as formatDateTime, isAfter, isValid as isValidDate } from 'date-fns'
-import { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
@@ -32,7 +32,11 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
         },
         header: {
             alignItems: 'unset',
+            overflow: 'auto',
             padding: 10,
+        },
+        headerContent: {
+            overflow: 'auto',
         },
         body: {
             flex: 1,
@@ -126,20 +130,8 @@ export function Collectible() {
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, orders } = Context.useContainer()
-    const titleRef = useRef<HTMLDivElement>(null)
-    const [outVerified, setOutVerified] = useState(false)
+    const [outVerified, titleRef] = useDetectOverflow<HTMLDivElement>()
 
-    useLayoutEffect(() => {
-        if (!titleRef) return
-        const offsetWidth = titleRef.current?.offsetWidth
-        const scrollWidth = titleRef.current?.scrollWidth
-
-        if (!offsetWidth || !scrollWidth) {
-            setOutVerified(false)
-        } else {
-            setOutVerified(scrollWidth > offsetWidth)
-        }
-    }, [])
     const { isReporting, isSpam, promptReport } = useReportSpam({
         address: asset.data?.address,
         chainId: asset.data?.chainId,
@@ -198,6 +190,7 @@ export function Collectible() {
             <CollectiblePaper classes={{ root: classes.root }}>
                 <CardHeader
                     className={classes.header}
+                    classes={{ content: classes.headerContent }}
                     avatar={
                         <LinkingAvatar
                             href={_asset.link ?? ''}
@@ -221,7 +214,7 @@ export function Collectible() {
                             ) : null}
 
                             {isSpam ? (
-                                <NFTSpamBadge />
+                                <NFTSpamBadge ml="auto" />
                             ) : (
                                 <IconButton
                                     className={classes.reportButton}
