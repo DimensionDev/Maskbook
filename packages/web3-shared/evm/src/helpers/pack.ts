@@ -1,4 +1,4 @@
-import { utf8ToHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 
 export function pack(types: string[], values: any[]) {
     if (types.length !== values.length) {
@@ -16,7 +16,7 @@ export function pack(types: string[], values: any[]) {
                 result += BigInt(values[i]).toString(16).padStart(64, '0')
                 break
             case 'bytes32':
-                result += utf8ToHex(values[i]).slice(2).padStart(64, '0')
+                result += web3_utils.utf8ToHex(values[i]).slice(2).padStart(64, '0')
                 break
             case 'bool':
                 result += values[i] ? '01' : '00'

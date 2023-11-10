@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { type AccountMeta, type PublicKey, type Signer, TransactionInstruction } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type { AccountMeta, PublicKey, Signer } from '@solana/web3.js'
 import * as BufferLayout from '@solana/buffer-layout'
 
 enum TokenInstruction {
@@ -46,7 +47,7 @@ export function createTransferInstruction(
     amount: number,
     multiSigners: Signer[] = [],
     programId = TOKEN_PROGRAM_ID,
-): TransactionInstruction {
+): SolanaWeb3.TransactionInstruction {
     const dataLayout = BufferLayout.struct<{ instruction: number; amount: Uint8Array }>([
         BufferLayout.u8('instruction'),
         BufferLayout.blob(8, 'amount'),
@@ -70,7 +71,7 @@ export function createTransferInstruction(
         data,
     )
 
-    return new TransactionInstruction({ keys, programId, data })
+    return new SolanaWeb3.TransactionInstruction({ keys, programId, data })
 }
 
 function addSigners(keys: AccountMeta[], ownerOrAuthority: PublicKey, multiSigners: Signer[]): AccountMeta[] {

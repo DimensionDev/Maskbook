@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import {
     type ChainId,
     EthereumMethodType,
@@ -49,7 +49,9 @@ class NonceAPI implements Middleware<ConnectionContext> {
                 params: [
                     {
                         ...context.config,
-                        nonce: toHex(await this.syncRemoteNonce(context.chainId, context.account, context.providerURL)),
+                        nonce: web3_utils.toHex(
+                            await this.syncRemoteNonce(context.chainId, context.account, context.providerURL),
+                        ),
                     },
                 ],
             }

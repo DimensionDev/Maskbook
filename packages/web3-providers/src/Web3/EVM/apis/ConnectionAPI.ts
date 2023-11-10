@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -147,7 +147,7 @@ export class ConnectionAPI
 
         // ERC20
         return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.approve(recipient, toHex(amount)),
+            (x) => x?.methods.approve(recipient, web3_utils.toHex(amount)),
             options.overrides,
         )
     }
@@ -197,8 +197,8 @@ export class ConnectionAPI
             const tx: Transaction = {
                 from: options.account,
                 to: recipient,
-                value: toHex(amount),
-                data: memo ? toHex(memo) : undefined,
+                value: web3_utils.toHex(amount),
+                data: memo ? web3_utils.toHex(memo) : undefined,
             }
             return this.sendTransaction(
                 {
@@ -211,7 +211,7 @@ export class ConnectionAPI
 
         // ERC20
         return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.transfer(recipient, toHex(amount)),
+            (x) => x?.methods.transfer(recipient, web3_utils.toHex(amount)),
             options.overrides,
         )
     }

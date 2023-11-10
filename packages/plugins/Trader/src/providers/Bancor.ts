@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { BigNumber } from 'bignumber.js'
-import { toChecksumAddress } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { pick } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
@@ -51,9 +51,9 @@ class BancorAPI implements TraderAPI.Provider {
         const baseUrl = BANCOR_API_BASE_URL[request.chainId]
         const url = urlcat(baseUrl, '/transactions/swap', {
             source_dlt_type: 'ethereum',
-            source_dlt_id: toChecksumAddress(request.fromToken.address),
+            source_dlt_id: web3_utils.toChecksumAddress(request.fromToken.address),
             target_dlt_type: 'ethereum',
-            target_dlt_id: toChecksumAddress(request.toToken.address),
+            target_dlt_id: web3_utils.toChecksumAddress(request.toToken.address),
             amount: roundDecimal(request.fromAmount, request.fromToken.decimals),
             min_return: roundDecimal(request.minimumReceived, request.toToken.decimals),
             user_source_dlt_id: request.user,

@@ -30,8 +30,8 @@ export { SolanaWalletProviders } from './Web3/Solana/providers/index.js'
 export { BaseEIP4337WalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
 
 // Web3
-export { getHub } from './Web3/Router/apis/AllHubAPI.js'
-export { getWeb3Connection } from './Web3/Router/apis/AllConnectionAPI.js'
+export { getHub } from './Web3/Router/apis/getHub.js'
+export { getWeb3Connection } from './Web3/Router/apis/getWeb3Connection.js'
 export { getUtils } from './Web3/Router/apis/getUtils.js'
 
 export {

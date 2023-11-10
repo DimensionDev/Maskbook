@@ -1,4 +1,4 @@
-import { keccak256 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { flattenDeep } from 'lodash-es'
 import { canonifyImgUrl, parseId } from './url.js'
 import {
@@ -35,9 +35,9 @@ export function getPostId(node: HTMLElement) {
     } else if (timeNode) {
         // Quoted tweet in timeline has no a status link to detail page,
         // so use the timestamp as post id instead
-        pid = `timestamp-keccak256:${keccak256(timeNode.getAttribute('datetime')!)}`
+        pid = `timestamp-keccak256:${web3_utils.keccak256(timeNode.getAttribute('datetime')!)}`
     } else {
-        pid = `keccak256:${keccak256(node.innerText)}`
+        pid = `keccak256:${web3_utils.keccak256(node.innerText)}`
     }
 
     // You can't retweet a tweet or a retweet, but only cancel retweeting

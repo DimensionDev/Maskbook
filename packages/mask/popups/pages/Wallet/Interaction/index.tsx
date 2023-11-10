@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
-import { toHex, toUtf8 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useUpdateEffect } from '@react-hookz/web'
@@ -129,7 +129,7 @@ const Interaction = memo(function Interaction() {
         const { method, params } = currentRequest.request.arguments
         if (method === EthereumMethodType.ETH_SIGN || method === EthereumMethodType.ETH_SIGN_TYPED_DATA) {
             try {
-                return toUtf8(params[1])
+                return web3_utils.toUtf8(params[1])
             } catch {
                 return params[1]
             }
@@ -170,7 +170,7 @@ const Interaction = memo(function Interaction() {
                 )
 
                 const parametersString = abiCoder
-                    .encodeParameters(approveParametersType, [parameters.spender, toHex(approveAmount)])
+                    .encodeParameters(approveParametersType, [parameters.spender, web3_utils.toHex(approveAmount)])
                     .slice(2)
 
                 const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
@@ -202,12 +202,12 @@ const Interaction = memo(function Interaction() {
                             ...(gasConfig
                                 ? mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
                                       if (key === 'gasCurrency' || !value) return
-                                      return toHex(value)
+                                      return web3_utils.toHex(value)
                                   })
                                 : {}),
-                            gas: toHex(addGasMargin(gasConfig?.gas ?? x.gas).toString()),
-                            chainId: toHex(x.chainId),
-                            nonce: toHex(x.nonce),
+                            gas: web3_utils.toHex(addGasMargin(gasConfig?.gas ?? x.gas).toString()),
+                            chainId: web3_utils.toHex(x.chainId),
+                            nonce: web3_utils.toHex(x.nonce),
                         }
                     }),
                 )

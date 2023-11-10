@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { isUndefined, omitBy } from 'lodash-es'
-import { type AbiItem, hexToBytes, keccak256, padLeft, toHex, toNumber } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import type { AbiItem } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
@@ -143,11 +144,11 @@ export class UserTransaction {
     }
 
     get hash() {
-        return keccak256(this.pack)
+        return web3_utils.keccak256(this.pack)
     }
 
     get requestId() {
-        return keccak256(
+        return web3_utils.keccak256(
             abiCoder.encodeParameters(['bytes32', 'address', 'uint256'], [this.hash, this.entryPoint, this.chainId]),
         )
     }
@@ -189,7 +190,7 @@ export class UserTransaction {
         if (isValidAddress(this.userOperation.sender) && typeof overrides === 'undefined' && nonce === 0) {
             try {
                 const nonce_ = await this.createWalletContract(web3, sender).methods.nonce().call()
-                this.userOperation.nonce = toNumber(nonce_) as number
+                this.userOperation.nonce = web3_utils.toNumber(nonce_) as number
             } catch (error) {
                 this.userOperation.nonce = 0
             }
@@ -201,13 +202,15 @@ export class UserTransaction {
                 to: this.userOperation.sender,
                 data: callData,
             })
-            this.userOperation.callGas = toHex(estimatedGas)
+            this.userOperation.callGas = web3_utils.toHex(estimatedGas)
         } else {
             this.userOperation.callGas = callGas ?? DEFAULT_USER_OPERATION.callGas
         }
 
         // 2x scale up callGas and add margin for postop
-        this.userOperation.callGas = toHex(toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2).plus(POSTOP), 0))
+        this.userOperation.callGas = web3_utils.toHex(
+            toFixed(multipliedBy(this.userOperation.callGas ?? '0', 2).plus(POSTOP), 0),
+        )
 
         // recover to the original callGas when extra gas could be provided
         if (isGreaterThan(callGas ?? '0', this.userOperation.callGas)) {
@@ -242,7 +245,8 @@ export class UserTransaction {
         if (isZeroString(preVerificationGas)) {
             this.userOperation.preVerificationGas = toFixed(
                 Math.max(
-                    hexToBytes(this.packAll)
+                    web3_utils
+                        .hexToBytes(this.packAll)
                         .map<number>((x) => (x === 0 ? 4 : 16))
                         .reduce((sum, x) => sum + x),
                     Number.parseInt(DEFAULT_USER_OPERATION.preVerificationGas, 10),
@@ -260,7 +264,7 @@ export class UserTransaction {
                 this.userOperation.paymaster = PAYMASTER_NATIVE_CONTRACT_ADDRESS
             } else {
                 this.userOperation.paymaster = PAYMASTER_MASK_CONTRACT_ADDRESS
-                this.userOperation.paymasterData = padLeft(this.paymentToken, 64)
+                this.userOperation.paymasterData = web3_utils.padLeft(this.paymentToken, 64)
             }
         }
 
@@ -269,7 +273,7 @@ export class UserTransaction {
 
     estimateUserOperation() {
         const { callGas = DEFAULT_USER_OPERATION.callGas } = this.userOperation
-        return toHex(callGas)
+        return web3_utils.toHex(callGas)
     }
 
     async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
@@ -336,7 +340,7 @@ export class UserTransaction {
             ...DEFAULT_USER_OPERATION,
             paymaster: PAYMASTER_MASK_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
             paymasterData: PAYMENT_TOKEN_ADDRESS
-                ? padLeft(PAYMENT_TOKEN_ADDRESS, 64)
+                ? web3_utils.padLeft(PAYMENT_TOKEN_ADDRESS, 64)
                 : DEFAULT_USER_OPERATION.paymasterData,
             ...userOperation,
         }
@@ -353,7 +357,7 @@ export class UserTransaction {
 
         return UserTransaction.fillUserOperation(chainId, {
             sender: formatEthereumAddress(from),
-            nonce: toNumber(nonce) as number,
+            nonce: web3_utils.toNumber(nonce) as number,
             callGas: transaction.gas ?? DEFAULT_USER_OPERATION.callGas,
             callData: abiCoder.encodeFunctionCall(CALL_WALLET_TYPE, [to, value, data]),
             maxFeePerGas: transaction.maxFeePerGas ?? transaction.gasPrice ?? DEFAULT_USER_OPERATION.maxFeePerGas,
@@ -376,11 +380,11 @@ export class UserTransaction {
             chainId,
             from: userOperation.sender,
             to: parameters?.dest,
-            value: toHex(parameters?.value ?? '0'),
+            value: web3_utils.toHex(parameters?.value ?? '0'),
             gas: userOperation.callGas,
             maxFeePerGas: userOperation.maxFeePerGas,
             maxPriorityFeePerGas: userOperation.maxPriorityFeePerGas,
-            nonce: toNumber(userOperation.nonce ?? '0') as number,
+            nonce: web3_utils.toNumber(userOperation.nonce ?? '0') as number,
             data: parameters?.func ?? '0x',
         }
     }

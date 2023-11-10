@@ -3,7 +3,7 @@ import urlcat from 'urlcat'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { sha3 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { delay } from '@masknet/kit'
 import { DeriveWalletTable } from '@masknet/shared'
@@ -88,7 +88,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const { mnemonic, password, isReset } = state
     // Avoid leaking mnemonic to react-query
-    const mnemonicHash = sha3(mnemonic)
+    const mnemonicHash = web3_utils.sha3(mnemonic)
     const [pathIndexes, setPathIndexes] = useState<number[]>([])
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 

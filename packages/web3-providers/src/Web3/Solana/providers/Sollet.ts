@@ -1,17 +1,17 @@
 import base58 from 'bs58'
 import type { Transaction } from '@solana/web3.js'
-import Wallet from '@project-serum/sol-wallet-adapter'
+import * as Wallet from /* webpackDefer: true */ '@project-serum/sol-wallet-adapter'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-solana'
 import { BaseSolanaWalletProvider } from './Base.js'
 
 export class SolanaSolletProvider extends BaseSolanaWalletProvider {
-    private wallet: Wallet | null = null
+    private wallet: Wallet.default | null = null
     private providerURL = 'https://www.sollet.io'
     private get solanaProvider() {
         if (!this.wallet) throw new Error('No sollet connection.')
         return this.wallet
     }
-    private set solanaProvider(newWallet: Wallet) {
+    private set solanaProvider(newWallet: Wallet.default) {
         this.wallet = newWallet
     }
 
@@ -30,7 +30,7 @@ export class SolanaSolletProvider extends BaseSolanaWalletProvider {
     }
 
     override async connect(chainId: ChainId) {
-        this.solanaProvider = new Wallet(this.providerURL, '')
+        this.solanaProvider = new Wallet.default(this.providerURL, '')
         await this.solanaProvider.connect()
         return {
             chainId,
@@ -39,7 +39,7 @@ export class SolanaSolletProvider extends BaseSolanaWalletProvider {
     }
 
     override async disconnect() {
-        this.solanaProvider = new Wallet(this.providerURL, '')
+        this.solanaProvider = new Wallet.default(this.providerURL, '')
         await this.solanaProvider.disconnect()
         this.emitter.emit('disconnect', ProviderType.Sollet)
 

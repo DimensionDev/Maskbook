@@ -1,5 +1,5 @@
 import { first, omit, toNumber } from 'lodash-es'
-import { numberToHex, toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
@@ -545,7 +545,7 @@ export class EVMConnectionReadonlyAPI
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: numberToHex(options.chainId),
+                chainId: web3_utils.numberToHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {
@@ -567,7 +567,7 @@ export class EVMConnectionReadonlyAPI
         const result = await contract?.methods.balances([options.account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,
-            chainId: numberToHex(options.chainId),
+            chainId: web3_utils.numberToHex(options.chainId),
         })
 
         if (result?.length !== listOfAddress.length) return {}
@@ -646,7 +646,7 @@ export class EVMConnectionReadonlyAPI
         return this.Request.request<Block>(
             {
                 method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-                params: [toHex(noOrId), false],
+                params: [web3_utils.toHex(noOrId), false],
             },
             initial,
         )
@@ -716,7 +716,7 @@ export class EVMConnectionReadonlyAPI
                 options,
             )
         } catch {
-            return toHex(fallback)
+            return web3_utils.toHex(fallback)
         }
     }
 
