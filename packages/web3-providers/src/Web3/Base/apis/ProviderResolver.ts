@@ -1,8 +1,7 @@
 import type { ProviderDescriptor } from '@masknet/web3-shared-base'
 
 export class ProviderResolver<ChainId, ProviderType> {
-    constructor(private descriptors: () => ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>>) {
-    }
+    constructor(private descriptors: () => ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>>) {}
 
     private getDescriptor(providerType: ProviderType) {
         return this.descriptors().find((x) => x.type === providerType)

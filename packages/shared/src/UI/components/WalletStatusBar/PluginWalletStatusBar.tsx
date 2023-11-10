@@ -61,14 +61,14 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({
-         className,
-         onClick,
-         expectedPluginID,
-         expectedChainId,
-         children,
-         requiredSupportChainIds,
-         requiredSupportPluginID,
-     }) => {
+        className,
+        onClick,
+        expectedPluginID,
+        expectedChainId,
+        children,
+        requiredSupportChainIds,
+        requiredSupportPluginID,
+    }) => {
         const t = useSharedTrans()
         const { classes, cx } = useStyles()
 

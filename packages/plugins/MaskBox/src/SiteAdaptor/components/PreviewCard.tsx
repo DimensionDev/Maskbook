@@ -190,8 +190,7 @@ export function PreviewCard() {
             setOpenDrawResultDialog(true)
             retryMaskBoxStatus()
             setOpenDrawDialog(false)
-        } catch {
-        }
+        } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
     const Utils = useWeb3Utils()
@@ -368,10 +367,10 @@ export function PreviewCard() {
                                 {(() => {
                                     return boxState === BoxState.READY && paymentTokenAddress
                                         ? t.action_title({
-                                            title: boxStateMessage,
-                                            price: formatCurrency(paymentTokenPrice, ''),
-                                            symbol: paymentTokenDetailed?.symbol ?? '',
-                                        })
+                                              title: boxStateMessage,
+                                              price: formatCurrency(paymentTokenPrice, ''),
+                                              symbol: paymentTokenDetailed?.symbol ?? '',
+                                          })
                                         : boxStateMessage
                                 })()}
                             </ActionButton>

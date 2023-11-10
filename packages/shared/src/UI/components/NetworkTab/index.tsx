@@ -26,12 +26,12 @@ interface NetworkTabProps extends Omit<MaskTabListProps, 'onChange'> {
 }
 
 export const NetworkTab = memo(function NetworkTab({
-                                                       chains,
-                                                       pluginID,
-                                                       onChange,
-                                                       requireChains,
-                                                       ...rest
-                                                   }: NetworkTabProps) {
+    chains,
+    pluginID,
+    onChange,
+    requireChains,
+    ...rest
+}: NetworkTabProps) {
     const { pluginID: networkPluginID } = useNetworkContext(pluginID)
     const { chainId, setChainId, setNetworkType } = useChainContext()
     const networks = useNetworkDescriptors(networkPluginID)

@@ -34,8 +34,8 @@ export function useNFT(
         ])
 
         const [token, asset] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
-                Web3Helper.NonFungibleTokenAll | undefined,
-                Web3Helper.NonFungibleAssetAll | undefined,
+            Web3Helper.NonFungibleTokenAll | undefined,
+            Web3Helper.NonFungibleAssetAll | undefined,
         ]
 
         const metadata = asset?.metadata || token?.metadata

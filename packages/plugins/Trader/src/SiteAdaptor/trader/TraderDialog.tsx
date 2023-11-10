@@ -31,8 +31,8 @@ const useStyles = makeStyles<{ rotate: boolean }>()((theme, { rotate }) => ({
 
         '& > div .MuiBox-root': Sniffings.is_dashboard_page
             ? {
-                background: MaskColorVar.mainBackground,
-            }
+                  background: MaskColorVar.mainBackground,
+              }
             : {},
     },
     content: {
@@ -99,9 +99,9 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const [defaultCoins, setDefaultCoins] = useState<
         | {
-        defaultInputCoin?: TokenType
-        defaultOutputCoin?: TokenType
-    }
+              defaultInputCoin?: TokenType
+              defaultOutputCoin?: TokenType
+          }
         | undefined
     >({
         defaultInputCoin: undefined,

@@ -147,19 +147,19 @@ export const SelectGasSettingsToolbar = memo(function SelectGasSettingsToolbar(p
 })
 
 export function SelectGasSettingsToolbarUI({
-                                               gasConfig: gasOption,
-                                               gasLimit,
-                                               nativeToken,
-                                               nativeTokenPrice,
-                                               estimateGasFee,
-                                               supportMultiCurrency,
-                                               editMode,
-                                               className,
-                                               classes: externalClasses,
-                                               onChange,
-                                               onOpenCustomSetting,
-                                               MenuProps = {},
-                                           }: SelectGasSettingsToolbarProps) {
+    gasConfig: gasOption,
+    gasLimit,
+    nativeToken,
+    nativeTokenPrice,
+    estimateGasFee,
+    supportMultiCurrency,
+    editMode,
+    className,
+    classes: externalClasses,
+    onChange,
+    onOpenCustomSetting,
+    MenuProps = {},
+}: SelectGasSettingsToolbarProps) {
     const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
@@ -181,18 +181,18 @@ export function SelectGasSettingsToolbarUI({
             onChange?.(
                 isSupportEIP1559
                     ? {
-                        maxFeePerGas,
-                        maxPriorityFeePerGas,
-                        gasCurrency: currentGasCurrency,
-                        gas: new BigNumber(gasLimit).toString(),
-                        gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
-                    }
+                          maxFeePerGas,
+                          maxPriorityFeePerGas,
+                          gasCurrency: currentGasCurrency,
+                          gas: new BigNumber(gasLimit).toString(),
+                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
+                      }
                     : {
-                        gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
-                        gasCurrency: currentGasCurrency,
-                        gas: new BigNumber(gasLimit).toString(),
-                        gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
-                    },
+                          gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
+                          gasCurrency: currentGasCurrency,
+                          gas: new BigNumber(gasLimit).toString(),
+                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
+                      },
             ),
         [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit, currentGasOptionType, isCustomGas],
     )

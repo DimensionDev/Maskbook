@@ -16,8 +16,7 @@ export interface ConnectionOptions<T extends NetworkPluginID>
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['Transaction']
-    > {
-}
+    > {}
 
 export interface ConnectionOptionsMap {
     [NetworkPluginID.PLUGIN_EVM]: EVMConnectionOptions
@@ -25,8 +24,7 @@ export interface ConnectionOptionsMap {
     [NetworkPluginID.PLUGIN_SOLANA]: SolanaConnectionOptions
 }
 
-export interface HubOptions<T extends NetworkPluginID> extends BaseHubOptions<Web3Helper.Definition[T]['ChainId']> {
-}
+export interface HubOptions<T extends NetworkPluginID> extends BaseHubOptions<Web3Helper.Definition[T]['ChainId']> {}
 
 export interface HubOptionsMap {
     [NetworkPluginID.PLUGIN_EVM]: EVMHubOptions
@@ -49,18 +47,16 @@ export interface Connection<T extends NetworkPluginID>
         Web3Helper.Definition[T]['Block'],
         Web3Helper.Definition[T]['Web3'],
         Web3Helper.Definition[T]['Web3Provider']
-    > {
-}
+    > {}
 
 export interface Hub<T extends NetworkPluginID>
     extends BaseHubProvider<
-        Web3Helper.Definition[T]['ChainId'],
-        Web3Helper.Definition[T]['SchemaType'],
-        Web3Helper.Definition[T]['GasOption']
-    >,
+            Web3Helper.Definition[T]['ChainId'],
+            Web3Helper.Definition[T]['SchemaType'],
+            Web3Helper.Definition[T]['GasOption']
+        >,
         BaseHubFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        BaseHubNonFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> {
-}
+        BaseHubNonFungible<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']> {}
 
 export interface Utils<T extends NetworkPluginID>
     extends BaseUtils<
@@ -69,5 +65,4 @@ export interface Utils<T extends NetworkPluginID>
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['NetworkType'],
         Web3Helper.Definition[T]['Transaction']
-    > {
-}
+    > {}

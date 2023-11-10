@@ -16,10 +16,10 @@ export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseH
         initial?: BaseHubOptions<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
-        FungibleTokenAPI.Provider<ChainId, SchemaType> &
-        TokenListAPI.Provider<ChainId, SchemaType> &
-        TokenIconAPI.Provider<ChainId> &
-        PriceAPI.Provider<ChainId>
+            FungibleTokenAPI.Provider<ChainId, SchemaType> &
+            TokenListAPI.Provider<ChainId, SchemaType> &
+            TokenIconAPI.Provider<ChainId> &
+            PriceAPI.Provider<ChainId>
     >
 
     async getFungibleTokensFromTokenList(

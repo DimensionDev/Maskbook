@@ -73,21 +73,23 @@ interface ERC1155Metadata {
 }
 
 export class EVMConnectionReadonlyAPI
-    implements BaseConnection<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        UserOperation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Block,
-        Web3,
-        Web3Provider
-    > {
+    implements
+        BaseConnection<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            UserOperation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Block,
+            Web3,
+            Web3Provider
+        >
+{
     static Default = new EVMConnectionReadonlyAPI()
 
     constructor(protected options?: EVMConnectionOptions) {
@@ -284,15 +286,13 @@ export class EVMConnectionReadonlyAPI
             const contract = this.Contract.getERC721Contract(address, options)
             try {
                 ownerId = await contract?.methods.ownerOf(tokenId).call()
-            } catch {
-            }
+            } catch {}
         } else if (options.account) {
             const contract = this.Contract.getERC1155Contract(address, options)
             try {
                 const balance = await contract?.methods.balanceOf(options.account, tokenId).call()
                 ownerId = balance && isGreaterThan(balance, '0') ? options.account : undefined
-            } catch {
-            }
+            } catch {}
         }
 
         return createNonFungibleToken<ChainId, SchemaType>(

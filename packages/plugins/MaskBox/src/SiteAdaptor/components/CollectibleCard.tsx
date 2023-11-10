@@ -56,15 +56,15 @@ interface CollectibleCardProps {
 }
 
 export const CollectibleCard = memo(function CollectibleCard({
-                                                                 className,
-                                                                 wallet,
-                                                                 asset,
-                                                                 readonly,
-                                                                 pluginID,
-                                                                 disableLink,
-                                                                 showNetworkIcon,
-                                                                 ...rest
-                                                             }: CollectibleCardProps) {
+    className,
+    wallet,
+    asset,
+    readonly,
+    pluginID,
+    disableLink,
+    showNetworkIcon,
+    ...rest
+}: CollectibleCardProps) {
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
 

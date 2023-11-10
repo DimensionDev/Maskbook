@@ -35,21 +35,23 @@ import { createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
 
 export class ConnectionAPI
     extends EVMConnectionReadonlyAPI
-    implements BaseConnection<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        UserOperation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Block,
-        Web3,
-        Web3Provider
-    > {
+    implements
+        BaseConnection<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            UserOperation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Block,
+            Web3,
+            Web3Provider
+        >
+{
     protected override Request = new EVMRequestAPI(this.options)
     protected override Contract = new EVMContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)

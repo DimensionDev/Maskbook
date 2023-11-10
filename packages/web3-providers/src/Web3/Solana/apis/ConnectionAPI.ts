@@ -39,21 +39,23 @@ import type { SolanaConnectionOptions } from '../types/index.js'
 import { solana } from '../../../Manager/registry.js'
 
 export class SolanaConnectionAPI
-    implements BaseConnection<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        Operation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Block,
-        Web3,
-        Web3Provider
-    > {
+    implements
+        BaseConnection<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            Operation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Block,
+            Web3,
+            Web3Provider
+        >
+{
     constructor(options?: SolanaConnectionOptions) {
         this.Web3 = new SolanaWeb3API(options)
         this.Transfer = new SolanaTransferAPI(options)

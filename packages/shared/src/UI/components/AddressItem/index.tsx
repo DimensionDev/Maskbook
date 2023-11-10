@@ -33,13 +33,13 @@ export interface AddressItemProps {
 }
 
 export function AddressItem({
-                                socialAccount,
-                                TypographyProps = { fontSize: '14px', fontWeight: 700 },
-                                linkIconClassName,
-                                disableLinkIcon,
-                                onClick,
-                                isMenu = false,
-                            }: AddressItemProps) {
+    socialAccount,
+    TypographyProps = { fontSize: '14px', fontWeight: 700 },
+    linkIconClassName,
+    disableLinkIcon,
+    onClick,
+    isMenu = false,
+}: AddressItemProps) {
     const { classes } = useStyles()
     const Utils = useWeb3Utils(socialAccount?.pluginID)
 

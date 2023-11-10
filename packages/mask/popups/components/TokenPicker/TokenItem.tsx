@@ -83,13 +83,13 @@ export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
 }
 
 export const TokenItem = memo(function TokenItem({
-                                                     className,
-                                                     asset,
-                                                     network,
-                                                     onSelect,
-                                                     selected,
-                                                     ...rest
-                                                 }: TokenItemProps) {
+    className,
+    asset,
+    network,
+    onSelect,
+    selected,
+    ...rest
+}: TokenItemProps) {
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
 

@@ -163,19 +163,19 @@ export function NFTItem({ token, pluginID }: NFTItemProps) {
 }
 
 export function NFTList({
-                            selectable,
-                            selectedPairs,
-                            tokens,
-                            onChange,
-                            limit = 1,
-                            columns = 4,
-                            gap = 12,
-                            className,
-                            onNextPage,
-                            finished,
-                            pluginID,
-                            hasError,
-                        }: Props) {
+    selectable,
+    selectedPairs,
+    tokens,
+    onChange,
+    limit = 1,
+    columns = 4,
+    gap = 12,
+    className,
+    onNextPage,
+    finished,
+    pluginID,
+    hasError,
+}: Props) {
     const { classes, cx } = useStyles({ columns, gap })
 
     const isRadio = limit === 1
@@ -190,11 +190,11 @@ export function NFTList({
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? (pairs, pair) => {
-                return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-            }
+                  return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
+              }
             : (pairs, pair) => {
-                return !!pairs.find(([, tokenId]) => tokenId === pair[1])
-            }
+                  return !!pairs.find(([, tokenId]) => tokenId === pair[1])
+              }
 
     const SelectComponent = isRadio ? Radio : Checkbox
 

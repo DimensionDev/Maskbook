@@ -107,9 +107,7 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
 
                     <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
                         {offer.maker?.address ? (
-                            <strong style={{ margin: '0px 4px' }}>
-                                {Utils.formatAddress(offer.maker.address, 4)}
-                            </strong>
+                            <strong style={{ margin: '0px 4px' }}>{Utils.formatAddress(offer.maker.address, 4)}</strong>
                         ) : (
                             '-'
                         )}
@@ -118,8 +116,8 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     <Typography className={classes.textBase}>
                         {isValidTimestamp(offer.createdAt)
                             ? formatDistanceToNow(Math.ceil(offer.createdAt!), {
-                                addSuffix: true,
-                            })
+                                  addSuffix: true,
+                              })
                             : '-'}
                         {isValidTimestamp(offer.expiredAt) && (
                             <>

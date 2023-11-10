@@ -2,8 +2,7 @@ import { type SourceType, createPredicate } from '@masknet/web3-shared-base'
 import { type HubOptionsProvider, type BaseHubOptions } from './HubOptions.js'
 
 export abstract class AbstractBaseHubProvider<ChainId> {
-    constructor(protected options?: BaseHubOptions<ChainId>) {
-    }
+    constructor(protected options?: BaseHubOptions<ChainId>) {}
 
     protected abstract HubOptions: HubOptionsProvider<ChainId>
 

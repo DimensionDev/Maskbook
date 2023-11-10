@@ -19,17 +19,17 @@ interface TraderInfoProps {
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const Others = useWeb3Utils()
+    const Utils = useWeb3Utils()
 
     // const nativeToken = createNativeToken(chainId)
-    const nativeToken = Others.createNativeToken(chainId)
+    const nativeToken = Utils.createNativeToken(chainId)
     const { data: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
         return trade.value?.gas && gasPrice
             ? multipliedBy(gasPrice, trade.value?.gas)
-                .integerValue()
-                .toFixed()
+                  .integerValue()
+                  .toFixed()
             : '0'
     }, [trade.value?.gas, gasPrice])
 

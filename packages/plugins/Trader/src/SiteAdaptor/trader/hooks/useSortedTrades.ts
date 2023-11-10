@@ -91,13 +91,5 @@ export function useSortedTrades(
                 if (valueA.value?.value?.outputAmount.isLessThan(valueB.value?.value?.outputAmount ?? 0)) return 1
                 return 0
             })
-    }, [
-        traders,
-        outputToken,
-        gasPrice,
-        outputTokenPrice,
-        nativeTokenPrice,
-        nativeToken,
-        Utils.isNativeTokenSchemaType,
-    ])
+    }, [traders, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice, nativeToken, Utils.isNativeTokenSchemaType])
 }

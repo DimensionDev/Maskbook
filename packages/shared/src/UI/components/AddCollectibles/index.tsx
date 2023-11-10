@@ -201,8 +201,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const handleFormSubmit = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
-            handleSubmit(() => {
-            })(event)
+            handleSubmit(() => {})(event)
         },
         [handleSubmit],
     )
@@ -305,8 +304,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             ) : null}
             <div className={classes.main}>
                 {!address || tokenIds.length === 0 ? null : (isLoadingContract || loadingAssets) &&
-                isValid &&
-                !allFailed ? (
+                  isValid &&
+                  !allFailed ? (
                     <LoadingStatus flexGrow={1} />
                 ) : isError ? (
                     <ReloadStatus flexGrow={1} onRetry={refetch} />

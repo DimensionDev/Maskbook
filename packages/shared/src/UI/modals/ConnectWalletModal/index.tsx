@@ -178,8 +178,8 @@ export const ConnectWalletModal = forwardRef<
                                     {loading
                                         ? t.plugin_wallet_connect_to()
                                         : connected
-                                            ? t.plugin_wallet_connected_to()
-                                            : t.plugin_wallet_connect_to()}{' '}
+                                        ? t.plugin_wallet_connected_to()
+                                        : t.plugin_wallet_connect_to()}{' '}
                                     {Utils.providerResolver.providerName(providerType)}
                                 </Typography>
                                 {loading ? (
@@ -198,7 +198,7 @@ export const ConnectWalletModal = forwardRef<
                                     <Typography className={classes.error} color="red" variant="body2">
                                         {error.message?.includes('Already processing eth_requestAccounts') ||
                                         error.message?.includes(
-                                            'Request of type \'wallet_requestPermissions\' already pending for origin',
+                                            "Request of type 'wallet_requestPermissions' already pending for origin",
                                         )
                                             ? t.plugin_wallet_metamask_error_already_request()
                                             : error.message ?? 'Something went wrong.'}

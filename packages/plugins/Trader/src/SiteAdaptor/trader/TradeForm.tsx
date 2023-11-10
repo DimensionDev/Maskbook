@@ -192,22 +192,22 @@ interface AllTradeFormProps extends withClasses<'root'> {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
-         trades,
-         inputAmount,
-         inputToken,
-         outputToken,
-         onTokenChipClick = noop,
-         onInputAmountChange,
-         inputTokenBalance,
-         focusedTrade,
-         onFocusedTradeChange,
-         isSmartPay,
-         gasPrice,
-         onSwitch,
-         settings,
-         gasConfig,
-         ...props
-     }) => {
+        trades,
+        inputAmount,
+        inputToken,
+        outputToken,
+        onTokenChipClick = noop,
+        onInputAmountChange,
+        inputTokenBalance,
+        focusedTrade,
+        onFocusedTradeChange,
+        isSmartPay,
+        gasPrice,
+        onSwitch,
+        settings,
+        gasConfig,
+        ...props
+    }) => {
         const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
         const userSelected = useRef(false)
         const t = useTraderTrans()

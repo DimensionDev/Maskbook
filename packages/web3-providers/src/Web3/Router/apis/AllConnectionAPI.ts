@@ -19,10 +19,10 @@ export function getWeb3Connection<T extends NetworkPluginID>(
         pluginID === NetworkPluginID.PLUGIN_EVM
             ? createConnection
             : pluginID === NetworkPluginID.PLUGIN_FLOW
-                ? createFlowConnection
-                : pluginID === NetworkPluginID.PLUGIN_SOLANA
-                    ? createSolanaConnection
-                    : unreachable(pluginID)
+            ? createFlowConnection
+            : pluginID === NetworkPluginID.PLUGIN_SOLANA
+            ? createSolanaConnection
+            : unreachable(pluginID)
     ) as ReturnType<typeof createConnectionCreator<T>>
     return creator(initial)
 }

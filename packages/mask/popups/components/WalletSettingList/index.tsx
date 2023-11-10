@@ -112,13 +112,13 @@ interface WalletListProps {
 }
 
 export const WalletList = memo<WalletListProps>(function WalletList({
-                                                                        walletProofs,
-                                                                        listingAddresses,
-                                                                        toggleUnlisted,
-                                                                        loading,
-                                                                        isValid,
-                                                                        identity,
-                                                                    }) {
+    walletProofs,
+    listingAddresses,
+    toggleUnlisted,
+    loading,
+    isValid,
+    identity,
+}) {
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()

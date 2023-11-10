@@ -252,7 +252,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         if (!keyword) return
 
         return Utils.isValidAddress(keyword) &&
-        !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
+            !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
     }, [keyword, sortedFungibleTokensForList])
@@ -341,22 +341,22 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     return (
         <Stack className={classes.channel}>
             <SearchableList<
-                    FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
-                balance?: string
-                isCustomToken?: boolean
-            }
-                >
+                FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
+                    balance?: string
+                    isCustomToken?: boolean
+                }
+            >
                 onSelect={handleSelect}
                 onSearch={setKeyword}
                 data={
                     isAddressNotContract
                         ? EMPTY_LIST
                         : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                            ? // balance field work for case: user search someone token by contract and whitelist is empty.
-                            [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
-                            : mode === TokenListMode.List
-                                ? sortedFungibleTokensForList
-                                : sortedFungibleTokensForManage
+                        ? // balance field work for case: user search someone token by contract and whitelist is empty.
+                          [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
+                        : mode === TokenListMode.List
+                        ? sortedFungibleTokensForList
+                        : sortedFungibleTokensForManage
                 }
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}

@@ -37,21 +37,23 @@ import type { FlowConnectionOptions } from '../types/index.js'
 import { flow } from '../../../Manager/registry.js'
 
 export class FlowConnectionAPI
-    implements BaseConnection<
-        ChainId,
-        AddressType,
-        SchemaType,
-        ProviderType,
-        Signature,
-        Operation,
-        Transaction,
-        TransactionReceipt,
-        TransactionDetailed,
-        TransactionSignature,
-        Block,
-        Web3,
-        Web3Provider
-    > {
+    implements
+        BaseConnection<
+            ChainId,
+            AddressType,
+            SchemaType,
+            ProviderType,
+            Signature,
+            Operation,
+            Transaction,
+            TransactionReceipt,
+            TransactionDetailed,
+            TransactionSignature,
+            Block,
+            Web3,
+            Web3Provider
+        >
+{
     constructor(options?: FlowConnectionOptions) {
         this.ConnectionOptions = new FlowConnectionOptionsAPI(options)
         this.Web3 = new FlowWeb3API(options)

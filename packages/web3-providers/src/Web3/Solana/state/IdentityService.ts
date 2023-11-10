@@ -38,19 +38,19 @@ export class SolanaIdentityService extends IdentityServiceState<ChainId> {
         return compact<SocialAddress<ChainId>>([
             address
                 ? {
-                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                    type: SocialAddressType.Address,
-                    label: '',
-                    address,
-                }
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      type: SocialAddressType.Address,
+                      label: '',
+                      address,
+                  }
                 : undefined,
             domainAddress
                 ? {
-                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                    type: SocialAddressType.SOL,
-                    label: domain ?? domainAddress,
-                    address: domainAddress,
-                }
+                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                      type: SocialAddressType.SOL,
+                      label: domain ?? domainAddress,
+                      address: domainAddress,
+                  }
                 : undefined,
         ])
     }

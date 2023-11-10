@@ -16,13 +16,13 @@ interface ContractSectionProps {
 }
 
 export function ContractSection({
-                                    chainId,
-                                    address,
-                                    name,
-                                    symbol,
-                                    iconURL,
-                                    pluginID = NetworkPluginID.PLUGIN_EVM,
-                                }: ContractSectionProps) {
+    chainId,
+    address,
+    name,
+    symbol,
+    iconURL,
+    pluginID = NetworkPluginID.PLUGIN_EVM,
+}: ContractSectionProps) {
     const Utils = useWeb3Utils(pluginID)
     const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
 

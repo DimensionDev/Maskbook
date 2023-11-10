@@ -204,8 +204,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 {loadingNativeToken || loadingBalance
                                     ? '-'
                                     : `${formatBalance(balance, nativeToken?.decimals, {
-                                        significant: 3,
-                                    })} ${nativeToken?.symbol}`}
+                                          significant: 3,
+                                      })} ${nativeToken?.symbol}`}
                             </Typography>
                         </div>
                     )}

@@ -19,15 +19,15 @@ interface InputTokenPanelProps extends withClasses<'root'> {
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({
-         chainId,
-         token,
-         balance,
-         onAmountChange,
-         amount,
-         SelectTokenChip: SelectTokenChipProps,
-         maxAmount,
-         isAvailableBalance,
-     }) => {
+        chainId,
+        token,
+        balance,
+        onAmountChange,
+        amount,
+        SelectTokenChip: SelectTokenChipProps,
+        maxAmount,
+        isAvailableBalance,
+    }) => {
         const { pluginID } = useNetworkContext()
         const Utils = useWeb3Utils()
         const { data: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address?.toLowerCase())

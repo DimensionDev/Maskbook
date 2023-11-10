@@ -66,8 +66,7 @@ export interface SelectableProps {
 interface CollectibleItemProps
     extends Omit<HTMLProps<HTMLDivElement>, keyof SelectableProps>,
         CollectibleCardProps,
-        SelectableProps {
-}
+        SelectableProps {}
 
 // TODO lazy render in big list.
 export const CollectibleItem = memo(

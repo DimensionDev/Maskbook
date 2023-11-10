@@ -138,7 +138,7 @@ export function ActivityCard(props: ActivityCardProps) {
                             {type === ActivityType.Mint
                                 ? Utils.formatAddress(ZERO_ADDRESS, 4)
                                 : activity.send.nickname ||
-                                (activity.send.address ? Utils.formatAddress(activity.send.address, 4) : '-')}
+                                  (activity.send.address ? Utils.formatAddress(activity.send.address, 4) : '-')}
                         </strong>
                     </Typography>
                 ) : null}
@@ -150,9 +150,9 @@ export function ActivityCard(props: ActivityCardProps) {
                                 {type === ActivityType.Mint
                                     ? Utils.formatAddress(activity.from?.address, 4)
                                     : activity.receive.nickname ||
-                                    (activity.receive.address
-                                        ? Utils.formatAddress(activity.receive.address, 4)
-                                        : '-')}
+                                      (activity.receive.address
+                                          ? Utils.formatAddress(activity.receive.address, 4)
+                                          : '-')}
                             </strong>
                         </>
                     ) : null}

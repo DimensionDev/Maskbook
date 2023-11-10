@@ -61,12 +61,12 @@ interface ContractItemProps extends Omit<ListItemProps, 'onSelect'> {
 }
 
 export const ContractItem = memo(function ContractItem({
-                                                           pluginID,
-                                                           className,
-                                                           collection,
-                                                           onSelect,
-                                                           ...rest
-                                                       }: ContractItemProps) {
+    pluginID,
+    className,
+    collection,
+    onSelect,
+    ...rest
+}: ContractItemProps) {
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils(pluginID)
 

@@ -38,9 +38,9 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const { chainId } = useChainContext()
     const [errorInfo, setErrorInfo] = useState<
         | {
-        error: RecognizableError
-        request: JsonRpcPayload
-    }
+              error: RecognizableError
+              request: JsonRpcPayload
+          }
         | undefined
     >()
     const [progress, setProgress] = useState<{

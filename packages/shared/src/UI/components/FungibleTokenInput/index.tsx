@@ -20,23 +20,23 @@ export interface FungibleTokenInputProps extends Omit<FungibleTokenInputUIProps,
 
 export const FungibleTokenInput = memo<FungibleTokenInputProps>(
     ({
-         label,
-         token,
-         disabled,
-         disableMax,
-         disableBalance,
-         disableToken,
-         loadingBalance,
-         onSelectToken,
-         onAmountChange,
-         amount,
-         maxAmount,
-         balance,
-         isAvailableBalance,
-         placeholder = '0.0',
-         maxAmountShares = 1,
-         className,
-     }) => {
+        label,
+        token,
+        disabled,
+        disableMax,
+        disableBalance,
+        disableToken,
+        loadingBalance,
+        onSelectToken,
+        onAmountChange,
+        amount,
+        maxAmount,
+        balance,
+        isAvailableBalance,
+        placeholder = '0.0',
+        maxAmountShares = 1,
+        className,
+    }) => {
         const Utils = useWeb3Utils()
 
         const isNative = isAvailableBalance ?? Utils.isNativeTokenAddress(token?.address)

@@ -22,11 +22,11 @@ export class FlowIdentityService extends IdentityServiceState<ChainId> {
         return compact<SocialAddress<ChainId>>([
             address
                 ? {
-                    pluginID: NetworkPluginID.PLUGIN_FLOW,
-                    type: SocialAddressType.Address,
-                    label: address,
-                    address,
-                }
+                      pluginID: NetworkPluginID.PLUGIN_FLOW,
+                      type: SocialAddressType.Address,
+                      label: address,
+                      address,
+                  }
                 : null,
         ])
     }

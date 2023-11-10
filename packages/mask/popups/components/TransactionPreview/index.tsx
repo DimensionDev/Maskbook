@@ -77,11 +77,11 @@ interface TransactionPreviewProps {
 }
 
 export const TransactionPreview = memo<TransactionPreviewProps>(function TransactionPreview({
-                                                                                                transaction,
-                                                                                                onConfigChange,
-                                                                                                paymentToken,
-                                                                                                onPaymentTokenChange,
-                                                                                            }) {
+    transaction,
+    onConfigChange,
+    paymentToken,
+    onPaymentTokenChange,
+}) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -140,8 +140,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const tokenValueUSD =
         amount && tokenPrice
             ? leftShift(amount, token?.decimals)
-                .times(tokenPrice)
-                .toString()
+                  .times(tokenPrice)
+                  .toString()
             : '0'
 
     const initConfig = useMemo(() => {
@@ -205,11 +205,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                             />
                             {amount
                                 ? formatBalance(amount, token?.decimals, {
-                                    significant: 4,
-                                    isPrecise: false,
-                                    isFixed: true,
-                                    fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
-                                })
+                                      significant: 4,
+                                      isPrecise: false,
+                                      isFixed: true,
+                                      fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                  })
                                 : null}
                         </>
                     ) : null}

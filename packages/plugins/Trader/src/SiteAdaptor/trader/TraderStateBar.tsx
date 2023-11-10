@@ -65,16 +65,16 @@ interface TradeStateBarProps {
 }
 
 export function TraderStateBar({
-                                   trades,
-                                   focusedTrade,
-                                   inputToken,
-                                   outputToken,
-                                   inputAmount,
-                                   inputTokenBalance,
-                                   gasPrice,
-                                   onSwap,
-                                   refresh,
-                               }: TradeStateBarProps) {
+    trades,
+    focusedTrade,
+    inputToken,
+    outputToken,
+    inputAmount,
+    inputTokenBalance,
+    gasPrice,
+    onSwap,
+    refresh,
+}: TradeStateBarProps) {
     const t = useTraderTrans()
     const { classes } = useStyles()
 

@@ -21,8 +21,8 @@ export abstract class BaseHubNonFungible<ChainId, SchemaType> extends AbstractBa
         initial?: BaseHubOptions<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
-        NonFungibleTokenAPI.Provider<ChainId, SchemaType> &
-        TokenListAPI.Provider<ChainId, SchemaType>
+            NonFungibleTokenAPI.Provider<ChainId, SchemaType> &
+            TokenListAPI.Provider<ChainId, SchemaType>
     >
 
     async getNonFungibleRarity(

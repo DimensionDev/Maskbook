@@ -51,8 +51,8 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
                 state === 'active'
                     ? theme.palette.maskColor.success
                     : state === 'pending'
-                        ? theme.palette.maskColor.warn
-                        : theme.palette.maskColor.main,
+                    ? theme.palette.maskColor.warn
+                    : theme.palette.maskColor.main,
         },
         blockieIcon: {
             width: 20,
@@ -258,8 +258,8 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>
                             {(proposal.choicesWithScore[i].score
-                                    ? formatCount(proposal.choicesWithScore[i].score, 1)
-                                    : '0') +
+                                ? formatCount(proposal.choicesWithScore[i].score, 1)
+                                : '0') +
                                 ' ' +
                                 proposal.strategyName}
                         </Typography>

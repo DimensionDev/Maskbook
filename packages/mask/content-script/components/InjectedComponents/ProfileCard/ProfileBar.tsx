@@ -118,14 +118,14 @@ interface ProfileBarProps extends BoxProps {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
-                                                                        socialAccounts,
-                                                                        address,
-                                                                        identity,
-                                                                        onAddressChange,
-                                                                        className,
-                                                                        children,
-                                                                        ...rest
-                                                                    }) {
+    socialAccounts,
+    address,
+    identity,
+    onAddressChange,
+    className,
+    children,
+    ...rest
+}) {
     const { classes, theme, cx } = useStyles()
     const t = useMaskSharedTrans()
     const { current: avatarClipPathId } = useRef<string>(uuid())
@@ -244,12 +244,12 @@ type ProfileBarSkeletonProps = Omit<ProfileBarProps, 'identity' | 'onAddressChan
 
 // This Skeleton is not fully empty, but also has user address
 export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function ProfileBarSkeleton({
-                                                                                                socialAccounts,
-                                                                                                address,
-                                                                                                className,
-                                                                                                children,
-                                                                                                ...rest
-                                                                                            }) {
+    socialAccounts,
+    address,
+    className,
+    children,
+    ...rest
+}) {
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
 

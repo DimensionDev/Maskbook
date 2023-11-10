@@ -15,14 +15,14 @@ export function useDefaultGasConfig(chainId: ChainId, gasLimit: string) {
     if (!gasOption) return
     return isSupportEIP1559
         ? {
-            gasOptionType: GasOptionType.SLOW,
-            gas: gasLimit,
-            maxFeePerGas: gasOption.suggestedMaxFeePerGas,
-            maxPriorityFeePerGas: gasOption.suggestedMaxPriorityFeePerGas,
-        }
+              gasOptionType: GasOptionType.SLOW,
+              gas: gasLimit,
+              maxFeePerGas: gasOption.suggestedMaxFeePerGas,
+              maxPriorityFeePerGas: gasOption.suggestedMaxPriorityFeePerGas,
+          }
         : {
-            gasOptionType: GasOptionType.SLOW,
-            gas: gasLimit,
-            gasPrice: gasOption.suggestedMaxFeePerGas,
-        }
+              gasOptionType: GasOptionType.SLOW,
+              gas: gasLimit,
+              gasPrice: gasOption.suggestedMaxFeePerGas,
+          }
 }

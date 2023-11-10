@@ -140,14 +140,14 @@ interface SocialAccountListItemProps {
 }
 
 export function SocialAccountListItem({
-                                          platform,
-                                          link,
-                                          identity,
-                                          name,
-                                          onClose,
-                                          relatedList,
-                                          profileUrl,
-                                      }: SocialAccountListItemProps) {
+    platform,
+    link,
+    identity,
+    name,
+    onClose,
+    relatedList,
+    profileUrl,
+}: SocialAccountListItemProps) {
     const t = useSharedTrans()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
@@ -217,8 +217,8 @@ export function SocialAccountListItem({
                             {isSameAddress(account, value?.ownedBy)
                                 ? t.view()
                                 : value?.isFollowing
-                                    ? t.lens_following()
-                                    : t.lens_follow()}
+                                ? t.lens_following()
+                                : t.lens_follow()}
                         </ActionButton>
                     ) : (
                         <div className={classes.linkIcon}>

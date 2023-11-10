@@ -139,7 +139,8 @@ async function getAssetTether(chainId: ChainId, account: string) {
 }
 
 class FlowFungibleAPI
-    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, TokenListAPI.Provider<ChainId, SchemaType> {
+    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, TokenListAPI.Provider<ChainId, SchemaType>
+{
     async getAssets(
         account: string,
         { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
