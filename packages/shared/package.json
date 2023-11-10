@@ -57,7 +57,7 @@
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "web3-core-helpers": "1.10.2",
-    "web3-utils": "1.10.2",
+    "web3-utils": "1.10.3",
     "zod": "^3.22.2"
   },
   "devDependencies": {
