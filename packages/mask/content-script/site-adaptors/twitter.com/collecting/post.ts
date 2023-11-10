@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es'
-import { keccak256 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
@@ -129,7 +129,7 @@ function registerPostCollectorInner(
             const tweetNode = getTweetNode(node)
             const parentTweetNode = isQuotedTweet(tweetNode) ? getParentTweetNode(tweetNode!) : null
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) {
-                return `keccak256:${keccak256(node.innerText)}`
+                return `keccak256:${web3_utils.keccak256(node.innerText)}`
             }
             const parentTweetId = parentTweetNode ? getPostId(parentTweetNode) : ''
             const tweetId = getPostId(tweetNode)

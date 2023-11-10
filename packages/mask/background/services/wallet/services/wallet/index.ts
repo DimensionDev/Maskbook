@@ -1,6 +1,6 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
-import { sha3 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { toBuffer } from '@ethereumjs/util'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
@@ -60,7 +60,7 @@ export async function createMnemonicWords() {
 }
 
 export async function createMnemonicId(mnemonic: string) {
-    const id = sha3(mnemonic)
+    const id = web3_utils.sha3(mnemonic)
     if (!id) throw new Error('Failed to create mnemonic id.')
     return id
 }

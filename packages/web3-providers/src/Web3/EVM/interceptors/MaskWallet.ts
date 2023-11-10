@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Wallet } from '@masknet/shared-base'
 import { EthereumMethodType, type Middleware, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
@@ -20,7 +20,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
-                context.write(toHex(provider.hostedChainId))
+                context.write(web3_utils.toHex(provider.hostedChainId))
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 context.write([provider.hostedAccount])

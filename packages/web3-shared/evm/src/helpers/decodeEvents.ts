@@ -1,10 +1,13 @@
 import type { EventLog, Log } from 'web3-core'
-import { type AbiItem, keccak256 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import type { AbiItem } from 'web3-utils'
 import { abiCoder } from './abiCoder.js'
 
 export function decodeEvents(abis: AbiItem[], logs: Log[]) {
     // the topic0 for identifying which abi to be used for decoding the event
-    const listOfTopic0 = abis.map((abi) => keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join(',')})`))
+    const listOfTopic0 = abis.map((abi) =>
+        web3_utils.keccak256(`${abi.name}(${abi.inputs?.map((x) => x.type).join(',')})`),
+    )
 
     // decode events
     const events = logs.map((log) => {

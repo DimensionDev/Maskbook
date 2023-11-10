@@ -1,4 +1,4 @@
-import { keccak256 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Token } from '@uniswap/sdk-core'
 import { getCreate2Address, pack } from '@masknet/web3-shared-evm'
 
@@ -22,7 +22,7 @@ export function getPairAddress(factoryAddress: string, initCodeHash: string, tok
                 ...cache?.[token0Addr],
                 [token1Addr]: getCreate2Address(
                     factoryAddress,
-                    keccak256(pack(['address', 'address'], [token0Addr, token1Addr])),
+                    web3_utils.keccak256(pack(['address', 'address'], [token0Addr, token1Addr])),
                     initCodeHash,
                 ),
             },

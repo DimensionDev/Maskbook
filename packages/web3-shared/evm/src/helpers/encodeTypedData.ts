@@ -1,5 +1,5 @@
-import { sha3, soliditySha3 } from 'web3-utils'
-import { AbiCoder } from 'web3-eth-abi'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import * as web3_eth_abi from /* webpackDefer: true */ 'web3-eth-abi'
 
 interface TypedDataField {
     name: string
@@ -49,7 +49,7 @@ const encodeType = (types: Record<string, TypedDataField[]>, primaryType: string
 
 // Generate the EIP-712 hash
 const typeHash = (types: Record<string, TypedDataField[]>, primaryType: string): string => {
-    return sha3(encodeType(types, primaryType))!
+    return web3_utils.sha3(encodeType(types, primaryType))!
 }
 
 export function encodeTypedData(
@@ -57,20 +57,22 @@ export function encodeTypedData(
     types: Record<string, TypedDataField[]>,
     message: Record<string, any>,
 ): string {
-    const coder = new AbiCoder()
-    const domainSeparator: string = sha3(
+    const coder = new web3_eth_abi.AbiCoder()
+    const domainSeparator: string = web3_utils.sha3(
         coder.encodeParameters(
             Object.keys(domain).map(() => 'string'),
             Object.values(domain),
         ),
     )!
 
-    const messageHash: string = sha3(coder.encodeParameters(findTypes(types, 'Message'), Object.values(message)))!
+    const messageHash: string = web3_utils.sha3(
+        coder.encodeParameters(findTypes(types, 'Message'), Object.values(message)),
+    )!
 
-    const payload: string = soliditySha3(
+    const payload: string = web3_utils.soliditySha3(
         '0x1901',
         domainSeparator,
-        sha3(coder.encodeParameters(['bytes32', 'bytes32'], [typeHash(types, 'Message'), messageHash]))!,
+        web3_utils.sha3(coder.encodeParameters(['bytes32', 'bytes32'], [typeHash(types, 'Message'), messageHash]))!,
     )!
 
     return payload

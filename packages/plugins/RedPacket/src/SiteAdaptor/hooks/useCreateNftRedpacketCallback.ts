@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
 import type { AsyncFnReturn } from 'react-use/lib/useAsync.js'
 import type { EventLog, TransactionReceipt } from 'web3-core'
-import { sha3 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction, type GasConfig, isValidAddress } from '@masknet/web3-shared-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -55,7 +55,7 @@ export function useCreateNftRedpacketCallback(
             const params: FillMethodParameters = [
                 publicKey,
                 duration,
-                sha3(Math.random().toString())!,
+                web3_utils.sha3(Math.random().toString())!,
                 message,
                 name,
                 contractAddress,

@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import {
@@ -97,7 +97,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
                     {
-                        chainId: toHex(chainId),
+                        chainId: web3_utils.toHex(chainId),
                     },
                 ],
             })
@@ -115,7 +115,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
                     method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
                     params: [
                         {
-                            chainId: toHex(chainId),
+                            chainId: web3_utils.toHex(chainId),
                             chainName: EVMChainResolver.chainFullName(chainId) ?? EVMChainResolver.chainName(chainId),
                             nativeCurrency: EVMChainResolver.nativeCurrency(chainId),
                             rpcUrls: [ProviderURL.fromOfficial(chainId)],

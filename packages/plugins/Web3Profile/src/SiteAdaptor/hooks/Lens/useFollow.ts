@@ -1,6 +1,6 @@
 import { useCallback, useRef, type MouseEvent, useState } from 'react'
 import { cloneDeep } from 'lodash-es'
-import { type AbiItem } from 'web3-utils'
+import type { AbiItem } from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'

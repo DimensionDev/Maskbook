@@ -1,5 +1,5 @@
 /* cspell:disable */
-import * as Parser from 'twitter-text'
+import * as Parser from /* webpackDefer: true */ 'twitter-text'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'

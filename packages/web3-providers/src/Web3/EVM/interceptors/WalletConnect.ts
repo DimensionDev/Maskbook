@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { EthereumMethodType, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 
@@ -20,7 +20,7 @@ export class WalletConnect implements Middleware<ConnectionContext> {
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:
                 if (typeof context.result === 'number') {
-                    context.result = toHex(context.result)
+                    context.result = web3_utils.toHex(context.result)
                 }
                 break
             default:

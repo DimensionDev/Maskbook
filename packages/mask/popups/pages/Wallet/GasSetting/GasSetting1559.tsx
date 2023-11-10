@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty } from 'lodash-es'
 import { z as zod } from 'zod'
-import { toHex, fromWei } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
@@ -230,9 +230,12 @@ export const GasSetting1559 = memo(() => {
             if (value?.formatterTransaction._tx.maxFeePerGas && value?.formatterTransaction._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
+                    web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
                 )
-                setValue('maxFeePerGas', fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'))
+                setValue(
+                    'maxFeePerGas',
+                    web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'),
+                )
             } else {
                 setOption(1)
             }
@@ -263,9 +266,9 @@ export const GasSetting1559 = memo(() => {
                     ? param
                     : {
                           ...param,
-                          gas: toHex(new BigNumber(data.gasLimit).toString()),
-                          maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                          maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                          gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
+                          maxPriorityFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                          maxFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
                       },
             )
 

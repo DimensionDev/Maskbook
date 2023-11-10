@@ -1,24 +1,27 @@
+import { lazyObject } from '@masknet/shared-base'
 import type { Web3State } from '@masknet/web3-shared-flow'
-import { FlowAddressBook } from '../state/AddressBook.js'
-import { FlowProvider } from '../state/Provider.js'
-import { FlowSettings } from '../state/Settings.js'
-import { FlowTransaction } from '../state/Transaction.js'
-import { FlowIdentityService } from '../state/IdentityService.js'
-import { FlowNetwork } from '../state/Network.js'
+import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
+import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
+import * as Settings from /* webpackDefer: true */ '../state/Settings.js'
+import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
+import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
+import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export async function createFlowState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = await FlowProvider.new(context)
+    const Provider_ = await Provider.FlowProvider.new(context)
 
-    return {
-        AddressBook: new FlowAddressBook(context),
-        IdentityService: new FlowIdentityService(context),
-        Settings: new FlowSettings(context),
-        Network: new FlowNetwork(context),
-        Transaction: new FlowTransaction(context, {
-            chainId: Provider_.chainId,
-            account: Provider_.account,
-        }),
-        Provider: Provider_,
-    }
+    const state: Web3State = lazyObject({
+        AddressBook: () => new AddressBook.FlowAddressBook(context),
+        IdentityService: () => new IdentityService.FlowIdentityService(context),
+        Settings: () => new Settings.FlowSettings(context),
+        Network: () => new Network.FlowNetwork(context),
+        Transaction: () =>
+            new Transaction.FlowTransaction(context, {
+                chainId: Provider_.chainId,
+                account: Provider_.account,
+            }),
+        Provider: () => Provider_,
+    })
+    return state
 }

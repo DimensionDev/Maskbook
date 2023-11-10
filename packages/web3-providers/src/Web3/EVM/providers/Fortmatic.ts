@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import Fortmatic from 'fortmatic'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { timeout } from '@masknet/kit'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider.js'
 import { ChainId, ProviderURL, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
@@ -121,7 +121,7 @@ export class FortmaticProvider extends BaseEVMWalletProvider {
             }
 
             this.onAccountsChanged(accounts)
-            this.onChainChanged(toHex(chainId))
+            this.onChainChanged(web3_utils.toHex(chainId))
             this.onConnect(connected)
             return connected
         } catch (error) {

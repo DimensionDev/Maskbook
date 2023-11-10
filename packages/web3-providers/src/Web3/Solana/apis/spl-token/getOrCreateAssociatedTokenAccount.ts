@@ -1,5 +1,6 @@
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { type Connection, type PublicKey, type Commitment, Transaction } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type { Connection, PublicKey, Commitment } from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction.js'
 import { getAccountInfo } from './getAccountInfo.js'
 import { getAssociatedTokenAddress } from './getAssociatedTokenAddress.js'
@@ -9,7 +10,7 @@ export async function getOrCreateAssociatedTokenAccount(
     payer: PublicKey,
     mint: PublicKey,
     owner: PublicKey,
-    signTransaction: (tx: Transaction) => Promise<Transaction>,
+    signTransaction: (tx: SolanaWeb3.Transaction) => Promise<SolanaWeb3.Transaction>,
     allowOwnerOffCurve = false,
     commitment: Commitment = 'single',
     programId = TOKEN_PROGRAM_ID,
@@ -35,7 +36,7 @@ export async function getOrCreateAssociatedTokenAccount(
         if (error.message === 'TokenAccountNotFoundError' || error.message === 'TokenInvalidAccountOwnerError') {
             // As this isn't atomic, it's possible others can create associated accounts meanwhile.
             try {
-                const transaction = new Transaction().add(
+                const transaction = new SolanaWeb3.Transaction().add(
                     createAssociatedTokenAccountInstruction(
                         payer,
                         associatedToken,

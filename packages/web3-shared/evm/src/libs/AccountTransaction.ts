@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { identity, pickBy, memoize } from 'lodash-es'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'
@@ -8,8 +8,8 @@ import { ChainId, type Transaction } from '../types/index.js'
 const normalizeHex = memoize((value: string | number) => {
     // fix an abnormal hex value like: 0x02c68af0bb140000
     if (typeof value === 'string' && value.length > 3 && value.startsWith('0x0'))
-        return toHex(new BigNumber(value).toFixed())
-    return toHex(value)
+        return web3_utils.toHex(new BigNumber(value).toFixed())
+    return web3_utils.toHex(value)
 })
 
 export class AccountTransaction {
