@@ -69,6 +69,7 @@ export function mini_mask_dark_url() { return new URL("./brands/MiniMask.dark.sv
 export function mini_mask_light_url() { return new URL("./brands/MiniMask.light.svg", import.meta.url).href }
 export function mirror_url() { return new URL("./brands/Mirror.svg", import.meta.url).href }
 export function momoka_url() { return new URL("./brands/Momoka.svg", import.meta.url).href }
+export function next_id_url() { return new URL("./brands/NextID.svg", import.meta.url).href }
 export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.dark.svg", import.meta.url).href }
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nftgo_url() { return new URL("./brands/Nftgo.svg", import.meta.url).href }

@@ -1,3 +1,4 @@
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform } from '@masknet/shared-base'
@@ -62,6 +63,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                 <VerificationPayload pubkey={pubkey} />
             </ThemeProvider>
         ) : null
+    },
+    wrapperProps: {
+        icon: <Icons.NextID size={24} style={{ boxShadow: '0px 6px 12px 0px rgba(7, 16, 27, 0.20)' }} />,
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.80) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.20) 0%, rgba(249, 55, 55, 0.20) 100%), #FFF',
     },
     ProfileTabs: [
         {
