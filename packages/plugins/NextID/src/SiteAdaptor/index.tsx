@@ -1,9 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { MaskLightTheme } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
+import { ThemeProvider } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { z } from 'zod'
 import { base } from '../base.js'
 import { NextIdPage } from '../components/NextIdPage.js'
@@ -47,7 +49,19 @@ const site: Plugin.SiteAdaptor.Definition = {
         const available = enabled && !!pubkey
         usePluginWrapper(available)
 
-        return available ? <VerificationPayload pubkey={pubkey} /> : null
+        const rootElement = usePostInfoDetails.rootNode()
+        useEffect(() => {
+            if (!rootElement || !available) return
+
+            const sigSpan = rootElement.querySelector<HTMLSpanElement>("[data-testid='tweetText'] > span:last-child")
+            if (sigSpan) sigSpan.style.display = 'none'
+        }, [rootElement, available])
+
+        return available ? (
+            <ThemeProvider theme={MaskLightTheme}>
+                <VerificationPayload pubkey={pubkey} />
+            </ThemeProvider>
+        ) : null
     },
     ProfileTabs: [
         {
