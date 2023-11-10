@@ -6,7 +6,7 @@ import {
     useChainContext,
     useChainIdValid,
     useNetworkContext,
-    useWeb3Others,
+    useWeb3Utils,
     useFungibleToken,
 } from '@masknet/web3-hooks-base'
 import { type ChainId, GasEditor, SchemaType, type Transaction } from '@masknet/web3-shared-evm'
@@ -31,8 +31,8 @@ const useStyles = makeStyles<{ rotate: boolean }>()((theme, { rotate }) => ({
 
         '& > div .MuiBox-root': Sniffings.is_dashboard_page
             ? {
-                  background: MaskColorVar.mainBackground,
-              }
+                background: MaskColorVar.mainBackground,
+            }
             : {},
     },
     content: {
@@ -89,7 +89,7 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const { pluginID } = useNetworkContext()
     const { chainId, setChainId } = useChainContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const t = useTraderTrans()
     const [rotate, setRotate] = useState(false)
@@ -99,9 +99,9 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const [defaultCoins, setDefaultCoins] = useState<
         | {
-              defaultInputCoin?: TokenType
-              defaultOutputCoin?: TokenType
-          }
+        defaultInputCoin?: TokenType
+        defaultOutputCoin?: TokenType
+    }
         | undefined
     >({
         defaultInputCoin: undefined,
@@ -115,9 +115,9 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
 
     const inputFungibleToken = useMemo(
         () =>
-            Others.createFungibleToken(
+            Utils.createFungibleToken(
                 chainId,
-                Others.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+                Utils.isNativeTokenAddress(defaultInputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultInputCoin?.address ?? '',
                 defaultInputCoin?.name ?? '',
                 defaultInputCoin?.symbol ?? '',
@@ -128,9 +128,9 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
 
     const outputFungibleToken = useMemo(
         () =>
-            Others.createFungibleToken(
+            Utils.createFungibleToken(
                 chainId,
-                Others.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
+                Utils.isNativeTokenAddress(defaultOutputCoin?.address) ? SchemaType.Native : SchemaType.ERC20,
                 defaultOutputCoin?.address ?? '',
                 defaultOutputCoin?.name ?? '',
                 defaultOutputCoin?.symbol ?? '',

@@ -13,7 +13,7 @@ import {
 } from '@masknet/theme'
 import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@masknet/shared-base'
 import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
-import { useWeb3State, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedTrans } from '../../../index.js'
 
@@ -38,9 +38,9 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const { chainId } = useChainContext()
     const [errorInfo, setErrorInfo] = useState<
         | {
-              error: RecognizableError
-              request: JsonRpcPayload
-          }
+        error: RecognizableError
+        request: JsonRpcPayload
+    }
         | undefined
     >()
     const [progress, setProgress] = useState<{
@@ -49,7 +49,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         txHash: string
         transaction: Web3Helper.Definition[T]['Transaction']
     }>()
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     const { TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
 
     useEffect(() => {
@@ -145,7 +145,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                             sx={{ wordBreak: 'break-word' }}
                             className={classes.link}
                             color="inherit"
-                            href={Others.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            href={Utils.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
                             target="_blank"
                             rel="noopener noreferrer">
                             {progress.status === TransactionStatusType.SUCCEED

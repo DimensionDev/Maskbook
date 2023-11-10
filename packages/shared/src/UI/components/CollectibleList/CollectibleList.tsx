@@ -1,7 +1,7 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo, useRef } from 'react'
@@ -54,8 +54,11 @@ export interface CollectibleListProps
      * You can also customize, but don't forget pass a customized getCollectibleKey as well.
      * */
     value?: string | string[]
+
     getCollectibleKey?(collectible: Web3Helper.NonFungibleAssetAll): string
+
     retry(): void
+
     onChange?(value: string | string[] | null): void
 }
 
@@ -84,7 +87,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
     } = props
     const t = useSharedTrans()
     const { classes, cx } = useStyles({ columns, gap })
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const availableKeys = useMemo(() => collectibles.map(getCollectibleKey), [collectibles])
     const handleItemChange = useCallback(
@@ -112,7 +115,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
                 <Box className={classes.root}>
                     {collectibles.map((token, index) => {
                         const name = token.metadata?.name
-                        const uiTokenId = Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                        const uiTokenId = Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
                         const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
                         const collectibleKey = getCollectibleKey(token)
                         const checked = selectable ? value?.includes(collectibleKey) : false

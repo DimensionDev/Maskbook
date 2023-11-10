@@ -2,7 +2,7 @@ import { compact } from 'lodash-es'
 import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-solana'
-import { IdentityServiceState } from '../../Base/state/Identity.js'
+import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { SolanaDomain } from '../apis/DomainAPI.js'
 
 const SOL_RE = /\S{1,256}\.sol\b/i
@@ -38,19 +38,19 @@ export class SolanaIdentityService extends IdentityServiceState<ChainId> {
         return compact<SocialAddress<ChainId>>([
             address
                 ? {
-                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.Address,
-                      label: '',
-                      address,
-                  }
+                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                    type: SocialAddressType.Address,
+                    label: '',
+                    address,
+                }
                 : undefined,
             domainAddress
                 ? {
-                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.SOL,
-                      label: domain ?? domainAddress,
-                      address: domainAddress,
-                  }
+                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                    type: SocialAddressType.SOL,
+                    label: domain ?? domainAddress,
+                    address: domainAddress,
+                }
                 : undefined,
         ])
     }

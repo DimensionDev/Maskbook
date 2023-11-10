@@ -3,8 +3,8 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 import { FlowFungible } from './FungibleTokenAPI.js'
 import { FlowConnectionAPI } from './ConnectionAPI.js'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
-import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import type { FungibleTokenAPI } from '../../../entry-types.js'
 
 export class FlowHubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {

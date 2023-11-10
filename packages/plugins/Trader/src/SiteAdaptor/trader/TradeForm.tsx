@@ -12,7 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeExtensionPage } from '@masknet/plugin-infra/extension-page'
 import type { TraderAPI } from '@masknet/web3-providers/types'
@@ -192,29 +192,29 @@ interface AllTradeFormProps extends withClasses<'root'> {
 
 export const TradeForm = memo<AllTradeFormProps>(
     ({
-        trades,
-        inputAmount,
-        inputToken,
-        outputToken,
-        onTokenChipClick = noop,
-        onInputAmountChange,
-        inputTokenBalance,
-        focusedTrade,
-        onFocusedTradeChange,
-        isSmartPay,
-        gasPrice,
-        onSwitch,
-        settings,
-        gasConfig,
-        ...props
-    }) => {
+         trades,
+         inputAmount,
+         inputToken,
+         outputToken,
+         onTokenChipClick = noop,
+         onInputAmountChange,
+         inputTokenBalance,
+         focusedTrade,
+         onFocusedTradeChange,
+         isSmartPay,
+         gasPrice,
+         onSwitch,
+         settings,
+         gasConfig,
+         ...props
+     }) => {
         const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
         const userSelected = useRef(false)
         const t = useTraderTrans()
         const { classes, cx } = useStyles(undefined, { props })
         const { chainId } = useChainContext()
         const { pluginID } = useNetworkContext()
-        const Others = useWeb3Others()
+        const Utils = useWeb3Utils()
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
@@ -241,13 +241,13 @@ export const TradeForm = memo<AllTradeFormProps>(
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = BigNumber.max(
                 0,
-                Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
+                Utils.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
 
             return isZero(amount_)
                 ? ZERO.toString()
                 : formatBalance(amount_.integerValue(), inputToken?.decimals, { isPrecise: true, hasSeparators: false })
-        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others.isNativeTokenSchemaType])
+        }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Utils.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
             (amount: string) => {

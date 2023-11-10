@@ -8,18 +8,18 @@ import {
 } from '@masknet/web3-shared-base'
 import { isEmpty } from 'lodash-es'
 import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenListAPI } from '../../../entry-types.js'
-import type { BaseHubOptions } from './HubOptionsAPI.js'
-import { AbstractBaseHubProvider } from './HubProviderAPI.js'
+import type { BaseHubOptions } from './HubOptions.js'
+import { AbstractBaseHubProvider } from './HubProvider.js'
 
 export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseHubProvider<ChainId> {
     protected abstract getProvidersFungible(
         initial?: BaseHubOptions<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
-            FungibleTokenAPI.Provider<ChainId, SchemaType> &
-            TokenListAPI.Provider<ChainId, SchemaType> &
-            TokenIconAPI.Provider<ChainId> &
-            PriceAPI.Provider<ChainId>
+        FungibleTokenAPI.Provider<ChainId, SchemaType> &
+        TokenListAPI.Provider<ChainId, SchemaType> &
+        TokenIconAPI.Provider<ChainId> &
+        PriceAPI.Provider<ChainId>
     >
 
     async getFungibleTokensFromTokenList(

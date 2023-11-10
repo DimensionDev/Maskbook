@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es'
-import type { BaseHubOptions } from './HubOptionsAPI.js'
+import type { BaseHubOptions } from './HubOptions.js'
 
 function resolver<ChainId>(initial?: BaseHubOptions<ChainId>) {
     return [initial?.chainId, initial?.account, initial?.currencyType, initial?.sourceType].join(',')

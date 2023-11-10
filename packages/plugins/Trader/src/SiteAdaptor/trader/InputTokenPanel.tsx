@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { useFungibleTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useFungibleTokenPrice, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { SelectTokenChipProps } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatEtherToWei } from '@masknet/web3-shared-evm'
@@ -19,17 +19,17 @@ interface InputTokenPanelProps extends withClasses<'root'> {
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({
-        chainId,
-        token,
-        balance,
-        onAmountChange,
-        amount,
-        SelectTokenChip: SelectTokenChipProps,
-        maxAmount,
-        isAvailableBalance,
-    }) => {
+         chainId,
+         token,
+         balance,
+         onAmountChange,
+         amount,
+         SelectTokenChip: SelectTokenChipProps,
+         maxAmount,
+         isAvailableBalance,
+     }) => {
         const { pluginID } = useNetworkContext()
-        const Others = useWeb3Others()
+        const Utils = useWeb3Utils()
         const { data: tokenPrice = 0 } = useFungibleTokenPrice(pluginID, token?.address?.toLowerCase())
 
         const tokenValueUSD = useMemo(
@@ -40,7 +40,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
         return (
             <InputTokenPanelUI
                 isAvailableBalance={isAvailableBalance}
-                balance={Others.isNativeTokenAddress(token?.address) ? formatEtherToWei(maxAmount).toString() : balance}
+                balance={Utils.isNativeTokenAddress(token?.address) ? formatEtherToWei(maxAmount).toString() : balance}
                 token={token}
                 amount={amount}
                 chainId={chainId}

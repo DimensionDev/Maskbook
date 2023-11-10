@@ -13,7 +13,7 @@ import {
     Sniffings,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { IdentityServiceState } from '../../Base/state/Identity.js'
+import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import { ARBID } from '../../../ARBID/index.js'

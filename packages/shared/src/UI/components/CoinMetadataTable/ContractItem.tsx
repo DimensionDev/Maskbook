@@ -4,7 +4,7 @@ import { CopyButton, FormattedAddress, ImageIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     contractItem: {
@@ -44,9 +44,10 @@ interface ContractItemProps extends MenuItemProps {
     symbol?: string
     iconURL?: string
 }
+
 export function ContractItem({ pluginID, chainId, address, className, ...rest }: ContractItemProps) {
     const { classes, cx } = useStyles()
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
 
@@ -57,11 +58,11 @@ export function ContractItem({ pluginID, chainId, address, className, ...rest }:
             <Stack direction="row" alignItems="center">
                 <ImageIcon icon={networkDescriptor.icon} size={16} />
                 <Typography className={classes.address} ml={1}>
-                    <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
+                    <FormattedAddress address={address} size={4} formatter={Utils.formatAddress} />
                 </Typography>
                 <CopyButton className={classes.icon} text={address} size={16} title="Copy address" scoped={false} />
                 <Link
-                    href={Others.explorerResolver.addressLink(chainId, address)}
+                    href={Utils.explorerResolver.addressLink(chainId, address)}
                     className={classes.link}
                     target="_blank">
                     <Icons.LinkOut size={16} className={classes.icon} />

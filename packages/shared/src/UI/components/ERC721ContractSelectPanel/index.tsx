@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectNonFungibleContractModal } from '../../modals/index.js'
@@ -66,11 +66,12 @@ export interface ERC721TokenSelectPanelProps {
     balance: number
     collection: NonFungibleCollection<ChainId, SchemaType> | null | undefined
 }
+
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
     const t = useSharedTrans()
     const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const onCollectionChange = useCallback(
         (contract: NonFungibleCollection<ChainId, SchemaType>) => {
@@ -96,7 +97,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                     {label ?? t.select_an_nft()}
                 </Typography>
                 {!collection?.address ||
-                !Others.isValidAddress(collection.address) ||
+                !Utils.isValidAddress(collection.address) ||
                 (collection.source === SourceType.SimpleHash && !collection?.id) ? null : (
                     <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                         {t.wallet_balance()}: {balance ? balance : '0'}

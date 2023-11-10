@@ -1,6 +1,6 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
-import { useWeb3Others } from './useWeb3Others.js'
+import { useWeb3Utils } from './useWeb3Utils.js'
 import { useNetwork } from './useNetwork.js'
 
 export function useNativeTokenAddress<T extends NetworkPluginID = NetworkPluginID>(
@@ -8,9 +8,9 @@ export function useNativeTokenAddress<T extends NetworkPluginID = NetworkPluginI
     options?: ConnectionOptions<T>,
 ) {
     const network = useNetwork(pluginID)
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     if (network?.isCustomized) {
         return network.nativeCurrency.address
     }
-    return Others.getNativeTokenAddress(options?.chainId)
+    return Utils.getNativeTokenAddress(options?.chainId)
 }

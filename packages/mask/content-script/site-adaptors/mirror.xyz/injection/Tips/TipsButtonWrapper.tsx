@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     createInjectHooksRenderer,
     Plugin,
@@ -32,13 +32,14 @@ const useStyles = makeStyles()((theme) => ({
 interface Props {
     slot: Plugin.SiteAdaptor.TipsSlot
 }
+
 export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props) {
     const { classes } = useStyles()
 
     const visitingIdentity = useCurrentVisitingIdentity()
     const isMinimalMode = useIsMinimalMode(PluginID.Tips)
     const { pluginID } = useNetworkContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
@@ -47,11 +48,11 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
                 pluginID,
                 address: visitingIdentity.identifier.userId,
                 label: visitingIdentity.nickname
-                    ? `(${visitingIdentity.nickname}) ${Others.formatAddress(visitingIdentity.identifier.userId, 4)}`
+                    ? `(${visitingIdentity.nickname}) ${Utils.formatAddress(visitingIdentity.identifier.userId, 4)}`
                     : visitingIdentity.identifier.userId,
             },
         ]
-    }, [visitingIdentity, Others.formatAddress])
+    }, [visitingIdentity, Utils.formatAddress])
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(

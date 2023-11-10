@@ -12,7 +12,7 @@ import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIden
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -118,14 +118,14 @@ interface ProfileBarProps extends BoxProps {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
-    socialAccounts,
-    address,
-    identity,
-    onAddressChange,
-    className,
-    children,
-    ...rest
-}) {
+                                                                        socialAccounts,
+                                                                        address,
+                                                                        identity,
+                                                                        onAddressChange,
+                                                                        className,
+                                                                        children,
+                                                                        ...rest
+                                                                    }) {
     const { classes, theme, cx } = useStyles()
     const t = useMaskSharedTrans()
     const { current: avatarClipPathId } = useRef<string>(uuid())
@@ -133,7 +133,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
 
     const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
 
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { chainId } = useChainContext()
 
     const [walletMenuOpen, setWalletMenuOpen] = useState(false)
@@ -182,7 +182,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         />
                         <CopyButton size={14} className={classes.linkIcon} text={address} />
                         <Link
-                            href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                            href={Utils.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
                             title={t.view_on_explorer()}
                             rel="noopener noreferrer"
@@ -244,16 +244,16 @@ type ProfileBarSkeletonProps = Omit<ProfileBarProps, 'identity' | 'onAddressChan
 
 // This Skeleton is not fully empty, but also has user address
 export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function ProfileBarSkeleton({
-    socialAccounts,
-    address,
-    className,
-    children,
-    ...rest
-}) {
+                                                                                                socialAccounts,
+                                                                                                address,
+                                                                                                className,
+                                                                                                children,
+                                                                                                ...rest
+                                                                                            }) {
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
 
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { chainId } = useChainContext()
 
     const selectedAccount = socialAccounts.find((x) => isSameAddress(x.address, address))
@@ -274,7 +274,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
                         />
                         <CopyButton size={14} className={classes.linkIcon} text={address} />
                         <Link
-                            href={Others.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                            href={Utils.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
                             title={t.view_on_explorer()}
                             rel="noopener noreferrer"

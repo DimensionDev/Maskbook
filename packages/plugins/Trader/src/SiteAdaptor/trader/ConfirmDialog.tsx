@@ -9,7 +9,7 @@ import {
     useNativeTokenPrice,
     useFungibleTokenPrice,
     useChainContext,
-    useWeb3Others,
+    useWeb3Utils,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -35,19 +35,20 @@ interface ConfirmDialogProps {
     onConfirm: () => void
     loading: boolean
 }
+
 const PERCENT_DENOMINATOR = 10000
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { inputToken, outputToken, gas = MIN_GAS_LIMIT, gasPrice, trade, onConfirm, gasConfig } = props
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { setTemporarySlippage } = AllProviderTradeContext.useContainer()
 
     const [priceImpactDialogOpen, setPriceImpactDialogOpen] = useState(false)
 
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const nativeToken = Others.createNativeToken(chainId)
+    const nativeToken = Utils.createNativeToken(chainId)
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID)
 
     const { data: inputTokenPrice = 0 } = useFungibleTokenPrice(pluginID, inputToken.address)

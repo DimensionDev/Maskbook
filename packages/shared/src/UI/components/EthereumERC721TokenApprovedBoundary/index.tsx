@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
 import { useSharedTrans } from '../../../locales/index.js'
@@ -21,7 +21,7 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
     const t = useSharedTrans()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { classes } = useStyles(undefined, { props })
     const {
         value: isApproveForAll,
@@ -40,10 +40,10 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         retry()
     }, [approveState.loading])
     const validationMessage = useMemo(() => {
-        if (!collection?.address || !Others.isValidAddress(collection?.address))
+        if (!collection?.address || !Utils.isValidAddress(collection?.address))
             return t.plugin_wallet_select_a_nft_contract()
-        if (!owner || !Others.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
-        if (!operator || !Others.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
+        if (!owner || !Utils.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
+        if (!operator || !Utils.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
         if (_validationMessage) return _validationMessage
         return ''
     }, [collection, owner, operator, _validationMessage])

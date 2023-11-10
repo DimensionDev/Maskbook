@@ -9,7 +9,7 @@ import {
     useNetworkDescriptor,
     useWallet,
     useReverseAddress,
-    useWeb3Others,
+    useWeb3Utils,
     useChainContext,
     NetworkContextProvider,
     RevokeChainContextProvider,
@@ -61,14 +61,14 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
     ({
-        className,
-        onClick,
-        expectedPluginID,
-        expectedChainId,
-        children,
-        requiredSupportChainIds,
-        requiredSupportPluginID,
-    }) => {
+         className,
+         onClick,
+         expectedPluginID,
+         expectedChainId,
+         children,
+         requiredSupportChainIds,
+         requiredSupportPluginID,
+     }) => {
         const t = useSharedTrans()
         const { classes, cx } = useStyles()
 
@@ -79,7 +79,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
         const { data: domain } = useReverseAddress(pluginID, account)
-        const Others = useWeb3Others()
+        const Utils = useWeb3Utils()
 
         const openSelectProviderDialog = useCallback(() => {
             SelectProviderModal.open({
@@ -93,8 +93,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         const walletName = useMemo(() => {
             if (domain) return domain
             if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-            return providerDescriptor?.name || Others.formatAddress(account, 4)
-        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Others.formatAddress])
+            return providerDescriptor?.name || Utils.formatAddress(account, 4)
+        }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Utils.formatAddress])
 
         if (!account) {
             return (
@@ -114,8 +114,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     networkIcon={networkDescriptor?.icon}
                     iconFilterColor={providerDescriptor?.iconFilterColor}
                     name={walletName}
-                    formattedAddress={Others.formatAddress(account, 4)}
-                    addressLink={Others.explorerResolver.addressLink(chainId, account)}
+                    formattedAddress={Utils.formatAddress(account, 4)}
+                    addressLink={Utils.explorerResolver.addressLink(chainId, account)}
                     onClick={onClick ?? openSelectProviderDialog}
                     onPendingClick={() => WalletStatusModal.open()}
                 />

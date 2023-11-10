@@ -1,8 +1,8 @@
 import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { EVMWeb3Readonly } from './ConnectionReadonlyAPI.js'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
-import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
+import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
@@ -27,10 +27,10 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
 
         return this.getPredicateProviders<
             AuthorizationAPI.Provider<ChainId> &
-                FungibleTokenAPI.Provider<ChainId, SchemaType> &
-                TokenListAPI.Provider<ChainId, SchemaType> &
-                TokenIconAPI.Provider<ChainId> &
-                PriceAPI.Provider<ChainId>
+            FungibleTokenAPI.Provider<ChainId, SchemaType> &
+            TokenListAPI.Provider<ChainId, SchemaType> &
+            TokenIconAPI.Provider<ChainId> &
+            PriceAPI.Provider<ChainId>
         >(
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken,

@@ -7,7 +7,7 @@ import {
     useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { DefaultWeb3ContextProvider, useWeb3Others } from '@masknet/web3-hooks-base'
+import { DefaultWeb3ContextProvider, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
@@ -18,7 +18,7 @@ const ActionsRenderer = createInjectHooksRenderer(
 )
 
 function PostActions() {
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const identifier = usePostInfoDetails.author()
     const nickname = usePostInfoDetails.nickname() as string | null
@@ -32,12 +32,12 @@ function PostActions() {
                 {
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
-                    label: nickname ? `(${nickname}) ${Others.formatAddress(identifier.userId, 4)}` : identifier.userId,
+                    label: nickname ? `(${nickname}) ${Utils.formatAddress(identifier.userId, 4)}` : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
                     pluginID: NetworkPluginID.PLUGIN_EVM,
                     address: x.author.userId,
-                    label: x.nickname ? `(${x.nickname}) ${Others.formatAddress(x.author.userId, 4)}` : x.author.userId,
+                    label: x.nickname ? `(${x.nickname}) ${Utils.formatAddress(x.author.userId, 4)}` : x.author.userId,
                 })) ?? []),
             ]}
             identity={identifier}

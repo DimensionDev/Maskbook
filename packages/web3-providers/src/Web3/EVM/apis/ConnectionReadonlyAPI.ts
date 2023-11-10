@@ -49,12 +49,12 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { EVMChainResolver } from './ResolverAPI.js'
-import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -73,29 +73,29 @@ interface ERC1155Metadata {
 }
 
 export class EVMConnectionReadonlyAPI
-    implements
-        BaseConnection<
-            ChainId,
-            AddressType,
-            SchemaType,
-            ProviderType,
-            Signature,
-            UserOperation,
-            Transaction,
-            TransactionReceipt,
-            TransactionDetailed,
-            TransactionSignature,
-            Block,
-            Web3,
-            Web3Provider
-        >
-{
+    implements BaseConnection<
+        ChainId,
+        AddressType,
+        SchemaType,
+        ProviderType,
+        Signature,
+        UserOperation,
+        Transaction,
+        TransactionReceipt,
+        TransactionDetailed,
+        TransactionSignature,
+        Block,
+        Web3,
+        Web3Provider
+    > {
     static Default = new EVMConnectionReadonlyAPI()
+
     constructor(protected options?: EVMConnectionOptions) {
         this.Contract = new EVMContractReadonlyAPI(this.options)
         this.Request = new EVMRequestReadonlyAPI(this.options)
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
     }
+
     protected Request
     protected Contract
     protected ConnectionOptions: ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction>
@@ -284,13 +284,15 @@ export class EVMConnectionReadonlyAPI
             const contract = this.Contract.getERC721Contract(address, options)
             try {
                 ownerId = await contract?.methods.ownerOf(tokenId).call()
-            } catch {}
+            } catch {
+            }
         } else if (options.account) {
             const contract = this.Contract.getERC1155Contract(address, options)
             try {
                 const balance = await contract?.methods.balanceOf(options.account, tokenId).call()
                 ownerId = balance && isGreaterThan(balance, '0') ? options.account : undefined
-            } catch {}
+            } catch {
+            }
         }
 
         return createNonFungibleToken<ChainId, SchemaType>(
@@ -838,4 +840,5 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 }
+
 export const EVMWeb3Readonly = EVMConnectionReadonlyAPI.Default

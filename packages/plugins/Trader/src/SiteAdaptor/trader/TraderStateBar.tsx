@@ -17,7 +17,7 @@ import {
 import { NetworkPluginID, PluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isLessThan, leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
@@ -63,24 +63,25 @@ interface TradeStateBarProps {
     onSwap: () => void
     refresh: () => void
 }
+
 export function TraderStateBar({
-    trades,
-    focusedTrade,
-    inputToken,
-    outputToken,
-    inputAmount,
-    inputTokenBalance,
-    gasPrice,
-    onSwap,
-    refresh,
-}: TradeStateBarProps) {
+                                   trades,
+                                   focusedTrade,
+                                   inputToken,
+                                   outputToken,
+                                   inputAmount,
+                                   inputTokenBalance,
+                                   gasPrice,
+                                   onSwap,
+                                   refresh,
+                               }: TradeStateBarProps) {
     const t = useTraderTrans()
     const { classes } = useStyles()
 
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
     const { pluginID: actualPluginID } = useEnvironmentContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
 
@@ -126,9 +127,9 @@ export function TraderStateBar({
         const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
         const gasFee = multipliedBy(marginGasPrice, focusedTrade?.value?.gas ?? MIN_GAS_LIMIT)
         let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
-        amount_ = Others.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
+        amount_ = Utils.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
         return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
-    }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others.isNativeTokenSchemaType])
+    }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Utils.isNativeTokenSchemaType])
 
     // #region UI logic
     // validate form return a message if an error exists
@@ -140,7 +141,7 @@ export function TraderStateBar({
 
         if (
             inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount) ||
-            (Others.isNativeTokenSchemaType(inputToken.schema) &&
+            (Utils.isNativeTokenSchemaType(inputToken.schema) &&
                 formatWeiToEther(inputTokenTradeAmount).isGreaterThan(maxAmount))
         )
             return t.plugin_trader_error_insufficient_balance({
@@ -158,7 +159,7 @@ export function TraderStateBar({
         inputTokenBalanceAmount.toFixed(),
         inputTokenTradeAmount.toFixed(),
         maxAmount,
-        Others.isNativeTokenSchemaType,
+        Utils.isNativeTokenSchemaType,
     ])
     // #endregion
 

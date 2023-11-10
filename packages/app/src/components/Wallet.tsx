@@ -10,7 +10,7 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWallet,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -71,11 +71,12 @@ interface WalletItemProps {
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
+
 export const WalletItem = memo<WalletItemProps>((props) => {
     const providerDescriptor = useProviderDescriptor<'all'>()
     const { classes, cx } = useStyles()
 
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { account, chainId } = useChainContext()
 
     const chainIdValid = useChainIdValid()
@@ -105,7 +106,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                     />
                     <span className="sr-only">Your profile</span>
                     <span className="dark:text-white text-black" aria-hidden="true">
-                        {account ? Others.formatAddress(account, 4) : 'Connect Wallet'}
+                        {account ? Utils.formatAddress(account, 4) : 'Connect Wallet'}
                     </span>
                 </a>
             ) : (
@@ -125,9 +126,9 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                         <div className={classes.infoRow}>
                             <Typography className={cx(classes.accountName, 'text-black dark:text-white')}>
                                 {domain ? (
-                                    Others.formatDomainName(domain)
+                                    Utils.formatDomainName(domain)
                                 ) : (
-                                    <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
+                                    <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />
                                 )}
                             </Typography>
                             <ThemeProvider theme={MaskLightTheme}>
@@ -141,7 +142,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                             {chainIdValid ? (
                                 <Link
                                     className={classes.link}
-                                    href={Others.explorerResolver.addressLink(chainId, account) ?? ''}
+                                    href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
                                     target="_blank"
                                     title="View on Explorer"
                                     rel="noopener noreferrer">
@@ -158,8 +159,8 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                                     {loadingNativeToken || loadingBalance
                                         ? '-'
                                         : `${formatBalance(balance, nativeToken?.decimals, {
-                                              significant: 3,
-                                          })} ${nativeToken?.symbol}`}
+                                            significant: 3,
+                                        })} ${nativeToken?.symbol}`}
                                 </Typography>
                             </div>
                         )}

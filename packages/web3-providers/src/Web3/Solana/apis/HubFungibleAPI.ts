@@ -1,6 +1,6 @@
 import { attemptUntil, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-solana'
-import { BaseHubFungible } from '../../Base/apis/HubFungibleAPI.js'
+import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { SolanaHubOptionsAPI } from './HubOptionsAPI.js'
 import { SolanaConnectionAPI } from './ConnectionAPI.js'
 import type { SolanaHubOptions } from '../types/index.js'

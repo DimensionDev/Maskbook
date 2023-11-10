@@ -17,7 +17,7 @@ import { Icons } from '@masknet/icons'
 import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { TokenIcon, FormattedAddress, Image, WalletIcon, ElementAnchor } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useNetworkDescriptor, useFungibleToken, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useFungibleToken, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
@@ -127,7 +127,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
     const themeMode = useSiteThemeMode(theme)
     const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles({ isPopper: isCollectionProjectPopper || isTokenTagPopper, themeMode })
-    const Others = useWeb3Others(result.pluginID)
+    const Utils = useWeb3Utils(result.pluginID)
     const { activities, fetchActivities, loadingActivities } = useNonFungibleTokenActivities(
         result.pluginID,
         id,
@@ -156,7 +156,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                             }}
                             className={classes.nftImage}
                         />
-                        <Typography fontSize={12}>{Others.formatTokenId(x.token_id || x.token_address, 3)}</Typography>
+                        <Typography fontSize={12}>{Utils.formatTokenId(x.token_id || x.token_address, 3)}</Typography>
                     </div>
                 ),
                 method: (
@@ -174,7 +174,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                         <FormattedAddress
                             address={x.send ?? x.from ?? x.source}
                             formatter={(address) =>
-                                Others.formatAddress(Others.formatDomainName(address, 12), 3) ?? address
+                                Utils.formatAddress(Utils.formatDomainName(address, 12), 3) ?? address
                             }
                         />
                     </Typography>
@@ -184,7 +184,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                         <FormattedAddress
                             address={x.receive ?? x.destination}
                             formatter={(address) =>
-                                Others.formatAddress(Others.formatDomainName(address, 12), 3) ?? address
+                                Utils.formatAddress(Utils.formatDomainName(address, 12), 3) ?? address
                             }
                         />
                     </Typography>

@@ -21,7 +21,7 @@ import {
     useNativeToken,
     useNonFungibleAsset,
     useReverseAddress,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
@@ -77,16 +77,16 @@ interface TransactionPreviewProps {
 }
 
 export const TransactionPreview = memo<TransactionPreviewProps>(function TransactionPreview({
-    transaction,
-    onConfigChange,
-    paymentToken,
-    onPaymentTokenChange,
-}) {
+                                                                                                transaction,
+                                                                                                onConfigChange,
+                                                                                                paymentToken,
+                                                                                                onPaymentTokenChange,
+                                                                                            }) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { title, to, tokenAddress, amount } = useMemo(() => {
         const type = transaction?.formattedTransaction?.type
 
@@ -140,8 +140,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const tokenValueUSD =
         amount && tokenPrice
             ? leftShift(amount, token?.decimals)
-                  .times(tokenPrice)
-                  .toString()
+                .times(tokenPrice)
+                .toString()
             : '0'
 
     const initConfig = useMemo(() => {
@@ -165,7 +165,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     }, [transaction?.computedPayload, transaction?.gasOptionType, isSupport1559])
 
     const receiver = useMemo(() => {
-        if (domain) return Others.formatDomainName(domain)
+        if (domain) return Utils.formatDomainName(domain)
         const target = contacts.find((x) => isSameAddress(x.address, to))
         return target?.name
     }, [domain, to, contacts])
@@ -205,11 +205,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                             />
                             {amount
                                 ? formatBalance(amount, token?.decimals, {
-                                      significant: 4,
-                                      isPrecise: false,
-                                      isFixed: true,
-                                      fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
-                                  })
+                                    significant: 4,
+                                    isPrecise: false,
+                                    isFixed: true,
+                                    fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                })
                                 : null}
                         </>
                     ) : null}

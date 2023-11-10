@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import { range } from 'lodash-es'
 import { ElementAnchor, EmptyStatus, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { ScopedDomainsContainer, useReverseAddress, useWeb3Others } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, Skeleton } from '@mui/material'
 import { useRSS3Trans } from '../locales/index.js'
@@ -27,7 +27,7 @@ export interface FeedPageProps {
 export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const { feeds, isLoading: loadingFeeds, error, next } = useFeeds(address, tag)
 
@@ -42,9 +42,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         return {
             address,
             name,
-            ownerDisplay: name ? Others.formatDomainName(name) : Others.formatAddress(address, 4) ?? address,
+            ownerDisplay: name ? Utils.formatDomainName(name) : Utils.formatAddress(address, 4) ?? address,
         }
-    }, [address, name, Others.formatDomainName, Others.formatAddress])
+    }, [address, name, Utils.formatDomainName, Utils.formatAddress])
 
     if (error && !feeds.length)
         return (

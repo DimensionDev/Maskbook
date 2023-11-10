@@ -34,7 +34,7 @@ import {
     useNetworkContext,
     useFungibleToken,
     useFungibleTokenPrice,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
@@ -54,9 +54,12 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     editMode?: boolean
     /** No effects on editMode */
     className?: string
+
     onChange?(gasConfig: GasConfig): void
+
     /** Will open internal setting dialog instead if not provided */
     onOpenCustomSetting?(): void
+
     MenuProps?: Partial<MenuProps>
 }
 
@@ -144,19 +147,19 @@ export const SelectGasSettingsToolbar = memo(function SelectGasSettingsToolbar(p
 })
 
 export function SelectGasSettingsToolbarUI({
-    gasConfig: gasOption,
-    gasLimit,
-    nativeToken,
-    nativeTokenPrice,
-    estimateGasFee,
-    supportMultiCurrency,
-    editMode,
-    className,
-    classes: externalClasses,
-    onChange,
-    onOpenCustomSetting,
-    MenuProps = {},
-}: SelectGasSettingsToolbarProps) {
+                                               gasConfig: gasOption,
+                                               gasLimit,
+                                               nativeToken,
+                                               nativeTokenPrice,
+                                               estimateGasFee,
+                                               supportMultiCurrency,
+                                               editMode,
+                                               className,
+                                               classes: externalClasses,
+                                               onChange,
+                                               onOpenCustomSetting,
+                                               MenuProps = {},
+                                           }: SelectGasSettingsToolbarProps) {
     const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
@@ -170,26 +173,26 @@ export function SelectGasSettingsToolbarUI({
     )
     const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
-    const isSupportEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
+    const isSupportEIP1559 = Utils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
             onChange?.(
                 isSupportEIP1559
                     ? {
-                          maxFeePerGas,
-                          maxPriorityFeePerGas,
-                          gasCurrency: currentGasCurrency,
-                          gas: new BigNumber(gasLimit).toString(),
-                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
-                      }
+                        maxFeePerGas,
+                        maxPriorityFeePerGas,
+                        gasCurrency: currentGasCurrency,
+                        gas: new BigNumber(gasLimit).toString(),
+                        gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
+                    }
                     : {
-                          gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
-                          gasCurrency: currentGasCurrency,
-                          gas: new BigNumber(gasLimit).toString(),
-                          gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
-                      },
+                        gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
+                        gasCurrency: currentGasCurrency,
+                        gas: new BigNumber(gasLimit).toString(),
+                        gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
+                    },
             ),
         [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit, currentGasOptionType, isCustomGas],
     )

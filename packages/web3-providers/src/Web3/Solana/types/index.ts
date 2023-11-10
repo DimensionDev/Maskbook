@@ -1,6 +1,6 @@
 import type { ChainId, ProviderType, Transaction } from '@masknet/web3-shared-solana'
-import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptionsAPI.js'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 
 export type SolanaConnectionOptions = BaseConnectionOptions<ChainId, ProviderType, Transaction>
 export type SolanaHubOptions = BaseHubOptions<ChainId>
@@ -14,6 +14,7 @@ interface RpcResponse<T> {
     jsonrpc: '2.0'
     result: T | null
 }
+
 interface ProgramAccount {
     account: {
         data: {

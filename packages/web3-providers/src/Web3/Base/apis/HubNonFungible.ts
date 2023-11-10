@@ -12,8 +12,8 @@ import {
     type NonFungibleContractSpender,
 } from '@masknet/web3-shared-base'
 import { type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
-import { AbstractBaseHubProvider } from './HubProviderAPI.js'
-import type { BaseHubOptions } from './HubOptionsAPI.js'
+import { AbstractBaseHubProvider } from './HubProvider.js'
+import type { BaseHubOptions } from './HubOptions.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
 export abstract class BaseHubNonFungible<ChainId, SchemaType> extends AbstractBaseHubProvider<ChainId> {
@@ -21,8 +21,8 @@ export abstract class BaseHubNonFungible<ChainId, SchemaType> extends AbstractBa
         initial?: BaseHubOptions<ChainId>,
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
-            NonFungibleTokenAPI.Provider<ChainId, SchemaType> &
-            TokenListAPI.Provider<ChainId, SchemaType>
+        NonFungibleTokenAPI.Provider<ChainId, SchemaType> &
+        TokenListAPI.Provider<ChainId, SchemaType>
     >
 
     async getNonFungibleRarity(

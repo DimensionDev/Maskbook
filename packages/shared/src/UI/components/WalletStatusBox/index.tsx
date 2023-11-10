@@ -11,7 +11,7 @@ import {
     useWeb3Connection,
     useBalance,
     useChainIdValid,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import {
     FormattedAddress,
@@ -103,12 +103,14 @@ const useStyles = makeStyles<{
         position: 'relative',
     },
 }))
+
 export interface WalletStatusBox {
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
+
 export function WalletStatusBox(props: WalletStatusBox) {
     const t = useSharedTrans()
     const providerDescriptor = useProviderDescriptor<'all'>()
@@ -124,7 +126,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     })
 
     const Web3 = useWeb3Connection()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { account, chainId } = useChainContext()
 
     const chainIdValid = useChainIdValid()
@@ -135,7 +137,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { data: domain } = useReverseAddress(undefined, account)
     const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
-    if (!Others.isValidAddress(account)) {
+    if (!Utils.isValidAddress(account)) {
         return (
             <section className={classes.connectButtonWrapper}>
                 <Button
@@ -171,9 +173,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
                             {domain ? (
-                                Others.formatDomainName(domain)
+                                Utils.formatDomainName(domain)
                             ) : (
-                                <FormattedAddress address={account} size={4} formatter={Others.formatAddress} />
+                                <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />
                             )}
                         </Typography>
                         <ThemeProvider theme={MaskLightTheme}>
@@ -187,7 +189,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         {chainIdValid ? (
                             <Link
                                 className={classes.link}
-                                href={Others.explorerResolver.addressLink(chainId, account) ?? ''}
+                                href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
                                 target="_blank"
                                 title={t.plugin_wallet_view_on_explorer()}
                                 rel="noopener noreferrer">
@@ -202,8 +204,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 {loadingNativeToken || loadingBalance
                                     ? '-'
                                     : `${formatBalance(balance, nativeToken?.decimals, {
-                                          significant: 3,
-                                      })} ${nativeToken?.symbol}`}
+                                        significant: 3,
+                                    })} ${nativeToken?.symbol}`}
                             </Typography>
                         </div>
                     )}

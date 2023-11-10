@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Avatar, Link, ListItem, Typography, type ListItemProps } from '@mui/material'
 import { memo } from 'react'
@@ -52,21 +52,23 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
     },
 }))
+
 interface ContractItemProps extends Omit<ListItemProps, 'onSelect'> {
     pluginID: NetworkPluginID
     collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+
     onSelect?(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): void
 }
 
 export const ContractItem = memo(function ContractItem({
-    pluginID,
-    className,
-    collection,
-    onSelect,
-    ...rest
-}: ContractItemProps) {
+                                                           pluginID,
+                                                           className,
+                                                           collection,
+                                                           onSelect,
+                                                           ...rest
+                                                       }: ContractItemProps) {
     const { classes, cx } = useStyles()
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     return (
         <ListItem className={cx(classes.listItem, className)} onClick={() => onSelect?.(collection)} {...rest}>
@@ -78,7 +80,7 @@ export const ContractItem = memo(function ContractItem({
                 <Typography className={classes.contractName}>
                     {collection.name}
                     <Link
-                        href={Others.explorerResolver.addressLink(collection.chainId, collection.address!)}
+                        href={Utils.explorerResolver.addressLink(collection.chainId, collection.address!)}
                         className={classes.linkIcon}
                         target="_blank"
                         rel="noopener noreferrer"

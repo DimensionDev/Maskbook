@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useFungibleTokenBalance, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isZero, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import {
     Box,
@@ -78,24 +78,25 @@ export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
     asset: Web3Helper.FungibleAssetAll
     network: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
     selected?: boolean
+
     onSelect?(asset: Web3Helper.FungibleAssetAll): void
 }
 
 export const TokenItem = memo(function TokenItem({
-    className,
-    asset,
-    network,
-    onSelect,
-    selected,
-    ...rest
-}: TokenItemProps) {
+                                                     className,
+                                                     asset,
+                                                     network,
+                                                     onSelect,
+                                                     selected,
+                                                     ...rest
+                                                 }: TokenItemProps) {
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
 
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const explorerLink = useMemo(() => {
-        return Others.explorerResolver.fungibleTokenLink(asset.chainId, asset.address)
-    }, [asset.address, asset.chainId, Others.explorerResolver.fungibleTokenLink])
+        return Utils.explorerResolver.fungibleTokenLink(asset.chainId, asset.address)
+    }, [asset.address, asset.chainId, Utils.explorerResolver.fungibleTokenLink])
 
     const liRef = useRef<HTMLLIElement>(null)
     useEffect(() => {

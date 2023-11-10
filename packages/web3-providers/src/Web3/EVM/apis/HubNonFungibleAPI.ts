@@ -1,6 +1,6 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { BaseHubNonFungible } from '../../Base/apis/HubNonFungibleAPI.js'
+import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
@@ -45,32 +45,32 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
             },
             options.chainId === ChainId.Mainnet
                 ? [
-                      X2Y2,
-                      SimpleHashEVM,
-                      NFTScanNonFungibleTokenEVM,
-                      ZerionNonFungibleToken,
-                      OpenSea,
-                      AlchemyEVM,
-                      Zora,
-                      Gem,
-                      Approval,
-                      GoPlusAuthorization,
-                      Rabby,
-                      R2D2TokenList,
-                  ]
+                    X2Y2,
+                    SimpleHashEVM,
+                    NFTScanNonFungibleTokenEVM,
+                    ZerionNonFungibleToken,
+                    OpenSea,
+                    AlchemyEVM,
+                    Zora,
+                    Gem,
+                    Approval,
+                    GoPlusAuthorization,
+                    Rabby,
+                    R2D2TokenList,
+                ]
                 : [
-                      SimpleHashEVM,
-                      NFTScanNonFungibleTokenEVM,
-                      ZerionNonFungibleToken,
-                      AlchemyEVM,
-                      OpenSea,
-                      Zora,
-                      Approval,
-                      Gem,
-                      GoPlusAuthorization,
-                      Rabby,
-                      R2D2TokenList,
-                  ],
+                    SimpleHashEVM,
+                    NFTScanNonFungibleTokenEVM,
+                    ZerionNonFungibleToken,
+                    AlchemyEVM,
+                    OpenSea,
+                    Zora,
+                    Approval,
+                    Gem,
+                    GoPlusAuthorization,
+                    Rabby,
+                    R2D2TokenList,
+                ],
             initial,
         )
     }

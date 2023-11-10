@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 import { useCollectibleTrans } from '../../locales/i18n_generated.js'
@@ -54,7 +54,7 @@ interface OfferCardProps extends HTMLProps<HTMLDivElement> {
 
 export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardProps) {
     const { classes, cx } = useStyles()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const t = useCollectibleTrans()
 
     const renderTokenIcon = () => {
@@ -108,7 +108,7 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
                         {offer.maker?.address ? (
                             <strong style={{ margin: '0px 4px' }}>
-                                {Others.formatAddress(offer.maker.address, 4)}
+                                {Utils.formatAddress(offer.maker.address, 4)}
                             </strong>
                         ) : (
                             '-'
@@ -118,8 +118,8 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     <Typography className={classes.textBase}>
                         {isValidTimestamp(offer.createdAt)
                             ? formatDistanceToNow(Math.ceil(offer.createdAt!), {
-                                  addSuffix: true,
-                              })
+                                addSuffix: true,
+                            })
                             : '-'}
                         {isValidTimestamp(offer.expiredAt) && (
                             <>

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, memo, useCallback, useMemo } from 'react'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import { formatBalance, isZero, leftShift } from '@masknet/web3-shared-base'
 import { FungibleTokenInputUI, type FungibleTokenInputUIProps } from './UI.js'
@@ -20,26 +20,26 @@ export interface FungibleTokenInputProps extends Omit<FungibleTokenInputUIProps,
 
 export const FungibleTokenInput = memo<FungibleTokenInputProps>(
     ({
-        label,
-        token,
-        disabled,
-        disableMax,
-        disableBalance,
-        disableToken,
-        loadingBalance,
-        onSelectToken,
-        onAmountChange,
-        amount,
-        maxAmount,
-        balance,
-        isAvailableBalance,
-        placeholder = '0.0',
-        maxAmountShares = 1,
-        className,
-    }) => {
-        const Others = useWeb3Others()
+         label,
+         token,
+         disabled,
+         disableMax,
+         disableBalance,
+         disableToken,
+         loadingBalance,
+         onSelectToken,
+         onAmountChange,
+         amount,
+         maxAmount,
+         balance,
+         isAvailableBalance,
+         placeholder = '0.0',
+         maxAmountShares = 1,
+         className,
+     }) => {
+        const Utils = useWeb3Utils()
 
-        const isNative = isAvailableBalance ?? Others.isNativeTokenAddress(token?.address)
+        const isNative = isAvailableBalance ?? Utils.isNativeTokenAddress(token?.address)
 
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
