@@ -1,8 +1,8 @@
 import { SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
-import { BaseHubNonFungible } from '../../Base/apis/HubNonFungibleAPI.js'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import { AlchemyFlow } from '../../../Alchemy/index.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
 

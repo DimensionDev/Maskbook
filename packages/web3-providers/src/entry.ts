@@ -32,7 +32,7 @@ export { BaseEIP4337WalletProvider } from './Web3/EVM/providers/BaseContractWall
 // Web3
 export { getHub } from './Web3/Router/apis/AllHubAPI.js'
 export { getWeb3Connection } from './Web3/Router/apis/AllConnectionAPI.js'
-export { getUtils } from './Web3/Router/apis/AllOthersAPI.js'
+export { getUtils } from './Web3/Router/apis/getUtils.js'
 
 export {
     EVMChainResolver,
@@ -49,7 +49,7 @@ export { EVMWeb3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'
 export { EVMRequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export { EVMHub } from './Web3/EVM/apis/HubAPI.js'
-export { EVMUtils } from './Web3/EVM/apis/OthersAPI.js'
+export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
 // Smart Pay
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'

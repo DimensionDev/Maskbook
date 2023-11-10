@@ -16,7 +16,7 @@ import {
     useFungibleTokensFromTokenList,
     useNetworkContext,
     useTrustedFungibleTokens,
-    useWeb3Others,
+    useWeb3Utils,
     useWeb3State,
 } from '@masknet/web3-hooks-base'
 import {
@@ -47,13 +47,18 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     selectedTokens?: string[]
     disableSearch?: boolean
+
     onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
+
     onSearchError?(error: boolean): void
+
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
     isHiddenChainIcon?: boolean
+
     setMode?(mode: TokenListMode): void
+
     mode?: TokenListMode
 }
 
@@ -91,7 +96,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const account = useAccount(pluginID)
     const chainId = useChainId(pluginID, props.chainId)
     const { Token } = useWeb3State<'all'>(pluginID)
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, {
         chainId,
@@ -103,7 +108,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
-    const nativeToken = useMemo(() => Others.chainResolver.nativeCurrency(chainId), [chainId])
+    const nativeToken = useMemo(() => Utils.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
         const allFungibleTokens = uniqBy(
@@ -148,15 +153,15 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             if (isTrustedToken(a.address)) return -1
             if (isTrustedToken(z.address)) return 1
 
-            const isNativeTokenA = isSameAddress(a.address, Others.getNativeTokenAddress(a.chainId))
+            const isNativeTokenA = isSameAddress(a.address, Utils.getNativeTokenAddress(a.chainId))
             if (isNativeTokenA) return -1
-            const isNativeTokenZ = isSameAddress(z.address, Others.getNativeTokenAddress(z.chainId))
+            const isNativeTokenZ = isSameAddress(z.address, Utils.getNativeTokenAddress(z.chainId))
             if (isNativeTokenZ) return 1
 
             // mask token with position value
-            const isMaskTokenA = isSameAddress(a.address, Others.getMaskTokenAddress(a.chainId))
+            const isMaskTokenA = isSameAddress(a.address, Utils.getMaskTokenAddress(a.chainId))
             if (isMaskTokenA) return -1
-            const isMaskTokenZ = isSameAddress(z.address, Others.getMaskTokenAddress(z.chainId))
+            const isMaskTokenZ = isSameAddress(z.address, Utils.getMaskTokenAddress(z.chainId))
             if (isMaskTokenZ) return 1
 
             if (z.rank && (!a.rank || a.rank - z.rank > 0)) return 1
@@ -180,7 +185,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             const value = fungibleAssetsTable[address]?.value?.[CurrencyType.USD]
             return value ? toZero(value) : ZERO
         }
-        const { getNativeTokenAddress, getMaskTokenAddress } = Others
+        const { getNativeTokenAddress, getMaskTokenAddress } = Utils
         return filteredFungibleTokens
             .map((x) => ({
                 ...x,
@@ -237,21 +242,21 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #region add token by address
     const [keyword, setKeyword] = useState('')
 
-    const { value: addressType } = useAddressType(pluginID, !Others.isValidAddress?.(keyword ?? '') ? '' : keyword, {
+    const { value: addressType } = useAddressType(pluginID, !Utils.isValidAddress?.(keyword ?? '') ? '' : keyword, {
         chainId,
     })
 
-    const isAddressNotContract = addressType !== AddressType.Contract && Others.isValidAddress(keyword)
+    const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
     const searchedTokenAddress = useMemo(() => {
         if (!keyword) return
 
-        return Others.isValidAddress(keyword) &&
+        return Utils.isValidAddress(keyword) &&
             !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
             ? keyword
             : ''
     }, [keyword, sortedFungibleTokensForList])
-    const searchError = keyword.match(/^0x.+/i) && !Others.isValidAddress(keyword) ? t.erc20_search_wrong_address() : ''
+    const searchError = keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? t.erc20_search_wrong_address() : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])

@@ -34,7 +34,7 @@ import {
     useNetworkContext,
     useFungibleToken,
     useFungibleTokenPrice,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { Icons } from '@masknet/icons'
 import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
@@ -54,9 +54,12 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     editMode?: boolean
     /** No effects on editMode */
     className?: string
+
     onChange?(gasConfig: GasConfig): void
+
     /** Will open internal setting dialog instead if not provided */
     onOpenCustomSetting?(): void
+
     MenuProps?: Partial<MenuProps>
 }
 
@@ -170,9 +173,9 @@ export function SelectGasSettingsToolbarUI({
     )
     const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
-    const isSupportEIP1559 = Others.chainResolver.isFeatureSupported(chainId, 'EIP1559')
+    const isSupportEIP1559 = Utils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
     const setGasConfigCallback = useCallback(
         (maxFeePerGas: string, maxPriorityFeePerGas: string, gasPrice: string) =>
             onChange?.(

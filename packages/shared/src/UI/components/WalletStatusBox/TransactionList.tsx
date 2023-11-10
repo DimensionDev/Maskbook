@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import { format } from 'date-fns'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useWeb3Others, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3Utils, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import {
@@ -79,8 +79,10 @@ const statusTextColorMap: Record<TransactionStatusType, string> = {
 interface TransactionProps extends GridProps {
     chainId: Web3Helper.ChainIdAll
     transaction: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>
+
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
+
 function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) {
     const t = useSharedTrans()
     const { classes, theme } = useStyles()
@@ -91,7 +93,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
         [TransactionStatusType.FAILED]: t.recent_transaction_failed(),
     }
 
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
@@ -138,12 +140,12 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
                 <Typography variant="body1" className={classes.linkText}>
                     {address && isSameAddress(domainOrAddress, address)
-                        ? Others.formatAddress(address, 4)
+                        ? Utils.formatAddress(address, 4)
                         : domainOrAddress || address}
                 </Typography>
                 <Link
                     className={classes.link}
-                    href={Others.explorerResolver.transactionLink?.(chainId, tx.id)}
+                    href={Utils.explorerResolver.transactionLink?.(chainId, tx.id)}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut className={classes.linkIcon} />
@@ -167,6 +169,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
 
 interface Props extends ListProps {
     transactions: Array<RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>>
+
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 

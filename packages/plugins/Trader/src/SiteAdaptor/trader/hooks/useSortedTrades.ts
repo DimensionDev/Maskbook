@@ -6,7 +6,7 @@ import {
     useFungibleTokenPrice,
     useNativeTokenPrice,
     useNetworkContext,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TraderAPI } from '@masknet/web3-providers/types'
@@ -19,7 +19,7 @@ export function useSortedTrades(
     gasPrice?: string,
 ) {
     const { pluginID } = useNetworkContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { data: nativeToken } = useFungibleToken(pluginID, '', undefined, { chainId })
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
@@ -47,7 +47,7 @@ export function useSortedTrades(
 
                         const finalPrice = leftShift(trade.value.value.outputAmount, outputToken.decimals)
                             .times(
-                                !Others.isNativeTokenSchemaType(outputToken.schema)
+                                !Utils.isNativeTokenSchemaType(outputToken.schema)
                                     ? outputTokenPrice
                                     : nativeTokenPrice,
                             )
@@ -91,13 +91,5 @@ export function useSortedTrades(
                 if (valueA.value?.value?.outputAmount.isLessThan(valueB.value?.value?.outputAmount ?? 0)) return 1
                 return 0
             })
-    }, [
-        traders,
-        outputToken,
-        gasPrice,
-        outputTokenPrice,
-        nativeTokenPrice,
-        nativeToken,
-        Others.isNativeTokenSchemaType,
-    ])
+    }, [traders, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice, nativeToken, Utils.isNativeTokenSchemaType])
 }

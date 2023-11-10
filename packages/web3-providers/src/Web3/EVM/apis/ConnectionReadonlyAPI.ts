@@ -49,12 +49,12 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { EVMChainResolver } from './ResolverAPI.js'
-import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -91,11 +91,13 @@ export class EVMConnectionReadonlyAPI
         >
 {
     static Default = new EVMConnectionReadonlyAPI()
+
     constructor(protected options?: EVMConnectionOptions) {
         this.Contract = new EVMContractReadonlyAPI(this.options)
         this.Request = new EVMRequestReadonlyAPI(this.options)
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
     }
+
     protected Request
     protected Contract
     protected ConnectionOptions: ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction>
@@ -838,4 +840,5 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 }
+
 export const EVMWeb3Readonly = EVMConnectionReadonlyAPI.Default

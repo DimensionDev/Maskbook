@@ -29,7 +29,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { toHex, type Account } from '@masknet/shared-base'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { FlowChainResolver } from './ResolverAPI.js'
 import { FlowWeb3API } from './Web3API.js'
@@ -58,6 +58,7 @@ export class FlowConnectionAPI
         this.ConnectionOptions = new FlowConnectionOptionsAPI(options)
         this.Web3 = new FlowWeb3API(options)
     }
+
     private Web3
     private ConnectionOptions
 
@@ -260,6 +261,7 @@ export class FlowConnectionAPI
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
+
     approveNonFungibleToken(
         address: string,
         recipient: string,
@@ -269,6 +271,7 @@ export class FlowConnectionAPI
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
+
     approveAllNonFungibleTokens(
         address: string,
         recipient: string,
@@ -278,6 +281,7 @@ export class FlowConnectionAPI
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
+
     transferFungibleToken(
         address: string,
         recipient: string,
@@ -287,6 +291,7 @@ export class FlowConnectionAPI
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
+
     transferNonFungibleToken(
         address: string,
         tokenId: string,

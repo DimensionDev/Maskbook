@@ -18,7 +18,7 @@ import {
     useWallets,
     useAccount,
     useChainId,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { Action } from './Action.js'
@@ -108,7 +108,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             isNextIdWallet,
         )
 
-        const Others = useWeb3Others(defaultPluginId)
+        const Utils = useWeb3Utils(defaultPluginId)
         const defaultChainId = useDefaultChainId(defaultPluginId)
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
@@ -128,9 +128,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 networkIcon: networkDescriptor?.icon,
                 providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
                 iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
-                formattedAddress: walletIdentity ? Others.formatAddress(walletIdentity, 4) : '',
+                formattedAddress: walletIdentity ? Utils.formatAddress(walletIdentity, 4) : '',
                 addressLink: walletIdentity
-                    ? Others.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
+                    ? Utils.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
                     : '',
                 address: walletIdentity,
                 verified: !isNextIdWallet ? isVerifiedAccount : true,

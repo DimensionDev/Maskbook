@@ -8,7 +8,7 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWallet,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
@@ -59,7 +59,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { account, providerType } = useChainContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     const { data: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
     const providerDescriptor = useProviderDescriptor()
@@ -94,7 +94,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                 />
                 <Box>
                     <Typography className={classes.name}>{walletName}</Typography>
-                    <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
+                    <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
             <Button variant="text" onClick={props.profile ? handleDisconnect : () => SelectProviderModal.open()}>

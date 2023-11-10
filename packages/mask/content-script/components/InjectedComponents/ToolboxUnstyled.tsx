@@ -20,7 +20,7 @@ import {
     useChainContext,
     useChainColor,
     useChainIdValid,
-    useWeb3Others,
+    useWeb3Utils,
     useReverseAddress,
     useChainIdMainnet,
     useRecentTransactions,
@@ -43,6 +43,7 @@ const useStyles = makeStyles()(() => ({
         height: 18,
     },
 }))
+
 interface ToolboxHintProps {
     Container?: React.ComponentType<React.PropsWithChildren<{}>>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
@@ -54,6 +55,7 @@ interface ToolboxHintProps {
     mini?: boolean
     category: 'wallet' | 'application'
 }
+
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     return props.category === 'wallet' ? <ToolboxHintForWallet {...props} /> : <ToolboxHintForApplication {...props} />
 }
@@ -168,14 +170,14 @@ function useToolbox() {
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
     const provider = useProviderDescriptor()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
     const { data: domain } = useReverseAddress(undefined, account, true)
 
     function getToolboxTitle() {
         if (!account || !provider) return t.plugin_wallet_connect_wallet()
         if (pendingTransactions.length <= 0)
-            return Others.formatDomainName?.(domain) || Others.formatAddress(account, 4) || account
+            return Utils.formatDomainName?.(domain) || Utils.formatAddress(account, 4) || account
         return (
             <>
                 <span style={{ marginRight: 12 }}>

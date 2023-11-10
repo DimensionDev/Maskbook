@@ -26,7 +26,7 @@ import {
     isValidChainId,
     getNetworkPluginID,
 } from '@masknet/web3-shared-flow'
-import { type BaseUtils } from '../../Base/apis/OthersAPI.js'
+import { type BaseUtils } from '../../Base/apis/Utils.js'
 import { FlowChainResolver, FlowExplorerResolver, FlowProviderResolver, FlowNetworkResolver } from './ResolverAPI.js'
 
 export const FlowUtils = {

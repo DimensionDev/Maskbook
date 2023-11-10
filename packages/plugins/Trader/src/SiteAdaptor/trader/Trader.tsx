@@ -15,7 +15,7 @@ import {
     useMaskTokenAddress,
     useNetworkContext,
     useWallet,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
@@ -62,7 +62,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     // #region trade state
     const {
@@ -101,9 +101,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: Others.createNativeToken(chainId),
+            token: Utils.createNativeToken(chainId),
         })
-    }, [chainId, chainIdValid, Others.createNativeToken])
+    }, [chainId, chainIdValid, Utils.createNativeToken])
     // #endregion
 
     const updateTradingCoin = useCallback(
@@ -316,9 +316,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
     // #region if chain id be changed, reset the chain id on context, and reset gas config
     useEffect(() => {
-        if (!Others.isValidChainId(chainId)) return
+        if (!Utils.isValidChainId(chainId)) return
         setGasConfig(undefined)
-    }, [chainId, Others])
+    }, [chainId, Utils])
     // #endregion
 
     // #region if target chain id be changed, reset output token

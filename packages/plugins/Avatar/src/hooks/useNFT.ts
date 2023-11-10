@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useWeb3Connection, useWeb3Hub, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Connection, useWeb3Hub, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { formatBalance, CurrencyType } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -14,7 +14,7 @@ export function useNFT(
     chainId: ChainId = ChainId.Mainnet,
     ownerAddress?: string,
 ) {
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     const Hub = useWeb3Hub(pluginID, {
         chainId,
         account,
@@ -44,7 +44,7 @@ export function useNFT(
             : asset?.price?.[CurrencyType.USD] ?? '0'
         const name = metadata?.name ?? ''
         const imageURL = metadata?.imageURL
-        const permalink = asset?.link ?? Others.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
+        const permalink = asset?.link ?? Utils.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
 
         return {
             amount,
@@ -57,5 +57,5 @@ export function useNFT(
             permalink,
             tokenId,
         } as NFTInfo
-    }, [Web3, Hub, Others, address, tokenId, chainId, ownerAddress])
+    }, [Web3, Hub, Utils, address, tokenId, chainId, ownerAddress])
 }

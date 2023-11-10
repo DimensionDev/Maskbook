@@ -1,10 +1,10 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
+import { type createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
 import { createConnection } from '../../EVM/apis/ConnectionAPI.js'
 import { createFlowConnection } from '../../Flow/apis/ConnectionOptionsAPI.js'
 import { createSolanaConnection } from '../../Solana/apis/ConnectionOptionsAPI.js'
-import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import { unreachable } from '@masknet/kit'
 
 export function getWeb3Connection<T extends NetworkPluginID>(

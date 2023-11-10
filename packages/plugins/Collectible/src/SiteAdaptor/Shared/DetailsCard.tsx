@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { useCollectibleTrans } from '../../locales/i18n_generated.js'
@@ -72,25 +72,25 @@ export function DetailsCard(props: DetailsCardProps) {
     const { asset, sourceType } = props
     const t = useCollectibleTrans()
     const { classes } = useStyles()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { pluginID } = useNetworkContext()
 
     const infos: Array<{ title: string; value?: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
             title: t.plugin_collectible_mint_address(),
-            value: Others.formatAddress(asset.address, 4),
+            value: Utils.formatAddress(asset.address, 4),
             link: true,
         })
     } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
         infos.push(
-            { title: t.plugin_collectible_token_id(), value: Others.formatTokenId(asset.tokenId, 4) },
-            { title: t.contract(), value: Others.formatAddress(asset.address, 4) ?? '-', link: true },
+            { title: t.plugin_collectible_token_id(), value: Utils.formatTokenId(asset.tokenId, 4) },
+            { title: t.contract(), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true },
         )
     }
     infos.push(
-        { title: t.plugin_collectible_block_chain(), value: Others.chainResolver.chainFullName(asset.chainId) },
-        { title: t.token_standard(), value: Others.formatSchemaType(asset.schema || asset.contract?.schema) },
+        { title: t.plugin_collectible_block_chain(), value: Utils.chainResolver.chainFullName(asset.chainId) },
+        { title: t.token_standard(), value: Utils.formatSchemaType(asset.schema || asset.contract?.schema) },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
         infos.push({
@@ -112,7 +112,7 @@ export function DetailsCard(props: DetailsCardProps) {
                             {x.link ? (
                                 <Link
                                     className={classes.link}
-                                    href={Others.explorerResolver.addressLink(asset.chainId, asset.address) ?? ''}
+                                    href={Utils.explorerResolver.addressLink(asset.chainId, asset.address) ?? ''}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />

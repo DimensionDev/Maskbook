@@ -28,10 +28,11 @@ import { EVMRequestAPI } from './RequestAPI.js'
 import { EVMContractAPI } from './ContractAPI.js'
 import { EVMConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
-import { createConnectionCreator } from '../../Base/apis/ConnectionCreatorAPI.js'
+import { createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
+
 export class ConnectionAPI
     extends EVMConnectionReadonlyAPI
     implements
