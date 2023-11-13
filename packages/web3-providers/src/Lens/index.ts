@@ -1,7 +1,7 @@
 import { NameServiceID } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
-import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
+import { LitmitType, type FollowModuleTypedData, type LensBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { LENS_ROOT_API } from './constants.js'
 
@@ -106,6 +106,35 @@ export class Lens {
         return data.profile
     }
 
+    static async getProfilesByHandles(handles: string[]) {
+        const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    query Profiles($request: ProfilesRequest!) {
+                        profiles(request: $request) {
+                            items {
+                                ${LensProfileQuery}
+                            }
+                        }
+                    }
+                  `,
+                variables: {
+                    request: {
+                        where: {
+                            handles: handles.map((x) => `lens/${x.replace('.lens', '')}`),
+                        },
+                        limit: LitmitType.Fifty,
+                    },
+                },
+            }),
+        })
+        return data.profiles.items
+    }
+
     static async queryDefaultProfileByAddress(address: string) {
         if (!isValidAddress(address)) return
         const { data } = await fetchJSON<{ data: { defaultProfile?: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
@@ -133,17 +162,19 @@ export class Lens {
             },
             body: JSON.stringify({
                 query: /* GraphQL */ `
-                    query handleOfDefaultProfile($address: EthereumAddress!) {
-                        defaultProfile(request: { ethereumAddress: $address }) {
+                    query handleOfDefaultProfile {
+                        defaultProfile(request: { for: "${address}" }) {
                             id
-                            handle
+                            handle {
+                                localName
+                            }
                         }
                     }
                 `,
                 variables: { address },
             }),
         })
-        return data.defaultProfile?.handle
+        return data.defaultProfile?.handle.localName
     }
 
     static async queryProfilesByAddress(address: string) {
@@ -155,7 +186,7 @@ export class Lens {
             },
             body: JSON.stringify({
                 query: `query Profiles {
-                  profiles(request: { ownedBy: ["${address}"], limit: 10 }) {
+                  profiles(request: { where: { ownedBy: ["${address}"] }, limit: ${LitmitType.Ten} }) {
                     items {
                       ${LensProfileQuery}
                     }
@@ -179,17 +210,17 @@ export class Lens {
                 },
                 body: JSON.stringify({
                     query: `query followStatusBulk {
-                  followStatusBulk(
-                    request: { followInfos: [{ follower: "${follower}", profileId: "${follower}" }] }
-                  ) {
-                    follower
-                    profileId
-                    status {
-                      isFinalisedOnchain
-                      value
+                        followStatusBulk(
+                            request: { followInfos: [{ follower: "${follower}", profileId: "${profileId}" }] }
+                        ) {
+                            follower
+                            profileId
+                            status {
+                            isFinalisedOnchain
+                            value
+                            }
+                        }
                     }
-                  }
-                }
                 `,
                 }),
             },
@@ -198,6 +229,47 @@ export class Lens {
         if (!data.followStatusBulk.length) return false
 
         return data.followStatusBulk.some((x) => x.status.value)
+    }
+
+    /**
+     * Query one-to-many follow relationships
+     * @param follower primary profile
+     * @param profileIds
+     */
+    static async queryFollowStatusList(follower: string, profileIds: string[]) {
+        if (!follower || !profileIds.length) return
+        const { data } = await fetchJSON<{ data: { followStatusBulk: LensBaseAPI.FollowStatusBulk[] } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: /* GraphQL */ `
+                        query followStatusBulk($request: FollowStatusBulkRequest!) {
+                            followStatusBulk(request: $request) {
+                                follower
+                                profileId
+                                status {
+                                    isFinalisedOnchain
+                                    value
+                                }
+                            }
+                        }
+                    `,
+                    variables: {
+                        request: {
+                            followInfos: profileIds.map((profileId) => ({
+                                follower,
+                                profileId,
+                            })),
+                        },
+                    },
+                }),
+            },
+        )
+        return data.followStatusBulk
     }
 
     static async queryChallenge(address: string, profileId: string) {
@@ -211,12 +283,13 @@ export class Lens {
                 query: `query Challenge {
                   challenge(request: { signedBy: "${address}", for: "${profileId}" }) {
                     text
+                    id
                   }
                 }`,
             }),
         })
 
-        return data.challenge.text
+        return data.challenge
     }
 
     static async authenticate(id: string, signature: string) {
@@ -227,7 +300,7 @@ export class Lens {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `mutation Authenticate {
+                query: /* GraphQL */ `mutation Authenticate {
                   authenticate(
                     request: {
                       id: "${id}"
@@ -253,7 +326,7 @@ export class Lens {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `mutation Refresh {
+                query: /* GraphQL */ `mutation Refresh {
                   refresh(request: {
                     refreshToken: "${refreshToken}"
                   }) {
@@ -301,7 +374,7 @@ export class Lens {
                 body: JSON.stringify({
                     query: `mutation CreateFollowTypedData {
                       createFollowTypedData(
-                        request: { follow: [{ profile: "${profileId}", ${followModule} }] }
+                        request: { follow: [{ profileId: "${profileId}", ${followModule} }] }
                       ) {
                         id
                         expiresAt
@@ -313,7 +386,7 @@ export class Lens {
                             verifyingContract
                           }
                           types {
-                            FollowWithSig {
+                            Follow {
                               name
                               type
                             }
@@ -321,7 +394,9 @@ export class Lens {
                           value {
                             nonce
                             deadline
-                            profileIds
+                            followerProfileId
+                            idsOfProfilesToFollow
+                            followTokenIds
                             datas
                           }
                         }
@@ -348,13 +423,13 @@ export class Lens {
                 body: JSON.stringify({
                     query: `mutation CreateUnfollowTypedData {
                       createUnfollowTypedData(request:{
-                        profile: "${profileId}"
+                        unfollow: ["${profileId}"]
                       }) {
                         id
                         expiresAt
                         typedData {
                           types {
-                            BurnWithSig {
+                            Unfollow {
                               name
                               type
                             }
@@ -368,7 +443,8 @@ export class Lens {
                           value {
                             nonce
                             deadline
-                            tokenId
+                            idsOfProfilesToUnfollow
+                            unfollowerProfileId
                           }
                         }
                       }
@@ -379,62 +455,6 @@ export class Lens {
         )
 
         return data.createUnfollowTypedData
-    }
-
-    static async followWithProxyAction(profileId: string, options: { token: string }) {
-        if (!profileId) return
-        const { data } = await fetchJSON<{ data: { proxyAction: string } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
-            },
-            body: JSON.stringify({
-                query: `mutation ProxyAction {
-                  proxyAction(request: { follow: { freeFollow: { profileId: "${profileId}" } } })
-                }
-                `,
-            }),
-        })
-
-        return data.proxyAction
-    }
-
-    static async queryProxyStatus(proxyActionId: string, options: { token: string }) {
-        if (!proxyActionId) return
-        const { data } = await fetchJSON<{ data: { proxyActionStatus: LensBaseAPI.ProxyActionStatus } }>(
-            LENS_ROOT_API,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
-                },
-                body: JSON.stringify({
-                    query: `query ProxyStatus {
-                      proxyActionStatus(proxyActionId: "${proxyActionId}") {
-                        ... on ProxyActionError{
-                          reason
-                          lastKnownTxId
-                          __typename
-                        }
-                        ... on ProxyActionStatusResult {
-                          txHash
-                          txId
-                          status
-                          __typename
-                        }
-                        ... on ProxyActionQueued {
-                          queuedAt
-                          __typename
-                        }
-                      }
-                    }`,
-                }),
-            },
-        )
-
-        return data.proxyActionStatus
     }
 
     static async broadcast(
@@ -453,14 +473,14 @@ export class Lens {
                 'x-access-token': options?.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
-                query: `mutation Broadcast {
-                      broadcast(
+                query: `mutation BroadcastonChain {
+                      broadcastOnchain(
                         request: {
                           id: "${id}"
                           signature: "${signature}"
                         }
                       ) {
-                        ... on RelayerResult {
+                        ... on RelaySuccess {
                           txHash
                           __typename
                         }
@@ -473,9 +493,9 @@ export class Lens {
                     }
                     `,
             }),
-        })) as { data: { broadcast: LensBaseAPI.Broadcast } }
+        })) as { data: { broadcastOnchain: LensBaseAPI.Broadcast } }
 
-        return data.broadcast
+        return data.broadcastOnchain
     }
 
     static async queryApprovedModuleAllowanceAmount(

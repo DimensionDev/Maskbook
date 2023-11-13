@@ -5,14 +5,14 @@ import { Lens, EVMWeb3 } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { lensTokenStorage as storage } from '../../context.js'
 
-export function useQueryAuthenticate(address: string) {
+export function useQueryAuthenticate(address: string, profileId?: string) {
     const { chainId } = useChainContext()
 
     return useCallback(async () => {
-        if (!address || chainId !== ChainId.Matic || !isValidAddress(address)) return
+        if (!address || chainId !== ChainId.Matic || !isValidAddress(address) || !profileId) return
 
-        const accessToken = storage.accessToken?.value?.[address]
-        const refreshToken = storage.refreshToken?.value?.[address]
+        const accessToken = storage.accessToken?.value?.[profileId]
+        const refreshToken = storage.refreshToken?.value?.[profileId]
         if (accessToken && isBefore(new Date(), accessToken.expireDate)) {
             return accessToken.token
         } else if (refreshToken && isBefore(new Date(), refreshToken.expireDate)) {
@@ -20,7 +20,7 @@ export function useQueryAuthenticate(address: string) {
             if (!authenticate) return
             // Only reset accessToken
             await storage.accessToken?.setValue({
-                [address]: {
+                [profileId]: {
                     token: authenticate.accessToken,
                     expireDate: add(new Date(), { minutes: 30 }),
                 },
@@ -28,11 +28,11 @@ export function useQueryAuthenticate(address: string) {
             return authenticate.accessToken
         }
 
-        const challenge = await Lens.queryChallenge(address)
+        const challenge = await Lens.queryChallenge(address, profileId)
         if (!challenge) return
 
-        const signature = await EVMWeb3.signMessage('message', challenge)
-        const authenticate = await Lens.authenticate(address, signature)
+        const signature = await EVMWeb3.signMessage('message', challenge.text)
+        const authenticate = await Lens.authenticate(challenge.id, signature)
         if (!authenticate) return
 
         /**
@@ -41,19 +41,19 @@ export function useQueryAuthenticate(address: string) {
          */
 
         await storage.accessToken?.setValue({
-            [address]: {
+            [profileId]: {
                 token: authenticate.accessToken,
                 expireDate: add(new Date(), { minutes: 30 }),
             },
         })
 
         await storage.refreshToken?.setValue({
-            [address]: {
+            [profileId]: {
                 token: authenticate.refreshToken,
                 expireDate: add(new Date(), { days: 7 }),
             },
         })
 
         return authenticate.accessToken
-    }, [address, chainId])
+    }, [address, chainId, profileId])
 }

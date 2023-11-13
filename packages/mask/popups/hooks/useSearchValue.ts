@@ -11,7 +11,7 @@ export function useSearchValue(value: string, type?: NextIDPlatform): AsyncState
 
         if (value.endsWith('.eth')) return (await ENS.lookup(value))?.toLowerCase()
 
-        if (value.endsWith('.lens')) return (await Lens.getProfileByHandle(value)).ownedBy?.toLowerCase()
+        if (value.endsWith('.lens')) return (await Lens.getProfileByHandle(value)).ownedBy.address?.toLowerCase()
 
         return value.toLowerCase()
     }, [value])

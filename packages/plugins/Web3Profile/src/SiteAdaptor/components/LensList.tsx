@@ -6,10 +6,11 @@ import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { memo } from 'react'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
-import { useAsync } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { useQuery } from '@tanstack/react-query'
+import { compact, first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -78,10 +79,54 @@ interface Props extends ListProps {
 
 export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
+    const { account: wallet } = useChainContext()
+
+    const { data = accounts, isLoading } = useQuery({
+        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join('')],
+        queryFn: async () => {
+            if (!accounts.length) return
+            let currentProfile = await Lens.queryDefaultProfileByAddress(wallet)
+            if (!currentProfile?.id) {
+                const profiles = await Lens.queryProfilesByAddress(wallet)
+                currentProfile = first(profiles)
+            }
+
+            const profiles = await Lens.getProfilesByHandles(accounts.map((x) => x.handle))
+            if (!currentProfile?.id)
+                return compact(
+                    profiles.map((profile) => {
+                        const target = accounts.find((x) => x.handle.replace('.lens', '') === profile.handle.localName)
+                        if (!target) return
+                        return {
+                            ...target,
+                            ownedBy: profile.ownedBy.address,
+                        }
+                    }),
+                )
+
+            const followStatusList = await Lens.queryFollowStatusList(
+                currentProfile.id,
+                profiles.map((x) => x.id),
+            )
+            return compact(
+                profiles.map((profile) => {
+                    const target = accounts.find((x) => x.handle.replace('.lens', '') === profile.handle.localName)
+                    if (!target) return
+                    return {
+                        ...target,
+                        ownedBy: profile.ownedBy.address,
+                        isFollowing: followStatusList?.find((x) => x.profileId === profile.id)?.status.value,
+                    }
+                }),
+            )
+        },
+        refetchOnWindowFocus: false,
+    })
+
     return (
         <List className={cx(classes.list, className)} {...rest}>
-            {accounts.map((account, key) => {
-                return <LensListItem account={account} key={key} />
+            {data.map((account, key) => {
+                return <LensListItem account={account} key={key} loading={isLoading} />
             })}
         </List>
     )
@@ -91,24 +136,15 @@ LensList.displayName = 'LensList'
 
 interface LensListItemProps {
     account: FireflyBaseAPI.LensAccount
+    loading: boolean
 }
 
-const LensListItem = memo<LensListItemProps>(({ account }) => {
+const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
     const { classes } = useStyles()
     const { account: wallet } = useChainContext()
     const t = useWeb3ProfileTrans()
     const profileUri = account.profileUri.filter(Boolean)
     const lensIcon = <Icons.Lens size={20} />
-
-    const { loading, value } = useAsync(async () => {
-        const profile = await Lens.getProfileByHandle(account.handle)
-        const isFollowing = await Lens.queryFollowStatus(wallet, profile.id)
-
-        return {
-            ownedBy: profile.ownedBy.address,
-            isFollowing,
-        }
-    }, [account, wallet])
 
     return (
         <ListItem className={classes.listItem} key={account.handle}>
@@ -129,9 +165,9 @@ const LensListItem = memo<LensListItemProps>(({ account }) => {
                         handle: account.handle,
                     })
                 }}>
-                {isSameAddress(wallet, value?.ownedBy)
+                {isSameAddress(wallet, account.ownedBy)
                     ? t.view()
-                    : value?.isFollowing
+                    : account?.isFollowing
                     ? t.following_action()
                     : t.follow()}
             </ActionButton>

@@ -22,8 +22,14 @@ export enum ProxyActionType {
 }
 
 export enum BroadcastType {
-    RelayerResult = 'RelayerResult',
+    RelaySuccess = 'RelaySuccess',
     RelayError = 'RelayError',
+}
+
+export enum LitmitType {
+    Ten = 'Ten',
+    TwentyFive = 'TwentyFive',
+    Fifty = 'Fifty',
 }
 
 export namespace LensBaseAPI {
@@ -39,15 +45,15 @@ export namespace LensBaseAPI {
             address: string
             chainId: number
         }
-        metadata: {
+        metadata?: {
             bio: string
             displayName: string
-            picture: {
+            picture?: {
                 optimized: {
                     uri: string
                 }
             }
-            coverPicture: {
+            coverPicture?: {
                 optimized: {
                     uri: string
                 }
@@ -84,13 +90,11 @@ export namespace LensBaseAPI {
             isFinalisedOnchain: boolean
             value: boolean
         }
-        // followerAddress: string
-        // profileId: string
-        // follows: boolean
     }
 
     export interface Challenge {
         text: string
+        id: string
     }
 
     export interface Authenticate {
@@ -109,7 +113,7 @@ export namespace LensBaseAPI {
                 verifyingContract: string
             }
             types: {
-                FollowWithSig: Array<{
+                Follow: Array<{
                     name: string
                     type: string
                 }>
@@ -117,7 +121,9 @@ export namespace LensBaseAPI {
             value: {
                 nonce: number
                 deadline: number
-                profileIds: string[]
+                followTokenIds: string[]
+                followerProfileId: string
+                idsOfProfilesToFollow: string[]
                 datas: string[]
             }
         }
@@ -134,7 +140,7 @@ export namespace LensBaseAPI {
                 verifyingContract: string
             }
             types: {
-                BurnWithSig: Array<{
+                Unfollow: Array<{
                     name: string
                     type: string
                 }>
@@ -142,7 +148,8 @@ export namespace LensBaseAPI {
             value: {
                 nonce: number
                 deadline: number
-                tokenId: string
+                idsOfProfilesToUnfollow: string[]
+                unfollowerProfileId: string
             }
         }
     }
@@ -167,9 +174,9 @@ export namespace LensBaseAPI {
 
     export type ProxyActionStatus = ProxyActionError | ProxyActionQueued | ProxyActionStatusResult
 
-    export interface RelayerResult {
+    export interface RelaySuccess {
         txHash: string
-        __typename: BroadcastType.RelayerResult
+        __typename: BroadcastType.RelaySuccess
     }
 
     export interface RelayError {
@@ -177,7 +184,7 @@ export namespace LensBaseAPI {
         __typename: BroadcastType.RelayError
     }
 
-    export type Broadcast = RelayerResult | RelayError
+    export type Broadcast = RelaySuccess | RelayError
 
     export interface ApprovedModuleAllowanceAmount {
         allowance: string
