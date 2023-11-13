@@ -35,9 +35,10 @@ export async function encryptTo(
         {
             network: whoAmI?.network || encryptPayloadNetworkToDomain(network),
             author: whoAmI ? Some(whoAmI) : None,
-            authorPublicKey: authorPublicKey
-                ? Some({ algr: EC_KeyCurve.secp256k1, key: authorPublicKey } satisfies EC_Key<EC_Public_CryptoKey>)
-                : None,
+            authorPublicKey:
+                authorPublicKey ?
+                    Some({ algr: EC_KeyCurve.secp256k1, key: authorPublicKey } satisfies EC_Key<EC_Public_CryptoKey>)
+                :   None,
             message: content,
             target: convertedTarget,
             version,

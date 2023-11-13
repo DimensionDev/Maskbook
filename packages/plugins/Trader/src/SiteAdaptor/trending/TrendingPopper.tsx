@@ -80,9 +80,9 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
                     style={{
                         position: 'absolute',
                         left: positionX_Type === 'left' ? badgeBoundingLeft - 20 : badgeBoundingLeft - 300,
-                        ...(positionY_Type === 'bottom'
-                            ? { top: badgeBoundingBottom + initialOffsetY + 10 }
-                            : { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),
+                        ...(positionY_Type === 'bottom' ?
+                            { top: badgeBoundingBottom + initialOffsetY + 10 }
+                        :   { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),
                     }}>
                     <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
                         {children?.(name, type, currentResult, setActive, identity, address, isCollectionProjectPopper)}

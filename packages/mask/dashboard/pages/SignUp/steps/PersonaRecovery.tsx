@@ -57,9 +57,8 @@ export function PersonaRecovery() {
                 }
 
                 const chainId = await SmartPayBundler.getSupportedChainId()
-                const accounts = result?.address
-                    ? await SmartPayOwner.getAccountsByOwner(chainId, result.address)
-                    : EMPTY_LIST
+                const accounts =
+                    result?.address ? await SmartPayOwner.getAccountsByOwner(chainId, result.address) : EMPTY_LIST
 
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {

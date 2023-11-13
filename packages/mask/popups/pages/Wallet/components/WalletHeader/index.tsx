@@ -57,16 +57,14 @@ export const WalletHeader = memo(function WalletHeader() {
 
     if (!wallet || !hasPassword || matchResetWallet) return <WalletSetupHeaderUI showBack={!!matchResetWallet} />
 
-    return matchWallet ? (
-        <WalletHeaderUI
-            origin={origin}
-            chainId={chainId}
-            currentNetwork={currentNetwork}
-            onActionClick={handleActionClick}
-            onOpenNetworkSelector={chooseNetwork}
-            wallet={wallet}
-        />
-    ) : (
-        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
-    )
+    return matchWallet ?
+            <WalletHeaderUI
+                origin={origin}
+                chainId={chainId}
+                currentNetwork={currentNetwork}
+                onActionClick={handleActionClick}
+                onOpenNetworkSelector={chooseNetwork}
+                wallet={wallet}
+            />
+        :   <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
 })

@@ -109,7 +109,7 @@ export function DetailsCard(props: DetailsCardProps) {
                             <TextOverflowTooltip title={x.value} as={ShadowRootTooltip}>
                                 <Typography className={classes.value}>{x.value} </Typography>
                             </TextOverflowTooltip>
-                            {x.link ? (
+                            {x.link ?
                                 <Link
                                     className={classes.link}
                                     href={Utils.explorerResolver.addressLink(asset.chainId, asset.address) ?? ''}
@@ -117,12 +117,12 @@ export function DetailsCard(props: DetailsCardProps) {
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />
                                 </Link>
-                            ) : null}
-                            {x.value && x.tooltip ? (
+                            :   null}
+                            {x.value && x.tooltip ?
                                 <ShadowRootTooltip title={x.tooltip} placement="top">
                                     <Icons.Info size={18} />
                                 </ShadowRootTooltip>
-                            ) : null}
+                            :   null}
                         </Typography>
                     </div>
                 )

@@ -65,7 +65,9 @@ export function ProposeCard({ feed, ...rest }: ProposeCardProps) {
                     }}
                 />
             </Typography>
-            {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
+            {metadata?.title ?
+                <Typography className={classes.title}>{metadata.title}</Typography>
+            :   null}
             <Typography className={classes.content}>{metadata?.body}</Typography>
         </CardFrame>
     )

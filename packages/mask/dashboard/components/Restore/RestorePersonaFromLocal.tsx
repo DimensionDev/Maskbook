@@ -154,10 +154,10 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
 
     return (
         <Box width="100%">
-            {restoreStatus !== RestoreStatus.Verified ? (
+            {restoreStatus !== RestoreStatus.Verified ?
                 <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit accept=".bin,.json" />
-            ) : null}
-            {file && restoreStatus !== RestoreStatus.Verified ? (
+            :   null}
+            {file && restoreStatus !== RestoreStatus.Verified ?
                 <FileFrame
                     className={classes.uploadedFile}
                     fileName={file.name}
@@ -170,8 +170,8 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                         {readingFile ? t.file_unpacking() : t.file_unpacking_completed()}
                     </Typography>
                 </FileFrame>
-            ) : null}
-            {restoreStatus === RestoreStatus.Decrypting ? (
+            :   null}
+            {restoreStatus === RestoreStatus.Decrypting ?
                 <Box mt={4}>
                     <PasswordField
                         fullWidth
@@ -183,12 +183,12 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                         autoFocus
                     />
                 </Box>
-            ) : restoreStatus === RestoreStatus.Verified && summary ? (
+            : restoreStatus === RestoreStatus.Verified && summary ?
                 <>
                     <AccountStatusBar label={file?.name} actionLabel={t.file_reselect()} onAction={reset} />
                     <BackupPreview mt={2} info={summary} />
                 </>
-            ) : null}
+            :   null}
         </Box>
     )
 })

@@ -51,23 +51,23 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
     return (
         <div className={classes.content}>
             <DoneIcon className={classes.icon} />
-            {message ? (
+            {message ?
                 <Typography className={classes.primary} color="textPrimary" variant="subtitle1">
                     {message}
                 </Typography>
-            ) : null}
-            {content ? (
+            :   null}
+            {content ?
                 <Typography className={classes.secondary} color="textSecondary">
                     {content}
                 </Typography>
-            ) : null}
-            {link ? (
+            :   null}
+            {link ?
                 <Typography>
                     <Link className={classes.link} href={link} target="_blank" rel="noopener noreferrer">
                         {t.share_dialog_view_on_explorer()}
                     </Link>
                 </Typography>
-            ) : null}
+            :   null}
         </div>
     )
 })

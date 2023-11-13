@@ -208,9 +208,8 @@ export const NftRedPacketHistoryItem = memo(
             account,
             patchedHistory.chainId,
         )
-        const bitStatusList = redpacketStatus
-            ? redpacketStatus.bitStatusList
-            : fill(Array(patchedHistory.token_ids.length), false)
+        const bitStatusList =
+            redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
 
         const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
             if (canSend && !isPasswordValid) {
@@ -232,26 +231,26 @@ export const NftRedPacketHistoryItem = memo(
                                         <Typography
                                             variant="body1"
                                             className={cx(classes.title, classes.message, classes.ellipsis)}>
-                                            {patchedHistory.sender.message === ''
-                                                ? t.best_wishes()
-                                                : patchedHistory.sender.message}
+                                            {patchedHistory.sender.message === '' ?
+                                                t.best_wishes()
+                                            :   patchedHistory.sender.message}
                                         </Typography>
                                     </div>
                                     <div className={classes.fullWidthBox}>
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.create_time()}
                                         </Typography>
-                                        {rpid ? (
+                                        {rpid ?
                                             <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                                 {t.history_duration({
                                                     time: dateTimeFormat(new Date(patchedHistory.creation_time)),
                                                 })}
                                             </Typography>
-                                        ) : null}
+                                        :   null}
                                     </div>
                                 </div>
 
-                                {canSend ? (
+                                {canSend ?
                                     <ActionButton
                                         onMouseEnter={handleMouseEnter}
                                         onMouseLeave={onHidePopover}
@@ -261,7 +260,7 @@ export const NftRedPacketHistoryItem = memo(
                                         size="large">
                                         {t.share()}
                                     </ActionButton>
-                                ) : null}
+                                :   null}
                             </section>
 
                             <section className={classes.footer}>

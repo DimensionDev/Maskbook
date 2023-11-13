@@ -67,21 +67,19 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
             <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginID)}>
                 {/* TODO: replace to radio */}
                 <ListItemIcon>
-                    {selected ? (
+                    {selected ?
                         <Icons.RadioButtonChecked
                             size={24}
                             style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
                         />
-                    ) : (
-                        <Icons.RadioButtonUnChecked size={24} className={classes.icon} />
-                    )}
+                    :   <Icons.RadioButtonUnChecked size={24} className={classes.icon} />}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />
-                {onChangeWallet ? (
+                {onChangeWallet ?
                     <Button size="medium" variant="roundedContained" onClick={onChangeWallet} sx={{ marginLeft: 4 }}>
                         {t.wallet_status_button_change()}
                     </Button>
-                ) : null}
+                :   null}
             </MenuItem>
         )
     },

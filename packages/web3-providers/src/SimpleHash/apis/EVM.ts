@@ -191,10 +191,12 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
             const firstFloorPriceTimeStamp = response.floor_prices?.[0]?.timestamp
             cursor =
-                !firstFloorPriceTimeStamp ||
-                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
-                    ? null
-                    : response.next_cursor
+                (
+                    !firstFloorPriceTimeStamp ||
+                    isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
+                ) ?
+                    null
+                :   response.next_cursor
 
             historicalPriceState.updatePriceState(collectionId, response.floor_prices, response.payment_token)
         }
@@ -253,10 +255,12 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             const firstFloorPriceTimeStamp = response.transfers?.[0]?.timestamp
 
             cursor =
-                !firstFloorPriceTimeStamp ||
-                isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
-                    ? null
-                    : response.next_cursor
+                (
+                    !firstFloorPriceTimeStamp ||
+                    isAfter(secondsToMilliseconds(from_timeStamp), new Date(firstFloorPriceTimeStamp))
+                ) ?
+                    null
+                :   response.next_cursor
 
             sales = sales.concat(response.transfers)
         }
@@ -394,21 +398,25 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             cursor: response.next_cursor,
             content: response.transfers.map((x) => {
                 const trade_token =
-                    !x.sale_details?.payment_token ||
-                    checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
-                        ? EVMChainResolver.nativeCurrency(chainId)
-                        : {
-                              ...x.sale_details?.payment_token,
-                              type: TokenType.Fungible,
-                              address: x.sale_details?.payment_token.payment_token_id.includes('native')
-                                  ? ZERO_ADDRESS
-                                  : x.sale_details?.payment_token.address ?? '',
-                              id: x.sale_details?.payment_token.payment_token_id.includes('native')
-                                  ? ZERO_ADDRESS
-                                  : x.sale_details?.payment_token.address ?? '',
-                              chainId,
-                              schema: SchemaType.ERC20,
-                          }
+                    (
+                        !x.sale_details?.payment_token ||
+                        checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
+                    ) ?
+                        EVMChainResolver.nativeCurrency(chainId)
+                    :   {
+                            ...x.sale_details?.payment_token,
+                            type: TokenType.Fungible,
+                            address:
+                                x.sale_details?.payment_token.payment_token_id.includes('native') ?
+                                    ZERO_ADDRESS
+                                :   x.sale_details?.payment_token.address ?? '',
+                            id:
+                                x.sale_details?.payment_token.payment_token_id.includes('native') ?
+                                    ZERO_ADDRESS
+                                :   x.sale_details?.payment_token.address ?? '',
+                            chainId,
+                            schema: SchemaType.ERC20,
+                        }
                 const imageURL = batchAssetsResponse.nfts.find((y) => y.nft_id === x.nft_id)?.image_url ?? ''
                 return {
                     hash: x.transaction,
@@ -421,9 +429,10 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     to: x.event_type === SimpleHash.ActivityType.Burn ? ZERO_ADDRESS : x.to_address,
                     trade_token,
                     timestamp: new Date(x.timestamp).getTime(),
-                    trade_price: x.sale_details?.total_price
-                        ? leftShift(x.sale_details?.total_price, trade_token.decimals).toNumber()
-                        : 0,
+                    trade_price:
+                        x.sale_details?.total_price ?
+                            leftShift(x.sale_details?.total_price, trade_token.decimals).toNumber()
+                        :   0,
                     imageURL,
                     contract_address: x.contract_address,
                     trade_symbol: trade_token.symbol ?? '',
@@ -450,29 +459,29 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         if (!paymentToken) return
 
         const tickers: TrendingAPI.Ticker[] = compact([
-            openseaStats
-                ? {
-                      logo_url: MaskIconURLs.open_sea_url(),
-                      // TODO
-                      trade_url: `https://opensea.io/assets/ethereum/${address}`,
-                      market_name: NonFungibleMarketplace.OpenSea,
-                      volume_24h: openseaStats.volume24h,
-                      floor_price: openseaStats.floorPrice,
-                      price_symbol: paymentToken?.symbol,
-                      sales_24: openseaStats.count24h,
-                  }
-                : null,
-            looksrareStats
-                ? {
-                      logo_url: MaskIconURLs.looks_rare_url(),
-                      trade_url: `https://looksrare.org/collections/${address}`,
-                      market_name: NonFungibleMarketplace.LooksRare,
-                      volume_24h: looksrareStats.volume24h,
-                      floor_price: looksrareStats.floorPrice,
-                      price_symbol: paymentToken?.symbol,
-                      sales_24: looksrareStats.count24h,
-                  }
-                : null,
+            openseaStats ?
+                {
+                    logo_url: MaskIconURLs.open_sea_url(),
+                    // TODO
+                    trade_url: `https://opensea.io/assets/ethereum/${address}`,
+                    market_name: NonFungibleMarketplace.OpenSea,
+                    volume_24h: openseaStats.volume24h,
+                    floor_price: openseaStats.floorPrice,
+                    price_symbol: paymentToken?.symbol,
+                    sales_24: openseaStats.count24h,
+                }
+            :   null,
+            looksrareStats ?
+                {
+                    logo_url: MaskIconURLs.looks_rare_url(),
+                    trade_url: `https://looksrare.org/collections/${address}`,
+                    market_name: NonFungibleMarketplace.LooksRare,
+                    volume_24h: looksrareStats.volume24h,
+                    floor_price: looksrareStats.floorPrice,
+                    price_symbol: paymentToken?.symbol,
+                    sales_24: looksrareStats.count24h,
+                }
+            :   null,
         ])
 
         return {
@@ -511,9 +520,10 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     },
                     {
                         type: 'instagram',
-                        link: collection.instagram_username
-                            ? `https://www.instagram.com/${collection.instagram_username}`
-                            : null,
+                        link:
+                            collection.instagram_username ?
+                                `https://www.instagram.com/${collection.instagram_username}`
+                            :   null,
                     },
                     {
                         type: 'medium',

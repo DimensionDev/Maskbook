@@ -24,9 +24,9 @@ const useStyles = makeStyles<{ maxHeight: string | number; isProfilePage?: boole
     (theme, { maxHeight, isProfilePage, searchType }) => ({
         contentWrapper: {
             background:
-                isProfilePage || (searchType !== SearchResultType.EOA && searchType !== SearchResultType.Domain)
-                    ? 'transparent'
-                    : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+                isProfilePage || (searchType !== SearchResultType.EOA && searchType !== SearchResultType.Domain) ?
+                    'transparent'
+                :   'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
         },
         tabContent: {
             position: 'relative',
@@ -75,9 +75,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const contentComponent = useMemo(() => {
         if (!currentResult || !resultList.value?.length) return null
 
-        const Component = profileTabType
-            ? getSearchResultContentForProfileTab(currentResult)
-            : getSearchResultContent(currentResult)
+        const Component =
+            profileTabType ? getSearchResultContentForProfileTab(currentResult) : getSearchResultContent(currentResult)
 
         return (
             <Component
@@ -115,7 +114,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             <ScopedDomainsContainer.Provider>
                 <div className={classes.contentWrapper}>
                     <div>{contentComponent}</div>
-                    {tabs.length ? (
+                    {tabs.length ?
                         <Stack px={2}>
                             <TabContext value={currentTab}>
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
@@ -125,9 +124,11 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                                 </MaskTabList>
                             </TabContext>
                         </Stack>
-                    ) : null}
+                    :   null}
                 </div>
-                {tabContentComponent ? <div className={classes.tabContent}>{tabContentComponent}</div> : null}
+                {tabContentComponent ?
+                    <div className={classes.tabContent}>{tabContentComponent}</div>
+                :   null}
             </ScopedDomainsContainer.Provider>
         </div>
     )

@@ -115,22 +115,22 @@ export const Prior1559GasSetting = memo(() => {
 
     const options = useMemo(
         () =>
-            gasOptions
-                ? [
-                      {
-                          title: t.popups_wallet_gas_fee_settings_low(),
-                          gasPrice: gasOptions.slow,
-                      },
-                      {
-                          title: t.popups_wallet_gas_fee_settings_medium(),
-                          gasPrice: gasOptions.standard,
-                      },
-                      {
-                          title: t.popups_wallet_gas_fee_settings_high(),
-                          gasPrice: gasOptions.fast,
-                      },
-                  ]
-                : null,
+            gasOptions ?
+                [
+                    {
+                        title: t.popups_wallet_gas_fee_settings_low(),
+                        gasPrice: gasOptions.slow,
+                    },
+                    {
+                        title: t.popups_wallet_gas_fee_settings_medium(),
+                        gasPrice: gasOptions.standard,
+                    },
+                    {
+                        title: t.popups_wallet_gas_fee_settings_high(),
+                        gasPrice: gasOptions.fast,
+                    },
+                ]
+            :   null,
         [gasOptions],
     )
 
@@ -246,7 +246,7 @@ export const Prior1559GasSetting = memo(() => {
 
     return (
         <>
-            {options ? (
+            {options ?
                 <div className={classes.options}>
                     {options.map(({ title, gasPrice }, index) => (
                         <div
@@ -269,7 +269,7 @@ export const Prior1559GasSetting = memo(() => {
                         </div>
                     ))}
                 </div>
-            ) : null}
+            :   null}
             <form onSubmit={onSubmit}>
                 <Typography className={classes.label}>{t.popups_wallet_gas_fee_settings_gas_limit()}</Typography>
                 <Controller

@@ -236,7 +236,7 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
 
     return (
         <Box>
-            {!signResult ? (
+            {!signResult ?
                 <Box p={2}>
                     <Box className={classes.provider}>
                         <Box className={classes.accountInfo}>
@@ -262,16 +262,17 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                             {t.wallet_status_button_change()}
                         </Button>
                     </Box>
-                    {isBound ? (
+                    {isBound ?
                         <Typography className={classes.bounded}>
                             {t.popups_verify_wallet_bounded_tips({ persona: String(currentPersona?.nickname) })}
                         </Typography>
-                    ) : null}
+                    :   null}
                     <Typography className={classes.description}>{t.popups_verify_wallet_description()}</Typography>
-                    {loading ? <LoadingMask text={t.signing()} /> : null}
+                    {loading ?
+                        <LoadingMask text={t.signing()} />
+                    :   null}
                 </Box>
-            ) : (
-                <Box p={2} display="flex" flexDirection="column" alignItems="center">
+            :   <Box p={2} display="flex" flexDirection="column" alignItems="center">
                     <Typography sx={{ mt: 3, textAlign: 'center' }} fontSize={36}>
                         &#x1F389;
                     </Typography>
@@ -286,11 +287,9 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                     </Typography>
                     <Box display="flex" py={3} px={1.5} alignItems="center">
                         <Box className={classes.info}>
-                            {currentPersona?.avatar ? (
+                            {currentPersona?.avatar ?
                                 <Avatar src={currentPersona.avatar} style={{ width: 36, height: 36 }} />
-                            ) : (
-                                <Icons.MenuPersonasActive size={36} style={{ borderRadius: 99 }} />
-                            )}
+                            :   <Icons.MenuPersonasActive size={36} style={{ borderRadius: 99 }} />}
                             <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
                         </Box>
                         <Icons.Connect size={24} />
@@ -300,20 +299,19 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
                         </Box>
                     </Box>
                 </Box>
-            )}
+            }
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
                     {t.cancel()}
                 </Button>
-                {!signResult ? (
+                {!signResult ?
                     <ActionButton fullWidth onClick={handleSign} disabled={loading || isBound}>
                         {t.sign()}
                     </ActionButton>
-                ) : (
-                    <ActionButton fullWidth onClick={handleDone}>
+                :   <ActionButton fullWidth onClick={handleDone}>
                         {t.done()}
                     </ActionButton>
-                )}
+                }
             </BottomController>
         </Box>
     )

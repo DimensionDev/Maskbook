@@ -101,9 +101,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             },
             rules: [
                 // Source map for libraries
-                computedFlags.sourceMapKind
-                    ? { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
-                    : null,
+                computedFlags.sourceMapKind ?
+                    { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
+                :   null,
                 // Patch old regenerator-runtime
                 {
                     test: /\..?js$/,
@@ -145,28 +145,28 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     },
                 },
                 // compress svg files
-                flags.mode === 'production'
-                    ? {
-                          test: /\.svg$/,
-                          loader: require.resolve('svgo-loader'),
-                          // overrides
-                          options: {
-                              js2svg: {
-                                  pretty: false,
-                              },
-                          },
-                          dependency(data) {
-                              if (data === '') return false
-                              if (data !== 'url')
-                                  throw new TypeError(
-                                      'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
-                                          data,
-                                  )
-                              return true
-                          },
-                          type: 'asset/resource',
-                      }
-                    : null,
+                flags.mode === 'production' ?
+                    {
+                        test: /\.svg$/,
+                        loader: require.resolve('svgo-loader'),
+                        // overrides
+                        options: {
+                            js2svg: {
+                                pretty: false,
+                            },
+                        },
+                        dependency(data) {
+                            if (data === '') return false
+                            if (data !== 'url')
+                                throw new TypeError(
+                                    'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
+                                        data,
+                                )
+                            return true
+                        },
+                        type: 'asset/resource',
+                    }
+                :   null,
             ],
         },
         plugins: [
@@ -216,9 +216,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
                     {
                         from:
-                            flags.mode === 'development'
-                                ? require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
-                                : require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
+                            flags.mode === 'development' ?
+                                require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
+                            :   require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
                     {
@@ -286,11 +286,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',
-            trustedTypes: String(computedFlags.sourceMapKind).includes('eval')
-                ? {
-                      policyName: 'webpack',
-                  }
-                : undefined,
+            trustedTypes:
+                String(computedFlags.sourceMapKind).includes('eval') ?
+                    {
+                        policyName: 'webpack',
+                    }
+                :   undefined,
         },
         ignoreWarnings: [
             /Failed to parse source map/,

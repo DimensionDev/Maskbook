@@ -262,14 +262,14 @@ export const GasSetting1559 = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
             const config = value.payload.params!.map((param) =>
-                param === 'latest'
-                    ? param
-                    : {
-                          ...param,
-                          gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
-                          maxPriorityFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
-                          maxFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
-                      },
+                param === 'latest' ? param : (
+                    {
+                        ...param,
+                        gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
+                        maxPriorityFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
+                        maxFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),
+                    }
+                ),
             )
 
             await Services.Wallet.updateUnconfirmedRequest({

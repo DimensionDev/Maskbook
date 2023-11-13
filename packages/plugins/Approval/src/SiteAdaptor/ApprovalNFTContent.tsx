@@ -227,81 +227,83 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     )
 
     return cancelled ? null : (
-        <div className={classes.listItemWrapper}>
-            <ListItem className={classes.listItem}>
-                <div className={classes.listItemInfo}>
-                    <div>
-                        <TokenIcon
-                            address={spender.contract.address}
-                            name={spender.contract.name}
-                            label=""
-                            logoURL={collection?.iconURL ?? ''}
-                            className={classes.logoIcon}
-                            tokenType={TokenType.NonFungible}
-                        />
+            <div className={classes.listItemWrapper}>
+                <ListItem className={classes.listItem}>
+                    <div className={classes.listItemInfo}>
+                        <div>
+                            <TokenIcon
+                                address={spender.contract.address}
+                                name={spender.contract.name}
+                                label=""
+                                logoURL={collection?.iconURL ?? ''}
+                                className={classes.logoIcon}
+                                tokenType={TokenType.NonFungible}
+                            />
 
-                        {contractDetailed ? (
-                            <Typography className={classes.primaryText}>
-                                {contractDetailed?.symbol ||
-                                    spender.contract.name ||
-                                    contractDetailed?.name ||
-                                    collection?.name}
+                            {contractDetailed ?
+                                <Typography className={classes.primaryText}>
+                                    {contractDetailed?.symbol ||
+                                        spender.contract.name ||
+                                        contractDetailed?.name ||
+                                        collection?.name}
+                                </Typography>
+                            :   null}
+                            <Typography className={classes.secondaryText}>
+                                {spender.contract.name || contractDetailed?.name || collection?.name}
                             </Typography>
-                        ) : null}
-                        <Typography className={classes.secondaryText}>
-                            {spender.contract.name || contractDetailed?.name || collection?.name}
-                        </Typography>
+                        </div>
+                        <div className={classes.contractInfo}>
+                            <Typography className={classes.secondaryText}>{t.contract()}</Typography>
+                            {!spender.logo ?
+                                null
+                            : typeof spender.logo === 'string' ?
+                                <img src={spender.logo} className={classes.spenderLogoIcon} />
+                            :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>}
+                            <Typography className={classes.primaryText}>
+                                {spender.name ?? EVMUtils.formatAddress(spender.address, 4)}
+                            </Typography>
+                            <Link
+                                className={classes.link}
+                                href={EVMUtils.explorerResolver.addressLink(chainId, spender.address) ?? ''}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
+                            </Link>
+                        </div>
+                        <div>
+                            <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
+                            <Typography className={classes.primaryText}>
+                                {collection?.balance ?? spender.amount}
+                            </Typography>
+                        </div>
                     </div>
-                    <div className={classes.contractInfo}>
-                        <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
-                            <img src={spender.logo} className={classes.spenderLogoIcon} />
-                        ) : (
-                            <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
-                        )}
-                        <Typography className={classes.primaryText}>
-                            {spender.name ?? EVMUtils.formatAddress(spender.address, 4)}
-                        </Typography>
-                        <Link
-                            className={classes.link}
-                            href={EVMUtils.explorerResolver.addressLink(chainId, spender.address) ?? ''}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
-                        </Link>
-                    </div>
-                    <div>
-                        <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
-                        <Typography className={classes.primaryText}>{collection?.balance ?? spender.amount}</Typography>
-                    </div>
-                </div>
 
-                <ChainBoundary
-                    expectedChainId={chainId}
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    className={classes.chainBoundary}
-                    classes={{ switchButton: classes.button }}
-                    ActionButtonPromiseProps={{
-                        fullWidth: false,
-                        init: t.revoke(),
-                        startIcon: null,
-                        failIcon: null,
-                        waitingIcon: null,
-                        className: classes.button,
-                        failedButtonStyle: classes.button,
-                        waiting: t.revoking(),
-                        complete: t.revoke(),
-                        failed: t.revoke(),
-                    }}>
-                    <ActionButton
-                        onClick={approveCallback}
-                        disabled={approveState.loading}
-                        loading={approveState.loading}
-                        className={classes.button}>
-                        {approveState.loading ? t.revoking() : t.revoke()}
-                    </ActionButton>
-                </ChainBoundary>
-            </ListItem>
-        </div>
-    )
+                    <ChainBoundary
+                        expectedChainId={chainId}
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        className={classes.chainBoundary}
+                        classes={{ switchButton: classes.button }}
+                        ActionButtonPromiseProps={{
+                            fullWidth: false,
+                            init: t.revoke(),
+                            startIcon: null,
+                            failIcon: null,
+                            waitingIcon: null,
+                            className: classes.button,
+                            failedButtonStyle: classes.button,
+                            waiting: t.revoking(),
+                            complete: t.revoke(),
+                            failed: t.revoke(),
+                        }}>
+                        <ActionButton
+                            onClick={approveCallback}
+                            disabled={approveState.loading}
+                            loading={approveState.loading}
+                            className={classes.button}>
+                            {approveState.loading ? t.revoking() : t.revoke()}
+                        </ActionButton>
+                    </ChainBoundary>
+                </ListItem>
+            </div>
+        )
 }

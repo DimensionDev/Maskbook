@@ -30,12 +30,12 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
     buttonTransform: {
-        ...(reason === 'timeline'
-            ? {
-                  width: '40px',
-                  transform: !isMinds(activatedSiteAdaptorUI!) ? 'translateX(200px) translateY(-78px)' : '',
-              }
-            : {}),
+        ...(reason === 'timeline' ?
+            {
+                width: '40px',
+                transform: !isMinds(activatedSiteAdaptorUI!) ? 'translateX(200px) translateY(-78px)' : '',
+            }
+        :   {}),
     },
     iconButton: {
         '&:hover': {

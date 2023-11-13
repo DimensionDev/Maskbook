@@ -13,12 +13,14 @@ export const flags = {
 
     shadowRootInit: {
         mode:
-            '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis ||
-            isBeta ||
-            isTest ||
-            !isEnvironment(Environment.HasBrowserAPI)
-                ? 'open'
-                : 'closed',
+            (
+                '__REACT_DEVTOOLS_GLOBAL_HOOK__' in globalThis ||
+                isBeta ||
+                isTest ||
+                !isEnvironment(Environment.HasBrowserAPI)
+            ) ?
+                'open'
+            :   'closed',
         delegatesFocus: true,
     } as const satisfies ShadowRootInit,
 

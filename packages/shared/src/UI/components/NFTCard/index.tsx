@@ -106,24 +106,22 @@ export function NFTImageCollectibleAvatar({
         )
 
     const title = token.collection?.name || token.contract?.name || ''
-    return isImageToken ? (
-        <NFTImage
-            title={title}
-            pluginID={pluginID}
-            size={size}
-            showBadge
-            token={token}
-            selectedToken={selectedToken}
-            onChange={onChange}
-            showNetwork={showNetwork}
-        />
-    ) : (
-        <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
-            <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
-                <Icons.MaskAvatar className={classes.maskIcon} />
-            </Box>
-        </ShadowRootTooltip>
-    )
+    return isImageToken ?
+            <NFTImage
+                title={title}
+                pluginID={pluginID}
+                size={size}
+                showBadge
+                token={token}
+                selectedToken={selectedToken}
+                onChange={onChange}
+                showNetwork={showNetwork}
+            />
+        :   <ShadowRootTooltip {...COMMON_TOOLTIP_PROPS} title={title}>
+                <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
+                    <Icons.MaskAvatar className={classes.maskIcon} />
+                </Box>
+            </ShadowRootTooltip>
 }
 
 interface NFTImageProps {
@@ -163,11 +161,13 @@ export function NFTImage(props: NFTImageProps) {
                         isSameNFT(pluginID, token, selectedToken) ? classes.itemSelected : '',
                     )}
                 />
-                {showNetwork ? <ImageIcon className={classes.networkIcon} icon={iconURL} size={20} /> : null}
+                {showNetwork ?
+                    <ImageIcon className={classes.networkIcon} icon={iconURL} size={20} />
+                :   null}
 
-                {showBadge && isSameNFT(pluginID, token, selectedToken) ? (
+                {showBadge && isSameNFT(pluginID, token, selectedToken) ?
                     <Icons.Selected className={classes.itemIcon} />
-                ) : null}
+                :   null}
             </Box>
         </ShadowRootTooltip>
     )

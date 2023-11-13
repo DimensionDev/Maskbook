@@ -43,16 +43,14 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
     return usePortalShadowRoot((container) => (
         <TrackDialogHierarchy>
             <Dialog container={container} {...dialogProps} {...extraProps}>
-                {shouldReplaceExitWithBack ? (
+                {shouldReplaceExitWithBack ?
                     // replace onClose with onBack when and only when there is no onBack
                     <MaskDialogTitle
                         onBack={onBack || closeBothCompositionDialog}
                         onClose={onBack ? closeBothCompositionDialog : undefined}
                         children={title}
                     />
-                ) : (
-                    <MaskDialogTitle onBack={onBack} onClose={closeBothCompositionDialog} children={title} />
-                )}
+                :   <MaskDialogTitle onBack={onBack} onClose={closeBothCompositionDialog} children={title} />}
                 {children}
             </Dialog>
         </TrackDialogHierarchy>

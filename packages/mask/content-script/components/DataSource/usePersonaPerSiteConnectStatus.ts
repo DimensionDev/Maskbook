@@ -26,9 +26,8 @@ export function usePersonaPerSiteConnectStatus() {
         const currentSiteConnectedPersona = personas.find(checkSiteConnectedToCurrentPersona)
         if (!currentPersona || !currentSiteConnectedPersona) return
         return {
-            isSiteConnectedToCurrentPersona: currentPersona
-                ? checkSiteConnectedToCurrentPersona(currentPersona)
-                : false,
+            isSiteConnectedToCurrentPersona:
+                currentPersona ? checkSiteConnectedToCurrentPersona(currentPersona) : false,
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSiteConnectedPersonaPublicKey: currentSiteConnectedPersona?.identifier.rawPublicKey,
         }

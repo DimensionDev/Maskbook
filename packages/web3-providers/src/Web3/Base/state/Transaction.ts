@@ -131,17 +131,17 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
 
         const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map(
             (x) =>
-                Object.keys(x.candidates).includes(id)
-                    ? {
-                          ...x,
-                          indexId: newId,
-                          candidates: {
-                              ...x.candidates,
-                              [newId]: transaction,
-                          },
-                          updatedAt: now,
-                      }
-                    : x,
+                Object.keys(x.candidates).includes(id) ?
+                    {
+                        ...x,
+                        indexId: newId,
+                        candidates: {
+                            ...x.candidates,
+                            [newId]: transaction,
+                        },
+                        updatedAt: now,
+                    }
+                :   x,
         )
 
         await this.storage.setValue({
@@ -169,14 +169,14 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
 
         const transactions: Array<RecentTransaction<ChainId, Transaction>> = (all[chainId]?.[address_] ?? []).map(
             (x) =>
-                Object.keys(x.candidates).includes(id)
-                    ? {
-                          ...x,
-                          indexId: id,
-                          status,
-                          updatedAt: now,
-                      }
-                    : x,
+                Object.keys(x.candidates).includes(id) ?
+                    {
+                        ...x,
+                        indexId: id,
+                        status,
+                        updatedAt: now,
+                    }
+                :   x,
         )
 
         await this.storage.setValue({

@@ -210,7 +210,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                             onAddressChange={setSelectedAddress}
                             identity={identity}
                         />
-                        {tabs.length > 0 && currentTab ? (
+                        {tabs.length > 0 && currentTab ?
                             <div className={classes.tabs}>
                                 <TabContext value={currentTab}>
                                     <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
@@ -225,7 +225,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                     </MaskTabList>
                                 </TabContext>
                             </div>
-                        ) : null}
+                        :   null}
                     </div>
                     <div className={classes.content}>{component}</div>
                     <div className={classes.footer}>

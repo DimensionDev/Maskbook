@@ -175,11 +175,9 @@ export function useLineChart(
                 const { y: yValue, width: w } = textNodeBox
                 const boxHalfWidth = w / 2
                 const offset =
-                    position.x - boxHalfWidth < 0
-                        ? boxHalfWidth - position.x
-                        : position.x + boxHalfWidth > contentWidth
-                        ? -(position.x + boxHalfWidth - contentWidth)
-                        : 0
+                    position.x - boxHalfWidth < 0 ? boxHalfWidth - position.x
+                    : position.x + boxHalfWidth > contentWidth ? -(position.x + boxHalfWidth - contentWidth)
+                    : 0
                 const boxArrowX = 42.5 - offset
                 const isFirstIndex = position.x === 35
 

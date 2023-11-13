@@ -218,10 +218,9 @@ export const TransactionDetail = memo(function TransactionDetail() {
 
     const gasUsedPercent = tx ? (tx.gas_used * 100) / tx.gas : 0
     const gasFeeInState = !isRecentTx && !tx ? transactionState?.fee?.eth : undefined
-    const gasFee = tx
-        ? formatWeiToEther(multipliedBy(tx.gas_used, tx.effective_gas_price))
-        : gasFeeInState
-        ? new BigNumber(gasFeeInState)
+    const gasFee =
+        tx ? formatWeiToEther(multipliedBy(tx.gas_used, tx.effective_gas_price))
+        : gasFeeInState ? new BigNumber(gasFeeInState)
         : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
@@ -229,9 +228,9 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const toAddress = receiverAddress || transaction.to || tx?.to_address
 
     const loadingToAddress =
-        transactionState?.type === 'transfer'
-            ? !receiverAddress && (loadingTx || loadingTxInput)
-            : !transaction.to && loadingTx
+        transactionState?.type === 'transfer' ?
+            !receiverAddress && (loadingTx || loadingTxInput)
+        :   !transaction.to && loadingTx
     return (
         <>
             <Box p={2} overflow="auto" data-hide-scrollbar>
@@ -248,7 +247,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                         {StatusLabelMap[status]}
                     </ProgressiveText>
                 </Box>
-                {transactionId ? (
+                {transactionId ?
                     <Box className={classes.field}>
                         <Typography className={classes.fieldName}>{t.transaction_hash()}</Typography>
                         <Typography className={classes.fieldValue}>
@@ -256,7 +255,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                             <CopyButton size={16} text={transactionId} sx={{ ml: 0.5 }} />
                         </Typography>
                     </Box>
-                ) : null}
+                :   null}
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t.transaction_link()}</Typography>
                     <Typography className={classes.fieldValue}>
@@ -296,11 +295,11 @@ export const TransactionDetail = memo(function TransactionDetail() {
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t.amount()}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
-                        {tx && nativeToken
-                            ? `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, {
-                                  significant: 6,
-                              })} ${nativeToken.symbol}`
-                            : ''}
+                        {tx && nativeToken ?
+                            `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, {
+                                significant: 6,
+                            })} ${nativeToken.symbol}`
+                        :   ''}
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
@@ -322,37 +321,35 @@ export const TransactionDetail = memo(function TransactionDetail() {
                         {tx ? formatWeiToGwei(tx.effective_gas_price).toFixed(6) : ''}
                     </ProgressiveText>
                 </Box>
-                {tx?.max_priority_fee_per_gas ? (
+                {tx?.max_priority_fee_per_gas ?
                     <Box className={classes.field}>
                         <Typography className={classes.fieldName}>{t.transaction_priority_fee()}</Typography>
                         <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                             {tx ? formatWeiToGwei(tx.max_priority_fee_per_gas).toFixed(6) : ''}
                         </ProgressiveText>
                     </Box>
-                ) : null}
-                {tx?.max_fee_per_gas ? (
+                :   null}
+                {tx?.max_fee_per_gas ?
                     <Box className={classes.field}>
                         <Typography className={classes.fieldName}>{t.transaction_max_fee()}</Typography>
                         <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                             {tx ? formatWeiToGwei(tx.max_fee_per_gas).toFixed(6) : ''}
                         </ProgressiveText>
                     </Box>
-                ) : null}
+                :   null}
                 <Box className={classes.field}>
                     <Typography className={classes.fieldName}>{t.transaction_fee()}</Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
-                        {gasCost ? (
+                        {gasCost ?
                             <>
                                 {' ≈ '}
                                 <FormattedCurrency value={gasCost} formatter={formatCurrency} />
                             </>
-                        ) : (
-                            ''
-                        )}
+                        :   ''}
                     </ProgressiveText>
                 </Box>
-                {logs?.length ? (
+                {logs?.length ?
                     <>
                         <Typography variant="h2" className={classes.sectionName}>
                             {t.activity_log()}
@@ -366,9 +363,9 @@ export const TransactionDetail = memo(function TransactionDetail() {
                             ))}
                         </ol>
                     </>
-                ) : null}
+                :   null}
             </Box>
-            {isRecentTx && status === NOT_DEPEND ? (
+            {isRecentTx && status === NOT_DEPEND ?
                 <Box className={classes.actionGroup}>
                     <ActionButton className={classes.speedupButton} fullWidth onClick={handleSpeedup}>
                         {t.speed_up()}
@@ -377,7 +374,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                         {t.cancel()}
                     </ActionButton>
                 </Box>
-            ) : null}
+            :   null}
         </>
     )
 })

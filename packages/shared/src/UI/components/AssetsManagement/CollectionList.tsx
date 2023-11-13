@@ -198,15 +198,16 @@ export const CollectionList = memo(function CollectionList({
         [loadAssets, loadVerifiedBy, account],
     )
 
-    const sidebar = disableSidebar ? null : (
-        <SelectNetworkSidebar
-            chainId={chainId}
-            className={classes.sidebar}
-            onChainChange={handleChainChange}
-            pluginID={pluginID}
-            networks={networks}
-        />
-    )
+    const sidebar =
+        disableSidebar ? null : (
+            <SelectNetworkSidebar
+                chainId={chainId}
+                className={classes.sidebar}
+                onChainChange={handleChainChange}
+                pluginID={pluginID}
+                networks={networks}
+            />
+        )
 
     if (!collections.length && loading && !error && account)
         return (
@@ -248,7 +249,7 @@ export const CollectionList = memo(function CollectionList({
                 {sidebar}
                 <div className={classes.main} ref={forkedMainColumnRef}>
                     <CollectionHeader className={classes.collectionHeader} onResetCollection={handleCollectionChange} />
-                    {currentCollection ? (
+                    {currentCollection ?
                         <ExpandedCollection
                             gridProps={gridProps}
                             pluginID={pluginID}
@@ -265,15 +266,14 @@ export const CollectionList = memo(function CollectionList({
                             selectedAsset={selectedAsset}
                             onItemClick={onItemClick}
                         />
-                    ) : (
-                        <Box className={classes.grid}>
-                            {pendingAdditionalAssetCount > 0 ? (
+                    :   <Box className={classes.grid}>
+                            {pendingAdditionalAssetCount > 0 ?
                                 <CollectionSkeleton
                                     id="additional-assets"
                                     count={pendingAdditionalAssetCount}
                                     expanded
                                 />
-                            ) : null}
+                            :   null}
                             {additional.map((asset) => (
                                 <CollectibleItem
                                     key={`additional.${asset.chainId}.${asset.address}.${asset.tokenId}`}
@@ -310,8 +310,10 @@ export const CollectionList = memo(function CollectionList({
                                 )
                             })}
                         </Box>
-                    )}
-                    {error ? <RetryHint hint={false} retry={retry} /> : null}
+                    }
+                    {error ?
+                        <RetryHint hint={false} retry={retry} />
+                    :   null}
                 </div>
             </div>
         </Box>

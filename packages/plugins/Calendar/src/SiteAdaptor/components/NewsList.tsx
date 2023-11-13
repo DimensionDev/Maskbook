@@ -132,11 +132,11 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
     return (
         <div className={classes.container} ref={listRef}>
             <div className={classes.paddingWrap}>
-                {isLoading && !list?.length ? (
+                {isLoading && !list?.length ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>
-                ) : !empty && listAfterDate.length ? (
+                : !empty && listAfterDate.length ?
                     listAfterDate.map((key) => {
                         return (
                             <div key={key}>
@@ -166,9 +166,7 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
                             </div>
                         )
                     })
-                ) : (
-                    <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>
-                )}
+                :   <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>}
             </div>
         </div>
     )

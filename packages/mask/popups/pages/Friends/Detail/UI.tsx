@@ -106,19 +106,17 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                         <Icons.Comeback />
                     </button>
                     <Box />
-                    {isLocal ? (
+                    {isLocal ?
                         <button onClick={onDelete} type="submit" className={classes.back} disabled={deleting}>
                             <Icons.Delete />
                         </button>
-                    ) : null}
+                    :   null}
                 </Box>
                 <Box className={classes.info}>
                     <Box>
-                        {avatar ? (
+                        {avatar ?
                             <Avatar src={avatar} style={{ width: 60, height: 60 }} />
-                        ) : (
-                            <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />
-                        )}
+                        :   <Icons.NextIdAvatar size={60} style={{ borderRadius: 99 }} />}
                     </Box>
                     <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
                         {publicKey ? formatPersonaFingerprint(publicKey) : null}
@@ -143,15 +141,14 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                     </Typography>
                 </Box>
             </Box>
-            {profiles.length ? (
+            {profiles.length ?
                 <ConnectedAccounts profiles={profiles} localProfile={localProfile} avatar={avatar} />
-            ) : (
-                <div className={classes.emptyContainer}>
+            :   <div className={classes.emptyContainer}>
                     <EmptyStatus className={classes.empty}>
                         {t.popups_encrypted_friends_no_associated_accounts()}
                     </EmptyStatus>
                 </div>
-            )}
+            }
         </Box>
     )
 })

@@ -106,9 +106,11 @@ export function ActivityCard(props: ActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
-                activity.priceInToken &&
-                !isZero(activity.priceInToken.amount) ? (
+                {(
+                    ![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
+                    activity.priceInToken &&
+                    !isZero(activity.priceInToken.amount)
+                ) ?
                     <div className={classes.salePrice}>
                         {(activity.paymentToken?.logoURL && (
                             <img
@@ -128,46 +130,46 @@ export function ActivityCard(props: ActivityCardProps) {
                             })}
                         </Typography>
                     </div>
-                ) : null}
+                :   null}
             </div>
             <div className={classes.flex}>
-                {activity.send ? (
+                {activity.send ?
                     <Typography className={classes.textBase}>
                         {t.plugin_collectible_from()}
                         <strong title={activity.send.address}>
-                            {type === ActivityType.Mint
-                                ? Utils.formatAddress(ZERO_ADDRESS, 4)
-                                : activity.send.nickname ||
-                                  (activity.send.address ? Utils.formatAddress(activity.send.address, 4) : '-')}
+                            {type === ActivityType.Mint ?
+                                Utils.formatAddress(ZERO_ADDRESS, 4)
+                            :   activity.send.nickname ||
+                                (activity.send.address ? Utils.formatAddress(activity.send.address, 4) : '-')
+                            }
                         </strong>
                     </Typography>
-                ) : null}
+                :   null}
                 <Typography className={classes.textBase}>
-                    {activity.receive && activity.from?.address ? (
+                    {activity.receive && activity.from?.address ?
                         <>
                             {t.plugin_collectible_to()}
                             <strong title={activity.receive.address}>
-                                {type === ActivityType.Mint
-                                    ? Utils.formatAddress(activity.from?.address, 4)
-                                    : activity.receive.nickname ||
-                                      (activity.receive.address
-                                          ? Utils.formatAddress(activity.receive.address, 4)
-                                          : '-')}
+                                {type === ActivityType.Mint ?
+                                    Utils.formatAddress(activity.from?.address, 4)
+                                :   activity.receive.nickname ||
+                                    (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
+                                }
                             </strong>
                         </>
-                    ) : null}
+                    :   null}
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp), {
                             addSuffix: true,
                         })}
-                    {activity.hash ? (
+                    {activity.hash ?
                         <Link
                             className={classes.link}
                             href={Utils.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut className={classes.linkOut} size={16} />
                         </Link>
-                    ) : null}
+                    :   null}
                 </Typography>
             </div>
         </div>

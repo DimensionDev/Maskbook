@@ -36,9 +36,9 @@ const useStyles = makeStyles()((theme) => ({
     menu: {
         background: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
     },
 }))
 

@@ -16,7 +16,7 @@ export const ProvidedBy = memo<ProvidedByProps>(({ providerLink, providerName })
             <Typography fontSize={14} fontWeight={500}>
                 {providerName}
             </Typography>
-            {providerLink ? (
+            {providerLink ?
                 <Link
                     href={providerLink}
                     underline="none"
@@ -25,7 +25,7 @@ export const ProvidedBy = memo<ProvidedByProps>(({ providerLink, providerName })
                     sx={{ display: 'inline-flex' }}>
                     <Icons.LinkOut size={16} color="#6E767D" />
                 </Link>
-            ) : null}
+            :   null}
         </Stack>
     )
 })

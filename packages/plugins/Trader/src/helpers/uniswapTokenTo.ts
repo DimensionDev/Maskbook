@@ -12,9 +12,8 @@ export function uniswapTokenTo(token: Token) {
         decimals: token.decimals,
         address: formatEthereumAddress(token.address),
         chainId: uniswapChainIdTo(token.chainId),
-        schema: ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '')
-            ? SchemaType.Native
-            : SchemaType.ERC20,
+        schema:
+            ['eth', 'matic', 'bnb'].includes(token.name?.toLowerCase() ?? '') ? SchemaType.Native : SchemaType.ERC20,
         id: token.symbol,
     } as Web3Helper.FungibleTokenAll
 }

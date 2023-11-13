@@ -49,14 +49,14 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
         (type: GasOptionType, option: GasOption) => {
             setGasOptionType(type)
             onChange?.(
-                isEIP1559
-                    ? {
-                          maxFeePerGas: option.suggestedMaxFeePerGas,
-                          maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
-                      }
-                    : {
-                          gasPrice: option.suggestedMaxFeePerGas,
-                      },
+                isEIP1559 ?
+                    {
+                        maxFeePerGas: option.suggestedMaxFeePerGas,
+                        maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
+                    }
+                :   {
+                        gasPrice: option.suggestedMaxFeePerGas,
+                    },
             )
         },
         [isEIP1559, onChange],

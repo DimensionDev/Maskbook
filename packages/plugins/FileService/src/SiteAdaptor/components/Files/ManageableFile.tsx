@@ -37,9 +37,9 @@ const useStyles = makeStyles()((theme) => ({
     menu: {
         minWidth: 229,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     row: {
         display: 'flex',
@@ -134,7 +134,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                 <Typography className={cx(classes.metaValue, classes.rightGap)}>
                     {formatFileSize(file.size, true)}
                 </Typography>
-                {file.key ? (
+                {file.key ?
                     <Typography className={classes.meta}>
                         <FileServiceTrans.file_key
                             components={{
@@ -143,7 +143,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                             values={{ key: file.key }}
                         />
                     </Typography>
-                ) : null}
+                :   null}
             </div>
         </FileFrame>
     )

@@ -281,9 +281,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, isNFT])
 
     const floorPrice =
-        trending.dataProvider === SourceType.CoinMarketCap
-            ? last(stats)?.[1] ?? market?.current_price
-            : market?.current_price
+        trending.dataProvider === SourceType.CoinMarketCap ?
+            last(stats)?.[1] ?? market?.current_price
+        :   market?.current_price
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
@@ -314,21 +314,20 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         LinkProps={{ className: classes.name, title: coinName }}>
                                         {coinName}
                                     </Linking>
-                                    {coin.symbol ? (
+                                    {coin.symbol ?
                                         <Typography component="span" className={classes.symbol}>
                                             (<em className={classes.symbolText}>{coin.symbol}</em>)
                                         </Typography>
-                                    ) : null}
+                                    :   null}
                                 </Typography>
-                                {typeof coin.market_cap_rank === 'number' || result.rank ? (
+                                {typeof coin.market_cap_rank === 'number' || result.rank ?
                                     <Typography component="span" className={classes.rank} title="Index Cap Rank">
                                         {t.plugin_trader_rank({
                                             rank: result.rank?.toString() ?? coin.market_cap_rank?.toString() ?? '',
                                         })}
                                     </Typography>
-                                ) : null}
-                                {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) &&
-                                !isPreciseSearch ? (
+                                :   null}
+                                {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) && !isPreciseSearch ?
                                     <>
                                         <IconButton
                                             sx={{ padding: 0 }}
@@ -350,9 +349,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             onTokenChange={setResult}
                                         />
                                     </>
-                                ) : null}
+                                :   null}
                                 <ThemeProvider theme={MaskLightTheme}>
-                                    {isBuyable ? (
+                                    {isBuyable ?
                                         <Button
                                             color="primary"
                                             className={classes.buyButton}
@@ -362,8 +361,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             onClick={onBuyButtonClicked}>
                                             {t.buy_now()}
                                         </Button>
-                                    ) : null}
-                                    {isNFT && first(coin.home_urls) ? (
+                                    :   null}
+                                    {isNFT && first(coin.home_urls) ?
                                         <Button
                                             color="primary"
                                             className={classes.buyButton}
@@ -373,37 +372,34 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             onClick={() => window.open(first(coin.home_urls))}>
                                             {t.open()}
                                         </Button>
-                                    ) : null}
+                                    :   null}
                                 </ThemeProvider>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between" marginTop={2}>
                                 <Stack direction="row" gap={1} alignItems="center">
-                                    {market ? (
+                                    {market ?
                                         <Typography
                                             fontSize={18}
                                             fontWeight={500}
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
                                             {isNFT ? `${t.plugin_trader_floor_price()}: ` : null}
-                                            {floorPrice
-                                                ? formatCurrency(floorPrice, isNFT ? market.price_symbol : 'USD')
-                                                : '--'}
+                                            {floorPrice ?
+                                                formatCurrency(floorPrice, isNFT ? market.price_symbol : 'USD')
+                                            :   '--'}
                                         </Typography>
-                                    ) : (
-                                        <Typography fontSize={14} fontWeight={500} lineHeight="24px">
+                                    :   <Typography fontSize={14} fontWeight={500} lineHeight="24px">
                                             {t.plugin_trader_no_data()}
                                         </Typography>
-                                    )}
-                                    {isNFT && !isSpam ? (
+                                    }
+                                    {isNFT && !isSpam ?
                                         <IconButton onClick={promptReport} disabled={isReporting}>
-                                            {isReporting ? (
+                                            {isReporting ?
                                                 <LoadingBase size={16} />
-                                            ) : (
-                                                <Icons.Flag size={16} color={theme.palette.maskColor.dark} />
-                                            )}
+                                            :   <Icons.Flag size={16} color={theme.palette.maskColor.dark} />}
                                         </IconButton>
-                                    ) : null}
-                                    {market && !isNFT ? (
+                                    :   null}
+                                    {market && !isNFT ?
                                         <PriceChange
                                             change={
                                                 market.price_change_percentage_24h_in_currency ||
@@ -411,13 +407,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 0
                                             }
                                         />
-                                    ) : null}
+                                    :   null}
                                 </Stack>
-                                {isNFT && isSpam ? (
+                                {isNFT && isSpam ?
                                     <NFTSpamBadge />
-                                ) : isTokenSecurityEnable && tokenSecurity && !error ? (
+                                : isTokenSecurityEnable && tokenSecurity && !error ?
                                     <TokenSecurityBar tokenSecurity={tokenSecurity} />
-                                ) : null}
+                                :   null}
                             </Stack>
                         </Stack>
                     </Stack>
@@ -426,15 +422,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <CardContent className={classes.content}>
                 <Paper className={classes.body} elevation={0}>
                     {children}
-                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTab.Market ? (
+                    {(isCollectionProjectPopper || isTokenTagPopper) && currentTab === ContentTab.Market ?
                         <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
-                    ) : null}
+                    :   null}
                 </Paper>
-                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTab.Swap ? (
+                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTab.Swap ?
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>
-                ) : null}
+                :   null}
             </CardContent>
         </TrendingCard>
     )

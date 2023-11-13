@@ -124,11 +124,12 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
             link: urlcat('https://magiceden.io/item-details/:mint_address', {
                 mint_address: tokenMint,
             }),
-            creator: nft?.creators?.length
-                ? {
-                      address: nft.creators[0].address,
-                  }
-                : undefined,
+            creator:
+                nft?.creators?.length ?
+                    {
+                        address: nft.creators[0].address,
+                    }
+                :   undefined,
             owner: {
                 address: nft?.owner,
             },

@@ -58,16 +58,17 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
         owner: {
             address: asset.owners?.[0].owner_address,
         },
-        priceInToken: asset.last_sale
-            ? {
-                  amount: asset.last_sale.total_price?.toString() || '',
-                  // FIXME: cannot get payment token
-                  token:
-                      asset.last_sale.payment_token?.symbol === 'ETH'
-                          ? EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
-                          : WNATIVE[chainId],
-              }
-            : undefined,
+        priceInToken:
+            asset.last_sale ?
+                {
+                    amount: asset.last_sale.total_price?.toString() || '',
+                    // FIXME: cannot get payment token
+                    token:
+                        asset.last_sale.payment_token?.symbol === 'ETH' ?
+                            EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                        :   WNATIVE[chainId],
+                }
+            :   undefined,
         metadata: {
             chainId,
             name,

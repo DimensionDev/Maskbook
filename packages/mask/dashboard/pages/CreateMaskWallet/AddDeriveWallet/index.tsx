@@ -95,23 +95,24 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
     useWallet() // Warming up persist caching
     const wallets = useWallets()
     const existedSiblingQueries = useQueries({
-        queries: isReset
-            ? wallets.map((wallet) => ({
-                  queryKey: ['derive-address', mnemonicHash, wallet.derivationPath],
-                  queryFn: async () => {
-                      const derived = await Services.Wallet.generateAddressFromMnemonicWords(
-                          '',
-                          mnemonic,
-                          wallet.derivationPath,
-                      )
-                      const pathIndex = wallet.derivationPath?.split('/').pop()
-                      if (pathIndex && isSameAddress(derived, wallet.address)) {
-                          return Number.parseInt(pathIndex, 10)
-                      }
-                      return null
-                  },
-              }))
-            : EMPTY_LIST,
+        queries:
+            isReset ?
+                wallets.map((wallet) => ({
+                    queryKey: ['derive-address', mnemonicHash, wallet.derivationPath],
+                    queryFn: async () => {
+                        const derived = await Services.Wallet.generateAddressFromMnemonicWords(
+                            '',
+                            mnemonic,
+                            wallet.derivationPath,
+                        )
+                        const pathIndex = wallet.derivationPath?.split('/').pop()
+                        if (pathIndex && isSameAddress(derived, wallet.address)) {
+                            return Number.parseInt(pathIndex, 10)
+                        }
+                        return null
+                    },
+                }))
+            :   EMPTY_LIST,
     })
     const mergedIndexes = useMemo(() => {
         if (!isReset || existedSiblingQueries.length === 0) return sortBy(uniq(pathIndexes))

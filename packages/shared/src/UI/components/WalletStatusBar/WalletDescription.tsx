@@ -93,12 +93,18 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
-                        {verified ? <Icons.Verification size={18} /> : null}
-                        {onPendingClick ? <Icons.ArrowDrop /> : null}
+                        {verified ?
+                            <Icons.Verification size={18} />
+                        :   null}
+                        {onPendingClick ?
+                            <Icons.ArrowDrop />
+                        :   null}
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{formattedAddress}</span>
-                        {address ? <CopyButton size={14} className={classes.linkIcon} text={address} /> : null}
+                        {address ?
+                            <CopyButton size={14} className={classes.linkIcon} text={address} />
+                        :   null}
                         <Link
                             href={addressLink}
                             target="_blank"
@@ -110,7 +116,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                             className={classes.linkIcon}>
                             <Icons.LinkOut size={14} className={classes.linkIcon} />
                         </Link>
-                        {pending ? (
+                        {pending ?
                             <span
                                 className={classes.pending}
                                 onClick={(e) => {
@@ -120,7 +126,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                                 {t.recent_transaction_pending()}
                                 <LoadingBase size={12} className={classes.progress} />
                             </span>
-                        ) : null}
+                        :   null}
                     </Typography>
                 </Box>
             </Box>

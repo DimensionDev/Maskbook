@@ -263,7 +263,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
                 <Grid item xs={6}>
                     <div className={classes.tokenWrapper}>
-                        {contract.iconURL ? <img className={classes.icon} src={contract.iconURL} /> : null}
+                        {contract.iconURL ?
+                            <img className={classes.icon} src={contract.iconURL} />
+                        :   null}
                         <Typography
                             variant="body1"
                             color="textPrimary"

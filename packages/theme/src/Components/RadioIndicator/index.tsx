@@ -13,9 +13,7 @@ export const RadioIndicator = memo<Props>(function RadioIndicator({
     checkedButtonColor,
     ...rest
 }) {
-    return checked ? (
-        <Icons.RadioButtonChecked {...rest} color={checkedButtonColor} />
-    ) : (
-        <Icons.RadioButtonUnChecked {...rest} color={unCheckedButtonColor} />
-    )
+    return checked ?
+            <Icons.RadioButtonChecked {...rest} color={checkedButtonColor} />
+        :   <Icons.RadioButtonUnChecked {...rest} color={unCheckedButtonColor} />
 })

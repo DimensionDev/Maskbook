@@ -38,9 +38,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     imageContainer: {
         background:
-            theme.palette.mode === 'dark'
-                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
+            theme.palette.mode === 'dark' ?
+                'linear-gradient(180deg, #202020 0%, #181818 100%)'
+            :   'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         borderRadius: 8,
         overflow: 'hidden',
         width: '100%',
@@ -90,7 +90,9 @@ export const NFTImage = memo((props: NFTImageProps) => {
                     src={token.metadata?.imageURL ?? ''}
                     className={classes.image}
                 />
-                {selected ? <Icons.CheckCircle className={classes.icon} size={24} /> : null}
+                {selected ?
+                    <Icons.CheckCircle className={classes.icon} size={24} />
+                :   null}
             </Box>
         </Tooltip>
     )

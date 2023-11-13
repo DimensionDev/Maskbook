@@ -175,28 +175,27 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                 <Box className={classes.content}>
                     <Typography className={classes.title}>{t.airdrop_title({ symbol: 'ARB' })}</Typography>
                     <Typography className={classes.timeTips}>{timeTips}</Typography>
-                    {!account ? (
+                    {!account ?
                         <Typography className={classes.tips}>{t.no_account_tips({ symbol: 'ARB' })}</Typography>
-                    ) : (
-                        <>
-                            {!isEligible ? (
+                    :   <>
+                            {!isEligible ?
                                 <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography>
-                            ) : null}
-                            {isClaimed ? (
+                            :   null}
+                            {isClaimed ?
                                 <Typography className={classes.tips}>
                                     {t.claimed_tips({ amount: amount ?? '', symbol: 'ARB' })}
                                 </Typography>
-                            ) : null}
-                            {isEligible && !isClaimed ? (
+                            :   null}
+                            {isEligible && !isClaimed ?
                                 <Box className={classes.actions}>
                                     <Box>
                                         <Typography className={classes.amount}>
                                             {amount} {tokenDetail.data?.symbol}
                                         </Typography>
                                         <Typography className={classes.claimable}>
-                                            {activityStatus === ActivityStatus.IN_PROGRESS
-                                                ? t.eligible_to_claim()
-                                                : t.claimable()}
+                                            {activityStatus === ActivityStatus.IN_PROGRESS ?
+                                                t.eligible_to_claim()
+                                            :   t.claimable()}
                                         </Typography>
                                     </Box>
                                     <ActionButton
@@ -205,18 +204,18 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                         className={classes.claimButton}
                                         disabled={activityStatus !== ActivityStatus.IN_PROGRESS}
                                         endIcon={
-                                            providerType === ProviderType.WalletConnect ? (
+                                            providerType === ProviderType.WalletConnect ?
                                                 <ShadowRootTooltip title={t.wallet_connect_tips()} placement="top">
                                                     <Icons.Questions size={18} />
                                                 </ShadowRootTooltip>
-                                            ) : null
+                                            :   null
                                         }>
                                         {activityStatus === ActivityStatus.ENDED ? t.expired() : t.claim()}
                                     </ActionButton>
                                 </Box>
-                            ) : null}
+                            :   null}
                         </>
-                    )}
+                    }
                 </Box>
             </Box>
         )

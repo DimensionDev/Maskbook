@@ -138,7 +138,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     />
                 }
                 endIcon={
-                    showHelperToken ? (
+                    showHelperToken ?
                         <ShadowRootTooltip
                             title={t.plugin_wallet_token_infinite_unlock_tips({
                                 provider: contractName ?? '',
@@ -152,7 +152,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                             disableTouchListener>
                             <HelpOutline className={classes.helpIcon} />
                         </ShadowRootTooltip>
-                    ) : null
+                    :   null
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>

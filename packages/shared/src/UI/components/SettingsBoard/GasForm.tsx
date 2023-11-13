@@ -151,21 +151,22 @@ export function GasForm(props: GasFormProps) {
     // #endregion
 
     useEffect(() => {
-        const payload = isEIP1559
-            ? {
-                  gas: gasLimit,
-                  maxFeePerGas: formatGweiToWei(maxFeePerGas).toString(),
-                  maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toString(),
-              }
-            : {
-                  gasPrice: formatGweiToWei(gasPrice).toString(),
-              }
+        const payload =
+            isEIP1559 ?
+                {
+                    gas: gasLimit,
+                    maxFeePerGas: formatGweiToWei(maxFeePerGas).toString(),
+                    maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toString(),
+                }
+            :   {
+                    gasPrice: formatGweiToWei(gasPrice).toString(),
+                }
         onChange?.(!errorCenter && !errorBottom ? payload : undefined)
     }, [errorCenter, errorBottom, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, gasOptions])
 
     return (
         <FormProvider {...methods}>
-            {isEIP1559 && isPositive(baseFeePerGas) ? (
+            {isEIP1559 && isPositive(baseFeePerGas) ?
                 <MaskAlert
                     classes={{
                         icon: classes.alertIcon,
@@ -177,7 +178,7 @@ export function GasForm(props: GasFormProps) {
                         fee: formatCurrency(formatWeiToGwei(baseFeePerGas), ''),
                     })}
                 </MaskAlert>
-            ) : null}
+            :   null}
             <Grid container direction="row" spacing={2}>
                 {isEIP1559 ? null : (
                     <Grid item xs={6}>
@@ -235,14 +236,14 @@ export function GasForm(props: GasFormProps) {
                         )}
                         name="gasLimit"
                     />
-                    {errorCenter ? (
+                    {errorCenter ?
                         <MaskAlert icon={<Icons.CircleWarning />} severity="error">
                             {errorCenter}
                         </MaskAlert>
-                    ) : null}
+                    :   null}
                 </Grid>
             </Grid>
-            {isEIP1559 ? (
+            {isEIP1559 ?
                 <Grid container direction="row" spacing={2}>
                     <Grid item xs={6}>
                         <Controller
@@ -257,9 +258,9 @@ export function GasForm(props: GasFormProps) {
                                         endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
                                     }}
                                     value={
-                                        isZero(maxPriorityFeePerGasByUser ?? 0)
-                                            ? maxPriorityFeePerGas
-                                            : maxPriorityFeePerGasByUser
+                                        isZero(maxPriorityFeePerGasByUser ?? 0) ? maxPriorityFeePerGas : (
+                                            maxPriorityFeePerGasByUser
+                                        )
                                     }
                                     label={
                                         <Typography className={classes.caption}>
@@ -309,12 +310,12 @@ export function GasForm(props: GasFormProps) {
                         />
                     </Grid>
                 </Grid>
-            ) : null}
-            {errorBottom ? (
+            :   null}
+            {errorBottom ?
                 <MaskAlert icon={<Icons.CircleWarning />} severity="error">
                     {errorBottom}
                 </MaskAlert>
-            ) : null}
+            :   null}
         </FormProvider>
     )
 }

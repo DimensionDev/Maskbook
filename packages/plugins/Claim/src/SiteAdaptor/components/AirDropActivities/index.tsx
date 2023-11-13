@@ -65,11 +65,11 @@ export const AirDropActivities = memo(() => {
         return (
             <Box className={classes.container}>
                 <AirDropActivityItem {...activity} onClaimSuccess={refetch} />
-                {open ? (
+                {open ?
                     <Alert severity="info" onClose={toggle} className={classes.alert}>
                         <AlertTitle className={classes.alertTitle}>{t.airdrop_alert()}</AlertTitle>
                     </Alert>
-                ) : null}
+                :   null}
             </Box>
         )
     }

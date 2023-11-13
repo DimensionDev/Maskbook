@@ -109,9 +109,9 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         boxSizing: 'border-box',
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
 }))
 
@@ -190,7 +190,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
 
     return (
         <div className={classes.content}>
-            {searching ? (
+            {searching ?
                 <div className={classes.header}>
                     <MaskTextField
                         wrapperProps={{ className: classes.searchInput }}
@@ -220,8 +220,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                         {t.cancel()}
                     </Button>
                 </div>
-            ) : (
-                <div className={classes.header}>
+            :   <div className={classes.header}>
                     <div className={classes.tabs}>
                         <Tabs value={tab} onChange={(_, newTab) => setTab(newTab as ProviderTabs)}>
                             {providers.map((x) => (
@@ -245,11 +244,10 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                         </Button>
                     </div>
                 </div>
-            )}
-            {visibleFiles.length ? (
+            }
+            {visibleFiles.length ?
                 renderList()
-            ) : (
-                <>
+            :   <>
                     <div className={classes.emptyBox}>
                         <Icons.EmptySimple size={36} />
                         <Typography className={classes.emptyMessage}>
@@ -264,14 +262,14 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                         </div>
                     )}
                 </>
-            )}
-            {selectMode && files.length ? (
+            }
+            {selectMode && files.length ?
                 <div className={classes.actions}>
                     <Button fullWidth disabled={!selectedIds.length} onClick={() => attachToPost(selectedFiles)}>
                         {t.confirm()}
                     </Button>
                 </div>
-            ) : null}
+            :   null}
         </div>
     )
 }

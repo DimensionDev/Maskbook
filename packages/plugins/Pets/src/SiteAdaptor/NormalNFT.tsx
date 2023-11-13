@@ -66,7 +66,7 @@ export function NormalNFT(props: NormalNFTProps) {
 
     return (
         <Drag moveHandle={moveHandle} baseWidth={150} baseHeight={150}>
-            {start && showMeta?.word ? (
+            {start && showMeta?.word ?
                 <Box className={classes.wordContent}>
                     <Box
                         className={cx(
@@ -79,7 +79,7 @@ export function NormalNFT(props: NormalNFTProps) {
                         {showMeta?.word}
                     </Box>
                 </Box>
-            ) : null}
+            :   null}
             <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
                     <Image
@@ -94,9 +94,9 @@ export function NormalNFT(props: NormalNFTProps) {
                     />
                 </div>
             </Box>
-            {infoShow ? (
+            {infoShow ?
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
-            ) : null}
+            :   null}
         </Drag>
     )
 }

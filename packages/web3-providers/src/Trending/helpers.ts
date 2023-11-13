@@ -23,7 +23,7 @@ export function getCurrency(chainId: Web3Helper.ChainIdAll, dataProvider: Source
     if (!dataProvider) return undefined
     const currencies = CURRENCIES_MAP[dataProvider]
     if (!currencies) return
-    return chainId && dataProvider === SourceType.NFTScan
-        ? currencies.find((x) => x.chainId === chainId)
-        : CURRENCIES_MAP[dataProvider]?.[0]
+    return chainId && dataProvider === SourceType.NFTScan ?
+            currencies.find((x) => x.chainId === chainId)
+        :   CURRENCIES_MAP[dataProvider]?.[0]
 }

@@ -278,9 +278,9 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                             <div className={classes.div}>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                        {patchedHistory.sender.message === ''
-                                            ? t.best_wishes()
-                                            : patchedHistory.sender.message}
+                                        {patchedHistory.sender.message === '' ?
+                                            t.best_wishes()
+                                        :   patchedHistory.sender.message}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
@@ -294,7 +294,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     </Typography>
                                 </div>
                             </div>
-                            {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ? (
+                            {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ?
                                 <>
                                     <ActionButton
                                         loading={isRefunding}
@@ -314,13 +314,13 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                             canSend && !isPasswordValid ? classes.disabledButton : '',
                                         )}
                                         size="large">
-                                        {canSend
-                                            ? t.share()
-                                            : isRefunding
-                                            ? t.refunding()
-                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded
-                                            ? t.empty()
-                                            : t.refund()}
+                                        {canSend ?
+                                            t.share()
+                                        : isRefunding ?
+                                            t.refunding()
+                                        : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
+                                            t.empty()
+                                        :   t.refund()}
                                     </ActionButton>
                                     <Popper
                                         className={classes.popper}
@@ -334,7 +334,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         <div className={classes.arrow} />
                                     </Popper>
                                 </>
-                            ) : null}
+                            :   null}
                         </section>
 
                         <section className={classes.footer}>
@@ -350,25 +350,26 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                             significant: 6,
                                             isPrecise: true,
                                         }),
-                                        claimedAmount: rpid
-                                            ? formatBalance(
-                                                  minus(patchedHistory.total, total_remaining ?? 0),
-                                                  historyToken.decimals,
-                                                  { significant: 6, isPrecise: true },
-                                              )
-                                            : '',
+                                        claimedAmount:
+                                            rpid ?
+                                                formatBalance(
+                                                    minus(patchedHistory.total, total_remaining ?? 0),
+                                                    historyToken.decimals,
+                                                    { significant: 6, isPrecise: true },
+                                                )
+                                            :   '',
                                         symbol: historyToken.symbol,
                                     }}
                                 />
                             </Typography>
-                            {historyToken.logoURL ? (
+                            {historyToken.logoURL ?
                                 <TokenIcon
                                     className={classes.icon}
                                     address={historyToken.address}
                                     name={historyToken.name}
                                     logoURL={historyToken.logoURL}
                                 />
-                            ) : null}
+                            :   null}
                         </section>
                     </Box>
                 </Box>

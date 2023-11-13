@@ -183,9 +183,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             if (!picked) return
             dispatchTradeStore({
                 type:
-                    panelType === TokenPanel.Input
-                        ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
-                        : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                    panelType === TokenPanel.Input ?
+                        AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                    :   AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                 token: picked,
                 balance: '0',
             })
@@ -209,21 +209,24 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         const isTwitter = Sniffings.is_twitter_page
         const isFacebook = Sniffings.is_facebook_page
         const cashTag = isTwitter ? '$' : ''
-        return focusedTrade?.value && inputToken && outputToken
-            ? t.share_text({
-                  input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, {
-                      significant: 6,
-                  }),
-                  input_symbol: `${cashTag}${inputToken.symbol}`,
-                  output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, {
-                      significant: 6,
-                  }),
-                  output_symbol: `${cashTag}${outputToken.symbol}`,
-                  account_promote: t.account_promote({
-                      context: isTwitter ? 'twitter' : isFacebook ? 'facebook' : 'default',
-                  }),
-              })
-            : ''
+        return focusedTrade?.value && inputToken && outputToken ?
+                t.share_text({
+                    input_amount: formatBalance(focusedTrade.value.value?.inputAmount, inputToken.decimals, {
+                        significant: 6,
+                    }),
+                    input_symbol: `${cashTag}${inputToken.symbol}`,
+                    output_amount: formatBalance(focusedTrade.value.value?.outputAmount, outputToken.decimals, {
+                        significant: 6,
+                    }),
+                    output_symbol: `${cashTag}${outputToken.symbol}`,
+                    account_promote: t.account_promote({
+                        context:
+                            isTwitter ? 'twitter'
+                            : isFacebook ? 'facebook'
+                            : 'default',
+                    }),
+                })
+            :   ''
     }, [focusedTrade?.value, inputToken, outputToken, t])
 
     const onConfirm = useCallback(async () => {
@@ -385,9 +388,9 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
                     new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                         .multipliedBy(
-                            focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas)
-                                ? addGasMargin(focusedTrade?.value.gas)
-                                : '150000',
+                            focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas) ?
+                                addGasMargin(focusedTrade?.value.gas)
+                            :   '150000',
                         )
                         .integerValue()
                         .multipliedBy(smartPayConfig?.ratio ?? 1),
@@ -431,10 +434,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                 gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
             />
-            {focusedTrade?.value?.value &&
-            !isNativeTokenWrapper(focusedTrade.value.value) &&
-            inputToken &&
-            outputToken ? (
+            {(
+                focusedTrade?.value?.value &&
+                !isNativeTokenWrapper(focusedTrade.value.value) &&
+                inputToken &&
+                outputToken
+            ) ?
                 <ConfirmDialog
                     open={openConfirmDialog}
                     trade={focusedTrade.value.value}
@@ -447,7 +452,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
                     onConfirm={onConfirm}
                     onClose={onConfirmDialogClose}
                 />
-            ) : null}
+            :   null}
 
             <TraderStateBar
                 trades={sortedAllTradeComputed}

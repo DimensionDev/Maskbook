@@ -107,9 +107,9 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
                         async function update(q: typeof relation) {
                             for await (const rec of relation) {
                                 rec.value.favor =
-                                    rec.value.favor === RelationFavor.DEPRECATED
-                                        ? RelationFavor.UNCOLLECTED
-                                        : RelationFavor.COLLECTED
+                                    rec.value.favor === RelationFavor.DEPRECATED ?
+                                        RelationFavor.UNCOLLECTED
+                                    :   RelationFavor.COLLECTED
 
                                 await rec.update(rec.value)
                             }
@@ -330,9 +330,10 @@ export async function createOrUpdatePersonaDB(
         return createPersonaDB(
             {
                 ...record,
-                address: record.privateKey?.d
-                    ? bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(record.privateKey.d)))))
-                    : undefined,
+                address:
+                    record.privateKey?.d ?
+                        bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(record.privateKey.d)))))
+                    :   undefined,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
                 linkedProfiles: record.linkedProfiles ?? new Map(),
@@ -439,12 +440,13 @@ async function updateProfileDB(
 ): Promise<void> {
     const old = await t.objectStore('profiles').get(updating.identifier.toText())
     if (!old) throw new Error('Updating a non exists record')
-    const oldLinkedPersona = old.linkedPersona
-        ? new ECKeyIdentifier(
-              old.linkedPersona.curve,
-              old.linkedPersona.compressedPoint || old.linkedPersona.encodedCompressedKey!,
-          )
-        : undefined
+    const oldLinkedPersona =
+        old.linkedPersona ?
+            new ECKeyIdentifier(
+                old.linkedPersona.curve,
+                old.linkedPersona.compressedPoint || old.linkedPersona.encodedCompressedKey!,
+            )
+        :   undefined
 
     if (oldLinkedPersona && updating.linkedPersona && oldLinkedPersona !== updating.linkedPersona) {
         const oldIdentifier = ProfileIdentifier.from(old.identifier).expect(
@@ -676,9 +678,10 @@ function profileToDB(x: ProfileRecord): ProfileRecordDB {
         ...x,
         identifier: x.identifier.toText(),
         network: x.identifier.network,
-        linkedPersona: x.linkedPersona
-            ? { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.rawPublicKey }
-            : undefined,
+        linkedPersona:
+            x.linkedPersona ?
+                { curve: x.linkedPersona.curve, type: 'ec_key', compressedPoint: x.linkedPersona.rawPublicKey }
+            :   undefined,
     }
 }
 function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
@@ -690,12 +693,13 @@ function profileOutDB({ network, ...x }: ProfileRecordDB): ProfileRecord {
         identifier: ProfileIdentifier.from(x.identifier).expect(
             `data stored in the profile database should be a valid ProfileIdentifier, but found ${x.identifier}`,
         ),
-        linkedPersona: x.linkedPersona
-            ? new ECKeyIdentifier(
-                  x.linkedPersona.curve,
-                  x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
-              )
-            : undefined,
+        linkedPersona:
+            x.linkedPersona ?
+                new ECKeyIdentifier(
+                    x.linkedPersona.curve,
+                    x.linkedPersona.compressedPoint || x.linkedPersona.encodedCompressedKey!,
+                )
+            :   undefined,
     }
 }
 function personaRecordToDB(x: PersonaRecord): PersonaRecordDB {
@@ -714,9 +718,10 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
 
     const obj: PersonaRecord = {
         ...x,
-        address: x.privateKey?.d
-            ? bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(x.privateKey.d)))))
-            : undefined,
+        address:
+            x.privateKey?.d ?
+                bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(x.privateKey.d)))))
+            :   undefined,
         identifier,
         publicHexKey: identifier.publicKeyAsHex,
         linkedProfiles: convertRawMapToIdentifierMap(x.linkedProfiles, ProfileIdentifier),

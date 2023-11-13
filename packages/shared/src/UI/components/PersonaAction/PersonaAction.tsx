@@ -51,9 +51,9 @@ export function PersonaAction(props: PersonaActionProps) {
                     </Typography>
                     <Box sx={{ display: 'flex' }}>
                         <Typography className={classes.personaKey}>
-                            {currentPersona?.identifier
-                                ? formatPersonaFingerprint(currentPersona.identifier.rawPublicKey, 4)
-                                : '--'}
+                            {currentPersona?.identifier ?
+                                formatPersonaFingerprint(currentPersona.identifier.rawPublicKey, 4)
+                            :   '--'}
                         </Typography>
                         <CopyButton
                             size={16}

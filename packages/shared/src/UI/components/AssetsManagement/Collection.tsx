@@ -181,24 +181,24 @@ export const Collection = memo(
                     ref={containerRef}>
                     <div className={classes.grid}>
                         {renderAssets}
-                        {hasExtra ? (
+                        {hasExtra ?
                             <Typography component="div" className={classes.extraCount}>
                                 {count > 1002 ? '>999' : `+${count - 3}`}
                             </Typography>
-                        ) : null}
+                        :   null}
                     </div>
                     <div className={classes.info}>
                         <div className={classes.nameRow}>
                             <Typography ref={nameRef} className={classes.name} variant="body2">
                                 {collection.name}
                             </Typography>
-                            {verifiedBy?.length ? (
+                            {verifiedBy?.length ?
                                 <ShadowRootTooltip
                                     disableInteractive
                                     title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
-                            ) : null}
+                            :   null}
                         </div>
                         <Typography className={classes.tokenId} variant="body2" component="div">
                             {collection?.symbol || ''}

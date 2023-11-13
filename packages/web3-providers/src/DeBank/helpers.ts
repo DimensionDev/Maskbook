@@ -73,12 +73,14 @@ function toTxAsset(
     const token = token_dict[token_id]
     // token_dict might not contain value to current token_id
     if (!token) return null
-    const schema = token.decimals
-        ? isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
-            ? SchemaType.ERC20
-            : SchemaType.Native
-        : token.is_erc721
-        ? SchemaType.ERC721
+    const schema =
+        token.decimals ?
+            (
+                isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
+            ) ?
+                SchemaType.ERC20
+            :   SchemaType.Native
+        : token.is_erc721 ? SchemaType.ERC721
         : SchemaType.ERC1155
 
     if (process.env.NODE_ENV === 'development') {
@@ -136,9 +138,10 @@ export function formatTransactions(
             chainId,
             type: txType,
             cateType: transaction.cate_id,
-            cateName: transaction.cate_id
-                ? cate_dict[transaction.cate_id].name
-                : transaction.tx?.name || 'Contract Interaction',
+            cateName:
+                transaction.cate_id ?
+                    cate_dict[transaction.cate_id].name
+                :   transaction.tx?.name || 'Contract Interaction',
             timestamp: transaction.time_at * 1000,
             from,
             to,
@@ -147,9 +150,10 @@ export function formatTransactions(
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict, SEND)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict, RECEIVE)),
             ]),
-            fee: transaction.tx
-                ? { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
-                : undefined,
+            fee:
+                transaction.tx ?
+                    { eth: transaction.tx.eth_gas_fee?.toString(), usd: transaction.tx.usd_gas_fee?.toString() }
+                :   undefined,
             isScam: transaction.is_scam,
         }
     })

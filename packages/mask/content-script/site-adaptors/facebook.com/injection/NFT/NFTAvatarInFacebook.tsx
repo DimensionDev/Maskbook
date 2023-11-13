@@ -91,9 +91,10 @@ function NFTAvatarInFacebook() {
     }, [avatar?.avatarId, identity.avatar, isMobileFacebook])
 
     const size = useMemo(() => {
-        const ele = isMobileFacebook
-            ? searchFacebookAvatarOnMobileSelector().evaluate()
-            : searchFacebookAvatarSelector().evaluate()
+        const ele =
+            isMobileFacebook ?
+                searchFacebookAvatarOnMobileSelector().evaluate()
+            :   searchFacebookAvatarSelector().evaluate()
         if (ele) {
             const style = window.getComputedStyle(ele)
             return max([148, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])

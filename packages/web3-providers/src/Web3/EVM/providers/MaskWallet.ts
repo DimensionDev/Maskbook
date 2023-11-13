@@ -191,12 +191,12 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         if (!isSameAddress(this.hostedAccount, account?.address)) {
             await this.switchAccount(
                 account.address,
-                account.owner
-                    ? {
-                          account: account.owner,
-                          identifier: account.identifier,
-                      }
-                    : undefined,
+                account.owner ?
+                    {
+                        account: account.owner,
+                        identifier: account.identifier,
+                    }
+                :   undefined,
             )
         }
 

@@ -43,16 +43,14 @@ function NavigationLink(props: (typeof navigation)[0]) {
                 }}
                 to={to}
                 className={classNames(
-                    matched
-                        ? 'dark:bg-menu-dark bg-menu-light dark:text-link-dark bg-menu text-blue-600'
-                        : 'text-item-light dark:text-item-dark ',
+                    matched ?
+                        'dark:bg-menu-dark bg-menu-light dark:text-link-dark bg-menu text-blue-600'
+                    :   'text-item-light dark:text-item-dark ',
                     'group flex gap-x-3 rounded-md px-2 py-3 text-md leading-6 font-semibold hover:bg-gray-200 dark:hover:bg-[#2d2d32]',
                 )}>
-                {matched ? (
+                {matched ?
                     <props.iconMatched className="h-6 w-6 shrink-0" aria-hidden="true" />
-                ) : (
-                    <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
-                )}
+                :   <props.icon className="h-6 w-6 shrink-0" aria-hidden="true" />}
                 {name}
             </Link>
         </li>

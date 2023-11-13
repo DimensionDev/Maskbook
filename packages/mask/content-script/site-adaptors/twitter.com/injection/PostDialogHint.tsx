@@ -84,11 +84,12 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
     const t = useMaskSharedTrans()
 
     const onHintButtonClicked = useCallback(() => {
-        const content = sayHelloShowed[twitterBase.networkIdentifier].value
-            ? undefined
-            : makeTypedMessageText(
-                  t.setup_guide_say_hello_content() + t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' }),
-              )
+        const content =
+            sayHelloShowed[twitterBase.networkIdentifier].value ?
+                undefined
+            :   makeTypedMessageText(
+                    t.setup_guide_say_hello_content() + t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' }),
+                )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: isReplyPageSelector() ? 'reply' : reason,

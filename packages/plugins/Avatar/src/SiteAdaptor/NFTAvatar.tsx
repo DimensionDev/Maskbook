@@ -167,10 +167,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 <Typography variant="body1" color="textPrimary">
                     {t.nft_list_title()}
                 </Typography>
-                {account ? (
+                {account ?
                     <Typography variant="body1" color="textPrimary" className={classes.account}>
                         {t.nft_wallet_label()}: <ReversedAddress address={account} size={4} />
-                        {!hideWallet ? (
+                        {!hideWallet ?
                             <Button
                                 variant="text"
                                 onClick={() => SelectProviderModal.open()}
@@ -178,22 +178,21 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 className={classes.changeButton}>
                                 {t.nft_wallet_change()}
                             </Button>
-                        ) : null}
+                        :   null}
                     </Typography>
-                ) : null}
+                :   null}
             </Box>
             <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                 <Box className={classes.galleryItem}>
-                    {!loadFinish && !loadError && !collectibles.length ? (
+                    {!loadFinish && !loadError && !collectibles.length ?
                         loadingSkeletons
-                    ) : loadError || (!collectibles.length && !customCollectibles.length) ? (
+                    : loadError || (!collectibles.length && !customCollectibles.length) ?
                         <ReloadStatus
                             message={t.dashboard_no_collectible_found()}
                             actionLabel={t.retry()}
                             onRetry={nextPage}
                         />
-                    ) : (
-                        <List className={classes.list}>
+                    :   <List className={classes.list}>
                             {uniqBy(
                                 [...customCollectibles, ...collectibles],
                                 (x) => x.contract?.address && x.tokenId,
@@ -214,7 +213,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 {!loadFinish && <LoadingBase />}
                             </ElementAnchor>
                         </List>
-                    )}
+                    }
                 </Box>
 
                 <Box className={classes.buttons}>

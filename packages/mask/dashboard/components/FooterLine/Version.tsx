@@ -9,13 +9,14 @@ export function Version({ className }: { className?: string }) {
 
     return (
         <Typography className={className} variant="body2" component="span" color="inherit">
-            {env.channel === 'stable' || !env.COMMIT_HASH
-                ? t.version_of_stable({ version })
-                : t.version_of_unstable({
-                      version,
-                      build: env.channel,
-                      hash: env.COMMIT_HASH,
-                  })}
+            {env.channel === 'stable' || !env.COMMIT_HASH ?
+                t.version_of_stable({ version })
+            :   t.version_of_unstable({
+                    version,
+                    build: env.channel,
+                    hash: env.COMMIT_HASH,
+                })
+            }
         </Typography>
     )
 }

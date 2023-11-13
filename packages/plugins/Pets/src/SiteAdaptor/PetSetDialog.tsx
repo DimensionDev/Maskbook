@@ -267,7 +267,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     inputProps={{ ...params.inputProps }}
                     endAdornment={
                         <Box pr={2} display="flex" alignItems="center">
-                            {isLoading ? <LoadingBase size={20} /> : <Icons.ArrowDrop className={classes.arrowIcon} />}
+                            {isLoading ?
+                                <LoadingBase size={20} />
+                            :   <Icons.ArrowDrop className={classes.arrowIcon} />}
                         </Box>
                     }
                 />
@@ -290,13 +292,15 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             renderOption={(props, option) => (
                 <MenuItem {...props} key={option.tokenId}>
                     <Box className={classes.itemFix}>
-                        {!option.glbSupport ? (
+                        {!option.glbSupport ?
                             <img className={classes.thumbnail} key="thumbnail" src={option.metadata?.imageURL} />
-                        ) : null}
+                        :   null}
                         <Typography color={(theme) => theme.palette.maskColor.main} key="name">
                             {option?.metadata?.name}
                         </Typography>
-                        {option.glbSupport ? <img className={classes.glbIcon} key="glb" src={GLB3DIcon} /> : null}
+                        {option.glbSupport ?
+                            <img className={classes.glbIcon} key="glb" src={GLB3DIcon} />
+                        :   null}
                     </Box>
                 </MenuItem>
             )}

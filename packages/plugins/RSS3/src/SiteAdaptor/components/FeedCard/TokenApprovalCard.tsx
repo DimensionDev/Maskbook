@@ -72,7 +72,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
     return (
         <CardFrame type={CardType.TokenApproval} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                {verbose ? (
+                {verbose ?
                     <RSS3Trans.token_approval_verbose
                         values={{
                             user,
@@ -84,8 +84,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                             bold: <Label />,
                         }}
                     />
-                ) : (
-                    <RSS3Trans.token_approval
+                :   <RSS3Trans.token_approval
                         values={{
                             user,
                             amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
@@ -97,14 +96,14 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                             bold: <Label />,
                         }}
                     />
-                )}
+                }
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image classes={{ container: classes.tokenIcon }} src={metadata?.image} height={40} width={40} />
                     <Typography className={classes.value}>{`${amount} ${metadata.symbol}`}</Typography>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

@@ -44,12 +44,13 @@ export function FileServiceDialog({ onClose, selectMode, selectedFileIds, compos
     const [confirmed] = useTermsConfirmed()
 
     const initialEntries = useMemo(() => {
-        const OpenEntry = selectMode
-            ? {
-                  pathname: RoutePaths.FileSelector,
-                  search: '?' + urlcat('', { selectedFileIds: selectedFileIds?.join(',') }),
-              }
-            : RoutePaths.Browser
+        const OpenEntry =
+            selectMode ?
+                {
+                    pathname: RoutePaths.FileSelector,
+                    search: '?' + urlcat('', { selectedFileIds: selectedFileIds?.join(',') }),
+                }
+            :   RoutePaths.Browser
         return [RoutePaths.Exit, OpenEntry, RoutePaths.Terms]
     }, [selectMode, selectedFileIds])
     const initialIndex = confirmed ? 1 : 2

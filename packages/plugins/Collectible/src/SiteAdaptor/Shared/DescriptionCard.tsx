@@ -56,11 +56,9 @@ export function DescriptionCard(props: DescriptionCardProps) {
         <div className={classes.root}>
             <Typography className={classes.title}>{t.plugin_collectible_description_title()}</Typography>
             <div className={classes.content} lang="en">
-                {asset.metadata?.description ? (
+                {asset.metadata?.description ?
                     <Markdown className={classes.markdownContent}>{asset.metadata?.description}</Markdown>
-                ) : (
-                    <Typography className={classes.textContent}>-</Typography>
-                )}
+                :   <Typography className={classes.textContent}>-</Typography>}
             </div>
         </div>
     )

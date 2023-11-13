@@ -42,13 +42,13 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         <Box>
             <Box p={2} display="flex" flexDirection="column" rowGap={2}>
                 <Typography fontWeight={700}>{t.popups_wallet_backup_private_key()}</Typography>
-                {value ? (
+                {value ?
                     <Typography
                         p={1.5}
                         style={{ background: theme.palette.maskColor.input, wordWrap: 'break-word', borderRadius: 8 }}>
                         {value}
                     </Typography>
-                ) : null}
+                :   null}
                 <Typography>
                     <Trans
                         i18nKey="popups_export_private_key_tips"

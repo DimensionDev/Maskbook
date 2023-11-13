@@ -161,13 +161,14 @@ export async function normalizeBackupVersion2(item: BackupJSONFileVersion2): Pro
             derivationPath: wallet.derivationPath ? Some(wallet.derivationPath) : None,
             publicKey: isEC_Public_JsonWebKey(wallet.publicKey) ? Some(wallet.publicKey) : None,
             privateKey: isEC_Private_JsonWebKey(wallet.privateKey) ? Some(wallet.privateKey) : None,
-            mnemonic: wallet.mnemonic
-                ? Some({
-                      words: wallet.mnemonic.words,
-                      hasPassword: wallet.mnemonic.parameter.withPassword,
-                      path: wallet.mnemonic.parameter.path,
-                  })
-                : None,
+            mnemonic:
+                wallet.mnemonic ?
+                    Some({
+                        words: wallet.mnemonic.words,
+                        hasPassword: wallet.mnemonic.parameter.withPassword,
+                        path: wallet.mnemonic.parameter.path,
+                    })
+                :   None,
             createdAt: new Date(wallet.createdAt),
             updatedAt: new Date(wallet.updatedAt),
         }

@@ -154,7 +154,9 @@ export function PreviewCard(props: PreviewCardProps) {
     return (
         <article className={classes.card}>
             <div className={classes.header}>
-                {ChainIcon ? <ChainIcon className={classes.network} size={36} /> : null}
+                {ChainIcon ?
+                    <ChainIcon className={classes.network} size={36} />
+                :   null}
                 <Stack flexGrow={1} overflow="auto">
                     <Box display="flex" flexDirection="row" alignItems="center">
                         <Typography variant="h1" className={classes.title} title={grant.title}>
@@ -167,9 +169,10 @@ export function PreviewCard(props: PreviewCardProps) {
                             sx={{
                                 pointerEvents: 'none',
                                 borderRadius: '32px',
-                                backgroundColor: grant.active
-                                    ? theme.palette.maskColor.success
-                                    : alpha(theme.palette.maskColor.primary, 0.1),
+                                backgroundColor:
+                                    grant.active ?
+                                        theme.palette.maskColor.success
+                                    :   alpha(theme.palette.maskColor.primary, 0.1),
                             }}>
                             {t.grant_status({ context: grant.active ? 'active' : 'closed' })}
                         </Button>
@@ -200,16 +203,16 @@ export function PreviewCard(props: PreviewCardProps) {
                                     }}
                                 />
                             </Typography>
-                            {twitterProfile ? (
+                            {twitterProfile ?
                                 <Link className={classes.link} target="_blank" href={twitterProfile}>
                                     <SocialIcon url={twitterProfile} size={16} />
                                 </Link>
-                            ) : null}
-                            {grant.admin_profile.github_url ? (
+                            :   null}
+                            {grant.admin_profile.github_url ?
                                 <Link className={classes.link} href={grant.admin_profile.github_url} target="_blank">
                                     <SocialIcon url={grant.admin_profile.github_url} size={16} />
                                 </Link>
-                            ) : null}
+                            :   null}
                             <Link className={classes.link} href={grant.reference_url}>
                                 <SocialIcon url={grant.reference_url} size={16} />
                             </Link>
@@ -248,7 +251,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                {grant.active && isSupportedTenant ? (
+                {grant.active && isSupportedTenant ?
                     <Box sx={{ flex: 1 }}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
@@ -266,7 +269,7 @@ export function PreviewCard(props: PreviewCardProps) {
                             </Button>
                         </ChainBoundary>
                     </Box>
-                ) : null}
+                :   null}
             </Box>
         </article>
     )

@@ -7,9 +7,9 @@ import { BaseDescriptor } from './Base.js'
 export class ERC721Descriptor extends BaseDescriptor implements TransactionDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {
         const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract?.symbol && contract?.symbol.length > 15
-            ? `${contract?.symbol.slice(0, 12)}...`
-            : contract?.symbol
+        return contract?.symbol && contract?.symbol.length > 15 ?
+                `${contract?.symbol.slice(0, 12)}...`
+            :   contract?.symbol
     }
 
     override async compute(context: TransactionContext<ChainId, TransactionParameter>) {
@@ -63,24 +63,24 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                         }),
                         snackbar: {
                             successfulDescription:
-                                parameters?.approved === false
-                                    ? i18NextInstance.t('plugin_infra_descriptor_nft_revoke_success', {
-                                          symbol,
-                                          action,
-                                      })
-                                    : i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
-                                          symbol,
-                                          action,
-                                      }),
+                                parameters?.approved === false ?
+                                    i18NextInstance.t('plugin_infra_descriptor_nft_revoke_success', {
+                                        symbol,
+                                        action,
+                                    })
+                                :   i18NextInstance.t('plugin_infra_descriptor_nft_approve_success', {
+                                        symbol,
+                                        action,
+                                    }),
                             failedDescription: i18NextInstance.t('plugin_infra_descriptor_nft_approve_fail', {
                                 action: action.toLowerCase(),
                             }),
                         },
                         popup: {
                             erc721Spender:
-                                typeof parameters.operator === 'string' && action === 'Unlock'
-                                    ? parameters.operator
-                                    : undefined,
+                                typeof parameters.operator === 'string' && action === 'Unlock' ?
+                                    parameters.operator
+                                :   undefined,
                             method: name,
                         },
                     }

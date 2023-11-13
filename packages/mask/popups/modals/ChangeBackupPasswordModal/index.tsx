@@ -124,14 +124,14 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                                 placeholder={t.password()}
                                 autoFocus
                                 error={
-                                    errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big'
-                                        ? !!errors.oldPassword?.message
-                                        : false
+                                    errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big' ?
+                                        !!errors.oldPassword?.message
+                                    :   false
                                 }
                                 helperText={
-                                    errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big'
-                                        ? errors.oldPassword?.message
-                                        : ''
+                                    errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big' ?
+                                        errors.oldPassword?.message
+                                    :   ''
                                 }
                             />
                         )
@@ -146,14 +146,14 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                             {...field}
                             placeholder={t.popups_settings_new_backup_password()}
                             error={
-                                errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big'
-                                    ? !!errors.newPassword?.message
-                                    : false
+                                errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big' ?
+                                    !!errors.newPassword?.message
+                                :   false
                             }
                             helperText={
-                                errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big'
-                                    ? errors.newPassword?.message
-                                    : ''
+                                errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big' ?
+                                    errors.newPassword?.message
+                                :   ''
                             }
                         />
                     )}
@@ -166,14 +166,20 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                             {...field}
                             placeholder={t.reenter()}
                             error={
-                                errors.repeatPassword?.type !== 'too_small' && errors.repeatPassword?.type !== 'too_big'
-                                    ? !!errors.repeatPassword?.message
-                                    : false
+                                (
+                                    errors.repeatPassword?.type !== 'too_small' &&
+                                    errors.repeatPassword?.type !== 'too_big'
+                                ) ?
+                                    !!errors.repeatPassword?.message
+                                :   false
                             }
                             helperText={
-                                errors.repeatPassword?.type !== 'too_small' && errors.repeatPassword?.type !== 'too_big'
-                                    ? errors.repeatPassword?.message
-                                    : ''
+                                (
+                                    errors.repeatPassword?.type !== 'too_small' &&
+                                    errors.repeatPassword?.type !== 'too_big'
+                                ) ?
+                                    errors.repeatPassword?.message
+                                :   ''
                             }
                         />
                     )}

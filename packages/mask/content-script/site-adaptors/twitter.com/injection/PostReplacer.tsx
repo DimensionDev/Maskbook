@@ -2,9 +2,9 @@ import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostReplacer } from '../../../site-adaptor-infra/defaults/inject/PostReplacer.js'
 
 function resolveLangNode(node: HTMLElement) {
-    return node.hasAttribute('lang')
-        ? node
-        : node.querySelector<HTMLDivElement>('[lang]') ?? node.parentElement?.querySelector<HTMLDivElement>('[lang]')
+    return node.hasAttribute('lang') ? node : (
+            node.querySelector<HTMLDivElement>('[lang]') ?? node.parentElement?.querySelector<HTMLDivElement>('[lang]')
+        )
 }
 
 export function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostInfo) {

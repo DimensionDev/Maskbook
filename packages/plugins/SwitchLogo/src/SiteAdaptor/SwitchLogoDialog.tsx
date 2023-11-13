@@ -127,7 +127,7 @@ export const SwitchLogoDialog = memo(() => {
                     </Stack>
                 </Stack>
                 <Stack>
-                    {logoType === SwitchLogoType.Classics ? (
+                    {logoType === SwitchLogoType.Classics ?
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -146,9 +146,7 @@ export const SwitchLogoDialog = memo(() => {
                                 </Typography>
                             }
                         />
-                    ) : (
-                        <br />
-                    )}
+                    :   <br />}
                 </Stack>
                 <Stack className={classes.buttons}>
                     <Button variant="roundedContained" fullWidth onClick={onSave} disabled={disabled}>

@@ -154,12 +154,15 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     getCollectibleKey={getCollectibleKey}
                     onChange={handleChange}
                 />
-                {done ? null : (
-                    // There might be chains that has no assets, setting key to token size might stuck the loading
-                    <ElementAnchor key={dataUpdatedAt} callback={() => next?.()}>
-                        <LoadingBase size={36} />
-                    </ElementAnchor>
-                )}
+                {
+                    done ? null
+                        // There might be chains that has no assets, setting key to token size might stuck the loading
+                    : (
+                        <ElementAnchor key={dataUpdatedAt} callback={() => next?.()}>
+                            <LoadingBase size={36} />
+                        </ElementAnchor>
+                    )
+                }
             </div>
             <div className={classes.actionGroup}>
                 <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>

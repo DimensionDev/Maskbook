@@ -92,7 +92,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
                         </Box>
                     )
                 })}
-                {walletGroup.imported.length ? (
+                {walletGroup.imported.length ?
                     <Box>
                         <Typography className={classes.title}>{t.popups_wallet_imported_group_title()}</Typography>
                         <Box className={classes.title}>
@@ -106,7 +106,7 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
                             ))}
                         </Box>
                     </Box>
-                ) : null}
+                :   null}
             </Box>
         </ActionModal>
     )

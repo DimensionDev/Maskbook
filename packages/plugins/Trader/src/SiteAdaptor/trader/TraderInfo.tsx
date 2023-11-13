@@ -26,11 +26,11 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const { data: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
-        return trade.value?.gas && gasPrice
-            ? multipliedBy(gasPrice, trade.value?.gas)
-                  .integerValue()
-                  .toFixed()
-            : '0'
+        return trade.value?.gas && gasPrice ?
+                multipliedBy(gasPrice, trade.value?.gas)
+                    .integerValue()
+                    .toFixed()
+            :   '0'
     }, [trade.value?.gas, gasPrice])
 
     const gasFeeValueUSD = useMemo(() => {

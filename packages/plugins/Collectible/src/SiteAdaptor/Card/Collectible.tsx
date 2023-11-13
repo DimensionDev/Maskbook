@@ -217,33 +217,34 @@ export function Collectible() {
                                 title={_asset.metadata?.name || '-'}>
                                 <Typography className={classes.cardTitle} ref={titleRef}>
                                     {_asset.metadata?.name || '-'}
-                                    {_asset.collection?.verified && !outVerified ? (
+                                    {_asset.collection?.verified && !outVerified ?
                                         <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
-                                    ) : null}
+                                    :   null}
                                 </Typography>
                             </TextOverflowTooltip>
-                            {_asset.collection?.verified && outVerified ? (
+                            {_asset.collection?.verified && outVerified ?
                                 <Icons.Verification size={20} sx={{ marginLeft: 0.5 }} />
-                            ) : null}
+                            :   null}
 
-                            {isSpam ? (
+                            {isSpam ?
                                 <NFTSpamBadge ml="auto" />
-                            ) : (
-                                <IconButton
+                            :   <IconButton
                                     className={classes.reportButton}
                                     onClick={promptReport}
                                     disabled={isReporting}>
-                                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                                    {isReporting ?
+                                        <LoadingBase size={16} />
+                                    :   <Icons.Flag size={16} />}
                                 </IconButton>
-                            )}
+                            }
                         </Typography>
                     }
                     subheader={
-                        _asset.metadata?.description ? (
+                        _asset.metadata?.description ?
                             <Typography className={classes.subtitle} component="div" variant="body2">
                                 <Markdown className={classes.markdown}>{_asset.metadata.description}</Markdown>
                             </Typography>
-                        ) : null
+                        :   null
                     }
                 />
                 <CardContent className={classes.content}>
@@ -264,7 +265,7 @@ export function Collectible() {
                     </Paper>
                 </CardContent>
             </CollectiblePaper>
-            {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) ? (
+            {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) ?
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
                         {t.plugin_collectible_sale_end({
@@ -272,7 +273,7 @@ export function Collectible() {
                         })}
                     </Typography>
                 </Box>
-            ) : null}
+            :   null}
         </>
     )
 }

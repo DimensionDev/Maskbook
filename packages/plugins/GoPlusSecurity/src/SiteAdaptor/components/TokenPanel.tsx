@@ -14,9 +14,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 16,
         borderRadius: 9,
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
     subtitle: {
         color: theme.palette.text.secondary,
@@ -56,9 +56,9 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                     <Typography className={classes.subtitle}>{t.token_info_token_contract_address()}</Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.contract
-                                ? formatEthereumAddress(tokenSecurity.contract, 4)
-                                : DEFAULT_PLACEHOLDER}
+                            {tokenSecurity.contract ?
+                                formatEthereumAddress(tokenSecurity.contract, 4)
+                            :   DEFAULT_PLACEHOLDER}
                         </Typography>
                         <Link
                             lineHeight="14px"
@@ -75,11 +75,11 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                     <Typography className={classes.subtitle}>{t.token_info_contract_creator()}</Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.creator_address
-                                ? formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
-                                : DEFAULT_PLACEHOLDER}
+                            {tokenSecurity.creator_address ?
+                                formatEthereumAddress(tokenSecurity.creator_address ?? '', 4)
+                            :   DEFAULT_PLACEHOLDER}
                         </Typography>
-                        {tokenSecurity.creator_address ? (
+                        {tokenSecurity.creator_address ?
                             <Link
                                 lineHeight="14px"
                                 href={EVMExplorerResolver.addressLink(
@@ -92,18 +92,18 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                                     style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                                 />
                             </Link>
-                        ) : null}
+                        :   null}
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_info_contract_owner()}</Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
-                            {tokenSecurity.owner_address
-                                ? formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
-                                : DEFAULT_PLACEHOLDER}
+                            {tokenSecurity.owner_address ?
+                                formatEthereumAddress(tokenSecurity.owner_address ?? '', 4)
+                            :   DEFAULT_PLACEHOLDER}
                         </Typography>
-                        {tokenSecurity.owner_address ? (
+                        {tokenSecurity.owner_address ?
                             <Link
                                 lineHeight="14px"
                                 href={EVMExplorerResolver.addressLink(
@@ -114,7 +114,7 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut size={14} color={theme.palette.text.strong} />
                             </Link>
-                        ) : null}
+                        :   null}
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">

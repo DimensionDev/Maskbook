@@ -109,65 +109,61 @@ function Content() {
         <SnapshotCard
             title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}>
             <List className={classes.list}>
-                {results
-                    ? results.map((result, i) => (
-                          <ListItem className={classes.listItem} key={i}>
-                              <Box className={classes.listItemHeader}>
-                                  <TextOverflowTooltip
-                                      as={ShadowRootTooltip}
-                                      PopperProps={{
-                                          disablePortal: true,
-                                      }}
-                                      title={<Typography>{result.choice}</Typography>}
-                                      placement="top"
-                                      classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                      arrow>
-                                      <Typography className={cx(classes.choice, classes.ellipsisText)}>
-                                          {result.choice}
-                                      </Typography>
-                                  </TextOverflowTooltip>
-                                  <ShadowRootTooltip
-                                      PopperProps={{
-                                          disablePortal: true,
-                                      }}
-                                      classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                      title={
-                                          <Typography className={classes.ellipsisText}>
-                                              {result.powerDetail
-                                                  .filter((x) => x.power)
-                                                  .flatMap((detail, index) => {
-                                                      const name = formatCount(
-                                                          proposal.scores_by_strategy[i][index],
-                                                          2,
-                                                          true,
-                                                      )
-                                                      return [index === 0 ? '' : '+', name, detail.name]
-                                                  })
-                                                  .join(' ')}
-                                          </Typography>
-                                      }
-                                      placement="top"
-                                      arrow>
-                                      <Typography className={classes.power}>
-                                          {formatCount(proposal.scores[i], 2, true)}
-                                      </Typography>
-                                  </ShadowRootTooltip>
-                                  <Typography className={classes.ratio}>
-                                      {Number.parseFloat(result.percentage.toFixed(2))}%
-                                  </Typography>
-                              </Box>
-                              <Box className={classes.linearProgressWrap}>
-                                  <StyledLinearProgress
-                                      color="inherit"
-                                      variant="determinate"
-                                      value={result.percentage}
-                                  />
-                              </Box>
-                          </ListItem>
-                      ))
-                    : null}
+                {results ?
+                    results.map((result, i) => (
+                        <ListItem className={classes.listItem} key={i}>
+                            <Box className={classes.listItemHeader}>
+                                <TextOverflowTooltip
+                                    as={ShadowRootTooltip}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={<Typography>{result.choice}</Typography>}
+                                    placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                    arrow>
+                                    <Typography className={cx(classes.choice, classes.ellipsisText)}>
+                                        {result.choice}
+                                    </Typography>
+                                </TextOverflowTooltip>
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                    title={
+                                        <Typography className={classes.ellipsisText}>
+                                            {result.powerDetail
+                                                .filter((x) => x.power)
+                                                .flatMap((detail, index) => {
+                                                    const name = formatCount(
+                                                        proposal.scores_by_strategy[i][index],
+                                                        2,
+                                                        true,
+                                                    )
+                                                    return [index === 0 ? '' : '+', name, detail.name]
+                                                })
+                                                .join(' ')}
+                                        </Typography>
+                                    }
+                                    placement="top"
+                                    arrow>
+                                    <Typography className={classes.power}>
+                                        {formatCount(proposal.scores[i], 2, true)}
+                                    </Typography>
+                                </ShadowRootTooltip>
+                                <Typography className={classes.ratio}>
+                                    {Number.parseFloat(result.percentage.toFixed(2))}%
+                                </Typography>
+                            </Box>
+                            <Box className={classes.linearProgressWrap}>
+                                <StyledLinearProgress color="inherit" variant="determinate" value={result.percentage} />
+                            </Box>
+                        </ListItem>
+                    ))
+                :   null}
             </List>
-            {proposal.isEnd ? (
+            {proposal.isEnd ?
                 <Button
                     variant="roundedContained"
                     className={classes.resultButton}
@@ -184,7 +180,7 @@ function Content() {
                     }}>
                     {t.plugin_snapshot_download_report()}
                 </Button>
-            ) : null}
+            :   null}
         </SnapshotCard>
     )
 }

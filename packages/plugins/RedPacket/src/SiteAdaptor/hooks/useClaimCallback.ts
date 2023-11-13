@@ -27,15 +27,15 @@ export function useClaimCallback(
         // but it is more understandable to declare respectively
         const contractTransaction = new ContractTransaction(redPacketContract)
         const tx =
-            version === 4
-                ? await contractTransaction.fillAll(
-                      (redPacketContract as HappyRedPacketV4).methods.claim(id, password, from),
-                      config,
-                  )
-                : await contractTransaction.fillAll(
-                      (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, web3_utils.sha3(from)!),
-                      config,
-                  )
+            version === 4 ?
+                await contractTransaction.fillAll(
+                    (redPacketContract as HappyRedPacketV4).methods.claim(id, password, from),
+                    config,
+                )
+            :   await contractTransaction.fillAll(
+                    (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, web3_utils.sha3(from)!),
+                    config,
+                )
 
         return EVMWeb3.sendTransaction(tx, {
             chainId,

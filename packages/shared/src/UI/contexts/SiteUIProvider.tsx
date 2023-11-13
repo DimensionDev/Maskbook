@@ -20,12 +20,12 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <QueryClientProvider client={queryClient}>
-                {process.env.NODE_ENV === 'development'
-                    ? createPortal(
-                          <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />,
-                          document.body,
-                      )
-                    : null}
+                {process.env.NODE_ENV === 'development' ?
+                    createPortal(
+                        <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />,
+                        document.body,
+                    )
+                :   null}
                 <RootWeb3ContextProvider>
                     <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                 </RootWeb3ContextProvider>

@@ -78,7 +78,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
                 <ElementAnchor callback={() => next()}>
-                    {loading ? <LoadingBase className={classes.loading} /> : null}
+                    {loading ?
+                        <LoadingBase className={classes.loading} />
+                    :   null}
                 </ElementAnchor>
             </Box>
         </FeedOwnerContext.Provider>

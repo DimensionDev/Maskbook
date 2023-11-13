@@ -81,30 +81,30 @@ export function LeavePageConfirm(props: LeavePageConfirmProps) {
         onClose()
     }, [info, onClose, openDashboard])
 
-    return open ? (
-        <InjectedDialog
-            disableTitleBorder
-            open={open}
-            classes={{
-                paper: classes.root,
-                dialogTitle: classes.header,
-            }}
-            maxWidth="sm"
-            onClose={onClose}
-            title={info?.title}
-            titleBarIconStyle="close">
-            <DialogContent classes={{ root: classes.content }}>
-                <Stack>
-                    <Typography>{info?.text}</Typography>
-                </Stack>
-            </DialogContent>
-            <DialogActions classes={{ root: classes.actions }}>
-                <Stack width="100%">
-                    <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
-                        {info?.actionHint}
-                    </Button>
-                </Stack>
-            </DialogActions>
-        </InjectedDialog>
-    ) : null
+    return open ?
+            <InjectedDialog
+                disableTitleBorder
+                open={open}
+                classes={{
+                    paper: classes.root,
+                    dialogTitle: classes.header,
+                }}
+                maxWidth="sm"
+                onClose={onClose}
+                title={info?.title}
+                titleBarIconStyle="close">
+                <DialogContent classes={{ root: classes.content }}>
+                    <Stack>
+                        <Typography>{info?.text}</Typography>
+                    </Stack>
+                </DialogContent>
+                <DialogActions classes={{ root: classes.actions }}>
+                    <Stack width="100%">
+                        <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
+                            {info?.actionHint}
+                        </Button>
+                    </Stack>
+                </DialogActions>
+            </InjectedDialog>
+        :   null
 }

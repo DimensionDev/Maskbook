@@ -161,14 +161,14 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                     </Box>
                     <QRCode value={qrValue} ecLevel="L" size={120} quietZone={6} qrStyle="dots" />
                 </Box>
-                {words?.length ? (
+                {words?.length ?
                     <>
                         <Typography margin="24px 0" fontWeight={600}>
                             {t.create_account_identity_id()}
                         </Typography>
                         <MnemonicReveal words={words} indexed wordClass={classes.wordClass} />
                     </>
-                ) : null}
+                :   null}
 
                 <Box display="flex" alignItems="center" margin="24px 0">
                     <Icons.Info className={classes.infoIcon} />

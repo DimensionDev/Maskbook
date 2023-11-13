@@ -175,14 +175,14 @@ export const ConnectWalletModal = forwardRef<
                             />
                             <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                                 <Typography className={classes.connectWith}>
-                                    {loading
-                                        ? t.plugin_wallet_connect_to()
-                                        : connected
-                                        ? t.plugin_wallet_connected_to()
-                                        : t.plugin_wallet_connect_to()}{' '}
+                                    {loading ?
+                                        t.plugin_wallet_connect_to()
+                                    : connected ?
+                                        t.plugin_wallet_connected_to()
+                                    :   t.plugin_wallet_connect_to()}{' '}
                                     {Utils.providerResolver.providerName(providerType)}
                                 </Typography>
-                                {loading ? (
+                                {loading ?
                                     <Box display="flex" alignItems="center">
                                         <LoadingBase
                                             className={classes.progressIcon}
@@ -193,19 +193,21 @@ export const ConnectWalletModal = forwardRef<
                                             {t.initializing()}
                                         </Typography>
                                     </Box>
-                                ) : null}
-                                {!loading && error ? (
+                                :   null}
+                                {!loading && error ?
                                     <Typography className={classes.error} color="red" variant="body2">
-                                        {error.message?.includes('Already processing eth_requestAccounts') ||
-                                        error.message?.includes(
-                                            "Request of type 'wallet_requestPermissions' already pending for origin",
-                                        )
-                                            ? t.plugin_wallet_metamask_error_already_request()
-                                            : error.message ?? 'Something went wrong.'}
+                                        {(
+                                            error.message?.includes('Already processing eth_requestAccounts') ||
+                                            error.message?.includes(
+                                                "Request of type 'wallet_requestPermissions' already pending for origin",
+                                            )
+                                        ) ?
+                                            t.plugin_wallet_metamask_error_already_request()
+                                        :   error.message ?? 'Something went wrong.'}
                                     </Typography>
-                                ) : null}
+                                :   null}
                             </Box>
-                            {!connected && error ? (
+                            {!connected && error ?
                                 <ActionButton
                                     loading={loading}
                                     color="primary"
@@ -214,7 +216,7 @@ export const ConnectWalletModal = forwardRef<
                                     className={classes.retryButton}>
                                     {t.plugin_wallet_connect_to_retry()}
                                 </ActionButton>
-                            ) : null}
+                            :   null}
                         </Box>
                     </Card>
                 </Paper>
@@ -225,16 +227,15 @@ export const ConnectWalletModal = forwardRef<
                             <Trans
                                 i18nKey="plugin_wallet_connect_tip"
                                 components={{
-                                    providerLink: Utils.providerResolver.providerHomeLink(providerType) ? (
-                                        <Link
-                                            className={classes.tipLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            href={Utils.providerResolver.providerHomeLink(providerType)}
-                                        />
-                                    ) : (
-                                        <span />
-                                    ),
+                                    providerLink:
+                                        Utils.providerResolver.providerHomeLink(providerType) ?
+                                            <Link
+                                                className={classes.tipLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                href={Utils.providerResolver.providerHomeLink(providerType)}
+                                            />
+                                        :   <span />,
                                 }}
                                 values={{
                                     providerName: Utils.providerResolver.providerName(providerType),

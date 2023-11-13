@@ -69,9 +69,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
             },
             '&:after': {
                 position: 'absolute',
@@ -81,9 +82,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
             },
         },
         qrcodeContainer: {
@@ -125,21 +127,18 @@ export default memo(function Receive() {
     useTitle(t.wallet_receive())
 
     const name = isChain ? currentNetwork?.name : asset?.symbol
-    const MainIcon = isChain ? (
-        currentNetwork?.iconUrl ? (
-            <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
-        ) : (
-            <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} {...avatarProps} />
-        )
-    ) : (
-        <TokenIcon
-            chainId={chainId as ChainId}
-            address={address}
-            name={asset?.name}
-            logoURL={asset?.logoURL}
-            size={60}
-        />
-    )
+    const MainIcon =
+        isChain ?
+            currentNetwork?.iconUrl ?
+                <ImageIcon size={60} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
+            :   <Icon size={60} name={currentNetwork?.name} color={currentNetwork?.color} {...avatarProps} />
+        :   <TokenIcon
+                chainId={chainId as ChainId}
+                address={address}
+                name={asset?.name}
+                logoURL={asset?.logoURL}
+                size={60}
+            />
 
     return (
         <Box>
@@ -157,11 +156,9 @@ export default memo(function Receive() {
                         </div>
                     )}
                 </Box>
-                {name ? (
+                {name ?
                     <Typography className={classes.name}>{name}</Typography>
-                ) : (
-                    <Skeleton width={60} className={classes.name} />
-                )}
+                :   <Skeleton width={60} className={classes.name} />}
                 <Typography className={classes.address}>
                     <FormattedAddress address={account} formatter={formatEthereumAddress} size={4} />
                     <CopyButton text={account} size={18} className={classes.copyButton} />

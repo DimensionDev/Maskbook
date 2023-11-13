@@ -28,13 +28,15 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
 
     return (
         <>
-            {profileOpen ? <Web3ProfileDialog open onClose={() => setProfileOpen(false)} /> : null}
+            {profileOpen ?
+                <Web3ProfileDialog open onClose={() => setProfileOpen(false)} />
+            :   null}
 
-            {lensOpen && handle ? (
+            {lensOpen && handle ?
                 <DefaultWeb3ContextProvider value={{ chainId: ChainId.Matic }}>
                     <FollowLensDialog handle={handle} onClose={closeLensDialog} />
                 </DefaultWeb3ContextProvider>
-            ) : null}
+            :   null}
 
             <LensPopup />
         </>

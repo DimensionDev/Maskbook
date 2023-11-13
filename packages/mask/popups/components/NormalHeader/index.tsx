@@ -65,24 +65,21 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
     const handleBack = useCallback(() => navigate(-1), [])
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
 
-    const leftAction = hasNavigator ? null : canBack ? (
-        <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
-    ) : (
-        <Icons.Close className={classes.icon} onClick={onClose} />
-    )
+    const leftAction =
+        hasNavigator ? null
+        : canBack ? <Icons.Comeback className={classes.icon} onClick={customBackHandler ?? handleBack} />
+        : <Icons.Close className={classes.icon} onClick={onClose} />
 
     return (
         <Box className={classes.container}>
             <Box className={classes.header}>
-                {showTitle ? (
+                {showTitle ?
                     <>
                         {leftAction}
                         <Typography className={classes.title}>{title}</Typography>
                         {extension}
                     </>
-                ) : (
-                    <Icons.Mask className={classes.logo} />
-                )}
+                :   <Icons.Mask className={classes.logo} />}
             </Box>
             {tabList}
         </Box>

@@ -119,9 +119,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
         </svg>
     )
 
-    return hasRainbow ? (
-        <RainbowBox borderSize={borderSize}>{svgNode}</RainbowBox>
-    ) : (
-        <div className={classes.container}>{svgNode}</div>
-    )
+    return hasRainbow ?
+            <RainbowBox borderSize={borderSize}>{svgNode}</RainbowBox>
+        :   <div className={classes.container}>{svgNode}</div>
 }

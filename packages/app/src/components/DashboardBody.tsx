@@ -10,16 +10,15 @@ interface DashboardBodyProps {
 export const DashboardBody = memo<DashboardBodyProps>(({ children, borderless = false, clipEdge = true }) => {
     return (
         <div className="bg-white dark:bg-[#16161a] p-5 pt-0">
-            {borderless ? (
+            {borderless ?
                 children
-            ) : (
-                <div
+            :   <div
                     className={classNames('border rounded-lg border-line-light dark:border-neutral-800', {
                         'overflow-hidden': clipEdge,
                     })}>
                     {children}
                 </div>
-            )}
+            }
         </div>
     )
 })

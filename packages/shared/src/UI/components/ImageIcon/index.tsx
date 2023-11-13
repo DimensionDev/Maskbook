@@ -7,13 +7,14 @@ export interface ImageIconProps extends HTMLProps<HTMLImageElement> {
 }
 
 export const ImageIcon = memo(function ImageIcon({ size = 48, icon, iconFilterColor, ...rest }: ImageIconProps) {
-    const style: CSSProperties | undefined = iconFilterColor
-        ? {
-              filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`,
-              backdropFilter: 'blur(16px)',
-              ...rest.style,
-          }
-        : rest.style
+    const style: CSSProperties | undefined =
+        iconFilterColor ?
+            {
+                filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`,
+                backdropFilter: 'blur(16px)',
+                ...rest.style,
+            }
+        :   rest.style
 
     return <img height={size} width={size} src={icon?.toString()} {...rest} style={style} />
 })

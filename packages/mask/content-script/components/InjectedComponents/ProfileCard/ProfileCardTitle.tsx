@@ -131,7 +131,7 @@ export function ProfileCardTitle({
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.operations}>
-                    {nextIdBindings.length ? (
+                    {nextIdBindings.length ?
                         <SocialAccountList
                             nextIdBindings={nextIdBindings}
                             userId={userId}
@@ -142,12 +142,12 @@ export function ProfileCardTitle({
                             }}
                             anchorReference="anchorPosition"
                         />
-                    ) : null}
-                    {itsMe ? (
+                    :   null}
+                    {itsMe ?
                         <Web3ProfileSettingButton />
-                    ) : !tipsDisabled ? (
+                    : !tipsDisabled ?
                         <TipButton className={classes.tipButton} receiver={identity.identifier} />
-                    ) : null}
+                    :   null}
                 </div>
             </ProfileBar>
         </div>

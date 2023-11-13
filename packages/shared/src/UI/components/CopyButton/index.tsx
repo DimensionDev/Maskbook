@@ -70,11 +70,9 @@ export const CopyButton = memo<CopyButtonProps>(function CopyButton({
                 {...props}
                 fontSize={0}
                 className={cx(classes.root, className)}>
-                {active ? (
+                {active ?
                     <Icons.Check {...iconProps} color={theme.palette.maskColor.success} />
-                ) : (
-                    <Icons.Copy {...iconProps} className={classes.copy} />
-                )}
+                :   <Icons.Copy {...iconProps} className={classes.copy} />}
             </Link>
         </ShadowRootTooltip>
     )

@@ -108,13 +108,13 @@ export class NextIDStorageProvider {
             method: 'POST',
         })
 
-        return response
-            ? Ok({
-                  signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
-                  createdAt: response.created_at,
-                  uuid: response.uuid,
-              })
-            : Err(null)
+        return response ?
+                Ok({
+                    signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+                    createdAt: response.created_at,
+                    uuid: response.uuid,
+                })
+            :   Err(null)
     }
 
     /**

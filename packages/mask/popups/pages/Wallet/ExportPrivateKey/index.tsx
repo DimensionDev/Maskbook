@@ -44,9 +44,9 @@ const useStyles = makeStyles()((theme) => ({
     iconWrapper: {
         height: 120,
         background:
-            theme.palette.mode === 'light'
-                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+            theme.palette.mode === 'light' ?
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, #FFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.20) 0%, rgba(59, 153, 252, 0.20) 100%)'
+            :   'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
         borderRadius: 8,
         display: 'flex',
         justifyContent: 'center',
@@ -85,10 +85,9 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
 
         const words = await Services.Wallet.exportMnemonicWords(wallet.address).catch(() => '')
         if (!words) {
-            const primaryWallet = wallet.mnemonicId
-                ? await Services.Wallet.getPrimaryWalletByMnemonicId(wallet.mnemonicId)
-                : wallet.source === ImportSource.LocalGenerated
-                ? await Services.Wallet.getWalletPrimary()
+            const primaryWallet =
+                wallet.mnemonicId ? await Services.Wallet.getPrimaryWalletByMnemonicId(wallet.mnemonicId)
+                : wallet.source === ImportSource.LocalGenerated ? await Services.Wallet.getWalletPrimary()
                 : null
 
             if (!primaryWallet) return
@@ -112,22 +111,20 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         <TabContext value={currentTab}>
             <NormalHeader
                 tabList={
-                    !getMnemonicLoading && mnemonic ? (
+                    !getMnemonicLoading && mnemonic ?
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                             <Tab label={t.popups_wallet_name_mnemonic()} value={TabType.Mnemonic} />
                             <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
                             <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
                         </MaskTabList>
-                    ) : (
-                        <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
+                    :   <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
                             <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
                             <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
                         </MaskTabList>
-                    )
                 }
             />
             <Box p={2} display="flex" flexDirection="column" rowGap={2} flex={1}>
-                {!getMnemonicLoading && mnemonic ? (
+                {!getMnemonicLoading && mnemonic ?
                     <TabPanel className={classes.panel} value={TabType.Mnemonic}>
                         <Typography sx={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}>
                             {t.popups_wallet_backup_mnemonic_title()}
@@ -138,7 +135,7 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         </Typography>
                         <MnemonicDisplay mnemonic={mnemonic} />
                     </TabPanel>
-                ) : null}
+                :   null}
                 <TabPanel className={classes.panel} value={TabType.PrivateKey}>
                     <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
                         {t.popups_wallet_settings_export_private_key_title()}
@@ -151,15 +148,17 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         maxHeight="450px"
                         overflow="auto"
                         data-hide-scrollbar>
-                        {wallet?.mnemonicId &&
-                        walletGroup?.groups[wallet.mnemonicId] &&
-                        walletGroup?.groups[wallet.mnemonicId].length > 1 ? (
+                        {(
+                            wallet?.mnemonicId &&
+                            walletGroup?.groups[wallet.mnemonicId] &&
+                            walletGroup?.groups[wallet.mnemonicId].length > 1
+                        ) ?
                             walletGroup?.groups[wallet.mnemonicId].map((x, index) => (
                                 <PrivateKeyDisplay wallet={x} key={index} />
                             ))
-                        ) : wallet ? (
+                        : wallet ?
                             <PrivateKeyDisplay wallet={wallet} hiddenArrow />
-                        ) : null}
+                        :   null}
                     </Box>
                 </TabPanel>
                 <TabPanel className={classes.panel} value={TabType.JsonFile}>
@@ -170,13 +169,13 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                 </TabPanel>
             </Box>
 
-            {currentTab === TabType.JsonFile ? (
+            {currentTab === TabType.JsonFile ?
                 <BottomController>
                     <ActionButton onClick={onExport} fullWidth loading={loading} disabled={loading}>
                         {t.export()}
                     </ActionButton>
                 </BottomController>
-            ) : null}
+            :   null}
         </TabContext>
     )
 })

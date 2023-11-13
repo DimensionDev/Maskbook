@@ -122,9 +122,8 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         [isDeposit, balance, inputTokenBalance],
     )
 
-    const balanceGasMinus = EVMUtils.isNativeTokenAddress(protocol.bareToken.address)
-        ? balanceAsBN.minus(estimatedGas)
-        : balanceAsBN
+    const balanceGasMinus =
+        EVMUtils.isNativeTokenAddress(protocol.bareToken.address) ? balanceAsBN.minus(estimatedGas) : balanceAsBN
 
     const needsSwap = protocol.type === ProtocolType.Lido && !isDeposit
 
@@ -132,9 +131,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (isLessThanOrEqualTo(tokenAmount, 0)) return
         try {
             setEstimatedGas(
-                isDeposit
-                    ? await protocol.depositEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount)
-                    : await protocol.withdrawEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount),
+                isDeposit ?
+                    await protocol.depositEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount)
+                :   await protocol.withdrawEstimate(account, chainId, EVMWeb3.getWeb3({ chainId }), tokenAmount),
             )
         } catch {
             // do nothing
@@ -218,8 +217,8 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 expectedChainId={chainId}
                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                 classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                {isDeposit ? (
-                    inputTokenBalance && !isZero(inputTokenBalance) ? (
+                {isDeposit ?
+                    inputTokenBalance && !isZero(inputTokenBalance) ?
                         <EthereumERC20TokenApprovedBoundary
                             amount={approvalData?.approveAmount.toFixed() ?? ''}
                             token={approvalData?.approveToken}
@@ -236,8 +235,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 executor={executor}
                             />
                         </EthereumERC20TokenApprovedBoundary>
-                    ) : (
-                        <ActionButtonPromise
+                    :   <ActionButtonPromise
                             className={classes.button}
                             init={validationMessage || t.plugin_savings_deposit() + ' ' + protocol.bareToken.symbol}
                             waiting={t.plugin_savings_process_deposit()}
@@ -248,14 +246,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             noUpdateEffect
                             executor={executor}
                         />
-                    )
-                ) : (
-                    <ActionButtonPromise
+
+                :   <ActionButtonPromise
                         init={
-                            needsSwap
-                                ? t.plugin_savings_swap_token({ token: protocol.bareToken.symbol })
-                                : validationMessage ||
-                                  t.plugin_savings_withdraw_token({ token: protocol.stakeToken.symbol })
+                            needsSwap ?
+                                t.plugin_savings_swap_token({ token: protocol.bareToken.symbol })
+                            :   validationMessage ||
+                                t.plugin_savings_withdraw_token({ token: protocol.stakeToken.symbol })
                         }
                         waiting={t.plugin_savings_process_withdraw()}
                         failed={t.failed()}
@@ -266,7 +263,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         noUpdateEffect
                         executor={executor}
                     />
-                )}
+                }
             </WalletConnectedBoundary>
         )
     }, [executor, validationMessage, needsSwap, protocol, isDeposit, approvalData, chainId, inputTokenBalance])
@@ -290,20 +287,17 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                 />
                             </div>
 
-                            {loading ? (
+                            {loading ?
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
                                     <LoadingBase width={16} height={16} />
                                 </Typography>
-                            ) : (
-                                <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
+                            :   <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
                                     &asymp; <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
-                                    {isPositive(estimatedGas) ? (
+                                    {isPositive(estimatedGas) ?
                                         <span className={classes.gasFee}>+ {formatBalance(estimatedGas, 18)} ETH</span>
-                                    ) : (
-                                        <span />
-                                    )}
+                                    :   <span />}
                                 </Typography>
-                            )}
+                            }
                         </>
                     )}
 

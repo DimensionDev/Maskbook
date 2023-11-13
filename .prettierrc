@@ -5,6 +5,7 @@
   "singleQuote": true,
   "bracketSameLine": true,
   "tabWidth": 4,
+  "experimentalTernaries": true,
   "overrides": [
     {
       "files": ["*rc", "package.json", "tsconfig*", "*.md", "*.yaml", "*.yml"],

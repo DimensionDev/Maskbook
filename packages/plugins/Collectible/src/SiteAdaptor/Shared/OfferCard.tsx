@@ -63,21 +63,19 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
 
         if (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
 
-        return offer.priceInToken?.token.address ? (
-            <TokenIcon
-                name={offer.priceInToken.token.name}
-                symbol={offer.priceInToken.token.symbol}
-                address={offer.priceInToken.token.address}
-                size={20}
-                style={{
-                    fontSize: 14,
-                }}
-            />
-        ) : (
-            <Typography className={classes.fallbackSymbol}>
-                {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
-            </Typography>
-        )
+        return offer.priceInToken?.token.address ?
+                <TokenIcon
+                    name={offer.priceInToken.token.name}
+                    symbol={offer.priceInToken.token.symbol}
+                    address={offer.priceInToken.token.address}
+                    size={20}
+                    style={{
+                        fontSize: 14,
+                    }}
+                />
+            :   <Typography className={classes.fallbackSymbol}>
+                    {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+                </Typography>
     }
 
     return (
@@ -93,32 +91,30 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                                 })}
                             </strong>
                         </Typography>
-                        {offer.price?.usd ? (
+                        {offer.price?.usd ?
                             <Typography className={classes.textBase} fontSize={12}>
                                 <strong>
                                     <FormattedCurrency value={offer.price.usd} formatter={formatCurrency} />
                                 </strong>
                             </Typography>
-                        ) : null}
+                        :   null}
                     </div>
                 </div>
                 <div className={classes.flex}>
                     <Typography className={classes.textBase}>{t.plugin_collectible_from()}</Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
-                        {offer.maker?.address ? (
+                        {offer.maker?.address ?
                             <strong style={{ margin: '0px 4px' }}>{Utils.formatAddress(offer.maker.address, 4)}</strong>
-                        ) : (
-                            '-'
-                        )}
+                        :   '-'}
                     </Typography>
 
                     <Typography className={classes.textBase}>
-                        {isValidTimestamp(offer.createdAt)
-                            ? formatDistanceToNow(Math.ceil(offer.createdAt!), {
-                                  addSuffix: true,
-                              })
-                            : '-'}
+                        {isValidTimestamp(offer.createdAt) ?
+                            formatDistanceToNow(Math.ceil(offer.createdAt!), {
+                                addSuffix: true,
+                            })
+                        :   '-'}
                         {isValidTimestamp(offer.expiredAt) && (
                             <>
                                 <span style={{ margin: '0 4px' }}>{t.plugin_collectible_expires_in()}</span>

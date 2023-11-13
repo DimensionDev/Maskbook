@@ -159,10 +159,12 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
                             autoEscape
                             textToHighlight={secondaryText}
                         />
-                        {rawPublicKey ? (
+                        {rawPublicKey ?
                             <CopyButton className={classes.actionIcon} size={16} text={rawPublicKey} />
-                        ) : null}
-                        {profile.fromNextID ? <Icons.NextIDMini className={classes.badge} /> : null}
+                        :   null}
+                        {profile.fromNextID ?
+                            <Icons.NextIDMini className={classes.badge} />
+                        :   null}
                     </div>
                 }
             />

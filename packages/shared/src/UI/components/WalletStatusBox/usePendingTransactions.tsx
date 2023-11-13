@@ -45,25 +45,26 @@ export function usePendingTransactions() {
 
     const transactions = pendingTransactions.slice(0, 5).filter((tx) => !meltedTxHashes.includes(tx.id))
     // #endregion
-    const summary = pendingTransactions.length ? (
-        <section className={classes.summaryWrapper}>
-            <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
-                {pendingTransactions.length ? (
-                    <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
-                        {t.wallet_status_pending({ count: pendingTransactions.length })}
+    const summary =
+        pendingTransactions.length ?
+            <section className={classes.summaryWrapper}>
+                <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
+                    {pendingTransactions.length ?
+                        <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
+                            {t.wallet_status_pending({ count: pendingTransactions.length })}
+                        </Typography>
+                    :   null}
+                </div>
+                {pendingTransactions.length ?
+                    <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
+                        {t.wallet_status_pending_clear_all()}
                     </Typography>
-                ) : null}
-            </div>
-            {pendingTransactions.length ? (
-                <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
-                    {t.wallet_status_pending_clear_all()}
-                </Typography>
-            ) : null}
-        </section>
-    ) : null
+                :   null}
+            </section>
+        :   null
 
     const transactionList =
-        transactions.length > 0 ? (
+        transactions.length > 0 ?
             <TransactionList
                 transactions={transactions}
                 onClear={(tx) => {
@@ -71,7 +72,7 @@ export function usePendingTransactions() {
                     removeRecentTx(tx.id)
                 }}
             />
-        ) : null
+        :   null
 
     return { summary, transactionList }
 }

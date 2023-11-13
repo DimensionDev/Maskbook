@@ -63,18 +63,20 @@ export function PriceCard(props: PriceCardProps) {
     if (((!topListing && orders.error) || orders.isLoading) && !sourceType) return null
 
     if (!topListing && !orders.isLoading)
-        return sourceType ? (
-            <div className={classes.wrapper}>
-                <div className={classes.priceZone}>
-                    <div className={classes.offerBox}>
-                        <Typography textAlign="left" fontSize={14} fontWeight={400}>
-                            {t.plugin_collectible_no_listings()}
-                        </Typography>
+        return sourceType ?
+                <div className={classes.wrapper}>
+                    <div className={classes.priceZone}>
+                        <div className={classes.offerBox}>
+                            <Typography textAlign="left" fontSize={14} fontWeight={400}>
+                                {t.plugin_collectible_no_listings()}
+                            </Typography>
+                        </div>
+                        {sourceType ?
+                            <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                        :   null}
                     </div>
-                    {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
                 </div>
-            </div>
-        ) : null
+            :   null
 
     const priceUSD = formatCurrency(topListing?.price?.usd ?? 0, 'USD', { onlyRemainTwoOrZeroDecimal: true })
 
@@ -94,10 +96,9 @@ export function PriceCard(props: PriceCardProps) {
     return (
         <div className={classes.wrapper}>
             <div className={classes.priceZone}>
-                {orders.isLoading ? (
+                {orders.isLoading ?
                     <PriceLoadingSkeleton />
-                ) : (
-                    <div className={classes.offerBox}>
+                :   <div className={classes.offerBox}>
                         {renderTokenSymbol()}
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: '18px', lineHeight: '18px' }}>
@@ -108,15 +109,17 @@ export function PriceCard(props: PriceCardProps) {
                                 )}
                             </strong>
                         </Typography>
-                        {topListing?.price?.usd ? (
+                        {topListing?.price?.usd ?
                             <Typography className={classes.textBase}>
                                 ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '≈'}
                                 {priceUSD})
                             </Typography>
-                        ) : null}
+                        :   null}
                     </div>
-                )}
-                {sourceType ? <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} /> : null}
+                }
+                {sourceType ?
+                    <SourceProviderSwitcher selected={sourceType} onSelect={setSourceType} />
+                :   null}
             </div>
         </div>
     )

@@ -34,7 +34,9 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
     }
     return (
         <video ref={videoRef} muted {...VideoProps}>
-            {blobURL ? <source src={blobURL} type="video/mp4" /> : null}
+            {blobURL ?
+                <source src={blobURL} type="video/mp4" />
+            :   null}
         </video>
     )
 })

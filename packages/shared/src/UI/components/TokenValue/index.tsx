@@ -52,23 +52,25 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
         return formatCurrency(new BigNumber(amount).times(tokenPrice), 'USD', { onlyRemainTwoOrZeroDecimal: true })
     }, [amount, tokenPrice])
 
-    return amount && token ? (
-        <div className={cx(classes.container, className)} {...rest}>
-            <div className={classes.token}>
-                <Typography className={classes.amount} component="strong" fontWeight="700" fontSize="24px">
-                    {amount}
-                </Typography>
-                <TokenIcon
-                    size={24}
-                    className={classes.tokenIcon}
-                    pluginID={pluginID}
-                    chainId={chainId}
-                    name={token.name}
-                    address={token.address}
-                    logoURL={token.logoURL}
-                />
+    return amount && token ?
+            <div className={cx(classes.container, className)} {...rest}>
+                <div className={classes.token}>
+                    <Typography className={classes.amount} component="strong" fontWeight="700" fontSize="24px">
+                        {amount}
+                    </Typography>
+                    <TokenIcon
+                        size={24}
+                        className={classes.tokenIcon}
+                        pluginID={pluginID}
+                        chainId={chainId}
+                        name={token.name}
+                        address={token.address}
+                        logoURL={token.logoURL}
+                    />
+                </div>
+                {priceUSD ?
+                    <Typography className={classes.price}>{`\u2248 ${priceUSD ?? '0'}`}</Typography>
+                :   null}
             </div>
-            {priceUSD ? <Typography className={classes.price}>{`\u2248 ${priceUSD ?? '0'}`}</Typography> : null}
-        </div>
-    ) : null
+        :   null
 }

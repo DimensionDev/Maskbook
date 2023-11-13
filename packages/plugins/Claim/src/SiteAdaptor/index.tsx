@@ -38,10 +38,12 @@ const site: Plugin.SiteAdaptor.Definition = {
 
         return (
             <>
-                {claimOpen ? <ClaimDialog open onClose={closeClaimDialog} /> : null}
-                {successOpen ? (
+                {claimOpen ?
+                    <ClaimDialog open onClose={closeClaimDialog} />
+                :   null}
+                {successOpen ?
                     <ClaimSuccessDialog open onClose={closeSuccessDialog} tokenAddress={tokenAddress} amount={amount} />
-                ) : null}
+                :   null}
             </>
         )
     },

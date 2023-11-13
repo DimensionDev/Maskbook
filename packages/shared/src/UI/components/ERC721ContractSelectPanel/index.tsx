@@ -96,22 +96,26 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                     {label ?? t.select_an_nft()}
                 </Typography>
-                {!collection?.address ||
-                !Utils.isValidAddress(collection.address) ||
-                (collection.source === SourceType.SimpleHash && !collection?.id) ? null : (
-                    <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
+                {(
+                    !collection?.address ||
+                    !Utils.isValidAddress(collection.address) ||
+                    (collection.source === SourceType.SimpleHash && !collection?.id)
+                ) ?
+                    null
+                :   <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
                         {t.wallet_balance()}: {balance ? balance : '0'}
-                    </Typography>
-                )}
+                    </Typography>}
             </div>
             <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>
-                    {collection?.iconURL ? <img className={classes.icon} src={collection?.iconURL} /> : null}
-                    {collection?.name ? (
+                    {collection?.iconURL ?
+                        <img className={classes.icon} src={collection?.iconURL} />
+                    :   null}
+                    {collection?.name ?
                         <Typography className={classes.nftName} color="textPrimary">
                             {collection?.name}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </div>
                 <ExpandMoreIcon className={classes.expandIcon} />
             </div>

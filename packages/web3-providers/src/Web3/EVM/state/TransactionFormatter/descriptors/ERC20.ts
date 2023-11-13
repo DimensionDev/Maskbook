@@ -55,20 +55,19 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
 
                         const spendingCap = new BigNumber(spender?.amount ?? spender?.rawAmount ?? 0).toString()
 
-                        const successfulDescription = isZero(parameters.value)
-                            ? isZero(spendingCap)
-                                ? revokeSuccessDescription
-                                : i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
-                                      tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
-                                      spender: spender?.address
-                                          ? formatEthereumAddress(spender?.address, 4)
-                                          : 'spender',
-                                  })
-                            : isZero(spendingCap)
-                            ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
-                                  symbol: token?.symbol,
-                              })
-                            : approveSuccessDescription
+                        const successfulDescription =
+                            isZero(parameters.value) ?
+                                isZero(spendingCap) ? revokeSuccessDescription
+                                :   i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
+                                        tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
+                                        spender:
+                                            spender?.address ? formatEthereumAddress(spender?.address, 4) : 'spender',
+                                    })
+                            : isZero(spendingCap) ?
+                                i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
+                                    symbol: token?.symbol,
+                                })
+                            :   approveSuccessDescription
 
                         const successfulTitle =
                             isZero(parameters.value) && !isZero(spendingCap) ? approveTitle : undefined
@@ -81,9 +80,8 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             snackbar: {
                                 successfulDescription,
                                 successfulTitle,
-                                failedDescription: isZero(parameters.value)
-                                    ? revokeFailedDescription
-                                    : approveFailedDescription,
+                                failedDescription:
+                                    isZero(parameters.value) ? revokeFailedDescription : approveFailedDescription,
                             },
                             popup: {
                                 method: name,
@@ -116,9 +114,10 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         description: approveDescription,
                         popup: {
                             spender: parameters.spender,
-                            tokenDescription: leftShift(parameters?.value, token?.decimals).gt(pow10(9))
-                                ? i18NextInstance.t('popups_wallet_token_infinite_unlock')
-                                : undefined,
+                            tokenDescription:
+                                leftShift(parameters?.value, token?.decimals).gt(pow10(9)) ?
+                                    i18NextInstance.t('popups_wallet_token_infinite_unlock')
+                                :   undefined,
                             method: name,
                         },
                         snackbar: {

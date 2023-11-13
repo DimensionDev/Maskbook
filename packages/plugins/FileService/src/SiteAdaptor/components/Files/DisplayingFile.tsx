@@ -63,7 +63,7 @@ export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: Displ
                 </div>
             }>
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
-            {file.key ? (
+            {file.key ?
                 <Typography className={classes.meta}>
                     <FileServiceTrans.file_key
                         components={{
@@ -72,7 +72,7 @@ export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: Displ
                         values={{ key: file.key }}
                     />
                 </Typography>
-            ) : null}
+            :   null}
         </FileFrame>
     )
 })

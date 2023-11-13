@@ -90,7 +90,7 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <div className={classes.bridgePair}>
                         <FromNetworkIcon size={32} />
@@ -115,7 +115,7 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
                         />
                     </div>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

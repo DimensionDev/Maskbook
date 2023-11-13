@@ -130,9 +130,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
 
     // #region qualification
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
-    const proofBytes = value?.proof
-        ? abiCoder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []])
-        : undefined
+    const proofBytes =
+        value?.proof ? abiCoder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []]) : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
         account,

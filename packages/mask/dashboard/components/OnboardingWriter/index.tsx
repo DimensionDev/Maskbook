@@ -75,9 +75,9 @@ export function OnboardingWriter({ words }: OnboardingWriterProps) {
                 ...fragment.props,
                 className: cx(
                     classes.typed,
-                    remain !== 0 && fragment.key !== 'ready' && fragment.key !== 'wallets'
-                        ? classes.endTyping
-                        : undefined,
+                    remain !== 0 && fragment.key !== 'ready' && fragment.key !== 'wallets' ?
+                        classes.endTyping
+                    :   undefined,
                 ),
             }
             if (take < text.length) newJsx.push(cloneElement(fragment, props, [text.slice(0, take)]))

@@ -14,9 +14,9 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 99,
         borderRadius: 16,
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 4px 30px rgba(0, 0, 0, 0.1)'
-                : '0px 4px 30px rgba(255, 255, 255, 0.15)',
+            theme.palette.mode === 'light' ?
+                '0px 4px 30px rgba(0, 0, 0, 0.1)'
+            :   '0px 4px 30px rgba(255, 255, 255, 0.15)',
     },
 }))
 

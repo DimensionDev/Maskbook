@@ -34,9 +34,9 @@ export async function injectAvatar(signal: AbortSignal) {
                             height: '100%',
                             zIndex: 2,
                         }}>
-                        {userId ? (
+                        {userId ?
                             <Avatar userId={userId} sourceType={Plugin.SiteAdaptor.AvatarRealmSourceType.Post} />
-                        ) : null}
+                        :   null}
                     </div>,
                 )
                 remover = root.destroy

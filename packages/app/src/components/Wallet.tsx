@@ -88,7 +88,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
 
     return (
         <>
-            {!account ? (
+            {!account ?
                 <a
                     href="#"
                     className="flex items-center gap-x-4 py-3 text-md font-semibold leading-6 text-white hover:text-white"
@@ -109,8 +109,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                         {account ? Utils.formatAddress(account, 4) : 'Connect Wallet'}
                     </span>
                 </a>
-            ) : (
-                <div className={classes.walletItem} onClick={() => SelectProviderModal.open()}>
+            :   <div className={classes.walletItem} onClick={() => SelectProviderModal.open()}>
                     <WalletIcon
                         size={40}
                         badgeSize={12}
@@ -118,18 +117,16 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                         badgeIcon={networkDescriptor?.icon}
                     />
                     <div className={classes.accountInfo}>
-                        {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                        {ProviderType.MaskWallet === providerDescriptor?.type ?
                             <Typography className={cx(classes.accountName, 'text-black dark:text-white')}>
                                 {wallet?.name}
                             </Typography>
-                        ) : null}
+                        :   null}
                         <div className={classes.infoRow}>
                             <Typography className={cx(classes.accountName, 'text-black dark:text-white')}>
-                                {domain ? (
+                                {domain ?
                                     Utils.formatDomainName(domain)
-                                ) : (
-                                    <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />
-                                )}
+                                :   <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />}
                             </Typography>
                             <ThemeProvider theme={MaskLightTheme}>
                                 <CopyButton
@@ -139,7 +136,7 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                                     text={account}
                                 />
                             </ThemeProvider>
-                            {chainIdValid ? (
+                            {chainIdValid ?
                                 <Link
                                     className={classes.link}
                                     href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
@@ -150,23 +147,24 @@ export const WalletItem = memo<WalletItemProps>((props) => {
                                         className={cx(classes.icon, classes.linkIcon, 'text-black dark:text-white')}
                                     />
                                 </Link>
-                            ) : null}
+                            :   null}
                         </div>
 
                         {props.withinRiskWarningDialog ? null : (
                             <div className={classes.infoRow}>
                                 <Typography className={cx(classes.balance, 'text-black dark:text-white')}>
-                                    {loadingNativeToken || loadingBalance
-                                        ? '-'
-                                        : `${formatBalance(balance, nativeToken?.decimals, {
-                                              significant: 3,
-                                          })} ${nativeToken?.symbol}`}
+                                    {loadingNativeToken || loadingBalance ?
+                                        '-'
+                                    :   `${formatBalance(balance, nativeToken?.decimals, {
+                                            significant: 3,
+                                        })} ${nativeToken?.symbol}`
+                                    }
                                 </Typography>
                             </div>
                         )}
                     </div>
                 </div>
-            )}
+            }
         </>
     )
 })

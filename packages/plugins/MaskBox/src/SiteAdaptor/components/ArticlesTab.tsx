@@ -50,9 +50,9 @@ export function ArticlesTab(props: ArticlesTabProps) {
                                 <img
                                     className={classes.hero}
                                     src={
-                                        boxMetadata?.mediaUrl
-                                            ? resolveIPFS_URL(boxMetadata?.mediaUrl)
-                                            : new URL('../../assets/FallbackImage.svg', import.meta.url).toString()
+                                        boxMetadata?.mediaUrl ?
+                                            resolveIPFS_URL(boxMetadata?.mediaUrl)
+                                        :   new URL('../../assets/FallbackImage.svg', import.meta.url).toString()
                                     }
                                 />
                             )

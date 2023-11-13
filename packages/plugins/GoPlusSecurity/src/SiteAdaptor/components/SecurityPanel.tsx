@@ -85,14 +85,14 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 direction="row"
                 justifyContent="space-between"
                 boxShadow={(theme) =>
-                    theme.palette.mode === 'light'
-                        ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                        : '0px 0px 20px rgba(255, 255, 255, 0.12);'
+                    theme.palette.mode === 'light' ?
+                        ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+                    :   '0px 0px 20px rgba(255, 255, 255, 0.12);'
                 }
                 padding="16px"
                 borderRadius="16px">
                 <Stack direction="row" spacing={0.8}>
-                    {tokenSecurity?.token_name ? (
+                    {tokenSecurity?.token_name ?
                         <TokenIcon
                             className={classes.icon}
                             address={tokenSecurity.contract ?? ''}
@@ -100,9 +100,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             logoURL={tokenInfo?.logoURL}
                             chainId={tokenSecurity.chainId}
                         />
-                    ) : (
-                        <Icons.DefaultToken size={48} />
-                    )}
+                    :   <Icons.DefaultToken size={48} />}
                     <Stack>
                         <Typography className={classes.tokenName}>
                             {tokenSecurity?.token_name || t.unnamed()}
@@ -112,7 +110,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         </Typography>
                     </Stack>
                 </Stack>
-                {hasWarningFactor ? (
+                {hasWarningFactor ?
                     <Stack>
                         <div
                             style={{
@@ -140,7 +138,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             </Typography>
                         </div>
                     </Stack>
-                ) : null}
+                :   null}
             </Stack>
             <Stack spacing={1}>
                 <Stack direction="row" justifyContent="space-between">
@@ -180,9 +178,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.High].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
-                                    {riskyFactors > 1
-                                        ? t.risky_factors({ quantity: riskyFactors.toString() })
-                                        : t.risky_factor({ quantity: riskyFactors.toString() })}
+                                    {riskyFactors > 1 ?
+                                        t.risky_factors({ quantity: riskyFactors.toString() })
+                                    :   t.risky_factor({ quantity: riskyFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}
@@ -190,9 +188,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
-                                    {attentionFactors > 1
-                                        ? t.attention_factors({ quantity: attentionFactors.toString() })
-                                        : t.attention_factor({ quantity: attentionFactors.toString() })}
+                                    {attentionFactors > 1 ?
+                                        t.attention_factors({ quantity: attentionFactors.toString() })
+                                    :   t.attention_factor({ quantity: attentionFactors.toString() })}
                                 </Typography>
                             </Stack>
                         )}

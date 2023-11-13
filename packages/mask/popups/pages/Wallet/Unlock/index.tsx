@@ -96,11 +96,11 @@ const Unlock = memo(function Unlock() {
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    {verified === false ? (
+                    {verified === false ?
                         <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
                             {t.popups_wallet_unlock_error_password()}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </Box>
 
                 <LoadingButton

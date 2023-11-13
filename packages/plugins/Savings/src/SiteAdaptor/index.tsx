@@ -28,12 +28,14 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
+                                    EntryComponentProps.onClick ?
+                                        () => EntryComponentProps.onClick?.(clickHandler)
+                                    :   clickHandler
                                 }
                             />
-                            {open ? <SavingsDialog open onClose={() => setOpen(false)} /> : null}
+                            {open ?
+                                <SavingsDialog open onClose={() => setOpen(false)} />
+                            :   null}
                         </>
                     )
                 },

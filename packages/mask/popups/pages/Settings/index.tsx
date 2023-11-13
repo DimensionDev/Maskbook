@@ -289,18 +289,18 @@ const Settings = memo(function Settings() {
                             className={classes.listItem}
                             onClick={() =>
                                 modalNavigate(
-                                    user.backupPassword
-                                        ? PopupModalRoutes.ChangeBackupPassword
-                                        : PopupModalRoutes.SetBackupPassword,
+                                    user.backupPassword ?
+                                        PopupModalRoutes.ChangeBackupPassword
+                                    :   PopupModalRoutes.SetBackupPassword,
                                 )
                             }>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={t.popups_settings_backup_password()}
                                 secondary={
-                                    user.backupPassword
-                                        ? t.popups_settings_change_backup_password()
-                                        : t.popups_settings_not_set()
+                                    user.backupPassword ?
+                                        t.popups_settings_change_backup_password()
+                                    :   t.popups_settings_not_set()
                                 }
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />

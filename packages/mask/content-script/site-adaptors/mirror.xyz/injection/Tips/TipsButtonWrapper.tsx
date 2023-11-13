@@ -47,9 +47,10 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
             {
                 pluginID,
                 address: visitingIdentity.identifier.userId,
-                label: visitingIdentity.nickname
-                    ? `(${visitingIdentity.nickname}) ${Utils.formatAddress(visitingIdentity.identifier.userId, 4)}`
-                    : visitingIdentity.identifier.userId,
+                label:
+                    visitingIdentity.nickname ?
+                        `(${visitingIdentity.nickname}) ${Utils.formatAddress(visitingIdentity.identifier.userId, 4)}`
+                    :   visitingIdentity.identifier.userId,
             },
         ]
     }, [visitingIdentity, Utils.formatAddress])

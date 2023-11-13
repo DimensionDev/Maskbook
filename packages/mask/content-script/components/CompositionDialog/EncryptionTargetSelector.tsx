@@ -66,7 +66,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const e2eDisabledMessage =
-        props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
+        props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ?
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t.persona_required()}</Typography>
                 <Box flex={1} />
@@ -89,7 +89,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     }}
                 </ConnectPersonaBoundary>
             </div>
-        ) : null
+        :   null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
         <div className={classes.flex}>
             <Typography className={classes.mainTitle}>{t.compose_no_local_key()}</Typography>
@@ -100,9 +100,9 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E)
-            return shareWithNum > 1
-                ? t.compose_shared_friends_other({ count: shareWithNum })
-                : t.compose_shared_friends_one()
+            return shareWithNum > 1 ?
+                    t.compose_shared_friends_other({ count: shareWithNum })
+                :   t.compose_shared_friends_one()
         else if (selected === EncryptionTargetType.Public) return t.compose_encrypt_visible_to_all()
         else if (selected === EncryptionTargetType.Self) return t.compose_encrypt_visible_to_private()
         unreachable(selected)

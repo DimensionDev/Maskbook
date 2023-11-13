@@ -36,22 +36,22 @@ export class SolanaIdentityService extends IdentityServiceState<ChainId> {
         const domainAddress = domain ? await getSolanaDomainAddress(domain) : undefined
 
         return compact<SocialAddress<ChainId>>([
-            address
-                ? {
-                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.Address,
-                      label: '',
-                      address,
-                  }
-                : undefined,
-            domainAddress
-                ? {
-                      pluginID: NetworkPluginID.PLUGIN_SOLANA,
-                      type: SocialAddressType.SOL,
-                      label: domain ?? domainAddress,
-                      address: domainAddress,
-                  }
-                : undefined,
+            address ?
+                {
+                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                    type: SocialAddressType.Address,
+                    label: '',
+                    address,
+                }
+            :   undefined,
+            domainAddress ?
+                {
+                    pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                    type: SocialAddressType.SOL,
+                    label: domain ?? domainAddress,
+                    address: domainAddress,
+                }
+            :   undefined,
         ])
     }
 }

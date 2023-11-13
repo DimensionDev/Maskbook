@@ -251,7 +251,9 @@ export const EditNetwork = memo(function EditNetwork() {
                         maxLength: 24,
                     }}
                 />
-                {errors.name ? <Typography className={classes.error}>{errors.name.message}</Typography> : null}
+                {errors.name ?
+                    <Typography className={classes.error}>{errors.name.message}</Typography>
+                :   null}
 
                 <Typography className={classes.label}>{t.rpc_url()}</Typography>
                 <Input
@@ -262,7 +264,9 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="https://"
                     disabled={isBuiltIn}
                 />
-                {errors.rpc ? <Typography className={classes.error}>{errors.rpc.message}</Typography> : null}
+                {errors.rpc ?
+                    <Typography className={classes.error}>{errors.rpc.message}</Typography>
+                :   null}
 
                 <Typography className={classes.label}>{t.chain_id()}</Typography>
                 <Input
@@ -273,11 +277,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. 2"
                     disabled={isBuiltIn}
                 />
-                {errors.chainId ? (
+                {errors.chainId ?
                     <Typography className={classes.error}>{errors.chainId.message}</Typography>
-                ) : chainIdWarning ? (
+                : chainIdWarning ?
                     <Typography className={classes.warn}>{chainIdWarning}</Typography>
-                ) : null}
+                :   null}
 
                 <Typography className={classes.label}>{t.optional_currency_symbol()}</Typography>
                 <Input
@@ -288,7 +292,9 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="eg. ETH"
                     disabled={isBuiltIn || !!errors.chainId}
                 />
-                {symbolWarning ? <Typography className={classes.warn}>{symbolWarning}</Typography> : null}
+                {symbolWarning ?
+                    <Typography className={classes.warn}>{symbolWarning}</Typography>
+                :   null}
 
                 <Typography className={classes.label}>{t.optional_block_explorer_url()}</Typography>
                 <Input
@@ -298,9 +304,11 @@ export const EditNetwork = memo(function EditNetwork() {
                     placeholder="https://"
                     disabled={isBuiltIn}
                 />
-                {errors.explorer ? <Typography className={classes.error}>{errors.explorer.message}</Typography> : null}
+                {errors.explorer ?
+                    <Typography className={classes.error}>{errors.explorer.message}</Typography>
+                :   null}
             </form>
-            {!isBuiltIn ? (
+            {!isBuiltIn ?
                 <div className={classes.footer}>
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
                         {t.cancel()}
@@ -309,7 +317,7 @@ export const EditNetwork = memo(function EditNetwork() {
                         {t.confirm()}
                     </ActionButton>
                 </div>
-            ) : null}
+            :   null}
         </main>
     )
 })

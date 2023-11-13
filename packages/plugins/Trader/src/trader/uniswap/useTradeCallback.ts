@@ -55,9 +55,9 @@ export function useTradeCallback(
                     from: account,
                     to: address,
                     data: calldata,
-                    ...(!value || /^0x0*$/.test(value)
-                        ? {}
-                        : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
+                    ...(!value || /^0x0*$/.test(value) ?
+                        {}
+                    :   { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
                 try {
@@ -134,9 +134,9 @@ export function useTradeCallback(
                 throw error
             }
             throw new Error(
-                error?.message === 'Unable to add more requests.'
-                    ? 'Unable to add more requests.'
-                    : 'Transaction rejected.',
+                error?.message === 'Unable to add more requests.' ?
+                    'Unable to add more requests.'
+                :   'Transaction rejected.',
             )
         }
     }, [account, tradeParameters, gasConfig, chainId, pluginID, notifyError])

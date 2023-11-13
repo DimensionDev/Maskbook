@@ -114,7 +114,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
                                 }}
                             />
                         </Typography>
-                        {metadata?.tokens.length ? (
+                        {metadata?.tokens.length ?
                             <div className={classes.horizonCenter}>
                                 <div className={classes.tokenList}>
                                     {metadata.tokens.map((token) => (
@@ -137,7 +137,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
                                     ))}
                                 </div>
                             </div>
-                        ) : null}
+                        :   null}
                     </CardFrame>
                 )
             })}

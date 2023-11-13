@@ -49,7 +49,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
                 />
             }>
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
-            {file.key ? (
+            {file.key ?
                 <Typography className={classes.meta}>
                     <FileServiceTrans.file_key
                         components={{
@@ -58,7 +58,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
                         values={{ key: file.key }}
                     />
                 </Typography>
-            ) : null}
+            :   null}
         </FileFrame>
     )
 })

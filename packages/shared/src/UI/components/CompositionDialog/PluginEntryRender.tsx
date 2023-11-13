@@ -73,16 +73,15 @@ export const PluginEntryRender = memo(
                 }
                 return (
                     <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
-                        {'onClick' in entry ? (
+                        {'onClick' in entry ?
                             <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
-                        ) : (
-                            <DialogEntry
+                        :   <DialogEntry
                                 {...entry}
                                 {...extra}
                                 ref={trackPluginRef(ID)}
                                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                             />
-                        )}
+                        }
                     </ErrorBoundary>
                 )
             }).unwrapOr(null),
@@ -185,9 +184,9 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginTransFieldRender field={label} pluginID={id} />
-                        {unstable ? (
+                        {unstable ?
                             <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        ) : null}
+                        :   null}
                     </>
                 }
                 onClick={() => {
@@ -223,9 +222,9 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginTransFieldRender field={label} pluginID={id} />
-                        {unstable ? (
+                        {unstable ?
                             <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        ) : null}
+                        :   null}
                     </>
                 }
                 disabled={props.readonly}

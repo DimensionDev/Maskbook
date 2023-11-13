@@ -86,14 +86,14 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
     return (
         <Box>
             <Box className={classes.root}>
-                {!display ? (
+                {!display ?
                     <Box className={classes.mask} onClick={toggle}>
                         <Icons.EyeOff size={24} />
                         <Typography className={classes.tips}>
                             <Trans i18nKey="popups_wallet_backup_mnemonic_view_tips" components={{ br: <br /> }} />
                         </Typography>
                     </Box>
-                ) : null}
+                :   null}
                 <Box component="ul" className={classes.words}>
                     {mnemonic.map((x) => (
                         <Box key={x} component="li" className={classes.word}>
@@ -102,7 +102,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                     ))}
                 </Box>
             </Box>
-            {display ? (
+            {display ?
                 <Box className={classes.footer}>
                     <Button
                         onClick={toggle}
@@ -112,7 +112,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                         {t.popups_wallet_backup_mnemonic_hidden()}
                     </Button>
                 </Box>
-            ) : null}
+            :   null}
         </Box>
     )
 })

@@ -28,13 +28,11 @@ export function ContractSection({
 
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
-            {chain ? (
+            {chain ?
                 <WalletIcon mainIcon={chain?.icon} size={14} />
-            ) : iconURL ? (
+            : iconURL ?
                 <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} />
-            ) : (
-                <Box width={16} />
-            )}
+            :   <Box width={16} />}
             <Typography
                 variant="body2"
                 component="span"

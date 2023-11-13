@@ -105,13 +105,12 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
     const { value: selectedRecipients = EMPTY_LIST, retry } = useSelectedRecipientsList()
 
     const rightActions =
-        props.author?.userId === props.whoAmI?.userId ? (
-            canAppendShareTarget && props.whoAmI ? (
+        props.author?.userId === props.whoAmI?.userId ?
+            canAppendShareTarget && props.whoAmI ?
                 <>
-                    {selectedRecipients?.length ? (
+                    {selectedRecipients?.length ?
                         <RecipientsToolTip recipients={selectedRecipients} openDialog={() => setShowDialog(true)} />
-                    ) : (
-                        <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
+                    :   <section className={classes.visibilityBox} onClick={() => setShowDialog(true)}>
                             <Typography color="textPrimary" fontSize={12} fontWeight={500}>
                                 {t.decrypted_postbox_only_visible_to_yourself()}
                             </Typography>
@@ -119,9 +118,9 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                                 <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
                             </div>
                         </section>
-                    )}
+                    }
 
-                    {showDialog ? (
+                    {showDialog ?
                         <AppendShareDetail
                             selectedRecipients={selectedRecipients}
                             retry={retry}
@@ -129,16 +128,14 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                             onClose={() => setShowDialog(false)}
                             recipients={recipients}
                         />
-                    ) : null}
+                    :   null}
                 </>
-            ) : (
-                <section className={classes.visibilityBox}>
+            :   <section className={classes.visibilityBox}>
                     <Typography color="textPrimary" fontSize={12} fontWeight={500}>
                         {t.decrypted_postbox_visible_to_all()}
                     </Typography>
                 </section>
-            )
-        ) : null
+        :   null
     return <DecryptPostSuccessBase {...props}>{rightActions}</DecryptPostSuccessBase>
 })
 

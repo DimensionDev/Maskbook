@@ -44,7 +44,9 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
                 balance={balance}
                 onSelectToken={onSelectTokenChipClick}
             />
-            {pluginID === NetworkPluginID.PLUGIN_EVM ? <GasSettingsBar /> : null}
+            {pluginID === NetworkPluginID.PLUGIN_EVM ?
+                <GasSettingsBar />
+            :   null}
             <TokenValue className={classes.tokenValue} token={token} amount={amount} />
         </div>
     )

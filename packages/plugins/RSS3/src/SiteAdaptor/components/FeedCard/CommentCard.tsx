@@ -126,30 +126,31 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 <Linkify options={LinkifyOptions}>{metadata?.body}</Linkify>
             </Typography>
             <article className={cx(classes.target, verbose ? classes.verbose : null)}>
-                {verbose ? <Typography className={classes.originalLabel}>{t.original()}</Typography> : null}
-                {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
+                {verbose ?
+                    <Typography className={classes.originalLabel}>{t.original()}</Typography>
+                :   null}
+                {commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
                     <Image
                         classes={{ container: classes.image, failed: classes.failedImage }}
                         src={resolveResourceURL(commentTarget.media[0].address)}
                         height={imageSize}
                         width={imageSize}
                     />
-                ) : null}
+                :   null}
                 <div>
-                    {commentTarget?.title ? (
+                    {commentTarget?.title ?
                         <Typography variant="h1" className={classes.title}>
                             {commentTarget?.title}
                         </Typography>
-                    ) : null}
-                    {verbose && commentTarget?.body ? (
+                    :   null}
+                    {verbose && commentTarget?.body ?
                         <Markdown defaultStyle={false} className={mdClasses.markdown}>
                             {commentTarget.body}
                         </Markdown>
-                    ) : (
-                        <Typography className={classes.content}>
+                    :   <Typography className={classes.content}>
                             <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
                         </Typography>
-                    )}
+                    }
                 </div>
             </article>
         </CardFrame>

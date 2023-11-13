@@ -27,15 +27,16 @@ export function AutoLock() {
                 <Typography className={classes.itemText}>{t.popups_wallet_settings_auto_unlock_time()}</Typography>
             </Box>
             <Box className={classes.itemBox}>
-                {value ? (
+                {value ?
                     <Typography className={classes.itemText}>
-                        {minutes && minutes >= 60
-                            ? t['popups_wallet_settings_auto-unlock_time_hour']({ count: millisecondsToHours(value) })
-                            : t.popups_wallet_settings_auto_unlock_time_mins({
-                                  time: String(millisecondsToMinutes(value)),
-                              })}
+                        {minutes && minutes >= 60 ?
+                            t['popups_wallet_settings_auto-unlock_time_hour']({ count: millisecondsToHours(value) })
+                        :   t.popups_wallet_settings_auto_unlock_time_mins({
+                                time: String(millisecondsToMinutes(value)),
+                            })
+                        }
                     </Typography>
-                ) : null}
+                :   null}
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

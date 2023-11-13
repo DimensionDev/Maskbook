@@ -34,11 +34,10 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     const { classes } = useStyles()
     const stop = useCallback((ev: React.MouseEvent<HTMLDivElement>) => ev.stopPropagation(), [])
     const { progress, title, message } = props
-    const ProgressJSX = !progress ? null : progress === true ? (
-        <CircularProgress size={20} color="primary" variant="indeterminate" />
-    ) : (
-        <CircularProgress size={20} color="primary" {...progress} />
-    )
+    const ProgressJSX =
+        !progress ? null
+        : progress === true ? <CircularProgress size={20} color="primary" variant="indeterminate" />
+        : <CircularProgress size={20} color="primary" {...progress} />
     const RightIconJSX = ((icon) => {
         const props = { fontSize: 'small', className: classes.rightIcon } as const
         if (icon === AdditionalIcon.check) return <CheckIcon htmlColor={colors.green[500]} {...props} />
@@ -71,7 +70,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
     return (
         <Card variant="outlined" className={classes.root} elevation={0} onClick={stop}>
             <header className={classes.content}>{header}</header>
-            {message ? (
+            {message ?
                 <main className={classes.content}>
                     <TypedMessageRenderContext
                         textResizer={activatedSiteAdaptorUI!.networkIdentifier !== 'twitter.com'}
@@ -79,7 +78,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
                         <TypedMessageRender message={TypedMessage} />
                     </TypedMessageRenderContext>
                 </main>
-            ) : null}
+            :   null}
         </Card>
     )
 })

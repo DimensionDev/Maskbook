@@ -126,7 +126,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     // #endregion
 
     // #region packet settings
-    const [isRandom, setRandom] = useState(!origin ? 1 : origin?.isRandom ? 1 : 0)
+    const [isRandom, setRandom] = useState(
+        !origin ? 1
+        : origin?.isRandom ? 1
+        : 0,
+    )
     const [message, setMessage] = useState(origin?.message || '')
     const currentIdentity = useCurrentVisitingIdentity()
     const linkedPersona = useCurrentLinkedPersona()
@@ -153,11 +157,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
 
     // amount
     const [rawAmount, setRawAmount] = useState(
-        !origin
-            ? ''
-            : origin?.isRandom
-            ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
-            : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
+        !origin ? ''
+        : origin?.isRandom ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
+        : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const rawTotalAmount = useMemo(
@@ -184,9 +186,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             name: senderName,
             message: message || t.best_wishes(),
             shares: shares || 0,
-            token: token
-                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
-                : undefined,
+            token:
+                token ?
+                    (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                :   undefined,
             total: totalAmount.toFixed(),
         }),
         [isRandom, senderName, message, t, shares, token, totalAmount],
@@ -211,9 +214,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             name: senderName,
             message: message || t.best_wishes(),
             shares: shares || 0,
-            token: token
-                ? (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
-                : undefined,
+            token:
+                token ?
+                    (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                :   undefined,
             total: rightShift(0.01, token?.decimals).toFixed(),
         },
         contract_version,
@@ -328,9 +332,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
                     maxAmount={
-                        minTotalAmount.isGreaterThan(balance) && !isZero(balance)
-                            ? minTotalAmount.toString()
-                            : undefined
+                        minTotalAmount.isGreaterThan(balance) && !isZero(balance) ?
+                            minTotalAmount.toString()
+                        :   undefined
                     }
                     isAvailableBalance={isAvailableBalance}
                     balance={balance}
@@ -349,7 +353,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 />
             </Box>
 
-            {pluginID === NetworkPluginID.PLUGIN_EVM ? (
+            {pluginID === NetworkPluginID.PLUGIN_EVM ?
                 <Box margin={2}>
                     <SelectGasSettingsToolbar
                         nativeToken={nativeTokenDetailed}
@@ -360,11 +364,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         onChange={onGasOptionChange}
                     />
                 </Box>
-            ) : null}
+            :   null}
 
-            {rawTotalAmount && !isZero(rawTotalAmount) ? (
+            {rawTotalAmount && !isZero(rawTotalAmount) ?
                 <TokenValue className={classes.tokenValue} token={token} amount={rawTotalAmount} />
-            ) : null}
+            :   null}
 
             <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
                 <PluginWalletStatusBar
@@ -379,9 +383,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             size: 'medium',
                         }}
                         token={
-                            token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage
-                                ? token
-                                : undefined
+                            token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage ?
+                                token
+                            :   undefined
                         }
                         spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                         <ChainBoundary

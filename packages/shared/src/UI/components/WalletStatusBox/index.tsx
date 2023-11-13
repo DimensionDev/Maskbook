@@ -120,9 +120,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet
-                ? theme.palette.maskColor.dark
-                : theme.palette.text.primary,
+            providerDescriptor?.type === ProviderType.MaskWallet ?
+                theme.palette.maskColor.dark
+            :   theme.palette.text.primary,
     })
 
     const Web3 = useWeb3Connection()
@@ -167,16 +167,14 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
                 />
                 <div className={classes.accountInfo}>
-                    {ProviderType.MaskWallet === providerDescriptor?.type ? (
+                    {ProviderType.MaskWallet === providerDescriptor?.type ?
                         <Typography className={classes.accountName}>{wallet?.name}</Typography>
-                    ) : null}
+                    :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
-                            {domain ? (
+                            {domain ?
                                 Utils.formatDomainName(domain)
-                            ) : (
-                                <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />
-                            )}
+                            :   <FormattedAddress address={account} size={4} formatter={Utils.formatAddress} />}
                         </Typography>
                         <ThemeProvider theme={MaskLightTheme}>
                             <CopyButton
@@ -186,7 +184,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 text={account}
                             />
                         </ThemeProvider>
-                        {chainIdValid ? (
+                        {chainIdValid ?
                             <Link
                                 className={classes.link}
                                 href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
@@ -195,17 +193,18 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
                             </Link>
-                        ) : null}
+                        :   null}
                     </div>
 
                     {props.withinRiskWarningDialog ? null : (
                         <div className={classes.infoRow}>
                             <Typography className={classes.balance}>
-                                {loadingNativeToken || loadingBalance
-                                    ? '-'
-                                    : `${formatBalance(balance, nativeToken?.decimals, {
-                                          significant: 3,
-                                      })} ${nativeToken?.symbol}`}
+                                {loadingNativeToken || loadingBalance ?
+                                    '-'
+                                :   `${formatBalance(balance, nativeToken?.decimals, {
+                                        significant: 3,
+                                    })} ${nativeToken?.symbol}`
+                                }
                             </Typography>
                         </div>
                     )}
@@ -239,12 +238,12 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </section>
                 )}
             </section>
-            {props.showPendingTransaction ? (
+            {props.showPendingTransaction ?
                 <div>
                     {pendingSummary}
                     {transactionList}
                 </div>
-            ) : null}
+            :   null}
         </>
     )
 }

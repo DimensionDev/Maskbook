@@ -61,16 +61,17 @@ export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRen
                         setName(e.target.value)
                     }}
                     InputProps={{
-                        endAdornment: name.length ? (
-                            <Icons.PopupClose
-                                onClick={() => {
-                                    setName('')
-                                    setError('')
-                                }}
-                                size={18}
-                                color={error ? theme.palette.maskColor.danger : undefined}
-                            />
-                        ) : null,
+                        endAdornment:
+                            name.length ?
+                                <Icons.PopupClose
+                                    onClick={() => {
+                                        setName('')
+                                        setError('')
+                                    }}
+                                    size={18}
+                                    color={error ? theme.palette.maskColor.danger : undefined}
+                                />
+                            :   null,
                         disableUnderline: true,
                     }}
                 />

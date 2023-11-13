@@ -105,7 +105,7 @@ export function RouterDialog() {
             title={title}
             titleTail={<Icons.Questions onClick={() => setDialog({ open: true })} />}>
             <DialogContent className={classes.dialogContent}>
-                {queryVerifyLoading ? (
+                {queryVerifyLoading ?
                     <Box
                         display="flex"
                         justifyContent="center"
@@ -116,13 +116,12 @@ export function RouterDialog() {
                         <LoadingBase size={36} />
                         <Typography>{t.loading()}</Typography>
                     </Box>
-                ) : (
-                    <Routes>
+                :   <Routes>
                         <Route path={RoutePaths.Deploy} element={<Deploy open={open} />} />
                         <Route path={RoutePaths.InEligibility} element={<InEligibilityTips />} />
                         <Route path={RoutePaths.Main} element={<SmartPayContent />} />
                     </Routes>
-                )}
+                }
             </DialogContent>
         </InjectedDialog>
     )

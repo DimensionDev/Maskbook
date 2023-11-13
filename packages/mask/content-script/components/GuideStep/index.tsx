@@ -190,7 +190,10 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                         ref={box3Ref}
                                         className={cx(
                                             classes.card,
-                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                            arrow ?
+                                                bottomAvailable ? 'arrow-top'
+                                                :   'arrow-bottom'
+                                            :   '',
                                         )}>
                                         <Box paddingBottom="16px">
                                             <Typography fontSize={20}>
@@ -203,12 +206,11 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
-                                            {step === total ? (
+                                            {step === total ?
                                                 <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
                                                     {t.try()}
                                                 </NextButton>
-                                            ) : (
-                                                <>
+                                            :   <>
                                                     <ActionButton type="button" onClick={onSkip}>
                                                         {t.skip()}
                                                     </ActionButton>
@@ -216,7 +218,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                                         {t.next()}
                                                     </NextButton>
                                                 </>
-                                            )}
+                                            }
                                         </div>
                                     </div>
                                 </Box>

@@ -21,9 +21,9 @@ export const { makeStyles } = createMakeStyles({ useTheme }) as any as {
             ownerState?: Record<string, unknown>
         },
     ) => {
-        classes: StyleOverrides extends { classes?: { [key in infer ExtraKeys]?: string | undefined } }
-            ? Record<string extends ExtraKeys ? RuleName : ExtraKeys | RuleName, string>
-            : Record<RuleName, string>
+        classes: StyleOverrides extends { classes?: { [key in infer ExtraKeys]?: string | undefined } } ?
+            Record<string extends ExtraKeys ? RuleName : ExtraKeys | RuleName, string>
+        :   Record<RuleName, string>
         theme: Theme
         css: Css
         cx: Cx

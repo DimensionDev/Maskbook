@@ -255,11 +255,11 @@ function ActionContent(props: ActionContentProps) {
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>
-            {hint ? (
+            {hint ?
                 <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
                     {hint}
                 </Typography>
-            ) : null}
+            :   null}
             <Stack direction="row" justifyContent="center">
                 <Button color="primary" className={classes.button} onClick={onClick}>
                     <Icons.Identity size={18} />

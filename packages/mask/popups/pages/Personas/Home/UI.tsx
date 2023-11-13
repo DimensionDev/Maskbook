@@ -226,7 +226,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         )
         return (
             <div className={classes.container}>
-                {!isEmpty ? (
+                {!isEmpty ?
                     <TabContext value={currentTab}>
                         <Box sx={{ background: theme.palette.maskColor.modalTitleBg }}>
                             <Box className={classes.header}>
@@ -248,14 +248,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 <Typography fontSize={18} fontWeight="700" lineHeight="22px" marginTop="8px">
                                     {nickname}
                                 </Typography>
-                                {fingerprint && publicKey ? (
+                                {fingerprint && publicKey ?
                                     <PersonaPublicKey
                                         classes={{ text: classes.publicKey, icon: classes.icon }}
                                         rawPublicKey={fingerprint}
                                         publicHexString={publicKey}
                                         iconSize={12}
                                     />
-                                ) : null}
+                                :   null}
                                 <Icons.Settings2
                                     size={20}
                                     className={classes.settings}
@@ -283,11 +283,12 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             className={classes.panel}
                             value={PopupHomeTabType.ConnectedWallets}
                             data-hide-scrollbar>
-                            {bindingWallets?.length ? <ConnectedWallet /> : <SelectProvider />}
+                            {bindingWallets?.length ?
+                                <ConnectedWallet />
+                            :   <SelectProvider />}
                         </TabPanel>
                     </TabContext>
-                ) : (
-                    <Box className={classes.container} data-hide-scrollbar>
+                :   <Box className={classes.container} data-hide-scrollbar>
                         <Box className={classes.emptyHeader}>
                             <Icons.MaskSquare width={160} height={46} />
                         </Box>
@@ -323,7 +324,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
                         </Box>
                     </Box>
-                )}
+                }
             </div>
         )
     },

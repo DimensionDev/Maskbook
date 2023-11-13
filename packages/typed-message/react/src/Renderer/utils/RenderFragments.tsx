@@ -19,9 +19,9 @@ export const DefaultRenderFragments = {
         )
     }),
     Image: memo(function ImageFragment(props: RenderFragmentsContextType.ImageProps) {
-        return props.width === 0 ? null : (
-            <img src={props.src} width={props.width} height={props.height} style={props.style} />
-        )
+        return props.width === 0 ?
+                null
+            :   <img src={props.src} width={props.width} height={props.height} style={props.style} />
     }),
     Metadata: memo(function MetadataFragment() {
         return null

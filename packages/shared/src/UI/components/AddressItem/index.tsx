@@ -54,17 +54,16 @@ export function AddressItem({
     return (
         <>
             <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
-                {preferAddress ? (
+                {preferAddress ?
                     <ReversedAddress
                         {...TypographyProps}
                         address={socialAccount.address}
                         pluginID={socialAccount.pluginID}
                     />
-                ) : (
-                    <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+                :   <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
                         {socialAccount.label}
                     </Typography>
-                )}
+                }
             </Box>
             {disableLinkIcon ? null : (
                 <Link
@@ -78,7 +77,9 @@ export function AddressItem({
                     <Icons.LinkOut size={20} className={linkIconClassName} />
                 </Link>
             )}
-            {isMenu ? <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={onClick} /> : null}
+            {isMenu ?
+                <Icons.ArrowDrop className={classes.arrowDropIcon} onClick={onClick} />
+            :   null}
         </>
     )
 }

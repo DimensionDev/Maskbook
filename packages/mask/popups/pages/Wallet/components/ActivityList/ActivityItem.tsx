@@ -255,11 +255,11 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         loading={loadingToAddress}
                         skeletonWidth={100}
                         component="div">
-                        {status === TransactionStatusType.FAILED ? (
+                        {status === TransactionStatusType.FAILED ?
                             <Typography className={classes.failedLabel} component="span">
                                 {t.failed()}
                             </Typography>
-                        ) : null}
+                        :   null}
                         <Trans
                             i18nKey="other_address"
                             context={isOut ? 'to' : 'from'}
@@ -274,28 +274,28 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 }>
                 <Typography className={classes.txName}>
                     {transaction.cateName}
-                    {transaction.isScam ? <span className={classes.scamLabel}>{t.scam_tx()}</span> : null}
+                    {transaction.isScam ?
+                        <span className={classes.scamLabel}>{t.scam_tx()}</span>
+                    :   null}
                 </Typography>
             </ListItemText>
 
-            {transaction.type === 'approve' && approveAmount && approveToken ? (
+            {transaction.type === 'approve' && approveAmount && approveToken ?
                 <Typography className={classes.asset} component="div">
                     <strong className={classes.amount}>
-                        {approveAmount === 'Infinite'
-                            ? approveAmount
-                            : formatTokenBalance(approveAmount, approveToken.decimals)}
+                        {approveAmount === 'Infinite' ?
+                            approveAmount
+                        :   formatTokenBalance(approveAmount, approveToken.decimals)}
                     </strong>
                     <TextOverflowTooltip title={approveToken.symbol} PopperProps={popperProps}>
                         <span className={classes.symbol}>{approveToken.symbol}</span>
                     </TextOverflowTooltip>
                 </Typography>
-            ) : (
-                <div className={classes.assets}>
+            :   <div className={classes.assets}>
                     {transaction.assets.map((token, i) => {
                         const isSend = token.direction === DebankTransactionDirection.SEND
-                        const amount = isLessThan(token.amount, '0.0001')
-                            ? '<0.0001'
-                            : trimZero(toFixed(token.amount, 4))
+                        const amount =
+                            isLessThan(token.amount, '0.0001') ? '<0.0001' : trimZero(toFixed(token.amount, 4))
                         return (
                             <Typography key={i} className={classes.asset} component="div">
                                 <strong className={classes.amount}>{`${isSend ? '-' : '+'} ${amount} `}</strong>
@@ -306,7 +306,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         )
                     })}
                 </div>
-            )}
+            }
         </ListItem>
     )
 })
@@ -361,14 +361,14 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                 secondary={
                     <Box>
                         <Typography>
-                            {transaction.status === TransactionStatusType.FAILED ? (
+                            {transaction.status === TransactionStatusType.FAILED ?
                                 <Typography className={classes.failedLabel} component="span">
                                     {t.failed()}
                                 </Typography>
-                            ) : null}
+                            :   null}
                             {recipient}
                         </Typography>
-                        {transaction.status === 1 ? (
+                        {transaction.status === 1 ?
                             <Box className={classes.operations}>
                                 <button
                                     type="button"
@@ -389,21 +389,21 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                                     {t.cancel()}
                                 </button>
                             </Box>
-                        ) : null}
+                        :   null}
                     </Box>
                 }>
                 {/* TODO specify cateType */}
                 <Typography className={classes.txName}>{t.send()}</Typography>
             </ListItemText>
             <Box ml="auto">
-                {candidate.value && nativeToken ? (
+                {candidate.value && nativeToken ?
                     <Typography className={classes.asset}>
                         <strong className={classes.amount}>
                             {`- ${formatTokenBalance(candidate.value, nativeToken.decimals)} `}
                         </strong>
                         <span className={classes.symbol}>{nativeToken.symbol}</span>
                     </Typography>
-                ) : null}
+                :   null}
             </Box>
         </ListItem>
     )

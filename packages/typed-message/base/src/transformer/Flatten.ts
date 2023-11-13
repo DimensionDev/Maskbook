@@ -21,7 +21,13 @@ export function FlattenTypedMessage(message: TypedMessage, context: Transformati
     if (isTypedMessageTuple(message)) {
         const next = message.items
             .map((x) => FlattenTypedMessage(x, context))
-            .flatMap((x) => (isTypedMessageTuple(x) ? (x.meta ? x : x.items) : x))
+            .flatMap((x) =>
+                isTypedMessageTuple(x) ?
+                    x.meta ?
+                        x
+                    :   x.items
+                :   x,
+            )
             .filter((x) => !isTypedMessageEmpty(x))
             .reduce<TypedMessage[]>((result, current) => {
                 const lastItem = result.at(-1)

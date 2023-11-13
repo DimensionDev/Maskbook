@@ -42,11 +42,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 onClick={() =>
-                                    EntryComponentProps?.onClick
-                                        ? EntryComponentProps.onClick()
-                                        : CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
-                                              open: true,
-                                          })
+                                    EntryComponentProps?.onClick ?
+                                        EntryComponentProps.onClick()
+                                    :   CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
+                                            open: true,
+                                        })
                                 }
                             />
                         </>

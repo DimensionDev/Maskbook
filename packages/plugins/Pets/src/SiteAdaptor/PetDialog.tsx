@@ -45,11 +45,9 @@ export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
             title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}
             titleBarIconStyle="back">
             <DialogContent style={{ padding: 0, display: 'flex', flexDirection: 'column' }}>
-                {step === PetFriendNFTStep.SetFriendNFT ? (
+                {step === PetFriendNFTStep.SetFriendNFT ?
                     <PetSetDialog onClose={handleSetDialogClose} configNFTs={configNFTs} />
-                ) : (
-                    <PetShareDialog onClose={handleClose} />
-                )}
+                :   <PetShareDialog onClose={handleClose} />}
             </DialogContent>
         </InjectedDialog>
     )

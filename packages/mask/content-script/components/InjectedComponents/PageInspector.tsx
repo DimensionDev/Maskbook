@@ -44,12 +44,13 @@ export function PageInspector() {
                     {
                         variant: 'info',
                         preventDuplicate: true,
-                        anchorOrigin: xsMatched
-                            ? {
-                                  vertical: 'bottom',
-                                  horizontal: 'center',
-                              }
-                            : { horizontal: 'right', vertical: 'top' },
+                        anchorOrigin:
+                            xsMatched ?
+                                {
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                }
+                            :   { horizontal: 'right', vertical: 'top' },
                         key,
                         action: <></>,
                     },

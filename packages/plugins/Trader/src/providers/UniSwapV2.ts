@@ -61,13 +61,14 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
 
         if (!tokenA || !tokenB || !context?.FACTORY_CONTRACT_ADDRESS || !context.INIT_CODE_HASH) return EMPTY_LIST
 
-        const bases: Token[] = !chainIdValid
-            ? []
-            : [
-                  ...(context?.AGAINST_TOKENS?.[chainId] ?? []),
-                  ...(tokenA ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []),
-                  ...(tokenB ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []),
-              ].map((x) => toUniswapToken(chainId, x))
+        const bases: Token[] =
+            !chainIdValid ?
+                []
+            :   [
+                    ...(context?.AGAINST_TOKENS?.[chainId] ?? []),
+                    ...(tokenA ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenA.address] ?? [] : []),
+                    ...(tokenB ? context?.ADDITIONAL_TOKENS?.[chainId]?.[tokenB.address] ?? [] : []),
+                ].map((x) => toUniswapToken(chainId, x))
 
         const basePairs: Array<[Token, Token]> = flatMap(
             bases,
@@ -115,9 +116,9 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
         if (!FACTORY_CONTRACT_ADDRESS || !INIT_CODE_HASH) return EMPTY_LIST
 
         const listOfPairAddress = tokenPairs.map(([tokenA, tokenB]) =>
-            tokenA && tokenB && !tokenA.equals(tokenB)
-                ? getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
-                : undefined,
+            tokenA && tokenB && !tokenA.equals(tokenB) ?
+                getPairAddress(FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH, tokenA, tokenB)
+            :   undefined,
         )
 
         const contracts = compact(

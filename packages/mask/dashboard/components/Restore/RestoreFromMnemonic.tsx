@@ -48,11 +48,11 @@ export function RestoreFromMnemonic({ handleRestoreFromMnemonic, error, setError
     return (
         <Box>
             <DesktopMnemonicConfirm onChange={handleWordChange} puzzleWords={values} setAll={setMnemonic} />
-            {error ? (
+            {error ?
                 <Typography className={classes.error} variant="body2">
                     {error}
                 </Typography>
-            ) : null}
+            :   null}
         </Box>
     )
 }

@@ -19,9 +19,9 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
                 transform: 'scale(1.02) translateY(-2px)',
                 background: theme.palette.maskColor.bottom,
                 boxShadow:
-                    theme.palette.mode === 'light'
-                        ? '0px 5px 8px rgba(0, 0, 0, 0.05)'
-                        : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+                    theme.palette.mode === 'light' ?
+                        '0px 5px 8px rgba(0, 0, 0, 0.05)'
+                    :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
             },
         },
         title: {
@@ -109,61 +109,60 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
     } = props
     const { classes, cx } = useStyles({ disabled, iconFilterColor })
     const popperProps = useBoundedPopperProps()
-    const jsx = recommendFeature ? (
-        <Button
-            variant="text"
-            // do not change to sx. the hover image will be changed in applicationBoxHover
-            style={{ background: recommendFeature.backgroundGradient }}
-            disabled={disabled}
-            className={cx(
-                classes.recommendFeatureApplicationBox,
-                disabled ? classes.disabled : classes.applicationBoxHover,
-            )}
-            onClick={disabled ? undefined : onClick}>
-            <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
-            <div>
-                <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
-                {secondTitle ? (
-                    <Typography className={classes.recommendFeatureAppListItemDescription}>{secondTitle}</Typography>
-                ) : null}
-                <Typography className={classes.recommendFeatureAppListItemDescription}>
-                    {recommendFeature.description}
+    const jsx =
+        recommendFeature ?
+            <Button
+                variant="text"
+                // do not change to sx. the hover image will be changed in applicationBoxHover
+                style={{ background: recommendFeature.backgroundGradient }}
+                disabled={disabled}
+                className={cx(
+                    classes.recommendFeatureApplicationBox,
+                    disabled ? classes.disabled : classes.applicationBoxHover,
+                )}
+                onClick={disabled ? undefined : onClick}>
+                <div className={classes.recommendFeatureAppIconWrapper}>{icon}</div>
+                <div>
+                    <Typography className={classes.recommendFeatureAppListItemName}>{title}</Typography>
+                    {secondTitle ?
+                        <Typography className={classes.recommendFeatureAppListItemDescription}>
+                            {secondTitle}
+                        </Typography>
+                    :   null}
+                    <Typography className={classes.recommendFeatureAppListItemDescription}>
+                        {recommendFeature.description}
+                    </Typography>
+                </div>
+            </Button>
+        :   <Button
+                className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
+                onClick={disabled ? undefined : onClick}
+                variant="text"
+                disabled={disabled}>
+                <div className={classes.iconWrapper}>{icon}</div>
+                <Typography className={classes.title} color="textPrimary">
+                    {title}
                 </Typography>
-            </div>
-        </Button>
-    ) : (
-        <Button
-            className={cx(classes.applicationBox, disabled ? classes.disabled : classes.applicationBoxHover)}
-            onClick={disabled ? undefined : onClick}
-            variant="text"
-            disabled={disabled}>
-            <div className={classes.iconWrapper}>{icon}</div>
-            <Typography className={classes.title} color="textPrimary">
-                {title}
-            </Typography>
-            {secondTitle ? (
-                <Typography variant="body2" color="textSecondary">
-                    {secondTitle}
-                </Typography>
-            ) : null}
-        </Button>
-    )
-    return tooltipHint && !disabled ? (
-        <ShadowRootTooltip
-            PopperProps={{
-                ...popperProps,
-                disablePortal: true,
-                placement: recommendFeature ? 'bottom' : 'top',
-            }}
-            classes={{
-                arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
-            }}
-            placement={recommendFeature ? 'bottom' : 'top'}
-            arrow
-            title={<Typography>{tooltipHint}</Typography>}>
-            {jsx}
-        </ShadowRootTooltip>
-    ) : (
-        jsx
-    )
+                {secondTitle ?
+                    <Typography variant="body2" color="textSecondary">
+                        {secondTitle}
+                    </Typography>
+                :   null}
+            </Button>
+    return tooltipHint && !disabled ?
+            <ShadowRootTooltip
+                PopperProps={{
+                    ...popperProps,
+                    disablePortal: true,
+                    placement: recommendFeature ? 'bottom' : 'top',
+                }}
+                classes={{
+                    arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
+                }}
+                placement={recommendFeature ? 'bottom' : 'top'}
+                arrow
+                title={<Typography>{tooltipHint}</Typography>}>
+                {jsx}
+            </ShadowRootTooltip>
+        :   jsx
 }

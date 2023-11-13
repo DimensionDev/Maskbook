@@ -96,7 +96,9 @@ const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProp
                 <Typography className={classes.title} component="div">
                     {title}
                 </Typography>
-                {typeof message === 'string' ? <Typography className={classes.message}>{message}</Typography> : message}
+                {typeof message === 'string' ?
+                    <Typography className={classes.message}>{message}</Typography>
+                :   message}
             </SnackbarContent>
         )
     },

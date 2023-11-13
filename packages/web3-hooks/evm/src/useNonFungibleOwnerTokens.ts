@@ -32,9 +32,9 @@ export function useNonFungibleOwnerTokens(
         const isEnumerable = await contract.methods.supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID).call()
 
         const balance =
-            _balance === undefined
-                ? Number.parseInt(await contract.methods.balanceOf(ownerAccount).call(), 10)
-                : _balance
+            _balance === undefined ?
+                Number.parseInt(await contract.methods.balanceOf(ownerAccount).call(), 10)
+            :   _balance
 
         if (!isEnumerable || !balance) return
 

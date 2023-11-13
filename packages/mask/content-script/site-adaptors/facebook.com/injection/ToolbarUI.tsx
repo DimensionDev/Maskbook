@@ -28,7 +28,10 @@ const Icon = styled(ListItemIcon, {
     hasTopNavBar: boolean
     hasSpecificLeftRailStartBar: boolean
 }>`
-    min-width: ${(props) => (!props.hasSpecificLeftRailStartBar ? '24px' : props.hasTopNavBar ? '46px' : 'auto')};
+    min-width: ${(props) =>
+        !props.hasSpecificLeftRailStartBar ? '24px'
+        : props.hasTopNavBar ? '46px'
+        : 'auto'};
     margin-right: ${(props) => (props.hasTopNavBar && props.hasSpecificLeftRailStartBar ? '0px' : '12px')};
     padding-left: 4px;
 `

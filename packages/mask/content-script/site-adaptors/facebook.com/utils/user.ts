@@ -15,24 +15,22 @@ import { collectNodeText } from '../../../utils/index.js'
 import { isMobileFacebook } from './isMobile.js'
 
 export function getNickName(userId?: string | null) {
-    const node = isMobileFacebook
-        ? searchNickNameSelectorOnMobile().evaluate()
-        : searchNickNameSelector(userId).evaluate()
+    const node =
+        isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector(userId).evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
 }
 
 export function getAvatar() {
-    const node = isMobileFacebook
-        ? searchFacebookAvatarOnMobileSelector().evaluate()
-        : searchAvatarSelector().evaluate()
+    const node =
+        isMobileFacebook ? searchFacebookAvatarOnMobileSelector().evaluate() : searchAvatarSelector().evaluate()
     if (!node) return
 
     const imageURL =
-        (isMobileFacebook
-            ? node.style.background.match(/\(["']?(.*?)["']?\)/)?.[1]
-            : node.getAttribute('xlink:href')) ?? ''
+        (isMobileFacebook ?
+            node.style.background.match(/\(["']?(.*?)["']?\)/)?.[1]
+        :   node.getAttribute('xlink:href')) ?? ''
 
     return imageURL.trim()
 }

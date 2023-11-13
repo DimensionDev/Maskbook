@@ -127,7 +127,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                 width: '100%',
                             }}>
                             <Typography className={classes.provider}>{providerName}</Typography>
-                            {!isZero(gasFee) ? (
+                            {!isZero(gasFee) ?
                                 <Typography className={classes.cost}>
                                     <Typography fontSize={14} lineHeight="20px" component="span">
                                         {t.plugin_trader_gas_fee()}
@@ -146,25 +146,27 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                                         {gasFeeValueUSD})
                                     </Typography>
                                 </Typography>
-                            ) : null}
+                            :   null}
                         </Box>
                     ),
                     endAdornment: (
                         <>
-                            {isBest ? <Icons.BestTrade className={classes.best} /> : null}
-                            {isGreatThanSlippageSetting ? (
+                            {isBest ?
+                                <Icons.BestTrade className={classes.best} />
+                            :   null}
+                            {isGreatThanSlippageSetting ?
                                 <Typography className={classes.warningText}>
                                     <Icons.CircleWarning size={18} />
                                     {t.plugin_trader_price_image_value({
                                         percent: priceImpact,
                                     })}
                                 </Typography>
-                            ) : null}
-                            {loading ? (
+                            :   null}
+                            {loading ?
                                 <div className={classes.dotLoading}>
                                     <DotLoading />
                                 </div>
-                            ) : null}
+                            :   null}
                         </>
                     ),
                 }}

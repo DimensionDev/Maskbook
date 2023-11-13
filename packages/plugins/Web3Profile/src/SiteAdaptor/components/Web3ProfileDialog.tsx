@@ -153,12 +153,11 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                 <Alert open={tipsVisible} onClose={dismissTips}>
                     {t.setup_tips()}
                 </Alert>
-                {loadingBinding && !twitterProofs.length ? (
+                {loadingBinding && !twitterProofs.length ?
                     range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
-                ) : isFetched && !twitterProofs.length ? (
+                : isFetched && !twitterProofs.length ?
                     <EmptyStatus height={360}>{t.no_verified_account()}</EmptyStatus>
-                ) : (
-                    twitterProofs.map((proof) => {
+                :   twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
                         const unlistedAddresses = unlistedAddressConfig[proof.identity] ?? EMPTY_LIST
                         const pendingUnlistedAddresses = pendingUnlistedConfig[proof.identity] ?? EMPTY_LIST
@@ -179,9 +178,9 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                             />
                         )
                     })
-                )}
+                }
             </DialogContent>
-            {currentPersona ? (
+            {currentPersona ?
                 <DialogActions className={classes.actions}>
                     <PersonaAction
                         avatar={avatar === null ? undefined : avatar}
@@ -196,7 +195,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                         </ActionButton>
                     </PersonaAction>
                 </DialogActions>
-            ) : null}
+            :   null}
         </InjectedDialog>
     )
 })

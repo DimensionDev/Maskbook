@@ -153,9 +153,9 @@ export function NFTItem({ token, pluginID }: NFTItemProps) {
             />
             <TextOverflowTooltip as={ShadowRootTooltip} title={caption} disableInteractive arrow placement="bottom">
                 <Typography className={classes.caption}>
-                    {Utils.isValidDomain(token.metadata?.name ?? '') || pluginID === NetworkPluginID.PLUGIN_SOLANA
-                        ? token.metadata?.name
-                        : caption}
+                    {Utils.isValidDomain(token.metadata?.name ?? '') || pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                        token.metadata?.name
+                    :   caption}
                 </Typography>
             </TextOverflowTooltip>
         </div>
@@ -188,13 +188,13 @@ export function NFTList({
         [onChange],
     )
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
-        pluginID === NetworkPluginID.PLUGIN_EVM
-            ? (pairs, pair) => {
-                  return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-              }
-            : (pairs, pair) => {
-                  return !!pairs.find(([, tokenId]) => tokenId === pair[1])
-              }
+        pluginID === NetworkPluginID.PLUGIN_EVM ?
+            (pairs, pair) => {
+                return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
+            }
+        :   (pairs, pair) => {
+                return !!pairs.find(([, tokenId]) => tokenId === pair[1])
+            }
 
     const SelectComponent = isRadio ? Radio : Checkbox
 
@@ -202,9 +202,8 @@ export function NFTList({
         <>
             <List className={cx(classes.list, className)}>
                 {tokens.map((token) => {
-                    const selected = selectedPairs
-                        ? includes(selectedPairs, [token.contract?.address!, token.tokenId])
-                        : false
+                    const selected =
+                        selectedPairs ? includes(selectedPairs, [token.contract?.address!, token.tokenId]) : false
                     const inactive = selectedPairs ? selectedPairs.length > 0 && !selected : false
                     const disabled = selectable ? !isRadio && reachedLimit && !selected : false
                     return (
@@ -216,7 +215,7 @@ export function NFTList({
                                 [classes.inactive]: inactive,
                             })}>
                             <NFTItem token={token} pluginID={pluginID} />
-                            {selectable ? (
+                            {selectable ?
                                 <SelectComponent
                                     size="small"
                                     onChange={noop}
@@ -232,16 +231,16 @@ export function NFTList({
                                     className={classes.checkbox}
                                     checked={selected}
                                 />
-                            ) : null}
+                            :   null}
                         </ListItem>
                     )
                 })}
             </List>
-            {hasError && finished && tokens.length ? (
+            {hasError && finished && tokens.length ?
                 <Stack py={1}>
                     <RetryHint hint={false} retry={onNextPage} />
                 </Stack>
-            ) : null}
+            :   null}
             <Stack py={1}>
                 <ElementAnchor callback={onNextPage}>{!finished && <LoadingBase />}</ElementAnchor>
             </Stack>

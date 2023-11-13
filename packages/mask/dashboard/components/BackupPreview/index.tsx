@@ -148,7 +148,7 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                 classes={{ action: classes.action }}
                 title={<Typography className={classes.title}>{t.personas()}</Typography>}
                 action={
-                    info.personas.length ? (
+                    info.personas.length ?
                         <Box display="flex" columnGap={1}>
                             <Typography component="div" className={classes.headerAction}>
                                 <TextOverflowTooltip title={personas} arrow placement="top">
@@ -156,11 +156,11 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                                 </TextOverflowTooltip>
                                 {` (${info.personas.length})`}
                             </Typography>
-                            {selectable ? (
+                            {selectable ?
                                 <Checkbox checked={selected} onChange={(event) => onChange?.(event.target.checked)} />
-                            ) : null}
+                            :   null}
                         </Box>
-                    ) : null
+                    :   null
                 }
             />
             <CardContent className={classes.cardContent}>
@@ -219,9 +219,9 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                 }
                 title={<Typography className={classes.title}>{`${t.wallets()} (${wallets.length})`}</Typography>}
                 action={
-                    selectable ? (
+                    selectable ?
                         <Checkbox checked={selected} onChange={(event) => onChange?.(event.target.checked)} />
-                    ) : null
+                    :   null
                 }
             />
             <CardContent className={classes.cardContent}>

@@ -93,10 +93,9 @@ export class Popups implements Middleware<ConnectionContext> {
 
             return {
                 allowMaskAsGas: !availableBalanceTooLow,
-                paymentToken: isNative
-                    ? context.paymentToken
-                    : !availableBalanceTooLow
-                    ? maskAddress
+                paymentToken:
+                    isNative ? context.paymentToken
+                    : !availableBalanceTooLow ? maskAddress
                     : nativeTokenAddress,
             }
         } catch (error) {

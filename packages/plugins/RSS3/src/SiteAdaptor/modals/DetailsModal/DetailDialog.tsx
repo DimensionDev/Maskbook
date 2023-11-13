@@ -98,7 +98,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                 <DialogContent className={classes.content}>
                     <div className={classes.details}>
                         <FeedCard className={classes.card} feed={feed} actionIndex={actionIndex} verbose />
-                        {links?.length ? (
+                        {links?.length ?
                             <div className={classes.links}>
                                 {links.map((link, index) => {
                                     const url = parseURL(link)
@@ -113,7 +113,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                                     )
                                 })}
                             </div>
-                        ) : null}
+                        :   null}
                     </div>
                 </DialogContent>
             </InjectedDialog>

@@ -67,16 +67,18 @@ Error stack:
                     </Button>
                     <Box sx={{ flex: 1 }} />
                     <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
-                        {showStack ? <ExpandMore /> : <ExpandLess />}
+                        {showStack ?
+                            <ExpandMore />
+                        :   <ExpandLess />}
                     </IconButton>
                 </ActionArea>
-                {showStack ? (
+                {showStack ?
                     <ErrorStack>
                         <Typography component="pre">
                             <code>{error.stack}</code>
                         </Typography>
                     </ErrorStack>
-                ) : null}
+                :   null}
             </Alert>
         </Root>
     )

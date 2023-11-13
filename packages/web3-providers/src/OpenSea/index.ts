@@ -165,28 +165,30 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             value: x.value,
             rarity: formatPercentage(dividedBy(x.trait_count, asset.collection.stats.count)),
         })),
-        price: asset.last_sale
-            ? {
-                  [CurrencyType.USD]: getOrderUSDPrice(
-                      asset.last_sale.total_price,
-                      asset.last_sale.payment_token.usd_price,
-                      asset.last_sale.payment_token.decimals,
-                  )?.toString(),
-              }
-            : undefined,
-        priceInToken: asset.last_sale
-            ? {
-                  token:
-                      paymentToken ??
-                      createTokenDetailed(chainId, {
-                          address: asset.last_sale.payment_token.address ?? '',
-                          decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
-                          name: '',
-                          symbol: asset.last_sale.payment_token.symbol ?? '',
-                      }),
-                  amount: asset.last_sale.total_price ?? '0',
-              }
-            : undefined,
+        price:
+            asset.last_sale ?
+                {
+                    [CurrencyType.USD]: getOrderUSDPrice(
+                        asset.last_sale.total_price,
+                        asset.last_sale.payment_token.usd_price,
+                        asset.last_sale.payment_token.decimals,
+                    )?.toString(),
+                }
+            :   undefined,
+        priceInToken:
+            asset.last_sale ?
+                {
+                    token:
+                        paymentToken ??
+                        createTokenDetailed(chainId, {
+                            address: asset.last_sale.payment_token.address ?? '',
+                            decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
+                            name: '',
+                            symbol: asset.last_sale.payment_token.symbol ?? '',
+                        }),
+                    amount: asset.last_sale.total_price ?? '0',
+                }
+            :   undefined,
     }
 }
 
@@ -201,16 +203,17 @@ function createAccount(account?: OpenSeaCustomAccount) {
 }
 
 function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
-    const paymentToken = event.payment_token
-        ? createERC20Token(
-              chainId,
-              event.payment_token.address,
-              event.payment_token.name,
-              event.payment_token.symbol,
-              event.payment_token.decimals,
-              event.payment_token.image_url,
-          )
-        : undefined
+    const paymentToken =
+        event.payment_token ?
+            createERC20Token(
+                chainId,
+                event.payment_token.address,
+                event.payment_token.name,
+                event.payment_token.symbol,
+                event.payment_token.decimals,
+                event.payment_token.image_url,
+            )
+        :   undefined
     return {
         from: createAccount(event.from_account ?? event.seller),
         to: createAccount(event.to_account ?? event.winner_account),
@@ -221,21 +224,23 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         quantity: event.quantity,
         hash: event.transaction?.transaction_hash,
         timestamp: new Date(`${event.created_date}Z`).getTime(),
-        price: event.payment_token
-            ? {
-                  [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
-                      .dividedBy(scale10(1, event.payment_token?.decimals))
-                      .dividedBy(event.quantity)
-                      .multipliedBy(event.payment_token?.usd_price ?? 1)
-                      .toFixed(2),
-              }
-            : undefined,
-        priceInToken: paymentToken
-            ? {
-                  amount: event.bid_amount ?? event.total_price ?? '0',
-                  token: paymentToken,
-              }
-            : undefined,
+        price:
+            event.payment_token ?
+                {
+                    [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
+                        .dividedBy(scale10(1, event.payment_token?.decimals))
+                        .dividedBy(event.quantity)
+                        .multipliedBy(event.payment_token?.usd_price ?? 1)
+                        .toFixed(2),
+                }
+            :   undefined,
+        priceInToken:
+            paymentToken ?
+                {
+                    amount: event.bid_amount ?? event.total_price ?? '0',
+                    token: paymentToken,
+                }
+            :   undefined,
         paymentToken,
         source: SourceType.OpenSea,
     }
@@ -264,19 +269,20 @@ function createOrder(
                 .multipliedBy(event.payment_token?.usd_price ?? 1)
                 .toFixed(2),
         },
-        priceInToken: event.payment_token
-            ? {
-                  amount: amount ?? '0',
-                  token: createERC20Token(
-                      chainId,
-                      event.payment_token.address,
-                      event.payment_token.name,
-                      event.payment_token.symbol,
-                      event.payment_token.decimals,
-                      event.payment_token.image_url,
-                  ),
-              }
-            : undefined,
+        priceInToken:
+            event.payment_token ?
+                {
+                    amount: amount ?? '0',
+                    token: createERC20Token(
+                        chainId,
+                        event.payment_token.address,
+                        event.payment_token.name,
+                        event.payment_token.symbol,
+                        event.payment_token.decimals,
+                        event.payment_token.image_url,
+                    ),
+                }
+            :   undefined,
         source: SourceType.OpenSea,
     }
 }
@@ -385,7 +391,10 @@ class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                 token_id: tokenId,
                 cursor: indicator?.id,
                 limit: size,
-                event_type: side === OrderSide.Sell ? 'created' : side === OrderSide.Buy ? 'offer_entered' : '',
+                event_type:
+                    side === OrderSide.Sell ? 'created'
+                    : side === OrderSide.Buy ? 'offer_entered'
+                    : '',
             }),
             chainId,
         )
@@ -424,9 +433,9 @@ class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                     address: x.primary_asset_contracts?.[0]?.address,
                     symbol: x.primary_asset_contracts?.[0]?.symbol,
                     schema:
-                        x.primary_asset_contracts?.[0]?.schema_name === 'ERC1155'
-                            ? SchemaType.ERC1155
-                            : SchemaType.ERC721,
+                        x.primary_asset_contracts?.[0]?.schema_name === 'ERC1155' ?
+                            SchemaType.ERC1155
+                        :   SchemaType.ERC721,
                     description: x.description,
                     iconURL: x.image_url,
                     balance: x.owned_asset_count,

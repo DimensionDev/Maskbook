@@ -129,14 +129,13 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                 <List className={classes.list} classes={{ root: classes.listRoot }}>
                     {files.map((file) => (
                         <ListItem key={file.id} className={classes.listItem}>
-                            {uploadStateMap[file.id] ? (
+                            {uploadStateMap[file.id] ?
                                 <UploadingFile
                                     className={classes.file}
                                     file={file}
                                     progress={uploadStateMap[file.id]?.progress ?? 0}
                                 />
-                            ) : (
-                                <ManageableFile
+                            :   <ManageableFile
                                     className={classes.file}
                                     file={file}
                                     onDelete={handleDelete}
@@ -144,7 +143,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                                     onDownload={onDownload}
                                     onSend={onSend}
                                 />
-                            )}
+                            }
                         </ListItem>
                     ))}
                 </List>

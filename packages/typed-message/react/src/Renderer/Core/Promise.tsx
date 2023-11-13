@@ -5,34 +5,34 @@ import { TypedMessageRenderInline } from '../Entry.js'
 import { useTransformedValue } from '../utils/TransformContext.js'
 
 export const TypedMessagePromiseRender = memo(
-    'use' in React
-        ? function TypedMessagePromiseRender(props: TypedMessagePromise) {
-              const { promise, alt } = props
-              return (
-                  <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
-                      <Await_new promise={promise} />
-                  </Suspense>
-              )
-          }
-        : function TypedMessagePromiseRender(props: TypedMessagePromise) {
-              const { promise, alt } = props
+    'use' in React ?
+        function TypedMessagePromiseRender(props: TypedMessagePromise) {
+            const { promise, alt } = props
+            return (
+                <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
+                    <Await_new promise={promise} />
+                </Suspense>
+            )
+        }
+    :   function TypedMessagePromiseRender(props: TypedMessagePromise) {
+            const { promise, alt } = props
 
-              const _ = useState(0)[1]
-              const rerender = () => _(Math.random())
+            const _ = useState(0)[1]
+            const rerender = () => _(Math.random())
 
-              useEffect(() => {
-                  promise.then(rerender)
-              }, [promise, _])
+            useEffect(() => {
+                promise.then(rerender)
+            }, [promise, _])
 
-              const transformedValue = useTransformedValue('value' in promise ? promise.value : undefined)
-              if (transformedValue) return <TypedMessageRenderInline message={transformedValue} />
+            const transformedValue = useTransformedValue('value' in promise ? promise.value : undefined)
+            if (transformedValue) return <TypedMessageRenderInline message={transformedValue} />
 
-              return (
-                  <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
-                      <Await_old promise={promise} />
-                  </Suspense>
-              )
-          },
+            return (
+                <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
+                    <Await_old promise={promise} />
+                </Suspense>
+            )
+        },
 )
 
 function Await_new({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {

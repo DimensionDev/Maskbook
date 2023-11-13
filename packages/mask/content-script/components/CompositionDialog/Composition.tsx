@@ -147,9 +147,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     initialMetas={initialMetas}
                     personaAction={
-                        persona ? (
+                        persona ?
                             <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />
-                        ) : null
+                        :   null
                     }
                 />
             </DialogContent>

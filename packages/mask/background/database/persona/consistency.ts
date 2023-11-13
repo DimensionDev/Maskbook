@@ -41,9 +41,9 @@ async function fixDBInconsistency(diagnosis: Diagnosis, t: ReadwriteFullPersonaD
         case Type.Invalid_Persona_LinkedProfiles: {
             const rec = await personas.get(diagnosis.persona.toText())
             const profileWantToUnlink =
-                diagnosis.type === Type.One_Way_Link_In_Persona
-                    ? diagnosis.designatedProfile.toText()
-                    : diagnosis.invalidProfile
+                diagnosis.type === Type.One_Way_Link_In_Persona ?
+                    diagnosis.designatedProfile.toText()
+                :   diagnosis.invalidProfile
             rec!.linkedProfiles.delete(profileWantToUnlink)
             return personas.put(rec!)
         }

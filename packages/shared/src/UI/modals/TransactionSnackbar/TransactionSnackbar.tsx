@@ -109,16 +109,15 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined)
-                Sniffings.is_popup_page
-                    ? closePopupSnackbar(snackbarKeyRef.current)
-                    : closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current = Sniffings.is_popup_page
-                ? showPopupSnackbar(title, options)
-                : showSnackbar(title, options)
+                Sniffings.is_popup_page ?
+                    closePopupSnackbar(snackbarKeyRef.current)
+                :   closeSnackbar(snackbarKeyRef.current)
+            snackbarKeyRef.current =
+                Sniffings.is_popup_page ? showPopupSnackbar(title, options) : showSnackbar(title, options)
             return () => {
-                Sniffings.is_popup_page
-                    ? closePopupSnackbar(snackbarKeyRef.current)
-                    : closeSnackbar(snackbarKeyRef.current)
+                Sniffings.is_popup_page ?
+                    closePopupSnackbar(snackbarKeyRef.current)
+                :   closeSnackbar(snackbarKeyRef.current)
             }
         },
         [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],
@@ -134,9 +133,9 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         if (!computed || computed.title === 'followWithSig' || computed.title === 'burnWithSig') return
 
         showSingletonSnackbar(
-            progress.status === TransactionStatusType.SUCCEED
-                ? computed.snackbar?.successfulTitle ?? computed.title
-                : computed.title,
+            progress.status === TransactionStatusType.SUCCEED ?
+                computed.snackbar?.successfulTitle ?? computed.title
+            :   computed.title,
             {
                 ...resolveSnackbarConfig(progress.status),
                 ...{
@@ -148,9 +147,9 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                             href={Utils.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            {progress.status === TransactionStatusType.SUCCEED
-                                ? computed.snackbar?.successfulDescription ?? computed.description
-                                : computed.description}{' '}
+                            {progress.status === TransactionStatusType.SUCCEED ?
+                                computed.snackbar?.successfulDescription ?? computed.description
+                            :   computed.description}{' '}
                             <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                         </Link>
                     ),

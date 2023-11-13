@@ -41,7 +41,11 @@ const dependencies = (types: Record<string, TypedDataField[]>, primaryType: stri
 // Encode the type data for hashing
 const encodeType = (types: Record<string, TypedDataField[]>, primaryType: string): string => {
     const depSet = dependencies(types, primaryType)
-    depSet.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+    depSet.sort((a, b) =>
+        a < b ? -1
+        : a > b ? 1
+        : 0,
+    )
     return depSet
         .map((type) => `${type}(${types[type]?.map(({ name, type }) => `${type} ${name}`).join(',')})`)
         .join('')

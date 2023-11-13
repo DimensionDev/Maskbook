@@ -56,9 +56,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         footer: {
             boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+                theme.palette.mode === 'dark' ?
+                    '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
             position: 'sticky',
             bottom: 0,
         },
@@ -125,9 +125,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 </div>
 
                 <div className={classes.tabWrapper}>
-                    {currentTab === TabType.About ? (
+                    {currentTab === TabType.About ?
                         <AboutTab orders={offers} asset={asset.data} />
-                    ) : currentTab === TabType.Offers ? (
+                    : currentTab === TabType.Offers ?
                         <OffersTab
                             offers={offers}
                             loading={orders.isLoading}
@@ -135,15 +135,13 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             onNext={orders.fetchNextPage}
                             onRetry={orders.refetch}
                         />
-                    ) : (
-                        <ActivitiesTab />
-                    )}
+                    :   <ActivitiesTab />}
                 </div>
             </div>
 
             <Web3ContextProvider value={{ pluginID: parentPluginID }}>
                 <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
-                    {origin === 'pfp' && currentVisitingIdentity?.isOwner ? (
+                    {origin === 'pfp' && currentVisitingIdentity?.isOwner ?
                         <ConnectPersonaBoundary
                             personas={personas}
                             identity={lastRecognized}
@@ -163,7 +161,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                                 <span className={classes.buttonText}>{t.plugin_collectibles_pfp_button()}</span>
                             </Button>
                         </ConnectPersonaBoundary>
-                    ) : externalLink ? (
+                    : externalLink ?
                         <Button
                             sx={{ display: 'flex', alignItems: 'center' }}
                             variant="contained"
@@ -173,16 +171,14 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             <span className={classes.buttonText}>
                                 {t.plugin_collectibles_more_on_button({
                                     provider:
-                                        asset.data.source === SourceType.NFTScan
-                                            ? resolveSourceTypeName(asset.data.source)
-                                            : 'platform',
+                                        asset.data.source === SourceType.NFTScan ?
+                                            resolveSourceTypeName(asset.data.source)
+                                        :   'platform',
                                 })}
                             </span>
                             <Icons.LinkOut size={16} />
                         </Button>
-                    ) : (
-                        <div />
-                    )}
+                    :   <div />}
                 </PluginWalletStatusBar>
             </Web3ContextProvider>
         </div>

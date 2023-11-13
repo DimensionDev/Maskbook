@@ -42,10 +42,14 @@ export function FollowersPage(props: FollowersPageProps) {
     if (!value?.length && loading) return <LoadingStatus height={400} omitText />
     return (
         <Box className={classes.root}>
-            {value?.length
-                ? value.map((x: IFollowIdentity) => <FollowRow key={x.ens || x.address} identity={x} />)
-                : props.hint}
-            <ElementAnchor callback={() => next?.()}>{!done && value?.length ? <LoadingBase /> : null}</ElementAnchor>
+            {value?.length ?
+                value.map((x: IFollowIdentity) => <FollowRow key={x.ens || x.address} identity={x} />)
+            :   props.hint}
+            <ElementAnchor callback={() => next?.()}>
+                {!done && value?.length ?
+                    <LoadingBase />
+                :   null}
+            </ElementAnchor>
         </Box>
     )
 }

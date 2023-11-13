@@ -36,15 +36,14 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     return (
         <Stack position="relative">
-            {hasBorder ? (
+            {hasBorder ?
                 <RainbowBox>
                     <Avatar src={avatar} />
                 </RainbowBox>
-            ) : (
-                <Box style={{ border: '2px solid transparent' }}>
+            :   <Box style={{ border: '2px solid transparent' }}>
                     <Avatar src={avatar} />
                 </Box>
-            )}
+            }
 
             <Stack
                 sx={{
@@ -58,7 +57,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
             </Stack>
-            {owner ? <div className={classes.indicator} /> : null}
+            {owner ?
+                <div className={classes.indicator} />
+            :   null}
         </Stack>
     )
 }

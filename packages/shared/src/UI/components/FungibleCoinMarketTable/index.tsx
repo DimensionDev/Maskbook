@@ -71,7 +71,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
-                                {market?.market_cap ? (
+                                {market?.market_cap ?
                                     <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.market_cap}
@@ -79,9 +79,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                             sign={sign}
                                         />
                                     </ProgressiveText>
-                                ) : (
-                                    '--'
-                                )}
+                                :   '--'}
                             </TableCell>
                         </TableRow>
 
@@ -103,7 +101,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
-                                {market?.total_volume ? (
+                                {market?.total_volume ?
                                     <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.total_volume}
@@ -111,9 +109,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                                             sign={sign}
                                         />
                                     </ProgressiveText>
-                                ) : (
-                                    '--'
-                                )}
+                                :   '--'}
                             </TableCell>
                         </TableRow>
                         <TableRow>

@@ -47,9 +47,9 @@ export function useSortedTrades(
 
                         const finalPrice = leftShift(trade.value.value.outputAmount, outputToken.decimals)
                             .times(
-                                !Utils.isNativeTokenSchemaType(outputToken.schema)
-                                    ? outputTokenPrice
-                                    : nativeTokenPrice,
+                                !Utils.isNativeTokenSchemaType(outputToken.schema) ?
+                                    outputTokenPrice
+                                :   nativeTokenPrice,
                             )
                             .minus(gasFeeUSD)
 

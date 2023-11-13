@@ -13,9 +13,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(1),
         backgroundColor: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
         backdropFilter: 'blur(8px)',
         '&:hover': {
             backgroundColor: theme.palette.maskColor.bg,
@@ -89,7 +89,9 @@ export const ContractItem = memo(function ContractItem({
                     </Link>
                 </Typography>
             </div>
-            {collection.balance ? <Typography className={classes.balance}>{collection.balance}</Typography> : null}
+            {collection.balance ?
+                <Typography className={classes.balance}>{collection.balance}</Typography>
+            :   null}
         </ListItem>
     )
 })

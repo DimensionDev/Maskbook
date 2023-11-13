@@ -124,16 +124,14 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
             <Container>
                 <ListItemButton onClick={onClickToolbox}>
                     <ListItemIcon>
-                        {account && provider && provider.type !== ProviderType.MaskWallet ? (
+                        {account && provider && provider.type !== ProviderType.MaskWallet ?
                             <WalletIcon
                                 size={iconSize}
                                 badgeSize={badgeSize}
                                 mainIcon={provider.icon}
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
-                        ) : (
-                            <Icons.Wallet size={iconSize} />
-                        )}
+                        :   <Icons.Wallet size={iconSize} />}
                     </ListItemIcon>
                     {mini ? null : (
                         <ListItemText
@@ -145,14 +143,14 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                         alignItems: 'center',
                                     }}>
                                     <Typography className={classes.title}>{title}</Typography>
-                                    {shouldDisplayChainIndicator ? (
+                                    {shouldDisplayChainIndicator ?
                                         <FiberManualRecordIcon
                                             className={classes.chainIcon}
                                             style={{
                                                 color: chainColor,
                                             }}
                                         />
-                                    ) : null}
+                                    :   null}
                                 </Box>
                             }
                         />

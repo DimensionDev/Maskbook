@@ -45,9 +45,10 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         position: 'relative',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        backgroundImage: claimed
-            ? `url(${new URL('./assets/nftClaimedCover.png', import.meta.url)})`
-            : `url(${new URL('./assets/cover.png', import.meta.url)})`,
+        backgroundImage:
+            claimed ?
+                `url(${new URL('./assets/nftClaimedCover.png', import.meta.url)})`
+            :   `url(${new URL('./assets/cover.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         width: 'calc(100% - 32px)',
@@ -232,7 +233,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             payload: postLink.toString(),
             network: network?.name || '',
             account_promote: t.account_promote({
-                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                context:
+                    isOnTwitter ? 'twitter'
+                    : isOnFacebook ? 'facebook'
+                    : 'default',
             }),
             interpolation: { escapeValue: false },
         } as const
@@ -285,7 +289,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             payload: postLink.toString(),
             network: network?.name || '',
             account_promote: t.account_promote({
-                context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+                context:
+                    isOnTwitter ? 'twitter'
+                    : isOnFacebook ? 'facebook'
+                    : 'default',
             }),
             interpolation: { escapeValue: false },
         } as const
@@ -371,33 +378,32 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 </ShadowRootTooltip>
 
                 <div className={classes.footer}>
-                    {availability.isClaimed ? (
+                    {availability.isClaimed ?
                         <Typography className={classes.claimedText}>
                             {t.got_nft({ name: payload.contractName || 'NFT' })}
                         </Typography>
-                    ) : (
-                        <Typography className={classes.remain}>
+                    :   <Typography className={classes.remain}>
                             {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
                         </Typography>
-                    )}
+                    }
                     <Typography variant="body1" className={classes.from}>
                         {t.from({ name: payload.senderName || '-' })}
                     </Typography>
                 </div>
 
-                {availability.isClaimed ? (
+                {availability.isClaimed ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {t.claimed({ amount: '' })}
                         </Typography>
                     </div>
-                ) : availability.isEnd ? (
+                : availability.isEnd ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
                             {availability.expired ? t.expired() : t.completed()}
                         </Typography>
                     </div>
-                ) : null}
+                :   null}
             </Card>
             {outdated ? null : (
                 <OperationFooter

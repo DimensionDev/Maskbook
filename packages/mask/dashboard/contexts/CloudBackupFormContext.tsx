@@ -35,16 +35,16 @@ function useCloudBackupFormContext() {
             z
                 .object({
                     email:
-                        currentTab === tabs.email
-                            ? z
-                                  .string()
-                                  .refine((email) => emailRegexp.test(email), t.cloud_backup_incorrect_email_address())
-                            : z.string().optional(),
+                        currentTab === tabs.email ?
+                            z
+                                .string()
+                                .refine((email) => emailRegexp.test(email), t.cloud_backup_incorrect_email_address())
+                        :   z.string().optional(),
                     countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),
                     phone:
-                        currentTab === tabs.mobile
-                            ? z.string().refine((mobile) => phoneRegexp.test(mobile))
-                            : z.string().optional(),
+                        currentTab === tabs.mobile ?
+                            z.string().refine((mobile) => phoneRegexp.test(mobile))
+                        :   z.string().optional(),
                     code: z
                         .string()
                         .min(1, t.cloud_backup_incorrect_verified_code())

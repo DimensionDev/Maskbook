@@ -182,11 +182,11 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
     return (
         <InjectedDialog {...rest} title={t.donate_dialog_title()} maxWidth="xs">
             <DialogContent style={{ padding: 16 }}>
-                {grant.logo_url ? (
+                {grant.logo_url ?
                     <div className={classes.banner}>
                         <img className={classes.bannerImage} src={grant.logo_url} />
                     </div>
-                ) : null}
+                :   null}
                 <form noValidate autoComplete="off">
                     <Box ml={-1.5}>
                         <NetworkTab pluginID={NetworkPluginID.PLUGIN_EVM} chains={availableChains} />

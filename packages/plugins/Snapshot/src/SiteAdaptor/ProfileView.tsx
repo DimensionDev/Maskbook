@@ -121,7 +121,7 @@ export function ProfileView(props: ProfileViewProps) {
                     </Stack>
                 </TabContext>
             </Stack>
-            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList || isPending ? (
+            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList || isPending ?
                 <CardContent className={classes.skeletonContent}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
@@ -130,10 +130,9 @@ export function ProfileView(props: ProfileViewProps) {
                         </Typography>
                     </Stack>
                 </CardContent>
-            ) : filteredProposalList.length > 0 ? (
+            : filteredProposalList.length > 0 ?
                 <ProfileProposalList proposalList={filteredProposalList} />
-            ) : (
-                <CardContent className={classes.skeletonContent}>
+            :   <CardContent className={classes.skeletonContent}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <Icons.EmptySimple size={36} />
                         <Typography fontSize="14px" mt={1.5}>
@@ -141,7 +140,7 @@ export function ProfileView(props: ProfileViewProps) {
                         </Typography>
                     </Stack>
                 </CardContent>
-            )}
+            }
         </ProfileCard>
     )
 }

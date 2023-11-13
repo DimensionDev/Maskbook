@@ -143,52 +143,52 @@ export function VotingCard() {
         }
         return text
     }, [choices_])
-    return account && pluginID === NetworkPluginID.PLUGIN_EVM ? (
-        <SnapshotCard title={t.plugin_snapshot_vote_title()}>
-            <Box className={classes.buttons}>
-                {choices.map((choiceText, i) => (
+    return account && pluginID === NetworkPluginID.PLUGIN_EVM ?
+            <SnapshotCard title={t.plugin_snapshot_vote_title()}>
+                <Box className={classes.buttons}>
+                    {choices.map((choiceText, i) => (
+                        <Button
+                            variant="roundedContained"
+                            fullWidth
+                            key={i}
+                            onClick={() => onClick(i + 1)}
+                            className={cx([
+                                classes.button,
+                                classes.choiceButton,
+                                ...(choices_.includes(i + 1) ? [classes.buttonActive] : []),
+                            ])}>
+                            <Typography
+                                fontWeight={700}
+                                fontSize={16}
+                                sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {choiceText}
+                            </Typography>
+                        </Button>
+                    ))}
+
                     <Button
                         variant="roundedContained"
                         fullWidth
-                        key={i}
-                        onClick={() => onClick(i + 1)}
-                        className={cx([
-                            classes.button,
-                            classes.choiceButton,
-                            ...(choices_.includes(i + 1) ? [classes.buttonActive] : []),
-                        ])}>
-                        <Typography
-                            fontWeight={700}
-                            fontSize={16}
-                            sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {choiceText}
+                        className={cx(classes.button, disabled ? '' : classes.buttonActive)}
+                        disabled={disabled}
+                        onClick={() => setOpen(true)}>
+                        <Typography fontWeight={700} fontSize={16}>
+                            {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
                         </Typography>
                     </Button>
-                ))}
+                </Box>
 
-                <Button
-                    variant="roundedContained"
-                    fullWidth
-                    className={cx(classes.button, disabled ? '' : classes.buttonActive)}
-                    disabled={disabled}
-                    onClick={() => setOpen(true)}>
-                    <Typography fontWeight={700} fontSize={16}>
-                        {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
-                    </Typography>
-                </Button>
-            </Box>
-
-            <VoteConfirmDialog
-                open={open}
-                loading={loading}
-                onClose={() => setOpen(false)}
-                choiceText={choiceText}
-                snapshot={proposal.snapshot}
-                powerSymbol={proposal.space.symbol}
-                power={power}
-                onVoteConfirm={onVoteConfirm}
-                chainId={proposal.chainId}
-            />
-        </SnapshotCard>
-    ) : null
+                <VoteConfirmDialog
+                    open={open}
+                    loading={loading}
+                    onClose={() => setOpen(false)}
+                    choiceText={choiceText}
+                    snapshot={proposal.snapshot}
+                    powerSymbol={proposal.space.symbol}
+                    power={power}
+                    onVoteConfirm={onVoteConfirm}
+                    chainId={proposal.chainId}
+                />
+            </SnapshotCard>
+        :   null
 }

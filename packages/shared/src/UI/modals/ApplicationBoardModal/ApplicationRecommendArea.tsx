@@ -72,7 +72,7 @@ export function ApplicationRecommendArea(props: Props) {
     return (
         <>
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            {recommendFeatureAppList.length > 2 && isCarouselReady?.() ? (
+            {recommendFeatureAppList.length > 2 && isCarouselReady?.() ?
                 <CarouselProvider
                     naturalSlideWidth={220}
                     naturalSlideHeight={117}
@@ -100,13 +100,12 @@ export function ApplicationRecommendArea(props: Props) {
                         ))}
                     </Slider>
                 </CarouselProvider>
-            ) : (
-                <Box className={classes.recommendFeatureAppListWrapper}>
+            :   <Box className={classes.recommendFeatureAppListWrapper}>
                     {recommendFeatureAppList.map((application) => (
                         <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
                 </Box>
-            )}
+            }
         </>
     )
 }

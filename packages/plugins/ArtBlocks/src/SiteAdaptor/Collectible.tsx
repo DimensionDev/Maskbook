@@ -74,9 +74,10 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
     const pages = [<CollectionView key="project" project={project} />, <DetailsView key="details" project={project} />]
 
     const invocations = ` ${project.invocations} of ${project.maxInvocations} minted `
-    const price = formatWeiToEther(project.pricePerTokenInWei).isZero()
-        ? ''
-        : ` ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`
+    const price =
+        formatWeiToEther(project.pricePerTokenInWei).isZero() ?
+            ''
+        :   ` ${formatWeiToEther(project.pricePerTokenInWei)} ${project?.currencySymbol}`
 
     return (
         <>
@@ -125,7 +126,7 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
                     <Paper>{pages[tabIndex]}</Paper>
                 </CardContent>
             </Card>
-            {price ? (
+            {price ?
                 <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
@@ -134,7 +135,7 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
                         <ActionBar chainId={chainId} project={project} />
                     </ChainBoundary>
                 </Box>
-            ) : null}
+            :   null}
         </>
     )
 }

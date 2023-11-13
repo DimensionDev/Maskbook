@@ -78,7 +78,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
     return (
         <Stack direction="row" alignItems="center" gap={1} onClick={onClick}>
             <Box flexGrow={0} position="relative">
-                {data.avatar ? (
+                {data.avatar ?
                     <Avatar
                         src={data.avatar}
                         sx={{
@@ -88,7 +88,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
                             borderRadius: '50%',
                         }}
                     />
-                ) : null}
+                :   null}
                 {!data.avatar && <Icons.MenuPersonasActive size={30} />}
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>
@@ -96,7 +96,9 @@ export function PersonaItemUI(props: PersonaItemProps) {
                 <Typography className={classes.nickname}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {data.persona.nickname}
-                        {isVerified ? <Icons.NextIDMini width={32} height={18} /> : null}
+                        {isVerified ?
+                            <Icons.NextIDMini width={32} height={18} />
+                        :   null}
                     </Stack>
                 </Typography>
                 <Typography className={classes.fingerprint}>
@@ -107,11 +109,9 @@ export function PersonaItemUI(props: PersonaItemProps) {
                 </Typography>
             </Stack>
             <Stack flexGrow={0}>
-                {isSamePersona(currentPersona?.persona, data.persona) ? (
+                {isSamePersona(currentPersona?.persona, data.persona) ?
                     <Icons.CheckCircle size={20} className={classes.checked} />
-                ) : (
-                    <Icons.RadioNo size={20} className={classes.unchecked} />
-                )}
+                :   <Icons.RadioNo size={20} className={classes.unchecked} />}
             </Stack>
         </Stack>
     )

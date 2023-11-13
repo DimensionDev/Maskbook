@@ -36,31 +36,31 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        ...(loading
-            ? {
-                  '&:before': {
-                      content: "''",
-                      boxSizing: 'border-box',
-                      position: 'absolute',
-                      top: -5,
-                      left: -5,
-                      width: 56,
-                      height: 56,
-                      borderRadius: '50%',
-                      border: `2px solid ${theme.palette.maskColor.main}`,
-                      borderTopColor: theme.palette.maskColor.second,
-                      animation: 'spinner 2s linear infinite',
-                  },
-              }
-            : {}),
+        ...(loading ?
+            {
+                '&:before': {
+                    content: "''",
+                    boxSizing: 'border-box',
+                    position: 'absolute',
+                    top: -5,
+                    left: -5,
+                    width: 56,
+                    height: 56,
+                    borderRadius: '50%',
+                    border: `2px solid ${theme.palette.maskColor.main}`,
+                    borderTopColor: theme.palette.maskColor.second,
+                    animation: 'spinner 2s linear infinite',
+                },
+            }
+        :   {}),
 
-        ...(timeout
-            ? {
-                  border: `2px solid ${theme.palette.maskColor.danger}`,
-                  borderRadius: '50%',
-                  padding: 10,
-              }
-            : {}),
+        ...(timeout ?
+            {
+                border: `2px solid ${theme.palette.maskColor.danger}`,
+                borderRadius: '50%',
+                padding: 10,
+            }
+        :   {}),
     },
 }))
 
@@ -106,9 +106,9 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 // wait for web3 state init
                 await delay(1500)
                 const chainId =
-                    providerType === ProviderType.Fortmatic
-                        ? ChainId.Mainnet
-                        : await EVMWeb3.getChainId({ providerType })
+                    providerType === ProviderType.Fortmatic ?
+                        ChainId.Mainnet
+                    :   await EVMWeb3.getChainId({ providerType })
                 return EVMWeb3.connect({
                     chainId,
                     providerType: providerType as ProviderType,
@@ -147,32 +147,32 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
     return (
         <ActionModal
             header={
-                providerExist
-                    ? t.popups_wait_for_provider_connect_title({ providerType: String(providerType) })
-                    : t.popups_not_connected_third_party_wallet_title()
+                providerExist ?
+                    t.popups_wait_for_provider_connect_title({ providerType: String(providerType) })
+                :   t.popups_not_connected_third_party_wallet_title()
             }
             keepMounted
             {...props}
             onClose={handleClose}>
             <Typography className={classes.tips}>
-                {isTimeout
-                    ? t.popups_wait_for_provider_connect_timeout()
-                    : providerExist
-                    ? t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
-                    : t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
+                {isTimeout ?
+                    t.popups_wait_for_provider_connect_timeout()
+                : providerExist ?
+                    t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
+                :   t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-                {provider?.icon ? (
+                {provider?.icon ?
                     <Box className={classes.icon}>
                         <img src={provider.icon} style={{ width: 32, height: 32 }} />
                     </Box>
-                ) : null}
-                {isTimeout ? (
+                :   null}
+                {isTimeout ?
                     <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
                         {t.retry()}
                     </Button>
-                ) : null}
-                {!providerExist ? (
+                :   null}
+                {!providerExist ?
                     <>
                         <Typography fontSize={14} lineHeight="18px" my={1.25}>
                             {t.popups_not_connected_third_party_wallet_description()}
@@ -181,7 +181,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                             {t.popups_choose_another_wallet()}
                         </Button>
                     </>
-                ) : null}
+                :   null}
             </Box>
         </ActionModal>
     )

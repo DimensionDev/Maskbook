@@ -143,7 +143,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     if (!chainIdValid && !expectedChainAllowed && forceShowingWrongNetworkButton)
         return renderBox(
-            !props.hiddenConnectButton ? (
+            !props.hiddenConnectButton ?
                 <ActionButton
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
@@ -151,13 +151,13 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     {...props.ActionButtonPromiseProps}>
                     {t.plugin_wallet_wrong_network()}
                 </ActionButton>
-            ) : null,
+            :   null,
         )
 
     // No wallet connected
     if (!account && !disableConnectWallet)
         return renderBox(
-            !props.hiddenConnectButton ? (
+            !props.hiddenConnectButton ?
                 <ActionButton
                     className={classes.connectWallet}
                     fullWidth
@@ -166,7 +166,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     {...props.ActionButtonPromiseProps}>
                     {t.plugin_wallet_connect_a_wallet()}
                 </ActionButton>
-            ) : null,
+            :   null,
         )
 
     // Network mismatch
@@ -182,9 +182,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,
-            actualProviderType === ProviderType.WalletConnect
-                ? t.plugin_wallet_connect_tips()
-                : t.plugin_wallet_not_support_network(),
+            actualProviderType === ProviderType.WalletConnect ?
+                t.plugin_wallet_connect_tips()
+            :   t.plugin_wallet_not_support_network(),
         )
     }
 

@@ -69,7 +69,9 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                     <IconButton className={classes.close} size="small" onClick={onClose}>
                         <CloseIcon />
                     </IconButton>
-                    {transakURL ? <iframe className={classes.frame} src={transakURL} /> : null}
+                    {transakURL ?
+                        <iframe className={classes.frame} src={transakURL} />
+                    :   null}
                 </DialogContent>
             </InjectedDialog>
         </div>

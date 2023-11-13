@@ -65,9 +65,9 @@ const useStyles = makeStyles<{
             width: 36,
             height: 36,
         },
-        ...(iconFilterColor
-            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
-            : {}),
+        ...(iconFilterColor ?
+            { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+        :   {}),
     },
     unlisted: {
         fontSize: 18,
@@ -129,28 +129,26 @@ function AppList({ appList, isListing }: AppListProps) {
     const { classes } = useStyles({ iconFilterColor: undefined })
     const t = useSharedTrans()
 
-    return appList.length > 0 ? (
-        <Boundary>
-            <List className={classes.list}>
-                {appList.map((application) => (
-                    <AppListItem
-                        key={application.entry.ApplicationEntryID}
-                        pluginID={application.pluginID}
-                        entry={application.entry}
-                        isListing={isListing}
-                    />
-                ))}
-            </List>
-        </Boundary>
-    ) : (
-        <div className={classes.placeholderWrapper}>
-            <Typography className={classes.placeholder}>
-                {isListing
-                    ? t.application_settings_tab_plug_app_unlisted_placeholder()
-                    : t.application_settings_tab_plug_app_listed_placeholder()}
-            </Typography>
-        </div>
-    )
+    return appList.length > 0 ?
+            <Boundary>
+                <List className={classes.list}>
+                    {appList.map((application) => (
+                        <AppListItem
+                            key={application.entry.ApplicationEntryID}
+                            pluginID={application.pluginID}
+                            entry={application.entry}
+                            isListing={isListing}
+                        />
+                    ))}
+                </List>
+            </Boundary>
+        :   <div className={classes.placeholderWrapper}>
+                <Typography className={classes.placeholder}>
+                    {isListing ?
+                        t.application_settings_tab_plug_app_unlisted_placeholder()
+                    :   t.application_settings_tab_plug_app_listed_placeholder()}
+                </Typography>
+            </div>
 }
 
 interface AppListItemProps {

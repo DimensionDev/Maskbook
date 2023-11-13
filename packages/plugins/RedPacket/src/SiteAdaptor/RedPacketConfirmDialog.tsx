@@ -106,7 +106,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const isBalanceInsufficient =
         isSameAddress(gasOption?.gasCurrency, nativeToken?.address) &&
         new BigNumber(transactionValue).isLessThanOrEqualTo(0)
-    const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
+    const total =
+        isNativeToken ?
+            isBalanceInsufficient ? '0'
+            :   transactionValue
+        :   (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
     const formatAvg = formatBalance(
         new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
@@ -280,7 +284,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         {formatTotal} {settings?.token?.symbol}
                     </Typography>
                 </Grid>
-                {estimateGasFee && !isZero(estimateGasFee) ? (
+                {estimateGasFee && !isZero(estimateGasFee) ?
                     <SelectGasSettingsToolbar
                         nativeToken={nativeTokenDetailed}
                         nativeTokenPrice={nativeTokenPrice}
@@ -291,7 +295,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         estimateGasFee={estimateGasFee}
                         editMode
                     />
-                ) : null}
+                :   null}
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
                         <Icons.SettingInfo size={20} />

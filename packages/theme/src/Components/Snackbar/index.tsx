@@ -58,9 +58,9 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         background: theme.palette.maskColor.bottom,
         color: theme.palette.maskColor.main,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
@@ -105,9 +105,9 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
         background: theme.palette.maskColor.primary,
         color: theme.palette.maskColor.white,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${classNames.title}`]: {
             color: 'inherit',
         },
@@ -209,7 +209,10 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
     const snackbar = useSnackbar()
     const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
-    const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
+    const variantIcon =
+        props.processing ? loadingIcon
+        : props.variant ? IconMap[props.variant]
+        : null
     let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>
             <CloseIcon />
@@ -220,16 +223,18 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     }
     return (
         <SnackbarContent ref={ref} className={cx(classes.content, classes[props.variant!])}>
-            {variantIcon ? <div className={classes.icon}>{variantIcon}</div> : null}
+            {variantIcon ?
+                <div className={classes.icon}>{variantIcon}</div>
+            :   null}
             <div className={classes.texts}>
                 <Typography className={classes.title} variant="h2">
                     {props.title}
                 </Typography>
-                {props.message ? (
+                {props.message ?
                     <Typography className={classes.message} variant="body1">
                         {props.message}
                     </Typography>
-                ) : null}
+                :   null}
             </div>
             <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>

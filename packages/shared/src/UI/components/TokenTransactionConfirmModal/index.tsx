@@ -113,7 +113,7 @@ export function TokenTransactionConfirmModal({
             onClose={onClose}
             {...rest}>
             <DialogContent className={classes.content}>
-                {isToken ? (
+                {isToken ?
                     <Box>
                         <TokenIcon
                             className={classes.tokenIcon}
@@ -131,9 +131,8 @@ export function TokenTransactionConfirmModal({
                             {messageTextForFT}
                         </Typography>
                     </Box>
-                ) : (
-                    <div className={classes.nftMessage}>
-                        {nonFungibleToken ? (
+                :   <div className={classes.nftMessage}>
+                        {nonFungibleToken ?
                             <>
                                 <div className={classes.nftContainer}>
                                     <AssetPreviewer
@@ -144,10 +143,12 @@ export function TokenTransactionConfirmModal({
                                     <Typography fontWeight={700} fontSize={20} lineHeight="24px">
                                         {nonFungibleToken?.metadata?.name}
                                     </Typography>
-                                    {nonFungibleToken.collection?.verified ? <Icons.Verification size={21.43} /> : null}
+                                    {nonFungibleToken.collection?.verified ?
+                                        <Icons.Verification size={21.43} />
+                                    :   null}
                                 </div>
                             </>
-                        ) : null}
+                        :   null}
                         <Typography className={classes.congratulation} mt="24px">
                             {t.congratulations()}
                         </Typography>
@@ -155,7 +156,7 @@ export function TokenTransactionConfirmModal({
                             {messageTextForNFT}
                         </Typography>
                     </div>
-                )}
+                }
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button fullWidth onClick={onConfirm}>

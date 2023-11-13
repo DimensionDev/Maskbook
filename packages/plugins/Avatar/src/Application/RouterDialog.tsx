@@ -9,9 +9,10 @@ export function RouterDialog(props: InjectedDialogProps) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
-    const title = matchPath(RoutePaths.Upload, pathname)
-        ? t.application_edit_profile_dialog_title()
-        : t.application_dialog_title()
+    const title =
+        matchPath(RoutePaths.Upload, pathname) ?
+            t.application_edit_profile_dialog_title()
+        :   t.application_dialog_title()
 
     const isOnBack = pathname !== RoutePaths.Personas
 

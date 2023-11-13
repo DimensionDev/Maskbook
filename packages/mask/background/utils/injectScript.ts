@@ -46,9 +46,9 @@ async function fetchInjectContentScriptList_raw() {
     return contentScripts
 }
 export const fetchInjectContentScriptList =
-    process.env.NODE_ENV === 'development'
-        ? fetchInjectContentScriptList_raw
-        : memoize(fetchInjectContentScriptList_raw)
+    process.env.NODE_ENV === 'development' ?
+        fetchInjectContentScriptList_raw
+    :   memoize(fetchInjectContentScriptList_raw)
 
 async function injectUserScriptMV2_raw(url: string) {
     try {

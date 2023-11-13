@@ -73,12 +73,14 @@ export function useGasOptionsMenu(
         setCustomGasConfig({
             ...result,
             gasPrice: result.gasPrice ? formatWeiToGwei(result.gasPrice).toFixed(2) : undefined,
-            maxFeePerGas: (result as EIP1559GasConfig).maxFeePerGas
-                ? formatWeiToGwei((result as EIP1559GasConfig).maxFeePerGas).toFixed(2)
-                : '',
-            maxPriorityFeePerGas: (result as EIP1559GasConfig).maxPriorityFeePerGas
-                ? formatWeiToGwei((result as EIP1559GasConfig).maxPriorityFeePerGas).toFixed(2)
-                : '',
+            maxFeePerGas:
+                (result as EIP1559GasConfig).maxFeePerGas ?
+                    formatWeiToGwei((result as EIP1559GasConfig).maxFeePerGas).toFixed(2)
+                :   '',
+            maxPriorityFeePerGas:
+                (result as EIP1559GasConfig).maxPriorityFeePerGas ?
+                    formatWeiToGwei((result as EIP1559GasConfig).maxPriorityFeePerGas).toFixed(2)
+                :   '',
         })
         callback(result)
     }, [chainId, minimumGas, callback, customGasConfig, paymentToken])
@@ -86,16 +88,17 @@ export function useGasOptionsMenu(
     const handleClick = useCallback(
         (type?: GasOptionType, option?: GasOption) => {
             if (!option) return
-            const config = isSupport1559
-                ? {
-                      gasOptionType: type,
-                      maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
-                      maxFeePerGas: option.suggestedMaxFeePerGas,
-                  }
-                : {
-                      gasOptionType: type,
-                      gasPrice: option.suggestedMaxFeePerGas,
-                  }
+            const config =
+                isSupport1559 ?
+                    {
+                        gasOptionType: type,
+                        maxPriorityFeePerGas: option.suggestedMaxPriorityFeePerGas,
+                        maxFeePerGas: option.suggestedMaxFeePerGas,
+                    }
+                :   {
+                        gasOptionType: type,
+                        gasPrice: option.suggestedMaxFeePerGas,
+                    }
 
             callback(config, type)
         },

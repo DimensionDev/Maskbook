@@ -76,9 +76,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 68,
         padding: '0 16px',
         boxShadow:
-            theme.palette.mode === 'light'
-                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+            theme.palette.mode === 'light' ?
+                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
         justifyContent: 'space-between',
         display: 'flex',
@@ -198,15 +198,15 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     content: Editor.current.value,
                     encode: encodingKind,
                     target:
-                        encryptionKind === EncryptionTargetType.Public
-                            ? { type: 'public' }
-                            : {
-                                  type: 'E2E',
-                                  target: recipients.map((x) => ({
-                                      profile: x.identifier,
-                                      persona: x.linkedPersona,
-                                  })),
-                              },
+                        encryptionKind === EncryptionTargetType.Public ?
+                            { type: 'public' }
+                        :   {
+                                type: 'E2E',
+                                target: recipients.map((x) => ({
+                                    profile: x.identifier,
+                                    persona: x.linkedPersona,
+                                })),
+                            },
                     version: encodingKind === EncryptionMethodType.Text ? -37 : -38,
                 })
                 .finally(reset)
@@ -276,17 +276,21 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     </div>
                 </div>
                 <DialogActions className={classes.action}>
-                    {props.personaAction ? <div className={classes.personaAction}>{props.personaAction}</div> : <div />}
+                    {props.personaAction ?
+                        <div className={classes.personaAction}>{props.personaAction}</div>
+                    :   <div />}
                     <div>
-                        {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
-                        {props.requireClipboardPermission && !props.hasClipboardPermission ? (
+                        {props.maxLength ?
+                            <CharLimitIndicator value={currentPostSize} max={props.maxLength} />
+                        :   null}
+                        {props.requireClipboardPermission && !props.hasClipboardPermission ?
                             <Button
                                 variant="roundedContained"
                                 onClick={props.onRequestClipboardPermission}
                                 sx={{ marginRight: 1 }}>
                                 {t.post_dialog_enable_paste_auto()}
                             </Button>
-                        ) : null}
+                        :   null}
                         <LoadingButton
                             style={{ opacity: 1 }}
                             disabled={!submitAvailable}

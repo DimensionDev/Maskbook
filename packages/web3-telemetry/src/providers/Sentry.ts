@@ -50,11 +50,11 @@ export class SentryAPI extends TelemetryProvider {
         super(Flags.sentry_sample_rate)
 
         const release =
-            env.channel === 'stable' && process.env.NODE_ENV === 'production'
-                ? env.COMMIT_HASH
-                    ? `mask-${env.COMMIT_HASH}`
-                    : `mask-${env.VERSION}-reproducible`
-                : undefined
+            env.channel === 'stable' && process.env.NODE_ENV === 'production' ?
+                env.COMMIT_HASH ?
+                    `mask-${env.COMMIT_HASH}`
+                :   `mask-${env.VERSION}-reproducible`
+            :   undefined
         if (typeof Sentry === 'undefined') {
             return
         }

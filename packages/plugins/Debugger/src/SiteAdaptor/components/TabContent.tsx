@@ -53,20 +53,20 @@ export function TabContent({ identity, socialAccount }: TabContentProps) {
     const renderAddressName = () => {
         return (
             <List dense>
-                {socialAccount
-                    ? [socialAccount].map((x) => (
-                          <ListItem key={`${x.pluginID}_${x.address}`}>
-                              <ListItemText
-                                  primary={
-                                      <Typography color="textPrimary">
-                                          {x.pluginID} - {x.label}
-                                      </Typography>
-                                  }
-                                  secondary={x.address}
-                              />
-                          </ListItem>
-                      ))
-                    : null}
+                {socialAccount ?
+                    [socialAccount].map((x) => (
+                        <ListItem key={`${x.pluginID}_${x.address}`}>
+                            <ListItemText
+                                primary={
+                                    <Typography color="textPrimary">
+                                        {x.pluginID} - {x.label}
+                                    </Typography>
+                                }
+                                secondary={x.address}
+                            />
+                        </ListItem>
+                    ))
+                :   null}
             </List>
         )
     }

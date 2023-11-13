@@ -107,12 +107,11 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
 
     return (
         <Box className={cx(classes.list, className)} {...rest} ref={listRef}>
-            {loading && collectibles.length === 0 ? (
+            {loading && collectibles.length === 0 ?
                 <LoadingSkeleton className={classes.root} />
-            ) : error || (collectibles.length === 0 && !loading) ? (
+            : error || (collectibles.length === 0 && !loading) ?
                 <ReloadStatus className={classes.text} message={t.no_collectible_found()} onRetry={retry} />
-            ) : (
-                <Box className={classes.root}>
+            :   <Box className={classes.root}>
                     {collectibles.map((token, index) => {
                         const name = token.metadata?.name
                         const uiTokenId = Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
@@ -160,7 +159,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
                         )
                     })}
                 </Box>
-            )}
+            }
         </Box>
     )
 })

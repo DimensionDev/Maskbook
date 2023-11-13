@@ -91,14 +91,15 @@ export function TickersTable({ tickers }: TickersTableProps) {
         const volume = ticker.volume
         const marketplaceOrExchange = (
             <Stack direction="row" alignItems="center">
-                {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
+                {ticker.logo_url ?
+                    <img className={classes.logo} src={ticker.logo_url} />
+                :   null}
                 <Typography component="span">{ticker.market_name}</Typography>
             </Stack>
         )
         const cellMap: Record<Cells, ReactNode> = {
-            volume: volume ? (
-                <FormattedCurrency value={volume} formatter={formatCurrency} sign={CurrencyType.USD} />
-            ) : null,
+            volume:
+                volume ? <FormattedCurrency value={volume} formatter={formatCurrency} sign={CurrencyType.USD} /> : null,
             updated: ticker.updated ? formatElapsed(ticker.updated.getTime()) : null,
             exchange: marketplaceOrExchange,
             pair: (() => {
@@ -135,9 +136,8 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     </ShadowRootTooltip>
                 )
             })(),
-            price: price ? (
-                <FormattedCurrency value={price} formatter={formatCurrency} sign={CurrencyType.USD} />
-            ) : null,
+            price:
+                price ? <FormattedCurrency value={price} formatter={formatCurrency} sign={CurrencyType.USD} /> : null,
         }
 
         const cells = Object.entries(pick(cellMap, columns)).map(([name, cell]) => (
@@ -163,10 +163,9 @@ export function TickersTable({ tickers }: TickersTableProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {columns.length ? (
+                    {columns.length ?
                         tickerRows
-                    ) : (
-                        <TableRow>
+                    :   <TableRow>
                             <TableCell
                                 className={classes.cell}
                                 colSpan={columns.length}
@@ -176,7 +175,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                                 </Typography>
                             </TableCell>
                         </TableRow>
-                    )}
+                    }
                 </TableBody>
             </Table>
         </TableContainer>

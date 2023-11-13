@@ -24,11 +24,12 @@ export function SocialTooltip({ children, platform }: SocialTooltipProps) {
 
     const t = useSharedTrans()
     const ref = useRef<HTMLElement>(null)
-    const title = platform ? (
-        <Typography className={classes.title} fontSize={14}>
-            {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) || platform })}
-        </Typography>
-    ) : null
+    const title =
+        platform ?
+            <Typography className={classes.title} fontSize={14}>
+                {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) || platform })}
+            </Typography>
+        :   null
 
     useEffect(() => {
         const el = ref.current

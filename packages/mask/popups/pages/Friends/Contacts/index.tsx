@@ -41,23 +41,21 @@ interface ContactsProps {
 export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
-    return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ? (
-        <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_no_friends()}</EmptyStatus>
-    ) : (
-        <Box className={classes.cardContainer}>
-            {friendsArray.map(({ friends }) => {
-                return friends.map((friend) => (
-                    <ContactCard
-                        key={friend.persona.publicKeyAsHex}
-                        avatar={friend.avatar}
-                        nextId={friend.persona?.publicKeyAsHex}
-                        publicKey={friend.persona?.rawPublicKey}
-                        profile={friend.profile}
-                        isLocal
-                    />
-                ))
-            })}
-            <ElementAnchor callback={() => fetchNextPage()} height={10} />
-        </Box>
-    )
+    return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ?
+            <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_no_friends()}</EmptyStatus>
+        :   <Box className={classes.cardContainer}>
+                {friendsArray.map(({ friends }) => {
+                    return friends.map((friend) => (
+                        <ContactCard
+                            key={friend.persona.publicKeyAsHex}
+                            avatar={friend.avatar}
+                            nextId={friend.persona?.publicKeyAsHex}
+                            publicKey={friend.persona?.rawPublicKey}
+                            profile={friend.profile}
+                            isLocal
+                        />
+                    ))
+                })}
+                <ElementAnchor callback={() => fetchNextPage()} height={10} />
+            </Box>
 })

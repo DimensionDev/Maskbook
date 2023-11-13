@@ -194,11 +194,13 @@ export function TraderStateBar({
                             symbol: approveToken?.symbol || '',
                         })}
                         token={
-                            !isNativeTokenWrapper(focusedTrade?.value?.value ?? null) &&
-                            approveToken?.schema === SchemaType.ERC20 &&
-                            !!approveAmount.toNumber()
-                                ? approveToken
-                                : undefined
+                            (
+                                !isNativeTokenWrapper(focusedTrade?.value?.value ?? null) &&
+                                approveToken?.schema === SchemaType.ERC20 &&
+                                !!approveAmount.toNumber()
+                            ) ?
+                                approveToken
+                            :   undefined
                         }
                         ActionButtonProps={{
                             color: 'primary',

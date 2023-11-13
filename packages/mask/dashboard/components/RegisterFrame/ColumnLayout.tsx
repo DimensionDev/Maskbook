@@ -42,7 +42,9 @@ export function ColumnLayout({ haveFooter = true, children }: ColumnLayoutProps)
                     <HeaderLine />
                     {children}
                 </Paper>
-                {haveFooter ? <FooterLine /> : null}
+                {haveFooter ?
+                    <FooterLine />
+                :   null}
             </Content>
         </Container>
     )

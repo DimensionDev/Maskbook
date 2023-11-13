@@ -68,46 +68,47 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
         <ActionModal header={t.popups_settings_supported_sites()} {...props}>
             <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
             <List className={classes.list}>
-                {!isLoading && data
-                    ? data?.map((x) => {
-                          const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[x.networkIdentifier]
+                {!isLoading && data ?
+                    data?.map((x) => {
+                        const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[x.networkIdentifier]
 
-                          return (
-                              <ListItemButton
-                                  key={x.networkIdentifier}
-                                  className={classes.item}
-                                  onClick={() =>
-                                      handleSwitch({ ...x, networkIdentifier: x.networkIdentifier as EnhanceableSite })
-                                  }>
-                                  {Icon ? (
-                                      <ListItemIcon className={classes.icon}>
-                                          <Icon
-                                              size={24}
-                                              style={{
-                                                  filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[x.networkIdentifier],
-                                                  backdropFilter: 'blur(8px)',
-                                                  borderRadius: 99,
-                                              }}
-                                          />
-                                      </ListItemIcon>
-                                  ) : null}
-                                  <ListItemText
-                                      classes={{ primary: classes.name }}
-                                      primary={SOCIAL_MEDIA_NAME[x.networkIdentifier]}
-                                  />
-                                  <Switch checked={!!x.hasPermission && !!x.allowInject} />
-                              </ListItemButton>
-                          )
-                      })
-                    : range(5).map((i) => (
-                          <ListItem key={i} className={classes.item} style={{ height: 48 }}>
-                              <ListItemIcon className={classes.icon}>
-                                  <Skeleton variant="circular" style={{ width: 24, height: 24 }} />
-                              </ListItemIcon>
-                              <ListItemText primary={<Skeleton width={100} />} />
-                              <Skeleton width={40} />
-                          </ListItem>
-                      ))}
+                        return (
+                            <ListItemButton
+                                key={x.networkIdentifier}
+                                className={classes.item}
+                                onClick={() =>
+                                    handleSwitch({ ...x, networkIdentifier: x.networkIdentifier as EnhanceableSite })
+                                }>
+                                {Icon ?
+                                    <ListItemIcon className={classes.icon}>
+                                        <Icon
+                                            size={24}
+                                            style={{
+                                                filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[x.networkIdentifier],
+                                                backdropFilter: 'blur(8px)',
+                                                borderRadius: 99,
+                                            }}
+                                        />
+                                    </ListItemIcon>
+                                :   null}
+                                <ListItemText
+                                    classes={{ primary: classes.name }}
+                                    primary={SOCIAL_MEDIA_NAME[x.networkIdentifier]}
+                                />
+                                <Switch checked={!!x.hasPermission && !!x.allowInject} />
+                            </ListItemButton>
+                        )
+                    })
+                :   range(5).map((i) => (
+                        <ListItem key={i} className={classes.item} style={{ height: 48 }}>
+                            <ListItemIcon className={classes.icon}>
+                                <Skeleton variant="circular" style={{ width: 24, height: 24 }} />
+                            </ListItemIcon>
+                            <ListItemText primary={<Skeleton width={100} />} />
+                            <Skeleton width={40} />
+                        </ListItem>
+                    ))
+                }
             </List>
         </ActionModal>
     )

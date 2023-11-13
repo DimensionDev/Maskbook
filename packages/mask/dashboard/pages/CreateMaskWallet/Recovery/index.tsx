@@ -186,9 +186,9 @@ const Recovery = memo(function Recovery() {
                 const errorMsg = (error as Error).message
                 // Todo: SDK should return 'Incorrect Keystore Password.' when keystore pwd is wrong.
                 setError(
-                    errorMsg === 'Incorrect payment password.'
-                        ? t.create_wallet_key_store_incorrect_password()
-                        : errorMsg,
+                    errorMsg === 'Incorrect payment password.' ?
+                        t.create_wallet_key_store_incorrect_password()
+                    :   errorMsg,
                 )
             }
         },

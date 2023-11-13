@@ -35,7 +35,12 @@ export const MaskLoadingButton = memo(
 
         return (
             <LoadingButton
-                loadingPosition={rest.startIcon ? 'start' : rest.endIcon ? 'end' : undefined}
+                loadingPosition={
+                    rest.startIcon ? 'start'
+                    : rest.endIcon ?
+                        'end'
+                    :   undefined
+                }
                 loading={loading}
                 loadingIndicator={isSoloLoading ? <CircularProgress color="primary" size={16} /> : undefined}
                 {...rest}

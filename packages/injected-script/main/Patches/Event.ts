@@ -32,9 +32,9 @@ export class __Event extends $unsafe.NewObject implements Event {
             // TODO: stack
             throw $unsafe.structuredCloneFromSafe(
                 new $.DOMException(
-                    $.isFirefox
-                        ? 'An attempt was made to use an object that is not, or is no longer, usable'
-                        : "Failed to execute 'dispatchEvent' on 'EventTarget': The event is already being dispatched.",
+                    $.isFirefox ?
+                        'An attempt was made to use an object that is not, or is no longer, usable'
+                    :   "Failed to execute 'dispatchEvent' on 'EventTarget': The event is already being dispatched.",
                     'InvalidStateError',
                 ),
             )

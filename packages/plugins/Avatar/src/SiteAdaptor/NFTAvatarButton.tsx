@@ -46,7 +46,9 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
                 <Typography style={{ marginLeft: 4 }} className={classes.text}>
                     {t.nft_avatar()}
                 </Typography>
-                {props.showSetting ? <Icons.GearSettings className={classes.setIcon} /> : null}
+                {props.showSetting ?
+                    <Icons.GearSettings className={classes.setIcon} />
+                :   null}
             </Stack>
         </div>
     )

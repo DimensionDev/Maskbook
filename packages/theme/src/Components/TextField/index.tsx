@@ -75,12 +75,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputFocused: {
         background: 'transparent',
-        ...(Sniffings.is_dashboard_page
-            ? {
-                  outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
-                  borderColor: alpha(theme.palette.maskColor.primary, 0.5),
-              }
-            : { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
+        ...(Sniffings.is_dashboard_page ?
+            {
+                outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
+                borderColor: alpha(theme.palette.maskColor.primary, 0.5),
+            }
+        :   { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
     },
 }))
 
@@ -94,18 +94,18 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const { classes, cx } = useStyles()
     return (
         <Box sx={sx} {...wrapperProps}>
-            {label && typeof label === 'string' ? (
+            {label && typeof label === 'string' ?
                 <Typography sx={{ mb: 1 }} variant="body2" className={classes.label}>
                     {label}
-                    {required ? (
+                    {required ?
                         <Typography className={classes.required} component="span">
                             *
                         </Typography>
-                    ) : null}
+                    :   null}
                 </Typography>
-            ) : null}
+            :   null}
             {label && typeof label !== 'string' ? label : null}
-            {Sniffings.is_dashboard_page ? (
+            {Sniffings.is_dashboard_page ?
                 <TextField
                     ref={ref}
                     {...rest}
@@ -124,13 +124,12 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                         className: cx(classes.input, InputProps?.className),
                     }}
                 />
-            ) : (
-                <InputBase
+            :   <InputBase
                     className={classes.field}
                     {...omit(InputProps, 'disableUnderline')}
                     {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps', 'FormHelperTextProps')}
                 />
-            )}
+            }
         </Box>
     )
 })

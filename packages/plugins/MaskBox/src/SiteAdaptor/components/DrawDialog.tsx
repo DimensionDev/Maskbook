@@ -132,7 +132,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             </span>
                             <span>{paymentTokenDetailed?.symbol}</span>
                         </Typography>
-                        {paymentTokenDetailed ? (
+                        {paymentTokenDetailed ?
                             <Typography color="textPrimary">
                                 <span>&asymp;</span>
                                 <TokenPrice
@@ -141,7 +141,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     contractAddress={paymentTokenDetailed.address}
                                 />
                             </Typography>
-                        ) : null}
+                        :   null}
                     </Box>
                     <Box className={classes.body}>
                         <Box className={classes.section} display="flex" alignItems="center">
@@ -243,7 +243,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                             </Box>
                         </Box>
-                        {isAllowanceEnough ? (
+                        {isAllowanceEnough ?
                             <Box className={classes.section} display="flex" alignItems="center">
                                 <Typography className={classes.title} color="textPrimary">
                                     Gas Fee:
@@ -255,7 +255,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     />
                                 </Box>
                             </Box>
-                        ) : null}
+                        :   null}
                     </Box>
                 </Box>
             </DialogContent>
@@ -273,7 +273,11 @@ export function DrawDialog(props: DrawDialogProps) {
                                 sx={{ marginTop: 2 }}
                                 disabled={isBalanceInsufficient || drawing}
                                 onClick={onSubmit}>
-                                {isBalanceInsufficient ? t.insufficient_balance() : drawing ? t.drawing() : t.draw()}
+                                {isBalanceInsufficient ?
+                                    t.insufficient_balance()
+                                : drawing ?
+                                    t.drawing()
+                                :   t.draw()}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
                     </WalletConnectedBoundary>

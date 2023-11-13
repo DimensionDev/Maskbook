@@ -81,9 +81,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const mode = useSiteThemeMode(theme)
     const { classes } = useStyles({ currentTab, showHistory, isDim: mode === 'dim' })
     const chainIdList: ChainId[] = useMemo(() => {
-        return currentTab === tabs.tokens
-            ? approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-            : [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+        return currentTab === tabs.tokens ?
+                approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+            :   [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
     }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
     const chainId = chainIdList.includes(_chainId) ? _chainId : ChainId.Mainnet
 
@@ -150,13 +150,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])
     const onDialogClose = useCallback(() => {
-        openSelectNFTDialog
-            ? setOpenSelectNFTDialog(false)
-            : openNFTConfirmDialog
-            ? setOpenNFTConfirmDialog(false)
-            : showHistory
-            ? setShowHistory(false)
-            : onBack()
+        openSelectNFTDialog ? setOpenSelectNFTDialog(false)
+        : openNFTConfirmDialog ? setOpenNFTConfirmDialog(false)
+        : showHistory ? setShowHistory(false)
+        : onBack()
     }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
@@ -172,14 +169,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = showHistory
-        ? t.history()
-        : openSelectNFTDialog
-        ? t.nft_select_collection()
-        : openNFTConfirmDialog
-        ? t.confirm()
-        : isCreateStep
-        ? t.display_name()
+    const title =
+        showHistory ? t.history()
+        : openSelectNFTDialog ? t.nft_select_collection()
+        : openNFTConfirmDialog ? t.confirm()
+        : isCreateStep ? t.display_name()
         : t.details()
 
     // #region gas config
@@ -207,22 +201,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 open={props.open}
                 title={title}
                 titleTail={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory ?
                         <Icons.History onClick={() => setShowHistory((history) => !history)} />
-                    ) : null
+                    :   null
                 }
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ?
                         <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                             <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
                             <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
                         </MaskTabList>
-                    ) : null
+                    :   null
                 }
                 networkTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage &&
-                    !openNFTConfirmDialog &&
-                    !openSelectNFTDialog ? (
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !openSelectNFTDialog ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chains={chainIdList}
@@ -231,21 +223,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 classes={{ arrowButton: classes.arrowButton }}
                             />
                         </div>
-                    ) : null
+                    :   null
                 }
                 onClose={onDialogClose}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
                 <DialogContent className={classes.dialogContent}>
-                    {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                    {step === CreateRedPacketPageStep.NewRedPacketPage ?
                         <>
                             <div
                                 style={{
                                     ...(showHistory ? { display: 'none' } : {}),
-                                    height: showHistory
-                                        ? 0
-                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded
-                                        ? 'calc(100% + 84px)'
+                                    height:
+                                        showHistory ? 0
+                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded ? 'calc(100% + 84px)'
                                         : 'auto',
                                 }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
@@ -274,13 +265,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     />
                                 </TabPanel>
                             </div>
-                            {showHistory ? (
+                            {showHistory ?
                                 <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
-                            ) : null}
+                            :   null}
                         </>
-                    ) : null}
+                    :   null}
 
-                    {step === CreateRedPacketPageStep.ConfirmPage ? (
+                    {step === CreateRedPacketPageStep.ConfirmPage ?
                         <RedPacketConfirmDialog
                             expectedChainId={chainId}
                             onClose={onClose}
@@ -290,7 +281,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             gasOption={gasOption}
                             onGasOptionChange={handleGasSettingChange}
                         />
-                    ) : null}
+                    :   null}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

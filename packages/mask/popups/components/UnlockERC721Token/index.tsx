@@ -171,7 +171,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                 <Trans i18nKey="popups_wallet_unlock_erc721_tips" components={{ br: <br /> }} />
             </Typography>
             <Box className={classes.tokenInfo}>
-                {contract?.address ? (
+                {contract?.address ?
                     <TokenIcon
                         address={contract?.address}
                         name={contract?.name}
@@ -180,12 +180,12 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                         className={classes.tokenIcon}
                         tokenType={TokenType.NonFungible}
                     />
-                ) : null}
+                :   null}
                 <Box width="262px" mr="18px" ml={1}>
                     <Typography className={classes.name}>{contract?.symbol}</Typography>
                     <Typography className={classes.address}>{contract?.address}</Typography>
                 </Box>
-                {contract?.address ? (
+                {contract?.address ?
                     <Box display="flex" columnGap={1} alignItems="center">
                         <CopyButton text={contract.address} size={16} />
                         <Link
@@ -196,11 +196,11 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                             <Icons.LinkOut size={16} />
                         </Link>
                     </Box>
-                ) : null}
+                :   null}
             </Box>
             <Box className={classes.amountInfo}>
                 <Typography className={classes.name}>{t.popups_wallet_unlock_erc20_requested_by()}</Typography>
-                {transaction.formattedTransaction.popup?.erc721Spender ? (
+                {transaction.formattedTransaction.popup?.erc721Spender ?
                     <Typography className={classes.spender}>
                         {t.contract()}:
                         <Typography className={classes.spenderAddress}>
@@ -218,12 +218,12 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                             </Link>
                         </Typography>
                     </Typography>
-                ) : null}
+                :   null}
             </Box>
 
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
-                {transaction.computedPayload.gas && initConfig ? (
+                {transaction.computedPayload.gas && initConfig ?
                     <GasSettingMenu
                         minimumGas={transaction.computedPayload.gas}
                         initConfig={initConfig}
@@ -233,7 +233,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                         paymentToken={paymentToken}
                         allowMaskAsGas={transaction.allowMaskAsGas}
                     />
-                ) : null}
+                :   null}
             </Box>
         </Box>
     )

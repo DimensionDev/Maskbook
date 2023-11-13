@@ -38,9 +38,9 @@ interface IFollowStatus {
 }
 async function query(data: IQuery) {
     const url =
-        process.env.NODE_ENV === 'production'
-            ? 'https://api.cybertino.io/connect/'
-            : 'https://api.stg.cybertino.io/connect/'
+        process.env.NODE_ENV === 'production' ?
+            'https://api.cybertino.io/connect/'
+        :   'https://api.stg.cybertino.io/connect/'
 
     const res = await fetch(url, {
         method: 'POST',
@@ -103,16 +103,16 @@ export async function fetchFollowers(
         return createPageable(
             res.data.identity.followings.list,
             createIndicator(indicator),
-            res.data.identity.followings.pageInfo.hasNextPage
-                ? createNextIndicator(indicator, res.data.identity.followings.pageInfo.endCursor)
-                : undefined,
+            res.data.identity.followings.pageInfo.hasNextPage ?
+                createNextIndicator(indicator, res.data.identity.followings.pageInfo.endCursor)
+            :   undefined,
         )
     return createPageable(
         res.data.identity.followers.list,
         createIndicator(indicator),
-        res.data.identity.followers.pageInfo.hasNextPage
-            ? createNextIndicator(indicator, res.data.identity.followers.pageInfo.endCursor)
-            : undefined,
+        res.data.identity.followers.pageInfo.hasNextPage ?
+            createNextIndicator(indicator, res.data.identity.followers.pageInfo.endCursor)
+        :   undefined,
     )
 }
 

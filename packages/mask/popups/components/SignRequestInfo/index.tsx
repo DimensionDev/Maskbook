@@ -58,14 +58,14 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestIn
     return (
         <main className={classes.container}>
             <Typography className={classes.title}>{t.popups_wallet_signature_request_title()}</Typography>
-            {source ? (
+            {source ?
                 <Box className={classes.source}>
                     <Typography fontSize={16} fontWeight={700}>
                         {t.popups_wallet_request_source()}
                     </Typography>
                     <Typography className={classes.sourceText}>{source}</Typography>
                 </Box>
-            ) : null}
+            :   null}
             <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
             <Typography className={classes.message}>{message}</Typography>
         </main>

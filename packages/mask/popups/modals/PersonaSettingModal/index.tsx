@@ -82,14 +82,14 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
             </Box>
             <Box className={classes.item}>
                 <Typography className={classes.text}>{t.popups_next_id()}</Typography>
-                {currentPersona ? (
+                {currentPersona ?
                     <PersonaPublicKey
                         rawPublicKey={currentPersona.identifier.rawPublicKey}
                         publicHexString={currentPersona.identifier.publicKeyAsHex}
                         iconSize={16}
                         classes={{ icon: classes.icon, text: classes.text }}
                     />
-                ) : null}
+                :   null}
             </Box>
             <Box className={classes.item}>
                 <Typography className={classes.text}>{t.popups_name()}</Typography>
@@ -109,9 +109,9 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                     className={classes.arrow}
                     onClick={() => {
                         modalNavigate(
-                            !user.backupPassword
-                                ? PopupModalRoutes.SetBackupPassword
-                                : PopupModalRoutes.verifyBackupPassword,
+                            !user.backupPassword ?
+                                PopupModalRoutes.SetBackupPassword
+                            :   PopupModalRoutes.verifyBackupPassword,
                             { to: PopupRoutes.ExportPrivateKey },
                         )
                     }}

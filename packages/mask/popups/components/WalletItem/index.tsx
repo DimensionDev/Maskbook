@@ -114,7 +114,9 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
             onClick={handleSelect}
             secondaryAction={<Radio sx={{ marginLeft: 0.75 }} checked={isSelected} />}
             {...rest}>
-            {wallet.owner ? <Icons.SmartPay size={24} /> : <Icons.MaskBlue size={24} />}
+            {wallet.owner ?
+                <Icons.SmartPay size={24} />
+            :   <Icons.MaskBlue size={24} />}
             <Box className={classes.text}>
                 <Box width={180} overflow="auto">
                     <Typography className={classes.mainLine} component="div">

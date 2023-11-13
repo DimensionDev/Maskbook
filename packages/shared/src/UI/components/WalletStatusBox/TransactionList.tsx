@@ -139,9 +139,9 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
                 <Typography variant="body1" className={classes.linkText}>
-                    {address && isSameAddress(domainOrAddress, address)
-                        ? Utils.formatAddress(address, 4)
-                        : domainOrAddress || address}
+                    {address && isSameAddress(domainOrAddress, address) ?
+                        Utils.formatAddress(address, 4)
+                    :   domainOrAddress || address}
                 </Typography>
                 <Link
                     className={classes.link}
@@ -157,11 +157,11 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
                 </Typography>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="right">
-                {txStatus === TransactionStatusType.NOT_DEPEND ? (
+                {txStatus === TransactionStatusType.NOT_DEPEND ?
                     <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
                         {t.wallet_status_pending_clear()}
                     </Typography>
-                ) : null}
+                :   null}
             </Grid>
         </Grid>
     )

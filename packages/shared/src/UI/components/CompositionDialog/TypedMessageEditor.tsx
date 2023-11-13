@@ -160,11 +160,11 @@ export const TypedMessageEditor = memo(
                 <InputBase
                     inputRef={setInputRef}
                     startAdornment={
-                        value.meta ? (
+                        value.meta ?
                             <div className={classes.badge}>
                                 <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
                             </div>
-                        ) : null
+                        :   null
                     }
                     readOnly={readonly}
                     classes={{

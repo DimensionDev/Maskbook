@@ -164,16 +164,17 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         if (!token.id) throw new Error('Token id is required')
 
         const key = account.toLowerCase()
-        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> = token.type === TokenType.Fungible
-            ? this.storage.fungibleTokenList.value
-            : this.storage.nonFungibleTokenList.value
+        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> =
+            token.type === TokenType.Fungible ?
+                this.storage.fungibleTokenList.value
+            :   this.storage.nonFungibleTokenList.value
         const id = token.id.toLowerCase()
 
         const oldList: Array<Token<ChainId, SchemaType>> = tokens[key] ?? []
         const newList =
-            strategy === 'add'
-                ? uniqBy([{ ...token, id }, ...oldList], (x) => x.id)
-                : oldList.filter((x) => x.id !== id)
+            strategy === 'add' ?
+                uniqBy([{ ...token, id }, ...oldList], (x) => x.id)
+            :   oldList.filter((x) => x.id !== id)
 
         const updatedValue = { ...tokens, [key]: newList }
 
@@ -194,17 +195,17 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
 
         const key = account.toLowerCase()
         const blocked =
-            token.type === TokenType.Fungible
-                ? this.storage.fungibleTokenBlockedBy.value
-                : this.storage.nonFungibleTokenBlockedBy.value
+            token.type === TokenType.Fungible ?
+                this.storage.fungibleTokenBlockedBy.value
+            :   this.storage.nonFungibleTokenBlockedBy.value
         const oldList = blocked[key] ?? []
         const id = token.id.toLowerCase()
         const blockedUpdated = {
             ...blocked,
             [key]:
-                strategy === 'trust'
-                    ? oldList.filter((x) => x.toLowerCase() !== id)
-                    : uniqBy([id, ...oldList], (x) => x.toLowerCase()),
+                strategy === 'trust' ?
+                    oldList.filter((x) => x.toLowerCase() !== id)
+                :   uniqBy([id, ...oldList], (x) => x.toLowerCase()),
         }
 
         if (token.type === TokenType.Fungible) {

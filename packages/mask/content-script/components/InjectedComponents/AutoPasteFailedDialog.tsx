@@ -60,7 +60,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             {t.auto_paste_failed_dialog_content()}
                         </Typography>
                     </DialogContentText>
-                    {props.data.text ? (
+                    {props.data.text ?
                         <>
                             <TextField multiline fullWidth value={data.text} InputProps={{ readOnly: true }} />
                             <Box
@@ -86,13 +86,13 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 {t.copy_text()}
                             </Button>
                         </>
-                    ) : null}
+                    :   null}
                     <Box marginBottom={1} />
                     <Box textAlign="left">
-                        {data.image ? (
+                        {data.image ?
                             // It must be img
                             <Image src={URL.createObjectURL(data.image)} style={{ width: '100%' }} />
-                        ) : null}
+                        :   null}
                         <Box marginBottom={1} />
                         <Button
                             className={classes.button}
@@ -111,7 +111,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             }}>
                             {t.copy_image()}
                         </Button>
-                        {url ? (
+                        {url ?
                             <Button
                                 className={classes.button}
                                 variant="text"
@@ -119,8 +119,8 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 startIcon={<Download />}>
                                 {t.download()}
                             </Button>
-                        ) : null}
-                        {url ? (
+                        :   null}
+                        {url ?
                             <Button
                                 className={classes.button}
                                 variant="text"
@@ -130,7 +130,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 startIcon={<OpenInBrowser />}>
                                 {t.auto_paste_failed_dialog_image_caption()}
                             </Button>
-                        ) : null}
+                        :   null}
                     </Box>
                 </DialogContent>
                 {/* To leave some bottom padding */}

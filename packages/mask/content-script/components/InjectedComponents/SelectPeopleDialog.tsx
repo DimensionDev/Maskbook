@@ -36,9 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
-            theme.palette.mode === 'light'
-                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+            theme.palette.mode === 'light' ?
+                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
         borderRadius: '0px 0px 12px 12px',
         flex: 1,
         backdropFilter: 'blur(8px)',
@@ -130,13 +130,13 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
                     loading={searchLoading}
                 />
             </DialogContent>
-            {rejection ? (
+            {rejection ?
                 <DialogContent className={classes.content}>
                     <>
                         Error: {rejection.message} {console.error(rejection)}
                     </>
                 </DialogContent>
-            ) : null}
+            :   null}
             <DialogActions className={classes.action}>
                 <Button className={classes.cancel} fullWidth onClick={handleClose} variant="roundedContained">
                     {t.cancel()}

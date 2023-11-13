@@ -107,15 +107,15 @@ function Content() {
                 {votes?.map(function voteItemIter(v) {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
-                        v.totalWeight && v.choices
-                            ? v.choices
-                                  .flatMap((choice, index) => [
-                                      index === 0 ? '' : ', ',
-                                      !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
-                                      choice.name,
-                                  ])
-                                  .join('')
-                            : null
+                        v.totalWeight && v.choices ?
+                            v.choices
+                                .flatMap((choice, index) => [
+                                    index === 0 ? '' : ', ',
+                                    !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                    choice.name,
+                                ])
+                                .join('')
+                        :   null
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
                             <Link
@@ -127,14 +127,14 @@ function Content() {
                                     <EthereumBlockie address={v.address} />
                                 </Box>
                                 <Typography color={theme.palette.maskColor.dark}>
-                                    {isSameAddress(v.address, account)
-                                        ? t.plugin_snapshot_votes_yourself()
-                                        : formatEthereumAddress(v.address, 4)}
+                                    {isSameAddress(v.address, account) ?
+                                        t.plugin_snapshot_votes_yourself()
+                                    :   formatEthereumAddress(v.address, 4)}
                                 </Typography>
                             </Link>
-                            {v.choice ? (
+                            {v.choice ?
                                 <Typography className={classes.choice}>{v.choice}</Typography>
-                            ) : v.choices ? (
+                            : v.choices ?
                                 <ShadowRootTooltip
                                     PopperProps={{
                                         disablePortal: false,
@@ -147,7 +147,7 @@ function Content() {
                                     arrow>
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
-                            ) : null}
+                            :   null}
                             <TextOverflowTooltip
                                 as={ShadowRootTooltip}
                                 PopperProps={{

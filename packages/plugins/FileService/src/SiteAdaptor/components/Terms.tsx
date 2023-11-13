@@ -49,9 +49,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: '16px',
         display: 'flex',
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
         justifyContent: 'space-between',
         gap: theme.spacing(2),
         '& > :not(:first-of-type)': {

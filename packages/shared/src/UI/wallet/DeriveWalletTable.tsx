@@ -129,19 +129,20 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
                 </TableHead>
             )}
             <TableBody>
-                {loading
-                    ? range(10).map((index) => <DeriveWalletTableRowSkeleton key={index} />)
-                    : dataSource.map((item) => (
-                          <DeriveWalletTableRow
-                              address={item.address}
-                              pathIndex={item.pathIndex}
-                              key={item.address}
-                              selected={item.selected}
-                              added={item.added}
-                              onCheck={(checked) => onCheck(checked, item.pathIndex)}
-                              symbol={symbol}
-                          />
-                      ))}
+                {loading ?
+                    range(10).map((index) => <DeriveWalletTableRowSkeleton key={index} />)
+                :   dataSource.map((item) => (
+                        <DeriveWalletTableRow
+                            address={item.address}
+                            pathIndex={item.pathIndex}
+                            key={item.address}
+                            selected={item.selected}
+                            added={item.added}
+                            onCheck={(checked) => onCheck(checked, item.pathIndex)}
+                            symbol={symbol}
+                        />
+                    ))
+                }
             </TableBody>
         </Table>
     )
@@ -189,10 +190,9 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                 </div>
             </TableCell>
             <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
-                {isLoading ? (
+                {isLoading ?
                     <CircularProgress color="primary" size={12} classes={{ colorPrimary: classes.colorPrimary }} />
-                ) : (
-                    <Typography className={classes.title}>
+                :   <Typography className={classes.title}>
                         <FormattedBalance
                             value={balance}
                             decimals={18}
@@ -202,7 +202,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                             classes={{ symbol: cx(classes.second, classes.symbol) }}
                         />
                     </Typography>
-                )}
+                }
             </TableCell>
             <TableCell align="right" variant="body" className={classes.cell}>
                 <Checkbox

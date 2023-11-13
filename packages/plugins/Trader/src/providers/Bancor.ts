@@ -102,13 +102,11 @@ class BancorAPI implements TraderAPI.Provider {
         const { BANCOR_ETH_ADDRESS } = getTraderConstants(chainId)
         if (!inputToken || !outputToken || isZero(inputAmount) || !BANCOR_ETH_ADDRESS) return null
 
-        const fromToken = isNativeTokenAddress(inputToken.address)
-            ? { ...inputToken, address: BANCOR_ETH_ADDRESS }
-            : inputToken
+        const fromToken =
+            isNativeTokenAddress(inputToken.address) ? { ...inputToken, address: BANCOR_ETH_ADDRESS } : inputToken
 
-        const toToken = isNativeTokenAddress(outputToken.address)
-            ? { ...outputToken, address: BANCOR_ETH_ADDRESS }
-            : outputToken
+        const toToken =
+            isNativeTokenAddress(outputToken.address) ? { ...outputToken, address: BANCOR_ETH_ADDRESS } : outputToken
 
         return this.swapBancor({
             strategy: TraderAPI.TradeStrategy.ExactIn,

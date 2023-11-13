@@ -80,11 +80,9 @@ export const NetworkManagement = memo(function NetworkManagement() {
                             onClick={() => {
                                 navigate(`${PopupRoutes.EditNetwork}/${network.ID}`)
                             }}>
-                            {network.iconUrl ? (
+                            {network.iconUrl ?
                                 <WalletIcon size={24} mainIcon={network.iconUrl} />
-                            ) : (
-                                <Icon size={24} name={network.name} sx={{ fontSize: 12 }} />
-                            )}
+                            :   <Icon size={24} name={network.name} sx={{ fontSize: 12 }} />}
                             <Box className={classes.text}>
                                 <TextOverflowTooltip title={network.name}>
                                     <Typography className={classes.name}>{network.name}</Typography>
@@ -96,13 +94,13 @@ export const NetworkManagement = memo(function NetworkManagement() {
                     )
                 })}
             </List>
-            {process.env.NODE_ENV === 'development' ? (
+            {process.env.NODE_ENV === 'development' ?
                 <div className={classes.footer}>
                     <ActionButton fullWidth onClick={() => navigate(PopupRoutes.AddNetwork)}>
                         {t.network_management_add_network()}
                     </ActionButton>
                 </div>
-            ) : null}
+            :   null}
         </main>
     )
 })

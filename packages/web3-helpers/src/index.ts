@@ -27,31 +27,28 @@ export declare namespace Web3Helper {
         [NetworkPluginID.PLUGIN_SOLANA]: Solana.Web3Definition
     }
 
-    export type Web3ProviderDescriptor<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : ProviderDescriptor<Definition[T]['ChainId'], Definition[T]['ProviderType']>
+    export type Web3ProviderDescriptor<T extends NetworkPluginID = never> =
+        T extends never ? never : ProviderDescriptor<Definition[T]['ChainId'], Definition[T]['ProviderType']>
 
-    export type Web3NetworkDescriptor<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : NetworkDescriptor<Definition[T]['ChainId'], Definition[T]['NetworkType']>
+    export type Web3NetworkDescriptor<T extends NetworkPluginID = never> =
+        T extends never ? never : NetworkDescriptor<Definition[T]['ChainId'], Definition[T]['NetworkType']>
 
     export type Web3<T extends NetworkPluginID = never> = T extends never ? never : Definition[T]['Web3']
 
-    export type Web3Provider<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Definition[T]['Web3Provider']
-    export type Web3State<T extends NetworkPluginID = never> = T extends never
-        ? never
-        : Web3StateShared<
-              Definition[T]['ChainId'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['NetworkType'],
-              Definition[T]['MessageRequest'],
-              Definition[T]['MessageResponse'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionParameter']
-          >
+    export type Web3Provider<T extends NetworkPluginID = never> =
+        T extends never ? never : Definition[T]['Web3Provider']
+    export type Web3State<T extends NetworkPluginID = never> =
+        T extends never ? never
+        :   Web3StateShared<
+                Definition[T]['ChainId'],
+                Definition[T]['SchemaType'],
+                Definition[T]['ProviderType'],
+                Definition[T]['NetworkType'],
+                Definition[T]['MessageRequest'],
+                Definition[T]['MessageResponse'],
+                Definition[T]['Transaction'],
+                Definition[T]['TransactionParameter']
+            >
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
 
@@ -159,20 +156,22 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionParameter']
     >
-    export type ChainIdScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? ChainIdAll : Definition[T]['ChainId']
+    export type ChainIdScope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
+        'all'
+    ) ?
+        ChainIdAll
+    :   Definition[T]['ChainId']
 
     export type AddressTypeScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all' ? AddressTypeAll : Definition[T]['AddressType']
 
-    export type GasOptionScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all' ? GasOptionAll : Definition[T]['GasOption']
+    export type GasOptionScope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
+        'all'
+    ) ?
+        GasOptionAll
+    :   Definition[T]['GasOption']
 
     export type NetworkTypeScope<
         S extends 'all' | void = void,
@@ -222,47 +221,45 @@ export declare namespace Web3Helper {
     export type ChainDescriptorScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? ChainDescriptorAll
-        : ChainDescriptor<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['NetworkType']>
+    > = S extends 'all' ? ChainDescriptorAll
+    :   ChainDescriptor<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['NetworkType']>
 
     export type NetworkDescriptorScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? NetworkDescriptorAll
-        : NetworkDescriptor<Definition[T]['ChainId'], Definition[T]['NetworkType']>
+    > = S extends 'all' ? NetworkDescriptorAll
+    :   NetworkDescriptor<Definition[T]['ChainId'], Definition[T]['NetworkType']>
 
     export type ProviderDescriptorScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? ProviderDescriptorAll
-        : ProviderDescriptor<Definition[T]['ChainId'], Definition[T]['ProviderType']>
+    > = S extends 'all' ? ProviderDescriptorAll
+    :   ProviderDescriptor<Definition[T]['ChainId'], Definition[T]['ProviderType']>
 
     export type Web3ProviderScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all' ? Web3ProviderAll : Definition[T]['Web3Provider']
 
-    export type Web3StateScope<
-        S extends 'all' | void = void,
-        T extends NetworkPluginID = NetworkPluginID,
-    > = S extends 'all'
-        ? Web3StateAll
-        : Web3StateShared<
-              Definition[T]['ChainId'],
-              Definition[T]['SchemaType'],
-              Definition[T]['ProviderType'],
-              Definition[T]['NetworkType'],
-              Definition[T]['MessageRequest'],
-              Definition[T]['MessageResponse'],
-              Definition[T]['Transaction'],
-              Definition[T]['TransactionParameter']
-          >
+    export type Web3StateScope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
+        'all'
+    ) ?
+        Web3StateAll
+    :   Web3StateShared<
+            Definition[T]['ChainId'],
+            Definition[T]['SchemaType'],
+            Definition[T]['ProviderType'],
+            Definition[T]['NetworkType'],
+            Definition[T]['MessageRequest'],
+            Definition[T]['MessageResponse'],
+            Definition[T]['Transaction'],
+            Definition[T]['TransactionParameter']
+        >
     export type Scope<S extends 'all' | void = void, T = unknown, F = unknown> = S extends 'all' ? T : F
 
-    export type Web3Scope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends 'all'
-        ? Web3All
-        : Definition[T]['Web3']
+    export type Web3Scope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
+        'all'
+    ) ?
+        Web3All
+    :   Definition[T]['Web3']
 }

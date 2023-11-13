@@ -44,23 +44,26 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             quantity: '1',
             hash: order.item_hash,
             side: order.type === 'buy' ? OrderSide.Buy : OrderSide.Sell,
-            maker: order.maker
-                ? {
-                      address: order.maker,
-                  }
-                : undefined,
-            taker: order.taker
-                ? {
-                      address: order.taker,
-                  }
-                : undefined,
+            maker:
+                order.maker ?
+                    {
+                        address: order.maker,
+                    }
+                :   undefined,
+            taker:
+                order.taker ?
+                    {
+                        address: order.taker,
+                    }
+                :   undefined,
             createdAt: Number.parseInt(order.created_at, 10),
             expiredAt: Number.parseInt(order.end_at, 10),
             priceInToken: {
                 amount: order.price,
-                token: isZeroAddress(order.currency)
-                    ? EVMChainResolver.nativeCurrency(ChainId.Mainnet)
-                    : createERC20Token(ChainId.Mainnet, order.currency),
+                token:
+                    isZeroAddress(order.currency) ?
+                        EVMChainResolver.nativeCurrency(ChainId.Mainnet)
+                    :   createERC20Token(ChainId.Mainnet, order.currency),
             },
             source: SourceType.X2Y2,
         }
@@ -81,9 +84,10 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                 address: event.to_address,
             },
             timestamp: Number.parseInt(event.created_at, 10) * 1000,
-            paymentToken: isZeroAddress(event.order.currency)
-                ? EVMChainResolver.nativeCurrency(ChainId.Mainnet)
-                : createERC20Token(ChainId.Mainnet, event.order.currency),
+            paymentToken:
+                isZeroAddress(event.order.currency) ?
+                    EVMChainResolver.nativeCurrency(ChainId.Mainnet)
+                :   createERC20Token(ChainId.Mainnet, event.order.currency),
             source: SourceType.X2Y2,
         }
     }
@@ -128,28 +132,28 @@ class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
         const saleCursor = last(cursors)
 
         const result = await Promise.all([
-            listCursor || !options?.indicator?.index
-                ? fetchFromX2Y2<Event[]>(
-                      urlcat('/v1/events', {
-                          cursor: listCursor ?? '',
-                          contract: address,
-                          token_id: tokenId,
-                          // list, sale, cancel_listing
-                          type: 'list',
-                      }),
-                  )
-                : EMPTY_LIST,
-            saleCursor || !options?.indicator?.index
-                ? fetchFromX2Y2<Event[]>(
-                      urlcat('/v1/events', {
-                          cursor: saleCursor ?? '',
-                          contract: address,
-                          token_id: tokenId,
-                          // list, sale, cancel_listing
-                          type: 'sale',
-                      }),
-                  )
-                : EMPTY_LIST,
+            listCursor || !options?.indicator?.index ?
+                fetchFromX2Y2<Event[]>(
+                    urlcat('/v1/events', {
+                        cursor: listCursor ?? '',
+                        contract: address,
+                        token_id: tokenId,
+                        // list, sale, cancel_listing
+                        type: 'list',
+                    }),
+                )
+            :   EMPTY_LIST,
+            saleCursor || !options?.indicator?.index ?
+                fetchFromX2Y2<Event[]>(
+                    urlcat('/v1/events', {
+                        cursor: saleCursor ?? '',
+                        contract: address,
+                        token_id: tokenId,
+                        // list, sale, cancel_listing
+                        type: 'sale',
+                    }),
+                )
+            :   EMPTY_LIST,
         ])
 
         const [[listData = EMPTY_LIST, listNext], [saleData = EMPTY_LIST, saleNext]] = result

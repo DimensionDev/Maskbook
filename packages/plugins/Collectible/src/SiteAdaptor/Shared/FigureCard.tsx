@@ -119,15 +119,18 @@ export function FigureCard(props: FigureCardProps) {
                     <TextOverflowTooltip title={asset.collection?.name} as={ShadowRootTooltip}>
                         <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
                     </TextOverflowTooltip>
-                    {asset.collection?.verified ? <Icons.Verification /> : null}
+                    {asset.collection?.verified ?
+                        <Icons.Verification />
+                    :   null}
 
-                    {isSpam ? (
+                    {isSpam ?
                         <NFTSpamBadge ml="7px" />
-                    ) : (
-                        <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
-                            {isReporting ? <LoadingBase size={20} /> : <Icons.Flag size={20} />}
+                    :   <IconButton className={classes.reportButton} onClick={promptReport} disabled={isReporting}>
+                            {isReporting ?
+                                <LoadingBase size={20} />
+                            :   <Icons.Flag size={20} />}
                         </IconButton>
-                    )}
+                    }
                 </div>
             )}
         </div>

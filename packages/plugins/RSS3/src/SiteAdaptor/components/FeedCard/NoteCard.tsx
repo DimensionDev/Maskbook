@@ -219,7 +219,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                 />
             </Typography>
             <div className={classes.body} ref={ref}>
-                {media?.mime_type.startsWith('image/') || isImagePost ? (
+                {media?.mime_type.startsWith('image/') || isImagePost ?
                     <Image
                         classes={{
                             container: cx(classes.image, soloImage ? classes.soloImage : undefined),
@@ -229,7 +229,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                         height={imageSize}
                         width={imageSize}
                     />
-                ) : media?.mime_type.startsWith('video/') ? (
+                : media?.mime_type.startsWith('video/') ?
                     <Link
                         className={classes.playButton}
                         href={
@@ -238,12 +238,18 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                         }
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
-                        {isLoading ? <LoadingBase size={36} /> : <Icons.Play size={64} />}
+                        {isLoading ?
+                            <LoadingBase size={36} />
+                        :   <Icons.Play size={64} />}
                     </Link>
-                ) : null}
+                :   null}
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>
-                    {metadata?.title ? <Typography className={classes.title}>{metadata.title}</Typography> : null}
-                    {isImagePost ? null : rest.verbose && metadata?.body ? (
+                    {metadata?.title ?
+                        <Typography className={classes.title}>{metadata.title}</Typography>
+                    :   null}
+                    {isImagePost ?
+                        null
+                    : rest.verbose && metadata?.body ?
                         <Markdown
                             className={mdClasses.markdown}
                             defaultStyle={false}
@@ -251,13 +257,12 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                             transformImageUri={transformUri}>
                             {metadata.body}
                         </Markdown>
-                    ) : (
-                        <Typography className={classes.content}>
+                    :   <Typography className={classes.content}>
                             <Linkify options={LinkifyOptions}>
                                 {htmlToPlain(metadata?.summary || metadata?.body)}
                             </Linkify>
                         </Typography>
-                    )}
+                    }
                 </div>
             </div>
         </CardFrame>

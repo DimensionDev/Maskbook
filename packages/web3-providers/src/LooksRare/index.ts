@@ -191,12 +191,13 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
             urlcat('/api/v1/events', {
                 collection: address,
                 tokenId,
-                pagination: indicator
-                    ? {
-                          first: indicator.index * LOOKSRARE_PAGE_SIZE,
-                          cursor: indicator.id,
-                      }
-                    : undefined,
+                pagination:
+                    indicator ?
+                        {
+                            first: indicator.index * LOOKSRARE_PAGE_SIZE,
+                            cursor: indicator.id,
+                        }
+                    :   undefined,
             }),
         )
 
@@ -248,11 +249,12 @@ class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                 quoteType: side === OrderSide.Sell ? 1 : 0,
                 collection: address,
                 itemId: tokenId,
-                pagination: indicator
-                    ? JSON.stringify({
-                          first: indicator.index * LOOKSRARE_PAGE_SIZE,
-                      })
-                    : undefined,
+                pagination:
+                    indicator ?
+                        JSON.stringify({
+                            first: indicator.index * LOOKSRARE_PAGE_SIZE,
+                        })
+                    :   undefined,
                 sort: 'PRICE_DESC',
             }),
         )

@@ -58,11 +58,11 @@ const site: Plugin.SiteAdaptor.Definition = {
             if (sigSpan) sigSpan.style.display = 'none'
         }, [rootElement, available])
 
-        return available ? (
-            <ThemeProvider theme={MaskLightTheme}>
-                <VerificationPayload pubkey={pubkey} />
-            </ThemeProvider>
-        ) : null
+        return available ?
+                <ThemeProvider theme={MaskLightTheme}>
+                    <VerificationPayload pubkey={pubkey} />
+                </ThemeProvider>
+            :   null
     },
     wrapperProps: {
         icon: <Icons.NextID size={24} style={{ boxShadow: '0px 6px 12px 0px rgba(7, 16, 27, 0.20)' }} />,

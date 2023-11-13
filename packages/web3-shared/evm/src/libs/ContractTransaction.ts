@@ -34,9 +34,8 @@ export class ContractTransaction<T extends BaseContract | null> {
                 value: overrides?.value ? web3_utils.toHex(overrides.value) : undefined,
                 gas: overrides?.gas ? web3_utils.toHex(overrides.gas) : undefined,
                 gasPrice: overrides?.gasPrice ? web3_utils.toHex(overrides.gasPrice) : undefined,
-                maxPriorityFeePerGas: overrides?.maxPriorityFeePerGas
-                    ? web3_utils.toHex(overrides.maxPriorityFeePerGas)
-                    : undefined,
+                maxPriorityFeePerGas:
+                    overrides?.maxPriorityFeePerGas ? web3_utils.toHex(overrides.maxPriorityFeePerGas) : undefined,
                 maxFeePerGas: overrides?.maxFeePerGas ? web3_utils.toHex(overrides.maxFeePerGas) : undefined,
                 nonce: overrides?.nonce ? web3_utils.toHex(overrides.nonce) : undefined,
                 chainId: overrides?.chainId ? web3_utils.toHex(overrides.chainId) : undefined,

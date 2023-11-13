@@ -94,20 +94,21 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const shareText = useMemo(() => {
         const recipientName = recipient?.label || recipientEns
         const context = recipientName ? 'name' : 'address'
-        const message = isTokenTip
-            ? t.tip_token_share_post({
-                  amount,
-                  symbol: token?.symbol || 'token',
-                  recipientSnsId: recipientUserId,
-                  recipient: recipientName || recipientAddress,
-                  context,
-              })
-            : t.tip_nft_share_post({
-                  name: nonFungibleTokenContract?.name || 'NFT',
-                  recipientSnsId: recipientUserId,
-                  recipient: recipientName || recipientAddress,
-                  context,
-              })
+        const message =
+            isTokenTip ?
+                t.tip_token_share_post({
+                    amount,
+                    symbol: token?.symbol || 'token',
+                    recipientSnsId: recipientUserId,
+                    recipient: recipientName || recipientAddress,
+                    context,
+                })
+            :   t.tip_nft_share_post({
+                    name: nonFungibleTokenContract?.name || 'NFT',
+                    recipientSnsId: recipientUserId,
+                    recipient: recipientName || recipientAddress,
+                    context,
+                })
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t, recipientEns])
 
@@ -116,7 +117,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         setTipType(value)
     }, [])
 
-    const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
+    const buttonLabel =
+        isSending ? t.sending_tip()
+        : isValid || !validateMessage ? t.send_tip()
+        : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
     const send = useCallback(async () => {
@@ -145,9 +149,10 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         onClose?.()
     }, [sendTip, nonFungibleToken, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
-    const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
-        ? pluginID
-        : NetworkPluginID.PLUGIN_EVM
+    const expectedPluginID =
+        [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID) ? pluginID : (
+            NetworkPluginID.PLUGIN_EVM
+        )
     const submitDisabled = !isValid || (isSending && !isDirty)
 
     const pluginIDs = useValueRef(pluginIDsSettings)

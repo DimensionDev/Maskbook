@@ -43,11 +43,10 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     value={password}
                     error={!passwordMatched}
                     helperText={
-                        !passwordValid
-                            ? t.popups_backup_password_invalid()
-                            : !passwordMatched
-                            ? t.popups_backup_password_incorrect()
-                            : null
+                        !passwordValid ? t.popups_backup_password_invalid()
+                        : !passwordMatched ?
+                            t.popups_backup_password_incorrect()
+                        :   null
                     }
                 />
             </Box>

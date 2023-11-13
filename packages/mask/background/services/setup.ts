@@ -77,14 +77,15 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         key,
         serializer,
         channel,
-        log: hasLog
-            ? {
-                  beCalled: true,
-                  remoteError: false,
-                  type: 'pretty',
-                  requestReplay: debugMode,
-              }
-            : false,
+        log:
+            hasLog ?
+                {
+                    beCalled: true,
+                    remoteError: false,
+                    type: 'pretty',
+                    requestReplay: debugMode,
+                }
+            :   false,
         thenable: false,
     })
 }

@@ -30,14 +30,14 @@ export async function getCoinTrending(
             return CoinMarketCap.getCoinTrending(chainId as ChainIdEVM, id, currency)
 
         case SourceType.NFTScan:
-            return pluginID === NetworkPluginID.PLUGIN_SOLANA
-                ? NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
-                : attemptUntil(
-                      [SimpleHashEVM, NFTScanTrending_EVM].map(
-                          (x) => () => x.getCoinTrending(chainId as ChainIdEVM, address, currency),
-                      ),
-                      undefined,
-                  )
+            return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                    NFTScanTrending_Solana.getCoinTrending(chainId as ChainIdSolana, name, currency)
+                :   attemptUntil(
+                        [SimpleHashEVM, NFTScanTrending_EVM].map(
+                            (x) => () => x.getCoinTrending(chainId as ChainIdEVM, address, currency),
+                        ),
+                        undefined,
+                    )
 
         default:
             return
@@ -79,12 +79,14 @@ export async function getNFT_TrendingOverview(
     chainId: Web3Helper.ChainIdAll,
     id: string,
 ): Promise<NonFungibleCollectionOverview | undefined> {
-    return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
-        : attemptUntil(
-              [SimpleHashEVM, NFTScanTrending_EVM].map((x) => () => x.getCollectionOverview(chainId as ChainIdEVM, id)),
-              undefined,
-          )
+    return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+            NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
+        :   attemptUntil(
+                [SimpleHashEVM, NFTScanTrending_EVM].map(
+                    (x) => () => x.getCollectionOverview(chainId as ChainIdEVM, id),
+                ),
+                undefined,
+            )
 }
 // #endregion
 
@@ -107,13 +109,13 @@ export async function getNonFungibleTokenActivities(
     address: string,
     cursor: string,
 ): Promise<{ content: Web3Helper.NonFungibleTokenActivityAll[]; cursor: string } | undefined> {
-    return pluginID === NetworkPluginID.PLUGIN_SOLANA
-        ? NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, address, cursor)
-        : attemptUntil(
-              [SimpleHashEVM, NFTScanTrending_EVM].map(
-                  (x) => () => x.getCoinActivities(chainId as ChainIdEVM, address, cursor),
-              ),
-              undefined,
-          )
+    return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+            NFTScanTrending_Solana.getCoinActivities(chainId as ChainIdSolana, address, cursor)
+        :   attemptUntil(
+                [SimpleHashEVM, NFTScanTrending_EVM].map(
+                    (x) => () => x.getCoinActivities(chainId as ChainIdEVM, address, cursor),
+                ),
+                undefined,
+            )
 }
 // #endregion

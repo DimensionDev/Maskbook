@@ -51,63 +51,66 @@ const useStyles = makeStyles<{
 }>()((theme, props) => {
     return {
         root:
-            props.isTokenTagPopper || props.isCollectionProjectPopper
-                ? {
-                      width: 598,
-                      borderRadius: theme.spacing(2),
-                      boxShadow:
-                          theme.palette.mode === 'dark'
-                              ? 'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
-                              : 'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
-                  }
-                : {
-                      width: '100%',
-                      boxShadow: 'none',
-                      borderRadius: 0,
-                      marginBottom: 0,
-                  },
+            props.isTokenTagPopper || props.isCollectionProjectPopper ?
+                {
+                    width: 598,
+                    borderRadius: theme.spacing(2),
+                    boxShadow:
+                        theme.palette.mode === 'dark' ?
+                            'rgba(255, 255, 255, 0.2) 0 0 15px, rgba(255, 255, 255, 0.15) 0 0 3px 1px'
+                        :   'rgba(101, 119, 134, 0.2) 0 0 15px, rgba(101, 119, 134, 0.15) 0 0 3px 1px',
+                }
+            :   {
+                    width: '100%',
+                    boxShadow: 'none',
+                    borderRadius: 0,
+                    marginBottom: 0,
+                },
         tabListRoot: {
             flexGrow: 0,
         },
-        body: props.isCollectionProjectPopper
-            ? {
-                  minHeight: 374,
-                  maxHeight: props.isCollectionProjectPopper
-                      ? props.currentTab === ContentTab.Price
-                          ? 450
-                          : props.currentTab === ContentTab.Swap
-                          ? 'unset'
-                          : 374
-                      : 'unset',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: 'transparent',
-              }
-            : {
-                  background: 'transparent',
-                  maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
-                  display: 'flex',
-                  flexDirection: 'column',
-              },
-        footerSkeleton: props.isTokenTagPopper
-            ? {}
-            : {
-                  borderBottom: `solid 1px ${theme.palette.divider}`,
-              },
-        content: props.isTokenTagPopper
-            ? {}
-            : {
-                  border: 'none',
-              },
+        body:
+            props.isCollectionProjectPopper ?
+                {
+                    minHeight: 374,
+                    maxHeight:
+                        props.isCollectionProjectPopper ?
+                            props.currentTab === ContentTab.Price ? 450
+                            : props.currentTab === ContentTab.Swap ? 'unset'
+                            : 374
+                        :   'unset',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    background: 'transparent',
+                }
+            :   {
+                    background: 'transparent',
+                    maxHeight: props.currentTab === ContentTab.Market ? 374 : 'unset',
+                    display: 'flex',
+                    flexDirection: 'column',
+                },
+        footerSkeleton:
+            props.isTokenTagPopper ?
+                {}
+            :   {
+                    borderBottom: `solid 1px ${theme.palette.divider}`,
+                },
+        content:
+            props.isTokenTagPopper ?
+                {}
+            :   {
+                    border: 'none',
+                },
         tradeViewRoot: {
             maxWidth: '100% !important',
         },
-        priceChartRoot: props.isTokenTagPopper
-            ? {
-                  flex: 1,
-              }
-            : {},
+        priceChartRoot:
+            props.isTokenTagPopper ?
+                {
+                    flex: 1,
+                }
+            :   {},
         cardHeader: {
             marginBottom: '-36px',
         },
@@ -207,15 +210,15 @@ export function TrendingView(props: TrendingViewProps) {
     const swapExpectedContract = useMemo(() => {
         const contracts = trending?.contracts?.filter((x) => x.chainId && x.address) ?? []
         const fallbackContracts: TrendingAPI.Contract[] =
-            trending?.coin.chainId && trending.coin.contract_address
-                ? [
-                      {
-                          chainId: trending.coin.chainId,
-                          address: trending.coin.contract_address,
-                          pluginID: NetworkPluginID.PLUGIN_EVM,
-                      },
-                  ]
-                : []
+            trending?.coin.chainId && trending.coin.contract_address ?
+                [
+                    {
+                        chainId: trending.coin.chainId,
+                        address: trending.coin.contract_address,
+                        pluginID: NetworkPluginID.PLUGIN_EVM,
+                    },
+                ]
+            :   []
 
         const _contracts = (contracts.length ? contracts : fallbackContracts).filter((x) => x.chainId === chainId) ?? []
         if (_contracts.length > 0) return first(_contracts)
@@ -257,18 +260,18 @@ export function TrendingView(props: TrendingViewProps) {
                 key: ContentTab.Exchange,
                 label: isNFT ? t.plugin_trader_tab_activities() : t.plugin_trader_tab_exchange(),
             },
-            isSwappable
-                ? {
-                      key: ContentTab.Swap,
-                      label: t.plugin_trader_tab_swap(),
-                  }
-                : undefined,
-            isNFT
-                ? {
-                      key: ContentTab.NFTItems,
-                      label: t.plugin_trader_nft_items(),
-                  }
-                : undefined,
+            isSwappable ?
+                {
+                    key: ContentTab.Swap,
+                    label: t.plugin_trader_tab_swap(),
+                }
+            :   undefined,
+            isNFT ?
+                {
+                    key: ContentTab.NFTItems,
+                    label: t.plugin_trader_nft_items(),
+                }
+            :   undefined,
         ]
         return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
     }, [t, isSwappable, isNFT])
@@ -283,11 +286,11 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const collectionId =
-        trending?.coin.type === TokenType.NonFungible
-            ? result.pluginID === NetworkPluginID.PLUGIN_SOLANA
-                ? result.name
-                : trending.coin.contract_address
-            : undefined
+        trending?.coin.type === TokenType.NonFungible ?
+            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                result.name
+            :   trending.coin.contract_address
+        :   undefined
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,
@@ -380,10 +383,10 @@ export function TrendingView(props: TrendingViewProps) {
                         display: 'none',
                     },
                 }}>
-                {currentTab === ContentTab.Market && trending.dataProvider ? (
+                {currentTab === ContentTab.Market && trending.dataProvider ?
                     <CoinMarketPanel trending={trending} result={result} />
-                ) : null}
-                {currentTab === ContentTab.Price ? (
+                :   null}
+                {currentTab === ContentTab.Price ?
                     <Box className={classes.priceChartWrapper}>
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
@@ -401,10 +404,10 @@ export function TrendingView(props: TrendingViewProps) {
                             />
                         </PriceChart>
                     </Box>
-                ) : null}
-                {currentTab === ContentTab.Exchange && trending.dataProvider ? (
+                :   null}
+                {currentTab === ContentTab.Exchange && trending.dataProvider ?
                     <Box p={2}>
-                        {isNFT ? (
+                        {isNFT ?
                             <NonFungibleTickersTable
                                 id={
                                     (result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? result.name : coin.address) ??
@@ -413,12 +416,10 @@ export function TrendingView(props: TrendingViewProps) {
                                 chainId={result.chainId ?? coin.chainId ?? ChainId.Mainnet}
                                 result={result}
                             />
-                        ) : (
-                            <TickersTable tickers={tickers} />
-                        )}
+                        :   <TickersTable tickers={tickers} />}
                     </Box>
-                ) : null}
-                {currentTab === ContentTab.Swap && isSwappable ? (
+                :   null}
+                {currentTab === ContentTab.Swap && isSwappable ?
                     <Web3ContextProvider
                         value={{
                             pluginID: context.pluginID,
@@ -437,23 +438,24 @@ export function TrendingView(props: TrendingViewProps) {
                                     nativeToken?.decimals ?? 0,
                                     isNativeTokenAddress(result.address) ? result.logoURL : undefined,
                                 ),
-                                defaultOutputCoin: isNativeTokenAddress(coin.contract_address)
-                                    ? undefined
-                                    : createFungibleToken(
-                                          swapExpectedContract?.chainId as ChainId,
-                                          SchemaType.ERC20,
-                                          swapExpectedContract?.address || '',
-                                          coin.name ?? coin.name,
-                                          coin.symbol ?? coin.symbol ?? '',
-                                          coin.decimals ?? 0,
-                                          result.logoURL,
-                                      ),
+                                defaultOutputCoin:
+                                    isNativeTokenAddress(coin.contract_address) ? undefined : (
+                                        createFungibleToken(
+                                            swapExpectedContract?.chainId as ChainId,
+                                            SchemaType.ERC20,
+                                            swapExpectedContract?.address || '',
+                                            coin.name ?? coin.name,
+                                            coin.symbol ?? coin.symbol ?? '',
+                                            coin.decimals ?? 0,
+                                            result.logoURL,
+                                        )
+                                    ),
                             }}
                         />
                     </Web3ContextProvider>
-                ) : null}
+                :   null}
 
-                {isNFT ? (
+                {isNFT ?
                     <Box className={cx(classes.nftItems, currentTab === ContentTab.NFTItems ? '' : classes.hidden)}>
                         <NFTList
                             pluginID={result.pluginID}
@@ -465,7 +467,7 @@ export function TrendingView(props: TrendingViewProps) {
                             gap={16}
                         />
                     </Box>
-                ) : null}
+                :   null}
             </Stack>
         </TrendingViewDeck>
     )

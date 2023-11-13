@@ -248,7 +248,7 @@ const LogoutUI = memo<LogoutUIProps>(
                             </Typography>
                         </Box>
                     </Box>
-                    {manageWallets.length ? (
+                    {manageWallets.length ?
                         <Box className={classes.wallets}>
                             {manageWallets.map((x, index) => (
                                 <Box className={classes.infoBox} key={index}>
@@ -264,7 +264,7 @@ const LogoutUI = memo<LogoutUIProps>(
                                             display="flex"
                                             alignItems="center">
                                             {formatEthereumAddress(x.address, 4)}
-                                            {chainId ? (
+                                            {chainId ?
                                                 <Link
                                                     style={{
                                                         width: 12,
@@ -278,29 +278,29 @@ const LogoutUI = memo<LogoutUIProps>(
                                                     rel="noopener noreferrer">
                                                     <Icons.LinkOut size={12} />
                                                 </Link>
-                                            ) : null}
+                                            :   null}
                                         </Typography>
                                     </Box>
                                 </Box>
                             ))}
                         </Box>
-                    ) : null}
+                    :   null}
                     <Typography className={classes.tips}>
                         {t.popups_log_out_tips()}
-                        {currentPersona && manageWallets.length ? (
+                        {currentPersona && manageWallets.length ?
                             <Typography mt={2}>
                                 <Trans
                                     i18nKey={
-                                        manageWallets.length > 1
-                                            ? 'popups_log_out_with_smart_pay_tips_other'
-                                            : 'popups_log_out_with_smart_pay_tips_one'
+                                        manageWallets.length > 1 ?
+                                            'popups_log_out_with_smart_pay_tips_other'
+                                        :   'popups_log_out_with_smart_pay_tips_one'
                                     }
                                     values={{
                                         persona: currentPersona.nickname,
                                     }}
                                 />
                             </Typography>
-                        ) : null}
+                        :   null}
                     </Typography>
                     {passwordField}
                 </Box>

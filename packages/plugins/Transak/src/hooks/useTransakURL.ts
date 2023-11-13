@@ -30,9 +30,8 @@ export function useTransakURL(config?: Partial<TransakConfig>) {
         const config_: TransakConfig = {
             ...DEFAULT_PARAMETERS,
             themeColor: rgbToHex(theme.palette.maskColor.dark).slice(1),
-            exchangeScreenTitle: config?.walletAddress
-                ? `Buy Crypto to ${formatEthereumAddress(config.walletAddress, 4)}`
-                : void 0,
+            exchangeScreenTitle:
+                config?.walletAddress ? `Buy Crypto to ${formatEthereumAddress(config.walletAddress, 4)}` : void 0,
             ...config,
         }
         const params = new URLSearchParams()

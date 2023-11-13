@@ -210,10 +210,9 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             fontSize={12}
                             fontWeight={700}
                             lineHeight="16px">
-                            {process !== 100 ? (
+                            {process !== 100 ?
                                 t.data_downloading()
-                            ) : (
-                                <>
+                            :   <>
                                     <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
                                         {formatFileSize(Number(size), false)}
                                     </Typography>
@@ -225,7 +224,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                                         {formatDateTime(fromUnixTime(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>
                                 </>
-                            )}
+                            }
                         </Typography>
                     </Box>
                     <Icons.BaseClose size={24} />
@@ -245,9 +244,9 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                     }}
                     error={!!backupPasswordError}
                     helperText={
-                        backupPasswordError
-                            ? backupPasswordError
-                            : t.cloud_backup_enter_backup_password_to_decrypt_file()
+                        backupPasswordError ? backupPasswordError : (
+                            t.cloud_backup_enter_backup_password_to_decrypt_file()
+                        )
                     }
                 />
             </DialogContent>

@@ -124,29 +124,29 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             LooksRare.getStats(address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
-            openseaStats
-                ? {
-                      logo_url: MaskIconURLs.open_sea_url(),
-                      // TODO
-                      trade_url: `https://opensea.io/assets/ethereum/${address}`,
-                      market_name: NonFungibleMarketplace.OpenSea,
-                      volume_24h: openseaStats.volume24h,
-                      floor_price: openseaStats.floorPrice,
-                      price_symbol: collection.price_symbol,
-                      sales_24: openseaStats.count24h,
-                  }
-                : null,
-            looksrareStats
-                ? {
-                      logo_url: MaskIconURLs.looks_rare_url(),
-                      trade_url: `https://looksrare.org/collections/${address}`,
-                      market_name: NonFungibleMarketplace.LooksRare,
-                      volume_24h: looksrareStats.volume24h,
-                      floor_price: looksrareStats.floorPrice,
-                      price_symbol: collection.price_symbol,
-                      sales_24: looksrareStats.count24h,
-                  }
-                : null,
+            openseaStats ?
+                {
+                    logo_url: MaskIconURLs.open_sea_url(),
+                    // TODO
+                    trade_url: `https://opensea.io/assets/ethereum/${address}`,
+                    market_name: NonFungibleMarketplace.OpenSea,
+                    volume_24h: openseaStats.volume24h,
+                    floor_price: openseaStats.floorPrice,
+                    price_symbol: collection.price_symbol,
+                    sales_24: openseaStats.count24h,
+                }
+            :   null,
+            looksrareStats ?
+                {
+                    logo_url: MaskIconURLs.looks_rare_url(),
+                    trade_url: `https://looksrare.org/collections/${address}`,
+                    market_name: NonFungibleMarketplace.LooksRare,
+                    volume_24h: looksrareStats.volume24h,
+                    floor_price: looksrareStats.floorPrice,
+                    price_symbol: collection.price_symbol,
+                    sales_24: looksrareStats.count24h,
+                }
+            :   null,
         ])
 
         return {
@@ -164,9 +164,9 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 description: collection.description,
                 image_url: collection.logo_url,
                 home_urls: compact([
-                    collection.website
-                        ? collection.website
-                        : `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${address}`,
+                    collection.website ?
+                        collection.website
+                    :   `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${address}`,
                 ]),
                 nftscan_url: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_EVM, chainId)}/${address}`,
                 community_urls: [
@@ -174,9 +174,9 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                         type: 'twitter',
                         link:
                             collection.twitter &&
-                            (collection.twitter.startsWith('https://twitter.com/')
-                                ? collection.twitter
-                                : `https://twitter.com/${collection.twitter}`),
+                            (collection.twitter.startsWith('https://twitter.com/') ?
+                                collection.twitter
+                            :   `https://twitter.com/${collection.twitter}`),
                     },
                     {
                         type: 'facebook',
@@ -191,17 +191,17 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                         type: 'instagram',
                         link:
                             collection.instagram &&
-                            (collection.instagram.startsWith('https://instagram.com/')
-                                ? collection.instagram
-                                : `https://www.instagram.com/${collection.instagram}`),
+                            (collection.instagram.startsWith('https://instagram.com/') ?
+                                collection.instagram
+                            :   `https://www.instagram.com/${collection.instagram}`),
                     },
                     {
                         type: 'medium',
                         link:
                             collection.medium &&
-                            (collection.medium.startsWith('https://instagram.com/@')
-                                ? collection.medium
-                                : `https://medium.com/@${collection.medium}`),
+                            (collection.medium.startsWith('https://instagram.com/@') ?
+                                collection.medium
+                            :   `https://medium.com/@${collection.medium}`),
                     },
                     {
                         type: 'reddit',
@@ -223,9 +223,10 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
             },
             market: {
                 total_supply: collection.items_total,
-                current_price: collection.floor_price
-                    ? collection.floor_price.toString()
-                    : openseaStats?.floorPrice.toString() ?? '',
+                current_price:
+                    collection.floor_price ?
+                        collection.floor_price.toString()
+                    :   openseaStats?.floorPrice.toString() ?? '',
                 floor_price: collection.floor_price?.toString(),
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'ETH',

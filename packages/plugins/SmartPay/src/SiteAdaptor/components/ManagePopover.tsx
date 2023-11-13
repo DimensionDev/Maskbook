@@ -26,9 +26,9 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         backgroundColor: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 0px 20px rgba(255, 255, 255, 0.12)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
         maxHeight: 296,
         '::-webkit-scrollbar': {
@@ -94,7 +94,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             disableRestoreFocus>
             <Typography className={classes.title}>{t.personas()}</Typography>
-            {personaManagers.length ? (
+            {personaManagers.length ?
                 <Box className={classes.list}>
                     {personaManagers.map((persona, index) => (
                         <Box
@@ -122,8 +122,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         </Box>
                     ))}
                 </Box>
-            ) : (
-                <Box className={classes.footer} sx={{ py: 2 }}>
+            :   <Box className={classes.footer} sx={{ py: 2 }}>
                     <Box>
                         <Typography className={classes.title}>{t.create_a_new_persona_title()}</Typography>
                         <Typography className={classes.desc}>{t.create_a_new_persona_desc()}</Typography>
@@ -136,9 +135,9 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         {t.create()}
                     </Button>
                 </Box>
-            )}
+            }
             <Typography className={classes.title}>{t.wallets()}</Typography>
-            {walletManagers.length ? (
+            {walletManagers.length ?
                 <Box className={classes.list}>
                     {walletManagers.map((wallet, index) => (
                         <Box
@@ -165,8 +164,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         </Box>
                     ))}
                 </Box>
-            ) : (
-                <Box className={classes.footer}>
+            :   <Box className={classes.footer}>
                     <Box>
                         <Typography className={classes.title}>{t.create_a_new_wallet_title()}</Typography>
                         <Typography className={classes.desc}>{t.create_a_new_wallet_desc()}</Typography>
@@ -179,7 +177,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         {t.create()}
                     </Button>
                 </Box>
-            )}
+            }
         </Popover>
     ))
 })

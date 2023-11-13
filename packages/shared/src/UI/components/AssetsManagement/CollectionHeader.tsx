@@ -60,25 +60,29 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     return (
         <div className={cx(classes.collectionHeader, className)} {...rest}>
             <Box className={classes.info}>
-                {currentCollection.iconURL ? (
+                {currentCollection.iconURL ?
                     <Image className={classes.icon} size={24} src={currentCollection.iconURL} />
-                ) : null}
+                :   null}
                 <Typography mx={1}>{currentCollection.name}</Typography>
-                {currentVerifiedBy.length ? (
+                {currentVerifiedBy.length ?
                     <ShadowRootTooltip title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
-                ) : null}
-                {isSpam ? <NFTSpamBadge /> : null}
+                :   null}
+                {isSpam ?
+                    <NFTSpamBadge />
+                :   null}
             </Box>
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                 <Icons.Undo size={16} />
             </Button>
-            {!isSpam ? (
+            {!isSpam ?
                 <Button variant="text" className={classes.backButton} onClick={promptReport}>
-                    {isReporting ? <LoadingBase size={16} /> : <Icons.Flag size={16} />}
+                    {isReporting ?
+                        <LoadingBase size={16} />
+                    :   <Icons.Flag size={16} />}
                 </Button>
-            ) : null}
+            :   null}
         </div>
     )
 })

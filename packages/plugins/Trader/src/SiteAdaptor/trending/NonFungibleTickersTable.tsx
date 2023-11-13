@@ -220,15 +220,14 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
 
     return (
         <TableContainer className={classes.container} ref={containerRef}>
-            {activities.length === 0 && loadingActivities ? (
+            {activities.length === 0 && loadingActivities ?
                 <Stack height={298} width={566} alignItems="center" justifyContent="center">
                     <LoadingBase />
                     <Typography fontSize="14px" mt={1.5}>
                         {t.loading()}
                     </Typography>
                 </Stack>
-            ) : (
-                <>
+            :   <>
                     <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
@@ -240,10 +239,9 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {tickerRows.length ? (
+                            {tickerRows.length ?
                                 tickerRows
-                            ) : (
-                                <TableRow>
+                            :   <TableRow>
                                     <TableCell
                                         className={classes.cell}
                                         colSpan={headCells.length}
@@ -256,19 +254,19 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
-                            )}
+                            }
                         </TableBody>
                     </Table>
 
                     <Stack py={1} className={classes.loadMore}>
                         <ElementAnchor callback={fetchActivities}>
-                            {activities.length > 0 && loadingActivities ? (
+                            {activities.length > 0 && loadingActivities ?
                                 <LoadingBase className={classes.loadMoreIcon} />
-                            ) : null}
+                            :   null}
                         </ElementAnchor>
                     </Stack>
                 </>
-            )}
+            }
         </TableContainer>
     )
 }
@@ -288,20 +286,19 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
 
     return (
         <div className={classes.cellWrapper}>
-            {result.pluginID === NetworkPluginID.PLUGIN_SOLANA ? (
+            {result.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
                 <div className={classes.tokenIcon}>
                     <WalletIcon mainIcon={chain?.icon} size={16} />
                 </div>
-            ) : activity.trade_symbol?.toUpperCase() === 'WETH' ? (
+            : activity.trade_symbol?.toUpperCase() === 'WETH' ?
                 <Icons.WETH size={16} className={classes.tokenIcon} />
-            ) : (
-                <TokenIcon
+            :   <TokenIcon
                     logoURL={token?.logoURL || activity.trade_token?.logoURL}
                     symbol={activity.trade_symbol}
                     address={activity.contract_address}
                     className={classes.tokenIcon}
                 />
-            )}
+            }
 
             <Typography fontSize={12}>
                 {formatCurrency((activity.trade_price ?? activity.fee ?? 0).toFixed(4), '')}

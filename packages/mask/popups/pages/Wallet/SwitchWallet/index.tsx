@@ -160,15 +160,15 @@ const SwitchWallet = memo(function SwitchWallet() {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item) =>
-                        item.owner && chainId !== ChainId.Matic ? null : (
-                            <WalletItem
+                        item.owner && chainId !== ChainId.Matic ?
+                            null
+                        :   <WalletItem
                                 key={item.address}
                                 wallet={item}
                                 onSelect={handleSelect}
                                 isSelected={isSameAddress(item.address, wallet?.address)}
                                 className={classes.walletItem}
-                            />
-                        ),
+                            />,
                     )}
                 </List>
             </div>

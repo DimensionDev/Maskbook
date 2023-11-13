@@ -56,11 +56,12 @@ export interface EthereumProvider {
     getProperty(key: string): Promise<boolean | undefined>
 }
 
-export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
-    ? U extends keyof InternalEvents
-        ? readonly [U, InternalEvents[U]]
-        : never
-    : never
+export type EventItemBeforeSerialization =
+    keyof InternalEvents extends infer U ?
+        U extends keyof InternalEvents ?
+            readonly [U, InternalEvents[U]]
+        :   never
+    :   never
 const { parse, stringify } = JSON
 const { isArray } = Array
 const { setPrototypeOf } = Object

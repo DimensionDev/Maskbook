@@ -102,12 +102,12 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(targetPluginID, nonFungibleTokenAddress)
 
     const connectionOptions =
-        targetPluginID === NetworkPluginID.PLUGIN_EVM
-            ? {
-                  overrides: gasOption,
-                  chainId: targetChainId as ChainId,
-              }
-            : undefined
+        targetPluginID === NetworkPluginID.PLUGIN_EVM ?
+            {
+                overrides: gasOption,
+                chainId: targetChainId as ChainId,
+            }
+        :   undefined
     const recipientAddress = _recipientAddress || task.recipient || recipients[0]?.address
     const { loading: validatingRecipient, validation: recipientValidation } = useRecipientValidate(recipientAddress)
     const tokenTipTuple = useTokenTip(targetPluginID, recipientAddress, token, amount, connectionOptions)

@@ -43,11 +43,9 @@ function parseText(
     const links = parseLink(string).flatMap((frag, index) => {
         if (frag.type === 'text') {
             return sliceString(frag.content).map((text, i) =>
-                text === '\n' ? (
+                text === '\n' ?
                     <br style={style} key={`${index} of ${i}`} />
-                ) : (
-                    <Text children={text} style={style} key={`${index} of ${i}`} />
-                ),
+                :   <Text children={text} style={style} key={`${index} of ${i}`} />,
             )
         }
         if (frag.category === 'normal' && !frag.content.match(/^https?:\/\//gi)) frag.content = 'http://' + frag.content

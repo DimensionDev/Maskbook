@@ -79,9 +79,9 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee, pluginID])
 
     const balance =
-        isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM
-            ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
-            : tokenBalance
+        isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM ?
+            BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
+        :   tokenBalance
 
     return {
         isAvailableBalance,

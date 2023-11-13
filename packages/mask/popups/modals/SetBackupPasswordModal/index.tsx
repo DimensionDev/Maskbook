@@ -96,11 +96,11 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>
                         {t.popups_backup_password_rules_tips()}
                     </Typography>
-                    {to ? (
+                    {to ?
                         <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
                             {t.popups_backup_password_tips()}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </Box>
             </Box>
         </ActionModal>

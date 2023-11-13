@@ -69,7 +69,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
             }}
             startAdornment={<Icons.Search />}
             endAdornment={
-                value ? (
+                value ?
                     <button
                         type="reset"
                         onClick={() => {
@@ -79,7 +79,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
                         className={classes.button}>
                         <Icons.Close />
                     </button>
-                ) : null
+                :   null
             }
             placeholder={t.popups_encrypted_friends_search_placeholder()}
         />

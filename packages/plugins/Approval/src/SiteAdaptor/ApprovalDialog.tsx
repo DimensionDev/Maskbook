@@ -121,11 +121,9 @@ function ApprovalWrapper({ tab }: ApprovalWrapperProps) {
                 <NetworkTab chains={chainIdList} pluginID={NetworkPluginID.PLUGIN_EVM} />
             </div>
             <section className={classes.contentWrapper}>
-                {tab === Tabs.tokens ? (
+                {tab === Tabs.tokens ?
                     <ApprovalTokenContent chainId={chainId} />
-                ) : (
-                    <ApprovalNFTContent chainId={chainId} />
-                )}
+                :   <ApprovalNFTContent chainId={chainId} />}
             </section>
 
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} />

@@ -108,28 +108,30 @@ export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div
                     className={cx(classes.body, {
                         [classes.verbose]: verbose,
                         [classes.center]: !metadata.bio && !verbose,
                     })}>
-                    {metadata.source === 'Lens' ? (
+                    {metadata.source === 'Lens' ?
                         <LensAvatar handle={metadata.handle} size={imageSize} />
-                    ) : metadata.profile_uri ? (
+                    : metadata.profile_uri ?
                         <Image
                             classes={{ container: classes.image }}
                             src={resolveResourceURL(metadata.profile_uri[0])}
                             height={imageSize}
                             width={imageSize}
                         />
-                    ) : null}
+                    :   null}
                     <div className={classes.info}>
                         <Typography className={classes.title}>{metadata.name || metadata.handle}</Typography>
-                        {metadata.bio ? <Typography className={classes.bio}>{metadata.bio}</Typography> : null}
+                        {metadata.bio ?
+                            <Typography className={classes.bio}>{metadata.bio}</Typography>
+                        :   null}
                     </div>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

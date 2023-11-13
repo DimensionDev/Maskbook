@@ -27,13 +27,12 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: Sniffings.is_dashboard_page
-            ? MaskColorVar.mainBackground
-            : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor:
+            Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            theme.palette.mode === 'dark' ?
+                '0px 0px 20px rgba(255, 255, 255, 0.12)'
+            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -134,11 +133,9 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
         </RevokeChainContextProvider>
     )
 
-    return props.actualPluginID ? (
-        <NetworkContextProvider value={props.actualPluginID}>{children}</NetworkContextProvider>
-    ) : (
-        children
-    )
+    return props.actualPluginID ?
+            <NetworkContextProvider value={props.actualPluginID}>{children}</NetworkContextProvider>
+        :   children
 })
 
 PluginWalletStatusBar.displayName = 'PluginWalletStatusBar'
