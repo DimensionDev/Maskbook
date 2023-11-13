@@ -5,8 +5,8 @@ export function getAssetFullName(contract_address: string, contractName: string,
         return tokenId && contractName
             ? `${contractName} #${tokenId}`
             : !contractName && tokenId
-            ? `#${tokenId}`
-            : contractName
+              ? `#${tokenId}`
+              : contractName
     if (isENSContractAddress(contract_address)) return `ENS #${name}`
     if (isLens(name)) return name
 

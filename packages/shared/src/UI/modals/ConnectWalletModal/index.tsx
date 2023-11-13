@@ -178,8 +178,8 @@ export const ConnectWalletModal = forwardRef<
                                     {loading
                                         ? t.plugin_wallet_connect_to()
                                         : connected
-                                        ? t.plugin_wallet_connected_to()
-                                        : t.plugin_wallet_connect_to()}{' '}
+                                          ? t.plugin_wallet_connected_to()
+                                          : t.plugin_wallet_connect_to()}{' '}
                                     {Utils.providerResolver.providerName(providerType)}
                                 </Typography>
                                 {loading ? (

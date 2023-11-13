@@ -148,8 +148,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                             result.type === SearchResultType.Domain
                                 ? result.keyword
                                 : result.type === SearchResultType.EOA
-                                ? result.domain ?? ''
-                                : '',
+                                  ? result.domain ?? ''
+                                  : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)

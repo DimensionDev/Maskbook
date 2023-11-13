@@ -189,8 +189,8 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 paymentToken: paymentAddress
                     ? paymentAddress
                     : chainId === smartPayChainId
-                    ? nativeTokenAddress
-                    : undefined,
+                      ? nativeTokenAddress
+                      : undefined,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
                 providerURL: network?.rpcUrl,

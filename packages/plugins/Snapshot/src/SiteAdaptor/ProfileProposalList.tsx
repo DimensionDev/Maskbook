@@ -51,8 +51,8 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
                 state === 'active'
                     ? theme.palette.maskColor.success
                     : state === 'pending'
-                    ? theme.palette.maskColor.warn
-                    : theme.palette.maskColor.main,
+                      ? theme.palette.maskColor.warn
+                      : theme.palette.maskColor.main,
         },
         blockieIcon: {
             width: 20,

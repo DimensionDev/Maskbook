@@ -218,8 +218,8 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const amount = spender.amount
         ? spender.amount
         : spender.rawAmount
-        ? leftShift(spender.rawAmount, token?.decimals)
-        : undefined
+          ? leftShift(spender.rawAmount, token?.decimals)
+          : undefined
 
     return (
         <div className={classes.listItemWrapper}>

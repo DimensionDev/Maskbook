@@ -96,8 +96,8 @@ export class Popups implements Middleware<ConnectionContext> {
                 paymentToken: isNative
                     ? context.paymentToken
                     : !availableBalanceTooLow
-                    ? maskAddress
-                    : nativeTokenAddress,
+                      ? maskAddress
+                      : nativeTokenAddress,
             }
         } catch (error) {
             const nativeBalance = await EVMWeb3Readonly.getNativeTokenBalance({

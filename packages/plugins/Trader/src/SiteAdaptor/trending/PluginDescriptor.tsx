@@ -48,8 +48,8 @@ export function PluginDescriptor({
                     {isTokenTagPopper || isCollectionProjectPopper
                         ? t.web3_profile_card_name()
                         : isProfilePage
-                        ? t.profile_card_name()
-                        : t.decentralized_search_name()}
+                          ? t.profile_card_name()
+                          : t.decentralized_search_name()}
                 </Typography>
             </Stack>
             <Box>{children}</Box>

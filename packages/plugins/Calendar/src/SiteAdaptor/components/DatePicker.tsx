@@ -150,8 +150,8 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
                                                     selectedDate.toDateString() === currentDatePointer.toDateString()
                                                         ? classes.active
                                                         : list?.[currentDatePointer.toLocaleDateString()]
-                                                        ? classes.canClick
-                                                        : ''
+                                                          ? classes.canClick
+                                                          : ''
                                                 }`}>
                                                 {format(currentDatePointer, 'd')}
                                             </Typography>

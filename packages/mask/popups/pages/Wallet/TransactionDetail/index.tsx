@@ -221,8 +221,8 @@ export const TransactionDetail = memo(function TransactionDetail() {
     const gasFee = tx
         ? formatWeiToEther(multipliedBy(tx.gas_used, tx.effective_gas_price))
         : gasFeeInState
-        ? new BigNumber(gasFeeInState)
-        : undefined
+          ? new BigNumber(gasFeeInState)
+          : undefined
     const gasCost = gasFee && nativeTokenPrice ? gasFee.times(nativeTokenPrice) : undefined
 
     const receiverAddress = parseReceiverFromERC20TransferInput(candidateState?.data || tx?.input || txInput)

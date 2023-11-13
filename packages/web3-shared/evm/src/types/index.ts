@@ -254,8 +254,8 @@ export enum TransactionEventType {
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
     ? R
     : T extends PayableTransactionObject<infer S>
-    ? S
-    : T
+      ? S
+      : T
 
 export enum NetworkType {
     Ethereum = 'Ethereum',

@@ -11,8 +11,8 @@ export function getAvatarType(ele?: HTMLElement) {
     return styles.clipPath.includes('#shape-square')
         ? AvatarType.Square
         : styles.clipPath.includes('#shape-hex')
-        ? AvatarType.Clip
-        : AvatarType.Default
+          ? AvatarType.Clip
+          : AvatarType.Default
 }
 
 export function isVerifiedUser(ele: HTMLElement) {

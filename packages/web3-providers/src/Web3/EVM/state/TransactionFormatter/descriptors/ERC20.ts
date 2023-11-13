@@ -65,10 +65,10 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                                           : 'spender',
                                   })
                             : isZero(spendingCap)
-                            ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
-                                  symbol: token?.symbol,
-                              })
-                            : approveSuccessDescription
+                              ? i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
+                                    symbol: token?.symbol,
+                                })
+                              : approveSuccessDescription
 
                         const successfulTitle =
                             isZero(parameters.value) && !isZero(spendingCap) ? approveTitle : undefined

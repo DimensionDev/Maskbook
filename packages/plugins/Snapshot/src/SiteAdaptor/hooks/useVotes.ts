@@ -20,16 +20,16 @@ async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier
                 typeof v.choice === 'number'
                     ? undefined
                     : Array.isArray(v.choice)
-                    ? v.choice.map((i) => ({
-                          weight: 1,
-                          name: proposal.choices[i - 1],
-                          index: Number(i),
-                      }))
-                    : Object.entries(v.choice).map(([i, weight]) => ({
-                          weight,
-                          name: proposal.choices[Number(i) - 1],
-                          index: Number(i),
-                      }))
+                      ? v.choice.map((i) => ({
+                            weight: 1,
+                            name: proposal.choices[i - 1],
+                            index: Number(i),
+                        }))
+                      : Object.entries(v.choice).map(([i, weight]) => ({
+                            weight,
+                            name: proposal.choices[Number(i) - 1],
+                            index: Number(i),
+                        }))
             return {
                 choiceIndex: typeof v.choice === 'number' ? v.choice : undefined,
                 choiceIndexes: typeof v.choice === 'number' ? undefined : Object.keys(v.choice).map(Number),

@@ -97,16 +97,16 @@ const ButtonGroupWrap = styled(ButtonGroup, {
               borderRadius: 18,
           }
         : maskVariant === 'flexible'
-        ? {
-              background: 'transparent',
-              borderRadius: 0,
-          }
-        : {
-              marginTop: theme.spacing(-1),
-              paddingTop: theme.spacing(1),
-              background: 'transparent',
-              borderRadius: 0,
-          }),
+          ? {
+                background: 'transparent',
+                borderRadius: 0,
+            }
+          : {
+                marginTop: theme.spacing(-1),
+                paddingTop: theme.spacing(1),
+                background: 'transparent',
+                borderRadius: 0,
+            }),
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {

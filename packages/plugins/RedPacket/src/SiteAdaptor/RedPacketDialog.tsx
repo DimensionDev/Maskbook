@@ -153,10 +153,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         openSelectNFTDialog
             ? setOpenSelectNFTDialog(false)
             : openNFTConfirmDialog
-            ? setOpenNFTConfirmDialog(false)
-            : showHistory
-            ? setShowHistory(false)
-            : onBack()
+              ? setOpenNFTConfirmDialog(false)
+              : showHistory
+                ? setShowHistory(false)
+                : onBack()
     }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
@@ -175,12 +175,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const title = showHistory
         ? t.history()
         : openSelectNFTDialog
-        ? t.nft_select_collection()
-        : openNFTConfirmDialog
-        ? t.confirm()
-        : isCreateStep
-        ? t.display_name()
-        : t.details()
+          ? t.nft_select_collection()
+          : openNFTConfirmDialog
+            ? t.confirm()
+            : isCreateStep
+              ? t.display_name()
+              : t.details()
 
     // #region gas config
     const { data: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -245,8 +245,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     height: showHistory
                                         ? 0
                                         : currentTab === 'collectibles' && isNFTRedPacketLoaded
-                                        ? 'calc(100% + 84px)'
-                                        : 'auto',
+                                          ? 'calc(100% + 84px)'
+                                          : 'auto',
                                 }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
                                     <RedPacketERC20Form

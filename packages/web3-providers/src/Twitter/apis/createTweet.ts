@@ -44,8 +44,8 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     const queryId = scheduled
         ? 'LCVzRQGxOaGnOnYH01NQXg'
         : overLength
-        ? 'pokID4auGUSzBxijrqpIlw'
-        : 'tTsjMKyhajZvK4q76mpIBg'
+          ? 'pokID4auGUSzBxijrqpIlw'
+          : 'tTsjMKyhajZvK4q76mpIBg'
     const queryName = scheduled ? 'CreateScheduledTweet' : overLength ? 'CreateNoteTweet' : 'CreateTweet'
     const response = await fetchJSON<TwitterBaseAPI.CreateTweetResponse>(
         `https://twitter.com/i/api/graphql/${queryId}/${queryName}`,

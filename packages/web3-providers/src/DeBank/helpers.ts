@@ -78,8 +78,8 @@ function toTxAsset(
             ? SchemaType.ERC20
             : SchemaType.Native
         : token.is_erc721
-        ? SchemaType.ERC721
-        : SchemaType.ERC1155
+          ? SchemaType.ERC721
+          : SchemaType.ERC1155
 
     if (process.env.NODE_ENV === 'development') {
         console.assert(token, `[Debank] no matching token in token_dict with token_id ${token_id}`)

@@ -88,8 +88,8 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
             const primaryWallet = wallet.mnemonicId
                 ? await Services.Wallet.getPrimaryWalletByMnemonicId(wallet.mnemonicId)
                 : wallet.source === ImportSource.LocalGenerated
-                ? await Services.Wallet.getWalletPrimary()
-                : null
+                  ? await Services.Wallet.getWalletPrimary()
+                  : null
 
             if (!primaryWallet) return
             const primaryWalletWords = await Services.Wallet.exportMnemonicWords(primaryWallet.address)

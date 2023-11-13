@@ -76,8 +76,8 @@ const useStyles = makeStyles<{
                       ? props.currentTab === ContentTab.Price
                           ? 450
                           : props.currentTab === ContentTab.Swap
-                          ? 'unset'
-                          : 374
+                            ? 'unset'
+                            : 374
                       : 'unset',
                   overflow: 'hidden',
                   display: 'flex',

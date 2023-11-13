@@ -116,12 +116,12 @@ export const usePostInfoDetails: {
             ? T
             : Readonly<T>
         : PostInfo[key] extends ObservableSet<infer T>
-        ? ReadonlyArray<Readonly<T>>
-        : PostInfo[key] extends ObservableMap<any, infer T>
-        ? ReadonlyArray<Readonly<T>>
-        : PostInfo[key] extends Subscription<infer T>
-        ? Readonly<T>
-        : PostInfo[key]
+          ? ReadonlyArray<Readonly<T>>
+          : PostInfo[key] extends ObservableMap<any, infer T>
+            ? ReadonlyArray<Readonly<T>>
+            : PostInfo[key] extends Subscription<infer T>
+              ? Readonly<T>
+              : PostInfo[key]
 } = {
     __proto__: new Proxy(
         { __proto__: null },

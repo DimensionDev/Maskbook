@@ -289,8 +289,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         collection?.assets?.length
             ? ''
             : collection?.source === SourceType.SimpleHash
-            ? collection?.id
-            : collection?.address,
+              ? collection?.id
+              : collection?.address,
         account,
         NetworkPluginID.PLUGIN_EVM,
         {

@@ -217,8 +217,8 @@ export function SocialAccountListItem({
                             {isSameAddress(account, value?.ownedBy)
                                 ? t.view()
                                 : value?.isFollowing
-                                ? t.lens_following()
-                                : t.lens_follow()}
+                                  ? t.lens_following()
+                                  : t.lens_follow()}
                         </ActionButton>
                     ) : (
                         <div className={classes.linkIcon}>

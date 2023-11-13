@@ -29,10 +29,10 @@ export function ActionBar(props: ActionBarProps) {
     const status = !project.active
         ? t.plugin_artblocks_not_active()
         : project.complete
-        ? t.plugin_artblocks_completed()
-        : project.paused
-        ? t.plugin_artblocks_paused()
-        : t.plugin_artblocks_purchase()
+          ? t.plugin_artblocks_completed()
+          : project.paused
+            ? t.plugin_artblocks_paused()
+            : t.plugin_artblocks_purchase()
 
     return (
         <Box className={classes.root} display="flex" justifyContent="center">

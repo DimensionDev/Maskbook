@@ -247,8 +247,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(typescript@5.3.0-beta)
       prettier:
-        specifier: ^3.0.3
-        version: 3.0.3
+        specifier: ^3.1.0
+        version: 3.1.0
       svgo:
         specifier: ^3.0.2
         version: 3.0.2
@@ -22549,8 +22549,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  /prettier@3.0.3:
-    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+  /prettier@3.1.0:
+    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
@@ -28080,6 +28080,7 @@ time:
   /eslint-plugin-i@2.28.1: '2023-09-06T08:19:37.937Z'
   /guess-calling-code@1.1.8: '2023-06-26T16:50:23.300Z'
   /knip@2.33.3: '2023-10-12T09:53:43.922Z'
+  /prettier@3.1.0: '2023-11-13T02:57:22.609Z'
   /rollup-plugin-polyfill-node@0.12.0: '2023-01-24T00:16:21.182Z'
   /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
   /url@0.11.3: '2023-09-14T22:38:37.401Z'

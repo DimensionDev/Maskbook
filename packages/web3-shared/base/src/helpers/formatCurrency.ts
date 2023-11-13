@@ -143,18 +143,18 @@ export function formatCurrency(
                             return bn.isZero()
                                 ? zeroValue
                                 : isLessThanCustomDecimalBoundary
-                                ? customDecimalConfig.boundary.toFixed()
-                                : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
+                                  ? customDecimalConfig.boundary.toFixed()
+                                  : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
                         }
                         return bn.isZero()
                             ? zeroValue
                             : onlyRemainTwoOrZeroDecimal
-                            ? minimumValue
-                            : isLessThanTwelveDecimalBoundary
-                            ? sixDecimalBoundary.toFixed()
-                            : isGreatThanEightDecimalBoundary
-                            ? bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
-                            : bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
+                              ? minimumValue
+                              : isLessThanTwelveDecimalBoundary
+                                ? sixDecimalBoundary.toFixed()
+                                : isGreatThanEightDecimalBoundary
+                                  ? bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
+                                  : bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
                     default:
                         return ''
                 }

@@ -352,11 +352,11 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     isAddressNotContract
                         ? EMPTY_LIST
                         : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                        ? // balance field work for case: user search someone token by contract and whitelist is empty.
-                          [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
-                        : mode === TokenListMode.List
-                        ? sortedFungibleTokensForList
-                        : sortedFungibleTokensForManage
+                          ? // balance field work for case: user search someone token by contract and whitelist is empty.
+                            [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
+                          : mode === TokenListMode.List
+                            ? sortedFungibleTokensForList
+                            : sortedFungibleTokensForManage
                 }
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}

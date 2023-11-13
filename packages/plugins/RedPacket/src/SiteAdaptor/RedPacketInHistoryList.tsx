@@ -317,10 +317,10 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         {canSend
                                             ? t.share()
                                             : isRefunding
-                                            ? t.refunding()
-                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded
-                                            ? t.empty()
-                                            : t.refund()}
+                                              ? t.refunding()
+                                              : listOfStatus.includes(RedPacketStatus.empty) || refunded
+                                                ? t.empty()
+                                                : t.refund()}
                                     </ActionButton>
                                     <Popper
                                         className={classes.popper}

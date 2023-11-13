@@ -158,8 +158,8 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 {isTimeout
                     ? t.popups_wait_for_provider_connect_timeout()
                     : providerExist
-                    ? t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
-                    : t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
+                      ? t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
+                      : t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 {provider?.icon ? (
