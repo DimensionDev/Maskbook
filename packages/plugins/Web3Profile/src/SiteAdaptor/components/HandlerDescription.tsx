@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, SelectProviderModal } from '@masknet/shared'
@@ -10,10 +10,11 @@ import {
     useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import type { LensBaseAPI } from '@masknet/web3-providers/types'
+import { Icons } from '@masknet/icons'
+import { ProfilePopup } from './ProfilePopup.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -47,13 +48,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface HandlerDescriptionProps extends withClasses<'container'> {
-    profile?: {
-        avatar?: string
-        handle: string
-    }
+    currentProfile?: LensBaseAPI.Profile
+    profiles?: LensBaseAPI.Profile[]
+    onChange: (profile: LensBaseAPI.Profile) => void
 }
 
-export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
+export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, currentProfile, onChange, ...props }) => {
     const t = useWeb3ProfileTrans()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
@@ -61,45 +61,59 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
     const { account, providerType } = useChainContext()
     const Utils = useWeb3Utils()
 
-    const { data: domain } = useReverseAddress(pluginID, props.profile?.handle ? account : undefined)
     const providerDescriptor = useProviderDescriptor()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+    const { data: domain } = useReverseAddress(pluginID, account)
 
     const walletName = useMemo(() => {
-        if (props.profile?.handle) return props.profile.handle
         if (domain) return domain
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
         return providerDescriptor?.name
-    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, props.profile?.handle])
+    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name])
 
-    const handleDisconnect = useCallback(() => EVMWeb3.disconnect(), [])
-
-    const avatarUrl = useMemo(() => {
-        if (!props.profile?.avatar) return
-        return resolveIPFS_URL(props.profile?.avatar)
-    }, [props.profile?.avatar])
+    if (!profiles?.length || !currentProfile) {
+        return (
+            <Box className={classes.container}>
+                <Box className={classes.description}>
+                    <WalletIcon size={36} mainIcon={providerDescriptor?.icon} />
+                    <Box>
+                        <Typography className={classes.name}>{walletName}</Typography>
+                        <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
+                    </Box>
+                </Box>
+                <Button variant="text" onClick={() => SelectProviderModal.open()}>
+                    {t.wallet_status_button_change()}
+                </Button>
+            </Box>
+        )
+    }
 
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
                 <WalletIcon
+                    classes={{ mainIcon: classes.avatar }}
                     size={36}
-                    classes={{ mainIcon: props.profile ? classes.avatar : undefined }}
                     mainIcon={
-                        props.profile ?
-                            avatarUrl ?
-                                avatarUrl
-                            :   new URL('../assets/Lens.png', import.meta.url).href
-                        :   providerDescriptor?.icon
+                        currentProfile.metadata?.picture?.optimized.uri ||
+                        new URL('../assets/Lens.png', import.meta.url).href
                     }
                 />
                 <Box>
-                    <Typography className={classes.name}>{walletName}</Typography>
+                    <Typography className={classes.name}>{currentProfile.metadata?.displayName}</Typography>
                     <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
-            <Button variant="text" onClick={props.profile ? handleDisconnect : () => SelectProviderModal.open()}>
-                {props.profile ? t.plugin_wallet_disconnect() : t.wallet_status_button_change()}
-            </Button>
+            <Icons.ArrowDrop size={18} onClick={(e) => setAnchorEl(e.currentTarget)} />
+            <ProfilePopup
+                profiles={profiles}
+                anchorEl={anchorEl}
+                open={!!anchorEl}
+                onClose={() => setAnchorEl(null)}
+                currentProfile={currentProfile}
+                onChange={onChange}
+            />
         </Box>
     )
 })
