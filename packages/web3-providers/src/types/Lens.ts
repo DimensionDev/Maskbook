@@ -26,7 +26,7 @@ export enum BroadcastType {
     RelayError = 'RelayError',
 }
 
-export enum LitmitType {
+export enum LimitType {
     Ten = 'Ten',
     TwentyFive = 'TwentyFive',
     Fifty = 'Fifty',

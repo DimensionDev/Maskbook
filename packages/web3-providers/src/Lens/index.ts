@@ -1,7 +1,7 @@
 import { NameServiceID } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
-import { LitmitType, type FollowModuleTypedData, type LensBaseAPI } from '../entry-types.js'
+import { LimitType, type FollowModuleTypedData, type LensBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { LENS_ROOT_API } from './constants.js'
 
@@ -127,7 +127,7 @@ export class Lens {
                         where: {
                             handles: handles.map((x) => `lens/${x.replace('.lens', '')}`),
                         },
-                        limit: LitmitType.Fifty,
+                        limit: LimitType.Fifty,
                     },
                 },
             }),
@@ -186,7 +186,7 @@ export class Lens {
             },
             body: JSON.stringify({
                 query: `query Profiles {
-                  profiles(request: { where: { ownedBy: ["${address}"] }, limit: ${LitmitType.Ten} }) {
+                  profiles(request: { where: { ownedBy: ["${address}"] }, limit: ${LimitType.Ten} }) {
                     items {
                       ${LensProfileQuery}
                     }
@@ -473,7 +473,7 @@ export class Lens {
                 'x-access-token': options?.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
-                query: `mutation BroadcastonChain {
+                query: `mutation BroadcastOnchain {
                       broadcastOnchain(
                         request: {
                           id: "${id}"
