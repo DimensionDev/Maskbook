@@ -1,5 +1,5 @@
 import { first, omit, toNumber } from 'lodash-es'
-import { numberToHex, toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     AddressType,
@@ -49,12 +49,12 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { EVMChainResolver } from './ResolverAPI.js'
-import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptionsAPI.js'
+import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -91,11 +91,13 @@ export class EVMConnectionReadonlyAPI
         >
 {
     static Default = new EVMConnectionReadonlyAPI()
+
     constructor(protected options?: EVMConnectionOptions) {
         this.Contract = new EVMContractReadonlyAPI(this.options)
         this.Request = new EVMRequestReadonlyAPI(this.options)
         this.ConnectionOptions = new ConnectionOptionsReadonlyAPI(this.options)
     }
+
     protected Request
     protected Contract
     protected ConnectionOptions: ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction>
@@ -543,7 +545,7 @@ export class EVMConnectionReadonlyAPI
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: numberToHex(options.chainId),
+                chainId: web3_utils.numberToHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {
@@ -565,7 +567,7 @@ export class EVMConnectionReadonlyAPI
         const result = await contract?.methods.balances([options.account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,
-            chainId: numberToHex(options.chainId),
+            chainId: web3_utils.numberToHex(options.chainId),
         })
 
         if (result?.length !== listOfAddress.length) return {}
@@ -644,7 +646,7 @@ export class EVMConnectionReadonlyAPI
         return this.Request.request<Block>(
             {
                 method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
-                params: [toHex(noOrId), false],
+                params: [web3_utils.toHex(noOrId), false],
             },
             initial,
         )
@@ -714,7 +716,7 @@ export class EVMConnectionReadonlyAPI
                 options,
             )
         } catch {
-            return toHex(fallback)
+            return web3_utils.toHex(fallback)
         }
     }
 
@@ -838,4 +840,5 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 }
+
 export const EVMWeb3Readonly = EVMConnectionReadonlyAPI.Default

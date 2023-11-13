@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
@@ -224,8 +224,8 @@ export const Prior1559GasSetting = memo(() => {
             if (!value) return
             const config = value.payload.params!.map((param) => ({
                 ...param,
-                gas: toHex(new BigNumber(data.gasLimit).toString()),
-                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
+                gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
+                gasPrice: web3_utils.toHex(formatGweiToWei(data.gasPrice).toString()),
             }))
             await Services.Wallet.updateUnconfirmedRequest({
                 ...value.payload,

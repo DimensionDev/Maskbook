@@ -21,7 +21,7 @@ import {
     useNativeToken,
     useNonFungibleAsset,
     useReverseAddress,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { unreachable } from '@masknet/kit'
@@ -86,7 +86,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { title, to, tokenAddress, amount } = useMemo(() => {
         const type = transaction?.formattedTransaction?.type
 
@@ -165,7 +165,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     }, [transaction?.computedPayload, transaction?.gasOptionType, isSupport1559])
 
     const receiver = useMemo(() => {
-        if (domain) return Others.formatDomainName(domain)
+        if (domain) return Utils.formatDomainName(domain)
         const target = contacts.find((x) => isSameAddress(x.address, to))
         return target?.name
     }, [domain, to, contacts])

@@ -1,4 +1,4 @@
-import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
@@ -7,15 +7,13 @@ import {
     isNativeTokenSchemaType,
     isFungibleTokenSchemaType,
     isNonFungibleTokenSchemaType,
-    formatEthereumAddress,
-    formatDomainName,
-    formatTokenId,
-    getTransactionSignature,
     type ChainId,
     type ProviderType,
     type NetworkType,
     type Transaction,
     type SchemaType,
+    formatAddress,
+    formatTokenId,
     getNetworkPluginID,
     getDefaultChainId,
     getInvalidChainId,
@@ -24,25 +22,31 @@ import {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
-    getAverageBlockDelay,
     formatSchemaType,
     isValidChainId,
-} from '@masknet/web3-shared-evm'
-import type { BaseUtils } from '../../Base/apis/OthersAPI.js'
-import { EVMChainResolver, EVMExplorerResolver, EVMProviderResolver, EVMNetworkResolver } from './ResolverAPI.js'
+} from '@masknet/web3-shared-solana'
+import { createFungibleToken, createNonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
+import { type BaseUtils } from '../../Base/apis/Utils.js'
+import {
+    SolanaChainResolver,
+    SolanaExplorerResolver,
+    SolanaProviderResolver,
+    SolanaNetworkResolver,
+} from './ResolverAPI.js'
 
-export const EVMUtils = {
+export const SolanaUtils = {
     isSameAddress,
-    chainResolver: EVMChainResolver,
-    explorerResolver: EVMExplorerResolver,
-    providerResolver: EVMProviderResolver,
-    networkResolver: EVMNetworkResolver,
+    chainResolver: SolanaChainResolver,
+    explorerResolver: SolanaExplorerResolver,
+    providerResolver: SolanaProviderResolver,
+    networkResolver: SolanaNetworkResolver,
 
     isValidDomain,
     isValidChainId,
     isValidAddress,
     isZeroAddress,
     isNativeTokenAddress,
+
     isNativeTokenSchemaType,
     isFungibleTokenSchemaType,
     isNonFungibleTokenSchemaType,
@@ -55,15 +59,13 @@ export const EVMUtils = {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
-    getTransactionSignature,
-    getAverageBlockDelay,
 
-    formatAddress: formatEthereumAddress,
-    formatTokenId,
+    formatAddress,
     formatDomainName,
+    formatTokenId,
     formatSchemaType,
     createNativeToken(chainId: ChainId) {
-        return EVMChainResolver.nativeCurrency(chainId)
+        return SolanaChainResolver.nativeCurrency(chainId)
     },
     createFungibleToken,
     createNonFungibleToken,

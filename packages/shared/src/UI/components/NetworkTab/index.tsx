@@ -5,7 +5,7 @@ import {
     useChainContext,
     useNetworkContext,
     useWallet,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs, type MaskTabListProps } from '@masknet/theme'
@@ -19,7 +19,9 @@ import { ChainId } from '@masknet/web3-shared-evm'
 interface NetworkTabProps extends Omit<MaskTabListProps, 'onChange'> {
     chains: Web3Helper.ChainIdAll[]
     pluginID: NetworkPluginID
+
     onChange?(chainId: Web3Helper.ChainIdAll): void
+
     requireChains?: boolean
 }
 
@@ -34,7 +36,7 @@ export const NetworkTab = memo(function NetworkTab({
     const { chainId, setChainId, setNetworkType } = useChainContext()
     const networks = useNetworkDescriptors(networkPluginID)
     const wallet = useWallet()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const supportedChains = useMemo(() => {
@@ -67,7 +69,7 @@ export const NetworkTab = memo(function NetworkTab({
                 variant="flexible"
                 onChange={(_, v) => {
                     const chainId = Number.parseInt(v, 10)
-                    const networkType = Others.chainResolver.networkType(chainId)
+                    const networkType = Utils.chainResolver.networkType(chainId)
                     setChainId?.(chainId)
                     if (networkType) setNetworkType?.(networkType)
                     onChange?.(chainId)

@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import Color from 'color'
 import { useContainer } from 'unstated-next'
 import { TabContext, TabPanel } from '@mui/lab'
-import { useChainContext, useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
 import { Box, Button, Chip, Paper, Tab, Typography, useTheme } from '@mui/material'
@@ -193,7 +193,7 @@ export function PreviewCard() {
         } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     // #endregion
 
     if (boxState === BoxState.UNKNOWN)
@@ -317,7 +317,7 @@ export function PreviewCard() {
                                     fontSize={14}
                                     fontWeight="bold"
                                     title={boxInfo.creator}>
-                                    {Others.formatAddress(boxInfo.creator, 4)}
+                                    {Utils.formatAddress(boxInfo.creator, 4)}
                                 </Typography>
                             </Box>
                         </Box>

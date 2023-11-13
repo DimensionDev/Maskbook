@@ -1,7 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { EVMUtils } from '../../EVM/apis/OthersAPI.js'
-import { FlowUtils } from '../../Flow/apis/OthersAPI.js'
-import { SolanaUtils } from '../../Solana/apis/OthersAPI.js'
+import { EVMUtils } from '../../EVM/apis/Utils.js'
+import { FlowUtils } from '../../Flow/apis/Utils.js'
+import { SolanaUtils } from '../../Solana/apis/Utils.js'
 import { unreachable } from '@masknet/kit'
 import type { Utils } from '../types/index.js'
 

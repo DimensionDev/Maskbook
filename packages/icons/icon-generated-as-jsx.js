@@ -362,6 +362,11 @@ export const Momoka = /*#__PURE__*/ __createIcon('Momoka', [
         u: () => new URL('./brands/Momoka.svg', import.meta.url).href,
     },
 ])
+export const NextID = /*#__PURE__*/ __createIcon('NextID', [
+    {
+        u: () => new URL('./brands/NextID.svg', import.meta.url).href,
+    },
+])
 export const NextIDMini = /*#__PURE__*/ __createIcon('NextIDMini', [
     {
         c: ['dark'],

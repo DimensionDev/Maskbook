@@ -24,6 +24,13 @@ const deferPackages = [
     '@blocto/fcl',
     '@metamask/eth-sig-util',
     '@masknet/gun-utils',
+    'web3-eth',
+    'web3-eth-accounts',
+    'twitter-text',
+    'web3-utils',
+    'web3-eth-abi',
+    '@solana/web3.js',
+    '@project-serum/sol-wallet-adapter',
     // add package names here.
 ]
 

@@ -15,7 +15,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
-import { useProviderDescriptor, useNetworkDescriptor, useWeb3Connection, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useProviderDescriptor, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '../../contexts/index.js'
 
 const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
@@ -107,14 +107,14 @@ export const ConnectWalletModal = forwardRef<
     const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
 
     const Web3 = useWeb3Connection(pluginID, { providerType })
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     const [{ loading, value: connected, error }, onConnect] = useAsyncFn(async () => {
         if (!connectionRef.current) throw new Error('Failed to connect to provider.')
 
         const { pluginID, providerType, networkType } = connectionRef.current
 
-        const chainId = Others.networkResolver.networkChainId(networkType)
+        const chainId = Utils.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error('Failed to connect to provider.')
 
         try {
@@ -137,7 +137,7 @@ export const ConnectWalletModal = forwardRef<
         }
 
         return true
-    }, [connectionRef.current, Others, Web3])
+    }, [connectionRef.current, Utils, Web3])
 
     const [open, dispatch] = useSingletonModal(ref, {
         async onOpen(props) {
@@ -180,7 +180,7 @@ export const ConnectWalletModal = forwardRef<
                                         : connected
                                         ? t.plugin_wallet_connected_to()
                                         : t.plugin_wallet_connect_to()}{' '}
-                                    {Others.providerResolver.providerName(providerType)}
+                                    {Utils.providerResolver.providerName(providerType)}
                                 </Typography>
                                 {loading ? (
                                     <Box display="flex" alignItems="center">
@@ -225,20 +225,20 @@ export const ConnectWalletModal = forwardRef<
                             <Trans
                                 i18nKey="plugin_wallet_connect_tip"
                                 components={{
-                                    providerLink: Others.providerResolver.providerHomeLink(providerType) ? (
+                                    providerLink: Utils.providerResolver.providerHomeLink(providerType) ? (
                                         <Link
                                             className={classes.tipLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            href={Others.providerResolver.providerHomeLink(providerType)}
+                                            href={Utils.providerResolver.providerHomeLink(providerType)}
                                         />
                                     ) : (
                                         <span />
                                     ),
                                 }}
                                 values={{
-                                    providerName: Others.providerResolver.providerName(providerType),
-                                    providerShortenLink: Others.providerResolver.providerShortenLink(providerType),
+                                    providerName: Utils.providerResolver.providerName(providerType),
+                                    providerShortenLink: Utils.providerResolver.providerShortenLink(providerType),
                                 }}
                             />
                         </Typography>

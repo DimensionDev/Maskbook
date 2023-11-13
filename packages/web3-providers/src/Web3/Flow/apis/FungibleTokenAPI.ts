@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-flow'
 import { type FungibleAsset, CurrencyType, rightShift } from '@masknet/web3-shared-base'
 import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
 async function getTokenBalance(
@@ -188,4 +188,5 @@ class FlowFungibleAPI
         ]
     }
 }
+
 export const FlowFungible = new FlowFungibleAPI()

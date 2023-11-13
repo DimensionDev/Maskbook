@@ -3,11 +3,11 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from './useContext.js'
 import { useWallets } from './useWallets.js'
-import { useWeb3Others } from './useWeb3Others.js'
+import { useWeb3Utils } from './useWeb3Utils.js'
 
 export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const { account, providerType } = useChainContext<T>({ account: expectedAccount })
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     const wallets = useWallets()
 
     return useMemo(() => {
@@ -16,6 +16,6 @@ export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expected
         if (wallet?.name) return wallet.name
 
         // else use the provider name as the account name
-        return Others.providerResolver.providerName?.(providerType)
-    }, [Others, account, providerType, wallets.map((x) => x.address.toLowerCase())])
+        return Utils.providerResolver.providerName?.(providerType)
+    }, [Utils, account, providerType, wallets.map((x) => x.address.toLowerCase())])
 }

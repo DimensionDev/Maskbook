@@ -3,7 +3,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { multipliedBy, formatBalance, ZERO, formatCurrency, formatPercentage } from '@masknet/web3-shared-base'
-import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
 import { DefaultTraderPlaceholderUI, TraderInfoUI } from './components/TraderInfoUI.js'
 import { resolveTradeProviderName } from '../../helpers/index.js'
@@ -19,10 +19,10 @@ interface TraderInfoProps {
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
     const { chainId } = useChainContext()
     const { pluginID } = useNetworkContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
 
     // const nativeToken = createNativeToken(chainId)
-    const nativeToken = Others.createNativeToken(chainId)
+    const nativeToken = Utils.createNativeToken(chainId)
     const { data: tokenPrice = 0 } = useNativeTokenPrice(pluginID, { chainId })
 
     const gasFee = useMemo(() => {
@@ -63,7 +63,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
 
 export const DefaultTraderPlaceholder = memo(() => {
     const { chainId } = useChainContext()
-    const Others = useWeb3Others()
-    const nativeToken = Others.createNativeToken(chainId)
+    const Utils = useWeb3Utils()
+    const nativeToken = Utils.createNativeToken(chainId)
     return <DefaultTraderPlaceholderUI nativeToken={nativeToken} />
 })

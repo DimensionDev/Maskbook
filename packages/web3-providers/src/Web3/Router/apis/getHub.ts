@@ -1,6 +1,6 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { BaseHubOptions } from '../../Base/apis/HubOptionsAPI.js'
+import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import { createHub } from '../../EVM/apis/HubAPI.js'
 import { createFlowHub } from '../../Flow/apis/HubAPI.js'
 import { createSolanaHub } from '../../Solana/apis/HubAPI.js'

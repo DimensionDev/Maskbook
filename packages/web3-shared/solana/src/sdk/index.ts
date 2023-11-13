@@ -1,4 +1,4 @@
-import { Connection } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import { ChainId } from '../types.js'
 
 const Endpoints: Record<ChainId, string> = {
@@ -13,5 +13,5 @@ export function createClientEndpoint(chainId = ChainId.Mainnet) {
 }
 
 export function createClient(chainId = ChainId.Mainnet) {
-    return new Connection(createClientEndpoint(chainId))
+    return new SolanaWeb3.Connection(createClientEndpoint(chainId))
 }

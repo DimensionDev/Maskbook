@@ -1,6 +1,6 @@
 import type { PageIndicator, Pageable } from '@masknet/shared-base'
 import type { FungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
-import type { BaseHubOptions } from '../Web3/Base/apis/HubOptionsAPI.js'
+import type { BaseHubOptions } from '../Web3/Base/apis/HubOptions.js'
 
 export namespace FungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {

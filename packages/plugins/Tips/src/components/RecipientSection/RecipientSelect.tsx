@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { AccountIcons, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
-import { useDefaultChainId, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useDefaultChainId, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -116,14 +116,14 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
 function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) {
     const t = useTipsTrans()
     const { classes, cx } = useStyles()
-    const Others = useWeb3Others(account.pluginID)
+    const Utils = useWeb3Utils(account.pluginID)
     const chainId = useDefaultChainId(account.pluginID)
 
     return (
         <Link
             className={cx(classes.link, classes.actionIcon, classes.icon)}
             onClick={(e) => e.stopPropagation()}
-            href={Others.explorerResolver.addressLink(chainId, account.address) ?? ''}
+            href={Utils.explorerResolver.addressLink(chainId, account.address) ?? ''}
             target="_blank"
             title={t.view_on_explorer()}
             rel="noopener noreferrer">
@@ -135,6 +135,7 @@ function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAl
 interface Props {
     className?: string
 }
+
 export const RecipientSelect = memo(({ className }: Props) => {
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)

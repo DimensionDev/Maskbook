@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { sha3 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { omit } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -83,7 +83,7 @@ function useCreateParamsCallback(
             shares,
             isRandom,
             duration,
-            seed: sha3(seed)!,
+            seed: web3_utils.sha3(seed)!,
             message,
             name,
             tokenType,

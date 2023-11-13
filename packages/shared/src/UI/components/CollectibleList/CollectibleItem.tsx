@@ -1,5 +1,5 @@
 import { forwardRef, type HTMLProps, memo } from 'react'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography, useForkRef } from '@mui/material'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
@@ -52,12 +52,14 @@ export interface ChangeEventOptions {
     checked: boolean
     value: string
 }
+
 export interface SelectableProps {
     selectable?: boolean
     checked?: boolean
     inactive?: boolean
     multiple?: boolean
     value?: string
+
     onChange?(options: ChangeEventOptions): void
 }
 
@@ -85,9 +87,9 @@ export const CollectibleItem = memo(
             ...rest
         } = props
         const { classes, cx } = useStyles()
-        const Others = useWeb3Others()
+        const Utils = useWeb3Utils()
 
-        const uiTokenId = Others.formatTokenId(asset.tokenId, 4)
+        const uiTokenId = Utils.formatTokenId(asset.tokenId, 4)
 
         const SelectableButton = selectable && multiple ? Checkbox : Radio
         const scrollIntoViewRef = (node: HTMLDivElement) => {

@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { PublicKey } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import {
     performReverseLookup,
     getHashedName,
@@ -14,7 +14,7 @@ import type { NameServiceAPI } from '../../../entry-types.js'
 class SolanaDomainAPI implements NameServiceAPI.Provider {
     private client = createClient(ChainId.Mainnet)
 
-    private SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
+    private SOL_TLD_AUTHORITY = new SolanaWeb3.PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
 
     id = NameServiceID.SOL
 
@@ -35,7 +35,7 @@ class SolanaDomainAPI implements NameServiceAPI.Provider {
         }
     }
     async reverse(address: string): Promise<string | undefined> {
-        const domainKey = new PublicKey(address)
+        const domainKey = new SolanaWeb3.PublicKey(address)
         const keys = await getAllDomains(this.client, domainKey)
         // resolve the first domain
         const key = first(keys)

@@ -1,4 +1,4 @@
-import { bytesToHex, hexToBytes, keccak256, padLeft, toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 export class Create2Factory {
@@ -12,11 +12,13 @@ export class Create2Factory {
     constructor(private address: string) {}
 
     private getDeployAddress(initCode: string, salt: number): string {
-        const saltByte32 = padLeft(toHex(salt), 64)
-        const items = ['0xff', formatEthereumAddress(this.address), saltByte32, keccak256(initCode)].flatMap((x) =>
-            hexToBytes(x),
+        const saltByte32 = web3_utils.padLeft(web3_utils.toHex(salt), 64)
+        const items = ['0xff', formatEthereumAddress(this.address), saltByte32, web3_utils.keccak256(initCode)].flatMap(
+            (x) => web3_utils.hexToBytes(x),
         )
-        return formatEthereumAddress(bytesToHex(hexToBytes(keccak256(bytesToHex(items))).slice(12)))
+        return formatEthereumAddress(
+            web3_utils.bytesToHex(web3_utils.hexToBytes(web3_utils.keccak256(web3_utils.bytesToHex(items))).slice(12)),
+        )
     }
 
     derive(initCode: string, nonce: number) {

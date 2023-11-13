@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { GasConfig, ChainId } from '@masknet/web3-shared-evm'
 import { useNativeTokenWrapperCallback } from '@masknet/web3-hooks-evm'
 import { TraderAPI } from '@masknet/web3-providers/types'
@@ -11,7 +11,7 @@ export function useTradeCallback(
     targetChainId?: ChainId,
 ) {
     const [wrapCallback, unwrapCallback] = useNativeTokenWrapperCallback(targetChainId)
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     return useAsyncFn(async () => {
         if (!trade?.trade_?.isNativeTokenWrapper) return
         if (!trade.inputToken || !trade.outputToken) return
@@ -22,14 +22,14 @@ export function useTradeCallback(
         let result: string | undefined
         if (
             (trade.strategy === TraderAPI.TradeStrategy.ExactIn &&
-                Others.isNativeTokenSchemaType(trade.inputToken?.schema)) ||
+                Utils.isNativeTokenSchemaType(trade.inputToken?.schema)) ||
             (trade.strategy === TraderAPI.TradeStrategy.ExactOut &&
-                Others.isNativeTokenSchemaType(trade.outputToken?.schema))
+                Utils.isNativeTokenSchemaType(trade.outputToken?.schema))
         ) {
             result = await wrapCallback(tradeAmount, gasConfig)
         } else {
             result = await unwrapCallback(false, tradeAmount)
         }
         return result
-    }, [wrapCallback, unwrapCallback, trade, Others.isNativeTokenSchemaType])
+    }, [wrapCallback, unwrapCallback, trade, Utils.isNativeTokenSchemaType])
 }

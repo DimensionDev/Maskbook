@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { sha3 } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { omit } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { ZERO, toFixed } from '@masknet/web3-shared-base'
@@ -34,7 +34,7 @@ export function useDefaultCreateGas(
             shares,
             isRandom,
             duration,
-            seed: sha3(seed)!,
+            seed: web3_utils.sha3(seed)!,
             message,
             name,
             tokenType,

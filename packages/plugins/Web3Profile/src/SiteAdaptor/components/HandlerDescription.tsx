@@ -8,7 +8,7 @@ import {
     useProviderDescriptor,
     useReverseAddress,
     useWallet,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
@@ -59,7 +59,8 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
     const { account, providerType } = useChainContext()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
+
     const providerDescriptor = useProviderDescriptor()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -78,7 +79,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     <WalletIcon size={36} mainIcon={providerDescriptor?.icon} />
                     <Box>
                         <Typography className={classes.name}>{walletName}</Typography>
-                        <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
+                        <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                     </Box>
                 </Box>
                 <Button variant="text" onClick={() => SelectProviderModal.open()}>
@@ -101,7 +102,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                 />
                 <Box>
                     <Typography className={classes.name}>{currentProfile.metadata?.displayName}</Typography>
-                    <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
+                    <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
             <Icons.ArrowDrop size={18} onClick={(e) => setAnchorEl(e.currentTarget)} />

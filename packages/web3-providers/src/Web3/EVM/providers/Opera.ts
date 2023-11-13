@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { Sniffings } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import { type ChainId, EthereumMethodType, ProviderType, isValidChainId } from '@masknet/web3-shared-evm'
@@ -26,7 +26,7 @@ export class OperaProvider extends EVMInjectedWalletProvider {
             method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
             params: [
                 {
-                    chainId: toHex(chainId),
+                    chainId: web3_utils.toHex(chainId),
                 },
             ],
         })

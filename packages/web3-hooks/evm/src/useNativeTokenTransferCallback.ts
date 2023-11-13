@@ -1,5 +1,5 @@
 import { useAsyncFn } from 'react-use'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
@@ -29,12 +29,12 @@ export function useNativeTransferCallback(expectedChainId?: ChainId) {
                     from: account,
                     to: recipient,
                     value: amount,
-                    data: memo ? toHex(memo) : undefined,
+                    data: memo ? web3_utils.toHex(memo) : undefined,
                 }).catch((error) => {
                     throw error
                 }),
                 value: amount,
-                data: memo ? toHex(memo) : undefined,
+                data: memo ? web3_utils.toHex(memo) : undefined,
                 ...gasConfig,
                 chainId,
             }

@@ -5,7 +5,7 @@ import {
     useWallets,
     useDefaultChainId,
     useNetworkDescriptor,
-    useWeb3Others,
+    useWeb3Utils,
     useReverseAddress,
     useNativeTokenBalance,
     useNativeToken,
@@ -43,11 +43,11 @@ function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletI
     const networkPluginId = resolveNextID_NetworkPluginID(proof.platform)
     const chainId = useDefaultChainId(networkPluginId)
     const networkDescriptor = useNetworkDescriptor(networkPluginId, chainId)
-    const Others = useWeb3Others(networkPluginId)
+    const Utils = useWeb3Utils(networkPluginId)
     const { data: domain } = useReverseAddress(networkPluginId, proof.identity)
 
-    const formattedAddress = Others.formatAddress(proof.identity, 4)
-    const addressLink = Others.explorerResolver.addressLink(chainId, proof.identity)
+    const formattedAddress = Utils.formatAddress(proof.identity, 4)
+    const addressLink = Utils.explorerResolver.addressLink(chainId, proof.identity)
 
     const balance = useNativeTokenBalance(networkPluginId, { account: proof.identity, chainId })
     const { data: nativeToken } = useNativeToken(networkPluginId, { chainId })

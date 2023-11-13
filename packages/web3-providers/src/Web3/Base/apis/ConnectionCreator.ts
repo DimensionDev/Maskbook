@@ -1,8 +1,8 @@
 import { memoize } from 'lodash-es'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { BaseConnection } from './ConnectionAPI.js'
-import type { BaseConnectionOptions, ConnectionOptionsProvider } from './ConnectionOptionsAPI.js'
+import type { BaseConnection } from './Connection.js'
+import type { BaseConnectionOptions, ConnectionOptionsProvider } from './ConnectionOptions.js'
 
 function resolver<ChainId, ProviderType, Transaction>(
     initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction>,

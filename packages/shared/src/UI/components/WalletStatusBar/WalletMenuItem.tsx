@@ -10,7 +10,7 @@ import {
     useDefaultChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.line,
     },
 }))
+
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginID: NetworkPluginID) => void
     address: string
@@ -44,12 +45,12 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         })
 
         const name = useWalletName(address, pluginID, !!platform)
-        const Others = useWeb3Others(pluginID)
+        const Utils = useWeb3Utils(pluginID)
 
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
-        const formattedAddress = Others.formatAddress(address, 4)
-        const addressLink = Others.explorerResolver.addressLink(chainId, address)
+        const formattedAddress = Utils.formatAddress(address, 4)
+        const addressLink = Utils.explorerResolver.addressLink(chainId, address)
 
         const descriptionProps = {
             name,

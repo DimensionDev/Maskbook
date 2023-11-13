@@ -27,8 +27,9 @@ import {
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
-import { PublicKey, sendAndConfirmRawTransaction, type BlockResponse } from '@solana/web3.js'
-import type { BaseConnection } from '../../Base/apis/ConnectionAPI.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type { BlockResponse } from '@solana/web3.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import { MagicEden } from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
@@ -61,9 +62,11 @@ export class SolanaConnectionAPI
         this.Transfer = new SolanaTransferAPI(options)
         this.ConnectionOptions = new SolanaConnectionOptionsAPI(options)
     }
+
     private Web3
     private Transfer
     private ConnectionOptions
+
     getAccount(initial?: SolanaConnectionOptions | undefined): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         return Promise.resolve(options.account)
@@ -164,7 +167,7 @@ export class SolanaConnectionAPI
     async getNativeTokenBalance(initial?: SolanaConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
         if (!options.account) return '0'
-        const balance = await this.Web3.getWeb3Connection(options).getBalance(new PublicKey(options.account))
+        const balance = await this.Web3.getWeb3Connection(options).getBalance(new SolanaWeb3.PublicKey(options.account))
         return balance.toString()
     }
 
@@ -378,16 +381,20 @@ export class SolanaConnectionAPI
 
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signedTransaction.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getWeb3Connection(initial),
+            signedTransaction.serialize(),
+        )
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        return sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signature.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getWeb3Connection(initial), signature.serialize())
     }
 
     replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
+
     cancelTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }

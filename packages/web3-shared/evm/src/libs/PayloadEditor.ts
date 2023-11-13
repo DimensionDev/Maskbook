@@ -1,5 +1,6 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
-import { type AbiItem, hexToNumber, hexToNumberString, toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import type { AbiItem } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
@@ -120,7 +121,7 @@ export class PayloadEditor {
                     chainId,
                     data: abiCoder.encodeFunctionCall(
                         CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                        ['0x', toHex(0)],
+                        ['0x', web3_utils.toHex(0)],
                     ),
                 }
             }
@@ -139,7 +140,7 @@ export class PayloadEditor {
                     chainId,
                     data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
                         ownerAddress,
-                        toHex(nonce),
+                        web3_utils.toHex(nonce),
                     ]),
                 }
             }
@@ -261,9 +262,9 @@ export class PayloadEditor {
 }
 
 function parseHexNumberString(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
+    return typeof hex !== 'undefined' ? web3_utils.hexToNumberString(hex ?? '0x0') : undefined
 }
 
 function parseHexNumber(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? (hexToNumber(hex) as number) : undefined
+    return typeof hex !== 'undefined' ? (web3_utils.hexToNumber(hex) as number) : undefined
 }

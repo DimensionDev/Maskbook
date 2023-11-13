@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Emitter } from '@servie/events'
 import { getSdkError } from '@walletconnect/utils'
 import { SignClient } from '@walletconnect/sign-client'
@@ -49,7 +49,7 @@ class Client {
 
         this.client.on('session_update', () => {
             if (!this.account) return
-            this.emitter.emit('chainId', toHex(this.account.chainId))
+            this.emitter.emit('chainId', web3_utils.toHex(this.account.chainId))
             this.emitter.emit('accounts', [this.account.account])
         })
 

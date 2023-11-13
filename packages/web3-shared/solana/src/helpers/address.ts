@@ -1,6 +1,6 @@
 import bs58 from 'bs58'
 import { memoize } from 'lodash-es'
-import * as Web3 from '@solana/web3.js'
+import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
 import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'

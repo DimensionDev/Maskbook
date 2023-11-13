@@ -1,5 +1,5 @@
 import { memoize } from 'lodash-es'
-import { isAddress, toChecksumAddress } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainIdList,
@@ -15,7 +15,7 @@ import {
 import { ChainId } from '../types/index.js'
 
 export function checksumAddress(address: string) {
-    return toChecksumAddress(address)
+    return web3_utils.toChecksumAddress(address)
 }
 
 export function isEmptyHex(hex?: string): hex is undefined {
@@ -30,7 +30,7 @@ export const isValidAddress: (address?: string) => address is string = memoize(f
     address?: string,
 ): address is string {
     if (!address) return false
-    return isAddress(address)
+    return web3_utils.isAddress(address)
 })
 
 export function isZeroAddress(address?: string): address is '0x0000000000000000000000000000000000000000' {

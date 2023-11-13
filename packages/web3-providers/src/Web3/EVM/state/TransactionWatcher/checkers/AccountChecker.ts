@@ -1,4 +1,4 @@
-import { sha3, toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { type TransactionChecker, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { EtherscanExplorer } from '../../../../../Etherscan/index.js'
@@ -33,13 +33,13 @@ class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {
     private getExplorerTransactionId(transaction: ExplorerAPI.Transaction | null) {
         if (!transaction) return ''
         const { from, to, input, value } = transaction
-        return sha3([from, to, input || '0x0', toHex(value || '0x0') || '0x0'].join('_')) ?? ''
+        return web3_utils.sha3([from, to, input || '0x0', web3_utils.toHex(value || '0x0') || '0x0'].join('_')) ?? ''
     }
 
     private getTransactionId(transaction: Transaction) {
         const { from, to, data = '0x0', value = '0x0' } = transaction
         if (!from || !to) return ''
-        return sha3([from, to, data, value].join('_')) ?? ''
+        return web3_utils.sha3([from, to, data, value].join('_')) ?? ''
     }
 
     private async fetchLatestTransactions(chainId: ChainId, account: string) {

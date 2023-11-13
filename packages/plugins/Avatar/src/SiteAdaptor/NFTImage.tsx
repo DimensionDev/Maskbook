@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Tooltip } from '@mui/material'
 import { Image } from '@masknet/shared'
-import { useWeb3Others } from '@masknet/web3-hooks-base'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,9 +65,9 @@ interface NFTImageProps {
 export const NFTImage = memo((props: NFTImageProps) => {
     const { className, token, onSelect, selected } = props
     const { classes, cx } = useStyles()
-    const Others = useWeb3Others()
+    const Utils = useWeb3Utils()
     const name = token.collection?.name || token.contract?.name
-    const uiTokenId = token.tokenId ? Others.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}` : name
+    const uiTokenId = token.tokenId ? Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}` : name
     const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
 
     return (

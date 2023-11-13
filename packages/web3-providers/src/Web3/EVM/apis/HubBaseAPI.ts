@@ -2,7 +2,7 @@ import { EMPTY_LIST, type Pageable, createPageable, createIndicator } from '@mas
 import { attemptUntil, type Transaction as Web3Transaction } from '@masknet/web3-shared-base'
 import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from './ResolverAPI.js'
-import { BaseHubProvider } from '../../Base/apis/HubBaseAPI.js'
+import { BaseHubProvider } from '../../Base/apis/HubBase.js'
 import { GasOptions } from './GasOptionAPI.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'

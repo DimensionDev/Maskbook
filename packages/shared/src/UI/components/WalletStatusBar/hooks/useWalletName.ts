@@ -5,7 +5,7 @@ import {
     useReverseAddress,
     useProviderDescriptor,
     useWallets,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { ProviderType, formatDomainName } from '@masknet/web3-shared-evm'
 import { isSameAddress, resolveNetworkWalletName } from '@masknet/web3-shared-base'
@@ -19,7 +19,7 @@ export const useWalletName = (
     const { data: domain } = useReverseAddress(expectedPluginId, account)
     const wallets = useWallets()
     const providerDescriptor = useProviderDescriptor(expectedPluginId)
-    const Others = useWeb3Others(expectedPluginId)
+    const Utils = useWeb3Utils(expectedPluginId)
 
     return useMemo(() => {
         // Binding Wallet Just display domain and network name
@@ -28,14 +28,14 @@ export const useWalletName = (
         const wallet = wallets.find((x) => isSameAddress(x.address, expectedAccount ?? account))
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
 
-        return providerDescriptor?.name || Others.formatAddress(account, 4)
+        return providerDescriptor?.name || Utils.formatAddress(account, 4)
     }, [
         wallets,
         expectedAccount,
         providerType,
         domain,
         providerDescriptor?.name,
-        Others.formatAddress,
+        Utils.formatAddress,
         account,
         isNextIdWallet,
         expectedPluginId,

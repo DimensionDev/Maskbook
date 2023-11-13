@@ -1,5 +1,6 @@
 import bs58 from 'bs58'
-import { PublicKey, type Transaction } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type { Transaction } from '@solana/web3.js'
 import { injectedPhantomProvider } from '@masknet/injected-script'
 import { PhantomMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
@@ -45,7 +46,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
             },
         })
 
-        transaction.addSignature(new PublicKey(publicKey), Buffer.from(bs58.decode(signature)))
+        transaction.addSignature(new SolanaWeb3.PublicKey(publicKey), Buffer.from(bs58.decode(signature)))
         return transaction
     }
 

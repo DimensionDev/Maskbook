@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSharedTrans } from '@masknet/shared'
-import { useGasOptions, useNetworkContext, useChainContext, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useGasOptions, useNetworkContext, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
@@ -34,14 +34,14 @@ function useSettingsContext(initial?: {
     const { chainId } = useChainContext({
         chainId: initial?.chainId,
     })
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     const [transactionOptions, setTransactionOptions] = useState<
         Web3Helper.Definition[typeof pluginID]['Transaction'] | undefined
     >(initial?.transaction)
     const [slippageTolerance, setSlippageTolerance] = useState(initial?.slippageTolerance ?? DEFAULT_SLIPPAGE_TOLERANCE)
 
     const networkSignature = `${pluginID}_${chainId}`
-    const transactionSignature = Others.getTransactionSignature!(chainId, transactionOptions) ?? ''
+    const transactionSignature = Utils.getTransactionSignature!(chainId, transactionOptions) ?? ''
     const needToResetByNetwork =
         !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =

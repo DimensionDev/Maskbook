@@ -8,7 +8,7 @@ import {
     useChainContext,
     useWeb3Connection,
     useWeb3Hub,
-    useWeb3Others,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { AddressType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -106,7 +106,9 @@ export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginI
      * For example, in PFP, we can add collectibles from verified wallets if no wallet connected.
      */
     account?: string
+
     onAdd(result?: AddingNFTs<T>): void
+
     disabled?: boolean
 }
 
@@ -128,7 +130,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
     const { classes } = useStyles(undefined, { props })
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
 
     const {
         control,
@@ -148,7 +150,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const { value: addressType, loading: loadingAddressType } = useAddressType(
         pluginID,
-        Others.isValidAddress(address) ? address : '',
+        Utils.isValidAddress(address) ? address : '',
         {
             chainId,
         },
@@ -156,7 +158,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const validationMsgForAddress = useMemo(() => {
         if (!address) return ''
-        if (!Others.isValidAddress?.(address ?? '') || (addressType !== AddressType.Contract && !loadingAddressType))
+        if (!Utils.isValidAddress?.(address ?? '') || (addressType !== AddressType.Contract && !loadingAddressType))
             return t.collectible_contract_invalid()
         return ''
     }, [address, addressType, loadingAddressType])

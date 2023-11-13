@@ -1,4 +1,4 @@
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { flatMap, compact } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { CurrencyAmount, type Currency, type Token, TradeType, Percent } from '@uniswap/sdk-core'
@@ -444,7 +444,7 @@ export class UniSwapV2LikeAPI implements TraderAPI.Provider {
                     from: account,
                     to: address,
                     data: calldata,
-                    ...(!value || /^0x0*$/.test(value) ? {} : { value: toHex(value) }),
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value: web3_utils.toHex(value) }),
                 }
 
                 try {

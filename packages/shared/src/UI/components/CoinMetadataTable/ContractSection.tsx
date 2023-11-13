@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { useNetworkDescriptor, useWeb3Others } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CopyButton, FormattedAddress, TokenIcon, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -23,7 +23,7 @@ export function ContractSection({
     iconURL,
     pluginID = NetworkPluginID.PLUGIN_EVM,
 }: ContractSectionProps) {
-    const Others = useWeb3Others(pluginID)
+    const Utils = useWeb3Utils(pluginID)
     const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
 
     return (
@@ -43,8 +43,8 @@ export function ContractSection({
                 sx={{
                     cursor: 'pointer',
                 }}
-                onClick={chainId ? () => openWindow(Others.explorerResolver.addressLink(chainId, address)) : noop}>
-                <FormattedAddress address={address} size={4} formatter={Others.formatAddress} />
+                onClick={chainId ? () => openWindow(Utils.explorerResolver.addressLink(chainId, address)) : noop}>
+                <FormattedAddress address={address} size={4} formatter={Utils.formatAddress} />
             </Typography>
             <CopyButton size={16} text={address} scoped={false} />
         </Stack>

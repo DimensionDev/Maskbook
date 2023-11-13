@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty, noop } from 'lodash-es'
-import { toWei } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -170,7 +170,7 @@ export const Prior1559GasSetting = memo(
             (data: zod.infer<typeof schema>) => {
                 onConfirm({
                     gasLimit: data.gasLimit as any,
-                    gasPrice: toWei(data.gasPrice, 'gwei'),
+                    gasPrice: web3_utils.toWei(data.gasPrice, 'gwei'),
                     gasOption: selectedGasOption,
                 })
             },

@@ -1,5 +1,5 @@
 import { uniqWith } from 'lodash-es'
-import { toHex } from 'web3-utils'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
 import {
     EMPTY_LIST,
@@ -191,12 +191,12 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
 
         this.emitter.emit('accounts', [this.hostedAccount])
         await delay(100)
-        this.emitter.emit('chainId', toHex(this.hostedChainId))
+        this.emitter.emit('chainId', web3_utils.toHex(this.hostedChainId))
     }
 
     private async onChainChanged() {
         await this.walletStorage?.chainId.initializedPromise
-        if (this.hostedChainId) this.emitter.emit('chainId', toHex(this.hostedChainId))
+        if (this.hostedChainId) this.emitter.emit('chainId', web3_utils.toHex(this.hostedChainId))
     }
 
     override async switchAccount(account?: string) {
