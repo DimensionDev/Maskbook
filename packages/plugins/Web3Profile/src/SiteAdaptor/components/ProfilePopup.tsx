@@ -20,13 +20,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 320,
         padding: theme.spacing(1.5),
         filter:
-            theme.palette.mode === 'light'
-                ? 'drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1))'
-                : 'drop-shadow(0px 4px 30px rgba(255, 255, 255, 0.15))',
+            theme.palette.mode === 'light' ?
+                'drop-shadow(0px 4px 30px rgba(0, 0, 0, 0.1))'
+            :   'drop-shadow(0px 4px 30px rgba(255, 255, 255, 0.15))',
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 4px 30px 0px rgba(0, 0, 0, 0.1)'
-                : '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
+            theme.palette.mode === 'light' ?
+                '0px 4px 30px 0px rgba(0, 0, 0, 0.1)'
+            :   '0px 4px 30px 0px rgba(255, 255, 255, 0.15)',
     },
     avatar: {
         borderRadius: 99,
@@ -87,16 +87,14 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                 onChange(profile)
                             }}>
                             <ListItemIcon>
-                                {profile.metadata?.picture?.optimized.uri ? (
+                                {profile.metadata?.picture?.optimized.uri ?
                                     <Image
                                         className={classes.avatar}
                                         size={36}
                                         src={profile.metadata.picture.optimized.uri}
                                         fallback={<Icons.Lens size={36} className={classes.avatar} />}
                                     />
-                                ) : (
-                                    <Icons.Lens size={36} className={classes.avatar} />
-                                )}
+                                :   <Icons.Lens size={36} className={classes.avatar} />}
                             </ListItemIcon>
                             <ListItemText
                                 classes={{ primary: classes.primary, secondary: classes.second }}
