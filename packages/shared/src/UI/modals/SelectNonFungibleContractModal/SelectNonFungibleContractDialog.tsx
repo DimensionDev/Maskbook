@@ -116,17 +116,17 @@ export const SelectNonFungibleContractDialog = memo(
 
         const filteredCollections = useMemo(() => {
             const allCollections = [...customizedCollections, ...collections]
-            return pluginID === NetworkPluginID.PLUGIN_EVM
-                ? allCollections.filter((x) => {
-                      return (
-                          x.address &&
-                          x.schema === SchemaType.ERC721 &&
-                          !isLensCollect(x.name) &&
-                          !isLensFollower(x.name) &&
-                          !isLensProfileAddress(x.address)
-                      )
-                  })
-                : allCollections
+            return pluginID === NetworkPluginID.PLUGIN_EVM ?
+                    allCollections.filter((x) => {
+                        return (
+                            x.address &&
+                            x.schema === SchemaType.ERC721 &&
+                            !isLensCollect(x.name) &&
+                            !isLensFollower(x.name) &&
+                            !isLensProfileAddress(x.address)
+                        )
+                    })
+                :   allCollections
         }, [customizedCollections, collections, pluginID])
         const fuse = useMemo(() => {
             return FuseNonFungibleCollection.create(filteredCollections)
@@ -176,14 +176,13 @@ export const SelectNonFungibleContractDialog = memo(
                             }}
                         />
                     </Box>
-                    {isError ? (
+                    {isError ?
                         <ReloadStatus height={500} onRetry={refetch} />
-                    ) : isLoading && !collections.length ? (
+                    : isLoading && !collections.length ?
                         <LoadingStatus height={500} />
-                    ) : !searchResults.length ? (
+                    : !searchResults.length ?
                         <EmptyStatus height={500}>{t.no_results()}</EmptyStatus>
-                    ) : (
-                        <List className={classes.contractList}>
+                    :   <List className={classes.contractList}>
                             {searchResults.map((collection) => (
                                 <ContractItem
                                     key={collection.address}
@@ -194,7 +193,7 @@ export const SelectNonFungibleContractDialog = memo(
                                 />
                             ))}
                         </List>
-                    )}
+                    }
 
                     <Stack
                         className={classes.toolbar}

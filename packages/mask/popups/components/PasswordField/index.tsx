@@ -15,16 +15,18 @@ export const PasswordField = memo(
                     ...rest.InputProps,
                     endAdornment: (
                         <InputAdornment position="end">
-                            {show ? (
+                            {show ?
                                 <IconButton
                                     aria-label="toggle password visibility"
                                     onClick={() => setShowPassword(!showPassword)}
                                     onMouseDown={(event) => event.preventDefault()}
                                     edge="end"
                                     size="small">
-                                    {showPassword ? <Icons.EyeOff /> : <Icons.Eye />}
+                                    {showPassword ?
+                                        <Icons.EyeOff />
+                                    :   <Icons.Eye />}
                                 </IconButton>
-                            ) : undefined}
+                            :   undefined}
                         </InputAdornment>
                     ),
                 }}

@@ -57,9 +57,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
     async getNonFungibleContractSymbol(chainId: ChainId, address: string) {
         const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract?.symbol && contract?.symbol.length > 15
-            ? `${contract?.symbol.slice(0, 12)}...`
-            : contract?.symbol
+        return contract?.symbol && contract?.symbol.length > 15 ?
+                `${contract?.symbol.slice(0, 12)}...`
+            :   contract?.symbol
     }
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
@@ -116,11 +116,12 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     title: i18NextInstance.t('plugin_red_packet_claim_title'),
                     description: i18NextInstance.t('plugin_red_packet_claim_notification'),
                     snackbar: {
-                        successfulDescription: tokenAmountDescription
-                            ? i18NextInstance.t('plugin_red_packet_claim_success', {
-                                  tokenAmountDescription,
-                              })
-                            : i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
+                        successfulDescription:
+                            tokenAmountDescription ?
+                                i18NextInstance.t('plugin_red_packet_claim_success', {
+                                    tokenAmountDescription,
+                                })
+                            :   i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
                     },
                     popup: {
@@ -134,11 +135,12 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     title: i18NextInstance.t('plugin_red_packet_refund_with_token_title'),
                     description: i18NextInstance.t('plugin_red_packet_refund_with_token'),
                     snackbar: {
-                        successfulDescription: tokenAmountDescription
-                            ? i18NextInstance.t('plugin_red_packet_refund_with_token_success', {
-                                  tokenAmountDescription,
-                              })
-                            : i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
+                        successfulDescription:
+                            tokenAmountDescription ?
+                                i18NextInstance.t('plugin_red_packet_refund_with_token_success', {
+                                    tokenAmountDescription,
+                                })
+                            :   i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_refund_with_token_fail'),
                     },
                     popup: {
@@ -157,11 +159,12 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     title: i18NextInstance.t('plugin_nft_red_packet_create_title'),
                     description: i18NextInstance.t('plugin_nft_red_packet_create'),
                     snackbar: {
-                        successfulDescription: symbol
-                            ? i18NextInstance.t('plugin_nft_red_packet_create_success', {
-                                  symbol,
-                              })
-                            : i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
+                        successfulDescription:
+                            symbol ?
+                                i18NextInstance.t('plugin_nft_red_packet_create_success', {
+                                    symbol,
+                                })
+                            :   i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
                     },
                     popup: {
@@ -175,11 +178,12 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     title: i18NextInstance.t('plugin_nft_red_packet_claim_title'),
                     description: i18NextInstance.t('plugin_nft_red_packet_claim'),
                     snackbar: {
-                        successfulDescription: symbol
-                            ? i18NextInstance.t('plugin_nft_red_packet_claim_success', {
-                                  symbol,
-                              })
-                            : i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
+                        successfulDescription:
+                            symbol ?
+                                i18NextInstance.t('plugin_nft_red_packet_claim_success', {
+                                    symbol,
+                                })
+                            :   i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
                         failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
                     },
                     popup: {

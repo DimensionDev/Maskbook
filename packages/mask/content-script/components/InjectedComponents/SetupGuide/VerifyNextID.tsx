@@ -222,7 +222,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
             <div className={classes.body}>
                 <Box p={2} overflow="auto" className={classes.main}>
                     <Box className={classes.connection}>
-                        {userId ? (
+                        {userId ?
                             <Box className={classes.connectItem}>
                                 <Box width={36}>
                                     <img src={avatar} className={cx(classes.avatar, 'connected')} />
@@ -232,8 +232,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                     <Typography className={classes.second}>@{userId}</Typography>
                                 </Box>
                             </Box>
-                        ) : (
-                            <Box className={classes.connectItem}>
+                        :   <Box className={classes.connectItem}>
                                 <Icons.Email size={24} />
                                 <Box ml={0.5}>
                                     <MaskTextField
@@ -246,14 +245,12 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                     />
                                 </Box>
                             </Box>
-                        )}
+                        }
                         <Icons.Connect size={24} />
                         <Box className={classes.connectItem}>
-                            {personaAvatar ? (
+                            {personaAvatar ?
                                 <img src={personaAvatar} className={cx(classes.avatar, 'connected')} />
-                            ) : (
-                                <EmojiAvatar value={personaIdentifier.publicKeyAsHex} />
-                            )}
+                            :   <EmojiAvatar value={personaIdentifier.publicKeyAsHex} />}
                             <Box className={classes.info}>
                                 <Typography className={classes.name}>{personaName}</Typography>
                                 <Typography className={classes.second} component="div">
@@ -268,14 +265,14 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {!nextIdPlatform || verified ? (
+                    {!nextIdPlatform || verified ?
                         <Typography className={classes.text}>
                             <Trans
                                 i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
                                 components={{ br: <br /> }}
                             />
                         </Typography>
-                    ) : creatingPostContent ? (
+                    : creatingPostContent ?
                         <>
                             <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
                             <Typography className={classes.postContent}>
@@ -290,7 +287,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
-                    ) : post ? (
+                    : post ?
                         <>
                             <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
                             <Typography className={classes.postContent}>{post}</Typography>
@@ -298,11 +295,11 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
-                    ) : null}
+                    :   null}
                 </Box>
 
                 <Box className={classes.footer}>
-                    {!nextIdPlatform || (nextIdPlatform && verified) ? (
+                    {!nextIdPlatform || (nextIdPlatform && verified) ?
                         <ActionButton
                             className={classes.button}
                             fullWidth
@@ -311,8 +308,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             onClick={onConfirm}>
                             {t.ok()}
                         </ActionButton>
-                    ) : (
-                        <ActionButton
+                    :   <ActionButton
                             className={classes.button}
                             fullWidth
                             variant="contained"
@@ -322,7 +318,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             <Icons.Send size={18} className={classes.send} />
                             {t.send()}
                         </ActionButton>
-                    )}
+                    }
                 </Box>
             </div>
         </BindingDialog>

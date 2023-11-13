@@ -157,7 +157,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
                 return (
                     <>
-                        {isCustomToken ? (
+                        {isCustomToken ?
                             <ActionButton
                                 color="primary"
                                 disabled={onAddOrRemoveTokenToLocalLoading}
@@ -166,8 +166,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                 onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}>
                                 {t.import()}
                             </ActionButton>
-                        ) : (
-                            <SettingSwitch
+                        :   <SettingSwitch
                                 disabled={
                                     (source === 'official-native' && mode === TokenListMode.Manage) ||
                                     onTrustOrBlockTokenToLocalLoading
@@ -181,22 +180,23 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                 size="small"
                                 checked={!isBlocked}
                             />
-                        )}
+                        }
                     </>
                 )
             }
             return (
                 <Typography className={classes.balance}>
-                    {balance === undefined ? (
+                    {balance === undefined ?
                         <LoadingBase size={24} />
-                    ) : balance === '' ? null : (
-                        <FormattedBalance
+                    : balance === '' ?
+                        null
+                    :   <FormattedBalance
                             value={balance}
                             decimals={decimals}
                             significant={6}
                             formatter={formatBalance}
                         />
-                    )}
+                    }
                 </Typography>
             )
         }, [balance, decimals, isBlocked, source, mode, isTrust])
@@ -241,21 +241,19 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         <Typography className={classes.primary} color="textPrimary" component="span">
                             <span className={classes.symbol}>{symbol}</span>
                             <span className={`${classes.name} dashboard token-list-symbol`}>
-                                {isCustomToken ? (
-                                    isLoadingTokenBalance ? (
+                                {isCustomToken ?
+                                    isLoadingTokenBalance ?
                                         <span className={classes.dotLoadingWrapper}>
                                             <DotLoading />
                                         </span>
-                                    ) : (
-                                        <FormattedBalance
+                                    :   <FormattedBalance
                                             value={tokenBalance}
                                             decimals={decimals}
                                             significant={6}
                                             formatter={formatBalance}
                                         />
-                                    )
-                                ) : (
-                                    <>
+
+                                :   <>
                                         <span className={classes.nameText}>{name}</span>
                                         <Link
                                             onClick={(event) => event.stopPropagation()}
@@ -265,9 +263,11 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                             rel="noopener noreferrer">
                                             <Icons.PopupLink size={18} className={classes.link} />
                                         </Link>
-                                        {token.isCustomToken ? <span>{t.added_by_user()}</span> : null}
+                                        {token.isCustomToken ?
+                                            <span>{t.added_by_user()}</span>
+                                        :   null}
                                     </>
-                                )}
+                                }
                             </span>
                         </Typography>
                         <Typography

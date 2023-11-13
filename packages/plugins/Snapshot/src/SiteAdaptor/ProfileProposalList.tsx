@@ -48,11 +48,9 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             color:
                 state === 'active' || state === 'pending' ? theme.palette.common.white : theme.palette.maskColor.bottom,
             backgroundColor:
-                state === 'active'
-                    ? theme.palette.maskColor.success
-                    : state === 'pending'
-                      ? theme.palette.maskColor.warn
-                      : theme.palette.maskColor.main,
+                state === 'active' ? theme.palette.maskColor.success
+                : state === 'pending' ? theme.palette.maskColor.warn
+                : theme.palette.maskColor.main,
         },
         blockieIcon: {
             width: 20,
@@ -178,13 +176,13 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
             className={classes.listItem}
             ref={ref}
             onClick={() => openWindow(resolveSnapshotProposalUrl(proposal.space.id, proposal.id))}>
-            {isViewed ? (
+            {isViewed ?
                 <>
                     <ProfileProposalListItemHeader proposal={proposal} />
                     <ProfileProposalListItemBody proposal={proposal} />
                     <ProfileProposalListItemVote proposal={proposal} />
                 </>
-            ) : null}
+            :   null}
         </ListItem>
     )
 }
@@ -252,22 +250,22 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         i === 0 && proposal.state !== 'pending' ? classes.selectedVoteItem : '',
                     )}>
                     <div className={classes.voteInfo}>
-                        {i === 0 && proposal.state !== 'pending' ? (
+                        {i === 0 && proposal.state !== 'pending' ?
                             <Icons.Check color={theme.palette.maskColor.main} size={18} className={classes.voteIcon} />
-                        ) : null}
+                        :   null}
                         <Typography className={classes.voteName}>{x}</Typography>
                         <Typography className={classes.strategyName}>
-                            {(proposal.choicesWithScore[i].score
-                                ? formatCount(proposal.choicesWithScore[i].score, 1)
-                                : '0') +
+                            {(proposal.choicesWithScore[i].score ?
+                                formatCount(proposal.choicesWithScore[i].score, 1)
+                            :   '0') +
                                 ' ' +
                                 proposal.strategyName}
                         </Typography>
-                        {currentAccountVote?.choice === i + 1 ? (
+                        {currentAccountVote?.choice === i + 1 ?
                             <div className={classes.myVote}>
                                 <Typography className={classes.myVoteText}>{t.plugin_snapshot_my_vote()}</Typography>
                             </div>
-                        ) : null}
+                        :   null}
                     </div>
 
                     <Typography className={classes.percentage}>

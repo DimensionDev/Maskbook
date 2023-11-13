@@ -38,9 +38,10 @@ class DeBankFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Schem
                             ...x,
                             name: isEther ? 'ETH' : x.name,
                             symbol: isEther ? 'ETH' : x.symbol,
-                            logo_url: isEther
-                                ? 'https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85'
-                                : x.logo_url,
+                            logo_url:
+                                isEther ?
+                                    'https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85'
+                                :   x.logo_url,
                         }
                     }),
                 ),

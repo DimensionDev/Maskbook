@@ -36,9 +36,9 @@ export const PriceChange = memo(function PriceChange({ change, loading, ...rest 
 
     return (
         <Box {...rest} className={cx(classes.container, rest.className)}>
-            {change ? (
+            {change ?
                 <Icons.ArrowDrop size={16} style={{ color, transform: change > 0 ? 'rotate(180deg)' : '' }} />
-            ) : null}
+            :   null}
             <Typography className={classes.value} color={color}>
                 {change ? `${change.toFixed(2)}%` : '--'}
             </Typography>

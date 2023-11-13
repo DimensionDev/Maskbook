@@ -99,11 +99,12 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     warning: {
-        backgroundColor: Sniffings.is_dashboard_page
-            ? theme.palette.warning.main
-            : parseColor(theme.palette.maskColor?.warn)
-                  .setAlpha(0.1)
-                  .toRgbString(),
+        backgroundColor:
+            Sniffings.is_dashboard_page ?
+                theme.palette.warning.main
+            :   parseColor(theme.palette.maskColor?.warn)
+                    .setAlpha(0.1)
+                    .toRgbString(),
         color: Sniffings.is_dashboard_page ? theme.palette.warning.main : theme.palette.maskColor?.warn,
     },
     info: {
@@ -111,11 +112,12 @@ const useStyles = makeStyles()((theme) => ({
         color: Sniffings.is_dashboard_page ? theme.palette.text.primary : theme.palette.maskColor?.main,
     },
     error: {
-        backgroundColor: Sniffings.is_dashboard_page
-            ? MaskColorVar.redMain
-            : parseColor(theme.palette.maskColor?.danger)
-                  .setAlpha(0.1)
-                  .toRgbString(),
+        backgroundColor:
+            Sniffings.is_dashboard_page ?
+                MaskColorVar.redMain
+            :   parseColor(theme.palette.maskColor?.danger)
+                    .setAlpha(0.1)
+                    .toRgbString(),
         color: Sniffings.is_dashboard_page ? theme.palette.common.white : theme.palette.maskColor?.danger,
     },
     action: {
@@ -350,10 +352,9 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                 />
                                 {outputToken.symbol}
                             </Typography>
-                            {loading ? (
+                            {loading ?
                                 <DotLoading />
-                            ) : (
-                                <Typography className={classes.amount}>
+                            :   <Typography className={classes.amount}>
                                     <FormattedBalance
                                         value={outputAmount.toFixed() ?? '0'}
                                         decimals={outputToken.decimals}
@@ -361,13 +362,13 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                         formatter={formatBalance}
                                     />
                                 </Typography>
-                            )}
+                            }
                         </Box>
                     </Box>
                     <Box className={classes.section}>
                         <Typography className={classes.title}>{t.plugin_trader_tab_price()}</Typography>
                         <Typography className={classes.description}>
-                            {priceReversed ? (
+                            {priceReversed ?
                                 <span>
                                     <span>1 {outputToken.symbol}</span>
                                     {' = '}
@@ -384,8 +385,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                     </span>
                                     {inputToken.symbol}
                                 </span>
-                            ) : (
-                                <span>
+                            :   <span>
                                     <span>1 {inputToken.symbol}</span>
                                     {' = '}
                                     <span>
@@ -401,7 +401,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                         {outputToken.symbol}
                                     </span>
                                 </span>
-                            )}
+                            }
                             <Icons.Retweet
                                 style={{ marginLeft: 4, cursor: 'pointer' }}
                                 onClick={() => setPriceReversed((x) => !x)}
@@ -413,20 +413,20 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             {t.plugin_trader_confirm_slippage_tolerance()}
                         </Typography>
                         <Typography className={classes.description}>
-                            {openSettingDialog ? (
+                            {openSettingDialog ?
                                 <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
                                     {t.edit()}
                                 </Typography>
-                            ) : null}
+                            :   null}
                             {currentSlippage / 100}%
                         </Typography>
                     </Box>
                     <Box className={classes.section}>
                         <Typography className={classes.title}>{t.plugin_trader_price_impact()}</Typography>
                         <Typography className={isGreatThanSlippageSetting ? classes.danger : classes.description}>
-                            {cacheTrade?.priceImpact?.isLessThan(ONE_BIPS)
-                                ? '<0.01%'
-                                : formatPercentage(cacheTrade.priceImpact)}
+                            {cacheTrade?.priceImpact?.isLessThan(ONE_BIPS) ?
+                                '<0.01%'
+                            :   formatPercentage(cacheTrade.priceImpact)}
                         </Typography>
                     </Box>
                     <Box className={classes.section}>
@@ -442,15 +442,15 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         </Typography>
                     </Box>
 
-                    {!isZero(gasFee) ? (
+                    {!isZero(gasFee) ?
                         <Box className={classes.section}>
                             <Typography className={classes.title}>{t.plugin_trader_gas()}</Typography>
                             <Typography className={classes.description}>
-                                {openSettingDialog ? (
+                                {openSettingDialog ?
                                     <Typography component="span" className={classes.edit} onClick={openSettingDialog}>
                                         {t.edit()}
                                     </Typography>
-                                ) : null}
+                                :   null}
                                 <FormattedBalance
                                     value={gasFee}
                                     decimals={nativeToken?.decimals ?? 0}
@@ -464,9 +464,9 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                 </span>
                             </Typography>
                         </Box>
-                    ) : null}
+                    :   null}
 
-                    {priceUpdated ? (
+                    {priceUpdated ?
                         <Alert
                             classes={{ action: classes.action, message: classes.alertMessage, icon: classes.alertIcon }}
                             className={cx(classes.alert, classes.info)}
@@ -483,9 +483,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             }>
                             {t.plugin_trader_price_updated()}
                         </Alert>
-                    ) : (
-                        alertTip
-                    )}
+                    :   alertTip}
                 </DialogContent>
 
                 <DialogActions className={classes.actions}>

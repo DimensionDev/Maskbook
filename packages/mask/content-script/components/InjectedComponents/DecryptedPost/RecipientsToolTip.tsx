@@ -63,7 +63,9 @@ export function RecipientsToolTip({ recipients, openDialog }: RecipientsToolTipP
             {recipients.slice(0, 3).map((recipient) => (
                 <Avatar key={recipient.identifier.userId} classes={{ root: classes.icon }} person={recipient} />
             ))}
-            {isMore ? <Icons.More size={13} className={classes.iconMore} color={theme.palette.text.primary} /> : null}
+            {isMore ?
+                <Icons.More size={13} className={classes.iconMore} color={theme.palette.text.primary} />
+            :   null}
             <div className={classes.iconAdd}>
                 <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
             </div>

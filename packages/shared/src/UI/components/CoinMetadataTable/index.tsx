@@ -143,7 +143,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {contracts.length ? (
+                        {contracts.length ?
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
@@ -151,7 +151,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">
-                                    {contracts[0].address ? (
+                                    {contracts[0].address ?
                                         <Stack
                                             direction="row"
                                             justifyContent="flex-end"
@@ -163,19 +163,17 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                                 address={contracts[0].address}
                                                 name={contracts[0].address}
                                             />
-                                            {contracts.length > 1 ? (
+                                            {contracts.length > 1 ?
                                                 <IconButton size="small" onClick={openMenu}>
                                                     <MoreHorizIcon style={{ fontSize: 16 }} />
                                                 </IconButton>
-                                            ) : null}
+                                            :   null}
                                             {menu}
                                         </Stack>
-                                    ) : (
-                                        '--'
-                                    )}
+                                    :   '--'}
                                 </TableCell>
                             </TableRow>
-                        ) : null}
+                        :   null}
                         {metadataLinks.map(([label, links], i) => {
                             if (!links?.length) return null
                             return (
@@ -200,7 +198,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                 </TableRow>
                             )
                         })}
-                        {trending?.coin.community_urls?.length ? (
+                        {trending?.coin.community_urls?.length ?
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
@@ -217,7 +215,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                         alignItems="center"
                                         gap={1}>
                                         {trending.coin.community_urls.map((x) =>
-                                            brands[x.type] ? (
+                                            brands[x.type] ?
                                                 <Linking
                                                     key={x.link}
                                                     href={x.link}
@@ -226,12 +224,12 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                                                     }}>
                                                     {brands[x.type]}
                                                 </Linking>
-                                            ) : null,
+                                            :   null,
                                         )}
                                     </Stack>
                                 </TableCell>
                             </TableRow>
-                        ) : null}
+                        :   null}
                     </TableBody>
                 </Table>
             </TableContainer>

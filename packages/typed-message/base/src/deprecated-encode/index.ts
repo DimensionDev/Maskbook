@@ -26,9 +26,9 @@ export function decodeTypedMessageV38ToV40Format(raw: Uint8Array, version: -38 |
                 })
         })()
         return Ok(
-            maybeMetadata.isSome()
-                ? makeTypedMessageText(text.value.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.value)
-                : makeTypedMessageText(text.value),
+            maybeMetadata.isSome() ?
+                makeTypedMessageText(text.value.replace(/.+\u{1F9E9}/u, ''), maybeMetadata.value)
+            :   makeTypedMessageText(text.value),
         )
     }
     return Ok(makeTypedMessageText(text.value))

@@ -78,7 +78,11 @@ export function TipButton(props: Props) {
                 const aHasNextId = a.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
                 const zHasNextId = z.supportedAddressTypes?.includes(SocialAddressType.NEXT_ID)
                 if (aHasNextId === zHasNextId) return 0
-                return aHasNextId ? -1 : zHasNextId ? 1 : 0
+                return (
+                    aHasNextId ? -1
+                    : zHasNextId ? 1
+                    : 0
+                )
             })
             .sort((a, z) => {
                 if (a.pluginID === z.pluginID) return 0

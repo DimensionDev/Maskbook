@@ -69,12 +69,12 @@ export function PriceChart(props: PriceChartProps) {
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading && props.stats.length ? (
+            {props.loading && props.stats.length ?
                 <LoadingBase className={classes.progress} color="primary" size={15} />
-            ) : null}
+            :   null}
 
             <Stack gap={2}>
-                {props.stats.length ? (
+                {props.stats.length ?
                     <svg
                         className={classes.svg}
                         ref={svgRef}
@@ -86,11 +86,10 @@ export function PriceChart(props: PriceChartProps) {
                             props.stats.length && openWindow(props.coin?.platform_url)
                         }}
                     />
-                ) : (
-                    <Typography className={classes.placeholder} align="center" color="textSecondary">
+                :   <Typography className={classes.placeholder} align="center" color="textSecondary">
                         {t.plugin_trader_no_data()}
                     </Typography>
-                )}
+                }
                 {props.children}
             </Stack>
         </div>

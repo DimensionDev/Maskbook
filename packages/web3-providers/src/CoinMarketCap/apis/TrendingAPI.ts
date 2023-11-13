@@ -181,9 +181,9 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
                     base_name: pair.market_pair_base.exchange_symbol,
                     target_name: pair.market_pair_quote.exchange_symbol,
                     price:
-                        pair.market_pair_base.currency_id === market.id
-                            ? pair.quote[currencyName].price
-                            : pair.quote[currencyName].price_quote,
+                        pair.market_pair_base.currency_id === market.id ?
+                            pair.quote[currencyName].price
+                        :   pair.quote[currencyName].price_quote,
                     volume: pair.quote[currencyName].volume_24h,
                     score: String(pair.market_score),
                     updated: new Date(pair.quote[currencyName].last_updated),

@@ -140,12 +140,13 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                     if (!oldData) return undefined
                     return {
                         ...oldData,
-                        pages: oldData.pages[0]
-                            ? [
-                                  { friends: [friend, ...oldData.pages[0].friends], nextPageOffset: 10 },
-                                  ...oldData.pages.slice(1),
-                              ]
-                            : [{ friends: [friend], nextPageOffset: 0 }],
+                        pages:
+                            oldData.pages[0] ?
+                                [
+                                    { friends: [friend, ...oldData.pages[0].friends], nextPageOffset: 10 },
+                                    ...oldData.pages.slice(1),
+                                ]
+                            :   [{ friends: [friend], nextPageOffset: 0 }],
                     }
                 },
             )
@@ -163,11 +164,9 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         <Box className={classes.card} ref={ref}>
             <Box className={classes.titleWrap}>
                 <Box className={classes.title}>
-                    {avatar ? (
+                    {avatar ?
                         <Avatar className={classes.avatar} src={avatar} />
-                    ) : (
-                        <Icons.NextIdAvatar className={classes.avatar} />
-                    )}
+                    :   <Icons.NextIdAvatar className={classes.avatar} />}
                     <Box>
                         <Typography fontSize={14} fontWeight={700} lineHeight="18px">
                             {publicKey ? formatPersonaFingerprint(publicKey) : null}
@@ -192,7 +191,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         </Typography>
                     </Box>
                 </Box>
-                {isLocal || local ? (
+                {isLocal || local ?
                     <Button
                         onClick={() =>
                             navigate(`${PopupRoutes.FriendsDetail}/${nextId}`, {
@@ -210,15 +209,14 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         style={{ borderRadius: '50%' }}>
                         <Icons.ArrowRight />
                     </Button>
-                ) : (
-                    <ActionButton
+                :   <ActionButton
                         variant="roundedContained"
                         onClick={() => onAdd(friendInfo)}
                         loading={isLoading}
                         disabled={isLoading}>
                         {t.popups_encrypted_friends_add_friends()}
                     </ActionButton>
-                )}
+                }
             </Box>
             <ConnectedAccounts
                 avatar={avatar}

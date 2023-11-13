@@ -142,7 +142,9 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 
     return (
         <Box className={classes.addWalletWrapper}>
-            {owner ? <Icons.SmartPay size={30} /> : <Icons.ETH size={30} />}
+            {owner ?
+                <Icons.SmartPay size={30} />
+            :   <Icons.ETH size={30} />}
             <div>
                 <Typography className={classes.subTitle}>
                     {domain || formatEthereumAddress(address, 4)}{' '}
@@ -231,17 +233,17 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>
-                        {isCreating
-                            ? t.popups_wallet_create_payment_password()
-                            : t.popups_set_the_payment_password_title()}
+                        {isCreating ?
+                            t.popups_wallet_create_payment_password()
+                        :   t.popups_set_the_payment_password_title()}
                     </Typography>
-                    {isCreating ? (
+                    {isCreating ?
                         <Typography className={classes.description} fontSize={14} fontWeight={700}>
                             {t.popups_wallet_create_payment_password_tip()}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </Box>
-                {isCreating ? (
+                {isCreating ?
                     <>
                         <form className={classes.form} onSubmit={onSubmit}>
                             <div className={classes.textField} style={{ marginBottom: 12 }}>
@@ -275,11 +277,11 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                     control={control}
                                 />
                             </div>
-                            {errorMsg && !isValid ? (
+                            {errorMsg && !isValid ?
                                 <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
                                     {errorMsg}
                                 </Typography>
-                            ) : null}
+                            :   null}
                         </form>
                         <Typography
                             color={theme.palette.maskColor.third}
@@ -315,8 +317,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                             />
                         </Typography>
                     </>
-                ) : (
-                    <>
+                :   <>
                         <Box className={classes.walletItemList}>
                             {wallets.map((wallet, index) => (
                                 <WalletItem wallet={wallet} key={index} />
@@ -328,10 +329,10 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                             </ActionButton>
                         </div>
                     </>
-                )}
+                }
             </Box>
 
-            {isCreating ? (
+            {isCreating ?
                 <div className={classes.bottomAction}>
                     <ActionButton
                         fullWidth
@@ -342,11 +343,11 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                         {t.confirm()}
                     </ActionButton>
                 </div>
-            ) : null}
+            :   null}
 
-            {isCreating && !params.get('isCreating') ? (
+            {isCreating && !params.get('isCreating') ?
                 <Icons.Comeback className={classes.back} onClick={() => setIsCreating(false)} />
-            ) : null}
+            :   null}
         </Box>
     )
 })

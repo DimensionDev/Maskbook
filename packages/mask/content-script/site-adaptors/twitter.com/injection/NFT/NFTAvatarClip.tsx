@@ -113,14 +113,16 @@ function NFTAvatarClipOrSquareInTwitter({ screenName, size, avatarType }: NFTAva
 
     if (!avatarMetadata?.address || !avatarMetadata?.token_id) return null
 
-    return avatarType === AvatarType.Square ? (
-        <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />
-    ) : avatarType === AvatarType.Clip ? (
-        <NFTAvatarClip
-            size={size}
-            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-            name={name}
-            price={price}
-        />
-    ) : null
+    return (
+        avatarType === AvatarType.Square ?
+            <NFTAvatarSquare stroke="black" strokeWidth={20} fontSize={9} name={name} price={price} size={size} />
+        : avatarType === AvatarType.Clip ?
+            <NFTAvatarClip
+                size={size}
+                classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+                name={name}
+                price={price}
+            />
+        :   null
+    )
 }

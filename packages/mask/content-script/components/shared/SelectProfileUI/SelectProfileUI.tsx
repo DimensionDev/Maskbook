@@ -158,21 +158,19 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                     disabled={disabled}
                 />
             </Box>
-            {props.loading ? (
+            {props.loading ?
                 <div className={cx(classes.empty, classes.mainText)}>
                     <LoadingStatus />
                 </div>
-            ) : (
-                <Boundary>
+            :   <Boundary>
                     <div className={classes.listParent}>
                         <div className={classes.listBody}>
                             <Box className={classes.list}>
-                                {profiles.length === 0 ? (
+                                {profiles.length === 0 ?
                                     <EmptyStatus className={classes.empty}>
                                         {t.compose_encrypt_share_dialog_empty()}
                                     </EmptyStatus>
-                                ) : (
-                                    profiles.map((item) => {
+                                :   profiles.map((item) => {
                                         const pubkey = item.linkedPersona?.publicKeyAsHex as string
                                         const selected = selectedPubkeyList.includes(pubkey)
                                         const disabled = frozenPubkeyList.includes(pubkey)
@@ -186,10 +184,10 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                             />
                                         )
                                     })
-                                )}
+                                }
                             </Box>
                         </div>
-                        {profiles.length ? (
+                        {profiles.length ?
                             <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0px' }}>
                                 <Checkbox
                                     sx={{ width: 20, height: 20 }}
@@ -197,10 +195,10 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                 />
                                 <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
                             </Stack>
-                        ) : null}
+                        :   null}
                     </div>
                 </Boundary>
-            )}
+            }
         </div>
     )
 }

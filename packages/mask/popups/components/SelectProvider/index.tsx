@@ -54,13 +54,13 @@ export const SelectProvider = memo(function SelectProvider() {
             if (providerType === ProviderType.MaskWallet) {
                 const hasWallets = wallets.filter((x) => !x.owner).length
                 navigate(
-                    hasWallets
-                        ? urlcat(PopupRoutes.SelectWallet, {
-                              setNFTAvatar: onlyMask ? true : undefined,
-                              verifyWallet: !onlyMask ? true : undefined,
-                              chainId: ChainId.Mainnet,
-                          })
-                        : PopupRoutes.Wallet,
+                    hasWallets ?
+                        urlcat(PopupRoutes.SelectWallet, {
+                            setNFTAvatar: onlyMask ? true : undefined,
+                            verifyWallet: !onlyMask ? true : undefined,
+                            chainId: ChainId.Mainnet,
+                        })
+                    :   PopupRoutes.Wallet,
                 )
                 return
             } else if (providerType === ProviderType.WalletConnect) {

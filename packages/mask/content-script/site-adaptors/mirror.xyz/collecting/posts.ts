@@ -92,14 +92,14 @@ async function registerPostCollectorInner(
                         result?.writers?.coAuthors
                             .map(
                                 (x): PostContextCoAuthor =>
-                                    x.identifier
-                                        ? {
-                                              author: x.identifier,
-                                              avatarURL: x.avatar ? new URL(x.avatar) : undefined,
-                                              post: new PostIdentifier(x.identifier, result.postId),
-                                              nickname: x.nickname,
-                                          }
-                                        : undefined!,
+                                    x.identifier ?
+                                        {
+                                            author: x.identifier,
+                                            avatarURL: x.avatar ? new URL(x.avatar) : undefined,
+                                            post: new PostIdentifier(x.identifier, result.postId),
+                                            nickname: x.nickname,
+                                        }
+                                    :   undefined!,
                             )
                             .filter(Boolean) || []
                 })

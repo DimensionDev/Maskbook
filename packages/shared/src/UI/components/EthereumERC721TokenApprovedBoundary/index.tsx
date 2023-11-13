@@ -58,11 +58,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 disabled
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_nft_approving_all({
-                    symbol: collection?.symbol
-                        ? collection.symbol.toLowerCase() === 'unknown'
-                            ? 'All'
-                            : collection?.symbol
-                        : 'All',
+                    symbol:
+                        collection?.symbol ?
+                            collection.symbol.toLowerCase() === 'unknown' ?
+                                'All'
+                            :   collection?.symbol
+                        :   'All',
                 })}
             </ActionButton>
         )
@@ -97,11 +98,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
                 {t.plugin_wallet_approve_all_nft({
-                    symbol: collection?.symbol
-                        ? collection?.symbol.toLowerCase() === 'unknown'
-                            ? 'All'
-                            : collection?.symbol
-                        : 'All',
+                    symbol:
+                        collection?.symbol ?
+                            collection?.symbol.toLowerCase() === 'unknown' ?
+                                'All'
+                            :   collection?.symbol
+                        :   'All',
                 })}
             </ActionButton>
         )

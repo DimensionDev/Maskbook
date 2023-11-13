@@ -37,9 +37,9 @@ export function PostInspector(props: PostInspectorProps) {
         const slot = hasEncryptedPost ? null : <slot />
         return (
             <>
-                {process.env.NODE_ENV === 'development' && !postBy ? (
+                {process.env.NODE_ENV === 'development' && !postBy ?
                     <h2 style={{ background: 'red', color: 'white' }}>Please fix me. Post author is not detected.</h2>
-                ) : null}
+                :   null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
                 <PossiblePluginSuggestionPostInspector />

@@ -20,9 +20,10 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
             lineHeight: 0,
             // padding bottom space for assets tabs
             paddingBottom: !disabled ? 34 : 16,
-            background: isDark
-                ? theme.palette.maskColor.modalTitleBg
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
+            background:
+                isDark ?
+                    theme.palette.maskColor.modalTitleBg
+                :   'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
         },
         topbar: {
             display: 'flex',
@@ -156,11 +157,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     onClick={(event) => {
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
-                    {currentNetwork?.iconUrl ? (
+                    {currentNetwork?.iconUrl ?
                         <ImageIcon size={30} icon={currentNetwork?.iconUrl} name={currentNetwork?.name || '?'} />
-                    ) : (
-                        <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />
-                    )}
+                    :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
 
                     <Box ml={0.5} overflow="auto">
                         <Box overflow="auto" display="flex">
@@ -169,13 +168,13 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     {networkName}
                                 </Typography>
                             </TextOverflowTooltip>
-                            {!disabled && !wallet.owner ? (
+                            {!disabled && !wallet.owner ?
                                 <Icons.ArrowDrop
                                     size={20}
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
-                            ) : null}
+                            :   null}
                         </Box>
                         {isLoading ? null : (
                             <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
@@ -199,17 +198,19 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                     onClick={() => {
                         if (!disabled) onActionClick()
                     }}>
-                    {wallet.owner ? <Icons.SmartPay size={30} /> : <Icons.MaskBlue size={30} />}
+                    {wallet.owner ?
+                        <Icons.SmartPay size={30} />
+                    :   <Icons.MaskBlue size={30} />}
                     <Box ml={0.5} overflow="hidden">
                         <TextOverflowTooltip title={wallet.name}>
                             <Typography className={classes.nickname}>{wallet.name}</Typography>
                         </TextOverflowTooltip>
                         <Typography className={classes.identifier}>
                             <FormattedAddress address={wallet.address} formatter={formatEthereumAddress} size={4} />
-                            {!disableCopy ? (
+                            {!disableCopy ?
                                 <CopyButton text={wallet.address} className={classes.icon} size={12} />
-                            ) : null}
-                            {addressLink ? (
+                            :   null}
+                            {addressLink ?
                                 <Link
                                     className={classes.icon}
                                     onClick={(event) => event.stopPropagation()}
@@ -218,18 +219,20 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink size={12} />
                                 </Link>
-                            ) : null}
+                            :   null}
                         </Typography>
                     </Box>
-                    {!disabled ? <Icons.ArrowDrop className={classes.arrow} /> : null}
+                    {!disabled ?
+                        <Icons.ArrowDrop className={classes.arrow} />
+                    :   null}
                 </div>
             </div>
-            {!disabled ? (
+            {!disabled ?
                 <>
                     <WalletAssetsValue className={classes.balance} skeletonWidth={100} skeletonHeight="2em" />
                     <ActionGroup chainId={chainId} mt={2} />
                 </>
-            ) : null}
+            :   null}
         </Box>
     )
 })

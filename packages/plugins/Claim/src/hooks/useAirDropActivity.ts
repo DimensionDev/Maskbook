@@ -25,9 +25,10 @@ export function useAirDropActivity(chainId: ChainId) {
             })
             const merkleTree = new MerkleTree(airdropList, web3_utils.keccak256, { sortPairs: true })
             const amount = claimer ? last(claimer) : undefined
-            const leaf = amount
-                ? web3_utils.keccak256(pack(['address', 'uint256'], [account, formatEtherToWei(amount)]))
-                : undefined
+            const leaf =
+                amount ?
+                    web3_utils.keccak256(pack(['address', 'uint256'], [account, formatEtherToWei(amount)]))
+                :   undefined
 
             const merkleProof = leaf ? merkleTree.getHexProof(leaf) : undefined
 

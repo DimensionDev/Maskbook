@@ -362,17 +362,17 @@
                         'div',
                         used_by_style,
                         'used by',
-                        m.used_by.length >= 10
-                            ? line(of(m.used_by, next_config))
-                            : line(...m.used_by.map((x) => line(of(x)))),
+                        m.used_by.length >= 10 ?
+                            line(of(m.used_by, next_config))
+                        :   line(...m.used_by.map((x) => line(of(x)))),
                     ],
                     m.imports.length && [
                         'div',
                         import_style,
                         'imports',
-                        m.imports.length >= 10
-                            ? line(of(m.imports, next_config))
-                            : line(...m.imports.map((x) => line(of(x)))),
+                        m.imports.length >= 10 ?
+                            line(of(m.imports, next_config))
+                        :   line(...m.imports.map((x) => line(of(x)))),
                     ],
                     m.async_used_by.length && ['div', used_by_style, 'async used by', line(of(m.async_used_by))],
                     m.defer_used_by.length && ['div', used_by_style, 'defer used by', line(of(m.defer_used_by))],
@@ -433,9 +433,9 @@
      * @returns {string}
      */
     function get_module_name(module) {
-        return module.startsWith('@')
-            ? module.slice(0, module.indexOf('/', module.indexOf('/')))
-            : module.slice(0, module.indexOf('/'))
+        return module.startsWith('@') ?
+                module.slice(0, module.indexOf('/', module.indexOf('/')))
+            :   module.slice(0, module.indexOf('/'))
     }
     /**
      * @param {string} module
@@ -443,9 +443,8 @@
     function simplified_name(module) {
         const npm_name = (npm_name_cache[module] ??= module.match(regex)?.groups?.key)
         if (npm_name) {
-            const no_version = npm_name.startsWith('@')
-                ? '@' + npm_name.split('@')[1].replace('+', '/')
-                : npm_name.split('@')[0]
+            const no_version =
+                npm_name.startsWith('@') ? '@' + npm_name.split('@')[1].replace('+', '/') : npm_name.split('@')[0]
             return module.replace(new RegExp(`.+/node_modules/${no_version}`), no_version)
         } else {
             return module
@@ -455,7 +454,11 @@
      * @param {number} time
      */
     function get_time_style(time) {
-        return time > 10 ? SLOW_TIME_STYLE : time < 4 ? FAST_TIME_STYLE : TIME_STYLE
+        return (
+            time > 10 ? SLOW_TIME_STYLE
+            : time < 4 ? FAST_TIME_STYLE
+            : TIME_STYLE
+        )
     }
     undefined
 })()

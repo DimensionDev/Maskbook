@@ -15,9 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         flexShrink: 0,
         alignSelf: 'stretch',
         background:
-            theme.palette.mode === 'light'
-                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)'
-                : theme.palette.maskColor.bottom,
+            theme.palette.mode === 'light' ?
+                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)'
+            :   theme.palette.maskColor.bottom,
         lineHeight: 0,
     },
     backIcon: {
@@ -42,7 +42,9 @@ export const WalletSetupHeaderUI = memo<WalletSetupHeaderUIProps>(function Walle
 
     return (
         <Box className={classes.container}>
-            {showBack ? <Icons.Comeback className={classes.backIcon} onClick={handleBack} /> : null}
+            {showBack ?
+                <Icons.Comeback className={classes.backIcon} onClick={handleBack} />
+            :   null}
             <Icons.MaskWallet width={64} height={64} />
         </Box>
     )

@@ -61,16 +61,14 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             <Box padding="16px">
                 <Search setSearchValue={setSearchValue} />
             </Box>
-            {loading ? (
+            {loading ?
                 <div className={cx(classes.empty, classes.mainText)}>
                     <LoadingBase />
                     <Typography>{t.loading()}</Typography>
                 </div>
-            ) : searchValue ? (
+            : searchValue ?
                 <SearchList searchResult={searchResult} fetchNextPage={fetchNextSearchPage} refetch={refetch} />
-            ) : (
-                <Contacts friendsArray={friends} fetchNextPage={fetchNextPage} />
-            )}
+            :   <Contacts friendsArray={friends} fetchNextPage={fetchNextPage} />}
         </div>
     )
 })

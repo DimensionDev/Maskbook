@@ -48,9 +48,9 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'default',
         borderRadius: 8,
         background:
-            theme.palette.mode === 'light'
-                ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.90) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.20) 1.03%, rgba(98, 152, 234, 0.20) 1.04%, rgba(98, 126, 234, 0.20) 100%)'
-                : 'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
+            theme.palette.mode === 'light' ?
+                'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.90) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.20) 1.03%, rgba(98, 152, 234, 0.20) 1.04%, rgba(98, 126, 234, 0.20) 100%)'
+            :   'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.00) 100%)',
     },
     secondItem: {
         margin: 0,
@@ -104,9 +104,9 @@ const useStyles = makeStyles()((theme) => ({
         },
         background: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     popoverTitle: {
         fontSize: 16,
@@ -262,7 +262,7 @@ export default function ChangeOwner() {
                                 <span className={classes.walletAddress} style={{ width: 264 }}>
                                     {wallet?.address}
                                 </span>
-                                {wallet?.address ? (
+                                {wallet?.address ?
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={wallet.address} />
                                         <Link
@@ -277,7 +277,7 @@ export default function ChangeOwner() {
                                             <Icons.LinkOut size={16} className={classes.linkIcon} />
                                         </Link>
                                     </>
-                                ) : null}
+                                :   null}
                             </Typography>
                         </div>
                     </Box>
@@ -287,13 +287,13 @@ export default function ChangeOwner() {
                 </Typography>
                 <Box className={cx(classes.item, classes.secondItem)}>
                     <Box className={classes.primaryItemBox}>
-                        {walletManager ? (
+                        {walletManager ?
                             <Icons.ETH size={24} />
-                        ) : personaManager ? (
+                        : personaManager ?
                             <div className={classes.avatar}>
                                 <PersonaAvatar avatar={personaManager.avatar} size={24} />
                             </div>
-                        ) : null}
+                        :   null}
                         <div className={classes.walletInfo}>
                             <Typography className={classes.primaryItemText}>
                                 {walletManager?.name ?? personaManager?.nickname}
@@ -302,14 +302,14 @@ export default function ChangeOwner() {
                                 <span className={classes.walletAddress} style={{ width: 264 }}>
                                     {managerAddress}
                                 </span>
-                                {managerAddress ? (
+                                {managerAddress ?
                                     <>
                                         <CopyButton size={16} className={classes.linkIcon} text={managerAddress} />
                                         <Link
                                             href={
-                                                walletManager
-                                                    ? EVMExplorerResolver.addressLink(chainId, managerAddress)
-                                                    : urlcat('https://web3.bio/', { s: managerAddress })
+                                                walletManager ?
+                                                    EVMExplorerResolver.addressLink(chainId, managerAddress)
+                                                :   urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"
                                             title={t.view_on_explorer()}
@@ -321,7 +321,7 @@ export default function ChangeOwner() {
                                             <Icons.LinkOut size={16} className={classes.linkIcon} />
                                         </Link>
                                     </>
-                                ) : null}
+                                :   null}
                             </Typography>
                         </div>
                     </Box>
@@ -341,7 +341,7 @@ export default function ChangeOwner() {
                     }}
                     inputProps={{ style: { cursor: 'pointer' } }}
                 />
-                {manageAccount ? (
+                {manageAccount ?
                     <Box display="flex" justifyContent="space-between" mt={2}>
                         <Typography className={classes.label}>{t.gas_fee()}</Typography>
                         <ChainContextProvider value={chainContextValue}>
@@ -357,7 +357,7 @@ export default function ChangeOwner() {
                             />
                         </ChainContextProvider>
                     </Box>
-                ) : null}
+                :   null}
                 <Popover
                     open={!!anchorEl}
                     anchorEl={anchorEl}

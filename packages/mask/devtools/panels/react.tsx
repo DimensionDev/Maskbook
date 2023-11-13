@@ -154,9 +154,9 @@ export async function startReactDevTools(signal: AbortSignal) {
         }
     }
     const viewUrlSourceFunction =
-        'openResource' in browser.devtools.panels
-            ? (url: string, line: number, col: number) => (browser.devtools.panels as any).openResource(url, line, col)
-            : undefined
+        'openResource' in browser.devtools.panels ?
+            (url: string, line: number, col: number) => (browser.devtools.panels as any).openResource(url, line, col)
+        :   undefined
     // fetchFileWithCaching, hookNamesModuleLoaderFunction: we skip this because we don't minify our files
 
     // Note: since we manually passed bridge and wall, the first argument is unused in the implementation

@@ -41,7 +41,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
                 </button>
                 <SearchBox onChange={(keyword) => setSearch(keyword)} />
             </div>
-            {keyword ? (
+            {keyword ?
                 <div className="h-[calc(100vh_-_64px)] overflow-auto lg:px-8">
                     <DashboardHeader title="DSearch" />
                     <DashboardBody>
@@ -56,9 +56,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
                         </DisableShadowRootContext.Provider>
                     </DashboardBody>
                 </div>
-            ) : (
-                <div className="h-[calc(100vh_-_64px)] overflow-auto lg:px-8">{children}</div>
-            )}
+            :   <div className="h-[calc(100vh_-_64px)] overflow-auto lg:px-8">{children}</div>}
         </div>
     )
 }

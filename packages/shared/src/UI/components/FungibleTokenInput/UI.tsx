@@ -152,30 +152,28 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 endAdornment={
                     <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
                         <Typography className={classes.label} display="flex" alignItems="center" component="div">
-                            {!disableBalance ? (
+                            {!disableBalance ?
                                 <>
                                     {isNative ? t.available_balance() : t.balance()}:
                                     <Typography className={classes.balance} component="span">
-                                        {token && !loadingBalance ? (
+                                        {token && !loadingBalance ?
                                             <FormattedBalance
                                                 value={balance}
                                                 decimals={token?.decimals}
                                                 significant={token?.decimals}
                                                 formatter={formatBalance}
                                             />
-                                        ) : (
-                                            '--'
-                                        )}
+                                        :   '--'}
                                     </Typography>
                                 </>
-                            ) : null}
-                            {!disableMax ? (
+                            :   null}
+                            {!disableMax ?
                                 <Chip className={classes.maxChip} label="MAX" size="small" onClick={onMaxClick} />
-                            ) : null}
+                            :   null}
                         </Typography>
-                        {!disableToken ? (
+                        {!disableToken ?
                             <Box display="flex" alignItems="center" columnGap="12px">
-                                {token ? (
+                                {token ?
                                     <>
                                         <Chip
                                             size="small"
@@ -196,14 +194,13 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             label={token.symbol}
                                         />
                                     </>
-                                ) : (
-                                    <Box className={classes.selectToken} onClick={onSelectToken}>
+                                :   <Box className={classes.selectToken} onClick={onSelectToken}>
                                         {t.select_a_token()}
                                         <Icons.ArrowDrop size={16} />
                                     </Box>
-                                )}
+                                }
                             </Box>
-                        ) : null}
+                        :   null}
                     </Box>
                 }
                 {...props}

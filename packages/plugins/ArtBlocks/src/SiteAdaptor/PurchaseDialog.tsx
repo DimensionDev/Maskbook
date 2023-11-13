@@ -72,17 +72,17 @@ export function PurchaseDialog(props: ActionBarProps) {
     const postLink = usePostLink()
 
     const shareText = [
-        Sniffings.is_twitter_page || Sniffings.is_facebook_page
-            ? t.plugin_artblocks_share({
-                  name: project.name,
-                  price: price.toFixed(),
-                  symbol: token?.symbol || '',
-              })
-            : t.plugin_artblocks_share_no_official_account({
-                  name: project.name,
-                  price: price.toFixed(),
-                  symbol: token?.symbol || '',
-              }),
+        Sniffings.is_twitter_page || Sniffings.is_facebook_page ?
+            t.plugin_artblocks_share({
+                name: project.name,
+                price: price.toFixed(),
+                symbol: token?.symbol || '',
+            })
+        :   t.plugin_artblocks_share_no_official_account({
+                name: project.name,
+                price: price.toFixed(),
+                symbol: token?.symbol || '',
+            }),
         '#mask_io #artblocks_io #nft',
         postLink,
     ].join('\n')
@@ -172,14 +172,14 @@ export function PurchaseDialog(props: ActionBarProps) {
                     <CardActions>
                         <WalletConnectedBoundary expectedChainId={chainId}>
                             {token?.schema === SchemaType.Native ? actionButton : null}
-                            {token?.schema === SchemaType.ERC20 ? (
+                            {token?.schema === SchemaType.ERC20 ?
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={project.pricePerTokenInWei}
                                     spender={spender}
                                     token={token}>
                                     {actionButton}
                                 </EthereumERC20TokenApprovedBoundary>
-                            ) : null}
+                            :   null}
                         </WalletConnectedBoundary>
                     </CardActions>
                 </Card>

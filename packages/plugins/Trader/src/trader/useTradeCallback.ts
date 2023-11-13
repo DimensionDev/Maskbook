@@ -38,25 +38,21 @@ export function useTradeCallback(
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
-        context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_
-            ? (tradeComputed as TraderAPI.TradeComputed<V2Trade<Currency, Currency, TradeType>>)
-            : null
+        context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_ ?
+            (tradeComputed as TraderAPI.TradeComputed<V2Trade<Currency, Currency, TradeType>>)
+        :   null
     const tradeComputedForUniswapV3Like =
-        context?.IS_UNISWAP_V3_LIKE && !isNativeTokenWrapper_
-            ? (tradeComputed as TraderAPI.TradeComputed<V3Trade<Currency, Currency, TradeType>>)
-            : null
-    const tradeComputedForZRX = !isNativeTokenWrapper_
-        ? (tradeComputed as TraderAPI.TradeComputed<SwapQuoteResponse>)
-        : null
-    const tradeComputedForDODO = !isNativeTokenWrapper_
-        ? (tradeComputed as TraderAPI.TradeComputed<SwapRouteSuccessResponse>)
-        : null
-    const tradeComputedForBancor = !isNativeTokenWrapper_
-        ? (tradeComputed as TraderAPI.TradeComputed<SwapBancorRequest>)
-        : null
-    const tradeComputedForOpenOcean = !isNativeTokenWrapper_
-        ? (tradeComputed as TraderAPI.TradeComputed<SwapOOSuccessResponse>)
-        : null
+        context?.IS_UNISWAP_V3_LIKE && !isNativeTokenWrapper_ ?
+            (tradeComputed as TraderAPI.TradeComputed<V3Trade<Currency, Currency, TradeType>>)
+        :   null
+    const tradeComputedForZRX =
+        !isNativeTokenWrapper_ ? (tradeComputed as TraderAPI.TradeComputed<SwapQuoteResponse>) : null
+    const tradeComputedForDODO =
+        !isNativeTokenWrapper_ ? (tradeComputed as TraderAPI.TradeComputed<SwapRouteSuccessResponse>) : null
+    const tradeComputedForBancor =
+        !isNativeTokenWrapper_ ? (tradeComputed as TraderAPI.TradeComputed<SwapBancorRequest>) : null
+    const tradeComputedForOpenOcean =
+        !isNativeTokenWrapper_ ? (tradeComputed as TraderAPI.TradeComputed<SwapOOSuccessResponse>) : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig, allowedSlippage)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig, allowedSlippage)

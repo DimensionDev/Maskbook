@@ -20,9 +20,9 @@ const useStyles = makeStyles()((theme) => ({
     action: {
         background: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 6px 0px rgba(0, 0, 0, 0.10)'
-                : '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 6px 0px rgba(0, 0, 0, 0.10)'
+            :   '0px 4px 6px 0px rgba(102, 108, 135, 0.10)',
         borderRadius: 99,
         padding: '5px 8px 5px 4px',
         display: 'flex',
@@ -68,11 +68,9 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(({ avatar, fingerprint
         <Box className={classes.container}>
             <Icons.Mask className={classes.logo} />
             <div className={classes.action}>
-                {avatar ? (
+                {avatar ?
                     <Avatar src={avatar} className={classes.avatar} />
-                ) : (
-                    <Icons.Masks className={classes.avatar} />
-                )}
+                :   <Icons.Masks className={classes.avatar} />}
                 <div>
                     <Typography className={classes.nickname}>{formatPersonaName(nickname)}</Typography>
                     <Typography className={classes.identifier}>

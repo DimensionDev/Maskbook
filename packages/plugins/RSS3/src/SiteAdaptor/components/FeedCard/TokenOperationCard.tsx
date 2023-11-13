@@ -100,7 +100,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                {verbose ? (
+                {verbose ?
                     <RSS3Trans.token_operation_verbose
                         values={{
                             from,
@@ -118,8 +118,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                             bold: <Label />,
                         }}
                     />
-                ) : (
-                    <RSS3Trans.token_operation
+                :   <RSS3Trans.token_operation
                         values={{
                             from,
                             to,
@@ -134,9 +133,9 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                             bold: <Label />,
                         }}
                     />
-                )}
+                }
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image classes={{ container: classes.tokenIcon }} src={metadata?.image} height={40} width={40} />
                     <Typography className={classes.value}>
@@ -146,7 +145,7 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                         })}
                     </Typography>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

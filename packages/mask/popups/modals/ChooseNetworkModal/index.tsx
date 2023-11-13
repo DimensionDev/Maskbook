@@ -95,16 +95,15 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                 closeModal()
             }}>
             <div className={classes.icon}>
-                {network.iconUrl ? (
+                {network.iconUrl ?
                     <ImageIcon size={24} icon={network.iconUrl} name={network.name} />
-                ) : (
-                    <NetworkIcon
+                :   <NetworkIcon
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                         chainId={network.chainId}
                         size={24}
                         network={network}
                     />
-                )}
+                }
             </div>
             <div className={classes.text}>
                 <TextOverflowTooltip title={network.name}>
@@ -122,11 +121,9 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
                     })} ${token?.symbol}`}
                 </ProgressiveText>
             </div>
-            {selected ? (
+            {selected ?
                 <Icons.RadioButtonChecked size={20} />
-            ) : (
-                <Icons.RadioButtonUnChecked size={20} color={theme.palette.maskColor.line} />
-            )}
+            :   <Icons.RadioButtonUnChecked size={20} color={theme.palette.maskColor.line} />}
         </li>
     )
 })

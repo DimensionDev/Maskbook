@@ -93,11 +93,11 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
                     {amount} {tokenDetail?.symbol}
                 </Typography>
                 <Typography className={classes.congratulations}>{t.congratulations()}</Typography>
-                {amount && tokenDetail ? (
+                {amount && tokenDetail ?
                     <Typography className={classes.tips}>
                         {t.claim_successfully_tips({ amount, symbol: tokenDetail.symbol })}
                     </Typography>
-                ) : null}
+                :   null}
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <ActionButton fullWidth onClick={onShare}>

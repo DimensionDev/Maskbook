@@ -12,9 +12,9 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         [`& .${backdropClasses.root}`]: {
             background:
-                theme.palette.mode === 'dark'
-                    ? 'rgba(255, 255, 255, 0.10)'
-                    : 'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
+                theme.palette.mode === 'dark' ?
+                    'rgba(255, 255, 255, 0.10)'
+                :   'linear-gradient(0deg, rgba(0, 0, 0, 0.40) 0%, rgba(0, 0, 0, 0.40) 100%), rgba(28, 104, 243, 0.20)',
             backdropFilter: 'blur(5px)',
         },
     },

@@ -70,14 +70,15 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             disableInteractive
             title={
                 <Typography fontSize={14} lineHeight="18px">
-                    {SocialAddressType.Address === type
-                        ? t.account_icon_tooltips_only({
-                              context: platform!,
-                          })
-                        : t.account_icon_tooltips({
-                              source: type?.replace('_', ' ') ?? '',
-                              context: platform,
-                          })}
+                    {SocialAddressType.Address === type ?
+                        t.account_icon_tooltips_only({
+                            context: platform!,
+                        })
+                    :   t.account_icon_tooltips({
+                            source: type?.replace('_', ' ') ?? '',
+                            context: platform,
+                        })
+                    }
                 </Typography>
             }
             arrow>
@@ -99,12 +100,12 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
     if (!supportedAddressTypes?.length) return null
 
     const iconStyle =
-        theme.palette.mode === 'light'
-            ? {
-                  boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
-                  backdropFilter: 'blur(8px)',
-              }
-            : undefined
+        theme.palette.mode === 'light' ?
+            {
+                boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
+                backdropFilter: 'blur(8px)',
+            }
+        :   undefined
 
     const fromTwitter = [
         SocialAddressType.ENS,
@@ -119,78 +120,78 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
     const normalClasses = cx(classes.actionIcon, classes.icon)
     const roundedClasses = cx(classes.actionIcon, classes.icon, classes.roundedIcon)
     const configs = compact([
-        fromNextId
-            ? {
-                  link: resolveSocialAddressLink(SocialAddressType.NEXT_ID),
-                  platform: AddressPlatform.NextId,
-                  icon: <Icons.NextIDMini className={normalClasses} style={{ ...iconStyle, width: 32, height: 18 }} />,
-              }
-            : null,
-        fromTwitter
-            ? {
-                  platform: AddressPlatform.Twitter,
-                  type: fromTwitter,
-                  icon: <Icons.TwitterXRound className={roundedClasses} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.CyberConnect)
-            ? {
-                  link: resolveSocialAddressLink(SocialAddressType.CyberConnect),
-                  type: SocialAddressType.CyberConnect,
-                  icon: <Icons.CyberConnect className={normalClasses} size={18} style={iconStyle} />,
-              }
-            : null,
+        fromNextId ?
+            {
+                link: resolveSocialAddressLink(SocialAddressType.NEXT_ID),
+                platform: AddressPlatform.NextId,
+                icon: <Icons.NextIDMini className={normalClasses} style={{ ...iconStyle, width: 32, height: 18 }} />,
+            }
+        :   null,
+        fromTwitter ?
+            {
+                platform: AddressPlatform.Twitter,
+                type: fromTwitter,
+                icon: <Icons.TwitterXRound className={roundedClasses} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.CyberConnect) ?
+            {
+                link: resolveSocialAddressLink(SocialAddressType.CyberConnect),
+                type: SocialAddressType.CyberConnect,
+                icon: <Icons.CyberConnect className={normalClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
 
-        supportedAddressTypes.includes(SocialAddressType.Leaderboard)
-            ? {
-                  link: resolveSocialAddressLink(SocialAddressType.Leaderboard),
-                  type: SocialAddressType.Leaderboard,
-                  icon: <Icons.Leaderboard className={normalClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.Sybil)
-            ? {
-                  link: resolveSocialAddressLink(SocialAddressType.Sybil),
-                  type: SocialAddressType.Sybil,
-                  icon: <Icons.Sybil className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.Mask)
-            ? {
-                  type: SocialAddressType.Mask,
-                  icon: <Icons.MaskBlue className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.Firefly)
-            ? {
-                  type: SocialAddressType.Firefly,
-                  icon: <Icons.Firefly className={normalClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.OpenSea)
-            ? {
-                  type: SocialAddressType.OpenSea,
-                  icon: <Icons.OpenSea className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.RSS3)
-            ? {
-                  type: SocialAddressType.RSS3,
-                  icon: <Icons.RSS3 className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.SPACE_ID)
-            ? {
-                  type: SocialAddressType.SPACE_ID,
-                  icon: <Icons.SpaceId className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
-        supportedAddressTypes.includes(SocialAddressType.Lens)
-            ? {
-                  type: SocialAddressType.Lens,
-                  icon: <Icons.Lens className={roundedClasses} size={18} style={iconStyle} />,
-              }
-            : null,
+        supportedAddressTypes.includes(SocialAddressType.Leaderboard) ?
+            {
+                link: resolveSocialAddressLink(SocialAddressType.Leaderboard),
+                type: SocialAddressType.Leaderboard,
+                icon: <Icons.Leaderboard className={normalClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.Sybil) ?
+            {
+                link: resolveSocialAddressLink(SocialAddressType.Sybil),
+                type: SocialAddressType.Sybil,
+                icon: <Icons.Sybil className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.Mask) ?
+            {
+                type: SocialAddressType.Mask,
+                icon: <Icons.MaskBlue className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.Firefly) ?
+            {
+                type: SocialAddressType.Firefly,
+                icon: <Icons.Firefly className={normalClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.OpenSea) ?
+            {
+                type: SocialAddressType.OpenSea,
+                icon: <Icons.OpenSea className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.RSS3) ?
+            {
+                type: SocialAddressType.RSS3,
+                icon: <Icons.RSS3 className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.SPACE_ID) ?
+            {
+                type: SocialAddressType.SPACE_ID,
+                icon: <Icons.SpaceId className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
+        supportedAddressTypes.includes(SocialAddressType.Lens) ?
+            {
+                type: SocialAddressType.Lens,
+                icon: <Icons.Lens className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
     ])
 
     if (configs.length <= 3) {
@@ -215,19 +216,19 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
     }
     const sources = compact(
         configs.flatMap((config, i) => {
-            return config.type && config.link
-                ? [
-                      <Link
-                          className={classes.link}
-                          href={config.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          key={config.type}>
-                          {config.type}
-                      </Link>,
-                      i === configs.length ? '' : ', ',
-                  ]
-                : null
+            return config.type && config.link ?
+                    [
+                        <Link
+                            className={classes.link}
+                            href={config.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            key={config.type}>
+                            {config.type}
+                        </Link>,
+                        i === configs.length ? '' : ', ',
+                    ]
+                :   null
         }),
     )
     return (
@@ -236,7 +237,10 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
             title={
                 <Typography fontSize={14} lineHeight="18px" component="div">
                     {t.account_icon_merged_tooltip({
-                        context: fromTwitter ? AddressPlatform.Twitter : fromNextId ? AddressPlatform.NextId : 'normal',
+                        context:
+                            fromTwitter ? AddressPlatform.Twitter
+                            : fromNextId ? AddressPlatform.NextId
+                            : 'normal',
                     })}
                     <>{sources}</>
                 </Typography>

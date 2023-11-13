@@ -13,7 +13,12 @@ export function hex2buffer(hexString: string, padded?: boolean) {
     // BN padding
     if (padded) {
         let len = res.length
-        len = len > 32 ? (len > 48 ? 66 : 48) : 32
+        len =
+            len > 32 ?
+                len > 48 ?
+                    66
+                :   48
+            :   32
         if (res.length < len) {
             res = concat(new Uint8Array(len - res.length), res)
         }

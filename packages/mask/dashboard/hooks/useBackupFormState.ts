@@ -41,14 +41,14 @@ export function useBackupFormState() {
                     .refine((password) => password === user.backupPassword, t.incorrect_password())
                     .refine((password) => passwordRegexp.test(password), t.incorrect_password()),
                 paymentPassword:
-                    backupWallets && hasPassword
-                        ? z
-                              .string({
-                                  required_error: t.incorrect_password(),
-                              })
-                              .min(6, t.incorrect_password())
-                              .max(20, t.incorrect_password())
-                        : z.string().optional(),
+                    backupWallets && hasPassword ?
+                        z
+                            .string({
+                                required_error: t.incorrect_password(),
+                            })
+                            .min(6, t.incorrect_password())
+                            .max(20, t.incorrect_password())
+                    :   z.string().optional(),
             }),
         ),
     })

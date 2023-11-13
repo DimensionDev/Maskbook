@@ -177,14 +177,14 @@ const Interaction = memo(function Interaction() {
 
                 params = compact(
                     currentRequest.request.arguments.params.map((x) =>
-                        x === 'latest'
-                            ? chainId !== ChainId.Celo
-                                ? x
-                                : undefined
-                            : {
-                                  ...x,
-                                  data: result,
-                              },
+                        x === 'latest' ?
+                            chainId !== ChainId.Celo ?
+                                x
+                            :   undefined
+                        :   {
+                                ...x,
+                                data: result,
+                            },
                     ),
                 )
             }
@@ -199,12 +199,12 @@ const Interaction = memo(function Interaction() {
 
                         return {
                             ...x,
-                            ...(gasConfig
-                                ? mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
-                                      if (key === 'gasCurrency' || !value) return
-                                      return web3_utils.toHex(value)
-                                  })
-                                : {}),
+                            ...(gasConfig ?
+                                mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                    if (key === 'gasCurrency' || !value) return
+                                    return web3_utils.toHex(value)
+                                })
+                            :   {}),
                             gas: web3_utils.toHex(addGasMargin(gasConfig?.gas ?? x.gas).toString()),
                             chainId: web3_utils.toHex(x.chainId),
                             nonce: web3_utils.toHex(x.nonce),
@@ -344,7 +344,7 @@ const Interaction = memo(function Interaction() {
                 overflow="auto"
                 data-hide-scrollbar>
                 {content}
-                {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ? (
+                {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ?
                     <Box
                         display="flex"
                         justifyContent="center"
@@ -361,13 +361,13 @@ const Interaction = memo(function Interaction() {
                             className={cx(classes.arrowIcon, expand ? classes.expand : undefined)}
                         />
                     </Box>
-                ) : null}
+                :   null}
 
-                {expand ? (
+                {expand ?
                     <Box
                         className={classes.transactionDetail}
                         style={{ marginBottom: expand && messages.length <= 1 ? 0 : 16 }}>
-                        {transaction?.formattedTransaction?.popup?.spender && approveAmount ? (
+                        {transaction?.formattedTransaction?.popup?.spender && approveAmount ?
                             <>
                                 <Box display="flex" alignItems="center" columnGap={1.25}>
                                     <Typography className={classes.itemTitle}>
@@ -384,27 +384,27 @@ const Interaction = memo(function Interaction() {
                                     </Typography>
                                 </Box>
                             </>
-                        ) : null}
+                        :   null}
                         <Box display="flex" columnGap={0.5} alignItems="center">
                             <Icons.Documents className={classes.document} size={16} />
                             <Typography className={classes.text}>{t.data()}</Typography>
                         </Box>
-                        {transaction?.formattedTransaction?.popup?.method ? (
+                        {transaction?.formattedTransaction?.popup?.method ?
                             <Typography className={classes.text}>
                                 {t.popups_wallet_transaction_function_name({
                                     name: transaction?.formattedTransaction.popup.method,
                                 })}
                             </Typography>
-                        ) : null}
-                        {transaction?.formattedTransaction?._tx.data ? (
+                        :   null}
+                        {transaction?.formattedTransaction?._tx.data ?
                             <Typography className={classes.data}>
                                 {transaction.formattedTransaction._tx.data}
                             </Typography>
-                        ) : null}
+                        :   null}
                     </Box>
-                ) : null}
+                :   null}
 
-                {messages.length > 1 ? (
+                {messages.length > 1 ?
                     <Box display="flex" flexDirection="column" alignItems="center" marginTop="auto" marginBottom={9}>
                         <Box display="flex" alignItems="center">
                             <Icons.ArrowDrop
@@ -442,7 +442,7 @@ const Interaction = memo(function Interaction() {
                             {t.popups_wallet_reject_all_requests({ total: String(messages.length) })}
                         </ActionButton>
                     </Box>
-                ) : null}
+                :   null}
             </Box>
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">

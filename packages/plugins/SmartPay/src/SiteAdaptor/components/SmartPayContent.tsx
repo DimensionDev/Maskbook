@@ -256,9 +256,9 @@ export const SmartPayContent = memo(() => {
                             <CopyButton size={14} text={contractAccount.address} />
                             <Link
                                 href={
-                                    chainId
-                                        ? EVMUtils.explorerResolver.addressLink(chainId, contractAccount.address)
-                                        : undefined
+                                    chainId ?
+                                        EVMUtils.explorerResolver.addressLink(chainId, contractAccount.address)
+                                    :   undefined
                                 }
                                 target="_blank"
                                 title="View on Explorer"
@@ -357,9 +357,9 @@ export const SmartPayContent = memo(() => {
                                 <CopyButton size={14} text={account} />
                                 <Link
                                     href={
-                                        account && chainId
-                                            ? EVMUtils.explorerResolver.addressLink(chainId, account)
-                                            : ''
+                                        account && chainId ?
+                                            EVMUtils.explorerResolver.addressLink(chainId, account)
+                                        :   ''
                                     }
                                     target="_blank"
                                     title="View on Explorer"
@@ -376,9 +376,9 @@ export const SmartPayContent = memo(() => {
                     </Typography>
                     <Box display="flex" columnGap={1} position="absolute" top={16} right={16}>
                         <Icons.KeySquare onClick={(event) => setManageAnchorEl(event.currentTarget)} size={24} />
-                        {value > 0 ? (
+                        {value > 0 ?
                             <Icons.Add onClick={(event) => setAddAnchorEl(event.currentTarget)} size={24} />
-                        ) : null}
+                        :   null}
                         <AddSmartPayPopover
                             open={!!addAnchorEl}
                             anchorEl={addAnchorEl}
@@ -418,12 +418,12 @@ export const SmartPayContent = memo(() => {
                                     <Box>
                                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
                                             {token.symbol}
-                                            {isSameAddress(token.address, maskAddress) ? (
+                                            {isSameAddress(token.address, maskAddress) ?
                                                 <ShadowRootTooltip
                                                     title={
-                                                        availableBalanceTooLow
-                                                            ? t.allow_mask_as_gas_token_description()
-                                                            : t.remain_mask_tips()
+                                                        availableBalanceTooLow ?
+                                                            t.allow_mask_as_gas_token_description()
+                                                        :   t.remain_mask_tips()
                                                     }
                                                     placement="top">
                                                     <Typography
@@ -437,26 +437,24 @@ export const SmartPayContent = memo(() => {
                                                         className={classes.maskGasTip}
                                                         display="inline-flex"
                                                         alignItems="center">
-                                                        {availableBalanceTooLow ? (
+                                                        {availableBalanceTooLow ?
                                                             <>
                                                                 (
                                                                 <Icons.GasStation size={18} sx={{ marginRight: 0.5 }} />
                                                                 {t.allow_mask_as_gas_token()})
                                                             </>
-                                                        ) : (
-                                                            <Icons.GasStation size={18} />
-                                                        )}
+                                                        :   <Icons.GasStation size={18} />}
                                                     </Typography>
                                                 </ShadowRootTooltip>
-                                            ) : null}
+                                            :   null}
                                         </Typography>
                                         <Typography className={classes.name}>
                                             {token.name}
                                             <Link
                                                 href={
-                                                    chainId
-                                                        ? EVMUtils.explorerResolver.addressLink(chainId, token.address)
-                                                        : undefined
+                                                    chainId ?
+                                                        EVMUtils.explorerResolver.addressLink(chainId, token.address)
+                                                    :   undefined
                                                 }
                                                 target="_blank"
                                                 title="View on Explorer"

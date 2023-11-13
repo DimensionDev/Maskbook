@@ -20,14 +20,14 @@ export class FlowIdentityService extends IdentityServiceState<ChainId> {
         const address = getFlowAddress(bio)
 
         return compact<SocialAddress<ChainId>>([
-            address
-                ? {
-                      pluginID: NetworkPluginID.PLUGIN_FLOW,
-                      type: SocialAddressType.Address,
-                      label: address,
-                      address,
-                  }
-                : null,
+            address ?
+                {
+                    pluginID: NetworkPluginID.PLUGIN_FLOW,
+                    type: SocialAddressType.Address,
+                    label: address,
+                    address,
+                }
+            :   null,
         ])
     }
 }

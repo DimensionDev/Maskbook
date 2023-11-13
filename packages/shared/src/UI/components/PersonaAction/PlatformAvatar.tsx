@@ -48,9 +48,10 @@ export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatar
     )
 
     // #region icon names
-    const names = inverse
-        ? [cx(classes.badgeIcon, classes.providerIcon), cx(classes.mainIcon, classes.networkIcon)]
-        : [cx(classes.mainIcon, classes.networkIcon), cx(classes.badgeIcon, classes.providerIcon)]
+    const names =
+        inverse ?
+            [cx(classes.badgeIcon, classes.providerIcon), cx(classes.mainIcon, classes.networkIcon)]
+        :   [cx(classes.mainIcon, classes.networkIcon), cx(classes.badgeIcon, classes.providerIcon)]
     // #endregion
     return (
         <div
@@ -59,7 +60,7 @@ export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatar
                 height: size,
                 width: size,
             }}>
-            {networkIcon ? (
+            {networkIcon ?
                 <PersonaImageIcon
                     classes={{
                         icon: names[0],
@@ -67,16 +68,15 @@ export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatar
                     size={size}
                     icon={networkIcon}
                 />
-            ) : (
-                <Icons.Masks
+            :   <Icons.Masks
                     size={size}
                     sx={{
                         display: 'inline-block',
                         borderRadius: '50%',
                     }}
                 />
-            )}
-            {providerIcon ? (
+            }
+            {providerIcon ?
                 <PersonaImageIcon
                     classes={{
                         icon: names[1],
@@ -84,7 +84,7 @@ export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatar
                     size={badgeSize}
                     icon={providerIcon}
                 />
-            ) : null}
+            :   null}
         </div>
     )
 })

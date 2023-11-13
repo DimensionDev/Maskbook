@@ -59,22 +59,22 @@ function MaskTheme(mode: PaletteMode) {
                 },
             },
         },
-        mode === 'dark'
-            ? {
-                  palette: {
-                      mode: 'dark',
-                      background: {
-                          paper: grey[900],
-                      },
-                  },
-                  components: {
-                      MuiPaper: {
-                          // https://github.com/mui-org/material-ui/pull/25522
-                          styleOverrides: { root: { backgroundImage: 'unset' } },
-                      },
-                  },
-              }
-            : {},
+        mode === 'dark' ?
+            {
+                palette: {
+                    mode: 'dark',
+                    background: {
+                        paper: grey[900],
+                    },
+                },
+                components: {
+                    MuiPaper: {
+                        // https://github.com/mui-org/material-ui/pull/25522
+                        styleOverrides: { root: { backgroundImage: 'unset' } },
+                    },
+                },
+            }
+        :   {},
         ...Object.values(Components).map(applyColors),
     ) as ThemeOptions
 

@@ -37,13 +37,14 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         queryKey: ['token-icon', chainId, address, isNFT],
         enabled: !logoURL,
         queryFn: async () => {
-            const logoURLs = isNFT
-                ? (() => {
-                      throw new Error(
-                          "Unreachable: it used to call Hub.getNonFungibleTokenIconURLs, but it's default implementation is throw an error, and not override by any subclass.",
-                      )
-                  })()
-                : await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
+            const logoURLs =
+                isNFT ?
+                    (() => {
+                        throw new Error(
+                            "Unreachable: it used to call Hub.getNonFungibleTokenIconURLs, but it's default implementation is throw an error, and not override by any subclass.",
+                        )
+                    })()
+                :   await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
             return first(logoURLs)
         },
     })

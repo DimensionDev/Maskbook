@@ -129,9 +129,9 @@ const useStyles = makeStyles()((theme) => {
             maxWidth: 400,
             background: theme.palette.maskColor.bottom,
             boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+                theme.palette.mode === 'dark' ?
+                    '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
         },
     }
 })

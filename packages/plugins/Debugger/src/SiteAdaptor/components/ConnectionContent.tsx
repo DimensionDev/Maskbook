@@ -294,7 +294,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             </Button>
                         </TableCell>
                     </TableRow>
-                    {customNetwork ? (
+                    {customNetwork ?
                         <>
                             <TableRow>
                                 <TableCell>
@@ -333,7 +333,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 </TableCell>
                             </TableRow>
                         </>
-                    ) : null}
+                    :   null}
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">

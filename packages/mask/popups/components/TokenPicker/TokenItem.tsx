@@ -178,7 +178,9 @@ export const TokenItem = memo(function TokenItem({
                                 <Icons.LinkOut size={18} />
                             </Link>
                         </Typography>
-                        {asset.isCustomToken ? <Typography>{t.added_by_user()}</Typography> : null}
+                        {asset.isCustomToken ?
+                            <Typography>{t.added_by_user()}</Typography>
+                        :   null}
                     </>
                 }>
                 <Typography className={classes.text}>{asset.symbol}</Typography>

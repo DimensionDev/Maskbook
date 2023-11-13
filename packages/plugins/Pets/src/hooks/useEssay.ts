@@ -30,7 +30,10 @@ export function useDefaultEssay(user: User) {
             const isProfile = user.userId === profileUser?.userId
             const isMASK = user.userId === MASK_TWITTER
             return {
-                image: isMASK ? Punk3D.url : isProfile ? PunkIcon : '',
+                image:
+                    isMASK ? Punk3D.url
+                    : isProfile ? PunkIcon
+                    : '',
                 word: t.pet_setting_tooltip({ context: isMASK ? 'punk' : 'default' }),
                 type: ImageType.NORMAL,
                 contract: '',

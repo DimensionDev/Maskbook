@@ -877,9 +877,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     [`& .${popoverClasses.paper}`]: {
                         borderRadius: 16,
                         boxShadow:
-                            mode === 'dark'
-                                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+                            mode === 'dark' ?
+                                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
                         backgroundColor: colors.maskColor.bottom,
                         backgroundImage: 'unset',
                         [`& .${menuClasses.list}`]: {

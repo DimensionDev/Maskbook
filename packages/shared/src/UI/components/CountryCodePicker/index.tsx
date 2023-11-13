@@ -16,9 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 316,
         background: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
     },
     list: {
         maxHeight: 240,
@@ -110,7 +110,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
                 sx={{ marginBottom: 0.5 }}
             />
-            {regions.length ? (
+            {regions.length ?
                 <List className={classes.list} data-hide-scrollbar>
                     {regions.map((data) => {
                         const selected = data.dialing_code === code
@@ -138,9 +138,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                         )
                     })}
                 </List>
-            ) : (
-                <EmptyStatus style={{ height: 246 }}>{t.no_results()}</EmptyStatus>
-            )}
+            :   <EmptyStatus style={{ height: 246 }}>{t.no_results()}</EmptyStatus>}
         </Popover>
     )
 })

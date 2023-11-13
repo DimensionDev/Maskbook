@@ -68,11 +68,9 @@ const WalletSettings = memo(() => {
         <div className={classes.content}>
             <Box className={cx(classes.item, classes.primaryItem)} onClick={handleSwitchWallet}>
                 <Box className={classes.primaryItemBox}>
-                    {wallet.owner ? (
+                    {wallet.owner ?
                         <Icons.SmartPay size={24} />
-                    ) : (
-                        <Icons.MaskBlue size={24} className={classes.maskBlue} />
-                    )}
+                    :   <Icons.MaskBlue size={24} className={classes.maskBlue} />}
                     <div className={classes.walletInfo}>
                         <Typography className={classes.primaryItemText}>{wallet.name}</Typography>
                         <Typography className={classes.primaryItemSecondText}>{wallet.address}</Typography>
@@ -81,7 +79,9 @@ const WalletSettings = memo(() => {
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list} data-hide-scrollbar>
-                {wallet.owner ? <ChangeOwner /> : null}
+                {wallet.owner ?
+                    <ChangeOwner />
+                :   null}
                 <Rename />
                 <Contacts />
                 <HidingScamTx />
@@ -102,9 +102,8 @@ const WalletSettings = memo(() => {
                         fullWidth
                         disabled={isTheFirstWallet}
                         onClick={async () => {
-                            const ownedWallets = !wallet?.address
-                                ? []
-                                : allWallets.filter((x) => isSameAddress(x.owner, wallet.address))
+                            const ownedWallets =
+                                !wallet?.address ? [] : allWallets.filter((x) => isSameAddress(x.owner, wallet.address))
                             if (ownedWallets.length) {
                                 const currentWallet = formatEthereumAddress(wallet.address, 4)
                                 const other_wallets = ownedWallets

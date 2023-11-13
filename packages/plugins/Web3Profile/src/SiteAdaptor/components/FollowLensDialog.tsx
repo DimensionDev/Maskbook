@@ -294,12 +294,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             title={t.lens()}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
-                {!value && (loading || getBalanceLoading) ? (
+                {!value && (loading || getBalanceLoading) ?
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
                         <CircularProgress />
                     </Box>
-                ) : (
-                    <Box className={classes.container}>
+                :   <Box className={classes.container}>
                         <Avatar
                             src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
@@ -317,7 +316,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             />
                         </Typography>
                         <Box className={classes.actions}>
-                            {isSelf ? (
+                            {isSelf ?
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
@@ -328,8 +327,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     sx={{ cursor: 'pointer' }}>
                                     {t.edit_profile_in_lenster()}
                                 </Button>
-                            ) : (
-                                <>
+                            :   <>
                                     <EthereumERC20TokenApprovedBoundary
                                         spender={value?.profile.followModule?.contractAddress}
                                         amount={approved.amount}
@@ -382,7 +380,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                         {t.lenster()}
                                     </Button>
                                 </>
-                            )}
+                            }
                         </Box>
                         <Box className={classes.profile}>
                             <WalletConnectedBoundary
@@ -390,21 +388,23 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
-                                {tips ? <Typography className={classes.tips}>{tips}</Typography> : null}
+                                {tips ?
+                                    <Typography className={classes.tips}>{tips}</Typography>
+                                :   null}
                                 <HandlerDescription
                                     profile={
-                                        defaultProfile
-                                            ? {
-                                                  avatar: defaultProfile.picture?.original?.url,
-                                                  handle: defaultProfile.handle,
-                                              }
-                                            : undefined
+                                        defaultProfile ?
+                                            {
+                                                avatar: defaultProfile.picture?.original?.url,
+                                                handle: defaultProfile.handle,
+                                            }
+                                        :   undefined
                                     }
                                 />
                             </WalletConnectedBoundary>
                         </Box>
                     </Box>
-                )}
+                }
                 <canvas
                     className={classes.canvas}
                     id="follow-button-confetto"

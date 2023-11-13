@@ -189,57 +189,55 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     </Typography>
                 </Box>
             )
-        return !loading && previewInfo ? (
-            <Box display="flex" flexDirection="column">
-                <PersonasBackupPreview info={previewInfo} />
+        return !loading && previewInfo ?
+                <Box display="flex" flexDirection="column">
+                    <PersonasBackupPreview info={previewInfo} />
 
-                <Controller
-                    control={control}
-                    render={({ field }) => (
-                        <PasswordField
-                            {...field}
-                            onFocus={() => clearErrors('backupPassword')}
-                            sx={{ mb: 2 }}
-                            placeholder={t.settings_label_backup_password()}
-                            error={!!errors.backupPassword?.message}
-                            helperText={errors.backupPassword?.message}
-                        />
-                    )}
-                    name="backupPassword"
-                />
-
-                <WalletsBackupPreview
-                    wallets={previewInfo.wallets}
-                    selectable
-                    selected={backupWallets}
-                    onChange={setBackupWallets}
-                />
-
-                {backupWallets && hasPassword ? (
                     <Controller
                         control={control}
                         render={({ field }) => (
                             <PasswordField
                                 {...field}
-                                onFocus={() => clearErrors('paymentPassword')}
+                                onFocus={() => clearErrors('backupPassword')}
                                 sx={{ mb: 2 }}
-                                placeholder={t.sign_in_account_local_backup_payment_password()}
-                                error={!!errors.paymentPassword?.message}
-                                helperText={errors.paymentPassword?.message}
+                                placeholder={t.settings_label_backup_password()}
+                                error={!!errors.backupPassword?.message}
+                                helperText={errors.backupPassword?.message}
                             />
                         )}
-                        name="paymentPassword"
+                        name="backupPassword"
                     />
-                ) : null}
-                {isOverwrite ? (
-                    <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
-                        {t.cloud_backup_overwrite_tips()}
-                    </Typography>
-                ) : null}
-            </Box>
-        ) : (
-            <LoadingStatus minHeight={320} />
-        )
+
+                    <WalletsBackupPreview
+                        wallets={previewInfo.wallets}
+                        selectable
+                        selected={backupWallets}
+                        onChange={setBackupWallets}
+                    />
+
+                    {backupWallets && hasPassword ?
+                        <Controller
+                            control={control}
+                            render={({ field }) => (
+                                <PasswordField
+                                    {...field}
+                                    onFocus={() => clearErrors('paymentPassword')}
+                                    sx={{ mb: 2 }}
+                                    placeholder={t.sign_in_account_local_backup_payment_password()}
+                                    error={!!errors.paymentPassword?.message}
+                                    helperText={errors.paymentPassword?.message}
+                                />
+                            )}
+                            name="paymentPassword"
+                        />
+                    :   null}
+                    {isOverwrite ?
+                        <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
+                            {t.cloud_backup_overwrite_tips()}
+                        </Typography>
+                    :   null}
+                </Box>
+            :   <LoadingStatus minHeight={320} />
     }, [
         loading,
         previewInfo,

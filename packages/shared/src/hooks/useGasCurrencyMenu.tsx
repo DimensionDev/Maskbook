@@ -69,7 +69,7 @@ export function useGasCurrencyMenu(
 
     return useMenuConfig(
         compact([
-            nativeToken ? (
+            nativeToken ?
                 <MenuItem className={classes.item} disableRipple onClick={() => handleChange(nativeToken.address)}>
                     <Typography className={classes.token} component="div">
                         <TokenIcon {...pick(nativeToken, 'chainId', 'address', 'symbol')} size={30} />
@@ -81,8 +81,8 @@ export function useGasCurrencyMenu(
                         className={classes.radio}
                     />
                 </MenuItem>
-            ) : null,
-            maskToken ? (
+            :   null,
+            maskToken ?
                 <MenuItem
                     className={classes.item}
                     disableRipple
@@ -91,19 +91,18 @@ export function useGasCurrencyMenu(
                         <TokenIcon {...pick(maskToken, 'chainId', 'address', 'symbol')} size={30} />
                         {maskToken.symbol}
                     </Typography>
-                    {availableBalanceTooLow ? (
+                    {availableBalanceTooLow ?
                         <Button variant="roundedContained" onClick={handleUnlock} size="small">
                             {sharedI18N.unlock()}
                         </Button>
-                    ) : (
-                        <RadioIndicator
+                    :   <RadioIndicator
                             size={20}
                             className={classes.radio}
                             checked={isSameAddress(selected, maskAddress)}
                         />
-                    )}
+                    }
                 </MenuItem>
-            ) : null,
+            :   null,
         ]),
         {
             classes: {

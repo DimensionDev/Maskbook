@@ -23,11 +23,12 @@ export function useBuildInfo() {
 }
 export function useBuildInfoMarkdown() {
     const env = useBuildInfo()
-    const gitInfo = env.COMMIT_HASH
-        ? `
+    const gitInfo =
+        env.COMMIT_HASH ?
+            `
 ## Git (${env.DIRTY ? '*' : ''}):
 ${env.COMMIT_HASH} (${env.BRANCH_NAME})`
-        : ''
+        :   ''
 
     const buildInfoMarkdown =
         `## Build info

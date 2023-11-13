@@ -112,11 +112,9 @@ const LensListItem = memo<LensListItemProps>(({ account }) => {
 
     return (
         <ListItem className={classes.listItem} key={account.handle}>
-            {profileUri.length ? (
+            {profileUri.length ?
                 <Image size={20} src={profileUri[0]} className={classes.avatar} fallback={lensIcon} />
-            ) : (
-                lensIcon
-            )}
+            :   lensIcon}
             <Typography className={classes.name}>{account.name || account.handle}</Typography>
             <ActionButton
                 variant="text"
@@ -129,11 +127,11 @@ const LensListItem = memo<LensListItemProps>(({ account }) => {
                         handle: account.handle,
                     })
                 }}>
-                {isSameAddress(wallet, value?.ownedBy)
-                    ? t.view()
-                    : value?.isFollowing
-                      ? t.following_action()
-                      : t.follow()}
+                {isSameAddress(wallet, value?.ownedBy) ?
+                    t.view()
+                : value?.isFollowing ?
+                    t.following_action()
+                :   t.follow()}
             </ActionButton>
         </ListItem>
     )

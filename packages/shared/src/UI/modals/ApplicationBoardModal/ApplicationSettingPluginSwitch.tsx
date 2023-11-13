@@ -12,14 +12,14 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         borderRadius: 12,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            theme.palette.mode === 'dark' ?
+                '0px 0px 20px rgba(255, 255, 255, 0.12)'
+            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
         '&:hover': {
             boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 0px 20px rgba(255, 255, 255, 0.06)'
-                    : '0px 0px 20px rgba(0, 0, 0, 0.1)',
+                theme.palette.mode === 'dark' ?
+                    '0px 0px 20px rgba(255, 255, 255, 0.06)'
+                :   '0px 0px 20px rgba(0, 0, 0, 0.1)',
         },
         '&:hover .MuiAvatar-root': {
             background: theme.palette.background.paper,
@@ -144,14 +144,14 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                         <Typography className={classes.name}>
                                             <PluginTransFieldRender field={x.entry.name} pluginID={x.pluginID} />
                                         </Typography>
-                                        {x.entry.tutorialLink ? (
+                                        {x.entry.tutorialLink ?
                                             <Box className={classes.settings}>
                                                 <Icons.Tutorial
                                                     size={22}
                                                     onClick={() => openWindow(x.entry.tutorialLink)}
                                                 />
                                             </Box>
-                                        ) : null}
+                                        :   null}
                                     </div>
                                     <Typography className={classes.desc}>
                                         <PluginTransFieldRender field={x.entry.description} pluginID={x.pluginID} />
@@ -165,7 +165,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                 />
                             </Stack>
                         </Stack>
-                        {x.entry.features?.length ? (
+                        {x.entry.features?.length ?
                             <Stack direction="row" mt={1.25}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
@@ -181,7 +181,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                                     ))}
                                 </Stack>
                             </Stack>
-                        ) : null}
+                        :   null}
                     </Stack>
                 </ListItem>
             ))}

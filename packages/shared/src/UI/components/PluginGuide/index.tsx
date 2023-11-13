@@ -175,7 +175,10 @@ export function PluginGuide({
                                         onClick={(e) => e.stopPropagation()}
                                         className={cx(
                                             classes.card,
-                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                            arrow ?
+                                                bottomAvailable ? 'arrow-top'
+                                                :   'arrow-bottom'
+                                            :   '',
                                         )}
                                         style={{
                                             left: clientRect.width < 50 ? -clientRect.width / 2 + 5 : 0,

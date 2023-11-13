@@ -54,9 +54,8 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
 
         // #region // ! decrypt by local key. This only happens in v38 or older.
         if (options.message.version <= -38) {
-            const hasAuthorLocalKey = author.isSome()
-                ? io.hasLocalKeyOf(author.value).catch(() => false)
-                : Promise.resolve(false)
+            const hasAuthorLocalKey =
+                author.isSome() ? io.hasLocalKeyOf(author.value).catch(() => false) : Promise.resolve(false)
             if (ownersAESKeyEncrypted.isOk()) {
                 try {
                     const aes_raw = new Uint8Array(
@@ -198,12 +197,12 @@ async function* decryptByECDH(
         // TODO: how to deal with signature?
         // TODO: what to do if provider throws?
         const derivedKeys =
-            type === 'static-v38-or-older'
-                ? await derive((_ as DecryptStaticECDH_PostKey).postKeyIV || iv)
-                : await derive((_ as DecryptEphemeralECDH_PostKey).ephemeralPublicKey).then((aesArr) =>
-                      // TODO: we reuse iv in ephemeral mode, is that safe?
-                      aesArr.map((aes) => [aes, iv] as const),
-                  )
+            type === 'static-v38-or-older' ?
+                await derive((_ as DecryptStaticECDH_PostKey).postKeyIV || iv)
+            :   await derive((_ as DecryptEphemeralECDH_PostKey).ephemeralPublicKey).then((aesArr) =>
+                    // TODO: we reuse iv in ephemeral mode, is that safe?
+                    aesArr.map((aes) => [aes, iv] as const),
+                )
         for (const [derivedKey, derivedKeyNewIV] of derivedKeys) {
             const possiblePostKey = await andThenAsync(
                 decryptWithAES(derivedKey, derivedKeyNewIV, encryptedPostKey),

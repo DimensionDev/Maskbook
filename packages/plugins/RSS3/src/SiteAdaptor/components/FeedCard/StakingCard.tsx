@@ -84,7 +84,7 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image
                         classes={{ container: classes.tokenIcon }}
@@ -99,7 +99,7 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
                         })}
                     </Typography>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

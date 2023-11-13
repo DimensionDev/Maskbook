@@ -17,19 +17,17 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
     switch (profile.platform) {
         case NextIDPlatform.Twitter:
         case EnhanceableSite.Twitter:
-            return detail ? (
-                <DetailSocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Twitter}
-                />
-            ) : (
-                <SocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Twitter}
-                />
-            )
+            return detail ?
+                    <DetailSocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Twitter}
+                    />
+                :   <SocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Twitter}
+                    />
         case NextIDPlatform.ENS:
         case NextIDPlatform.Ethereum:
         case NextIDPlatform.GitHub:
@@ -39,14 +37,12 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
         case NextIDPlatform.Farcaster:
         case NextIDPlatform.Keybase:
             const _userID =
-                profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase
-                    ? profile.name
-                    : profile.identity
-            return detail ? (
-                <DetailAccount userId={_userID} platform={profile.platform} />
-            ) : (
-                <Account userId={_userID} platform={profile.platform} />
-            )
+                profile.platform === NextIDPlatform.ENS || profile.platform === NextIDPlatform.Keybase ?
+                    profile.name
+                :   profile.identity
+            return detail ?
+                    <DetailAccount userId={_userID} platform={profile.platform} />
+                :   <Account userId={_userID} platform={profile.platform} />
         case NextIDPlatform.CyberConnect:
         case NextIDPlatform.Bit:
         case NextIDPlatform.SYBIL:
@@ -56,33 +52,29 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
         case NextIDPlatform.NextID:
             return null
         case EnhanceableSite.Facebook:
-            return detail ? (
-                <DetailSocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Facebook}
-                />
-            ) : (
-                <SocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Facebook}
-                />
-            )
+            return detail ?
+                    <DetailSocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Facebook}
+                    />
+                :   <SocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Facebook}
+                    />
         case EnhanceableSite.Instagram:
-            return detail ? (
-                <DetailSocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Instagram}
-                />
-            ) : (
-                <SocialAccount
-                    avatar={avatar}
-                    userId={profile.name ?? profile.identity}
-                    site={EnhanceableSite.Instagram}
-                />
-            )
+            return detail ?
+                    <DetailSocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Instagram}
+                    />
+                :   <SocialAccount
+                        avatar={avatar}
+                        userId={profile.name ?? profile.identity}
+                        site={EnhanceableSite.Instagram}
+                    />
         default:
             safeUnreachable(profile.platform)
             return null

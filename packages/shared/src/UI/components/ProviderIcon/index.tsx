@@ -49,9 +49,9 @@ export function ProviderIcon({ icon, name, onClick, iconFilterColor, className, 
                     src={icon}
                     className={classes.icon}
                     style={
-                        iconFilterColor
-                            ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
-                            : {}
+                        iconFilterColor ?
+                            { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
+                        :   {}
                     }
                 />
                 <Typography className={classes.name}>{name}</Typography>

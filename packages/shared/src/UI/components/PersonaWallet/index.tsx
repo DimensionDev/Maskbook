@@ -74,21 +74,19 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
                         {persona?.nickname || name}
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
-                        {persona?.identifier.rawPublicKey ? (
+                        {persona?.identifier.rawPublicKey ?
                             formatPersonaFingerprint(persona?.identifier.rawPublicKey || '')
-                        ) : (
-                            <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />
-                        )}
+                        :   <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />}
                     </Typography>
                 </Stack>
             </Box>
-            {manageWallets.length ? (
+            {manageWallets.length ?
                 <List className={classes.wallets}>
                     {manageWallets.map((wallet, i) => (
                         <WalletItem wallet={wallet} key={i} />
                     ))}
                 </List>
-            ) : null}
+            :   null}
         </>
     )
 }

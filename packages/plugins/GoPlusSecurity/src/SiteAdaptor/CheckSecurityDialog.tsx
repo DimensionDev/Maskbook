@@ -25,9 +25,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     footer: {
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
         padding: '8px',
         justifyContent: 'flex-end',
     },
@@ -80,20 +80,22 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
                         </Box>
                     )}
                     <Stack flex={1}>
-                        {searching || loadingToken ? (
+                        {searching || loadingToken ?
                             <Stack height="100%" justifyContent="center" alignItems="center">
                                 <LoadingBase size={36} />
                             </Stack>
-                        ) : null}
-                        {error && !searching && !loadingToken ? <NotFound /> : null}
-                        {!error && !searching && !loadingToken && value ? (
+                        :   null}
+                        {error && !searching && !loadingToken ?
+                            <NotFound />
+                        :   null}
+                        {!error && !searching && !loadingToken && value ?
                             <SecurityPanel
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
                                 tokenMarketCap={tokenMarketCap}
                             />
-                        ) : null}
+                        :   null}
                         {!error && !searching && !loadingToken && !value && (
                             <Stack height="100%" justifyContent="center" alignItems="center">
                                 <DefaultPlaceholder />

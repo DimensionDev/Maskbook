@@ -92,9 +92,10 @@ export function createNonFungibleAsset(
     const owner = asset.owner
     const schema = asset.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721
     const symbol = asset.contract_name
-    const name = isValidDomain(asset.name)
-        ? asset.name
-        : getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id)
+    const name =
+        isValidDomain(asset.name) ?
+            asset.name
+        :   getAssetFullName(asset.contract_address, contractName, payload?.name || asset.name, asset.token_id)
 
     return {
         id: asset.contract_address,
@@ -108,23 +109,25 @@ export function createNonFungibleAsset(
             address: creator,
             link: urlcat(NFTSCAN_BASE, creator),
         },
-        owner: owner
-            ? {
-                  address: owner,
-                  link: urlcat(NFTSCAN_BASE, owner),
-              }
-            : undefined,
+        owner:
+            owner ?
+                {
+                    address: owner,
+                    link: urlcat(NFTSCAN_BASE, owner),
+                }
+            :   undefined,
         traits: getAssetTraits(asset),
-        priceInToken: asset.latest_trade_price
-            ? {
-                  amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
-                  // FIXME: cannot get payment token
-                  token:
-                      asset.latest_trade_symbol === 'ETH'
-                          ? EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
-                          : WNATIVE[chainId],
-              }
-            : undefined,
+        priceInToken:
+            asset.latest_trade_price ?
+                {
+                    amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
+                    // FIXME: cannot get payment token
+                    token:
+                        asset.latest_trade_symbol === 'ETH' ?
+                            EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                        :   WNATIVE[chainId],
+                }
+            :   undefined,
         metadata: {
             chainId,
             name,
@@ -241,12 +244,13 @@ export function createNonFungibleTokenEvent(
         },
         assetName: transaction.contract_name,
         assetPermalink: createPermalink(chainId, transaction.contract_address, transaction.token_id),
-        priceInToken: paymentToken
-            ? {
-                  amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(),
-                  token: paymentToken,
-              }
-            : undefined,
+        priceInToken:
+            paymentToken ?
+                {
+                    amount: scale10(transaction.trade_price, paymentToken?.decimals).toFixed(),
+                    token: paymentToken,
+                }
+            :   undefined,
         paymentToken,
         source: SourceType.NFTScan,
     }

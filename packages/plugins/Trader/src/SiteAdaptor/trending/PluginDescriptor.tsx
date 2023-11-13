@@ -30,26 +30,24 @@ export function PluginDescriptor({
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                {isCollectionProjectPopper || isTokenTagPopper ? (
+                {isCollectionProjectPopper || isTokenTagPopper ?
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
-                ) : isProfilePage ? (
+                : isProfilePage ?
                     <Icons.Web3Profile className={classes.cardIcon} size={24} />
-                ) : (
-                    <Icons.DecentralizedSearch />
-                )}
+                :   <Icons.DecentralizedSearch />}
                 <Typography
                     fontWeight="bolder"
                     fontSize={16}
                     color={(theme) =>
-                        isCollectionProjectPopper || isTokenTagPopper
-                            ? theme.palette.maskColor.main
-                            : theme.palette.maskColor.dark
+                        isCollectionProjectPopper || isTokenTagPopper ?
+                            theme.palette.maskColor.main
+                        :   theme.palette.maskColor.dark
                     }>
-                    {isTokenTagPopper || isCollectionProjectPopper
-                        ? t.web3_profile_card_name()
-                        : isProfilePage
-                          ? t.profile_card_name()
-                          : t.decentralized_search_name()}
+                    {isTokenTagPopper || isCollectionProjectPopper ?
+                        t.web3_profile_card_name()
+                    : isProfilePage ?
+                        t.profile_card_name()
+                    :   t.decentralized_search_name()}
                 </Typography>
             </Stack>
             <Box>{children}</Box>

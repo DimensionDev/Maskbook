@@ -90,18 +90,17 @@ export function NFTAvatarSettingDialog() {
     return (
         <InjectedDialog keepMounted open={open} onClose={onClose} title={t.set_nft_profile_photo()}>
             <DialogContent style={{ padding: 16 }}>
-                {account ? (
+                {account ?
                     <NFTAvatar
                         onChange={onChange}
                         classes={{
                             root: classes.root,
                         }}
                     />
-                ) : (
-                    <div className={classes.wallet}>
+                :   <div className={classes.wallet}>
                         <Button onClick={onClick}>{t.connect_your_wallet()}</Button>
                     </div>
-                )}
+                }
             </DialogContent>
         </InjectedDialog>
     )

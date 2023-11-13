@@ -45,11 +45,11 @@ export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
                     }}
                 />
             </Typography>
-            {process.env.NODE_ENV === 'development' ? (
+            {process.env.NODE_ENV === 'development' ?
                 <Typography color={theme.palette.maskColor.danger}>
                     Unknown feed. Tag: {feed.tag}, Type: {feed.type}, {feed.actions.length} actions
                 </Typography>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

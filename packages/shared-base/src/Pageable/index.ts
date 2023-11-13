@@ -24,15 +24,15 @@ export function createIndicator(indicator?: PageIndicator, id?: string): PageInd
 
 export function createNextIndicator(indicator?: PageIndicator, id?: string): PageIndicator {
     const index = (indicator?.index ?? 0) + 1
-    return typeof id === 'string'
-        ? {
-              id,
-              index,
-          }
-        : {
-              id: index.toString(),
-              index,
-          }
+    return typeof id === 'string' ?
+            {
+                id,
+                index,
+            }
+        :   {
+                id: index.toString(),
+                index,
+            }
 }
 
 export function createPageable<Item, Indicator = PageIndicator>(

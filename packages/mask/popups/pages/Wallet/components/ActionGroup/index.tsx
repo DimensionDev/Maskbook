@@ -78,18 +78,18 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
         const url = urlcat(
             'popups.html#/',
             PopupRoutes.Swap,
-            isNativeTokenAddress(asset?.address)
-                ? {
-                      chainId: asset?.chainId,
-                  }
-                : {
-                      id: asset?.address,
-                      chainId: asset?.chainId,
-                      name: asset?.name,
-                      symbol: asset?.symbol,
-                      contract_address: asset?.address,
-                      decimals: asset?.decimals,
-                  },
+            isNativeTokenAddress(asset?.address) ?
+                {
+                    chainId: asset?.chainId,
+                }
+            :   {
+                    id: asset?.address,
+                    chainId: asset?.chainId,
+                    name: asset?.name,
+                    symbol: asset?.symbol,
+                    contract_address: asset?.address,
+                    decimals: asset?.decimals,
+                },
         )
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, disabledSwap])

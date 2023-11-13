@@ -35,9 +35,9 @@ export function MainUI() {
                             <Route path={`${ApplicationRoutes.Applications}/*`} element={<ApplicationsPage />} />
                             <Route path={`${ApplicationRoutes.Web3Profile}/*`} element={<Web3ProfilePage />} />
                             <Route path={`${ApplicationRoutes.Compose}/*`} element={<ComposePage />} />
-                            {process.env.NODE_ENV === 'development' ? (
+                            {process.env.NODE_ENV === 'development' ?
                                 <Route path={`${ApplicationRoutes.Debug}/*`} element={<DebugPage />} />
-                            ) : null}
+                            :   null}
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Compose} />} />
                         </Routes>
                     </Suspense>

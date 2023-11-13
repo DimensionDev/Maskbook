@@ -212,9 +212,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
         (asset: Web3Helper.NonFungibleAssetAll) => {
             setSelectedTokenIdsMap((idsMap) => {
                 const ids = idsMap[formatEthereumAddress(address)] ?? []
-                const newIds = ids.includes(asset.tokenId)
-                    ? ids.filter((x) => x !== asset.tokenId)
-                    : [...ids, asset.tokenId]
+                const newIds =
+                    ids.includes(asset.tokenId) ? ids.filter((x) => x !== asset.tokenId) : [...ids, asset.tokenId]
                 return {
                     ...idsMap,
                     [formatEthereumAddress(address)]: newIds,
@@ -246,21 +245,24 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                 error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
                                     spellCheck: false,
-                                    endAdornment: field.value ? (
-                                        <Icons.Close
-                                            size={18}
-                                            onClick={() => resetField('address')}
-                                            color={validationMsgForAddress ? theme.palette.maskColor.danger : undefined}
-                                        />
-                                    ) : null,
+                                    endAdornment:
+                                        field.value ?
+                                            <Icons.Close
+                                                size={18}
+                                                onClick={() => resetField('address')}
+                                                color={
+                                                    validationMsgForAddress ? theme.palette.maskColor.danger : undefined
+                                                }
+                                            />
+                                        :   null,
                                     classes: { input: classes.input },
                                 }}
                             />
-                            {validationMsgForAddress ? (
+                            {validationMsgForAddress ?
                                 <Typography className={classes.error} mt={0.5}>
                                     {validationMsgForAddress}
                                 </Typography>
-                            ) : null}
+                            :   null}
                         </>
                     )
                 }}
@@ -277,42 +279,42 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                 error={!!errors.tokenIds}
                                 InputProps={{
                                     spellCheck: false,
-                                    endAdornment: field.value ? (
-                                        <Icons.Close
-                                            size={18}
-                                            onClick={() => resetField('tokenIds')}
-                                            color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
-                                        />
-                                    ) : null,
+                                    endAdornment:
+                                        field.value ?
+                                            <Icons.Close
+                                                size={18}
+                                                onClick={() => resetField('tokenIds')}
+                                                color={errors.tokenIds ? theme.palette.maskColor.danger : undefined}
+                                            />
+                                        :   null,
                                     classes: { input: classes.input },
                                 }}
                             />
 
-                            {errors.tokenIds ? (
+                            {errors.tokenIds ?
                                 <Typography className={classes.error} mt={0.5}>
                                     {errors.tokenIds?.message}
                                 </Typography>
-                            ) : null}
+                            :   null}
                         </>
                     )}
                 />
             </Box>
-            {someNotMine ? (
+            {someNotMine ?
                 <Typography className={classes.error} mt={1}>
                     {t.collection_not_belong_to_you()}
                 </Typography>
-            ) : null}
+            :   null}
             <div className={classes.main}>
-                {!address || tokenIds.length === 0 ? null : (isLoadingContract || loadingAssets) &&
-                  isValid &&
-                  !allFailed ? (
+                {!address || tokenIds.length === 0 ?
+                    null
+                : (isLoadingContract || loadingAssets) && isValid && !allFailed ?
                     <LoadingStatus flexGrow={1} />
-                ) : isError ? (
+                : isError ?
                     <ReloadStatus flexGrow={1} onRetry={refetch} />
-                ) : noResults ? (
+                : noResults ?
                     <EmptyStatus height="100%">{t.no_results()}</EmptyStatus>
-                ) : (
-                    <Box className={classes.grid}>
+                :   <Box className={classes.grid}>
                         {assetsQueries
                             .filter((x) => x.data)
                             .map(({ data: asset, isLoading }, i) => {
@@ -335,7 +337,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                 )
                             })}
                     </Box>
-                )}
+                }
             </div>
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
                 <ActionButton fullWidth startIcon={<Icons.Avatar size={18} />} disabled={disabled} onClick={handleAdd}>

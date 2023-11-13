@@ -47,7 +47,10 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         manifestFile: opts.manifest ? parseManifest(opts.manifest) : undefined,
         mode,
         outputPath: opts.output,
-        channel: opts.beta ? 'beta' : opts.insider ? 'insider' : 'stable',
+        channel:
+            opts.beta ? 'beta'
+            : opts.insider ? 'insider'
+            : 'stable',
         profiling: opts.profile,
         progress: opts.progress,
         hmr: opts.hmr,

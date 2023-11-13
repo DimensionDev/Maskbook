@@ -108,18 +108,18 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     await Promise.all([tasks, writeInternalList])
     await writeFile(
         join(distPath, './mv3-preload.js'),
-        mv3PreloadList.size
-            ? (function* () {
-                  yield `importScripts(\n`
-                  for (const file of mv3PreloadList) {
-                      if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
-                      yield '    "/sandboxed-modules/'
-                      yield file
-                      yield '", \n'
-                  }
-                  yield `)\nnull`
-              })()
-            : 'null',
+        mv3PreloadList.size ?
+            (function* () {
+                yield `importScripts(\n`
+                for (const file of mv3PreloadList) {
+                    if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
+                    yield '    "/sandboxed-modules/'
+                    yield file
+                    yield '", \n'
+                }
+                yield `)\nnull`
+            })()
+        :   'null',
         { encoding: 'utf-8' },
     )
 }

@@ -65,7 +65,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
                     />
                 )
             })}
-            {profiles && profiles.length > 2 ? (
+            {profiles && profiles.length > 2 ?
                 <ButtonBase
                     className={classes.more}
                     onClick={() => {
@@ -84,7 +84,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
                         {`+${profiles?.length - 2}`}
                     </Typography>
                 </ButtonBase>
-            ) : null}
+            :   null}
         </Box>
     )
 })

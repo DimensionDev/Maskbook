@@ -27,15 +27,13 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     )
     const popperProps = useBoundedPopperProps()
 
-    return hasEllipsis ? (
-        <ShadowRootTooltip
-            title={showDomain ? domain : address}
-            PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces' } }}>
-            {node}
-        </ShadowRootTooltip>
-    ) : (
-        node
-    )
+    return hasEllipsis ?
+            <ShadowRootTooltip
+                title={showDomain ? domain : address}
+                PopperProps={{ ...popperProps, style: { whiteSpace: 'break-spaces' } }}>
+                {node}
+            </ShadowRootTooltip>
+        :   node
 })
 
 ReversedAddress.displayName = 'ReversedAddress'

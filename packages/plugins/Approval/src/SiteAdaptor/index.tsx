@@ -33,17 +33,17 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => {
-                                    EntryComponentProps.onClick
-                                        ? EntryComponentProps.onClick?.(clickHandler, NetworkPluginID.PLUGIN_EVM)
-                                        : clickHandler()
+                                    EntryComponentProps.onClick ?
+                                        EntryComponentProps.onClick?.(clickHandler, NetworkPluginID.PLUGIN_EVM)
+                                    :   clickHandler()
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryAppApprovalOpen)
                                 }}
                             />
-                            {open ? (
+                            {open ?
                                 <Web3ContextProvider value={{ pluginID }}>
                                     <ApprovalDialog open onClose={() => setOpen(false)} />
                                 </Web3ContextProvider>
-                            ) : null}
+                            :   null}
                         </>
                     )
                 },

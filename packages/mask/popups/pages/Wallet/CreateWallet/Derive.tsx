@@ -124,9 +124,9 @@ const DeriveWallet = memo(function DeriveWallet() {
             <List dense className={classes.list} data-hide-scrollbar>
                 {wallets.map((wallet) => (
                     <ListItem key={wallet.address} className={classes.wallet}>
-                        {isSameAddress(wallet.address, currentWallet?.address) ? (
+                        {isSameAddress(wallet.address, currentWallet?.address) ?
                             <Icons.CheckCircle className={classes.indicator} size={20} />
-                        ) : null}
+                        :   null}
                         <Icons.MaskBlue size={24} />
                         <Box flexGrow={1} ml={1}>
                             <Typography className={classes.walletName}>{wallet.name}</Typography>

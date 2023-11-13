@@ -34,8 +34,12 @@ function ContentUI(props: ContentUIProps) {
                 <Box>
                     <main className={classes.content}>{props.content}</main>
                     <div>{props.tip}</div>
-                    {props.footer ? <footer className={classes.footer}>{props.footer}</footer> : null}
-                    {props.dismiss ? <div>{props.dismiss}</div> : null}
+                    {props.footer ?
+                        <footer className={classes.footer}>{props.footer}</footer>
+                    :   null}
+                    {props.dismiss ?
+                        <div>{props.dismiss}</div>
+                    :   null}
                 </Box>
             )
         default:
@@ -107,11 +111,11 @@ export function WizardDialog(props: WizardDialogProps) {
                 </Typography>
             </header>
             <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} dismiss={dismiss} />
-            {onClose ? (
+            {onClose ?
                 <IconButton className={classes.close} size="medium" onClick={onClose}>
                     <Icons.Close />
                 </IconButton>
-            ) : null}
+            :   null}
         </Paper>
     )
 }

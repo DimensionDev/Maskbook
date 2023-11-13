@@ -286,11 +286,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         next,
         done,
     } = useNonFungibleAssetsByCollectionAndOwner(
-        collection?.assets?.length
-            ? ''
-            : collection?.source === SourceType.SimpleHash
-              ? collection?.id
-              : collection?.address,
+        collection?.assets?.length ? ''
+        : collection?.source === SourceType.SimpleHash ? collection?.id
+        : collection?.address,
         account,
         NetworkPluginID.PLUGIN_EVM,
         {
@@ -408,8 +406,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         chainId={chainId}
                     />
                 </Box>
-                {collection && balance ? (
-                    done ? (
+                {collection && balance ?
+                    done ?
                         <>
                             <Box className={classes.selectWrapper}>
                                 <div
@@ -431,11 +429,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                         <CheckIcon className={classes.checkIcon} />
                                     </div>
                                     <Typography color="textPrimary">
-                                        {balance === 0
-                                            ? 'All'
-                                            : t.nft_select_all_option({
-                                                  total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
-                                              })}
+                                        {balance === 0 ?
+                                            'All'
+                                        :   t.nft_select_all_option({
+                                                total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
+                                            })
+                                        }
                                     </Typography>
                                 </div>
                                 <div
@@ -466,24 +465,23 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 </List>
                             </div>
                         </>
-                    ) : (
-                        <>
+                    :   <>
                             <div className={classes.skeleton}>
                                 <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
                                 <Skeleton className={classes.rectangle} height={24} variant="rectangular" width={140} />
                             </div>
                             <Skeleton className={classes.rectangle} height={180} variant="rectangular" width="100%" />
                         </>
-                    )
-                ) : null}
+
+                :   null}
 
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
-                {collection && balance ? (
+                {collection && balance ?
                     <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
-                ) : null}
-                {nativeTokenDetailed && nativeTokenPrice ? (
+                :   null}
+                {nativeTokenDetailed && nativeTokenPrice ?
                     <Box mx={2}>
                         <SelectGasSettingsToolbar
                             className={classes.toolbar}
@@ -495,7 +493,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             onChange={onGasOptionChange}
                         />
                     </Box>
-                ) : null}
+                :   null}
             </Box>
 
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
@@ -517,9 +515,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 operator={RED_PACKET_NFT_ADDRESS}>
                                 <ShadowRootTooltip
                                     title={
-                                        isGasFeeGreaterThanOneETH
-                                            ? t.erc721_gas_cap({ symbol: nativeTokenDetailed?.symbol || 'ETH' })
-                                            : ''
+                                        isGasFeeGreaterThanOneETH ?
+                                            t.erc721_gas_cap({ symbol: nativeTokenDetailed?.symbol || 'ETH' })
+                                        :   ''
                                     }
                                     arrow
                                     disableInteractive

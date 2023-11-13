@@ -27,11 +27,12 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
         signableConfig,
     } = PayloadEditor.fromPayload(payload, options)
     const identifier = ECKeyIdentifier.from(options?.identifier).unwrapOr(undefined)
-    const signer = identifier
-        ? new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
-              signWithPersona(type, message, identifier, undefined, true),
-          )
-        : new Signer(owner || from!, signWithWallet)
+    const signer =
+        identifier ?
+            new Signer(identifier, <T>(type: SignType, message: T, identifier?: ECKeyIdentifier) =>
+                signWithPersona(type, message, identifier, undefined, true),
+            )
+        :   new Signer(owner || from!, signWithWallet)
 
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:

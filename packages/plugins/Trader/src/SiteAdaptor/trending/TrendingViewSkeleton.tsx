@@ -50,13 +50,13 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                         </Stack>
                     )}
                 </CardContent>
-                {isCollectionProjectPopper || isTokenTagPopper ? (
+                {isCollectionProjectPopper || isTokenTagPopper ?
                     <PluginDescriptor
                         isCollectionProjectPopper={isCollectionProjectPopper}
                         isProfilePage={isProfilePage}
                         isTokenTagPopper={isTokenTagPopper}
                     />
-                ) : null}
+                :   null}
             </Stack>
         </TrendingCard>
     )

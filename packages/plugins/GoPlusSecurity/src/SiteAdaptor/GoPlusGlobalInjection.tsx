@@ -41,8 +41,10 @@ export const GoPlusGlobalInjection = memo(function GoPlusGlobalInjection() {
 
     return (
         <>
-            {confirmOpen ? <CheckSecurityConfirmDialog open onClose={() => setConfirmOpen(false)} /> : null}
-            {mainDialogOpen ? (
+            {confirmOpen ?
+                <CheckSecurityConfirmDialog open onClose={() => setConfirmOpen(false)} />
+            :   null}
+            {mainDialogOpen ?
                 <CheckSecurityDialog
                     open
                     onClose={() => setMainDialogOpen(false)}
@@ -50,8 +52,10 @@ export const GoPlusGlobalInjection = memo(function GoPlusGlobalInjection() {
                     chainId={chainId}
                     tokenAddress={tokenAddress ?? ZERO_ADDRESS}
                 />
-            ) : null}
-            {riskWarningOpen ? <RiskWarningDialog open onSetDialog={setRiskWarningDialog} token={token} /> : null}
+            :   null}
+            {riskWarningOpen ?
+                <RiskWarningDialog open onSetDialog={setRiskWarningDialog} token={token} />
+            :   null}
         </>
     )
 })

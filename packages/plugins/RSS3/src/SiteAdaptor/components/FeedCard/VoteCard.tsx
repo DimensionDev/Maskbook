@@ -98,20 +98,19 @@ export function VoteCard({ feed, className, ...rest }: VoteCardProps) {
                     }}
                 />
             </Typography>
-            {metadata.proposal ? (
+            {metadata.proposal ?
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>
-                    {verbose ? (
+                    {verbose ?
                         <Markdown className={mdClasses.markdown} defaultStyle={false}>
                             {metadata.proposal.body}
                         </Markdown>
-                    ) : (
-                        <Typography className={classes.content}>
+                    :   <Typography className={classes.content}>
                             <Linkify options={LinkifyOptions}>{htmlToPlain(metadata.proposal.body)}</Linkify>
                         </Typography>
-                    )}
+                    }
                 </>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

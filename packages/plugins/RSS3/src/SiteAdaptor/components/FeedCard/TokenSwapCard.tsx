@@ -91,7 +91,7 @@ export function TokenSwapCard({ feed, ...rest }: TokenSwapCardProps) {
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <div className={classes.iconStack}>
                         <Image
@@ -118,7 +118,7 @@ export function TokenSwapCard({ feed, ...rest }: TokenSwapCardProps) {
                         })}
                     </Typography>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

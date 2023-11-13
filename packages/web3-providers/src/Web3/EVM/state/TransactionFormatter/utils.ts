@@ -5,9 +5,10 @@ import { EVMContractReadonly } from '../../apis/ContractReadonlyAPI.js'
 import { BaseDescriptor } from './descriptors/Base.js'
 
 export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
-    const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
-        ? formatBalance(amount, token?.decimals)
-        : 'infinite'
+    const value =
+        scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount) ?
+            formatBalance(amount, token?.decimals)
+        :   'infinite'
 
     return `${value} ${token?.symbol?.trim()}`
 }

@@ -42,8 +42,8 @@ function parseTag(x: string): ParseLinkResult[] {
     return x
         .split(TagLike)
         .map<ParseLinkResult>((x) =>
-            TagLike.test(x)
-                ? { type: 'link', content: x, category: map[x[0] as keyof typeof map] || 'normal' }
-                : { type: 'text', content: x },
+            TagLike.test(x) ?
+                { type: 'link', content: x, category: map[x[0] as keyof typeof map] || 'normal' }
+            :   { type: 'text', content: x },
         )
 }

@@ -29,18 +29,18 @@ export function GasSettingBar(props: GasSettingBarProps) {
 
     const onOpenGasSettingDialog = useCallback(() => {
         GasSettingModal.open(
-            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')
-                ? {
-                      gasLimit,
-                      maxFee,
-                      priorityFee,
-                      gasOption,
-                  }
-                : {
-                      gasLimit,
-                      gasPrice,
-                      gasOption,
-                  },
+            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?
+                {
+                    gasLimit,
+                    maxFee,
+                    priorityFee,
+                    gasOption,
+                }
+            :   {
+                    gasLimit,
+                    gasPrice,
+                    gasOption,
+                },
         )
     }, [chainId, gasLimit, gasPrice, maxFee, priorityFee, gasOption])
 
@@ -49,16 +49,16 @@ export function GasSettingBar(props: GasSettingBarProps) {
         const off = GasSettingModal.emitter.on('close', (evt) => {
             if (evt?.gasOption) setGasOptionType(evt.gasOption)
             onChange?.(
-                (EVMChainResolver.isFeatureSupported(chainId, 'EIP1559')
-                    ? {
-                          gas: evt?.gasLimit,
-                          maxFeePerGas: evt?.maxFee,
-                          maxPriorityFeePerGas: evt?.priorityFee,
-                      }
-                    : {
-                          gas: evt?.gasLimit,
-                          gasPrice: evt?.gasPrice,
-                      }) as NonPayableTx,
+                (EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?
+                    {
+                        gas: evt?.gasLimit,
+                        maxFeePerGas: evt?.maxFee,
+                        maxPriorityFeePerGas: evt?.priorityFee,
+                    }
+                :   {
+                        gas: evt?.gasLimit,
+                        gasPrice: evt?.gasPrice,
+                    }) as NonPayableTx,
             )
         })
         return () => {
@@ -69,9 +69,9 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const gasFee = useMemo(() => {
         return multipliedBy(
             gasLimit,
-            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee
-                ? new BigNumber(maxFee)
-                : gasPrice ?? gasPriceDefault,
+            EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee ?
+                new BigNumber(maxFee)
+            :   gasPrice ?? gasPriceDefault,
         )
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 

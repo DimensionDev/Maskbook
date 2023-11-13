@@ -114,21 +114,21 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                     />
                 </Box>
             </Paper>
-            {error ? (
+            {error ?
                 <MaskAlert icon={<Icons.Warning />} severity="error">
                     {error}
                 </MaskAlert>
-            ) : tolerance < slippageTolerances[0] ? (
+            : tolerance < slippageTolerances[0] ?
                 <MaskAlert icon={<Icons.WarningTriangle color="warning" />} severity="warning">
                     {t.gas_settings_alert_low_slippage_tolerance()}
                 </MaskAlert>
-            ) : tolerance > slippageTolerances.at(-1)! ? (
+            : tolerance > slippageTolerances.at(-1)! ?
                 <MaskAlert icon={<Icons.Warning />} severity="error">
                     {t.gas_settings_alert_high_slippage_tolerance({
                         percentage: tolerance.toString(),
                     })}
                 </MaskAlert>
-            ) : null}
+            :   null}
         </FormProvider>
     )
 }

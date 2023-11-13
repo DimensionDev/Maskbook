@@ -36,9 +36,15 @@ export function useOpenOcean(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!provider) return
-            return isNativeTokenWrapper
-                ? provider.getNativeWrapperTradeInfo(chainId as ChainId, account, inputAmount_, inputToken, outputToken)
-                : provider.getTradeInfo(chainId as ChainId, account, inputAmount_, slippage, inputToken, outputToken)
+            return isNativeTokenWrapper ?
+                    provider.getNativeWrapperTradeInfo(
+                        chainId as ChainId,
+                        account,
+                        inputAmount_,
+                        inputToken,
+                        outputToken,
+                    )
+                :   provider.getTradeInfo(chainId as ChainId, account, inputAmount_, slippage, inputToken, outputToken)
         },
         [inputAmount_, isNativeTokenWrapper, chainId, account, provider, inputToken, outputToken],
         scale,

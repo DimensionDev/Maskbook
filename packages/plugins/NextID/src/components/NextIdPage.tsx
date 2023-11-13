@@ -90,7 +90,7 @@ export const NextIdPage = memo(function NextIdPage() {
                     <PluginEnableBoundary pluginID={PluginID.Web3Profile}>{ActionComponent}</PluginEnableBoundary>
                 </PluginCardFrameMini>
             </ThemeProvider>
-            {openBindDialog && currentPersona && isOwn ? (
+            {openBindDialog && currentPersona && isOwn ?
                 <BindDialog
                     open={openBindDialog}
                     onClose={() => toggleBindDialog(false)}
@@ -98,7 +98,7 @@ export const NextIdPage = memo(function NextIdPage() {
                     bounds={proofs.data ?? EMPTY_LIST}
                     onBound={proofs.refetch}
                 />
-            ) : null}
+            :   null}
         </>
     )
 })

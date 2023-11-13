@@ -91,9 +91,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
-            theme.palette.mode === 'light'
-                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+            theme.palette.mode === 'light' ?
+                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
         borderRadius: '0px 0px 12px 12px',
         flex: 1,
         backdropFilter: 'blur(8px)',
@@ -224,22 +224,20 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     }
                     placeholder={t.post_dialog_share_with_input_placeholder()}
                 />
-                {props.loading ? (
+                {props.loading ?
                     <div className={cx(classes.empty, classes.mainText)}>
                         <LoadingBase />
                         <Typography>{t.loading()}</Typography>
                     </div>
-                ) : (
-                    <Boundary>
+                :   <Boundary>
                         <div className={classes.listParent}>
                             <div className={classes.listBody}>
                                 <div className={classes.list}>
-                                    {results.length === 0 ? (
+                                    {results.length === 0 ?
                                         <EmptyStatus className={classes.empty}>
                                             {props.searchEmptyText ?? t.compose_encrypt_share_dialog_empty()}
                                         </EmptyStatus>
-                                    ) : (
-                                        results.map((item, index) => {
+                                    :   results.map((item, index) => {
                                             const pubkey = item.linkedPersona?.publicKeyAsHex as string
                                             const selected = selectedPubkeyList.includes(pubkey)
                                             return (
@@ -253,10 +251,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                                 />
                                             )
                                         })
-                                    )}
+                                    }
                                 </div>
                             </div>
-                            {results.length > 0 ? (
+                            {results.length > 0 ?
                                 <Stack alignItems="center" flexDirection="row" sx={{ padding: '16px 0' }}>
                                     <Checkbox
                                         size="small"
@@ -265,10 +263,10 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                     />
                                     <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
                                 </Stack>
-                            ) : null}
+                            :   null}
                         </div>
                     </Boundary>
-                )}
+                }
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
                 <div className={classes.actions}>

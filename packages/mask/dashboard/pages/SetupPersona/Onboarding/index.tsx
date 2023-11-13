@@ -132,12 +132,12 @@ export const Onboarding = memo(function Onboarding() {
                 {t.persona_onboarding_ready()}
                 {t.ready()}
             </Typography>,
-            count && !isZero(count) ? (
+            count && !isZero(count) ?
                 <Typography key="wallets">
                     {t.persona_onboarding_recovery_wallets()}
                     {t.persona_onboarding_wallets({ count: Number(count) })}
                 </Typography>
-            ) : undefined,
+            :   undefined,
         ])
     }, [t])
 
@@ -178,7 +178,7 @@ export const Onboarding = memo(function Onboarding() {
                     }>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                {!isCreate ? (
+                {!isCreate ?
                     <PrimaryButton
                         loading={loading}
                         disabled={loading}
@@ -188,7 +188,7 @@ export const Onboarding = memo(function Onboarding() {
                         startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
                         {hasPaymentPassword ? t.wallet_open_mask_wallet() : t.persona_onboarding_set_payment_password()}
                     </PrimaryButton>
-                ) : null}
+                :   null}
             </SetupFrameController>
         </>
     )

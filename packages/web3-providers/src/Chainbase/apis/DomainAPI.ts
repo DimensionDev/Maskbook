@@ -34,7 +34,11 @@ class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const name = first(response)?.name
         if (!name) return
         const suffix = suffixMap[chainId] || 'eth'
-        return isValidDomain(name) ? name : isValidDomain(`${name}.${suffix}`) ? `${name}.${suffix}` : undefined
+        return (
+            isValidDomain(name) ? name
+            : isValidDomain(`${name}.${suffix}`) ? `${name}.${suffix}`
+            : undefined
+        )
     }
 
     async lookup(chainId: ChainId, name: string): Promise<string | undefined> {

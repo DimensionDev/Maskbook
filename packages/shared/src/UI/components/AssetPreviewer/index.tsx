@@ -42,7 +42,9 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
                 src={url}
                 fallback={fallbackImage}
             />
-            {icon ? <div className={classes.icon}>{icon}</div> : null}
+            {icon ?
+                <div className={classes.icon}>{icon}</div>
+            :   null}
         </div>
     )
 }

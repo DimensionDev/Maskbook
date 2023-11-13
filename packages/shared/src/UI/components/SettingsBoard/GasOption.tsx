@@ -64,7 +64,9 @@ export function GasOption(props: GasOptionProps) {
             className={classes.root}
             style={{ color: checked ? theme.palette.maskColor.primary : theme.palette.maskColor.line }}
             onClick={onClick}>
-            {checked ? <CheckCircle color="inherit" /> : <RadioButtonUnchecked color="inherit" />}
+            {checked ?
+                <CheckCircle color="inherit" />
+            :   <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
             <Typography className={classes.estimate}>
                 {t.gas_settings_gas_option_estimate_distance({

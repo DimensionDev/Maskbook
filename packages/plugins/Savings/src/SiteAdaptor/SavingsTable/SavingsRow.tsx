@@ -82,11 +82,11 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                     </Typography>
                 </div>
             </Grid>
-            {isDeposit ? (
+            {isDeposit ?
                 <Grid item xs={2} className={classes.tableCell}>
                     <Typography variant="body1">{isFetchingApr && apr === '0.00' ? '--' : `${apr}%`}</Typography>
                 </Grid>
-            ) : null}
+            :   null}
             <Grid item xs={isDeposit ? 3 : 5} className={classes.tableCell}>
                 <FungibleTokenBalance isDeposit={isDeposit} protocol={protocol} protocolBalance={balance} />
             </Grid>

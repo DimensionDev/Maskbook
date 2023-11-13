@@ -22,7 +22,7 @@ export function RequestPermission(props: RequestPermissionProps) {
         <>
             <DialogTitle>{t.popups_mask_requests_permission()}</DialogTitle>
             <DialogContent>
-                {origins?.length ? (
+                {origins?.length ?
                     <List dense subheader={<ListSubheader>{t.popups_sites()}</ListSubheader>}>
                         {origins?.map((origin, key) => (
                             <ListItem key={key}>
@@ -30,8 +30,8 @@ export function RequestPermission(props: RequestPermissionProps) {
                             </ListItem>
                         ))}
                     </List>
-                ) : null}
-                {permissions?.length ? (
+                :   null}
+                {permissions?.length ?
                     <List dense subheader={<ListSubheader>{t.popups_permissions()}</ListSubheader>}>
                         {permissions?.map((permission, key) => (
                             <ListItem key={key}>
@@ -39,7 +39,7 @@ export function RequestPermission(props: RequestPermissionProps) {
                             </ListItem>
                         ))}
                     </List>
-                ) : null}
+                :   null}
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.onCancel} variant="text">

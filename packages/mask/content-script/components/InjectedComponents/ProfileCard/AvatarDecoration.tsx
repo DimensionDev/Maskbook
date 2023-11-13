@@ -19,16 +19,14 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
 
     if (!userId || !user) return null
 
-    return user.has_nft_avatar ? (
-        <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
-    ) : (
-        <NFTBadgeTimeline
-            classes={{ root: className }}
-            userId={userId}
-            avatarId={Twitter.getAvatarId(user.avatarURL)}
-            height={size}
-            width={size}
-            siteKey={RSS3_KEY_SITE.TWITTER}
-        />
-    )
+    return user.has_nft_avatar ?
+            <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
+        :   <NFTBadgeTimeline
+                classes={{ root: className }}
+                userId={userId}
+                avatarId={Twitter.getAvatarId(user.avatarURL)}
+                height={size}
+                width={size}
+                siteKey={RSS3_KEY_SITE.TWITTER}
+            />
 }

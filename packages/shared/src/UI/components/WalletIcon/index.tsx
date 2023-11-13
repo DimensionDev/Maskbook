@@ -51,10 +51,12 @@ export function WalletIcon(props: WalletIconProps) {
                 height: size,
                 width: size,
             }}>
-            {mainIcon ? (
+            {mainIcon ?
                 <ImageIcon className={classes.mainIcon} size={size} icon={mainIcon} iconFilterColor={iconFilterColor} />
-            ) : null}
-            {badgeIcon ? <ImageIcon className={classes.badgeIcon} size={badgeSize} icon={badgeIcon} /> : null}
+            :   null}
+            {badgeIcon ?
+                <ImageIcon className={classes.badgeIcon} size={badgeSize} icon={badgeIcon} />
+            :   null}
         </div>
     )
 }

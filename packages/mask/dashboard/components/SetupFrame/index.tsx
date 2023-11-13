@@ -54,7 +54,7 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                 <Box sx={{ paddingTop: 4.5, flex: 1, display: 'flex', flexDirection: 'column' }}>{children}</Box>
             </Box>
             <Box className={classes.sidebar} position="relative">
-                {!hiddenSpline ? (
+                {!hiddenSpline ?
                     <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: '#d2deff' }}>
                         <Box position="absolute" marginTop={21.5} width="100%" display="flex" justifyContent="center">
                             <Typography
@@ -72,12 +72,12 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
 
                         <Spline scene={Welcome} onLoad={() => setLoading(false)} />
                     </div>
-                ) : null}
-                {loading && !hiddenSpline ? (
+                :   null}
+                {loading && !hiddenSpline ?
                     <Box position="absolute" top="calc(50% - 18px)" left="calc(50% - 18px)">
                         <LoadingBase size={36} />
                     </Box>
-                ) : null}
+                :   null}
             </Box>
         </Box>
     )

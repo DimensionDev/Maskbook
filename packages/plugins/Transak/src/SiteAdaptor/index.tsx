@@ -29,9 +29,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                             iconFilterColor={iconFilterColor}
                             {...EntryComponentProps}
                             onClick={
-                                EntryComponentProps.onClick
-                                    ? () => EntryComponentProps.onClick?.(openDialog)
-                                    : openDialog
+                                EntryComponentProps.onClick ?
+                                    () => EntryComponentProps.onClick?.(openDialog)
+                                :   openDialog
                             }
                         />
                     )

@@ -47,28 +47,27 @@ export function QRCode({ text, options = {}, canvasProps }: QRProps) {
         })
     }, [options, text, error])
 
-    return error ? (
-        <>
-            <Typography color="textPrimary" variant="body1" className={classes.text}>
-                <Trans
-                    i18nKey="backup_qrcode_error"
-                    components={{
-                        again: (
-                            <span
-                                onClick={() => {
-                                    setError(false)
-                                }}
-                                className={classes.info}
-                            />
-                        ),
-                    }}
-                />
-            </Typography>
-        </>
-    ) : image ? (
-        <img src={image} {...canvasProps} />
-    ) : (
-        <canvas {...canvasProps} ref={ref} />
+    return (
+        error ?
+            <>
+                <Typography color="textPrimary" variant="body1" className={classes.text}>
+                    <Trans
+                        i18nKey="backup_qrcode_error"
+                        components={{
+                            again: (
+                                <span
+                                    onClick={() => {
+                                        setError(false)
+                                    }}
+                                    className={classes.info}
+                                />
+                            ),
+                        }}
+                    />
+                </Typography>
+            </>
+        : image ? <img src={image} {...canvasProps} />
+        : <canvas {...canvasProps} ref={ref} />
     )
 }
 

@@ -41,9 +41,10 @@ async function getAllWalletRecords() {
 async function makePrivateKey(record: LegacyWalletRecord) {
     // not a managed wallet
     if (!record._private_key_ && !record.mnemonic.length) return ''
-    const { privateKey } = record._private_key_
-        ? await recoverWalletFromPrivateKey(record._private_key_)
-        : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
+    const { privateKey } =
+        record._private_key_ ?
+            await recoverWalletFromPrivateKey(record._private_key_)
+        :   await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
     return `0x${toHex(privateKey)}`
 }
 

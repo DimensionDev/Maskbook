@@ -32,9 +32,9 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 320,
         backgroundColor: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: 16,
     },
 
@@ -143,12 +143,12 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
             ))}
 
             <div key="rss3" className={classes.group}>
-                {collectionList?.length > 0 && socialAccounts?.length ? (
+                {collectionList?.length > 0 && socialAccounts?.length ?
                     <>
                         <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
                         <Divider className={classes.divider} />
                     </>
-                ) : null}
+                :   null}
                 {socialAccounts?.map((x) => {
                     return (
                         <MenuItem

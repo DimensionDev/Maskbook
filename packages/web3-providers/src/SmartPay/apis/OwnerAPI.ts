@@ -157,9 +157,10 @@ export class SmartPayOwner {
                     .flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
                     .map((y) => ({
                         ...y,
-                        funded: y.creator
-                            ? operations.some((operation) => isSameAddress(operation.walletAddress, y.address))
-                            : y.funded,
+                        funded:
+                            y.creator ?
+                                operations.some((operation) => isSameAddress(operation.walletAddress, y.address))
+                            :   y.funded,
                     }))
 
                 return this.filterAccounts(result).filter((x) => (exact ? isSameAddress(x.owner, owner) : true))

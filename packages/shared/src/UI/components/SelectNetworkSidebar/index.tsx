@@ -69,12 +69,14 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
     // Do not translate the "All" button
     return (
         <div className={cx(classes.sidebar, className)} {...rest}>
-            {networks.length > 1 && !hideAllButton ? (
+            {networks.length > 1 && !hideAllButton ?
                 <AllButton className={classes.networkButton} onClick={() => onChainChange?.(undefined)}>
                     All
-                    {!chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                    {!chainId ?
+                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
+                    :   null}
                 </AllButton>
-            ) : null}
+            :   null}
             {networks.map((x) => (
                 <Button
                     variant="text"
@@ -83,7 +85,9 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
                     disableRipple
                     onClick={() => onChainChange?.(x.chainId)}>
                     <NetworkIcon pluginID={pluginID} chainId={x.chainId} size={24} network={x} />
-                    {chainId === x.chainId ? <Icons.BorderedSuccess className={classes.indicator} size={12} /> : null}
+                    {chainId === x.chainId ?
+                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
+                    :   null}
                 </Button>
             ))}
         </div>

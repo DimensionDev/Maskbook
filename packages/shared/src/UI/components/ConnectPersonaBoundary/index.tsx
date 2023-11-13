@@ -127,7 +127,9 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
                     {actionComponent}
                 </Stack>
-                {status.action || statusLoading ? <Stack className={classes.mask} display="inline-flex" /> : null}
+                {status.action || statusLoading ?
+                    <Stack className={classes.mask} display="inline-flex" />
+                :   null}
             </Stack>
         )
     },

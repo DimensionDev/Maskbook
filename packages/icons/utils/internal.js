@@ -25,12 +25,13 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
         const supportColor = selected.s
 
         const iconStyle = React.useMemo(() => {
-            const bg = supportColor
-                ? null
-                : {
-                      backgroundImage: `url(${selected.u()})`,
-                      backgroundSize: 'contain',
-                  }
+            const bg =
+                supportColor ? null : (
+                    {
+                        backgroundImage: `url(${selected.u()})`,
+                        backgroundSize: 'contain',
+                    }
+                )
             const base = {
                 display: 'inline-block',
                 backgroundRepeat: 'no-repeat',

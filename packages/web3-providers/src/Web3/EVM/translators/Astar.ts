@@ -12,9 +12,8 @@ export class AstarTranslator extends BaseTranslator {
         context.config = {
             ...context.config,
             maxFeePerGas: context.config.maxFeePerGas ? web3_utils.toHex(context.config.maxFeePerGas) : undefined,
-            maxPriorityFeePerGas: context.config.maxPriorityFeePerGas
-                ? web3_utils.toHex(context.config.maxPriorityFeePerGas)
-                : undefined,
+            maxPriorityFeePerGas:
+                context.config.maxPriorityFeePerGas ? web3_utils.toHex(context.config.maxPriorityFeePerGas) : undefined,
             // rpc hack, alchemy rpc must pass gas parameter
             gas: '0x135168',
         }

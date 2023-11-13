@@ -85,16 +85,15 @@ const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChai
                     key={chainId}
                     onClick={() => onChainChange(network)}
                     selected={chainId === currentNetwork?.chainId}>
-                    {network.iconUrl ? (
+                    {network.iconUrl ?
                         <ImageIcon size={20} icon={network.iconUrl} name={network.name} />
-                    ) : (
-                        <NetworkIcon
+                    :   <NetworkIcon
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={network.chainId}
                             size={20}
                             network={network}
                         />
-                    )}
+                    }
 
                     <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>
                 </MenuItem>
@@ -110,16 +109,15 @@ const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChai
         <>
             <Box className={classes.root} onClick={openMenu}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {currentNetwork.iconUrl ? (
+                    {currentNetwork.iconUrl ?
                         <ImageIcon size={20} icon={currentNetwork.iconUrl} name={currentNetwork.name} />
-                    ) : (
-                        <NetworkIcon
+                    :   <NetworkIcon
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             chainId={currentNetwork.chainId}
                             size={20}
                             network={currentNetwork}
                         />
-                    )}
+                    }
                     <Typography className={classes.title}>{currentNetwork?.name}</Typography>
                 </div>
                 <Icons.ArrowDownRound size={16} color="#fff" />

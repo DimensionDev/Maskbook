@@ -116,7 +116,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.body)}>
                     <div className={classes.user}>
                         <Image
@@ -148,7 +148,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
                         </Typography>
                     </div>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

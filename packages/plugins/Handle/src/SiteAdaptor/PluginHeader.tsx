@@ -45,7 +45,7 @@ export function PluginHeader() {
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
                     {t.plugin_provider_by()}
                 </Typography>
-                {base.publisher ? (
+                {base.publisher ?
                     <Typography
                         variant="body1"
                         fontSize={14}
@@ -54,12 +54,12 @@ export function PluginHeader() {
                         color={MaskColorVar.textPluginColor}>
                         <PluginTransFieldRender pluginID={PluginID.Handle} field={base.publisher.name} />
                     </Typography>
-                ) : null}
-                {base.publisher?.link ? (
+                :   null}
+                {base.publisher?.link ?
                     <Link href={base.publisher?.link} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider size={18} style={{ marginLeft: 4 }} />
                     </Link>
-                ) : null}
+                :   null}
             </Box>
         </Stack>
     )

@@ -138,11 +138,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 
     const tokenValueUSD =
-        amount && tokenPrice
-            ? leftShift(amount, token?.decimals)
-                  .times(tokenPrice)
-                  .toString()
-            : '0'
+        amount && tokenPrice ?
+            leftShift(amount, token?.decimals)
+                .times(tokenPrice)
+                .toString()
+        :   '0'
 
     const initConfig = useMemo(() => {
         if (!transaction?.computedPayload) return
@@ -177,7 +177,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             <Box className={classes.info}>
                 <Box display="flex" justifyContent="space-between">
                     <Typography className={classes.title}>{title}</Typography>
-                    {receiver ? <Typography className={classes.title}>{receiver}</Typography> : null}
+                    {receiver ?
+                        <Typography className={classes.title}>{receiver}</Typography>
+                    :   null}
                 </Box>
                 <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
                     <Typography className={classes.addressTitle}>{t.to()}:</Typography>
@@ -189,13 +191,13 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
                 <Typography component="div" className={classes.amount}>
-                    {tokenId && metadata?.collection?.iconURL ? (
+                    {tokenId && metadata?.collection?.iconURL ?
                         <>
                             <ImageIcon icon={metadata.collection.iconURL} className={classes.tokenIcon} />
                             {metadata.collection.name}#{tokenId}
                         </>
-                    ) : null}
-                    {!tokenId ? (
+                    :   null}
+                    {!tokenId ?
                         <>
                             <TokenIcon
                                 address={(tokenAddress || nativeToken?.address) ?? ''}
@@ -203,18 +205,18 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 name={token?.name}
                                 className={classes.tokenIcon}
                             />
-                            {amount
-                                ? formatBalance(amount, token?.decimals, {
-                                      significant: 4,
-                                      isPrecise: false,
-                                      isFixed: true,
-                                      fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
-                                  })
-                                : null}
+                            {amount ?
+                                formatBalance(amount, token?.decimals, {
+                                    significant: 4,
+                                    isPrecise: false,
+                                    isFixed: true,
+                                    fixedDecimals: leftShift(amount, token?.decimals).isGreaterThan(1) ? 6 : 12,
+                                })
+                            :   null}
                         </>
-                    ) : null}
+                    :   null}
                 </Typography>
-                {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ? (
+                {!isGreaterThan(tokenValueUSD, pow10(9)) && !tokenId ?
                     <Typography className={classes.value}>
                         <FormattedCurrency
                             value={tokenValueUSD}
@@ -222,11 +224,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                             options={{ onlyRemainTwoOrZeroDecimal: true }}
                         />
                     </Typography>
-                ) : null}
+                :   null}
             </Box>
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
-                {transaction.computedPayload.gas && !!initConfig ? (
+                {transaction.computedPayload.gas && !!initConfig ?
                     <GasSettingMenu
                         minimumGas={transaction.computedPayload.gas}
                         initConfig={initConfig}
@@ -236,7 +238,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                         owner={transaction.owner}
                         onPaymentTokenChange={onPaymentTokenChange}
                     />
-                ) : null}
+                :   null}
             </Box>
         </Box>
     )

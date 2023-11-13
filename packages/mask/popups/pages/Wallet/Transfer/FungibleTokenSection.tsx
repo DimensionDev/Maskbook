@@ -186,11 +186,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         try {
             await Web3.transferFungibleToken(address, recipient, totalAmount, '', {
                 overrides: gasConfig,
-                paymentToken: paymentAddress
-                    ? paymentAddress
-                    : chainId === smartPayChainId
-                      ? nativeTokenAddress
-                      : undefined,
+                paymentToken:
+                    paymentAddress ? paymentAddress
+                    : chainId === smartPayChainId ? nativeTokenAddress
+                    : undefined,
                 chainId,
                 gasOptionType: gasConfig?.gasOptionType,
                 providerURL: network?.rpcUrl,
@@ -270,11 +269,11 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
-                        {isAvailableBalance
-                            ? t.available_amount({
-                                  amount: formatTokenBalance(tokenBalance, token?.decimals),
-                              })
-                            : formatTokenBalance(tokenBalance, token?.decimals)}
+                        {isAvailableBalance ?
+                            t.available_amount({
+                                amount: formatTokenBalance(tokenBalance, token?.decimals),
+                            })
+                        :   formatTokenBalance(tokenBalance, token?.decimals)}
                     </ProgressiveText>
                 </Box>
                 <Icons.ArrowDrop size={24} />

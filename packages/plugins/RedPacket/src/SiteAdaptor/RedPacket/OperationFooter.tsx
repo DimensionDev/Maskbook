@@ -83,7 +83,13 @@ export function OperationFooter({
                 loading={isLoading}
                 disabled={isLoading}
                 onClick={onClick}>
-                {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
+                {canClaim ?
+                    isClaiming ?
+                        t.claiming()
+                    :   t.claim()
+                : isRefunding ?
+                    t.refunding()
+                :   t.refund()}
             </ActionButton>
         )
     }
@@ -101,7 +107,7 @@ export function OperationFooter({
                     </ActionButton>
                 )}
 
-                {canClaim || canRefund ? (
+                {canClaim || canRefund ?
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
@@ -114,7 +120,7 @@ export function OperationFooter({
                             {getObtainButton(onClaimOrRefund)}
                         </WalletConnectedBoundary>
                     </ChainBoundary>
-                ) : null}
+                :   null}
             </Box>
         </Box>
     )

@@ -251,10 +251,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const searchedTokenAddress = useMemo(() => {
         if (!keyword) return
 
-        return Utils.isValidAddress(keyword) &&
-            !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
-            ? keyword
-            : ''
+        return (
+                Utils.isValidAddress(keyword) &&
+                    !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
+            ) ?
+                keyword
+            :   ''
     }, [keyword, sortedFungibleTokensForList])
     const searchError = keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? t.erc20_search_wrong_address() : ''
     useEffect(() => {
@@ -349,14 +351,13 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 onSelect={handleSelect}
                 onSearch={setKeyword}
                 data={
-                    isAddressNotContract
-                        ? EMPTY_LIST
-                        : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
-                          ? // balance field work for case: user search someone token by contract and whitelist is empty.
-                            [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
-                          : mode === TokenListMode.List
-                            ? sortedFungibleTokensForList
-                            : sortedFungibleTokensForManage
+                    isAddressNotContract ? EMPTY_LIST
+                    : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress) ?
+                        // balance field work for case: user search someone token by contract and whitelist is empty.
+                        [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
+                    : mode === TokenListMode.List ?
+                        sortedFungibleTokensForList
+                    :   sortedFungibleTokensForManage
                 }
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}
@@ -366,11 +367,11 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}
             />
-            {mode === TokenListMode.List && enableManage ? (
+            {mode === TokenListMode.List && enableManage ?
                 <Box className={classes.bar}>
                     <ManageTokenListBar onClick={() => setMode?.(TokenListMode.Manage)} />
                 </Box>
-            ) : null}
+            :   null}
         </Stack>
     )
 }

@@ -195,7 +195,7 @@ export function NFTListDialog() {
     return (
         <>
             <DialogContent className={classes.content}>
-                {account || proofs.length ? (
+                {account || proofs.length ?
                     <UserAssetsProvider pluginID={selectedPluginId} account={targetAccount}>
                         <CollectionList
                             height={479}
@@ -208,14 +208,13 @@ export function NFTListDialog() {
                             onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
                         />
                     </UserAssetsProvider>
-                ) : (
-                    <Box className={classes.noWallet} height={479}>
+                :   <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
                             {t.no_wallet_message()}
                         </Typography>
                     </Box>
-                )}
+                }
             </DialogContent>
 
             <DialogActions className={classes.actions} disableSpacing>
@@ -228,7 +227,7 @@ export function NFTListDialog() {
                         padding: '8px 16px',
                         justifyContent: 'space-between',
                     }}>
-                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ?
                         <Button
                             variant="text"
                             size="small"
@@ -237,9 +236,7 @@ export function NFTListDialog() {
                             onClick={handleAddCollectibles}>
                             {t.add_collectible()}
                         </Button>
-                    ) : (
-                        <div />
-                    )}
+                    :   <div />}
 
                     <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Typography
@@ -282,9 +279,9 @@ export function NFTListDialog() {
                             onClick={onSave}
                             disabled={disabled || !selectedToken || !!targetWallet?.owner}
                             fullWidth>
-                            {targetWallet?.owner
-                                ? sharedI18N.coming_soon()
-                                : t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
+                            {targetWallet?.owner ?
+                                sharedI18N.coming_soon()
+                            :   t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
                         </Button>
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>

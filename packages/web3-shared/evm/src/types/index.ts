@@ -251,11 +251,10 @@ export enum TransactionEventType {
     ERROR = 'error',
 }
 
-export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
-    ? R
-    : T extends PayableTransactionObject<infer S>
-      ? S
-      : T
+export type UnboxTransactionObject<T> =
+    T extends NonPayableTransactionObject<infer R> ? R
+    : T extends PayableTransactionObject<infer S> ? S
+    : T
 
 export enum NetworkType {
     Ethereum = 'Ethereum',

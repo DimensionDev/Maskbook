@@ -99,25 +99,25 @@ export const Prior1559GasSetting = memo(
 
         const options = useMemo(
             () =>
-                gasOptions
-                    ? [
-                          {
-                              title: t.popups_wallet_gas_fee_settings_low(),
-                              gasOption: GasOptionType.SLOW,
-                              gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas || '0',
-                          },
-                          {
-                              title: t.popups_wallet_gas_fee_settings_medium(),
-                              gasOption: GasOptionType.NORMAL,
-                              gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas || '0',
-                          },
-                          {
-                              title: t.popups_wallet_gas_fee_settings_high(),
-                              gasOption: GasOptionType.FAST,
-                              gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas || 0,
-                          },
-                      ]
-                    : null,
+                gasOptions ?
+                    [
+                        {
+                            title: t.popups_wallet_gas_fee_settings_low(),
+                            gasOption: GasOptionType.SLOW,
+                            gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas || '0',
+                        },
+                        {
+                            title: t.popups_wallet_gas_fee_settings_medium(),
+                            gasOption: GasOptionType.NORMAL,
+                            gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas || '0',
+                        },
+                        {
+                            title: t.popups_wallet_gas_fee_settings_high(),
+                            gasOption: GasOptionType.FAST,
+                            gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas || 0,
+                        },
+                    ]
+                :   null,
             [gasOptions],
         )
         const currentGasOption = options ? options.find((opt) => opt.gasOption === selectedGasOption) : null
@@ -181,7 +181,7 @@ export const Prior1559GasSetting = memo(
 
         return (
             <>
-                {options ? (
+                {options ?
                     <div className={classes.options}>
                         {options.map(({ title, gasPrice, gasOption }, index) => (
                             <div
@@ -206,7 +206,7 @@ export const Prior1559GasSetting = memo(
                             </div>
                         ))}
                     </div>
-                ) : null}
+                :   null}
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_fee_settings_gas_limit()}

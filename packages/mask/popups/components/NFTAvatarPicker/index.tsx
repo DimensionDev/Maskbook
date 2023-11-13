@@ -94,11 +94,11 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     selected={selected}
                     onItemClick={setSelected}
                 />
-                {error && !done && tokens.length ? (
+                {error && !done && tokens.length ?
                     <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
                         <RetryHint hint={false} retry={retry} />
                     </Stack>
-                ) : null}
+                :   null}
                 <ElementAnchor key={tokens.length} callback={next}>
                     {!done && tokens.length !== 0 && <LoadingBase />}
                 </ElementAnchor>

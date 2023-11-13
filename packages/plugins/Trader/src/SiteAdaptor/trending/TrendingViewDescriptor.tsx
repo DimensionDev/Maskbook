@@ -30,15 +30,15 @@ const useStyles = makeStyles<{
         selectedOption: {
             fontWeight: 700,
             color:
-                props.isCollectionProjectPopper || props.isTokenTagPopper
-                    ? theme.palette.maskColor.main
-                    : theme.palette.maskColor.dark,
+                props.isCollectionProjectPopper || props.isTokenTagPopper ?
+                    theme.palette.maskColor.main
+                :   theme.palette.maskColor.dark,
         },
         arrowDropIcon: {
             color:
-                props.isCollectionProjectPopper || props.isTokenTagPopper
-                    ? theme.palette.maskColor.main
-                    : theme.palette.maskColor.dark,
+                props.isCollectionProjectPopper || props.isTokenTagPopper ?
+                    theme.palette.maskColor.main
+                :   theme.palette.maskColor.dark,
         },
     }
 })

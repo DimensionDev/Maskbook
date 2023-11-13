@@ -53,13 +53,15 @@ export function BridgeStack() {
                     <div className={classes.bridgeInfo}>
                         <Typography className={classes.bridgeName}>
                             {bridge.name}
-                            {bridge.isOfficial ? (
+                            {bridge.isOfficial ?
                                 <Typography className={classes.officialTag} component="span">
                                     Official
                                 </Typography>
-                            ) : null}
+                            :   null}
                         </Typography>
-                        {bridge.intro ? <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography> : null}
+                        {bridge.intro ?
+                            <Typography className={classes.bridgeIntro}>{bridge.intro}</Typography>
+                        :   null}
                     </div>
                 </div>
             ))}

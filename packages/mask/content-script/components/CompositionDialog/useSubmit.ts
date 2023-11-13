@@ -35,21 +35,21 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, rawEncrypted)
 
             const decoratedText =
-                encode === 'image'
-                    ? decorateEncryptedText('', t, content.meta)
-                    : decorateEncryptedText(encrypted, t, content.meta)
+                encode === 'image' ?
+                    decorateEncryptedText('', t, content.meta)
+                :   decorateEncryptedText(encrypted, t, content.meta)
             const defaultText: string =
-                encode === 'image'
-                    ? t.additional_post_box__encrypted_post_pre({
-                          encrypted: 'https://mask.io/',
-                      })
-                    : t.additional_post_box__encrypted_post_pre({ encrypted })
+                encode === 'image' ?
+                    t.additional_post_box__encrypted_post_pre({
+                        encrypted: 'https://mask.io/',
+                    })
+                :   t.additional_post_box__encrypted_post_pre({ encrypted })
             const mediaObject =
-                encode === 'image'
-                    ? // We can send raw binary through the image, but for the text we still use the old way.
-                      // For text, it must send the text _after_ encodeByNetwork, otherwise it will break backward compatibility.
-                      await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
-                    : undefined
+                encode === 'image' ?
+                    // We can send raw binary through the image, but for the text we still use the old way.
+                    // For text, it must send the text _after_ encodeByNetwork, otherwise it will break backward compatibility.
+                    await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
+                :   undefined
 
             if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost) {
                 await activatedSiteAdaptorUI.automation.endpoint.publishPost(
@@ -101,23 +101,23 @@ function decorateEncryptedText(
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
-        return hasOfficialAccount
-            ? t.additional_post_box__encrypted_post_pre_red_packet_sns_official_account({
-                  encrypted,
-                  account: officialAccount,
-                  ...options,
-              })
-            : t.additional_post_box__encrypted_post_pre_red_packet({ encrypted, ...options })
+        return hasOfficialAccount ?
+                t.additional_post_box__encrypted_post_pre_red_packet_sns_official_account({
+                    encrypted,
+                    account: officialAccount,
+                    ...options,
+                })
+            :   t.additional_post_box__encrypted_post_pre_red_packet({ encrypted, ...options })
     } else if (meta?.has(`${PluginID.FileService}:3`)) {
-        return hasOfficialAccount
-            ? t.additional_post_box__encrypted_post_pre_file_service_sns_official_account({
-                  encrypted,
-                  ...options,
-              })
-            : t.additional_post_box__encrypted_post_pre_file_service({
-                  encrypted,
-                  ...options,
-              })
+        return hasOfficialAccount ?
+                t.additional_post_box__encrypted_post_pre_file_service_sns_official_account({
+                    encrypted,
+                    ...options,
+                })
+            :   t.additional_post_box__encrypted_post_pre_file_service({
+                    encrypted,
+                    ...options,
+                })
     }
     return null
 }

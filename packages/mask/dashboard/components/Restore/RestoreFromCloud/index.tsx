@@ -102,20 +102,18 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
 
     return (
         <Box width="100%">
-            {[RestoreStep.InputEmail, RestoreStep.InputPhone].includes(state.step) ? (
+            {[RestoreStep.InputEmail, RestoreStep.InputPhone].includes(state.step) ?
                 <InputForm />
-            ) : state.step === RestoreStep.Decrypt ? (
+            : state.step === RestoreStep.Decrypt ?
                 <ConfirmBackupInfo />
-            ) : (
-                <Restore onRestore={handleRestore} />
-            )}
-            {openSynchronizePasswordDialog ? (
+            :   <Restore onRestore={handleRestore} />}
+            {openSynchronizePasswordDialog ?
                 <ConfirmSynchronizePasswordDialog
                     open={openSynchronizePasswordDialog}
                     onClose={() => onCloseSynchronizePassword()}
                     onConform={synchronizePassword}
                 />
-            ) : null}
+            :   null}
         </Box>
     )
 })

@@ -94,7 +94,12 @@ export function SelectFungibleTokenDialog({
             onClose={() => {
                 mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)
             }}
-            title={title ? title : mode === TokenListMode.Manage ? t.manage_token_list() : t.select_token()}>
+            title={
+                title ? title
+                : mode === TokenListMode.Manage ?
+                    t.manage_token_list()
+                :   t.select_token()
+            }>
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
                     mode={mode}

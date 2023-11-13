@@ -69,26 +69,26 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
 
     return (
         <Box {...rest} className={cx(classes.container, rest.className)}>
-            {tokens.length
-                ? tokens.map((x, index) => {
-                      const isSelected = isSameNFT(pluginID, x, selected)
-                      const disabled = (selected && !isSelected) || wallet?.owner
-                      return (
-                          <CollectibleCard
-                              className={cx(classes.item, disabled ? classes.disabled : undefined)}
-                              asset={x}
-                              key={index}
-                              disableNetworkIcon
-                              onClick={() => {
-                                  if (disabled) return
-                                  onItemClick(!selected ? x : undefined)
-                              }}
-                              isSelected={isSameNFT(pluginID, x, selected)}
-                              useRadio
-                          />
-                      )
-                  })
-                : null}
+            {tokens.length ?
+                tokens.map((x, index) => {
+                    const isSelected = isSameNFT(pluginID, x, selected)
+                    const disabled = (selected && !isSelected) || wallet?.owner
+                    return (
+                        <CollectibleCard
+                            className={cx(classes.item, disabled ? classes.disabled : undefined)}
+                            asset={x}
+                            key={index}
+                            disableNetworkIcon
+                            onClick={() => {
+                                if (disabled) return
+                                onItemClick(!selected ? x : undefined)
+                            }}
+                            isSelected={isSameNFT(pluginID, x, selected)}
+                            useRadio
+                        />
+                    )
+                })
+            :   null}
         </Box>
     )
 })

@@ -86,11 +86,11 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 <Typography className={timeline ? cx(classes.title, classes.unset) : classes.title}>
                     {t.plugin_collectible_properties()}
                 </Typography>
-                {rank ? (
+                {rank ?
                     <div className={classes.rankBox}>
                         <Rank rank={rank} />
                     </div>
-                ) : null}
+                :   null}
             </div>
             <div className={classes.content}>
                 {asset.traits?.map((trait, i) => {
@@ -103,9 +103,9 @@ export function PropertiesCard(props: PropertiesCardProps) {
                             <TextOverflowTooltip title={trait.value} as={ShadowRootTooltip}>
                                 <Typography className={classes.traitValue}>{uiValue}</Typography>
                             </TextOverflowTooltip>
-                            {typeof trait.rarity === 'string' ? (
+                            {typeof trait.rarity === 'string' ?
                                 <Typography className={classes.traitRarity}>({trait.rarity})</Typography>
-                            ) : null}
+                            :   null}
                         </div>
                     )
                 })}

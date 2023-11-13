@@ -82,22 +82,25 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                         type: x.traitType!,
                         value: x.value!,
                     })) ?? EMPTY_LIST,
-            price: token.mintInfo?.price.usdcPrice?.raw
-                ? {
-                      [CurrencyType.USD]: token.mintInfo?.price.usdcPrice?.raw,
-                  }
-                : undefined,
-            priceInToken: token.mintInfo?.price.nativePrice.raw
-                ? {
-                      amount: token.mintInfo?.price.nativePrice.raw,
-                      token: EVMChainResolver.nativeCurrency(chainId),
-                  }
-                : undefined,
-            owner: token.owner
-                ? {
-                      address: token.owner,
-                  }
-                : undefined,
+            price:
+                token.mintInfo?.price.usdcPrice?.raw ?
+                    {
+                        [CurrencyType.USD]: token.mintInfo?.price.usdcPrice?.raw,
+                    }
+                :   undefined,
+            priceInToken:
+                token.mintInfo?.price.nativePrice.raw ?
+                    {
+                        amount: token.mintInfo?.price.nativePrice.raw,
+                        token: EVMChainResolver.nativeCurrency(chainId),
+                    }
+                :   undefined,
+            owner:
+                token.owner ?
+                    {
+                        address: token.owner,
+                    }
+                :   undefined,
             ownerId: token.owner,
             source: SourceType.Zora,
         }
@@ -138,17 +141,19 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             const price = mintEventProperty.price || saleEventProperty.price
             if (price.usdcPrice)
                 return {
-                    price: price.usdcPrice?.raw
-                        ? {
-                              [CurrencyType.USD]: price.usdcPrice?.raw,
-                          }
-                        : undefined,
-                    priceInToken: price.nativePrice.raw
-                        ? {
-                              amount: price.nativePrice.raw,
-                              token: EVMChainResolver.nativeCurrency(chainId),
-                          }
-                        : undefined,
+                    price:
+                        price.usdcPrice?.raw ?
+                            {
+                                [CurrencyType.USD]: price.usdcPrice?.raw,
+                            }
+                        :   undefined,
+                    priceInToken:
+                        price.nativePrice.raw ?
+                            {
+                                amount: price.nativePrice.raw,
+                                token: EVMChainResolver.nativeCurrency(chainId),
+                            }
+                        :   undefined,
                 }
             return
         })()

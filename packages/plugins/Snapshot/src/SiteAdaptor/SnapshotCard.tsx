@@ -67,7 +67,9 @@ export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps)
         <Card className={classes.root} variant="outlined" ref={ref}>
             <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />
             {isPending ? range(6).map((i) => <Skeleton key={i} animation="wave" height={30} sx={{ m: 1 }} />) : null}
-            {seen ? <CardContent className={classes.content}>{children}</CardContent> : null}
+            {seen ?
+                <CardContent className={classes.content}>{children}</CardContent>
+            :   null}
         </Card>
     )
 })

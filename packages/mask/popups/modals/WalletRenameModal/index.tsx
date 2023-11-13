@@ -69,25 +69,26 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                         setError('')
                     }}
                     InputProps={{
-                        endAdornment: name.length ? (
-                            <Icons.PopupClose
-                                onClick={() => {
-                                    setName('')
-                                    setError('')
-                                }}
-                                size={18}
-                                color={error ? theme.palette.maskColor.danger : undefined}
-                            />
-                        ) : null,
+                        endAdornment:
+                            name.length ?
+                                <Icons.PopupClose
+                                    onClick={() => {
+                                        setName('')
+                                        setError('')
+                                    }}
+                                    size={18}
+                                    color={error ? theme.palette.maskColor.danger : undefined}
+                                />
+                            :   null,
                         disableUnderline: true,
                     }}
                 />
             </Box>
-            {error ? (
+            {error ?
                 <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
                     {error}
                 </Typography>
-            ) : null}
+            :   null}
             <ActionButton
                 loading={loading}
                 disabled={loading || !name.length || !!error}

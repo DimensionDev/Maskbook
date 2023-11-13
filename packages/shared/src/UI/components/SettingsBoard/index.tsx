@@ -26,12 +26,12 @@ export function SettingsBoard(props: SettingsBoardProps) {
 
     useEffect(() => {
         onChange?.({
-            transaction: (transaction
-                ? {
-                      ...transaction,
-                      ...transactionOptions,
-                  }
-                : undefined) as Web3Helper.TransactionAll | undefined,
+            transaction: (transaction ?
+                {
+                    ...transaction,
+                    ...transactionOptions,
+                }
+            :   undefined) as Web3Helper.TransactionAll | undefined,
             slippageTolerance: slippageTolerance * 100, // convert to bips
         })
     }, [JSON.stringify(transaction), JSON.stringify(transactionOptions), slippageTolerance, onChange])

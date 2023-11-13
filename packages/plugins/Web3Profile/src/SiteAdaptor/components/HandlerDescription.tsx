@@ -85,11 +85,11 @@ export const HandlerDescription = memo<HandlerDescriptionProps>((props) => {
                     size={36}
                     classes={{ mainIcon: props.profile ? classes.avatar : undefined }}
                     mainIcon={
-                        props.profile
-                            ? avatarUrl
-                                ? avatarUrl
-                                : new URL('../assets/Lens.png', import.meta.url).href
-                            : providerDescriptor?.icon
+                        props.profile ?
+                            avatarUrl ?
+                                avatarUrl
+                            :   new URL('../assets/Lens.png', import.meta.url).href
+                        :   providerDescriptor?.icon
                     }
                 />
                 <Box>

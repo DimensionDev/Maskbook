@@ -87,11 +87,11 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
                 <Grid item xs={4} className={classes.tableCell}>
                     <Typography variant="body1">{t.plugin_savings_asset()}</Typography>
                 </Grid>
-                {isDeposit ? (
+                {isDeposit ?
                     <Grid item xs={2} className={classes.tableCell}>
                         <Typography variant="body1"> {t.plugin_savings_apr()}</Typography>
                     </Grid>
-                ) : null}
+                :   null}
                 <Grid item xs={isDeposit ? 3 : 5} className={classes.tableCell}>
                     <Typography variant="body1">{t.plugin_savings_wallet()}</Typography>
                 </Grid>
@@ -100,12 +100,12 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
                 </Grid>
             </Grid>
 
-            {loadingProtocols ? (
+            {loadingProtocols ?
                 <div className={classes.placeholder}>
                     <Icons.CircleLoading size={36} className={classes.animated} />
                     <Typography className={classes.loading}>{t.popups_loading()}</Typography>
                 </div>
-            ) : protocols.length ? (
+            : protocols.length ?
                 <div className={classes.tableContainer}>
                     {protocols.map((protocol, index) => (
                         <SavingsRow
@@ -117,14 +117,13 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
                         />
                     ))}
                 </div>
-            ) : (
-                <div className={classes.placeholder}>
+            :   <div className={classes.placeholder}>
                     <Icons.EmptySimple size={36} className={classes.empty} />
                     <Typography fontSize="14px" mt={1.5} color={theme.palette.maskColor.second}>
                         {t.plugin_savings_no_protocol()}
                     </Typography>
                 </div>
-            )}
+            }
         </Box>
     )
 }

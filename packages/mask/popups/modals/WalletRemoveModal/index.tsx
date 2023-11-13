@@ -90,11 +90,11 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                     }}
                 />
             </Box>
-            {error ? (
+            {error ?
                 <Typography fontSize={14} color={theme.palette.maskColor.danger} mt={1}>
                     {error}
                 </Typography>
-            ) : null}
+            :   null}
             <ActionButton
                 loading={loading}
                 disabled={loading || !password.length || !!error}

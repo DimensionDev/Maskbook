@@ -46,9 +46,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
             },
             '&:after': {
                 position: 'absolute',
@@ -58,9 +59,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
             },
         },
         qrcodeContainer: {

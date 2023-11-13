@@ -156,12 +156,12 @@ export const CollectibleItem = memo(
         const [nameOverflow, nameRef] = useDetectOverflow()
         const [identityOverflow, identityRef] = useDetectOverflow()
         const tooltip =
-            nameOverflow || identityOverflow ? (
+            nameOverflow || identityOverflow ?
                 <Typography component="div">
                     {disableName ? null : <div>{name}</div>}
                     {assetName}
                 </Typography>
-            ) : undefined
+            :   undefined
 
         return (
             <ShadowRootTooltip PopperProps={popperProps} title={tooltip} placement="top" disableInteractive arrow>
@@ -185,11 +185,11 @@ export const CollectibleItem = memo(
                                     {name || assetName}
                                 </Typography>
 
-                                {verifiedBy.length ? (
+                                {verifiedBy.length ?
                                     <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
                                         <Icons.Verification size={16} />
                                     </ShadowRootTooltip>
-                                ) : null}
+                                :   null}
                             </div>
                         )}
                         <Typography ref={identityRef} className={classes.identity} variant="body2" component="div">

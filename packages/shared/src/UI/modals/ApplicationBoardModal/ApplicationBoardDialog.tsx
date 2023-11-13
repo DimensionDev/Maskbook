@@ -102,57 +102,56 @@ export function ApplicationBoard({
         reset()
     }, [openSettings, quickMode, reset])
 
-    return open ? (
-        <TabContext value={currentTab}>
-            <InjectedDialog
-                open={open}
-                maxWidth="sm"
-                isOnBack={!!(openSettings && !quickMode)}
-                onClose={closeDialog}
-                titleTabs={
-                    openSettings ? (
-                        <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                            <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
-                            <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
-                        </MaskTabList>
-                    ) : null
-                }
-                titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
-                independent={LeavePageConfirmModal.peek()}
-                title={openSettings ? t.application_settings() : t.applications()}
-                titleTail={
-                    openSettings ? null : (
-                        <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>
-                            <Icons.Gear size={24} />
-                        </IconButton>
-                    )
-                }>
-                <DialogContent className={classes.content}>
-                    {openSettings ? (
-                        <>
-                            <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginList />
-                            </TabPanel>
-                            <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginSwitch
-                                    focusPluginID={focusPluginID}
-                                    setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
-                                />
-                            </TabPanel>
-                        </>
-                    ) : (
-                        <ApplicationBoardContent
-                            openDashboard={openDashboard}
-                            queryOwnedPersonaInformation={queryOwnedPersonaInformation}
-                            currentSite={currentSite}
-                            lastRecognized={lastRecognized}
-                            allPersonas={allPersonas}
-                            applicationCurrentStatus={applicationCurrentStatus}
-                            personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
-                        />
-                    )}
-                </DialogContent>
-            </InjectedDialog>
-        </TabContext>
-    ) : null
+    return open ?
+            <TabContext value={currentTab}>
+                <InjectedDialog
+                    open={open}
+                    maxWidth="sm"
+                    isOnBack={!!(openSettings && !quickMode)}
+                    onClose={closeDialog}
+                    titleTabs={
+                        openSettings ?
+                            <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
+                                <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
+                                <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
+                            </MaskTabList>
+                        :   null
+                    }
+                    titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
+                    independent={LeavePageConfirmModal.peek()}
+                    title={openSettings ? t.application_settings() : t.applications()}
+                    titleTail={
+                        openSettings ? null : (
+                            <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>
+                                <Icons.Gear size={24} />
+                            </IconButton>
+                        )
+                    }>
+                    <DialogContent className={classes.content}>
+                        {openSettings ?
+                            <>
+                                <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
+                                    <ApplicationSettingPluginList />
+                                </TabPanel>
+                                <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
+                                    <ApplicationSettingPluginSwitch
+                                        focusPluginID={focusPluginID}
+                                        setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
+                                    />
+                                </TabPanel>
+                            </>
+                        :   <ApplicationBoardContent
+                                openDashboard={openDashboard}
+                                queryOwnedPersonaInformation={queryOwnedPersonaInformation}
+                                currentSite={currentSite}
+                                lastRecognized={lastRecognized}
+                                allPersonas={allPersonas}
+                                applicationCurrentStatus={applicationCurrentStatus}
+                                personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
+                            />
+                        }
+                    </DialogContent>
+                </InjectedDialog>
+            </TabContext>
+        :   null
 }

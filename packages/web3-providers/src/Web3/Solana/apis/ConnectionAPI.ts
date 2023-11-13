@@ -121,9 +121,9 @@ export class SolanaConnectionAPI
         memo?: string,
         initial?: SolanaConnectionOptions,
     ): Promise<string> {
-        return isNativeTokenAddress(address)
-            ? this.Transfer.transferSol(recipient, amount, initial)
-            : this.Transfer.transferSplToken(address, recipient, amount, initial)
+        return isNativeTokenAddress(address) ?
+                this.Transfer.transferSol(recipient, amount, initial)
+            :   this.Transfer.transferSplToken(address, recipient, amount, initial)
     }
 
     transferNonFungibleToken(

@@ -29,9 +29,9 @@ const useStyles = makeStyles()((theme) => ({
     walletDescription: {
         backgroundColor: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            theme.palette.mode === 'dark' ?
+                '0px 0px 20px rgba(255, 255, 255, 0.12)'
+            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px);',
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
@@ -229,14 +229,13 @@ export function Deploy({ open }: { open: boolean }) {
                             </Typography>
 
                             <Typography className={classes.address}>
-                                {queryContractLoading ? (
+                                {queryContractLoading ?
                                     <LoadingBase size={14} />
-                                ) : (
-                                    <>
+                                :   <>
                                         {formatEthereumAddress(contractAccount?.address ?? '', 4)}
                                         <CopyButton size={14} text={contractAccount?.address ?? ''} />
                                     </>
-                                )}
+                                }
                             </Typography>
                         </Box>
                     </Box>
@@ -261,9 +260,9 @@ export function Deploy({ open }: { open: boolean }) {
                         <Box display="flex" alignItems="center" columnGap={1}>
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
-                                {manager?.type === 'Persona'
-                                    ? formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
-                                    : formatEthereumAddress(manager?.address ?? '', 4)}
+                                {manager?.type === 'Persona' ?
+                                    formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
+                                :   formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>
                         <Icons.ArrowDrop className={classes.arrow} size={24} />
@@ -289,7 +288,7 @@ export function Deploy({ open }: { open: boolean }) {
                 </Box>
             </Box>
             <Box className={classes.stateBar}>
-                {signPersona ? (
+                {signPersona ?
                     <PersonaAction
                         classes={{ bottomFixed: classes.bottomFixed }}
                         avatar={avatar !== null ? avatar : undefined}
@@ -303,8 +302,7 @@ export function Deploy({ open }: { open: boolean }) {
                             {t.deploy()}
                         </ActionButton>
                     </PersonaAction>
-                ) : (
-                    <Box className={classes.walletStatus}>
+                :   <Box className={classes.walletStatus}>
                         <WalletDescription
                             pending={false}
                             providerIcon={providerDescriptor?.icon}
@@ -315,9 +313,9 @@ export function Deploy({ open }: { open: boolean }) {
                                 signWallet?.address ? formatEthereumAddress(signWallet.address, 4) : undefined
                             }
                             addressLink={
-                                signWallet?.address && chainId
-                                    ? EVMExplorerResolver.addressLink(chainId, signWallet?.address)
-                                    : undefined
+                                signWallet?.address && chainId ?
+                                    EVMExplorerResolver.addressLink(chainId, signWallet?.address)
+                                :   undefined
                             }
                         />
                         <ActionButton
@@ -328,7 +326,7 @@ export function Deploy({ open }: { open: boolean }) {
                             {t.deploy()}
                         </ActionButton>
                     </Box>
-                )}
+                }
             </Box>
             <CreateSuccessDialog
                 open={successDialogOpen}

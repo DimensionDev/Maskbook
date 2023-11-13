@@ -16,12 +16,12 @@ export class PolygonTranslator extends BaseTranslator {
         const config = {
             ...context.config,
             // keep the legacy gasPrice
-            ...(PayloadEditor.fromPayload(context.request)
-                ? {}
-                : {
-                      gasPrice:
-                          context.config.gasPrice ?? (await EVMWeb3Readonly.getGasPrice({ chainId: context.chainId })),
-                  }),
+            ...(PayloadEditor.fromPayload(context.request) ?
+                {}
+            :   {
+                    gasPrice:
+                        context.config.gasPrice ?? (await EVMWeb3Readonly.getGasPrice({ chainId: context.chainId })),
+                }),
         }
 
         delete config.maxFeePerGas

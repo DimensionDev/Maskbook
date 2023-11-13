@@ -78,7 +78,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     return (
         <Box width="100%">
             <UploadDropArea onSelectFile={handleSetFile} omitSizeLimit />
-            {file ? (
+            {file ?
                 <>
                     <FileFrame
                         className={classes.uploadedFile}
@@ -92,7 +92,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                             {readingFile ? t.file_unpacking() : t.file_unpacking_completed()}
                         </Typography>
                     </FileFrame>
-                    {!readingFile ? (
+                    {!readingFile ?
                         <Box mt={4}>
                             <PasswordField
                                 fullWidth
@@ -107,9 +107,9 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                                 autoFocus
                             />
                         </Box>
-                    ) : null}
+                    :   null}
                 </>
-            ) : null}
+            :   null}
         </Box>
     )
 })

@@ -58,7 +58,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
             <PermissionBoundary
                 permissions={props.definition.enableRequirement.host_permissions ?? EMPTY_LIST}
                 fallback={
-                    open ? (
+                    open ?
                         <PossiblePluginSuggestionUISingle
                             lackHostPermission
                             define={props.definition}
@@ -78,7 +78,7 @@ export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Pl
                                 </Typography>
                             }
                         />
-                    ) : undefined
+                    :   undefined
                 }>
                 <MaskPostExtraPluginWrapper
                     {...props}

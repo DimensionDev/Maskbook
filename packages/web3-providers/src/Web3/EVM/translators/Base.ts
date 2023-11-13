@@ -68,9 +68,10 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
         context.config = {
             ...config,
             maxFeePerGas: overrideMaxFeePerGas ? web3_utils.toHex(overrideMaxFeePerGas) : config.maxFeePerGas,
-            maxPriorityFeePerGas: overrideMaxPriorityFeePerGas
-                ? web3_utils.toHex(overrideMaxPriorityFeePerGas)
-                : config.maxPriorityFeePerGas,
+            maxPriorityFeePerGas:
+                overrideMaxPriorityFeePerGas ?
+                    web3_utils.toHex(overrideMaxPriorityFeePerGas)
+                :   config.maxPriorityFeePerGas,
             gasPrice: overrideGasPrice ? web3_utils.toHex(overrideGasPrice) : config.gasPrice,
         }
         // #endregion

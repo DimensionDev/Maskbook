@@ -60,9 +60,10 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
 
     override getFungibleToken(address: string, initial?: BaseHubOptions<ChainId> | undefined) {
         const networks = evm.state?.Network?.networks?.getCurrentValue()
-        const currentNetwork = initial?.chainId
-            ? networks?.find((x) => x.chainId === initial.chainId)
-            : evm.state?.Network?.network?.getCurrentValue()
+        const currentNetwork =
+            initial?.chainId ?
+                networks?.find((x) => x.chainId === initial.chainId)
+            :   evm.state?.Network?.network?.getCurrentValue()
         return attemptUntil(
             [
                 () => evm.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),

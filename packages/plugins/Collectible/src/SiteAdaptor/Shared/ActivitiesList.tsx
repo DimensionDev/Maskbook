@@ -49,13 +49,15 @@ export function ActivitiesList() {
                 <ActivityCard key={idx} activity={x} />
             ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center">
-                {hasNextPage ? (
+                {hasNextPage ?
                     <Stack py={1}>
                         <ElementAnchor callback={() => fetchNextPage()}>
-                            {isLoading ? <LoadingBase /> : null}
+                            {isLoading ?
+                                <LoadingBase />
+                            :   null}
                         </ElementAnchor>
                     </Stack>
-                ) : null}
+                :   null}
             </Stack>
         </div>
     )

@@ -54,17 +54,17 @@ export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid, ..
 
     return (
         <div className={classes.container}>
-            {avatar ? (
+            {avatar ?
                 <Avatar className={classes.avatar} src={avatar} />
-            ) : (
-                <Icons.GrayMasks className={classes.avatar} />
-            )}
-            {Icon ? (
+            :   <Icons.GrayMasks className={classes.avatar} />}
+            {Icon ?
                 <div className={classes.network}>
                     <Icon size={14} />
                 </div>
-            ) : null}
-            {!isValid && network === EnhanceableSite.Twitter ? <div className={classes.valid} /> : null}
+            :   null}
+            {!isValid && network === EnhanceableSite.Twitter ?
+                <div className={classes.valid} />
+            :   null}
         </div>
     )
 })

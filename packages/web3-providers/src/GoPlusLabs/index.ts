@@ -113,9 +113,9 @@ class GoPlusAuthorizationAPI implements AuthorizationAPI.Provider<ChainId> {
                             name: rawSpender.address_info.tag,
                             address: rawSpender.approved_contract,
                             amount:
-                                rawSpender.approved_amount === 'Unlimited'
-                                    ? INFINITE_VALUE
-                                    : new BigNumber(rawSpender.approved_amount).toNumber(),
+                                rawSpender.approved_amount === 'Unlimited' ?
+                                    INFINITE_VALUE
+                                :   new BigNumber(rawSpender.approved_amount).toNumber(),
                             tokenInfo,
                         }
 
@@ -224,30 +224,30 @@ function createTokenSecurity(
 
 function isHighRisk(tokenSecurity?: SecurityAPI.TokenSecurityType) {
     if (!tokenSecurity) return false
-    return tokenSecurity.trust_list === '1'
-        ? false
-        : SecurityMessages.filter(
-              (x) =>
-                  x.condition(tokenSecurity) &&
-                  x.level !== SecurityMessageLevel.Safe &&
-                  !x.shouldHide(tokenSecurity) &&
-                  x.level === SecurityMessageLevel.High,
-          ).sort((a, z) => {
-              if (a.level === SecurityMessageLevel.High) return -1
-              if (z.level === SecurityMessageLevel.High) return 1
-              return 0
-          }).length > 0
+    return tokenSecurity.trust_list === '1' ?
+            false
+        :   SecurityMessages.filter(
+                (x) =>
+                    x.condition(tokenSecurity) &&
+                    x.level !== SecurityMessageLevel.Safe &&
+                    !x.shouldHide(tokenSecurity) &&
+                    x.level === SecurityMessageLevel.High,
+            ).sort((a, z) => {
+                if (a.level === SecurityMessageLevel.High) return -1
+                if (z.level === SecurityMessageLevel.High) return 1
+                return 0
+            }).length > 0
 }
 
 function getMessageList(tokenSecurity: SecurityAPI.TokenSecurityType) {
-    return tokenSecurity.trust_list === '1'
-        ? []
-        : SecurityMessages.filter(
-              (x) =>
-                  x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-          ).sort((a, z) => {
-              if (a.level === SecurityMessageLevel.High) return -1
-              if (z.level === SecurityMessageLevel.High) return 1
-              return 0
-          })
+    return tokenSecurity.trust_list === '1' ?
+            []
+        :   SecurityMessages.filter(
+                (x) =>
+                    x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
+            ).sort((a, z) => {
+                if (a.level === SecurityMessageLevel.High) return -1
+                if (z.level === SecurityMessageLevel.High) return 1
+                return 0
+            })
 }

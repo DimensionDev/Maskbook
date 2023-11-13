@@ -199,9 +199,9 @@ function ProfileTabForTokenAndPersona() {
         (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
     const { classes } = useStyles({
         minWidth:
-            currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
-                ? 0
-                : 56,
+            currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase()) ?
+                0
+            :   56,
     })
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
@@ -210,23 +210,26 @@ function ProfileTabForTokenAndPersona() {
     }, [])
 
     return hidden || loading ? null : (
-        <ProfileTab
-            title={
-                currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
-                    ? 'More'
-                    : 'Web3'
-            }
-            type={ProfileTabs.WEB3}
-            classes={{
-                root: classes.root,
-                button: classes.button,
-                selected: classes.selected,
-            }}
-            reset={resetTwitterActivatedContent}
-            clear={hideTwitterActivatedContent}
-            children={<div className={classes.line} />}
-        />
-    )
+            <ProfileTab
+                title={
+                    (
+                        currentVisitingUserId &&
+                        twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
+                    ) ?
+                        'More'
+                    :   'Web3'
+                }
+                type={ProfileTabs.WEB3}
+                classes={{
+                    root: classes.root,
+                    button: classes.button,
+                    selected: classes.selected,
+                }}
+                reset={resetTwitterActivatedContent}
+                clear={hideTwitterActivatedContent}
+                children={<div className={classes.line} />}
+            />
+        )
 }
 
 function ProfileTabForDAO() {
@@ -246,20 +249,20 @@ function ProfileTabForDAO() {
         })
     }, [])
 
-    return hidden || loading || !spaceList?.length ? null : (
-        <ProfileTab
-            title="DAO"
-            type={ProfileTabs.DAO}
-            classes={{
-                root: classes.root,
-                button: classes.button,
-                selected: classes.selected,
-            }}
-            reset={resetTwitterActivatedContent}
-            clear={hideTwitterActivatedContent}
-            children={<div className={classes.line} />}
-        />
-    )
+    return hidden || loading || !spaceList?.length ?
+            null
+        :   <ProfileTab
+                title="DAO"
+                type={ProfileTabs.DAO}
+                classes={{
+                    root: classes.root,
+                    button: classes.button,
+                    selected: classes.selected,
+                }}
+                reset={resetTwitterActivatedContent}
+                clear={hideTwitterActivatedContent}
+                children={<div className={classes.line} />}
+            />
 }
 
 export function injectProfileTabAtTwitter(signal: AbortSignal) {

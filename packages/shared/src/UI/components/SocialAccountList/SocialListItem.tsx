@@ -166,11 +166,8 @@ export function SocialAccountListItem({
     const PlatformIcon = resolveNextIDPlatformIcon(platform)
     const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
 
-    const icon = profileUrl ? (
-        <Image size={20} src={profileUrl} className={classes.avatar} fallback={renderIcon} />
-    ) : (
-        renderIcon
-    )
+    const icon =
+        profileUrl ? <Image size={20} src={profileUrl} className={classes.avatar} fallback={renderIcon} /> : renderIcon
 
     return (
         <SocialTooltip platform={platform}>
@@ -190,17 +187,17 @@ export function SocialAccountListItem({
                     {icon}
 
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                        {Utils.isValidAddress(name || identity) ? (
+                        {Utils.isValidAddress(name || identity) ?
                             <>
                                 {Utils.formatAddress(name || identity, 4)}
                                 <CopyButton size={14} text={name || identity} />
                             </>
-                        ) : (
-                            name || identity
-                        )}
-                        {platform === NextIDPlatform.ENS ? <ENSAddress domain={identity} /> : null}
+                        :   name || identity}
+                        {platform === NextIDPlatform.ENS ?
+                            <ENSAddress domain={identity} />
+                        :   null}
                     </Typography>
-                    {platform === NextIDPlatform.LENS ? (
+                    {platform === NextIDPlatform.LENS ?
                         <ActionButton
                             loading={loading}
                             variant="text"
@@ -214,19 +211,18 @@ export function SocialAccountListItem({
                                     handle: identity,
                                 })
                             }}>
-                            {isSameAddress(account, value?.ownedBy)
-                                ? t.view()
-                                : value?.isFollowing
-                                  ? t.lens_following()
-                                  : t.lens_follow()}
+                            {isSameAddress(account, value?.ownedBy) ?
+                                t.view()
+                            : value?.isFollowing ?
+                                t.lens_following()
+                            :   t.lens_follow()}
                         </ActionButton>
-                    ) : (
-                        <div className={classes.linkIcon}>
+                    :   <div className={classes.linkIcon}>
                             <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                         </div>
-                    )}
+                    }
                 </div>
-                {platform === NextIDPlatform.ENS && relatedList?.length ? (
+                {platform === NextIDPlatform.ENS && relatedList?.length ?
                     <div className={classes.related}>
                         {relatedList.map((y) => (
                             <Typography component="span" key={y.name} className={classes.ens}>
@@ -234,7 +230,7 @@ export function SocialAccountListItem({
                             </Typography>
                         ))}
                     </div>
-                ) : null}
+                :   null}
             </MenuItem>
         </SocialTooltip>
     )

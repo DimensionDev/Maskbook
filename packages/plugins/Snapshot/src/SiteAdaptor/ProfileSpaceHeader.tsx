@@ -81,7 +81,9 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                         <Typography component="span" className={classes.symbol}>
                             {currentSpace.spaceName}
                         </Typography>
-                        {currentSpace.isVerified ? <Icons.Verification size={16} /> : null}
+                        {currentSpace.isVerified ?
+                            <Icons.Verification size={16} />
+                        :   null}
                         {spaceList.length > 1 && (
                             <>
                                 <IconButton
@@ -106,13 +108,13 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                             </>
                         )}
                     </div>
-                    {currentSpace.followersCount ? (
+                    {currentSpace.followersCount ?
                         <Typography component="span" className={classes.followersCount}>
                             {t.plugin_snapshot_space_info_followers_count({
                                 followersCount: formatCount(currentSpace.followersCount, 1),
                             })}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </div>
             </section>
             <Button
@@ -121,9 +123,9 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                 size="medium"
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
-                {followedSpaceList?.includes(currentSpace.spaceId) && account
-                    ? t.plugin_snapshot_space_view()
-                    : t.plugin_snapshot_space_join()}
+                {followedSpaceList?.includes(currentSpace.spaceId) && account ?
+                    t.plugin_snapshot_space_view()
+                :   t.plugin_snapshot_space_join()}
             </Button>
         </Box>
     )

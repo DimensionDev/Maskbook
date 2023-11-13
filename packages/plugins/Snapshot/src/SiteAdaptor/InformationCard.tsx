@@ -99,11 +99,9 @@ export function InformationCard() {
                     rel="noopener"
                     href={EVMExplorerResolver.addressLink(proposal.chainId, proposal.address)}>
                     <div className={classes.avatarWrapper}>
-                        {proposal.authorAvatar ? (
+                        {proposal.authorAvatar ?
                             <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
-                        ) : (
-                            <EthereumBlockie address={proposal.address} />
-                        )}
+                        :   <EthereumBlockie address={proposal.address} />}
                     </div>
                     <Typography fontSize={14}>
                         {proposal.space.id ?? formatEthereumAddress(proposal.address, 4)}

@@ -78,10 +78,12 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                                 overflow="hidden"
                                 textOverflow="ellipsis">
                                 <span className={classes.name}>{x.name}</span>
-                                {x.symbol ? <span className={classes.symbol}>({x.symbol})</span> : null}
+                                {x.symbol ?
+                                    <span className={classes.symbol}>({x.symbol})</span>
+                                :   null}
                             </Typography>
                             <div className={classes.itemCheckout}>
-                                {x.rank ? (
+                                {x.rank ?
                                     <Typography
                                         fontSize={14}
                                         fontWeight={700}
@@ -91,18 +93,19 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                                         textOverflow="ellipsis">
                                         #{x.rank}
                                     </Typography>
-                                ) : null}
-                                {fromSocialCard ? null : selected ? (
+                                :   null}
+                                {fromSocialCard ?
+                                    null
+                                : selected ?
                                     <Icons.CheckCircle size={20} className={classes.checkedIcon} />
-                                ) : (
-                                    <RadioButtonUncheckedIcon
+                                :   <RadioButtonUncheckedIcon
                                         style={{
                                             fontSize: 20,
                                             color: theme.palette.maskColor.secondaryLine,
                                             visibility: 'hidden',
                                         }}
                                     />
-                                )}
+                                }
                             </div>
                         </Stack>
                     </MenuItem>

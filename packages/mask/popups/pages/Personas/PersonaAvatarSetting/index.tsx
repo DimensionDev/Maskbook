@@ -217,7 +217,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             <TabContext value={currentTab}>
                 <NormalHeader
                     tabList={
-                        !file ? (
+                        !file ?
                             <MaskTabList
                                 onChange={handleChangeTab}
                                 aria-label="profile-photo-tabs"
@@ -225,10 +225,10 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                                 <Tab label={t.popups_profile_photo_image()} value={ProfilePhotoType.Image} />
                                 <Tab label={t.popups_profile_photo_nfts()} value={ProfilePhotoType.NFT} />
                             </MaskTabList>
-                        ) : null
+                        :   null
                     }
                 />
-                {!file ? (
+                {!file ?
                     <>
                         <TabPanel value={ProfilePhotoType.Image} className={classes.tabPanel}>
                             <Box p={2}>
@@ -270,7 +270,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                             />
                         </TabPanel>
                     </>
-                ) : null}
+                :   null}
             </TabContext>
         </Box>
     )

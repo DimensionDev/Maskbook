@@ -75,13 +75,11 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                         <Typography className={classes.identity}>@{account.identity}</Typography>
                     </Box>
                     <Typography className={classes.tips}>
-                        {account.is_valid ? (
+                        {account.is_valid ?
                             t.popups_display_web3_address_tips()
-                        ) : isSupportNextDotID ? (
+                        : isSupportNextDotID ?
                             t.popups_verify_account_tips()
-                        ) : (
-                            <Trans i18nKey="popups_other_social_accounts_tips" components={{ strong: <strong /> }} />
-                        )}
+                        :   <Trans i18nKey="popups_other_social_accounts_tips" components={{ strong: <strong /> }} />}
                     </Typography>
 
                     <WalletList
@@ -94,7 +92,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                     />
                 </Box>
 
-                {isSupportNextDotID ? (
+                {isSupportNextDotID ?
                     <BottomController>
                         <Button variant="outlined" fullWidth onClick={handleBack}>
                             {t.back()}
@@ -103,7 +101,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                             {account.is_valid ? t.save() : t.popups_verify_account()}
                         </ActionButton>
                     </BottomController>
-                ) : null}
+                :   null}
             </Box>
         )
     },

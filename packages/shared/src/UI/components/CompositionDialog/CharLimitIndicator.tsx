@@ -42,13 +42,13 @@ export const CharLimitIndicator = memo(({ value, max, ...props }: CharLimitIndic
                 value={normalized}
                 className={cx(props.className, classes.circle)}
             />
-            {displayLabel ? (
+            {displayLabel ?
                 <span className={classes.label}>
                     <Typography variant="caption" component="div" color="textSecondary">
                         {max - value}
                     </Typography>
                 </span>
-            ) : null}
+            :   null}
         </div>
     )
 })

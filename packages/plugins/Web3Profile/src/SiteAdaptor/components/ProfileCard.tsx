@@ -146,21 +146,22 @@ export const ProfileCard = memo(function ProfileCard({
         return addresses.filter((x) => !pendingUnlistedAddresses.includes(x))
     }, [pendingUnlistedAddresses])
 
-    const action = walletProofs.length ? (
-        <>
-            <Icons.Wallet size={24} />
-            <Typography className={classes.percent} variant="body2" mx={1}>
-                {listingAddresses.length}/{walletProofs.length}
-            </Typography>
-            <div className={classes.arrowWrapper}>
-                {expanded ? <Icons.ArrowUp size={20} /> : <Icons.ArrowDrop size={20} />}
-            </div>
-        </>
-    ) : (
-        <Button variant="text" disableRipple onClick={onAddWallet} sx={{ px: 1 }}>
-            {t.add_wallet()}
-        </Button>
-    )
+    const action =
+        walletProofs.length ?
+            <>
+                <Icons.Wallet size={24} />
+                <Typography className={classes.percent} variant="body2" mx={1}>
+                    {listingAddresses.length}/{walletProofs.length}
+                </Typography>
+                <div className={classes.arrowWrapper}>
+                    {expanded ?
+                        <Icons.ArrowUp size={20} />
+                    :   <Icons.ArrowDrop size={20} />}
+                </div>
+            </>
+        :   <Button variant="text" disableRipple onClick={onAddWallet} sx={{ px: 1 }}>
+                {t.add_wallet()}
+            </Button>
     const cardRef = useRef<HTMLDivElement>(null)
 
     return (
@@ -185,11 +186,11 @@ export const ProfileCard = memo(function ProfileCard({
                         <Typography variant="subtitle1" className={classes.title}>
                             {nickname}
                         </Typography>
-                        {isCurrent ? (
+                        {isCurrent ?
                             <span className={classes.current} role="status">
                                 {t.current()}
                             </span>
-                        ) : null}
+                        :   null}
                     </div>
                 }
                 subheader={
@@ -203,7 +204,7 @@ export const ProfileCard = memo(function ProfileCard({
                     return setExpanded((v) => !v)
                 }}
             />
-            {walletProofs.length ? (
+            {walletProofs.length ?
                 <Collapse
                     in={expanded}
                     easing="ease-in-out"
@@ -231,7 +232,7 @@ export const ProfileCard = memo(function ProfileCard({
                         </div>
                     </CardContent>
                 </Collapse>
-            ) : null}
+            :   null}
         </Card>
     )
 })

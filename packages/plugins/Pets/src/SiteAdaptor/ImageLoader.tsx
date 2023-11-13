@@ -15,7 +15,9 @@ export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
                 onError={onErrorHandle}
                 style={{ display: loaded || !props.src ? 'block' : 'none' }}
             />
-            {!loaded && !!props.src ? <LoadingBase size={20} /> : null}
+            {!loaded && !!props.src ?
+                <LoadingBase size={20} />
+            :   null}
         </>
     )
 }

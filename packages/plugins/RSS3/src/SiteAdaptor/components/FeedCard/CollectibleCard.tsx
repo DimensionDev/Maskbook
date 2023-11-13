@@ -225,9 +225,9 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                 metadata = action.metadata
                 const standard = feed.actions[0].metadata?.standard
                 const costMetadata: RSS3BaseAPI.TransactionMetadata | undefined =
-                    standard && ['Native', 'ERC-20'].includes(standard)
-                        ? (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
-                        : undefined
+                    standard && ['Native', 'ERC-20'].includes(standard) ?
+                        (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
+                    :   undefined
                 const isSending = isSameAddress(feed.owner, action.address_from)
                 const otherAddress = isSending ? action.address_to : action.address_from
                 return {
@@ -239,7 +239,10 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
                                 other: formatEthereumAddress(otherAddress ?? '', 4),
-                                context: isSending ? 'send' : costMetadata ? 'claim_cost' : 'claim',
+                                context:
+                                    isSending ? 'send'
+                                    : costMetadata ? 'claim_cost'
+                                    : 'claim',
                                 cost_value: formatValue(costMetadata),
                                 cost_symbol: costMetadata?.symbol!,
                             }}
@@ -283,7 +286,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>{summary}</Typography>
-            {metadata ? (
+            {metadata ?
                 <div
                     className={cx(classes.body, {
                         [classes.verbose]: verbose,
@@ -300,16 +303,17 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     />
                     <div className={classes.info}>
                         {verbose ? null : <Typography className={classes.title}>{metadata.name}</Typography>}
-                        {metadata.description ? (
+                        {metadata.description ?
                             <Typography className={classes.subtitle}>{metadata.description}</Typography>
-                        ) : null}
+                        :   null}
                     </div>
-                    {verbose && attributes?.length ? (
+                    {verbose && attributes?.length ?
                         <div className={classes.attributes}>
                             {attributes.map((attribute) => {
-                                const value = Array.isArray(attribute.value)
-                                    ? attribute.value.map((x) => x.uri).join('\n')
-                                    : attribute.value
+                                const value =
+                                    Array.isArray(attribute.value) ?
+                                        attribute.value.map((x) => x.uri).join('\n')
+                                    :   attribute.value
 
                                 return (
                                     <div className={classes.attribute} key={attribute.trait_type}>
@@ -323,9 +327,9 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                                 )
                             })}
                         </div>
-                    ) : null}
+                    :   null}
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

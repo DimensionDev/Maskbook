@@ -103,11 +103,11 @@ const CreateWalletForm = memo(function CreateWalletForm() {
             urlcat(isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic, {
                 external_request,
             }),
-            data.password
-                ? {
-                      state: { password: data.password, isReset },
-                  }
-                : undefined,
+            data.password ?
+                {
+                    state: { password: data.password, isReset },
+                }
+            :   undefined,
         )
     })
 

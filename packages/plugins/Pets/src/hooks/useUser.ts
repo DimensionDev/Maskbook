@@ -24,9 +24,8 @@ const DEFAULT_USER = { userId: '', address: '' }
 export function useCurrentVisitingUser(flag?: number) {
     const identity = useCurrentVisitingIdentity()
     const { value: user = DEFAULT_USER } = useAsync(async () => {
-        const userId = location.href?.endsWith(identity?.identifier?.userId ?? '')
-            ? identity?.identifier?.userId ?? ''
-            : ''
+        const userId =
+            location.href?.endsWith(identity?.identifier?.userId ?? '') ? identity?.identifier?.userId ?? '' : ''
         try {
             if (!userId || userId === '$unknown') return DEFAULT_USER
             const storage = Web3Storage.createKVStorage(PetsPluginID)

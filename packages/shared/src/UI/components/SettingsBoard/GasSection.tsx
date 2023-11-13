@@ -70,20 +70,21 @@ export function GasSection(props: GasSectionProps) {
     const suggestedMaxPriorityFeePerGas =
         gasOptions?.[gasOptionType ?? GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas
     const baseFeePerGas = gasOptions?.[GasOptionType.FAST].baseFeePerGas ?? '0'
-    const priorityFee = !isZero(maxPriorityFeePerGasByUser)
-        ? formatGweiToWei(maxPriorityFeePerGasByUser)
-        : ((transaction as Transaction)?.maxPriorityFeePerGas as string)
+    const priorityFee =
+        !isZero(maxPriorityFeePerGasByUser) ?
+            formatGweiToWei(maxPriorityFeePerGasByUser)
+        :   ((transaction as Transaction)?.maxPriorityFeePerGas as string)
 
     const gasPrice = (transactionOptions as Transaction | undefined)?.gasPrice
 
     const customPrice = formatCurrency(
-        activeTab === GasSettingsType.Basic
-            ? formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
-            : formatWeiToGwei(
-                  isEIP1559
-                      ? plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
-                      : gasPrice ?? suggestedMaxFeePerGas ?? 0,
-              ),
+        activeTab === GasSettingsType.Basic ?
+            formatWeiToGwei(suggestedMaxFeePerGas ?? 0)
+        :   formatWeiToGwei(
+                isEIP1559 ?
+                    plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
+                :   gasPrice ?? suggestedMaxFeePerGas ?? 0,
+            ),
         '',
     )
 
@@ -92,16 +93,16 @@ export function GasSection(props: GasSectionProps) {
             <Section
                 title={t.gas_settings_label_gas_price()}
                 additions={
-                    gasOptionType ? (
+                    gasOptionType ?
                         <Typography className={classes.additions} component="span">
                             <span className={classes.label}>
-                                {activeTab === GasSettingsType.Basic
-                                    ? GAS_OPTION_NAMES[gasOptionType]
-                                    : t.gas_settings_custom()}
+                                {activeTab === GasSettingsType.Basic ?
+                                    GAS_OPTION_NAMES[gasOptionType]
+                                :   t.gas_settings_custom()}
                             </span>
                             <span className={classes.price}>{` ${customPrice} Gwei`}</span>
                         </Typography>
-                    ) : null
+                    :   null
                 }>
                 <TabContext value={activeTab}>
                     <MaskTabList
@@ -117,7 +118,7 @@ export function GasSection(props: GasSectionProps) {
                         />
                     </MaskTabList>
                 </TabContext>
-                {activeTab === GasSettingsType.Basic ? (
+                {activeTab === GasSettingsType.Basic ?
                     <GasOptionSelector
                         chainId={chainId as ChainId}
                         options={gasOptions}
@@ -125,7 +126,7 @@ export function GasSection(props: GasSectionProps) {
                             setTransactionOptions(transactionOptions)
                         }}
                     />
-                ) : gasOptions ? (
+                : gasOptions ?
                     <GasForm
                         defaultGasLimit={customPrice}
                         disableGasLimit={disableGasLimit}
@@ -139,7 +140,7 @@ export function GasSection(props: GasSectionProps) {
                         maxPriorityFeePerGasByUser={maxPriorityFeePerGasByUser}
                         setMaxPriorityFeePerGasByUser={setMaxPriorityFeePerGasByUser}
                     />
-                ) : null}
+                :   null}
             </Section>
         </div>
     )

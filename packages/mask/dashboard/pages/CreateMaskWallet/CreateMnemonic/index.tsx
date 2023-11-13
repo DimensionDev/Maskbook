@@ -243,7 +243,7 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                     {t.wallets_import_wallet_import()}
                 </Typography>
             </div>
-            {verified ? (
+            {verified ?
                 <VerifyMnemonicUI
                     isReset={location.state?.isReset}
                     setVerified={setVerified}
@@ -257,14 +257,13 @@ const CreateMnemonic = memo(function CreateMnemonic() {
                     puzzleWordList={puzzleWordList}
                     onSubmit={onSubmit}
                 />
-            ) : (
-                <CreateMnemonicUI
+            :   <CreateMnemonicUI
                     address={address}
                     words={words}
                     onRefreshWords={refreshCallback}
                     onVerifyClick={onVerifyClick}
                 />
-            )}
+            }
         </>
     )
 })
@@ -338,11 +337,11 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                     </section>
                 ))}
             </Box>
-            {isMatched === false ? (
+            {isMatched === false ?
                 <Typography className={classes.verificationFail}>
                     {t.create_wallet_mnemonic_verification_fail()}
                 </Typography>
-            ) : null}
+            :   null}
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <SecondaryButton className={classes.bold} width="125px" size="large" onClick={handleOnBack}>
@@ -379,9 +378,9 @@ const PuzzleOption = memo<PuzzleOption>(function PuzzleOption({ puzzleWord, puzz
                             classes.iconWrapper,
                             word !== puzzleAnswer[puzzleWord.index] ? classes.emptyCheckbox : '',
                         )}>
-                        {word === puzzleAnswer[puzzleWord.index] ? (
+                        {word === puzzleAnswer[puzzleWord.index] ?
                             <Icons.Checkbox size={18} className={classes.checkIcon} />
-                        ) : null}
+                        :   null}
                     </div>
 
                     <Typography className={classes.puzzleWordText}>{word}</Typography>

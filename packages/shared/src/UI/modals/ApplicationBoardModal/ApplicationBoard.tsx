@@ -187,14 +187,14 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                 setIsHoveringCarousel={setIsHoveringCarousel}
             />
 
-            {listedAppList.length > 0 ? (
+            {listedAppList.length > 0 ?
                 <Boundary>
                     <section
                         className={cx(
                             classes.applicationWrapper,
-                            recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
-                                ? classes.applicationWrapperWithCarousel
-                                : '',
+                            recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel ?
+                                classes.applicationWrapperWithCarousel
+                            :   '',
                         )}>
                         {listedAppList.map((application) => (
                             <RenderEntryComponent
@@ -204,19 +204,18 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                         ))}
                     </section>
                 </Boundary>
-            ) : (
-                <div
+            :   <div
                     className={cx(
                         classes.placeholderWrapper,
-                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
-                            ? classes.applicationWrapperWithCarousel
-                            : '',
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel ?
+                            classes.applicationWrapperWithCarousel
+                        :   '',
                     )}>
                     <Typography className={classes.placeholder}>
                         {t.application_display_tab_plug_app_unlisted_placeholder()}
                     </Typography>
                 </div>
-            )}
+            }
         </>
     )
 }

@@ -44,11 +44,11 @@ const useStyles = makeStyles()({
 function BannerUI(props: BannerUIProps) {
     const { classes } = useStyles(undefined, { props })
 
-    return props.nextStep === 'hidden' ? null : (
-        <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            {ICON_MAP?.[props?.iconType ?? 'default']}
-        </IconButton>
-    )
+    return props.nextStep === 'hidden' ?
+            null
+        :   <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
+                {ICON_MAP?.[props?.iconType ?? 'default']}
+            </IconButton>
 }
 
 interface BannerProps extends Partial<BannerUIProps> {}
@@ -79,23 +79,24 @@ export function Banner(props: BannerProps) {
             personaConnectStatus.hasPersona ? DashboardRoutes.Personas : DashboardRoutes.SignUpPersona,
         )
     }, [networkIdentifier, nextStep])
-    const defaultUserName = networkIdentifier
-        ? {
-              defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
-              value,
-              onChange,
-              isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),
-          }
-        : ('hidden' as const)
+    const defaultUserName =
+        networkIdentifier ?
+            {
+                defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
+                value,
+                onChange,
+                isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),
+            }
+        :   ('hidden' as const)
 
     const [mounted, setMounted] = useState(false)
     useMount(() => setMounted(true))
 
-    return identities.length === 0 && mounted ? (
-        <BannerUI
-            {...props}
-            username={props.username ?? defaultUserName}
-            nextStep={props.nextStep ?? { onClick: defaultNextStep }}
-        />
-    ) : null
+    return identities.length === 0 && mounted ?
+            <BannerUI
+                {...props}
+                username={props.username ?? defaultUserName}
+                nextStep={props.nextStep ?? { onClick: defaultNextStep }}
+            />
+        :   null
 }

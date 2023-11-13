@@ -80,11 +80,9 @@ function MaskIcon() {
     return process.env.NODE_ENV === 'production' ? <Icons.MaskBlue size={120} /> : <Icons.MaskGrey size={120} />
 }
 function MaskTitleIcon() {
-    return process.env.NODE_ENV === 'production' ? (
-        <Icons.MaskText width={190} height={28} />
-    ) : (
-        <Icons.MaskTextNightly width={190} height={28} />
-    )
+    return process.env.NODE_ENV === 'production' ?
+            <Icons.MaskText width={190} height={28} />
+        :   <Icons.MaskTextNightly width={190} height={28} />
 }
 
 export function About() {

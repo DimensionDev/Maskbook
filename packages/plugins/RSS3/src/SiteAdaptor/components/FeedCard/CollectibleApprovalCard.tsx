@@ -72,11 +72,11 @@ export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFe
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Typography className={classes.value}>{metadata.collection}</Typography>
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

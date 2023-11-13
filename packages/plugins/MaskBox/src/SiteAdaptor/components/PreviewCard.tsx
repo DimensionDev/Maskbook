@@ -341,10 +341,14 @@ export function PreviewCard() {
                 </Box>
                 <Paper className={classes.content}>
                     <TabPanel value={tabs.Articles} key={tabs.Articles} sx={{ padding: 0 }}>
-                        {boxInfo ? <ArticlesTab boxMetadata={boxMetadata} /> : null}
+                        {boxInfo ?
+                            <ArticlesTab boxMetadata={boxMetadata} />
+                        :   null}
                     </TabPanel>
                     <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
-                        {boxInfo ? <DetailsTab boxMetadata={boxMetadata} /> : null}
+                        {boxInfo ?
+                            <DetailsTab boxMetadata={boxMetadata} />
+                        :   null}
                     </TabPanel>
                 </Paper>
 
@@ -365,13 +369,13 @@ export function PreviewCard() {
                                 disabled={boxState !== BoxState.READY || isOpening}
                                 onClick={() => setOpenDrawDialog(true)}>
                                 {(() => {
-                                    return boxState === BoxState.READY && paymentTokenAddress
-                                        ? t.action_title({
-                                              title: boxStateMessage,
-                                              price: formatCurrency(paymentTokenPrice, ''),
-                                              symbol: paymentTokenDetailed?.symbol ?? '',
-                                          })
-                                        : boxStateMessage
+                                    return boxState === BoxState.READY && paymentTokenAddress ?
+                                            t.action_title({
+                                                title: boxStateMessage,
+                                                price: formatCurrency(paymentTokenPrice, ''),
+                                                symbol: paymentTokenDetailed?.symbol ?? '',
+                                            })
+                                        :   boxStateMessage
                                 })()}
                             </ActionButton>
                         </WalletConnectedBoundary>

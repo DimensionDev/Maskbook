@@ -215,11 +215,10 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, spender.tokenInfo.address, undefined, {
         chainId,
     })
-    const amount = spender.amount
-        ? spender.amount
-        : spender.rawAmount
-          ? leftShift(spender.rawAmount, token?.decimals)
-          : undefined
+    const amount =
+        spender.amount ? spender.amount
+        : spender.rawAmount ? leftShift(spender.rawAmount, token?.decimals)
+        : undefined
 
     return (
         <div className={classes.listItemWrapper}>
@@ -236,11 +235,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
-                        {!spender.logo ? null : typeof spender.logo === 'string' ? (
+                        {!spender.logo ?
+                            null
+                        : typeof spender.logo === 'string' ?
                             <img src={spender.logo} className={classes.spenderLogoIcon} />
-                        ) : (
-                            <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>
-                        )}
+                        :   <div className={classes.spenderMaskLogoIcon}>{spender.logo ?? ''}</div>}
                         <Typography className={classes.primaryText}>
                             {spender.name || EVMUtils.formatAddress(spender.address, 4)}
                         </Typography>
@@ -254,9 +253,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
-                        {amount ? (
+                        {amount ?
                             <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
-                        ) : null}
+                        :   null}
                     </div>
                 </div>
                 <ChainBoundary

@@ -177,14 +177,14 @@ export function RedPacket(props: RedPacketProps) {
             interpolation: { escapeValue: false },
         }
         if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
-            return isOnTwitter || isOnFacebook
-                ? t.share_message_official_account(shareTextOption)
-                : t.share_message_not_twitter(shareTextOption)
+            return isOnTwitter || isOnFacebook ?
+                    t.share_message_official_account(shareTextOption)
+                :   t.share_message_not_twitter(shareTextOption)
         }
 
-        return isOnTwitter || isOnFacebook
-            ? t.share_unclaimed_message_official_account(shareTextOption)
-            : t.share_unclaimed_message_not_twitter(shareTextOption)
+        return isOnTwitter || isOnFacebook ?
+                t.share_unclaimed_message_official_account(shareTextOption)
+            :   t.share_unclaimed_message_not_twitter(shareTextOption)
     }, [payload, postLink, claimTxHash, listOfStatus, t, network?.name])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
@@ -235,12 +235,12 @@ export function RedPacket(props: RedPacketProps) {
         if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t.description_claimed(
-                availability.claimed_amount
-                    ? {
-                          amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
-                          symbol: token.symbol,
-                      }
-                    : { amount: '-', symbol: '-' },
+                availability.claimed_amount ?
+                    {
+                        amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
+                        symbol: token.symbol,
+                    }
+                :   { amount: '-', symbol: '-' },
             )
         return ''
     }, [listOfStatus, t, token])
@@ -300,11 +300,11 @@ export function RedPacket(props: RedPacketProps) {
                 />
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
-                    {listOfStatus.length ? (
+                    {listOfStatus.length ?
                         <Typography className={classes.label} variant="body2">
                             {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </div>
                 <div className={classes.content}>
                     <Stack />

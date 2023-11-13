@@ -147,11 +147,10 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
                                             onClick={() => handleDateClick(currentDatePointer)}>
                                             <Typography
                                                 className={`${classes.dateItem} ${
-                                                    selectedDate.toDateString() === currentDatePointer.toDateString()
-                                                        ? classes.active
-                                                        : list?.[currentDatePointer.toLocaleDateString()]
-                                                          ? classes.canClick
-                                                          : ''
+                                                    selectedDate.toDateString() === currentDatePointer.toDateString() ?
+                                                        classes.active
+                                                    : list?.[currentDatePointer.toLocaleDateString()] ? classes.canClick
+                                                    : ''
                                                 }`}>
                                                 {format(currentDatePointer, 'd')}
                                             </Typography>

@@ -29,16 +29,14 @@ export const TokenCard = memo<TokenCardProps>(({ contractDetailed, tokenId }: To
     const { classes } = useStyles()
     const { data: tokenDetailed } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, contractDetailed.address, tokenId)
 
-    return tokenDetailed ? (
-        <>
-            <CollectibleCard readonly provider={SourceType.OpenSea} asset={tokenDetailed} />
-            <div className={classes.title}>
-                <Typography className={classes.name} color="textSecondary" variant="body2">
-                    {tokenDetailed.contract?.name ?? tokenId}
-                </Typography>
-            </div>
-        </>
-    ) : (
-        <LoadingBase />
-    )
+    return tokenDetailed ?
+            <>
+                <CollectibleCard readonly provider={SourceType.OpenSea} asset={tokenDetailed} />
+                <div className={classes.title}>
+                    <Typography className={classes.name} color="textSecondary" variant="body2">
+                        {tokenDetailed.contract?.name ?? tokenId}
+                    </Typography>
+                </div>
+            </>
+        :   <LoadingBase />
 })

@@ -9,9 +9,9 @@ const useStyles = makeStyles()((theme) => ({
     detectionCard: {
         borderRadius: 8,
         boxShadow:
-            theme.palette.mode === 'light'
-                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+            theme.palette.mode === 'light' ?
+                '0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
         marginTop: '8px',
     },
     icon: {
@@ -66,7 +66,9 @@ export const RiskCardUI = memo<RiskCardUIProps>(({ icon, title, titleColor, desc
                 <Typography className={classes.header} color={titleColor}>
                     {title}
                 </Typography>
-                {description ? <Typography className={classes.description}>{description}</Typography> : null}
+                {description ?
+                    <Typography className={classes.description}>{description}</Typography>
+                :   null}
             </Box>
         </Stack>
     )

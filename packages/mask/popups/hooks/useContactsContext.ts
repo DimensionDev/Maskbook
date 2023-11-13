@@ -37,10 +37,10 @@ function useContactsContext(
         const matches = [...wallets, ...contacts].filter((x) => x.name === userInput)
         if (!matches.length) return defaultAddress
         const contact: Wallet | Contact =
-            matches.length > 1
-                ? // There might be wallets or contacts with the same name
-                  matches.find((x) => isSameAddress(x.address, defaultAddress)) || matches[0]
-                : matches[0]
+            matches.length > 1 ?
+                // There might be wallets or contacts with the same name
+                matches.find((x) => isSameAddress(x.address, defaultAddress)) || matches[0]
+            :   matches[0]
         return contact.address
     }, [userInput, defaultAddress, registeredAddress, contacts, wallets])
 

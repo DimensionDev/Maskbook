@@ -18,25 +18,23 @@ export function Linking(props: LinkingProps) {
                 rel="noopener noreferrer"
                 href={props.href}
                 {...LinkProps}>
-                {children ? (
+                {children ?
                     children
-                ) : (
-                    <Typography variant="body2" component="span" {...TypographyProps}>
+                :   <Typography variant="body2" component="span" {...TypographyProps}>
                         {hostname.replace(/^www./i, '')}
                     </Typography>
-                )}
+                }
             </Link>
         )
     } else {
         return (
             <span className={LinkProps?.className} title={LinkProps?.title}>
-                {children ? (
+                {children ?
                     children
-                ) : (
-                    <Typography variant="body2" component="span" {...TypographyProps}>
+                :   <Typography variant="body2" component="span" {...TypographyProps}>
                         {href}
                     </Typography>
-                )}
+                }
             </span>
         )
     }

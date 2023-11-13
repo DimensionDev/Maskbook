@@ -27,9 +27,9 @@ export function ChangeCurrency() {
                 <Typography className={classes.itemText}>{t.currency()}</Typography>
             </Box>
             <Box className={classes.itemBox}>
-                {currencyType ? (
+                {currencyType ?
                     <Typography className={classes.itemText}>{resolveCurrencyName(currencyType)}</Typography>
-                ) : null}
+                :   null}
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

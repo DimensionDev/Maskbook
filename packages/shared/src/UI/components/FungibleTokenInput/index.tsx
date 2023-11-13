@@ -93,9 +93,9 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                     })
 
                     onAmountChange(
-                        (isZero(formattedBalance)
-                            ? new BigNumber(leftShift(amount, token.decimals).toPrecision(2)).toFormat()
-                            : formattedBalance) ?? '0',
+                        (isZero(formattedBalance) ?
+                            new BigNumber(leftShift(amount, token.decimals).toPrecision(2)).toFormat()
+                        :   formattedBalance) ?? '0',
                     )
                 }}
                 balance={balance}

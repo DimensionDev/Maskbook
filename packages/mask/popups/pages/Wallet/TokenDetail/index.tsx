@@ -109,9 +109,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #443434 0%, rgba(68, 52, 52, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #FFE9E9 0%, rgba(255, 233, 233, 0.00) 100%)',
             },
             '&:after': {
                 position: 'absolute',
@@ -121,9 +122,10 @@ const useStyles = makeStyles()((theme) => {
                 content: '""',
                 height: 256,
                 width: 256,
-                backgroundImage: isDark
-                    ? 'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
-                    : 'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
+                backgroundImage:
+                    isDark ?
+                        'radial-gradient(50% 50.00% at 50% 50.00%, #605675 0%, rgba(56, 51, 67, 0.00) 100%)'
+                    :   'radial-gradient(50% 50.00% at 50% 50.00%, #F0E9FF 0%, rgba(240, 233, 255, 0.00) 100%)',
             },
         },
     }
@@ -194,31 +196,29 @@ const TokenDetail = memo(function TokenDetail() {
             <Box className={classes.page}>
                 <Box padding={2}>
                     <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        {typeof tokenPrice !== 'undefined' ? (
+                        {typeof tokenPrice !== 'undefined' ?
                             <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
-                        ) : null}
+                        :   null}
                     </ProgressiveText>
                     <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
                     <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
-                    {!isLoadingStats && isError ? (
+                    {!isLoadingStats && isError ?
                         <ReloadStatus
                             onRetry={refetch}
                             className={classes.trending}
                             height={DIMENSION.height}
                             width={DIMENSION.width}
                         />
-                    ) : !isLoadingStats && !stats.length ? (
+                    : !isLoadingStats && !stats.length ?
                         <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
                             {t.not_enough_data_to_present()}
                         </EmptyStatus>
-                    ) : (
-                        <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />
-                    )}
+                    :   <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />}
 
                     <Box display="flex" flexDirection="row" justifyContent="space-between">
                         <Box>
                             <Typography className={classes.label}>{t.balance()}</Typography>
-                            {asset ? (
+                            {asset ?
                                 <Typography component="div" className={classes.value} justifyContent="flex-start">
                                     <TokenIcon
                                         className={classes.tokenIcon}
@@ -235,12 +235,11 @@ const TokenDetail = memo(function TokenDetail() {
                                         formatter={formatBalance}
                                     />
                                 </Typography>
-                            ) : (
-                                <Typography component="div" className={classes.value}>
+                            :   <Typography component="div" className={classes.value}>
                                     <Skeleton className={classes.tokenIcon} variant="circular" width={16} height={16} />
                                     <Skeleton variant="text" width={30} />
                                 </Typography>
-                            )}
+                            }
                         </Box>
                         <Box textAlign="right">
                             <Typography className={classes.label}>{t.value()}</Typography>
@@ -250,17 +249,16 @@ const TokenDetail = memo(function TokenDetail() {
                         </Box>
                     </Box>
                 </Box>
-                {isLoadingTrending ? (
+                {isLoadingTrending ?
                     <Box className={classes.info}>
                         <FungibleCoinMarketTableSkeleton />
                         <CoinMetadataTableSkeleton />
                     </Box>
-                ) : (
-                    <Box className={classes.info}>
+                :   <Box className={classes.info}>
                         <FungibleCoinMarketTable trending={trending} />
                         <CoinMetadataTable trending={trending} />
                     </Box>
-                )}
+                }
                 <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
                     <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
                 </ThemeProvider>

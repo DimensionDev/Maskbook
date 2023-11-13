@@ -99,7 +99,12 @@ export function formatCurrency(
     try {
         formatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: isIntlCurrencyValid ? (currency === CurrencyType.JPY ? CurrencyType.CNY : currency) : 'USD',
+            currency:
+                isIntlCurrencyValid ?
+                    currency === CurrencyType.JPY ?
+                        CurrencyType.CNY
+                    :   currency
+                :   'USD',
             currencyDisplay: 'narrowSymbol',
         })
     } catch {
@@ -114,7 +119,9 @@ export function formatCurrency(
     const isDigitalCurrency = !!(!isIntlCurrencyValid && symbol)
     const digitalCurrencyModifierValues = digitalCurrencyModifier(
         formatter.formatToParts(
-            bn.isZero() ? 0 : bn.lt(sixDecimalBoundary) ? sixDecimalBoundary.toNumber() : bn.toNumber(),
+            bn.isZero() ? 0
+            : bn.lt(sixDecimalBoundary) ? sixDecimalBoundary.toNumber()
+            : bn.toNumber(),
         ),
         symbol,
         isDigitalCurrency,
@@ -128,9 +135,8 @@ export function formatCurrency(
     ) {
         const isLessThanAssetValueDecimalBoundary = bn.lt(assetValueBoundary)
         const isLessThanTwelveDecimalBoundary = bn.lt(twelveDecimalBoundary)
-        const isLessThanCustomDecimalBoundary = customDecimalConfig?.boundary
-            ? bn.lt(customDecimalConfig?.boundary)
-            : false
+        const isLessThanCustomDecimalBoundary =
+            customDecimalConfig?.boundary ? bn.lt(customDecimalConfig?.boundary) : false
         const isGreatThanEightDecimalBoundary = bn.gte(eightDecimalBoundary)
 
         const value = digitalCurrencyModifierValues
@@ -140,21 +146,20 @@ export function formatCurrency(
                         return formatCurrencySymbol(symbol ?? value, i === 0)
                     case 'fraction':
                         if (customDecimalConfig) {
-                            return bn.isZero()
-                                ? zeroValue
-                                : isLessThanCustomDecimalBoundary
-                                  ? customDecimalConfig.boundary.toFixed()
-                                  : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
+                            return (
+                                bn.isZero() ? zeroValue
+                                : isLessThanCustomDecimalBoundary ? customDecimalConfig.boundary.toFixed()
+                                : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
+                            )
                         }
-                        return bn.isZero()
-                            ? zeroValue
-                            : onlyRemainTwoOrZeroDecimal
-                              ? minimumValue
-                              : isLessThanTwelveDecimalBoundary
-                                ? sixDecimalBoundary.toFixed()
-                                : isGreatThanEightDecimalBoundary
-                                  ? bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
-                                  : bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
+                        return (
+                            bn.isZero() ? zeroValue
+                            : onlyRemainTwoOrZeroDecimal ? minimumValue
+                            : isLessThanTwelveDecimalBoundary ? sixDecimalBoundary.toFixed()
+                            : isGreatThanEightDecimalBoundary ?
+                                bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
+                            :   bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
+                        )
                     default:
                         return ''
                 }
@@ -162,10 +167,13 @@ export function formatCurrency(
             .join('')
 
         result = `${
-            (isLessThanTwelveDecimalBoundary || (onlyRemainTwoOrZeroDecimal && isLessThanAssetValueDecimalBoundary)) &&
-            !bn.isZero()
-                ? '< '
-                : ''
+            (
+                (isLessThanTwelveDecimalBoundary ||
+                    (onlyRemainTwoOrZeroDecimal && isLessThanAssetValueDecimalBoundary)) &&
+                !bn.isZero()
+            ) ?
+                '< '
+            :   ''
         }${value}`
     } else if (isMoreThanOrEqualToOne) {
         result = digitalCurrencyModifierValues

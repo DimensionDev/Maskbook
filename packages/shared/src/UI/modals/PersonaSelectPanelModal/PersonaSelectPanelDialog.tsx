@@ -63,21 +63,21 @@ export function PersonaSelectPanelDialog({
 
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 
-    return open ? (
-        <InjectedDialog
-            disableTitleBorder
-            open={open}
-            classes={{
-                paper: classes.root,
-                dialogTitle: classes.header,
-            }}
-            maxWidth="sm"
-            onClose={onClose}
-            title={t.applications_persona_title()}
-            titleBarIconStyle="close">
-            <DialogContent classes={{ root: classes.content }}>
-                <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={onClose} />
-            </DialogContent>
-        </InjectedDialog>
-    ) : null
+    return open ?
+            <InjectedDialog
+                disableTitleBorder
+                open={open}
+                classes={{
+                    paper: classes.root,
+                    dialogTitle: classes.header,
+                }}
+                maxWidth="sm"
+                onClose={onClose}
+                title={t.applications_persona_title()}
+                titleBarIconStyle="close">
+                <DialogContent classes={{ root: classes.content }}>
+                    <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={onClose} />
+                </DialogContent>
+            </InjectedDialog>
+        :   null
 }

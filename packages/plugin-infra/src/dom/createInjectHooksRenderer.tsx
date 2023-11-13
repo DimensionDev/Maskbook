@@ -28,11 +28,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
                     ref={(methods) => {
                         if (methods) setRef(methods)
                     }}>
-                    {ref ? (
+                    {ref ?
                         <PluginWrapperMethodsContext.Provider value={ref}>
                             {element}
                         </PluginWrapperMethodsContext.Provider>
-                    ) : null}
+                    :   null}
                 </PluginWrapperComponent>
             )
         }
@@ -42,11 +42,11 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const t = usePluginTransField()
         const ui = pickInjectorHook(plugin)
         return usePluginWrapperProvider(
-            ui ? (
+            ui ?
                 <ErrorBoundary subject={'Plugin ' + t(plugin.ID, plugin.name)}>
                     <Main UI={ui} data={props} />
                 </ErrorBoundary>
-            ) : null,
+            :   null,
             plugin,
         )
     }

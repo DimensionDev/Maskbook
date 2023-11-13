@@ -45,13 +45,11 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
         if ('error' in info) throw new Error(info.error)
 
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
-        const twitter_url = info.links.twitter_screen_name
-            ? `https://twitter.com/${info.links.twitter_screen_name}`
-            : ''
+        const twitter_url =
+            info.links.twitter_screen_name ? `https://twitter.com/${info.links.twitter_screen_name}` : ''
         const facebook_url = info.links.facebook_username ? `https://facebook.com/${info.links.facebook_username}` : ''
-        const telegram_url = info.links.telegram_channel_identifier
-            ? `https://t.me/${info.links.telegram_channel_identifier}`
-            : ''
+        const telegram_url =
+            info.links.telegram_channel_identifier ? `https://t.me/${info.links.telegram_channel_identifier}` : ''
 
         const platforms = await this.getSupportedPlatform()
         const avaxContracts = [
@@ -71,16 +69,16 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
             lastUpdated: info.last_updated,
             dataProvider: SourceType.CoinGecko,
             contracts:
-                info.id === 'avalanche-2'
-                    ? avaxContracts
-                    : Object.entries(info.platforms)
-                          .map(([key, address]) => ({
-                              chainId:
-                                  platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
-                              address,
-                              pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
-                          }))
-                          .filter((x) => x.chainId && x.address),
+                info.id === 'avalanche-2' ?
+                    avaxContracts
+                :   Object.entries(info.platforms)
+                        .map(([key, address]) => ({
+                            chainId:
+                                platforms.find((x) => x.id === key)?.chain_identifier ?? resolveCoinGeckoChainId(key),
+                            address,
+                            pluginID: key === 'solana' ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                        }))
+                        .filter((x) => x.chainId && x.address),
             currency,
             coin: {
                 id,
@@ -119,9 +117,9 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
                 twitter_url,
                 telegram_url,
                 contract_address:
-                    EVMChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol)
-                        ? getTokenConstant(EVMChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
-                        : info.contract_address,
+                    EVMChainResolver.chainId(info.name) && isNativeTokenSymbol(info.symbol) ?
+                        getTokenConstant(EVMChainResolver.chainId(info.name)!, 'NATIVE_TOKEN_ADDRESS')
+                    :   info.contract_address,
             },
             market: (() => {
                 const entries = Object.entries(info.market_data).map(([key, value]) => {

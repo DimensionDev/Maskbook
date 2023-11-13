@@ -113,10 +113,12 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
                             option.name === OptionName.ONE_DAY ? classes.listItemOneDay : '',
                             option.value === (time ?? initialTime) ? classes.selected : '',
                             option.value === '' && (time ?? initialTime) === '0' ? classes.selected : '',
-                            option.value === '' &&
-                                minutesToMilliseconds(Number(time ?? initialTime)) > ONE_DAY_IN_MILLISECONDS
-                                ? classes.selected
-                                : '',
+                            (
+                                option.value === '' &&
+                                    minutesToMilliseconds(Number(time ?? initialTime)) > ONE_DAY_IN_MILLISECONDS
+                            ) ?
+                                classes.selected
+                            :   '',
                         )}
                         onClick={() => {
                             setTime(option.value)

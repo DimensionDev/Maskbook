@@ -50,9 +50,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 20,
         backgroundColor: !Sniffings.is_dashboard_page ? theme.palette.maskColor?.primary : undefined,
         '&:hover': {
-            backgroundColor: !Sniffings.is_dashboard_page
-                ? `${lighten(theme.palette.maskColor?.primary, 0.1)}!important`
-                : undefined,
+            backgroundColor:
+                !Sniffings.is_dashboard_page ?
+                    `${lighten(theme.palette.maskColor?.primary, 0.1)}!important`
+                :   undefined,
         },
     },
     chipLabel: {
@@ -122,9 +123,9 @@ const useStyles = makeStyles()((theme) => ({
         } !important`,
         ['&:hover']: {
             backgroundColor: `${
-                Sniffings.is_dashboard_page
-                    ? theme.palette.primary.main
-                    : lighten(theme.palette.maskColor?.primary, 0.1)
+                Sniffings.is_dashboard_page ?
+                    theme.palette.primary.main
+                :   lighten(theme.palette.maskColor?.primary, 0.1)
             }!important`,
         },
         [`& .${chipClasses.label}`]: {
@@ -206,9 +207,9 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
                     <>
                         <Box className={classes.action}>
                             <Typography className={classes.balance}>
-                                {isAvailableBalance || isNativeTokenAddress(token?.address)
-                                    ? t.available_balance()
-                                    : t.wallet_balance()}
+                                {isAvailableBalance || isNativeTokenAddress(token?.address) ?
+                                    t.available_balance()
+                                :   t.wallet_balance()}
                                 :
                                 <Typography component="span" className={classes.amount} color="primary">
                                     <FormattedBalance

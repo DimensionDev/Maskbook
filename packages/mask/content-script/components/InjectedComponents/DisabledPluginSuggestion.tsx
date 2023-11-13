@@ -108,9 +108,9 @@ export function PossiblePluginSuggestionUISingle(props: {
             open
             title={<PluginTransFieldRender field={define.name} pluginID={define.ID} />}
             publisher={
-                define.publisher ? (
+                define.publisher ?
                     <PluginTransFieldRender pluginID={define.ID} field={define.publisher.name} />
-                ) : undefined
+                :   undefined
             }
             publisherLink={define.publisher?.link}
             wrapperProps={wrapperProps}

@@ -90,7 +90,7 @@ export const LocalBackup = memo(function LocalBackup() {
                     {t.data_backup_title()}
                 </Typography>
                 <Typography className={classes.description}>{t.data_backup_description()}</Typography>
-                {!loading && previewInfo ? (
+                {!loading && previewInfo ?
                     <Box display="flex" flexDirection="column">
                         <PersonasBackupPreview info={previewInfo} />
 
@@ -116,7 +116,7 @@ export const LocalBackup = memo(function LocalBackup() {
                             onChange={setBackupWallets}
                         />
 
-                        {backupWallets ? (
+                        {backupWallets ?
                             <Controller
                                 control={control}
                                 render={({ field }) => (
@@ -131,11 +131,9 @@ export const LocalBackup = memo(function LocalBackup() {
                                 )}
                                 name="paymentPassword"
                             />
-                        ) : null}
+                        :   null}
                     </Box>
-                ) : (
-                    <LoadingStatus minHeight={320} />
-                )}
+                :   <LoadingStatus minHeight={320} />}
             </form>
             <SetupFrameController>
                 <PrimaryButton

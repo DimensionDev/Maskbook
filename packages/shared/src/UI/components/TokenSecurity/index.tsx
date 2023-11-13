@@ -39,9 +39,9 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                         component="span"
                         fontSize="12px"
                         color={DefineMapping[SecurityMessageLevel.High].titleColor}>
-                        {riskyFactors > 1
-                            ? t.risky_items({ quantity: riskyFactors.toString() })
-                            : t.risky_item({ quantity: riskyFactors.toString() })}
+                        {riskyFactors > 1 ?
+                            t.risky_items({ quantity: riskyFactors.toString() })
+                        :   t.risky_item({ quantity: riskyFactors.toString() })}
                     </Typography>
                 </Stack>
             )}
@@ -58,9 +58,9 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                         component="span"
                         fontSize="12px"
                         color={DefineMapping[SecurityMessageLevel.Medium].titleColor}>
-                        {attentionFactors > 1
-                            ? t.attention_items({ quantity: attentionFactors.toString() })
-                            : t.attention_item({ quantity: attentionFactors.toString() })}
+                        {attentionFactors > 1 ?
+                            t.attention_items({ quantity: attentionFactors.toString() })
+                        :   t.attention_item({ quantity: attentionFactors.toString() })}
                     </Typography>
                 </Stack>
             )}

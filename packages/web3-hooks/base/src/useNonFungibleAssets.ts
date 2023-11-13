@@ -38,12 +38,13 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 size: 20,
                 chainId,
             })
-            const data = blockedTokenIds.length
-                ? res.data.filter((x) => {
-                      const id = `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()
-                      return !blockedTokenIds.includes(id)
-                  })
-                : res.data
+            const data =
+                blockedTokenIds.length ?
+                    res.data.filter((x) => {
+                        const id = `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()
+                        return !blockedTokenIds.includes(id)
+                    })
+                :   res.data
             return {
                 ...res,
                 data,

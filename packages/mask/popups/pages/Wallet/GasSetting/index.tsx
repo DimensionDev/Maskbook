@@ -39,7 +39,9 @@ const GasSetting = memo(() => {
                 {t.popups_wallet_gas_fee_settings()}
             </Typography>
             <Typography className={classes.description}>{t.popups_wallet_gas_fee_settings_description()}</Typography>
-            {EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ? <GasSetting1559 /> : <Prior1559GasSetting />}
+            {EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?
+                <GasSetting1559 />
+            :   <Prior1559GasSetting />}
         </main>
     )
 })

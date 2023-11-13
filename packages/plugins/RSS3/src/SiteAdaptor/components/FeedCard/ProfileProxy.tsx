@@ -90,7 +90,7 @@ export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardP
                     }}
                 />
             </Typography>
-            {metadata ? (
+            {metadata ?
                 <div className={cx(classes.body)}>
                     <div className={classes.user}>
                         <Image
@@ -106,7 +106,7 @@ export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardP
                     </div>
                     <Icons.Follow height={18} width={48} />
                 </div>
-            ) : null}
+            :   null}
         </CardFrame>
     )
 }

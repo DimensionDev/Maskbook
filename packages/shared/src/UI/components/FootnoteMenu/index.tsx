@@ -51,7 +51,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                     <Stack flexGrow={1} color={theme.palette.maskColor.main}>
                         {x.name}
                     </Stack>
-                    {selectedIndex === i ? (
+                    {selectedIndex === i ?
                         <Icons.CheckCircle
                             size={20}
                             style={{
@@ -59,11 +59,10 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                                 boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
                             }}
                         />
-                    ) : (
-                        <RadioButtonUncheckedIcon
+                    :   <RadioButtonUncheckedIcon
                             style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}
                         />
-                    )}
+                    }
                 </Stack>
             </MenuItem>
         )),
@@ -92,9 +91,9 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 onClick={options.length > 1 ? openMenu : undefined}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    {options.length > 1 ? (
+                    {options.length > 1 ?
                         <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
-                    ) : null}
+                    :   null}
                 </Typography>
                 {children}
             </Link>

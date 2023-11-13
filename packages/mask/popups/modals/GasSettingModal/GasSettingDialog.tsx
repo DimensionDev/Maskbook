@@ -190,18 +190,18 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
 
     const handleConfirm = useCallback(() => {
         onClose(
-            isSupport1559
-                ? {
-                      gasOptionType: GasOptionType.CUSTOM,
-                      gas: config.gas,
-                      maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
-                      maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
-                  }
-                : {
-                      gasPrice: formatGweiToWei(gasPrice).toFixed(),
-                      gas: config.gas,
-                      gasOptionType: GasOptionType.CUSTOM,
-                  },
+            isSupport1559 ?
+                {
+                    gasOptionType: GasOptionType.CUSTOM,
+                    gas: config.gas,
+                    maxFeePerGas: formatGweiToWei(maxFeePerGas).toFixed(),
+                    maxPriorityFeePerGas: formatGweiToWei(maxPriorityFeePerGas).toFixed(),
+                }
+            :   {
+                    gasPrice: formatGweiToWei(gasPrice).toFixed(),
+                    gas: config.gas,
+                    gasOptionType: GasOptionType.CUSTOM,
+                },
         )
     }, [gasPrice, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose, config])
 
@@ -210,21 +210,21 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         // Set default value
         if (!isSupport1559) {
             const result =
-                replaceType && config.gasPrice
-                    ? formatWeiToGwei(config.gasPrice).plus(5)
-                    : formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
+                replaceType && config.gasPrice ?
+                    formatWeiToGwei(config.gasPrice).plus(5)
+                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
 
             setGasPrice(result.toFixed(2))
         } else {
             const maxPriorityFeePerGas =
-                replaceType && config.maxPriorityFeePerGas
-                    ? formatWeiToGwei(config.maxPriorityFeePerGas).plus(5)
-                    : formatWeiToGwei(gasOptions.normal.suggestedMaxPriorityFeePerGas)
+                replaceType && config.maxPriorityFeePerGas ?
+                    formatWeiToGwei(config.maxPriorityFeePerGas).plus(5)
+                :   formatWeiToGwei(gasOptions.normal.suggestedMaxPriorityFeePerGas)
 
             const maxFeePerGas =
-                replaceType && config.maxFeePerGas
-                    ? formatWeiToGwei(config.maxFeePerGas).plus(5)
-                    : formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
+                replaceType && config.maxFeePerGas ?
+                    formatWeiToGwei(config.maxFeePerGas).plus(5)
+                :   formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas)
 
             setMaxPriorityFeePerGas(maxPriorityFeePerGas.toFixed(2))
             setMaxFeePerGas(maxFeePerGas.toFixed(2))
@@ -253,33 +253,33 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                     }}
                 />
             </Typography>
-            {tips ? (
+            {tips ?
                 <Typography
                     className={classes.tips}
                     sx={{
                         color:
-                            replaceType === ReplaceType.CANCEL
-                                ? theme.palette.maskColor.danger
-                                : theme.palette.maskColor.warn,
+                            replaceType === ReplaceType.CANCEL ?
+                                theme.palette.maskColor.danger
+                            :   theme.palette.maskColor.warn,
                     }}>
                     {tips}
                 </Typography>
-            ) : null}
-            {estimateSecond && !replaceType ? (
+            :   null}
+            {estimateSecond && !replaceType ?
                 <Typography className={classes.seconds}>
                     {}
                     {/* @ts-expect-error https://github.com/Jack-Works/i18n-codegen/issues/10 */}
                     {t.popups_wallet_gas_price_estimate_second({ seconds: String(estimateSecond) })}
                 </Typography>
-            ) : null}
-            {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ? (
+            :   null}
+            {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ?
                 <Alert severity="info">
                     {t.popups_wallet_gas_price_current_base_fee({
                         baseFee: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP),
                     })}
                 </Alert>
-            ) : null}
-            {isSupport1559 ? (
+            :   null}
+            {isSupport1559 ?
                 <>
                     <Box>
                         <Typography className={classes.title}>
@@ -376,8 +376,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         </Box>
                     </Box>
                 </>
-            ) : (
-                <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
+            :   <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2}>
                     <Box>
                         <Typography className={classes.title}>{t.popups_wallet_gas_price()}</Typography>
                         <TextField
@@ -425,8 +424,10 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
                         />
                     </Box>
                 </Box>
-            )}
-            {error ? <Alert severity="error">{error}</Alert> : null}
+            }
+            {error ?
+                <Alert severity="error">{error}</Alert>
+            :   null}
             <Button onClick={handleConfirm} disabled={disabled}>
                 {t.confirm()}
             </Button>

@@ -36,9 +36,9 @@ async function fetchCommonERC20TokensFromTokenList(
         .filter(
             (x) =>
                 x.chainId === chainId &&
-                (process.env.NODE_ENV === 'production' && env.channel === 'stable'
-                    ? EVMChainResolver.isMainnet(chainId)
-                    : true),
+                (process.env.NODE_ENV === 'production' && env.channel === 'stable' ?
+                    EVMChainResolver.isMainnet(chainId)
+                :   true),
         )
         .map((x) => ({
             id: x.address,

@@ -73,13 +73,11 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIPro
         </ShadowRootTooltip>
     )
 
-    return disableGuideTip ? (
-        Entry
-    ) : (
-        <GuideStep step={4} total={4} tip={t.user_guide_tip_4()} onComplete={props.onHintButtonClicked}>
-            {Entry}
-        </GuideStep>
-    )
+    return disableGuideTip ? Entry : (
+            <GuideStep step={4} total={4} tip={t.user_guide_tip_4()} onComplete={props.onHintButtonClicked}>
+                {Entry}
+            </GuideStep>
+        )
 })
 
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
@@ -87,14 +85,12 @@ export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHi
     const { classes } = useStyles(undefined, { props })
     const t = useMaskSharedTrans()
 
-    return isMobileFacebook ? (
-        <div className={classes.wrapper} onClick={onHintButtonClicked}>
-            <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
-            <Typography className={classes.text}>{t.post_modal_hint__button()}</Typography>
-        </div>
-    ) : (
-        <div className={classes.buttonTransform}>
-            <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />
-        </div>
-    )
+    return isMobileFacebook ?
+            <div className={classes.wrapper} onClick={onHintButtonClicked}>
+                <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
+                <Typography className={classes.text}>{t.post_modal_hint__button()}</Typography>
+            </div>
+        :   <div className={classes.buttonTransform}>
+                <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />
+            </div>
 })

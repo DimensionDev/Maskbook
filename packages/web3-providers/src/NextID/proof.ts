@@ -554,14 +554,14 @@ export class NextIDProof {
             method: 'POST',
         })
 
-        return response
-            ? {
-                  postContent: response.post_content[nextIDLanguageFormat] ?? response.post_content.default,
-                  signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
-                  createdAt: response.created_at,
-                  uuid: response.uuid,
-              }
-            : null
+        return response ?
+                {
+                    postContent: response.post_content[nextIDLanguageFormat] ?? response.post_content.default,
+                    signPayload: JSON.stringify(JSON.parse(response.sign_payload)),
+                    createdAt: response.created_at,
+                    uuid: response.uuid,
+                }
+            :   null
     }
 
     static async restorePubkey(payload: string, platform: NextIDPlatform, identity: string) {

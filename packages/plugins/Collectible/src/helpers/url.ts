@@ -211,9 +211,9 @@ export function getPayloadFromURL(url?: string): CollectiblePayload | undefined 
                 provider: rule.provider,
                 address: rule.address?.(matched[1]) ?? matched[1],
                 tokenId:
-                    rule.pluginID === NetworkPluginID.PLUGIN_SOLANA
-                        ? rule.address?.(matched[1]) ?? matched[1]
-                        : matched[2],
+                    rule.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                        rule.address?.(matched[1]) ?? matched[1]
+                    :   matched[2],
             }
         }
     }

@@ -43,9 +43,9 @@ export function useUpdateBalance(chainId: Web3Helper.ChainIdAll) {
     useEffect(() => {
         if (!account) return
         const value =
-            Utils.isNativeTokenSchemaType(outputToken?.schema) || isNativeTokenAddress(outputToken?.address)
-                ? balance
-                : '0'
+            Utils.isNativeTokenSchemaType(outputToken?.schema) || isNativeTokenAddress(outputToken?.address) ?
+                balance
+            :   '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: value || '0',

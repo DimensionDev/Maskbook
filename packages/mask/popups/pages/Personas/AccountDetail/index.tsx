@@ -41,9 +41,10 @@ const AccountDetail = memo(() => {
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
-    const isSupportNextDotID = selectedAccount
-        ? SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite)
-        : false
+    const isSupportNextDotID =
+        selectedAccount ?
+            SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite)
+        :   false
 
     const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
         useUnlistedAddressConfig(
@@ -51,9 +52,9 @@ const AccountDetail = memo(() => {
                 identifier: currentPersona?.identifier,
                 pluginID: PluginID.Web3Profile,
                 socialIds:
-                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity
-                        ? [selectedAccount.identity]
-                        : EMPTY_LIST,
+                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity ?
+                        [selectedAccount.identity]
+                    :   EMPTY_LIST,
             },
             (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
         )
@@ -181,10 +182,9 @@ const AccountDetail = memo(() => {
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })
         setExtension(
-            !selectedAccount?.is_valid && selectedAccount?.linkedPersona ? (
+            !selectedAccount?.is_valid && selectedAccount?.linkedPersona ?
                 <Icons.Trash size={24} onClick={handleDetachProfile} />
-            ) : (
-                <Icons.Disconnect
+            :   <Icons.Disconnect
                     size={24}
                     onClick={async () => {
                         if (!currentPersona) return
@@ -212,8 +212,7 @@ const AccountDetail = memo(() => {
                             await releaseBinding()
                         }
                     }}
-                />
-            ),
+                />,
         )
         return () => setExtension(undefined)
     }, [selectedAccount, handleDetachProfile, currentPersona, releaseBinding])

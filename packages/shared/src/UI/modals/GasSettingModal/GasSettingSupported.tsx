@@ -8,9 +8,7 @@ import type { GasSettingProps } from './types.js'
 export function GasSettingSupported(props: GasSettingProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    return EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ? (
-        <GasSetting1559 {...props} />
-    ) : (
-        <Prior1559GasSetting {...props} />
-    )
+    return EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?
+            <GasSetting1559 {...props} />
+        :   <Prior1559GasSetting {...props} />
 }

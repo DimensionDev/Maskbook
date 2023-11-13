@@ -28,9 +28,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
+                                    EntryComponentProps.onClick ?
+                                        () => EntryComponentProps.onClick?.(clickHandler)
+                                    :   clickHandler
                                 }
                             />
                             <CrossChainBridgeDialog open={open} onClose={() => setOpen(false)} />

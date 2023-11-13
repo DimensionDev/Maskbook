@@ -349,13 +349,13 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         name: 'Browser Wallet',
         icon: new URL('../assets/metamask.png', import.meta.url).href,
         enableRequirements:
-            process.env.NODE_ENV === 'development'
-                ? {
-                      supportedChainIds: ChainIdList,
-                      supportedEnhanceableSites: EnhanceableSiteList,
-                      supportedExtensionSites: ExtensionSiteList,
-                  }
-                : undefined,
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
         homeLink: '',
         shortenLink: '',
         downloadLink: '',
@@ -387,16 +387,17 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.WalletConnect,
         name: 'WalletConnect',
         icon: new URL('../assets/walletconnect.png', import.meta.url).href,
-        enableRequirements: Flags.wc_enabled
-            ? {
-                  supportedChainIds: ChainIdList,
-                  supportedEnhanceableSites: difference(EnhanceableSiteList, [
-                      EnhanceableSite.Localhost,
-                      EnhanceableSite.App,
-                  ]),
-                  supportedExtensionSites: Flags.wc_enabled ? ExtensionSiteList : [],
-              }
-            : undefined,
+        enableRequirements:
+            Flags.wc_enabled ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: difference(EnhanceableSiteList, [
+                        EnhanceableSite.Localhost,
+                        EnhanceableSite.App,
+                    ]),
+                    supportedExtensionSites: Flags.wc_enabled ? ExtensionSiteList : [],
+                }
+            :   undefined,
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
         downloadLink: 'https://walletconnect.com',

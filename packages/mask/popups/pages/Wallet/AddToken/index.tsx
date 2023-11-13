@@ -115,9 +115,9 @@ const AddToken = memo(function AddToken() {
 
     const supportedChains = allNetworks.map((x) => x.chainId)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>(
-        defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10))
-            ? Number.parseInt(defaultChainId, 10)
-            : ChainId.Mainnet,
+        defaultChainId && supportedChains.includes(Number.parseInt(defaultChainId, 10)) ?
+            Number.parseInt(defaultChainId, 10)
+        :   ChainId.Mainnet,
     )
 
     useTitle(t.add_assets())

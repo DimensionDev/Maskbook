@@ -42,9 +42,8 @@ const useStyles = makeStyles()((theme) => {
         },
         reverseIcon: {
             cursor: 'pointer',
-            color: Sniffings.is_dashboard_page
-                ? `${theme.palette.text.primary}!important`
-                : theme.palette.maskColor?.main,
+            color:
+                Sniffings.is_dashboard_page ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
         },
         card: {
             background: Sniffings.is_dashboard_page ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
@@ -53,9 +52,8 @@ const useStyles = makeStyles()((theme) => {
             padding: 12,
         },
         reverse: {
-            backgroundColor: Sniffings.is_dashboard_page
-                ? MaskColorVar.lightBackground
-                : theme.palette.background.default,
+            backgroundColor:
+                Sniffings.is_dashboard_page ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
             height: 32,
             borderRadius: 99,
@@ -141,9 +139,9 @@ const useStyles = makeStyles()((theme) => {
             } !important`,
             ['&:hover']: {
                 backgroundColor: `${
-                    Sniffings.is_dashboard_page
-                        ? theme.palette.primary.main
-                        : lighten(theme.palette.maskColor?.primary, 0.1)
+                    Sniffings.is_dashboard_page ?
+                        theme.palette.primary.main
+                    :   lighten(theme.palette.maskColor?.primary, 0.1)
                 }!important`,
             },
             [`& .${chipClasses.label}`]: {
@@ -244,9 +242,12 @@ export const TradeForm = memo<AllTradeFormProps>(
                 Utils.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
             )
 
-            return isZero(amount_)
-                ? ZERO.toString()
-                : formatBalance(amount_.integerValue(), inputToken?.decimals, { isPrecise: true, hasSeparators: false })
+            return isZero(amount_) ?
+                    ZERO.toString()
+                :   formatBalance(amount_.integerValue(), inputToken?.decimals, {
+                        isPrecise: true,
+                        hasSeparators: false,
+                    })
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Utils.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
@@ -404,17 +405,15 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                             />
                             <Box marginTop="8px">
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error ? (
+                                {isTokenSecurityEnable && tokenSecurityInfo && !error ?
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
-                                ) : null}
+                                :   null}
                             </Box>
 
                             <Box marginTop="12px">
-                                {trades.filter((item) => !!item.value).length > 0 ? (
+                                {trades.filter((item) => !!item.value).length > 0 ?
                                     firstTraderInfo
-                                ) : (
-                                    <DefaultTraderPlaceholder />
-                                )}
+                                :   <DefaultTraderPlaceholder />}
                                 <Collapse in={isExpand}>
                                     {trades.slice(1).map((trade) => (
                                         <TraderInfo
@@ -430,19 +429,19 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         />
                                     ))}
                                 </Collapse>
-                                {trades.filter((x) => !!x.value).length > 1 ? (
+                                {trades.filter((x) => !!x.value).length > 1 ?
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
                                         <Icons.ChevronUp
                                             className={cx(classes.chevron, isExpand ? classes.reverseChevron : null)}
                                             onClick={() => setExpand(!isExpand)}
                                         />
                                     </Box>
-                                ) : null}
+                                :   null}
                             </Box>
                         </Box>
                     </Box>
                 </Box>
-                {settings ? (
+                {settings ?
                     <Box className={classes.section}>
                         <Box className={classes.controller}>
                             <Box className={classes.section}>
@@ -463,7 +462,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </Box>
                         </Box>
                     </Box>
-                ) : null}
+                :   null}
             </>
         )
     },

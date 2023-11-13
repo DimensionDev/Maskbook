@@ -22,7 +22,11 @@ export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
     const { classes } = useStyles()
     return (
         <InjectedDialog open={open} onClose={onClose} title={t.wallet_connect_qr_code_dialog_title()}>
-            <DialogContent className={classes.container}>{uri ? <QRCodeModal uri={uri} /> : null}</DialogContent>
+            <DialogContent className={classes.container}>
+                {uri ?
+                    <QRCodeModal uri={uri} />
+                :   null}
+            </DialogContent>
         </InjectedDialog>
     )
 }

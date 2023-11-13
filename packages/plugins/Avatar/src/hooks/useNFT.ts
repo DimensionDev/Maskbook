@@ -39,9 +39,10 @@ export function useNFT(
         ]
 
         const metadata = asset?.metadata || token?.metadata
-        const amount = asset?.priceInToken
-            ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
-            : asset?.price?.[CurrencyType.USD] ?? '0'
+        const amount =
+            asset?.priceInToken ?
+                formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
+            :   asset?.price?.[CurrencyType.USD] ?? '0'
         const name = metadata?.name ?? ''
         const imageURL = metadata?.imageURL
         const permalink = asset?.link ?? Utils.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)

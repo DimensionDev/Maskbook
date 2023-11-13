@@ -75,7 +75,7 @@ const Transfer = memo(function Transfer() {
             <TabContext value={currentTab}>
                 <NormalHeader
                     tabList={
-                        undecided ? (
+                        undecided ?
                             <MaskTabList
                                 onChange={handleTabChange}
                                 aria-label="persona-tabs"
@@ -83,7 +83,7 @@ const Transfer = memo(function Transfer() {
                                 <Tab label={t.popups_wallet_token()} value={TransferTabType.Token} />
                                 <Tab label={t.popups_wallet_collectible()} value={TransferTabType.NFT} />
                             </MaskTabList>
-                        ) : null
+                        :   null
                     }
                 />
                 <div className={classes.body}>

@@ -7,6 +7,9 @@ export function useProposal(id: string) {
 }
 async function Suspender(id: string) {
     const proposal = await PluginSnapshotRPC.fetchProposal(id)
-    proposal.status = !proposal.isStart ? 'Pending' : proposal.isEnd ? 'Closed' : 'Active'
+    proposal.status =
+        !proposal.isStart ? 'Pending'
+        : proposal.isEnd ? 'Closed'
+        : 'Active'
     return proposal
 }

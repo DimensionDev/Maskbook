@@ -22,15 +22,14 @@ export function NFTInfo(props: NFTInfoProps) {
     if (loading) return <LoadingBase size={24} />
     const node = (
         <Box className={classes.root}>
-            {isNFT ? (
+            {isNFT ?
                 <Typography variant="body1" fontWeight={700} fontSize={12}>
                     {t.nft_set_success()}
                 </Typography>
-            ) : (
-                <Typography fontWeight={700} fontSize={12}>
+            :   <Typography fontWeight={700} fontSize={12}>
                     {t.set_nft()}
                 </Typography>
-            )}
+            }
         </Box>
     )
     if (!tooltip) return node

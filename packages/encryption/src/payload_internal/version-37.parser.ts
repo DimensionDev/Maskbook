@@ -32,11 +32,12 @@ function parsePayload37(payload: Uint8Array, signature: PayloadParseResult.Paylo
         const normalized: PayloadParseResult.Payload = {
             version: -37,
             author: parseAuthor(authorNetwork, authorID),
-            authorPublicKey: authorPublicKey
-                ? OptionalResult.fromResult(
-                      await importAsymmetryKey(authorPublicKeyAlg, authorPublicKey, 'authorPublicKey'),
-                  )
-                : OptionalResult.None,
+            authorPublicKey:
+                authorPublicKey ?
+                    OptionalResult.fromResult(
+                        await importAsymmetryKey(authorPublicKeyAlg, authorPublicKey, 'authorPublicKey'),
+                    )
+                :   OptionalResult.None,
             encryption: await parseEncryption(encryption),
             encrypted: assertUint8Array(data, 'encrypted', PayloadException.InvalidPayload),
             signature,

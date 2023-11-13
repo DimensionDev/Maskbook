@@ -71,14 +71,16 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
             <PluginHeader />
             <Box className={classes.root}>
                 <section className={classes.ensInfo}>
-                    {domain && ChainIcon ? <ChainIcon size={30} className={classes.ensIcon} /> : null}
+                    {domain && ChainIcon ?
+                        <ChainIcon size={30} className={classes.ensIcon} />
+                    :   null}
                     <div>
-                        {domain ? (
+                        {domain ?
                             <Typography className={classes.domain}>
                                 {EVMUtils.formatDomainName(domain) || domain}
                             </Typography>
-                        ) : null}
-                        {reversedAddress ? (
+                        :   null}
+                        {reversedAddress ?
                             <Typography className={classes.reversedAddress}>
                                 {reversedAddress}{' '}
                                 <CopyButton size={20} className={classes.reversedAddressIcon} text={reversedAddress} />
@@ -95,7 +97,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                                     <Icons.LinkOut size={20} className={classes.reversedAddressIcon} />
                                 </Link>
                             </Typography>
-                        ) : null}
+                        :   null}
                     </div>
                     <SocialAccountList nextIdBindings={nextIdBindings} className={classes.accounts} />
                 </section>

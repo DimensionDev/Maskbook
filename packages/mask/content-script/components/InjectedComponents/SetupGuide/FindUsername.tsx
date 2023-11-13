@@ -67,11 +67,11 @@ export function FindUsername({ onClose, onDone }: FindUsernameProps) {
             <div className={classes.main}>
                 <Icon size={48} className={classes.icon} />
                 <Typography className={classes.title}>{t.connect_persona()}</Typography>
-                {loadingCurrentUserId ? (
+                {loadingCurrentUserId ?
                     <div className={classes.loadingBox}>
                         <LoadingStatus omitText />
                     </div>
-                ) : connected ? (
+                : connected ?
                     <>
                         <Typography className={classes.text}>
                             <Trans
@@ -93,7 +93,7 @@ export function FindUsername({ onClose, onDone }: FindUsernameProps) {
                             </Button>
                         </Box>
                     </>
-                ) : userId ? (
+                : userId ?
                     <>
                         <Typography className={classes.text}>{t.not_current_account()}</Typography>
                         <Typography className={classes.text} mt="1.5em">
@@ -108,9 +108,7 @@ export function FindUsername({ onClose, onDone }: FindUsernameProps) {
                             />
                         </Typography>
                     </>
-                ) : (
-                    <Typography className={classes.text}>{t.request_to_login({ siteName })}</Typography>
-                )}
+                :   <Typography className={classes.text}>{t.request_to_login({ siteName })}</Typography>}
             </div>
         </BindingDialog>
     )

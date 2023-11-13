@@ -97,7 +97,11 @@ export const InputForm = memo(function InputForm(props: BoxProps) {
                     }
                 />
             </RadioGroup>
-            <Box mt={2}>{state.step === RestoreStep.InputEmail ? <EmailField /> : <PhoneField />}</Box>
+            <Box mt={2}>
+                {state.step === RestoreStep.InputEmail ?
+                    <EmailField />
+                :   <PhoneField />}
+            </Box>
         </Box>
     )
 })

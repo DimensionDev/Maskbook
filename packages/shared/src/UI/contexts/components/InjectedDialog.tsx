@@ -95,15 +95,16 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     dialogTitleEndingContentWithTabs: {
         marginRight: 16,
     },
-    paper: clean
-        ? {
-              width: 'auto',
-              backgroundImage: 'none',
-              maxHeight: 620,
-          }
-        : {
-              maxHeight: 620,
-          },
+    paper:
+        clean ?
+            {
+                width: 'auto',
+                backgroundImage: 'none',
+                maxHeight: 620,
+            }
+        :   {
+                maxHeight: 620,
+            },
     tabs: {
         display: 'flex',
         gridColumn: '3 span',
@@ -228,7 +229,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 {...omit(rest, 'isOnBack')}
                 {...(independent ? omit(extraProps, 'hidden', 'style', 'aria-hidden') : extraProps)}>
                 <ErrorBoundary>
-                    {title ? (
+                    {title ?
                         <DialogTitle
                             className={cx(titleTabs ? dialogTitleWithTabs : '')}
                             classes={{ root: dialogTitle }}>
@@ -240,11 +241,13 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
-                                        titleBarIconStyle !== 'close' &&
-                                        shouldReplaceExitWithBack &&
-                                        !Sniffings.is_dashboard_page
-                                            ? 'back'
-                                            : titleBarIconStyle
+                                        (
+                                            titleBarIconStyle !== 'close' &&
+                                            shouldReplaceExitWithBack &&
+                                            !Sniffings.is_dashboard_page
+                                        ) ?
+                                            'back'
+                                        :   titleBarIconStyle
                                     }
                                 />
                             </IconButton>
@@ -259,11 +262,17 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 {titleTail}
                             </Stack>
                             {/* If you want to apply different size gaps between rows, then consider using actual rows for the job, since you cannot apply different widths to different gaps  */}
-                            {titleTabs ? <Stack className={dialogGap} /> : null}
-                            {titleTabs ? <Stack className={dialogTitleTabs}>{titleTabs}</Stack> : null}
-                            {networkTabs ? <Stack className={dialogNetworkTabs}>{networkTabs}</Stack> : null}
+                            {titleTabs ?
+                                <Stack className={dialogGap} />
+                            :   null}
+                            {titleTabs ?
+                                <Stack className={dialogTitleTabs}>{titleTabs}</Stack>
+                            :   null}
+                            {networkTabs ?
+                                <Stack className={dialogNetworkTabs}>{networkTabs}</Stack>
+                            :   null}
                         </DialogTitle>
-                    ) : null}
+                    :   null}
 
                     {/* There is a .MuiDialogTitle+.MuiDialogContent selector that provides paddingTop: 0 */}
                     {/* Add an empty span here to revert this effect. */}
@@ -289,11 +298,11 @@ function CopyElementWithNewProps<T>(
             for (const key of allKeys) {
                 result[key] = cx((extraClasses as any)[key], child?.props?.classes?.[key])
             }
-            return child?.type === Target
-                ? cloneElement(child, {
-                      classes: result,
-                  } as DialogContentProps)
-                : null
+            return child?.type === Target ?
+                    cloneElement(child, {
+                        classes: result,
+                    } as DialogContentProps)
+                :   null
         }) || []
     ).filter(Boolean)
 }

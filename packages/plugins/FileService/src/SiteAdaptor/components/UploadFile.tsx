@@ -101,7 +101,7 @@ export function UploadFile() {
     )
 
     const cdnButton =
-        provider === Provider.Arweave ? (
+        provider === Provider.Arweave ?
             <FormControlLabel
                 control={
                     <Checkbox
@@ -116,7 +116,7 @@ export function UploadFile() {
                 className={classes.label}
                 label={t.use_cdn()}
             />
-        ) : null
+        :   null
 
     return (
         <section className={classes.container}>
@@ -159,14 +159,13 @@ export function UploadFile() {
                 {cdnButton}
             </section>
             <Typography className={classes.heading}>{t.uploaded_files()}</Typography>
-            {files.length ? (
+            {files.length ?
                 <FileList files={files} className={classes.fileList} onSend={attachToPost} onDownload={downloadFile} />
-            ) : (
-                <div className={classes.emptyBox}>
+            :   <div className={classes.emptyBox}>
                     <Icons.EmptySimple size={36} />
                     <Typography className={classes.emptyMessage}>{t.upload_tips()}</Typography>
                 </div>
-            )}
+            }
         </section>
     )
 }

@@ -120,23 +120,24 @@ export function SearchableList<T extends {}>({
                             style: { height: 40 },
                             inputProps: { style: { paddingLeft: 4 } },
                             startAdornment: <Icons.Search size={18} />,
-                            endAdornment: keyword ? (
-                                <Icons.Close
-                                    size={18}
-                                    onClick={handleClear}
-                                    color={textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined}
-                                />
-                            ) : null,
+                            endAdornment:
+                                keyword ?
+                                    <Icons.Close
+                                        size={18}
+                                        onClick={handleClear}
+                                        color={textFieldPropsRest.error ? theme.palette.maskColor.danger : undefined}
+                                    />
+                                :   null,
                             ...InputProps,
                         }}
                         onChange={handleChange}
                         {...textFieldPropsRest}
                     />
-                    {textFieldPropsRest.error ? (
+                    {textFieldPropsRest.error ?
                         <Typography className={classes.error} mt={0.5}>
                             {textFieldPropsRest.helperText}
                         </Typography>
-                    ) : null}
+                    :   null}
                 </Box>
             )}
             {readyToRenderData.length === 0 && (

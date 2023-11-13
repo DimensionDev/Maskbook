@@ -122,14 +122,16 @@ export const CollectibleItem = memo(
                     showNetworkIcon={showNetworkIcon}
                     disableLink={disableLink || selectable}
                 />
-                {asset.metadata?.name || uiTokenId ? (
+                {asset.metadata?.name || uiTokenId ?
                     <div className={classes.description}>
                         <Typography className={classes.name} color="textPrimary" variant="body2">
                             {asset.metadata?.name || uiTokenId}
                         </Typography>
                     </div>
-                ) : null}
-                {checked ? <SelectableButton className={classes.select} value={value} checked /> : null}
+                :   null}
+                {checked ?
+                    <SelectableButton className={classes.select} value={value} checked />
+                :   null}
             </div>
         )
     }),

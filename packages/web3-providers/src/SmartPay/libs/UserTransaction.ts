@@ -339,9 +339,10 @@ export class UserTransaction {
         return {
             ...DEFAULT_USER_OPERATION,
             paymaster: PAYMASTER_MASK_CONTRACT_ADDRESS || DEFAULT_USER_OPERATION.paymaster,
-            paymasterData: PAYMENT_TOKEN_ADDRESS
-                ? web3_utils.padLeft(PAYMENT_TOKEN_ADDRESS, 64)
-                : DEFAULT_USER_OPERATION.paymasterData,
+            paymasterData:
+                PAYMENT_TOKEN_ADDRESS ?
+                    web3_utils.padLeft(PAYMENT_TOKEN_ADDRESS, 64)
+                :   DEFAULT_USER_OPERATION.paymasterData,
             ...userOperation,
         }
     }
@@ -368,13 +369,14 @@ export class UserTransaction {
     }
 
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
-        const parameters = !isEmptyHex(userOperation.callData)
-            ? (abiCoder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
-                  dest: string
-                  value: string
-                  func: string
-              })
-            : undefined
+        const parameters =
+            !isEmptyHex(userOperation.callData) ?
+                (abiCoder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
+                    dest: string
+                    value: string
+                    func: string
+                })
+            :   undefined
 
         return {
             chainId,

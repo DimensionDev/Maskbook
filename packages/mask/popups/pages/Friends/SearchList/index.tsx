@@ -41,26 +41,24 @@ interface SearchListProps {
 export const SearchList = memo<SearchListProps>(function SearchList({ searchResult, fetchNextPage, refetch }) {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
-    return searchResult.length === 0 ? (
-        <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_search_no_result()}</EmptyStatus>
-    ) : (
-        <RestorableScroll scrollKey="search_contacts">
-            <Box className={classes.cardContainer}>
-                {searchResult.map((friend) => {
-                    return (
-                        <ContactCard
-                            key={friend.persona}
-                            nextId={friend.persona}
-                            proofProfiles={friend.proofs}
-                            publicKey={friend.linkedPersona?.rawPublicKey}
-                            isLocal={friend.isLocal}
-                            refetch={refetch}
-                            avatar={friend.avatar}
-                        />
-                    )
-                })}
-                <ElementAnchor callback={() => fetchNextPage()} height={10} />
-            </Box>
-        </RestorableScroll>
-    )
+    return searchResult.length === 0 ?
+            <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_search_no_result()}</EmptyStatus>
+        :   <RestorableScroll scrollKey="search_contacts">
+                <Box className={classes.cardContainer}>
+                    {searchResult.map((friend) => {
+                        return (
+                            <ContactCard
+                                key={friend.persona}
+                                nextId={friend.persona}
+                                proofProfiles={friend.proofs}
+                                publicKey={friend.linkedPersona?.rawPublicKey}
+                                isLocal={friend.isLocal}
+                                refetch={refetch}
+                                avatar={friend.avatar}
+                            />
+                        )
+                    })}
+                    <ElementAnchor callback={() => fetchNextPage()} height={10} />
+                </Box>
+            </RestorableScroll>
 })

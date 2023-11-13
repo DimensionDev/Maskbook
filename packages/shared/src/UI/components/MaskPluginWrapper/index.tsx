@@ -110,7 +110,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     {t.powered_by()}
                 </Typography>
                 {main}
-                {publisherLink ? (
+                {publisherLink ?
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider
                             size={18}
@@ -118,7 +118,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                             color={MaskLightTheme.palette.maskColor.main}
                         />
                     </Link>
-                ) : null}
+                :   null}
             </Box>
         )
     }, [publisher, publisherLink])
@@ -143,15 +143,17 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>
-            {action ? (
+            {action ?
                 <>
                     <Typography component="div" variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
                         {content}
                     </Typography>
                     <div className={classes.action}>{action}</div>
                 </>
-            ) : null}
-            {children ? <div className={classes.body}>{children}</div> : null}
+            :   null}
+            {children ?
+                <div className={classes.body}>{children}</div>
+            :   null}
         </div>
     )
 

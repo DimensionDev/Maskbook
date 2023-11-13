@@ -169,7 +169,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         </InjectedDialog>
                     </TabContext>
                 </ChainContextProvider>
-                {selectedProtocol ? (
+                {selectedProtocol ?
                     <RevokeChainContextProvider>
                         <SavingsFormDialog
                             tab={currentTab}
@@ -178,7 +178,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                             onClose={() => setSelectedProtocol(null)}
                         />
                     </RevokeChainContextProvider>
-                ) : null}
+                :   null}
             </AllProviderTradeContext.Provider>
         </Web3ContextProvider>
     )

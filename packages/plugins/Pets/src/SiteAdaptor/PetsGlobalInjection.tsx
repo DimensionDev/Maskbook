@@ -9,7 +9,9 @@ export const PetsGlobalInjection = memo(function PetsGlobalInjection() {
     return (
         <>
             <AnimatePic />
-            {open ? <PetDialog open onClose={closeDialog} /> : null}
+            {open ?
+                <PetDialog open onClose={closeDialog} />
+            :   null}
         </>
     )
 })

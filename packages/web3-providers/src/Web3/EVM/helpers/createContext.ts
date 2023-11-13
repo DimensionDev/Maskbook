@@ -10,9 +10,9 @@ const initializer = {
         return providerType === ProviderType.MaskWallet ? '' : evm.state?.Provider?.account?.getCurrentValue()
     },
     getDefaultChainId(providerType: ProviderType) {
-        return providerType === ProviderType.MaskWallet
-            ? ChainId.Mainnet
-            : evm.state?.Provider?.chainId?.getCurrentValue()
+        return providerType === ProviderType.MaskWallet ?
+                ChainId.Mainnet
+            :   evm.state?.Provider?.chainId?.getCurrentValue()
     },
     getDefaultProviderType() {
         return evm.state?.Provider?.providerType?.getCurrentValue()

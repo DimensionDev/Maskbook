@@ -79,7 +79,7 @@ const CreateWallet = memo(function CreateWallet() {
 
     return (
         <div className={classes.content}>
-            {groups.length ? (
+            {groups.length ?
                 <>
                     <Typography className={classes.sectionTitle}>{t.add_new_address_to_an_existing_group()}</Typography>
                     <List className={classes.groups}>
@@ -103,13 +103,13 @@ const CreateWallet = memo(function CreateWallet() {
                                     <ListItemText
                                         className={classes.groupText}
                                         secondary={
-                                            theFirstWallet?.address ? (
+                                            theFirstWallet?.address ?
                                                 <Tooltip title={theFirstWallet?.address}>
                                                     <Typography component="span">
                                                         {formatEthereumAddress(theFirstWallet?.address, 4)}
                                                     </Typography>
                                                 </Tooltip>
-                                            ) : null
+                                            :   null
                                         }>
                                         <Typography className={classes.groupName}>
                                             {t.popups_wallet_group_title({ index: String(index + 1) })}
@@ -122,7 +122,7 @@ const CreateWallet = memo(function CreateWallet() {
                         })}
                     </List>
                 </>
-            ) : null}
+            :   null}
 
             <Typography className={classes.sectionTitle}>{t.or_create_a_new_wallet_group()}</Typography>
             <ImportCreateWallet />

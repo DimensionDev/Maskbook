@@ -132,9 +132,9 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
         } else return makeTypedMessageEmpty()
     }
     const lang = node.parentElement!.querySelector<HTMLDivElement>('[lang]')
-    return lang
-        ? FlattenTypedMessage.NoContext(makeTypedMessageTuple(Array.from(lang.childNodes).flatMap(make)))
-        : makeTypedMessageEmpty()
+    return lang ?
+            FlattenTypedMessage.NoContext(makeTypedMessageTuple(Array.from(lang.childNodes).flatMap(make)))
+        :   makeTypedMessageEmpty()
 }
 
 function getElementStyle(element: Element | null): Meta | undefined {

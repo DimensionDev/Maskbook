@@ -22,9 +22,9 @@ export function useTradeApproveComputed(
     return useMemo(() => {
         return {
             approveToken:
-                pluginID === NetworkPluginID.PLUGIN_EVM && token?.schema === SchemaType.ERC20
-                    ? (token as FungibleToken<ChainId, SchemaType.ERC20>)
-                    : null,
+                pluginID === NetworkPluginID.PLUGIN_EVM && token?.schema === SchemaType.ERC20 ?
+                    (token as FungibleToken<ChainId, SchemaType.ERC20>)
+                :   null,
             approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {
                 if (context?.TYPE === TradeProvider.ZRX)

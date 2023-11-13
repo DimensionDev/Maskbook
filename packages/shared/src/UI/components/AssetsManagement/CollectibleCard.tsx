@@ -102,7 +102,7 @@ export const CollectibleCard = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {isSelected || showUnCheckedIndicator ? (
+                {isSelected || showUnCheckedIndicator ?
                     <Indicator
                         size={20}
                         checked={isSelected}
@@ -110,7 +110,7 @@ export const CollectibleCard = memo(
                         checkedButtonColor={theme.palette.maskColor.primary}
                         unCheckedButtonColor={theme.palette.maskColor.secondaryLine}
                     />
-                ) : null}
+                :   null}
             </div>
         )
     },

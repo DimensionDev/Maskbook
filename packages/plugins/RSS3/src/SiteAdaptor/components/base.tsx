@@ -103,18 +103,18 @@ export function CardFrame({
             {...rest}>
             <div className={classes.header}>
                 <CardIcon width={36} height={18} />
-                {verbose && feed.fee ? (
+                {verbose && feed.fee ?
                     <div className={classes.fee}>
                         <Icons.Gas size={16} />
                         <Typography ml="4px">{new BigNumber(feed.fee).toFixed(6)}</Typography>
                     </div>
-                ) : null}
-                {ProviderPlatformIcon ? (
+                :   null}
+                {ProviderPlatformIcon ?
                     <ProviderPlatformIcon className={classes.icon} height={18} width="auto" />
-                ) : null}
-                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ? (
+                :   null}
+                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ?
                     <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" />
-                ) : null}
+                :   null}
                 <ShadowRootTooltip
                     title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                     placement="right">

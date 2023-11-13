@@ -24,18 +24,20 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
 
     protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {
         return {
-            arguments: updates?.arguments
-                ? {
-                      ...request.arguments,
-                      ...updates.arguments,
-                  }
-                : request.arguments,
-            options: updates?.options
-                ? {
-                      ...request.options,
-                      ...updates.options,
-                  }
-                : request.options,
+            arguments:
+                updates?.arguments ?
+                    {
+                        ...request.arguments,
+                        ...updates.arguments,
+                    }
+                :   request.arguments,
+            options:
+                updates?.options ?
+                    {
+                        ...request.options,
+                        ...updates.options,
+                    }
+                :   request.options,
         }
     }
 

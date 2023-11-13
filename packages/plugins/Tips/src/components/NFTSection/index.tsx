@@ -103,21 +103,22 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
-        const filtered = isEvm
-            ? fetchedTokens.filter((x) => {
-                  if (isLensProfileAddress(x.address)) return false
-                  if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
-                  if (x.collection?.name && isLensCollect(x.collection.name)) return false
-                  return true
-              })
-            : fetchedTokens
+        const filtered =
+            isEvm ?
+                fetchedTokens.filter((x) => {
+                    if (isLensProfileAddress(x.address)) return false
+                    if (x.metadata?.name && isLensFollower(x.metadata.name)) return false
+                    if (x.collection?.name && isLensCollect(x.collection.name)) return false
+                    return true
+                })
+            :   fetchedTokens
         return uniqWith(
             filtered,
-            isEvm
-                ? (v1, v2) => {
-                      return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
-                  }
-                : (v1, v2) => v1.tokenId === v2.tokenId,
+            isEvm ?
+                (v1, v2) => {
+                    return isSameAddress(v1.contract?.address, v2.contract?.address) && v1.tokenId === v2.tokenId
+                }
+            :   (v1, v2) => v1.tokenId === v2.tokenId,
         )
     }, [fetchedTokens, isEvm])
 
@@ -155,11 +156,11 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
     return (
         <div className={cx(classes.root, className)} {...rest}>
             <FormControl className={classes.header}>
-                {isEvm && account ? (
+                {isEvm && account ?
                     <Typography className={classes.addButton} onClick={handleAddToken}>
                         {t.tip_add_collectibles()}
                     </Typography>
-                ) : null}
+                :   null}
             </FormControl>
             <div className={classes.selectSection}>
                 {(() => {

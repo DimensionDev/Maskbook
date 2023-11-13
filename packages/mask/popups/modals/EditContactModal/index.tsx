@@ -145,7 +145,9 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                 />
             </Box>
             <Typography className={classes.address}>{formatEthereumAddress(address, 4)}</Typography>
-            {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
+            {validationMessage ?
+                <Typography className={classes.helperText}>{validationMessage}</Typography>
+            :   null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t.cancel()}

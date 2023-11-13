@@ -80,9 +80,9 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
                 description: collection.description,
                 image_url: collection.logo_url,
                 home_urls: compact([
-                    collection.website
-                        ? collection.website
-                        : `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_SOLANA, chainId)}/${address}`,
+                    collection.website ?
+                        collection.website
+                    :   `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_SOLANA, chainId)}/${address}`,
                 ]),
                 nftscan_url: `${resolveNFTScanHostName(NetworkPluginID.PLUGIN_SOLANA, chainId)}/${address}`,
                 community_urls: [
@@ -90,9 +90,9 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
                         type: 'twitter',
                         link:
                             collection.twitter &&
-                            (collection.twitter.startsWith('https://twitter.com/')
-                                ? collection.twitter
-                                : `https://twitter.com/${collection.twitter}`),
+                            (collection.twitter.startsWith('https://twitter.com/') ?
+                                collection.twitter
+                            :   `https://twitter.com/${collection.twitter}`),
                     },
                     {
                         type: 'facebook',
@@ -107,17 +107,17 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
                         type: 'instagram',
                         link:
                             collection.instagram &&
-                            (collection.instagram.startsWith('https://instagram.com/')
-                                ? collection.instagram
-                                : `https://www.instagram.com/${collection.instagram}`),
+                            (collection.instagram.startsWith('https://instagram.com/') ?
+                                collection.instagram
+                            :   `https://www.instagram.com/${collection.instagram}`),
                     },
                     {
                         type: 'medium',
                         link:
                             collection.medium &&
-                            (collection.medium.startsWith('https://instagram.com/@')
-                                ? collection.medium
-                                : `https://medium.com/@${collection.medium}`),
+                            (collection.medium.startsWith('https://instagram.com/@') ?
+                                collection.medium
+                            :   `https://medium.com/@${collection.medium}`),
                     },
                     {
                         type: 'reddit',

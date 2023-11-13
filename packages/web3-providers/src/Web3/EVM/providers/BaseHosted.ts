@@ -127,16 +127,16 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         const now = new Date()
         await this.walletStorage?.wallets.setValue(
             this.walletStorage?.wallets.value.map((x) =>
-                isSameAddress(x.address, address)
-                    ? {
-                          ...x,
-                          name: updates.name ?? x.name,
-                          owner: updates.owner ?? x.owner,
-                          identifier: updates.identifier ?? x.identifier,
-                          createdAt: x.createdAt ?? now,
-                          updatedAt: now,
-                      }
-                    : x,
+                isSameAddress(x.address, address) ?
+                    {
+                        ...x,
+                        name: updates.name ?? x.name,
+                        owner: updates.owner ?? x.owner,
+                        identifier: updates.identifier ?? x.identifier,
+                        createdAt: x.createdAt ?? now,
+                        updatedAt: now,
+                    }
+                :   x,
             ),
         )
         CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

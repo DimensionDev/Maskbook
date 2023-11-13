@@ -36,9 +36,10 @@ function getStyleProps() {
     const newTweetButton = searchNewTweetButtonSelector().evaluate()
     return {
         backgroundColor: newTweetButton ? window.getComputedStyle(newTweetButton).backgroundColor : undefined,
-        fontFamily: newTweetButton?.firstChild
-            ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
-            : undefined,
+        fontFamily:
+            newTweetButton?.firstChild ?
+                window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
+            :   undefined,
     }
 }
 

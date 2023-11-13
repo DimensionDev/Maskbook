@@ -170,23 +170,22 @@ export const RecipientSelect = memo(({ className }: Props) => {
             {recipients.map((account) => (
                 <MenuItem className={classes.menuItem} key={account.address} value={account.address}>
                     <PluginIcon pluginID={account.pluginID} />
-                    {account.label ? (
+                    {account.label ?
                         <Typography component="span" className={classes.text}>
                             {account.label}
                         </Typography>
-                    ) : (
-                        <ReversedAddress
+                    :   <ReversedAddress
                             address={account.address}
                             size={account.address.length}
                             component="span"
                             className={classes.text}
                         />
-                    )}
+                    }
                     <ExternalLink account={account} />
                     <AccountIcons socialAccount={account} classes={{ icon: classes.icon }} />
-                    {isSameAddress(account.address, recipientAddress) ? (
+                    {isSameAddress(account.address, recipientAddress) ?
                         <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
-                    ) : null}
+                    :   null}
                 </MenuItem>
             ))}
         </Select>

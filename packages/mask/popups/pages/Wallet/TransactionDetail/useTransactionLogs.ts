@@ -30,9 +30,8 @@ export function useTransactionLogs(transactionState: TransactionState) {
     const logs = useMemo(() => {
         if (!transactionState) return EMPTY_LIST
         const isRecentTx = 'candidates' in transactionState
-        const localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined = isRecentTx
-            ? transactionState
-            : txes?.find((x) => x.id === transactionState.id)
+        const localTransaction: RecentTransaction<ChainId, EvmTransaction> | undefined =
+            isRecentTx ? transactionState : txes?.find((x) => x.id === transactionState.id)
         if (localTransaction) {
             return [
                 t.transaction_confirmed_at({

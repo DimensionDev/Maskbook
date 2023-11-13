@@ -51,7 +51,7 @@ export const ConnectSocialAccounts = memo<ConnectSocialAccountsProps>(function C
                 return (
                     <Box className={classes.item} key={networkIdentifier} onClick={() => onConnect(networkIdentifier)}>
                         <div className={classes.networkIcon}>
-                            {Icon ? (
+                            {Icon ?
                                 <Icon
                                     size={24}
                                     style={{
@@ -60,7 +60,7 @@ export const ConnectSocialAccounts = memo<ConnectSocialAccountsProps>(function C
                                         borderRadius: 99,
                                     }}
                                 />
-                            ) : null}
+                            :   null}
                         </div>
                         <Typography className={classes.network}>{SOCIAL_MEDIA_NAME[networkIdentifier]}</Typography>
                     </Box>

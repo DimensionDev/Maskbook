@@ -8,11 +8,11 @@ export function getAvatarType(ele?: HTMLElement) {
         searchTwitterAvatarNormalSelector().querySelector('div').evaluate()
     if (!dom) return AvatarType.Default
     const styles = window.getComputedStyle(dom)
-    return styles.clipPath.includes('#shape-square')
-        ? AvatarType.Square
-        : styles.clipPath.includes('#shape-hex')
-          ? AvatarType.Clip
-          : AvatarType.Default
+    return (
+        styles.clipPath.includes('#shape-square') ? AvatarType.Square
+        : styles.clipPath.includes('#shape-hex') ? AvatarType.Clip
+        : AvatarType.Default
+    )
 }
 
 export function isVerifiedUser(ele: HTMLElement) {

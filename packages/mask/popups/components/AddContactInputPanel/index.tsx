@@ -120,25 +120,26 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                     autoFocus={autoFocus}
                     InputProps={{
                         spellCheck: false,
-                        endAdornment: addable ? (
-                            <div className={classes.endAdornment} onClick={openAddContactModal}>
-                                <Typography className={classes.save}>{t.save()}</Typography>
-                                <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
-                            </div>
-                        ) : undefined,
+                        endAdornment:
+                            addable ?
+                                <div className={classes.endAdornment} onClick={openAddContactModal}>
+                                    <Typography className={classes.save}>{t.save()}</Typography>
+                                    <Icons.AddUser size={18} color={theme.palette.maskColor.main} />
+                                </div>
+                            :   undefined,
                         classes: { input: classes.inputText },
                     }}
                 />
-                {inputWarningMessage && !addressValidationMessage ? (
+                {inputWarningMessage && !addressValidationMessage ?
                     <Typography className={classes.warning} mt={1}>
                         {inputWarningMessage}
                     </Typography>
-                ) : null}
-                {addressValidationMessage ? (
+                :   null}
+                {addressValidationMessage ?
                     <Typography className={classes.validation} mt={1}>
                         {addressValidationMessage}
                     </Typography>
-                ) : shouldShowAddress ? (
+                : shouldShowAddress ?
                     <Typography className={classes.receiver} mt={1}>
                         {address}
                         <Icons.LinkOut
@@ -147,7 +148,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
                             onClick={() => openWindow(EVMExplorerResolver.addressLink(chainId, address))}
                         />
                     </Typography>
-                ) : null}
+                :   null}
             </div>
         </Box>
     )

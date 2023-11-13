@@ -64,25 +64,27 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
             address: creator,
             link: urlcat(NFTSCAN_BASE_SOLANA + '/:id', { id: creator }),
         },
-        owner: owner
-            ? {
-                  address: owner,
-                  link: urlcat(NFTSCAN_BASE_SOLANA + '/:id', { id: owner }),
-              }
-            : undefined,
+        owner:
+            owner ?
+                {
+                    address: owner,
+                    link: urlcat(NFTSCAN_BASE_SOLANA + '/:id', { id: owner }),
+                }
+            :   undefined,
         traits:
             asset.attributes?.map((x) => ({
                 type: x.attribute_name,
                 value: x.attribute_value,
                 rarity: x.percentage,
             })) ?? EMPTY_LIST,
-        priceInToken: asset.latest_trade_price
-            ? {
-                  amount: scale10(asset.latest_trade_price, nativeToken.decimals).toFixed(),
-                  // FIXME: cannot get payment token
-                  token: nativeToken,
-              }
-            : undefined,
+        priceInToken:
+            asset.latest_trade_price ?
+                {
+                    amount: scale10(asset.latest_trade_price, nativeToken.decimals).toFixed(),
+                    // FIXME: cannot get payment token
+                    token: nativeToken,
+                }
+            :   undefined,
         metadata: {
             chainId,
             name: getAssetFullName(asset.token_address, payload?.collection?.name || name, name),
@@ -159,25 +161,27 @@ export function createNonFungibleTokenEvent(
         timestamp: transaction.timestamp ?? 0,
         type: resolveActivityType(transaction.event_type),
         hash: transaction.hash,
-        from: transaction.source
-            ? {
-                  address: transaction.source,
-              }
-            : undefined,
-        to: transaction.destination
-            ? {
-                  address: transaction.destination,
-              }
-            : undefined,
+        from:
+            transaction.source ?
+                {
+                    address: transaction.source,
+                }
+            :   undefined,
+        to:
+            transaction.destination ?
+                {
+                    address: transaction.destination,
+                }
+            :   undefined,
         assetName: transaction.exchange_name,
         assetPermalink: createPermalink(chainId, transaction.token_address),
         priceInToken:
-            paymentToken && transaction.trade_price
-                ? {
-                      amount: scale10(transaction.trade_price ?? 0, paymentToken?.decimals).toFixed(),
-                      token: paymentToken,
-                  }
-                : undefined,
+            paymentToken && transaction.trade_price ?
+                {
+                    amount: scale10(transaction.trade_price ?? 0, paymentToken?.decimals).toFixed(),
+                    token: paymentToken,
+                }
+            :   undefined,
         paymentToken,
         source: SourceType.NFTScan,
     }

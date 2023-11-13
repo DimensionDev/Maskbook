@@ -70,9 +70,10 @@ const FlexibleButtonGroupPanel = styled(Box, {
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
     width: 'calc(100% - 24px)',
-    boxShadow: isOpen
-        ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
-        : 'none',
+    boxShadow:
+        isOpen ?
+            `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
+        :   'none',
     backdropFilter: 'blur(20px)',
     background: alpha(theme.palette.maskColor.bottom, 0.8),
     boxSizing: 'content-box',
@@ -90,23 +91,23 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     overflowY: 'clip',
     flex: 1,
     gap: theme.spacing(1),
-    ...(maskVariant === 'round'
-        ? {
-              padding: theme.spacing(0.5),
-              background: theme.palette.maskColor.input,
-              borderRadius: 18,
-          }
-        : maskVariant === 'flexible'
-          ? {
-                background: 'transparent',
-                borderRadius: 0,
-            }
-          : {
-                marginTop: theme.spacing(-1),
-                paddingTop: theme.spacing(1),
-                background: 'transparent',
-                borderRadius: 0,
-            }),
+    ...(maskVariant === 'round' ?
+        {
+            padding: theme.spacing(0.5),
+            background: theme.palette.maskColor.input,
+            borderRadius: 18,
+        }
+    : maskVariant === 'flexible' ?
+        {
+            background: 'transparent',
+            borderRadius: 0,
+        }
+    :   {
+            marginTop: theme.spacing(-1),
+            paddingTop: theme.spacing(1),
+            background: 'transparent',
+            borderRadius: 0,
+        }),
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
@@ -127,11 +128,11 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
     gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
     borderRadius: 0,
     background:
-        !isOpen && isOverflow
-            ? theme.palette.mode === 'light'
-                ? `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
-                : `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
-            : 'transparent',
+        !isOpen && isOverflow ?
+            theme.palette.mode === 'light' ?
+                `linear-gradient(270deg, rgba(255,255,255,1) ${defaultTabSize}px, rgba(223, 229, 244, 0.8) ${defaultTabSize}px, rgba(244, 247, 254, 0) 72px)`
+            :   `linear-gradient(270deg, transparent ${defaultTabSize}px, rgba(49, 49, 49, 0.8) ${defaultTabSize}px, rgba(23, 23, 23, 0) 72px)`
+        :   'transparent',
 }))
 
 const tabMapping: {
@@ -269,7 +270,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        {(isTabsOverflow || open) && !hideArrowButton ? (
+                        {(isTabsOverflow || open) && !hideArrowButton ?
                             <ArrowButtonWrap
                                 className={classes?.arrowButton}
                                 variant="text"
@@ -283,7 +284,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                                     sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }}
                                 />
                             </ArrowButtonWrap>
-                        ) : null}
+                        :   null}
                     </FlexButtonGroupWrap>
                 </FlexibleButtonGroupPanel>
             </Box>

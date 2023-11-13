@@ -105,12 +105,12 @@ export function DetailsView({ project }: DetailsViewProps) {
                     <Typography variant="body2">{t.plugin_artblocks_license_row()} </Typography>
                     <Typography variant="body2">{project.license}</Typography>
                 </Box>
-                {project.scriptJSON ? (
+                {project.scriptJSON ?
                     <Box className={classes.meta_row}>
                         <Typography variant="body2">{t.plugin_artblocks_library_row()}</Typography>
                         <Typography variant="body2">{JSON.parse(project.scriptJSON).type}</Typography>
                     </Box>
-                ) : null}
+                :   null}
             </Box>
             <Box className={classes.container}>
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>

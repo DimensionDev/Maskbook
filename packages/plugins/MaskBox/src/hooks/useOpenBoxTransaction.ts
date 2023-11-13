@@ -24,9 +24,9 @@ export function useOpenBoxTransaction(
                 ...overrides,
                 from: account,
                 value:
-                    paymentTokenDetailed?.schema === SchemaType.Native
-                        ? multipliedBy(paymentTokenPrice, amount).toFixed()
-                        : undefined,
+                    paymentTokenDetailed?.schema === SchemaType.Native ?
+                        multipliedBy(paymentTokenPrice, amount).toFixed()
+                    :   undefined,
             },
             method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, proof ?? '0x00'),
         }

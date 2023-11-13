@@ -145,11 +145,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                         pluginID: NetworkPluginID.PLUGIN_EVM,
                         address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
                         label:
-                            result.type === SearchResultType.Domain
-                                ? result.keyword
-                                : result.type === SearchResultType.EOA
-                                  ? result.domain ?? ''
-                                  : '',
+                            result.type === SearchResultType.Domain ? result.keyword
+                            : result.type === SearchResultType.EOA ? result.domain ?? ''
+                            : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)

@@ -424,7 +424,7 @@ function Content(props: ProfileTabContentProps) {
                                 color={(theme) => theme.palette.maskColor.dark}>
                                 {t.mask_network()}
                             </Typography>
-                            {isOwnerIdentity && isOnTwitter ? (
+                            {isOwnerIdentity && isOnTwitter ?
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}
                                     identity={lastRecognized}
@@ -440,15 +440,14 @@ function Content(props: ProfileTabContentProps) {
                                         sx={{ cursor: 'pointer' }}
                                     />
                                 </ConnectPersonaBoundary>
-                            ) : (
-                                <Link
+                            :   <Link
                                     className={classes.settingLink}
                                     href="https://mask.io"
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut className={classes.linkOutIcon} size={20} />
                                 </Link>
-                            )}
+                            }
                         </div>
                     </div>
                     <div className={classes.tabs}>

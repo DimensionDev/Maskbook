@@ -82,12 +82,14 @@ class OpenOceanAPI implements TraderAPI.Provider {
         if (isZero(inputAmount) || !inputToken || !outputToken || !OPENOCEAN_SUPPORTED_CHAINS.includes(chainId))
             return null
 
-        const sellToken = isNativeTokenAddress(inputToken.address)
-            ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
-            : inputToken
-        const buyToken = isNativeTokenAddress(outputToken.address)
-            ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
-            : outputToken
+        const sellToken =
+            isNativeTokenAddress(inputToken.address) ?
+                { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
+            :   inputToken
+        const buyToken =
+            isNativeTokenAddress(outputToken.address) ?
+                { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
+            :   outputToken
 
         return this.swapOO({
             isNativeSellToken: isNativeTokenAddress(inputToken.address),

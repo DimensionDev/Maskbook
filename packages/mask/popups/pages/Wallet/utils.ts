@@ -27,9 +27,8 @@ export async function modifyTransaction(
         gas: candidate.gas!,
         gasPrice: candidate.gasPrice ? formatWeiToGwei(candidate.gasPrice).toFixed() : undefined,
         maxFeePerGas: candidate.maxFeePerGas ? formatWeiToGwei(candidate.maxFeePerGas).toFixed() : undefined,
-        maxPriorityFeePerGas: candidate.maxPriorityFeePerGas
-            ? formatWeiToGwei(candidate.maxPriorityFeePerGas).toFixed()
-            : undefined,
+        maxPriorityFeePerGas:
+            candidate.maxPriorityFeePerGas ? formatWeiToGwei(candidate.maxPriorityFeePerGas).toFixed() : undefined,
     }
     const gasSettings = await GasSettingModal.openAndWaitForClose({
         chainId: transaction.chainId,

@@ -131,7 +131,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
             <Box>
                 <Typography className={classes.title}>{t.cloud_backup_preview_title()}</Typography>
                 <Typography className={classes.description}>{t.cloud_backup_preview_description()}</Typography>
-                {previewInfo.downloadLink ? (
+                {previewInfo.downloadLink ?
                     <>
                         <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
                             <Typography className={classes.text}>{previewInfo.account}</Typography>
@@ -192,8 +192,7 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                             </Box>
                         </Box>
                     </>
-                ) : (
-                    <Box className={classes.container}>
+                :   <Box className={classes.container}>
                         <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
                             <Typography className={classes.text}>{previewInfo.account}</Typography>
                             <Typography
@@ -205,15 +204,15 @@ export const CloudBackupPreview = memo(function CloudBackupPreview() {
                         </Box>
                         <EmptyStatus sx={{ minHeight: 182 }}>{t.data_backup_no_backups_found()}</EmptyStatus>
                     </Box>
-                )}
+                }
             </Box>
-            {!previewInfo.downloadLink ? (
+            {!previewInfo.downloadLink ?
                 <SetupFrameController>
                     <ActionButton onClick={handleBackupClick} startIcon={<Icons.CloudBackup2 size={20} />}>
                         {t.backup()}
                     </ActionButton>
                 </SetupFrameController>
-            ) : null}
+            :   null}
         </>
     )
 })

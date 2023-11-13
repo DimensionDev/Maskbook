@@ -50,7 +50,9 @@ const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
     const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[origin], [origin])
     return (
         <Box className={classes.container}>
-            {Icon ? <Icon size={24} /> : null}
+            {Icon ?
+                <Icon size={24} />
+            :   null}
             <Box className={classes.site}>
                 <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[origin]}</Typography>
                 <Typography className={classes.siteUrl}>{origin}</Typography>
@@ -58,14 +60,14 @@ const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
             <button className={classes.button} onClick={() => setOpen(true)} type="button">
                 <Icons.Disconnect />
             </button>
-            {open ? (
+            {open ?
                 <DisconnectModal
                     origin={origin}
                     setOpen={(open: boolean) => {
                         setOpen(open)
                     }}
                 />
-            ) : null}
+            :   null}
         </Box>
     )
 })

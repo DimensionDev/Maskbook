@@ -45,28 +45,32 @@ export function useFriendsFromSearch(
                         avatar: item.avatar,
                     }
                 }) ?? EMPTY_LIST
-        const profiles: NextIDPersonaBindingsWithIdentifier[] = searchResult
-            ? searchResult
-                  .filter((x) => x.persona !== currentIdentifier?.identifier.publicKeyAsHex)
-                  .map((item) => {
-                      const filtered = item.proofs.filter(profilesFilter)
-                      const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
-                          `${item.persona} should be a valid hex public key in k256`,
-                      )
-                      filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
-                      const searchItem = filtered.findIndex((x) => x.identity === searchValue || x.name === searchValue)
-                      if (searchItem !== -1) filtered.unshift(filtered.splice(searchItem, 1)[0])
-                      return {
-                          proofs: uniqBy(filtered, ({ identity }) => identity),
-                          linkedPersona: identifier,
-                          activated_at: item.activated_at,
-                          persona: item.persona,
-                          isLocal: localList
-                              ? localList.some((x) => x.persona.publicKeyAsHex === identifier.publicKeyAsHex)
-                              : false,
-                      }
-                  })
-            : EMPTY_LIST
+        const profiles: NextIDPersonaBindingsWithIdentifier[] =
+            searchResult ?
+                searchResult
+                    .filter((x) => x.persona !== currentIdentifier?.identifier.publicKeyAsHex)
+                    .map((item) => {
+                        const filtered = item.proofs.filter(profilesFilter)
+                        const identifier = ECKeyIdentifier.fromHexPublicKeyK256(item.persona).expect(
+                            `${item.persona} should be a valid hex public key in k256`,
+                        )
+                        filtered.sort((a, b) => PlatformSort[a.platform] - PlatformSort[b.platform])
+                        const searchItem = filtered.findIndex(
+                            (x) => x.identity === searchValue || x.name === searchValue,
+                        )
+                        if (searchItem !== -1) filtered.unshift(filtered.splice(searchItem, 1)[0])
+                        return {
+                            proofs: uniqBy(filtered, ({ identity }) => identity),
+                            linkedPersona: identifier,
+                            activated_at: item.activated_at,
+                            persona: item.persona,
+                            isLocal:
+                                localList ?
+                                    localList.some((x) => x.persona.publicKeyAsHex === identifier.publicKeyAsHex)
+                                :   false,
+                        }
+                    })
+            :   EMPTY_LIST
         return uniqBy(
             localProfiles ? localProfiles.concat(profiles) : profiles,
             ({ linkedPersona }) => linkedPersona.publicKeyAsHex,

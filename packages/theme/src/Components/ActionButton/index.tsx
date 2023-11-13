@@ -28,7 +28,7 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
             {...rest}
             disableElevation
             disabled={!!(rest.disabled || loading)}>
-            {loading ? (
+            {loading ?
                 <Box
                     position="absolute"
                     width="100%"
@@ -39,7 +39,7 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
                     style={{ opacity: 1 }}>
                     <LoadingBase />
                 </Box>
-            ) : null}
+            :   null}
             {children}
         </Button>
     )

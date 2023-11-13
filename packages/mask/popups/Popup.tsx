@@ -94,7 +94,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                         <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
                     </Routes>
-                    {mainLocation ? (
+                    {mainLocation ?
                         <Routes>
                             <Route
                                 path={PopupModalRoutes.verifyBackupPassword}
@@ -146,7 +146,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                                 element={wrapModal(<ChangeBackupPasswordModal />)}
                             />
                         </Routes>
-                    ) : null}
+                    :   null}
                 </UserContext.Provider>
             </PersonaContext.Provider>
         </Suspense>

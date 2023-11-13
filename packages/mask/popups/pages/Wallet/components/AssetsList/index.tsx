@@ -161,9 +161,9 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                                 {balance.value} {asset.symbol}
                             </ProgressiveText>
                         </TextOverflowTooltip>
-                        {asset.isCustomToken ? (
+                        {asset.isCustomToken ?
                             <Typography className={classes.customToken}>{t.added_by_user()}</Typography>
-                        ) : null}
+                        :   null}
                     </>
                 }>
                 <TextOverflowTooltip title={asset.name}>
@@ -201,18 +201,17 @@ export const AssetsList = memo(function AssetsList() {
     )
     return (
         <div className={classes.container} data-hide-scrollbar>
-            {isLoading ? (
+            {isLoading ?
                 <AssetsListSkeleton />
-            ) : (
-                <List dense className={classes.list}>
+            :   <List dense className={classes.list}>
                     {list.map((asset) => (
                         <AssetItem key={`${asset.chainId}.${asset.address}`} asset={asset} onItemClick={onItemClick} />
                     ))}
                 </List>
-            )}
-            {hasLowValueToken ? (
+            }
+            {hasLowValueToken ?
                 <MoreBar isExpand={assetsIsExpand} onClick={onSwitch} className={classes.more} />
-            ) : null}
+            :   null}
         </div>
     )
 })

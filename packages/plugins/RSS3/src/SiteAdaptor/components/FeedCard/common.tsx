@@ -40,18 +40,16 @@ interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
 }
 export function AddressLabel({ address, pluginID, size, className, ...rest }: AddressLabelProps) {
     const { classes, cx } = useStyles()
-    return address ? (
-        <ReversedAddress
-            address={address}
-            pluginID={pluginID}
-            size={size}
-            className={cx(classes.label, className)}
-            component="span"
-            {...rest}
-        />
-    ) : (
-        <Label className={className} {...rest} />
-    )
+    return address ?
+            <ReversedAddress
+                address={address}
+                pluginID={pluginID}
+                size={size}
+                className={cx(classes.label, className)}
+                component="span"
+                {...rest}
+            />
+        :   <Label className={className} {...rest} />
 }
 
 export const formatValue = (value?: { value: string; decimals: number } | null): string => {

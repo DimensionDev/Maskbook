@@ -36,18 +36,19 @@ export async function parse38(payload: string): PayloadParserResult {
     // #region Normalization
     const raw_iv = decodeUint8ArrayCrypto(iv).andThen(assertIVLengthEq16)
     const raw_aes = decodeUint8ArrayCrypto(AESKeyEncrypted)
-    const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = isPublic
-        ? {
-              type: 'public',
-              iv: raw_iv,
-              AESKey: await decodePublicSharedAESKey(raw_iv, raw_aes),
-          }
-        : {
-              type: 'E2E',
-              iv: raw_iv,
-              ephemeralPublicKey: {},
-              ownersAESKeyEncrypted: raw_aes,
-          }
+    const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption =
+        isPublic ?
+            {
+                type: 'public',
+                iv: raw_iv,
+                AESKey: await decodePublicSharedAESKey(raw_iv, raw_aes),
+            }
+        :   {
+                type: 'E2E',
+                iv: raw_iv,
+                ephemeralPublicKey: {},
+                ownersAESKeyEncrypted: raw_aes,
+            }
     const normalized: Readwrite<PayloadParseResult.Payload> = {
         version: -38,
         author: OptionalResult.None,
@@ -84,9 +85,8 @@ export async function parse38(payload: string): PayloadParserResult {
 function splitFields(raw: string) {
     const [, AESKeyEncrypted = '', iv = '', encryptedText = '', signature, authorPublicKey, isPublic, authorUserIDRaw] =
         raw.split('|')
-    const authorUserID: OptionalResult<string, any> = authorUserIDRaw
-        ? Result.wrap(() => Some(atob(authorUserIDRaw)))
-        : OptionalResult.None
+    const authorUserID: OptionalResult<string, any> =
+        authorUserIDRaw ? Result.wrap(() => Some(atob(authorUserIDRaw))) : OptionalResult.None
     return {
         AESKeyEncrypted,
         encryptedText,

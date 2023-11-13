@@ -64,13 +64,14 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                 localKey: persona.localKey ? Some(persona.localKey) : None,
                 createdAt: persona.createdAt ? Some(persona.createdAt) : None,
                 updatedAt: persona.updatedAt ? Some(persona.updatedAt) : None,
-                mnemonic: persona.mnemonic
-                    ? Some({
-                          hasPassword: persona.mnemonic.parameter.withPassword,
-                          path: persona.mnemonic.parameter.path,
-                          words: persona.mnemonic.words,
-                      })
-                    : None,
+                mnemonic:
+                    persona.mnemonic ?
+                        Some({
+                            hasPassword: persona.mnemonic.parameter.withPassword,
+                            path: persona.mnemonic.parameter.path,
+                            words: persona.mnemonic.words,
+                        })
+                    :   None,
                 linkedProfiles: persona.linkedProfiles,
                 address: persona.address ? Some(persona.address) : None,
             })

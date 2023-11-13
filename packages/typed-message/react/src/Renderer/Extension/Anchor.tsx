@@ -9,7 +9,7 @@ export const TypedMessageAnchorRender = memo(function TypedMessageAnchorRender(p
             children={props.content}
             href={props.href}
             suggestedPostImage={
-                typeof props.postImage?.image === 'string' ? (
+                typeof props.postImage?.image === 'string' ?
                     // TODO: support Blob image
                     // Note: no need to add alt here because itself is a decorate image.
                     <img
@@ -18,7 +18,7 @@ export const TypedMessageAnchorRender = memo(function TypedMessageAnchorRender(p
                         style={{ height: '1.25em', marginLeft: '0.25em' }}
                         alt=""
                     />
-                ) : null
+                :   null
             }
         />
     )

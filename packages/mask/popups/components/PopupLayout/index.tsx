@@ -79,8 +79,14 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
                     <div className={classes.body} data-hide-scrollbar>
                         {children ?? <Outlet context={outletContext} />}
                     </div>
-                    <Suspense fallback={null}>{matched ? <LoadMaskSDK /> : null}</Suspense>
-                    {matched ? <Navigator className={classes.navigator} /> : null}
+                    <Suspense fallback={null}>
+                        {matched ?
+                            <LoadMaskSDK />
+                        :   null}
+                    </Suspense>
+                    {matched ?
+                        <Navigator className={classes.navigator} />
+                    :   null}
                 </div>
             </Paper>
         </>

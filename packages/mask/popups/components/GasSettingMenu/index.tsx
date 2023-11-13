@@ -115,18 +115,19 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     useEffect(() => {
         if (!!initConfig || !gasOptions || !onChange) return
         const target = gasOptions[GasOptionType.SLOW]
-        const result = isSupport1559
-            ? {
-                  gasOptionType: GasOptionType.SLOW,
-                  maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
-                  maxFeePerGas: target.suggestedMaxFeePerGas,
-                  gas: minimumGas,
-              }
-            : {
-                  gasOptionType: GasOptionType.SLOW,
-                  gasPrice: target.suggestedMaxFeePerGas,
-                  gas: minimumGas,
-              }
+        const result =
+            isSupport1559 ?
+                {
+                    gasOptionType: GasOptionType.SLOW,
+                    maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
+                    maxFeePerGas: target.suggestedMaxFeePerGas,
+                    gas: minimumGas,
+                }
+            :   {
+                    gasOptionType: GasOptionType.SLOW,
+                    gasPrice: target.suggestedMaxFeePerGas,
+                    gas: minimumGas,
+                }
 
         setGasConfig((prev) => {
             if (prev) return
@@ -159,7 +160,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     formatter={formatCurrency}
                 />
             </Typography>
-            {!disable ? (
+            {!disable ?
                 <Box
                     py={0.5}
                     px={1.5}
@@ -174,13 +175,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     </Typography>
                     <Icons.Candle size={12} />
                 </Box>
-            ) : null}
-            {owner && allowMaskAsGas ? (
+            :   null}
+            {owner && allowMaskAsGas ?
                 <>
                     <Icons.ArrowDrop size={20} sx={{ ml: 0.5, cursor: 'pointer' }} onClick={openPaymentTokenMenu} />
                     {paymentTokenMenu}
                 </>
-            ) : null}
+            :   null}
             {menu}
         </Box>
     )

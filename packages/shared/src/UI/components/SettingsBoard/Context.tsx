@@ -47,14 +47,14 @@ function useSettingsContext(initial?: {
     const needToResetByTransaction =
         !!IN_MEMORY_CACHE?.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
     const [gasSettingsType, setGasSettingsType] = useState<GasSettingsType>(
-        needToResetByNetwork || needToResetByTransaction
-            ? GasSettingsType.Basic
-            : IN_MEMORY_CACHE.lastSelectedGasSettingsType,
+        needToResetByNetwork || needToResetByTransaction ?
+            GasSettingsType.Basic
+        :   IN_MEMORY_CACHE.lastSelectedGasSettingsType,
     )
     const [gasOptionType, setGasOptionType] = useState<GasOptionType>(
-        needToResetByNetwork || needToResetByTransaction
-            ? GasOptionType.NORMAL
-            : IN_MEMORY_CACHE.lastSelectedGasOptionType,
+        needToResetByNetwork || needToResetByTransaction ?
+            GasOptionType.NORMAL
+        :   IN_MEMORY_CACHE.lastSelectedGasOptionType,
     )
 
     const {

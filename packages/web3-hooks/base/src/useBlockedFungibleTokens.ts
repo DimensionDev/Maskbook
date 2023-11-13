@@ -11,8 +11,8 @@ export function useBlockedFungibleTokens<S extends 'all' | void = void, T extend
     const { Token } = useWeb3State(pluginID)
     const fungibleTokens = useSubscription(Token?.blockedFungibleTokens ?? EMPTY_ARRAY)
     return useMemo<Array<Web3Helper.FungibleTokenScope<S, T>>>(() => {
-        return fungibleTokens.length && schemaType
-            ? fungibleTokens.filter((x) => x.schema === schemaType)
-            : fungibleTokens
+        return fungibleTokens.length && schemaType ?
+                fungibleTokens.filter((x) => x.schema === schemaType)
+            :   fungibleTokens
     }, [schemaType, fungibleTokens])
 }

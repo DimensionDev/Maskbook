@@ -68,12 +68,11 @@ export function PersonaPage() {
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
-                {isLoading ? (
+                {isLoading ?
                     <Stack justifyContent="center" alignItems="center" height="100%">
                         <LoadingBase />
                     </Stack>
-                ) : (
-                    <>
+                :   <>
                         <Alert open={visible} onClose={dismissAlert}>
                             {t.persona_hint()}
                         </Alert>
@@ -95,11 +94,13 @@ export function PersonaPage() {
                         {myPersonas[0].linkedProfiles
                             .filter((x) => x.identifier.network === network)
                             .map((x, i) =>
-                                binding?.proofs.some(
-                                    (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
-                                ) ? null : (
-                                    <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />
-                                ),
+                                (
+                                    binding?.proofs.some(
+                                        (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
+                                    )
+                                ) ?
+                                    null
+                                :   <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />,
                             )}
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
@@ -113,7 +114,7 @@ export function PersonaPage() {
                                 />
                             ))}
                     </>
-                )}
+                }
             </DialogContent>
             <DialogActions style={{ padding: 0, margin: 0 }}>
                 <PersonaAction

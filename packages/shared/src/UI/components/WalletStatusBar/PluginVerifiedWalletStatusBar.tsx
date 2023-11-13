@@ -32,13 +32,12 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: Sniffings.is_dashboard_page
-            ? MaskColorVar.mainBackground
-            : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor:
+            Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
+            theme.palette.mode === 'dark' ?
+                '0px 0px 20px rgba(255, 255, 255, 0.12)'
+            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -55,9 +54,9 @@ const useStyles = makeStyles()((theme) => ({
     menu: {
         background: theme.palette.maskColor.bottom,
         boxShadow:
-            theme.palette.mode === 'dark'
-                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
-                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
         borderRadius: Sniffings.is_popup_page ? 16 : undefined,
     },
 }))
@@ -94,9 +93,8 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // Whether the current account is verified
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
-        const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
-            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
-            : undefined
+        const pluginIdByDefaultVerifiedWallet =
+            defaultVerifiedWallet ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform) : undefined
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
 
@@ -129,9 +127,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
                 iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
                 formattedAddress: walletIdentity ? Utils.formatAddress(walletIdentity, 4) : '',
-                addressLink: walletIdentity
-                    ? Utils.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
-                    : '',
+                addressLink:
+                    walletIdentity ?
+                        Utils.explorerResolver.addressLink(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
+                    :   '',
                 address: walletIdentity,
                 verified: !isNextIdWallet ? isVerifiedAccount : true,
             }),
@@ -162,7 +161,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const [menu, openMenu] = useMenuConfig(
             [
-                account ? (
+                account ?
                     <WalletMenuItem
                         address={account}
                         verified={isVerifiedAccount}
@@ -171,8 +170,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onSelect={onSelect}
                         expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
                     />
-                ) : (
-                    <MenuItem key="connect">
+                :   <MenuItem key="connect">
                         <Button
                             variant="roundedContained"
                             fullWidth
@@ -180,8 +178,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                             sx={{ minWidth: 311 }}>
                             {t.connect_your_wallet()}
                         </Button>
-                    </MenuItem>
-                ),
+                    </MenuItem>,
                 wallets.length ? <Divider key="divider" style={{ marginLeft: 8, marginRight: 8 }} /> : null,
                 ...wallets.map((x) => (
                     <WalletMenuItem
@@ -193,7 +190,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onSelect={onSelect}
                     />
                 )),
-                openPopupWindow ? (
+                openPopupWindow ?
                     <MenuItem key="Wallet Setting" onClick={openPopupWindow}>
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
@@ -202,7 +199,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                             </Typography>
                         </Box>
                     </MenuItem>
-                ) : null,
+                :   null,
             ],
             {
                 classes: { paper: classes.menu },

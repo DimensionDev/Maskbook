@@ -24,9 +24,9 @@ const impl = memoizePromise(
                 queryAvatarDB(t, id)
                     .then((avatar) => {
                         if (!avatar) return
-                        return typeof avatar === 'string'
-                            ? avatar
-                            : blobToDataURL(new Blob([avatar], { type: 'image/png' }))
+                        return typeof avatar === 'string' ? avatar : (
+                                blobToDataURL(new Blob([avatar], { type: 'image/png' }))
+                            )
                     })
                     .then((url) => url && map.set(id, url)),
             )

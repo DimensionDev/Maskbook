@@ -54,9 +54,9 @@ export class GasEditor {
                     web3_utils.toHex(config?.maxPriorityFeePerGas || '1'),
                 gasCurrency: this.EIP1559GasOptionConfig?.gasCurrency || fallback?.gasCurrency,
                 gas:
-                    this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas)
-                        ? web3_utils.toHex(this.EIP1559GasOptionConfig.gas)
-                        : undefined,
+                    this.EIP1559GasOptionConfig.gas && !isZero(this.EIP1559GasOptionConfig.gas) ?
+                        web3_utils.toHex(this.EIP1559GasOptionConfig.gas)
+                    :   undefined,
                 gasOptionType: this.config.gasOptionType ?? config?.gasOptionType,
             }
         }

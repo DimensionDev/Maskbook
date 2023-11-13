@@ -101,9 +101,9 @@ const SelectWallet = memo(function SelectWallet() {
             })
 
             navigate(
-                isSettingNFTAvatarFlow
-                    ? urlcat(PopupRoutes.PersonaAvatarSetting, { tab: ProfilePhotoType.NFT })
-                    : PopupRoutes.ConnectWallet,
+                isSettingNFTAvatarFlow ?
+                    urlcat(PopupRoutes.PersonaAvatarSetting, { tab: ProfilePhotoType.NFT })
+                :   PopupRoutes.ConnectWallet,
                 { replace: true },
             )
             return
@@ -115,15 +115,15 @@ const SelectWallet = memo(function SelectWallet() {
             await Services.Wallet.internalWalletConnect(wallet.address, source)
 
         await Services.Wallet.resolveMaskAccount([
-            wallet?.owner
-                ? {
-                      address: selected,
-                      owner: wallet.owner,
-                      identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
-                  }
-                : {
-                      address: selected,
-                  },
+            wallet?.owner ?
+                {
+                    address: selected,
+                    owner: wallet.owner,
+                    identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
+                }
+            :   {
+                    address: selected,
+                },
         ])
 
         if (smartPayChainId && wallet?.owner && chainId !== smartPayChainId) {
@@ -160,13 +160,13 @@ const SelectWallet = memo(function SelectWallet() {
 
     return (
         <Box overflow="auto" data-hide-scrollbar>
-            {external_request ? (
+            {external_request ?
                 <Box textAlign="center" paddingX={2}>
                     Connecting: <i>{external_request.origin}</i>
                     <br />
                     Be aware of fraud!
                 </Box>
-            ) : null}
+            :   null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
@@ -199,9 +199,9 @@ const SelectWallet = memo(function SelectWallet() {
                     fullWidth
                     onClick={handleConfirm}
                     disabled={
-                        isVerifyWalletFlow
-                            ? !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
-                            : false
+                        isVerifyWalletFlow ?
+                            !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
+                        :   false
                     }>
                     {t.confirm()}
                 </ActionButton>

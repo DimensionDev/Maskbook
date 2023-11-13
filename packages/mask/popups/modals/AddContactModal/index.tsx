@@ -116,16 +116,18 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
                 error={addressError || addressExistError}
                 InputProps={{
                     endAdornment:
-                        addressError || addressExistError ? (
+                        addressError || addressExistError ?
                             <InputAdornment position="end">
                                 <IconButton onClick={() => setAddress('')} edge="end" size="small">
                                     <Icons.Close size={18} color={theme.palette.maskColor.danger} />
                                 </IconButton>
                             </InputAdornment>
-                        ) : null,
+                        :   null,
                 }}
             />
-            {validationMessage ? <Typography className={classes.helperText}>{validationMessage}</Typography> : null}
+            {validationMessage ?
+                <Typography className={classes.helperText}>{validationMessage}</Typography>
+            :   null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
                     {t.cancel()}

@@ -129,11 +129,9 @@ function Profile({ url }: { url: string }) {
             <div className={classes.root}>
                 <Stack className={classes.profile}>
                     <Stack className={classes.avatar}>
-                        {identity?.avatar ? (
+                        {identity?.avatar ?
                             <img src={identity.avatar} alt="" width={64} height={64} />
-                        ) : (
-                            <Avatar name={queryAddress} square size={64} />
-                        )}
+                        :   <Avatar name={queryAddress} square size={64} />}
                     </Stack>
 
                     <Stack flex={1}>
@@ -166,9 +164,9 @@ function Profile({ url }: { url: string }) {
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink className={classes.PopupLink} size={16} />
                             </Link>
-                            {identity?.address ? (
+                            {identity?.address ?
                                 <CopyButton text={identity.address} className={classes.icon} size={16} />
-                            ) : null}
+                            :   null}
                         </Stack>
                     </Stack>
 

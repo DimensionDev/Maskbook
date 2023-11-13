@@ -101,22 +101,22 @@ function ScamAlert({ result }: { result: ScamResult }) {
                         </ListItemIcon>
                         <ListItemText className={classes.highlight} primary={result.name} />
                     </ListItemButton>
-                    {result.twitterUsername ? (
+                    {result.twitterUsername ?
                         <ListItemButton onClick={() => openTwitter()}>
                             <ListItemIcon className={classes.listIcon}>
                                 <TwitterIcon className={classes.highlight} />
                             </ListItemIcon>
                             <ListItemText className={classes.highlight} primary={result.twitterUsername} />
                         </ListItemButton>
-                    ) : null}
-                    {result.externalUrl ? (
+                    :   null}
+                    {result.externalUrl ?
                         <ListItemButton onClick={() => openSite()}>
                             <ListItemIcon className={classes.listIcon}>
                                 <LinkIcon className={classes.highlight} />
                             </ListItemIcon>
                             <ListItemText className={classes.highlight} primary={result.externalUrl} />
                         </ListItemButton>
-                    ) : null}
+                    :   null}
                 </List>
                 <Typography className={classes.desc}>{t.tip()}</Typography>
             </div>

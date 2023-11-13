@@ -51,14 +51,12 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
 
     if (!avatar || !avatarId || avatar.avatarId !== avatarId_) return null
 
-    return loading ? (
-        <LoadingBase size={width} />
-    ) : (
-        <RainbowBox
-            width={width}
-            height={height}
-            radius={props.avatarType === AvatarType.Square ? '5px' : '100%'}
-            classes={{ root: classes.root }}
-        />
-    )
+    return loading ?
+            <LoadingBase size={width} />
+        :   <RainbowBox
+                width={width}
+                height={height}
+                radius={props.avatarType === AvatarType.Square ? '5px' : '100%'}
+                classes={{ root: classes.root }}
+            />
 }

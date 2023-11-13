@@ -46,13 +46,13 @@ export function useDonateCallback(
                 grantAmount,
                 address, // dest
             ],
-            GITCOIN_MAINTAINER_ADDRESS && new BigNumber(tipAmount).gt(0)
-                ? [
-                      token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
-                      tipAmount,
-                      GITCOIN_MAINTAINER_ADDRESS, // dest
-                  ]
-                : undefined,
+            GITCOIN_MAINTAINER_ADDRESS && new BigNumber(tipAmount).gt(0) ?
+                [
+                    token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
+                    tipAmount,
+                    GITCOIN_MAINTAINER_ADDRESS, // dest
+                ]
+            :   undefined,
         ])
     }, [address, grantAmount, tipAmount, token, GITCOIN_MAINTAINER_ADDRESS, GITCOIN_ETH_ADDRESS])
 

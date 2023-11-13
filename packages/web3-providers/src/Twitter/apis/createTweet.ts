@@ -41,12 +41,14 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     const parsedTweet = Parser.default.parseTweet(variables.tweet_text)
     const overLength = parsedTweet.weightedLength > 280
     const scheduled = typeof variables.execute_at !== 'undefined'
-    const queryId = scheduled
-        ? 'LCVzRQGxOaGnOnYH01NQXg'
-        : overLength
-          ? 'pokID4auGUSzBxijrqpIlw'
-          : 'tTsjMKyhajZvK4q76mpIBg'
-    const queryName = scheduled ? 'CreateScheduledTweet' : overLength ? 'CreateNoteTweet' : 'CreateTweet'
+    const queryId =
+        scheduled ? 'LCVzRQGxOaGnOnYH01NQXg'
+        : overLength ? 'pokID4auGUSzBxijrqpIlw'
+        : 'tTsjMKyhajZvK4q76mpIBg'
+    const queryName =
+        scheduled ? 'CreateScheduledTweet'
+        : overLength ? 'CreateNoteTweet'
+        : 'CreateTweet'
     const response = await fetchJSON<TwitterBaseAPI.CreateTweetResponse>(
         `https://twitter.com/i/api/graphql/${queryId}/${queryName}`,
         {
@@ -64,6 +66,9 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         },
     )
 
-    return response.data[scheduled ? 'posttweet_created' : overLength ? 'notetweet_create' : 'create_tweet']
-        .tweet_results.result
+    return response.data[
+        scheduled ? 'posttweet_created'
+        : overLength ? 'notetweet_create'
+        : 'create_tweet'
+    ].tweet_results.result
 }

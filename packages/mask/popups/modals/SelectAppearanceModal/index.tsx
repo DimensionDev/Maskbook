@@ -65,7 +65,9 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
                             className={classes.item}
                             key={x.key}
                             onClick={() => handleAppearanceChange(x.value)}>
-                            {icon ? <ListItemIcon className={classes.icon}>{icon}</ListItemIcon> : null}
+                            {icon ?
+                                <ListItemIcon className={classes.icon}>{icon}</ListItemIcon>
+                            :   null}
                             <ListItemText
                                 classes={{ primary: classes.text }}
                                 primary={APPEARANCE_OPTIONS_MAP[x.value]}

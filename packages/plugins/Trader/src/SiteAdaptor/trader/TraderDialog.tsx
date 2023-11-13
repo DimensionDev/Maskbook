@@ -29,11 +29,12 @@ const useStyles = makeStyles<{ rotate: boolean }>()((theme, { rotate }) => ({
         top: 0,
         zIndex: 2,
 
-        '& > div .MuiBox-root': Sniffings.is_dashboard_page
-            ? {
-                  background: MaskColorVar.mainBackground,
-              }
-            : {},
+        '& > div .MuiBox-root':
+            Sniffings.is_dashboard_page ?
+                {
+                    background: MaskColorVar.mainBackground,
+                }
+            :   {},
     },
     content: {
         padding: 0,
@@ -214,11 +215,11 @@ export function TraderDialog(props: { share: ((text: string) => void) | undefine
                             <Icons.Refresh size={24} className={classes.icon} />
                         </div>
                     </IconButton>
-                    {pluginID === NetworkPluginID.PLUGIN_EVM ? (
+                    {pluginID === NetworkPluginID.PLUGIN_EVM ?
                         <IconButton onClick={openGasSettingDialog}>
                             <Icons.Gear size={24} className={classes.icon} />
                         </IconButton>
-                    ) : null}
+                    :   null}
                 </div>
             }
             className={classes.dialog}>

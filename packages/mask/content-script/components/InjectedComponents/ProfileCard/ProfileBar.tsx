@@ -173,7 +173,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                 <Typography className={classes.nickname} title={identity.nickname}>
                     {identity.nickname}
                 </Typography>
-                {address ? (
+                {address ?
                     <div className={classes.addressRow}>
                         <AddressItem
                             socialAccount={selectedAccount}
@@ -201,7 +201,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                             }}
                         />
                     </div>
-                ) : null}
+                :   null}
             </Box>
 
             <TokenWithSocialGroupMenu
@@ -265,7 +265,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
             </div>
             <Box className={classes.description}>
                 <Skeleton variant="text" className={classes.nickname} width={100} />
-                {address ? (
+                {address ?
                     <div className={classes.addressRow}>
                         <AddressItem
                             socialAccount={selectedAccount}
@@ -286,7 +286,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
                             <Icons.LinkOut size={14} />
                         </Link>
                     </div>
-                ) : null}
+                :   null}
             </Box>
             {children}
         </Box>

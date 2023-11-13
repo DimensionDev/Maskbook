@@ -52,9 +52,9 @@ const useStyles = makeStyles()((theme) => ({
         height: 68,
         padding: '0 16px',
         boxShadow:
-            theme.palette.mode === 'light'
-                ? ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
-                : '0px 0px 20px rgba(255, 255, 255, 0.12);',
+            theme.palette.mode === 'light' ?
+                ' 0px 0px 20px rgba(0, 0, 0, 0.05)'
+            :   '0px 0px 20px rgba(255, 255, 255, 0.12);',
         background: alpha(theme.palette.maskColor.bottom, 0.8),
         justifyContent: 'end',
         display: 'flex',
@@ -148,7 +148,9 @@ export function CompositionDialogUI(props: CompositionProps) {
             </div>
             <DialogActions className={classes.action}>
                 <div>
-                    {props.maxLength ? <CharLimitIndicator value={currentPostSize} max={props.maxLength} /> : null}
+                    {props.maxLength ?
+                        <CharLimitIndicator value={currentPostSize} max={props.maxLength} />
+                    :   null}
                     <LoadingButton
                         style={{ opacity: 1 }}
                         disabled={!submitAvailable}

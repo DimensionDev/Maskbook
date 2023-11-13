@@ -104,13 +104,11 @@ class ZeroX_API implements TraderAPI.Provider {
         const networkType = EVMChainResolver.networkType(chainId as ChainId)
 
         if (!networkType) return
-        const sellToken = isNativeTokenAddress(inputToken.address)
-            ? getNativeTokenLabel(networkType)
-            : inputToken.address
+        const sellToken =
+            isNativeTokenAddress(inputToken.address) ? getNativeTokenLabel(networkType) : inputToken.address
 
-        const buyToken = isNativeTokenAddress(outputToken.address)
-            ? getNativeTokenLabel(networkType)
-            : outputToken.address
+        const buyToken =
+            isNativeTokenAddress(outputToken.address) ? getNativeTokenLabel(networkType) : outputToken.address
 
         return this.swapQuote(
             {

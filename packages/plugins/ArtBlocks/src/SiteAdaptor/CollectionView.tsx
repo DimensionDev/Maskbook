@@ -95,16 +95,15 @@ export function CollectionView(props: CollectionProps) {
     return (
         <Box className={classes.root}>
             <Paper square elevation={0} className={classes.paper}>
-                {!isImageLoaded ? (
+                {!isImageLoaded ?
                     <Skeleton className={classes.skeletonTitle} animation="wave" variant="rectangular" />
-                ) : (
-                    <Link href={tokenLink} target="_blank">
+                :   <Link href={tokenLink} target="_blank">
                         <Typography className={classes.title}>
                             #{currentSelectedToken.tokenId}
                             <OpenInNew className={classes.tokenIdRedirectionIcon} fontSize="small" />
                         </Typography>
                     </Link>
-                )}
+                }
 
                 <MobileStepper
                     className={classes.stepper}
@@ -120,7 +119,9 @@ export function CollectionView(props: CollectionProps) {
                             onClick={handleNext}
                             disabled={activeStep === maxSteps}>
                             Next
-                            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                            {theme.direction === 'rtl' ?
+                                <KeyboardArrowLeft />
+                            :   <KeyboardArrowRight />}
                         </Button>
                     }
                     backButton={
@@ -130,16 +131,18 @@ export function CollectionView(props: CollectionProps) {
                             variant="text"
                             onClick={handleBack}
                             disabled={activeStep === 1}>
-                            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                            {theme.direction === 'rtl' ?
+                                <KeyboardArrowRight />
+                            :   <KeyboardArrowLeft />}
                             Back
                         </Button>
                     }
                 />
             </Paper>
 
-            {!isImageLoaded ? (
+            {!isImageLoaded ?
                 <Skeleton className={classes.skeletonImage} animation="wave" variant="rectangular" />
-            ) : null}
+            :   null}
 
             <div className={classes.imageContainer}>
                 <Link href={tokenLink} target="_blank">

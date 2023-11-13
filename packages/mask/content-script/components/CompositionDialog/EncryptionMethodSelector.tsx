@@ -45,9 +45,9 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                 setAnchorEl={setAnchorEl}
                 onChange={props.onChange}
                 selectedTitle={
-                    props.method === EncryptionMethodType.Text
-                        ? t.compose_encrypt_method_text()
-                        : t.compose_encrypt_method_image()
+                    props.method === EncryptionMethodType.Text ?
+                        t.compose_encrypt_method_text()
+                    :   t.compose_encrypt_method_image()
                 }>
                 <PopoverListItem
                     value={EncryptionMethodType.Text}

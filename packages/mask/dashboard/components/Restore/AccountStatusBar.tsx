@@ -22,7 +22,9 @@ export const AccountStatusBar = memo(function AccountStatusBar({ label, actionLa
     const { classes } = useStyles()
     return (
         <Box display="flex" justifyContent="space-between" alignItems="center" {...rest}>
-            {label ? <Typography className={classes.label}>{label}</Typography> : null}
+            {label ?
+                <Typography className={classes.label}>{label}</Typography>
+            :   null}
             <Button className={classes.actionButton} variant="text" onClick={onAction}>
                 {actionLabel}
             </Button>

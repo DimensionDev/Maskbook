@@ -41,9 +41,9 @@ export function composeTransformers(): ComposedTransformers {
         subscription,
         addTransformer(t, priority, signal) {
             const f_priority = [
-                typeof t === 'function'
-                    ? t
-                    : (message: TypedMessage, context: TransformationContext) => t.getCurrentValue()(message, context),
+                typeof t === 'function' ? t : (
+                    (message: TypedMessage, context: TransformationContext) => t.getCurrentValue()(message, context)
+                ),
                 priority,
             ] as const
             transformers.add(f_priority)

@@ -92,18 +92,19 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             padding: '8px 12px',
             width: 140,
             minHeight: 'unset',
-            '&:first-of-type': showDivideLine
-                ? {
-                      '&:after': {
-                          content: '""',
-                          background: theme.palette.divider,
-                          bottom: 0,
-                          position: 'absolute',
-                          width: 120,
-                          height: 1,
-                      },
-                  }
-                : {},
+            '&:first-of-type':
+                showDivideLine ?
+                    {
+                        '&:after': {
+                            content: '""',
+                            background: theme.palette.divider,
+                            bottom: 0,
+                            position: 'absolute',
+                            width: 120,
+                            height: 1,
+                        },
+                    }
+                :   {},
         },
         optionName: {
             fontSize: 14,
@@ -188,11 +189,11 @@ const ContactListUI = memo(function ContactListUI() {
             <Box className={classes.page}>
                 <AddContactInputPanel isManage={isManage} autoFocus />
                 <Box className={classes.contactsPanel}>
-                    {contacts.length ? (
+                    {contacts.length ?
                         <Typography className={classes.contactTitle}>
                             {t.wallet_transfer_my_contacts_title()}
                         </Typography>
-                    ) : null}
+                    :   null}
                     <List className={classes.contactsList}>
                         {contacts.map((contact, index) => {
                             return (
@@ -331,7 +332,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                     </Typography>
                 </div>
             </div>
-            {contactType === ContactType.Recipient ? (
+            {contactType === ContactType.Recipient ?
                 <Icons.More
                     size={24}
                     className={classes.iconMore}
@@ -340,7 +341,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
                         openMenu(event)
                     }}
                 />
-            ) : null}
+            :   null}
             {menu}
         </ListItem>
     )

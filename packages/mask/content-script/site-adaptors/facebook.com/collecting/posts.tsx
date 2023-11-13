@@ -96,9 +96,9 @@ function collectPostsFacebookInner(
                         }
                         return Some(
                             '\n' +
-                                (href.includes('l.facebook.com')
-                                    ? new URL(href).searchParams.get('u')
-                                    : node.innerText),
+                                (href.includes('l.facebook.com') ?
+                                    new URL(href).searchParams.get('u')
+                                :   node.innerText),
                         )
                     },
                 })
@@ -142,9 +142,10 @@ function collectPostsFacebookInner(
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
     if (node.destroyed) return
-    const dom = isMobileFacebook
-        ? node.current.querySelectorAll('a')
-        : [(node.current.closest('[role="article"]') ?? node.current.parentElement)!.querySelectorAll('a')[1]]
+    const dom =
+        isMobileFacebook ?
+            node.current.querySelectorAll('a')
+        :   [(node.current.closest('[role="article"]') ?? node.current.parentElement)!.querySelectorAll('a')[1]]
     // side effect: save to service
     return getProfileIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
@@ -167,22 +168,24 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
             try {
                 // In timeline
                 const postTimeNode1 = root.closest('[role=article]')?.querySelector('[href*="permalink"]')
-                const postIdMode1 = postTimeNode1
-                    ? postTimeNode1
-                          .getAttribute('href')
-                          ?.match(/story_fbid=(\d+)/g)?.[0]
-                          .split('=')[1] ?? null
-                    : null
+                const postIdMode1 =
+                    postTimeNode1 ?
+                        postTimeNode1
+                            .getAttribute('href')
+                            ?.match(/story_fbid=(\d+)/g)?.[0]
+                            .split('=')[1] ?? null
+                    :   null
 
                 if (postIdMode1) return postIdMode1
 
                 const postTimeNode2 = root.closest('[role=article]')?.querySelector('[href*="posts"]')
-                const postIdMode2 = postTimeNode2
-                    ? postTimeNode2
-                          .getAttribute('href')
-                          ?.match(/posts\/(\w+)/g)?.[0]
-                          .split('/')[1] ?? null
-                    : null
+                const postIdMode2 =
+                    postTimeNode2 ?
+                        postTimeNode2
+                            .getAttribute('href')
+                            ?.match(/posts\/(\w+)/g)?.[0]
+                            .split('/')[1] ?? null
+                    :   null
                 if (postIdMode2 && /^-?\w+$/.test(postIdMode2)) return postIdMode2
             } catch {
                 return null
@@ -203,17 +206,19 @@ function getMetadataImages(node: DOMProxy): string[] {
     if (node.destroyed) return []
     const parent = node.current.parentElement?.parentElement?.parentElement?.parentElement?.parentElement
     if (!parent) return []
-    const imgNodes = isMobileFacebook
-        ? parent.querySelectorAll<HTMLImageElement>('div>div>div>a>div>div>i.img')
-        : parent.querySelectorAll('img') || []
+    const imgNodes =
+        isMobileFacebook ?
+            parent.querySelectorAll<HTMLImageElement>('div>div>div>a>div>div>i.img')
+        :   parent.querySelectorAll('img') || []
     if (!imgNodes.length) return []
-    const imgUrls = isMobileFacebook
-        ? (getComputedStyle(imgNodes[0]).backgroundImage || '')
-              .slice(4, -1)
-              .replaceAll(/["']/g, '')
-              .split(',')
-              .filter(Boolean)
-        : Array.from(imgNodes, (node) => node.src).filter(Boolean)
+    const imgUrls =
+        isMobileFacebook ?
+            (getComputedStyle(imgNodes[0]).backgroundImage || '')
+                .slice(4, -1)
+                .replaceAll(/["']/g, '')
+                .split(',')
+                .filter(Boolean)
+        :   Array.from(imgNodes, (node) => node.src).filter(Boolean)
     if (!imgUrls.length) return []
     return imgUrls
 }
