@@ -175,6 +175,10 @@
     "account_icon_tooltips_only$facebook": "データソースは Facebook のプロファイルから取得されます",
     "account_icon_tooltips$next_id": "データソースは NEXT.ID から取得されます。",
     "account_icon_tooltips_only$next_id": "データソースは NEXT.ID から取得されます。",
+    "account_icon_merged_tooltip$normal": "データソースは次から取得されます ",
+    "account_icon_merged_tooltip$twitter": "データソースは Twitter プロファイルと {} から取得されます。",
+    "account_icon_merged_tooltip$facebook": "データソースは、Facebookのプロファイルと {}から取得されます。",
+    "account_icon_merged_tooltip$next_id": "データソースは NEXT.ID と（）から取得されます。",
     "wallet_status_button_copy_address": "アドレスをコピー",
     "copy_success_of_wallet_addr": "ウォレットアドレスをコピーしました！",
     "persona_boundary_create_persona": "ペルソナを作成",
@@ -245,6 +249,9 @@
     "wallet_transfer_error_gas_price_absence": "ガス価格を入力",
     "popups_wallet_gas_fee_settings_min_gas_limit_tips": "ガス限界は少なくとも {{limit}}でなければなりません",
     "popups_wallet_gas_fee_settings": "ガス料金の設定",
+    "plugin_wallet_connect_to": "次に接続します:",
+    "plugin_wallet_connect_to_retry": "再試行",
+    "plugin_wallet_connected_to": "に接続されています",
     "initializing": "初期化中...",
     "plugin_wallet_metamask_error_already_request": "ポップアップを開いています。確認してください。",
     "applications": "アプリケーション",
@@ -337,5 +344,11 @@
     "reset": "リセット",
     "editor": "編集者",
     "typed_message_text_alert": "現在、TypedMessageTextのみ対応しています。",
-    "share_to_social_networks": "ソーシャル ネットワークに共有"
+    "share_to_social_networks": "ソーシャル ネットワークに共有",
+    "report_nft": "NFT 詐欺契約を報告しますか？",
+    "confirm_to_report_nft": "{{name}}を報告してもよろしいですか？承認すると、このNFTはスパムとしてマークされます。",
+    "spam": "スパム",
+    "report_spam": "スパムを報告",
+    "report_spam_success": "報告に成功しました。",
+    "report_spam_fail": "スパムを報告できませんでした。"
 }
