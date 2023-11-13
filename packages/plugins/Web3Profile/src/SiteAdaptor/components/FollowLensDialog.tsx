@@ -243,6 +243,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             providerType === ProviderType.Fortmatic ||
             followLoading ||
             unfollowLoading ||
+            profile?.followModule?.type === FollowModuleType.UnknownFollowModule ||
             (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile) ||
             (profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
                 profile.followModule.amount &&
@@ -270,6 +271,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const buttonText = useMemo(() => {
         if (isFollowing) {
             return isHovering ? t.unfollow() : t.following_action()
+        } else if (profile?.followModule?.type === FollowModuleType.UnknownFollowModule) {
+            return t.can_not_follow()
         } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
             return t.follow_for_fees({
                 value: profile.followModule.amount.value,

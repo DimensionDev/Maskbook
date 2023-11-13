@@ -1,4 +1,5 @@
 export enum FollowModuleType {
+    UnknownFollowModule = 'UnknownFollowModule',
     FeeFollowModule = 'FeeFollowModule',
     ProfileFollowModule = 'ProfileFollowModule',
     RevertFollowModule = 'RevertFollowModule',

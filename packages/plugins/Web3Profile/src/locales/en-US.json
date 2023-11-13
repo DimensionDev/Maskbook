@@ -19,6 +19,7 @@
     "following_action": "Following",
     "follow_lens_handle": "Follow Lens handle",
     "unfollow_lens_handle": "Unfollow lens handle",
+    "can_not_follow": "This profile can not be followed.",
     "followers": "<strong>{{followers}}</strong> Followers",
     "following": "<strong>{{following}}</strong> Following",
     "follow_for_fees": "Follow for {{value}} {{symbol}}",
