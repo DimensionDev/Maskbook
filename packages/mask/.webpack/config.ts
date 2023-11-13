@@ -35,6 +35,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const computedFlags = computedBuildFlags(flags)
     const cacheKey = computeCacheKey(flags, computedFlags)
 
+    const productionLike = flags.mode === 'production' || flags.profiling
+
     const nonWebpackJSFiles = join(flags.outputPath, './js')
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
@@ -131,6 +133,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                             transform: {
                                 react: {
                                     runtime: 'automatic',
+                                    development: !productionLike,
                                     refresh: flags.reactRefresh && {
                                         refreshReg: '$RefreshReg$',
                                         refreshSig: '$RefreshSig$',
@@ -184,7 +187,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.nextTick': require.resolve('next-tick'),
             }),
             new EnvironmentPlugin({
-                NODE_ENV: flags.mode,
+                NODE_ENV: productionLike ? 'production' : flags.mode,
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
@@ -216,9 +219,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
                     {
                         from:
-                            flags.mode === 'development' ?
-                                require.resolve('../../../node_modules/ses/dist/lockdown.umd.js')
-                            :   require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js'),
+                            productionLike ?
+                                require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js')
+                            :   require.resolve('../../../node_modules/ses/dist/lockdown.umd.js'),
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
                     {
@@ -237,7 +240,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     COMMIT_HASH,
                     DIRTY,
                     VERSION,
-                    REACT_DEVTOOLS_EDITOR_URL: flags.mode === 'development' ? flags.devtoolsEditorURI : undefined,
+                    REACT_DEVTOOLS_EDITOR_URL: flags.devtools ? flags.devtoolsEditorURI : undefined,
                 }
                 return [
                     emitJSONFile({ content: json, name: 'build-info.json' }),
@@ -245,10 +248,18 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ]
             })(),
         ],
+        // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
+            chunkIds: 'named',
+            concatenateModules: productionLike,
+            flagIncludedChunks: productionLike,
+            mangleExports: false,
             minimize: false,
-            runtimeChunk: false,
             moduleIds: flags.channel === 'stable' && flags.mode === 'production' ? 'deterministic' : 'named',
+            nodeEnv: false, // provided in EnvironmentPlugin
+            realContentHash: false,
+            // removeAvailableModules: false,
+            runtimeChunk: false,
             splitChunks: {
                 maxInitialRequests: Infinity,
                 chunks: 'all',
