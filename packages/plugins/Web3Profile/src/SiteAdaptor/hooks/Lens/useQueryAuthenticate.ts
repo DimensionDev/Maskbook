@@ -32,7 +32,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
         const challenge = await Lens.queryChallenge(address, profileId)
         if (!challenge) return
 
-        const signature = await Web3.signMessage('message', challenge)
+        const signature = await Web3.signMessage('message', challenge.text)
         const authenticate = await Lens.authenticate(challenge.id, signature)
         if (!authenticate) return
 

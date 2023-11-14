@@ -418,14 +418,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 {tips ? <Typography className={classes.tips}>{tips}</Typography> : null}
 
                                 <HandlerDescription
-                                    profile={
-                                        defaultProfile
-                                            ? {
-                                                  avatar: defaultProfile.picture?.original?.url,
-                                                  handle: defaultProfile.handle,
-                                              }
-                                            : undefined
-                                    }
                                     currentProfile={currentProfile}
                                     profiles={profiles}
                                     onChange={(profile) => setCurrentProfile(profile)}
