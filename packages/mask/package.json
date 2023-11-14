@@ -159,6 +159,7 @@
     "source-map-loader": "^4.0.1",
     "svgo-loader": "^4.0.0",
     "swc-loader": "^0.2.3",
+    "terser-webpack-plugin": "^5.3.9",
     "webpack": "Jack-Works/webpack#lazy-import",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",

@@ -1,9 +1,9 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
-import type { ComputedFlags, NormalizedFlags } from './flags.js'
+import type { ComputedFlags, NormalizedFlags } from '../flags.js'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import type { Manifest } from 'webextension-polyfill'
-import { parseJSONc } from './utils.js'
+import { parseJSONc } from '../utils.js'
 import { join } from 'node:path'
 
 const cloneDeep = <T>(x: T): T => JSON.parse(JSON.stringify(x))
@@ -47,9 +47,9 @@ type ManifestPresets =
     | [flags: ModifyAcceptFlags, base: ManifestV2, modify?: (manifest: ManifestV2) => void]
     | [flags: ModifyAcceptFlags, base: ManifestV3, modify?: (manifest: ManifestV3) => void]
 function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags) {
-    const mv2Base: ManifestV2 = parseJSONc(readFileSync(new URL('./manifest/manifest.json', import.meta.url), 'utf-8'))
+    const mv2Base: ManifestV2 = parseJSONc(readFileSync(new URL('../manifest/manifest.json', import.meta.url), 'utf-8'))
     const mv3Base: ManifestV3 = parseJSONc(
-        readFileSync(new URL('./manifest/manifest-mv3.json', import.meta.url), 'utf-8'),
+        readFileSync(new URL('../manifest/manifest-mv3.json', import.meta.url), 'utf-8'),
     )
 
     const manifestFlags: Record<NormalizedFlags['manifestFile'], ManifestPresets> = {
@@ -87,7 +87,7 @@ function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlag
     fixTheExtensionID(manifest)
     if (flags.devtools) manifest.devtools_page = 'devtools-background.html'
 
-    const topPackageJSON = JSON.parse(readFileSync(new URL('../../../package.json', import.meta.url), 'utf-8'))
+    const topPackageJSON = JSON.parse(readFileSync(new URL('../../../../package.json', import.meta.url), 'utf-8'))
     manifest.version = topPackageJSON.version
 
     if (manifest.manifest_version === 2) {

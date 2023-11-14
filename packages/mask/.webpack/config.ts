@@ -4,12 +4,13 @@ const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 import WebExtensionPlugin from 'webpack-target-webextension'
+import TerserPlugin from 'terser-webpack-plugin'
 import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
-import { emitManifestFile } from './manifest.js'
+import { emitManifestFile } from './plugins/manifest.js'
 import { getGitInfo } from './git-info.js'
 
 import { dirname, join } from 'node:path'
@@ -19,7 +20,7 @@ import { createRequire } from 'node:module'
 
 import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
 import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
-import { ProfilingPlugin } from './ProfilingPlugin.js'
+import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
 
 import './clean-hmr.js'
 
@@ -49,9 +50,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
         entry: {},
+        node: {
+            global: true,
+            __dirname: false,
+            __filename: false,
+        },
         experiments: {
-            backCompat: false,
-            asyncWebAssembly: true,
+            futureDefaults: true,
             syncImportAssertion: true,
             deferImport: { asyncModule: 'error' },
         },
@@ -109,7 +114,12 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // Patch old regenerator-runtime
                 {
                     test: /\..?js$/,
-                    loader: require.resolve('./fix-regenerator-runtime.ts'),
+                    loader: require.resolve('./loaders/fix-regenerator-runtime.ts'),
+                },
+                {
+                    test: /\.tsx?$/,
+                    include: join(__dirname, '../../'),
+                    loader: require.resolve('./loaders/jsx.ts'),
                 },
                 // TypeScript
                 {
@@ -254,11 +264,30 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             concatenateModules: productionLike,
             flagIncludedChunks: productionLike,
             mangleExports: false,
-            minimize: false,
+            minimize: productionLike,
+            minimizer: [
+                new TerserPlugin({
+                    minify: TerserPlugin.swcMinify,
+                    // https://swc.rs/docs/config-js-minify
+                    terserOptions: {
+                        compress: {
+                            drop_debugger: false,
+                            ecma: 2020,
+                            keep_classnames: true,
+                            keep_fnames: true,
+                            keep_infinity: true,
+                            passes: 3,
+                            pure_getters: false,
+                            sequences: false,
+                        },
+                        mangle: false,
+                    },
+                }),
+            ],
             moduleIds: flags.channel === 'stable' && flags.mode === 'production' ? 'deterministic' : 'named',
             nodeEnv: false, // provided in EnvironmentPlugin
             realContentHash: false,
-            // removeAvailableModules: false,
+            removeAvailableModules: productionLike,
             runtimeChunk: false,
             splitChunks: {
                 maxInitialRequests: Infinity,
