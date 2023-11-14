@@ -12,6 +12,7 @@ import { useI18N } from '../../../locales/i18n_generated.js'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { useContract } from '@masknet/web3-hooks-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useUnfollow(
     profileId?: string,
@@ -22,7 +23,7 @@ export function useUnfollow(
     const [loading, setLoading] = useState(false)
     const t = useI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const handleQueryAuthenticate = useQueryAuthenticate(account)
+    const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
     const { fetchJSON } = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()

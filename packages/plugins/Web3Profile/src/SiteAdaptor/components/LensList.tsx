@@ -10,6 +10,7 @@ import { Lens } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
