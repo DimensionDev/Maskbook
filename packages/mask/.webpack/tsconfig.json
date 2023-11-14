@@ -4,14 +4,5 @@
     "incremental": false,
     "composite": false
   },
-  "files": [
-    "./clean-hmr.ts",
-    "./config.ts",
-    "./fix-regenerator-runtime.ts",
-    "./flags.ts",
-    "./git-info.ts",
-    "./manifest.ts",
-    "./utils.ts",
-    "./webpack.config.ts"
-  ]
+  "include": ["./**/*.ts"]
 }
