@@ -3,18 +3,19 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Contract, Lens, Web3 } from '@masknet/web3-providers'
+import { Lens, Web3 } from '@masknet/web3-providers'
 import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, ContractTransaction, encodeTypedData, splitSignature } from '@masknet/web3-shared-evm'
-import LensFollowNftABI from '@masknet/web3-contracts/abis/LensFollowNFT.json'
-import type { LensFollowNFT } from '@masknet/web3-contracts/types/LensFollowNFT.js'
+import { ChainId, ContractTransaction, useLensConstants } from '@masknet/web3-shared-evm'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { BroadcastType } from '@masknet/web3-providers/types'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 import { useI18N } from '../../../locales/i18n_generated.js'
+import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
+import { useContract } from '@masknet/web3-hooks-evm'
+import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 
 export function useUnfollow(
     profileId?: string,
+    currentProfileId?: string,
     onSuccess?: (event: MouseEvent<HTMLElement>) => void,
     onFailed?: () => void,
 ) {
@@ -26,6 +27,9 @@ export function useUnfollow(
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+
+    const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
+    const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
 
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
@@ -53,18 +57,24 @@ export function useUnfollow(
 
                 const signature = await Web3.signMessage(
                     'typedData',
-                    JSON.stringify(
-                        encodeTypedData(
-                            typedData.typedData.domain,
-                            typedData.typedData.types,
-                            typedData.typedData.value,
-                        ),
-                    ),
-                    { chainId: ChainId.Matic },
+                    JSON.stringify({
+                        domain: typedData.typedData.domain,
+                        primaryType: 'Unfollow',
+                        message: typedData.typedData.value,
+                        types: {
+                            Unfollow: typedData.typedData.types.Unfollow,
+                            EIP712Domain: [
+                                { name: 'name', type: 'string' },
+                                { name: 'version', type: 'string' },
+                                { name: 'chainId', type: 'uint256' },
+                                { name: 'verifyingContract', type: 'address' },
+                            ],
+                        },
+                    }),
+                    { chainId },
                 )
 
-                const { v, r, s } = splitSignature(signature)
-                const { tokenId, deadline } = typedData.typedData.value
+                const { idsOfProfilesToUnfollow, unfollowerProfileId } = typedData.typedData.value
 
                 let hash: string | undefined
                 try {
@@ -77,12 +87,8 @@ export function useUnfollow(
                     onFailed?.()
                     setLoading(true)
 
-                    const followNFTContract = Contract.getWeb3Contract<LensFollowNFT>(
-                        typedData.typedData.domain.verifyingContract,
-                        LensFollowNftABI as AbiItem[],
-                    )
-                    const tx = await new ContractTransaction(followNFTContract).fillAll(
-                        followNFTContract?.methods.burnWithSig(tokenId, [v, r, s, deadline]),
+                    const tx = await new ContractTransaction(lensHub).fillAll(
+                        lensHub?.methods.unfollow(unfollowerProfileId, idsOfProfilesToUnfollow),
                         { from: account },
                     )
                     hash = await Web3.sendTransaction(tx, { chainId: ChainId.Matic })
@@ -117,7 +123,7 @@ export function useUnfollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, fetchJSON, showSingletonSnackbar],
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, showSingletonSnackbar, lensHub, fetchJSON],
     )
 
     return { loading, handleUnfollow }
