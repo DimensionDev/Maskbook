@@ -164,36 +164,47 @@ export function ConnectionContent(props: ConnectionContentProps) {
         async (type: string) => {
             const message = 'Hello World'
             const typedData = JSON.stringify({
-                types: {
-                    Follow: [
-                        { name: 'followerProfileId', type: 'uint256' },
-                        { name: 'idsOfProfilesToFollow', type: 'uint256[]' },
-                        { name: 'followTokenIds', type: 'uint256[]' },
-                        { name: 'datas', type: 'bytes[]' },
-                        { name: 'nonce', type: 'uint256' },
-                        { name: 'deadline', type: 'uint256' },
-                    ],
-                    EIP712Domain: [
-                        { name: 'name', type: 'string' },
-                        { name: 'version', type: 'string' },
-                        { name: 'chainId', type: 'uint256' },
-                        { name: 'verifyingContract', type: 'address' },
-                    ],
-                },
                 domain: {
-                    name: 'Lens Protocol Profiles',
-                    version: '2',
-                    chainId: '137',
-                    verifyingContract: '0xdb46d1dc155634fbc732f92e853b10b288ad5a1d',
+                    chainId: chainId.toString(),
+                    name: 'Ether Mail',
+                    verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC',
+                    version: '1',
                 },
-                primaryType: 'Follow',
                 message: {
-                    followerProfileId: '10675',
-                    idsOfProfilesToFollow: ['114578'],
-                    followTokenIds: ['0'],
-                    datas: ['0x'],
-                    nonce: '21',
-                    deadline: '1699814667',
+                    contents: 'Hello, Bob!',
+                    from: {
+                        name: 'Cow',
+                        wallets: [
+                            '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+                            '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+                        ],
+                    },
+                    to: [
+                        {
+                            name: 'Bob',
+                            wallets: [
+                                '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+                                '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+                                '0xB0B0b0b0b0b0B000000000000000000000000000',
+                            ],
+                        },
+                    ],
+                },
+                primaryType: 'Mail',
+                types: {
+                    Group: [
+                        { name: 'name', type: 'string' },
+                        { name: 'members', type: 'Person[]' },
+                    ],
+                    Mail: [
+                        { name: 'from', type: 'Person' },
+                        { name: 'to', type: 'Person[]' },
+                        { name: 'contents', type: 'string' },
+                    ],
+                    Person: [
+                        { name: 'name', type: 'string' },
+                        { name: 'wallets', type: 'address[]' },
+                    ],
                 },
             })
             const transaction = {
