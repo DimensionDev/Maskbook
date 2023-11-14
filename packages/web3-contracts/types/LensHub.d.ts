@@ -50,82 +50,135 @@ export interface LensHub extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): LensHub
     clone(): LensHub
     methods: {
+        DANGER__disableTokenGuardian(): NonPayableTransactionObject<void>
+
+        act(
+            publicationActionParams: [
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
+                string,
+                string | number[],
+            ],
+        ): NonPayableTransactionObject<string>
+
+        actWithSig(
+            publicationActionParams: [
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
+                string,
+                string | number[],
+            ],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
+        ): NonPayableTransactionObject<string>
+
         approve(to: string, tokenId: number | string | BN): NonPayableTransactionObject<void>
 
         balanceOf(owner: string): NonPayableTransactionObject<string>
 
-        burn(tokenId: number | string | BN): NonPayableTransactionObject<void>
+        batchMigrateFollowModules(profileIds: (number | string | BN)[]): NonPayableTransactionObject<void>
 
-        burnWithSig(
-            tokenId: number | string | BN,
-            sig: [number | string | BN, string | number[], string | number[], number | string | BN],
+        batchMigrateFollowers(
+            followerProfileIds: (number | string | BN)[],
+            idOfProfileFollowed: number | string | BN,
+            followTokenIds: (number | string | BN)[],
         ): NonPayableTransactionObject<void>
 
-        collect(
-            profileId: number | string | BN,
-            pubId: number | string | BN,
-            data: string | number[],
-        ): NonPayableTransactionObject<string>
+        batchMigrateFollows(
+            followerProfileId: number | string | BN,
+            idsOfProfileFollowed: (number | string | BN)[],
+            followTokenIds: (number | string | BN)[],
+        ): NonPayableTransactionObject<void>
 
-        collectWithSig(
-            vars: [
-                string,
+        batchMigrateProfiles(profileIds: (number | string | BN)[]): NonPayableTransactionObject<void>
+
+        burn(tokenId: number | string | BN): NonPayableTransactionObject<void>
+
+        'changeDelegatedExecutorsConfig(uint256,address[],bool[],uint64,bool)'(
+            delegatorProfileId: number | string | BN,
+            delegatedExecutors: string[],
+            approvals: boolean[],
+            configNumber: number | string | BN,
+            switchToGivenConfig: boolean,
+        ): NonPayableTransactionObject<void>
+
+        'changeDelegatedExecutorsConfig(uint256,address[],bool[])'(
+            delegatorProfileId: number | string | BN,
+            delegatedExecutors: string[],
+            approvals: boolean[],
+        ): NonPayableTransactionObject<void>
+
+        changeDelegatedExecutorsConfigWithSig(
+            delegatorProfileId: number | string | BN,
+            delegatedExecutors: string[],
+            approvals: boolean[],
+            configNumber: number | string | BN,
+            switchToGivenConfig: boolean,
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
+        ): NonPayableTransactionObject<void>
+
+        collectLegacy(
+            collectParams: [
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
                 number | string | BN,
                 number | string | BN,
                 string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
             ],
         ): NonPayableTransactionObject<string>
 
+        collectLegacyWithSig(
+            collectParams: [
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+                number | string | BN,
+                string | number[],
+            ],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
+        ): NonPayableTransactionObject<string>
+
         comment(
-            vars: [
+            commentParams: [
                 number | string | BN,
                 string,
                 number | string | BN,
                 number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
                 string | number[],
-                string,
-                string | number[],
+                string[],
+                (string | number[])[],
                 string,
                 string | number[],
             ],
         ): NonPayableTransactionObject<string>
 
         commentWithSig(
-            vars: [
+            commentParams: [
                 number | string | BN,
                 string,
                 number | string | BN,
                 number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
                 string | number[],
+                string[],
+                (string | number[])[],
                 string,
                 string | number[],
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
             ],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<string>
 
-        commentWithSig_Dispatcher(
-            vars: [
-                number | string | BN,
-                string,
-                number | string | BN,
-                number | string | BN,
-                string | number[],
-                string,
-                string | number[],
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
-        ): NonPayableTransactionObject<string>
-
-        createProfile(
-            vars: [string, string, string, string, string | number[], string],
-        ): NonPayableTransactionObject<string>
-
-        defaultProfile(wallet: string): NonPayableTransactionObject<string>
+        createProfile(createProfileParams: [string, string, string | number[]]): NonPayableTransactionObject<string>
 
         emitCollectNFTTransferEvent(
             profileId: number | string | BN,
@@ -135,181 +188,199 @@ export interface LensHub extends BaseContract {
             to: string,
         ): NonPayableTransactionObject<void>
 
-        emitFollowNFTTransferEvent(
-            profileId: number | string | BN,
-            followNFTId: number | string | BN,
-            from: string,
-            to: string,
+        emitUnfollowedEvent(
+            unfollowerProfileId: number | string | BN,
+            idOfProfileUnfollowed: number | string | BN,
+            transactionExecutor: string,
         ): NonPayableTransactionObject<void>
+
+        enableTokenGuardian(): NonPayableTransactionObject<void>
 
         exists(tokenId: number | string | BN): NonPayableTransactionObject<boolean>
 
         follow(
-            profileIds: (number | string | BN)[],
+            followerProfileId: number | string | BN,
+            idsOfProfilesToFollow: (number | string | BN)[],
+            followTokenIds: (number | string | BN)[],
             datas: (string | number[])[],
         ): NonPayableTransactionObject<string[]>
 
         followWithSig(
-            vars: [
-                string,
-                (number | string | BN)[],
-                (string | number[])[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+            followerProfileId: number | string | BN,
+            idsOfProfilesToFollow: (number | string | BN)[],
+            followTokenIds: (number | string | BN)[],
+            datas: (string | number[])[],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<string[]>
 
         getApproved(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
-        getCollectModule(
-            profileId: number | string | BN,
-            pubId: number | string | BN,
-        ): NonPayableTransactionObject<string>
-
-        getCollectNFT(profileId: number | string | BN, pubId: number | string | BN): NonPayableTransactionObject<string>
-
-        getCollectNFTImpl(): NonPayableTransactionObject<string>
-
         getContentURI(profileId: number | string | BN, pubId: number | string | BN): NonPayableTransactionObject<string>
 
-        getDispatcher(profileId: number | string | BN): NonPayableTransactionObject<string>
+        getDelegatedExecutorsConfigNumber(delegatorProfileId: number | string | BN): NonPayableTransactionObject<string>
+
+        getDelegatedExecutorsMaxConfigNumberSet(
+            delegatorProfileId: number | string | BN,
+        ): NonPayableTransactionObject<string>
+
+        getDelegatedExecutorsPrevConfigNumber(
+            delegatorProfileId: number | string | BN,
+        ): NonPayableTransactionObject<string>
 
         getDomainSeparator(): NonPayableTransactionObject<string>
 
-        getFollowModule(profileId: number | string | BN): NonPayableTransactionObject<string>
-
-        getFollowNFT(profileId: number | string | BN): NonPayableTransactionObject<string>
-
         getFollowNFTImpl(): NonPayableTransactionObject<string>
-
-        getFollowNFTURI(profileId: number | string | BN): NonPayableTransactionObject<string>
 
         getGovernance(): NonPayableTransactionObject<string>
 
-        getHandle(profileId: number | string | BN): NonPayableTransactionObject<string>
+        getLegacyCollectNFTImpl(): NonPayableTransactionObject<string>
+
+        getModuleRegistry(): NonPayableTransactionObject<string>
 
         getProfile(
             profileId: number | string | BN,
-        ): NonPayableTransactionObject<[string, string, string, string, string, string]>
+        ): NonPayableTransactionObject<[string, string, string, string, string, string, string]>
 
-        getProfileIdByHandle(handle: string): NonPayableTransactionObject<string>
+        getProfileIdByHandleHash(handleHash: string | number[]): NonPayableTransactionObject<string>
 
-        getPub(
+        getPublication(
             profileId: number | string | BN,
             pubId: number | string | BN,
-        ): NonPayableTransactionObject<[string, string, string, string, string, string]>
+        ): NonPayableTransactionObject<[string, string, string, string, string, string, string, string, string]>
 
-        getPubCount(profileId: number | string | BN): NonPayableTransactionObject<string>
-
-        getPubPointer(
-            profileId: number | string | BN,
-            pubId: number | string | BN,
-        ): NonPayableTransactionObject<{
-            0: string
-            1: string
-        }>
-
-        getPubType(profileId: number | string | BN, pubId: number | string | BN): NonPayableTransactionObject<string>
-
-        getReferenceModule(
+        getPublicationType(
             profileId: number | string | BN,
             pubId: number | string | BN,
         ): NonPayableTransactionObject<string>
 
         getState(): NonPayableTransactionObject<string>
 
+        getTokenGuardianDisablingTimestamp(wallet: string): NonPayableTransactionObject<string>
+
+        getTreasury(): NonPayableTransactionObject<string>
+
+        getTreasuryData(): NonPayableTransactionObject<{
+            0: string
+            1: string
+        }>
+
+        getTreasuryFee(): NonPayableTransactionObject<string>
+
         initialize(name: string, symbol: string, newGovernance: string): NonPayableTransactionObject<void>
+
+        isActionModuleEnabledInPublication(
+            profileId: number | string | BN,
+            pubId: number | string | BN,
+            module: string,
+        ): NonPayableTransactionObject<boolean>
 
         isApprovedForAll(owner: string, operator: string): NonPayableTransactionObject<boolean>
 
-        isCollectModuleWhitelisted(collectModule: string): NonPayableTransactionObject<boolean>
+        isBlocked(
+            profileId: number | string | BN,
+            byProfileId: number | string | BN,
+        ): NonPayableTransactionObject<boolean>
 
-        isFollowModuleWhitelisted(followModule: string): NonPayableTransactionObject<boolean>
+        'isDelegatedExecutorApproved(uint256,address)'(
+            delegatorProfileId: number | string | BN,
+            delegatedExecutor: string,
+        ): NonPayableTransactionObject<boolean>
+
+        'isDelegatedExecutorApproved(uint256,address,uint64)'(
+            delegatorProfileId: number | string | BN,
+            delegatedExecutor: string,
+            configNumber: number | string | BN,
+        ): NonPayableTransactionObject<boolean>
+
+        isFollowing(
+            followerProfileId: number | string | BN,
+            followedProfileId: number | string | BN,
+        ): NonPayableTransactionObject<boolean>
 
         isProfileCreatorWhitelisted(profileCreator: string): NonPayableTransactionObject<boolean>
-
-        isReferenceModuleWhitelisted(referenceModule: string): NonPayableTransactionObject<boolean>
 
         mintTimestampOf(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
         mirror(
-            vars: [
+            mirrorParams: [
                 number | string | BN,
-                number | string | BN,
-                number | string | BN,
-                string | number[],
                 string,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
                 string | number[],
             ],
         ): NonPayableTransactionObject<string>
 
         mirrorWithSig(
-            vars: [
+            mirrorParams: [
                 number | string | BN,
-                number | string | BN,
-                number | string | BN,
-                string | number[],
                 string,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
                 string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
             ],
-        ): NonPayableTransactionObject<string>
-
-        mirrorWithSig_Dispatcher(
-            vars: [
-                number | string | BN,
-                number | string | BN,
-                number | string | BN,
-                string | number[],
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<string>
 
         name(): NonPayableTransactionObject<string>
 
+        nonces(signer: string): NonPayableTransactionObject<string>
+
         ownerOf(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
-        permit(
-            spender: string,
-            tokenId: number | string | BN,
-            sig: [number | string | BN, string | number[], string | number[], number | string | BN],
-        ): NonPayableTransactionObject<void>
-
-        permitForAll(
-            owner: string,
-            operator: string,
-            approved: boolean,
-            sig: [number | string | BN, string | number[], string | number[], number | string | BN],
-        ): NonPayableTransactionObject<void>
-
         post(
-            vars: [number | string | BN, string, string, string | number[], string, string | number[]],
+            postParams: [number | string | BN, string, string[], (string | number[])[], string, string | number[]],
         ): NonPayableTransactionObject<string>
 
         postWithSig(
-            vars: [
+            postParams: [number | string | BN, string, string[], (string | number[])[], string, string | number[]],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
+        ): NonPayableTransactionObject<string>
+
+        quote(
+            quoteParams: [
                 number | string | BN,
                 string,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
+                string | number[],
+                string[],
+                (string | number[])[],
                 string,
                 string | number[],
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
             ],
         ): NonPayableTransactionObject<string>
 
-        postWithSig_Dispatcher(
-            vars: [
+        quoteWithSig(
+            quoteParams: [
                 number | string | BN,
                 string,
+                number | string | BN,
+                number | string | BN,
+                (number | string | BN)[],
+                (number | string | BN)[],
+                string | number[],
+                string[],
+                (string | number[])[],
                 string,
                 string | number[],
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
             ],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<string>
+
+        royaltyInfo(
+            tokenId: number | string | BN,
+            salePrice: number | string | BN,
+        ): NonPayableTransactionObject<{
+            0: string
+            1: string
+        }>
 
         'safeTransferFrom(address,address,uint256)'(
             from: string,
@@ -326,24 +397,17 @@ export interface LensHub extends BaseContract {
 
         setApprovalForAll(operator: string, approved: boolean): NonPayableTransactionObject<void>
 
-        setDefaultProfile(profileId: number | string | BN): NonPayableTransactionObject<void>
-
-        setDefaultProfileWithSig(
-            vars: [
-                string,
-                number | string | BN,
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+        setBlockStatus(
+            byProfileId: number | string | BN,
+            idsOfProfilesToSetBlockStatus: (number | string | BN)[],
+            blockStatus: boolean[],
         ): NonPayableTransactionObject<void>
 
-        setDispatcher(profileId: number | string | BN, dispatcher: string): NonPayableTransactionObject<void>
-
-        setDispatcherWithSig(
-            vars: [
-                number | string | BN,
-                string,
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+        setBlockStatusWithSig(
+            byProfileId: number | string | BN,
+            idsOfProfilesToSetBlockStatus: (number | string | BN)[],
+            blockStatus: boolean[],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<void>
 
         setEmergencyAdmin(newEmergencyAdmin: string): NonPayableTransactionObject<void>
@@ -355,49 +419,37 @@ export interface LensHub extends BaseContract {
         ): NonPayableTransactionObject<void>
 
         setFollowModuleWithSig(
-            vars: [
-                number | string | BN,
-                string,
-                string | number[],
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
-        ): NonPayableTransactionObject<void>
-
-        setFollowNFTURI(profileId: number | string | BN, followNFTURI: string): NonPayableTransactionObject<void>
-
-        setFollowNFTURIWithSig(
-            vars: [
-                number | string | BN,
-                string,
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+            profileId: number | string | BN,
+            followModule: string,
+            followModuleInitData: string | number[],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<void>
 
         setGovernance(newGovernance: string): NonPayableTransactionObject<void>
 
-        setProfileImageURI(profileId: number | string | BN, imageURI: string): NonPayableTransactionObject<void>
+        setMigrationAdmins(migrationAdmins: string[], whitelisted: boolean): NonPayableTransactionObject<void>
 
-        setProfileImageURIWithSig(
-            vars: [
-                number | string | BN,
-                string,
-                [number | string | BN, string | number[], string | number[], number | string | BN],
-            ],
+        setProfileMetadataURI(profileId: number | string | BN, metadataURI: string): NonPayableTransactionObject<void>
+
+        setProfileMetadataURIWithSig(
+            profileId: number | string | BN,
+            metadataURI: string,
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
         ): NonPayableTransactionObject<void>
+
+        setRoyalty(royaltiesInBasisPoints: number | string | BN): NonPayableTransactionObject<void>
 
         setState(newState: number | string | BN): NonPayableTransactionObject<void>
 
-        sigNonces(arg0: string): NonPayableTransactionObject<string>
+        setTreasury(newTreasury: string): NonPayableTransactionObject<void>
+
+        setTreasuryFee(newTreasuryFee: number | string | BN): NonPayableTransactionObject<void>
 
         supportsInterface(interfaceId: string | number[]): NonPayableTransactionObject<boolean>
 
         symbol(): NonPayableTransactionObject<string>
 
-        tokenByIndex(index: number | string | BN): NonPayableTransactionObject<string>
-
         tokenDataOf(tokenId: number | string | BN): NonPayableTransactionObject<[string, string]>
-
-        tokenOfOwnerByIndex(owner: string, index: number | string | BN): NonPayableTransactionObject<string>
 
         tokenURI(tokenId: number | string | BN): NonPayableTransactionObject<string>
 
@@ -405,13 +457,18 @@ export interface LensHub extends BaseContract {
 
         transferFrom(from: string, to: string, tokenId: number | string | BN): NonPayableTransactionObject<void>
 
-        whitelistCollectModule(collectModule: string, whitelist: boolean): NonPayableTransactionObject<void>
+        unfollow(
+            unfollowerProfileId: number | string | BN,
+            idsOfProfilesToUnfollow: (number | string | BN)[],
+        ): NonPayableTransactionObject<void>
 
-        whitelistFollowModule(followModule: string, whitelist: boolean): NonPayableTransactionObject<void>
+        unfollowWithSig(
+            unfollowerProfileId: number | string | BN,
+            idsOfProfilesToUnfollow: (number | string | BN)[],
+            signature: [string, number | string | BN, string | number[], string | number[], number | string | BN],
+        ): NonPayableTransactionObject<void>
 
         whitelistProfileCreator(profileCreator: string, whitelist: boolean): NonPayableTransactionObject<void>
-
-        whitelistReferenceModule(referenceModule: string, whitelist: boolean): NonPayableTransactionObject<void>
     }
     events: {
         Approval(cb?: Callback<Approval>): EventEmitter
