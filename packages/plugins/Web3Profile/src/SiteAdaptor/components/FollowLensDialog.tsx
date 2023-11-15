@@ -199,6 +199,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         profile?.id,
         currentProfile?.id,
         followModule,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
             setIsFollowing(true)
@@ -208,6 +209,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
         profile?.id,
         currentProfile?.id,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             setIsFollowing(false)
         },

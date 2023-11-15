@@ -10,7 +10,7 @@ import {
     useWallet,
     useWeb3Others,
 } from '@masknet/web3-hooks-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { ProfilePopup } from './ProfilePopup.js'
@@ -85,7 +85,12 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                 </Box>
                 <Button
                     variant="text"
-                    onClick={() => SelectProviderModal.open({ requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM })}>
+                    onClick={() =>
+                        SelectProviderModal.open({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                            requiredSupportChainIds: [ChainId.Matic],
+                        })
+                    }>
                     {t.wallet_status_button_change()}
                 </Button>
             </Box>

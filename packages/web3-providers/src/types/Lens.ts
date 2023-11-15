@@ -36,6 +36,7 @@ export enum LimitType {
 export namespace LensBaseAPI {
     export interface Profile {
         id: string
+        signless: boolean
         handle: {
             localName: string
             fullHandle: string
