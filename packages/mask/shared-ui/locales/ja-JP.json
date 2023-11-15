@@ -803,6 +803,8 @@
     "popups_wallet_backup_mnemonic_hidden": "ニーモニック単語を隠す",
     "popups_wallet_backup_private_key_view_tips": "タップすると秘密鍵が表示されます<br />。誰もあなたの画面を見ていないことを確認してください",
     "popups_wallet_backup_copy_private_key": "秘密鍵をコピーする",
+    "popups_wallet_enter_your_wallet_name": "ウォレット名を入力してください",
+    "popups_wallet_delete_tip": "このウォレットを削除してもよろしいですか？シードフレーズなしでウォレットを復元できません。",
     "popups_wallet_invalid_gas_limit": "ガス限界は21,000以上と15M以下でなければなりません。",
     "popups_wallet_priority_fee_is_zero": "優先料金は0より大きくなければなりません。 ",
     "popups_wallet_priority_fee_is_too_high": "最大優先料金がネットワーク状況に対して高すぎます。",
