@@ -5,7 +5,7 @@ try {
         './js/gun.js',
         './js/polyfill/browser-polyfill.js',
         './sandboxed-modules/mv3-preload.js',
-        './bundled/backgroundWorker.js',
+        './entry/backgroundWorker.js',
     )
 } catch (error) {
     // Note: this try catch is for Safari. If Safari extension failed to initialize, we cannot see the error message without this try-catch.

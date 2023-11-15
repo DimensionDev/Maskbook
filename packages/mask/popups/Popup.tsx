@@ -44,7 +44,7 @@ import { noop } from 'lodash-es'
 import { UserContext } from '../shared-ui/index.js'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
-const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
+const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
 const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))

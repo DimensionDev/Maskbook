@@ -260,7 +260,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         ],
         // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
-            chunkIds: 'named',
+            // we don't need deterministic, and we also don't have chunk request at init we don't need "size"
+            chunkIds: productionLike ? 'total-size' : 'named',
             concatenateModules: productionLike,
             flagIncludedChunks: productionLike,
             mangleExports: false,
@@ -289,26 +290,29 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             realContentHash: false,
             removeAvailableModules: productionLike,
             runtimeChunk: false,
-            splitChunks: {
-                maxInitialRequests: Infinity,
-                chunks: 'all',
-                cacheGroups: {
-                    // split each npm package into a chunk.
-                    defaultVendors: {
-                        test: /[/\\]node_modules[/\\]/,
-                        name(module: any) {
-                            const path = (module.context as string)
-                                .replace(/\\/g, '/')
-                                .match(/node_modules\/\.pnpm\/(.+)/)![1]
-                                .split('/')
-                            // [@org+pkgname@version, node_modules, @org, pkgname, ...inner path]
-                            if (path[0].startsWith('@')) return `npm-ns.${path[2].replace('@', '')}.${path[3]}`
-                            // [pkgname@version, node_modules, pkgname, ...inner path]
-                            return `npm.${path[2]}`
+            splitChunks:
+                productionLike ? undefined : (
+                    {
+                        maxInitialRequests: Infinity,
+                        chunks: 'all',
+                        cacheGroups: {
+                            // split each npm package into a chunk to give better debug experience.
+                            defaultVendors: {
+                                test: /[/\\]node_modules[/\\]/,
+                                name(module: any) {
+                                    const path = (module.context as string)
+                                        .replace(/\\/g, '/')
+                                        .match(/node_modules\/\.pnpm\/(.+)/)![1]
+                                        .split('/')
+                                    // [@org+pkgname@version, node_modules, @org, pkgname, ...inner path]
+                                    if (path[0].startsWith('@')) return `npm-ns.${path[2].replace('@', '')}.${path[3]}`
+                                    // [pkgname@version, node_modules, pkgname, ...inner path]
+                                    return `npm.${path[2]}`
+                                },
+                            },
                         },
-                    },
-                },
-            },
+                    }
+                ),
         },
         output: {
             environment: {
@@ -316,8 +320,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 dynamicImport: true,
             },
             path: flags.outputPath,
-            filename: 'bundled/[name].js',
-            chunkFilename: 'bundled/chunk.[name].js',
+            filename: 'entry/[name].js',
+            chunkFilename: productionLike ? 'bundled/[id].js' : 'bundled/chunk-[name].js',
             assetModuleFilename: 'assets/[hash][ext][query]',
             webassemblyModuleFilename: 'assets/[hash].wasm',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
