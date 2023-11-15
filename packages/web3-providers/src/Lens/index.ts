@@ -103,7 +103,7 @@ export class LensAPI {
                 variables: { handle: `lens/${handle.replace('.lens', '')}` },
             }),
         })
-        return data.profiles.items
+        return data.profile
     }
 
     async getProfilesByHandles(handles: string[]) {
@@ -152,7 +152,7 @@ export class LensAPI {
         })
         return data.defaultProfile
     }
-    static async reverse(address: string) {
+    async reverse(address: string) {
         if (!isValidAddress(address)) return
         type Response = { data: { defaultProfile?: Pick<LensBaseAPI.Profile, 'id' | 'handle'> } }
         const { data } = await fetchJSON<Response>(LENS_ROOT_API, {
@@ -177,7 +177,7 @@ export class LensAPI {
         return data.defaultProfile?.handle.localName
     }
 
-    static async queryProfilesByAddress(address: string) {
+    async queryProfilesByAddress(address: string) {
         if (!isValidAddress(address)) return []
         const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -318,7 +318,7 @@ export class LensAPI {
         return data.authenticate
     }
 
-    static async refresh(refreshToken: string) {
+    async refresh(refreshToken: string) {
         if (!refreshToken) return
         const { data } = await fetchJSON<{ data: { refresh: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -341,7 +341,85 @@ export class LensAPI {
         return data.refresh
     }
 
-    static async createFollowTypedData(
+    async follow(
+        profileId: string,
+        options: {
+            token: string
+            followModule?: FollowModuleTypedData
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        let followModule = ''
+        if (options.followModule?.profileFollowModule) {
+            followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
+        }
+
+        const { data } = await options.fetcher<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Follow {
+                        follow(request: { follow: [{ profileId: "${profileId}", ${followModule} }] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.follow
+    }
+
+    async unfollow(
+        profileId: string,
+        options: {
+            token: string
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        const { data } = await options.fetcher<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Unfollow {
+                        unfollow(request: { unfollow: ["${profileId}"] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.unfollow
+    }
+
+    async createFollowTypedData(
         profileId: string,
         options: {
             token: string
@@ -401,7 +479,7 @@ export class LensAPI {
                           }
                         }
                       }
-                    }
+                    }  
                   `,
                 }),
             },
@@ -410,7 +488,7 @@ export class LensAPI {
         return data.createFollowTypedData
     }
 
-    static async createUnfollowTypedData(profileId: string, options: { token: string }) {
+    async createUnfollowTypedData(profileId: string, options: { token: string }) {
         if (!profileId) return
         const { data } = await fetchJSON<{ data: { createUnfollowTypedData: LensBaseAPI.CreateUnfollowTypedData } }>(
             LENS_ROOT_API,
@@ -448,7 +526,7 @@ export class LensAPI {
                           }
                         }
                       }
-                    }
+                    }  
                 `,
                 }),
             },
@@ -462,7 +540,7 @@ export class LensAPI {
         signature: string,
         options?: {
             token: string
-            fetcher: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<unknown>
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
         if (!id || !options?.token || !signature) return
@@ -498,7 +576,7 @@ export class LensAPI {
         return data.broadcastOnchain
     }
 
-    static async queryApprovedModuleAllowanceAmount(
+    async queryApprovedModuleAllowanceAmount(
         currency: string,
         options?: {
             token: string
@@ -528,7 +606,7 @@ export class LensAPI {
         return first(data.approvedModuleAllowanceAmount)
     }
 
-    static async queryTransactionPublicationId(txId: string) {
+    async queryTransactionPublicationId(txId: string) {
         const result = await fetchJSON<{
             data: { dataAvailabilityTransaction?: LensBaseAPI.TransactionPublication }
         }>(LENS_ROOT_API, {

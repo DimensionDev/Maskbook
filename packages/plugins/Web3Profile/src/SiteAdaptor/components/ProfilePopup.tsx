@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Others } from '@masknet/web3-providers'
 import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
@@ -172,7 +172,12 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 </Box>
                 <Button
                     variant="text"
-                    onClick={() => SelectProviderModal.open({ requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM })}>
+                    onClick={() =>
+                        SelectProviderModal.open({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                            requiredSupportChainIds: [ChainId.Matic],
+                        })
+                    }>
                     {t.wallet_status_button_change()}
                 </Button>
             </Box>
