@@ -341,6 +341,84 @@ export class LensAPI {
         return data.refresh
     }
 
+    async follow(
+        profileId: string,
+        options: {
+            token: string
+            followModule?: FollowModuleTypedData
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        let followModule = ''
+        if (options.followModule?.profileFollowModule) {
+            followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
+        }
+
+        const { data } = await options.fetcher<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Follow {
+                        follow(request: { follow: [{ profileId: "${profileId}", ${followModule} }] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.follow
+    }
+
+    async unfollow(
+        profileId: string,
+        options: {
+            token: string
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        const { data } = await options.fetcher<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Unfollow {
+                        unfollow(request: { unfollow: ["${profileId}"] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.unfollow
+    }
+
     async createFollowTypedData(
         profileId: string,
         options: {

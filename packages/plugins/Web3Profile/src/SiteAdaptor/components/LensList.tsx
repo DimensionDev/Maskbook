@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
@@ -82,9 +82,9 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { account: wallet } = useChainContext()
 
     const { data = accounts, isLoading } = useQuery({
-        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join('')],
+        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet],
         queryFn: async () => {
-            if (!accounts.length) return
+            if (!accounts.length) return EMPTY_LIST
             let currentProfile = await Lens.queryDefaultProfileByAddress(wallet)
             if (!currentProfile?.id) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
@@ -120,6 +120,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
                 }),
             )
         },
+
         refetchOnWindowFocus: false,
     })
 
