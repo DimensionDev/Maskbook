@@ -238,6 +238,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const disabled = useMemo(() => {
         if (
             !account ||
+            !currentProfile ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
             providerType === ProviderType.Fortmatic ||
@@ -258,6 +259,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
         return false
     }, [
+        currentProfile,
         account,
         wallet?.owner,
         chainId,
@@ -300,11 +302,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         )
             return t.follow_with_charge_tips()
         else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
-        else if (!defaultProfile) {
-            return t.follow_gas_tips()
+        else if (!currentProfile) {
+            return t.follow_with_out_handle_tips()
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
 
     const avatar = useMemo(() => {
         if (!profile?.metadata?.picture?.optimized.uri) return
@@ -327,7 +329,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
-                        <Typography className={classes.name}>{profile?.metadata?.displayName}</Typography>
+                        <Typography className={classes.name}>
+                            {profile?.metadata?.displayName ?? profile?.handle.localName}
+                        </Typography>
                         <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
                             <Web3ProfileTrans.followers
@@ -412,9 +416,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
-                                {tips ?
-                                    <Typography className={classes.tips}>{tips}</Typography>
-                                :   null}
                                 {tips ?
                                     <Typography className={classes.tips}>{tips}</Typography>
                                 :   null}
