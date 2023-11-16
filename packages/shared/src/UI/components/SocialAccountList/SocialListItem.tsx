@@ -214,7 +214,7 @@ export function SocialAccountListItem({
                                     handle: identity,
                                 })
                             }}>
-                            {isSameAddress(account, value?.ownedBy)
+                            {isSameAddress(account, value?.ownedBy.address)
                                 ? t.view()
                                 : value?.isFollowing
                                 ? t.lens_following()

@@ -13,6 +13,8 @@ export namespace FireflyBaseAPI {
         bio: string
         url: string
         profileUri: string[]
+        ownedBy?: string
+        isFollowing?: boolean
     }
 
     export type LensResult = Result<LensAccount[]>

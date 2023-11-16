@@ -12,14 +12,15 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
-import { FollowModuleType } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, isSameAddress, resolveIPFS_URL, ZERO } from '@masknet/web3-shared-base'
+import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
+import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { Translate, useI18N } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
+import { useQuery } from '@tanstack/react-query'
 import { HandlerDescription } from './HandlerDescription.js'
 import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 
@@ -111,6 +112,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const t = useI18N()
 
     const wallet = useWallet()
+    const [currentProfile, setCurrentProfile] = useState<LensBaseAPI.Profile>()
     const [isFollowing, setIsFollowing] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
     const { classes } = useStyles({ account: !!wallet })
@@ -125,22 +127,35 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         const profile = await Lens.getProfileByHandle(handle)
 
         if (!profile) return
-        const isFollowing = await Lens.queryFollowStatus(account, profile.id)
 
         const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
 
         const profiles = await Lens.queryProfilesByAddress(account)
 
-        setIsFollowing(!!isFollowing)
+        setCurrentProfile((prev) => {
+            if (!prev) return defaultProfile ?? first(profiles)
+            return prev
+        })
         return {
             profile,
-            isSelf: isSameAddress(profile.ownedBy, account),
-            isFollowing,
+            isSelf: isSameAddress(profile.ownedBy.address, account),
+            profiles,
             defaultProfile: defaultProfile ?? first(profiles),
         }
     }, [handle, open, account])
 
-    const { profile, defaultProfile, isSelf } = value ?? {}
+    const { profile, defaultProfile, isSelf, profiles } = value ?? {}
+
+    const { isLoading } = useQuery({
+        queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
+        queryFn: async () => {
+            if (!value?.profile.id || !currentProfile) return false
+            const result = await Lens.queryFollowStatus(currentProfile.id, value?.profile.id)
+            setIsFollowing(result)
+            return result
+        },
+        refetchOnWindowFocus: false,
+    })
 
     const followModule = useMemo(() => {
         if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
@@ -152,7 +167,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
             return {
                 feeFollowModule: {
-                    currency: profile.followModule.amount.asset.address,
+                    currency: profile.followModule.amount.asset.contract.address,
                     value: profile.followModule.amount.value,
                 },
             }
@@ -163,7 +178,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const approved = useMemo(() => {
         if (!profile?.followModule?.amount?.asset) return { amount: ZERO.toFixed() }
-        const { address, name, symbol, decimals } = profile.followModule.amount.asset
+        const {
+            contract: { address },
+            name,
+            symbol,
+            decimals,
+        } = profile.followModule.amount.asset
         const token = createERC20Token(chainId, address, name, symbol, decimals)
         const amount = formatAmount(profile.followModule.amount.value, decimals)
 
@@ -177,8 +197,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { showConfettiExplosion, canvasRef } = useConfettiExplosion()
     const { loading: followLoading, handleFollow } = useFollow(
         profile?.id,
+        currentProfile?.id,
         followModule,
-        !!defaultProfile,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
             setIsFollowing(true)
@@ -187,6 +208,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     )
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
         profile?.id,
+        currentProfile?.id,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             setIsFollowing(false)
         },
@@ -196,7 +219,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { data: feeTokenBalance, isLoading: getBalanceLoading } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
-        profile?.followModule?.amount?.asset.address ?? '',
+        profile?.followModule?.amount?.asset.contract.address ?? '',
     )
 
     const handleClick = useCallback(
@@ -217,11 +240,13 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const disabled = useMemo(() => {
         if (
             !account ||
+            !currentProfile ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
             providerType === ProviderType.Fortmatic ||
             followLoading ||
             unfollowLoading ||
+            profile?.followModule?.type === FollowModuleType.UnknownFollowModule ||
             (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile) ||
             (profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
                 profile.followModule.amount &&
@@ -236,6 +261,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
         return false
     }, [
+        currentProfile,
         account,
         wallet?.owner,
         chainId,
@@ -249,6 +275,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const buttonText = useMemo(() => {
         if (isFollowing) {
             return isHovering ? t.unfollow() : t.following_action()
+        } else if (profile?.followModule?.type === FollowModuleType.UnknownFollowModule) {
+            return t.can_not_follow()
         } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
             return t.follow_for_fees({
                 value: profile.followModule.amount.value,
@@ -260,7 +288,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
-        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle })
+        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle.localName })
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
             return t.follow_wallet_tips()
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
@@ -276,16 +304,16 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         )
             return t.follow_with_charge_tips()
         else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
-        else if (!defaultProfile) {
-            return t.follow_gas_tips()
+        else if (!currentProfile) {
+            return t.follow_with_out_handle_tips()
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
 
     const avatar = useMemo(() => {
-        if (!profile?.picture?.original) return
-        return resolveIPFS_URL(profile?.picture?.original.url)
-    }, [profile?.picture?.original])
+        if (!profile?.metadata?.picture?.optimized.uri) return
+        return profile?.metadata?.picture.optimized.uri
+    }, [profile?.metadata?.picture?.optimized.uri])
 
     return (
         <InjectedDialog
@@ -304,16 +332,18 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
-                        <Typography className={classes.name}>{profile?.name}</Typography>
-                        <Typography className={classes.handle}>@{profile?.handle}</Typography>
+                        <Typography className={classes.name}>
+                            {profile?.metadata?.displayName ?? profile?.handle.localName}
+                        </Typography>
+                        <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
                             <Translate.followers
                                 components={{ strong: <strong /> }}
-                                values={{ followers: String(profile?.stats?.totalFollowers ?? '0') }}
+                                values={{ followers: String(profile?.stats.followers ?? '0') }}
                             />
                             <Translate.following
                                 components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats?.totalFollowing ?? '0') }}
+                                values={{ following: String(profile?.stats?.following ?? '0') }}
                             />
                         </Typography>
                         <Box className={classes.actions}>
@@ -321,7 +351,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
-                                    href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                    href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
@@ -331,7 +361,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             ) : (
                                 <>
                                     <EthereumERC20TokenApprovedBoundary
-                                        spender={value?.profile.followModule?.contractAddress}
+                                        spender={value?.profile.followModule?.contract?.address}
                                         amount={approved.amount}
                                         token={!isFollowing ? approved.token : undefined}
                                         showHelperToken={false}
@@ -363,7 +393,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 variant="roundedContained"
                                                 className={classes.followAction}
                                                 disabled={disabled}
-                                                loading={followLoading || unfollowLoading || loading}
+                                                loading={followLoading || unfollowLoading || loading || isLoading}
                                                 onClick={handleClick}
                                                 onMouseOver={() => setIsHovering(true)}
                                                 onMouseOut={() => setIsHovering(false)}>
@@ -374,12 +404,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     <Button
                                         className={classes.linkButton}
                                         variant="roundedOutlined"
-                                        href={profile?.handle ? getLensterLink(profile.handle) : '#'}
+                                        href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
                                         sx={{ cursor: 'pointer' }}>
-                                        {t.lenster()}
+                                        {t.hey()}
                                     </Button>
                                 </>
                             )}
@@ -391,15 +421,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
                                 {tips ? <Typography className={classes.tips}>{tips}</Typography> : null}
+
                                 <HandlerDescription
-                                    profile={
-                                        defaultProfile
-                                            ? {
-                                                  avatar: defaultProfile.picture?.original?.url,
-                                                  handle: defaultProfile.handle,
-                                              }
-                                            : undefined
-                                    }
+                                    currentProfile={currentProfile}
+                                    profiles={profiles}
+                                    onChange={(profile) => setCurrentProfile(profile)}
                                 />
                             </WalletConnectedBoundary>
                         </Box>

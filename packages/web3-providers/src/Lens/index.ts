@@ -1,15 +1,91 @@
 import { NameServiceID } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
-import type { FollowModuleTypedData, LensBaseAPI } from '../entry-types.js'
+import { LimitType, type FollowModuleTypedData, type LensBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { LENS_ROOT_API } from './constants.js'
 
-export class LensAPI implements LensBaseAPI.Provider {
-    get id() {
-        return NameServiceID.Lens
-    }
+const LensProfileQuery = `
+          id
+          handle {
+              localName
+              fullHandle
+              id
+              namespace
+          }
+          ownedBy {
+              address
+              chainId
+          }
+          signless
+          metadata {
+              bio
+              displayName
+              picture {
+                  ... on ImageSet {
+                      optimized {
+                          uri
+                      }
+                      raw {
+                          uri
+                      }
+                  }
+                  ... on NftImage {
+                      image {
+                          raw {
+                              uri
+                          }
+                      }
+                  }
+              }
+
+              coverPicture {
+                  ... on ImageSet {
+                      optimized {
+                          uri
+                      }
+                      raw {
+                          uri
+                      }
+                  }
+              }
+          }
+          stats {
+              followers
+              following
+          }
+          followModule {
+              ... on FeeFollowModuleSettings {
+                  type
+                  contract {
+                      address
+                  }
+                  amount {
+                      asset {
+                          ... on Erc20 {
+                              name
+                              symbol
+                              decimals
+                              contract {
+                                  address
+                              }
+                          }
+                      }
+                      value
+                  }
+                  recipient
+              }
+              ... on UnknownFollowModuleSettings {
+                  type
+              }
+              ... on RevertFollowModuleSettings {
+                  type
+              }
+          }
+`
+
+export class LensAPI {
+    static readonly id = NameServiceID.Lens
     async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
         const { data } = await fetchJSON<{ data: { profile: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -19,51 +95,44 @@ export class LensAPI implements LensBaseAPI.Provider {
             body: JSON.stringify({
                 query: /* GraphQL */ `
                     query Profile($handle: Handle) {
-                        profile(request: { handle: $handle }) {
-                            id
-                            handle
-                            ownedBy
-                            name
-                            picture {
-                                ... on MediaSet {
-                                    original {
-                                        url
-                                    }
-                                }
-                            }
-                            stats {
-                                totalFollowers
-                                totalFollowing
-                            }
-                            followModule {
-                                ... on FeeFollowModuleSettings {
-                                    type
-                                    contractAddress
-                                    amount {
-                                        asset {
-                                            name
-                                            symbol
-                                            decimals
-                                            address
-                                        }
-                                        value
-                                    }
-                                    recipient
-                                }
-                                ... on ProfileFollowModuleSettings {
-                                    type
-                                }
-                                ... on RevertFollowModuleSettings {
-                                    type
-                                }
-                            }
+                        profile(request: { forHandle: $handle }) {
+                            ${LensProfileQuery}
                         }
                     }
                 `,
-                variables: { handle },
+                variables: { handle: `lens/${handle.replace('.lens', '')}` },
             }),
         })
         return data.profile
+    }
+
+    async getProfilesByHandles(handles: string[]) {
+        const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    query Profiles($request: ProfilesRequest!) {
+                        profiles(request: $request) {
+                            items {
+                                ${LensProfileQuery}
+                            }
+                        }
+                    }
+                  `,
+                variables: {
+                    request: {
+                        where: {
+                            handles: handles.map((x) => `lens/${x.replace('.lens', '')}`),
+                        },
+                        limit: LimitType.Fifty,
+                    },
+                },
+            }),
+        })
+        return data.profiles.items
     }
 
     async queryDefaultProfileByAddress(address: string) {
@@ -75,45 +144,8 @@ export class LensAPI implements LensBaseAPI.Provider {
             },
             body: JSON.stringify({
                 query: `query DefaultProfile {
-                  defaultProfile(request: { ethereumAddress: "${address}"}) {
-                    id
-                    name
-                    ownedBy
-                    handle
-                    picture {
-                      ... on MediaSet {
-                        original {
-                          url
-                          mimeType
-                        }
-                      }
-                    }
-                    stats {
-                      totalFollowers
-                      totalFollowing
-                    }
-                    followModule {
-                      ... on FeeFollowModuleSettings {
-                        type
-                        contractAddress
-                        amount {
-                          asset {
-                            name
-                            symbol
-                            decimals
-                            address
-                          }
-                          value
-                        }
-                        recipient
-                      }
-                      ... on ProfileFollowModuleSettings {
-                       type
-                      }
-                      ... on RevertFollowModuleSettings {
-                       type
-                      }
-                    }
+                  defaultProfile(request: { for: "${address}" }) {
+                    ${LensProfileQuery}
                   }
                 }`,
             }),
@@ -122,7 +154,7 @@ export class LensAPI implements LensBaseAPI.Provider {
     }
     async reverse(address: string) {
         if (!isValidAddress(address)) return
-        type Response = { data: { defaultProfile?: Pick<LensBaseAPI.Profile, 'id' | 'name' | 'handle'> } }
+        type Response = { data: { defaultProfile?: Pick<LensBaseAPI.Profile, 'id' | 'handle'> } }
         const { data } = await fetchJSON<Response>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -130,18 +162,19 @@ export class LensAPI implements LensBaseAPI.Provider {
             },
             body: JSON.stringify({
                 query: /* GraphQL */ `
-                    query handleOfDefaultProfile($address: EthereumAddress!) {
-                        defaultProfile(request: { ethereumAddress: $address }) {
+                    query handleOfDefaultProfile {
+                        defaultProfile(request: { for: "${address}" }) {
                             id
-                            name
-                            handle
+                            handle {
+                                localName
+                            }
                         }
                     }
                 `,
                 variables: { address },
             }),
         })
-        return data.defaultProfile?.handle
+        return data.defaultProfile?.handle.localName
     }
 
     async queryProfilesByAddress(address: string) {
@@ -153,92 +186,94 @@ export class LensAPI implements LensBaseAPI.Provider {
             },
             body: JSON.stringify({
                 query: `query Profiles {
-                profiles(request: { ownedBy: ["${address}"], limit: 10 }) {
-                  items {
-                    id
-                    name
-                    picture {
-                      ... on MediaSet {
-                        original {
-                          url
-                          mimeType
-                        }
-                      }
-                    }
-                    handle
-                    ownedBy
-                    stats {
-                      totalFollowers
-                      totalFollowing
-                     
-                    }
-                    followModule {
-                      ... on FeeFollowModuleSettings {
-                        type
-                        amount {
-                          asset {
-                            symbol
-                            name
-                            decimals
-                            address
-                          }
-                          value
-                        }
-                        recipient
-                      }
-                      ... on ProfileFollowModuleSettings {
-                       type
-                      }
-                      ... on RevertFollowModuleSettings {
-                       type
-                      }
+                  profiles(request: { where: { ownedBy: ["${address}"] }, limit: ${LimitType.Ten} }) {
+                    items {
+                      ${LensProfileQuery}
                     }
                   }
-                }
-              }`,
+                }`,
             }),
         })
 
         return data.profiles.items
     }
 
-    async queryFollowStatus(address: string, profileId: string) {
-        if (!isValidAddress(address) || !profileId) return false
+    async queryFollowStatus(follower: string, profileId: string) {
+        if (!follower || !profileId) return false
 
-        const { data } = await fetchJSON<{ data: { doesFollow: LensBaseAPI.DoesFollow[] } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: `query DoesFollow {
-                    doesFollow(request: {
-                      followInfos: [
-                        {
-                          followerAddress: "${address}", 
-                          profileId: "${profileId}"
+        const { data } = await fetchJSON<{ data: { followStatusBulk: LensBaseAPI.FollowStatusBulk[] } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: `query followStatusBulk {
+                        followStatusBulk(
+                            request: { followInfos: [{ follower: "${follower}", profileId: "${profileId}" }] }
+                        ) {
+                            follower
+                            profileId
+                            status {
+                            isFinalisedOnchain
+                            value
+                            }
                         }
-                      ]
-                }) {
-                  followerAddress
-                  profileId
-                  follows
-                }
-              }`,
-            }),
-        })
-
-        if (!data.doesFollow.length) return false
-
-        const result: LensBaseAPI.DoesFollow | undefined = data.doesFollow.find((x) =>
-            isSameAddress(x.followerAddress, address),
+                    }
+                `,
+                }),
+            },
         )
 
-        return result?.follows
+        if (!data.followStatusBulk.length) return false
+
+        return data.followStatusBulk.some((x) => x.status.value)
     }
 
-    async queryChallenge(address: string) {
-        if (!isValidAddress(address)) return ''
+    /**
+     * Query one-to-many follow relationships
+     * @param follower primary profile
+     * @param profileIds
+     */
+    async queryFollowStatusList(follower: string, profileIds: string[]) {
+        if (!follower || !profileIds.length) return
+        const { data } = await fetchJSON<{ data: { followStatusBulk: LensBaseAPI.FollowStatusBulk[] } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: /* GraphQL */ `
+                        query followStatusBulk($request: FollowStatusBulkRequest!) {
+                            followStatusBulk(request: $request) {
+                                follower
+                                profileId
+                                status {
+                                    isFinalisedOnchain
+                                    value
+                                }
+                            }
+                        }
+                    `,
+                    variables: {
+                        request: {
+                            followInfos: profileIds.map((profileId) => ({
+                                follower,
+                                profileId,
+                            })),
+                        },
+                    },
+                }),
+            },
+        )
+        return data.followStatusBulk
+    }
+
+    async queryChallenge(address: string, profileId: string) {
+        if (!isValidAddress(address) || !profileId) return ''
         const { data } = await fetchJSON<{ data: { challenge: LensBaseAPI.Challenge } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -246,28 +281,29 @@ export class LensAPI implements LensBaseAPI.Provider {
             },
             body: JSON.stringify({
                 query: `query Challenge {
-                  challenge(request: { address: "${address}" }) {
+                  challenge(request: { signedBy: "${address}", for: "${profileId}" }) {
                     text
+                    id
                   }
                 }`,
             }),
         })
 
-        return data.challenge.text
+        return data.challenge
     }
 
-    async authenticate(address: string, signature: string) {
-        if (!isValidAddress(address) || !signature) return
+    async authenticate(id: string, signature: string) {
+        if (!id || !signature) return
         const { data } = await fetchJSON<{ data: { authenticate: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `mutation Authenticate {
+                query: /* GraphQL */ `mutation Authenticate {
                   authenticate(
                     request: {
-                      address: "${address}"
+                      id: "${id}"
                       signature: "${signature}"
                     }
                   ) {
@@ -290,7 +326,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                query: `mutation Refresh {
+                query: /* GraphQL */ `mutation Refresh {
                   refresh(request: {
                     refreshToken: "${refreshToken}"
                   }) {
@@ -303,6 +339,84 @@ export class LensAPI implements LensBaseAPI.Provider {
         })
 
         return data.refresh
+    }
+
+    async follow(
+        profileId: string,
+        options: {
+            token: string
+            followModule?: FollowModuleTypedData
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        let followModule = ''
+        if (options.followModule?.profileFollowModule) {
+            followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
+        }
+
+        const { data } = await options.fetcher<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Follow {
+                        follow(request: { follow: [{ profileId: "${profileId}", ${followModule} }] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.follow
+    }
+
+    async unfollow(
+        profileId: string,
+        options: {
+            token: string
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+        },
+    ) {
+        if (!profileId) return
+
+        const { data } = await options.fetcher<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+            },
+            body: JSON.stringify({
+                query: /* GraphQL */ `
+                    mutation Unfollow {
+                        unfollow(request: { unfollow: ["${profileId}"] }) {
+                            ... on RelaySuccess {
+                                txHash
+                                __typename
+                            }
+                            ... on LensProfileManagerRelayError {
+                                reason
+                                __typename
+                            }
+                        }
+                    }
+                `,
+            }),
+        })
+
+        return data.unfollow
     }
 
     async createFollowTypedData(
@@ -338,7 +452,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                 body: JSON.stringify({
                     query: `mutation CreateFollowTypedData {
                       createFollowTypedData(
-                        request: { follow: [{ profile: "${profileId}", ${followModule} }] }
+                        request: { follow: [{ profileId: "${profileId}", ${followModule} }] }
                       ) {
                         id
                         expiresAt
@@ -350,7 +464,7 @@ export class LensAPI implements LensBaseAPI.Provider {
                             verifyingContract
                           }
                           types {
-                            FollowWithSig {
+                            Follow {
                               name
                               type
                             }
@@ -358,7 +472,9 @@ export class LensAPI implements LensBaseAPI.Provider {
                           value {
                             nonce
                             deadline
-                            profileIds
+                            followerProfileId
+                            idsOfProfilesToFollow
+                            followTokenIds
                             datas
                           }
                         }
@@ -385,13 +501,13 @@ export class LensAPI implements LensBaseAPI.Provider {
                 body: JSON.stringify({
                     query: `mutation CreateUnfollowTypedData {
                       createUnfollowTypedData(request:{
-                        profile: "${profileId}"
+                        unfollow: ["${profileId}"]
                       }) {
                         id
                         expiresAt
                         typedData {
                           types {
-                            BurnWithSig {
+                            Unfollow {
                               name
                               type
                             }
@@ -405,7 +521,8 @@ export class LensAPI implements LensBaseAPI.Provider {
                           value {
                             nonce
                             deadline
-                            tokenId
+                            idsOfProfilesToUnfollow
+                            unfollowerProfileId
                           }
                         }
                       }
@@ -418,62 +535,6 @@ export class LensAPI implements LensBaseAPI.Provider {
         return data.createUnfollowTypedData
     }
 
-    async followWithProxyAction(profileId: string, options: { token: string }) {
-        if (!profileId) return
-        const { data } = await fetchJSON<{ data: { proxyAction: string } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
-            },
-            body: JSON.stringify({
-                query: `mutation ProxyAction {
-                  proxyAction(request: { follow: { freeFollow: { profileId: "${profileId}" } } })
-                }
-                `,
-            }),
-        })
-
-        return data.proxyAction
-    }
-
-    async queryProxyStatus(proxyActionId: string, options: { token: string }) {
-        if (!proxyActionId) return
-        const { data } = await fetchJSON<{ data: { proxyActionStatus: LensBaseAPI.ProxyActionStatus } }>(
-            LENS_ROOT_API,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': options?.token ? `Bearer ${options.token}` : '',
-                },
-                body: JSON.stringify({
-                    query: `query ProxyStatus {
-                      proxyActionStatus(proxyActionId: "${proxyActionId}") {
-                        ... on ProxyActionError{
-                          reason
-                          lastKnownTxId
-                          __typename
-                        }
-                        ... on ProxyActionStatusResult {
-                          txHash
-                          txId
-                          status
-                          __typename
-                        }
-                        ... on ProxyActionQueued {
-                          queuedAt
-                          __typename
-                        }
-                      }
-                    }`,
-                }),
-            },
-        )
-
-        return data.proxyActionStatus
-    }
-
     async broadcast(
         id: string,
         signature: string,
@@ -483,21 +544,21 @@ export class LensAPI implements LensBaseAPI.Provider {
         },
     ) {
         if (!id || !options?.token || !signature) return
-        const { data } = await options.fetcher<{ data: { broadcast: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const { data } = await options.fetcher<{ data: { broadcastOnchain: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': options?.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
-                query: `mutation Broadcast {
-                      broadcast(
+                query: `mutation BroadcastOnchain {
+                      broadcastOnchain(
                         request: {
                           id: "${id}"
                           signature: "${signature}"
                         }
                       ) {
-                        ... on RelayerResult {
+                        ... on RelaySuccess {
                           txHash
                           __typename
                         }
@@ -512,7 +573,7 @@ export class LensAPI implements LensBaseAPI.Provider {
             }),
         })
 
-        return data.broadcast
+        return data.broadcastOnchain
     }
 
     async queryApprovedModuleAllowanceAmount(

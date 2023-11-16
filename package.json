@@ -8,7 +8,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.23.9",
+  "version": "2.23.10",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -24,7 +24,7 @@
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "prepare": "husky install",
     "svgo": "svgo packages/icons/*/*.svg",
-    "test": "vitest",
+    "test": "vitest --no-threads",
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "npx gulp clean"
   },
