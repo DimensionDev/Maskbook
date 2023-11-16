@@ -1,28 +1,27 @@
-import urlcat from 'urlcat'
 import { Icons } from '@masknet/icons'
+import { PopupHomeTabType, useParamTab } from '@masknet/shared'
 import {
-    type EnhanceableSite,
-    type ProfileAccount,
+    LockStatus,
     PopupModalRoutes,
     PopupRoutes,
     currentMaskWalletLockStatusSettings,
-    LockStatus,
+    type EnhanceableSite,
+    type ProfileAccount,
 } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
-import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
-import type { ConnectedWalletInfo } from '../type.js'
-import { useModalNavigate } from '../../../components/index.js'
-import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
-import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
-import { useParamTab } from '../../../hooks/index.js'
 import { useNavigate } from 'react-router-dom'
-import { PopupHomeTabType } from '@masknet/shared'
+import urlcat from 'urlcat'
+import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
+import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
+import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { SelectProvider } from '../../../components/SelectProvider/index.js'
+import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
+import { useModalNavigate } from '../../../components/index.js'
+import type { ConnectedWalletInfo } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

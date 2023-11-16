@@ -643,6 +643,9 @@ importers:
       '@masknet/plugin-file-service':
         specifier: workspace:^
         version: link:../plugins/FileService
+      '@masknet/plugin-friend-tech':
+        specifier: workspace:^
+        version: link:../plugins/FriendTech
       '@masknet/plugin-gitcoin':
         specifier: workspace:^
         version: link:../plugins/Gitcoin
@@ -1516,6 +1519,57 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
+
+  packages/plugins/FriendTech:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:^
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:^
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:^
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:^
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:^
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../../theme
+      '@masknet/web3-hooks-base':
+        specifier: workspace:^
+        version: link:../../web3-hooks/base
+      '@masknet/web3-providers':
+        specifier: workspace:^
+        version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:^
+        version: link:../../web3-shared/evm
+      '@masknet/web3-telemetry':
+        specifier: workspace:^
+        version: link:../../web3-telemetry
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
+      bignumber.js:
+        specifier: 9.1.2
+        version: 9.1.2
+      react-router-dom:
+        specifier: ^6.14.2
+        version: 6.14.2(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
 
   packages/plugins/Gitcoin:
     dependencies:
@@ -2719,6 +2773,9 @@ importers:
       react-markdown:
         specifier: ^8.0.7
         version: 8.0.7(@types/react@18.2.21)(react@0.0.0-experimental-0a360642d-20230711)
+      react-router-dom:
+        specifier: ^6.14.2
+        version: 6.14.2(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
@@ -23214,7 +23271,7 @@ packages:
       react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
     dev: false
 
-  /react-universal-interface@0.6.2(react@0.0.0-experimental-0a360642d-20230711)(tslib@2.5.0):
+  /react-universal-interface@0.6.2(react@0.0.0-experimental-0a360642d-20230711)(tslib@2.6.2):
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
       react: '*'
@@ -23224,7 +23281,7 @@ packages:
         optional: true
     dependencies:
       react: 0.0.0-experimental-0a360642d-20230711
-      tslib: 2.5.0
+      tslib: 2.6.2
     dev: false
 
   /react-use@17.4.0(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
@@ -23247,13 +23304,13 @@ packages:
       nano-css: 5.3.5(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711)
       react: 0.0.0-experimental-0a360642d-20230711
       react-dom: 0.0.0-experimental-0a360642d-20230711(react@0.0.0-experimental-0a360642d-20230711)
-      react-universal-interface: 0.6.2(react@0.0.0-experimental-0a360642d-20230711)(tslib@2.5.0)
+      react-universal-interface: 0.6.2(react@0.0.0-experimental-0a360642d-20230711)(tslib@2.6.2)
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       set-harmonic-interval: 1.0.1
       throttle-debounce: 3.0.1
       ts-easing: 0.2.0
-      tslib: 2.5.0
+      tslib: 2.6.2
     dev: false
 
   /react-window@1.8.9(react-dom@0.0.0-experimental-0a360642d-20230711)(react@0.0.0-experimental-0a360642d-20230711):
@@ -25875,10 +25932,6 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: false
 
-  /tslib@2.5.0:
-    resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
-    dev: false
-
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
@@ -28072,30 +28125,6 @@ packages:
     dev: true
 
 time:
-  /@emotion/cache@11.11.0: '2023-05-06T08:49:11.977Z'
-  /@emotion/react@11.11.1: '2023-06-07T11:01:08.326Z'
-  /@emotion/serialize@1.1.2: '2023-05-06T08:49:15.377Z'
-  /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
-  /@masknet/kit@0.2.0: '2023-11-09T07:45:47.089Z'
-  /@rollup/plugin-commonjs@25.0.4: '2023-08-11T17:13:52.902Z'
-  /@rollup/plugin-node-resolve@15.2.1: '2023-08-22T04:58:47.775Z'
-  /@rollup/plugin-replace@5.0.2: '2022-12-17T15:03:40.788Z'
-  /@rollup/plugin-virtual@3.0.2: '2023-10-05T12:50:16.732Z'
-  /@swc/core@1.3.96: '2023-11-05T04:47:37.929Z'
-  /@types/twitter-text@3.1.7: '2023-10-18T16:50:37.249Z'
   /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
-  /assert@2.1.0: '2023-09-07T18:24:30.341Z'
-  /buffer@6.0.3: '2020-11-23T02:51:27.107Z'
-  /core-js-compat@3.33.0: '2023-10-01T18:37:33.446Z'
-  /eslint-import-resolver-typescript@3.6.1: '2023-09-22T10:03:30.716Z'
-  /eslint-plugin-i@2.28.1: '2023-09-06T08:19:37.937Z'
-  /guess-calling-code@1.1.8: '2023-06-26T16:50:23.300Z'
-  /knip@2.33.3: '2023-10-12T09:53:43.922Z'
-  /prettier@3.1.0: '2023-11-13T02:57:22.609Z'
-  /rollup-plugin-polyfill-node@0.12.0: '2023-01-24T00:16:21.182Z'
-  /terser-webpack-plugin@5.3.9: '2023-05-17T23:20:28.819Z'
-  /tiny-secp256k1@2.2.3: '2023-06-29T08:38:53.395Z'
-  /url@0.11.3: '2023-09-14T22:38:37.401Z'
-  /vite@4.5.0: '2023-10-18T09:13:23.804Z'
-  /vitest@0.34.6: '2023-09-29T07:34:15.873Z'
-  /zod@3.22.4: '2023-10-04T21:53:36.013Z'
+  /bignumber.js@9.1.2: '2023-08-28T12:15:45.587Z'
+  /react-use@17.4.0: '2022-05-20T12:10:53.726Z'

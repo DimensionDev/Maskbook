@@ -1,3 +1,4 @@
+import { useParamTab } from '@masknet/shared'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
@@ -6,16 +7,10 @@ import { useSearchParams } from 'react-router-dom'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
-import {
-    ContactsContext,
-    useParamTab,
-    useTitle,
-    useNonFungibleTokenParams,
-    useTokenParams,
-} from '../../../hooks/index.js'
+import { ContactsContext, useNonFungibleTokenParams, useTitle, useTokenParams } from '../../../hooks/index.js'
+import { TransferTabType } from '../type.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
-import { TransferTabType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     page: {

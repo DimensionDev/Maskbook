@@ -102,6 +102,7 @@ export namespace SiteAdaptorUI {
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void
+            nameWidget?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
             switchLogo?(signal: AbortSignal): void
             calendar?(signal: AbortSignal): void

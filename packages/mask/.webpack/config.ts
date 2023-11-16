@@ -116,11 +116,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     test: /\..?js$/,
                     loader: require.resolve('./loaders/fix-regenerator-runtime.ts'),
                 },
-                {
-                    test: /\.tsx?$/,
-                    include: join(__dirname, '../../'),
-                    loader: require.resolve('./loaders/jsx.ts'),
-                },
                 // TypeScript
                 {
                     test: /\.tsx?$/,

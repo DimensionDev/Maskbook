@@ -1,4 +1,4 @@
-import { CollectionList, type CollectionListProps } from '@masknet/shared'
+import { CollectionList, useParamTab, type CollectionListProps } from '@masknet/shared'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,7 +9,6 @@ import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { useParamTab } from '../../../../hooks/index.js'
 import { WalletAssetTabs } from '../../type.js'
 
 const gridProps = {

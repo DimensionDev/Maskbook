@@ -115,7 +115,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                                 {t.decrypted_postbox_only_visible_to_yourself()}
                             </Typography>
                             <div className={classes.iconAdd}>
-                                <Icons.AddNoBorder size={12} color={theme.palette.maskColor.white} />
+                                <Icons.Plus size={12} color={theme.palette.maskColor.white} />
                             </div>
                         </section>
                     }
