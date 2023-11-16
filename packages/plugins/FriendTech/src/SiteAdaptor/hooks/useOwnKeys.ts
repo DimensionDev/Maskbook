@@ -6,6 +6,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 export function useOwnKeys(subjectAddress: string, myAddress: string) {
     return useQuery({
+        enabled: !!myAddress,
         queryKey: ['friend-tech', 'own-keys', subjectAddress, myAddress],
         queryFn: async () => {
             const contract = EVMContractReadonly.getFriendTech(FRIEND_TECH_CONTRACT_ADDRESS, {

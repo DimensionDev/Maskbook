@@ -44,7 +44,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 description: <Trans ns={PluginID.FriendTech} i18nKey="description" />,
                 name,
                 iconFilterColor,
-                tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),
     ],

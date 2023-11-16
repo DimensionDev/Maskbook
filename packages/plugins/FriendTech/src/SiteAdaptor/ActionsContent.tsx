@@ -66,3 +66,9 @@ export function ActionsContent() {
         </PluginWalletStatusBar>
     )
 }
+
+export function MainActionsContent() {
+    const matchMain = !!useMatch(RoutePaths.Main)
+
+    return matchMain ? <PluginWalletStatusBar /> : null
+}

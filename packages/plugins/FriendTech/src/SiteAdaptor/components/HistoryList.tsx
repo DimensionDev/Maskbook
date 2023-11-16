@@ -1,7 +1,7 @@
 import { ElementAnchor, EmptyStatus, FormattedBalance, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { FriendTech } from '@masknet/web3-providers'
-import { formatBalance, formatElapsed, isSameAddress } from '@masknet/web3-shared-base'
+import { formatBalance, formatElapsed } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Skeleton, Typography, type ListProps } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { range } from 'lodash-es'
@@ -84,77 +84,64 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
 
     return (
         <List className={cx(classes.list, className)} {...rest}>
-            {activities.map((activity) => {
-                const address = activity.isBuy ? activity.subject.address : activity.trader.address
-                const otherLink =
-                    isSameAddress(address, account) ? undefined : (
-                        urlcat(RoutePaths.Detail, {
-                            address,
-                            title: activity.isBuy ? activity.subject.name : activity.trader.name,
-                        })
-                    )
-                return (
-                    <ListItem key={`${activity.blockNumber}-${activity.transactionIndex}`} className={classes.activity}>
-                        <Box className={classes.avatarStack}>
-                            <Image
-                                className={classes.avatar}
-                                classes={{ failed: classes.avatar }}
-                                size={40}
-                                src={activity.trader.pfpUrl}
+            {activities.map((activity) => (
+                <ListItem key={`${activity.blockNumber}-${activity.transactionIndex}`} className={classes.activity}>
+                    <Box className={classes.avatarStack}>
+                        <Image
+                            className={classes.avatar}
+                            classes={{ failed: classes.avatar }}
+                            size={40}
+                            src={activity.trader.pfpUrl}
+                        />
+                        <Image
+                            className={classes.avatar}
+                            containerProps={{ style: { marginLeft: -11 } }}
+                            size={40}
+                            classes={{ failed: classes.avatar }}
+                            src={activity.subject.pfpUrl}
+                        />
+                    </Box>
+                    <Box flexGrow={1} ml={2}>
+                        <Typography fontWeight={700} color={theme.palette.maskColor.main}>
+                            <Translate.key_trade
+                                values={{
+                                    trader: activity.trader.name,
+                                    subject: activity.subject.name,
+                                    count: Number.parseInt(activity.shareAmount, 10),
+                                }}
+                                context={activity.isBuy ? 'buy' : 'sell'}
+                                components={{
+                                    other: (
+                                        <span
+                                            className={classes.link}
+                                            role="link"
+                                            onClick={() => {
+                                                const otherLink = urlcat(RoutePaths.Detail, {
+                                                    address: activity.subject.address,
+                                                    title: activity.subject.name,
+                                                })
+                                                navigate(otherLink)
+                                            }}
+                                        />
+                                    ),
+                                }}
                             />
-                            <Image
-                                className={classes.avatar}
-                                containerProps={{ style: { marginLeft: -11 } }}
-                                size={40}
-                                classes={{ failed: classes.avatar }}
-                                src={activity.subject.pfpUrl}
-                            />
-                        </Box>
-                        <Box flexGrow={1} ml={2}>
-                            <Typography fontWeight={700} color={theme.palette.maskColor.main}>
-                                <Translate.key_trade
-                                    values={{
-                                        trader: activity.trader.name,
-                                        subject: activity.subject.name,
-                                        count: Number.parseInt(activity.shareAmount, 10),
-                                    }}
-                                    context={activity.isBuy ? 'buy' : 'sell'}
-                                    components={{
-                                        other: (
-                                            <span
-                                                className={classes.link}
-                                                role="link"
-                                                onClick={() => {
-                                                    if (!otherLink) return
-                                                    navigate(otherLink)
-                                                }}
-                                            />
-                                        ),
-                                    }}
-                                />
-                            </Typography>
+                        </Typography>
 
-                            <Box display="flex" color={theme.palette.maskColor.second}>
-                                <Typography
-                                    color={
-                                        activity.isBuy ?
-                                            theme.palette.maskColor.success
-                                        :   theme.palette.maskColor.danger
-                                    }
-                                    fontWeight={700}>
-                                    <FormattedBalance
-                                        value={activity.ethAmount}
-                                        decimals={18}
-                                        formatter={formatBalance}
-                                    />{' '}
-                                    ETH
-                                </Typography>
-                                <Typography>, {formatElapsed(activity.createdAt)}</Typography>
-                            </Box>
+                        <Box display="flex" color={theme.palette.maskColor.second}>
+                            <Typography
+                                color={
+                                    activity.isBuy ? theme.palette.maskColor.success : theme.palette.maskColor.danger
+                                }
+                                fontWeight={700}>
+                                <FormattedBalance value={activity.ethAmount} decimals={18} formatter={formatBalance} />{' '}
+                                ETH
+                            </Typography>
+                            <Typography>, {formatElapsed(activity.createdAt)}</Typography>
                         </Box>
-                    </ListItem>
-                )
-            })}
+                    </Box>
+                </ListItem>
+            ))}
             {isFetching ? range(6).map((i) => <HistoryItemSkeleton key={i} />) : null}
             <ElementAnchor callback={() => fetchNextPage()} key={dataUpdatedAt} height={1} />
         </List>
