@@ -17,9 +17,8 @@ import { memo } from 'react'
 import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Others } from '@masknet/web3-providers'
-import { useChainContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -106,7 +105,9 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
     onChange,
     walletName,
 }) {
-    const t = useI18N()
+    const t = useWeb3ProfileTrans()
+
+    const Utils = useWeb3Utils()
 
     const { classes } = useStyles()
 
@@ -167,7 +168,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     <WalletIcon size={36} mainIcon={providerDescriptor?.icon} />
                     <Box>
                         <Typography className={classes.name}>{walletName}</Typography>
-                        <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
+                        <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                     </Box>
                 </Box>
                 <Button

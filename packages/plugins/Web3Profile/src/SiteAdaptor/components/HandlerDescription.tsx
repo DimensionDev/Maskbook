@@ -14,7 +14,7 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { ProfilePopup } from './ProfilePopup.js'
-import { useI18N } from '../../locales/i18n_generated.js'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -55,7 +55,7 @@ interface HandlerDescriptionProps extends withClasses<'container'> {
 }
 
 export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, currentProfile, onChange, ...props }) => {
-    const t = useI18N()
+    const t = useWeb3ProfileTrans()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
@@ -112,7 +112,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     <Typography className={classes.name}>
                         {currentProfile.metadata?.displayName ?? currentProfile.handle.localName}
                     </Typography>
-                    <Typography className={classes.address}>{Others.formatAddress(account, 4)}</Typography>
+                    <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
             <Icons.ArrowDrop size={18} onClick={(e) => setAnchorEl(e.currentTarget)} />

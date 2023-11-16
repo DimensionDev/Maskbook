@@ -84,9 +84,9 @@ const LensProfileQuery = `
           }
 `
 
-export class LensAPI {
+export class Lens {
     static readonly id = NameServiceID.Lens
-    async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
+    static async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
         const { data } = await fetchJSON<{ data: { profile: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -106,7 +106,7 @@ export class LensAPI {
         return data.profile
     }
 
-    async getProfilesByHandles(handles: string[]) {
+    static async getProfilesByHandles(handles: string[]) {
         const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
@@ -135,7 +135,7 @@ export class LensAPI {
         return data.profiles.items
     }
 
-    async queryDefaultProfileByAddress(address: string) {
+    static async queryDefaultProfileByAddress(address: string) {
         if (!isValidAddress(address)) return
         const { data } = await fetchJSON<{ data: { defaultProfile?: LensBaseAPI.Profile } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -152,7 +152,7 @@ export class LensAPI {
         })
         return data.defaultProfile
     }
-    async reverse(address: string) {
+    static async reverse(address: string) {
         if (!isValidAddress(address)) return
         type Response = { data: { defaultProfile?: Pick<LensBaseAPI.Profile, 'id' | 'handle'> } }
         const { data } = await fetchJSON<Response>(LENS_ROOT_API, {
@@ -177,7 +177,7 @@ export class LensAPI {
         return data.defaultProfile?.handle.localName
     }
 
-    async queryProfilesByAddress(address: string) {
+    static async queryProfilesByAddress(address: string) {
         if (!isValidAddress(address)) return []
         const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -198,7 +198,7 @@ export class LensAPI {
         return data.profiles.items
     }
 
-    async queryFollowStatus(follower: string, profileId: string) {
+    static async queryFollowStatus(follower: string, profileId: string) {
         if (!follower || !profileId) return false
 
         const { data } = await fetchJSON<{ data: { followStatusBulk: LensBaseAPI.FollowStatusBulk[] } }>(
@@ -236,7 +236,7 @@ export class LensAPI {
      * @param follower primary profile
      * @param profileIds
      */
-    async queryFollowStatusList(follower: string, profileIds: string[]) {
+    static async queryFollowStatusList(follower: string, profileIds: string[]) {
         if (!follower || !profileIds.length) return
         const { data } = await fetchJSON<{ data: { followStatusBulk: LensBaseAPI.FollowStatusBulk[] } }>(
             LENS_ROOT_API,
@@ -272,7 +272,7 @@ export class LensAPI {
         return data.followStatusBulk
     }
 
-    async queryChallenge(address: string, profileId: string) {
+    static async queryChallenge(address: string, profileId: string) {
         if (!isValidAddress(address) || !profileId) return ''
         const { data } = await fetchJSON<{ data: { challenge: LensBaseAPI.Challenge } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -292,7 +292,7 @@ export class LensAPI {
         return data.challenge
     }
 
-    async authenticate(id: string, signature: string) {
+    static async authenticate(id: string, signature: string) {
         if (!id || !signature) return
         const { data } = await fetchJSON<{ data: { authenticate: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -318,7 +318,7 @@ export class LensAPI {
         return data.authenticate
     }
 
-    async refresh(refreshToken: string) {
+    static async refresh(refreshToken: string) {
         if (!refreshToken) return
         const { data } = await fetchJSON<{ data: { refresh: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
             method: 'POST',
@@ -341,12 +341,12 @@ export class LensAPI {
         return data.refresh
     }
 
-    async follow(
+    static async follow(
         profileId: string,
         options: {
             token: string
             followModule?: FollowModuleTypedData
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<unknown>
         },
     ) {
         if (!profileId) return
@@ -356,7 +356,7 @@ export class LensAPI {
             followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
         }
 
-        const { data } = await options.fetcher<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const { data } = (await options.fetcher(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -378,21 +378,21 @@ export class LensAPI {
                     }
                 `,
             }),
-        })
+        })) as { data: { follow: LensBaseAPI.Broadcast } }
 
         return data.follow
     }
 
-    async unfollow(
+    static async unfollow(
         profileId: string,
         options: {
             token: string
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<unknown>
         },
     ) {
         if (!profileId) return
 
-        const { data } = await options.fetcher<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const { data } = (await options.fetcher(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -414,12 +414,12 @@ export class LensAPI {
                     }
                 `,
             }),
-        })
+        })) as { data: { unfollow: LensBaseAPI.Broadcast } }
 
         return data.unfollow
     }
 
-    async createFollowTypedData(
+    static async createFollowTypedData(
         profileId: string,
         options: {
             token: string
@@ -488,7 +488,7 @@ export class LensAPI {
         return data.createFollowTypedData
     }
 
-    async createUnfollowTypedData(profileId: string, options: { token: string }) {
+    static async createUnfollowTypedData(profileId: string, options: { token: string }) {
         if (!profileId) return
         const { data } = await fetchJSON<{ data: { createUnfollowTypedData: LensBaseAPI.CreateUnfollowTypedData } }>(
             LENS_ROOT_API,
@@ -535,16 +535,16 @@ export class LensAPI {
         return data.createUnfollowTypedData
     }
 
-    async broadcast(
+    static async broadcast(
         id: string,
         signature: string,
         options?: {
             token: string
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<unknown>
         },
     ) {
         if (!id || !options?.token || !signature) return
-        const { data } = await options.fetcher<{ data: { broadcastOnchain: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const { data } = (await options.fetcher(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -571,12 +571,12 @@ export class LensAPI {
                     }
                     `,
             }),
-        })
+        })) as { data: { broadcastOnchain: LensBaseAPI.Broadcast } }
 
         return data.broadcastOnchain
     }
 
-    async queryApprovedModuleAllowanceAmount(
+    static async queryApprovedModuleAllowanceAmount(
         currency: string,
         options?: {
             token: string
@@ -606,7 +606,7 @@ export class LensAPI {
         return first(data.approvedModuleAllowanceAmount)
     }
 
-    async queryTransactionPublicationId(txId: string) {
+    static async queryTransactionPublicationId(txId: string) {
         const result = await fetchJSON<{
             data: { dataAvailabilityTransaction?: LensBaseAPI.TransactionPublication }
         }>(LENS_ROOT_API, {

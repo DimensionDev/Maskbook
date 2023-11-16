@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
+import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, ContractTransaction, useLensConstants } from '@masknet/web3-shared-evm'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
@@ -11,7 +11,8 @@ import { BroadcastType } from '@masknet/web3-providers/types'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { useContract } from '@masknet/web3-hooks-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
-import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
+import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
+import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 
 export function useUnfollow(
     profileId?: string,
@@ -24,7 +25,6 @@ export function useUnfollow(
     const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
-    const { fetchJSON } = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -53,7 +53,7 @@ export function useUnfollow(
 
             if (!typedData) return
 
-            const signature = await Web3.signMessage(
+            const signature = await EVMWeb3.signMessage(
                 'typedData',
                 JSON.stringify({
                     domain: typedData.typedData.domain,
@@ -89,14 +89,14 @@ export function useUnfollow(
                     lensHub?.methods.unfollow(unfollowerProfileId, idsOfProfilesToUnfollow),
                     { from: account },
                 )
-                hash = await Web3.sendTransaction(tx, { chainId: ChainId.Matic })
+                hash = await EVMWeb3.sendTransaction(tx, { chainId: ChainId.Matic })
                 onSuccess?.(cloneEvent)
                 setLoading(false)
             }
 
             if (!hash) return
 
-            const receipt = await Web3.confirmTransaction(hash, {
+            const receipt = await EVMWeb3.confirmTransaction(hash, {
                 chainId: ChainId.Matic,
                 signal: AbortSignal.timeout(3 * 60 * 1000),
             })
@@ -121,7 +121,7 @@ export function useUnfollow(
                         else if (result?.txHash) {
                             setLoading(false)
                             onSuccess?.(cloneEvent)
-                            const receipt = await Web3.confirmTransaction(result.txHash, {
+                            const receipt = await EVMWeb3.confirmTransaction(result.txHash, {
                                 signal: AbortSignal.timeout(3 * 60 * 1000),
                             })
                             if (!receipt.status) {

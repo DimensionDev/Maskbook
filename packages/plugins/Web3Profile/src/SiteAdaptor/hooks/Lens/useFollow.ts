@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens, Web3 } from '@masknet/web3-providers'
+import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { ChainId, ContractTransaction, splitSignature, useLensConstants } from '@masknet/web3-shared-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
@@ -12,6 +12,7 @@ import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-provide
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
+import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 
 export function useFollow(
     profileId?: string,
@@ -52,7 +53,7 @@ export function useFollow(
 
             if (!typedData) return
 
-            const signature = await Web3.signMessage(
+            const signature = await EVMWeb3.signMessage(
                 'typedData',
                 JSON.stringify({
                     domain: typedData.typedData.domain,
@@ -97,13 +98,13 @@ export function useFollow(
                     },
                 )
 
-                hash = await Web3.sendTransaction(tx)
+                hash = await EVMWeb3.sendTransaction(tx)
             }
 
             if (!hash) return
             onSuccess?.(event)
 
-            const receipt = await Web3.confirmTransaction(hash, {
+            const receipt = await EVMWeb3.confirmTransaction(hash, {
                 signal: AbortSignal.timeout(3 * 60 * 1000),
             })
             if (!receipt.status) throw new Error('Failed to Follow')
@@ -128,7 +129,7 @@ export function useFollow(
                         else if (result?.txHash) {
                             setLoading(false)
                             onSuccess?.(cloneEvent)
-                            const receipt = await Web3.confirmTransaction(result.txHash, {
+                            const receipt = await EVMWeb3.confirmTransaction(result.txHash, {
                                 signal: AbortSignal.timeout(3 * 60 * 1000),
                             })
                             if (!receipt.status) {
