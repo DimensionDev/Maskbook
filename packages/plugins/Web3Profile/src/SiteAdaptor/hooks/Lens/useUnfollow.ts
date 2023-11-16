@@ -3,16 +3,15 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Lens, EVMWeb3 } from '@masknet/web3-providers'
+import { Lens } from '@masknet/web3-providers'
 import { type SnackbarMessage, type ShowSnackbarOptions, type SnackbarKey, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, ContractTransaction, useLensConstants } from '@masknet/web3-shared-evm'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { BroadcastType } from '@masknet/web3-providers/types'
-import { fetchJSON } from '@masknet/plugin-infra/dom/context'
-import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { useContract } from '@masknet/web3-hooks-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
+import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useUnfollow(
     profileId?: string,
@@ -24,6 +23,7 @@ export function useUnfollow(
     const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
+    const { fetchJSON } = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -123,7 +123,7 @@ export function useUnfollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, showSingletonSnackbar, lensHub],
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, showSingletonSnackbar, lensHub, fetchJSON],
     )
 
     return { loading, handleUnfollow }

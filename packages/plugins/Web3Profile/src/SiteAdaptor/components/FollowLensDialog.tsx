@@ -16,7 +16,7 @@ import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/type
 import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { useI18N, Translate as Web3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
@@ -109,7 +109,7 @@ interface Props {
 let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
-    const t = useWeb3ProfileTrans()
+    const t = useI18N()
 
     const wallet = useWallet()
     const [currentProfile, setCurrentProfile] = useState<LensBaseAPI.Profile>()
@@ -412,6 +412,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Matic}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
+                                {tips ?
+                                    <Typography className={classes.tips}>{tips}</Typography>
+                                :   null}
                                 {tips ?
                                     <Typography className={classes.tips}>{tips}</Typography>
                                 :   null}

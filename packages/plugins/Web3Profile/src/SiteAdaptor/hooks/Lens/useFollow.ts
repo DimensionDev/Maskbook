@@ -3,13 +3,12 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens, EVMWeb3 } from '@masknet/web3-providers'
+import { Lens, Web3 } from '@masknet/web3-providers'
 import { ChainId, ContractTransaction, splitSignature, useLensConstants } from '@masknet/web3-shared-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
-import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
@@ -57,7 +56,7 @@ export function useFollow(
 
                 if (!typedData) return
 
-                const signature = await EVMWeb3.signMessage(
+                const signature = await Web3.signMessage(
                     'typedData',
                     JSON.stringify({
                         domain: typedData.typedData.domain,
@@ -102,14 +101,14 @@ export function useFollow(
                         },
                     )
 
-                    hash = await EVMWeb3.sendTransaction(tx)
+                    hash = await Web3.sendTransaction(tx)
                 }
 
                 if (!hash) return
                 onSuccess?.(cloneEvent)
                 setLoading(false)
 
-                const receipt = await EVMWeb3.confirmTransaction(hash, {
+                const receipt = await Web3.confirmTransaction(hash, {
                     signal: AbortSignal.timeout(3 * 60 * 1000),
                 })
                 if (!receipt.status) throw new Error('Failed to Follow')

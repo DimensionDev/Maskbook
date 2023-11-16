@@ -187,7 +187,7 @@ export function SocialAccountListItem({
                     {icon}
 
                     <Typography className={cx(classes.socialName, classes.accountName)} component="div">
-                        {Utils.isValidAddress(name || identity) ?
+                        {Others.isValidAddress(name || identity) ?
                             <>
                                 {Utils.formatAddress(name || identity, 4)}
                                 <CopyButton size={14} text={name || identity} />

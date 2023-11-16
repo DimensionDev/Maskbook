@@ -5,12 +5,12 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { memo } from 'react'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -142,7 +142,7 @@ interface LensListItemProps {
 const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
     const { classes } = useStyles()
     const { account: wallet } = useChainContext()
-    const t = useWeb3ProfileTrans()
+    const t = useI18N()
     const profileUri = account.profileUri.filter(Boolean)
     const lensIcon = <Icons.Lens size={20} />
 

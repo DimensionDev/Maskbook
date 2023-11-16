@@ -11,10 +11,10 @@ import {
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { ProfilePopup } from './ProfilePopup.js'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -54,7 +54,7 @@ interface HandlerDescriptionProps extends withClasses<'container'> {
 }
 
 export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, currentProfile, onChange, ...props }) => {
-    const t = useWeb3ProfileTrans()
+    const t = useI18N()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
