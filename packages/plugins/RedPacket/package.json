@@ -20,6 +20,7 @@
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^",
     "@masknet/typed-message-react": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",

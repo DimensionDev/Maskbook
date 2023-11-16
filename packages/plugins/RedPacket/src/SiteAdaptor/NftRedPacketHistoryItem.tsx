@@ -1,18 +1,18 @@
-import { memo, type MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useIntersectionObserver } from '@react-hookz/web'
-import { fill } from 'lodash-es'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
+import { fill } from 'lodash-es'
+import { memo, useCallback, useMemo, type MouseEventHandler } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
-import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
-import { TokenIcon } from '@masknet/shared'
+import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { dateTimeFormat } from './utils/formatDate.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
@@ -166,130 +166,123 @@ interface NftRedPacketHistoryItemProps {
     onShowPopover: (anchorEl: HTMLElement, text: string) => void
     onHidePopover: () => void
 }
-export const NftRedPacketHistoryItem = memo(
-    ({ history, onSend, onShowPopover, onHidePopover, collections }: NftRedPacketHistoryItemProps) => {
-        const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-        const [isViewed, setIsViewed] = useState(false)
-        const ref = useRef<HTMLLIElement | null>(null)
-        const entry = useIntersectionObserver(ref, {})
-        const t = useRedPacketTrans()
+export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
+    history,
+    onSend,
+    onShowPopover,
+    onHidePopover,
+    collections,
+}: NftRedPacketHistoryItemProps) {
+    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const [seen, ref] = useEverSeen<HTMLLIElement>()
+    const t = useRedPacketTrans()
 
-        const { value: receipt } = useCreateNftRedPacketReceipt(isViewed ? history.txid : '', history.chainId)
-        const rpid = receipt?.rpid ?? ''
-        const creation_time = receipt?.creation_time ?? 0
-        const patchedHistory: NftRedPacketJSONPayload = useMemo(
-            () => ({ ...history, rpid, creation_time }),
-            [history, rpid, creation_time],
-        )
-        const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { value: receipt } = useCreateNftRedPacketReceipt(seen ? history.txid : '', history.chainId)
+    const rpid = receipt?.rpid ?? ''
+    const creation_time = receipt?.creation_time ?? 0
+    const patchedHistory: NftRedPacketJSONPayload = useMemo(
+        () => ({ ...history, rpid, creation_time }),
+        [history, rpid, creation_time],
+    )
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-        const { classes, cx } = useStyles({
-            listItemBackground: networkDescriptor?.backgroundGradient,
-            listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
-        })
+    const { classes, cx } = useStyles({
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
+    })
 
-        useEffect(() => {
-            if (entry?.isIntersecting) setIsViewed(true)
-        }, [entry?.isIntersecting])
+    const {
+        computed: { canSend, isPasswordValid },
+    } = useNftAvailabilityComputed(account, patchedHistory)
 
-        const {
-            computed: { canSend, isPasswordValid },
-        } = useNftAvailabilityComputed(account, patchedHistory)
+    const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
 
-        const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
+    const handleSend = useCallback(() => {
+        if (!(canSend && collection && isPasswordValid)) return
+        onSend(patchedHistory, collection)
+    }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
 
-        const handleSend = useCallback(() => {
-            if (!(canSend && collection && isPasswordValid)) return
-            onSend(patchedHistory, collection)
-        }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
+    const { value: redpacketStatus } = useAvailabilityNftRedPacket(patchedHistory.rpid, account, patchedHistory.chainId)
+    const bitStatusList =
+        redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
 
-        const { value: redpacketStatus } = useAvailabilityNftRedPacket(
-            patchedHistory.rpid,
-            account,
-            patchedHistory.chainId,
-        )
-        const bitStatusList =
-            redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
-
-        const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
-            if (canSend && !isPasswordValid) {
-                handleShowPopover(event.currentTarget)
-            }
+    const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
+        if (canSend && !isPasswordValid) {
+            handleShowPopover(event.currentTarget)
         }
-        const handleShowPopover = (anchor: HTMLElement) => {
-            onShowPopover(anchor, t.nft_data_broken())
-        }
+    }
+    const handleShowPopover = (anchor: HTMLElement) => {
+        onShowPopover(anchor, t.nft_data_broken())
+    }
 
-        return (
-            <ListItem className={classes.root}>
-                <section className={classes.contentItem} ref={ref}>
-                    <Box className={classes.box}>
-                        <Box className={classes.content}>
-                            <section className={classes.section}>
-                                <div>
-                                    <div className={classes.fullWidthBox}>
-                                        <Typography
-                                            variant="body1"
-                                            className={cx(classes.title, classes.message, classes.ellipsis)}>
-                                            {patchedHistory.sender.message === '' ?
-                                                t.best_wishes()
-                                            :   patchedHistory.sender.message}
-                                        </Typography>
-                                    </div>
-                                    <div className={classes.fullWidthBox}>
-                                        <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                            {t.create_time()}
-                                        </Typography>
-                                        {rpid ?
-                                            <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                                {t.history_duration({
-                                                    time: dateTimeFormat(new Date(patchedHistory.creation_time)),
-                                                })}
-                                            </Typography>
-                                        :   null}
-                                    </div>
+    return (
+        <ListItem className={classes.root}>
+            <section className={classes.contentItem} ref={ref}>
+                <Box className={classes.box}>
+                    <Box className={classes.content}>
+                        <section className={classes.section}>
+                            <div>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography
+                                        variant="body1"
+                                        className={cx(classes.title, classes.message, classes.ellipsis)}>
+                                        {patchedHistory.sender.message === '' ?
+                                            t.best_wishes()
+                                        :   patchedHistory.sender.message}
+                                    </Typography>
                                 </div>
+                                <div className={classes.fullWidthBox}>
+                                    <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                        {t.create_time()}
+                                    </Typography>
+                                    {rpid ?
+                                        <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                            {t.history_duration({
+                                                time: dateTimeFormat(new Date(patchedHistory.creation_time)),
+                                            })}
+                                        </Typography>
+                                    :   null}
+                                </div>
+                            </div>
 
-                                {canSend ?
-                                    <ActionButton
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={onHidePopover}
-                                        onClick={handleSend}
-                                        disabled={!isPasswordValid}
-                                        className={classes.actionButton}
-                                        size="large">
-                                        {t.share()}
-                                    </ActionButton>
-                                :   null}
-                            </section>
+                            {canSend ?
+                                <ActionButton
+                                    onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={onHidePopover}
+                                    onClick={handleSend}
+                                    disabled={!isPasswordValid}
+                                    className={classes.actionButton}
+                                    size="large">
+                                    {t.share()}
+                                </ActionButton>
+                            :   null}
+                        </section>
 
-                            <section className={classes.footer}>
-                                <Typography variant="body1" className={classes.footerInfo}>
-                                    <RedPacketTrans.history_nft_claimed
-                                        components={{
-                                            span: <span />,
-                                        }}
-                                        values={{
-                                            claimedShares: rpid ? bitStatusList.filter(Boolean).length.toString() : '0',
-                                            shares: patchedHistory.shares.toString(),
-                                            symbol: collection?.name ?? '',
-                                        }}
-                                    />
-                                </Typography>
-                                <TokenIcon
-                                    className={classes.icon}
-                                    address={collection?.address ?? ''}
-                                    name={collection?.name ?? '-'}
-                                    logoURL={
-                                        collection?.iconURL ??
-                                        new URL('./assets/maskFilledIcon.png', import.meta.url).toString()
-                                    }
+                        <section className={classes.footer}>
+                            <Typography variant="body1" className={classes.footerInfo}>
+                                <RedPacketTrans.history_nft_claimed
+                                    components={{
+                                        span: <span />,
+                                    }}
+                                    values={{
+                                        claimedShares: rpid ? bitStatusList.filter(Boolean).length.toString() : '0',
+                                        shares: patchedHistory.shares.toString(),
+                                        symbol: collection?.name ?? '',
+                                    }}
                                 />
-                            </section>
-                        </Box>
+                            </Typography>
+                            <TokenIcon
+                                className={classes.icon}
+                                address={collection?.address ?? ''}
+                                name={collection?.name ?? '-'}
+                                logoURL={
+                                    collection?.iconURL ?? new URL('./assets/maskFilledIcon.png', import.meta.url).href
+                                }
+                            />
+                        </section>
                     </Box>
-                </section>
-            </ListItem>
-        )
-    },
-)
+                </Box>
+            </section>
+        </ListItem>
+    )
+})

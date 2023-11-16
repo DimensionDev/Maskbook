@@ -166,7 +166,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
     const duration = 60 * 60 * 24
 
-    const tokenIdList = tokenList.map((value) => value.tokenId)
+    const tokenIdList = useMemo(() => tokenList.map((value) => value.tokenId), [tokenList])
     const [{ loading: isSending }, createCallback] = useCreateNftRedpacketCallback(
         duration,
         message,
