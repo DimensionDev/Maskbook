@@ -2,7 +2,7 @@ import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
@@ -42,8 +42,8 @@ function Component() {
     if (!tweetAddress) return null
     if (!location.href.includes(`/status/${tweetAddress}`)) return null
     return (
-        <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
+        <EVMWeb3ContextProvider chainId={ChainId.Mainnet}>
             <VCentDialog tweetAddress={tweetAddress} />
-        </DefaultWeb3ContextProvider>
+        </EVMWeb3ContextProvider>
     )
 }

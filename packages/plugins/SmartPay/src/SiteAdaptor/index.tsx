@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
-import { DefaultWeb3ContextProvider, useWallets } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
@@ -21,20 +21,20 @@ const site: Plugin.SiteAdaptor.Definition = {
         const { value: chainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
         return (
-            <DefaultWeb3ContextProvider value={{ chainId, account: first(contractAccounts)?.address }}>
+            <EVMWeb3ContextProvider chainId={chainId} account={first(contractAccounts)?.address}>
                 <SmartPayDialog />
                 <InjectSmartPayDescriptionDialog />
                 <InjectReceiveDialog />
-            </DefaultWeb3ContextProvider>
+            </EVMWeb3ContextProvider>
         )
     },
     ApplicationEntries: [
         {
             RenderEntryComponent: (props) => {
                 return (
-                    <DefaultWeb3ContextProvider>
+                    <EVMWeb3ContextProvider>
                         <SmartPayEntry {...props} />
-                    </DefaultWeb3ContextProvider>
+                    </EVMWeb3ContextProvider>
                 )
             },
             ApplicationEntryID: PLUGIN_ID,

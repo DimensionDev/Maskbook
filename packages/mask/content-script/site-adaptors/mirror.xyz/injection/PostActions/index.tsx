@@ -7,7 +7,7 @@ import {
     useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { DefaultWeb3ContextProvider, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
@@ -49,11 +49,11 @@ function PostActions() {
 function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <DefaultWeb3ContextProvider>
+            <EVMWeb3ContextProvider>
                 <PostInfoProvider post={postInfo}>
                     <PostActions />
                 </PostInfoProvider>
-            </DefaultWeb3ContextProvider>
+            </EVMWeb3ContextProvider>
         )
         if (postInfo.actionsElement) {
             const root = attachReactTreeWithContainer(postInfo.actionsElement.afterShadow, {

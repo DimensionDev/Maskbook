@@ -183,7 +183,6 @@ export default function ChangeOwner() {
         () => Services.Identity.queryOwnedPersonaInformation(true),
         { networkMode: 'always' },
     )
-    const chainContextValue = useMemo(() => ({ chainId: smartPayChainId }), [smartPayChainId])
     const [paymentToken, setPaymentToken] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig>()
     const wallet = useWallet()
@@ -344,7 +343,7 @@ export default function ChangeOwner() {
                 {manageAccount ?
                     <Box display="flex" justifyContent="space-between" mt={2}>
                         <Typography className={classes.label}>{t.gas_fee()}</Typography>
-                        <ChainContextProvider value={chainContextValue}>
+                        <ChainContextProvider chainId={smartPayChainId}>
                             <GasSettingMenu
                                 minimumGas={gas ?? FALLBACK_GAS.toString()}
                                 initConfig={gasConfig}

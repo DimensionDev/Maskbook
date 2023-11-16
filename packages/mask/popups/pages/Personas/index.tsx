@@ -3,7 +3,7 @@ import { useMount } from 'react-use'
 import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
 
 const Home = lazy(() => import(/* webpackMode: 'eager' */ './Home/index.js'))
@@ -44,7 +44,7 @@ const Persona = memo(() => {
     }, [params])
 
     return (
-        <DefaultWeb3ContextProvider>
+        <EVMWeb3ContextProvider>
             <PersonaHeader />
             <Routes>
                 <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
@@ -56,7 +56,7 @@ const Persona = memo(() => {
                 <Route path={r(PopupRoutes.PersonaAvatarSetting)} element={<PersonaAvatarSetting />} />
                 <Route path="*" element={<Home />} />
             </Routes>
-        </DefaultWeb3ContextProvider>
+        </EVMWeb3ContextProvider>
     )
 })
 

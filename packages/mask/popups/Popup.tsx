@@ -2,7 +2,7 @@ import { createInjectHooksRenderer, useActivatedPluginsExtensionPage } from '@ma
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -69,8 +69,7 @@ const PopupRoutes = memo(function PopupRoutes() {
     const mainLocation = location.state?.mainLocation as Location | undefined
 
     useEffect(() => {
-        const spinner = document.getElementById('app-spinner')
-        if (spinner) spinner.remove()
+        document.getElementById('app-spinner')?.remove()
     }, [])
 
     return (
@@ -84,10 +83,10 @@ const PopupRoutes = memo(function PopupRoutes() {
                 <UserContext.Provider>
                     <Routes location={mainLocation || location}>
                         <Route path="/" element={<PopupLayout />}>
-                            <Route path={PopupPaths.Personas + '/*'} element={<Personas />} />
-                            <Route path={PopupPaths.Wallet + '/*'} element={<Wallet />} />
-                            <Route path={PopupPaths.Friends + '/*'} element={<Contacts />} />
-                            <Route path={PopupPaths.Settings} element={<Settings />} />
+                            <Route path={PopupPaths.Personas + '/*'} element={withSuspense(<Personas />)} />
+                            <Route path={PopupPaths.Wallet + '/*'} element={withSuspense(<Wallet />)} />
+                            <Route path={PopupPaths.Friends + '/*'} element={withSuspense(<Contacts />)} />
+                            <Route path={PopupPaths.Settings} element={withSuspense(<Settings />)} />
                         </Route>
                         <Route path={PopupPaths.Swap} element={<SwapPage />} />
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
@@ -152,6 +151,18 @@ const PopupRoutes = memo(function PopupRoutes() {
         </Suspense>
     )
 })
+function withSuspense(children: ReactNode) {
+    return (
+        <Suspense
+            fallback={
+                <Box height="100vh" display="flex">
+                    <LoadingPlaceholder />
+                </Box>
+            }>
+            {children}
+        </Suspense>
+    )
+}
 
 export default function Popups() {
     const [title, setTitle] = useState('')
@@ -174,7 +185,7 @@ export default function Popups() {
     return PageUIProvider(
         usePopupTheme,
         <PopupSnackbarProvider>
-            <DefaultWeb3ContextProvider value={{ providerType: ProviderType.MaskWallet }}>
+            <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={titleContext}>
                         <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
@@ -185,7 +196,7 @@ export default function Popups() {
                         </HistoryRouter>
                     </PageTitleContext.Provider>
                 </PopupContext.Provider>
-            </DefaultWeb3ContextProvider>
+            </EVMWeb3ContextProvider>
         </PopupSnackbarProvider>,
         null,
     )

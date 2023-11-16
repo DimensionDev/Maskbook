@@ -31,7 +31,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         if (!open) return null
 
         return (
-            <Web3ContextProvider value={{ pluginID, chainId }}>
+            <Web3ContextProvider network={pluginID} chainId={chainId}>
                 <NFTAvatarDialog startPicking={!!picking} open={open} onClose={() => setOpen(false)} />
             </Web3ContextProvider>
         )

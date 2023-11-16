@@ -11,7 +11,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { EVMWeb3, Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { DefaultWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
 import { NormalHeader, useModalNavigate } from '../../../components/index.js'
 import { PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
@@ -278,8 +278,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
 export default function PersonaAvatarPage() {
     return (
-        <DefaultWeb3ContextProvider>
+        <EVMWeb3ContextProvider>
             <PersonaAvatarSetting />
-        </DefaultWeb3ContextProvider>
+        </EVMWeb3ContextProvider>
     )
 }

@@ -134,7 +134,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps<NetworkPluginID>>
     )
 
     return props.actualPluginID ?
-            <NetworkContextProvider value={props.actualPluginID}>{children}</NetworkContextProvider>
+            <NetworkContextProvider initialNetwork={props.actualPluginID}>{children}</NetworkContextProvider>
         :   children
 })
 

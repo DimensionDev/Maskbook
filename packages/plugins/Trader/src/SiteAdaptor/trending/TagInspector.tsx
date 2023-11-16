@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, type SocialIdentity } from '@masknet/shared-base'
 import { useDialogStacking } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { SearchResultType, SourceType } from '@masknet/web3-shared-base'
@@ -40,9 +40,9 @@ export function TagInspector() {
     )
     const { stack } = useDialogStacking()
     return (
-        <DefaultWeb3ContextProvider>
+        <EVMWeb3ContextProvider>
             <TrendingPopper locked={stack.length > 0}>{createTrendingView}</TrendingPopper>
-        </DefaultWeb3ContextProvider>
+        </EVMWeb3ContextProvider>
     )
 }
 

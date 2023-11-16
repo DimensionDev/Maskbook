@@ -1,5 +1,5 @@
 import { DialogContent } from '@mui/material'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ConnectionContent } from './ConnectionContent.js'
@@ -10,9 +10,9 @@ export function ConnectionDialog() {
     return (
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <DefaultWeb3ContextProvider>
+                <EVMWeb3ContextProvider>
                     <ConnectionContent onClose={closeDialog} />
-                </DefaultWeb3ContextProvider>
+                </EVMWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )
