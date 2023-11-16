@@ -6,7 +6,7 @@ import {
     useNetworkContext,
     Web3ContextProvider,
 } from '@masknet/web3-hooks-base'
-import { type PropsWithChildren, useCallback, useState, useMemo } from 'react'
+import { type PropsWithChildren, useCallback, useState } from 'react'
 import { createContainer } from 'unstated-next'
 
 function useTargetRuntime(initPluginID?: NetworkPluginID) {
@@ -44,14 +44,9 @@ export function ChainRuntime({ children }: PropsWithChildren<{}>) {
     const { targetPluginID, targetChainId } = TargetRuntimeContext.useContainer()
     const account = useAccount(targetPluginID)
 
-    const context = useMemo(() => {
-        return {
-            pluginID: targetPluginID,
-            chainId: targetChainId,
-            account,
-            controlled: true,
-        }
-    }, [targetPluginID, targetChainId, account])
-
-    return <Web3ContextProvider value={context}>{children}</Web3ContextProvider>
+    return (
+        <Web3ContextProvider network={targetPluginID} chainId={targetChainId} account={account} controlled>
+            {children}
+        </Web3ContextProvider>
+    )
 }

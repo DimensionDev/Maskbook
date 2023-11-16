@@ -1,7 +1,7 @@
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ConsoleContent } from './ConsoleContent.js'
 import { PluginDebuggerMessages } from '../../messages.js'
 
@@ -10,9 +10,9 @@ export function ConsoleDialog() {
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <DefaultWeb3ContextProvider>
+                <EVMWeb3ContextProvider>
                     <ConsoleContent onClose={closeDialog} />
-                </DefaultWeb3ContextProvider>
+                </EVMWeb3ContextProvider>
             </DialogContent>
         </InjectedDialog>
     )

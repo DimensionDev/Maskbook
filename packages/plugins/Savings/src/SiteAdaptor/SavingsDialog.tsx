@@ -117,9 +117,9 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
 
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} chainId={ChainId.Mainnet}>
             <AllProviderTradeContext.Provider>
-                <ChainContextProvider value={{ chainId }}>
+                <ChainContextProvider chainId={chainId}>
                     <TabContext value={currentTab}>
                         <InjectedDialog
                             open={open}

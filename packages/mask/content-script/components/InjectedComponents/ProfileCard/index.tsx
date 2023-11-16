@@ -25,7 +25,7 @@ import {
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DefaultWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import Services from '#services'
@@ -200,7 +200,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     }, [socialAccounts])
 
     return (
-        <DefaultWeb3ContextProvider value={{ chainId: ChainId.Mainnet }}>
+        <EVMWeb3ContextProvider chainId={ChainId.Mainnet}>
             <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
                 <div className={classes.root}>
                     <div className={classes.header}>
@@ -252,7 +252,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                     </div>
                 </div>
             </ScopedDomainsContainer.Provider>
-        </DefaultWeb3ContextProvider>
+        </EVMWeb3ContextProvider>
     )
 })
 

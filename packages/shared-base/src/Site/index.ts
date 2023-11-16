@@ -1,20 +1,19 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
-import { parseURL } from '../helpers/parseURL.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
-    [EnhanceableSite.Localhost]: /localhost/i,
+    [EnhanceableSite.Localhost]: /^localhost$/i,
     [EnhanceableSite.App]:
         process.env.NODE_ENV === 'production' ?
             /^(app\.mask\.io|app-(beta|stage|test)\.mask\.io|[\w-]*\.?maskbook\.pages\.dev)$/i
-        :   /localhost/,
-    [EnhanceableSite.Facebook]: /facebook\.com/i,
-    [EnhanceableSite.Twitter]: /twitter\.com/i,
-    [EnhanceableSite.Minds]: /minds\.com/i,
-    [EnhanceableSite.Instagram]: /instagram\.com/i,
-    [EnhanceableSite.OpenSea]: /opensea\.io/i,
-    [EnhanceableSite.Mirror]: /mirror\.xyz/i,
+        :   /^localhost$/,
+    [EnhanceableSite.Facebook]: /(^|\.)facebook\.com$/i,
+    [EnhanceableSite.Twitter]: /(^|\.)twitter\.com$/i,
+    [EnhanceableSite.Minds]: /(^|\.)minds\.com$/i,
+    [EnhanceableSite.Instagram]: /(^|\.)instagram\.com$/i,
+    [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/i,
+    [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
@@ -25,8 +24,8 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
 export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)
 export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.value)
 
-export function getEnhanceableSiteType(url?: string) {
-    const target = parseURL(url)?.host ?? location.host
+export function getEnhanceableSiteType() {
+    const target = location.host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (target.match(regexp)) return type as EnhanceableSite
         continue
@@ -34,8 +33,9 @@ export function getEnhanceableSiteType(url?: string) {
     return
 }
 
-export function getExtensionSiteType(url?: string) {
-    const target = parseURL(url)?.pathname ?? location.pathname
+export function getExtensionSiteType() {
+    if (!location.protocol.includes('extension')) return
+    const target = location.pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (target.match(regexp)) return type as ExtensionSite
         continue
@@ -43,8 +43,8 @@ export function getExtensionSiteType(url?: string) {
     return
 }
 
-export function getSiteType(url?: string) {
-    return getEnhanceableSiteType(url) ?? getExtensionSiteType(url)
+export function getSiteType() {
+    return getEnhanceableSiteType() ?? getExtensionSiteType()
 }
 
 export function getAgentType() {

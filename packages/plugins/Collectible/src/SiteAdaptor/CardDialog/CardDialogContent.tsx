@@ -139,7 +139,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                 </div>
             </div>
 
-            <Web3ContextProvider value={{ pluginID: parentPluginID }}>
+            <Web3ContextProvider network={parentPluginID}>
                 <PluginWalletStatusBar className={classes.footer} expectedPluginID={pluginID} expectedChainId={chainId}>
                     {origin === 'pfp' && currentVisitingIdentity?.isOwner ?
                         <ConnectPersonaBoundary

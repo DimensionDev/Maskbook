@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { querySelector } from '../../utils/selectors.js'
@@ -20,8 +20,8 @@ export function injectOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <DefaultWeb3ContextProvider>
+        <EVMWeb3ContextProvider>
             <TipsButtonWrapper slot={Plugin.SiteAdaptor.TipsSlot.MirrorMenu} />
-        </DefaultWeb3ContextProvider>,
+        </EVMWeb3ContextProvider>,
     )
 }

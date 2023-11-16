@@ -12,7 +12,7 @@ import {
 import { I18NextProviderHMR, PersonaContext, SharedContextProvider, persistOptions, Modals } from '@masknet/shared'
 import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes, NetworkPluginID, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
+import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
 import { Pages } from './pages/routes.js'
@@ -56,7 +56,7 @@ export default function Dashboard() {
         (children) => (
             <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions} children={children} />
         ),
-        (children) => <RootWeb3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }} children={children} />,
+        (children) => <RootWeb3ContextProvider enforceEVM children={children} />,
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,
         (children) => <StyledEngineProvider injectFirst children={children} />,
         (children) => <ThemeProvider theme={theme} children={children} />,

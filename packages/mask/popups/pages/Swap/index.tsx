@@ -2,9 +2,8 @@ import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
-import { useMemo } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
@@ -62,11 +61,10 @@ export default function SwapPage() {
     const { classes } = useStyles()
     const { chainId } = useTokenParams()
     applyMaskColorVars(document.body, Appearance.light)
-    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
 
     return (
         <SharedContextProvider>
-            <ChainContextProvider value={chainContextValue}>
+            <ChainContextProvider chainId={chainId}>
                 <div className={classes.page}>
                     <div className={classes.container}>
                         <header className={classes.header}>
@@ -76,11 +74,11 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <DefaultWeb3ContextProvider>
+                            <EVMWeb3ContextProvider>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
-                            </DefaultWeb3ContextProvider>
+                            </EVMWeb3ContextProvider>
                         </main>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useState, useMemo, type ProviderProps, memo } from 'react'
+import { createContext, useContext, useState, useMemo, memo, type PropsWithChildren } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
 import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
@@ -9,10 +9,6 @@ import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
 import { useLocation } from 'react-use'
-
-interface ReadonlyNetworkContext<T extends NetworkPluginID = NetworkPluginID> {
-    pluginID: T
-}
 
 interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -35,7 +31,7 @@ interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
     setProviderType?: (providerType: Web3Helper.Definition[T]['ProviderType']) => void
 }
 
-const ReadonlyNetworkContext = createContext<ReadonlyNetworkContext>(null!)
+const ReadonlyNetworkContext = createContext<NetworkPluginID>(null!)
 ReadonlyNetworkContext.displayName = 'ReadonlyNetworkContext'
 
 const NetworkContext = createContext<NetworkContext>(null!)
@@ -45,28 +41,16 @@ const ChainContext = createContext<ChainContextGetter & ChainContextSetter>(null
 ChainContext.displayName = 'ChainContext'
 
 /**
- * Provide the current readonly network plugin ID (readonly)
- * @param props
- * @returns
- */
-export function ReadonlyNetworkContextProvider({ value, children }: ProviderProps<ReadonlyNetworkContext>) {
-    return <ReadonlyNetworkContext.Provider value={value}>{children}</ReadonlyNetworkContext.Provider>
-}
-
-/**
  * Provide the current selected network plugin ID
  * @param props
  * @returns
  */
-export function NetworkContextProvider({ value, children }: ProviderProps<NetworkPluginID>) {
-    const [pluginID = value, setPluginID] = useState<NetworkPluginID>()
-    const context = useMemo(
-        () => ({
-            pluginID,
-            setPluginID,
-        }),
-        [pluginID],
-    )
+export function NetworkContextProvider({
+    initialNetwork,
+    children,
+}: PropsWithChildren<{ initialNetwork: NetworkPluginID }>) {
+    const [pluginID, setPluginID] = useState(initialNetwork)
+    const context = useMemo(() => ({ pluginID, setPluginID }), [pluginID])
     return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
@@ -75,12 +59,9 @@ export function NetworkContextProvider({ value, children }: ProviderProps<Networ
  * @param props
  * @returns
  */
-export const ChainContextProvider = memo(function ChainContextProvider({
-    value,
-    children,
-}: ProviderProps<ChainContextGetter>) {
+export const ChainContextProvider = memo(function ChainContextProvider(props: PropsWithChildren<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
-    const { controlled } = value
+    const { controlled } = props
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
@@ -99,13 +80,13 @@ export const ChainContextProvider = memo(function ChainContextProvider({
     const location = useLocation()
     const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes('/wallet')
     const account =
-        controlled ? value.account : _account ?? value.account ?? (is_popup_wallet_page ? maskAccount : globalAccount)
+        controlled ? props.account : _account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount)
     const chainId =
-        controlled ? value.chainId : _chainId ?? value.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId)
+        controlled ? props.chainId : _chainId ?? props.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId)
     const providerType =
         controlled ?
-            value.providerType
-        :   _providerType ?? value.providerType ?? (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
+            props.providerType
+        :   _providerType ?? props.providerType ?? (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
 
     const context = useMemo(
         () => ({
@@ -118,7 +99,7 @@ export const ChainContextProvider = memo(function ChainContextProvider({
         }),
         [account, chainId, providerType],
     )
-    return <ChainContext.Provider value={context}>{children}</ChainContext.Provider>
+    return <ChainContext.Provider value={context}>{props.children}</ChainContext.Provider>
 })
 
 /**
@@ -126,40 +107,16 @@ export const ChainContextProvider = memo(function ChainContextProvider({
  * @param props
  * @returns
  */
-export function Web3ContextProvider({
-    value,
+export function Web3ContextProvider<T extends NetworkPluginID = NetworkPluginID>({
+    network,
     children,
-}: ProviderProps<
-    {
-        pluginID: NetworkPluginID
-    } & ChainContextGetter
->) {
-    const { pluginID, ...rest } = value
-
+    ...rest
+}: PropsWithChildren<{ network: T } & ChainContextGetter<T>>) {
     return compose(
-        (children) => <NetworkContextProvider value={pluginID} children={children} />,
-        (children) => <ChainContextProvider value={rest} children={children} />,
+        (children) => <NetworkContextProvider initialNetwork={network} children={children} />,
+        (children) => <ChainContextProvider {...rest} children={children} />,
         <>{children}</>,
     )
-}
-
-/**
- * Provide the top most network context
- * @param props
- * @returns
- */
-export function RevokeNetworkContextProvider({ children }: { children: ReactNode | undefined }) {
-    const { pluginID } = useContext(ReadonlyNetworkContext)
-    const value = useMemo(
-        () => ({
-            pluginID,
-            setPluginID: () => {
-                throw new Error('Set pluginID is not allowed.')
-            },
-        }),
-        [pluginID],
-    )
-    return <NetworkContext.Provider value={value} children={children} />
 }
 
 /**
@@ -167,7 +124,7 @@ export function RevokeNetworkContextProvider({ children }: { children: ReactNode
  * @param props
  * @returns
  */
-export function RevokeChainContextProvider({ children }: { children: ReactNode | undefined }) {
+export function RevokeChainContextProvider({ children }: PropsWithChildren<{}>) {
     const account = useAccount()
     const chainId = useChainId()
     const providerType = useProviderType()
@@ -187,23 +144,8 @@ export function RevokeChainContextProvider({ children }: { children: ReactNode |
  * @param props
  * @returns
  */
-export function DefaultWeb3ContextProvider({
-    value,
-    children,
-}: Partial<
-    ProviderProps<
-        Partial<
-            {
-                pluginID: NetworkPluginID
-            } & ChainContextGetter
-        >
-    >
->) {
-    const contextValue = useMemo(() => {
-        return { pluginID: value?.pluginID ?? NetworkPluginID.PLUGIN_EVM, ...value }
-    }, [JSON.stringify(value)])
-
-    return <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
+export function EVMWeb3ContextProvider(props: PropsWithChildren<{}> & ChainContextGetter<NetworkPluginID.PLUGIN_EVM>) {
+    return <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} {...props} />
 }
 
 /**
@@ -211,35 +153,28 @@ export function DefaultWeb3ContextProvider({
  * @param props
  * @returns
  */
-export function RootWeb3ContextProvider({
-    value,
-    children,
-}: Partial<
-    ProviderProps<
-        Partial<
-            {
-                pluginID: NetworkPluginID
-            } & ChainContextGetter
-        >
-    >
->) {
+export function RootWeb3ContextProvider({ enforceEVM, children }: PropsWithChildren<{ enforceEVM?: boolean }>) {
     const pluginIDs = useValueRef(pluginIDsSettings)
     const contextValue = useMemo(() => {
         const site = getSiteType()
-        return { pluginID: value?.pluginID ?? (site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM) }
-    }, [pluginIDs, JSON.stringify(value)])
+        return (
+            enforceEVM ? NetworkPluginID.PLUGIN_EVM
+            : site ? pluginIDs[site]
+            : NetworkPluginID.PLUGIN_EVM
+        )
+    }, [pluginIDs, enforceEVM])
 
     return (
-        <ReadonlyNetworkContextProvider value={contextValue}>
-            <Web3ContextProvider value={contextValue}>{children}</Web3ContextProvider>
-        </ReadonlyNetworkContextProvider>
+        <ReadonlyNetworkContext.Provider value={contextValue}>
+            <Web3ContextProvider network={contextValue}>{children}</Web3ContextProvider>
+        </ReadonlyNetworkContext.Provider>
     )
 }
 
-export function useEnvironmentContext(overrides?: ReadonlyNetworkContext) {
+export function useEnvironmentContext(overrides?: NetworkPluginID) {
     const context = useContext(ReadonlyNetworkContext)
     return {
-        ...context,
+        pluginID: context,
         ...omitBy(overrides, isUndefined),
     }
 }

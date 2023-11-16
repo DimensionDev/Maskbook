@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Box } from '@mui/material'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { base } from '../base.js'
@@ -24,9 +24,9 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
                 const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
 
                 return (
-                    <DefaultWeb3ContextProvider>
+                    <EVMWeb3ContextProvider>
                         <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                    </DefaultWeb3ContextProvider>
+                    </EVMWeb3ContextProvider>
                 )
             },
         },
@@ -57,9 +57,9 @@ const createSearchTabConfig = (
 
                 return (
                     <Box style={{ minHeight: 300 }}>
-                        <DefaultWeb3ContextProvider>
+                        <EVMWeb3ContextProvider>
                             <FeedsPage key={key} address={socialAccount?.address} {...props} />
-                        </DefaultWeb3ContextProvider>
+                        </EVMWeb3ContextProvider>
                     </Box>
                 )
             },

@@ -95,7 +95,6 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const { chainId, address, params, setParams } = useTokenParams()
     const { smartPayChainId } = PopupContext.useContainer()
     const recipient = params.get('recipient')
-    const chainContextValue = useMemo(() => ({ chainId }), [chainId])
     const navigate = useNavigate()
     const [paymentAddress, setPaymentAddress] = useState<string>()
 
@@ -307,7 +306,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
             </Box>
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mx={2}>
                 <Typography className={classes.label}>{t.gas_fee()}</Typography>
-                <ChainContextProvider value={chainContextValue}>
+                <ChainContextProvider chainId={chainId}>
                     <GasSettingMenu
                         initConfig={gasConfig}
                         minimumGas={gasLimit}

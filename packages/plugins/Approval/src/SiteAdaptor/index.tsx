@@ -40,7 +40,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 }}
                             />
                             {open ?
-                                <Web3ContextProvider value={{ pluginID }}>
+                                <Web3ContextProvider network={pluginID}>
                                     <ApprovalDialog open onClose={() => setOpen(false)} />
                                 </Web3ContextProvider>
                             :   null}

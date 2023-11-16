@@ -51,7 +51,7 @@ export function DialogInspector() {
     }
 
     return (
-        <Web3ContextProvider value={{ pluginID, chainId }}>
+        <Web3ContextProvider network={pluginID} chainId={chainId}>
             <Context.Provider
                 initialState={{
                     parentPluginID,

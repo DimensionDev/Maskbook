@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { LensPopup } from './components/LensPopup.js'
 import { FollowLensDialog } from './components/FollowLensDialog.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
@@ -33,9 +33,9 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             :   null}
 
             {lensOpen && handle ?
-                <DefaultWeb3ContextProvider value={{ chainId: ChainId.Matic }}>
+                <EVMWeb3ContextProvider chainId={ChainId.Matic}>
                     <FollowLensDialog handle={handle} onClose={closeLensDialog} />
-                </DefaultWeb3ContextProvider>
+                </EVMWeb3ContextProvider>
             :   null}
 
             <LensPopup />

@@ -54,7 +54,7 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
             if (!socialAccount) return null
             return (
-                <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                <Web3ContextProvider network={socialAccount.pluginID}>
                     <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
                         <CollectionList
                             gridProps={gridProps}
@@ -112,7 +112,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     if (!socialAccount) return null
 
                     return (
-                        <Web3ContextProvider value={{ pluginID: socialAccount.pluginID }}>
+                        <Web3ContextProvider network={socialAccount.pluginID}>
                             <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
                                 <CollectionList
                                     height={392}
@@ -154,7 +154,7 @@ const site: Plugin.SiteAdaptor.Definition = {
 
                     return (
                         <Box style={{ minHeight: 300 }}>
-                            <Web3ContextProvider value={{ pluginID: result.pluginID }}>
+                            <Web3ContextProvider network={result.pluginID}>
                                 <UserAssetsProvider pluginID={result.pluginID} account={socialAccount.address}>
                                     <CollectionList
                                         height={479}

@@ -1,18 +1,7 @@
-import { Component, forwardRef } from 'react'
-import { type CrashUIProps, CrashUI } from './CrashUI.js'
+import { Component } from 'react'
+import type { CrashUIProps } from './CrashUI.js'
+import * as CrashUI from /* webpackDefer: true */ './CrashUI.js'
 import type { ErrorBoundaryError } from './context.js'
-
-const map = new WeakMap<React.ComponentType<any>, React.ForwardRefExoticComponent<any>>()
-/**
- * Return the ErrorBoundary wrapped version of given Component
- * @param Component The component that need to be wrapped with ErrorBoundary
- */
-export function withErrorBoundary<T>(Component: React.ComponentType<T>): React.ComponentType<T> {
-    if (map.has(Component)) return map.get(Component)!
-    const C = forwardRef((props: T, ref) => <ErrorBoundary children={<Component {...props} ref={ref} />} />)
-    map.set(Component, C)
-    return C as any
-}
 
 export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     static getDerivedStateFromError(error: unknown) {
@@ -24,7 +13,7 @@ export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     override render() {
         if (!this.state.error) return <>{this.props.children}</>
         return (
-            <CrashUI
+            <CrashUI.CrashUI
                 subject="Mask"
                 onRetry={() => this.setState({ error: null })}
                 {...this.props}
