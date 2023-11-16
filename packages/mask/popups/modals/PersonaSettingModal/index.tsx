@@ -1,14 +1,14 @@
 import { memo } from 'react'
-import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
+import { useNavigate } from 'react-router-dom'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { PersonaContext } from '@masknet/shared'
-import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 import { Icons } from '@masknet/icons'
-import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
 import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
-import { useNavigate } from 'react-router-dom'
+import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
+import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
+import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
+import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     avatarItem: {
