@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isBefore, add } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Lens, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { lensTokenStorage as storage } from '../../context.js'
 

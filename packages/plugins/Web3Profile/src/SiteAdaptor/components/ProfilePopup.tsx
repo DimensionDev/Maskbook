@@ -2,6 +2,8 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import {
+    Box,
+    Button,
     List,
     ListItemButton,
     ListItemIcon,
@@ -9,10 +11,14 @@ import {
     ListItemText,
     Popover,
     Radio,
+    Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { Image } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -39,6 +45,45 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         fontWeight: 700,
     },
+    container: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: theme.palette.maskColor.bg,
+        borderRadius: 8,
+        padding: theme.spacing(1.5),
+    },
+    description: {
+        display: 'flex',
+        columnGap: 4,
+    },
+    name: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+    address: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+    list: {
+        maxHeight: 200,
+        overflow: 'auto',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 18,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
+    },
 }))
 
 interface ProfilePopupProps {
@@ -48,6 +93,7 @@ interface ProfilePopupProps {
     onClose: () => void
     onChange: (profile: LensBaseAPI.Profile) => void
     currentProfile: LensBaseAPI.Profile
+    walletName?: string
 }
 
 export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
@@ -57,8 +103,17 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
     onClose,
     currentProfile,
     onChange,
+    walletName,
 }) {
+    const t = useWeb3ProfileTrans()
+
+    const Utils = useWeb3Utils()
+
     const { classes } = useStyles()
+
+    const { account } = useChainContext()
+
+    const providerDescriptor = useProviderDescriptor()
 
     return usePortalShadowRoot((container) => (
         <Popover
@@ -77,7 +132,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 vertical: 'top',
                 horizontal: 'right',
             }}>
-            <List disablePadding>
+            <List disablePadding className={classes.list}>
                 {profiles?.map((profile) => {
                     return (
                         <ListItemButton
@@ -108,6 +163,25 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     )
                 })}
             </List>
+            <Box className={classes.container}>
+                <Box className={classes.description}>
+                    <WalletIcon size={36} mainIcon={providerDescriptor?.icon} />
+                    <Box>
+                        <Typography className={classes.name}>{walletName}</Typography>
+                        <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
+                    </Box>
+                </Box>
+                <Button
+                    variant="text"
+                    onClick={() =>
+                        SelectProviderModal.open({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                            requiredSupportChainIds: [ChainId.Matic],
+                        })
+                    }>
+                    {t.wallet_status_button_change()}
+                </Button>
+            </Box>
         </Popover>
     ))
 })

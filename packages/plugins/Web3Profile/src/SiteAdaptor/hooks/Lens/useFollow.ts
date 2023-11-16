@@ -3,21 +3,22 @@ import { cloneDeep } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
-import { Lens, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { ChainId, ContractTransaction, splitSignature, useLensConstants } from '@masknet/web3-shared-evm'
 import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
-import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
+import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 
 export function useFollow(
     profileId?: string,
     currentProfileId?: string,
     followModule?: FollowModuleTypedData,
+    signless?: boolean,
     onSuccess?: (event: MouseEvent<HTMLElement>) => void,
     onFailed?: () => void,
 ) {
@@ -42,6 +43,75 @@ export function useFollow(
         [showSnackbar, closeSnackbar],
     )
 
+    const broadcastAction = useCallback(
+        async (event: MouseEvent<HTMLElement>) => {
+            if (!profileId || chainId !== ChainId.Matic) return
+            const token = await handleQueryAuthenticate()
+            if (!token) return
+
+            const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
+
+            if (!typedData) return
+
+            const signature = await EVMWeb3.signMessage(
+                'typedData',
+                JSON.stringify({
+                    domain: typedData.typedData.domain,
+                    primaryType: 'Follow',
+                    message: typedData.typedData.value,
+                    types: {
+                        Follow: typedData.typedData.types.Follow,
+                        EIP712Domain: [
+                            { name: 'name', type: 'string' },
+                            { name: 'version', type: 'string' },
+                            { name: 'chainId', type: 'uint256' },
+                            { name: 'verifyingContract', type: 'address' },
+                        ],
+                    },
+                }),
+                { chainId },
+            )
+
+            const { v, r, s } = splitSignature(signature)
+
+            const { deadline, idsOfProfilesToFollow, followerProfileId, followTokenIds, datas } =
+                typedData.typedData.value
+
+            let hash: string | undefined
+
+            try {
+                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+                if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
+                else hash = broadcast?.txHash
+            } catch {
+                onFailed?.()
+                const tx = await new ContractTransaction(lensHub).fillAll(
+                    lensHub?.methods.followWithSig(followerProfileId, idsOfProfilesToFollow, followTokenIds, datas, [
+                        account,
+                        v,
+                        r,
+                        s,
+                        deadline,
+                    ]),
+                    {
+                        from: account,
+                    },
+                )
+
+                hash = await EVMWeb3.sendTransaction(tx)
+            }
+
+            if (!hash) return
+            onSuccess?.(event)
+
+            const receipt = await EVMWeb3.confirmTransaction(hash, {
+                signal: AbortSignal.timeout(3 * 60 * 1000),
+            })
+            if (!receipt.status) throw new Error('Failed to Follow')
+        },
+        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, fetchJSON, onFailed],
+    )
+
     const handleFollow = useCallback<(event: MouseEvent<HTMLElement>) => Promise<void>>(
         async (event: MouseEvent<HTMLElement>) => {
             const cloneEvent = cloneDeep(event)
@@ -52,67 +122,27 @@ export function useFollow(
                 const token = await handleQueryAuthenticate()
                 if (!token) return
 
-                setLoading(true)
-                const typedData = await Lens.createFollowTypedData(profileId, { token, followModule })
-
-                if (!typedData) return
-
-                const signature = await EVMWeb3.signMessage(
-                    'typedData',
-                    JSON.stringify({
-                        domain: typedData.typedData.domain,
-                        primaryType: 'Follow',
-                        message: typedData.typedData.value,
-                        types: {
-                            Follow: typedData.typedData.types.Follow,
-                            EIP712Domain: [
-                                { name: 'name', type: 'string' },
-                                { name: 'version', type: 'string' },
-                                { name: 'chainId', type: 'uint256' },
-                                { name: 'verifyingContract', type: 'address' },
-                            ],
-                        },
-                    }),
-                    { chainId },
-                )
-
-                const { v, r, s } = splitSignature(signature)
-
-                const { deadline, idsOfProfilesToFollow, followerProfileId, followTokenIds, datas } =
-                    typedData.typedData.value
-
-                let hash: string | undefined
-
-                try {
-                    const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
-                    if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
-                    else hash = broadcast?.txHash
-                } catch {
-                    onFailed?.()
-                    const tx = await new ContractTransaction(lensHub).fillAll(
-                        lensHub?.methods.followWithSig(
-                            followerProfileId,
-                            idsOfProfilesToFollow,
-                            followTokenIds,
-                            datas,
-                            [account, v, r, s, deadline],
-                        ),
-                        {
-                            from: account,
-                        },
-                    )
-
-                    hash = await EVMWeb3.sendTransaction(tx)
+                if (signless && !followModule?.feeFollowModule) {
+                    try {
+                        const result = await Lens.follow(profileId, { token, followModule, fetcher: fetchJSON })
+                        if (result?.__typename === BroadcastType.RelayError) throw new Error('Failed to follow')
+                        else if (result?.txHash) {
+                            setLoading(false)
+                            onSuccess?.(cloneEvent)
+                            const receipt = await EVMWeb3.confirmTransaction(result.txHash, {
+                                signal: AbortSignal.timeout(3 * 60 * 1000),
+                            })
+                            if (!receipt.status) {
+                                onFailed?.()
+                                throw new Error('Failed to follow')
+                            }
+                        }
+                    } catch {
+                        broadcastAction(cloneEvent)
+                    }
+                } else {
+                    broadcastAction(cloneEvent)
                 }
-
-                if (!hash) return
-                onSuccess?.(cloneEvent)
-                setLoading(false)
-
-                const receipt = await EVMWeb3.confirmTransaction(hash, {
-                    signal: AbortSignal.timeout(3 * 60 * 1000),
-                })
-                if (!receipt.status) throw new Error('Failed to Follow')
             } catch (error) {
                 if (
                     error instanceof Error &&
@@ -133,7 +163,17 @@ export function useFollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, showSingletonSnackbar, onFailed],
+        [
+            signless,
+            profileId,
+            onSuccess,
+            onFailed,
+            handleQueryAuthenticate,
+            broadcastAction,
+            followModule,
+            fetchJSON,
+            chainId,
+        ],
     )
 
     return { loading, handleFollow }

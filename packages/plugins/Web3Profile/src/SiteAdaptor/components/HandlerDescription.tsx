@@ -10,11 +10,12 @@ import {
     useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { ProfilePopup } from './ProfilePopup.js'
+import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -82,7 +83,14 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                         <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                     </Box>
                 </Box>
-                <Button variant="text" onClick={() => SelectProviderModal.open()}>
+                <Button
+                    variant="text"
+                    onClick={() =>
+                        SelectProviderModal.open({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                            requiredSupportChainIds: [ChainId.Matic],
+                        })
+                    }>
                     {t.wallet_status_button_change()}
                 </Button>
             </Box>
@@ -101,12 +109,15 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     }
                 />
                 <Box>
-                    <Typography className={classes.name}>{currentProfile.metadata?.displayName}</Typography>
+                    <Typography className={classes.name}>
+                        {currentProfile.metadata?.displayName ?? currentProfile.handle.localName}
+                    </Typography>
                     <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
             <Icons.ArrowDrop size={18} onClick={(e) => setAnchorEl(e.currentTarget)} />
             <ProfilePopup
+                walletName={walletName}
                 profiles={profiles}
                 anchorEl={anchorEl}
                 open={!!anchorEl}

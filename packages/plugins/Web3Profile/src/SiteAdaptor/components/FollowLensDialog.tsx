@@ -16,7 +16,7 @@ import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/type
 import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { useWeb3ProfileTrans, Web3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
@@ -199,6 +199,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         profile?.id,
         currentProfile?.id,
         followModule,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
             setIsFollowing(true)
@@ -208,6 +209,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
         profile?.id,
         currentProfile?.id,
+        currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             setIsFollowing(false)
         },
@@ -238,6 +240,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const disabled = useMemo(() => {
         if (
             !account ||
+            !currentProfile ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
             providerType === ProviderType.Fortmatic ||
@@ -258,6 +261,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
         return false
     }, [
+        currentProfile,
         account,
         wallet?.owner,
         chainId,
@@ -300,11 +304,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         )
             return t.follow_with_charge_tips()
         else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
-        else if (!defaultProfile) {
-            return t.follow_gas_tips()
+        else if (!currentProfile) {
+            return t.follow_with_out_handle_tips()
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf])
+    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
 
     const avatar = useMemo(() => {
         if (!profile?.metadata?.picture?.optimized.uri) return
@@ -327,7 +331,9 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
-                        <Typography className={classes.name}>{profile?.metadata?.displayName}</Typography>
+                        <Typography className={classes.name}>
+                            {profile?.metadata?.displayName ?? profile?.handle.localName}
+                        </Typography>
                         <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
                             <Web3ProfileTrans.followers
