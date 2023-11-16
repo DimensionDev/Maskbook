@@ -1,8 +1,7 @@
-import { PluginWalletStatusBar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { DialogActions, DialogContent } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -59,9 +58,6 @@ export const FriendTechDialog = memo(function FriendTechDialog({ onClose, addres
                 <DialogContent className={classes.content}>
                     <FriendTechRoutes />
                 </DialogContent>
-                <DialogActions className={classes.actions}>
-                    <PluginWalletStatusBar />
-                </DialogActions>
             </RouterDialog>
         </MemoryRouter>
     )
