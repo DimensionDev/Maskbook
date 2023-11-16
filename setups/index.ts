@@ -14,14 +14,6 @@ globalThis.fetch = fetch
 globalThis.Headers = Headers
 globalThis.Request = Request
 globalThis.Response = Response
-globalThis.URL.canParse ??= (url) => {
-    try {
-        new URL(url)
-        return true
-    } catch {
-        return false
-    }
-}
 // @ts-ignore
 globalThis.location = {
     href: '',
