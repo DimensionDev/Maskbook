@@ -1,6 +1,7 @@
 import { createContext, useContext, useRef } from 'react'
 import type { BuildInfoFile } from '@masknet/flags'
-import { useBuildInfo_raw } from '../../index.js'
+import { useBuildInfo_raw } from '../../hooks/useBuildInfo.js'
+
 export interface ErrorBoundaryError {
     /** Type of the Error */
     type: string
