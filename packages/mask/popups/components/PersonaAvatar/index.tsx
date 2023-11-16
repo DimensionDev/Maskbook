@@ -1,7 +1,7 @@
+import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Avatar } from '@mui/material'
-import { memo } from 'react'
 
 const useStyles = makeStyles()(() => ({
     root: {
