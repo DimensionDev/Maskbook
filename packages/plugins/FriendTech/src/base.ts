@@ -15,7 +15,7 @@ export const base: Plugin.Shared.Definition = {
                 [EnhanceableSite.Localhost]: true,
             },
         },
-        target: 'beta',
+        target: 'stable',
         web3: {
             [NetworkPluginID.PLUGIN_EVM]: {},
         },

@@ -1,14 +1,14 @@
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { useAccount } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogActions, DialogContent } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { RoutePaths } from '../constants.js'
 import { FriendTechRoutes } from './Routes.js'
 import { RouterDialog } from './components/RouterDialog.js'
-import { ActionsContent } from './DialogActions.js'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -60,7 +60,7 @@ export const FriendTechDialog = memo(function FriendTechDialog({ onClose, addres
                     <FriendTechRoutes />
                 </DialogContent>
                 <DialogActions className={classes.actions}>
-                    <ActionsContent />
+                    <PluginWalletStatusBar />
                 </DialogActions>
             </RouterDialog>
         </MemoryRouter>

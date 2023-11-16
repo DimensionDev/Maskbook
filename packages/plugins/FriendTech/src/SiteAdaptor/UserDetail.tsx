@@ -54,6 +54,7 @@ const useStyles = makeStyles<void, 'name' | 'value'>()((theme, _, refs) => ({
     tabContent: {
         overflow: 'auto',
         marginTop: theme.spacing(1.5),
+        overscrollBehavior: 'contain',
         flexGrow: 1,
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -62,12 +63,13 @@ const useStyles = makeStyles<void, 'name' | 'value'>()((theme, _, refs) => ({
 }))
 
 export const UserDetail = memo(function UserDetail() {
+    type TabKey = 'trades' | 'holding'
     const t = useI18N()
     const { classes, cx } = useStyles()
     const [params, setParams] = useSearchParams()
     const address = params.get('address')!
     const { data: user, isInitialLoading } = useUser(address)
-    const [tab, setTab] = useState<'trades' | 'holding'>('trades')
+    const [tab, setTab] = useState<TabKey>('trades')
 
     useEffect(() => {
         setParams(

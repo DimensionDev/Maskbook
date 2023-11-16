@@ -14,6 +14,7 @@ import { Translate } from '../../locales/i18n_generated.js'
 const useStyles = makeStyles()((theme) => ({
     list: {
         paddingTop: 0,
+        overscrollBehavior: 'contain',
     },
     activity: {
         fontSize: 14,
@@ -134,7 +135,13 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                             </Typography>
 
                             <Box display="flex" color={theme.palette.maskColor.second}>
-                                <Typography color={theme.palette.maskColor.danger} fontWeight={700}>
+                                <Typography
+                                    color={
+                                        activity.isBuy ?
+                                            theme.palette.maskColor.success
+                                        :   theme.palette.maskColor.danger
+                                    }
+                                    fontWeight={700}>
                                     <FormattedBalance
                                         value={activity.ethAmount}
                                         decimals={18}

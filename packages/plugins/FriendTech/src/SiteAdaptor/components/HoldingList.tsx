@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         height: '100%',
         boxSizing: 'border-box',
+        overscrollBehavior: 'contain',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
