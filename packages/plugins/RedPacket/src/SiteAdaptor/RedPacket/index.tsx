@@ -1,17 +1,17 @@
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { TransactionConfirmModal } from '@masknet/shared'
+import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, parseColor } from '@masknet/theme'
+import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId, signMessage } from '@masknet/web3-shared-evm'
-import { Box, Card, Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
@@ -126,13 +126,11 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     }
 })
 
-interface RedPacketProps {
+export interface RedPacketProps {
     payload: RedPacketJSONPayload
 }
 
-export function RedPacket(props: RedPacketProps) {
-    const { payload } = props
-
+export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const t = useRedPacketTrans()
     const token = payload.token
     const { pluginID } = useNetworkContext()
@@ -216,7 +214,7 @@ export function RedPacket(props: RedPacketProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [JSON.stringify(token), redPacketContract, payload.rpid, account])
+    }, [token, redPacketContract, payload.rpid, account])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
@@ -275,21 +273,7 @@ export function RedPacket(props: RedPacketProps) {
     const { classes } = useStyles({ outdated })
 
     // the red packet can fetch without account
-    if (!availability || !token)
-        return (
-            <Box
-                flex={1}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-                padding={1}
-                minHeight={148}>
-                <LoadingBase />
-                <Typography>{t.loading()}</Typography>
-            </Box>
-        )
+    if (!availability || !token) return <LoadingStatus minHeight={148} />
 
     return (
         <>
@@ -341,7 +325,7 @@ export function RedPacket(props: RedPacketProps) {
             )}
         </>
     )
-}
+})
 
 function resolveRedPacketStatus(listOfStatus: RedPacketStatus[]) {
     if (listOfStatus.includes(RedPacketStatus.claimed)) return 'Claimed'

@@ -1,19 +1,17 @@
-import { useEffect } from 'react'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
-import { RedPacket } from './RedPacket/index.js'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { MaskLightTheme } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { RedPacketRecord } from '@masknet/web3-providers/types'
+import { ThemeProvider } from '@mui/material'
+import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
-import type { RedPacketJSONPayload, RedPacketRecord } from '@masknet/web3-providers/types'
+import { RedPacket, type RedPacketProps } from './RedPacket/index.js'
 
-interface RedPacketInPostProps {
-    payload: RedPacketJSONPayload
-}
-
-export function RedPacketInPost(props: RedPacketInPostProps) {
-    const { payload } = props
+export function RedPacketInPost({ payload }: RedPacketProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const fromUrl = usePostLink()
+
     useEffect(() => {
         if (!fromUrl) return
         if (!payload.txid && payload.contract_version !== 1) return
@@ -27,5 +25,9 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     }, [fromUrl, chainId])
     // #endregion
 
-    return <RedPacket payload={payload} />
+    return (
+        <ThemeProvider theme={MaskLightTheme}>
+            <RedPacket payload={payload} />
+        </ThemeProvider>
+    )
 }

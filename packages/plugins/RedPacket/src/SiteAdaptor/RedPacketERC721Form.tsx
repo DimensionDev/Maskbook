@@ -267,7 +267,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         linkedPersona?.nickname ??
         'Unknown User'
 
-    const { value: gasLimit = '0' } = useCreateNFTRedpacketGas(
+    const { data: gasLimit = '0' } = useCreateNFTRedpacketGas(
         message,
         senderName,
         collection?.address ?? '',

@@ -1,25 +1,26 @@
-import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/shared-base'
+import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
+import { PluginID } from '@masknet/shared-base'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { Typography } from '@mui/material'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Typography } from '@mui/material'
+import { memo } from 'react'
+import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
+import RedPacketDialog from './RedPacketDialog.js'
+import { RedPacketInPost } from './RedPacketInPost.js'
+import { RedPacketInjection } from './RedPacketInjection.js'
+import { RedPacketNftInPost } from './RedPacketNftInPost.js'
+import { openDialog } from './emitter.js'
 import {
     RedPacketMetadataReader,
     RedPacketNftMetadataReader,
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import { RedPacketInjection } from './RedPacketInjection.js'
-import RedPacketDialog from './RedPacketDialog.js'
-import { RedPacketInPost } from './RedPacketInPost.js'
-import { RedPacketNftInPost } from './RedPacketNftInPost.js'
-import { openDialog } from './emitter.js'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -37,17 +38,18 @@ const containerStyle = {
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector(props) {
-        if (RedPacketMetadataReader(props.message.meta).isOk())
+    DecryptedInspector: memo(function RedPacketInspector(props) {
+        const meta = props.message.meta
+        if (RedPacketMetadataReader(meta).isOk())
             return (
                 <Render name="Lucky Drop">
-                    {renderWithRedPacketMetadata(props.message.meta, (r) => (
+                    {renderWithRedPacketMetadata(meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
                 </Render>
             )
 
-        if (RedPacketNftMetadataReader(props.message.meta).isOk())
+        if (RedPacketNftMetadataReader(meta).isOk())
             return (
                 <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
@@ -56,7 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 </Render>
             )
         return null
-    },
+    }),
     CompositionDialogMetadataBadgeRender: new Map([
         [
             RedPacketMetaKey,

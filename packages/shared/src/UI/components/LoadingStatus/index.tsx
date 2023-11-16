@@ -10,6 +10,9 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         flexDirection: 'column',
     },
+    icon: {
+        color: theme.palette.maskColor.main,
+    },
     text: {
         color: theme.palette.maskColor.second,
         fontSize: '14px',
@@ -34,7 +37,7 @@ export const LoadingStatus = memo(function LoadingStatus({
     const t = useSharedTrans()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <LoadingBase size={iconSize} />
+            <LoadingBase size={iconSize} className={classes.icon} />
             {omitText ? null : <Typography className={classes.text}>{children ?? t.loading()}</Typography>}
         </Box>
     )

@@ -13,6 +13,7 @@ export function useCreateNftRedPacketReceipt(txid: string, expectedChainId: Chai
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
     return useAsyncRetry(async () => {
+        if (!txid) return null
         const receipt = await EVMWeb3.getTransactionReceipt(txid, { chainId })
         if (!receipt) return null
 
