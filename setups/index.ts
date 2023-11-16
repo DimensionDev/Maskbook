@@ -14,7 +14,6 @@ globalThis.fetch = fetch
 globalThis.Headers = Headers
 globalThis.Request = Request
 globalThis.Response = Response
-
 // @ts-ignore
 globalThis.location = {
     href: '',
