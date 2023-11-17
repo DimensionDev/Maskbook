@@ -13,6 +13,10 @@
         "./register": {
             "mask-src": "./src/register.ts",
             "default": "./dist/register.js"
+        },
+        "./widget": {
+          "mask-src": "./src/SiteAdaptor/RenderCalendar.tsx",
+          "default": "./dist/SiteAdaptor/CalendarContent.js"
         }
     },
     "dependencies": {
