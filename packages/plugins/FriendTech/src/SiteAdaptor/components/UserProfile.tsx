@@ -137,7 +137,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
                 {user?.twitterName ?
                     <Link
                         className={classes.link}
-                        href={`https://www.friend.tech/${user?.twitterUsername}`}
+                        href={`https://www.friend.tech/${user.twitterUsername}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <Icons.FriendTech size={24} />
@@ -170,9 +170,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
                             ml="auto"
                             skeletonWidth={50}
                             loading={loadingOwnCount}>
-                            {t.keys({
-                                count: ownCount!,
-                            })}
+                            {ownCount === undefined ? '--' : t.keys({ count: ownCount })}
                         </ProgressiveText>
                     </div>
                 :   null}
