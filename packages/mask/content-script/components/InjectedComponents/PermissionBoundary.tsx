@@ -23,7 +23,11 @@ interface PermissionBoundaryProps extends PropsWithChildren<{}> {
         | ((grantState: AsyncState<boolean>, onGrantPermissions: () => Promise<boolean | undefined>) => ReactNode)
 }
 
-const PermissionBoundary = memo<PermissionBoundaryProps>(({ permissions, fallback, children }) => {
+const PermissionBoundary = memo<PermissionBoundaryProps>(function PermissionBoundary({
+    permissions,
+    fallback,
+    children,
+}) {
     const { value: hasPermissions = true } = useCheckPermissions(permissions)
 
     const [grantState, onGrant] = useGrantPermissions(permissions)

@@ -7,7 +7,7 @@ export interface IO {
 }
 export function createRemoteFlag<T extends object>(
     defaultFlags: T,
-): [T, ((io: IO, signal?: AbortSignal, url?: string) => void) & { io: (typeof createRemoteFlag)['io'] }] {
+): readonly [T, ((io: IO, signal?: AbortSignal, url?: string) => void) & { io: (typeof createRemoteFlag)['io'] }] {
     if (typeof localStorage === 'object') {
         // keep for a few releases, added in Nov 29 2023
         localStorage.removeItem('mask-last-fetch-result')
@@ -27,7 +27,7 @@ export function createRemoteFlag<T extends object>(
         setPrototypeOf(t, v) {
             return v === null
         },
-    })
+    }) as T
 
     async function fetch(io: IO, signal?: AbortSignal, url = 'https://mask-flags.r2d2.to/') {
         url = urlcat(url, {
