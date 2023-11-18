@@ -1,7 +1,7 @@
 import { ElementAnchor, EmptyStatus, FormattedBalance, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { FriendTech } from '@masknet/web3-providers'
-import { formatBalance, formatElapsed } from '@masknet/web3-shared-base'
+import { formatBalance, formatElapsed, isSameAddress } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Skeleton, Typography, type ListProps } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { range } from 'lodash-es'
@@ -116,6 +116,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                                             className={classes.link}
                                             role="link"
                                             onClick={() => {
+                                                if (isSameAddress(account, activity.subject.address)) return
                                                 const otherLink = urlcat(RoutePaths.Detail, {
                                                     address: activity.subject.address,
                                                     title: activity.subject.name,
