@@ -9,6 +9,7 @@ export const facebookBase: SiteAdaptor.Base = {
     networkIdentifier: EnhanceableSite.Facebook,
     declarativePermissions: { origins },
     shouldActivate(location) {
-        return location.hostname.endsWith('facebook.com')
+        //                                                   facebook share widget
+        return location.hostname.endsWith('facebook.com') && location.pathname !== '/v2.0/plugins/like.php'
     },
 }
