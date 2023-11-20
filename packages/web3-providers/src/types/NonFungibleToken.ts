@@ -55,7 +55,7 @@ export namespace NonFungibleTokenAPI {
         owners_total: number
         royalty: number
         opensea_floor_price: number
-        floor_price: number
+        floor_price: number | undefined
         price_symbol: string
     }
     export interface Provider<ChainId, SchemaType, Indicator = PageIndicator> {
