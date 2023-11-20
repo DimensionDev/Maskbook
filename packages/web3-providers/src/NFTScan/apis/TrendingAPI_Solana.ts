@@ -139,8 +139,8 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
             },
             market: {
                 total_supply: collection.items_total,
-                current_price: collection.floor_price.toString(),
-                floor_price: collection.floor_price.toString(),
+                current_price: collection.floor_price?.toString(),
+                floor_price: collection.floor_price?.toString(),
                 highest_price: undefined,
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'SOL',

@@ -74,7 +74,7 @@ export namespace TrendingAPI {
     }
 
     export interface Market {
-        current_price: string
+        current_price: string | undefined
         circulating_supply?: number
         market_cap?: number
         max_supply?: number
