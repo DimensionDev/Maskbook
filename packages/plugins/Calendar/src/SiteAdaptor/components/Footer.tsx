@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         alignItems: 'center',
+        whiteSpace: 'nowrap',
     },
     calender: {
         display: 'flex',

@@ -1,8 +1,8 @@
-import React, { useMemo, useEffect, useRef } from 'react'
-import { format } from 'date-fns'
-import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { Typography } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { Link, Typography } from '@mui/material'
+import { format } from 'date-fns'
+import { useCallback, useMemo } from 'react'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,6 +44,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         gap: '8px',
         cursor: 'pointer',
+        '&:hover': {
+            textDecoration: 'none',
+        },
     },
     eventHeader: {
         display: 'flex',
@@ -109,8 +112,7 @@ export const formatDate = (date: string) => {
 export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
-    const listRef = useRef<HTMLDivElement>(null)
-    const listAfterDate = useMemo(() => {
+    const futureEvents = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
             if (new Date(key) >= new Date(dateString)) {
@@ -119,33 +121,32 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
         }
         return listAfterDate
     }, [list, dateString])
-    useEffect(() => {
-        if (listRef.current)
-            listRef.current.scrollTo({
-                top: 0,
-            })
-    }, [listRef, list])
+
+    const listRef = useCallback((el: HTMLDivElement | null) => {
+        el?.scrollTo({ top: 0 })
+    }, [])
+
     return (
-        <div className={classes.container} ref={listRef}>
+        <div className={classes.container} ref={listRef} key={dateString}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>
-                : !empty && listAfterDate.length ?
-                    listAfterDate.map((key) => {
+                : !empty && futureEvents.length ?
+                    futureEvents.map((key) => {
                         return (
                             <div key={key}>
                                 <Typography className={classes.dateDiv}>
                                     {format(new Date(key), 'MMM dd,yyy')}
                                 </Typography>
                                 {list[key].map((v) => (
-                                    <div
+                                    <Link
+                                        key={v.event_url}
                                         className={classes.eventCard}
-                                        key={v.eventTitle}
-                                        onClick={() => {
-                                            window.open(v.event_url)
-                                        }}>
+                                        href={v.event_url}
+                                        rel="noopener noreferrer"
+                                        target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
                                                 <img src={v.project.logo} className={classes.logo} alt="logo" />
@@ -157,7 +158,7 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                                         <Typography className={classes.eventTitle}>{v.event_title}</Typography>
                                         <Typography className={classes.time}>{formatDate(v.event_date)}</Typography>
                                         <img className={classes.poster} src={v.poster_url} alt="poster" />
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         )

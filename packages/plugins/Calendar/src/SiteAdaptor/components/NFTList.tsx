@@ -1,12 +1,12 @@
-import React, { useMemo, type ReactNode, useRef, useEffect } from 'react'
-import { format } from 'date-fns'
+import { Icons } from '@masknet/icons'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { IconButton, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { formatDate } from './EventList.js'
-import { CountdownTimer } from './CountDownTimer.js'
+import { IconButton, Link, Typography } from '@mui/material'
+import { format } from 'date-fns'
+import { useMemo, type ReactNode, useCallback } from 'react'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
+import { CountdownTimer } from './CountDownTimer.js'
+import { formatDate } from './EventList.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -50,6 +50,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         fontSize: '12px',
         cursor: 'pointer',
+        '&:hover': {
+            textDecoration: 'none',
+        },
     },
     eventHeader: {
         display: 'flex',
@@ -129,7 +132,6 @@ const sortPlat = (_: any, b: { type: string }) => {
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
-    const listRef = useRef<HTMLDivElement>(null)
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -139,14 +141,12 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
         }
         return listAfterDate
     }, [list, dateString])
-    useEffect(() => {
-        if (listRef.current)
-            listRef.current.scrollTo({
-                top: 0,
-            })
-    }, [listRef, list])
+
+    const listRef = useCallback((el: HTMLDivElement | null) => {
+        el?.scrollTo({ top: 0 })
+    }, [])
     return (
-        <div className={classes.container} ref={listRef}>
+        <div className={classes.container} ref={listRef} key={dateString}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
@@ -160,12 +160,12 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                     {format(new Date(key), 'MMM dd,yyy')}
                                 </Typography>
                                 {list[key].map((v) => (
-                                    <div
+                                    <Link
+                                        key={v.event_url}
                                         className={classes.eventCard}
-                                        key={v.eventTitle}
-                                        onClick={() => {
-                                            window.open(v.event_url)
-                                        }}>
+                                        href={v.event_url}
+                                        rel="noopener noreferrer"
+                                        target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
                                                 <img src={v.project.logo} className={classes.logo} alt="logo" />
@@ -214,7 +214,7 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                             </Typography>
                                         </div>
                                         <img className={classes.poster} src={v.poster_url} alt="poster" />
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         )

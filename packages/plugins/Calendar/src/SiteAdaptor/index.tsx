@@ -1,7 +1,6 @@
-import React from 'react'
-import { Trans } from 'react-i18next'
-import { type Plugin } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
+import { type Plugin } from '@masknet/plugin-infra'
+import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 
