@@ -1,4 +1,4 @@
-import { Image, Markdown } from '@masknet/shared'
+import { Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
@@ -11,7 +11,7 @@ import { CardFrame, type FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
-const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
+const useStyles = makeStyles()((theme) => ({
     badge: {
         display: 'inline-block',
         height: 18,
@@ -41,24 +41,6 @@ const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        [`.${refs.image}`]: {
-            width: 64,
-            height: 64,
-            borderRadius: 8,
-            overflow: 'hidden',
-            flexShrink: 0,
-        },
-    },
-    image: {
-        img: {
-            objectFit: 'cover',
-        },
-    },
-    verbose: {
-        [`.${refs.image}`]: {
-            marginTop: theme.spacing(1),
-            aspectRatio: 'auto',
-        },
     },
     info: {
         overflow: 'auto',
@@ -102,7 +84,6 @@ const CardBody = memo(({ metadata, className, ...rest }: CardBodyProps) => {
     const { classes, cx } = useStyles()
     return (
         <div className={cx(classes.body, className)} {...rest}>
-            <Image classes={{ container: classes.image }} src={metadata.logo} height={64} width={64} />
             <div className={classes.info}>
                 <Typography className={classes.title}>{metadata.title}</Typography>
                 <Typography className={classes.subtitle}>{metadata.description}</Typography>
@@ -119,7 +100,7 @@ const CardBody = memo(({ metadata, className, ...rest }: CardBodyProps) => {
  */
 export function DonationCard({ feed, actionIndex, className, ...rest }: DonationCardProps) {
     const { verbose } = rest
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
     const [index, setIndex] = useState(0)
@@ -135,12 +116,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
 
     if (verbose) {
         return (
-            <CardFrame
-                type={CardType.DonationDonate}
-                feed={feed}
-                className={cx(rest.verbose ? classes.verbose : null, className)}
-                badge={badge}
-                {...rest}>
+            <CardFrame type={CardType.DonationDonate} feed={feed} className={className} badge={badge} {...rest}>
                 <Typography className={classes.summary}>
                     <RSS3Trans.donation_donate_verbose
                         values={{
@@ -154,7 +130,6 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
                         }}
                     />
                 </Typography>
-                <Image classes={{ container: classes.image }} src={metadata!.logo} width="100%" />
                 <Markdown className={mdClasses.markdown} defaultStyle={false}>
                     {metadata!.description}
                 </Markdown>
