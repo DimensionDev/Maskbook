@@ -881,5 +881,7 @@
     "popups_backup_password_tips": "秘密鍵をエクスポートするには、バックアップパスワードを設定してください。",
     "popups_backup_password_inconsistency": "入力された二つのパスワードに矛盾があります。",
     "popups_backup_password_incorrect": "バックアップパスワードが正しくありません。",
+    "popups_backup_password_invalid": "ペルソナ秘密鍵をエクスポートするには、バックアップパスワードを入力してください。",
+    "popups_backup_password_set_successfully": "バックアップパスワードの設定が完了しました",
     "wallet_name": "ウォレット名"
 }
