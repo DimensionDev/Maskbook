@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { CopyButton, FormattedBalance, Image, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { type FriendTech as FT } from '@masknet/web3-providers/types'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
@@ -19,6 +19,12 @@ import { useOwnKeys } from '../hooks/useOwnKeys.js'
 const useStyles = makeStyles()((theme) => ({
     avatar: {
         borderRadius: '50%',
+    },
+    name: {
+        maxWidth: '90%',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     address: {
         display: 'flex',
@@ -110,9 +116,11 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
                     src={holding.twitterPfpUrl}
                     size={40}
                 />
-                <Typography mt={1} fontWeight={700}>
-                    @{holding.twitterUsername}
-                </Typography>
+                <TextOverflowTooltip as={ShadowRootTooltip} title={holding.twitterName}>
+                    <Typography className={classes.name} mt={1} fontWeight={700}>
+                        @{holding.twitterUsername}
+                    </Typography>
+                </TextOverflowTooltip>
                 <div className={classes.address}>
                     <ReversedAddress address={holding.address} />
                     <CopyButton text={holding.address} size={16} />
