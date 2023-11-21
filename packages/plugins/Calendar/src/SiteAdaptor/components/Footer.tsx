@@ -1,11 +1,10 @@
-/* cspell: disable */
-import React, { type ReactNode } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { Typography, IconButton } from '@mui/material'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
-import { useOpenApplicationSettings, ApplicationSettingTabs } from '@masknet/shared'
+import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/shared'
 import { PluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { IconButton, Typography } from '@mui/material'
+import { type ReactNode } from 'react'
+import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -70,7 +69,7 @@ export function Footer({ provider }: FooterProps) {
         news: (
             <>
                 <Typography className={classes.providerName}>CoinCarp</Typography>
-                <Icons.Coincarp size={24} />
+                <Icons.CoinCarp size={24} />
             </>
         ),
         event: (
@@ -82,7 +81,7 @@ export function Footer({ provider }: FooterProps) {
         nfts: (
             <>
                 <Typography className={classes.providerName}>NFTGO</Typography>
-                <Icons.Nftgo size={24} />
+                <Icons.NFTGo size={24} />
             </>
         ),
     }
