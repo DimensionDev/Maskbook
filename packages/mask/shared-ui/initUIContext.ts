@@ -1,8 +1,14 @@
-import { createSubscriptionFromAsync, DashboardRoutes, MaskMessages } from '@masknet/shared-base'
+import {
+    createSubscriptionFromAsync,
+    DashboardRoutes,
+    MaskMessages,
+    type PersonaInformation,
+} from '@masknet/shared-base'
 import Services from '#services'
 import { __setUIContext__ } from '@masknet/plugin-infra/content-script'
+import type { Subscription } from 'use-subscription'
 
-export const allPersonas = createSubscriptionFromAsync(
+export const allPersonas: Subscription<PersonaInformation[]> = createSubscriptionFromAsync(
     () => Services.Identity.queryOwnedPersonaInformation(true),
     [],
     (x) => {
