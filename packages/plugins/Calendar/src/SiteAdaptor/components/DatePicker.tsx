@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react'
-import { format, startOfMonth, addDays, addMonths, isAfter, endOfMonth } from 'date-fns'
-import { IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
-import { useEventList, useNFTList, useNewsList } from '../../hooks/useEventList.js'
 import { safeUnreachable } from '@masknet/kit'
+import { makeStyles } from '@masknet/theme'
+import { IconButton, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import { addDays, addMonths, endOfMonth, format, isAfter, startOfMonth } from 'date-fns'
+import { range } from 'lodash-es'
+import { useMemo, useState } from 'react'
+import { useEventList, useNFTList, useNewsList } from '../../hooks/useEventList.js'
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     container: {
@@ -134,9 +135,9 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from({ length: 6 }).map((_, weekIndex) => (
+                    {range(6).map((weekIndex) => (
                         <tr key={weekIndex} className={classes.row}>
-                            {Array.from({ length: 7 }).map((_, dayIndex) => {
+                            {range(7).map((dayIndex) => {
                                 const currentDatePointer = addDays(monthStart, weekIndex * 7 + dayIndex)
                                 return (
                                     <td key={dayIndex}>

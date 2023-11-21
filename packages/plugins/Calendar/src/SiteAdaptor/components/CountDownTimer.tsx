@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { differenceInSeconds } from 'date-fns'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
+import { differenceInSeconds } from 'date-fns'
+import { useCallback, useEffect, useState } from 'react'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,14 +24,11 @@ interface CountDownTimerProps {
 }
 
 export function CountdownTimer({ targetDate }: CountDownTimerProps) {
-    const calculateRemainingTime = useCallback(
-        (targetDate: Date) => {
-            const currentDate = new Date()
-            const difference = differenceInSeconds(targetDate, currentDate)
-            return difference > 0 ? difference : 0
-        },
-        [targetDate],
-    )
+    const calculateRemainingTime = useCallback((targetDate: Date) => {
+        const currentDate = new Date()
+        const difference = differenceInSeconds(targetDate, currentDate)
+        return difference > 0 ? difference : 0
+    }, [])
 
     const [remainingTime, setRemainingTime] = useState(() => calculateRemainingTime(targetDate))
 

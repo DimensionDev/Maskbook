@@ -1,19 +1,18 @@
-/* cspell: disable */
-import React, { useState, useMemo } from 'react'
-import { Tab } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
 import { safeUnreachable } from '@masknet/kit'
-import { PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { EMPTY_OBJECT, PluginID } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
-import { DatePickerTab } from './components/DatePickerTab.js'
+import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { TabContext, TabPanel } from '@mui/lab'
+import { Tab } from '@mui/material'
+import { useMemo, useState } from 'react'
 import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
-import { NewsList } from './components/NewsList.js'
-import { EventList } from './components/EventList.js'
-import { NFTList } from './components/NFTList.js'
-import { Footer } from './components/Footer.js'
 import { useCalendarTrans } from '../locales/i18n_generated.js'
+import { DatePickerTab } from './components/DatePickerTab.js'
+import { EventList } from './components/EventList.js'
+import { Footer } from './components/Footer.js'
+import { NFTList } from './components/NFTList.js'
+import { NewsList } from './components/NewsList.js'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -47,9 +46,9 @@ export function CalendarContent({ target }: { target?: string }) {
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const { data: eventList, isLoading: eventLoading } = useEventList(selectedDate)
-    const { data: newsList, isLoading: newsLoading } = useNewsList(selectedDate)
-    const { data: nftList, isLoading: nftLoading } = useNFTList(selectedDate)
+    const { data: eventList = EMPTY_OBJECT, isLoading: eventLoading } = useEventList(selectedDate)
+    const { data: newsList = EMPTY_OBJECT, isLoading: newsLoading } = useNewsList(selectedDate)
+    const { data: nftList = EMPTY_OBJECT, isLoading: nftLoading } = useNFTList(selectedDate)
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':
@@ -82,9 +81,9 @@ export function CalendarContent({ target }: { target?: string }) {
                 </div>
                 <DatePickerTab
                     open={open}
-                    setOpen={(open) => setOpen(open)}
+                    setOpen={setOpen}
                     selectedDate={selectedDate}
-                    setSelectedDate={(date: Date) => setSelectedDate(date)}
+                    setSelectedDate={setSelectedDate}
                     list={list}
                     currentTab={currentTab}
                 />
