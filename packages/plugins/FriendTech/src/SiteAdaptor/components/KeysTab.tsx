@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function KeyTab() {
+export function KeysTab() {
     const { classes } = useStyles()
     const account = useAccount()
     const { data: user, isInitialLoading } = useUser(account)

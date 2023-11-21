@@ -37,7 +37,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 3,
+                appBoardSortingDefaultPriority: 0,
                 marketListSortingPriority: 3,
                 icon,
                 category: 'dapp',

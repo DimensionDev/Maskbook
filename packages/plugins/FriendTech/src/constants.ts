@@ -12,7 +12,7 @@ export const enum RoutePaths {
 }
 
 export enum TitleTabs {
-    Key = 'Key',
+    Keys = 'Keys',
     History = 'History',
     Buy = 'Buy',
     Sell = 'Sell',

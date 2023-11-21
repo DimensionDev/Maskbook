@@ -3,10 +3,10 @@ import { useAccount } from '@masknet/web3-hooks-base'
 import { Box } from '@mui/material'
 import { TitleTabs } from '../constants.js'
 import { HistoryList } from './components/HistoryList.js'
-import { KeyTab } from './components/KeyTab.js'
+import { KeysTab } from './components/KeysTab.js'
 
 export function Main() {
-    const [tab] = useParamTab<TitleTabs>(TitleTabs.Key)
+    const [tab] = useParamTab<TitleTabs>(TitleTabs.Keys)
     const account = useAccount()
 
     if (tab === TitleTabs.History)
@@ -15,5 +15,5 @@ export function Main() {
                 <HistoryList account={account} />
             </Box>
         )
-    return <KeyTab />
+    return <KeysTab />
 }

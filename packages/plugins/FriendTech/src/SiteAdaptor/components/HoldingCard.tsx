@@ -20,12 +20,14 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
     },
     name: {
+        fontSize: 12,
         maxWidth: '90%',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
     address: {
+        fontSize: 12,
         display: 'flex',
         alignItems: 'center',
         gap: 6,
@@ -50,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     rank: {
-        fontSize: 14,
+        fontSize: 12,
         color: theme.palette.maskColor.main,
         fontWeight: 700,
     },
@@ -120,7 +122,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
                     </Typography>
                 </TextOverflowTooltip>
                 <div className={classes.address}>
-                    <ReversedAddress address={holding.address} />
+                    <ReversedAddress address={holding.address} fontSize={12} />
                     <CopyButton text={holding.address} size={16} />
                     <Link
                         className={classes.link}

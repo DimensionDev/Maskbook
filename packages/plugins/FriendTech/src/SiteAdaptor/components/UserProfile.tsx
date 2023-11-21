@@ -46,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     address: {
         display: 'flex',
         alignItems: 'center',
+        fontSize: 12,
         gap: 6,
     },
     key: {
@@ -83,6 +84,7 @@ const useStyles = makeStyles()((theme) => ({
         textTransform: 'capitalize',
     },
     metaValue: {
+        fontSize: 14,
         display: 'flex',
         alignItems: 'center',
         fontWeight: 700,
@@ -130,7 +132,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
                         </ProgressiveText>
                     </TextOverflowTooltip>
                     <div className={classes.address}>
-                        <ReversedAddress address={address} />
+                        <ReversedAddress address={address} fontSize={12} />
                         <CopyButton text={address} size={16} />
                         <Link
                             className={classes.link}
@@ -153,7 +155,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
             </div>
             <div className={classes.key}>
                 <div className={classes.row}>
-                    <Typography color={theme.palette.maskColor.second} mr={1}>
+                    <Typography color={theme.palette.maskColor.second} mr={1} fontSize={14}>
                         {t.key_price()}
                     </Typography>
                     <ShadowRootTooltip

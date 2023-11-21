@@ -36,11 +36,11 @@ export function RouterDialog(props: InjectedDialogProps) {
         }
     }, [pathname === RoutePaths.Exit, props.onClose])
 
-    const [tab, handleTabChange] = useParamTab<TitleTabs>(TitleTabs.Key)
+    const [tab, handleTabChange] = useParamTab<TitleTabs>(TitleTabs.Keys)
     const titleTabs =
         matchPath(RoutePaths.Main, pathname) ?
             <MaskTabList variant="base" onChange={handleTabChange}>
-                <Tab label={t.key()} value={TitleTabs.Key} />
+                <Tab label={t.key()} value={TitleTabs.Keys} />
                 <Tab label={t.history()} value={TitleTabs.History} />
             </MaskTabList>
         :   undefined
