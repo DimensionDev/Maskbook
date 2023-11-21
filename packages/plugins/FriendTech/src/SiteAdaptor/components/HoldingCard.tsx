@@ -14,7 +14,6 @@ import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useUser } from '../hooks/useUser.js'
-import { useOwnKeys } from '../hooks/useOwnKeys.js'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -94,7 +93,6 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
 
     // Disable loading with empty string until component appearances.
     const { data: user, isInitialLoading: loading } = useUser(seen ? holding.address : '')
-    const { data: ownCount, isInitialLoading: loadingOwnCount } = useOwnKeys(holding.address, seen ? holder : '')
     const navigate = useNavigate()
 
     return (
@@ -136,9 +134,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
             <div className={classes.holderMeta}>
                 <div className={classes.holderMetaItem}>
                     <Typography className={classes.holderMetaLabel}>{t.key()}</Typography>
-                    <ProgressiveText className={classes.holderMetaValue} skeletonWidth={50} loading={loadingOwnCount}>
-                        {ownCount}
-                    </ProgressiveText>
+                    <Typography className={classes.holderMetaValue}>{holding.balance}</Typography>
                 </div>
                 <div className={classes.holderMetaItem}>
                     <Typography className={classes.holderMetaLabel}>{t.value()}</Typography>
