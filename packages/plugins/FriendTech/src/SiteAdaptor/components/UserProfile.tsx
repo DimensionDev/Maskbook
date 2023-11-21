@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { CopyButton, FormattedBalance, Image, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useAccount, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { type FriendTech as FT } from '@masknet/web3-providers/types'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
@@ -33,11 +33,15 @@ const useStyles = makeStyles()((theme) => ({
     account: {
         marginLeft: theme.spacing(1),
         marginRight: 'auto',
+        overflow: 'auto',
     },
     name: {
         fontSize: 12,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     address: {
         display: 'flex',
@@ -106,6 +110,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const isOther = !isSameAddress(myAccount, address)
     const { data: ownCount, isInitialLoading: loadingOwnCount } = useOwnKeys(address, myAccount)
+    const uiName = user?.twitterUsername || identity?.identifier?.userId
     return (
         <div className={cx(classes.userInfo, className)} {...rest}>
             <div className={classes.profile}>
@@ -119,9 +124,11 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
                     />
                 }
                 <div className={classes.account}>
-                    <ProgressiveText className={classes.name} loading={loading} skeletonWidth={60}>
-                        @{user?.twitterUsername || identity?.identifier?.userId}
-                    </ProgressiveText>
+                    <TextOverflowTooltip as={ShadowRootTooltip} title={uiName}>
+                        <ProgressiveText className={classes.name} loading={loading} skeletonWidth={60}>
+                            @{uiName}
+                        </ProgressiveText>
+                    </TextOverflowTooltip>
                     <div className={classes.address}>
                         <ReversedAddress address={address} />
                         <CopyButton text={address} size={16} />
