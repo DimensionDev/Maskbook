@@ -88,7 +88,12 @@ export const HoldingList = memo(function HoldingList({ address, ...rest }: Props
         <div {...rest} className={cx(classes.container, rest.className)}>
             <div className={classes.holdings}>
                 {holdings.map((holding) => (
-                    <HoldingCard holding={holding} key={holding.address} className={classes.holdingCard} />
+                    <HoldingCard
+                        key={holding.address}
+                        holding={holding}
+                        holder={address}
+                        className={classes.holdingCard}
+                    />
                 ))}
                 {isFetching ? range(4).map((i) => <HoldingCardSkeleton key={i} />) : null}
             </div>

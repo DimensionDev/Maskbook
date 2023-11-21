@@ -14,6 +14,7 @@ import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
 import { useUser } from '../hooks/useUser.js'
+import { useOwnKeys } from '../hooks/useOwnKeys.js'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -75,17 +76,19 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends HTMLProps<HTMLDivElement> {
     holding: FT.Holder
+    holder: string
 }
 
-export const HoldingCard = memo(function HoldingCard({ holding, className, ...rest }: Props) {
+export const HoldingCard = memo(function HoldingCard({ holding, holder, className, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const t = useI18N()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const [seen, ref] = useEverSeen()
     const [params] = useSearchParams()
 
-    // Empty string will disable loading
+    // Disable loading with empty string until component appearances.
     const { data: user, isInitialLoading: loading } = useUser(seen ? holding.address : '')
+    const { data: ownCount, isInitialLoading: loadingOwnCount } = useOwnKeys(holding.address, seen ? holder : '')
     const navigate = useNavigate()
 
     return (
@@ -125,8 +128,8 @@ export const HoldingCard = memo(function HoldingCard({ holding, className, ...re
             <div className={classes.holderMeta}>
                 <div className={classes.holderMetaItem}>
                     <Typography className={classes.holderMetaLabel}>{t.key()}</Typography>
-                    <ProgressiveText className={classes.holderMetaValue} skeletonWidth={50} loading={loading}>
-                        {user?.holdingCount}
+                    <ProgressiveText className={classes.holderMetaValue} skeletonWidth={50} loading={loadingOwnCount}>
+                        {ownCount}
                     </ProgressiveText>
                 </div>
                 <div className={classes.holderMetaItem}>

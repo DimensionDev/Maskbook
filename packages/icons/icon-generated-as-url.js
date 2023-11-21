@@ -5,7 +5,7 @@ export function arweave_url() { return new URL("./brands/Arweave.png", import.me
 export function avalanche_url() { return new URL("./brands/Avalanche.svg", import.meta.url).href }
 export function bsc_url() { return new URL("./brands/BSC.svg", import.meta.url).href }
 export function celo_url() { return new URL("./brands/Celo.svg", import.meta.url).href }
-export function coincarp_url() { return new URL("./brands/Coincarp.svg", import.meta.url).href }
+export function coin_carp_url() { return new URL("./brands/CoinCarp.svg", import.meta.url).href }
 export function coin_gecko_url() { return new URL("./brands/CoinGecko.svg", import.meta.url).href }
 export function coin_market_cap_url() { return new URL("./brands/CoinMarketCap.svg", import.meta.url).href }
 export function cosmos_url() { return new URL("./brands/Cosmos.svg", import.meta.url).href }
@@ -72,7 +72,7 @@ export function momoka_url() { return new URL("./brands/Momoka.svg", import.meta
 export function next_id_url() { return new URL("./brands/NextID.svg", import.meta.url).href }
 export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.dark.svg", import.meta.url).href }
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
-export function nftgo_url() { return new URL("./brands/Nftgo.svg", import.meta.url).href }
+export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
 export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url).href }
 export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.meta.url).href }
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url).href }
