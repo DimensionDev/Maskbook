@@ -18,9 +18,9 @@ export function profilesFilter(x: BindingProof) {
 export function useFriendProfiles(seen: boolean, nextId?: string, profile?: ProfileIdentifier) {
     const currentPersona = useCurrentPersona()
 
-    const { data: profiles = EMPTY_LIST } = useQuery(
-        ['profiles', currentPersona?.identifier.publicKeyAsHex, nextId],
-        async () => {
+    const { data: profiles = EMPTY_LIST } = useQuery({
+        queryKey: ['profiles', currentPersona?.identifier.publicKeyAsHex, nextId],
+        queryFn: async () => {
             if (!nextId) return EMPTY_LIST
             try {
                 return await NextIDProof.queryProfilesByPublicKey(nextId, 2)
@@ -28,10 +28,8 @@ export function useFriendProfiles(seen: boolean, nextId?: string, profile?: Prof
                 return EMPTY_LIST
             }
         },
-        {
-            enabled: seen && !!nextId,
-        },
-    )
+        enabled: seen && !!nextId,
+    })
     return useMemo(() => {
         if (profiles.length === 0) {
             if (profile?.userId) {

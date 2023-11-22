@@ -106,9 +106,12 @@ function Profile({ url }: { url: string }) {
         isLoading,
         error,
         refetch,
-    } = useQuery(['cyber-connect', 'identity', queryAddress], async () => {
-        const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
-        return res.data.identity
+    } = useQuery({
+        queryKey: ['cyber-connect', 'identity', queryAddress],
+        queryFn: async () => {
+            const res = await PluginCyberConnectRPC.fetchIdentity(queryAddress)
+            return res.data.identity
+        },
     })
 
     const [currentTab, onChange, tabs] = useTabs(ProfileTab.Followings, ProfileTab.Followers)

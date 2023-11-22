@@ -9,6 +9,7 @@ import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-i'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
+import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
 import { pathToFileURL } from 'url'
 
@@ -40,6 +41,9 @@ const deferPackages = [
 //        for RegEx rules, always uses 'error'.
 
 const avoidMistakeRules = {
+    // Libraries
+    '@tanstack/query/stable-query-client': 'error',
+
     // Code quality
     'no-invalid-regexp': 'error', // RegEx
     'unicorn/no-abusive-eslint-disable': 'error', // disable a rule requires a reason
@@ -193,6 +197,8 @@ const avoidMistakeRules = {
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
 const codeStyleRules = {
+    // Migration
+    '@tanstack/query/prefer-query-object-syntax': 'error',
     // Deprecated
     'no-alert': 'warn', // alert()
     'no-proto': 'error', // __proto__ accessor
@@ -518,6 +524,7 @@ const plugins = {
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
+    '@tanstack/query': ReactQueryPlugin,
 }
 export default [
     {

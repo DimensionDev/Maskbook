@@ -21,9 +21,9 @@ export function useFriendsPaged() {
         isLoading: recordsLoading,
         refetch: refetchRecords,
         status: fetchRelationStatus,
-    } = useQuery(
-        ['relation-records', currentPersona?.identifier.rawPublicKey],
-        async () => {
+    } = useQuery({
+        queryKey: ['relation-records', currentPersona?.identifier.rawPublicKey],
+        queryFn: async () => {
             return Services.Identity.queryRelationPaged(
                 currentPersona?.identifier,
                 {
@@ -33,11 +33,9 @@ export function useFriendsPaged() {
                 3000,
             )
         },
-        {
-            enabled: !!currentPersona,
-            networkMode: 'always',
-        },
-    )
+        enabled: !!currentPersona,
+        networkMode: 'always',
+    })
     const {
         data,
         hasNextPage,
@@ -96,24 +94,27 @@ export function useFriendsPaged() {
 
 export function useFriendFromList(searchedRecords: RelationRecord[]) {
     const currentPersona = useCurrentPersona()
-    return useQuery(['search-local', searchedRecords], async () => {
-        return (
-            await Promise.all(
-                searchedRecords.map<Promise<Friend | undefined>>(async (x) => {
-                    if (!isProfileIdentifier(x.profile)) return
-                    const profile = first(await Services.Identity.queryProfileInformation(x.profile))
-                    if (
-                        profile?.linkedPersona !== undefined &&
-                        profile?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
-                    )
-                        return {
-                            persona: profile.linkedPersona,
-                            profile: x.profile,
-                            avatar: profile.avatar,
-                        }
-                    return
-                }),
-            )
-        ).filter((x): x is Friend => typeof x !== 'undefined' && Object.hasOwn(x, 'persona'))
+    return useQuery({
+        queryKey: ['search-local', searchedRecords],
+        queryFn: async () => {
+            return (
+                await Promise.all(
+                    searchedRecords.map<Promise<Friend | undefined>>(async (x) => {
+                        if (!isProfileIdentifier(x.profile)) return
+                        const profile = first(await Services.Identity.queryProfileInformation(x.profile))
+                        if (
+                            profile?.linkedPersona !== undefined &&
+                            profile?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
+                        )
+                            return {
+                                persona: profile.linkedPersona,
+                                profile: x.profile,
+                                avatar: profile.avatar,
+                            }
+                        return
+                    }),
+                )
+            ).filter((x): x is Friend => typeof x !== 'undefined' && Object.hasOwn(x, 'persona'))
+        },
     })
 }

@@ -19,7 +19,9 @@ export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
     })
 
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const { data: fallbackSymbol } = useQuery(['chain-list'], fetchChains, {
+    const { data: fallbackSymbol } = useQuery({
+        queryKey: ['chain-list'],
+        queryFn: fetchChains,
         select: (chains) => chains.find((x) => x.chainId === chainId)?.nativeCurrency.symbol,
     })
     const symbol = nativeToken?.symbol || fallbackSymbol

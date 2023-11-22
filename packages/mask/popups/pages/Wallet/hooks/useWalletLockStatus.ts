@@ -9,7 +9,7 @@ export function useWalletLockStatus() {
         isLoading,
         error,
         refetch,
-    } = useQuery(['@@is-locked'], Services.Wallet.isLocked, { networkMode: 'always' })
+    } = useQuery({ queryKey: ['@@is-locked'], queryFn: Services.Wallet.isLocked, networkMode: 'always' })
 
     useEffect(() => {
         refetch()

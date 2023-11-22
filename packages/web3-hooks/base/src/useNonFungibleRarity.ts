@@ -16,9 +16,12 @@ export function useNonFungibleRarity<T extends NetworkPluginID = NetworkPluginID
         ...options,
     } as HubOptions<T>)
 
-    return useQuery(['non-fungible-rarity', pluginID, address, id, options], () => {
-        // Solana only needs id
-        if (!address && !id) return null
-        return Hub.getNonFungibleRarity(address || '', id || '')
+    return useQuery({
+        queryKey: ['non-fungible-rarity', pluginID, address, id, options],
+        queryFn: () => {
+            // Solana only needs id
+            if (!address && !id) return null
+            return Hub.getNonFungibleRarity(address || '', id || '')
+        },
     })
 }

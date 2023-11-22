@@ -30,8 +30,8 @@ export const FriendsDetail = memo(function FriendsDetail() {
     const { mutate: onDelete, isLoading } = useMutation({
         mutationFn: handleDelete,
         onMutate: async () => {
-            await queryClient.cancelQueries(['relation-records', rawPublicKey])
-            await queryClient.cancelQueries(['friends', rawPublicKey])
+            await queryClient.cancelQueries({ queryKey: ['relation-records', rawPublicKey] })
+            await queryClient.cancelQueries({ queryKey: ['friends', rawPublicKey] })
             queryClient.setQueryData(
                 ['friends', rawPublicKey],
                 (
@@ -60,8 +60,8 @@ export const FriendsDetail = memo(function FriendsDetail() {
             navigate('/friends')
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['relation-records', rawPublicKey])
-            queryClient.invalidateQueries(['friends', rawPublicKey])
+            queryClient.invalidateQueries({ queryKey: ['relation-records', rawPublicKey] })
+            queryClient.invalidateQueries({ queryKey: ['friends', rawPublicKey] })
         },
     })
 

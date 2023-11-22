@@ -178,11 +178,11 @@ export default function ChangeOwner() {
     const [manageAccount, setManageAccount] = useState<ManagerAccount>()
 
     const { smartPayChainId } = useContainer(PopupContext)
-    const { data: personaManagers } = useQuery(
-        ['persona-managers'],
-        () => Services.Identity.queryOwnedPersonaInformation(true),
-        { networkMode: 'always' },
-    )
+    const { data: personaManagers } = useQuery({
+        queryKey: ['persona-managers'],
+        queryFn: () => Services.Identity.queryOwnedPersonaInformation(true),
+        networkMode: 'always',
+    })
     const [paymentToken, setPaymentToken] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig>()
     const wallet = useWallet()

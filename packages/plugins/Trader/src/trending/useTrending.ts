@@ -17,9 +17,12 @@ export function useNFT_TrendingOverview(
     id: string, // For nftscan it's address, for simplehash it's collection id.
     expectedChainId?: Web3Helper.ChainIdAll,
 ) {
-    return useQuery(['nft-trending-overview', pluginID, expectedChainId, id], async () => {
-        if (!id || !expectedChainId || !pluginID) return null
-        return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
+    return useQuery({
+        queryKey: ['nft-trending-overview', pluginID, expectedChainId, id],
+        queryFn: async () => {
+            if (!id || !expectedChainId || !pluginID) return null
+            return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
+        },
     })
 }
 
@@ -127,15 +130,21 @@ export function useTrendingById(
 }
 
 export function useHighestFloorPrice(id: string) {
-    return useQuery(['highest-floor-price', id], async () => {
-        if (!id) return null
-        return PluginTraderRPC.getHighestFloorPrice(id)
+    return useQuery({
+        queryKey: ['highest-floor-price', id],
+        queryFn: async () => {
+            if (!id) return null
+            return PluginTraderRPC.getHighestFloorPrice(id)
+        },
     })
 }
 
 export function useOneDaySaleAmounts(id: string) {
-    return useQuery(['one-day-sale-amount', id], async () => {
-        if (!id) return null
-        return PluginTraderRPC.getOneDaySaleAmounts(id)
+    return useQuery({
+        queryKey: ['one-day-sale-amount', id],
+        queryFn: async () => {
+            if (!id) return null
+            return PluginTraderRPC.getOneDaySaleAmounts(id)
+        },
     })
 }

@@ -47,7 +47,7 @@ export function useTransactions() {
     })
     useEffect(() => {
         return Transaction?.transactions?.subscribe(() => {
-            queryClient.invalidateQueries(['transitions'])
+            queryClient.invalidateQueries({ queryKey: ['transitions'] })
         })
     }, [])
 
