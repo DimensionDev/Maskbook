@@ -214,9 +214,9 @@ export function RedPacket(props: RedPacketProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
-            share,
+            share: context?.share,
         })
-    }, [JSON.stringify(token), redPacketContract, payload.rpid, account, share])
+    }, [JSON.stringify(token), redPacketContract, payload.rpid, account, context?.share])
 
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
@@ -268,7 +268,7 @@ export function RedPacket(props: RedPacketProps) {
     const handleShare = useCallback(() => {
         if (!shareText) return
         context?.share?.(shareText)
-    }, [shareText, share])
+    }, [shareText, context?.share])
 
     const outdated =
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))

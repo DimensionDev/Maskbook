@@ -1,12 +1,12 @@
+import { useEffect, useMemo } from 'react'
 import { SiteAdaptorContextRef } from '@masknet/plugin-infra/dom'
 import { AllProviderTradeContext } from '@masknet/plugin-trader'
+import { Typography } from '@mui/material'
 import { Appearance } from '@masknet/public-api'
-import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
+import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, DefaultWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { Typography } from '@mui/material'
-import { useEffect, useMemo } from 'react'
 import { TwitterAdaptor } from '../../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { useI18N } from '../../../../utils/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
@@ -69,7 +69,7 @@ export default function SwapPage() {
 
     useEffect(() => {
         SiteAdaptorContextRef.value = {
-            ...SiteAdaptorContextRef.value,
+            ...SiteAdaptorContextRef.value!,
             share(text) {
                 const url = TwitterAdaptor.getShareLinkURL!(text)
                 const width = 700

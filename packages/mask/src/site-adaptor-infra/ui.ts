@@ -179,7 +179,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
                         Services.Settings.setPluginMinimalModeEnabled(id, enabled)
                     },
                     ...createPartialSharedUIContext(id, def, signal),
-                    ...SiteAdaptorContextRef.value,
+                    ...SiteAdaptorContextRef.value!,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

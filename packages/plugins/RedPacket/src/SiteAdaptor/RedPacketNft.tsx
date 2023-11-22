@@ -306,9 +306,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 name: '',
             }),
             title: t.lucky_drop(),
-            share,
+            share: context?.share,
         })
-    }, [nftRedPacketContract, payload.id, account, share, Hub])
+    }, [nftRedPacketContract, payload.id, account, context?.share, Hub])
 
     const claim = useCallback(async () => {
         const hash = await claimCallback()

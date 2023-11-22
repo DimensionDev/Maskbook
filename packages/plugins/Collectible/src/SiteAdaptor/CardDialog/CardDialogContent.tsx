@@ -149,7 +149,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             personas={personas}
                             identity={lastRecognized}
                             currentPersonaIdentifier={currentIdentifier}
-                            openDashboard={openDashboard?.openDashboard}
+                            openDashboard={context?.openDashboard}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}

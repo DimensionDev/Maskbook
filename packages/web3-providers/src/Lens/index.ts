@@ -346,7 +346,7 @@ export class LensAPI {
         options: {
             token: string
             followModule?: FollowModuleTypedData
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher?: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
         if (!profileId) return
@@ -356,7 +356,7 @@ export class LensAPI {
             followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
         }
 
-        const { data } = await options.fetcher<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const response = await options.fetcher?.<{ data: { follow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -380,19 +380,19 @@ export class LensAPI {
             }),
         })
 
-        return data.follow
+        return response?.data.follow
     }
 
     async unfollow(
         profileId: string,
         options: {
             token: string
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher?: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
         if (!profileId) return
 
-        const { data } = await options.fetcher<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const response = await options.fetcher?.<{ data: { unfollow: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -416,7 +416,7 @@ export class LensAPI {
             }),
         })
 
-        return data.unfollow
+        return response?.data.unfollow
     }
 
     async createFollowTypedData(
@@ -540,11 +540,11 @@ export class LensAPI {
         signature: string,
         options?: {
             token: string
-            fetcher: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
+            fetcher?: <T>(input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<T>
         },
     ) {
         if (!id || !options?.token || !signature) return
-        const { data } = await options.fetcher<{ data: { broadcastOnchain: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
+        const response = await options.fetcher?.<{ data: { broadcastOnchain: LensBaseAPI.Broadcast } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -573,7 +573,7 @@ export class LensAPI {
             }),
         })
 
-        return data.broadcastOnchain
+        return response?.data.broadcastOnchain
     }
 
     async queryApprovedModuleAllowanceAmount(
