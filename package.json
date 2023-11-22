@@ -48,8 +48,8 @@
     "i18next": "^23.2.11",
     "knip": "^2.33.3",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-0a360642d-20230711",
-    "react-dom": "0.0.0-experimental-0a360642d-20230711",
+    "react": "0.0.0-experimental-8039e6d0b-20231026",
+    "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
     "react-i18next": "^13.0.2",
     "ses": "0.18.7",
     "ts-results-es": "^4.0.0"
@@ -146,7 +146,8 @@
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
       "@walletconnect/socket-transport@1.7.8": "patches/@walletconnect__socket-transport@1.7.8.patch",
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
-      "eslint-plugin-i@2.28.1": "patches/eslint-plugin-i@2.28.1.patch"
+      "eslint-plugin-i@2.28.1": "patches/eslint-plugin-i@2.28.1.patch",
+      "react-devtools-inline@4.28.5": "patches/react-devtools-inline@4.28.5.patch"
     }
   }
 }

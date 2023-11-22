@@ -90,7 +90,7 @@ export async function startReactDevTools(signal: AbortSignal) {
     })
     bridge.addListener('syncSelectionToNativeElementsPanel', () => {
         __eval`
-            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
+            if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
                 inspect(__REACT_DEVTOOLS_GLOBAL_HOOK__.$0)
             }
         `
@@ -278,7 +278,7 @@ export async function startReactDevTools(signal: AbortSignal) {
     {
         async function setReactSelectionFromBrowser() {
             const didSelectionChange = await __eval<boolean>`
-                if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__?.$0 !== $0) {
+                if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__ && window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 !== $0) {
                     window.__REACT_DEVTOOLS_GLOBAL_HOOK__.$0 = $0
                     true
                 } else {

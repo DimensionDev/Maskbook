@@ -154,7 +154,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "devtools-ignore-webpack-plugin": "^0.1.1",
     "html-webpack-plugin": "^5.5.3",
-    "react-devtools-inline": "4.28.0",
+    "react-devtools-inline": "4.28.5",
     "react-refresh": "^0.14.0",
     "rimraf": "^5.0.1",
     "source-map-loader": "^4.0.1",
