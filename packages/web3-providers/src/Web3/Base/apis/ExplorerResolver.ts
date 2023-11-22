@@ -41,7 +41,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
 
     addressLink(chainId: ChainId, address: string) {
         const explorerUrl = this.getExplorerURL(chainId)
-        if (!explorerUrl.url) return
+        if (!explorerUrl.url || !address) return
         return urlcat(explorerUrl.url, this.options.addressPathname, {
             address,
             ...explorerUrl?.parameters,

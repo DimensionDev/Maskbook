@@ -36,5 +36,6 @@
     "action": "Action",
     "total_amount": "Total Amount",
     "gas_fee": "Gas fee",
-    "sell_key": "Sell Key"
+    "sell_key": "Sell Key",
+    "wallet_require": "Connecting to the wallet to see what keys are held."
 }
