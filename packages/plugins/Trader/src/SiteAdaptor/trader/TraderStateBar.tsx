@@ -82,14 +82,14 @@ export function TraderStateBar({
     const Others = useWeb3Others()
 
     const { isSwapping } = AllProviderTradeContext.useContainer()
-    const { openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     // #region if `isPopupPage` be true, click the plugin status bar need to  open popup window
     const openSelectWalletPopup = useCallback(() => {
-        openPopupWindow?.(PopupRoutes.SelectWallet, {
+        context?.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
         })
-    }, [chainId, openPopupWindow])
+    }, [chainId, context?.openPopupWindow])
     // #endregion
 
     // #region approve token

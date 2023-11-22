@@ -3,12 +3,12 @@ import { useSiteAdaptorContext } from '@masknet/plugin-infra/content-script'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
-    const { getSearchedKeyword } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     useEffect(() => {
         const onLocationChange = () => {
-            if (!getSearchedKeyword) return
-            const kw = getSearchedKeyword()
+            if (!context?.getSearchedKeyword) return
+            const kw = context?.getSearchedKeyword()
             setKeyword(kw)
         }
         onLocationChange()
@@ -16,6 +16,6 @@ export function useSearchedKeyword() {
         return () => {
             window.removeEventListener('locationchange', onLocationChange)
         }
-    }, [getSearchedKeyword])
+    }, [context?.getSearchedKeyword])
     return keyword
 }

@@ -32,10 +32,10 @@ interface PetSetDialogProps {
 export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const onShareClick = useCallback(() => {
-        share?.(
+        context?.share?.(
             t.game_share_text({
                 name: gameInfo?.name ?? '',
                 snsId: gameInfo?.snsId ?? '',
@@ -43,7 +43,7 @@ export default function GameShareDialog({ onClose, gameInfo }: PetSetDialogProps
             }),
         )
         onClose()
-    }, [gameInfo?.name, gameInfo?.snsId, onClose, share])
+    }, [gameInfo?.name, gameInfo?.snsId, onClose, context?.share])
 
     return (
         <Box className={classes.root}>

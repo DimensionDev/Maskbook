@@ -57,7 +57,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const { chainId, account, setChainId } = useChainContext({
         chainId: targetChainId,
     })
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const { pluginID } = useNetworkContext()
     const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
@@ -266,12 +266,12 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             confirmLabel: t.share(),
             maxWidthOfContent: 420,
         })
-        if (confirmed) share?.(shareText)
+        if (confirmed) context?.share?.(shareText)
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-    }, [tradeCallback, shareText, focusedTrade, share])
+    }, [tradeCallback, shareText, focusedTrade, context?.share])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)

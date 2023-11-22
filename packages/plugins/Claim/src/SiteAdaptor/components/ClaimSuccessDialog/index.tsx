@@ -73,15 +73,14 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
     const t = useI18N()
     const { classes } = useStyles()
 
-    const { share } = useSiteAdaptorContext()
-
+    const context = useSiteAdaptorContext()
     const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
 
     const onShare = useCallback(() => {
         if (!amount || !tokenDetail) return
 
-        share?.(t.share_text({ amount, symbol: tokenDetail.symbol }))
-    }, [share, amount, tokenDetail?.symbol])
+        context?.share?.(t.share_text({ amount, symbol: tokenDetail.symbol }))
+    }, [context?.share, amount, tokenDetail?.symbol])
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>

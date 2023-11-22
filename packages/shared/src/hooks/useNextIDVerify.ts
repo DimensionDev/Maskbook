@@ -15,7 +15,7 @@ import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/cont
 
 export function useNextIDVerify() {
     const verifyPostCollectTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-    const { getPostIdFromNewPostToast, postMessage, signWithPersona } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
@@ -30,14 +30,19 @@ export function useNextIDVerify() {
             )
             if (!payload) throw new Error('Failed to create persona payload.')
 
-            const signature = await signWithPersona?.(SignType.Message, payload.signPayload, persona.identifier, true)
+            const signature = await context?.signWithPersona?.(
+                SignType.Message,
+                payload.signPayload,
+                persona.identifier,
+                true,
+            )
             if (!signature) throw new Error('Failed to sign by persona.')
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            postMessage?.(postContent, { recover: false, reason: 'verify' })
+            context?.postMessage?.(postContent, { recover: false, reason: 'verify' })
             await new Promise<void>((resolve, reject) => {
                 verifyPostCollectTimer.current = setInterval(async () => {
-                    const postId = getPostIdFromNewPostToast?.()
+                    const postId = context?.getPostIdFromNewPostToast?.()
                     if (postId && persona.identifier.publicKeyAsHex) {
                         clearInterval(verifyPostCollectTimer.current!)
                         await NextIDProof.bindProof(
@@ -72,6 +77,6 @@ export function useNextIDVerify() {
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
             await verifiedCallback?.()
         },
-        [postMessage, signWithPersona],
+        [context?.postMessage, context?.signWithPersona],
     )
 }

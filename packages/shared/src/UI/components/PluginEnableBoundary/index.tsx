@@ -26,12 +26,12 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
     const t = useSharedI18N()
     const { children, pluginID } = props
     const { classes } = useStyles(undefined, { props })
-    const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const disabled = useIsMinimalMode(pluginID)
 
     const [{ loading }, onEnablePlugin] = useAsyncFn(async () => {
-        await setPluginMinimalModeEnabled?.(pluginID, false)
-    }, [pluginID, setPluginMinimalModeEnabled])
+        await context?.setPluginMinimalModeEnabled?.(pluginID, false)
+    }, [pluginID, context?.setPluginMinimalModeEnabled])
 
     if (disabled) {
         return (

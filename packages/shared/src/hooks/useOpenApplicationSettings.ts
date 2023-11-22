@@ -5,16 +5,16 @@ import type { ApplicationSettingTabs } from '../UI/modals/ApplicationBoardModal/
 import { ApplicationBoardSettingsModal } from '../index.js'
 
 export function useOpenApplicationSettings() {
-    const { setPluginMinimalModeEnabled } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     return useCallback(
         (tab?: ApplicationSettingTabs, focusPluginID?: PluginID) => {
             ApplicationBoardSettingsModal.open({
-                setPluginMinimalModeEnabled,
+                setPluginMinimalModeEnabled: context?.setPluginMinimalModeEnabled,
                 tab,
                 focusPluginID,
             })
         },
-        [setPluginMinimalModeEnabled],
+        [context?.setPluginMinimalModeEnabled],
     )
 }

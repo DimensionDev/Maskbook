@@ -30,12 +30,12 @@ export const NextIdPage = memo(function NextIdPage() {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { openDashboard, queryPersonaByProfile, openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
-        openDashboard,
+        context?.openDashboard,
         currentProfileIdentifier,
     )
 
@@ -46,16 +46,16 @@ export const NextIdPage = memo(function NextIdPage() {
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
-        return queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
-    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, queryPersonaByProfile])
+        return context?.queryPersonaByProfile?.(visitingPersonaIdentifier.identifier)
+    }, [visitingPersonaIdentifier?.identifier, personaConnectStatus.hasPersona, context?.queryPersonaByProfile])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
     const proofs = usePersonaProofs(publicKeyAsHex)
 
     const handleAddWallets = useCallback(() => {
-        openPopupWindow?.(PopupRoutes.Personas, {
+        context?.openPopupWindow?.(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
         })
-    }, [openPopupWindow])
+    }, [context?.openPopupWindow])
 
     const ActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />

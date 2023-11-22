@@ -64,7 +64,7 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
     const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const [needShare, setNeedShare] = useState(true)
     const [open, setOpen] = useState(false)
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     useEffect(() => {
         return CrossIsolationMessages.events.switchLogoDialogUpdated.on(async (data) => {
@@ -78,13 +78,13 @@ export const SwitchLogoDialog = memo<SwitchLogoDialogProps>(() => {
         Telemetry.captureEvent(EventType.Access, EventID.EntrySwitchLogoSave)
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
-            share?.(
+            context?.share?.(
                 [t.switch_logo_share_text(), '#TwitterLogo #TwitterX #SaveTheBird\n', t.switch_logo_share_mask()].join(
                     '\n',
                 ),
             )
         }
-    }, [logoType, identity?.identifier?.userId, defaultLogoType, share, needShare])
+    }, [logoType, identity?.identifier?.userId, defaultLogoType, context?.share, needShare])
 
     const onChange = useCallback((logoType: SwitchLogoType) => {
         setLogoType(logoType)

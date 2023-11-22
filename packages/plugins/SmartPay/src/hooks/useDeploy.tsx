@@ -33,7 +33,7 @@ export function useDeploy(
     const t = useI18N()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
-    const { signWithPersona, hasPaymentPassword, openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -70,8 +70,8 @@ export function useDeploy(
             )
                 return
 
-            const hasPassword = await hasPaymentPassword()
-            if (!hasPassword) return openPopupWindow(PopupRoutes.SetPaymentPassword, {})
+            const hasPassword = await context?.hasPaymentPassword()
+            if (!hasPassword) return context?.openPopupWindow(PopupRoutes.SetPaymentPassword, {})
 
             if (contractAccount.funded && !contractAccount.deployed) {
                 const hash = await Web3.deploy?.(signAccount.address, signAccount.identifier, options)
@@ -102,7 +102,7 @@ export function useDeploy(
             })
 
             if (signPersona) {
-                signature = await signWithPersona(SignType.Message, payload, signPersona.identifier)
+                signature = await context?.signWithPersona(SignType.Message, payload, signPersona.identifier)
             } else if (signWallet) {
                 signature = await Web3.signMessage('message', payload, options)
             }

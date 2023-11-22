@@ -20,7 +20,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
 
     const wallets = useWallets()
     const personas = useAllPersonas()
-    const { openDashboard } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const { setDialog: setSmartPayDialog } = useRemoteControlledDialog(PluginSmartPayMessages.smartPayDialogEvent)
 
@@ -50,7 +50,7 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                     actionHint: t.create_persona_action(),
                     position: 'center',
                 },
-                openDashboard,
+                openDashboard: context?.openDashboard,
             })
             return
         }

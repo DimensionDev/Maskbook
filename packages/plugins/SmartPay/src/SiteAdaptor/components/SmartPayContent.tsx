@@ -195,7 +195,7 @@ export const SmartPayContent = memo(() => {
 
     // #region web3 state
 
-    const { openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const { account, chainId, setAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const wallet = useMemo(() => {
@@ -316,8 +316,8 @@ export const SmartPayContent = memo(() => {
 
     const [{ loading: openSendLoading }, handleSendClick] = useAsyncFn(async () => {
         await connectToCurrent()
-        await openPopupWindow(PopupRoutes.Contacts, { selectedToken: maskToken?.address })
-    }, [connectToCurrent, openPopupWindow, maskToken])
+        await context?.openPopupWindow(PopupRoutes.Contacts, { selectedToken: maskToken?.address })
+    }, [connectToCurrent, context?.openPopupWindow, maskToken])
 
     const handleReceiveClick = useCallback(() => {
         setReceiveDialog({

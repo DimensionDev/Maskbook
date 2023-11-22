@@ -98,7 +98,7 @@ export function NFTListDialog() {
     const [disabled, setDisabled] = useState(false)
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const { openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => setSelectedToken(undefined), [chainId])
@@ -265,7 +265,7 @@ export function NFTListDialog() {
 
                 <PluginVerifiedWalletStatusBar
                     openPopupWindow={() =>
-                        openPopupWindow(PopupRoutes.Personas, {
+                        context?.openPopupWindow(PopupRoutes.Personas, {
                             tab: PopupHomeTabType.ConnectedWallets,
                         })
                     }

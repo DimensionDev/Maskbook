@@ -90,7 +90,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
-    const { openDashboard } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const currentIdentifier = useSubscription(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
@@ -149,7 +149,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             personas={personas}
                             identity={lastRecognized}
                             currentPersonaIdentifier={currentIdentifier}
-                            openDashboard={openDashboard}
+                            openDashboard={openDashboard?.openDashboard}
                             handlerPosition="top-right"
                             customHint
                             directTo={PluginID.Avatar}

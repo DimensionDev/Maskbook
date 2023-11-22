@@ -38,12 +38,12 @@ interface PetSetDialogProps {
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const onShareClick = useCallback(() => {
-        share?.(t.share_twitter())
+        context?.share?.(t.share_twitter())
         onClose()
-    }, [onClose, share])
+    }, [onClose, context?.share])
 
     return (
         <Box className={classes.root}>

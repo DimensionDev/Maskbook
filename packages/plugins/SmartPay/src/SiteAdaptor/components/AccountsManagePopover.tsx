@@ -63,7 +63,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
         const t = useI18N()
         const { classes } = useStyles()
         const { personaManagers, walletManagers } = useManagers()
-        const { openPopupWindow } = useSiteAdaptorContext()
+        const context = useSiteAdaptorContext()
 
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const account = useAccount()
@@ -99,8 +99,8 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
 
                 if (network) await Network?.switchNetwork(network.ID)
             }
-            await openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address })
-        }, [address, connection, account, chainId, network])
+            await context?.openPopupWindow(PopupRoutes.ChangeOwner, { contractAccount: address })
+        }, [address, connection, account, chainId, network, context?.openPopupWindow])
 
         return usePortalShadowRoot((container) => (
             <Popover

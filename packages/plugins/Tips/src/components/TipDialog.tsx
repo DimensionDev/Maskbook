@@ -119,7 +119,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const buttonLabel = isSending ? t.sending_tip() : isValid || !validateMessage ? t.send_tip() : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const send = useCallback(async () => {
         const hash = await sendTip()
@@ -142,7 +142,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.tips(),
-            share,
+            share: context?.share,
         })
         onClose?.()
     }, [
@@ -154,7 +154,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         token,
         nonFungibleTokenAddress,
         nonFungibleTokenId,
-        share,
+        context?.share,
     ])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)

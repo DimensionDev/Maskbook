@@ -28,7 +28,7 @@ export function useFollow(
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
     const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
-    const { fetchJSON } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -81,7 +81,7 @@ export function useFollow(
             let hash: string | undefined
 
             try {
-                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: context?.fetchJSON })
                 if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
                 else hash = broadcast?.txHash
             } catch {
@@ -110,7 +110,7 @@ export function useFollow(
             })
             if (!receipt.status) throw new Error('Failed to Follow')
         },
-        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, fetchJSON, onFailed],
+        [handleQueryAuthenticate, profileId, account, chainId, onSuccess, context?.fetchJSON, onFailed],
     )
 
     const handleFollow = useCallback<(event: MouseEvent<HTMLElement>) => Promise<void>>(
@@ -125,7 +125,11 @@ export function useFollow(
 
                 if (signless && !followModule?.feeFollowModule) {
                     try {
-                        const result = await Lens.follow(profileId, { token, followModule, fetcher: fetchJSON })
+                        const result = await Lens.follow(profileId, {
+                            token,
+                            followModule,
+                            fetcher: context?.fetchJSON,
+                        })
                         if (result?.__typename === BroadcastType.RelayError) throw new Error('Failed to follow')
                         else if (result?.txHash) {
                             setLoading(false)
@@ -172,7 +176,7 @@ export function useFollow(
             handleQueryAuthenticate,
             broadcastAction,
             followModule,
-            fetchJSON,
+            context?.fetchJSON,
             chainId,
         ],
     )

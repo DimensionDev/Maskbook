@@ -139,14 +139,14 @@ function Content(props: ProfileTabContentProps) {
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { openDashboard } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const {
         value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
-    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, openDashboard, lastRecognized)
+    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, context?.openDashboard, lastRecognized)
 
     const {
         currentVisitingSocialIdentity,
@@ -432,7 +432,7 @@ function Content(props: ProfileTabContentProps) {
                                     personas={allPersonas}
                                     identity={lastRecognized}
                                     currentPersonaIdentifier={currentIdentifier}
-                                    openDashboard={openDashboard}
+                                    openDashboard={context?.openDashboard}
                                     customHint
                                     handlerPosition="top-right"
                                     directTo={PluginID.Web3Profile}>

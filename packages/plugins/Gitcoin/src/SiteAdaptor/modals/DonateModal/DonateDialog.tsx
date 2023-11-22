@@ -77,7 +77,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
     const t = useI18N()
     const { classes, theme } = useStyles()
     const { title, admin_address: address, tenants } = grant
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const availableChains = useMemo(() => getSupportedChainIds(tenants), [tenants])
     const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -147,7 +147,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
             token,
             uiAmount,
             onShare() {
-                share?.(shareText)
+                context?.share?.(shareText)
             },
         })
 

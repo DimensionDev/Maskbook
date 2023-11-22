@@ -51,7 +51,7 @@ export function PurchaseDialog(props: ActionBarProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const {
         token: { data: token },
@@ -94,7 +94,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             await openShareTxDialog({
                 hash,
                 onShare() {
-                    share?.(shareText)
+                    context?.share?.(shareText)
                 },
             })
             onClose()

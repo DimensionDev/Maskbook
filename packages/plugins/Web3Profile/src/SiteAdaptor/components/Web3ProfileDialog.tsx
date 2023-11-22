@@ -47,7 +47,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { classes } = useStyles()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
-    const { openPopupWindow } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const [tipsVisible, setTipsVisible] = useState(true)
     const dismissTips = useCallback(() => setTipsVisible(false), [])
@@ -132,10 +132,10 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const { value: avatar } = useAsyncRetry(async () => queryPersonaAvatar(currentPersona?.identifier), [])
 
     const openPopupsWindow = useCallback(() => {
-        openPopupWindow(PopupRoutes.Personas, {
+        context?.openPopupWindow(PopupRoutes.Personas, {
             tab: PopupHomeTabType.ConnectedWallets,
         })
-    }, [])
+    }, [context?.openPopupWindow])
 
     const disabled = isClean || isInitialLoading
 

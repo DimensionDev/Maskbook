@@ -3,10 +3,10 @@ import { useSiteAdaptorContext } from '../dom/useSiteAdaptorContext.js'
 import { useSocialIdentity } from './index.js'
 
 export function useSocialIdentityByUserId(userId?: string) {
-    const { getUserIdentity } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const { value: identity } = useAsync(async () => {
         if (!userId) return
-        return getUserIdentity?.(userId)
-    }, [userId, getUserIdentity])
+        return context?.getUserIdentity?.(userId)
+    }, [userId, context?.getUserIdentity])
     return useSocialIdentity(identity)
 }

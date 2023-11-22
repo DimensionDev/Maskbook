@@ -25,7 +25,7 @@ export function useUnfollow(
     const t = useI18N()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
-    const { fetchJSON } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const snackbarKeyRef = useRef<SnackbarKey>()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -79,7 +79,7 @@ export function useUnfollow(
             try {
                 onSuccess?.(cloneEvent)
                 setLoading?.(false)
-                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
+                const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: context?.fetchJSON })
                 if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
                 else hash = broadcast?.txHash
             } catch {
@@ -103,7 +103,7 @@ export function useUnfollow(
             })
             if (!receipt.status) throw new Error('Failed to unfollow')
         },
-        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, lensHub, fetchJSON, onFailed],
+        [handleQueryAuthenticate, chainId, profileId, account, onSuccess, lensHub, context?.fetchJSON, onFailed],
     )
 
     const handleUnfollow = useCallback(
@@ -117,7 +117,7 @@ export function useUnfollow(
 
                 if (signless) {
                     try {
-                        const result = await Lens.unfollow(profileId, { token, fetcher: fetchJSON })
+                        const result = await Lens.unfollow(profileId, { token, fetcher: context?.fetchJSON })
                         if (result?.__typename === BroadcastType.RelayError) throw new Error('Failed to unfollow')
                         else if (result?.txHash) {
                             setLoading(false)
@@ -156,7 +156,7 @@ export function useUnfollow(
                 setLoading(false)
             }
         },
-        [handleQueryAuthenticate, chainId, profileId, onSuccess, onFailed, showSingletonSnackbar, fetchJSON],
+        [handleQueryAuthenticate, chainId, profileId, onSuccess, onFailed, showSingletonSnackbar, context?.fetchJSON],
     )
 
     return { loading, handleUnfollow }

@@ -63,7 +63,7 @@ export const AvatarManagementContext = createContext<AvatarManagementContextOpti
 interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 
 export const AvatarManagementProvider = memo(({ children }: Props) => {
-    const { queryPersonaByProfile } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const identity = useLastRecognizedIdentity()
 
     const [proof, setProof] = useState<BindingProof>()
@@ -82,7 +82,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
                 currentNextIDPlatform,
                 identity.identifier.userId.toLowerCase(),
             )
-            const linkedPersona = await queryPersonaByProfile(identity.identifier)
+            const linkedPersona = await context?.queryPersonaByProfile(identity.identifier)
             const personaBindings = bindings.filter(
                 (x) => x.persona === linkedPersona?.identifier.publicKeyAsHex.toLowerCase(),
             )

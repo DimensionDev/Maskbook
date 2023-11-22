@@ -3,14 +3,14 @@ import { type ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 export function usePersonaSign(message?: string, currentIdentifier?: ECKeyIdentifier) {
-    const { signWithPersona } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     return useAsyncFn(async () => {
         if (!message || !currentIdentifier) return
         try {
-            return await signWithPersona?.(SignType.Message, message, currentIdentifier)
+            return await signWithPersona?.signWithPersona?.(SignType.Message, message, currentIdentifier)
         } catch {
             return
         }
-    }, [message, currentIdentifier, signWithPersona])
+    }, [message, currentIdentifier, signWithPersona?.signWithPersona])
 }

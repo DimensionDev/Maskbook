@@ -131,10 +131,10 @@ export interface RedPacketProps {
 
 export function RedPacket(props: RedPacketProps) {
     const { payload } = props
+    const token = payload.token
 
     const t = useI18N()
-    const { share } = useSiteAdaptorContext()
-    const token = payload.token
+    const context = useSiteAdaptorContext()
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? ChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
@@ -266,8 +266,8 @@ export function RedPacket(props: RedPacketProps) {
     }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {
-        if (!shareText || !share) return
-        share(shareText)
+        if (!shareText) return
+        context?.share?.(shareText)
     }, [shareText, share])
 
     const outdated =

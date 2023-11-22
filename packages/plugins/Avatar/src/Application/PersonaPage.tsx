@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { useSubscription } from 'use-subscription'
-import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
+import { type BindingProof, EMPTY_LIST, NextIDPlatform, type PersonaInformation, UNDEFINED } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
 import { useI18N } from '../locales/index.js'
@@ -28,9 +28,9 @@ export function PersonaPage() {
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId
 
-    const { currentPersona: currentPersona_ } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const myPersonas = useAllPersonas()
-    const _persona = useSubscription(currentPersona_)
+    const _persona = useSubscription(context?.currentPersona ?? UNDEFINED)
     const currentPersona = myPersonas?.find(
         (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )

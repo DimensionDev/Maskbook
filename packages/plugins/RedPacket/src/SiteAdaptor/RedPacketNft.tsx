@@ -200,7 +200,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const {
         value: availability,
         loading,
@@ -243,8 +243,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [availability?.isClaimed, t, network?.name])
 
     const onShare = useCallback(() => {
-        if (shareText) share?.(shareText)
-    }, [shareText, share])
+        if (shareText) context?.share?.(shareText)
+    }, [shareText, context?.share])
     // #endregion
 
     const openNFTDialog = useCallback(() => {

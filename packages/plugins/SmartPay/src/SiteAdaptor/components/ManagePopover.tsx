@@ -83,7 +83,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
     const { classes } = useStyles()
     const { personaManagers, walletManagers } = useManagers()
 
-    const { openPopupWindow, openDashboard } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     return usePortalShadowRoot((container) => (
         <Popover
@@ -134,7 +134,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
-                        onClick={() => openDashboard(DashboardRoutes.SignUpPersona)}>
+                        onClick={() => context?.openDashboard(DashboardRoutes.SignUpPersona)}>
                         {t.create()}
                     </Button>
                 </Box>
@@ -177,7 +177,7 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
-                        onClick={() => openPopupWindow(PopupRoutes.WalletStartUp, undefined)}>
+                        onClick={() => context?.openPopupWindow(PopupRoutes.WalletStartUp, undefined)}>
                         {t.create()}
                     </Button>
                 </Box>

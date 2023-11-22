@@ -5,8 +5,8 @@ import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 
 // TODO: support suspense
 export function useExternalPluginManifest(url: string) {
-    const { fetchManifest } = useSiteAdaptorContext()
-    return useAsyncRetry(async () => fetchManifest?.(url), [url, fetchManifest])
+    const context = useSiteAdaptorContext()
+    return useAsyncRetry(async () => context?.fetchManifest?.(url), [url, context?.fetchManifest])
 }
 
 export function useExternalPluginTemplate(url: string, manifest: Manifest | undefined, metaKey: string) {

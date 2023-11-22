@@ -103,7 +103,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const t = useI18N()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
@@ -216,10 +216,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         await openShareTxDialog({
             hash,
             onShare() {
-                share?.(shareText)
+                context?.share?.(shareText)
             },
         })
-    }, [isDeposit, protocol, account, chainId, tokenAmount, openShareTxDialog, currentChainId, share])
+    }, [isDeposit, protocol, account, chainId, tokenAmount, openShareTxDialog, currentChainId, context?.share])
 
     const buttonDom = useMemo(() => {
         return (

@@ -66,7 +66,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { data: personas = EMPTY_LIST, isLoading, error, refetch } = useConnectedPersonas()
-    const { openDashboard, attachProfile, setCurrentPersonaIdentifier } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -81,12 +81,12 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     const [, connect] = useAsyncFn(
         async (profileIdentifier?: ProfileIdentifier, personaIdentifier?: PersonaIdentifier) => {
             if (!profileIdentifier || !personaIdentifier) return
-            await attachProfile?.(profileIdentifier, personaIdentifier, {
+            await context?.attachProfile?.(profileIdentifier, personaIdentifier, {
                 connectionConfirmState: 'confirmed',
             })
-            await setCurrentPersonaIdentifier?.(personaIdentifier)
+            await context?.setCurrentPersonaIdentifier?.(personaIdentifier)
         },
-        [attachProfile, setCurrentPersonaIdentifier],
+        [context?.attachProfile, context?.setCurrentPersonaIdentifier],
     )
 
     useLayoutEffect(() => {
@@ -94,7 +94,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         onClose?.()
         LeavePageConfirmModal.open({
-            openDashboard,
+            openDashboard: context?.openDashboard,
             info: {
                 target: 'dashboard',
                 url: DashboardRoutes.SignUpPersona,
@@ -103,7 +103,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 actionHint: t.applications_create_persona_action(),
             },
         })
-    }, [!personas.length, isLoading, !error, openDashboard])
+    }, [!personas.length, isLoading, !error, context?.openDashboard])
 
     const actionButton = useMemo(() => {
         let isConnected = true

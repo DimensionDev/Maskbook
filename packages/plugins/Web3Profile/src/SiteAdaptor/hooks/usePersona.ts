@@ -1,14 +1,15 @@
+import { useSubscription } from 'use-subscription'
+import { UNDEFINED } from '@masknet/shared-base'
 import { useSiteAdaptorContext } from '@masknet/plugin-infra/dom'
 import {
     allPersonas,
     lastRecognizedProfile,
     currentVisitingProfile,
 } from '@masknet/plugin-infra/content-script/context'
-import { useSubscription } from 'use-subscription'
 
 export function useCurrentPersona() {
     const context = useSiteAdaptorContext()
-    return useSubscription(context.currentPersona)
+    return useSubscription(context?.currentPersona ?? UNDEFINED)
 }
 
 export function useCurrentVisitingProfile() {

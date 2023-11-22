@@ -6,11 +6,11 @@ import { currentNextIDPlatform, lastRecognizedProfile } from '@masknet/plugin-in
 import { NextIDPlatform } from '@masknet/shared-base'
 
 export function usePersonaVerify() {
-    const { queryPersonaByProfile } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const visitingPersonaIdentifier = useSubscription(lastRecognizedProfile)
     return useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
-        const persona = await queryPersonaByProfile(visitingPersonaIdentifier.identifier)
+        const persona = await context?.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
         if (!persona?.identifier.publicKeyAsHex) return
         const isVerified = await NextIDProof.queryIsBound(
             persona.identifier.publicKeyAsHex,
@@ -18,5 +18,5 @@ export function usePersonaVerify() {
             visitingPersonaIdentifier.identifier.userId,
         )
         return { isVerified }
-    }, [visitingPersonaIdentifier, queryPersonaByProfile])
+    }, [visitingPersonaIdentifier, context?.queryPersonaByProfile])
 }

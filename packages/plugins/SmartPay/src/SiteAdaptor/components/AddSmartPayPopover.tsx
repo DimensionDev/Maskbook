@@ -69,7 +69,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
     }, [currentProfile])
-    const { openDashboard } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
 
     const { value: qualifications, loading } = useQueryQualifications()
 
@@ -81,7 +81,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
         // If there is no persona and no signer
         if (!personas.length && !qualifications.signPersona && !qualifications.signWallet) {
             LeavePageConfirmModal.open({
-                openDashboard,
+                openDashboard: context?.openDashboard,
                 info: {
                     target: 'dashboard',
                     url: DashboardRoutes.SignUpPersona,

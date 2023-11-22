@@ -36,7 +36,7 @@ export interface DrawResultDialogProps {
 export function DrawResultDialog(props: DrawResultDialogProps) {
     const { open, onClose, boxInfo, contractDetailed } = props
     const { classes } = useStyles()
-    const { share } = useSiteAdaptorContext()
+    const context = useSiteAdaptorContext()
     const { lastPurchasedTokenIds } = useContainer(Context)
 
     const postLink = usePostLink()
@@ -44,7 +44,7 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
 
     const onShare = () => {
         onClose()
-        share?.(shareText)
+        context?.share?.(shareText)
     }
 
     if (!contractDetailed) return null
