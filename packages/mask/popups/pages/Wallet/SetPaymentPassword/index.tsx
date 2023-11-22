@@ -205,7 +205,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 } else {
                     await Services.Wallet.setPassword(data.password)
                 }
-                queryClient.refetchQueries(['@@has-password'])
+                queryClient.refetchQueries({ queryKey: ['@@has-password'] })
                 const hasPassword = await Services.Wallet.hasPassword()
 
                 if (hasPassword) {

@@ -125,8 +125,8 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         mutationFn: handleAddFriend,
         onMutate: async (friend: Friend | undefined) => {
             if (!friend) return
-            await queryClient.cancelQueries(['relation-records', rawPublicKey])
-            await queryClient.cancelQueries(['friends', rawPublicKey])
+            await queryClient.cancelQueries({ queryKey: ['relation-records', rawPublicKey] })
+            await queryClient.cancelQueries({ queryKey: ['friends', rawPublicKey] })
             queryClient.setQueryData(
                 ['friends', rawPublicKey],
                 (
@@ -154,8 +154,8 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
             setLocal(true)
         },
         onSettled: async () => {
-            await queryClient.invalidateQueries(['relation-records', rawPublicKey])
-            await queryClient.invalidateQueries(['friends', rawPublicKey])
+            await queryClient.invalidateQueries({ queryKey: ['relation-records', rawPublicKey] })
+            await queryClient.invalidateQueries({ queryKey: ['friends', rawPublicKey] })
             refetch?.()
         },
     })

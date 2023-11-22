@@ -201,7 +201,9 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         if (typeof hash !== 'string') {
             throw new Error('Failed to deposit token.')
         } else {
-            queryClient.invalidateQueries(['savings', 'balance', chainId, protocol.bareToken.address, account])
+            queryClient.invalidateQueries({
+                queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],
+            })
         }
         await openShareTxDialog({
             hash,

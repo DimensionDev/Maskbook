@@ -30,7 +30,7 @@ export function useConnectPersona() {
         // auto-finish the setup process
         if (!personaInfo) throw new Error('invalid persona')
         await Services.Identity.setupPersona(personaInfo?.identifier)
-        queryClient.invalidateQueries(['query-persona-info', persona.publicKeyAsHex])
+        queryClient.invalidateQueries({ queryKey: ['query-persona-info', persona.publicKeyAsHex] })
         MaskMessages.events.ownPersonaChanged.sendToAll()
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])

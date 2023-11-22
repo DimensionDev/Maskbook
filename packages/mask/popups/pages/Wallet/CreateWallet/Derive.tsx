@@ -103,7 +103,7 @@ const DeriveWallet = memo(function DeriveWallet() {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
             const ens = await NameService?.safeReverse?.(nextWallet, true)
             const allWallets = EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets.getCurrentValue()
-            queryClient.invalidateQueries(['@@mask-wallets'])
+            queryClient.invalidateQueries({ queryKey: ['@@mask-wallets'] })
             const name = ens || generateNewWalletName(allWallets)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)
             await pollResult(address)

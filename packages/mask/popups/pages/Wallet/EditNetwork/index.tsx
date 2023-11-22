@@ -109,7 +109,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     await Network?.removeNetwork(id)
                     showSnackbar(t.deleted_network_successfully())
                     // Trigger UI update.
-                    queryClient.invalidateQueries(QUERY_KEY)
+                    queryClient.invalidateQueries({ queryKey: QUERY_KEY })
                     navigate(-1)
                 }}>
                 <Icons.Trash size={24} />
@@ -209,7 +209,7 @@ export const EditNetwork = memo(function EditNetwork() {
                     showSnackbar(t.adding_network_successfully())
                 }
                 navigate(-1)
-                queryClient.invalidateQueries(QUERY_KEY)
+                queryClient.invalidateQueries({ queryKey: QUERY_KEY })
             } catch (err) {
                 checkZodError((err as Error).message)
                 showSnackbar(t.failed_to_save_network())
