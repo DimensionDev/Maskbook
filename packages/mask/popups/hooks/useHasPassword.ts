@@ -8,7 +8,7 @@ export function useHasPassword() {
         data: hasPassword,
         isLoading,
         refetch,
-    } = useQuery(['@@has-password'], Services.Wallet.hasPassword, { networkMode: 'always' })
+    } = useQuery({ queryKey: ['@@has-password'], queryFn: Services.Wallet.hasPassword, networkMode: 'always' })
 
     useEffect(() => {
         refetch()

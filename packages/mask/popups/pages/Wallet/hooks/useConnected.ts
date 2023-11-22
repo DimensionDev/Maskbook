@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 
 export function useConnectedWallets(origin: string | null) {
-    return useQuery(
-        ['origin-connected-wallets', origin],
-        async () => {
+    return useQuery({
+        queryKey: ['origin-connected-wallets', origin],
+        queryFn: async () => {
             if (origin === null) {
                 const result = await Services.Helper.queryCurrentActiveTab()
                 if (!result.url || !URL.canParse(result.url)) return null
@@ -13,6 +13,6 @@ export function useConnectedWallets(origin: string | null) {
             const connected = await Services.Wallet.getAllConnectedWallets(origin)
             return connected
         },
-        { networkMode: 'always' },
-    )
+        networkMode: 'always',
+    })
 }

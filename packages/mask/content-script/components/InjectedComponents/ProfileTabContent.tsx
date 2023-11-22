@@ -308,9 +308,12 @@ function Content(props: ProfileTabContentProps) {
 
     const { data: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
-    const { data: nextIdBindings = EMPTY_LIST } = useQuery(['profiles', 'by-twitter-id', currentVisitingUserId], () => {
-        if (!currentVisitingUserId) return EMPTY_LIST
-        return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
+    const { data: nextIdBindings = EMPTY_LIST } = useQuery({
+        queryKey: ['profiles', 'by-twitter-id', currentVisitingUserId],
+        queryFn: () => {
+            if (!currentVisitingUserId) return EMPTY_LIST
+            return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
+        },
     })
 
     if (hidden) return null

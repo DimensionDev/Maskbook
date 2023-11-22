@@ -154,9 +154,10 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const t = useApprovalTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: spenders, isLoading } = useQuery(['non-fungible-tokens', 'spenders', chainId, account], async () =>
-        EVMHub.getNonFungibleTokenSpenders(chainId, account),
-    )
+    const { data: spenders, isLoading } = useQuery({
+        queryKey: ['non-fungible-tokens', 'spenders', chainId, account],
+        queryFn: async () => EVMHub.getNonFungibleTokenSpenders(chainId, account),
+    })
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({

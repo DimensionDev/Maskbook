@@ -23,9 +23,12 @@ export function usePriceStats({
     const { chainId } = useChainContext({
         chainId: expectedChainId,
     })
-    return useQuery(['price-stats', chainId, coinId, currency, days, sourceType], async () => {
-        if (isUndefined(days) || isUndefined(coinId) || isUndefined(sourceType) || isUndefined(currency))
-            return EMPTY_LIST
-        return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, sourceType)
+    return useQuery({
+        queryKey: ['price-stats', chainId, coinId, currency, days, sourceType],
+        queryFn: async () => {
+            if (isUndefined(days) || isUndefined(coinId) || isUndefined(sourceType) || isUndefined(currency))
+                return EMPTY_LIST
+            return PluginTraderRPC.getPriceStats(chainId, coinId, currency, days, sourceType)
+        },
     })
 }
