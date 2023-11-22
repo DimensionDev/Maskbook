@@ -18,7 +18,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
-import { useSearchedKeyword } from './useSearchedKeyword.js'
+import { useSearchedKeyword } from '../../../hooks/useSearchedKeyword.js'
 
 const useStyles = makeStyles<{ maxHeight: string | number; isProfilePage?: boolean; searchType?: SearchResultType }>()(
     (theme, { maxHeight, isProfilePage, searchType }) => ({
