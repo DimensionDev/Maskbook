@@ -36,5 +36,6 @@
     "action": "crwdns22626:0crwdne22626:0",
     "total_amount": "crwdns22628:0crwdne22628:0",
     "gas_fee": "crwdns22630:0crwdne22630:0",
-    "sell_key": "crwdns22632:0crwdne22632:0"
+    "sell_key": "crwdns22632:0crwdne22632:0",
+    "wallet_require": "crwdns22636:0crwdne22636:0"
 }
