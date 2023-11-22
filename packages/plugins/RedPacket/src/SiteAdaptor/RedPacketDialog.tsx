@@ -8,15 +8,15 @@ import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPers
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { Icons } from '@masknet/icons'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
+    useActivatedPluginSiteAdaptor,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
+import { Icons } from '@masknet/icons'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
@@ -75,7 +75,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const approvalDefinition = useActivatedPlugin(PluginID.RedPacket, 'any')
+    const approvalDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)

@@ -25,11 +25,6 @@
       "mask-src": "./src/entry-background-worker.ts",
       "default": "./dist/entry-background-worker.js"
     },
-    "./extension-page": {
-      "types": "./dist/entry-extension-page.d.ts",
-      "mask-src": "./src/entry-extension-page.ts",
-      "default": "./dist/entry-extension-page.js"
-    },
     "./content-script": {
       "types": "./dist/entry-content-script.d.ts",
       "mask-src": "./src/entry-content-script.ts",

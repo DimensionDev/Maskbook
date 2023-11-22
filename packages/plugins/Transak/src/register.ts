@@ -8,9 +8,4 @@ registerPlugin({
         hotModuleReload: (hot) =>
             import.meta.webpackHot?.accept('./SiteAdaptor', () => hot(import('./SiteAdaptor/index.js'))),
     },
-    ExtensionPage: {
-        load: () => import('./ExtensionPage/index.js'),
-        hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./ExtensionPage', () => hot(import('./ExtensionPage/index.js'))),
-    },
 })

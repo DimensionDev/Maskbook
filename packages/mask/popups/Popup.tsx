@@ -1,4 +1,3 @@
-import { createInjectHooksRenderer, useActivatedPluginsExtensionPage } from '@masknet/plugin-infra/extension-page'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
@@ -50,15 +49,6 @@ const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index
 const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
 const Settings = lazy(() => import('./pages/Settings/index.js'))
-
-const PluginRender = createInjectHooksRenderer(useActivatedPluginsExtensionPage, (x) => x.GlobalInjection)
-
-function PluginRenderDelayed() {
-    const [canRenderPlugin, setRenderPlugins] = useState(false)
-    useEffect(() => setRenderPlugins(true), [])
-    if (!canRenderPlugin) return null
-    return <PluginRender />
-}
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -191,8 +181,6 @@ export default function Popups() {
                         <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
                             <PopupRoutes />
                             <Modals />
-                            {/* TODO: Should only load plugins when the page is plugin-aware. */}
-                            <PluginRenderDelayed />
                         </HistoryRouter>
                     </PageTitleContext.Provider>
                 </PopupContext.Provider>

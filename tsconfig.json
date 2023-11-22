@@ -73,7 +73,6 @@
       "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
       "@masknet/plugin-infra/dom/context": ["./packages/plugin-infra/src/dom/context.ts"],
       "@masknet/plugin-infra/background-worker": ["./packages/plugin-infra/src/entry-background-worker.ts"],
-      "@masknet/plugin-infra/extension-page": ["./packages/plugin-infra/src/entry-extension-page.ts"],
       "@masknet/plugin-infra/content-script/context": ["./packages/plugin-infra/src/site-adaptor/context.ts"],
       "@masknet/plugin-infra/content-script": ["./packages/plugin-infra/src/entry-content-script.ts"],
       "@masknet/plugin-infra": ["./packages/plugin-infra/src/entry.ts"],
@@ -84,7 +83,6 @@
       "@masknet/sandboxed-plugin-runtime/site-adaptor": [
         "./packages/sandboxed-plugin-runtime/src/site-adaptor/index.ts"
       ],
-      "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       "@masknet/shared": ["./packages/shared/src/index.ts"],
       "@masknet/shared-base": ["./packages/shared-base/src/index.ts"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src/index.ts"],

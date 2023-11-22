@@ -1,9 +1,6 @@
-import { startPluginHostExtensionPage } from '@masknet/plugin-infra/extension-page'
 import { createNormalReactRoot } from '../../shared-ui/utils/createNormalReactRoot.js'
-import { createPluginHost, createSharedContext } from '../../shared/plugin-infra/host.js'
-import Services from '#services'
 import Popups from '../Popup.js'
-import { allPersonas, setupUIContext } from '../../shared-ui/initUIContext.js'
+import { setupUIContext } from '../../shared-ui/initUIContext.js'
 
 setupUIContext()
 if (location.hash === '') location.assign('#/personas')
@@ -28,24 +25,3 @@ if (navigator.userAgent.includes('Firefox')) {
     }, 200)
 }
 createNormalReactRoot(<Popups />)
-startPluginHost()
-
-function startPluginHost() {
-    // TODO: Should only load plugins when the page is plugin-aware.
-
-    startPluginHostExtensionPage(
-        createPluginHost(
-            undefined,
-            (id, def, signal) => ({
-                ...createSharedContext(id, signal),
-                allPersonas,
-                hasPaymentPassword: Services.Wallet.hasPassword,
-                setMinimalMode(enabled) {
-                    Services.Settings.setPluginMinimalModeEnabled(id, enabled)
-                },
-            }),
-            Services.Settings.getPluginMinimalModeEnabled,
-            Services.Helper.hasHostPermission,
-        ),
-    )
-}
