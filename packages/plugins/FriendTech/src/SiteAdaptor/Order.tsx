@@ -103,10 +103,10 @@ export const Order = memo(function Order() {
         )
     }, [count])
 
-    const { data: user, isInitialLoading: loadingPrice } = useUser(address)
-    const { data: own, isInitialLoading: loadingOwnCount } = useOwnKeys(address, account)
+    const { data: user, isLoading: loadingPrice } = useUser(address)
+    const { data: own, isLoading: loadingOwnCount } = useOwnKeys(address, account)
     const { data: gas, isLoading: isEstimating } = useEstimateSellGas(address, account, count.toString())
-    const { data: price, isInitialLoading: isLoadingPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, {
+    const { data: price, isLoading: isLoadingPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: ChainId.Base,
     })
     const gasFee = useMemo(() => {

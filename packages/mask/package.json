@@ -96,8 +96,7 @@
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.2",
     "@splinetool/react-spline": "2.2.6",
-    "@tanstack/react-query-devtools": "^4.29.25",
-    "@tanstack/react-query-persist-client": "^4.35.0",
+    "@tanstack/react-query-persist-client": "^5.8.4",
     "@types/elliptic": "^6.4.14",
     "@types/json-stable-stringify": "^1.0.34",
     "@types/node": "20.5.7",
@@ -149,6 +148,7 @@
   "devDependencies": {
     "@nice-labs/emit-file-webpack-plugin": "^1.1.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
+    "@tanstack/react-query-devtools": "^5.8.4",
     "@types/color": "^3.0.3",
     "@types/react-devtools-inline": "^4.24.3",
     "copy-webpack-plugin": "^11.0.0",

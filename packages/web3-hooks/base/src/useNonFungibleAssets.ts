@@ -1,4 +1,4 @@
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -32,7 +32,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const { data, isLoading, fetchNextPage, hasNextPage, refetch, error, dataUpdatedAt } = useInfiniteQuery({
         queryKey: ['non-fungible-assets', account, availableChainIds, blockedTokenIds],
         queryFn: async ({ pageParam }) => {
-            const chainId = pageParam?.chainId || availableChainIds[0]
+            const chainId = pageParam?.chainId || (availableChainIds[0] as HubOptions<T>['chainId'])
             const res = await Hub.getNonFungibleAssets!(account, {
                 indicator: pageParam?.indicator,
                 size: 20,
@@ -51,12 +51,16 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 chainId,
             }
         },
+        initialPageParam: {
+            indicator: undefined as PageIndicator | undefined,
+            chainId: availableChainIds[0] as NonNullable<HubOptions<T>['chainId']>,
+        },
         getNextPageParam: (lastPage) => {
             const { nextIndicator, chainId } = lastPage
-            const nextChainId = nextIndicator ? chainId : availableChainIds[availableChainIds.indexOf(chainId) + 1]
+            const nextChainId = nextIndicator ? chainId : availableChainIds[availableChainIds.indexOf(chainId!) + 1]
             if (!nextChainId) return
             return {
-                indicator: nextIndicator,
+                indicator: nextIndicator as PageIndicator | undefined,
                 chainId: nextChainId,
             }
         },

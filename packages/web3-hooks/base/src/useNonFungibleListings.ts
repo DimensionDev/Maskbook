@@ -1,4 +1,4 @@
-import type { NetworkPluginID } from '@masknet/shared-base'
+import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { OrderSide } from '@masknet/web3-shared-base'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -24,6 +24,7 @@ export function useNonFungibleListings<T extends NetworkPluginID = NetworkPlugin
                 indicator: nextIndicator,
             })
         },
-        getNextPageParam: (x) => x.nextIndicator,
+        initialPageParam: undefined as PageIndicator | undefined,
+        getNextPageParam: (x) => x.nextIndicator as PageIndicator,
     })
 }

@@ -111,7 +111,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
     const myAccount = useAccount()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const isOther = !isSameAddress(myAccount, address)
-    const { data: ownCount, isInitialLoading: loadingOwnCount } = useOwnKeys(address, myAccount)
+    const { data: ownCount, isLoading: loadingOwnCount } = useOwnKeys(address, myAccount)
     const uiName = user?.twitterUsername || identity?.identifier?.userId
     return (
         <div className={cx(classes.userInfo, className)} {...rest}>

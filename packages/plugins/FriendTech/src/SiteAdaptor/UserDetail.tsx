@@ -68,7 +68,7 @@ export const UserDetail = memo(function UserDetail() {
     const { classes, cx } = useStyles()
     const [params, setParams] = useSearchParams()
     const address = params.get('address')!
-    const { data: user, isInitialLoading } = useUser(address)
+    const { data: user, isLoading } = useUser(address)
     const [tab, setTab] = useState<TabKey>('trades')
 
     useEffect(() => {
@@ -83,7 +83,7 @@ export const UserDetail = memo(function UserDetail() {
 
     return (
         <div className={classes.container}>
-            <UserProfile address={address} user={user} loading={isInitialLoading} />
+            <UserProfile address={address} user={user} loading={isLoading} />
             <div className={classes.tabs}>
                 <div
                     className={cx(classes.tab, tab === 'trades' ? classes.selectedTab : undefined)}

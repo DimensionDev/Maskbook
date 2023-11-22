@@ -94,7 +94,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
     const [params] = useSearchParams()
 
     // Disable loading with empty string until component appearances.
-    const { data: user, isInitialLoading: loading } = useUser(seen ? holding.address : '')
+    const { data: user, isLoading } = useUser(seen ? holding.address : '')
     const navigate = useNavigate()
 
     return (
@@ -106,7 +106,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
                 navigate(urlcat(RoutePaths.Detail, { address: holding.address, title: holding.twitterName }))
             }}
             {...rest}>
-            <ProgressiveText className={classes.rank} loading={loading} skeletonWidth={50}>
+            <ProgressiveText className={classes.rank} loading={isLoading} skeletonWidth={50}>
                 # {user?.rank}
             </ProgressiveText>
             <div className={classes.holding}>
@@ -142,7 +142,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
                     <Typography className={classes.holderMetaLabel}>{t.value()}</Typography>
                     <ProgressiveText
                         className={cx(classes.keyPrice, classes.holderMetaValue)}
-                        loading={loading}
+                        loading={isLoading}
                         skeletonWidth={80}>
                         <Icons.ETHSymbol size={18} />
                         <FormattedBalance value={user?.displayPrice} decimals={18} formatter={formatBalance} />

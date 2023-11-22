@@ -129,8 +129,8 @@ importers:
         specifier: 5.10.8
         version: 5.10.8(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.21)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@tanstack/react-query':
-        specifier: ^4.29.25
-        version: 4.29.25(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^5.8.4
+        version: 5.8.4(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@types/masknet__global-types':
         specifier: workspace:^
         version: link:packages/polyfills/types
@@ -787,12 +787,9 @@ importers:
       '@splinetool/react-spline':
         specifier: 2.2.6
         version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
-      '@tanstack/react-query-devtools':
-        specifier: ^4.29.25
-        version: 4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@tanstack/react-query-persist-client':
-        specifier: ^4.35.0
-        version: 4.35.0(@tanstack/react-query@4.29.25)
+        specifier: ^5.8.4
+        version: 5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
@@ -944,6 +941,9 @@ importers:
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.11
         version: 0.5.11(react-refresh@0.14.0)(webpack-dev-server@4.15.1)(webpack@5.88.2)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.8.4
+        version: 5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@types/color':
         specifier: ^3.0.3
         version: 3.0.3
@@ -2735,11 +2735,11 @@ importers:
         specifier: ^4.35.0
         version: 4.35.0
       '@tanstack/react-query-devtools':
-        specifier: ^4.29.25
-        version: 4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^5.8.4
+        version: 5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@tanstack/react-query-persist-client':
-        specifier: ^4.35.0
-        version: 4.35.0(@tanstack/react-query@4.29.25)
+        specifier: ^5.8.4
+        version: 5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@types/d3':
         specifier: 5.16.4
         version: 5.16.4
@@ -9279,25 +9279,26 @@ packages:
       eslint: 8.48.0
     dev: true
 
-  /@tanstack/match-sorter-utils@8.8.4:
-    resolution: {integrity: sha512-rKH8LjZiszWEvmi01NR72QWZ8m4xmXre0OOwlRGnjU01Eqz/QnN+cqpty2PJ0efHblq09+KilvyR7lsbzmXVEw==}
-    engines: {node: '>=12'}
-    dependencies:
-      remove-accents: 0.4.2
-    dev: false
-
-  /@tanstack/query-core@4.29.25:
-    resolution: {integrity: sha512-DI4y4VC6Uw4wlTpOocEXDky69xeOScME1ezLKsj+hOk7DguC9fkqXtp6Hn39BVb9y0b5IBrY67q6kIX623Zj4Q==}
-    dev: false
-
   /@tanstack/query-core@4.35.0:
     resolution: {integrity: sha512-4GMcKQuLZQi6RFBiBZNsLhl+hQGYScRZ5ZoVq8QAzfqz9M7vcGin/2YdSESwl7WaV+Qzsb5CZOAbMBes4lNTnA==}
     dev: false
+
+  /@tanstack/query-core@5.8.3:
+    resolution: {integrity: sha512-SWFMFtcHfttLYif6pevnnMYnBvxKf3C+MHMH7bevyYfpXpTMsLB9O6nNGBdWSoPwnZRXFNyNeVZOw25Wmdasow==}
+
+  /@tanstack/query-devtools@5.8.4:
+    resolution: {integrity: sha512-F1dRbITNt9tMUoM9WCH8WQ2c54116hv52m/PKK8ZiN/pO2wGVzTZtKuLanF8pFpwmNchjIixcMw/a57HY5ivcw==}
 
   /@tanstack/query-persist-client-core@4.35.0:
     resolution: {integrity: sha512-un1zoD6D80lrJ1x1jtPzhm1xrdPbhG9unf4y0Tl58/eCZz1VIjw+rR4hG+kn/hfzxX/kY4AMvtwMPxtt3HiAdg==}
     dependencies:
       '@tanstack/query-core': 4.35.0
+    dev: false
+
+  /@tanstack/query-persist-client-core@5.8.3:
+    resolution: {integrity: sha512-q9FR1HHMWWvL0R2XRTZ5jikXTrj6O7WmXqlouelhxc73ODMg5IiESav9MFKfWXbxHt1C8aKtu3OWYwdbI4K7xw==}
+    dependencies:
+      '@tanstack/query-core': 5.8.3
     dev: false
 
   /@tanstack/query-sync-storage-persister@4.35.0:
@@ -9306,40 +9307,46 @@ packages:
       '@tanstack/query-persist-client-core': 4.35.0
     dev: false
 
-  /@tanstack/react-query-devtools@4.29.25(@tanstack/react-query@4.29.25)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
-    resolution: {integrity: sha512-XlrGUqmjv1O+6Ny23rAiyNSWYKep90SKT3IixDQRnIuTGaZej+hVCOh7wZSxq6qkzadIvsblc4SLtyJsOiIXBQ==}
+  /@tanstack/react-query-devtools@5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
+    resolution: {integrity: sha512-mffs51FJqXU/5rwhbwv393DccL6et7uK2pRLwOcmMrWbPyW8vpxr9oidaghHX4cdVeP/7u5owW9yMpBhBAJfcQ==}
     peerDependencies:
-      '@tanstack/react-query': 4.29.25
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+      '@tanstack/react-query': ^5.8.4
+      react: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+      react-dom: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
       react:
         optional: true
       react-dom:
         optional: true
     dependencies:
-      '@tanstack/match-sorter-utils': 8.8.4
-      '@tanstack/react-query': 4.29.25(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      '@tanstack/query-devtools': 5.8.4
+      '@tanstack/react-query': 5.8.4(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       react: 0.0.0-experimental-8039e6d0b-20231026
       react-dom: 0.0.0-experimental-8039e6d0b-20231026(react@0.0.0-experimental-8039e6d0b-20231026)
-      superjson: 1.12.3
-      use-sync-external-store: 1.2.0(react@0.0.0-experimental-8039e6d0b-20231026)
-    dev: false
 
-  /@tanstack/react-query-persist-client@4.35.0(@tanstack/react-query@4.29.25):
-    resolution: {integrity: sha512-hcFyWjDIKqaRH38MMPKOXqRzxqAHSRrWV9N2vqo6N1LbMaIdbwvL1sZQ9vfUuBXSoyq1kbhSLVdoz6Kpx/gA8A==}
+  /@tanstack/react-query-persist-client@5.8.4(@tanstack/react-query@5.8.4)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
+    resolution: {integrity: sha512-al6FdBwT7+bzbl8T35xDxqAtfa0GBwQNukH2MarwNkutE/WLA2gMIdv1BD2wiGr6BTDzxl4IlZoktBlPFw3s0A==}
     peerDependencies:
-      '@tanstack/react-query': ^4.35.0
+      '@tanstack/react-query': ^5.8.4
+      react: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+      react-dom: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
     dependencies:
-      '@tanstack/query-persist-client-core': 4.35.0
-      '@tanstack/react-query': 4.29.25(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      '@tanstack/query-persist-client-core': 5.8.3
+      '@tanstack/react-query': 5.8.4(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      react: 0.0.0-experimental-8039e6d0b-20231026
+      react-dom: 0.0.0-experimental-8039e6d0b-20231026(react@0.0.0-experimental-8039e6d0b-20231026)
     dev: false
 
-  /@tanstack/react-query@4.29.25(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
-    resolution: {integrity: sha512-c1+Ezu+XboYrdAMdusK2fTdRqXPMgPAnyoTrzHOZQqr8Hqz6PNvV9DSKl8agUo6nXX4np7fdWabIprt+838dLg==}
+  /@tanstack/react-query@5.8.4(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
+    resolution: {integrity: sha512-CD+AkXzg8J72JrE6ocmuBEJfGzEzu/bzkD6sFXFDDB5yji9N20JofXZlN6n0+CaPJuIi+e4YLCbGsyPFKkfNQA==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+      react: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+      react-dom: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-native: '*'
     peerDependenciesMeta:
       react:
@@ -9349,11 +9356,9 @@ packages:
       react-native:
         optional: true
     dependencies:
-      '@tanstack/query-core': 4.29.25
+      '@tanstack/query-core': 5.8.3
       react: 0.0.0-experimental-8039e6d0b-20231026
       react-dom: 0.0.0-experimental-8039e6d0b-20231026(react@0.0.0-experimental-8039e6d0b-20231026)
-      use-sync-external-store: 1.2.0(react@0.0.0-experimental-8039e6d0b-20231026)
-    dev: false
 
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -13333,13 +13338,6 @@ packages:
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
-
-  /copy-anything@3.0.4:
-    resolution: {integrity: sha512-MaQ9FwzlZ/KLeVCLhzI3rZw0EhrIryfZa3AyT4agVybR0DjlkDHA8898lamLD6kfkf9MMn8D+zDAUR4+GxaymQ==}
-    engines: {node: '>=12.13'}
-    dependencies:
-      is-what: 4.1.9
-    dev: false
 
   /copy-descriptor@0.1.1:
     resolution: {integrity: sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==}
@@ -18607,11 +18605,6 @@ packages:
       get-intrinsic: 1.2.1
     dev: true
 
-  /is-what@4.1.9:
-    resolution: {integrity: sha512-I3FU0rkVvwhgLLEs6iITwZ/JaLXe7tQcHyzupXky8jigt1vu4KM0UOqDr963j36JRvJ835EATVIm6MnGz/i1/g==}
-    engines: {node: '>=12.13'}
-    dev: false
-
   /is-windows@1.0.2:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
     engines: {node: '>=0.10.0'}
@@ -23059,7 +23052,6 @@ packages:
       loose-envify: 1.4.0
       react: 0.0.0-experimental-8039e6d0b-20231026
       scheduler: 0.0.0-experimental-8039e6d0b-20231026
-    dev: false
 
   /react-draggable@4.4.5(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
     resolution: {integrity: sha512-OMHzJdyJbYTZo4uQE393fHcqqPYsEtkjfMgvCHr6rejT+Ezn4OZbNyGH50vv+SunC1RMvwOTSWkEODQLzw1M9g==}
@@ -23351,7 +23343,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
@@ -23672,10 +23663,6 @@ packages:
     dependencies:
       argparse: 1.0.10
       autolinker: 3.14.3
-    dev: false
-
-  /remove-accents@0.4.2:
-    resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
     dev: false
 
   /remove-bom-buffer@3.0.0:
@@ -24196,7 +24183,6 @@ packages:
     resolution: {integrity: sha512-psHROJE7IYl9WafGHFKW+/dpAHwxZGK6ssfMfd09BwMA9Jsx2buLrsmtq2UlDFTlrNdX00596v4IZ2RJV+OfVQ==}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /schema-utils@3.3.0:
     resolution: {integrity: sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==}
@@ -25252,13 +25238,6 @@ packages:
 
   /summary@2.1.0:
     resolution: {integrity: sha512-nMIjMrd5Z2nuB2RZCKJfFMjgS3fygbeyGk9PxPPaJR1RIcyN9yn4A63Isovzm3ZtQuEkLBVgMdPup8UeLH7aQw==}
-    dev: false
-
-  /superjson@1.12.3:
-    resolution: {integrity: sha512-0j+U70KUtP8+roVPbwfqkyQI7lBt7ETnuA7KXbTDX3mCKiD/4fXs2ldKSMdt0MCfpTwiMxo20yFU3vu6ewETpQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      copy-anything: 3.0.4
     dev: false
 
   /superstruct@0.14.2:
@@ -28140,10 +28119,4 @@ packages:
     dev: true
 
 time:
-  /@tanstack/eslint-plugin-query@4.36.1: '2023-10-07T07:10:15.385Z'
   /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
-  /bignumber.js@9.1.2: '2023-08-28T12:15:45.587Z'
-  /react-devtools-inline@4.28.5: '2023-10-25T17:20:37.097Z'
-  /react-dom@0.0.0-experimental-8039e6d0b-20231026: '2023-10-26T16:16:45.339Z'
-  /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
-  /react@0.0.0-experimental-8039e6d0b-20231026: '2023-10-26T16:16:33.985Z'

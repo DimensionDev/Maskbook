@@ -1,5 +1,5 @@
 import { ElementAnchor } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, type PageIndicator } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { FriendTech } from '@masknet/web3-providers'
@@ -47,6 +47,7 @@ export const HoldingList = memo(function HoldingList({ address, ...rest }: Props
         queryFn: async ({ pageParam: nextIndicator }) => {
             return FriendTech.getHolding(address, nextIndicator)
         },
+        initialPageParam: undefined as PageIndicator | undefined,
         getNextPageParam: (x) => x.nextIndicator,
     })
     const holdings = useMemo(() => {
