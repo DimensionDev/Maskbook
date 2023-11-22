@@ -4,7 +4,6 @@
     "rootDir": "./",
     "outDir": "../dist/public-api/",
     "tsBuildInfoFile": "../dist/public-api.tsbuildinfo",
-    "emitDeclarationOnly": true,
     "declarationMap": false
   },
   "include": ["./"],

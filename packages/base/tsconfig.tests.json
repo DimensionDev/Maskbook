@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.leaf.json",
   "compilerOptions": {
-    "noEmit": true,
+    "rootDir": "./tests/",
     "tsBuildInfoFile": "./dist/tests.tsbuildinfo"
   },
   "include": ["./tests"],

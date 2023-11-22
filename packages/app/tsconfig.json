@@ -1,8 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.leaf.json",
   "compilerOptions": {
     "rootDir": "./src/",
-    "outDir": "./dist/src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],

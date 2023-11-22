@@ -10,6 +10,6 @@
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
     { "path": "../../shared/tsconfig.json" },
-    { "path": "../Trader//tsconfig.json" }
+    { "path": "../Trader/tsconfig.json" }
   ]
 }

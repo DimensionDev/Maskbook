@@ -1,6 +1,7 @@
 {
-  "extends": "./node_modules/@masknet/config/tsconfig.json",
+  "extends": "./packages/config/tsconfig.json",
   "references": [
+    { "path": "./tsconfig.npm.json" },
     // Only list top-level projects here
     { "path": "./packages/polyfills/tsconfig.json" },
     { "path": "./packages/app/tsconfig.json" },
@@ -17,6 +18,7 @@
     { "path": "./packages/shared-base/tsconfig.tests.json" },
     { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },
     { "path": "./packages/web3-shared/base/tsconfig.tests.json" },
+    { "path": "./packages/web3-providers/tsconfig.tests.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins/tsconfig.json" }
   ],
@@ -24,6 +26,7 @@
     // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
     "resolveJsonModule": true,
+    "emitDeclarationOnly": true,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Classification follows https://www.typescriptlang.org/tsconfig
+
+    // Emit
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+
+    // Projects
+    "composite": false
+  }
+}
