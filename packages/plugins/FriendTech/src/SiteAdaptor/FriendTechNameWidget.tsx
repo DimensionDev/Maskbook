@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends Plugin.SiteAdaptor.NameWidgetOptions {}
 
 export const FriendTechNameWidget = memo(function FriendTechNameWidget({ userId, slot, onStatusUpdate }: Props) {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { data: userInfo } = useUserInfo(userId)
     const disabled = !userInfo
     useEffect(() => {
@@ -60,7 +60,7 @@ export const FriendTechNameWidget = memo(function FriendTechNameWidget({ userId,
                 <ProgressiveText loading={loadingUser} skeletonWidth={30} className={classes.text}>
                     {user?.rank || '-'}
                 </ProgressiveText>
-                <Icons.ETHSymbol size={16} />
+                <Icons.ETHSymbol size={16} color={theme.palette.maskColor.second} />
                 <Typography className={classes.text}>{formatBalance(userInfo.displayPrice, 18)}</Typography>
             </Box>
         )

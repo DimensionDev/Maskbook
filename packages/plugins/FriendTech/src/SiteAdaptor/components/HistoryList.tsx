@@ -1,7 +1,7 @@
 import { ElementAnchor, EmptyStatus, FormattedBalance, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { FriendTech } from '@masknet/web3-providers'
-import { formatBalance, formatElapsed } from '@masknet/web3-shared-base'
+import { formatBalance, formatElapsed, isSameAddress } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Skeleton, Typography, type ListProps } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { range } from 'lodash-es'
@@ -102,7 +102,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                         />
                     </Box>
                     <Box flexGrow={1} ml={2}>
-                        <Typography fontWeight={700} color={theme.palette.maskColor.main}>
+                        <Typography fontWeight={700} color={theme.palette.maskColor.main} fontSize={14}>
                             <Translate.key_trade
                                 values={{
                                     trader: activity.trader.name,
@@ -116,6 +116,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                                             className={classes.link}
                                             role="link"
                                             onClick={() => {
+                                                if (isSameAddress(account, activity.subject.address)) return
                                                 const otherLink = urlcat(RoutePaths.Detail, {
                                                     address: activity.subject.address,
                                                     title: activity.subject.name,
@@ -130,6 +131,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
 
                         <Box display="flex" color={theme.palette.maskColor.second}>
                             <Typography
+                                fontSize={14}
                                 color={
                                     activity.isBuy ? theme.palette.maskColor.success : theme.palette.maskColor.danger
                                 }
@@ -137,7 +139,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                                 <FormattedBalance value={activity.ethAmount} decimals={18} formatter={formatBalance} />{' '}
                                 ETH
                             </Typography>
-                            <Typography>, {formatElapsed(activity.createdAt)}</Typography>
+                            <Typography fontSize={14}>, {formatElapsed(activity.createdAt)}</Typography>
                         </Box>
                     </Box>
                 </ListItem>

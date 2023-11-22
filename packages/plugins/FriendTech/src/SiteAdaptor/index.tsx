@@ -37,14 +37,13 @@ const site: Plugin.SiteAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 3,
+                appBoardSortingDefaultPriority: 0,
                 marketListSortingPriority: 3,
                 icon,
                 category: 'dapp',
                 description: <Trans ns={PluginID.FriendTech} i18nKey="description" />,
                 name,
                 iconFilterColor,
-                tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
             }
         })(),
     ],
