@@ -62,9 +62,9 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
     }, [pluginID, plugins, minimalMode, minimalModeEqualsTo])
 }
 useActivatedPluginSiteAdaptor.visibility = {
-    useMinimalMode: useActivatedPluginSiteAdaptor.bind(null, true),
-    useNotMinimalMode: useActivatedPluginSiteAdaptor.bind(null, false),
-    useAnyMode: useActivatedPluginSiteAdaptor.bind(null, 'any'),
+    useMinimalMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, true),
+    useNotMinimalMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, false),
+    useAnyMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, 'any'),
 }
 
 export function startPluginSiteAdaptor(
