@@ -61,6 +61,11 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
         unreachable(minimalModeEqualsTo)
     }, [pluginID, plugins, minimalMode, minimalModeEqualsTo])
 }
+useActivatedPluginSiteAdaptor.visibility = {
+    useMinimalMode: useActivatedPluginSiteAdaptor.bind(null, true),
+    useNotMinimalMode: useActivatedPluginSiteAdaptor.bind(null, false),
+    useAnyMode: useActivatedPluginSiteAdaptor.bind(null, 'any'),
+}
 
 export function startPluginSiteAdaptor(
     currentNetwork: EnhanceableSite,

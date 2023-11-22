@@ -6,7 +6,7 @@ import { PluginWalletStatusBar, InjectedDialog, NetworkTab } from '@masknet/shar
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useApprovalTrans } from '../locales/index.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
@@ -107,7 +107,7 @@ interface ApprovalWrapperProps {
 
 function ApprovalWrapper({ tab }: ApprovalWrapperProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
+    const approvalDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Approval)
     const chainIdList = useMemo(() => {
         return compact<ChainId>(
             approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST,

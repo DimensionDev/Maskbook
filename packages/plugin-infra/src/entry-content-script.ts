@@ -1,6 +1,11 @@
 export * from './entry-dom.js'
 
-export { startPluginSiteAdaptor, useActivatedPluginsSiteAdaptor, useIsMinimalMode } from './manager/site-adaptor.js'
+export {
+    startPluginSiteAdaptor,
+    useActivatedPluginsSiteAdaptor,
+    useActivatedPluginSiteAdaptor,
+    useIsMinimalMode,
+} from './manager/site-adaptor.js'
 
 export {
     type PostContext,

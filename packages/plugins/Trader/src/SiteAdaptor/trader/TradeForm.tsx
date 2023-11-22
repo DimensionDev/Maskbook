@@ -14,7 +14,6 @@ import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { useIsMinimalModeExtensionPage } from '@masknet/plugin-infra/extension-page'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { TokenPanel } from '../../types/index.js'
@@ -218,8 +217,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
         const isGoPlusSecurityMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
-        const isClosedInExtensionPage = useIsMinimalModeExtensionPage(PluginID.GoPlusSecurity)
-        const isTokenSecurityEnable = !isGoPlusSecurityMinimal && !isClosedInExtensionPage
+        const isTokenSecurityEnable = !isGoPlusSecurityMinimal
 
         // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')

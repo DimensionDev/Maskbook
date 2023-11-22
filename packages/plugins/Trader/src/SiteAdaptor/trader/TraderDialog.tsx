@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { PluginID, NetworkPluginID, CrossIsolationMessages, type TokenType, Sniffings } from '@masknet/shared-base'
-import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import {
     useChainContext,
     useChainIdValid,
@@ -87,7 +87,7 @@ const useStyles = makeStyles<{ rotate: boolean }>()((theme, { rotate }) => ({
 
 export function TraderDialog(props: { share: ((text: string) => void) | undefined }) {
     const tradeRef = useRef<TraderRef>(null)
-    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
+    const traderDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Trader)
     const { pluginID } = useNetworkContext()
     const { chainId, setChainId } = useChainContext()
     const Utils = useWeb3Utils()

@@ -17,24 +17,6 @@
       "types": "./dist/site-adaptor/index.d.ts",
       "mask-src": "./src/site-adaptor/index.ts",
       "default": "./dist/site-adaptor/index.js"
-    },
-    "./extension-page": {
-      "types": "./dist/extension-page/index.d.ts",
-      "mask-src": "./src/extension-page/index.ts",
-      "default": "./dist/extension-page/index.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "./background": [
-        "./dist/background/index.d.ts"
-      ],
-      "./site-adaptor": [
-        "./dist/site-adaptor/index.d.ts"
-      ],
-      "./extension-page": [
-        "./dist/extension-page/index.d.ts"
-      ]
     }
   },
   "dependencies": {
