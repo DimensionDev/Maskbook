@@ -1,0 +1,18 @@
+// a leaf project is a project that not references by any other project
+// disable declaration for leaf projects speed up build perf and reduce some annoying errors
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Classification follows https://www.typescriptlang.org/tsconfig
+
+    // Emit
+    "noEmit": true,
+    "emitDeclarationOnly": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+
+    // Projects
+    "composite": false
+  }
+}

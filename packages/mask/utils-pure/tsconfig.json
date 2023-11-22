@@ -3,8 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/utils-pure/",
-    "tsBuildInfoFile": "../dist/utils-pure.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "tsBuildInfoFile": "../dist/utils-pure.tsbuildinfo"
   },
   "include": ["./"],
   "references": [{ "path": "../../shared-base/tsconfig.json" }]

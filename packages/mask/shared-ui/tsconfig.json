@@ -3,8 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/shared-ui/",
-    "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
   "references": [

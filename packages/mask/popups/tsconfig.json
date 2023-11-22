@@ -1,10 +1,8 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../../../tsconfig.leaf.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "../dist/popup/",
-    "tsBuildInfoFile": "../dist/popup.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "tsBuildInfoFile": "../dist/popup.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
   "references": [

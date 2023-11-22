@@ -1,10 +1,8 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../../../tsconfig.leaf.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "../dist/main/",
-    "tsBuildInfoFile": "../dist/main.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "tsBuildInfoFile": "../dist/main.tsbuildinfo"
   },
   "include": ["./"],
   "references": [{ "path": "../public-api/tsconfig.json" }, { "path": "../shared/tsconfig.json" }]

@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.leaf.json",
   "references": [
     { "path": "./Approval/tsconfig.json" },
     { "path": "./ArtBlocks/tsconfig.json" },

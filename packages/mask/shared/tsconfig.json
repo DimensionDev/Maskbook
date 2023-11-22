@@ -3,10 +3,9 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../dist/shared/",
-    "tsBuildInfoFile": "../dist/shared.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "tsBuildInfoFile": "../dist/shared.tsbuildinfo"
   },
-  "include": ["./"],
+  "include": ["./**/*"],
   "exclude": ["./plugin-infra/register.js"],
   "references": [
     { "path": "../../shared-base/tsconfig.json" },

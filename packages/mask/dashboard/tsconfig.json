@@ -1,8 +1,7 @@
 {
-  "extends": "../../../tsconfig.json",
+  "extends": "../../../tsconfig.leaf.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "../dist/dashboard/",
     "tsBuildInfoFile": "../dist/dashboard.tsbuildinfo"
   },
   "include": ["./", "./**/*.json"],
