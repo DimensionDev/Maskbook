@@ -3,7 +3,7 @@ import { type ChainId, type TransactionParameter } from '@masknet/web3-shared-ev
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptor } from '../types.js'
-import { Airdrop } from '../../../../../Airdrop/index.js'
+import * as Airdrop from /* webpackDefer: true */ '../../../../../Airdrop/index.js'
 
 export class AirdropDescriptor extends BaseDescriptor implements TransactionDescriptor {
     override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
@@ -12,7 +12,7 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
 
         for (const { name, parameters } of context.methods) {
             if (name === 'claim' && parameters?._eventIndex !== undefined) {
-                const result = await Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
+                const result = await Airdrop.Airdrop.getPoolInfo(context.chainId, parameters._eventIndex)
                 const token =
                     result?.token ?
                         await this.Hub.getFungibleToken(result.token, { chainId: context.chainId })

@@ -20,8 +20,8 @@ import {
     type TransferableMessage,
     isSameURL,
 } from '@masknet/web3-shared-base'
-import { DepositPaymaster } from '../../../SmartPay/libs/DepositPaymaster.js'
-import { SmartPayAccount, SmartPayBundler } from '../../../SmartPay/index.js'
+import * as DepositPaymaster from /* webpackDefer: true */ '../../../SmartPay/libs/DepositPaymaster.js'
+import * as SmartPay from /* webpackDefer: true */ '../../../SmartPay/index.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { evm } from '../../../Manager/registry.js'
@@ -43,7 +43,7 @@ export class Popups implements Middleware<ConnectionContext> {
             paymentToken: nativeTokenAddress,
         }
         try {
-            const smartPayChainId = await SmartPayBundler.getSupportedChainId()
+            const smartPayChainId = await SmartPay.SmartPayBundler.getSupportedChainId()
             if (context.chainId !== smartPayChainId || !context.owner)
                 return {
                     allowMaskAsGas: false,
@@ -59,11 +59,11 @@ export class Popups implements Middleware<ConnectionContext> {
 
             if (!signableConfig?.maxFeePerGas) return DEFAULT_PAYMENT_TOKEN_STATE
 
-            const gas = await SmartPayAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
+            const gas = await SmartPay.SmartPayAccount.estimateTransaction?.(smartPayChainId, signableConfig, {
                 paymentToken: maskAddress,
             })
 
-            const depositPaymaster = new DepositPaymaster(context.chainId)
+            const depositPaymaster = new DepositPaymaster.DepositPaymaster(context.chainId)
             const ratio = await depositPaymaster.getRatio()
 
             const maskGasFee = toFixed(

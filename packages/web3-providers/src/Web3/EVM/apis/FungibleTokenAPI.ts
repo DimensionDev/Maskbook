@@ -10,7 +10,7 @@ import {
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import { EVMContractReadonly } from './ContractReadonlyAPI.js'
-import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
+import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
 import type { EVMHubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
 
@@ -28,7 +28,7 @@ export class FungibleTokenAPI implements FungibleTokenBaseAPI.Provider<ChainId, 
     }
 
     async createAssets(fungibleToken: FungibleToken<ChainId, SchemaType>, chainId: ChainId, balance: number) {
-        const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(chainId, fungibleToken.address)
+        const price = await CoinGeckoPriceEVM.CoinGeckoPriceEVM.getFungibleTokenPrice(chainId, fungibleToken.address)
 
         return {
             ...fungibleToken,

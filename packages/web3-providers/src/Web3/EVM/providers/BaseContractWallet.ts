@@ -3,14 +3,14 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import { type ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import { BaseHostedProvider } from './BaseHosted.js'
-import { SmartPayBundler } from '../../../SmartPay/index.js'
+import * as SmartPayBundler from /* webpackDefer: true */ '../../../SmartPay/index.js'
 import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
 
 /**
  * EIP-4337 compatible smart contract based wallet.
  */
 export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
-    protected Bundler: BundlerAPI.Provider = SmartPayBundler
+    protected Bundler: BundlerAPI.Provider = SmartPayBundler.SmartPayBundler
 
     private ownerStorage:
         | StorageItem<{

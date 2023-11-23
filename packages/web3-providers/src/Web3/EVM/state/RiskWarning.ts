@@ -3,7 +3,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { RiskWarningState } from '../../Base/state/RiskWarning.js'
-import { RiskWarning as Warning } from '../../../RiskWarning/index.js'
+import * as Warning from /* webpackDefer: true */ '../../../RiskWarning/index.js'
 
 export class EVMRiskWarning extends RiskWarningState {
     constructor(
@@ -19,7 +19,7 @@ export class EVMRiskWarning extends RiskWarningState {
     }
 
     override async approve(address: string, pluginID?: string | undefined) {
-        await Warning.approve(address, pluginID)
+        await Warning.RiskWarning.approve(address, pluginID)
         await super.approve(address)
     }
 }

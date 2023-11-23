@@ -16,16 +16,16 @@ import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { BaseMaskX } from '../../../entry-types.js'
-import { ARBID } from '../../../ARBID/index.js'
-import { ENS } from '../../../ENS/index.js'
-import { Firefly } from '../../../Firefly/index.js'
-import { Lens } from '../../../Lens/index.js'
-import { MaskX } from '../../../MaskX/index.js'
-import { NextIDProof } from '../../../NextID/proof.js'
-import { RSS3 } from '../../../RSS3/index.js'
-import { SpaceID } from '../../../SpaceID/index.js'
-import { Twitter } from '../../../Twitter/index.js'
-import { NextIDStorageProvider } from '../../../NextID/kv.js'
+import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
+import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
+import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
+import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
+import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
+import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
+import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
+import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
+import * as Twitter from /* webpackDefer: true */ '../../../Twitter/index.js'
+import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -78,7 +78,7 @@ async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIde
     const platform = getNextIDPlatform()
     if (!platform) return EMPTY_LIST
 
-    const latestActivatedBinding = await NextIDProof.queryLatestBindingByPlatform(
+    const latestActivatedBinding = await NextIDProof.NextIDProof.queryLatestBindingByPlatform(
         platform,
         identifier.userId,
         publicKey,
@@ -149,7 +149,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             handles.map(async (handle) => {
-                const info = await RSS3.getNameInfo(handle)
+                const info = await RSS3.RSS3.getNameInfo(handle)
                 if (!info?.crossbell) return
                 return this.createSocialAddress(SocialAddressType.Crossbell, info.address, info.crossbell)
             }),
@@ -162,7 +162,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId || !publicKey) return
 
-        const response = await NextIDStorageProvider.getByIdentity<{ ownerAddress?: string }>(
+        const response = await NextIDStorageProvider.NextIDStorageProvider.getByIdentity<{ ownerAddress?: string }>(
             publicKey,
             NextIDPlatform.Twitter,
             userId.toLowerCase(),
@@ -197,7 +197,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const address = await ENS.lookup(name)
+                const address = await ENS.ENS.lookup(name)
                 if (!address) return
                 return [
                     this.createSocialAddress(SocialAddressType.ENS, address, name),
@@ -214,7 +214,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const address = await ARBID.lookup(name)
+                const address = await ARBID.ARBID.lookup(name)
                 if (!address) return
                 return [
                     this.createSocialAddress(SocialAddressType.ARBID, address, name, ChainId.Arbitrum),
@@ -231,7 +231,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const address = await SpaceID.lookup(name)
+                const address = await SpaceID.SpaceID.lookup(name)
                 if (!address) return
                 return [
                     this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC),
@@ -248,7 +248,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         const allSettled = await Promise.allSettled(
             names.map(async (name) => {
-                const profile = await Lens.getProfileByHandle(name)
+                const profile = await Lens.Lens.getProfileByHandle(name)
                 if (!profile) return
                 return [
                     this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy.address, name),
@@ -264,7 +264,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId) return
 
-        const response = await Twitter.getUserNftContainer(userId)
+        const response = await Twitter.Twitter.getUserNftContainer(userId)
         if (!response) return
         const ownerAddress = await EVMWeb3Readonly.getNonFungibleTokenOwner(
             response.address,
@@ -291,7 +291,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId) return
 
-        const response = await MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
+        const response = await MaskX.MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
         const results = response.records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !x.is_verified) return false
 
@@ -307,7 +307,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const allSettled = await Promise.allSettled(
             results.map(async (y) => {
                 try {
-                    const name = await ENS.reverse(y.web3_addr)
+                    const name = await ENS.ENS.reverse(y.web3_addr)
 
                     return this.createSocialAddress(resolveMaskXAddressType(y.source), y.web3_addr, name)
                 } catch {
@@ -343,7 +343,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
                 if (x.verified) return address
-                const isReliable = await Firefly.verifyTwitterHandleByAddress(address, handle)
+                const isReliable = await Firefly.Firefly.verifyTwitterHandleByAddress(address, handle)
                 return isReliable ? address : null
             }),
         )

@@ -6,15 +6,15 @@ import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
-import { Approval } from '../../../Approval/index.js'
-import { ChainbaseFungibleToken } from '../../../Chainbase/index.js'
-import { Cloudflare } from '../../../Cloudflare/index.js'
-import { CoinGeckoPriceEVM } from '../../../CoinGecko/index.js'
-import { DeBankFungibleToken } from '../../../DeBank/index.js'
-import { GoPlusAuthorization } from '../../../GoPlusLabs/index.js'
-import { R2D2TokenList } from '../../../R2D2/index.js'
-import { Rabby } from '../../../Rabby/index.js'
-import { Zerion } from '../../../Zerion/index.js'
+import * as Approval from /* webpackDefer: true */ '../../../Approval/index.js'
+import * as ChainbaseFungibleToken from /* webpackDefer: true */ '../../../Chainbase/index.js'
+import * as Cloudflare from /* webpackDefer: true */ '../../../Cloudflare/index.js'
+import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
+import * as DeBankFungibleToken from /* webpackDefer: true */ '../../../DeBank/index.js'
+import * as GoPlusAuthorization from /* webpackDefer: true */ '../../../GoPlusLabs/index.js'
+import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
+import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
+import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
 
 export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -33,26 +33,26 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
                 PriceAPI.Provider<ChainId>
         >(
             {
-                [SourceType.Chainbase]: ChainbaseFungibleToken,
-                [SourceType.DeBank]: DeBankFungibleToken,
-                [SourceType.Zerion]: Zerion,
-                [SourceType.GoPlus]: GoPlusAuthorization,
-                [SourceType.Rabby]: Rabby,
-                [SourceType.Approval]: Approval,
-                [SourceType.R2D2]: R2D2TokenList,
-                [SourceType.CF]: Cloudflare,
-                [SourceType.CoinGecko]: CoinGeckoPriceEVM,
+                [SourceType.Chainbase]: ChainbaseFungibleToken.ChainbaseFungibleToken,
+                [SourceType.DeBank]: DeBankFungibleToken.DeBankFungibleToken,
+                [SourceType.Zerion]: Zerion.Zerion,
+                [SourceType.GoPlus]: GoPlusAuthorization.GoPlusAuthorization,
+                [SourceType.Rabby]: Rabby.Rabby,
+                [SourceType.Approval]: Approval.Approval,
+                [SourceType.R2D2]: R2D2TokenList.R2D2TokenList,
+                [SourceType.CF]: Cloudflare.Cloudflare,
+                [SourceType.CoinGecko]: CoinGeckoPriceEVM.CoinGeckoPriceEVM,
             },
             [
-                DeBankFungibleToken,
-                Approval,
-                Zerion,
-                ChainbaseFungibleToken,
-                Rabby,
-                GoPlusAuthorization,
-                R2D2TokenList,
-                Cloudflare,
-                CoinGeckoPriceEVM,
+                DeBankFungibleToken.DeBankFungibleToken,
+                Approval.Approval,
+                Zerion.Zerion,
+                ChainbaseFungibleToken.ChainbaseFungibleToken,
+                Rabby.Rabby,
+                GoPlusAuthorization.GoPlusAuthorization,
+                R2D2TokenList.R2D2TokenList,
+                Cloudflare.Cloudflare,
+                CoinGeckoPriceEVM.CoinGeckoPriceEVM,
             ],
             initial,
         )

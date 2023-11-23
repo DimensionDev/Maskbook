@@ -15,7 +15,7 @@ import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArgum
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { BaseEIP4337WalletProvider } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
-import { SmartPayOwner } from '../../../SmartPay/apis/OwnerAPI.js'
+import * as SmartPayOwner from /* webpackDefer: true */ '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
 
@@ -46,7 +46,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
 
         const chainId = await this.Bundler.getSupportedChainId()
-        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
+        const accounts = await SmartPayOwner.SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.map((x) => x.address),
             ...compact(allPersonas.map((x) => x.address)),
         ])

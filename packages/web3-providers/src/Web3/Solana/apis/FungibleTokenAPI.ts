@@ -18,7 +18,7 @@ import {
     getTokenConstant,
 } from '@masknet/web3-shared-solana'
 import { SolanaChainResolver } from './ResolverAPI.js'
-import { CoinGeckoPriceSolana } from '../../../CoinGecko/index.js'
+import * as CoinGeckoPriceSolana from /* webpackDefer: true */ '../../../CoinGecko/index.js'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
 import type {
@@ -127,9 +127,13 @@ class SolanaFungibleTokenAPI
     }
 
     async getAsset(account: string, { chainId = ChainId.Mainnet }: SolanaHubOptions = {}) {
-        const price = await CoinGeckoPriceSolana.getFungibleTokenPrice(chainId, getNativeTokenAddress(), {
-            currencyType: CurrencyType.USD,
-        })
+        const price = await CoinGeckoPriceSolana.CoinGeckoPriceSolana.getFungibleTokenPrice(
+            chainId,
+            getNativeTokenAddress(),
+            {
+                currencyType: CurrencyType.USD,
+            },
+        )
 
         const data = await requestRPC<GetBalanceResponse>(chainId, {
             method: 'getBalance',
