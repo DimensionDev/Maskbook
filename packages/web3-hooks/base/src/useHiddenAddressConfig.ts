@@ -11,6 +11,7 @@ type StorageValueV3 = { hiddenAddresses?: Record<string, string[]> }
 type CurrentStorageValue = StorageValueV3
 type StorageValue = StorageValueV1 | StorageValueV2 | StorageValueV3
 
+type T = UseQueryResult
 /**
  *
  * Get unlisted address by persona pubkey.

@@ -1,9 +1,10 @@
 import type { NetworkPluginID, PageIndicator } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, type UseInfiniteQueryResult } from '@tanstack/react-query'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
+type T = UseInfiniteQueryResult
 export function useNonFungibleEvents<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,

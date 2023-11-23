@@ -1,13 +1,15 @@
 import { EMPTY_LIST, type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, type UseInfiniteQueryResult, type UseQueryResult } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 import { useBlockedNonFungibleTokens } from './useBlockedNonFungibleTokens.js'
 import { useChainContext } from './useContext.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
+type T = UseQueryResult
+type TT = UseInfiniteQueryResult
 /**
  * Blocked tokens would be filtered out
  */

@@ -1,9 +1,11 @@
 import { NetworkPluginID, type SocialAddress, type SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery, type UseBaseQueryResult, type UseQueryResult } from '@tanstack/react-query'
 import { useWeb3State } from './useWeb3State.js'
 
 type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
+type T = UseQueryResult
+type TT = UseBaseQueryResult
 
 /**
  * Get all social addresses across all networks.
@@ -12,14 +14,14 @@ export function useSocialAddressesAll(
     identity?: SocialIdentity | null,
     includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<Web3Helper.ChainIdAll>, z: SocialAddress<Web3Helper.ChainIdAll>) => number,
-): UseQueryResult<Array<SocialAddress<Web3Helper.ChainIdAll>>> {
+) {
     // TODO: to add flow
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
     const userId = identity?.identifier?.userId
 
-    return useQuery({
+    return useQuery<Array<SocialAddress<Web3Helper.ChainIdAll>>>({
         enabled: !!identity && userId !== '$unknown',
         queryKey: ['all-social-addresses', userId, identity, includes],
         queryFn: async () => {

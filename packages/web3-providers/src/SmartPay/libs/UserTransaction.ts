@@ -182,7 +182,7 @@ export class UserTransaction {
         // add sender
         if (!isEmptyHex(initCode) && !isValidAddress(sender)) {
             this.userOperation.sender = await this.createEntryPointContract(web3)
-                .methods.getSenderAddress(initCode, nonce)
+                .methods.getSenderAddress(initCode, nonce!)
                 .call()
         }
 

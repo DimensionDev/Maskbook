@@ -7,6 +7,7 @@ import {
     decodeOutputString,
     getEthereumConstant,
     type UnboxTransactionObject,
+    type Transaction,
 } from '@masknet/web3-shared-evm'
 import { EVMContractReadonly } from '../Web3/EVM/apis/ContractReadonlyAPI.js'
 import { EVMWeb3Readonly } from '../Web3/EVM/apis/ConnectionReadonlyAPI.js'
@@ -115,7 +116,10 @@ export class Multicall {
             await Promise.all(
                 this.chunkArray(unresolvedCalls).map(async (chunk) => {
                     // we don't mind the actual block number of the current call
-                    const tx = new ContractTransaction(contract).fill(contract.methods.multicall(chunk), overrides)
+                    const tx = new ContractTransaction(contract).fill(
+                        contract.methods.multicall(chunk),
+                        overrides as Partial<Transaction>,
+                    )
                     const hex = await EVMWeb3Readonly.callTransaction(tx, { chainId })
 
                     const result = decodeOutputString(contract.options.jsonInterface, hex, 'multicall') as

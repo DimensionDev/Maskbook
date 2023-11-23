@@ -12,6 +12,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
+// type T = UseQueryResult
 export function useNonFungibleCollections<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: HubOptions<T>,

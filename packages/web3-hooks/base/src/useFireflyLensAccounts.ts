@@ -1,7 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { Firefly } from '@masknet/web3-providers'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 
+type T = UseQueryResult
 export function useFireflyLensAccounts(twitterId?: string, isVerified?: boolean) {
     return useQuery<FireflyBaseAPI.LensAccount[]>({
         queryKey: ['firefly', 'lens', twitterId, isVerified],
