@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
  * Get all personas bound with the given identity from NextID service
  */
 export function usePersonasFromNextID(userId: string, platform: NextIDPlatform, exact?: boolean) {
-    const result = useQuery<NextIDPersonaBindings[], Error>({
+    const result = useQuery<NextIDPersonaBindings[]>({
         queryKey: ['next-id', 'personas', userId],
         enabled: Boolean(platform && userId),
         queryFn: async () => {

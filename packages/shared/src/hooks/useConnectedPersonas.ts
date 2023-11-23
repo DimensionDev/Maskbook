@@ -13,10 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 
 export function useConnectedPersonas() {
     const personasInDB = useAllPersonas()
-    const result = useQuery<
-        Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>,
-        Error
-    >({
+    const result = useQuery<Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>>({
         queryKey: ['connected-persona', personasInDB],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)

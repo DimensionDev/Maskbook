@@ -1,4 +1,5 @@
 import { ElementAnchor, EmptyStatus, FormattedBalance, Image } from '@masknet/shared'
+import type { PageIndicator } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { FriendTech } from '@masknet/web3-providers'
 import { formatBalance, formatElapsed, isSameAddress } from '@masknet/web3-shared-base'
@@ -10,7 +11,6 @@ import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { Translate } from '../../locales/i18n_generated.js'
-import type { PageIndicator } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
