@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useChainContext } from './useContext.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     address?: string | null,
     fallbackToken?: Web3Helper.FungibleTokenScope<S, T>,
     options?: HubOptions<T>,
-) {
+): UseQueryResult<Web3Helper.FungibleTokenScope<S, T>> {
     const { chainId } = useChainContext({ chainId: options?.chainId })
     const Hub = useWeb3Hub(pluginID, {
         chainId,
