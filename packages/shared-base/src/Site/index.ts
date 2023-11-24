@@ -25,6 +25,7 @@ export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.
 export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.value)
 
 export function getEnhanceableSiteType() {
+    if (typeof location === 'undefined') return
     const target = location.host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
         if (target.match(regexp)) return type as EnhanceableSite
@@ -34,8 +35,8 @@ export function getEnhanceableSiteType() {
 }
 
 export function getExtensionSiteType() {
-    if (!location.protocol.includes('extension')) return
-    const target = location.pathname
+    // if (!location.protocol.includes('extension')) return
+    const target = '/foo' //location.pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
         if (target.match(regexp)) return type as ExtensionSite
         continue

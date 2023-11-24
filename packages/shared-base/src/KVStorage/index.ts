@@ -103,4 +103,4 @@ async function migrateUnlistedEntries() {
         await PersistentStorages.ApplicationEntryUnListedList.storage.current.setValue({})
     }
 }
-migrateUnlistedEntries()
+// migrateUnlistedEntries()

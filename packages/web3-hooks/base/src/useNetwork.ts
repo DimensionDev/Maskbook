@@ -9,9 +9,9 @@ export function useNetwork<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     chainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
-    const { Network } = useWeb3State(pluginID)
+    const State = useWeb3State(pluginID)
     const networks = useNetworks(pluginID)
-    const networkID = useSubscription(Network?.networkID ?? EMPTY_STRING)
+    const networkID = useSubscription(State?.Network?.networkID ?? EMPTY_STRING)
 
     return useMemo(() => {
         if (chainId) return networks.find((x) => x.chainId === chainId)

@@ -1,32 +1,28 @@
 {
-    "name": "@masknet/plugin-calendar",
-    "private": true,
-    "sideEffects": [
-        "./src/register.ts"
-    ],
-    "type": "module",
-    "exports": {
-        ".": {
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
-        },
-        "./register": {
-            "mask-src": "./src/register.ts",
-            "default": "./dist/register.js"
-        },
-        "./widget": {
-          "mask-src": "./src/SiteAdaptor/RenderCalendar.tsx",
-          "default": "./dist/SiteAdaptor/CalendarContent.js"
-        }
+  "name": "@masknet/plugin-calendar",
+  "private": true,
+  "sideEffects": [
+    "./src/register.ts"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
     },
-    "dependencies": {
-        "@masknet/icons": "workspace:^",
-        "@masknet/plugin-infra": "workspace:^",
-        "@masknet/shared": "workspace:^",
-        "@masknet/shared-base": "workspace:^",
-        "@masknet/shared-base-ui": "workspace:^",
-        "@masknet/theme": "workspace:^",
-        "@masknet/web3-providers": "workspace:^",
-        "date-fns": "^2.30.0"
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
+  },
+  "dependencies": {
+    "@masknet/icons": "workspace:^",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
+    "@masknet/theme": "workspace:^",
+    "@masknet/web3-providers": "workspace:^",
+    "date-fns": "^2.30.0"
+  }
 }

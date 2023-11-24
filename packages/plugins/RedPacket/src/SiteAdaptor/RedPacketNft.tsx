@@ -198,21 +198,24 @@ interface RedPacketNftProps {
 export function RedPacketNft({ payload }: RedPacketNftProps) {
     const t = useRedPacketTrans()
 
-    const { pluginID } = useNetworkContext()
+    const pluginID = NetworkPluginID.PLUGIN_EVM
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
+    console.log('payload', payload)
     const {
         value: availability,
         loading,
         retry: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
+    console.log('availabilityError', availabilityError)
 
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
-        signMessage(account, payload.privateKey).signature ?? '',
+        // signMessage(account, payload.privateKey).signature ?? '',
+        '',
     )
     const [showTooltip, textRef] = useDetectOverflow()
 
@@ -328,6 +331,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
     if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
+    console.log('availability', availability)
 
     return (
         <div className={classes.root}>

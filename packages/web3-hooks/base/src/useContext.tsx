@@ -3,7 +3,7 @@ import { isUndefined, omitBy } from 'lodash-es'
 import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
 import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
 import { EVMWalletProviders, type BaseEIP4337WalletProvider } from '@masknet/web3-providers'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
@@ -183,7 +183,7 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(o
     const context = useContext(NetworkContext)
     return {
         ...context,
-        pluginID: (overrides ?? context.pluginID) as T,
+        pluginID: (overrides ?? context?.pluginID ?? NetworkPluginID.PLUGIN_EVM) as T,
     }
 }
 

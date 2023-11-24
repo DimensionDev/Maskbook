@@ -27,11 +27,9 @@ export function useContracts<T extends BaseContract>(
     listOfAddress: string[] = EMPTY_LIST,
     ABI: AbiItem[] = EMPTY_LIST,
 ) {
-    return useMemo(
-        () =>
-            listOfAddress
-                .map((address) => createContract<T>(EVMWeb3.getWeb3({ chainId }), address, ABI))
-                .filter(Boolean) as T[],
-        [JSON.stringify(listOfAddress), ABI],
-    )
+    return useMemo(() => {
+        return listOfAddress
+            .map((address) => createContract<T>(EVMWeb3.getWeb3({ chainId }), address, ABI))
+            .filter(Boolean) as T[]
+    }, [JSON.stringify(listOfAddress), ABI])
 }

@@ -29,7 +29,10 @@
     }
   },
   "exports": {
-    ".": null
+      "./crypto": {
+          "mask-src": "./background/services/crypto/index.ts",
+          "default": "./background/services/crypto/index.js"
+      }
   },
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",

@@ -5,6 +5,7 @@ import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
 export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: ChainId) {
     const nftRedPacketContract = useNftRedPacketContract(chainId)
+    console.log('nftRedPacketContract', nftRedPacketContract)
     return useAsyncRetry(async () => {
         if (!id || !nftRedPacketContract) return null
         const availability = await nftRedPacketContract.methods.check_availability(id).call({

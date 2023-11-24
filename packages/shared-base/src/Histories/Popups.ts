@@ -9,6 +9,6 @@ function __create__<T>(creator: () => T): NonNullable<T> {
 }
 
 export const PopupsHistory = __create__(() => {
-    if (location.href.includes('popups.html')) return createHashHistory()
+    if (typeof location !== 'undefined' && location.href.includes('popups.html')) return createHashHistory()
     return
 })

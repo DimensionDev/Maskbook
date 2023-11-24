@@ -27,7 +27,7 @@ export function createIndicator(indicator?: PageIndicator, id?: string): PageInd
     const index = indicator?.index ?? 0
     return {
         __type__: $PageIndicator,
-        id: id ?? indicator?.id ?? index.toString(),
+        id: id ?? indicator?.id ?? '',
         index,
     }
 }

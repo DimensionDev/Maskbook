@@ -1,5 +1,6 @@
 // Encrypt & decrypt (decryptWithDecoding is a generator, not included.)
 export { encryptTo } from './encryption.js'
+export { decryptWithDecoding, type DecryptionContext } from './decryption.js'
 export { appendShareTarget } from './appendEncryption.js'
 
 // Comments
