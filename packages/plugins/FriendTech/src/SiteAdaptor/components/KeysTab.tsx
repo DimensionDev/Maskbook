@@ -25,7 +25,7 @@ export function KeysTab() {
 
     return (
         <div className={classes.container}>
-            <UserProfile address={account} user={user} loading={isInitialLoading} />
+            <UserProfile address={account} user={user} loading={isInitialLoading} variant="self" />
             <HoldingList address={account} className={classes.holdingList} />
         </div>
     )

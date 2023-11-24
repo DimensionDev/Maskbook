@@ -1,6 +1,4 @@
 import { makeStyles } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { DialogActions, DialogContent } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
@@ -40,19 +38,15 @@ interface FriendTechDialogProps {
 
 export const FriendTechDialog = memo(function FriendTechDialog({ onClose, address }: FriendTechDialogProps) {
     const { classes } = useStyles()
-    const account = useAccount()
 
     const initialEntries = useMemo(() => {
         if (!address) return [RoutePaths.Exit, RoutePaths.Main]
-        const OpenEntry =
-            isSameAddress(account, address) ?
-                RoutePaths.Main
-            :   {
-                    pathname: RoutePaths.Detail,
-                    search: '?' + urlcat('', { address }),
-                }
+        const OpenEntry = {
+            pathname: RoutePaths.Detail,
+            search: '?' + urlcat('', { address }),
+        }
         return [RoutePaths.Exit, OpenEntry]
-    }, [account, address])
+    }, [address])
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
             <RouterDialog open onClose={onClose} classes={{ paper: classes.paper }}>
