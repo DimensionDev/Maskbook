@@ -1,34 +1,34 @@
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
-import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { useTheme } from '@mui/material'
+import Service from '#services'
+import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
+import { ConfirmDialog, PersonaContext } from '@masknet/shared'
 import {
-    type EnhanceableSite,
-    PopupRoutes,
-    SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID,
-    PluginID,
     EMPTY_LIST,
     EMPTY_OBJECT,
-    NextIDAction,
-    SignType,
     MaskMessages,
+    NextIDAction,
+    PluginID,
+    PopupRoutes,
+    SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID,
+    SignType,
+    type EnhanceableSite,
 } from '@masknet/shared-base'
-import { ConfirmDialog, PersonaContext } from '@masknet/shared'
 import { usePopupCustomSnackbar } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
-import { useUpdateEffect } from '@react-hookz/web'
+import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
-import { NextIDProof } from '@masknet/web3-providers'
-import { useTitle, PageTitleContext } from '../../../hooks/index.js'
+import { useTheme } from '@mui/material'
+import { useUpdateEffect } from '@react-hookz/web'
+import { useQueryClient } from '@tanstack/react-query'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { AccountDetailUI } from './UI.js'
-import Service from '#services'
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
-import { queryClient } from '@masknet/shared-base-ui'
-import { delay } from '@masknet/kit'
+import { PageTitleContext, useTitle } from '../../../hooks/index.js'
+import { AccountDetailUI } from './UI.js'
 
 const AccountDetail = memo(() => {
     const t = useMaskSharedTrans()
@@ -76,6 +76,7 @@ const AccountDetail = memo(() => {
         })
     }, [])
 
+    const queryClient = useQueryClient()
     const handleDetachProfile = useCallback(async () => {
         try {
             if (!selectedAccount?.identifier) return
@@ -95,7 +96,7 @@ const AccountDetail = memo(() => {
                 variant: 'error',
             })
         }
-    }, [selectedAccount])
+    }, [selectedAccount, queryClient])
 
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {

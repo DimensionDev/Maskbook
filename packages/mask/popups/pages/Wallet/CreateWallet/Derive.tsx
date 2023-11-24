@@ -2,13 +2,13 @@ import Services from '#services'
 import { Icons } from '@masknet/icons'
 import { defer, timeout } from '@masknet/kit'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWalletProviders, EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Tooltip, Typography } from '@mui/material'
+import { useQueryClient } from '@tanstack/react-query'
 import { memo, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -96,6 +96,7 @@ const DeriveWallet = memo(function DeriveWallet() {
     useEffect(() => {
         isDerivingRef.current = isDeriving
     })
+    const queryClient = useQueryClient()
     const [{ loading: creating }, create] = useAsyncFn(async () => {
         if (isDerivingRef.current) return
         setIsDeriving(true)
@@ -113,7 +114,7 @@ const DeriveWallet = memo(function DeriveWallet() {
             })
         } catch {}
         setIsDeriving(false)
-    }, [mnemonicId])
+    }, [mnemonicId, queryClient])
 
     useTitle(t.popups_add_wallet())
 

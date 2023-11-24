@@ -83,7 +83,7 @@ export const UserDetail = memo(function UserDetail() {
 
     return (
         <div className={classes.container}>
-            <UserProfile address={address} user={user} loading={isInitialLoading} />
+            <UserProfile address={address} user={user} loading={isInitialLoading} variant="other" />
             <div className={classes.tabs}>
                 <div
                     className={cx(classes.tab, tab === 'trades' ? classes.selectedTab : undefined)}

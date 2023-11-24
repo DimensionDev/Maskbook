@@ -7,7 +7,6 @@ import {
     getDefaultWalletPassword,
     type Wallet,
 } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useBalance, useReverseAddress, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
@@ -24,6 +23,7 @@ import Services from '#services'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
+import { useQueryClient } from '@tanstack/react-query'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -196,6 +196,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         reset({ password: '', confirm: '' })
     }, [isCreating])
 
+    const queryClient = useQueryClient()
     const [{ loading }, onConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
@@ -221,7 +222,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                 }
             }
         },
-        [setError, params],
+        [setError, params, queryClient],
     )
 
     const onSubmit = handleSubmit(onConfirm)

@@ -5,7 +5,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useAccount, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { type FriendTech as FT } from '@masknet/web3-providers/types'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Link, Skeleton, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
@@ -102,15 +102,16 @@ interface Props extends HTMLProps<HTMLDivElement> {
     address: string
     user?: FT.User | null
     loading?: boolean
+    variant?: 'self' | 'other'
 }
 
-export const UserProfile = memo(function UserProfile({ user, address, loading, className, ...rest }: Props) {
+export const UserProfile = memo(function UserProfile({ user, address, loading, variant, className, ...rest }: Props) {
     const { classes, theme, cx } = useStyles()
     const t = useI18N()
     const identity = useLastRecognizedIdentity()
     const myAccount = useAccount()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
-    const isOther = !isSameAddress(myAccount, address)
+    const isOther = variant === 'other'
     const { data: ownCount, isInitialLoading: loadingOwnCount } = useOwnKeys(address, myAccount)
     const uiName = user?.twitterUsername || identity?.identifier?.userId
     return (
@@ -171,7 +172,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, c
                 </div>
                 {isOther ?
                     <div className={classes.row}>
-                        <Typography color={theme.palette.maskColor.second} mr={1}>
+                        <Typography color={theme.palette.maskColor.second} mr={1} fontSize={14}>
                             {t.you_own()}
                         </Typography>
                         <ProgressiveText

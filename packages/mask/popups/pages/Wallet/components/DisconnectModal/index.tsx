@@ -1,12 +1,11 @@
-import { memo, useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { Box, Typography } from '@mui/material'
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { queryClient } from '@masknet/shared-base-ui'
-import { useMutation } from '@tanstack/react-query'
+import { Box, Typography } from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { memo, useCallback } from 'react'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -99,6 +98,7 @@ interface DisconnectModalProps {
 
 const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
     const t = useMaskSharedTrans()
+    const queryClient = useQueryClient()
     const { classes } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
