@@ -1,23 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { fetchChains } from '@masknet/web3-providers/helpers'
 import { TokenType, type TransferableNetwork } from '@masknet/web3-shared-base'
-import { NetworkType, SchemaType, ZERO_ADDRESS, ChainId, getRPCConstant, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType, ProviderType, SchemaType, ZERO_ADDRESS, getRPCConstant } from '@masknet/web3-shared-evm'
 import { Button, Input, Typography, alpha } from '@mui/material'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { type z, type ZodCustomIssue } from 'zod'
+import { type ZodCustomIssue, type z } from 'zod'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { createSchema } from './network-schema.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
+import { createSchema } from './network-schema.js'
 import { useWarnings } from './useWarnings.js'
-import { fetchChains } from '@masknet/web3-providers/helpers'
-import { EVMWeb3 } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -92,6 +91,7 @@ export const EditNetwork = memo(function EditNetwork() {
     useTitle(network ? network.name : t.network_management_add_network())
     const { setExtension } = useContext(PageTitleContext)
 
+    const queryClient = useQueryClient()
     const isBuiltIn = network ? !network.isCustomized : false
     useEffect(() => {
         if (isBuiltIn || !id || !Network) return
@@ -116,7 +116,7 @@ export const EditNetwork = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network, currentChainId])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network, currentChainId, queryClient])
 
     const schema = useMemo(() => {
         return createSchema(
