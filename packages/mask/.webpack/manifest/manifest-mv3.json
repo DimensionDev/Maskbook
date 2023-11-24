@@ -18,7 +18,7 @@
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
     "web_accessible_resources": [
         {
-            "resources": ["js/*", "*.svg", "*.png", "*.css"],
+            "resources": ["js/*", "bundled/*", "entry/*", "*.svg", "*.png", "*.css", "build-info.json"],
             "matches": ["<all_urls>"],
             "use_dynamic_url": true
         },

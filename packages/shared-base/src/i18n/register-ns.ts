@@ -4,7 +4,8 @@ function addI18NBundle(instance: i18n, namespace: string, langs: Record<string, 
     if (!instance.addResourceBundle) throw new TypeError('Please call instance.init() first')
 
     try {
-        if (process.env.NODE_ENV === 'development') {
+        // not enable hmr for MV3
+        if (process.env.NODE_ENV === 'development' && !('importScripts' in globalThis)) {
             globalThis.addEventListener('MASK_I18N_HMR', (e) => {
                 const [ns, langs] = (e as CustomEvent).detail
                 if (namespace !== ns) return

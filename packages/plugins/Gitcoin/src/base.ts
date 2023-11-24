@@ -1,12 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants.js'
+import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { languages } from './locales/languages.js'
 
+export const PLUGIN_NAME = 'Gitcoin'
 export const base: Plugin.Shared.Definition = {
-    ID: PLUGIN_ID,
+    ID: PluginID.Gitcoin,
     name: { fallback: PLUGIN_NAME },
-    description: { fallback: PLUGIN_DESCRIPTION },
+    description: { fallback: 'Gitcoin grants sustain web3 projects with quadratic funding.' },
     publisher: DEFAULT_PLUGIN_PUBLISHER,
     enableRequirement: {
         supports: {

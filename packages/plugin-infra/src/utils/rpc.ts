@@ -56,6 +56,9 @@ function startPluginRPCInternal(
 ) {
     if (!isBackground()) throw new Error('Cannot start RPC in the UI.')
     const message = getPluginMessage<RPCMessage>(pluginID, DOMAIN_RPC)
+    Promise.resolve(impl).catch((error) => {
+        console.error('[@masknet/plugin-infra] Background service of plugin', pluginID, 'failed to start.', error)
+    })
     const delegate = getOrUpdateLocalImplementationHMR(() => impl, message[entry])
     if (cache.has(pluginID)) return
     cache.set(pluginID, delegate)

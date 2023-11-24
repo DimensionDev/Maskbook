@@ -1,10 +1,10 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { NameServiceState } from '../../Base/state/NameService.js'
-import { ENS } from '../../../ENS/index.js'
-import { SpaceID } from '../../../SpaceID/index.js'
+import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
+import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
 import type { WalletAPI, NameServiceAPI } from '../../../entry-types.js'
-import { Lens } from '../../../Lens/index.js'
+import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 
 export class EVMNameService extends NameServiceState {
     constructor(context: WalletAPI.IOContext) {
@@ -17,7 +17,7 @@ export class EVMNameService extends NameServiceState {
     }
 
     override createResolvers(domainOnly?: boolean) {
-        if (domainOnly) return [ENS, SpaceID] as NameServiceAPI.Provider[]
-        return [ENS, SpaceID, Lens] as NameServiceAPI.Provider[]
+        if (domainOnly) return [ENS.ENS, SpaceID.SpaceID] as NameServiceAPI.Provider[]
+        return [ENS.ENS, SpaceID.SpaceID, Lens.Lens] as NameServiceAPI.Provider[]
     }
 }

@@ -8,7 +8,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { UserTransaction } from '../../../SmartPay/libs/UserTransaction.js'
+import * as UserTransaction from /* webpackDefer: true */ '../../../SmartPay/libs/UserTransaction.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
@@ -40,7 +40,10 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                     break
                 case EthereumMethodType.ETH_SEND_USER_OPERATION:
                     if (!context.userOperation || typeof context.result !== 'string') return
-                    const transaction = UserTransaction.toTransaction(context.chainId, context.userOperation)
+                    const transaction = UserTransaction.UserTransaction.toTransaction(
+                        context.chainId,
+                        context.userOperation,
+                    )
                     await Transaction?.addTransaction?.(context.chainId, context.account, context.result, {
                         ...transaction,
                         draftedAt,
