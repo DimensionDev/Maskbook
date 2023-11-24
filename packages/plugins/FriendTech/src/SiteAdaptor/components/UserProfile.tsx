@@ -172,7 +172,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
                 </div>
                 {isOther ?
                     <div className={classes.row}>
-                        <Typography color={theme.palette.maskColor.second} mr={1}>
+                        <Typography color={theme.palette.maskColor.second} mr={1} fontSize={14}>
                             {t.you_own()}
                         </Typography>
                         <ProgressiveText
