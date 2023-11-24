@@ -859,6 +859,10 @@
     "popups_wallet_persona_log_out_error_payment_password": "パスワードが正しくありません。",
     "popups_wallet_activity_to_address": "宛先: {{address}}",
     "popups_wallet_transfer_error_tip": "ネットワーク接続に失敗またはコントラクトエラーが発生し、トランザクションに失敗しました。",
+    "popups_wallet_transactions_pending": "保留中...",
+    "popups_wallet_re_send": "再送信",
+    "popups_wallet_choose_token": "トークンを選択",
+    "popups_wallet_gas_price": "ガス価格",
     "popups_switch_Wallet": "ウォレットの切り替え",
     "popups_encrypted_friends": "連絡先",
     "popups_encrypted_friends_search_placeholder": "Next.ID、Twitter、Lens、ENS、或いはアドレスを検索",
@@ -941,5 +945,12 @@
     "plugin_artblocks_share_no_official_account": "{{name}} {{- price}} {{symbol}}のコレクションから、美しいアート作品を購入しました。ようこそ。",
     "plugin_tips_disconnect_introduction": "ウォレット<strong>{{address}}<strong/>から{{persona}}を接続解除してもよろしいですか？",
     "plugin_tips_not_evm_alert": " チップ機能は現在、EVMチェーンのみを対応しています。将来的には他のチェーンにも対応する予定です。",
+    "plugin_artblocks_description": "Artblocksでは、好きなスタイルを選び、作品に対価を支払うと、アルゴリズムによってランダムに生成されたバージョンのコンテンツが作成され、イーサリアムアカウントに送られます。",
+    "plugin_artblocks_name": "Artblocks",
+    "plugin_ens_description": "ソーシャルメディアでENSに関する検索結果の表示を最適化。",
+    "plugin_ens_name": "ENS",
+    "nft_button_set_avatar": "NFT アバターを設定",
+    "plugin_mask_box_name": "MaskBox",
+    "plugin_mask_box_description": "NFTのミステリーボックスを起動するためのプロフェッショナルなマルチチェーン分散型プラットフォームです。",
     "wallet_name": "ウォレット名"
 }
