@@ -1,10 +1,9 @@
 import { EMPTY_LIST, hidingScamSettings } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
 import { type RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
-import { useInfiniteQuery, useQueries } from '@tanstack/react-query'
+import { useInfiniteQuery, useQueries, useQueryClient } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 
@@ -45,11 +44,12 @@ export function useTransactions() {
             }
         }),
     })
+    const queryClient = useQueryClient()
     useEffect(() => {
         return Transaction?.transactions?.subscribe(() => {
             queryClient.invalidateQueries({ queryKey: ['transitions'] })
         })
-    }, [])
+    }, [queryClient])
 
     const allLocaleTxes = useMemo(() => {
         return queries.flatMap((x) => x.data ?? []) as Array<RecentTransaction<ChainId, EvmTransaction>>

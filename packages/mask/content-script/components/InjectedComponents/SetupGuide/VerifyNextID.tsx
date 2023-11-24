@@ -2,13 +2,12 @@ import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { EmojiAvatar } from '@masknet/shared'
 import { currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
@@ -150,6 +149,7 @@ interface VerifyNextIDProps extends BindingDialogProps {}
 export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
+    const queryClient = useQueryClient()
 
     const { userId, myIdentity, personaInfo, checkingVerified, verified, loadingCurrentUserId, currentUserId } =
         SetupGuideContext.useContainer()
@@ -192,7 +192,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
         }
         await queryClient.invalidateQueries({ queryKey: ['next-id', 'bindings-by-persona'] })
         await delay(1000)
-    }, [userId, personaInfo])
+    }, [userId, personaInfo, queryClient])
 
     const notify = useNotifyConnected()
 

@@ -1,8 +1,8 @@
 import { MaskMessages, ProfileIdentifier } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
 import { useAsync } from 'react-use'
+import { useQueryClient } from '@tanstack/react-query'
 import Services from '../../../../../shared-ui/service.js'
 import { EventMap } from '../../../../../shared/definitions/event.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
@@ -12,6 +12,7 @@ export function useConnectPersona() {
     const { userId, myIdentity, personaInfo, setIsFirstConnection, connected } = SetupGuideContext.useContainer()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const persona = personaInfo?.identifier
+    const queryClient = useQueryClient()
     return useAsync(async () => {
         if (!persona || !userId || connected) return
         const id = ProfileIdentifier.of(site, userId)
@@ -34,5 +35,5 @@ export function useConnectPersona() {
         MaskMessages.events.ownPersonaChanged.sendToAll()
 
         Telemetry.captureEvent(EventType.Access, EventMap[activatedSiteAdaptorUI!.networkIdentifier])
-    }, [site, persona, userId, myIdentity.avatar, connected])
+    }, [site, persona, userId, myIdentity.avatar, connected, queryClient])
 }
