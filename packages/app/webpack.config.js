@@ -27,6 +27,7 @@ const polyfillsFolderPath = join(outputPath, './js/polyfills')
 function Configuration(env, argv) {
     const mode = env.WEBPACK_SERVE ? 'development' : 'production'
     const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
+    const VERSION = require('../../package.json').version
     return {
         mode,
         name: 'mask',
@@ -128,7 +129,7 @@ function Configuration(env, argv) {
                 'process.env.COMMIT_DATE': JSON.stringify(COMMIT_DATE),
                 'process.env.BRANCH_NAME': JSON.stringify(BRANCH_NAME),
                 'process.env.DIRTY': JSON.stringify(DIRTY),
-                'process.env.CHANNEL': JSON.stringify(flags.channel),
+                'process.env.CHANNEL': JSON.stringify('stable'),
             }),
             new CopyPlugin({
                 patterns: [
@@ -147,7 +148,7 @@ function Configuration(env, argv) {
                     COMMIT_DATE,
                     COMMIT_HASH,
                     DIRTY,
-                    VERSION: '2.22.0',
+                    VERSION,
                 }
                 return emitJSONFile({ content: json, name: 'build-info.json' })
             })(),
