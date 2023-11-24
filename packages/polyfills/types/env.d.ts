@@ -7,6 +7,13 @@ declare module NodeJS {
          * RUN_SKIP_TESTS=1 pnpm test
          */
         readonly RUN_SKIP_TESTS: string
+        readonly BUILD_DATE: string
+        readonly VERSION: string
+        readonly COMMIT_HASH: string
+        readonly COMMIT_DATE: string
+        readonly BRANCH_NAME: string
+        readonly DIRTY: boolean
+        readonly CHANNEL: 'stable' | 'beta' | 'insider'
     }
 }
 declare namespace NodeJS {
