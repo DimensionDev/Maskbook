@@ -10,7 +10,7 @@ export function useConnectedWallets(origin: string | null) {
                 if (!result.url || !URL.canParse(result.url)) return null
                 origin = new URL(result.url).origin
             }
-            const connected = await Services.Wallet.getAllConnectedWallets(origin)
+            const connected = await Services.Wallet.getAllConnectedWallets(origin, 'any')
             return connected
         },
         networkMode: 'always',

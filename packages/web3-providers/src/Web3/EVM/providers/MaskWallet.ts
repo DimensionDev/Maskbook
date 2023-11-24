@@ -164,7 +164,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 await this.switchChain(chainId)
 
                 if (externalRequestID) {
-                    await this.context?.grantEIP2255Permission(externalRequestID, [address])
+                    await this.context?.SDK_grantEIP2255Permission(externalRequestID, [address])
                 }
 
                 return {
@@ -209,7 +209,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     }
 
     override async disconnect() {
-        await this.context?.disconnectAllWalletsFromOrigin(location.origin)
+        await this.context?.disconnectAllWalletsFromOrigin(location.origin, 'any')
     }
 
     override async request<T>(

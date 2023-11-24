@@ -17,8 +17,8 @@ import type { WalletGrantedPermission } from '../database/types.js'
 import { omit } from 'lodash-es'
 
 // https://eips.ethereum.org/EIPS/eip-2255
-export async function EIP2255_wallet_getPermissions(origin: string): Promise<EIP2255Permission[]> {
-    const wallets = await getAllConnectedWallets(origin)
+export async function SDK_EIP2255_wallet_getPermissions(origin: string): Promise<EIP2255Permission[]> {
+    const wallets = await getAllConnectedWallets(origin, 'sdk')
     if (!wallets.size) return []
     return EIP2255PermissionsOfWallets(origin, wallets)
 }
@@ -30,7 +30,7 @@ const requests = new Map<
         promise: DeferTuple<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>
     }
 >()
-export async function EIP2255_wallet_requestPermissions(
+export async function SDK_EIP2255_wallet_requestPermissions(
     origin: string,
     request: EIP2255PermissionRequest,
 ): Promise<EIP2255RequestedPermission[]> {
@@ -60,10 +60,10 @@ export async function EIP2255_wallet_requestPermissions(
     }
     return requests.get(id)!.promise[0]
 }
-export async function getEIP2255PermissionDetail(id: string) {
+export async function SDK_getEIP2255PermissionRequestDetail(id: string) {
     return omit(requests.get(id), 'promise')
 }
-export async function grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
+export async function SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
     if (!requests.has(id)) throw new Error('Invalid request id')
     const { origin, promise } = requests.get(id)!
     for (const wallet of grantedWalletAddress) {
@@ -90,30 +90,58 @@ export async function grantEIP2255Permission(id: string, grantedWalletAddress: I
     promise[1](EIP2255PermissionsOfWallets(origin, grantedWalletAddress))
 }
 
-export async function disconnectWalletFromOrigin(wallet: string, origin: string) {
+export async function disconnectWalletFromOrigin(wallet: string, origin: string, type: 'any' | 'sdk' | 'internal') {
     assertOrigin(origin)
-    const origins = new Map((await walletDatabase.get('granted_permission', wallet))?.origins)
-    if (!origins.has(origin)) return
-    origins.delete(origin)
-    if (origins.size) await walletDatabase.add({ type: 'granted_permission', id: wallet, origins })
-    else await walletDatabase.remove('granted_permission', wallet)
-}
-export async function disconnectAllWalletsFromOrigin(origin: string) {
-    assertOrigin(origin)
-    for await (const cursor of walletDatabase.iterate_mutate('granted_permission')) {
-        if (!cursor.value.origins.has(origin)) continue
-        if (cursor.value.origins.size === 1) await cursor.delete()
-        else {
-            await cursor.update(
-                produce(cursor.value, (draft) => {
-                    draft.origins.delete(origin)
-                }),
-            )
+    if (type === 'any' || type === 'sdk') {
+        const origins = new Map((await walletDatabase.get('granted_permission', wallet))?.origins)
+        if (origins.has(origin)) {
+            origins.delete(origin)
+            if (origins.size) await walletDatabase.add({ type: 'granted_permission', id: wallet, origins })
+            else await walletDatabase.remove('granted_permission', wallet)
+        }
+    }
+    if (type === 'any' || type === 'internal') {
+        const internalOrigins = new Set((await walletDatabase.get('internal_connected', wallet))?.origins)
+        if (internalOrigins?.has(origin)) {
+            internalOrigins.delete(origin)
+            if (internalOrigins.size)
+                await walletDatabase.add({ type: 'internal_connected', id: wallet, origins: internalOrigins })
+            else await walletDatabase.remove('internal_connected', wallet)
         }
     }
 }
-export async function disconnectAllOriginsConnectedFromWallet(wallet: string) {
-    await walletDatabase.remove('granted_permission', wallet)
+export async function disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal') {
+    assertOrigin(origin)
+    if (type === 'any' || type === 'sdk') {
+        for await (const cursor of walletDatabase.iterate_mutate('granted_permission')) {
+            if (!cursor.value.origins.has(origin)) continue
+            if (cursor.value.origins.size === 1) await cursor.delete()
+            else {
+                await cursor.update(
+                    produce(cursor.value, (draft) => {
+                        draft.origins.delete(origin)
+                    }),
+                )
+            }
+        }
+    }
+    if (type === 'any' || type === 'internal') {
+        for await (const cursor of walletDatabase.iterate_mutate('internal_connected')) {
+            if (!cursor.value.origins.has(origin)) continue
+            if (cursor.value.origins.size === 1) await cursor.delete()
+            else {
+                await cursor.update(
+                    produce(cursor.value, (draft) => {
+                        draft.origins.delete(origin)
+                    }),
+                )
+            }
+        }
+    }
+}
+export async function disconnectAllOriginsConnectedFromWallet(wallet: string, type: 'any' | 'sdk' | 'internal') {
+    if (type === 'any' || type === 'sdk') await walletDatabase.remove('granted_permission', wallet)
+    if (type === 'any' || type === 'internal') await walletDatabase.remove('internal_connected', wallet)
 }
 
 export async function internalWalletConnect(wallet: string, origin: string) {
@@ -155,36 +183,53 @@ function EIP2255PermissionsOfWallets(origin: string, wallets: Iterable<string>):
         },
     ]
 }
-export async function getAllConnectedWallets(origin: string): Promise<ReadonlySet<string>> {
+export async function getAllConnectedWallets(
+    origin: string,
+    type: 'any' | 'sdk' | 'internal',
+): Promise<ReadonlySet<string>> {
     assertOrigin(origin)
     const wallets = new Set<string>()
-    out: for await (const cursor of walletDatabase.iterate('granted_permission')) {
-        const thisOrigin = cursor.value.origins.get(origin)
-        if (!thisOrigin) continue
-        for (const permission of thisOrigin) {
-            if (hasEthAccountsPermission(origin, permission)) {
-                wallets.add(cursor.value.id)
-                continue out
+    if (type === 'any' || type === 'sdk') {
+        out: for await (const cursor of walletDatabase.iterate('granted_permission')) {
+            const thisOrigin = cursor.value.origins.get(origin)
+            if (!thisOrigin) continue
+            for (const permission of thisOrigin) {
+                if (hasEthAccountsPermission(origin, permission)) {
+                    wallets.add(cursor.value.id)
+                    continue out
+                }
             }
         }
     }
 
-    for await (const cursor of walletDatabase.iterate('internal_connected')) {
-        if (!cursor.value.origins.has(origin)) continue
-        wallets.add(cursor.value.id)
+    if (type === 'any' || type === 'internal') {
+        for await (const cursor of walletDatabase.iterate('internal_connected')) {
+            if (!cursor.value.origins.has(origin)) continue
+            wallets.add(cursor.value.id)
+        }
     }
     return wallets
 }
-export async function getAllConnectedOrigins(wallet: string): Promise<ReadonlySet<string>> {
-    const origins = (await walletDatabase.get('granted_permission', wallet))?.origins
+export async function getAllConnectedOrigins(
+    wallet: string,
+    type: 'any' | 'sdk' | 'internal',
+): Promise<ReadonlySet<string>> {
     const connectedOrigins = new Set<string>()
-    if (!origins) return connectedOrigins
-    out: for (const permissions of origins.values()) {
-        for (const permission of permissions) {
-            if (hasEthAccountsPermission(permission.invoker, permission)) {
-                connectedOrigins.add(permission.invoker)
-                continue out
+    if (type === 'any' || type === 'sdk') {
+        const origins = (await walletDatabase.get('granted_permission', wallet))?.origins || []
+        out: for (const permissions of origins.values()) {
+            for (const permission of permissions) {
+                if (hasEthAccountsPermission(permission.invoker, permission)) {
+                    connectedOrigins.add(permission.invoker)
+                    continue out
+                }
             }
+        }
+    }
+    if (type === 'any' || type === 'internal') {
+        const origins = (await walletDatabase.get('internal_connected', wallet))?.origins || []
+        for (const origin of origins) {
+            connectedOrigins.add(origin)
         }
     }
     return connectedOrigins

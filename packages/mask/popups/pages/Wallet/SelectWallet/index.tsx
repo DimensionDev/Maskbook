@@ -43,7 +43,7 @@ const SelectWallet = memo(function SelectWallet() {
     const source = params.get('source')
     const { value: external_request } = useAsync(async () => {
         if (!external_request_id) return null
-        return Services.Wallet.getEIP2255PermissionDetail(external_request_id)
+        return Services.Wallet.SDK_getEIP2255PermissionRequestDetail(external_request_id)
     }, [external_request_id])
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
@@ -90,7 +90,7 @@ const SelectWallet = memo(function SelectWallet() {
 
     const handleConfirm = useCallback(async () => {
         if (external_request_id && external_request) {
-            await Services.Wallet.grantEIP2255Permission(external_request_id, [selected])
+            await Services.Wallet.SDK_grantEIP2255Permission(external_request_id, [selected])
             return Services.Helper.removePopupWindow()
         }
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {

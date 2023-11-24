@@ -105,7 +105,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
     const { mutate: onDisconnect } = useMutation({
         mutationFn: useCallback(async (): Promise<void> => {
             if (!wallet) return
-            await Services.Wallet.disconnectWalletFromOrigin(wallet.address, origin)
+            await Services.Wallet.disconnectWalletFromOrigin(wallet.address, origin, 'any')
         }, []),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
@@ -119,7 +119,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
     const { mutate: onDisconnectAll } = useMutation({
         mutationFn: useCallback(async (): Promise<void> => {
             if (!wallet) return
-            await Services.Wallet.disconnectAllOriginsConnectedFromWallet(wallet!.address)
+            await Services.Wallet.disconnectAllOriginsConnectedFromWallet(wallet!.address, 'any')
         }, [wallet?.address]),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
