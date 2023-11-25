@@ -8,17 +8,19 @@ import { DisableShadowRootContext } from '@masknet/theme'
 import { MainUI } from './MainUI.js'
 import { useTheme } from './hooks/useTheme.js'
 
-const root = document.createElement('main')
-document.body.appendChild(root)
-
-createRoot(root).render(
-    <StrictMode>
-        <DisableShadowRootContext.Provider value>
-            <App />
-        </DisableShadowRootContext.Provider>
-    </StrictMode>,
-)
-
 function App() {
     return PageUIProvider(useTheme, <MainUI />)
+}
+
+export default function renderApp() {
+    const root = document.createElement('main')
+    document.body.appendChild(root)
+
+    createRoot(root).render(
+        <StrictMode>
+            <DisableShadowRootContext.Provider value>
+                <App />
+            </DisableShadowRootContext.Provider>
+        </StrictMode>,
+    )
 }
