@@ -21,7 +21,7 @@ const methods = {
 
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
-        return Services.Wallet.EIP2255_wallet_getPermissions(location.origin)
+        return Services.Wallet.SDK_EIP2255_wallet_getPermissions(location.origin)
     },
     async wallet_requestPermissions(request: EIP2255PermissionRequest) {
         if (typeof request !== 'object' || request === null) throw new E(C.InvalidParams, M.InvalidMethodParams)
@@ -31,7 +31,7 @@ const methods = {
             if (typeof key !== 'string' || typeof request[key] !== 'object' || request[key] === null)
                 throw new E(C.InvalidParams, M.wallet_requestPermissions_Unknown.replaceAll('$', location.origin))
         }
-        return Services.Wallet.EIP2255_wallet_requestPermissions(location.origin, request)
+        return Services.Wallet.SDK_EIP2255_wallet_requestPermissions(location.origin, request)
     },
 }
 Object.setPrototypeOf(methods, null)

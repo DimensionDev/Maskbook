@@ -19,7 +19,7 @@ const WalletIO: WalletAPI.IOContext = {
     closeWalletConnectDialog: () => {
         WalletConnectQRCodeModal.close()
     },
-    grantEIP2255Permission: reject,
+    SDK_grantEIP2255Permission: reject,
     disconnectAllWalletsFromOrigin: reject,
     selectMaskWalletAccount: reject,
     addWallet: reject,

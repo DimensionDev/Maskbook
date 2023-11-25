@@ -24,11 +24,11 @@ export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequ
 export interface WalletGrantedPermission {
     type: 'granted_permission'
     id: string
-    origins: ReadonlyMap<string, Set<EIP2255Permission>>
+    origins: ReadonlyMap<string, ReadonlySet<EIP2255Permission>>
 }
 
 export interface InternalWalletConnectRecord {
     type: 'internal_connected'
     id: string
-    origins: Set<string>
+    origins: ReadonlySet<string>
 }

@@ -36,7 +36,7 @@ await initWallet({
     send: Services.Wallet.send,
     selectMaskWalletAccount: Services.Wallet.selectMaskAccount,
 
-    grantEIP2255Permission: Services.Wallet.grantEIP2255Permission,
+    SDK_grantEIP2255Permission: Services.Wallet.SDK_grantEIP2255Permission,
     disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
     wallets: createSubscriptionFromAsync(
         () => Services.Wallet.getWallets(),

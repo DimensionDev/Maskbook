@@ -74,7 +74,7 @@ export namespace WalletAPI {
             },
         ): Promise<string>
         /** Connect origin to Mask wallet  */
-        grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
+        SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
 
         /** Select a Mask Wallet account */
         selectMaskWalletAccount(
@@ -84,7 +84,7 @@ export namespace WalletAPI {
         ): Promise<Array<{ address: string; owner?: string; identifier?: ECKeyIdentifier }>>
 
         /** Disconnect origin from Mask wallet  */
-        disconnectAllWalletsFromOrigin(origin: string): Promise<void>
+        disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
     export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
