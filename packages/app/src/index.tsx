@@ -6,8 +6,7 @@ import { doInitWallet } from './setup/wallet.js'
 import renderApp from './render.js'
 
 async function startApp() {
-    doInitWallet()
-    await setupBuildInfo()
+    await Promise.allSettled([doInitWallet(), setupBuildInfo()])
     renderApp()
 }
 
