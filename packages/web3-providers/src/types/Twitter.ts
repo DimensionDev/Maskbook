@@ -445,6 +445,7 @@ export namespace TwitterBaseAPI {
                 }
             }
         }
+        errors?: any[]
     }
 
     export interface UserShowResponse {
