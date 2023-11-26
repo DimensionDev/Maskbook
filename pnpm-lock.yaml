@@ -363,6 +363,9 @@ importers:
       '@masknet/plugin-web3-profile':
         specifier: workspace:^
         version: link:../plugins/Web3Profile
+      '@masknet/polyfill':
+        specifier: workspace:^
+        version: link:../polyfills
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api
