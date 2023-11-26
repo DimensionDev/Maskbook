@@ -1,4 +1,5 @@
 import './styles/index.css'
+import '@masknet/polyfill/dist/ecmascript.js'
 import './setup/locale.js'
 
 import { setupBuildInfo } from '@masknet/flags/build-info'

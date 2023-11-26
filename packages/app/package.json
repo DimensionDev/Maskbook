@@ -58,6 +58,7 @@
         "@masknet/plugin-transak": "workspace:^",
         "@masknet/plugin-vcent": "workspace:^",
         "@masknet/plugin-web3-profile": "workspace:^",
+        "@masknet/polyfill": "workspace:^",
         "@masknet/public-api": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",

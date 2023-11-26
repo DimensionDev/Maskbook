@@ -5,7 +5,7 @@ import { getPostPayload } from '../helpers/getPostPayload.js'
 // Custom hook to execute getPostPayload when location changes
 export function usePostPayload() {
     const location = useLocation()
-    const [payload, setPayload] = useState(getPostPayload())
+    const [payload, setPayload] = useState(getPostPayload)
 
     useEffect(() => {
         setPayload(getPostPayload())
