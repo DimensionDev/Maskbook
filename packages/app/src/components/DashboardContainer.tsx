@@ -30,7 +30,7 @@ export function DashboardContainer(props: DashboardContainerProps) {
     }, [setThemeMode, mode])
 
     return (
-        <div className="xl:pl-72 ">
+        <div className="overflow-auto grow">
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-line-light dark:border-neutral-800 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#16161a]">
                 <button
                     type="button"

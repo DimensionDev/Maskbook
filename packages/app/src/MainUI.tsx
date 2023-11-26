@@ -20,12 +20,12 @@ export function MainUI() {
     return (
         <DashboardContext.Provider>
             <BrowserRouter>
-                <div className="bg-white dark:bg-[#16161a] h-full">
+                <div className="bg-white dark:bg-[#16161a] h-full flex">
                     <DashboardForMobile />
                     <DashboardForDesktop />
                     <Suspense
                         fallback={
-                            <div className="pl-72 h-full flex items-center justify-center">
+                            <div className="overflow-auto grow h-full flex items-center justify-center">
                                 <Spinner />
                             </div>
                         }>
