@@ -23,13 +23,27 @@ const features = {
     tweetypie_unmention_optimization_enabled: true,
     verified_phone_label_enabled: false,
     view_counts_everywhere_api_enabled: true,
+    c9s_tweet_anatomy_moderator_badge_enabled: false,
+    responsive_web_home_pinned_timelines_enabled: false,
 }
 
 const toggles = { withArticleRichContentState: false, withAuxiliaryUserLabels: false }
+const queryIdMap = {
+    CreateScheduledTweet: 'LCVzRQGxOaGnOnYH01NQXg',
+    CreateNoteTweet: 'nI7OgbViyRrJn6RKXPrbJw',
+    CreateTweet: '5V_dkq1jfalfiFOEZ4g47A',
+} as const
+const dataFieldMap = {
+    CreateScheduledTweet: 'posttweet_created',
+    CreateNoteTweet: 'notetweet_create',
+    CreateTweet: 'create_tweet',
+} as const
 
 export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     const variables = {
         ...tweet,
+        // TODO unescape properly
+        tweet_text: decodeURIComponent(tweet.tweet_text).replaceAll('&#x2F;', '/'),
         dark_request: false,
         withDownvotePerspective: false,
         withReactionsMetadata: false,
@@ -38,19 +52,17 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         withSuperFollowsUserFields: true,
         semantic_annotation_ids: [],
     }
+    // Remove link query
     const parsedTweet = Parser.default.parseTweet(variables.tweet_text)
     const overLength = parsedTweet.weightedLength > 280
     const scheduled = typeof variables.execute_at !== 'undefined'
-    const queryId =
-        scheduled ? 'LCVzRQGxOaGnOnYH01NQXg'
-        : overLength ? 'pokID4auGUSzBxijrqpIlw'
-        : 'tTsjMKyhajZvK4q76mpIBg'
-    const queryName =
+    const operationName =
         scheduled ? 'CreateScheduledTweet'
         : overLength ? 'CreateNoteTweet'
         : 'CreateTweet'
+    const queryId = queryIdMap[operationName]
     const response = await fetchJSON<TwitterBaseAPI.CreateTweetResponse>(
-        `https://twitter.com/i/api/graphql/${queryId}/${queryName}`,
+        `https://twitter.com/i/api/graphql/${queryId}/${operationName}`,
         {
             headers: getHeaders({
                 'content-type': 'application/json; charset=utf-8',
@@ -66,9 +78,14 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         },
     )
 
-    return response.data[
-        scheduled ? 'posttweet_created'
-        : overLength ? 'notetweet_create'
-        : 'create_tweet'
-    ].tweet_results.result
+    const field = dataFieldMap[operationName]
+    if (process.env.NODE_ENV === 'development') {
+        if (response.errors) {
+            // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
+            console.error(
+                "Errors occupied, query id chould be outdated. Please check twitter's client code in main.xxx.js",
+            )
+        }
+    }
+    return response.data[field].tweet_results.result
 }
