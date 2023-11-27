@@ -1,5 +1,5 @@
 import { SelectNetworkSidebar } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleAssets, useNetworks, useWallet } from '@masknet/web3-hooks-base'
