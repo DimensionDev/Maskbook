@@ -2,7 +2,7 @@ import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useBlockedNonFungibleTokens } from './useBlockedNonFungibleTokens.js'
 import { useChainContext } from './useContext.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
@@ -29,7 +29,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const blockedTokenIds = useMemo(() => {
         return blockedTokens.filter((x) => availableChainIds.includes(x.chainId)).map((x) => x.id)
     }, [blockedTokens, availableChainIds])
-    const { data, isLoading, fetchNextPage, hasNextPage, refetch, error, dataUpdatedAt } = useInfiniteQuery({
+    const response = useInfiniteQuery({
         queryKey: ['non-fungible-assets', account, availableChainIds, blockedTokenIds],
         queryFn: async ({ pageParam }) => {
             const chainId = pageParam?.chainId || availableChainIds[0]
@@ -62,17 +62,8 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         },
     })
 
-    const list = useMemo(() => data?.pages.flatMap((x) => x.data) || EMPTY_LIST, [data?.pages])
-    const nextPage = useCallback(() => fetchNextPage(), [fetchNextPage])
+    const pages = response.data?.pages
+    const list = useMemo(() => pages?.flatMap((x) => x.data) || EMPTY_LIST, [pages])
 
-    // TODO rename these fields in style of react-query
-    return {
-        value: list,
-        next: nextPage,
-        loading: isLoading,
-        done: !hasNextPage,
-        retry: refetch,
-        error,
-        dataUpdatedAt,
-    }
+    return [list, response] as const
 }

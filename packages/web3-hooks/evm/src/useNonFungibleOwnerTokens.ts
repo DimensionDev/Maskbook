@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useNonFungibleAssets } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleToken } from '@masknet/web3-shared-base'
@@ -13,7 +13,7 @@ export function useNonFungibleOwnerTokens(
     chainId: ChainId,
     _balance?: number,
 ) {
-    const { value: collectibles_ = EMPTY_LIST } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, {
+    const [collectibles_] = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, {
         chainId,
         account: ownerAccount,
     })

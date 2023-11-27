@@ -61,14 +61,11 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
 
     const { account, chainId, setAccount, setChainId } = useChainContext()
 
-    const {
-        value: assets,
-        done,
-        next,
-        error,
-        retry,
-        loading,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
+    const [assets, { hasNextPage, fetchNextPage, error, refetch, isLoading }] = useNonFungibleAssets(
+        pluginID,
+        undefined,
+        { chainId, account },
+    )
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 
@@ -89,18 +86,18 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                 <CollectionList
                     className={classes.collectionList}
                     tokens={tokens}
-                    loading={loading}
+                    loading={isLoading}
                     account={account}
                     selected={selected}
                     onItemClick={setSelected}
                 />
-                {error && !done && tokens.length ?
+                {error && hasNextPage && tokens.length ?
                     <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                        <RetryHint hint={false} retry={retry} />
+                        <RetryHint hint={false} retry={refetch} />
                     </Stack>
                 :   null}
-                <ElementAnchor key={tokens.length} callback={next}>
-                    {!done && tokens.length !== 0 && <LoadingBase />}
+                <ElementAnchor key={tokens.length} callback={() => fetchNextPage()}>
+                    {hasNextPage && tokens.length !== 0 ? <LoadingBase /> : null}
                 </ElementAnchor>
             </Box>
             <Box>
@@ -112,7 +109,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     expectedAddress={account}>
                     <Button
                         fullWidth
-                        disabled={loading || !selected || !!wallet?.owner}
+                        disabled={isLoading || !selected || !!wallet?.owner}
                         onClick={() => {
                             if (!selected?.metadata?.imageURL) return
                             onChange(selected?.metadata?.imageURL)
