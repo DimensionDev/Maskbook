@@ -1,1 +1,6 @@
-{}
+{
+    "token_operation_verbose$claim": "<to>{{to}}</to> が <from>{{from}}</from> で <bold>{{value}} {{symbol}}</bold> から受け取りました",
+    "token_operation_verbose$burn": "$t(token_operation$burn)",
+    "token_operation_verbose$deposit": "$t(token_operation$deposit)",
+    "token_operation_verbose$withdraw": "$t(token_operation$withdraw)"
+}
