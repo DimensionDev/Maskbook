@@ -4,7 +4,6 @@ import { RedPacket, TheGraphRedPacket, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/types'
 import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
 import { RedPacketRPC } from '../../messages.js'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
@@ -12,7 +11,7 @@ const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const wallet = useWallet()
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
-    const query = useQuery({
+    return useQuery({
         queryKey: ['red-packet-history', chainId, address, wallet?.owner],
         queryFn: async () => {
             if (!HAPPY_RED_PACKET_ADDRESS_V4) return EMPTY_LIST as RedPacketJSONPayloadFromChain[]
@@ -41,12 +40,7 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
 
             return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
         },
+        select: (query) =>
+            query?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
     })
-
-    const data = useMemo(
-        () => query.data?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
-        [chainId, query.data],
-    )
-
-    return [data, query] as const
 }

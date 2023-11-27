@@ -1,11 +1,10 @@
-import { useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { RSS3 } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
-    const response = useInfiniteQuery({
+    return useInfiniteQuery({
         enabled: !!address,
         initialPageParam: undefined as any,
         queryKey: ['rss3-feeds', address, tag],
@@ -14,13 +13,6 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
             return res
         },
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,
+        select: (data) => data.pages.flatMap((page) => page.data) || EMPTY_LIST,
     })
-
-    const pages = response.data?.pages
-    const feeds = useMemo(() => {
-        if (!pages) return EMPTY_LIST
-        return pages.flatMap((page) => page.data)
-    }, [pages])
-
-    return [feeds, response] as const
 }

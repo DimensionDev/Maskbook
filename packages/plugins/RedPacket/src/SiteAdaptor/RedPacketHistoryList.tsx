@@ -42,7 +42,7 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [histories, { isLoading }] = useRedPacketHistory(account, chainId)
+    const { data: histories, isLoading } = useRedPacketHistory(account, chainId)
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 

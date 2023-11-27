@@ -7,13 +7,15 @@ import { isLens, isLensCollect, isLensComment, isLensFollower, isLensPost } from
 
 export function useNFTs() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [assets, { isLoading, hasNextPage, fetchNextPage, dataUpdatedAt }] = useNonFungibleAssets(
-        NetworkPluginID.PLUGIN_EVM,
-        undefined,
-        {
-            chainId,
-        },
-    )
+    const {
+        data: assets = EMPTY_LIST,
+        isLoading,
+        hasNextPage,
+        fetchNextPage,
+        dataUpdatedAt,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId,
+    })
     useEffect(() => {
         if (!hasNextPage) return
         fetchNextPage()

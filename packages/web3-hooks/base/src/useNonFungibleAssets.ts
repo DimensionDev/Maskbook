@@ -31,7 +31,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     const blockedTokenIds = useMemo(() => {
         return blockedTokens.filter((x) => availableChainIds.includes(x.chainId)).map((x) => x.id)
     }, [blockedTokens, availableChainIds])
-    const response = useInfiniteQuery({
+    return useInfiniteQuery({
         queryKey: ['non-fungible-assets', account, availableChainIds, blockedTokenIds],
         initialPageParam: undefined as
             | {
@@ -68,10 +68,6 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 chainId: nextChainId,
             }
         },
+        select: (data) => data.pages.flatMap((x) => x.data) || EMPTY_LIST,
     })
-
-    const pages = response.data?.pages
-    const list = useMemo(() => pages?.flatMap((x) => x.data) || EMPTY_LIST, [pages])
-
-    return [list, response] as const
 }

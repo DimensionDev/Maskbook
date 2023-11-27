@@ -29,7 +29,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const [feeds, { isLoading: loadingFeeds, error, fetchNextPage }] = useFeeds(address, tag)
+    const { data: feeds, isLoading: loadingFeeds, error, fetchNextPage } = useFeeds(address, tag)
 
     const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
@@ -46,7 +46,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         }
     }, [address, name, Utils.formatDomainName, Utils.formatAddress])
 
-    if (error && !feeds.length)
+    if (error && !feeds?.length)
         return (
             <Box p={2} boxSizing="border-box">
                 <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
@@ -55,7 +55,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
             </Box>
         )
 
-    if ((loading && !feeds.length) || !feedOwner) {
+    if ((loading && !feeds?.length) || !feedOwner) {
         return (
             <Box p={2} boxSizing="border-box">
                 {range(3).map((i) => (
@@ -66,7 +66,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
             </Box>
         )
     }
-    if (!feeds.length && !loading) {
+    if (!feeds?.length && !loading) {
         return <EmptyStatus height={260}>{t.no_data({ context: tag || 'activities' })}</EmptyStatus>
     }
 
@@ -74,9 +74,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         <FeedOwnerContext.Provider value={feedOwner}>
             {/* padding for profile card footer */}
             <Box paddingBottom="48px">
-                {feeds.map((feed, index) => (
-                    <FeedCard key={index} className={classes.feedCard} feed={feed} />
-                ))}
+                {feeds?.map((feed, index) => <FeedCard key={index} className={classes.feedCard} feed={feed} />)}
                 <ElementAnchor callback={() => fetchNextPage()}>
                     {loading ?
                         <LoadingBase className={classes.loading} />

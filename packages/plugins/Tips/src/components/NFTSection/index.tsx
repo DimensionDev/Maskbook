@@ -11,7 +11,7 @@ import {
     LoadingStatus,
     EmptyStatus,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
@@ -93,11 +93,13 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
 
-    const [fetchedTokens, { hasNextPage, fetchNextPage, isLoading, error: loadError }] = useNonFungibleAssets(
-        pluginID,
-        undefined,
-        { chainId },
-    )
+    const {
+        data: fetchedTokens = EMPTY_LIST,
+        hasNextPage,
+        fetchNextPage,
+        isLoading,
+        error: loadError,
+    } = useNonFungibleAssets(pluginID, undefined, { chainId })
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {

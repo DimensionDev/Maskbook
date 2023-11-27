@@ -1,5 +1,5 @@
 import { CollectibleList, ElementAnchor } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNonFungibleAsset, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'
@@ -59,9 +59,13 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 
-    const [fetchedTokens, { hasNextPage, fetchNextPage, isLoading, dataUpdatedAt }] = useNonFungibleAssets(
-        NetworkPluginID.PLUGIN_EVM,
-    )
+    const {
+        data: fetchedTokens = EMPTY_LIST,
+        hasNextPage,
+        fetchNextPage,
+        isLoading,
+        dataUpdatedAt,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const tokens = useMemo(() => {
         const filtered = fetchedTokens.filter((x) => {
             if (isLensProfileAddress(x.address)) return false

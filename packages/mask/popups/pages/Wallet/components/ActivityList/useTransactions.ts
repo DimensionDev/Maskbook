@@ -20,15 +20,10 @@ export function useTransactions() {
             return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
+        select: (data) =>
+            data.pages.flatMap((page) => page.data).filter((t) => !hidingScamSettings.value || !t.isScam) || EMPTY_LIST,
     })
     const data = response.data
-    const transactions = useMemo(
-        () =>
-            data?.pages
-                .flatMap((p) => p.data)
-                .filter((transaction) => !hidingScamSettings.value || !transaction.isScam) || EMPTY_LIST,
-        [data?.pages],
-    )
 
     const networks = useNetworks()
 
@@ -37,7 +32,7 @@ export function useTransactions() {
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
-                enabled: !!account && (transactions.length > 0 || !response.isLoading),
+                enabled: !!account && ((response.data?.length || 0) > 0 || !response.isLoading),
                 queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []
@@ -63,11 +58,11 @@ export function useTransactions() {
         return sortBy(
             allLocaleTxes.filter((tx) => {
                 // show txes from the past half txes
-                return !transactions.find((x) => x.id === tx.id) && now - tx.updatedAt.getTime() < duration
+                return !response.data?.find((x) => x.id === tx.id) && now - tx.updatedAt.getTime() < duration
             }),
             (x) => -x.createdAt.getTime(),
         )
-    }, [allLocaleTxes, transactions])
+    }, [allLocaleTxes, response.data])
 
-    return [{ transactions, localeTxes }, response] as const
+    return [{ transactions: response.data, localeTxes }, response] as const
 }

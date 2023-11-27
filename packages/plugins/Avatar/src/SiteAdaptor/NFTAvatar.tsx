@@ -9,7 +9,7 @@ import {
     SelectProviderModal,
     isSameNFT,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
@@ -97,7 +97,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken>()
     const [customCollectibles, setCustomCollectibles] = useState<AllChainsNonFungibleToken[]>([])
     const t = useAvatarTrans()
-    const [collectibles, { hasNextPage, fetchNextPage, error: loadError }] = useNonFungibleAssets(pluginID, undefined, {
+    const {
+        data: collectibles = EMPTY_LIST,
+        hasNextPage,
+        fetchNextPage,
+        error: loadError,
+    } = useNonFungibleAssets(pluginID, undefined, {
         chainId,
         account,
     })

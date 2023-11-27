@@ -61,7 +61,7 @@ export const ActivityList = memo(function ActivityList() {
         [navigate],
     )
 
-    if (!isLoading && !localeTxes.length && !transactions.length)
+    if (!isLoading && !localeTxes.length && !transactions?.length)
         return <EmptyStatus height="100%">{t.no_data()}</EmptyStatus>
 
     return (
@@ -76,7 +76,7 @@ export const ActivityList = memo(function ActivityList() {
                         onView={handleView}
                     />
                 ))}
-                {transactions.map((transaction) => (
+                {transactions?.map((transaction) => (
                     <ActivityItem
                         key={transaction.id}
                         className={classes.item}
@@ -86,7 +86,7 @@ export const ActivityList = memo(function ActivityList() {
                 ))}
                 {isFetching ? range(4).map((i) => <ActivityItemSkeleton key={i} className={classes.item} />) : null}
             </List>
-            <ElementAnchor callback={() => fetchNextPage()} key={transactions.length} height={10} />
+            <ElementAnchor callback={() => fetchNextPage()} key={transactions?.length} height={10} />
         </div>
     )
 })
