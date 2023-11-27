@@ -28,11 +28,11 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     const { chainId } = useChainContext(options)
     const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID, options)
     const maskTokenAddress = useMaskTokenAddress(pluginID, options)
-    const { data: maskBalance = '0', isLoading: isLoadingMaskBalance } = useFungibleTokenBalance(
+    const { data: maskBalance = '0', isPending: isLoadingMaskBalance } = useFungibleTokenBalance(
         undefined,
         maskTokenAddress,
     )
-    const { data: tokenBalance = '0', isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
+    const { data: tokenBalance = '0', isPending: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
         ...options,
         chainId,
     })
@@ -89,6 +89,6 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         isGasFeeGreaterThanOneETH,
         gasFee,
         balance,
-        isLoading: isLoadingMaskBalance || isLoadingTokenBalance || loading,
+        isPending: isLoadingMaskBalance || isLoadingTokenBalance || loading,
     }
 }

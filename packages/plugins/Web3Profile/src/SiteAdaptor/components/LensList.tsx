@@ -81,7 +81,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
     const { account: wallet } = useChainContext()
 
-    const { data = accounts, isLoading } = useQuery({
+    const { data = accounts, isPending } = useQuery({
         queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet],
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
@@ -127,7 +127,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     return (
         <List className={cx(classes.list, className)} {...rest}>
             {data.map((account, key) => {
-                return <LensListItem account={account} key={key} loading={isLoading} />
+                return <LensListItem account={account} key={key} loading={isPending} />
             })}
         </List>
     )

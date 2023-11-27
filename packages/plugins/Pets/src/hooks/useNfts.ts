@@ -9,7 +9,7 @@ export function useNFTs() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
         data: assets = EMPTY_LIST,
-        isLoading,
+        isPending,
         hasNextPage,
         fetchNextPage,
         dataUpdatedAt,
@@ -19,7 +19,7 @@ export function useNFTs() {
     useEffect(() => {
         if (!hasNextPage) return
         fetchNextPage()
-    }, [isLoading, hasNextPage, fetchNextPage, dataUpdatedAt])
+    }, [isPending, hasNextPage, fetchNextPage, dataUpdatedAt])
 
     const nfts = useMemo(() => {
         const map: Record<string, NonFungibleContract> = {}
@@ -54,5 +54,5 @@ export function useNFTs() {
         return nfts
     }, [assets])
 
-    return { nfts, isLoading }
+    return { nfts, isPending }
 }

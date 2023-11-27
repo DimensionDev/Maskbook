@@ -81,8 +81,8 @@ export const WalletItem = memo<WalletItemProps>((props) => {
 
     const chainIdValid = useChainIdValid()
     const wallet = useWallet()
-    const { data: balance = '0', isLoading: loadingBalance } = useBalance()
-    const { data: nativeToken, isLoading: loadingNativeToken } = useNativeToken()
+    const { data: balance = '0', isPending: loadingBalance } = useBalance()
+    const { data: nativeToken, isPending: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { data: domain } = useReverseAddress(undefined, account)
 

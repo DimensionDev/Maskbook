@@ -19,7 +19,7 @@ export function Avatar(props: AvatarProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { data: identity } = useSocialIdentityByUserId(userId)
-    const [socialAccounts, { isLoading: loadingSocialAccounts }] = useSocialAccountsAll(identity)
+    const [socialAccounts, { isPending: loadingSocialAccounts }] = useSocialAccountsAll(identity)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,

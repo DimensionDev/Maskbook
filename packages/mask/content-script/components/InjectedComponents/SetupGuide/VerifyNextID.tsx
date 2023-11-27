@@ -158,7 +158,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const personaIdentifier = personaInfo?.identifier
 
     const [customUserId, setCustomUserId] = useState('')
-    const { data: post, isLoading: creatingPostContent } = usePostContent(personaIdentifier, userId || customUserId)
+    const { data: post, isPending: creatingPostContent } = usePostContent(personaIdentifier, userId || customUserId)
     const { configuration, networkIdentifier } = activatedSiteAdaptorUI!
     const nextIdPlatform = configuration.nextIDConfig?.platform
 

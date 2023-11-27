@@ -59,7 +59,7 @@ function useSettingsContext(initial?: {
 
     const {
         data: gasOptions,
-        isLoading: gasOptionsLoading,
+        isPending: gasOptionsLoading,
         error: gasOptionsError,
         refetch: gasOptionRetry,
     } = useGasOptions(pluginID, {

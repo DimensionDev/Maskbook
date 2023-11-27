@@ -151,7 +151,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             {wallets.map((wallet, index) => {
                 const query = queries[index]
                 let walletName = query.data || ''
-                if (!walletName && !query.isLoading) {
+                if (!walletName && !query.isPending) {
                     walletName = `${resolveNextIDPlatformWalletName(wallet.platform)} ${wallets.length - index}`
                 }
                 return (
@@ -164,7 +164,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                     component="span"
                                     skeletonWidth={60}
                                     skeletonHeight={16}
-                                    loading={query.isLoading}>
+                                    loading={query.isPending}>
                                     {formatDomainName(walletName, 13)}
                                 </ProgressiveText>
 

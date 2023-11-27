@@ -8,8 +8,8 @@ export function useTransactionValue(
     gas?: string,
     /** token address */ gasCurrency?: string,
 ) {
-    const { data: nativeTokenBalance = '0', isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { data: gasCurrencyBalance = '0', isLoading: loadingTokenBalance } = useFungibleTokenBalance(
+    const { data: nativeTokenBalance = '0', isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasCurrencyBalance = '0', isPending: loadingTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         gasCurrency,
     )

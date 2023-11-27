@@ -112,7 +112,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
         }
     }, [asset.data?.link])
 
-    if (asset.isLoading) return <LoadingStatus height="100%" />
+    if (asset.isPending) return <LoadingStatus height="100%" />
     if (!asset.data) return <ReloadStatus height="100%" message={t.load_failed()} onRetry={asset.refetch} />
 
     // Links of Solana NFTs might be incorrect, we discard them temporarily.
@@ -130,7 +130,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     : currentTab === TabType.Offers ?
                         <OffersTab
                             offers={offers}
-                            loading={orders.isLoading}
+                            loading={orders.isPending}
                             finished={!orders.hasNextPage}
                             onNext={orders.fetchNextPage}
                             onRetry={orders.refetch}

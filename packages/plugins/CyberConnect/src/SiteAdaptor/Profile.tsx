@@ -103,7 +103,7 @@ function Profile({ url }: { url: string }) {
     const [, , , , queryAddress] = url.split('/')
     const {
         data: identity,
-        isLoading,
+        isPending,
         error,
         refetch,
     } = useQuery({
@@ -124,7 +124,7 @@ function Profile({ url }: { url: string }) {
         )
     }
 
-    if (isLoading) return <LoadingStatus height={196} omitText />
+    if (isPending) return <LoadingStatus height={196} omitText />
     if (error) return <ReloadStatus height={196} message={t.failed()} onRetry={refetch} />
 
     return (

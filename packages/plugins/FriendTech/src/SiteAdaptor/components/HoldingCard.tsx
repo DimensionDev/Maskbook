@@ -94,7 +94,7 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
     const [params] = useSearchParams()
 
     // Disable loading with empty string until component appearances.
-    const { data: user, isInitialLoading: loading } = useUser(seen ? holding.address : '')
+    const { data: user, isLoading: loading } = useUser(seen ? holding.address : '')
     const navigate = useNavigate()
 
     return (

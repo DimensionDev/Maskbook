@@ -31,7 +31,7 @@ export function useTransactions() {
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
-                enabled: !!account && ((response.data?.length || 0) > 0 || !response.isLoading),
+                enabled: !!account && ((response.data?.length || 0) > 0 || !response.isPending),
                 queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []

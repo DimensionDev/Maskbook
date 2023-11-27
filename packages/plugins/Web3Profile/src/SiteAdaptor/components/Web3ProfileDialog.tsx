@@ -57,7 +57,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         return allPersona.flatMap((x) => x.linkedProfiles).filter((x) => x.identifier.network === 'twitter.com')
     }, [allPersona])
 
-    const { data: proofs, isLoading: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
+    const { data: proofs, isPending: loadingBinding, isFetched } = usePersonaProofs(personaPublicKey)
 
     const twitterProofs = useMemo(() => {
         if (!proofs?.length) return EMPTY_LIST
@@ -75,15 +75,14 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     }, [proofs])
 
     const socialIds = useMemo(() => twitterProofs.map((x) => x.identity), [twitterProofs])
-    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig(
-            {
-                identifier: currentPersona?.identifier,
-                pluginID: PluginID.Web3Profile,
-                socialIds,
-            },
-            signWithPersona,
-        )
+    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isLoading, refetch }, updateConfig] = useUnlistedAddressConfig(
+        {
+            identifier: currentPersona?.identifier,
+            pluginID: PluginID.Web3Profile,
+            socialIds,
+        },
+        signWithPersona,
+    )
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
     useEffect(() => {
@@ -138,7 +137,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         })
     }, [])
 
-    const disabled = isClean || isInitialLoading
+    const disabled = isClean || isLoading
 
     return (
         <InjectedDialog

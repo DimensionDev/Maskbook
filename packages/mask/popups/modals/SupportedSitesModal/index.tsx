@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal(props) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
-    const { data = EMPTY_LIST, isLoading, refetch } = useSupportedSites()
+    const { data = EMPTY_LIST, isPending, refetch } = useSupportedSites()
 
     const handleSwitch = useCallback(
         async ({
@@ -68,7 +68,7 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
         <ActionModal header={t.popups_settings_supported_sites()} {...props}>
             <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
             <List className={classes.list}>
-                {!isLoading && data ?
+                {!isPending && data ?
                     data?.map((x) => {
                         const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[x.networkIdentifier]
 

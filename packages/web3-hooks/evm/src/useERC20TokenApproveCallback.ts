@@ -30,13 +30,13 @@ export function useERC20TokenApproveCallback(
     // read the approved information from the chain
     const {
         data: balance = '0',
-        isLoading: loadingBalance,
+        isPending: loadingBalance,
         error: errorBalance,
         refetch: revalidateBalance,
     } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId: tokenChainId })
     const {
         data: allowance = '0',
-        isLoading: loadingAllowance,
+        isPending: loadingAllowance,
         error: errorAllowance,
         refetch: revalidateAllowance,
     } = useERC20TokenAllowance(address, spender, { chainId: tokenChainId })

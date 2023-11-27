@@ -13,14 +13,14 @@ export function useSocialAccountsBySettings(
 ) {
     const [
         socialAccounts,
-        { isLoading: loadingSocialAccounts, error: loadSocialAccountsError, refetch: refetchSocialAccounts },
+        { isPending: loadingSocialAccounts, error: loadSocialAccountsError, refetch: refetchSocialAccounts },
     ] = useSocialAccountsAll(identity, typeWhitelist, sorter)
     const userId = identity?.identifier?.userId
     const [
         hiddenAddress,
         {
             isFetching: loadingHiddenAddress,
-            isInitialLoading,
+            isLoading,
             error: loadingHiddenAddressError,
             refetch: refetchLoadHiddenAddress,
         },
@@ -42,8 +42,8 @@ export function useSocialAccountsBySettings(
 
     return {
         data: addresses,
-        isLoading: loadingSocialAccounts || loadingHiddenAddress,
-        isInitialLoading,
+        isPending: loadingSocialAccounts || loadingHiddenAddress,
+        isLoading,
         error: loadSocialAccountsError || loadingHiddenAddressError,
         refetch,
     }

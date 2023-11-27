@@ -76,7 +76,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { data: personas = EMPTY_LIST, isLoading, error, refetch } = useConnectedPersonas()
+    const { data: personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -100,7 +100,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     )
 
     useLayoutEffect(() => {
-        if (personas.length || isLoading || error) return
+        if (personas.length || isPending || error) return
 
         onClose?.()
         LeavePageConfirmModal.open({
@@ -113,7 +113,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                 actionHint: t.applications_create_persona_action(),
             },
         })
-    }, [!personas.length, isLoading, !error])
+    }, [!personas.length, isPending, !error])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -215,7 +215,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         selectedPersona?.persona.linkedProfiles,
     ])
 
-    if (isLoading) return <LoadingStatus iconSize={24} />
+    if (isPending) return <LoadingStatus iconSize={24} />
 
     if (error) return <ReloadStatus className={classes.reloadStatus} onRetry={refetch} />
 

@@ -21,7 +21,7 @@ export function PersonaPage() {
     const [visible, setVisible] = useState(true)
     const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
-    const { setProofs, setTokenInfo, setProof, isLoading, binding } = useAvatarManagement()
+    const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
 
     const socialIdentity = useLastRecognizedIdentity()
 
@@ -68,7 +68,7 @@ export function PersonaPage() {
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
-                {isLoading ?
+                {isPending ?
                     <Stack justifyContent="center" alignItems="center" height="100%">
                         <LoadingBase />
                     </Stack>

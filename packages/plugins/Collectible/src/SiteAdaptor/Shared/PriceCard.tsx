@@ -60,9 +60,9 @@ export function PriceCard(props: PriceCardProps) {
     const { setSourceType, sourceType = topListing?.source, orders } = Context.useContainer()
     const t = useCollectibleTrans()
     const { classes } = useStyles()
-    if (((!topListing && orders.error) || orders.isLoading) && !sourceType) return null
+    if (((!topListing && orders.error) || orders.isPending) && !sourceType) return null
 
-    if (!topListing && !orders.isLoading)
+    if (!topListing && !orders.isPending)
         return sourceType ?
                 <div className={classes.wrapper}>
                     <div className={classes.priceZone}>
@@ -96,7 +96,7 @@ export function PriceCard(props: PriceCardProps) {
     return (
         <div className={classes.wrapper}>
             <div className={classes.priceZone}>
-                {orders.isLoading ?
+                {orders.isPending ?
                     <PriceLoadingSkeleton />
                 :   <div className={classes.offerBox}>
                         {renderTokenSymbol()}

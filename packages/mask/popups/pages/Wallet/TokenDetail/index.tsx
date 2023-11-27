@@ -144,16 +144,16 @@ const TokenDetail = memo(function TokenDetail() {
     const {
         data: stats = EMPTY_LIST,
         refetch,
-        isLoading: isLoadingStats,
+        isPending: isLoadingStats,
     } = useCoinTrendingStats(chainId, address, chartRange)
-    const { data: tokenPrice = stats.at(-1)?.[1], isLoading: isLoadingPrice } = useTokenPrice(chainId, address)
+    const { data: tokenPrice = stats.at(-1)?.[1], isPending: isLoadingPrice } = useTokenPrice(chainId, address)
     const tokenValue = useMemo(() => {
         if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
         return leftShift(balance, asset.decimals).times(tokenPrice)
     }, [balance, asset, tokenPrice])
 
-    const { data: trending, isLoading: isLoadingTrending, isError } = useTrending(chainId, address)
+    const { data: trending, isPending: isLoadingTrending, isError } = useTrending(chainId, address)
     const priceChange =
         trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
 

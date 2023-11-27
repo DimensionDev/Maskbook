@@ -46,18 +46,17 @@ const AccountDetail = memo(() => {
             SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite)
         :   false
 
-    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isInitialLoading, refetch }, updateConfig] =
-        useUnlistedAddressConfig(
-            {
-                identifier: currentPersona?.identifier,
-                pluginID: PluginID.Web3Profile,
-                socialIds:
-                    isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity ?
-                        [selectedAccount.identity]
-                    :   EMPTY_LIST,
-            },
-            (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
-        )
+    const [{ data: unlistedAddressConfig = EMPTY_OBJECT, isLoading, refetch }, updateConfig] = useUnlistedAddressConfig(
+        {
+            identifier: currentPersona?.identifier,
+            pluginID: PluginID.Web3Profile,
+            socialIds:
+                isSupportNextDotID && selectedAccount?.is_valid && selectedAccount.identity ?
+                    [selectedAccount.identity]
+                :   EMPTY_LIST,
+        },
+        (a, b, c, d) => Service.Identity.signWithPersona(a, b, c, location.origin, d),
+    )
 
     const listingAddresses = useMemo(() => {
         if (!selectedAccount?.identity) return EMPTY_LIST
@@ -232,7 +231,7 @@ const AccountDetail = memo(() => {
             walletProofs={walletProofs}
             toggleUnlisted={toggleUnlisted}
             listingAddresses={listingAddresses}
-            loading={isInitialLoading}
+            loading={isLoading}
             onSubmit={handleSubmit}
             submitting={submitting}
         />

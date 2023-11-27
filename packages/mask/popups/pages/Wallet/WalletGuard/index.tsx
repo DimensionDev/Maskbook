@@ -15,7 +15,7 @@ export const WalletGuard = memo(function WalletGuard() {
     const outletContext = useOutletContext()
     const location = useLocation()
     const [params] = useSearchParams()
-    const { isLocked, isLoading } = useWalletLockStatus()
+    const { isLocked, isPending } = useWalletLockStatus()
 
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
@@ -32,7 +32,7 @@ export const WalletGuard = memo(function WalletGuard() {
         params.set('from', location.pathname)
         return <Navigate to={{ pathname: PopupRoutes.SetPaymentPassword, search: params.toString() }} />
     }
-    if (isLocked && !isLoading) {
+    if (isLocked && !isPending) {
         return (
             <>
                 <WalletSetupHeaderUI />

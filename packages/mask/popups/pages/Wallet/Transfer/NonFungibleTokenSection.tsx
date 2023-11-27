@@ -63,7 +63,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
         data: fetchedTokens = EMPTY_LIST,
         hasNextPage,
         fetchNextPage,
-        isLoading,
+        isPending,
         dataUpdatedAt,
     } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
     const tokens = useMemo(() => {
@@ -145,7 +145,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     retry={fetchNextPage}
                     collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
-                    loading={isLoading || !!hasNextPage}
+                    loading={isPending || !!hasNextPage}
                     columns={4}
                     gap={1}
                     selectable

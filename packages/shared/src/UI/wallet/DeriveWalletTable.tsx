@@ -164,7 +164,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
     symbol,
 }) {
     const { classes, cx } = useStyles()
-    const { data: balance, isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+    const { data: balance, isPending } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId: ChainId.Mainnet,
     })
@@ -190,7 +190,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                 </div>
             </TableCell>
             <TableCell align="left" variant="body" className={cx(classes.cell, classes.center)}>
-                {isLoading ?
+                {isPending ?
                     <CircularProgress color="primary" size={12} classes={{ colorPrimary: classes.colorPrimary }} />
                 :   <Typography className={classes.title}>
                         <FormattedBalance

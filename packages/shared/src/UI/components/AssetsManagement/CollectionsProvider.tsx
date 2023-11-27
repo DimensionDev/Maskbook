@@ -14,7 +14,7 @@ function useCollections(defaultCollectionId?: string) {
     const [currentCollectionId = defaultCollectionId, setCurrentCollectionId] = useState<string>()
     const {
         data: rawCollections = EMPTY_LIST,
-        isLoading: loading,
+        isPending: loading,
         error,
         refetch: retry,
     } = useNonFungibleCollections(pluginID, {

@@ -17,7 +17,7 @@ const FriendsHome = memo(function FriendsHome() {
     const t = useMaskSharedTrans()
     useTitle(t.popups_encrypted_friends())
 
-    const [{ isLoading, refetch, records }, { status: fetchRelationStatus }, { data, status, fetchNextPage }] =
+    const [{ isPending, refetch, records }, { status: fetchRelationStatus }, { data, status, fetchNextPage }] =
         useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
@@ -35,11 +35,11 @@ const FriendsHome = memo(function FriendsHome() {
         if (!keyword || type !== NextIDPlatform.Twitter) return EMPTY_LIST
         return fuse.search(keyword).map((item) => item.item)
     }, [fuse, keyword, type])
-    const { isLoading: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
+    const { isPending: isSearchRecordLoading, data: localSearchedList = EMPTY_LIST } =
         useFriendFromList(searchedRecords)
     const {
-        isLoading: searchLoading,
-        isInitialLoading,
+        isPending: searchLoading,
+        isLoading,
         data: searchResultArray,
         fetchNextPage: fetchNextSearchPage,
     } = useInfiniteQuery({
@@ -61,9 +61,9 @@ const FriendsHome = memo(function FriendsHome() {
         <FriendsHomeUI
             friends={data?.pages ?? EMPTY_LIST}
             loading={
-                isLoading ||
+                isPending ||
                 resolveLoading ||
-                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isInitialLoading) ||
+                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isLoading) ||
                 status === 'pending' ||
                 fetchRelationStatus === 'pending'
             }

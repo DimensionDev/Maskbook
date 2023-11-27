@@ -50,7 +50,7 @@ interface CoinMarketTableProps {
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending, sign }: CoinMarketTableProps) {
     const t = useSharedTrans()
     const { classes } = useStyles()
-    const { isLoading } = useFiatCurrencyRate()
+    const { isPending } = useFiatCurrencyRate()
 
     const market = trending?.market
 
@@ -72,7 +72,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                             </TableCell>
                             <TableCell className={classes.value}>
                                 {market?.market_cap ?
-                                    <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
+                                    <ProgressiveText className={classes.value} loading={isPending} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.market_cap}
                                             formatter={formatCurrency}
@@ -102,7 +102,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                             </TableCell>
                             <TableCell className={classes.value}>
                                 {market?.total_volume ?
-                                    <ProgressiveText className={classes.value} loading={isLoading} skeletonWidth={60}>
+                                    <ProgressiveText className={classes.value} loading={isPending} skeletonWidth={60}>
                                         <FormattedCurrency
                                             value={market.total_volume}
                                             formatter={formatCurrency}

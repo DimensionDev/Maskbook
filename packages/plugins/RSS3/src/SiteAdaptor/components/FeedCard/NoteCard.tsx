@@ -194,7 +194,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const media = metadata?.media?.[0]
     const [seen, ref] = useEverSeen()
     const enablePublicationId = seen && !!media?.mime_type.startsWith('video/')
-    const { data: publicationId, isLoading } = usePublicationId(enablePublicationId ? feed.hash : null)
+    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.hash : null)
 
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
@@ -238,7 +238,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                         }
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
-                        {isLoading ?
+                        {isPending ?
                             <LoadingBase size={36} />
                         :   <Icons.Play size={64} />}
                     </Link>

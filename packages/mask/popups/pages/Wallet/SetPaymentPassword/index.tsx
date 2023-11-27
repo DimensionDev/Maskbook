@@ -132,7 +132,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles({})
     const { address, owner } = wallet
     const chainId = owner ? ChainId.Matic : ChainId.Mainnet
-    const { data: balance = '0', isLoading } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+    const { data: balance = '0', isPending } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId,
     })
@@ -159,7 +159,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                         <Icons.LinkOut size={16} color={theme.palette.maskColor.main} />
                     </Link>
                 </Typography>
-                <ProgressiveText loading={isLoading} className={classes.description} fontSize={12} skeletonWidth={50}>
+                <ProgressiveText loading={isPending} className={classes.description} fontSize={12} skeletonWidth={50}>
                     <FormattedBalance
                         value={balance}
                         decimals={18}

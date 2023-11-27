@@ -82,7 +82,7 @@ export const SelectNonFungibleContractDialog = memo(
         }
         const {
             data: collections = EMPTY_LIST,
-            isLoading,
+            isPending,
             isError,
             refetch,
         } = useNonFungibleCollections(pluginID, {
@@ -178,7 +178,7 @@ export const SelectNonFungibleContractDialog = memo(
                     </Box>
                     {isError ?
                         <ReloadStatus height={500} onRetry={refetch} />
-                    : isLoading && !collections.length ?
+                    : isPending && !collections.length ?
                         <LoadingStatus height={500} />
                     : !searchResults.length ?
                         <EmptyStatus height={500}>{t.no_results()}</EmptyStatus>

@@ -53,7 +53,7 @@ export function TipButton(props: Props) {
     } = props
     const { classes, cx } = useStyles({ iconSize })
 
-    const { data: personaPubkey, isLoading: loadingPersona } = useProfilePublicKey(receiver?.userId)
+    const { data: personaPubkey, isPending: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId
 
     const { pluginID } = useNetworkContext()

@@ -148,7 +148,7 @@ export function Collectible() {
 
     const offers = useMemo(() => orders.data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [orders.data?.pages])
 
-    if (asset.isLoading) return <LoadingStatus height={148} p={1} />
+    if (asset.isPending) return <LoadingStatus height={148} p={1} />
 
     if (!asset.data && !asset.error) {
         return <EmptyStatus className={classes.empty}>{t.nft_minted()}</EmptyStatus>
@@ -169,12 +169,12 @@ export function Collectible() {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: <AboutTab asset={asset.data} isLoading={asset.isLoading} />,
-            [tabs.details]: <DetailsTab asset={asset.data} isLoading={asset.isLoading} />,
+            [tabs.about]: <AboutTab asset={asset.data} isLoading={asset.isPending} />,
+            [tabs.details]: <DetailsTab asset={asset.data} isLoading={asset.isPending} />,
             [tabs.offers]: (
                 <OffersTab
                     offers={offers}
-                    loading={orders.isLoading}
+                    loading={orders.isPending}
                     error={orders.error as Error | undefined}
                     finished={!orders.hasNextPage}
                     onRetry={orders.refetch}

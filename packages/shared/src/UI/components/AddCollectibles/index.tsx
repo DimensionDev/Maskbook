@@ -165,7 +165,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
     const {
         data: contract,
-        isLoading: isLoadingContract,
+        isPending: isLoadingContract,
         isError,
         refetch,
     } = useQuery({
@@ -194,9 +194,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             },
         })),
     })
-    const loadingAssets = assetsQueries.every((x) => x.isLoading)
+    const loadingAssets = assetsQueries.every((x) => x.isPending)
     const allFailed = assetsQueries.every((x) => x.failureReason)
-    const noResults = assetsQueries.every((x) => !x.isLoading && !x.data) || !isValid || allFailed
+    const noResults = assetsQueries.every((x) => !x.isPending && !x.data) || !isValid || allFailed
     const someNotMine = assetsQueries.some((x) => (x.data ? !isSameAddress(x.data.owner?.address, account) : false))
 
     const handleFormSubmit = useCallback(
@@ -317,8 +317,8 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 :   <Box className={classes.grid}>
                         {assetsQueries
                             .filter((x) => x.data)
-                            .map(({ data: asset, isLoading }, i) => {
-                                if (isLoading) return <CollectibleItemSkeleton key={i} />
+                            .map(({ data: asset, isPending }, i) => {
+                                if (isPending) return <CollectibleItemSkeleton key={i} />
                                 if (!asset) return null
                                 const isMine = isSameAddress(account, asset.owner?.address)
                                 return (

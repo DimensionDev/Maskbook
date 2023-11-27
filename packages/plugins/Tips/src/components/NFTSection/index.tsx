@@ -97,7 +97,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         data: fetchedTokens = EMPTY_LIST,
         hasNextPage,
         fetchNextPage,
-        isLoading,
+        isPending,
         error: loadError,
     } = useNonFungibleAssets(pluginID, undefined, { chainId })
 
@@ -173,7 +173,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                                     retry={fetchNextPage}
                                     collectibles={tokens}
                                     pluginID={pluginID}
-                                    loading={isLoading}
+                                    loading={isPending}
                                     columns={4}
                                     selectable
                                     value={selectedKey}
@@ -197,7 +197,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                             </div>
                         )
                     }
-                    if (tokens.length === 0 && (hasNextPage || isLoading) && account) {
+                    if (tokens.length === 0 && (hasNextPage || isPending) && account) {
                         return <LoadingStatus className={classes.statusBox} iconSize={36} />
                     }
                     if (fetchedTokens.length === 0 && loadError && account && !hasNextPage) {

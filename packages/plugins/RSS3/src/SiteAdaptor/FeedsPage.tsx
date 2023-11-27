@@ -29,9 +29,9 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const { data: feeds, isLoading: loadingFeeds, error, fetchNextPage } = useFeeds(address, tag)
+    const { data: feeds, isPending: loadingFeeds, error, fetchNextPage } = useFeeds(address, tag)
 
-    const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
+    const { data: reversedName, isPending: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
     const loading = loadingFeeds || loadingENS

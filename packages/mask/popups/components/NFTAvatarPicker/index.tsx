@@ -67,7 +67,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
         fetchNextPage,
         error,
         refetch,
-        isLoading,
+        isPending,
     } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
@@ -89,7 +89,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                 <CollectionList
                     className={classes.collectionList}
                     tokens={tokens}
-                    loading={isLoading}
+                    loading={isPending}
                     account={account}
                     selected={selected}
                     onItemClick={setSelected}
@@ -114,7 +114,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     expectedAddress={account}>
                     <Button
                         fullWidth
-                        disabled={isLoading || !selected || !!wallet?.owner}
+                        disabled={isPending || !selected || !!wallet?.owner}
                         onClick={() => {
                             if (!selected?.metadata?.imageURL) return
                             onChange(selected?.metadata?.imageURL)
