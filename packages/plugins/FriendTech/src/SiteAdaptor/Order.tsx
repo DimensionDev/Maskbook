@@ -106,7 +106,7 @@ export const Order = memo(function Order() {
     const { data: user, isInitialLoading: loadingPrice } = useUser(address)
     const { data: own, isInitialLoading: loadingOwnCount } = useOwnKeys(address, account)
     const { data: gas, isLoading: isEstimating } = useEstimateSellGas(address, account, count.toString())
-    const { data: price, isInitialLoading: isLoadingPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, {
+    const [price, { isInitialLoading: isLoadingPrice }] = useGasPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: ChainId.Base,
     })
     const gasFee = useMemo(() => {

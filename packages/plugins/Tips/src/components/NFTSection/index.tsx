@@ -188,7 +188,9 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                                     }}
                                 />
                                 <ElementAnchor key={fetchedTokens.length} callback={() => fetchNextPage()}>
-                                    {hasNextPage ? <LoadingBase size={36} /> : null}
+                                    {hasNextPage ?
+                                        <LoadingBase size={36} />
+                                    :   null}
                                 </ElementAnchor>
                             </div>
                         )

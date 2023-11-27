@@ -15,8 +15,5 @@ export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginI
         },
     })
 
-    return {
-        ...gasPrice,
-        data: gasOption?.value?.suggestedMaxFeePerGas ?? gasPrice.data,
-    }
+    return [gasOption?.value?.suggestedMaxFeePerGas ?? gasPrice.data, gasPrice] as const
 }

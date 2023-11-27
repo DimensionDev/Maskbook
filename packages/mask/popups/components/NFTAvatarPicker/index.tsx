@@ -97,7 +97,9 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     </Stack>
                 :   null}
                 <ElementAnchor key={tokens.length} callback={() => fetchNextPage()}>
-                    {hasNextPage && tokens.length !== 0 ? <LoadingBase /> : null}
+                    {hasNextPage && tokens.length !== 0 ?
+                        <LoadingBase />
+                    :   null}
                 </ElementAnchor>
             </Box>
             <Box>

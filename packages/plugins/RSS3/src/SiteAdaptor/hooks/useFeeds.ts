@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
-    const { data, isLoading, error, fetchNextPage } = useInfiniteQuery({
+    const response = useInfiniteQuery({
         enabled: !!address,
         queryKey: ['rss3-feeds', address, tag],
         queryFn: async ({ pageParam }) => {
@@ -15,15 +15,11 @@ export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,
     })
 
+    const pages = response.data?.pages
     const feeds = useMemo(() => {
-        if (!data?.pages) return EMPTY_LIST
-        return data.pages.flatMap((page) => page.data)
-    }, [data?.pages])
+        if (!pages) return EMPTY_LIST
+        return pages.flatMap((page) => page.data)
+    }, [pages])
 
-    return {
-        feeds,
-        isLoading,
-        error: error as Error | undefined,
-        next: fetchNextPage,
-    }
+    return [feeds, response] as const
 }

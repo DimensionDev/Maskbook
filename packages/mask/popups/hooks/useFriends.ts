@@ -16,12 +16,7 @@ export interface Friend {
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
 
-    const {
-        data: records = EMPTY_LIST,
-        isLoading: recordsLoading,
-        refetch: refetchRecords,
-        status: fetchRelationStatus,
-    } = useQuery({
+    const relationQuery = useQuery({
         queryKey: ['relation-records', currentPersona?.identifier.rawPublicKey],
         queryFn: async () => {
             return Services.Identity.queryRelationPaged(
@@ -36,17 +31,10 @@ export function useFriendsPaged() {
         enabled: !!currentPersona,
         networkMode: 'always',
     })
-    const {
-        data,
-        hasNextPage,
-        fetchNextPage,
-        isLoading,
-        isFetchingNextPage,
-        refetch: refetchFriends,
-        status,
-    } = useInfiniteQuery({
+    const records = relationQuery.data || EMPTY_LIST
+    const friendsQuery = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
-        enabled: !recordsLoading,
+        enabled: !relationQuery.isLoading,
         queryFn: async ({ pageParam = 0 }) => {
             const friends: Friend[] = []
             const startIndex = pageParam ? Number(pageParam) : 0
@@ -75,21 +63,15 @@ export function useFriendsPaged() {
         },
     })
     const refetch = useCallback(() => {
-        refetchFriends()
-        refetchRecords()
-    }, [refetchFriends, refetchRecords])
+        relationQuery.refetch()
+        friendsQuery.refetch()
+    }, [relationQuery.refetch, friendsQuery.refetch])
 
-    return {
-        data,
-        isLoading: isLoading || recordsLoading,
-        hasNextPage,
-        fetchNextPage,
-        isFetchingNextPage,
-        refetch,
-        status,
-        fetchRelationStatus,
-        records,
-    }
+    return [
+        { isLoading: relationQuery.isLoading || friendsQuery.isLoading, refetch, records },
+        relationQuery,
+        friendsQuery,
+    ] as const
 }
 
 export function useFriendFromList(searchedRecords: RelationRecord[]) {

@@ -208,7 +208,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 callback={() => {
                                     fetchNextPage()
                                 }}>
-                                {hasNextPage ? <LoadingBase /> : null}
+                                {hasNextPage ?
+                                    <LoadingBase />
+                                :   null}
                             </ElementAnchor>
                         </List>
                     }

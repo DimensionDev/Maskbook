@@ -102,7 +102,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         chainId,
     })
 
-    const { data: fungibleAssets = EMPTY_LIST } = useFungibleAssets(pluginID, undefined, {
+    const [fungibleAssets] = useFungibleAssets(pluginID, undefined, {
         chainId,
     })
 

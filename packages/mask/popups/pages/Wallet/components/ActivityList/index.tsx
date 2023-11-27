@@ -37,7 +37,7 @@ export const ActivityList = memo(function ActivityList() {
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
-    const { data: transactions, localeTxes, isLoading, isFetching, fetchNextPage } = useTransactions()
+    const [{ transactions, localeTxes }, { isLoading, isFetching, fetchNextPage }] = useTransactions()
 
     const handleSpeedup = useCallback(async (transaction: RecentTransaction<ChainId, EvmTransaction>) => {
         modifyTransaction(transaction, ReplaceType.SPEED_UP)

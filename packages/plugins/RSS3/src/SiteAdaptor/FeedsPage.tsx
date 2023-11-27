@@ -29,7 +29,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const { feeds, isLoading: loadingFeeds, error, next } = useFeeds(address, tag)
+    const [feeds, { isLoading: loadingFeeds, error, fetchNextPage }] = useFeeds(address, tag)
 
     const { data: reversedName, isLoading: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
@@ -50,7 +50,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         return (
             <Box p={2} boxSizing="border-box">
                 <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
-                    <RetryHint retry={next} />
+                    <RetryHint retry={fetchNextPage} />
                 </Box>
             </Box>
         )
@@ -77,7 +77,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                 {feeds.map((feed, index) => (
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
-                <ElementAnchor callback={() => next()}>
+                <ElementAnchor callback={() => fetchNextPage()}>
                     {loading ?
                         <LoadingBase className={classes.loading} />
                     :   null}

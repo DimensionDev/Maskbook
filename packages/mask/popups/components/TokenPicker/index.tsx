@@ -1,5 +1,5 @@
 import { SelectNetworkSidebar } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleAssets, useNetworks, useWallet } from '@masknet/web3-hooks-base'
@@ -44,7 +44,7 @@ export const TokenPicker = memo(function TokenPicker({
     ...rest
 }: TokenPickerProps) {
     const { classes, cx } = useStyles()
-    const { data: assets = EMPTY_LIST } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const [assets] = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
     const [sidebarChainId, setSidebarChainId] = useState<Web3Helper.ChainIdAll | undefined>(defaultChainId)

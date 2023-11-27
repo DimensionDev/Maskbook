@@ -9,7 +9,7 @@ interface WalletAssetsValueProps extends Omit<ProgressiveTextProps, 'loading'> {
 }
 
 export const WalletAssetsValue = memo(function WalletAssetsValue({ account, ...props }: WalletAssetsValueProps) {
-    const { data: assets, isLoading } = useWalletAssets()
+    const [assets, { isLoading }] = useWalletAssets()
 
     const value = useMemo(() => {
         return sum(assets.map((x) => (x.value?.usd ? Number.parseFloat(x.value.usd) : 0)))

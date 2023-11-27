@@ -155,7 +155,7 @@ jobs:
           pnpm run lint:ci-report
       - uses: EndBug/add-and-commit@v9
         with:
-          message: 'fix: markdownlint'
+          message: 'fix: eslint'
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:

@@ -6,7 +6,7 @@ import { useWalletAssets } from './useWalletAssets.js'
 
 // Use token from list first, to make sure data is consistent
 export function useAsset(chainId: ChainId, address?: string, account?: string) {
-    const { data: assets } = useWalletAssets()
+    const [assets] = useWalletAssets()
     const { data: asset } = useFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, { account, chainId })
     const matchedAsset = assets.find((x) => {
         if (x.chainId !== chainId) return false
