@@ -162,7 +162,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     )
     const {
         balance,
-        isLoading: isLoadingAvailableBalance,
+        isPending: isLoadingAvailableBalance,
         isAvailableBalance,
         isGasSufficient,
         gasFee,
