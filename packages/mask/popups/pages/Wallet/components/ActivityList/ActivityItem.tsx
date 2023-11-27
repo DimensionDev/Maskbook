@@ -197,7 +197,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
 
     const blockNumber = transaction && 'blockNumber' in transaction ? (transaction.blockNumber as number) : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
-    const { data: tx, isLoading: loadingTx } = useQuery({
+    const { data: tx, isPending: loadingTx } = useQuery({
         // This could be a transaction of SmartPay which Debank doesn't provide detailed info for it.
         // This also could be an ERC20 transfer, which Debank returns the token contract rather than receiver as `to_address`.
         // So we fetch via Chainbase
@@ -208,7 +208,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
             return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
         },
     })
-    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+    const { data: txInput, isPending: loadingTxInput } = useQuery({
         // Enable this when chainbase does not support the current chain.
         enabled: !!transaction && !loadingTx && !tx?.input && transaction.type === 'transfer',
         queryKey: [transaction?.chainId, transaction?.id],

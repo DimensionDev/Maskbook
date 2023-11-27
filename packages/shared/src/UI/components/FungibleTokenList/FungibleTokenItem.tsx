@@ -201,7 +201,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             )
         }, [balance, decimals, isBlocked, source, mode, isTrust])
 
-        const { data: tokenBalance, isLoading: isLoadingTokenBalance } = useFungibleTokenBalance(
+        const { data: tokenBalance, isPending: isLoadingTokenBalance } = useFungibleTokenBalance(
             NetworkPluginID.PLUGIN_EVM,
             isCustomToken ? address : '',
             {

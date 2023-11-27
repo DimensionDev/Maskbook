@@ -134,13 +134,13 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     }, [])
 
     // #region update balance
-    const { data: inputTokenBalance_, isLoading: loadingInputTokenBalance } = useFungibleTokenBalance(
+    const { data: inputTokenBalance_, isPending: loadingInputTokenBalance } = useFungibleTokenBalance(
         pluginID,
         inputToken?.address ?? '',
         { chainId },
     )
 
-    const { data: outputTokenBalance_, isLoading: loadingOutputTokenBalance } = useFungibleTokenBalance(
+    const { data: outputTokenBalance_, isPending: loadingOutputTokenBalance } = useFungibleTokenBalance(
         pluginID,
         outputToken?.address ?? '',
         { chainId },

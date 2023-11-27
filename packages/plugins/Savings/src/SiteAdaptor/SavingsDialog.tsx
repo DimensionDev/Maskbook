@@ -68,7 +68,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { data: aaveTokens, isLoading: loadingAAve } = useQuery({
+    const { data: aaveTokens, isPending: loadingAAve } = useQuery({
         enabled: open && chainId === ChainId.Mainnet,
         queryKey: ['savings', 'aave', 'tokens', chainId],
         queryFn: async () => {

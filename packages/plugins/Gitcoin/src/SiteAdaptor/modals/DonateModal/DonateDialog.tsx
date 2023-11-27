@@ -199,7 +199,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
                         token={token}
                         onAmountChange={setRawAmount}
                         onSelectToken={onSelectTokenChipClick}
-                        loadingBalance={tokenBalance.isLoading}
+                        loadingBalance={tokenBalance.isPending}
                         className={classes.input}
                     />
                     <div className={classes.row}>

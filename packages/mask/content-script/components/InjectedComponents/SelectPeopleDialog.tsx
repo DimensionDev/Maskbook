@@ -89,7 +89,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const type = resolveNextIDPlatform(valueToSearch)
 
     const value = resolveValueToSearch(valueToSearch)
-    const { isLoading: searchLoading, data: NextIDResults } = usePersonasFromNextID(
+    const { isPending: searchLoading, data: NextIDResults } = usePersonasFromNextID(
         value,
         type ?? NextIDPlatform.NextID,
         false,

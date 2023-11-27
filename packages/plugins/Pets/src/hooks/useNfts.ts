@@ -7,17 +7,19 @@ import { isLens, isLensCollect, isLensComment, isLensFollower, isLensPost } from
 
 export function useNFTs() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [assets, { isLoading, hasNextPage, fetchNextPage, dataUpdatedAt }] = useNonFungibleAssets(
-        NetworkPluginID.PLUGIN_EVM,
-        undefined,
-        {
-            chainId,
-        },
-    )
+    const {
+        data: assets = EMPTY_LIST,
+        isPending,
+        hasNextPage,
+        fetchNextPage,
+        dataUpdatedAt,
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId,
+    })
     useEffect(() => {
         if (!hasNextPage) return
         fetchNextPage()
-    }, [isLoading, hasNextPage, fetchNextPage, dataUpdatedAt])
+    }, [isPending, hasNextPage, fetchNextPage, dataUpdatedAt])
 
     const nfts = useMemo(() => {
         const map: Record<string, NonFungibleContract> = {}
@@ -52,5 +54,5 @@ export function useNFTs() {
         return nfts
     }, [assets])
 
-    return { nfts, isLoading }
+    return { nfts, isPending }
 }

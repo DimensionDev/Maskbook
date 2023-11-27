@@ -46,9 +46,9 @@ export function CalendarContent({ target }: { target?: string }) {
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const { data: eventList = EMPTY_OBJECT, isLoading: eventLoading } = useEventList(selectedDate)
-    const { data: newsList = EMPTY_OBJECT, isLoading: newsLoading } = useNewsList(selectedDate)
-    const { data: nftList = EMPTY_OBJECT, isLoading: nftLoading } = useNFTList(selectedDate)
+    const { data: eventList = EMPTY_OBJECT, isPending: eventLoading } = useEventList(selectedDate)
+    const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate)
+    const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate)
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':

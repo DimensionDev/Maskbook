@@ -121,7 +121,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         }
     }, [nextId, queryClient, currentPersona, refetch, friendInfo])
 
-    const { mutate: onAdd, isLoading } = useMutation({
+    const { mutate: onAdd, isPending } = useMutation({
         mutationFn: handleAddFriend,
         onMutate: async (friend: Friend | undefined) => {
             if (!friend) return
@@ -212,8 +212,8 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 :   <ActionButton
                         variant="roundedContained"
                         onClick={() => onAdd(friendInfo)}
-                        loading={isLoading}
-                        disabled={isLoading}>
+                        loading={isPending}
+                        disabled={isPending}>
                         {t.popups_encrypted_friends_add_friends()}
                     </ActionButton>
                 }

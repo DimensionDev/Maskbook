@@ -146,7 +146,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { profile, defaultProfile, isSelf, profiles } = value ?? {}
 
-    const { isLoading } = useQuery({
+    const { isPending } = useQuery({
         queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
         queryFn: async () => {
             if (!value?.profile.id || !currentProfile) return false
@@ -217,7 +217,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     )
     // #endregion
 
-    const { data: feeTokenBalance, isLoading: getBalanceLoading } = useFungibleTokenBalance(
+    const { data: feeTokenBalance, isPending: getBalanceLoading } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         profile?.followModule?.amount?.asset.contract.address ?? '',
     )
@@ -391,7 +391,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 variant="roundedContained"
                                                 className={classes.followAction}
                                                 disabled={disabled}
-                                                loading={followLoading || unfollowLoading || loading || isLoading}
+                                                loading={followLoading || unfollowLoading || loading || isPending}
                                                 onClick={handleClick}
                                                 onMouseOver={() => setIsHovering(true)}
                                                 onMouseOut={() => setIsHovering(false)}>

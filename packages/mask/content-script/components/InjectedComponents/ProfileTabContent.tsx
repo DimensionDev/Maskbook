@@ -164,7 +164,7 @@ function Content(props: ProfileTabContentProps) {
 
     const {
         data: socialAccounts = EMPTY_LIST,
-        isLoading: loadingSocialAccounts,
+        isPending: loadingSocialAccounts,
         error: loadSocialAccounts,
         refetch: retrySocialAccounts,
     } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter, (a, b, c, d) =>

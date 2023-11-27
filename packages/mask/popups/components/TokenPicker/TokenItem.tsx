@@ -109,7 +109,7 @@ export const TokenItem = memo(function TokenItem({
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
     const tryRpc = (!asset.balance || isZero(asset.balance)) && network?.isCustomized && seen
-    const { data: rpcBalance, isLoading } = useFungibleTokenBalance(
+    const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
         { chainId: asset.chainId as ChainId, providerURL },
@@ -118,15 +118,15 @@ export const TokenItem = memo(function TokenItem({
     const balance = useMemo(() => {
         if (tryRpc) {
             return {
-                pending: isLoading,
-                value: isLoading ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
+                pending: isPending,
+                value: isPending ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
             }
         }
         return {
             pending: false,
             value: formatTokenBalance(asset.balance, asset.decimals),
         }
-    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isLoading])
+    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isPending])
     // #endregion
 
     const forkedRef = useForkRef(liRef, ref)

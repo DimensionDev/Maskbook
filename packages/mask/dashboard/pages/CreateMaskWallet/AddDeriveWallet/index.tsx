@@ -124,7 +124,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
 
     const [page, setPage] = useState(0)
 
-    const { data: walletChunks = EMPTY_LIST, isLoading } = useQuery({
+    const { data: walletChunks = EMPTY_LIST, isPending } = useQuery({
         queryKey: ['derived-wallets', mnemonicHash, page],
         networkMode: 'always',
         queryFn: async () => {
@@ -193,7 +193,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { external_request }))
     }, [navigate, external_request])
 
-    const disabled = confirmLoading || isLoading || !mergedIndexes.length
+    const disabled = confirmLoading || isPending || !mergedIndexes.length
 
     return (
         <>
@@ -215,7 +215,7 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
                 {t.wallet_derivation_path({ path: HD_PATH_WITHOUT_INDEX_ETHEREUM })}
             </Typography>
 
-            <DeriveWalletTable hiddenHeader loading={isLoading} dataSource={tableData} onCheck={onCheck} symbol="ETH" />
+            <DeriveWalletTable hiddenHeader loading={isPending} dataSource={tableData} onCheck={onCheck} symbol="ETH" />
 
             <div className={classes.pagination}>
                 <SecondaryButton

@@ -27,7 +27,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
         await Services.Identity.deletePersona(personaIdentifier, 'safe delete')
     }, [nextId, queryClient, currentPersona])
 
-    const { mutate: onDelete, isLoading } = useMutation({
+    const { mutate: onDelete, isPending } = useMutation({
         mutationFn: handleDelete,
         onMutate: async () => {
             await queryClient.cancelQueries({ queryKey: ['relation-records', rawPublicKey] })
@@ -73,7 +73,7 @@ export const FriendsDetail = memo(function FriendsDetail() {
             publicKey={publicKey}
             isLocal={isLocal ? !deleted : false}
             onDelete={onDelete}
-            deleting={isLoading}
+            deleting={isPending}
             localProfile={localProfile}
         />
     )

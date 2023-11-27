@@ -7,7 +7,9 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 import { useChainContext } from './useContext.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useNetworks } from './useNetworks.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string | null,

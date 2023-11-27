@@ -53,7 +53,7 @@ const Logout = memo(() => {
     const wallets = useWallets()
     const { Provider } = useWeb3State()
     const { smartPayChainId } = useContainer(PopupContext)
-    const { hasPassword, isLoading: hasPasswordLoading } = useHasPassword()
+    const { hasPassword, isPending: hasPasswordLoading } = useHasPassword()
 
     const { user } = useContainer(UserContext)
     const { showSnackbar } = usePopupCustomSnackbar()

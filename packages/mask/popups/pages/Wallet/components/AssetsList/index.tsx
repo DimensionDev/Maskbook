@@ -100,7 +100,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
     const tryRpc = (!asset.balance || isZero(asset.balance)) && network?.isCustomized && seen
-    const { data: rpcBalance, isLoading } = useFungibleTokenBalance(
+    const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
         { chainId: asset.chainId, providerURL },
@@ -109,15 +109,15 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const balance = useMemo(() => {
         if (tryRpc) {
             return {
-                pending: isLoading,
-                value: isLoading ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
+                pending: isPending,
+                value: isPending ? undefined : formatTokenBalance(rpcBalance, asset.decimals),
             }
         }
         return {
             pending: false,
             value: formatTokenBalance(asset.balance, asset.decimals),
         }
-    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isLoading])
+    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isPending])
     return (
         <ListItem
             key={`${asset.chainId}.${asset.address}`}
@@ -178,7 +178,7 @@ export const AssetsList = memo(function AssetsList() {
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
-    const [assets, { isLoading }] = useWalletAssets()
+    const [assets, { isPending }] = useWalletAssets()
     const [assetsIsExpand, setAssetsIsExpand] = useAssetExpand()
     const onItemClick = useCallback((asset: Asset) => {
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
@@ -201,7 +201,7 @@ export const AssetsList = memo(function AssetsList() {
     )
     return (
         <div className={classes.container} data-hide-scrollbar>
-            {isLoading ?
+            {isPending ?
                 <AssetsListSkeleton />
             :   <List dense className={classes.list}>
                     {list.map((asset) => (

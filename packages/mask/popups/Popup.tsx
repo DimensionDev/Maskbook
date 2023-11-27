@@ -41,6 +41,7 @@ import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
 import { UserContext } from '../shared-ui/index.js'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
@@ -179,6 +180,9 @@ export default function Popups() {
                 <PopupContext.Provider>
                     <PageTitleContext.Provider value={titleContext}>
                         <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                            {process.env.NODE_ENV === 'development' ?
+                                <ReactQueryDevtools buttonPosition="bottom-right" />
+                            :   null}
                             <PopupRoutes />
                             <Modals />
                         </HistoryRouter>

@@ -27,7 +27,7 @@ export function ActivitiesList() {
     const t = useCollectibleTrans()
     const { classes } = useStyles()
 
-    const { data, isLoading, error, hasNextPage, fetchNextPage, refetch } = useNonFungibleEvents(
+    const { data, isPending, error, hasNextPage, fetchNextPage, refetch } = useNonFungibleEvents(
         pluginID,
         tokenAddress,
         tokenId,
@@ -37,7 +37,7 @@ export function ActivitiesList() {
         },
     )
     const events = useMemo(() => data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [data?.pages])
-    if (isLoading && !events.length) return <LoadingStatus className={classes.wrapper} />
+    if (isPending && !events.length) return <LoadingStatus className={classes.wrapper} />
 
     if (error) return <ReloadStatus className={classes.wrapper} onRetry={refetch} />
 
@@ -52,7 +52,7 @@ export function ActivitiesList() {
                 {hasNextPage ?
                     <Stack py={1}>
                         <ElementAnchor callback={() => fetchNextPage()}>
-                            {isLoading ?
+                            {isPending ?
                                 <LoadingBase />
                             :   null}
                         </ElementAnchor>

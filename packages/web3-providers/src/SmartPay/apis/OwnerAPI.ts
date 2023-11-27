@@ -138,7 +138,7 @@ export class SmartPayOwner {
     ): Promise<Array<OwnerAPI.AbstractAccount<NetworkPluginID.PLUGIN_EVM>>> {
         const accounts = await queryClient.fetchQuery({
             queryKey: ['smart-pay', 'get-accounts-by-owner', chainId, owner, exact],
-            cacheTime: 1000_000,
+            gcTime: 1000_000,
             queryFn: async () => {
                 const create2Factory = await this.createCreate2Factory(chainId, owner)
                 const contractWallet = await this.createContractWallet(chainId, owner)

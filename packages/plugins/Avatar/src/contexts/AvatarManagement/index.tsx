@@ -29,7 +29,7 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 
 interface AvatarManagementContextOptions {
-    isLoading: boolean
+    isPending: boolean
     binding?: NextIDPersonaBindings
     targetAccount: string
     setTargetAccount: (account: string) => void
@@ -46,7 +46,7 @@ interface AvatarManagementContextOptions {
 }
 
 const AvatarManagementContext = createContext<AvatarManagementContextOptions>({
-    isLoading: false,
+    isPending: false,
     binding: undefined,
     targetAccount: '',
     setTargetAccount: noop,
@@ -73,7 +73,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
     const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
-    const { data, isLoading, refetch } = useQuery({
+    const { data, isPending, refetch } = useQuery({
         queryKey: ['nft-avatar-state', identity],
         enabled: !!identity,
         queryFn: async () => {
@@ -107,7 +107,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
         return {
             binding: data?.binding,
-            isLoading,
+            isPending,
             pfpType: PFP_TYPE.PFP,
             targetAccount: selectedAccount || account || first(data?.nextIdWallets)?.identity || '',
             setTargetAccount: setSelectedAccount,
@@ -120,7 +120,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
             selectedTokenInfo,
             setSelectedTokenInfo,
         }
-    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, data, account, isLoading])
+    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, data, account, isPending])
 
     return <AvatarManagementContext.Provider value={contextValue}>{children}</AvatarManagementContext.Provider>
 })

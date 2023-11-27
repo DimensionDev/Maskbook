@@ -160,7 +160,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         chainId: transaction?.chainId,
     })
 
-    const { data: tx, isLoading: loadingTx } = useQuery({
+    const { data: tx, isPending: loadingTx } = useQuery({
         enabled: !!transaction,
         queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
@@ -169,7 +169,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
         },
     })
 
-    const { data: txInput, isLoading: loadingTxInput } = useQuery({
+    const { data: txInput, isPending: loadingTxInput } = useQuery({
         enabled:
             !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState?.data,
         queryKey: [transaction?.chainId, transactionId],

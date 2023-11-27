@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useSocialIdentityByUserId } from '../DataSource/useActivatedUI.js'
 
@@ -20,7 +19,7 @@ export function Avatar(props: AvatarProps) {
     const { classes } = useStyles(undefined, { props })
 
     const { data: identity } = useSocialIdentityByUserId(userId)
-    const { data: socialAccounts = EMPTY_LIST, isLoading: loadingSocialAccounts } = useSocialAccountsAll(identity)
+    const [socialAccounts, { isPending: loadingSocialAccounts }] = useSocialAccountsAll(identity)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,

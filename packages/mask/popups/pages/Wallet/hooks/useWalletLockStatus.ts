@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 export function useWalletLockStatus() {
     const {
         data: isLocked,
-        isLoading,
+        isPending,
         error,
         refetch,
     } = useQuery({ queryKey: ['@@is-locked'], queryFn: Services.Wallet.isLocked, networkMode: 'always' })
@@ -18,7 +18,7 @@ export function useWalletLockStatus() {
 
     return {
         error,
-        isLoading,
+        isPending,
         isLocked,
     }
 }

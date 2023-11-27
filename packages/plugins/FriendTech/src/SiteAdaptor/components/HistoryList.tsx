@@ -66,15 +66,16 @@ function HistoryItemSkeleton() {
 export const HistoryList = memo(function HistoryList({ account, className, ...rest }: Props) {
     const navigate = useNavigate()
     const { classes, theme, cx } = useStyles()
-    const { data, isFetching, isInitialLoading, fetchNextPage, dataUpdatedAt } = useInfiniteQuery({
+    const { data, isFetching, isLoading, fetchNextPage, dataUpdatedAt } = useInfiniteQuery({
         enabled: !!account,
         queryKey: ['friend-tech', 'activities', account],
+        initialPageParam: undefined as any,
         queryFn: ({ pageParam: nextIndicator }) => FriendTech.getActivities(account, nextIndicator),
         getNextPageParam: (x) => x.nextIndicator,
     })
     const activities = useMemo(() => data?.pages.flatMap((x) => x.data) || [], [data?.pages])
 
-    if (!isInitialLoading && !activities.length) {
+    if (!isLoading && !activities.length) {
         return (
             <Box height="100%" display="flex" flexDirection="column" justifyContent="center">
                 <EmptyStatus />

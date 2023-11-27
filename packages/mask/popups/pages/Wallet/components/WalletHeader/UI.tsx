@@ -144,7 +144,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
 }) {
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles({ disabled })
-    const { data: connectedWallets, isLoading } = useConnectedWallets(origin)
+    const { data: connectedWallets, isPending } = useConnectedWallets(origin)
     const connected = connectedWallets?.has(wallet.address)
     const addressLink = EVMExplorerResolver.addressLink(chainId, wallet.address)
 
@@ -176,8 +176,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 />
                             :   null}
                         </Box>
-                        {isLoading ? null : (
-                            <ProgressiveText className={classes.connected} loading={isLoading} skeletonWidth={50}>
+                        {isPending ? null : (
+                            <ProgressiveText className={classes.connected} loading={isPending} skeletonWidth={50}>
                                 <span
                                     className={cx(
                                         classes.dot,

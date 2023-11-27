@@ -65,7 +65,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const {
         data: spenders,
-        isLoading: spendersLoading,
+        isPending: spendersLoading,
         isError,
         refetch,
     } = useFungibleTokenSpenders(NetworkPluginID.PLUGIN_EVM, {

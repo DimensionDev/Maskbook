@@ -126,7 +126,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
 
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
-    const { nfts, isLoading } = useNFTs()
+    const { nfts, isPending } = useNFTs()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
 
     const [collection, setCollection] = useState<FilterContract>()
@@ -267,7 +267,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     inputProps={{ ...params.inputProps }}
                     endAdornment={
                         <Box pr={2} display="flex" alignItems="center">
-                            {isLoading ?
+                            {isPending ?
                                 <LoadingBase size={20} />
                             :   <Icons.ArrowDrop className={classes.arrowIcon} />}
                         </Box>

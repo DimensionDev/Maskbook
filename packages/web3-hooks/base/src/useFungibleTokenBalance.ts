@@ -7,7 +7,9 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useChainContext } from './useContext.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
 import { useWeb3State } from './useWeb3State.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,

@@ -163,7 +163,7 @@ export const EditNetwork = memo(function EditNetwork() {
     const { chainIdWarning, symbolWarning } = useWarnings(formChainId, formSymbol)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const { isLoading: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
+    const { isPending: isMutating, mutate } = useMutation<void, unknown, FormInputs>({
         mutationFn: async (data) => {
             if (!Network) return
             setIsSubmitting(true)

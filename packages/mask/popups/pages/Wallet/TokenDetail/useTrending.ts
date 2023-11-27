@@ -7,9 +7,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
 
 export function useTrending(chainId: ChainId, address?: string) {
-    const { data: coinId, isLoading } = useCoinGeckoCoinId(chainId, address)
+    const { data: coinId, isPending } = useCoinGeckoCoinId(chainId, address)
     return useQuery({
-        enabled: !isLoading,
+        enabled: !isPending,
         queryKey: ['coin-trending', 'coin-gecko', chainId, coinId, address],
         queryFn: async (): Promise<TrendingAPI.Trending | null | undefined> => {
             const currency = trending.getCurrency(chainId, SourceType.CoinGecko)

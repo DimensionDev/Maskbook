@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 export function useHasPassword() {
     const {
         data: hasPassword,
-        isLoading,
+        isPending,
         refetch,
     } = useQuery({ queryKey: ['@@has-password'], queryFn: Services.Wallet.hasPassword, networkMode: 'always' })
 
@@ -15,5 +15,5 @@ export function useHasPassword() {
         return CrossIsolationMessages.events.passwordStatusUpdated.on(() => refetch())
     }, [])
 
-    return { hasPassword, isLoading }
+    return { hasPassword, isPending }
 }

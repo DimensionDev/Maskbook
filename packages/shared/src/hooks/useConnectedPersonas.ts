@@ -9,14 +9,13 @@ import {
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 
-export function useConnectedPersonas() {
+export function useConnectedPersonas(): UseQueryResult<
+    Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>
+> {
     const personasInDB = useAllPersonas()
-    const result = useQuery<
-        Array<{ persona: PersonaInformation; proof: BindingProof[]; avatar: string | undefined }>,
-        Error
-    >({
+    const result = useQuery({
         queryKey: ['connected-persona', personasInDB],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)

@@ -168,11 +168,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
     const stateAsset = location.state?.asset as
         | Web3Helper.NonFungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM>
         | undefined
-    const { data: asset, isLoading } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, id, { chainId })
+    const { data: asset, isPending } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, id, { chainId })
 
     useEffect(() => {
-        if (!asset && !isLoading) navigate(-1)
-    }, [!asset && !isLoading, navigate])
+        if (!asset && !isPending) navigate(-1)
+    }, [!asset && !isPending, navigate])
     useTitle(asset?.metadata?.name || t.collectible_title())
 
     const availableAsset = asset || stateAsset
@@ -264,7 +264,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             <ProgressiveText
                 variant="h1"
                 className={classes.name}
-                loading={isLoading || !name}
+                loading={isPending || !name}
                 skeletonWidth={100}
                 skeletonHeight={18}>
                 {name}
@@ -275,7 +275,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 :   null}
                 <ProgressiveText
                     className={classes.collectionNameLabel}
-                    loading={isLoading || !collectionName}
+                    loading={isPending || !collectionName}
                     skeletonWidth={80}>
                     {collectionName}
                 </ProgressiveText>
@@ -318,7 +318,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             <Typography variant="body1" className={classes.text}>
                 {assetDesc || t.none()}
             </Typography>
-            {isLoading || asset?.traits?.length ?
+            {isPending || asset?.traits?.length ?
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
                         {t.collectible_properties()}
@@ -341,12 +341,12 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                     </div>
                 </>
             :   null}
-            {isLoading || collectionDesc ?
+            {isPending || collectionDesc ?
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
                         {t.about_collection({ name: String(collectionName) })}
                     </Typography>
-                    <ProgressiveText variant="body1" loading={isLoading} className={classes.text} skeletonWidth={100}>
+                    <ProgressiveText variant="body1" loading={isPending} className={classes.text} skeletonWidth={100}>
                         {collectionDesc}
                     </ProgressiveText>
                 </>

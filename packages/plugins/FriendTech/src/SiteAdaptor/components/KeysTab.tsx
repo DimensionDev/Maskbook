@@ -21,11 +21,11 @@ const useStyles = makeStyles()((theme) => ({
 export function KeysTab() {
     const { classes } = useStyles()
     const account = useAccount()
-    const { data: user, isInitialLoading } = useUser(account)
+    const { data: user, isLoading } = useUser(account)
 
     return (
         <div className={classes.container}>
-            <UserProfile address={account} user={user} loading={isInitialLoading} variant="self" />
+            <UserProfile address={account} user={user} loading={isLoading} variant="self" />
             <HoldingList address={account} className={classes.holdingList} />
         </div>
     )

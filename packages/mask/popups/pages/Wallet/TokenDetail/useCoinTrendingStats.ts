@@ -6,9 +6,9 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { useCoinGeckoCoinId } from './useCoinGeckoCoinId.js'
 
 export function useCoinTrendingStats(chainId: number, address?: string, days?: number) {
-    const { data: coinId, isLoading } = useCoinGeckoCoinId(chainId, address)
+    const { data: coinId, isPending } = useCoinGeckoCoinId(chainId, address)
     return useQuery({
-        enabled: !isLoading && days !== undefined,
+        enabled: !isPending && days !== undefined,
         queryKey: ['coin-stats', chainId, address, coinId, days],
         queryFn: async (): Promise<TrendingAPI.Stat[] | undefined> => {
             if (!coinId || days === undefined) return

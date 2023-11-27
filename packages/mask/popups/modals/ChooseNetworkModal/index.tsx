@@ -76,7 +76,7 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
     }, [selected, liRef.current])
 
     const providerURL = network.isCustomized ? network.rpcUrl : undefined
-    const { data: balance, isLoading: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, {
+    const { data: balance, isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         providerURL,
     })

@@ -135,7 +135,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         [setParams],
     )
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
-    const { data: token, isLoading } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
+    const { data: token, isPending } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, address, undefined, { chainId })
 
     const [amount, setAmount] = useState('')
     const totalAmount = useMemo(
@@ -153,7 +153,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         chainId,
     )
     const gasLimit = gasResult.data?.toString() ?? fallbackGasLimit
-    const { isLoading: isLoadingGasLimit } = gasResult
+    const { isPending: isLoadingGasLimit } = gasResult
     const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
     const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig>()
     const patchedGasConfig = useMemo(
@@ -162,7 +162,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     )
     const {
         balance,
-        isLoading: isLoadingAvailableBalance,
+        isPending: isLoadingAvailableBalance,
         isAvailableBalance,
         isGasSufficient,
         gasFee,
@@ -224,10 +224,10 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
 
     // Use selectedAsset balance eagerly
     // balance passed from previous page, would be used if during fetching balance.
-    const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isLoading
+    const isLoadingBalance = selectedAsset?.balance ? false : isLoadingAvailableBalance || isPending
     const optimisticBalance = BigNumber.max(0, minus(selectedAsset?.balance || 0, gasFee))
     // Available token balance
-    const tokenBalance = (isLoadingAvailableBalance || isLoading) && isZero(balance) ? optimisticBalance : balance
+    const tokenBalance = (isLoadingAvailableBalance || isPending) && isZero(balance) ? optimisticBalance : balance
 
     const decimals = token?.decimals || selectedAsset?.decimals
     const uiTokenBalance = tokenBalance && decimals ? leftShift(tokenBalance, decimals).toString() : '0'
@@ -264,7 +264,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     />
                 </Box>
                 <Box mr="auto" ml={2}>
-                    <ProgressiveText loading={isLoading} skeletonWidth={36}>
+                    <ProgressiveText loading={isPending} skeletonWidth={36}>
                         {token?.symbol}
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>

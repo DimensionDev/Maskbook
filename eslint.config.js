@@ -9,7 +9,7 @@ import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-i'
 import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
-import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
+import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
 import { pathToFileURL } from 'url'
 
@@ -197,8 +197,6 @@ const avoidMistakeRules = {
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
 const codeStyleRules = {
-    // Migration
-    '@tanstack/query/prefer-query-object-syntax': 'error',
     // Deprecated
     'no-alert': 'warn', // alert()
     'no-proto': 'error', // __proto__ accessor

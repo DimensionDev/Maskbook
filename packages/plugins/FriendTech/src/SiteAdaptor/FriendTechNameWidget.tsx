@@ -40,7 +40,7 @@ export const FriendTechNameWidget = memo(function FriendTechNameWidget({ userId,
         onStatusUpdate?.(disabled)
     }, [disabled])
     const isSidebar = slot === Plugin.SiteAdaptor.NameWidgetSlot.Sidebar
-    const { data: user, isInitialLoading: loadingUser } = useUser(isSidebar ? userInfo?.address : undefined)
+    const { data: user, isLoading: loadingUser } = useUser(isSidebar ? userInfo?.address : undefined)
 
     const handleClick = useCallback(
         (event: MouseEvent) => {

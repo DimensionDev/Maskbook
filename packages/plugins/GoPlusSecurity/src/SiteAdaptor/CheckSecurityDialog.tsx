@@ -58,7 +58,7 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
         [],
     )
 
-    const { data: tokenDetailed, isLoading: loadingToken } = useFungibleToken(
+    const { data: tokenDetailed, isPending: loadingToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         value?.contract,
     )

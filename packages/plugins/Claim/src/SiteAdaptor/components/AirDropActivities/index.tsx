@@ -52,9 +52,9 @@ export const AirDropActivities = memo(() => {
     const { classes } = useStyles()
     const { account } = useChainContext()
 
-    const { data: activity, isLoading, refetch } = useAirDropActivity(ChainId.Arbitrum)
+    const { data: activity, isPending, refetch } = useAirDropActivity(ChainId.Arbitrum)
 
-    if (isLoading)
+    if (isPending)
         return (
             <Box className={classes.placeholder}>
                 <LoadingBase size={24} />

@@ -197,7 +197,7 @@ export function TrendingView(props: TrendingViewProps) {
     }, [trending?.market])
 
     const isNFT = trending?.coin.type === TokenType.NonFungible
-    const { data: stats = EMPTY_LIST, isLoading: loadingStats } = usePriceStats({
+    const { data: stats = EMPTY_LIST, isPending: loadingStats } = usePriceStats({
         chainId: result.chainId,
         coinId: trending?.coin.id,
         sourceType: isNFT ? SourceType.NFTScan : trending?.dataProvider,

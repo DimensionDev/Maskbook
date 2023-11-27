@@ -154,7 +154,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 
     const {
         data: spenders,
-        isLoading,
+        isPending,
         refetch,
     } = useFungibleTokenSpenders(NetworkPluginID.PLUGIN_EVM, { chainId, account })
 
@@ -164,7 +164,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    if (isLoading) return <LoadingStatus iconSize={36} className={classes.statusBox} />
+    if (isPending) return <LoadingStatus iconSize={36} className={classes.statusBox} />
 
     if (!spenders || spenders.length === 0)
         return (

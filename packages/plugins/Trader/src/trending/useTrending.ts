@@ -11,6 +11,9 @@ import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-b
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../messages.js'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
+
+type T = [UseQueryResult]
 
 export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,
@@ -75,7 +78,7 @@ export function useTrendingById(
     const currency = trending.getCurrency(result.chainId, result.source)
 
     const {
-        isLoading,
+        isPending,
         data: coinTrending,
         error,
     } = useQuery({
@@ -91,7 +94,7 @@ export function useTrendingById(
     })
 
     const trendingData = useMemo(() => {
-        if (isLoading || error || !coinTrending) return
+        if (isPending || error || !coinTrending) return
         return {
             ...coinTrending,
             coin: {
@@ -105,9 +108,9 @@ export function useTrendingById(
                 chainId: coinTrending.coin.chainId ?? coinTrending.contracts?.[0]?.chainId ?? chainId,
             },
         }
-    }, [isLoading, error, coinTrending, detailedToken?.decimals])
+    }, [isPending, error, coinTrending, detailedToken?.decimals])
 
-    if (isLoading) {
+    if (isPending) {
         return {
             loading: true,
         }
@@ -125,7 +128,7 @@ export function useTrendingById(
             currency,
             trending: trendingData,
         },
-        loading: isLoading,
+        loading: isPending,
     }
 }
 
