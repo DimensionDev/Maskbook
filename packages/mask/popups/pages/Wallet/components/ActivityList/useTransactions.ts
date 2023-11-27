@@ -23,7 +23,6 @@ export function useTransactions() {
         select: (data) =>
             data.pages.flatMap((page) => page.data).filter((t) => !hidingScamSettings.value || !t.isScam) || EMPTY_LIST,
     })
-    const data = response.data
 
     const networks = useNetworks()
 

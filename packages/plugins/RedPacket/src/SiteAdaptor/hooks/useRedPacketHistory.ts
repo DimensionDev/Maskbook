@@ -5,6 +5,7 @@ import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/type
 import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { RedPacketRPC } from '../../messages.js'
+import { useCallback } from 'react'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
@@ -40,7 +41,10 @@ export function useRedPacketHistory(address: string, chainId: ChainId) {
 
             return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
         },
-        select: (query) =>
-            query?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
+        select: useCallback(
+            (query: RedPacketJSONPayloadFromChain[]) =>
+                query?.filter((x) => x.chainId === chainId).sort((a, b) => b.creation_time - a.creation_time),
+            [],
+        ),
     })
 }
