@@ -4,7 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useChainContext } from './useContext.js'
 import { useNativeTokenAddress } from './useNativeTokenAddress.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useNativeTokenPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID: T, options?: HubOptions<T>) {
     const { chainId } = useChainContext({ chainId: options?.chainId })
     const Hub = useWeb3Hub(pluginID, options)

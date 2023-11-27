@@ -42,20 +42,19 @@ const FriendsHome = memo(function FriendsHome() {
         isInitialLoading,
         data: searchResultArray,
         fetchNextPage: fetchNextSearchPage,
-    } = useInfiniteQuery(
-        ['search-personas', keyword, type],
-        async ({ pageParam }) => {
+    } = useInfiniteQuery({
+        queryKey: ['search-personas', keyword, type],
+        initialPageParam: undefined as any,
+        queryFn: async ({ pageParam }) => {
             if (!type) return EMPTY_LIST
             return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
         },
-        {
-            enabled: !!keyword && !!type,
-            getNextPageParam: (lastPage, allPages) => {
-                if (lastPage.length === 0) return undefined
-                return allPages.length + 1
-            },
+        enabled: !!keyword && !!type,
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.length === 0) return undefined
+            return allPages.length + 1
         },
-    )
+    })
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
     const searchedList = useFriendsFromSearch(localSearchedList, searchResult, friends, keyword)
     return (
@@ -65,8 +64,8 @@ const FriendsHome = memo(function FriendsHome() {
                 isLoading ||
                 resolveLoading ||
                 (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isInitialLoading) ||
-                status === 'loading' ||
-                fetchRelationStatus === 'loading'
+                status === 'pending' ||
+                fetchRelationStatus === 'pending'
             }
             setSearchValue={setSearchValue}
             searchValue={searchValue}

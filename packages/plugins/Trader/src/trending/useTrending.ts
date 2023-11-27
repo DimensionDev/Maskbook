@@ -11,6 +11,9 @@ import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-b
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../messages.js'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
+
+type T = [UseQueryResult]
 
 export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,

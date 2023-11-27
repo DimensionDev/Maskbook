@@ -118,7 +118,9 @@ function useSettingsContext(initial?: {
         gasOptions,
         gasOptionsLoading,
         gasOptionsError,
-        gasOptionRetry,
+        gasOptionRetry: () => {
+            gasOptionRetry()
+        },
 
         resetAll: onResetAll,
     }

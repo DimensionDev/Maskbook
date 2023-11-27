@@ -11,20 +11,20 @@ export function useSocialAccountsBySettings(
     sorter: ((a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number) | undefined,
     signWithPersona: WalletAPI.IOContext['signWithPersona'],
 ) {
-    const {
-        data: socialAccounts,
-        isLoading: loadingSocialAccounts,
-        error: loadSocialAccountsError,
-        refetch: refetchSocialAccounts,
-    } = useSocialAccountsAll(identity, typeWhitelist, sorter)
+    const [
+        socialAccounts,
+        { isLoading: loadingSocialAccounts, error: loadSocialAccountsError, refetch: refetchSocialAccounts },
+    ] = useSocialAccountsAll(identity, typeWhitelist, sorter)
     const userId = identity?.identifier?.userId
-    const {
-        data: hiddenAddress,
-        isFetching: loadingHiddenAddress,
-        isInitialLoading,
-        error: loadingHiddenAddressError,
-        refetch: refetchLoadHiddenAddress,
-    } = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId, signWithPersona)
+    const [
+        hiddenAddress,
+        {
+            isFetching: loadingHiddenAddress,
+            isInitialLoading,
+            error: loadingHiddenAddressError,
+            refetch: refetchLoadHiddenAddress,
+        },
+    ] = useHiddenAddressConfigOf(identity?.publicKey, PluginID.Web3Profile, userId, signWithPersona)
 
     const addresses = useMemo(() => {
         if (!hiddenAddress || !socialAccounts) return socialAccounts

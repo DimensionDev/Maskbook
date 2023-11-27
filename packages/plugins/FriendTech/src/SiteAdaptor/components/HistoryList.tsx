@@ -69,6 +69,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
     const { data, isFetching, isInitialLoading, fetchNextPage, dataUpdatedAt } = useInfiniteQuery({
         enabled: !!account,
         queryKey: ['friend-tech', 'activities', account],
+        initialPageParam: undefined as any,
         queryFn: ({ pageParam: nextIndicator }) => FriendTech.getActivities(account, nextIndicator),
         getNextPageParam: (x) => x.nextIndicator,
     })

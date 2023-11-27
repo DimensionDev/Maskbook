@@ -35,7 +35,8 @@ export function useFriendsPaged() {
     const friendsQuery = useInfiniteQuery({
         queryKey: ['friends', currentPersona?.identifier.rawPublicKey],
         enabled: !relationQuery.isLoading,
-        queryFn: async ({ pageParam = 0 }) => {
+        initialPageParam: 0,
+        queryFn: async ({ pageParam }) => {
             const friends: Friend[] = []
             const startIndex = pageParam ? Number(pageParam) : 0
             let nextPageOffset = 0

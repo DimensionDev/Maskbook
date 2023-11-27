@@ -2,12 +2,17 @@ import { useEffect } from 'react'
 import { EMPTY_LIST, MaskMessages, type NextIDPersonaBindings, type NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
 
 /**
  * Get all personas bound with the given identity from NextID service
  */
-export function usePersonasFromNextID(userId: string, platform: NextIDPlatform, exact?: boolean) {
-    const result = useQuery<NextIDPersonaBindings[], Error>({
+export function usePersonasFromNextID(
+    userId: string,
+    platform: NextIDPlatform,
+    exact?: boolean,
+): UseQueryResult<NextIDPersonaBindings[]> {
+    const result = useQuery({
         queryKey: ['next-id', 'personas', userId],
         enabled: Boolean(platform && userId),
         queryFn: async () => {

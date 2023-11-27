@@ -15,6 +15,7 @@ export function useTransactions() {
     const { account } = useChainContext()
     const response = useInfiniteQuery({
         queryKey: ['debank', 'all-history', account],
+        initialPageParam: undefined as any,
         queryFn: async ({ pageParam }) => {
             return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
         },

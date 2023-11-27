@@ -2,7 +2,9 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useFungibleToken } from './useFungibleToken.js'
 import { useNativeTokenAddress } from './useNativeTokenAddress.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useNativeToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: ConnectionOptions<T>,

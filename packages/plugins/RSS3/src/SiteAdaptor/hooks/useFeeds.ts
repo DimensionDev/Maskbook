@@ -7,6 +7,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
     const response = useInfiniteQuery({
         enabled: !!address,
+        initialPageParam: undefined as any,
         queryKey: ['rss3-feeds', address, tag],
         queryFn: async ({ pageParam }) => {
             const res = await RSS3.getAllNotes(address!, { tag }, { indicator: pageParam, size: 20 })

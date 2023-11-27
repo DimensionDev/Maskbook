@@ -44,6 +44,7 @@ export const HoldingList = memo(function HoldingList({ address, ...rest }: Props
 
     const { data, isFetching, fetchNextPage } = useInfiniteQuery({
         queryKey: ['friend-tech', 'holdings', address],
+        initialPageParam: undefined as any,
         queryFn: async ({ pageParam: nextIndicator }) => {
             return FriendTech.getHolding(address, nextIndicator)
         },

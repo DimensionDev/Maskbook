@@ -7,7 +7,9 @@ import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useWeb3Connection } from './useWeb3Connection.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: ConnectionOptions<T>,

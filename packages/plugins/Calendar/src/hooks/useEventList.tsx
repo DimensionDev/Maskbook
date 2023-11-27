@@ -2,11 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { Calendar } from '@masknet/web3-providers'
 import { startOfMonth, endOfMonth } from 'date-fns'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
+import type { UseQueryResult } from '@tanstack/react-query'
 
-export function useNewsList(date: Date) {
+export function useNewsList(date: Date): UseQueryResult<any> {
     const startTime = startOfMonth(date).getTime() / 1000
     const endTime = Math.floor(endOfMonth(date).getTime() / 1000)
-    return useQuery<any>({
+    return useQuery({
         queryKey: ['newsList', startTime, endTime],
         queryFn: async () => Calendar.getNewsList(startTime, endTime),
         select(data) {

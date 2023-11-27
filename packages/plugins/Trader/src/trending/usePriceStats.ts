@@ -6,6 +6,9 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginTraderRPC } from '../messages.js'
 import type { Currency } from '../types/index.js'
 import { useQuery } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
+
+type T = [UseQueryResult]
 
 export function usePriceStats({
     chainId: expectedChainId,

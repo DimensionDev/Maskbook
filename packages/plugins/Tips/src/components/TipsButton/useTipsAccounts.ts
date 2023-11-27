@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useHiddenAddressConfigOf, useSocialAccountsAll } from '@masknet/web3-hooks-base'
 import { signWithPersona } from '@masknet/plugin-infra/dom/context'
@@ -10,14 +10,9 @@ import { signWithPersona } from '@masknet/plugin-infra/dom/context'
  * and put the default one at the front.
  */
 export function useTipsAccounts(identity: IdentityResolved | null | undefined, personaPubkey: string | undefined) {
-    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsAll(identity)
+    const [socialAccounts] = useSocialAccountsAll(identity)
     const userId = identity?.identifier?.userId
-    const { data: hiddenAddresses } = useHiddenAddressConfigOf(
-        personaPubkey,
-        PluginID.Web3Profile,
-        userId,
-        signWithPersona,
-    )
+    const [hiddenAddresses] = useHiddenAddressConfigOf(personaPubkey, PluginID.Web3Profile, userId, signWithPersona)
     return useMemo(() => {
         if (!hiddenAddresses?.length) return socialAccounts
         const list = socialAccounts

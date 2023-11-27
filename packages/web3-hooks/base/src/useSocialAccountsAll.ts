@@ -2,7 +2,9 @@ import { type SocialAccount, type SocialAddressType, type SocialIdentity, EMPTY_
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSocialAddressesAll } from './useSocialAddressesAll.js'
 import { useSocialAccountsFrom } from './useSocialAccountsFrom.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 /**
  * Get all social addresses across all networks.
  */
@@ -11,11 +13,8 @@ export function useSocialAccountsAll(
     includes?: SocialAddressType[],
     sorter?: (a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number,
 ) {
-    const { data: socialAddressList = EMPTY_LIST, ...rest } = useSocialAddressesAll(identity, includes, sorter)
-    const socialAccounts = useSocialAccountsFrom(socialAddressList) ?? EMPTY_LIST
+    const query = useSocialAddressesAll(identity, includes, sorter)
+    const socialAccounts = useSocialAccountsFrom(query.data || EMPTY_LIST) ?? EMPTY_LIST
 
-    return {
-        ...rest,
-        data: socialAccounts,
-    }
+    return [socialAccounts, query] as const
 }

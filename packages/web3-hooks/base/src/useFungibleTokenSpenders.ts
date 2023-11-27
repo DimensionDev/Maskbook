@@ -3,7 +3,9 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
+import type { UseQueryResult } from '@tanstack/react-query'
 
+type T = UseQueryResult
 export function useFungibleTokenSpenders<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: HubOptions<T>,

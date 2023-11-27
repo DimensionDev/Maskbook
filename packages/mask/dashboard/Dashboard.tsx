@@ -72,7 +72,7 @@ export default function Dashboard() {
             <CssBaseline />
             {GlobalCss}
             {process.env.NODE_ENV === 'development' ?
-                <ReactQueryDevtools position="bottom-right" toggleButtonProps={{ style: { width: 24 } }} />
+                <ReactQueryDevtools buttonPosition="bottom-right" />
             :   null}
             <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
             <Pages />

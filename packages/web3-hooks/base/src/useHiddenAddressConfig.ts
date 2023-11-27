@@ -55,13 +55,9 @@ export function useHiddenAddressConfigOf(
     pluginID: PluginID | undefined,
     socialId: string | undefined,
     signWithPersona: WalletAPI.IOContext['signWithPersona'],
-) {
+): [string[] | undefined, ReturnType<typeof useHiddenAddressConfig>] {
     const result = useHiddenAddressConfig(personaPubkey, pluginID, signWithPersona)
-    return {
-        ...result,
-        // Identities of Twitter proof get lowered case.
-        data: result.data ? getHiddenAddressesOf(result.data, socialId?.toLowerCase()) : undefined,
-    }
+    return [result.data ? getHiddenAddressesOf(result.data, socialId?.toLowerCase()) : undefined, result]
 }
 
 interface Options {

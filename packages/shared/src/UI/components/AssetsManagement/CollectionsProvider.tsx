@@ -58,7 +58,9 @@ function useCollections(defaultCollectionId?: string) {
         setCurrentCollectionId,
         loading,
         error,
-        retry,
+        retry: () => {
+            retry()
+        },
     }
 }
 
