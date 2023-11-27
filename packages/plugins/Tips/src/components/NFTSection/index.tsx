@@ -11,7 +11,7 @@ import {
     LoadingStatus,
     EmptyStatus,
 } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
@@ -188,7 +188,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                                     }}
                                 />
                                 <ElementAnchor key={fetchedTokens.length} callback={() => fetchNextPage()}>
-                                    {hasNextPage && <LoadingBase size={36} />}
+                                    {hasNextPage ? <LoadingBase size={36} /> : null}
                                 </ElementAnchor>
                             </div>
                         )

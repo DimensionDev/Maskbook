@@ -1,5 +1,5 @@
 import { CollectibleList, ElementAnchor } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNonFungibleAsset, useNonFungibleAssets, useWeb3Connection } from '@masknet/web3-hooks-base'

@@ -9,7 +9,7 @@ import {
     SelectProviderModal,
     isSameNFT,
 } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
@@ -208,7 +208,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 callback={() => {
                                     fetchNextPage()
                                 }}>
-                                {hasNextPage && <LoadingBase />}
+                                {hasNextPage ? <LoadingBase /> : null}
                             </ElementAnchor>
                         </List>
                     }
