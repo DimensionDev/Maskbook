@@ -10,7 +10,7 @@ import {
     DialogStackingProvider,
 } from '@masknet/theme'
 import { I18NextProviderHMR, PersonaContext, SharedContextProvider, persistOptions, Modals } from '@masknet/shared'
-import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
@@ -18,7 +18,6 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
 import Services from '#services'
-import { useQueryClient } from '@tanstack/react-query'
 
 const GlobalCss = (
     <GlobalStyles
@@ -37,7 +36,6 @@ const PersonaContextIO = {
     queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
 }
 export default function Dashboard() {
-    const queryClient = useQueryClient()
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     // #region theme
