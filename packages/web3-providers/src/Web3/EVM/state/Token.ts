@@ -45,14 +45,18 @@ export class EVMToken extends TokenState<ChainId, SchemaType> {
         const storedTokensMap = this.storage.credibleFungibleTokenList.value
         const storedTokens = storedTokensMap[chainId]
         if (storedTokens) return storedTokens
-        return queryClient.fetchQuery(['evm', 'get-fungible-token-list', chainId], async () => {
-            const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId)
-            // No need to wait for storage
-            this.storage.credibleFungibleTokenList.setValue({
-                ...storedTokensMap,
-                [chainId]: fungibleTokenList.length ? fungibleTokenList : [EVMChainResolver.nativeCurrency(chainId)],
-            })
-            return fungibleTokenList
+        return queryClient.fetchQuery({
+            queryKey: ['evm', 'get-fungible-token-list', chainId],
+            queryFn: async () => {
+                const fungibleTokenList = await this.Hub.getFungibleTokensFromTokenList(chainId)
+                // No need to wait for storage
+                this.storage.credibleFungibleTokenList.setValue({
+                    ...storedTokensMap,
+                    [chainId]:
+                        fungibleTokenList.length ? fungibleTokenList : [EVMChainResolver.nativeCurrency(chainId)],
+                })
+                return fungibleTokenList
+            },
         })
     }
 

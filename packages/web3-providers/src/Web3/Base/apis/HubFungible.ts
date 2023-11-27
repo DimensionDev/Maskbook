@@ -28,11 +28,14 @@ export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseH
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         const options = this.HubOptions.fill({ ...initial, chainId })
         const providers = this.getProvidersFungible(initial)
-        return queryClient.fetchQuery(['get-fungible-token-list', options.chainId, initial], async () => {
-            return attemptUntil(
-                providers.map((x) => () => x.getFungibleTokenList?.(options.chainId)),
-                EMPTY_LIST,
-            )
+        return queryClient.fetchQuery({
+            queryKey: ['get-fungible-token-list', options.chainId, initial],
+            queryFn: async () => {
+                return attemptUntil(
+                    providers.map((x) => () => x.getFungibleTokenList?.(options.chainId)),
+                    EMPTY_LIST,
+                )
+            },
         })
     }
 
