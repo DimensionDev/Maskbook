@@ -93,13 +93,11 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
 
-    const {
-        value: fetchedTokens = EMPTY_LIST,
-        done,
-        next,
-        loading,
-        error: loadError,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId })
+    const [fetchedTokens, { hasNextPage, fetchNextPage, isLoading, error: loadError }] = useNonFungibleAssets(
+        pluginID,
+        undefined,
+        { chainId },
+    )
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {
@@ -150,8 +148,8 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
     // fetched tokens are all filtered out, keep fetching next page
     useEffect(() => {
         if (tokens.length) return
-        next()
-    }, [!tokens.length, fetchedTokens.length, next])
+        fetchNextPage()
+    }, [!tokens.length, fetchedTokens.length, fetchNextPage])
 
     return (
         <div className={cx(classes.root, className)} {...rest}>
@@ -170,10 +168,10 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                             <div className={classes.loadingList}>
                                 <CollectibleList
                                     classes={{ root: classes.collectibleList }}
-                                    retry={next}
+                                    retry={fetchNextPage}
                                     collectibles={tokens}
                                     pluginID={pluginID}
-                                    loading={loading}
+                                    loading={isLoading}
                                     columns={4}
                                     selectable
                                     value={selectedKey}
@@ -189,17 +187,17 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                                         setNonFungibleTokenId(tokenId)
                                     }}
                                 />
-                                <ElementAnchor key={fetchedTokens.length} callback={() => next?.()}>
-                                    {!done && <LoadingBase size={36} />}
+                                <ElementAnchor key={fetchedTokens.length} callback={() => fetchNextPage()}>
+                                    {hasNextPage && <LoadingBase size={36} />}
                                 </ElementAnchor>
                             </div>
                         )
                     }
-                    if (tokens.length === 0 && (!done || loading) && account) {
+                    if (tokens.length === 0 && (hasNextPage || isLoading) && account) {
                         return <LoadingStatus className={classes.statusBox} iconSize={36} />
                     }
-                    if (fetchedTokens.length === 0 && loadError && account && done) {
-                        return <RetryHint retry={next} />
+                    if (fetchedTokens.length === 0 && loadError && account && !hasNextPage) {
+                        return <RetryHint retry={fetchNextPage} />
                     }
                     return (
                         <EmptyStatus className={classes.statusBox} iconSize={36}>

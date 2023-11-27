@@ -59,13 +59,9 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 
-    const {
-        value: fetchedTokens = EMPTY_LIST,
-        done,
-        next,
-        loading,
-        dataUpdatedAt,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const [fetchedTokens, { hasNextPage, fetchNextPage, isLoading, dataUpdatedAt }] = useNonFungibleAssets(
+        NetworkPluginID.PLUGIN_EVM,
+    )
     const tokens = useMemo(() => {
         const filtered = fetchedTokens.filter((x) => {
             if (isLensProfileAddress(x.address)) return false
@@ -142,10 +138,10 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
             <div className={classes.scroll} data-hide-scrollbar>
                 <CollectibleList
                     className={classes.collectibleList}
-                    retry={next}
+                    retry={fetchNextPage}
                     collectibles={prependTokens}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
-                    loading={loading || !done}
+                    loading={isLoading || !!hasNextPage}
                     columns={4}
                     gap={1}
                     selectable
@@ -154,15 +150,12 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
                     getCollectibleKey={getCollectibleKey}
                     onChange={handleChange}
                 />
-                {
-                    done ? null
-                        // There might be chains that has no assets, setting key to token size might stuck the loading
-                    : (
-                        <ElementAnchor key={dataUpdatedAt} callback={() => next?.()}>
-                            <LoadingBase size={36} />
-                        </ElementAnchor>
-                    )
-                }
+                {hasNextPage ?
+                    // There might be chains that has no assets, setting key to token size might stuck the loading
+                    <ElementAnchor key={dataUpdatedAt} callback={() => fetchNextPage()}>
+                        <LoadingBase size={36} />
+                    </ElementAnchor>
+                :   null}
             </div>
             <div className={classes.actionGroup}>
                 <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>

@@ -97,12 +97,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken>()
     const [customCollectibles, setCustomCollectibles] = useState<AllChainsNonFungibleToken[]>([])
     const t = useAvatarTrans()
-    const {
-        value: collectibles = EMPTY_LIST,
-        done: loadFinish,
-        next: nextPage,
-        error: loadError,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
+    const [collectibles, { hasNextPage, fetchNextPage, error: loadError }] = useNonFungibleAssets(pluginID, undefined, {
+        chainId,
+        account,
+    })
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -184,13 +182,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
             </Box>
             <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                 <Box className={classes.galleryItem}>
-                    {!loadFinish && !loadError && !collectibles.length ?
+                    {hasNextPage && !loadError && !collectibles.length ?
                         loadingSkeletons
                     : loadError || (!collectibles.length && !customCollectibles.length) ?
                         <ReloadStatus
                             message={t.dashboard_no_collectible_found()}
                             actionLabel={t.retry()}
-                            onRetry={nextPage}
+                            onRetry={fetchNextPage}
                         />
                     :   <List className={classes.list}>
                             {uniqBy(
@@ -208,9 +206,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                             ))}
                             <ElementAnchor
                                 callback={() => {
-                                    nextPage?.()
+                                    fetchNextPage()
                                 }}>
-                                {!loadFinish && <LoadingBase />}
+                                {hasNextPage && <LoadingBase />}
                             </ElementAnchor>
                         </List>
                     }
