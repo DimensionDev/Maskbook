@@ -28,6 +28,7 @@ export interface PostContextAuthor {
 
 export interface PostContextCoAuthor {
     nickname?: string
+    /** TODO Refactor to string */
     avatarURL?: URL
     author: ProfileIdentifier
     post: PostIdentifier
