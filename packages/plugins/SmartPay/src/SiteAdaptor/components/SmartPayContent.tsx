@@ -205,7 +205,7 @@ export const SmartPayContent = memo(() => {
     const maskAddress = EVMUtils.getMaskTokenAddress(chainId)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const { data: assets, refetch: refreshAssets } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const [assets, { refetch: refreshAssets }] = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
 

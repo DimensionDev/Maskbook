@@ -17,7 +17,8 @@ const FriendsHome = memo(function FriendsHome() {
     const t = useMaskSharedTrans()
     useTitle(t.popups_encrypted_friends())
 
-    const { data, fetchNextPage, isLoading, refetch, status, fetchRelationStatus, records } = useFriendsPaged()
+    const [{ isLoading, refetch, records }, { status: fetchRelationStatus }, { data, status, fetchNextPage }] =
+        useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)

@@ -44,7 +44,7 @@ export const TokenPicker = memo(function TokenPicker({
     ...rest
 }: TokenPickerProps) {
     const { classes, cx } = useStyles()
-    const { data: assets = EMPTY_LIST } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    const [assets] = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
     const [sidebarChainId, setSidebarChainId] = useState<Web3Helper.ChainIdAll | undefined>(defaultChainId)

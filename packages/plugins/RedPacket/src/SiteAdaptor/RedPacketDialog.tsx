@@ -177,7 +177,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         : t.details()
 
     // #region gas config
-    const { data: defaultGasPrice } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const [defaultGasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const handleGasSettingChange = useCallback(
         (gasConfig: GasConfig) => {
             const editor = GasEditor.fromConfig(chainId, gasConfig)

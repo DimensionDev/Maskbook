@@ -13,14 +13,14 @@ import { useEffect, useMemo } from 'react'
  */
 export function useTransactions() {
     const { account } = useChainContext()
-    const result = useInfiniteQuery({
+    const response = useInfiniteQuery({
         queryKey: ['debank', 'all-history', account],
         queryFn: async ({ pageParam }) => {
             return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
     })
-    const data = result.data
+    const data = response.data
     const transactions = useMemo(
         () =>
             data?.pages
@@ -36,7 +36,7 @@ export function useTransactions() {
     const queries = useQueries({
         queries: networks.map((network) => {
             return {
-                enabled: !!account && (transactions.length > 0 || !result.isLoading),
+                enabled: !!account && (transactions.length > 0 || !response.isLoading),
                 queryKey: ['transitions', network.chainId, account],
                 queryFn: async () => {
                     return Transaction?.getTransactions?.(network.chainId, account) ?? []
@@ -68,9 +68,5 @@ export function useTransactions() {
         )
     }, [allLocaleTxes, transactions])
 
-    return {
-        ...result,
-        data: transactions,
-        localeTxes,
-    }
+    return [{ transactions, localeTxes }, response] as const
 }

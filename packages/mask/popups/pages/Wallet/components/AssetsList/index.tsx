@@ -178,7 +178,7 @@ export const AssetsList = memo(function AssetsList() {
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
-    const { data: assets, isLoading } = useWalletAssets()
+    const [assets, { isLoading }] = useWalletAssets()
     const [assetsIsExpand, setAssetsIsExpand] = useAssetExpand()
     const onItemClick = useCallback((asset: Asset) => {
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))

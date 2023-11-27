@@ -37,7 +37,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     const { BalanceNotifier, Network } = useWeb3State(pluginID)
     const networks = useNetworks()
 
-    const { data: mergedAssets = EMPTY_LIST, ...rest } = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
+    const query = useQuery<Array<Web3Helper.FungibleAssetScope<S, T>>>({
         queryKey: ['fungible-assets', pluginID, account],
         queryFn: async () => {
             if (!account) return EMPTY_LIST
@@ -63,12 +63,13 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
             return list.filter((x) => networkIds.includes(x.chainId))
         },
     })
+    const mergedAssets = query.data || EMPTY_LIST
     // Hub.getFungibleAssets relies on networks.
     useEffect(() => {
         return Network?.networks?.subscribe(() => {
-            rest.refetch()
+            query.refetch()
         })
-    }, [rest.refetch])
+    }, [query.refetch])
 
     const assets: Array<Web3Helper.FungibleAssetScope<S, T>> = useMemo(() => {
         const isTrustedToken = currySameAddress(trustedTokens.map((x) => x.address))
@@ -128,14 +129,11 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
                 if (isSameAddress(account, ev.account)) {
-                    rest.refetch()
+                    query.refetch()
                 }
             }) ?? noop
         )
-    }, [account, rest.refetch, BalanceNotifier])
+    }, [account, query.refetch, BalanceNotifier])
 
-    return {
-        data: assets,
-        ...rest,
-    }
+    return [assets, query] as const
 }
