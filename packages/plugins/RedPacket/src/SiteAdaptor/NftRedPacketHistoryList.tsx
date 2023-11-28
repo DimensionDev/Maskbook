@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react'
-import { makeStyles, LoadingBase } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { EmptyStatus, LoadingStatus, useSharedTrans } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { List, Popper, Typography, Box } from '@mui/material'
+import { List, Popper, Typography } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -33,19 +32,11 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             },
         },
         placeholder: {
-            display: 'flex',
-            flexDirection: 'column',
-            height: 474,
-            justifyContent: 'center',
-            alignItems: 'center',
+            boxSizing: 'border-box',
             textAlign: 'center',
             width: 360,
+            height: 474,
             margin: '0 auto',
-        },
-        emptyIcon: {
-            width: 36,
-            height: 36,
-            marginBottom: 13,
         },
         popper: {
             overflow: 'visible',
@@ -80,10 +71,6 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
             color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',
             fontSize: 12,
         },
-        loading: {
-            fontSize: 14,
-            marginTop: 13,
-        },
     }
 })
 
@@ -115,26 +102,17 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     if (loading) {
         return (
-            <Box
-                style={{
-                    height: 474,
-                    alignItems: 'center',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}>
-                <LoadingBase size={30} />
-                <Typography className={classes.loading}>{sharedI18N.loading()}</Typography>
-            </Box>
+            <LoadingStatus className={classes.placeholder} iconSize={30}>
+                {sharedI18N.loading()}
+            </LoadingStatus>
         )
     }
 
     if (!histories?.length) {
         return (
-            <Typography className={classes.placeholder} color="textSecondary">
-                <Icons.EmptySimple className={classes.emptyIcon} />
+            <EmptyStatus className={classes.placeholder} iconSize={36}>
                 {t.nft_no_history()}
-            </Typography>
+            </EmptyStatus>
         )
     }
 
