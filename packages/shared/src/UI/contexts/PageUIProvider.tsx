@@ -4,9 +4,7 @@ import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { compose, i18NextInstance } from '@masknet/shared-base'
-import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { persistOptions } from './localStoragePersist.js'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 
 export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
@@ -30,16 +28,14 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
-                <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
-                    <RootWeb3ContextProvider>
-                        <SharedContextProvider>
-                            <Suspense fallback={fallback}>
-                                <CSSVariableInjector />
-                                {children}
-                            </Suspense>
-                        </SharedContextProvider>
-                    </RootWeb3ContextProvider>
-                </PersistQueryClientProvider>
+                <RootWeb3ContextProvider>
+                    <SharedContextProvider>
+                        <Suspense fallback={fallback}>
+                            <CSSVariableInjector />
+                            {children}
+                        </Suspense>
+                    </SharedContextProvider>
+                </RootWeb3ContextProvider>
             </MaskThemeProvider>
         </DialogStackingProvider>
     )

@@ -96,6 +96,7 @@
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.2",
     "@splinetool/react-spline": "2.2.6",
+    "@tanstack/query-async-storage-persister": "^5.8.7",
     "@tanstack/react-query-devtools": "^5.8.7",
     "@tanstack/react-query-persist-client": "^5.8.7",
     "@types/elliptic": "^6.4.14",
