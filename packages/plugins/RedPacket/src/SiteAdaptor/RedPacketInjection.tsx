@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
 
 import RedPacketDialog from './RedPacketDialog.js'
@@ -15,10 +15,14 @@ export function RedPacketInjection() {
         })
     }, [])
 
+    const handleClose = useCallback(() => {
+        setOpen(false)
+    }, [])
+
     if (!open) return null
     return (
         <EVMWeb3ContextProvider>
-            <RedPacketDialog open onClose={() => setOpen(false)} source={source} />
+            <RedPacketDialog open onClose={handleClose} source={source} />
         </EVMWeb3ContextProvider>
     )
 }
