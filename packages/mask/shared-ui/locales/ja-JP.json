@@ -1073,6 +1073,7 @@
     "decentralized_search_feature_nft_name": "NFTs",
     "decentralized_search_feature_nft_description": "NFT コレクションまたはそのシンボルの名前で検索し、最適化された結果を得ます。",
     "decentralized_search_feature_wallet_name": "ENSまたはウォレットアドレス",
+    "decentralized_search_feature_wallet_description": "ENSドメインまたはウォレットアドレスで検索すると、最適化された結果が得られます。",
     "incorrect_chain_id": "不正なチェーンIDです",
     "invalid_number": "無効な番号です",
     "saved_network_successfully": "ネットワークを保存しました",
