@@ -48,6 +48,7 @@ export interface MaskEvents extends MaskSettingsEvents, MaskContentScriptEvents 
     __kv_backend_persistent__: [string, unknown]
     __kv_backend_in_memory__: [string, unknown]
     popupRouteUpdated: string
+    reactQuerySync: any
 }
 
 interface UpdateEvent<Data> {

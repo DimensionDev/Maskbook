@@ -40,8 +40,10 @@ import {
 import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
-import { UserContext } from '../shared-ui/index.js'
+import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
@@ -173,23 +175,27 @@ export default function Popups() {
         return MaskMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
     }, [])
 
-    return PageUIProvider(
-        usePopupTheme,
-        <PopupSnackbarProvider>
-            <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
-                <PopupContext.Provider>
-                    <PageTitleContext.Provider value={titleContext}>
-                        <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
-                            {process.env.NODE_ENV === 'development' ?
-                                <ReactQueryDevtools buttonPosition="bottom-right" />
-                            :   null}
-                            <PopupRoutes />
-                            <Modals />
-                        </HistoryRouter>
-                    </PageTitleContext.Provider>
-                </PopupContext.Provider>
-            </EVMWeb3ContextProvider>
-        </PopupSnackbarProvider>,
-        null,
+    return (
+        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+            {PageUIProvider(
+                usePopupTheme,
+                <PopupSnackbarProvider>
+                    <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
+                        <PopupContext.Provider>
+                            <PageTitleContext.Provider value={titleContext}>
+                                <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                                    {process.env.NODE_ENV === 'development' ?
+                                        <ReactQueryDevtools buttonPosition="bottom-right" />
+                                    :   null}
+                                    <PopupRoutes />
+                                    <Modals />
+                                </HistoryRouter>
+                            </PageTitleContext.Provider>
+                        </PopupContext.Provider>
+                    </EVMWeb3ContextProvider>
+                </PopupSnackbarProvider>,
+                null,
+            )}
+        </PersistQueryClientProvider>
     )
 }

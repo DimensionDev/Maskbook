@@ -79,14 +79,14 @@ export const serializer: Serialization = {
         return typeson!.revive(to)
     },
 }
-export function registerSerializableClass(name: string, constructor: NewableFunction): void
-export function registerSerializableClass<T, Q>(
+function registerSerializableClass(name: string, constructor: NewableFunction): void
+function registerSerializableClass<T, Q>(
     name: string,
     isT: (x: unknown) => boolean,
     ser: (x: T) => Q | TypesonPromise<Q>,
     de_ser: (x: Q) => T,
 ): void
-export function registerSerializableClass(name: string, a: any, b?: any, c?: any): void {
+function registerSerializableClass(name: string, a: any, b?: any, c?: any): void {
     if (typeson) {
         if (b) typeson.register({ [name]: [a, b, c] })
         else addClass(name, a)

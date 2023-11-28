@@ -43,6 +43,7 @@ const deferPackages = [
 const avoidMistakeRules = {
     // Libraries
     '@tanstack/query/stable-query-client': 'error',
+    '@tanstack/query/no-rest-destructuring': 'error',
 
     // Code quality
     'no-invalid-regexp': 'error', // RegEx
