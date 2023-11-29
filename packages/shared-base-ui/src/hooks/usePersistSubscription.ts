@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useDebugValue, useEffect } from 'react'
 import { type Subscription } from 'use-subscription'
 
 /**
@@ -10,20 +10,22 @@ export function usePersistSubscription<T>(
     subscription: Subscription<T>,
     predicate?: (data: T) => boolean,
 ): T {
-    const [initialValue] = useState(() => subscription.getCurrentValue())
-    const { data = initialValue, refetch } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: [persistKey],
         networkMode: 'always',
         queryFn: () => {
             const value = subscription.getCurrentValue()
-            if (predicate && !predicate(value)) return undefined
+            if (predicate && !predicate(value)) return null
             return value
         },
+        placeholderData: () => subscription.getCurrentValue() as any,
     })
     useEffect(() => {
         refetch() // Actively fetch, make persist data act as placeholder data
         return subscription.subscribe(refetch)
     }, [subscription, refetch])
 
-    return data
+    useDebugValue(data)
+
+    return data!
 }

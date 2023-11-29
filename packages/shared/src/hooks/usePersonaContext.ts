@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
@@ -15,7 +14,7 @@ import {
     NextIDPlatform,
     type ProfileAccount,
 } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRefReactQuery } from '@masknet/shared-base-ui'
 import { usePersonaProofs } from './usePersonaProofs.js'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
@@ -26,7 +25,7 @@ function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
     const { data: personas = EMPTY_LIST, refetch } = useQuery({
-        queryKey: ['my-own-persona-info'],
+        queryKey: ['@@queryOwnedPersonaInformation(false)'],
         queryFn: () => queryOwnedPersonaInformation?.(false),
     })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
@@ -40,29 +39,32 @@ function usePersonaContext(initialState?: {
 }) {
     const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
-    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const currentIdentifier = useValueRefReactQuery('@@ref:currentPersonaIdentifier', currentPersonaIdentifier)
 
     const { personas } = usePersonaInformation(initialState?.queryOwnedPersonaInformation)
 
     const currentPersona = personas.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
-    const { value: avatar } = useAsync(async () => {
-        if (!currentPersona) return
-        if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona.avatar
+    const { data: avatar } = useQuery({
+        enabled: !!currentPersona,
+        queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
+        queryFn: async (): Promise<string | null> => {
+            if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona!.avatar || null
 
-        const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona.identifier)
-        const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
-        try {
-            const remote = await storage.get<PersonaAvatarData>(currentPersona.identifier.rawPublicKey)
+            const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona!.identifier)
+            const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
+            try {
+                const remote = await storage.get<PersonaAvatarData>(currentPersona!.identifier.rawPublicKey)
 
-            if (remote && lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
-                return remote.imageUrl
+                if (remote && lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
+                    return remote.imageUrl
+                }
+                return currentPersona!.avatar || null
+            } catch {
+                return currentPersona!.avatar || null
             }
-            return currentPersona.avatar
-        } catch {
-            return currentPersona.avatar
-        }
-    }, [currentPersona, initialState?.queryPersonaAvatarLastUpdateTime])
+        },
+    })
 
     const { data: proofs, isPending: fetchProofsLoading } = usePersonaProofs(currentPersona?.identifier.publicKeyAsHex)
 
@@ -143,3 +145,4 @@ function usePersonaContext(initialState?: {
 }
 
 export const PersonaContext = createContainer(usePersonaContext)
+PersonaContext.Provider.displayName = 'PersonaContext'

@@ -53,11 +53,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
 
-    if (mode === 'production') hmr = false
-    if (profiling) {
-        hmr = false
-        devtools = false
-    }
+    if (mode === 'production' || profiling) hmr = false
     if (!hmr) reactRefresh = false
 
     return {

@@ -12,7 +12,7 @@ import { EventMap } from '../../../shared/definitions/event.js'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal(props) {
     const t = useMaskSharedTrans()
-    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
+    const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const { currentPersona } = PersonaContext.useContainer()
 

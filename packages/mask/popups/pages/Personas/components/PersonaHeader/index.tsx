@@ -33,3 +33,4 @@ export const PersonaHeader = memo(function PersonaHeader() {
 
     return <NormalHeader />
 })
+PersonaHeader.displayName = 'PersonaHeader'

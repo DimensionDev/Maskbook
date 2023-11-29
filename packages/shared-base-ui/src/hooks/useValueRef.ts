@@ -1,5 +1,6 @@
-import { useSyncExternalStore } from 'react'
-import type { ValueRef, ValueRefJSON } from '@masknet/shared-base'
+import { useDebugValue, useEffect, useSyncExternalStore } from 'react'
+import type { ValueRef, ValueRefJSON, ValueRefWithReady } from '@masknet/shared-base'
+import { useQuery } from '@tanstack/react-query'
 
 function getServerSnapshot(): never {
     throw new Error('getServerSnapshot is not supported')
@@ -10,6 +11,24 @@ export function useValueRef<T>(ref: ValueRef<T>): Readonly<T> {
         () => ref.value,
         getServerSnapshot,
     )
+}
+
+export function useValueRefReactQuery<T>(key: `@@${string}`, ref: ValueRefWithReady<T>) {
+    const { data, refetch } = useQuery({
+        queryKey: [key],
+        queryFn: async () => {
+            await ref.readyPromise
+            return ref.value
+        },
+        placeholderData: () => ref.value as any,
+        networkMode: 'always',
+    })
+    useEffect(() => {
+        refetch()
+        ref.addListener(() => refetch())
+    }, [refetch, ref])
+    useDebugValue(data)
+    return data
 }
 
 /** @deprecated */

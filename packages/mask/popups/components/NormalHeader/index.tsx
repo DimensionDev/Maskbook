@@ -85,3 +85,4 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
         </Box>
     )
 })
+NormalHeader.displayName = 'NormalHeader'
