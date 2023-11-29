@@ -2,7 +2,7 @@
     "name": "@masknet/flags",
     "version": "0.0.0",
     "private": true,
-    "sideEffects": ["./src/index.ts"],
+    "sideEffects": false,
     "type": "module",
     "exports": {
       ".": {
