@@ -9,6 +9,7 @@ import {
     ValueRef,
     type PostIdentifier,
     type ProfileIdentifier,
+    type EnhanceableSite,
 } from '@masknet/shared-base'
 import { useObservableValues, useValueRef } from '@masknet/shared-base-ui'
 import type { TypedMessage } from '@masknet/typed-message'
@@ -19,6 +20,7 @@ export interface PostContextActions {
     getURLFromPostIdentifier?(post: PostIdentifier): URL | null
 }
 export interface PostContextAuthor {
+    readonly site: EnhanceableSite | null
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>

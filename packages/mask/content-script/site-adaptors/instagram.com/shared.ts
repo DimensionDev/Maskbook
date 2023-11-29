@@ -6,7 +6,7 @@ import { instagramBase } from './base.js'
 export const instagramShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...instagramBase,
     utils: {
-        createPostContext: createSiteAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext(instagramBase.networkIdentifier, {
             hasPayloadLike,
         }),
     },

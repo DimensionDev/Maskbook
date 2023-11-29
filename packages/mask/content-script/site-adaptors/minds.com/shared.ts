@@ -1,4 +1,4 @@
-import type { PostIdentifier } from '@masknet/shared-base'
+import { type PostIdentifier } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SiteAdaptor } from '@masknet/types'
 import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'
@@ -18,7 +18,7 @@ export const mindsShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
         share(message) {
             openWindow(MindsAdaptor.getShareLinkURL?.(message))
         },
-        createPostContext: createSiteAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext(mindsBase.networkIdentifier, {
             hasPayloadLike,
             getURLFromPostIdentifier: getPostURL,
         }),

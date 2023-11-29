@@ -7,7 +7,7 @@ import { getUserIdentity } from './utils/user.js'
 export const mirrorShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...mirrorBase,
     utils: {
-        createPostContext: createSiteAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext(mirrorBase.networkIdentifier, {
             hasPayloadLike,
         }),
         getUserIdentity,

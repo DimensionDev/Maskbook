@@ -20,6 +20,7 @@ const NetworkToNextIDPlatform = {
     [EnhanceableSite.Localhost]: undefined,
     [EnhanceableSite.Mirror]: undefined,
     [EnhanceableSite.App]: undefined,
+    [EnhanceableSite.Firefly]: undefined,
     [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
 }
 export function resolveNetworkToNextIDPlatform(key: EnhanceableSite): NextIDPlatform | undefined {

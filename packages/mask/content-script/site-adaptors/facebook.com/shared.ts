@@ -1,7 +1,7 @@
 import type { SiteAdaptor } from '@masknet/types'
 import { facebookBase } from './base.js'
 import { getPostUrlAtFacebook, isValidFacebookUsername } from './utils/parse-username.js'
-import type { PostIdentifier } from '@masknet/shared-base'
+import { type PostIdentifier } from '@masknet/shared-base'
 import { hasPayloadLike } from '../../utils/index.js'
 import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -18,7 +18,7 @@ export const facebookShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
         share(message) {
             openWindow(FacebookAdaptor.getShareLinkURL?.(message))
         },
-        createPostContext: createSiteAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext(facebookBase.networkIdentifier, {
             hasPayloadLike,
             getURLFromPostIdentifier: getPostURL,
         }),
