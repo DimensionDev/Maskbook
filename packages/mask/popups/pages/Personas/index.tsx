@@ -59,5 +59,6 @@ const Persona = memo(() => {
         </EVMWeb3ContextProvider>
     )
 })
+Persona.displayName = 'Persona'
 
 export default Persona

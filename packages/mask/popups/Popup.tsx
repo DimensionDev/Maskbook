@@ -144,6 +144,7 @@ const PopupRoutes = memo(function PopupRoutes() {
         </Suspense>
     )
 })
+PopupRoutes.displayName = 'PopupRoutes'
 function withSuspense(children: ReactNode) {
     return (
         <Suspense
@@ -177,6 +178,9 @@ export default function Popups() {
 
     return (
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+            {process.env.NODE_ENV === 'development' ?
+                <ReactQueryDevtools buttonPosition="bottom-right" />
+            :   null}
             {PageUIProvider(
                 usePopupTheme,
                 <PopupSnackbarProvider>
@@ -184,9 +188,6 @@ export default function Popups() {
                         <PopupContext.Provider>
                             <PageTitleContext.Provider value={titleContext}>
                                 <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
-                                    {process.env.NODE_ENV === 'development' ?
-                                        <ReactQueryDevtools buttonPosition="bottom-right" />
-                                    :   null}
                                     <PopupRoutes />
                                     <Modals />
                                 </HistoryRouter>

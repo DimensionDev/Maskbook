@@ -17,7 +17,7 @@ const PersonaHome = memo(() => {
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 
-    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
+    const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
     const bindingWallets = useMemo(() => proofs?.filter((x) => x.platform === NextIDPlatform.Ethereum), [proofs])
     const { hasPassword } = useHasPassword()
 
@@ -76,5 +76,6 @@ const PersonaHome = memo(() => {
         />
     )
 })
+PersonaHome.displayName = 'PersonaHome'
 
 export default PersonaHome

@@ -11,10 +11,19 @@ try {
         localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
 } catch {}
 
+const cache = new Map<string, unknown>()
+export function setInitData(key: string, value: unknown) {
+    cache.set(key, value)
+}
 // https://github.com/TanStack/query/discussions/6447
 const asyncStoragePersister = createAsyncStoragePersister({
     storage: {
         async getItem(k) {
+            if (cache.has(k)) {
+                const v = cache.get(k)
+                cache.delete(k)
+                return v
+            }
             const v = await browser.storage.local.get(k)
             return v[k]
         },

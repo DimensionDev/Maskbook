@@ -328,3 +328,4 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         )
     },
 )
+PersonaHomeUI.displayName = 'PersonaHomeUI'

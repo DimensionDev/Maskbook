@@ -1,10 +1,13 @@
 import { PersistentStorages, type BackupConfig } from '@masknet/shared-base'
+import { usePersistSubscription } from '@masknet/shared-base-ui'
 import { useCallback, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
-import { useSubscription } from 'use-subscription'
 
 function useUserContext() {
-    const user = useSubscription(PersistentStorages.Settings.storage.backupConfig.subscription)
+    const user = usePersistSubscription(
+        '@@PersistentStorages.Settings.storage.backupConfig.subscription',
+        PersistentStorages.Settings.storage.backupConfig.subscription,
+    )
 
     const updateUser = useCallback(
         async (obj: Partial<BackupConfig>) => {
@@ -37,3 +40,4 @@ function useUserContext() {
 }
 
 export const UserContext = createContainer(useUserContext)
+UserContext.Provider.displayName = 'UserContext.Provider'

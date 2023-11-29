@@ -6,7 +6,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 
 export function usePersonaProofs(publicKey?: string): UseQueryResult<BindingProof[]> {
     const result = useQuery<BindingProof[]>({
-        queryKey: ['next-id', 'bindings-by-persona', publicKey],
+        queryKey: ['@@next-id', 'bindings-by-persona', publicKey],
         queryFn: async () => {
             if (Sniffings.is_popup_page) await NextIDProof.clearPersonaQueryCache(publicKey!)
             const binding = await NextIDProof.queryExistedBindingByPersona(publicKey!)

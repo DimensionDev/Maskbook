@@ -5,12 +5,15 @@
 
 import { createContainer } from 'unstated-next'
 import { useState } from 'react'
-import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 
 function usePopupContext() {
     const [signed, setSigned] = useState(false)
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const { data: smartPayChainId } = useQuery({
+        queryKey: ['@@SmartPayBundler.getSupportedChainId'],
+        queryFn: () => SmartPayBundler.getSupportedChainId(),
+    })
 
     return {
         smartPayChainId,
@@ -20,3 +23,4 @@ function usePopupContext() {
 }
 
 export const PopupContext = createContainer(usePopupContext)
+PopupContext.Provider.displayName = 'PopupContext'
