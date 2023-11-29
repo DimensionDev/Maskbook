@@ -15,7 +15,7 @@ import {
     i18NextInstance,
 } from '@masknet/shared-base'
 import { setupReactShadowRootEnvironment } from '@masknet/theme'
-import { inMemoryStorage, indexedDBStorage } from '../setup/storage.js'
+import { inMemoryStorage, indexedDBStorage } from '../storage.js'
 
 async function reject(): Promise<never> {
     throw new Error('Not implemented')

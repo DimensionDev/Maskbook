@@ -13,6 +13,7 @@ import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import Terser from 'terser-webpack-plugin'
 import { getGitInfo } from './.webpack/git-info.js'
 import CopyPlugin from 'copy-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
@@ -26,12 +27,10 @@ const polyfillsFolderPath = join(outputPath, './js/polyfills')
  */
 function Configuration(env, argv) {
     const mode = env.WEBPACK_SERVE ? 'development' : 'production'
-    const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
-    const VERSION = require('../../package.json').version
     return {
         mode,
         name: 'mask',
-        entry: './src/index.tsx',
+        entry: './src/initialization/index.ts',
         output: {
             filename: '[name].[contenthash].js',
             path: outputPath,
@@ -55,6 +54,7 @@ function Configuration(env, argv) {
         },
         experiments: {
             backCompat: false,
+            futureDefaults: true,
             asyncWebAssembly: true,
             syncImportAssertion: true,
             deferImport: { asyncModule: 'error' },
@@ -81,7 +81,7 @@ function Configuration(env, argv) {
             rules: [
                 {
                     test: /\.css$/i,
-                    use: [require.resolve('style-loader'), require.resolve('css-loader')],
+                    use: [MiniCssExtractPlugin.loader, 'css-loader'],
                 },
                 {
                     test: /\.tsx?$/,
@@ -106,6 +106,7 @@ function Configuration(env, argv) {
             ],
         },
         plugins: [
+            new MiniCssExtractPlugin(),
             new HtmlWebpackPlugin({
                 templateContent: readFileSync(join(__dirname, './.webpack/template.html'), 'utf8'),
                 inject: 'body',
@@ -123,13 +124,6 @@ function Configuration(env, argv) {
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.version': JSON.stringify('v20.0.0'),
                 'process.browser': 'true',
-                'process.env.BUILD_DATE': JSON.stringify(BUILD_DATE),
-                'process.env.VERSION': JSON.stringify(VERSION),
-                'process.env.COMMIT_HASH': JSON.stringify(COMMIT_HASH),
-                'process.env.COMMIT_DATE': JSON.stringify(COMMIT_DATE),
-                'process.env.BRANCH_NAME': JSON.stringify(BRANCH_NAME),
-                'process.env.DIRTY': JSON.stringify(DIRTY),
-                'process.env.CHANNEL': JSON.stringify('stable'),
             }),
             new CopyPlugin({
                 patterns: [
@@ -141,6 +135,7 @@ function Configuration(env, argv) {
                 ],
             }),
             (() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
                     BUILD_DATE,
@@ -148,11 +143,16 @@ function Configuration(env, argv) {
                     COMMIT_DATE,
                     COMMIT_HASH,
                     DIRTY,
-                    VERSION,
+                    VERSION: '2.22.0',
                 }
                 return emitJSONFile({ content: json, name: 'build-info.json' })
             })(),
         ],
+        node: {
+            global: true,
+            __dirname: false,
+            __filename: false,
+        },
         devServer: {
             historyApiFallback: true,
             client: {

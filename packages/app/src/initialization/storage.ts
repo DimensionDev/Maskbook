@@ -7,7 +7,7 @@ const inMemoryBackend = {
     getValue: BackgroundWorker.memoryRead,
     setValue: BackgroundWorker.memoryWrite,
 }
-// #region Setup storage
+
 export const inMemoryStorage = createKVStorageHost(inMemoryBackend, {
     on: (callback) => addListener('inMemoryStorage', callback),
 })
@@ -19,5 +19,7 @@ const idbBackend = {
 export const indexedDBStorage = createKVStorageHost(idbBackend, {
     on: (callback) => addListener('indexedDBStorage', callback),
 })
-setupMaskKVStorageBackend(idbBackend, inMemoryBackend)
-// #endregion
+
+export function initStorage() {
+    setupMaskKVStorageBackend(idbBackend, inMemoryBackend)
+}

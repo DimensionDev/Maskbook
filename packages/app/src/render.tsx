@@ -1,6 +1,3 @@
-import './setup/storage.js'
-import './setup/wallet.js'
-
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PageUIProvider } from '@masknet/shared'
@@ -10,7 +7,6 @@ import { MainUI } from './MainUI.js'
 import { useTheme } from './hooks/useTheme.js'
 import { PersistQueryClientProvider, type PersistQueryClientOptions } from '@tanstack/react-query-persist-client'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
-import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 
 function App() {
     return PageUIProvider(useTheme, <MainUI />)
@@ -27,9 +23,8 @@ const persistOptions: Omit<PersistQueryClientOptions, 'queryClient'> = {
         },
     },
 }
-broadcastQueryClient({ queryClient })
 
-export default function renderApp() {
+export function renderApp() {
     const root = document.createElement('main')
     document.body.appendChild(root)
 

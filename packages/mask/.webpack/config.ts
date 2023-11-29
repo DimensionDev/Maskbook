@@ -42,7 +42,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
-    const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
     const baseConfig: webpack.Configuration = {
         name: 'mask',
         // to set a correct base path for source map
@@ -204,13 +203,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
-                'process.env.BUILD_DATE': JSON.stringify(BUILD_DATE),
-                'process.env.VERSION': JSON.stringify(VERSION),
-                'process.env.COMMIT_HASH': JSON.stringify(COMMIT_HASH),
-                'process.env.COMMIT_DATE': JSON.stringify(COMMIT_DATE),
-                'process.env.BRANCH_NAME': JSON.stringify(BRANCH_NAME),
-                'process.env.DIRTY': JSON.stringify(DIRTY),
-                'process.env.CHANNEL': JSON.stringify(flags.channel),
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
             flags.profiling && new ProfilingPlugin(),
@@ -244,6 +236,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ],
             }),
             ...(() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
                     BUILD_DATE,

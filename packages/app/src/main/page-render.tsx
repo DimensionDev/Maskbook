@@ -1,4 +1,4 @@
-import '../plugin-host/enable.js'
+import '../initialization/plugin-host/enable.js'
 
 import { DisableShadowRootContext, ShadowRootIsolation } from '@masknet/theme'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
