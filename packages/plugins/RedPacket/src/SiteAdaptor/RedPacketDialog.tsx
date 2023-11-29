@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
@@ -28,10 +28,7 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 
-const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistory: boolean; isDim: boolean }>()((
-    theme,
-    { currentTab, showHistory, isDim },
-) => {
+const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
     const darkBackgroundColor = isDim ? '#38414b' : '#292929'
     return {
@@ -42,7 +39,7 @@ const useStyles = makeStyles<{ currentTab: 'tokens' | 'collectibles'; showHistor
             },
 
             overflowX: 'hidden',
-            overflowY: !showHistory && currentTab === 'tokens' ? 'hidden' : 'auto',
+            overflowY: scrollY ? 'auto' : 'hidden',
         },
         abstractTabWrapper: {
             width: '100%',
@@ -74,18 +71,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId: _chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const approvalDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
+    const { account, chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const definition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)
-    const { classes } = useStyles({ currentTab, showHistory, isDim: mode === 'dim' })
+    const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
     const chainIdList: ChainId[] = useMemo(() => {
-        return currentTab === tabs.tokens ?
-                approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
-            :   [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
-    }, [currentTab === tabs.tokens, approvalDefinition?.enableRequirement.web3])
-    const chainId = chainIdList.includes(_chainId) ? _chainId : ChainId.Mainnet
+        if (currentTab === tabs.tokens)
+            return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
+        return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+    }, [currentTab === tabs.tokens, definition?.enableRequirement.web3])
+    const chainId = chainIdList.includes(contextChainId) ? contextChainId : ChainId.Mainnet
 
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
@@ -95,11 +92,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
 
-    const onClose = useCallback(() => {
+    const handleClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
         props.onClose()
-    }, [props, step])
+    }, [props.onClose, step])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const lastRecognized = useLastRecognizedIdentity()
@@ -132,28 +129,29 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
-            onClose()
+            handleClose()
         },
-        [senderName],
+        [senderName, handleClose],
     )
 
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
         if (step === CreateRedPacketPageStep.NewRedPacketPage) {
-            onClose()
+            handleClose()
             if (props.source === PluginID.SmartPay) {
                 CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
             }
         }
-    }, [step, props.source])
+    }, [step, props.source === PluginID.SmartPay, handleClose])
+    const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const onNext = useCallback(() => {
-        if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
-    }, [step])
+        if (isCreateStep) setStep(CreateRedPacketPageStep.ConfirmPage)
+    }, [isCreateStep])
     const onDialogClose = useCallback(() => {
-        openSelectNFTDialog ? setOpenSelectNFTDialog(false)
-        : openNFTConfirmDialog ? setOpenNFTConfirmDialog(false)
-        : showHistory ? setShowHistory(false)
-        : onBack()
+        if (openSelectNFTDialog) return setOpenSelectNFTDialog(false)
+        if (openNFTConfirmDialog) return setOpenNFTConfirmDialog(false)
+        if (showHistory) return setShowHistory(false)
+        onBack()
     }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
@@ -168,7 +166,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onCreateOrSelect],
     )
 
-    const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const title =
         showHistory ? t.history()
         : openSelectNFTDialog ? t.nft_select_collection()
@@ -243,7 +240,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     <RedPacketERC20Form
                                         expectedChainId={chainId}
                                         origin={settings}
-                                        onClose={onClose}
+                                        onClose={handleClose}
                                         onNext={onNext}
                                         onChange={_onChange}
                                         gasOption={gasOption}
@@ -258,7 +255,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         setOpenSelectNFTDialog={setOpenSelectNFTDialog}
                                         setOpenNFTConfirmDialog={setOpenNFTConfirmDialog}
                                         openNFTConfirmDialog={openNFTConfirmDialog}
-                                        onClose={onClose}
+                                        onClose={handleClose}
                                         setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
                                         gasOption={gasOption}
                                         onGasOptionChange={handleGasSettingChange}
@@ -266,7 +263,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory ?
-                                <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
+                                <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={handleClose} />
                             :   null}
                         </>
                     :   null}
@@ -274,7 +271,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     {step === CreateRedPacketPageStep.ConfirmPage ?
                         <RedPacketConfirmDialog
                             expectedChainId={chainId}
-                            onClose={onClose}
+                            onClose={handleClose}
                             onBack={onBack}
                             onCreated={handleCreated}
                             settings={settings}
