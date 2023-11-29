@@ -26,7 +26,6 @@ const polyfillsFolderPath = join(outputPath, './js/polyfills')
  */
 function Configuration(env, argv) {
     const mode = env.WEBPACK_SERVE ? 'development' : 'production'
-    const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
     return {
         mode,
         name: 'mask',
@@ -122,13 +121,6 @@ function Configuration(env, argv) {
                 'process.env.NODE_DEBUG': 'undefined',
                 'process.version': JSON.stringify('v20.0.0'),
                 'process.browser': 'true',
-                'process.env.BUILD_DATE': JSON.stringify(BUILD_DATE),
-                'process.env.VERSION': JSON.stringify(VERSION),
-                'process.env.COMMIT_HASH': JSON.stringify(COMMIT_HASH),
-                'process.env.COMMIT_DATE': JSON.stringify(COMMIT_DATE),
-                'process.env.BRANCH_NAME': JSON.stringify(BRANCH_NAME),
-                'process.env.DIRTY': JSON.stringify(DIRTY),
-                'process.env.CHANNEL': JSON.stringify(flags.channel),
             }),
             new CopyPlugin({
                 patterns: [
@@ -140,6 +132,7 @@ function Configuration(env, argv) {
                 ],
             }),
             (() => {
+                const { BRANCH_NAME, BUILD_DATE, COMMIT_DATE, COMMIT_HASH, DIRTY } = getGitInfo()
                 const json = {
                     BRANCH_NAME,
                     BUILD_DATE,

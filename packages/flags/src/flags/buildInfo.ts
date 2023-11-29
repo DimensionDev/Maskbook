@@ -29,7 +29,6 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
         }
     }
 }
-let hasSetup = false
 export let env: BuildInfoFile = {
     BUILD_DATE: process.env.BUILD_DATE,
     VERSION: process.env.VERSION,
@@ -43,11 +42,11 @@ export let env: BuildInfoFile = {
 const [_promise, resolve] = defer<void>()
 export const buildInfoReadyPromise = _promise
 export async function setupBuildInfo(): Promise<void> {
+    if (env) return
     return setupBuildInfoManually(await getBuildInfo())
 }
 export function setupBuildInfoManually(_env: BuildInfoFile) {
-    if (hasSetup) return
-    hasSetup = true
-    env = _env
+    if (env) return
     resolve()
+    env = _env
 }
