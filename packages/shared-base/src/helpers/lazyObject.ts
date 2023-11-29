@@ -3,7 +3,6 @@ export function lazyObject<T extends object>(lazyInit: { [key in keyof T]: () =>
     const desc: any = {}
     for (const key in lazyInit) {
         desc[key] = {
-             
             get: () => {
                 const value = lazyInit[key]()
                 Object.defineProperty(object, key, {
