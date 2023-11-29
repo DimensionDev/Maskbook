@@ -13,6 +13,7 @@ import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import Terser from 'terser-webpack-plugin'
 import { getGitInfo } from './.webpack/git-info.js'
 import CopyPlugin from 'copy-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 const require = createRequire(import.meta.url)
 const __dirname = fileURLToPath(dirname(import.meta.url))
@@ -29,7 +30,7 @@ function Configuration(env, argv) {
     return {
         mode,
         name: 'mask',
-        entry: './src/index.tsx',
+        entry: './src/initialization/index.ts',
         output: {
             filename: '[name].[contenthash].js',
             path: outputPath,
@@ -53,6 +54,7 @@ function Configuration(env, argv) {
         },
         experiments: {
             backCompat: false,
+            futureDefaults: true,
             asyncWebAssembly: true,
             syncImportAssertion: true,
             deferImport: { asyncModule: 'error' },
@@ -79,7 +81,7 @@ function Configuration(env, argv) {
             rules: [
                 {
                     test: /\.css$/i,
-                    use: [require.resolve('style-loader'), require.resolve('css-loader')],
+                    use: [MiniCssExtractPlugin.loader, 'css-loader'],
                 },
                 {
                     test: /\.tsx?$/,
@@ -104,6 +106,7 @@ function Configuration(env, argv) {
             ],
         },
         plugins: [
+            new MiniCssExtractPlugin(),
             new HtmlWebpackPlugin({
                 templateContent: readFileSync(join(__dirname, './.webpack/template.html'), 'utf8'),
                 inject: 'body',
@@ -145,6 +148,11 @@ function Configuration(env, argv) {
                 return emitJSONFile({ content: json, name: 'build-info.json' })
             })(),
         ],
+        node: {
+            global: true,
+            __dirname: false,
+            __filename: false,
+        },
         devServer: {
             historyApiFallback: true,
             client: {

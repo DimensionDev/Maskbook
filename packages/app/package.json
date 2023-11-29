@@ -1,7 +1,13 @@
 {
     "name": "@masknet/app",
     "private": true,
-    "sideEffects": true,
+    "sideEffects": [
+        "./src/initialization/**",
+        "./src/plugin-host/**",
+        "./src/background-worker/**",
+        "./src/index.ts",
+        "./src/styles/**"
+    ],
     "type": "module",
     "exports": {
         ".": null
@@ -98,6 +104,7 @@
         "copy-webpack-plugin": "^11.0.0",
         "css-loader": "^6.8.1",
         "html-webpack-plugin": "^5.5.3",
+        "mini-css-extract-plugin": "^2.7.6",
         "style-loader": "^3.3.3",
         "swc-loader": "^0.2.3",
         "terser-webpack-plugin": "^5.3.9",

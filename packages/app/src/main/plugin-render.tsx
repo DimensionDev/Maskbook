@@ -1,4 +1,4 @@
-import '../plugin-host/enable.js'
+import '../initialization/plugin-host/enable.js'
 
 import type { TypedMessage } from '@masknet/typed-message'
 import { createInjectHooksRenderer } from '@masknet/plugin-infra/dom'
