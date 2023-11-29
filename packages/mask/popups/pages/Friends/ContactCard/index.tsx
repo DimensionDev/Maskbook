@@ -229,3 +229,4 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
         </Box>
     )
 })
+ContactCard.displayName = 'ContactCard'
