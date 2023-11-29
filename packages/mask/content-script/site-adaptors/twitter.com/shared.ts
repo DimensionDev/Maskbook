@@ -39,7 +39,7 @@ export const twitterShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
                 location.assign(url)
             }
         },
-        createPostContext: createSiteAdaptorSpecializedPostContext({
+        createPostContext: createSiteAdaptorSpecializedPostContext(twitterBase.networkIdentifier, {
             hasPayloadLike: (text) => {
                 return TwitterDecoder(text).map(hasPayloadLike).unwrapOr(false)
             },

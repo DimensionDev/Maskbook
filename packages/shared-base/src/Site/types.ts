@@ -7,6 +7,7 @@ export enum EnhanceableSite {
     Instagram = 'instagram.com',
     OpenSea = 'opensea.io',
     Mirror = 'mirror.xyz',
+    Firefly = 'mask.social',
 }
 
 export enum ExtensionSite {

@@ -23,17 +23,16 @@ import type {
     PostContextActions,
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage, makeTypedMessageEmpty, type TypedMessage } from '@masknet/typed-message'
-import { activatedSiteAdaptorUI } from '../ui.js'
 import { resolveFacebookLink } from '../../site-adaptors/facebook.com/utils/resolveFacebookLink.js'
 
-export function createSiteAdaptorSpecializedPostContext(create: PostContextActions) {
+export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, actions: PostContextActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
         const cancel: Array<() => void> = []
         opt.signal?.addEventListener('abort', () => cancel.forEach((fn) => fn?.()))
 
         // #region Mentioned links
         const linksSubscribe: Subscription<string[]> = (() => {
-            const isFacebook = activatedSiteAdaptorUI!.networkIdentifier === EnhanceableSite.Facebook
+            const isFacebook = site === EnhanceableSite.Facebook
             const links = new ValueRef<string[]>(EMPTY_LIST)
 
             function evaluate() {
@@ -54,6 +53,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
+            site,
             postID: opt.postID,
         }
         const postIdentifier = debug({
@@ -78,6 +78,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
+            site,
             postID: author.postID,
 
             get rootNode() {
@@ -94,7 +95,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
 
             identifier: postIdentifier,
             url: mapSubscription(postIdentifier, (id) => {
-                if (id) return create.getURLFromPostIdentifier?.(id) || null
+                if (id) return actions.getURLFromPostIdentifier?.(id) || null
                 return null
             }),
 
@@ -115,7 +116,7 @@ export function createSiteAdaptorSpecializedPostContext(create: PostContextActio
                         extractTextFromTypedMessage(opt.rawMessage.getCurrentValue()).unwrapOr('') +
                         '\n' +
                         [...linksSubscribe.getCurrentValue()].join('\n')
-                    hasMaskPayload.value = create.hasPayloadLike(msg)
+                    hasMaskPayload.value = actions.hasPayloadLike(msg)
                 }
                 evaluate()
                 cancel.push(linksSubscribe.subscribe(evaluate))
@@ -146,7 +147,10 @@ export function createRefsForCreatePostContext() {
     const postMessage = new ValueRef<TypedMessage>(makeTypedMessageEmpty())
     const postMetadataImages = new ObservableSet<string>()
     const postMetadataMentionedLinks = new ObservableMap<unknown, string>()
-    const subscriptions: Omit<PostContextCreation, 'rootElement' | 'actionsElement' | 'suggestedInjectionPoint'> = {
+    const subscriptions: Omit<
+        PostContextCreation,
+        'rootElement' | 'actionsElement' | 'suggestedInjectionPoint' | 'site'
+    > = {
         avatarURL: mapSubscription(createSubscriptionFromValueRef(avatarURL), (x) => {
             if (!x) return null
             if (!URL.canParse(x)) return null

@@ -8,7 +8,7 @@ import { mirrorShared } from '../shared.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
-import { PostIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
@@ -88,6 +88,7 @@ async function registerPostCollectorInner(
                     refs.postBy.value = result.writers?.author.identifier || null
                     refs.nickname.value = result.writers?.author.nickname || null
                     refs.avatarURL.value = result.writers?.author.avatar || null
+                    refs.site = EnhanceableSite.Mirror
                     refs.postCoAuthors.value =
                         result?.writers?.coAuthors
                             .map(
