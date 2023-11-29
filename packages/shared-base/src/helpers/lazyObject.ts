@@ -5,7 +5,6 @@ export function lazyObject<T extends object>(lazyInit: { [key in keyof T]: () =>
         desc[key] = {
             // eslint-disable-next-line @typescript-eslint/no-loop-func
             get: () => {
-                console.debug('lazyObject', object, key, 'eval')
                 const value = lazyInit[key]()
                 Object.defineProperty(object, key, {
                     value,
