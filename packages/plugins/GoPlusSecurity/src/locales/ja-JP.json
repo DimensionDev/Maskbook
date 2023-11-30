@@ -1,1 +1,7 @@
-{}
+{
+    "__plugin_name": "セキュリティを確認",
+    "powered_by_go_plus": "Go＋により提供されています+",
+    "powered_by": "以下により提供されています",
+    "go_plus": "Go+",
+    "high_risk": "高リスク"
+}
