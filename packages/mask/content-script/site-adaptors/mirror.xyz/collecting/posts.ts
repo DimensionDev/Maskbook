@@ -73,6 +73,7 @@ async function registerPostCollectorInner(
 
             const refs = createRefsForCreatePostContext()
             const postInfo = mirrorShared.utils.createPostContext({
+                site: EnhanceableSite.Mirror,
                 actionsElement: actionsElementProxy,
                 comments: undefined,
                 rootElement: proxy,
@@ -88,7 +89,6 @@ async function registerPostCollectorInner(
                     refs.postBy.value = result.writers?.author.identifier || null
                     refs.nickname.value = result.writers?.author.nickname || null
                     refs.avatarURL.value = result.writers?.author.avatar || null
-                    refs.site = EnhanceableSite.Mirror
                     refs.postCoAuthors.value =
                         result?.writers?.coAuthors
                             .map(

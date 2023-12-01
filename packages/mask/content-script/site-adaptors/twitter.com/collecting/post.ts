@@ -2,7 +2,7 @@ import { memoize } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { IntervalWatcher } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     FlattenTypedMessage,
     extractTextFromTypedMessage,
@@ -96,6 +96,7 @@ function registerPostCollectorInner(
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) return
             const refs = createRefsForCreatePostContext()
             const info = twitterShared.utils.createPostContext({
+                site: EnhanceableSite.Twitter,
                 comments: undefined,
                 rootElement: proxy,
                 isFocusing: isDetailTweet(tweetNode),
