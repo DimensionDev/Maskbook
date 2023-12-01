@@ -25,7 +25,7 @@ export function useValueRefReactQuery<T>(key: `@@${string}`, ref: ValueRefWithRe
     })
     useEffect(() => {
         refetch()
-        ref.addListener(() => refetch())
+        return ref.addListener(() => refetch())
     }, [refetch, ref])
     useDebugValue(data)
     return data
