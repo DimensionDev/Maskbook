@@ -1,6 +1,6 @@
 import { type DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { type TypedMessage, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/typed-message'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { startWatch } from '../../../utils/startWatch.js'
 import { creator } from '../../../site-adaptor-infra/utils.js'
@@ -26,6 +26,7 @@ function collectPostsInstagramInner(
         new MutationObserverWatcher(posts).useForeach((node, key, metadata) => {
             const { subscriptions, ...info } = createRefsForCreatePostContext()
             const postInfo = instagramShared.utils.createPostContext({
+                site: EnhanceableSite.Instagram,
                 comments: undefined,
                 rootElement: metadata,
                 suggestedInjectionPoint:

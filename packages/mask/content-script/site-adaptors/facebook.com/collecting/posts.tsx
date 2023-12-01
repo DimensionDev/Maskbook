@@ -11,6 +11,7 @@ import { facebookShared } from '../shared.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { collectNodeText } from '../../../utils/index.js'
 import { startWatch } from '../../../utils/startWatch.js'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(
     isMobileFacebook ? '.story_body_container > div' : '[role=article]  [id]  span[dir="auto"]',
@@ -74,6 +75,7 @@ function collectPostsFacebookInner(
 
             const { subscriptions, ...info } = createRefsForCreatePostContext()
             const postInfo = facebookShared.utils.createPostContext({
+                site: EnhanceableSite.Facebook,
                 rootElement: rootProxy,
                 suggestedInjectionPoint: metadata.realCurrent!,
                 signal,

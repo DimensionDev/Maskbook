@@ -7,7 +7,7 @@ import {
     makeTypedMessageTupleFromList,
     makeTypedMessageImage,
 } from '@masknet/typed-message'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { creator } from '../../../site-adaptor-infra/utils.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { untilElementAvailable } from '../../../utils/untilElementAvailable.js'
@@ -50,6 +50,7 @@ function collectPostsMindsInner(
 
             const { subscriptions, ...info } = createRefsForCreatePostContext()
             const postInfo = mindsShared.utils.createPostContext({
+                site: EnhanceableSite.Minds,
                 comments: { commentBoxSelector, commentsSelector },
                 rootElement: metadata,
                 suggestedInjectionPoint: node,
