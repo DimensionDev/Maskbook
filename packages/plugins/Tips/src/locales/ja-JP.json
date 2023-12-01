@@ -1,1 +1,14 @@
-{}
+{
+    "tips": "チップ",
+    "tip_to": "宛先",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "copy_success": "コピー完了",
+    "description": "ソーシャルメディア上の <Link>Next.ID</Link> 検証済みユーザーに暗号またはNFTのヒントを贈ります。",
+    "default": "デフォルト",
+    "gas_fee": "ガス料金",
+    "token_insufficient_balance": "残高が不足しています",
+    "manage_wallet": "ウォレットを管理",
+    "failed_to_transfer_nft": "ネットワークエラーまたはスマートコントラクトを実行できませんでした。",
+    "save": "保存"
+}
