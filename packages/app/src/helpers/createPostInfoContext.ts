@@ -8,6 +8,7 @@ import {
     EMPTY_ARRAY,
     ValueRefWithReady,
     createConstantSubscription,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import { makeTypedMessageEmpty, makeTypedMessageTuple } from '@masknet/typed-message'
 
@@ -15,6 +16,7 @@ const emptyValueRef = new ValueRefWithReady<any>()
 
 export function createPostInfoContext(): PostInfo {
     return {
+        site: EnhanceableSite.App,
         nickname: NULL,
         avatarURL: NULL,
         author: NULL,
