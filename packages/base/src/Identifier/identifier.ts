@@ -21,7 +21,6 @@ export abstract class Identifier {
      *
      * Note:
      * group: has removed, if you want to add a new identifier for grouping, please choose another prefix.
-     * @internal
      */
     static from(input: string | undefined | null): Option<Identifier> {
         if (!input) return None
