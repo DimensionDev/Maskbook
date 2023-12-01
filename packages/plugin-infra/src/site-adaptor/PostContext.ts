@@ -114,13 +114,10 @@ export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo
 }
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
-    [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T> ?
-        T extends (...args: any) => any ?
-            T
-        :   Readonly<T>
-    : PostInfo[key] extends ObservableSet<infer T> ? ReadonlyArray<Readonly<T>>
-    : PostInfo[key] extends ObservableMap<any, infer T> ? ReadonlyArray<Readonly<T>>
-    : PostInfo[key] extends Subscription<infer T> ? Readonly<T>
+    [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T> ? T
+    : PostInfo[key] extends ObservableSet<infer T> ? readonly T[]
+    : PostInfo[key] extends ObservableMap<any, infer T> ? readonly T[]
+    : PostInfo[key] extends Subscription<infer T> ? T
     : PostInfo[key]
 } = {
     __proto__: new Proxy(
