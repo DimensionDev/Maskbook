@@ -20,7 +20,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { useSharedTrans } from '../../../locales/index.js'
-import { SelectProviderModal } from '../../../index.js'
+import { SelectProviderModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
