@@ -16,10 +16,10 @@ const emptyValueRef = new ValueRefWithReady<any>()
 
 export function createPostInfoContext(): PostInfo {
     return {
-        site: EnhanceableSite.App,
         nickname: NULL,
         avatarURL: NULL,
         author: NULL,
+        site: EnhanceableSite.App,
         postID: NULL,
 
         get rootNode() {

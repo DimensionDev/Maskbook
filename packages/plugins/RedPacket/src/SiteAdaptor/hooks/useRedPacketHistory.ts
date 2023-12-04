@@ -1,15 +1,18 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useWallet } from '@masknet/web3-hooks-base'
-import { RedPacket, TheGraphRedPacket, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3, RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
 import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/types'
 import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
-import { useQuery } from '@tanstack/react-query'
-import { RedPacketRPC } from '../../messages.js'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import { RedPacketRPC } from '../../messages.js'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
-export function useRedPacketHistory(address: string, chainId: ChainId) {
+export function useRedPacketHistory(
+    address: string,
+    chainId: ChainId,
+): UseQueryResult<RedPacketJSONPayloadFromChain[]> {
     const wallet = useWallet()
     const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT, HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
     return useQuery({

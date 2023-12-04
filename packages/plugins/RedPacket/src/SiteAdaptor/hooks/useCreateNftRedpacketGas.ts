@@ -6,14 +6,14 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { toFixed } from '@masknet/web3-shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 
 export function useCreateNFTRedpacketGas(
     message: string,
     name: string,
     contractAddress: string,
     tokenIdList: string[],
-) {
+): UseQueryResult<string | undefined> {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nftRedPacketContract = useNftRedPacketContract(chainId)
 

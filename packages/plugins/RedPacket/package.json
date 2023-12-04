@@ -36,5 +36,8 @@
     "react-use": "^17.4.0",
     "web3-core": "1.10.2",
     "web3-utils": "1.10.2"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.8.7"
   }
 }
