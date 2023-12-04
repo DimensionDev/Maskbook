@@ -1,5 +1,4 @@
 import { compact } from 'lodash-es'
-import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
@@ -25,10 +24,6 @@ function getSolanaDomainAddress(domain: string) {
 }
 
 export class SolanaIdentityService extends IdentityServiceState<ChainId> {
-    constructor(protected context: WalletAPI.IOContext) {
-        super()
-    }
-
     protected override async getFromRemote(identity: SocialIdentity) {
         const { bio = '', nickname = '' } = identity
         const address = getSolanaAddress(bio)

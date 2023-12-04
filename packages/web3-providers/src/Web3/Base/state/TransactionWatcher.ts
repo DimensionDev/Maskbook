@@ -1,7 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { WalletAPI } from '../../../entry-types.js'
 import { mergeSubscription, type NetworkPluginID } from '@masknet/shared-base'
 import {
     type TransactionChecker,
@@ -75,7 +74,6 @@ export abstract class TransactionWatcherState<ChainId extends PropertyKey, Trans
     public emitter: Emitter<WatchEvents<ChainId, Transaction>> = new Emitter()
 
     constructor(
-        protected context: WalletAPI.IOContext,
         protected subscriptions: {
             chainId: Subscription<ChainId>
             transactions: Subscription<Array<RecentTransaction<ChainId, Transaction>>>

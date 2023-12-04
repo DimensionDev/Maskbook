@@ -1,5 +1,4 @@
 import type { Subscription } from 'use-subscription'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     mapSubscription,
     mergeSubscription,
@@ -32,7 +31,6 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
-        protected context: WalletAPI.IOContext,
         protected chainIds: ChainId[],
         protected subscriptions: {
             account?: Subscription<string>

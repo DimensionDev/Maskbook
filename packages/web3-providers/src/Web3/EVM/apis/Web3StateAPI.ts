@@ -20,16 +20,16 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     const Provider_ = await Provider.EVMProvider.new(context)
 
     const state: Web3State = lazyObject({
-        Settings: () => new Settings.EVMSettings(context),
+        Settings: () => new Settings.EVMSettings(),
         Provider: () => Provider_,
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
-        Network: () => new Network.EVMNetwork(context),
-        AddressBook: () => new AddressBook.EVMAddressBook(context),
-        IdentityService: () => new IdentityService.EVMIdentityService(context),
-        NameService: () => new NameService.EVMNameService(context),
+        Network: () => new Network.EVMNetwork(),
+        AddressBook: () => new AddressBook.EVMAddressBook(),
+        IdentityService: () => new IdentityService.EVMIdentityService(),
+        NameService: () => new NameService.EVMNameService(),
         RiskWarning: () =>
-            new RiskWarning.EVMRiskWarning(context, {
+            new RiskWarning.EVMRiskWarning({
                 account: Provider_.account,
             }),
         Message: () => new Message.EVMMessage(context),
@@ -39,13 +39,13 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
                 chainId: Provider_.chainId,
             }),
         Transaction: () =>
-            new Transaction.EVMTransaction(context, {
+            new Transaction.EVMTransaction({
                 chainId: Provider_.chainId,
                 account: Provider_.account,
             }),
         TransactionFormatter: () => new TransactionFormatter.EVMTransactionFormatter(),
         TransactionWatcher: () =>
-            new TransactionWatcher.EVMTransactionWatcher(context, {
+            new TransactionWatcher.EVMTransactionWatcher({
                 chainId: Provider_.chainId!,
                 transactions: state.Transaction!.transactions!,
             }),

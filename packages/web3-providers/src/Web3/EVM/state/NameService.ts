@@ -3,12 +3,12 @@ import { formatEthereumAddress, isValidAddress, isZeroAddress } from '@masknet/w
 import { NameServiceState } from '../../Base/state/NameService.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
-import type { WalletAPI, NameServiceAPI } from '../../../entry-types.js'
+import type { NameServiceAPI } from '../../../entry-types.js'
 import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 
 export class EVMNameService extends NameServiceState {
-    constructor(context: WalletAPI.IOContext) {
-        super(context, {
+    constructor() {
+        super({
             pluginID: NetworkPluginID.PLUGIN_EVM,
             isValidName: (x) => x !== '0x',
             isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),

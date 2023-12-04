@@ -1,5 +1,4 @@
 import type { Subscription } from 'use-subscription'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     InMemoryStorages,
     mapSubscription,
@@ -16,7 +15,6 @@ export abstract class RiskWarningState implements Web3RiskWarningState {
     public approved?: Subscription<boolean>
 
     constructor(
-        protected context: WalletAPI.IOContext,
         protected subscriptions: {
             account?: Subscription<string>
         },

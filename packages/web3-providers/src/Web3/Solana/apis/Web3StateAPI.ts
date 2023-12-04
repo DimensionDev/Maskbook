@@ -12,12 +12,12 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
     const Provider_ = await Provider.SolanaProvider.new(context)
 
     const state: Web3State = lazyObject({
-        AddressBook: () => new AddressBook.SolanaAddressBook(context),
-        IdentityService: () => new IdentityService.SolanaIdentityService(context),
-        Settings: () => new Settings.SolanaSettings(context),
-        Network: () => new Network.SolanaNetwork(context),
+        AddressBook: () => new AddressBook.SolanaAddressBook(),
+        IdentityService: () => new IdentityService.SolanaIdentityService(),
+        Settings: () => new Settings.SolanaSettings(),
+        Network: () => new Network.SolanaNetwork(),
         Transaction: () =>
-            new Transaction.SolanaTransaction(context, {
+            new Transaction.SolanaTransaction({
                 chainId: Provider_.chainId,
                 account: Provider_.account,
             }),

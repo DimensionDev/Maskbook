@@ -18,8 +18,8 @@ import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
-    constructor(context: WalletAPI.IOContext) {
-        super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
+    constructor(private context: WalletAPI.IOContext) {
+        super(NetworkPluginID.PLUGIN_EVM)
     }
 
     protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {

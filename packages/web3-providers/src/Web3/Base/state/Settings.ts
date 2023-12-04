@@ -11,7 +11,6 @@ import {
     SourceType,
     type SettingsState as Web3SettingsState,
 } from '@masknet/web3-shared-base'
-import type { WalletAPI } from '../../../entry-types.js'
 
 interface SettingsStorage {
     currencyType: CurrencyType
@@ -28,13 +27,8 @@ export abstract class SettingsState implements Web3SettingsState {
     public fungibleAssetSourceType: Subscription<SourceType>
     public nonFungibleAssetSourceType: Subscription<SourceType>
 
-    constructor(
-        context: WalletAPI.IOContext,
-        protected options: {
-            pluginID: NetworkPluginID
-        },
-    ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(`${this.options.pluginID}_Settings`, {
+    constructor(protected pluginID: NetworkPluginID) {
+        const { storage } = InMemoryStorages.Web3.createSubScope(`${this.pluginID}_Settings`, {
             currencyType: CurrencyType.USD,
             gasOptionType: GasOptionType.NORMAL,
             fungibleAssetSourceType: SourceType.DeBank,

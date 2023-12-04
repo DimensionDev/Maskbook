@@ -7,7 +7,6 @@ import {
     type MessageState as Web3MessageState,
 } from '@masknet/web3-shared-base'
 import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export abstract class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
     public storage: StorageObject<{
@@ -16,13 +15,8 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
 
     public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
-    constructor(
-        protected context: WalletAPI.IOContext,
-        protected options: {
-            pluginID: NetworkPluginID
-        },
-    ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Message`, {
+    constructor(protected pluginID: NetworkPluginID) {
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.pluginID}_Message`, {
             messages: {},
         })
 

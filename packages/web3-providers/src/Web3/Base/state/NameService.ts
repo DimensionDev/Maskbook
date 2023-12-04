@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { type StorageItem, NameServiceID, InMemoryStorages, type NetworkPluginID } from '@masknet/shared-base'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
-import type { NameServiceAPI, WalletAPI } from '../../../entry-types.js'
+import type { NameServiceAPI } from '../../../entry-types.js'
 
 export abstract class NameServiceState<
     DomainBook extends Record<string, string> = Record<string, string>,
@@ -11,7 +11,6 @@ export abstract class NameServiceState<
     public storage: StorageItem<DomainBooks>
 
     constructor(
-        protected context: WalletAPI.IOContext,
         protected options: {
             pluginID: NetworkPluginID
             isValidName(a: string): boolean
@@ -100,7 +99,5 @@ export abstract class NameServiceState<
         return
     }
 
-    createResolvers(domainOnly?: boolean): NameServiceAPI.Provider[] {
-        throw new Error('Method not implemented.')
-    }
+    abstract createResolvers(domainOnly?: boolean): NameServiceAPI.Provider[]
 }

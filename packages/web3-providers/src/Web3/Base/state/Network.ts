@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '../../../Manager/index.js'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     mapSubscription,
     PersistentStorages,
@@ -30,13 +29,8 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
     public network: Subscription<ReasonableNetwork<ChainId, SchemaType, NetworkType>>
     public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
-    constructor(
-        protected context: WalletAPI.IOContext,
-        protected options: {
-            pluginID: NetworkPluginID
-        },
-    ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Network`, {
+    constructor(protected pluginID: NetworkPluginID) {
+        const { storage } = PersistentStorages.Web3.createSubScope(`${this.pluginID}_Network`, {
             networkID: this.DEFAULT_NETWORK_ID,
             networks: {},
         })
@@ -50,8 +44,8 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
             const customizedNetworks = Object.values(storage).sort(
                 (a, z) => z.createdAt.getTime() - a.createdAt.getTime(),
             )
-            const registeredChains = getRegisteredWeb3Chains(this.options.pluginID)
-            const registeredNetworks = getRegisteredWeb3Networks(this.options.pluginID)
+            const registeredChains = getRegisteredWeb3Chains(this.pluginID)
+            const registeredNetworks = getRegisteredWeb3Networks(this.pluginID)
 
             return [
                 ...registeredNetworks

@@ -12,12 +12,12 @@ export async function createFlowState(context: WalletAPI.IOContext): Promise<Web
     const Provider_ = await Provider.FlowProvider.new(context)
 
     const state: Web3State = lazyObject({
-        AddressBook: () => new AddressBook.FlowAddressBook(context),
-        IdentityService: () => new IdentityService.FlowIdentityService(context),
-        Settings: () => new Settings.FlowSettings(context),
-        Network: () => new Network.FlowNetwork(context),
+        AddressBook: () => new AddressBook.FlowAddressBook(),
+        IdentityService: () => new IdentityService.FlowIdentityService(),
+        Settings: () => new Settings.FlowSettings(),
+        Network: () => new Network.FlowNetwork(),
         Transaction: () =>
-            new Transaction.FlowTransaction(context, {
+            new Transaction.FlowTransaction({
                 chainId: Provider_.chainId,
                 account: Provider_.account,
             }),
