@@ -17,6 +17,7 @@
     "@masknet/base": "workspace:^",
     "@masknet/encryption": "workspace:^",
     "@masknet/public-api": "workspace:^",
+    "@masknet/sdk": "workspace:^",
     "@masknet/typed-message": "workspace:^",
     "@servie/events": "^3.0.0",
     "@types/dompurify": "^3.0.2",

@@ -72,7 +72,6 @@
       "@masknet/gun-utils": ["./packages/gun-utils/src/index.ts"],
       "@masknet/injected-script": ["./packages/injected-script/sdk/index.ts"],
       "@masknet/sdk": ["./packages/mask-sdk/server/index.ts"],
-      "@masknet/sdk/shared": ["./packages/mask-sdk/shared/index.ts"],
       "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
       "@masknet/plugin-infra/dom/context": ["./packages/plugin-infra/src/dom/context.ts"],
       "@masknet/plugin-infra/background-worker": ["./packages/plugin-infra/src/entry-background-worker.ts"],

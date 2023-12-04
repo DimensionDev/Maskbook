@@ -3,6 +3,7 @@ import type { Serialization } from 'async-call-rpc'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { EncryptError, DecryptError } from '@masknet/encryption'
+import { MaskEthereumProviderRpcError } from '@masknet/sdk'
 
 import { blob, builtin, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '@masknet/base'
@@ -45,13 +46,28 @@ function setup() {
         'MaskEncryptError',
         (x) => x instanceof EncryptError,
         (e: EncryptError) => ({
-            cause: (e as any).cause,
+            cause: e.cause,
             message: e.message,
             stack: e.stack,
         }),
         (o) => {
             const e = new EncryptError(o.message, o.cause)
             e.stack = o.stack
+            return e
+        },
+    )
+    registerSerializableClass(
+        'MaskEthereumProviderRpcError',
+        (x) => x instanceof MaskEthereumProviderRpcError,
+        (e: MaskEthereumProviderRpcError) => ({
+            cause: e.cause,
+            message: e.message,
+            code: e.code,
+            data: e.data,
+        }),
+        (o) => {
+            const e = new MaskEthereumProviderRpcError(o.code, o.message, { cause: o.cause, data: o.data })
+            e.stack = ''
             return e
         },
     )
