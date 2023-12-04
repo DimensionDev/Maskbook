@@ -1174,5 +1174,9 @@
     "collectible_title": "コレクティブ",
     "collectible_description": "説明",
     "collectible_properties": "プロパティ",
-    "collectible_last_sale_price": "プロパティ"
+    "collectible_last_sale_price": "プロパティ",
+    "about_collection": "{{- name}} の数",
+    "hide_collectible": "{{-name}} を非表示",
+    "hide_collectible_description": "{{- name}}を非表示にしますか？このNFTをいつでも再追加することで再表示できます。",
+    "add_new_address_to_an_existing_group": "既存のグループに新しいアドレスを追加"
 }
