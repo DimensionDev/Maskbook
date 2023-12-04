@@ -9,7 +9,7 @@
   "references": [
     { "path": "../base/tsconfig.json" },
     { "path": "../encryption/tsconfig.json" },
-    { "path": "../mask-sdk/shared/tsconfig.json" },
+    { "path": "../mask-sdk/server/tsconfig.json" },
     { "path": "../public-api/tsconfig.json" },
     { "path": "../typed-message/base/tsconfig.json" }
   ]
