@@ -28,7 +28,9 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
         }
     }
 }
-export let env: BuildInfoFile
+export let env: BuildInfoFile = {
+    channel: 'stable',
+}
 const [_promise, resolve] = defer<void>()
 export const buildInfoReadyPromise = _promise
 export async function setupBuildInfo(): Promise<void> {
