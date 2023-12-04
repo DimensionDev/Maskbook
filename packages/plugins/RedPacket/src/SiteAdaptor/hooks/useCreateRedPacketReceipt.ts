@@ -6,13 +6,15 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 
-export function useCreateRedPacketReceipt(txid: string) {
+type Result = { rpid: string; creation_time: number } | null
+
+export function useCreateRedPacketReceipt(txid: string): UseQueryResult<Result> {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
 
-    return useQuery({
+    const query = useQuery({
         queryKey: ['red-packet-create-receipt', chainId, txid],
         queryFn: async () => {
             if (!txid) return null
@@ -33,7 +35,8 @@ export function useCreateRedPacketReceipt(txid: string) {
             return {
                 rpid: eventParams.CreationSuccess.id ?? '',
                 creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
-            }
+            } satisfies Result
         },
     })
+    return query
 }
