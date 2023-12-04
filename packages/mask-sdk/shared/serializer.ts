@@ -45,7 +45,7 @@ const [MaskEthereumProviderRpcErrorEncode, MaskEthereumProviderRpcErrorDecode] =
     ([cause, code, data, message]) => {
         return new MaskEthereumProviderRpcError(Number(code), String(message), {
             cause: serializer.deserialization(cause),
-            // data: serializer.deserialization(data),
+            data: serializer.deserialization(data),
         })
     },
 )

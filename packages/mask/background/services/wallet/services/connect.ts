@@ -7,7 +7,7 @@ import {
     ErrorMessages,
 } from '@masknet/sdk'
 import { walletDatabase } from '../database/Plugin.db.js'
-import { produce } from 'immer'
+import { produce, enableMapSet } from 'immer'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 import { EVMWalletProviders } from '@masknet/web3-providers'
@@ -15,6 +15,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { defer, type DeferTuple } from '@masknet/kit'
 import type { WalletGrantedPermission } from '../database/types.js'
 import { omit } from 'lodash-es'
+import { Err, Ok, type Result } from 'ts-results-es'
 
 // https://eips.ethereum.org/EIPS/eip-2255
 export async function SDK_EIP2255_wallet_getPermissions(origin: string): Promise<EIP2255Permission[]> {
@@ -27,13 +28,13 @@ const requests = new Map<
     {
         origin: string
         request: EIP2255PermissionRequest
-        promise: DeferTuple<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>
+        promise: DeferTuple<Result<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>>
     }
 >()
 export async function SDK_EIP2255_wallet_requestPermissions(
     origin: string,
     request: EIP2255PermissionRequest,
-): Promise<EIP2255RequestedPermission[]> {
+): Promise<Result<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>> {
     assertOrigin(origin)
     for (const method in request) {
         if (method !== 'eth_accounts') {
@@ -66,6 +67,7 @@ export async function SDK_getEIP2255PermissionRequestDetail(id: string) {
 export async function SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
     if (!requests.has(id)) throw new Error('Invalid request id')
     const { origin, promise } = requests.get(id)!
+    enableMapSet()
     for (const wallet of grantedWalletAddress) {
         const data = await walletDatabase.get('granted_permission', wallet)
         const newData = produce<WalletGrantedPermission>(
@@ -87,7 +89,18 @@ export async function SDK_grantEIP2255Permission(id: string, grantedWalletAddres
         )
         if (data !== newData) await walletDatabase.add(newData)
     }
-    promise[1](EIP2255PermissionsOfWallets(origin, grantedWalletAddress))
+    promise[1](Ok(EIP2255PermissionsOfWallets(origin, grantedWalletAddress)))
+}
+
+export async function SDK_denyEIP2255Permission(id: string) {
+    if (!requests.has(id)) throw new Error('Invalid request id')
+    const { promise } = requests.get(id)!
+    enableMapSet()
+    promise[1](
+        Err(
+            new MaskEthereumProviderRpcError(ErrorCode.UserRejectedTheRequest, ErrorMessages.user_rejected_the_request),
+        ),
+    )
 }
 
 export async function disconnectWalletFromOrigin(wallet: string, origin: string, type: 'any' | 'sdk' | 'internal') {
@@ -112,6 +125,7 @@ export async function disconnectWalletFromOrigin(wallet: string, origin: string,
 }
 export async function disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal') {
     assertOrigin(origin)
+    enableMapSet()
     if (type === 'any' || type === 'sdk') {
         for await (const cursor of walletDatabase.iterate_mutate('granted_permission')) {
             if (!cursor.value.origins.has(origin)) continue
@@ -146,6 +160,7 @@ export async function disconnectAllOriginsConnectedFromWallet(wallet: string, ty
 
 export async function internalWalletConnect(wallet: string, origin: string) {
     assertOrigin(origin)
+    enableMapSet()
     const origins = (await walletDatabase.get('internal_connected', wallet))?.origins
 
     if (!origins) {

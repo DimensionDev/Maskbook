@@ -6,6 +6,7 @@ import {
     ErrorCode as C,
     ErrorMessages as M,
 } from '@masknet/sdk'
+import { Err, Ok } from 'ts-results-es'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -36,16 +37,33 @@ const methods = {
 }
 Object.setPrototypeOf(methods, null)
 
-export async function eth_request(request: unknown) {
-    if (typeof request !== 'object' || request === null) throw new E(C.InvalidRequest, M.FirstArgumentIsNotObject)
+export async function eth_request(request: unknown): Promise<{ e?: E | null; d?: unknown }> {
+    if (typeof request !== 'object' || request === null)
+        return { e: new E(C.InvalidRequest, M.FirstArgumentIsNotObject) }
 
     const { method } = request as any
-    if (typeof method !== 'string' || !method) throw new E(C.InvalidRequest, M.FirstArgumentMethodFieldInvalid)
-    if (!(method in methods)) throw new E(C.MethodNotFound, M.UnknownMethod.replaceAll('$', method))
+    if (typeof method !== 'string' || !method) return { e: new E(C.InvalidRequest, M.FirstArgumentMethodFieldInvalid) }
+    if (!(method in methods)) return { e: new E(C.MethodNotFound, M.UnknownMethod.replaceAll('$', method)) }
 
     const { params } = request as any
-    if (params !== undefined && !Array.isArray(params)) throw new E(C.InvalidRequest, M.ParamsIsNotArray)
+    if (params !== undefined && !Array.isArray(params)) return { e: new E(C.InvalidRequest, M.ParamsIsNotArray) }
 
     const f = Reflect.get(methods, method)
-    return f(...params)
+    try {
+        let result: unknown
+        if (params === undefined) result = await f()
+        else result = await f(...params)
+        // TODO: async-rpc-call should be able to serialize error without touching it (by using the serializer defined)
+        if (result instanceof Err) {
+            if (result.error instanceof E) return { e: result.error }
+            console.error(result)
+            throw new Error('internal error')
+        }
+        if (result instanceof Ok) return { d: result.value }
+        return { d: result }
+    } catch (error) {
+        if (error instanceof E) return { e: error }
+        console.error(error)
+        return { e: new E(C.InternalError, M.InternalError) }
+    }
 }

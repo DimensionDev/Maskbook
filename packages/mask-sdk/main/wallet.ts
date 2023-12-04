@@ -1,4 +1,4 @@
-import { contentScript } from './bridge.js'
+import { contentScript, readyPromise } from './bridge.js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import image from '../../icons/brands/MaskBlue.svg'
@@ -31,26 +31,33 @@ class EthereumEventEmitter extends EventTarget implements Ethereum.MaskEthereumE
     }
 }
 class MaskProvider extends EthereumEventEmitter implements Ethereum.ProviderObject {
-    async request(param: any): Promise<any> {
-        return contentScript.eth_request(param)
+    request(param: any): Promise<any> {
+        const stack = new Error().stack?.replace(/^Error\n/, '')
+        return contentScript.eth_request(param).then((result) => {
+            if (result.e) {
+                result.e.stack = `MaskEthereumProviderRpcError: ${result.e.message}\n${stack}`
+                throw result.e
+            }
+            return result.d
+        })
     }
 }
 export const ethereum = new MaskProvider()
 
-{
-    const detail: Ethereum.EIP6963ProviderDetail = {
-        info: {
-            uuid: 'f113ee3f-49e3-4576-8f77-c3991d82af41',
-            name: 'Mask Wallet',
-            rdns: 'io.mask',
-            icon: String(image),
-        },
-        provider: ethereum,
-    }
-    Object.freeze(detail)
-    Object.freeze(detail.info)
-    const event = new CustomEvent('eip6963:announceProvider', { detail })
-
-    window.dispatchEvent(event)
-    window.addEventListener('eip6963:requestProvider', () => window.dispatchEvent(event))
+const detail: Ethereum.EIP6963ProviderDetail = {
+    info: {
+        uuid: 'f113ee3f-49e3-4576-8f77-c3991d82af41',
+        name: 'Mask Wallet',
+        rdns: 'io.mask',
+        icon: String(image),
+    },
+    provider: ethereum,
 }
+Object.freeze(detail)
+Object.freeze(detail.info)
+const event = () => new CustomEvent('eip6963:announceProvider', { detail })
+
+readyPromise.then(() => {
+    window.dispatchEvent(event())
+    window.addEventListener('eip6963:requestProvider', () => window.dispatchEvent(event()))
+})

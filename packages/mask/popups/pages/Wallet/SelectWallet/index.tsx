@@ -77,6 +77,12 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
+            if (external_request_id && external_request) {
+                // reject a request does not revoke the permission already granted.
+                // MetaMask has this behavior, we should follow them.
+                await Services.Wallet.SDK_denyEIP2255Permission(external_request_id)
+                return Services.Helper.removePopupWindow()
+            }
             // TODO Open the popup via a RPC request, and reject the request
             const rejected = await Promise.allSettled([
                 Promise.reject({
@@ -86,7 +92,7 @@ const SelectWallet = memo(function SelectWallet() {
             await Services.Wallet.resolveMaskAccount(rejected[0])
             await Services.Helper.removePopupWindow()
         }
-    }, [isVerifyWalletFlow])
+    }, [isVerifyWalletFlow, external_request_id, external_request])
 
     const handleConfirm = useCallback(async () => {
         if (external_request_id && external_request) {
@@ -164,7 +170,7 @@ const SelectWallet = memo(function SelectWallet() {
                 <Box textAlign="center" paddingX={2}>
                     Connecting: <i>{external_request.origin}</i>
                     <br />
-                    Be aware of fraud!
+                    Please make sure the connected site is not a fraud.
                 </Box>
             :   null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
