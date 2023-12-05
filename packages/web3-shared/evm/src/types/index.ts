@@ -221,6 +221,17 @@ export enum EthereumMethodType {
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+    ETH_FEE_HISTORY = 'eth_feeHistory',
+    ETH_GET_BLOCK_RECEIPTS = 'eth_getBlockReceipts',
+    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH = 'eth_getBlockTransactionCountByHash',
+    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER = 'eth_getBlockTransactionCountByNumber',
+    ETH_GET_PROOF = 'eth_getProof',
+    ETH_GET_STORAGE_AT = 'eth_getStorageAt',
+    ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX = 'eth_getTransactionByBlockHashAndIndex',
+    ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX = 'eth_getTransactionByBlockNumberAndIndex',
+    ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
+    ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
+    ETH_SYNCING = 'eth_syncing',
 
     // EIP-4337
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',

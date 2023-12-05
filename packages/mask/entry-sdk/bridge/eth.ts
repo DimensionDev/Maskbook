@@ -10,8 +10,8 @@ import { Err, Ok } from 'ts-results-es'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
-    readonlyMethods[method] = async (params: unknown[] | undefined) => {
-        return Services.Wallet.send({ jsonrpc: '2.0', method, params })
+    readonlyMethods[method] = async (...params: unknown[]) => {
+        return (await Services.Wallet.send({ jsonrpc: '2.0', method, params })).result
     }
 }
 // Reference:
