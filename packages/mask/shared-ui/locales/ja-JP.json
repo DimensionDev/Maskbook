@@ -1178,5 +1178,6 @@
     "about_collection": "{{- name}} の数",
     "hide_collectible": "{{-name}} を非表示",
     "hide_collectible_description": "{{- name}}を非表示にしますか？このNFTをいつでも再追加することで再表示できます。",
-    "add_new_address_to_an_existing_group": "既存のグループに新しいアドレスを追加"
+    "add_new_address_to_an_existing_group": "既存のグループに新しいアドレスを追加",
+    "or_create_a_new_wallet_group": "または新しいウォレットグループを作成"
 }
