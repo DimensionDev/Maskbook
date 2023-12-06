@@ -66,7 +66,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## [EIP-1102: Opt-in account exposure](https://eips.ethereum.org/EIPS/eip-1102)
 
-- [ ] eth_requestAccounts
+- [x] eth_requestAccounts
 - [ ] (Deprecated) Provider.enable()
 
 ## [EIP-2255: Wallet Permissions System](https://eips.ethereum.org/EIPS/eip-2255)

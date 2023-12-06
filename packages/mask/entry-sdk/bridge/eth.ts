@@ -20,8 +20,18 @@ for (const method of readonlyMethodType) {
 const methods = {
     ...readonlyMethods,
 
-    eth_chainId() {
-        return Services.Wallet.sdk_eth_chainId().then((x) => '0x' + x.toString(16))
+    async eth_chainId() {
+        const chainId = await Services.Wallet.sdk_eth_chainId()
+        return '0x' + chainId.toString(16)
+    },
+    async eth_requestAccounts() {
+        let wallets = await getGrantedWalletAddress()
+        if (wallets.length) return wallets
+        const request = await methods.wallet_requestPermissions({ eth_accounts: {} })
+        if (request instanceof Err) return request
+        wallets = await getGrantedWalletAddress()
+        if (wallets.length) return wallets
+        return new E(C.UserRejectedTheRequest, M.user_rejected_the_request)
     },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
@@ -69,4 +79,19 @@ export async function eth_request(request: unknown): Promise<{ e?: E | null; d?:
         console.error(error)
         return { e: new E(C.InternalError, M.InternalError) }
     }
+}
+
+async function getGrantedWalletAddress() {
+    const wallets: string[] = []
+    for (const permission of await methods.wallet_getPermissions()) {
+        if (permission.parentCapability !== 'eth_accounts') continue
+        for (const caveat of permission.caveats) {
+            if (caveat.type !== 'restrictReturnedAccounts') continue
+            if (!Array.isArray(caveat.value)) continue
+            for (const item of caveat.value) {
+                if (typeof item === 'string') wallets.push(item)
+            }
+        }
+    }
+    return wallets
 }
