@@ -164,7 +164,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 await this.switchChain(chainId)
 
                 if (externalRequestID) {
-                    await this.context?.SDK_grantEIP2255Permission(externalRequestID, [address])
+                    await this.context?.sdk_grantEIP2255Permission(externalRequestID, [address])
                 }
 
                 return {

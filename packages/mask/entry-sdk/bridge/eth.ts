@@ -20,9 +20,22 @@ for (const method of readonlyMethodType) {
 const methods = {
     ...readonlyMethods,
 
+    async eth_chainId() {
+        const chainId = await Services.Wallet.sdk_eth_chainId()
+        return '0x' + chainId.toString(16)
+    },
+    async eth_requestAccounts() {
+        let wallets = await getGrantedWalletAddress()
+        if (wallets.length) return wallets
+        const request = await methods.wallet_requestPermissions({ eth_accounts: {} })
+        if (request instanceof Err) return request
+        wallets = await getGrantedWalletAddress()
+        if (wallets.length) return wallets
+        return new E(C.UserRejectedTheRequest, M.user_rejected_the_request)
+    },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
-        return Services.Wallet.SDK_EIP2255_wallet_getPermissions(location.origin)
+        return Services.Wallet.sdk_EIP2255_wallet_getPermissions(location.origin)
     },
     async wallet_requestPermissions(request: EIP2255PermissionRequest) {
         if (typeof request !== 'object' || request === null) throw new E(C.InvalidParams, M.InvalidMethodParams)
@@ -32,7 +45,7 @@ const methods = {
             if (typeof key !== 'string' || typeof request[key] !== 'object' || request[key] === null)
                 throw new E(C.InvalidParams, M.wallet_requestPermissions_Unknown.replaceAll('$', location.origin))
         }
-        return Services.Wallet.SDK_EIP2255_wallet_requestPermissions(location.origin, request)
+        return Services.Wallet.sdk_EIP2255_wallet_requestPermissions(location.origin, request)
     },
 }
 Object.setPrototypeOf(methods, null)
@@ -66,4 +79,19 @@ export async function eth_request(request: unknown): Promise<{ e?: E | null; d?:
         console.error(error)
         return { e: new E(C.InternalError, M.InternalError) }
     }
+}
+
+async function getGrantedWalletAddress() {
+    const wallets: string[] = []
+    for (const permission of await methods.wallet_getPermissions()) {
+        if (permission.parentCapability !== 'eth_accounts') continue
+        for (const caveat of permission.caveats) {
+            if (caveat.type !== 'restrictReturnedAccounts') continue
+            if (!Array.isArray(caveat.value)) continue
+            for (const item of caveat.value) {
+                if (typeof item === 'string') wallets.push(item)
+            }
+        }
+    }
+    return wallets
 }

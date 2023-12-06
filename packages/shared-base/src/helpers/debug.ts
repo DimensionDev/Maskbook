@@ -5,7 +5,7 @@ class Opaque {
             __proto__: null,
             get ['set globalThis.' + key]() {
                 console.log(`[DEBUG] globalThis.${key} =`, value)
-                ;(globalThis as any)[key] = value
+                Object.defineProperty(globalThis, key, { configurable: true, value, writable: true })
                 return value
             },
             value,
@@ -21,5 +21,11 @@ class Opaque {
  * All value wrapped by this function can only be accessed in the devtools.
  */
 export function setDebugObject(key: string, value: unknown) {
-    ;(globalThis as any)[key] = new Opaque(key, value)
+    const object = new Opaque(key, value)
+    Object.defineProperty(globalThis, key, {
+        configurable: true,
+        get() {
+            console.log(object)
+        },
+    })
 }

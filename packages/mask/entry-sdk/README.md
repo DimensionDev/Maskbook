@@ -11,8 +11,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 - [x] eth_blockNumber
 - [x] eth_call
-- [ ] eth_chainId
-- [ ] eth_coinbase (not supported by infura)
+- [x] eth_chainId
 - [x] eth_estimateGas
 - [x] eth_feeHistory
 - [x] eth_gasPrice
@@ -38,8 +37,10 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 ## Write ETH methods
 
 - [ ] eth_accounts
+- [ ] eth_sign (EIP-191): <https://support.metamask.io/hc/en-us/articles/14764161421467-What-is-eth-sign-and-why-is-it-a-risk->
 - [ ] personal_sign
 - [ ] eth_sendTransaction
+- [ ] ~~eth_signTransaction: MetaMask refuse to add, we should follow them. <https://github.com/MetaMask/metamask-extension/issues/3475>~~
 - [ ] eth_sendRawTransaction
 
 ## ETH methods
@@ -65,7 +66,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## [EIP-1102: Opt-in account exposure](https://eips.ethereum.org/EIPS/eip-1102)
 
-- [ ] eth_requestAccounts
+- [x] eth_requestAccounts
 - [ ] (Deprecated) Provider.enable()
 
 ## [EIP-2255: Wallet Permissions System](https://eips.ethereum.org/EIPS/eip-2255)
@@ -92,4 +93,6 @@ Methods not on a standard track is unlikely to be implemented.
 
 ## Other question
 
+- [ ] eth_coinbase (not supported by infura)
 - [ ] eth_maxPriorityFeePerGas: does not exist / is not available (MetaMask) but in their docs <https://docs.metamask.io/wallet/reference/eth_maxpriorityfeepergas/>
+- [ ] eth_createAccessList: in ETH RPC specification but not in MetaMask.
