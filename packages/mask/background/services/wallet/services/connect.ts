@@ -18,7 +18,7 @@ import { omit } from 'lodash-es'
 import { Err, Ok, type Result } from 'ts-results-es'
 
 // https://eips.ethereum.org/EIPS/eip-2255
-export async function SDK_EIP2255_wallet_getPermissions(origin: string): Promise<EIP2255Permission[]> {
+export async function sdk_EIP2255_wallet_getPermissions(origin: string): Promise<EIP2255Permission[]> {
     const wallets = await getAllConnectedWallets(origin, 'sdk')
     if (!wallets.size) return []
     return EIP2255PermissionsOfWallets(origin, wallets)
@@ -31,7 +31,7 @@ const requests = new Map<
         promise: DeferTuple<Result<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>>
     }
 >()
-export async function SDK_EIP2255_wallet_requestPermissions(
+export async function sdk_EIP2255_wallet_requestPermissions(
     origin: string,
     request: EIP2255PermissionRequest,
 ): Promise<Result<EIP2255RequestedPermission[], MaskEthereumProviderRpcError>> {
@@ -61,10 +61,10 @@ export async function SDK_EIP2255_wallet_requestPermissions(
     }
     return requests.get(id)!.promise[0]
 }
-export async function SDK_getEIP2255PermissionRequestDetail(id: string) {
+export async function sdk_getEIP2255PermissionRequestDetail(id: string) {
     return omit(requests.get(id), 'promise')
 }
-export async function SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
+export async function sdk_grantEIP2255Permission(id: string, grantedWalletAddress: Iterable<string>) {
     if (!requests.has(id)) throw new Error('Invalid request id')
     const { origin, promise } = requests.get(id)!
     enableMapSet()
@@ -92,7 +92,7 @@ export async function SDK_grantEIP2255Permission(id: string, grantedWalletAddres
     promise[1](Ok(EIP2255PermissionsOfWallets(origin, grantedWalletAddress)))
 }
 
-export async function SDK_denyEIP2255Permission(id: string) {
+export async function sdk_denyEIP2255Permission(id: string) {
     if (!requests.has(id)) throw new Error('Invalid request id')
     const { promise } = requests.get(id)!
     enableMapSet()

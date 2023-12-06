@@ -48,6 +48,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         await super.setup(context)
 
         this.walletStorage = PersistentStorages.Web3.createSubScope(
+            // if you change this (don't unless you have migration), please also be aware of packages/mask/background/services/wallet/services/sdk.ts
             `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,
             {
                 account: this.options.getDefaultAccount(),

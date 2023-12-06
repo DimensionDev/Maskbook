@@ -74,7 +74,7 @@ export namespace WalletAPI {
             },
         ): Promise<string>
         /** Connect origin to Mask wallet  */
-        SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
+        sdk_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
 
         /** Select a Mask Wallet account */
         selectMaskWalletAccount(

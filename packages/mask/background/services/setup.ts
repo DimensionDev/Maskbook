@@ -24,6 +24,15 @@ export function startServices() {
     setup('SiteAdaptor', () => import(/* webpackMode: 'eager' */ './site-adaptors/index.js'))
     setup('Settings', () => import(/* webpackMode: 'eager' */ './settings/index.js'), false)
     setup('Wallet', () => import(/* webpackMode: 'eager' */ './wallet/services/index.js'))
+    if (import.meta.webpackHot) {
+        import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('Crypto')))
+        import.meta.webpackHot.accept(['./identity'], () => hmr.dispatchEvent(new Event('Identity')))
+        import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('Backup')))
+        import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('Helper')))
+        import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('Settings')))
+        import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('SiteAdaptor')))
+        import.meta.webpackHot.accept(['./wallet/services'], () => hmr.dispatchEvent(new Event('Wallet')))
+    }
     setDebugObject('Service', DebugService)
 
     const GeneratorService: GeneratorServices = {
@@ -50,16 +59,6 @@ export function startServices() {
         preferLocalImplementation: true,
         thenable: false,
     })
-}
-
-if (import.meta.webpackHot) {
-    import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
-    import.meta.webpackHot.accept(['./identity'], () => hmr.dispatchEvent(new Event('identity')))
-    import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('backup')))
-    import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
-    import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
-    import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('site-adaptors')))
-    import.meta.webpackHot.accept(['./wallet/services/'], () => hmr.dispatchEvent(new Event('wallet')))
 }
 
 function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>, hasLog = true) {

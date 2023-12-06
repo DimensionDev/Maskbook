@@ -20,9 +20,12 @@ for (const method of readonlyMethodType) {
 const methods = {
     ...readonlyMethods,
 
+    eth_chainId() {
+        return Services.Wallet.sdk_eth_chainId().then((x) => '0x' + x.toString(16))
+    },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
-        return Services.Wallet.SDK_EIP2255_wallet_getPermissions(location.origin)
+        return Services.Wallet.sdk_EIP2255_wallet_getPermissions(location.origin)
     },
     async wallet_requestPermissions(request: EIP2255PermissionRequest) {
         if (typeof request !== 'object' || request === null) throw new E(C.InvalidParams, M.InvalidMethodParams)
@@ -32,7 +35,7 @@ const methods = {
             if (typeof key !== 'string' || typeof request[key] !== 'object' || request[key] === null)
                 throw new E(C.InvalidParams, M.wallet_requestPermissions_Unknown.replaceAll('$', location.origin))
         }
-        return Services.Wallet.SDK_EIP2255_wallet_requestPermissions(location.origin, request)
+        return Services.Wallet.sdk_EIP2255_wallet_requestPermissions(location.origin, request)
     },
 }
 Object.setPrototypeOf(methods, null)
