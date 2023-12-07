@@ -24,12 +24,15 @@ const methods = {
         const chainId = await Services.Wallet.sdk_eth_chainId()
         return '0x' + chainId.toString(16)
     },
+    async eth_accounts() {
+        return Services.Wallet.sdk_eth_accounts(location.origin)
+    },
     async eth_requestAccounts() {
-        let wallets = await getGrantedWalletAddress()
+        let wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
         const request = await methods.wallet_requestPermissions({ eth_accounts: {} })
         if (request instanceof Err) return request
-        wallets = await getGrantedWalletAddress()
+        wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
         return new E(C.UserRejectedTheRequest, M.user_rejected_the_request)
     },
@@ -79,19 +82,4 @@ export async function eth_request(request: unknown): Promise<{ e?: E | null; d?:
         console.error(error)
         return { e: new E(C.InternalError, M.InternalError) }
     }
-}
-
-async function getGrantedWalletAddress() {
-    const wallets: string[] = []
-    for (const permission of await methods.wallet_getPermissions()) {
-        if (permission.parentCapability !== 'eth_accounts') continue
-        for (const caveat of permission.caveats) {
-            if (caveat.type !== 'restrictReturnedAccounts') continue
-            if (!Array.isArray(caveat.value)) continue
-            for (const item of caveat.value) {
-                if (typeof item === 'string') wallets.push(item)
-            }
-        }
-    }
-    return wallets
 }

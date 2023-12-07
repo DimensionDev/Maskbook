@@ -9,6 +9,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## Read ETH methods
 
+- [x] eth_accounts
 - [x] eth_blockNumber
 - [x] eth_call
 - [x] eth_chainId
@@ -36,7 +37,6 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## Write ETH methods
 
-- [ ] eth_accounts
 - [ ] eth_sign (EIP-191): <https://support.metamask.io/hc/en-us/articles/14764161421467-What-is-eth-sign-and-why-is-it-a-risk->
 - [ ] personal_sign
 - [ ] eth_sendTransaction
