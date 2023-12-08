@@ -21,6 +21,7 @@ export enum ErrorCode {
     InvalidParams = -32602,
     InternalError = -32603,
     UserRejectedTheRequest = 4001,
+    RequestedAccountHasNotBeenAuthorized = 4100,
 }
 
 export enum ErrorMessages {
@@ -33,5 +34,6 @@ export enum ErrorMessages {
     InvalidMethodParams = 'Invalid method parameter(s).',
     wallet_requestPermissions_Empty = 'Permissions request for origin "$" contains no permissions.',
     wallet_requestPermissions_Unknown = 'Permissions request for origin "$" contains invalid requested permission(s).',
-    user_rejected_the_request = 'User rejected the request.',
+    UserRejectedTheRequest = 'User rejected the request.',
+    RequestedAccountHasNotBeenAuthorized = 'The requested account and/or method has not been authorized by the user.',
 }

@@ -7,6 +7,8 @@ import {
     ErrorMessages as M,
 } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { SignType } from '@masknet/shared-base'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -35,7 +37,16 @@ const methods = {
         if (request instanceof Err) return request
         wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
-        return new E(C.UserRejectedTheRequest, M.user_rejected_the_request)
+        return new E(C.UserRejectedTheRequest, M.UserRejectedTheRequest)
+    },
+    async personal_sign(challenge: string, requestedAddress: string) {
+        // check challenge is 0x hex
+        await Services.Wallet.requestUnlockWallet()
+        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
+        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+            return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
+        // TODO: should have a popup to sign.
+        return Services.Wallet.signWithWallet(SignType.Message, challenge, requestedAddress)
     },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {

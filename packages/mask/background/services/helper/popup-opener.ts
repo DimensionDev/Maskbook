@@ -87,10 +87,10 @@ export async function openPopupWindow<T extends PopupRoutes>(
             ...params,
         })
     } else {
-        return openOrUpdatePopupWindow(PopupRoutes.WalletUnlock, {
+        return openOrUpdatePopupWindow(PopupRoutes.Wallet, {
             close_after_unlock: true,
             from: urlcat(route, params as ParamMap),
-        } satisfies PopupRoutesParamsMap[PopupRoutes.WalletUnlock])
+        } satisfies PopupRoutesParamsMap[PopupRoutes.Wallet])
     }
 }
 

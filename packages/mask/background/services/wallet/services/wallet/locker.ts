@@ -33,7 +33,7 @@ export async function unlockWallet(unverifiedPassword: string) {
 }
 
 export async function requestUnlockWallet(): Promise<void> {
-    if (!isLocked()) return
+    if (!(await isLocked())) return
     await openPopupWindow(PopupRoutes.WalletUnlock, {})
     return new Promise((resolve) => {
         CrossIsolationMessages.events.walletLockStatusUpdated.on((locked) => {

@@ -97,9 +97,7 @@ export async function sdk_denyEIP2255Permission(id: string) {
     const { promise } = requests.get(id)!
     enableMapSet()
     promise[1](
-        Err(
-            new MaskEthereumProviderRpcError(ErrorCode.UserRejectedTheRequest, ErrorMessages.user_rejected_the_request),
-        ),
+        Err(new MaskEthereumProviderRpcError(ErrorCode.UserRejectedTheRequest, ErrorMessages.UserRejectedTheRequest)),
     )
 }
 
