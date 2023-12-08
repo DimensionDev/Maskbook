@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { type ReactNode } from 'react'
@@ -58,11 +58,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface FooterProps {
+export interface FooterProps {
     provider: string
+    disableSetting?: boolean
 }
 
-export function Footer({ provider }: FooterProps) {
+export function Footer({ provider, disableSetting }: FooterProps) {
     const { classes } = useStyles()
     const t = useCalendarTrans()
     const providerMap: Record<string, ReactNode> = {
@@ -96,13 +97,15 @@ export function Footer({ provider }: FooterProps) {
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>
                     {providerMap[provider]}
-                    <IconButton
-                        sx={{ width: '16px', height: '16px' }}
-                        onClick={() =>
-                            openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
-                        }>
-                        <Icons.Gear size={16} />
-                    </IconButton>
+                    {disableSetting ? null : (
+                        <IconButton
+                            sx={{ width: '16px', height: '16px' }}
+                            onClick={() =>
+                                openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
+                            }>
+                            <Icons.Gear size={16} />
+                        </IconButton>
+                    )}
                 </div>
             </div>
         </div>
