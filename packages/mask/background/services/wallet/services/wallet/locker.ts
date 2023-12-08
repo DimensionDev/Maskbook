@@ -1,6 +1,12 @@
-import { CrossIsolationMessages, LockStatus, currentMaskWalletLockStatusSettings } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    LockStatus,
+    PopupRoutes,
+    currentMaskWalletLockStatusSettings,
+} from '@masknet/shared-base'
 import { getAutoLockerDuration } from './database/locker.js'
 import * as password from './password.js'
+import { openPopupWindow } from '../../../helper/popup-opener.js'
 
 export async function isLocked() {
     return (await password.hasPassword()) && !(await password.hasVerifiedPassword())
@@ -24,6 +30,16 @@ export async function unlockWallet(unverifiedPassword: string) {
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
         return false
     }
+}
+
+export async function requestUnlockWallet(): Promise<void> {
+    if (!isLocked()) return
+    await openPopupWindow(PopupRoutes.WalletUnlock, {})
+    return new Promise((resolve) => {
+        CrossIsolationMessages.events.walletLockStatusUpdated.on((locked) => {
+            if (!locked) resolve()
+        })
+    })
 }
 
 let autoLockTimer: ReturnType<typeof setTimeout> | undefined

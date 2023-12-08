@@ -39,7 +39,6 @@ export interface __UIContext__ {
     openPopupWindow<T extends PopupRoutes>(
         route: T,
         params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-        evenWhenWalletLocked?: boolean,
     ): Promise<void>
     /** Sign a message with persona (w or w/o popups) */
     signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>

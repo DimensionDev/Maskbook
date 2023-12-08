@@ -42,6 +42,7 @@ export enum PopupModalRoutes {
 export enum PopupRoutes {
     Root = '/',
     Wallet = '/wallet',
+    WalletUnlock = '/wallet/unlock',
     WalletStartUp = '/wallet/startup',
     AddDeriveWallet = '/wallet/addDerive',
     WalletSettings = '/wallet/settings',
@@ -118,6 +119,10 @@ export interface PopupRoutesParamsMap {
         isCreating?: boolean
         external_request?: string
         // Unlock
+        close_after_unlock?: boolean
+        from?: string | null
+    }
+    [PopupRoutes.WalletUnlock]: {
         close_after_unlock?: boolean
         from?: string | null
     }

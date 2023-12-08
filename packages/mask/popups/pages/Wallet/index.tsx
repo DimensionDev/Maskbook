@@ -40,6 +40,7 @@ export default function Wallet() {
                     <Routes>
                         <Route path="/" element={<WalletGuard />}>
                             <Route index element={<WalletAssets />} />
+                            <Route path={r(PopupRoutes.WalletUnlock)} element={<></>} />
                             <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
                             <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
                             <Route path={r(PopupRoutes.DeriveWallet)} element={<DeriveWallet />} />

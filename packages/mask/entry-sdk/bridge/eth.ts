@@ -28,6 +28,7 @@ const methods = {
         return Services.Wallet.sdk_eth_accounts(location.origin)
     },
     async eth_requestAccounts() {
+        await Services.Wallet.requestUnlockWallet()
         let wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
         const request = await methods.wallet_requestPermissions({ eth_accounts: {} })
