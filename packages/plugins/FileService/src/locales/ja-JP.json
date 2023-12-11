@@ -34,5 +34,10 @@
     "upload_file": "ファイルをアップロード",
     "uploaded_files": "アップロードされたファイル",
     "delete_message": "ファイル <file>{{ name }}</file> を削除しますか？",
-    "file_key": "ファイルキー："
+    "delete_description": "ユーザーはこれらのファイルのローカルリンクのみを削除することができます。分散ストレージプロトコル上のファイルは削除できません。",
+    "file_key": "ファイルキー：",
+    "upload_file_title$failed": "ファイルのアップロードに失敗しました",
+    "upload_file_message$failed": "最大ファイルサイズの10MBを超えました。",
+    "save_file_title$success": "ファイルを正常に保存しました",
+    "save_file_title$failed": "ファイルを保存できませんでした"
 }
