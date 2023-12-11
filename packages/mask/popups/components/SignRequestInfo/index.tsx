@@ -67,7 +67,25 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestIn
                 </Box>
             :   null}
             <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
-            <Typography className={classes.message}>{message}</Typography>
+            <MessageDisplayer message={message} />
         </main>
     )
 })
+
+function MessageDisplayer({ message }: { message: string }) {
+    const t = useMaskSharedTrans()
+    const { classes } = useStyles()
+    if (message.startsWith('0x')) {
+        const string = new TextDecoder().decode(
+            new Uint8Array([...message.slice(2).matchAll(/([\da-f]{2})/gi)].map((i) => Number.parseInt(i[0], 16))),
+        )
+        return (
+            <>
+                <Typography className={classes.sourceText}>{string}</Typography>
+                <Typography className={classes.messageTitle}>{t.popups_wallet_sign_raw_message()}</Typography>
+                <Typography className={classes.sourceText}>{message}</Typography>
+            </>
+        )
+    }
+    return <Typography className={classes.sourceText}>{message}</Typography>
+}

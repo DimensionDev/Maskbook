@@ -1,4 +1,4 @@
-import { readonlyMethodType, type EthereumMethodType } from '@masknet/web3-shared-evm'
+import { readonlyMethodType, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '#services'
 import {
     type EIP2255PermissionRequest,
@@ -8,7 +8,7 @@ import {
 } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { SignType } from '@masknet/shared-base'
+import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -45,8 +45,21 @@ const methods = {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
             return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
-        // TODO: should have a popup to sign.
-        return Services.Wallet.signWithWallet(SignType.Message, challenge, requestedAddress)
+        await providers.evm.state?.Message?.readyPromise
+        return providers.EVMWeb3.getWeb3Provider({ providerType: ProviderType.MaskWallet }).request({
+            method: EthereumMethodType.PERSONAL_SIGN,
+            params: [challenge, requestedAddress],
+        })
+    },
+    async eth_sendTransaction(options: any) {
+        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
+        if (!wallets.some((addr) => isSameAddress(addr, options.from)))
+            return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
+        await providers.evm.state?.Message?.readyPromise
+        return providers.EVMWeb3.getWeb3Provider({ providerType: ProviderType.MaskWallet }).request({
+            method: EthereumMethodType.ETH_SEND_TRANSACTION,
+            params: options,
+        })
     },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
