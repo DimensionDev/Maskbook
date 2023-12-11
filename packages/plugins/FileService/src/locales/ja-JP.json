@@ -39,5 +39,8 @@
     "upload_file_title$failed": "ファイルのアップロードに失敗しました",
     "upload_file_message$failed": "最大ファイルサイズの10MBを超えました。",
     "save_file_title$success": "ファイルを正常に保存しました",
-    "save_file_title$failed": "ファイルを保存できませんでした"
+    "save_file_title$failed": "ファイルを保存できませんでした",
+    "save_file_message$success": "{{name}} を Web3 ファイルサービスに保存しました。",
+    "save_file_message$failed": "ファイルの保存に失敗しました。もう一度お試しください。",
+    "delete_file_title$success": "正常に削除されました"
 }
