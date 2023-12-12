@@ -38,8 +38,8 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 ## Write ETH methods
 
 - [ ] eth_sign (EIP-191): <https://support.metamask.io/hc/en-us/articles/14764161421467-What-is-eth-sign-and-why-is-it-a-risk->
-- [ ] personal_sign
-- [ ] eth_sendTransaction
+- [x] personal_sign
+- [x] eth_sendTransaction
 - [ ] ~~eth_signTransaction: MetaMask refuse to add, we should follow them. <https://github.com/MetaMask/metamask-extension/issues/3475>~~
 - [ ] eth_sendRawTransaction
 

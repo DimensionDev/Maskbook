@@ -46,7 +46,12 @@ const methods = {
         if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
             return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
         await providers.evm.state?.Message?.readyPromise
-        return providers.EVMWeb3.getWeb3Provider({ providerType: ProviderType.MaskWallet }).request({
+        return providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            account: requestedAddress,
+            silent: true,
+            readonly: false,
+        }).request({
             method: EthereumMethodType.PERSONAL_SIGN,
             params: [challenge, requestedAddress],
         })
@@ -56,8 +61,17 @@ const methods = {
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
             return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
         await providers.evm.state?.Message?.readyPromise
-        return providers.EVMWeb3.getWeb3Provider({ providerType: ProviderType.MaskWallet }).request({
+        const p = providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            account: options.from,
+            silent: false,
+            readonly: false,
+            // this is strange. why I cannot pass options via request.params?
+            overrides: options,
+        })
+        return p.request({
             method: EthereumMethodType.ETH_SEND_TRANSACTION,
+            // this options here actually get ignored!
             params: options,
         })
     },
