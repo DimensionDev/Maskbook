@@ -34,5 +34,13 @@
     "upload_file": "ファイルをアップロード",
     "uploaded_files": "アップロードされたファイル",
     "delete_message": "ファイル <file>{{ name }}</file> を削除しますか？",
-    "file_key": "ファイルキー："
+    "delete_description": "ユーザーはこれらのファイルのローカルリンクのみを削除することができます。分散ストレージプロトコル上のファイルは削除できません。",
+    "file_key": "ファイルキー：",
+    "upload_file_title$failed": "ファイルのアップロードに失敗しました",
+    "upload_file_message$failed": "最大ファイルサイズの10MBを超えました。",
+    "save_file_title$success": "ファイルを正常に保存しました",
+    "save_file_title$failed": "ファイルを保存できませんでした",
+    "save_file_message$success": "{{name}} を Web3 ファイルサービスに保存しました。",
+    "save_file_message$failed": "ファイルの保存に失敗しました。もう一度お試しください。",
+    "delete_file_title$success": "正常に削除されました"
 }
