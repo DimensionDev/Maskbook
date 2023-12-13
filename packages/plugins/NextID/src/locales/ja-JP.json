@@ -7,6 +7,8 @@
     "connect_wallet_other_user_tip2": "2. マスク拡張機能をインストールするようにユーザーを招待し、確認ツイートを投稿します。",
     "connect_wallet_other_user_instruction": "ユーザーはまだウォレットに接続していない可能性があります。次のように試すことができます:",
     "connect_wallet_tip": "このWeb3セクションでは、あなたのNFTコレクションのヒントを受け取るためのあなたのアドレスを表示することができます. Mask Networkをインストールした友人に寄付記録やその他のオンチェーン情報を提供しています。",
+    "verify_wallet_intro": "ウォレットを確認するにはこちら。",
+    "verify_Twitter_ID_intro": "Twitter IDを確認するにはこちら。",
     "nft_not_belong_to_you": "コレクションは存在しないか、あなたに属していません。",
     "send_tip_successfully": "チップを送信しました。",
     "send_specific_tip_successfully": "{{- amount}} {{name}} チップを送信しました。",
