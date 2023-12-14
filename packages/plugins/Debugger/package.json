@@ -10,6 +10,10 @@
       "mask-src": "./src/index.ts",
       "default": "./dist/index.js"
     },
+    "./messages": {
+      "mask-src": "./src/messages.ts",
+      "default": "./dist/messages.js"
+    },
     "./register": {
       "mask-src": "./src/register.ts",
       "default": "./dist/register.js"
