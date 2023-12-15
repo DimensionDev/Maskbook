@@ -10,6 +10,8 @@
     "verify_wallet_intro": "ウォレットを確認するにはこちら。",
     "verify_wallet": "Web3タブでは、チップ、NFTコレクション、寄付記録、その他のオンチェーンフィードを受け取るためのウォレットアドレスを、同じくMaskエクステンションをインストールした友人に見せることができます。",
     "verify_Twitter_ID_intro": "Twitter IDを確認するにはこちら。",
+    "verify_Twitter_ID": "Twitter IDをNext.IDで確認して、Web3のエクスペリエンスを向上させることができます。",
+    "verify_other_Twitter_ID_intro": "このユーザーはウォレットに接続していません。",
     "nft_not_belong_to_you": "コレクションは存在しないか、あなたに属していません。",
     "send_tip_successfully": "チップを送信しました。",
     "send_specific_tip_successfully": "{{- amount}} {{name}} チップを送信しました。",
