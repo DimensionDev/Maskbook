@@ -364,6 +364,24 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
+        ID: `${PLUGIN_ID}_customEvent`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.CustomEvent,
+        name: 'Custom Event Wallet',
+        icon: new URL('../assets/metamask.png', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: [EnhanceableSite.Firefly],
+            supportedExtensionSites: [],
+        },
+        homeLink: '',
+        shortenLink: '',
+        downloadLink: '',
+        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
         ID: `${PLUGIN_ID}_metamask`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.MetaMask,

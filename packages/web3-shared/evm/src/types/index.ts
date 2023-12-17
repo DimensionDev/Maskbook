@@ -290,6 +290,7 @@ export enum ProviderType {
     OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
+    CustomEvent = 'CustomEvent',
     CustomNetwork = 'CustomNetwork',
 }
 
