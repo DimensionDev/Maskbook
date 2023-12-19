@@ -55,7 +55,6 @@ export namespace WalletAPI {
         openPopupWindow<T extends PopupRoutes>(
             route: T,
             params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-            evenWhenWalletLocked?: boolean,
         ): Promise<void>
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string): Promise<void>
