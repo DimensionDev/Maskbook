@@ -951,6 +951,7 @@
     "popups_set_avatar_failed": "crwdns21847:0crwdne21847:0",
     "popups_wallet_request_source": "crwdns21999:0crwdne21999:0",
     "popups_wallet_sign_message": "crwdns22001:0crwdne22001:0",
+    "popups_wallet_sign_raw_message": "crwdns22638:0crwdne22638:0",
     "popups_wallet_unlock_erc20_title": "crwdns22003:0{{symbol}}crwdne22003:0",
     "popups_wallet_unlock_erc20_tips": "crwdns22005:0crwdne22005:0",
     "popups_wallet_unlock_erc20_placeholder": "crwdns22007:0crwdne22007:0",
