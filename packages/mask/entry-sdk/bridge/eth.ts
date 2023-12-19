@@ -1,14 +1,11 @@
 import { readonlyMethodType, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import Services from '#services'
-import {
-    type EIP2255PermissionRequest,
-    MaskEthereumProviderRpcError as E,
-    ErrorCode as C,
-    ErrorMessages as M,
-} from '@masknet/sdk'
+import { type EIP2255PermissionRequest, MaskEthereumProviderRpcError, err } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
+import { ParamsValidate, fromZodError, requestSchema, ReturnValidate } from './eth/validator.js'
+import { ZodTuple } from 'zod'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -37,14 +34,14 @@ const methods = {
         if (request instanceof Err) return request
         wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
-        return new E(C.UserRejectedTheRequest, M.UserRejectedTheRequest)
+        return err.user_rejected_the_request()
     },
     async personal_sign(challenge: string, requestedAddress: string) {
         // check challenge is 0x hex
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
-            return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
+            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         await providers.evm.state?.Message?.readyPromise
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -59,7 +56,7 @@ const methods = {
     async eth_sendTransaction(options: any) {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
-            return new E(C.RequestedAccountHasNotBeenAuthorized, M.RequestedAccountHasNotBeenAuthorized)
+            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
         await providers.evm.state?.Message?.readyPromise
         const p = providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
@@ -80,45 +77,79 @@ const methods = {
         return Services.Wallet.sdk_EIP2255_wallet_getPermissions(location.origin)
     },
     async wallet_requestPermissions(request: EIP2255PermissionRequest) {
-        if (typeof request !== 'object' || request === null) throw new E(C.InvalidParams, M.InvalidMethodParams)
         if (Object.keys(request).length === 0)
-            throw new E(C.InvalidParams, M.wallet_requestPermissions_Empty.replaceAll('$', location.origin))
+            throw err.wallet_requestPermissions.a_permission_request_must_contain_at_least_1_permission()
         for (const key in request) {
             if (typeof key !== 'string' || typeof request[key] !== 'object' || request[key] === null)
-                throw new E(C.InvalidParams, M.wallet_requestPermissions_Unknown.replaceAll('$', location.origin))
+                throw err.wallet_requestPermissions.permission_request_contains_unsupported_permission_permission({
+                    permission: key,
+                })
         }
         return Services.Wallet.sdk_EIP2255_wallet_requestPermissions(location.origin, request)
     },
 }
 Object.setPrototypeOf(methods, null)
 
-export async function eth_request(request: unknown): Promise<{ e?: E | null; d?: unknown }> {
-    if (typeof request !== 'object' || request === null)
-        return { e: new E(C.InvalidRequest, M.FirstArgumentIsNotObject) }
-
-    const { method } = request as any
-    if (typeof method !== 'string' || !method) return { e: new E(C.InvalidRequest, M.FirstArgumentMethodFieldInvalid) }
-    if (!(method in methods)) return { e: new E(C.MethodNotFound, M.UnknownMethod.replaceAll('$', method)) }
-
-    const { params } = request as any
-    if (params !== undefined && !Array.isArray(params)) return { e: new E(C.InvalidRequest, M.ParamsIsNotArray) }
-
-    const f = Reflect.get(methods, method)
+export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumProviderRpcError | null; d?: unknown }> {
     try {
-        let result: unknown
-        if (params === undefined) result = await f()
-        else result = await f(...params)
+        // validate request
+        const requestValidate = requestSchema.safeParse(request)
+        if (!requestValidate.success) return { e: fromZodError(requestValidate.error) }
+
+        // validate method
+        const { method, params } = requestValidate.data
+        if (!(method in methods)) {
+            return {
+                e: err.the_method_method_does_not_exist_is_not_available({ method }),
+            }
+        }
+
+        // assert argument & return value validator exists
+        if (!(method in ParamsValidate)) {
+            console.error(`Missing parameter schema for method ${method}`)
+            return { e: err.internal_error() }
+        }
+        if (!(method in ReturnValidate)) {
+            console.error(`Missing return schema for method ${method}`)
+            return { e: err.internal_error() }
+        }
+
+        let paramsArr: unknown[]
+        if (!params) paramsArr = []
+        else if (!Array.isArray(params)) paramsArr = [params]
+        else paramsArr = params
+
+        // validate parameters
+        // @ts-expect-error keyof
+        const paramsSchema = ParamsValidate[method]
+        if (paramsSchema instanceof ZodTuple && paramsSchema.items.length !== paramsArr.length) {
+            paramsArr.length = paramsSchema.items.length
+        }
+        const paramsValidate = paramsSchema.safeParse(paramsArr)
+        if (!paramsValidate.success) return { e: fromZodError(paramsValidate.error) }
+
+        // call the method
+        const fn = Reflect.get(methods, method)
+        const result = await fn(...paramsArr)
+
+        // validate return value
+        // @ts-expect-error keyof
+        const returnSchema = ReturnValidate[method]
+        const returnValidate = returnSchema.safeParse(result)
+        if (!returnValidate.success) return { e: fromZodError(returnValidate.error) }
+
+        // unwrap Result<T>
         // TODO: async-rpc-call should be able to serialize error without touching it (by using the serializer defined)
         if (result instanceof Err) {
-            if (result.error instanceof E) return { e: result.error }
-            console.error(result)
+            if (result.error instanceof MaskEthereumProviderRpcError) return { e: result.error }
+            console.error(result.error)
             throw new Error('internal error')
         }
         if (result instanceof Ok) return { d: result.value }
         return { d: result }
     } catch (error) {
-        if (error instanceof E) return { e: error }
+        if (error instanceof MaskEthereumProviderRpcError) return { e: error }
         console.error(error)
-        return { e: new E(C.InternalError, M.InternalError) }
+        return { e: err.internal_error() }
     }
 }

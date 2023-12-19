@@ -1,10 +1,9 @@
 import type { Ethereum } from '../public-api/mask-wallet.js'
-
 export interface MaskEthereumProviderRpcErrorOptions extends ErrorOptions {
     data?: unknown
 }
 export class MaskEthereumProviderRpcError extends Error implements Ethereum.ProviderRpcError {
-    constructor(code: ErrorCode, message: ErrorMessages | string, options: MaskEthereumProviderRpcErrorOptions = {}) {
+    constructor(code: number, message: string, options: MaskEthereumProviderRpcErrorOptions = {}) {
         const { cause = undefined, data } = options
         super(message, { cause })
         this.code = code
@@ -22,18 +21,4 @@ export enum ErrorCode {
     InternalError = -32603,
     UserRejectedTheRequest = 4001,
     RequestedAccountHasNotBeenAuthorized = 4100,
-}
-
-export enum ErrorMessages {
-    InternalError = 'Internal error.',
-    FirstArgumentIsNotObject = 'Expected a single, non-array, object argument.',
-    FirstArgumentMethodFieldInvalid = "'args.method' must be a non-empty string.",
-    UnknownMethod = 'The method "$" does not exist / is not available.',
-    // ParamsIsNotObjectOrArray = "'args.params' must be an object or array if provided.",
-    ParamsIsNotArray = "'args.params' must be an array if provided.",
-    InvalidMethodParams = 'Invalid method parameter(s).',
-    wallet_requestPermissions_Empty = 'Permissions request for origin "$" contains no permissions.',
-    wallet_requestPermissions_Unknown = 'Permissions request for origin "$" contains invalid requested permission(s).',
-    UserRejectedTheRequest = 'User rejected the request.',
-    RequestedAccountHasNotBeenAuthorized = 'The requested account and/or method has not been authorized by the user.',
 }

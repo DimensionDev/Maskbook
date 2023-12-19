@@ -16,7 +16,8 @@
   "types": "./dist/server/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "start": "rollup -c -w"
+    "start": "rollup -c -w",
+    "gen-msg": "node ./gen-message.mjs"
   },
   "devDependencies": {
     "@rollup/plugin-image": "^3.0.2",

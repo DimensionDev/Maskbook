@@ -3,6 +3,8 @@
 Methods listed in this document is not a commitment that it will be implemented.
 The list is built from what [MetaMask supported](https://docs.metamask.io/wallet/reference/json-rpc-api/).
 
+- <https://ethereum.github.io/execution-apis/api-documentation/>
+
 - [ ] Do params check before sending them to the background.
 
 ## Need revisit
@@ -45,7 +47,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## ETH methods
 
-## Subscribe to events
+## Subscribe to events (unknown specification)
 
 - [ ] eth_subscribe
 - [ ] eth_unsubscribe

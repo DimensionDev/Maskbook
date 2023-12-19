@@ -2,9 +2,8 @@ import {
     type EIP2255PermissionRequest,
     type EIP2255Permission,
     type EIP2255RequestedPermission,
-    MaskEthereumProviderRpcError,
-    ErrorCode,
-    ErrorMessages,
+    type MaskEthereumProviderRpcError,
+    err,
 } from '@masknet/sdk'
 import { walletDatabase } from '../database/Plugin.db.js'
 import { produce, enableMapSet } from 'immer'
@@ -38,10 +37,9 @@ export async function sdk_EIP2255_wallet_requestPermissions(
     assertOrigin(origin)
     for (const method in request) {
         if (method !== 'eth_accounts') {
-            throw new MaskEthereumProviderRpcError(
-                ErrorCode.MethodNotFound,
-                ErrorMessages.UnknownMethod.replaceAll('$', method),
-            )
+            throw err.wallet_requestPermissions.permission_request_contains_unsupported_permission_permission({
+                permission: method,
+            })
         }
     }
     const id = Math.random().toString(36).slice(2)
@@ -96,9 +94,7 @@ export async function sdk_denyEIP2255Permission(id: string) {
     if (!requests.has(id)) throw new Error('Invalid request id')
     const { promise } = requests.get(id)!
     enableMapSet()
-    promise[1](
-        Err(new MaskEthereumProviderRpcError(ErrorCode.UserRejectedTheRequest, ErrorMessages.UserRejectedTheRequest)),
-    )
+    promise[1](Err(err.user_rejected_the_request()))
 }
 
 export async function disconnectWalletFromOrigin(wallet: string, origin: string, type: 'any' | 'sdk' | 'internal') {
