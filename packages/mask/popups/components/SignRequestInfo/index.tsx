@@ -33,17 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginTop: theme.spacing(3),
     },
-    message: {
-        fontSize: 12,
-        marginTop: theme.spacing(1.5),
-        color: theme.palette.maskColor.second,
-        wordBreak: 'break-all',
-        maxHeight: 260,
-        overflow: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
 }))
 
 interface SignRequestInfoProps {
@@ -67,12 +56,12 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestIn
                 </Box>
             :   null}
             <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
-            <MessageDisplayer message={message} />
+            <MessageDisplay message={message} />
         </main>
     )
 })
 
-function MessageDisplayer({ message }: { message: string }) {
+function MessageDisplay({ message }: { message: string }) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     if (message.startsWith('0x')) {
