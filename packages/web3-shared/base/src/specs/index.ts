@@ -908,7 +908,7 @@ export interface AddressBookState {
     renameContact: (contact: Contact) => Promise<void>
 }
 
-export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
     /** The used network. */
@@ -957,7 +957,7 @@ export interface NameServiceState extends Startable {
     safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
 }
 
-export interface TokenState<ChainId, SchemaType> extends Startable {
+export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */
     trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user trusted non-fungible tokens. */

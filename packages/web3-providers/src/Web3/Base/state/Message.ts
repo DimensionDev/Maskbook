@@ -12,6 +12,7 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
     public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
     constructor(private storage: StorageItem<Record<string, ReasonableMessage<Request, Response>>>) {
+        if (!storage.initialized) throw new Error('Storage not initialized')
         this.messages = mapSubscription(this.storage.subscription, (storage) => {
             return Object.values(storage)
                 .filter((x) => x.state === MessageStateType.NOT_DEPEND)

@@ -1,18 +1,12 @@
 import type { Subscription } from 'use-subscription'
-import {
-    mapSubscription,
-    mergeSubscription,
-    PersistentStorages,
-    type NetworkPluginID,
-    type StorageItem,
-} from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type NetworkPluginID, type StorageItem } from '@masknet/shared-base'
 import {
     type RecentTransaction,
     TransactionStatusType,
     type TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
 
-type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
+export type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
     ChainId,
     | Record<
           // address
@@ -26,8 +20,6 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionState<ChainId, Transaction>
 {
     static MAX_RECORD_SIZE = 20
-
-    public storage: StorageItem<TransactionStorage<ChainId, Transaction>>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
@@ -41,12 +33,9 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
             formatAddress(a: string): string
             isValidChainId(chainId?: ChainId): boolean
         },
+        private storage: StorageItem<TransactionStorage<ChainId, Transaction>>,
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Transaction`, {
-            value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<ChainId, Transaction>,
-        })
-        this.storage = storage.value
-
+        if (!storage.initialized) throw new Error('Storage not initialized')
         if (this.subscriptions.chainId && this.subscriptions.account) {
             this.transactions = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.subscriptions.account, this.storage.subscription),
