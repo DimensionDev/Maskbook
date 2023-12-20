@@ -881,7 +881,7 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface SettingsState extends Startable {
+export interface SettingsState {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
@@ -929,7 +929,7 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> {
     removeNetwork: (id: string) => Promise<void>
 }
 
-export interface RiskWarningState extends Startable {
+export interface RiskWarningState {
     /** Is approved */
     approved?: Subscription<boolean>
 
@@ -948,7 +948,7 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceState extends Startable {
+export interface NameServiceState {
     /** get address of domain name */
     lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -1035,7 +1035,7 @@ export interface MessageState<Request, Response> {
     denyAllRequests(): Promise<void>
 }
 
-export interface TransactionState<ChainId, Transaction> extends Startable {
+export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 

@@ -1,4 +1,4 @@
-import { lazyObject, PersistentStorages, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
+import { lazyObject, PersistentStorages, NetworkPluginID, EMPTY_LIST, InMemoryStorages } from '@masknet/shared-base'
 import {
     ChainIdList,
     type Web3State,
@@ -13,6 +13,7 @@ import * as IdentityService from /* webpackDefer: true */ '../state/IdentityServ
 import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
+import { CurrencyType, GasOptionType, SourceType } from '@masknet/web3-shared-base'
 
 export async function createFlowState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: address } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_FLOW}_AddressBookV2`, {
@@ -26,18 +27,28 @@ export async function createFlowState(context: WalletAPI.IOContext): Promise<Web
         `${NetworkPluginID.PLUGIN_FLOW}_Transaction`,
         { value: Object.fromEntries(ChainIdList.map((x) => [x, {}])) as TransactionStorage<ChainId, TransactionType> },
     ).storage
+    const { storage: settings } = InMemoryStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_FLOW}_Settings`, {
+        currencyType: CurrencyType.USD,
+        gasOptionType: GasOptionType.NORMAL,
+        fungibleAssetSourceType: SourceType.DeBank,
+        nonFungibleAssetSourceType: SourceType.OpenSea,
+    })
     const [Provider_] = await Promise.all([
         Provider.FlowProvider.new(context),
         address.initializedPromise,
         network.networkID.initializedPromise,
         network.networks.initializedPromise,
         transaction.initializedPromise,
+        settings.currencyType.initializedPromise,
+        settings.fungibleAssetSourceType.initializedPromise,
+        settings.gasOptionType.initializedPromise,
+        settings.nonFungibleAssetSourceType.initializedPromise,
     ] as const)
 
     const state: Web3State = lazyObject({
         AddressBook: () => new AddressBook.FlowAddressBook(address),
         IdentityService: () => new IdentityService.FlowIdentityService(),
-        Settings: () => new Settings.FlowSettings(),
+        Settings: () => new Settings.FlowSettings(settings),
         Network: () => new Network.FlowNetwork(NetworkPluginID.PLUGIN_FLOW, network.networkID, network.networks),
         Transaction: () =>
             new Transaction.FlowTransaction({ chainId: Provider_.chainId, account: Provider_.account }, transaction),

@@ -1,5 +1,5 @@
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, type NetworkPluginID, type StorageItem } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
 import {
     type RecentTransaction,
     TransactionStatusType,
@@ -23,13 +23,11 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
-        protected chainIds: ChainId[],
-        protected subscriptions: {
+        private subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
         },
-        protected options: {
-            pluginID: NetworkPluginID
+        private options: {
             formatAddress(a: string): string
             isValidChainId(chainId?: ChainId): boolean
         },
@@ -46,15 +44,6 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
             )
         }
     }
-
-    get ready() {
-        return this.storage.initialized
-    }
-
-    get readyPromise() {
-        return this.storage.initializedPromise
-    }
-
     async getTransaction(chainId: ChainId, address: string, id: string): Promise<Transaction | undefined> {
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
