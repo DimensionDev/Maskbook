@@ -42,7 +42,6 @@ const methods = {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
-        await providers.evm.state?.Message?.readyPromise
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             account: requestedAddress,
@@ -57,7 +56,6 @@ const methods = {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
-        await providers.evm.state?.Message?.readyPromise
         const p = providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             account: options.from,

@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import type { ReasonableNetwork, TransferableNetwork } from '@masknet/web3-shared-base'
 import { NetworkState } from '../../Base/state/Network.js'
@@ -6,10 +5,6 @@ import { createSchema } from '../schemas/ChainDescriptor.js'
 import { fetchChainId } from '../../../helpers/fetchChainId.js'
 
 export class EVMNetwork extends NetworkState<ChainId, SchemaType, NetworkType> {
-    constructor() {
-        super(NetworkPluginID.PLUGIN_EVM)
-    }
-
     protected override async validateNetwork(
         network: TransferableNetwork<ChainId, SchemaType, NetworkType>,
     ): Promise<boolean> {

@@ -8,13 +8,11 @@ import {
     mapSubscription,
     mergeSubscription,
     type StorageObject,
-    InMemoryStorages,
-    type NetworkPluginID,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
-interface ProviderStorage<Account, ProviderType extends string> {
+export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
     providerType: ProviderType
 }
@@ -29,7 +27,6 @@ export abstract class ProviderState<
 {
     protected site = getSiteType()
 
-    abstract storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
     public networkType?: Subscription<NetworkType>
@@ -44,41 +41,17 @@ export abstract class ProviderState<
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-    protected constructor(protected context: WalletAPI.IOContext) {
+    constructor(
+        protected context: WalletAPI.IOContext,
+        protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
+    ) {
         this.signWithPersona = context.signWithPersona
     }
-    signWithPersona
-    protected static createStorage<ChainId extends number, ProviderType extends string>(
-        pluginID: NetworkPluginID,
-        defaultChainId: ChainId,
-        defaultProviderType: ProviderType,
-    ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${getSiteType() ?? 'Provider'}`, {
-            account: {
-                account: '',
-                chainId: defaultChainId,
-            },
-            providerType: defaultProviderType,
-        })
-        return storage
-    }
-
-    get ready() {
-        return this.storage.account.initialized && this.storage.providerType.initialized
-    }
-
-    get readyPromise() {
-        return Promise.all([
-            this.storage.account.initializedPromise,
-            this.storage.providerType.initializedPromise,
-        ]).then(() => {})
-    }
-
-    async setup() {
-        await this.readyPromise
+    protected init() {
         this.setupSubscriptions()
         this.setupProviders()
     }
+    public signWithPersona
 
     protected setupSubscriptions() {
         if (!this.site) return

@@ -1,15 +1,11 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { type StorageItem } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { formatAddress, isValidAddress } from '@masknet/web3-shared-solana'
+import { isValidAddress } from '@masknet/web3-shared-solana'
 import { AddressBookState } from '../../Base/state/AddressBook.js'
+import type { Contact } from '@masknet/web3-shared-base'
 
 export class SolanaAddressBook extends AddressBookState {
-    constructor() {
-        super({
-            pluginID: NetworkPluginID.PLUGIN_SOLANA,
-            isValidAddress,
-            isSameAddress,
-            formatAddress,
-        })
+    constructor(storage: StorageItem<Contact[]>) {
+        super(isValidAddress, isSameAddress, storage)
     }
 }

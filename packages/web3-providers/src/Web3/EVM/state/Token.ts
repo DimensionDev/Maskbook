@@ -1,5 +1,5 @@
 import type { WalletAPI } from '../../../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, type StorageObject } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import {
@@ -23,17 +23,9 @@ export class EVMToken extends TokenState<ChainId, SchemaType> {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
         },
+        storage: StorageObject<TokenStorage<ChainId, SchemaType>>,
     ) {
-        const defaultValue: TokenStorage<ChainId, SchemaType> = {
-            fungibleTokenList: {},
-            credibleFungibleTokenList: {},
-            nonFungibleTokenList: {},
-            credibleNonFungibleTokenList: {},
-            fungibleTokenBlockedBy: {},
-            nonFungibleTokenBlockedBy: {},
-            nonFungibleCollectionMap: {},
-        }
-        super(context, defaultValue, subscriptions, {
+        super(context, storage, subscriptions, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             isValidAddress,
             isSameAddress,

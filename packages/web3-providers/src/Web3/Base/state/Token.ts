@@ -4,7 +4,6 @@ import type { Subscription } from 'use-subscription'
 import {
     mapSubscription,
     mergeSubscription,
-    PersistentStorages,
     safeEmptyList,
     type NetworkPluginID,
     type StorageObject,
@@ -39,7 +38,6 @@ export interface TokenStorage<ChainId extends number, SchemaType> {
 }
 
 export abstract class TokenState<ChainId extends number, SchemaType> implements Web3TokenState<ChainId, SchemaType> {
-    public storage: StorageObject<TokenStorage<ChainId, SchemaType>>
     public trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     public trustedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
     public blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
@@ -56,35 +54,9 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
         >
     >
 
-    get ready() {
-        const { storage } = this
-        return (
-            storage.fungibleTokenList.initialized &&
-            storage.nonFungibleTokenList.initialized &&
-            storage.fungibleTokenBlockedBy.initialized &&
-            storage.nonFungibleTokenBlockedBy.initialized &&
-            storage.credibleFungibleTokenList.initialized &&
-            storage.credibleNonFungibleTokenList.initialized &&
-            storage.nonFungibleCollectionMap.initialized
-        )
-    }
-
-    get readyPromise() {
-        const { storage } = this
-        return Promise.all([
-            storage.fungibleTokenList.initializedPromise,
-            storage.nonFungibleTokenList.initializedPromise,
-            storage.fungibleTokenBlockedBy.initializedPromise,
-            storage.nonFungibleTokenBlockedBy.initializedPromise,
-            storage.credibleFungibleTokenList.initializedPromise,
-            storage.credibleNonFungibleTokenList.initializedPromise,
-            storage.nonFungibleCollectionMap.initializedPromise,
-        ]).then(() => {})
-    }
-
     constructor(
         protected context: WalletAPI.IOContext,
-        protected defaultValue: TokenStorage<ChainId, SchemaType>,
+        protected storage: StorageObject<TokenStorage<ChainId, SchemaType>>,
         protected subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
@@ -96,9 +68,18 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Token`, defaultValue)
-        this.storage = storage
-
+        if (
+            !(
+                storage.credibleFungibleTokenList.initialized &&
+                storage.credibleNonFungibleTokenList.initialized &&
+                storage.fungibleTokenBlockedBy.initialized &&
+                storage.fungibleTokenList.initialized &&
+                storage.nonFungibleCollectionMap.initialized &&
+                storage.nonFungibleTokenBlockedBy.initialized &&
+                storage.nonFungibleTokenList.initialized
+            )
+        )
+            throw new Error('Storage not initialized')
         if (this.subscriptions.account) {
             this.trustedFungibleTokens = mapSubscription(
                 mergeSubscription(
