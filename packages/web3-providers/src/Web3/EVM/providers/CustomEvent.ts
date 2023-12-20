@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid'
-import { type ChainId, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
+import { type ChainId, ProviderType, type RequestArguments, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
 import { safeUnreachable } from '@masknet/kit'
 import type { Account } from '@masknet/shared-base'
+import { first } from 'lodash-es'
 
 export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     constructor() {
@@ -50,10 +51,7 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
                 requestArguments,
             },
         })
-
-        document.dispatchEvent(event)
-
-        return new Promise((resolve, reject) => {
+        const defer = new Promise<T>((resolve, reject) => {
             const handler = (
                 event: CustomEvent<{
                     id: string
@@ -62,9 +60,6 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
                 }>,
             ) => {
                 if (event.detail.id !== id) return
-
-                // @ts-expect-error TODO: define the custom event
-                document.removeEventListener('mask_custom_event_provider_response', handler)
 
                 if (event.detail.error) {
                     reject(event.detail.error)
@@ -75,7 +70,27 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
             // @ts-expect-error TODO: define the custom event
             document.addEventListener('mask_custom_event_provider_response', handler, {
                 signal: AbortSignal.timeout(3 * 60 * 1000),
+                once: true,
             })
         })
+
+        document.dispatchEvent(event)
+        return defer
+    }
+
+    override async connect(): Promise<Account<ChainId>> {
+        const accounts = await this.request<string[]>({
+            method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
+            params: [],
+        })
+        const chainId = await this.request<string>({
+            method: EthereumMethodType.ETH_CHAIN_ID,
+            params: [],
+        })
+
+        return {
+            chainId: Number.parseInt(chainId, 16),
+            account: first(accounts) ?? '',
+        }
     }
 }

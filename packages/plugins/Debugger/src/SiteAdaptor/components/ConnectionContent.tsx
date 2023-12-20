@@ -544,7 +544,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                 onClick={async () => {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
-                                            await onConnect(ChainId.Mainnet, ProviderType.MetaMask)
+                                            await onConnect(ChainId.Mainnet, ProviderType.CustomEvent)
                                             break
                                         default:
                                             break
