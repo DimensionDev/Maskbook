@@ -1018,7 +1018,7 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface MessageState<Request, Response> extends Startable {
+export interface MessageState<Request, Response> {
     /** All unresolved requests. */
     messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
     /** Updates a request. */
@@ -1026,9 +1026,7 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request. */
     applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse<T>(
-        message: TransferableMessage<Request, Response>,
-    ): Promise<ReasonableMessage<Request, Response>>
+    applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
     approveRequest(id: string, updates?: Request): Promise<Response | void>
     /** Rejects a request. */

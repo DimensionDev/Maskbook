@@ -20,8 +20,15 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     const { value: address } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_AddressBookV2`, {
         value: EMPTY_LIST,
     }).storage
+    const { messages } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_Message`, {
+        messages: {},
+    }).storage
 
-    const [Provider_] = await Promise.all([Provider.EVMProvider.new(context), address.initializedPromise] as const)
+    const [Provider_] = await Promise.all([
+        Provider.EVMProvider.new(context),
+        address.initializedPromise,
+        messages.initializedPromise,
+    ] as const)
 
     const state: Web3State = lazyObject({
         Settings: () => new Settings.EVMSettings(),
@@ -36,7 +43,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
             new RiskWarning.EVMRiskWarning({
                 account: Provider_.account,
             }),
-        Message: () => new Message.EVMMessage(context),
+        Message: () => new Message.EVMMessage(context, messages),
         Token: () =>
             new Token.EVMToken(context, {
                 account: Provider_.account,
