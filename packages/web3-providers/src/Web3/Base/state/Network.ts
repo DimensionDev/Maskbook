@@ -20,7 +20,7 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
     public networks: Subscription<Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>>
 
     constructor(
-        protected pluginID: NetworkPluginID,
+        private pluginID: NetworkPluginID,
         private networkIDStorage: StorageItem<string>,
         private networksStorage: StorageItem<Record<string, ReasonableNetwork<ChainId, SchemaType, NetworkType>>>,
     ) {

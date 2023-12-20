@@ -1,4 +1,4 @@
-import { lazyObject, PersistentStorages, NetworkPluginID, EMPTY_LIST, InMemoryStorages } from '@masknet/shared-base'
+import { lazyObject, PersistentStorages, NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainId,
     ChainIdList,
@@ -15,48 +15,23 @@ import * as IdentityService from /* webpackDefer: true */ '../state/IdentityServ
 import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
-import { CurrencyType, GasOptionType, SourceType } from '@masknet/web3-shared-base'
-import { ProviderState } from '../../Base/state/Provider.js'
-
+import { addressStorage, networkStorage, settingsStorage, providerStorage } from '../../Base/storage.js'
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const { value: address } = PersistentStorages.Web3.createSubScope(
-        `${NetworkPluginID.PLUGIN_SOLANA}_AddressBookV2`,
-        { value: EMPTY_LIST },
-    ).storage
-    const { storage: network } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_SOLANA}_Network`, {
-        networkID: '1_ETH',
-        networks: {},
-    })
     const { value: transaction } = PersistentStorages.Web3.createSubScope(
         `${NetworkPluginID.PLUGIN_SOLANA}_Transaction`,
         { value: Object.fromEntries(ChainIdList.map((x) => [x, {}])) as TransactionStorage<ChainId, TransactionType> },
     ).storage
-    const { storage: settings } = InMemoryStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_SOLANA}_Settings`, {
-        currencyType: CurrencyType.USD,
-        gasOptionType: GasOptionType.NORMAL,
-        fungibleAssetSourceType: SourceType.DeBank,
-        nonFungibleAssetSourceType: SourceType.OpenSea,
-    })
-    const providerStorage = ProviderState.createStorage(
-        NetworkPluginID.PLUGIN_FLOW,
-        getDefaultChainId(),
-        getDefaultProviderType(),
-    )
-    await Promise.all([
-        providerStorage.account.initializedPromise,
-        providerStorage.providerType.initializedPromise,
-        address.initializedPromise,
-        network.networkID.initializedPromise,
-        network.networks.initializedPromise,
+    const [address, network, settings, provider] = await Promise.all([
+        addressStorage(NetworkPluginID.PLUGIN_SOLANA),
+        networkStorage(NetworkPluginID.PLUGIN_SOLANA),
+        settingsStorage(NetworkPluginID.PLUGIN_SOLANA),
+        providerStorage(NetworkPluginID.PLUGIN_SOLANA, getDefaultChainId(), getDefaultProviderType()),
+
         transaction.initializedPromise,
-        settings.currencyType.initializedPromise,
-        settings.fungibleAssetSourceType.initializedPromise,
-        settings.gasOptionType.initializedPromise,
-        settings.nonFungibleAssetSourceType.initializedPromise,
-    ] as const)
+    ])
 
     const state: Web3State = lazyObject({
-        Provider: () => new Provider.SolanaProvider(context, providerStorage),
+        Provider: () => new Provider.SolanaProvider(context, provider),
         AddressBook: () => new AddressBook.SolanaAddressBook(address),
         IdentityService: () => new IdentityService.SolanaIdentityService(),
         Settings: () => new Settings.SolanaSettings(settings),

@@ -2,11 +2,9 @@ import { type StorageItem, type NameServiceID } from '@masknet/shared-base'
 import { attemptUntil, type NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 import type { NameServiceAPI } from '../../../entry-types.js'
 
-export abstract class NameServiceState<
-    DomainBook extends Record<string, string> = Record<string, string>,
-    DomainBooks extends Record<NameServiceID, DomainBook> = Record<NameServiceID, DomainBook>,
-> implements Web3NameServiceState
-{
+type DomainBook = Record<string, string>
+type DomainBooks = Record<NameServiceID, DomainBook>
+export abstract class NameServiceState implements Web3NameServiceState {
     constructor(
         private storage: StorageItem<DomainBooks>,
         private isValidAddress: (a: string) => boolean,

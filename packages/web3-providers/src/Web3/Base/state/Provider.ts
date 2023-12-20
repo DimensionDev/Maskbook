@@ -8,8 +8,6 @@ import {
     mapSubscription,
     mergeSubscription,
     type StorageObject,
-    InMemoryStorages,
-    type NetworkPluginID,
 } from '@masknet/shared-base'
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
@@ -51,21 +49,7 @@ export abstract class ProviderState<
         this.setupSubscriptions()
         this.setupProviders()
     }
-    signWithPersona
-    static createStorage<ChainId extends number, ProviderType extends string>(
-        pluginID: NetworkPluginID,
-        defaultChainId: ChainId,
-        defaultProviderType: ProviderType,
-    ) {
-        const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${getSiteType() ?? 'Provider'}`, {
-            account: {
-                account: '',
-                chainId: defaultChainId,
-            },
-            providerType: defaultProviderType,
-        })
-        return storage
-    }
+    public signWithPersona
 
     protected setupSubscriptions() {
         if (!this.site) return
