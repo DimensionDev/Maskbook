@@ -4,7 +4,6 @@ import type {
     ECKeyIdentifier,
     Account,
     Wallet,
-    Startable,
     SignType,
     PopupRoutes,
     PopupRoutesParamsMap,
@@ -85,7 +84,9 @@ export namespace WalletAPI {
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
-    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
+    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
+        readonly ready: boolean
+        readonly readyPromise: Promise<void>
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
         readonly subscription: {

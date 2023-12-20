@@ -1,11 +1,4 @@
-import type { WalletAPI } from '../../../entry-types.js'
-import {
-    type ECKeyIdentifier,
-    mapSubscription,
-    mergeSubscription,
-    type Account,
-    NetworkPluginID,
-} from '@masknet/shared-base'
+import { type ECKeyIdentifier, mapSubscription, mergeSubscription, type Account } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -35,17 +28,6 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkTypeFromChainId(chainId: ChainId) {
         return EVMChainResolver.networkType(chainId) ?? NetworkType.Ethereum
-    }
-
-    private constructor(io: WalletAPI.IOContext) {
-        super(io)
-    }
-    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType())
-
-    static async new(io: WalletAPI.IOContext) {
-        const provider = new this(io)
-        await provider.setup()
-        return provider
     }
 
     protected override async setupSubscriptions() {

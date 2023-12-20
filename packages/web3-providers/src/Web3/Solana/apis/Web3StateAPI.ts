@@ -4,6 +4,8 @@ import {
     ChainIdList,
     type Web3State,
     type Transaction as TransactionType,
+    getDefaultChainId,
+    getDefaultProviderType,
 } from '@masknet/web3-shared-solana'
 import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
@@ -14,6 +16,7 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { CurrencyType, GasOptionType, SourceType } from '@masknet/web3-shared-base'
+import { ProviderState } from '../../Base/state/Provider.js'
 
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: address } = PersistentStorages.Web3.createSubScope(
@@ -34,8 +37,14 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
         fungibleAssetSourceType: SourceType.DeBank,
         nonFungibleAssetSourceType: SourceType.OpenSea,
     })
-    const [Provider_] = await Promise.all([
-        Provider.SolanaProvider.new(context),
+    const providerStorage = ProviderState.createStorage(
+        NetworkPluginID.PLUGIN_FLOW,
+        getDefaultChainId(),
+        getDefaultProviderType(),
+    )
+    await Promise.all([
+        providerStorage.account.initializedPromise,
+        providerStorage.providerType.initializedPromise,
         address.initializedPromise,
         network.networkID.initializedPromise,
         network.networks.initializedPromise,
@@ -47,6 +56,7 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
     ] as const)
 
     const state: Web3State = lazyObject({
+        Provider: () => new Provider.SolanaProvider(context, providerStorage),
         AddressBook: () => new AddressBook.SolanaAddressBook(address),
         IdentityService: () => new IdentityService.SolanaIdentityService(),
         Settings: () => new Settings.SolanaSettings(settings),
@@ -54,12 +64,11 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
         Transaction: () =>
             new Transaction.SolanaTransaction(
                 {
-                    chainId: Provider_.chainId,
-                    account: Provider_.account,
+                    chainId: state.Provider?.chainId,
+                    account: state.Provider?.account,
                 },
                 transaction,
             ),
-        Provider: () => Provider_,
     })
     return state
 }

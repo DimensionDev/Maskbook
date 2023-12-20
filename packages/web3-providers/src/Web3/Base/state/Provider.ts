@@ -29,7 +29,6 @@ export abstract class ProviderState<
 {
     protected site = getSiteType()
 
-    abstract storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>
     public account?: Subscription<string>
     public chainId?: Subscription<ChainId>
     public networkType?: Subscription<NetworkType>
@@ -44,11 +43,16 @@ export abstract class ProviderState<
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
-    protected constructor(protected context: WalletAPI.IOContext) {
+    constructor(
+        protected context: WalletAPI.IOContext,
+        protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
+    ) {
         this.signWithPersona = context.signWithPersona
+        this.setupSubscriptions()
+        this.setupProviders()
     }
     signWithPersona
-    protected static createStorage<ChainId extends number, ProviderType extends string>(
+    static createStorage<ChainId extends number, ProviderType extends string>(
         pluginID: NetworkPluginID,
         defaultChainId: ChainId,
         defaultProviderType: ProviderType,
@@ -61,23 +65,6 @@ export abstract class ProviderState<
             providerType: defaultProviderType,
         })
         return storage
-    }
-
-    get ready() {
-        return this.storage.account.initialized && this.storage.providerType.initialized
-    }
-
-    get readyPromise() {
-        return Promise.all([
-            this.storage.account.initializedPromise,
-            this.storage.providerType.initializedPromise,
-        ]).then(() => {})
-    }
-
-    async setup() {
-        await this.readyPromise
-        this.setupSubscriptions()
-        this.setupProviders()
     }
 
     protected setupSubscriptions() {

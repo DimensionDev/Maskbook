@@ -11,6 +11,8 @@ import {
     ChainIdList,
     type Web3State,
     type Transaction as TransactionType,
+    getDefaultChainId,
+    getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as RiskWarning from /* webpackDefer: true */ '../state/RiskWarning.js'
@@ -30,6 +32,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { CurrencyType, GasOptionType, SourceType } from '@masknet/web3-shared-base'
 import { getEnumAsArray } from '@masknet/kit'
+import { ProviderState } from '../../Base/state/Provider.js'
 
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: address } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_AddressBookV2`, {
@@ -69,8 +72,14 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     const { value: riskWarning } = InMemoryStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_RiskWarning`, {
         value: {},
     }).storage
-    const [Provider_] = await Promise.all([
-        Provider.EVMProvider.new(context),
+    const providerStorage = ProviderState.createStorage(
+        NetworkPluginID.PLUGIN_EVM,
+        getDefaultChainId(),
+        getDefaultProviderType(),
+    )
+    await Promise.all([
+        providerStorage.account.initializedPromise,
+        providerStorage.providerType.initializedPromise,
         address.initializedPromise,
         messages.initializedPromise,
         network.networkID.initializedPromise,
@@ -93,22 +102,26 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
 
     const state: Web3State = lazyObject({
         Settings: () => new Settings.EVMSettings(settings),
-        Provider: () => Provider_,
+        Provider: () => new Provider.EVMProvider(context, providerStorage),
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(NetworkPluginID.PLUGIN_EVM, network.networkID, network.networks),
         AddressBook: () => new AddressBook.EVMAddressBook(address),
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
-        RiskWarning: () => new RiskWarning.EVMRiskWarning(Provider_.account, riskWarning),
+        RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),
         Message: () => new Message.EVMMessage(context, messages),
-        Token: () => new Token.EVMToken(context, { account: Provider_.account, chainId: Provider_.chainId }, token),
+        Token: () =>
+            new Token.EVMToken(context, { account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
         Transaction: () =>
-            new Transaction.EVMTransaction({ chainId: Provider_.chainId, account: Provider_.account }, transaction),
+            new Transaction.EVMTransaction(
+                { chainId: state.Provider?.chainId, account: state.Provider?.account },
+                transaction,
+            ),
         TransactionFormatter: () => new TransactionFormatter.EVMTransactionFormatter(),
         TransactionWatcher: () =>
             new TransactionWatcher.EVMTransactionWatcher({
-                chainId: Provider_.chainId!,
+                chainId: state.Provider?.chainId!,
                 transactions: state.Transaction!.transactions!,
             }),
     })

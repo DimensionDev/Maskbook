@@ -13,7 +13,6 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
-    Startable,
     SignType,
 } from '@masknet/shared-base'
 
@@ -1100,7 +1099,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ) => Promise<void>
 }
 
-export interface ProviderState<ChainId, ProviderType, NetworkType> extends Startable {
+export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
     /** The chain id of the currently visiting site. */

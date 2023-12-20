@@ -1,4 +1,3 @@
-import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -16,7 +15,6 @@ import {
 import { FlowWalletProviders } from '../providers/index.js'
 import { FlowChainResolver } from '../apis/ResolverAPI.js'
 import { ProviderState } from '../../Base/state/Provider.js'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export class FlowProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     protected override providers = FlowWalletProviders
@@ -29,15 +27,5 @@ export class FlowProvider extends ProviderState<ChainId, ProviderType, NetworkTy
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
         return FlowChainResolver.networkType(chainId) ?? NetworkType.Flow
-    }
-    private constructor(io: WalletAPI.IOContext) {
-        super(io)
-    }
-    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_FLOW, getDefaultChainId(), getDefaultProviderType())
-
-    static async new(io: WalletAPI.IOContext) {
-        const provider = new this(io)
-        await provider.setup()
-        return provider
     }
 }

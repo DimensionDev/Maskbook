@@ -1,5 +1,3 @@
-import type { WalletAPI } from '../../../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidChainId,
@@ -29,15 +27,5 @@ export class SolanaProvider extends ProviderState<ChainId, ProviderType, Network
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
         return SolanaChainResolver.networkType(chainId) ?? NetworkType.Solana
-    }
-    private constructor(io: WalletAPI.IOContext) {
-        super(io)
-    }
-    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_SOLANA, getDefaultChainId(), getDefaultProviderType())
-
-    static async new(io: WalletAPI.IOContext) {
-        const provider = new this(io)
-        await provider.setup()
-        return provider
     }
 }
