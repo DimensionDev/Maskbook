@@ -14,9 +14,15 @@ import {
 } from '@masknet/web3-shared-solana'
 import { SolanaWalletProviders } from '../providers/index.js'
 import { SolanaChainResolver } from '../apis/ResolverAPI.js'
-import { ProviderState } from '../../Base/state/Provider.js'
+import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
+import type { WalletAPI } from '../../../entry-types.js'
+import type { Account, StorageObject } from '@masknet/shared-base'
 
 export class SolanaProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
+        super(context, storage)
+        this.init()
+    }
     protected override providers = SolanaWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId

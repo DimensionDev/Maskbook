@@ -1,4 +1,10 @@
-import { type ECKeyIdentifier, mapSubscription, mergeSubscription, type Account } from '@masknet/shared-base'
+import {
+    type ECKeyIdentifier,
+    mapSubscription,
+    mergeSubscription,
+    type Account,
+    type StorageObject,
+} from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     type ChainId,
@@ -15,9 +21,14 @@ import {
 } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { EVMWalletProviders } from '../providers/index.js'
-import { ProviderState } from '../../Base/state/Provider.js'
+import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
+import type { WalletAPI } from '../../../entry-types.js'
 
 export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
+        super(context, storage)
+        this.init()
+    }
     protected providers = EVMWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId

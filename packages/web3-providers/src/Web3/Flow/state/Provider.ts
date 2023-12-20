@@ -14,9 +14,15 @@ import {
 } from '@masknet/web3-shared-flow'
 import { FlowWalletProviders } from '../providers/index.js'
 import { FlowChainResolver } from '../apis/ResolverAPI.js'
-import { ProviderState } from '../../Base/state/Provider.js'
+import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
+import type { WalletAPI } from '../../../entry-types.js'
+import type { Account, StorageObject } from '@masknet/shared-base'
 
 export class FlowProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
+        super(context, storage)
+        this.init()
+    }
     protected override providers = FlowWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId

@@ -12,7 +12,7 @@ import {
 import type { ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { WalletAPI } from '../../../entry-types.js'
 
-interface ProviderStorage<Account, ProviderType extends string> {
+export interface ProviderStorage<Account, ProviderType extends string> {
     account: Account
     providerType: ProviderType
 }
@@ -46,6 +46,8 @@ export abstract class ProviderState<
         protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
     ) {
         this.signWithPersona = context.signWithPersona
+    }
+    protected init() {
         this.setupSubscriptions()
         this.setupProviders()
     }
