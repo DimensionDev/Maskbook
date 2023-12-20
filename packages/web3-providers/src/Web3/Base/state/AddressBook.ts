@@ -1,49 +1,33 @@
 import type { Subscription } from 'use-subscription'
-import { EMPTY_LIST, type NetworkPluginID, PersistentStorages, type StorageItem } from '@masknet/shared-base'
+import { type StorageItem } from '@masknet/shared-base'
 import type { Contact, AddressBookState as Web3AddressBookState } from '@masknet/web3-shared-base'
 
 export abstract class AddressBookState implements Web3AddressBookState {
-    public storage: StorageItem<Contact[]>
     public contacts: Subscription<Contact[]>
-
     constructor(
-        protected options: {
-            pluginID: NetworkPluginID
-            isValidAddress(a: string): boolean
-            isSameAddress(a: string, b: string): boolean
-            formatAddress(a: string): string
-        },
+        private isValidAddress: (a: string) => boolean,
+        private isSameAddress: (a: string, b: string) => boolean,
+        private storage: StorageItem<Contact[]>,
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_AddressBookV2`, {
-            value: EMPTY_LIST,
-        })
-        this.storage = storage.value
+        if (!storage.initialized) throw new Error('Storage not initialized')
         this.contacts = this.storage.subscription
     }
 
-    get ready() {
-        return this.storage.initialized
-    }
-
-    get readyPromise() {
-        return this.storage.initializedPromise
-    }
-
     async addContact({ address, name }: Contact) {
-        if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
+        if (!this.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
         await this.storage.setValue(this.storage.value.concat({ name, address }))
     }
     async removeContact(address: string) {
-        if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
-        await this.storage.setValue(this.storage.value.filter((x) => !this.options.isSameAddress(x.address, address)))
+        if (!this.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
+        await this.storage.setValue(this.storage.value.filter((x) => !this.isSameAddress(x.address, address)))
     }
 
     async renameContact({ address, name }: Contact) {
-        if (!this.options.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
+        if (!this.isValidAddress(address)) throw new Error(`Invalid address: ${address}`)
 
         await this.storage.setValue(
             this.storage.value.map((x) => {
-                if (this.options.isSameAddress(x.address, address)) {
+                if (this.isSameAddress(x.address, address)) {
                     return { address, name }
                 }
                 return x

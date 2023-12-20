@@ -1,4 +1,4 @@
-import { lazyObject } from '@masknet/shared-base'
+import { lazyObject, PersistentStorages, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3State } from '@masknet/web3-shared-solana'
 import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
@@ -9,10 +9,15 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = await Provider.SolanaProvider.new(context)
+    const { value: address } = PersistentStorages.Web3.createSubScope(
+        `${NetworkPluginID.PLUGIN_SOLANA}_AddressBookV2`,
+        { value: EMPTY_LIST },
+    ).storage
+
+    const [Provider_] = await Promise.all([Provider.SolanaProvider.new(context), address.initializedPromise] as const)
 
     const state: Web3State = lazyObject({
-        AddressBook: () => new AddressBook.SolanaAddressBook(),
+        AddressBook: () => new AddressBook.SolanaAddressBook(address),
         IdentityService: () => new IdentityService.SolanaIdentityService(),
         Settings: () => new Settings.SolanaSettings(),
         Network: () => new Network.SolanaNetwork(),

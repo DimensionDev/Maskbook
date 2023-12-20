@@ -896,7 +896,7 @@ export interface SettingsState extends Startable {
     setDefaultCurrencyType: (type: CurrencyType) => Promise<void>
 }
 
-export interface AddressBookState extends Startable {
+export interface AddressBookState {
     /** The tracked addresses of currently chosen sub-network */
     contacts?: Subscription<Contact[]>
 

@@ -1,4 +1,4 @@
-import { lazyObject } from '@masknet/shared-base'
+import { lazyObject, PersistentStorages, NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3State } from '@masknet/web3-shared-evm'
 import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as RiskWarning from /* webpackDefer: true */ '../state/RiskWarning.js'
@@ -17,7 +17,11 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
-    const Provider_ = await Provider.EVMProvider.new(context)
+    const { value: address } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_AddressBookV2`, {
+        value: EMPTY_LIST,
+    }).storage
+
+    const [Provider_] = await Promise.all([Provider.EVMProvider.new(context), address.initializedPromise] as const)
 
     const state: Web3State = lazyObject({
         Settings: () => new Settings.EVMSettings(),
@@ -25,7 +29,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(),
-        AddressBook: () => new AddressBook.EVMAddressBook(),
+        AddressBook: () => new AddressBook.EVMAddressBook(address),
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(),
         RiskWarning: () =>
