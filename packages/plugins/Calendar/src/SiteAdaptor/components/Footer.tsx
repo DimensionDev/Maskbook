@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/shared'
-import { PluginID, Sniffings } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { type ReactNode } from 'react'

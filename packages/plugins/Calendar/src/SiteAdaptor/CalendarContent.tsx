@@ -10,7 +10,7 @@ import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { useCalendarTrans } from '../locales/i18n_generated.js'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { EventList } from './components/EventList.js'
-import { Footer, type FooterProps } from './components/Footer.js'
+import { Footer } from './components/Footer.js'
 import { NFTList } from './components/NFTList.js'
 import { NewsList } from './components/NewsList.js'
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props {
     target?: string
-    disableSetting: FooterProps['disableSetting']
+    disableSetting?: boolean
 }
 
 export function CalendarContent({ target, disableSetting }: Props) {
