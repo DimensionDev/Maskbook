@@ -1,4 +1,8 @@
 {
+    "set_nft": "NFT PFPを設定",
+    "nft_set_success": "NFT PFPを正常にセットアップしました",
+    "persona_verification_failed": "NFT PFPの検証に失敗しました",
+    "cancel": "キャンセル",
     "save": "保存",
     "change": "変更",
     "connect_your_wallet": "あなたのウォレットに接続",

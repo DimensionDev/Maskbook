@@ -951,6 +951,7 @@
     "popups_set_avatar_failed": "アバターを設定できませんでした。",
     "popups_wallet_request_source": "リクエストソース",
     "popups_wallet_sign_message": "署名メッセージ",
+    "popups_wallet_sign_raw_message": "メッセージ署名（Hex）",
     "popups_wallet_unlock_erc20_title": "<br /> あなたの{{symbol}}へのアクセス許可を与えますか？",
     "popups_wallet_unlock_erc20_tips": "許可を与えることにより、以下の <br /> 契約があなたの資金にアクセスすることを許可しています",
     "popups_wallet_unlock_erc20_placeholder": "最大支出上限を入力してください",
