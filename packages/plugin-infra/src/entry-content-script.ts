@@ -40,6 +40,7 @@ export {
     useSocialIdentity,
     useSiteThemeMode,
     useSocialIdentityByUserId,
+    type __SiteAdaptorContext__,
     __setSiteAdaptorContext__,
 } from './site-adaptor/index.js'
 
