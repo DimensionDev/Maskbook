@@ -27,6 +27,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
                 ),
                 new MaskWallet(),
             ),
+            [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
             [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
             [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
             [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
