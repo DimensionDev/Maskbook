@@ -13,6 +13,7 @@ import {
     forwardRef,
     Children,
     isValidElement,
+    useCallback,
     useState,
     useRef,
     useEffect,
@@ -171,7 +172,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
     const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
-    const innerRef = useRef<HTMLDivElement>(null)
+    const innerRef = useRef<HTMLDivElement>()
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
@@ -183,13 +184,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     useImperativeHandle(ref, () => innerRef?.current!)
 
     // #region hide tab should up to first when chick
-    useEffect(() => {
-        if (!innerRef?.current) return
-
-        const current = innerRef.current
-        setIsTabsOverflow(current.scrollWidth >= current.clientWidth + defaultTabSize)
-    }, [innerRef?.current, width])
     // #endregion
+    const innerRefCallback = useCallback((element: HTMLDivElement | null) => {
+      if (!element) return
+      setIsTabsOverflow(element.scrollWidth >= element.clientWidth + defaultTabSize)
+      innerRef.current = element
+    }, [])
 
     const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
@@ -267,7 +267,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         isOpen={open}
                         isOverflow={!!(isTabsOverflow && !hideArrowButton)}
                         {...rest}
-                        ref={innerRef}
+                        ref={innerRefCallback}
                         role="tablist">
                         {flexibleTabs}
                         {(isTabsOverflow || open) && !hideArrowButton ?
