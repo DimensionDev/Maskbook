@@ -10,7 +10,7 @@ import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { useCalendarTrans } from '../locales/i18n_generated.js'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { EventList } from './components/EventList.js'
-import { Footer } from './components/Footer.js'
+import { Footer, type FooterProps } from './components/Footer.js'
 import { NFTList } from './components/NFTList.js'
 import { NewsList } from './components/NewsList.js'
 
@@ -38,7 +38,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CalendarContent({ target }: { target?: string }) {
+interface Props {
+    target?: string
+    disableSetting: FooterProps['disableSetting']
+}
+
+export function CalendarContent({ target, disableSetting }: Props) {
     const t = useCalendarTrans()
     const { classes } = useStyles()
     const [pathname, setPathname] = useState(location.pathname)
@@ -111,7 +116,7 @@ export function CalendarContent({ target }: { target?: string }) {
                         dateString={dateString}
                     />
                 </TabPanel>
-                <Footer provider={currentTab} />
+                <Footer provider={currentTab} disableSetting={disableSetting} />
             </TabContext>
         </div>
     )
