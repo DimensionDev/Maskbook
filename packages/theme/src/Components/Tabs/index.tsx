@@ -19,6 +19,7 @@ import {
     useImperativeHandle,
     type ForwardRefExoticComponent,
     useMemo,
+    useCallback,
 } from 'react'
 import { BaseTab } from './BaseTab.js'
 import { FlexibleTab } from './FlexibleTab.js'
@@ -171,7 +172,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
     const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
-    const innerRef = useRef<HTMLDivElement>(null)
+    const innerElementRef = useRef<HTMLDivElement>()
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
@@ -180,15 +181,20 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const { onChange, variant = 'base', hideArrowButton, ...rest } = props
 
-    useImperativeHandle(ref, () => innerRef?.current!)
+    useImperativeHandle(ref, () => innerElementRef?.current!)
 
     // #region hide tab should up to first when chick
     useEffect(() => {
-        if (!innerRef?.current) return
+        if (!innerElementRef?.current) return
 
-        const current = innerRef.current
+        const current = innerElementRef.current
         setIsTabsOverflow(current.scrollWidth >= current.clientWidth + defaultTabSize)
-    }, [innerRef?.current, width])
+    }, [innerElementRef?.current, width])
+    const innerRef = useCallback((element: HTMLDivElement | null) => {
+        if (!element) return
+        setIsTabsOverflow(element.scrollWidth >= element.clientWidth + defaultTabSize)
+        innerElementRef.current = element
+    }, [])
     // #endregion
 
     const children = Children.map(props.children, (child) => {
@@ -240,7 +246,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     // #region Should close panel when click other area
     useClickAway(flexPanelRef, (event) => {
         if (variant !== 'flexible') return
-        const { left, right, top, bottom } = innerRef.current?.getBoundingClientRect() ?? {
+        const { left, right, top, bottom } = innerElementRef.current?.getBoundingClientRect() ?? {
             right: 0,
             left: 0,
             top: 0,
