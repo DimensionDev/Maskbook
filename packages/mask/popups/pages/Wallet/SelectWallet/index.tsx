@@ -43,7 +43,7 @@ const SelectWallet = memo(function SelectWallet() {
     const source = params.get('source')
     const { value: external_request } = useAsync(async () => {
         if (!external_request_id) return null
-        return Services.Wallet.SDK_getEIP2255PermissionRequestDetail(external_request_id)
+        return Services.Wallet.sdk_getEIP2255PermissionRequestDetail(external_request_id)
     }, [external_request_id])
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
@@ -77,6 +77,12 @@ const SelectWallet = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
+            if (external_request_id && external_request) {
+                // reject a request does not revoke the permission already granted.
+                // MetaMask has this behavior, we should follow them.
+                await Services.Wallet.sdk_denyEIP2255Permission(external_request_id)
+                return Services.Helper.removePopupWindow()
+            }
             // TODO Open the popup via a RPC request, and reject the request
             const rejected = await Promise.allSettled([
                 Promise.reject({
@@ -86,11 +92,11 @@ const SelectWallet = memo(function SelectWallet() {
             await Services.Wallet.resolveMaskAccount(rejected[0])
             await Services.Helper.removePopupWindow()
         }
-    }, [isVerifyWalletFlow])
+    }, [isVerifyWalletFlow, external_request_id, external_request])
 
     const handleConfirm = useCallback(async () => {
         if (external_request_id && external_request) {
-            await Services.Wallet.SDK_grantEIP2255Permission(external_request_id, [selected])
+            await Services.Wallet.sdk_grantEIP2255Permission(external_request_id, [selected])
             return Services.Helper.removePopupWindow()
         }
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
@@ -164,7 +170,7 @@ const SelectWallet = memo(function SelectWallet() {
                 <Box textAlign="center" paddingX={2}>
                     Connecting: <i>{external_request.origin}</i>
                     <br />
-                    Be aware of fraud!
+                    Please make sure the connected site is not a fraud.
                 </Box>
             :   null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">

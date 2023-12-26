@@ -1,4 +1,12 @@
 {
+    "token_operation$mint": "<to>{{to}}</to> が <bold>{{value}} {{symbol}}</bold>をミントしました。",
+    "token_operation$send": "<from>{{from}}</from> が <to>{{to}}</to> に送信されました",
+    "token_operation$claim": "<to>{{to}}</to> が <from>{{from}}</from> から受け取りました",
+    "token_operation$burn": "<from>{{from}}</from> が<bold>{{value}} {{symbol}}</bold>を燃やしました。",
+    "token_operation$deposit": "<from>{{from}}</from> が <bold>{{exchange}}</bold> に入金されました",
+    "token_operation$withdraw": "<from>{{from}}</from> が <bold>{{exchange}}</bold> を出金しました",
+    "token_operation_verbose$mint": "$t(token_operation$mint)",
+    "token_operation_verbose$send": "<from>{{from}}</from> が <to>{{to}}</to> に <bold>{{value}} {{symbol}}</bold> を送信しました",
     "token_operation_verbose$claim": "<to>{{to}}</to> が <from>{{from}}</from> で <bold>{{value}} {{symbol}}</bold> から受け取りました",
     "token_operation_verbose$burn": "$t(token_operation$burn)",
     "token_operation_verbose$deposit": "$t(token_operation$deposit)",

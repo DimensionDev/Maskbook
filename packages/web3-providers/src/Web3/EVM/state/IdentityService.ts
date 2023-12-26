@@ -1,5 +1,4 @@
 import { compact, uniqBy } from 'lodash-es'
-import type { WalletAPI } from '../../../entry-types.js'
 import {
     EMPTY_LIST,
     NetworkPluginID,
@@ -107,10 +106,6 @@ const resolveMaskXAddressType = createLookupTableResolver<BaseMaskX.SourceType, 
 )
 
 export class EVMIdentityService extends IdentityServiceState<ChainId> {
-    constructor(protected context: WalletAPI.IOContext) {
-        super()
-    }
-
     private createSocialAddress(
         type: SocialAddressType,
         address: string,

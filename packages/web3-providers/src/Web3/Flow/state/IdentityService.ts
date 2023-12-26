@@ -1,5 +1,4 @@
 import { compact } from 'lodash-es'
-import type { WalletAPI } from '../../../entry-types.js'
 import { type ChainId, isValidAddress } from '@masknet/web3-shared-flow'
 import { NetworkPluginID, type SocialIdentity, type SocialAddress, SocialAddressType } from '@masknet/shared-base'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
@@ -12,10 +11,6 @@ function getFlowAddress(bio: string) {
 }
 
 export class FlowIdentityService extends IdentityServiceState<ChainId> {
-    constructor(protected context: WalletAPI.IOContext) {
-        super()
-    }
-
     protected override async getFromRemote({ bio = '' }: SocialIdentity) {
         const address = getFlowAddress(bio)
 

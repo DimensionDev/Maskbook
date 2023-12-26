@@ -9,7 +9,7 @@
         "package.json": "pnpm-*.yaml, .pnpmfile.cjs"
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
+        "source.fixAll": "explicit"
     },
     "editor.tabSize": 4,
     "json.schemas": [

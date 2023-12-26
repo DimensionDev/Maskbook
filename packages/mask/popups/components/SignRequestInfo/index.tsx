@@ -33,17 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginTop: theme.spacing(3),
     },
-    message: {
-        fontSize: 12,
-        marginTop: theme.spacing(1.5),
-        color: theme.palette.maskColor.second,
-        wordBreak: 'break-all',
-        maxHeight: 260,
-        overflow: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
 }))
 
 interface SignRequestInfoProps {
@@ -67,7 +56,25 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(function SignRequestIn
                 </Box>
             :   null}
             <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
-            <Typography className={classes.message}>{message}</Typography>
+            <MessageDisplay message={message} />
         </main>
     )
 })
+
+function MessageDisplay({ message }: { message: string }) {
+    const t = useMaskSharedTrans()
+    const { classes } = useStyles()
+    if (message.startsWith('0x')) {
+        const string = new TextDecoder().decode(
+            new Uint8Array([...message.slice(2).matchAll(/([\da-f]{2})/gi)].map((i) => Number.parseInt(i[0], 16))),
+        )
+        return (
+            <>
+                <Typography className={classes.sourceText}>{string}</Typography>
+                <Typography className={classes.messageTitle}>{t.popups_wallet_sign_raw_message()}</Typography>
+                <Typography className={classes.sourceText}>{message}</Typography>
+            </>
+        )
+    }
+    return <Typography className={classes.sourceText}>{message}</Typography>
+}

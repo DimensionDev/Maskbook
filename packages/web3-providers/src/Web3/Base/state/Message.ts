@@ -6,45 +6,22 @@ import {
     type TransferableMessage,
     type MessageState as Web3MessageState,
 } from '@masknet/web3-shared-base'
-import { type NetworkPluginID, PersistentStorages, type StorageObject, mapSubscription } from '@masknet/shared-base'
-import type { WalletAPI } from '../../../entry-types.js'
+import { type StorageItem, mapSubscription } from '@masknet/shared-base'
 
 export abstract class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
-    public storage: StorageObject<{
-        messages: Record<string, ReasonableMessage<Request, Response>>
-    }>
-
     public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
-    constructor(
-        protected context: WalletAPI.IOContext,
-        protected options: {
-            pluginID: NetworkPluginID
-        },
-    ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Message`, {
-            messages: {},
-        })
-
-        this.storage = storage
-
-        this.messages = mapSubscription(this.storage.messages.subscription, (storage) => {
+    constructor(private storage: StorageItem<Record<string, ReasonableMessage<Request, Response>>>) {
+        if (!storage.initialized) throw new Error('Storage not initialized')
+        this.messages = mapSubscription(this.storage.subscription, (storage) => {
             return Object.values(storage)
                 .filter((x) => x.state === MessageStateType.NOT_DEPEND)
                 .sort((a, z) => a.createdAt.getTime() - z.createdAt.getTime())
         })
     }
 
-    get ready() {
-        return this.storage.messages.initialized
-    }
-
-    get readyPromise() {
-        return this.storage.messages.initializedPromise
-    }
-
     protected assertMessage(id: string) {
-        const message = this.storage.messages.value[id]
+        const message = this.storage.value[id]
         if (!message) throw new Error('Invalid message ID')
         return message
     }
@@ -56,7 +33,7 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
     protected async waitForApprovingRequest(id: string): Promise<ReasonableMessage<Request, Response>> {
         return new Promise((resolve, reject) => {
             const observe = () => {
-                const message = this.storage.messages.value[id]
+                const message = this.storage.value[id]
 
                 if (message) {
                     // not a state to be resolved
@@ -71,7 +48,7 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
                 unsubscribe()
             }
 
-            const unsubscribe = this.storage.messages.subscription.subscribe(observe)
+            const unsubscribe = this.storage.subscription.subscribe(observe)
             observe()
         })
     }
@@ -89,9 +66,9 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
             updatedAt: now,
         }
 
-        await this.storage.messages.setValue(
+        await this.storage.setValue(
             Object.fromEntries([
-                ...Object.entries(this.storage.messages.value).filter(
+                ...Object.entries(this.storage.value).filter(
                     // remove those resolved messages
                     ([_, message]) => message.state === MessageStateType.NOT_DEPEND,
                 ),
@@ -114,8 +91,8 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
     async updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void> {
         const message = this.assertMessage(id)
 
-        await this.storage.messages.setValue({
-            ...this.storage.messages.value,
+        await this.storage.setValue({
+            ...this.storage.value,
             [id]: {
                 ...message,
                 ...updates,
@@ -143,9 +120,9 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
     }
 
     async denyAllRequests(): Promise<void> {
-        await this.storage.messages.setValue(
+        await this.storage.setValue(
             Object.fromEntries(
-                Object.entries(this.storage.messages.value).map(([id, message]) => [
+                Object.entries(this.storage.value).map(([id, message]) => [
                     id,
                     {
                         ...message,

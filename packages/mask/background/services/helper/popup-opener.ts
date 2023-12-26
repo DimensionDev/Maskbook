@@ -67,14 +67,21 @@ async function openOrUpdatePopupWindow(route: PopupRoutes, params: ParamMap) {
     )
 }
 
-const noWalletUnlockNeeded: PopupRoutes[] = [PopupRoutes.PersonaSignRequest, PopupRoutes.Personas]
+const noWalletUnlockNeeded: PopupRoutes[] = [
+    PopupRoutes.PersonaSignRequest,
+    PopupRoutes.Personas,
+    PopupRoutes.WalletUnlock,
+]
 
+export interface OpenPopupWindowOptions {
+    bypassWalletLock?: boolean
+}
 export async function openPopupWindow<T extends PopupRoutes>(
     route: T,
     params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-    evenWhenWalletLocked?: boolean,
+    options?: OpenPopupWindowOptions,
 ): Promise<void> {
-    if (noWalletUnlockNeeded.includes(route) || evenWhenWalletLocked || !(await isLocked())) {
+    if (noWalletUnlockNeeded.includes(route) || options?.bypassWalletLock || !(await isLocked())) {
         return openOrUpdatePopupWindow(route, {
             close_after_unlock: true,
             ...params,

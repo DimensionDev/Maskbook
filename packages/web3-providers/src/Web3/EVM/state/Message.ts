@@ -1,7 +1,7 @@
 import { omitBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { EMPTY_OBJECT, NetworkPluginID, PopupRoutes, PopupsHistory, Sniffings } from '@masknet/shared-base'
+import { EMPTY_OBJECT, PopupRoutes, PopupsHistory, Sniffings, type StorageItem } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
@@ -18,8 +18,11 @@ import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
-    constructor(context: WalletAPI.IOContext) {
-        super(context, { pluginID: NetworkPluginID.PLUGIN_EVM })
+    constructor(
+        private context: WalletAPI.IOContext,
+        storage: StorageItem<Record<string, ReasonableMessage<MessageRequest, MessageResponse>>>,
+    ) {
+        super(storage)
     }
 
     protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {

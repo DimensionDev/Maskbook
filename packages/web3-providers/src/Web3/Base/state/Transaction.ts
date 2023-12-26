@@ -1,19 +1,12 @@
 import type { Subscription } from 'use-subscription'
-import type { WalletAPI } from '../../../entry-types.js'
-import {
-    mapSubscription,
-    mergeSubscription,
-    PersistentStorages,
-    type NetworkPluginID,
-    type StorageItem,
-} from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
 import {
     type RecentTransaction,
     TransactionStatusType,
     type TransactionState as Web3TransactionState,
 } from '@masknet/web3-shared-base'
 
-type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
+export type TransactionStorage<ChainId extends PropertyKey, Transaction> = Record<
     ChainId,
     | Record<
           // address
@@ -27,28 +20,20 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
     implements Web3TransactionState<ChainId, Transaction>
 {
     static MAX_RECORD_SIZE = 20
-
-    public storage: StorageItem<TransactionStorage<ChainId, Transaction>>
     public transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
     constructor(
-        protected context: WalletAPI.IOContext,
-        protected chainIds: ChainId[],
-        protected subscriptions: {
+        private subscriptions: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>
         },
-        protected options: {
-            pluginID: NetworkPluginID
+        private options: {
             formatAddress(a: string): string
             isValidChainId(chainId?: ChainId): boolean
         },
+        private storage: StorageItem<TransactionStorage<ChainId, Transaction>>,
     ) {
-        const { storage } = PersistentStorages.Web3.createSubScope(`${this.options.pluginID}_Transaction`, {
-            value: Object.fromEntries(chainIds.map((x) => [x, {}])) as TransactionStorage<ChainId, Transaction>,
-        })
-        this.storage = storage.value
-
+        if (!storage.initialized) throw new Error('Storage not initialized')
         if (this.subscriptions.chainId && this.subscriptions.account) {
             this.transactions = mapSubscription(
                 mergeSubscription(this.subscriptions.chainId, this.subscriptions.account, this.storage.subscription),
@@ -59,15 +44,6 @@ export abstract class TransactionState<ChainId extends PropertyKey, Transaction>
             )
         }
     }
-
-    get ready() {
-        return this.storage.initialized
-    }
-
-    get readyPromise() {
-        return this.storage.initializedPromise
-    }
-
     async getTransaction(chainId: ChainId, address: string, id: string): Promise<Transaction | undefined> {
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)

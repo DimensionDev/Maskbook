@@ -1,5 +1,3 @@
-import type { WalletAPI } from '../../../entry-types.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidChainId,
@@ -16,9 +14,15 @@ import {
 } from '@masknet/web3-shared-solana'
 import { SolanaWalletProviders } from '../providers/index.js'
 import { SolanaChainResolver } from '../apis/ResolverAPI.js'
-import { ProviderState } from '../../Base/state/Provider.js'
+import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
+import type { WalletAPI } from '../../../entry-types.js'
+import type { Account, StorageObject } from '@masknet/shared-base'
 
 export class SolanaProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+    constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
+        super(context, storage)
+        this.init()
+    }
     protected override providers = SolanaWalletProviders
     protected override isValidAddress = isValidAddress
     protected override isValidChainId = isValidChainId
@@ -29,15 +33,5 @@ export class SolanaProvider extends ProviderState<ChainId, ProviderType, Network
     protected override getDefaultChainId = getDefaultChainId
     protected override getNetworkTypeFromChainId(chainId: ChainId): NetworkType {
         return SolanaChainResolver.networkType(chainId) ?? NetworkType.Solana
-    }
-    private constructor(io: WalletAPI.IOContext) {
-        super(io)
-    }
-    storage = ProviderState.createStorage(NetworkPluginID.PLUGIN_SOLANA, getDefaultChainId(), getDefaultProviderType())
-
-    static async new(io: WalletAPI.IOContext) {
-        const provider = new this(io)
-        await provider.setup()
-        return provider
     }
 }

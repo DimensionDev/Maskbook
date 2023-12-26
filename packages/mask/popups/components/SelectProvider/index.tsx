@@ -89,7 +89,7 @@ export const SelectProvider = memo(function SelectProvider() {
                 await Services.Helper.openPopupWindow(
                     PopupRoutes.Personas,
                     { providerType, from: PopupModalRoutes.SelectProvider, tab: PopupHomeTabType.ConnectedWallets },
-                    true,
+                    { bypassWalletLock: true },
                 )
 
                 return

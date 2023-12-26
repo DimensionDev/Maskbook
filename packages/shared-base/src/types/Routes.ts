@@ -42,6 +42,7 @@ export enum PopupModalRoutes {
 export enum PopupRoutes {
     Root = '/',
     Wallet = '/wallet',
+    WalletUnlock = '/wallet/unlock',
     WalletStartUp = '/wallet/startup',
     AddDeriveWallet = '/wallet/addDerive',
     WalletSettings = '/wallet/settings',
@@ -71,16 +72,12 @@ export enum PopupRoutes {
     ConnectedSites = '/wallet/connected-sites',
     Personas = '/personas',
     Logout = '/personas/logout',
-    SocialAccounts = '/personas/accounts',
     AccountDetail = '/personas/accounts/detail',
-    ConnectedWallets = '/personas/connected-wallets',
     ConnectWallet = '/personas/connect-wallet',
     PersonaSignRequest = '/personas/sign-request',
     PermissionAwareRedirect = '/redirect',
     RequestPermission = '/request-permission',
-    SignRequest = '/sign-request',
     Swap = '/swap',
-    VerifyWallet = '/personas/verify',
     ChangeOwner = '/wallet/change-owner',
     Friends = '/friends',
     FriendsDetail = '/friends/detail',
@@ -118,6 +115,10 @@ export interface PopupRoutesParamsMap {
         isCreating?: boolean
         external_request?: string
         // Unlock
+        close_after_unlock?: boolean
+        from?: string | null
+    }
+    [PopupRoutes.WalletUnlock]: {
         close_after_unlock?: boolean
         from?: string | null
     }

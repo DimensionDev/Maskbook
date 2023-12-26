@@ -1,5 +1,4 @@
 import type { Subscription } from 'use-subscription'
-import type { WalletAPI } from '../../../entry-types.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, type Transaction } from '@masknet/web3-shared-evm'
 import { type RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -8,14 +7,11 @@ import { evm } from '../../../Manager/registry.js'
 import { TransactionWatcherState } from '../../Base/state/TransactionWatcher.js'
 
 export class EVMTransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {
-    constructor(
-        context: WalletAPI.IOContext,
-        subscriptions: {
-            chainId: Subscription<ChainId>
-            transactions: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
-        },
-    ) {
-        super(context, subscriptions, {
+    constructor(subscriptions: {
+        chainId: Subscription<ChainId>
+        transactions: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
+    }) {
+        super(subscriptions, {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             defaultBlockDelay: 15,
             getTransactionCheckers: () => EVMTransactionCheckers,

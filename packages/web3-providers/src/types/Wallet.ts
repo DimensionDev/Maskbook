@@ -4,7 +4,6 @@ import type {
     ECKeyIdentifier,
     Account,
     Wallet,
-    Startable,
     SignType,
     PopupRoutes,
     PopupRoutesParamsMap,
@@ -55,7 +54,6 @@ export namespace WalletAPI {
         openPopupWindow<T extends PopupRoutes>(
             route: T,
             params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-            evenWhenWalletLocked?: boolean,
         ): Promise<void>
         /** Open walletconnect dialog */
         openWalletConnectDialog(uri: string): Promise<void>
@@ -74,7 +72,7 @@ export namespace WalletAPI {
             },
         ): Promise<string>
         /** Connect origin to Mask wallet  */
-        SDK_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
+        sdk_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
 
         /** Select a Mask Wallet account */
         selectMaskWalletAccount(
@@ -86,7 +84,9 @@ export namespace WalletAPI {
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
-    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> extends Startable {
+    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
+        readonly ready: boolean
+        readonly readyPromise: Promise<void>
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
         readonly subscription: {

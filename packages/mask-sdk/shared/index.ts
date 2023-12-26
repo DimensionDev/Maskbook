@@ -1,6 +1,7 @@
 /// <reference path="../public-api/index.ts" />
+import type { MaskEthereumProviderRpcError } from './error.js'
 export interface BridgeAPI {
-    eth_request(request: unknown): Promise<unknown>
+    eth_request(request: unknown): Promise<{ e?: MaskEthereumProviderRpcError | null; d?: unknown }>
     reload(): Promise<void>
 }
 export interface UserScriptAPI {
@@ -13,3 +14,5 @@ export interface InitInformation {
 export { serializer } from './serializer.js'
 export { createMaskSDKChannel } from './channel.js'
 export * from './types.js'
+export * from './error.js'
+export * from './error-generated.js'

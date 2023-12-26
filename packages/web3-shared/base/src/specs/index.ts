@@ -13,7 +13,6 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
-    Startable,
     SignType,
 } from '@masknet/shared-base'
 
@@ -881,7 +880,7 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface SettingsState extends Startable {
+export interface SettingsState {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
     /** The currency of estimated values and prices. */
@@ -896,7 +895,7 @@ export interface SettingsState extends Startable {
     setDefaultCurrencyType: (type: CurrencyType) => Promise<void>
 }
 
-export interface AddressBookState extends Startable {
+export interface AddressBookState {
     /** The tracked addresses of currently chosen sub-network */
     contacts?: Subscription<Contact[]>
 
@@ -908,7 +907,7 @@ export interface AddressBookState extends Startable {
     renameContact: (contact: Contact) => Promise<void>
 }
 
-export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startable {
+export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
     /** The used network. */
@@ -929,7 +928,7 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> extends Startabl
     removeNetwork: (id: string) => Promise<void>
 }
 
-export interface RiskWarningState extends Startable {
+export interface RiskWarningState {
     /** Is approved */
     approved?: Subscription<boolean>
 
@@ -948,7 +947,7 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceState extends Startable {
+export interface NameServiceState {
     /** get address of domain name */
     lookup?: (domain: string) => Promise<string | undefined>
     /** get domain name of address */
@@ -957,7 +956,7 @@ export interface NameServiceState extends Startable {
     safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
 }
 
-export interface TokenState<ChainId, SchemaType> extends Startable {
+export interface TokenState<ChainId, SchemaType> {
     /** The user trusted fungible tokens. */
     trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
     /** The user trusted non-fungible tokens. */
@@ -1018,7 +1017,7 @@ export interface TokenState<ChainId, SchemaType> extends Startable {
     ): Promise<void>
 }
 
-export interface MessageState<Request, Response> extends Startable {
+export interface MessageState<Request, Response> {
     /** All unresolved requests. */
     messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
     /** Updates a request. */
@@ -1026,9 +1025,7 @@ export interface MessageState<Request, Response> extends Startable {
     /** Applies a request. */
     applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse<T>(
-        message: TransferableMessage<Request, Response>,
-    ): Promise<ReasonableMessage<Request, Response>>
+    applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
     approveRequest(id: string, updates?: Request): Promise<Response | void>
     /** Rejects a request. */
@@ -1037,7 +1034,7 @@ export interface MessageState<Request, Response> extends Startable {
     denyAllRequests(): Promise<void>
 }
 
-export interface TransactionState<ChainId, Transaction> extends Startable {
+export interface TransactionState<ChainId, Transaction> {
     /** The tracked transactions of currently chosen sub-network */
     transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
 
@@ -1102,7 +1099,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     ) => Promise<void>
 }
 
-export interface ProviderState<ChainId, ProviderType, NetworkType> extends Startable {
+export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
     /** The chain id of the currently visiting site. */
