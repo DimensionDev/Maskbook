@@ -21,6 +21,7 @@ import { evm } from '../../../Manager/registry.js'
 
 export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
+    private walletsSubscription = createSubscriptionFromValueRef(this.ref)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
         await this.context?.MaskWalletContext?.renameWallet(address, name)
     }
@@ -82,7 +83,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     override get subscription() {
         return {
             ...super.subscription,
-            wallets: createSubscriptionFromValueRef(this.ref),
+            wallets: this.walletsSubscription,
         }
     }
 
