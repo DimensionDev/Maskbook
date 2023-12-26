@@ -5,7 +5,6 @@ import type { RedPacketJSONPayloadFromChain } from '@masknet/web3-providers/type
 import { getRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { RedPacketRPC } from '../../messages.js'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x5db05aba'
 
@@ -28,7 +27,7 @@ export function useRedPacketHistory(
                 )
 
                 if (!historyTransactions) return EMPTY_LIST as RedPacketJSONPayloadFromChain[]
-                return RedPacketRPC.getRedPacketHistoryFromDatabase(historyTransactions)
+                return historyTransactions
             }
 
             const blockNumber = await EVMWeb3.getBlockNumber({ chainId })
@@ -42,7 +41,7 @@ export function useRedPacketHistory(
             )
             if (!payloadList) return EMPTY_LIST as RedPacketJSONPayloadFromChain[]
 
-            return RedPacketRPC.getRedPacketHistoryFromDatabase(payloadList)
+            return payloadList
         },
         select: useCallback(
             (query: RedPacketJSONPayloadFromChain[]) =>
