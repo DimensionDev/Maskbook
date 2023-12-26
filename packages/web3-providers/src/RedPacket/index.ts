@@ -19,6 +19,11 @@ import {
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { BaseHubOptions, RedPacketBaseAPI } from '../entry-types.js'
 
+function toNumber(val: any) {
+    if (typeof val.toNumber === 'function') return val.toNumber()
+    return typeof val === 'string' ? Number.parseInt(val, 10) : val
+}
+
 class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     getHistories(
         chainId: ChainId,
@@ -139,7 +144,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                         name: decodedInputParam._name,
                         message: decodedInputParam._message,
                     },
-                    duration: decodedInputParam._duration.toNumber() * 1000,
+                    duration: toNumber(decodedInputParam._duration) * 1000,
                     token_ids: decodedInputParam._erc721_token_ids.map((x) => x.toString()),
                     // #region Retrieve at NFT History List Item.
                     rpid: '',
@@ -175,10 +180,10 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     contract_address: tx.to,
                     txid: tx.hash ?? '',
                     chainId: tx.chainId,
-                    shares: decodedInputParam._number.toNumber(),
+                    shares: toNumber(decodedInputParam._number),
                     is_random: decodedInputParam._ifrandom,
                     total: decodedInputParam._total_tokens.toString(),
-                    duration: decodedInputParam._duration.toNumber() * 1000,
+                    duration: toNumber(decodedInputParam._duration) * 1000,
                     block_number: Number(tx.blockNumber),
                     contract_version: 4,
                     network: EVMChainResolver.networkType(tx.chainId),
