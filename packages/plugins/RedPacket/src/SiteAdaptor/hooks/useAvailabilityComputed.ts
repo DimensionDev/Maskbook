@@ -4,6 +4,8 @@ import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-providers/types'
 import { useAvailability } from './useAvailability.js'
+import { useQuery } from '@tanstack/react-query'
+import { RedPacketRPC } from '../../messages.js'
 
 /**
  * Fetch the red packet info from the chain
@@ -18,6 +20,14 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const asyncResult = useAvailability(payload.rpid, payload.contract_address, payload.contract_version, {
         account,
         chainId: parsedChainId,
+    })
+
+    const { data: password = payload.password } = useQuery({
+        queryKey: ['red-packet', 'password', payload.txid],
+        queryFn: async () => {
+            const record = await RedPacketRPC.getRedPacketRecord(payload.txid)
+            return record?.password
+        },
     })
 
     const result = asyncResult
@@ -38,7 +48,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isClaimed = availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
-    const isPasswordValid = !!(payload.password && payload.password !== 'PASSWORD INVALID')
+    const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
     return {
         ...asyncResult,
         computed: {
