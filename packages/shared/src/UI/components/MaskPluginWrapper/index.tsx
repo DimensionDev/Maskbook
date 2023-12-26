@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { Typography, SnackbarContent, Link } from '@mui/material'
+import { Typography, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Box } from '@mui/system'
 import {
