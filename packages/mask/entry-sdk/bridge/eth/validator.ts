@@ -1,5 +1,4 @@
 import { MaskEthereumProviderRpcError, fromMessage, ErrorCode } from '@masknet/sdk'
-import { Err, Ok, type Result } from 'ts-results-es'
 import z, { type ZodError } from 'zod'
 
 export const requestSchema = z.object({
@@ -7,13 +6,18 @@ export const requestSchema = z.object({
     params: z.object({}).or(z.array(z.unknown())).nullish().optional(),
 })
 export function fromZodError(error: ZodError) {
-    // TODO: flatten zod error
-    return fromMessage(error.message) || new MaskEthereumProviderRpcError(ErrorCode.InvalidParams, error.message)
+    const m = fromMessage(error.message)
+    if (m) return m
+    console.error(...error.issues)
+    const message =
+        'InvalidParams: ' +
+        error.issues.map((issue) => `(${issue.code})${issue.path.join('.')}: ${issue.message}`).join('; ')
+    return m || new MaskEthereumProviderRpcError(ErrorCode.InvalidParams, message)
 }
 
 namespace _ {
     export const httpsURL = z.string().startsWith('https://').url()
-    export const hex = z.string().regex(/0x[\da-f]+/g)
+    export const hex = z.string().regex(/0x[\da-f]*/g)
     export const hexAllowCap = z.string().regex(/^0x[\dA-Fa-f]+$/g)
     export const unpadded_hex = z.string().regex(/^0x([1-9a-f]+[\da-f]*|0)$/g)
 
@@ -41,31 +45,36 @@ namespace _ {
         .strict()
         .describe('Filter')
     export const filter_identifier = unpadded_hex.describe('FilterIdentifier')
-    export const hydrated_transactions = z.boolean().describe('HydratedTransactions')
+    export const hydrated_transactions = z.boolean().nullable().describe('HydratedTransactions')
     export const subscription_id = z.string()
     export const symbol = z.string().min(2).max(11)
     export const transaction = z
         .object({
-            type: z.string().regex(/^0x([\d,A-Fa-f]?){1,2}$/g),
-            nonce: unpadded_hex,
-            to: address,
-            from: address,
-            gas: unpadded_hex,
-            value: unpadded_hex,
-            input: hex,
-            gasPrice: unpadded_hex,
-            maxPriorityFeePerGas: unpadded_hex,
-            maxFeePerGas: unpadded_hex,
-            maxFeePerBlobGas: unpadded_hex,
+            type: z
+                .string()
+                .regex(/^0x([\d,A-Fa-f]?){1,2}$/g)
+                .nullable(),
+            nonce: unpadded_hex.nullable(),
+            to: address.nullable(),
+            from: address.nullable(),
+            gas: unpadded_hex.nullable(),
+            value: unpadded_hex.nullable(),
+            data: hexAllowCap.nullable(),
+            input: hex.nullable(),
+            gasPrice: unpadded_hex.nullable(),
+            maxPriorityFeePerGas: unpadded_hex.nullable(),
+            maxFeePerGas: unpadded_hex.nullable(),
+            maxFeePerBlobGas: unpadded_hex.nullable(),
             accessList: z
                 .object({
                     address,
                     storageKeys: z.string().array(),
                 })
                 .strict()
-                .array(),
-            blobVersionedHashes: z.string().array(),
-            blobs: z.string().array(),
+                .array()
+                .nullable(),
+            blobVersionedHashes: z.string().array().nullable(),
+            blobs: z.string().array().nullable(),
             chainId,
         })
         .partial()
@@ -79,13 +88,13 @@ namespace _ {
     export const block_object = z.any()
     export const EIP2255_PermissionList = z.array(
         z.object({
-            id: z.string(),
+            id: z.string().optional(),
             invoker: z.string(),
             caveats: z.array(
                 z.object({
                     type: z.string(),
                     value: z.unknown(),
-                    name: z.string(),
+                    name: z.string().optional(),
                 }),
             ),
         }),
@@ -195,7 +204,7 @@ export const ParamsValidate = {
     eth_coinbase: z.tuple([]),
     eth_estimateGas: z.tuple([_.transaction, _.block_number_or_tag.nullish()]),
     eth_feeHistory: z.tuple([
-        _.unpadded_hex.describe('blockCount'),
+        _.unpadded_hex.or(z.number().positive()).describe('blockCount'),
         _.block_number_or_tag.describe('newestBlock'),
         z.number().array().describe('rewardPercentiles'),
     ]),
@@ -235,68 +244,55 @@ export const ParamsValidate = {
     eth_uninstallFilter: z.tuple([_.filter_identifier]),
 }
 export const ReturnValidate = {
-    eth_subscribe: R(_.subscription_id),
-    eth_unsubscribe: R(z.boolean()),
-    wallet_addEthereumChain: R(z.null()),
-    wallet_switchEthereumChain: R(z.null()),
-    wallet_requestPermissions: R(_.EIP2255_PermissionList),
-    wallet_revokePermissions: R(z.null()),
-    wallet_getPermissions: R(_.EIP2255_PermissionList),
-    wallet_watchAsset: R(z.boolean()),
+    eth_subscribe: _.subscription_id,
+    eth_unsubscribe: z.boolean(),
+    wallet_addEthereumChain: z.null(),
+    wallet_switchEthereumChain: z.null(),
+    wallet_requestPermissions: _.EIP2255_PermissionList,
+    wallet_revokePermissions: z.null(),
+    wallet_getPermissions: _.EIP2255_PermissionList,
+    wallet_watchAsset: z.boolean(),
     // deprecated
-    eth_decrypt: R(z.never()),
+    eth_decrypt: z.never(),
     // deprecated
-    eth_getEncryptionPublicKey: R(z.never()),
-    eth_requestAccounts: R(_.address.array()),
-    eth_accounts: R(_.address.array()),
-    eth_signTypedData_v4: R(_.hex),
-    personal_sign: R(_.hex),
-    eth_sendTransaction: R(_.transaction_hash),
-    web3_clientVersion: R(z.string()),
-    eth_blockNumber: R(_.unpadded_hex),
-    eth_call: R(_.hex),
-    eth_chainId: R(_.chainId),
-    eth_coinbase: R(_.address),
-    eth_estimateGas: R(_.unpadded_hex),
-    eth_feeHistory: R(_.fee_history_result),
-    eth_gasPrice: R(_.unpadded_hex),
-    eth_getBalance: R(_.unpadded_hex),
-    eth_getBlockByHash: R(_.block_object),
-    eth_getBlockByNumber: R(_.block_object),
-    eth_getBlockReceipts: R(_.receipts_information),
-    eth_getBlockTransactionCountByHash: R(_.transaction_count),
-    eth_getBlockTransactionCountByNumber: R(_.transaction_count),
-    eth_getCode: R(_.hex),
-    eth_getFilterChanges: R(_.log_objects),
-    eth_getFilterLogs: R(_.log_objects),
-    eth_getLogs: R(_.log_objects),
-    eth_getProof: R(_.account),
-    eth_getStorageAt: R(_.hex),
-    eth_getTransactionByBlockHashAndIndex: R(_.transaction_information),
-    eth_getTransactionByBlockNumberAndIndex: R(_.transaction_information),
-    eth_getTransactionByHash: R(_.transaction_information),
-    eth_getTransactionCount: R(_.unpadded_hex),
-    eth_getTransactionReceipt: R(_.receipts_information),
-    eth_getUncleCountByBlockHash: R(_.uncle_count),
-    eth_getUncleCountByBlockNumber: R(_.uncle_count),
-    eth_maxPriorityFeePerGas: R(_.unpadded_hex),
-    eth_newBlockFilter: R(_.filter_identifier),
-    eth_newFilter: R(_.filter_identifier),
-    eth_newPendingTransactionFilter: R(_.filter_identifier),
-    eth_sendRawTransaction: R(_.transaction_hash),
-    eth_syncing: R(_.syncing_status),
-    eth_uninstallFilter: R(z.boolean()),
-}
-
-function R<T extends z.ZodTypeAny>(t: T) {
-    return z.union([
-        z.custom<Result<z.infer<typeof t>, MaskEthereumProviderRpcError>>((val: unknown) => {
-            if (typeof val === 'object' && val) {
-                if (val instanceof Ok) return t.safeParse(val.value).success
-                if (val instanceof Err) return val.error instanceof MaskEthereumProviderRpcError
-            }
-            return false
-        }),
-        t,
-    ])
+    eth_getEncryptionPublicKey: z.never(),
+    eth_requestAccounts: _.address.array(),
+    eth_accounts: _.address.array(),
+    eth_signTypedData_v4: _.hex,
+    personal_sign: _.hex,
+    eth_sendTransaction: _.transaction_hash,
+    web3_clientVersion: z.string(),
+    eth_blockNumber: _.unpadded_hex,
+    eth_call: _.hex,
+    eth_chainId: _.chainId,
+    eth_coinbase: _.address,
+    eth_estimateGas: _.unpadded_hex,
+    eth_feeHistory: _.fee_history_result,
+    eth_gasPrice: _.unpadded_hex,
+    eth_getBalance: _.unpadded_hex,
+    eth_getBlockByHash: _.block_object,
+    eth_getBlockByNumber: _.block_object,
+    eth_getBlockReceipts: _.receipts_information,
+    eth_getBlockTransactionCountByHash: _.transaction_count,
+    eth_getBlockTransactionCountByNumber: _.transaction_count,
+    eth_getCode: _.hex,
+    eth_getFilterChanges: _.log_objects,
+    eth_getFilterLogs: _.log_objects,
+    eth_getLogs: _.log_objects,
+    eth_getProof: _.account,
+    eth_getStorageAt: _.hex,
+    eth_getTransactionByBlockHashAndIndex: _.transaction_information,
+    eth_getTransactionByBlockNumberAndIndex: _.transaction_information,
+    eth_getTransactionByHash: _.transaction_information,
+    eth_getTransactionCount: _.unpadded_hex,
+    eth_getTransactionReceipt: _.receipts_information,
+    eth_getUncleCountByBlockHash: _.uncle_count,
+    eth_getUncleCountByBlockNumber: _.uncle_count,
+    eth_maxPriorityFeePerGas: _.unpadded_hex,
+    eth_newBlockFilter: _.filter_identifier,
+    eth_newFilter: _.filter_identifier,
+    eth_newPendingTransactionFilter: _.filter_identifier,
+    eth_sendRawTransaction: _.transaction_hash,
+    eth_syncing: _.syncing_status,
+    eth_uninstallFilter: z.boolean(),
 }

@@ -23,31 +23,32 @@ function MaskSDKLoader() {
     if (!shouldShow) return null
     if (dismissed) return null
     return (
-        <Box>
-            (Dev mode only, UI to be done) Connect Mask on this site.
+        <Box sx={{ position: 'fixed', bottom: '3em' }}>
+            (Dev mode only, No UI for now.)
             <br />
+            Connect Mask on this site{' '}
             <Link
                 onClick={async () => {
                     await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('once')
                     window.close()
                 }}>
-                Connect once
+                once
             </Link>
-            <br />
+            {', '}
             <Link
                 onClick={async () => {
                     await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always')
                     window.close()
                 }}>
-                Always connect this site
+                always
             </Link>
-            <br />
+            {', or '}
             <Link
                 onClick={async () => {
                     await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always-all')
                     window.close()
                 }}>
-                Always connect all sites
+                all sites
             </Link>
             <br />
             <Link onClick={() => setDismissed(true)}>Close</Link>
