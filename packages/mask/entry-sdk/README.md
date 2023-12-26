@@ -43,7 +43,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 - [x] personal_sign
 - [x] eth_sendTransaction
 - [ ] ~~eth_signTransaction: MetaMask refuse to add, we should follow them. <https://github.com/MetaMask/metamask-extension/issues/3475>~~
-- [ ] eth_sendRawTransaction
+- [x] eth_sendRawTransaction
 
 ## ETH methods
 
