@@ -14,7 +14,8 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Instagram]: /(^|\.)instagram\.com$/i,
     [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/i,
     [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
-    [EnhanceableSite.Firefly]: /^mask\.social$/i,
+    [EnhanceableSite.Firefly]:
+        process.env.NODE_ENV === 'production' ? /(?:^(?:firefly\.)?mask\.social|\.vercel\.app)$/i : /^localhost:\d+$/,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {

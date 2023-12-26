@@ -99,6 +99,7 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
         }),
         [account, chainId, providerType],
     )
+
     return <ChainContext.Provider value={context}>{props.children}</ChainContext.Provider>
 })
 

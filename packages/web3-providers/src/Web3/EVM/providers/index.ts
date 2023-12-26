@@ -11,6 +11,7 @@ import { CloverProvider } from './Clover.js'
 import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { MaskWalletProvider } from './MaskWallet.js'
+import { EVMCustomEventProvider } from './CustomEvent.js'
 import { EVMCustomNetworkProvider } from './CustomNetwork.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
@@ -28,5 +29,6 @@ export const EVMWalletProviders = {
     [ProviderType.Clover]: new CloverProvider(),
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Opera]: new OperaProvider(),
+    [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     [ProviderType.CustomNetwork]: new EVMCustomNetworkProvider(),
 } satisfies Record<ProviderType, EVMWalletProvider>

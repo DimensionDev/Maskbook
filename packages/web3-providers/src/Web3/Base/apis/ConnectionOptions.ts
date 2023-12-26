@@ -33,7 +33,9 @@ export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkTy
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getProvider?(): undefined | ProviderState<ChainId, ProviderType, NetworkType>
+
     constructor(private options?: BaseConnectionOptions<ChainId, ProviderType, Transaction>) {}
+
     protected get defaults() {
         return {
             account: '',

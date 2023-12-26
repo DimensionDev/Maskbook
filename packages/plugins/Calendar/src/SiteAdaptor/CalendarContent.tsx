@@ -38,7 +38,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CalendarContent({ target }: { target?: string }) {
+interface Props {
+    target?: string
+    disableSetting?: boolean
+}
+
+export function CalendarContent({ target, disableSetting }: Props) {
     const t = useCalendarTrans()
     const { classes } = useStyles()
     const [pathname, setPathname] = useState(location.pathname)
@@ -111,7 +116,7 @@ export function CalendarContent({ target }: { target?: string }) {
                         dateString={dateString}
                     />
                 </TabPanel>
-                <Footer provider={currentTab} />
+                <Footer provider={currentTab} disableSetting={disableSetting} />
             </TabContext>
         </div>
     )

@@ -306,7 +306,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     InputProps={{
                         endAdornment: (
                             <>
-                                <Typography color={theme.palette.maskColor.third} fontSize={14} marginRight={0.5}>
+                                <Typography
+                                    color={theme.palette.maskColor.third}
+                                    fontSize={14}
+                                    marginRight={0.5}
+                                    whiteSpace="nowrap">
                                     {t.quantity()}
                                 </Typography>
                                 <Icons.RedPacket size={18} />

@@ -33,15 +33,6 @@ export async function publishPostTwitter(
         }
     }
 
-    console.log('DEBUG: publish post twitter')
-    console.log({
-        mediaObjects,
-        variables,
-    })
-
     const postId = await Twitter.createTweet(variables)
-
-    console.log('DEBUG: response create tweet')
-    console.log(postId)
     return postId
 }
