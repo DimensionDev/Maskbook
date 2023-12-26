@@ -1,0 +1,65 @@
+diff --git a/build/modern/asyncThrottle.js b/build/modern/asyncThrottle.js
+index 15654ccb191ea5320a6302a6d298ce6c8e74ec56..3c3b5468a23bc97bff1231cb4bc2f75bebd924cb 100644
+--- a/build/modern/asyncThrottle.js
++++ b/build/modern/asyncThrottle.js
+@@ -1,49 +1,17 @@
+ // src/asyncThrottle.ts
+ var noop = () => {
+ };
+-function asyncThrottle(func, { interval = 1e3, onError = noop } = {}) {
+-  if (typeof func !== "function")
+-    throw new Error("argument is not function.");
+-  let running = false;
+-  let lastTime = 0;
+-  let timeout;
+-  let currentArgs = null;
+-  const execFunc = async () => {
+-    if (currentArgs) {
+-      const args = currentArgs;
+-      currentArgs = null;
+-      try {
+-        running = true;
+-        await func(...args);
+-      } catch (error) {
+-        onError(error);
+-      } finally {
+-        lastTime = Date.now();
+-        running = false;
+-      }
+-    }
+-  };
+-  const delayFunc = async () => {
+-    clearTimeout(timeout);
+-    timeout = setTimeout(() => {
+-      if (running) {
+-        delayFunc();
+-      } else {
+-        execFunc();
+-      }
+-    }, interval);
+-  };
++function asyncThrottle2(func, { interval = 1e3, onError = noop } = {}) {
++  if (typeof func !== 'function') throw new Error('argument is not function.')
++  let currentArgs = null
++  setInterval(() => {
++      if (!currentArgs) return
++      Promise.resolve(func(...currentArgs)).catch(onError)
++      currentArgs = null
++  }, interval)
+   return (...args) => {
+-    currentArgs = args;
+-    const tooSoon = Date.now() - lastTime < interval;
+-    if (running || tooSoon) {
+-      delayFunc();
+-    } else {
+-      execFunc();
+-    }
+-  };
++      currentArgs = args
++  }
+ }
+-export {
+-  asyncThrottle
+-};
++export { asyncThrottle2 as asyncThrottle }
+ //# sourceMappingURL=asyncThrottle.js.map

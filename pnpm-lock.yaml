@@ -39,6 +39,9 @@ patchedDependencies:
   '@splinetool/runtime@0.9.342':
     hash: pai5dnfr6cjujs6g7ajnubnady
     path: patches/@splinetool__runtime@0.9.342.patch
+  '@tanstack/query-async-storage-persister@5.8.7':
+    hash: ghd5fzm4bobwfiuhqbcqkq4bsy
+    path: patches/@tanstack__query-async-storage-persister@5.8.7.patch
   '@types/react-avatar-editor@13.0.0':
     hash: 6wzwgbn4gsisp2tjbg76iifhqq
     path: patches/@types__react-avatar-editor@13.0.0.patch
@@ -798,7 +801,7 @@ importers:
         version: 2.2.6(@splinetool/runtime@0.9.342)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@tanstack/query-async-storage-persister':
         specifier: ^5.8.7
-        version: 5.8.7
+        version: 5.8.7(patch_hash=ghd5fzm4bobwfiuhqbcqkq4bsy)
       '@tanstack/react-query-devtools':
         specifier: ^5.8.7
         version: 5.8.7(@tanstack/react-query@5.8.7)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -9453,11 +9456,12 @@ packages:
       - typescript
     dev: true
 
-  /@tanstack/query-async-storage-persister@5.8.7:
+  /@tanstack/query-async-storage-persister@5.8.7(patch_hash=ghd5fzm4bobwfiuhqbcqkq4bsy):
     resolution: {integrity: sha512-mlWWZxLm0Qfa3h+qMlYhBq3QfBPqlI86XIGfP+qy4YMSixPmTtejwzDXtqNKjzqNJBOxbo7PqfdES/PrLuaRtw==}
     dependencies:
       '@tanstack/query-persist-client-core': 5.8.7
     dev: false
+    patched: true
 
   /@tanstack/query-broadcast-client-experimental@5.8.7:
     resolution: {integrity: sha512-9RB6Oj5N1xUSnBV3rkrQyT212gK2mK7PqSniI0RuNEjZH99POoJ7tm7ohljIKtzsu50SWT2XyXTRHbGeasl//A==}
