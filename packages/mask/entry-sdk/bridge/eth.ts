@@ -1,4 +1,4 @@
-import { readonlyMethodType, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { readonlyMethodType, EthereumMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-evm'
 import Services from '#services'
 import { type EIP2255PermissionRequest, MaskEthereumProviderRpcError, err } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
@@ -6,6 +6,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
 import { ParamsValidate, fromZodError, requestSchema, ReturnValidate } from './eth/validator.js'
 import { ZodError, ZodTuple } from 'zod'
+import { maskSDK } from '../index.js'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -13,6 +14,16 @@ for (const method of readonlyMethodType) {
         return (await Services.Wallet.send({ jsonrpc: '2.0', method, params })).result
     }
 }
+
+let readonlyClient: Web3Provider
+function setReadonlyClient(): Web3Provider {
+    return (readonlyClient ??= providers.EVMWeb3.getWeb3Provider({
+        providerType: ProviderType.MaskWallet,
+        silent: true,
+        readonly: true,
+    }))
+}
+const subscriptionMap = new Map<string, () => void>()
 // Reference:
 // https://ethereum.github.io/execution-apis/api-documentation/
 // https://docs.metamask.io/wallet/reference/eth_subscribe/
@@ -80,6 +91,33 @@ const methods = {
             method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
             params: [transaction] as any,
         })
+    },
+    async eth_subscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_subscribe']>) {
+        const id = String(
+            await setReadonlyClient().request({
+                method: EthereumMethodType.ETH_SUBSCRIBE,
+                params,
+            }),
+        )
+        const fn = (message: { type: string; data: unknown }): void => {
+            if (message.type === EthereumMethodType.ETH_SUBSCRIBE && (message.data as any).subscription === id) {
+                maskSDK.eth_message(message)
+            }
+        }
+        subscriptionMap.set(id, () => readonlyClient.removeListener('message', fn))
+        readonlyClient.on('message', fn)
+        window.addEventListener('beforeunload', () =>
+            readonlyClient!.request({ method: EthereumMethodType.ETH_UNSUBSCRIBE, params: [id] }),
+        )
+        return id
+    },
+    async eth_unsubscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_sendRawTransaction']>) {
+        await setReadonlyClient().request({
+            method: EthereumMethodType.ETH_UNSUBSCRIBE,
+            params,
+        })
+        subscriptionMap.get(params[0])?.()
+        return null
     },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {

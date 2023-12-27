@@ -7,6 +7,7 @@ export interface BridgeAPI {
 export interface UserScriptAPI {
     // When User script loaded, content script is not loaded. We must _be_ called to make sure CS has loaded.
     request_init(init: InitInformation): Promise<void>
+    eth_message(message: unknown): Promise<void>
 }
 export interface InitInformation {
     debuggerMode: boolean
