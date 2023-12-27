@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { Days } from '@masknet/shared-base'
 import { CurrencyType, type Price } from '@masknet/web3-shared-base'
 import { COINGECKO_URL_BASE } from '../constants.js'
-import type { Category, CoinInfo, Exchange, ThumbCoin, ThumbCollection } from '../types.js'
+import type { CoinInfo } from '../types.js'
 import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 
 function fetchFromCoinGecko<T>(request: RequestInfo | URL, init?: RequestInit) {
@@ -29,27 +29,6 @@ export async function getCoinInfo(coinId: string) {
     )
 }
 
-export async function getThumbCoins(keyword: string) {
-    if (!keyword) return []
-    const response = await fetchFromCoinGecko<
-        | {
-              categories: Category[]
-              coins: ThumbCoin[]
-              nfts: ThumbCollection[]
-              exchanges: Exchange[]
-          }
-        | { error: string }
-    >(
-        urlcat(COINGECKO_URL_BASE, '/search', {
-            query: keyword,
-        }),
-        {
-            cache: 'default',
-        },
-    )
-    if ('error' in response) throw new Error(response.error)
-    return response.coins
-}
 // #endregion
 
 // #region price chart

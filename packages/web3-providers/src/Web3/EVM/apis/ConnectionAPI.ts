@@ -152,18 +152,6 @@ export class ConnectionAPI
         )
     }
 
-    override async approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        // Do not use `approve()`, since it is buggy.
-        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
-        throw new Error('Method not implemented.')
-    }
-
     override async approveAllNonFungibleTokens(
         address: string,
         recipient: string,
@@ -296,16 +284,6 @@ export class ConnectionAPI
         return this.Request.request<ChainId[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    override supportedEntryPoints(initial?: EVMConnectionOptions) {
-        return this.Request.request<string[]>(
-            {
-                method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
                 params: [],
             },
             initial,

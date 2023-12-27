@@ -24,13 +24,10 @@ export type NFTApprovalInfoAccountMap = Record<
     >
 >
 
+enableMapSet()
 class ApprovalListState {
     private _token_state: TokenApprovalInfoAccountMap = {}
     private _nft_state: NFTApprovalInfoAccountMap = {}
-
-    constructor() {
-        enableMapSet()
-    }
 
     public get tokenState() {
         return this._token_state

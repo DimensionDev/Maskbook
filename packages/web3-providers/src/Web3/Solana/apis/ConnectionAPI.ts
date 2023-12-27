@@ -94,16 +94,6 @@ export class SolanaConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType | undefined,
-        initial?: SolanaConnectionOptions | undefined,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     approveAllNonFungibleTokens(
         address: string,
         recipient: string,

@@ -262,16 +262,6 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     approveAllNonFungibleTokens(
         address: string,
         recipient: string,

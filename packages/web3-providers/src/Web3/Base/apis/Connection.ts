@@ -158,15 +158,6 @@ export interface BaseConnection<
     /** Approve a recipient for using a fungible token. */
     approveFungibleToken(address: string, recipient: string, amount: string, initial?: Options): Promise<string>
 
-    /** Approve a recipient for using a non-fungible token. */
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<string>
-
     /** Approve a recipient for using all non-fungible tokens. */
     approveAllNonFungibleTokens(
         address: string,
@@ -195,8 +186,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<string>
 
-    /** Get all supported entry points */
-    supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
     callUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<string>
     /** Send a operation */

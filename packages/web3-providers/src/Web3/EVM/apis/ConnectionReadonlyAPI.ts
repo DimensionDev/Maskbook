@@ -169,16 +169,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     async approveAllNonFungibleTokens(
         address: string,
         recipient: string,
@@ -772,10 +762,6 @@ export class EVMConnectionReadonlyAPI
     }
 
     supportedChainIds(initial?: EVMConnectionOptions): Promise<ChainId[]> {
-        throw new Error('Method not implemented.')
-    }
-
-    supportedEntryPoints(initial?: EVMConnectionOptions): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
 
