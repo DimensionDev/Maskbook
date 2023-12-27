@@ -34,7 +34,7 @@ export declare namespace Ethereum {
         removeListener(eventName: string | symbol, listener: (...args: any[]) => void): this
     }
     export interface EthereumEventEmitter extends EventEmitter {
-        // on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this
+        on(eventName: 'message', listener: (message: ProviderMessage | EthSubscription) => void): this
         // on(eventName: 'connect', listener: (message: ProviderConnectInfo) => void): this
         // on(eventName: 'disconnect', listener: (error: ProviderRpcError) => void): this
         // on(eventName: 'chainChanged', listener: (chainId: string) => void): this

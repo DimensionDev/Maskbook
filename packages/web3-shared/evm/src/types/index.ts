@@ -232,6 +232,8 @@ export enum EthereumMethodType {
     ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
     ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
     ETH_SYNCING = 'eth_syncing',
+    ETH_SUBSCRIBE = 'eth_subscribe',
+    ETH_UNSUBSCRIBE = 'eth_unsubscribe',
 
     // EIP-4337
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
