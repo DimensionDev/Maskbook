@@ -2,12 +2,13 @@ import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { ChainContextProvider, EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, EVMWeb3ContextProvider, useNetwork } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -60,6 +61,8 @@ export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useTokenParams()
+
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     applyMaskColorVars(document.body, Appearance.light)
 
     return (
@@ -74,7 +77,7 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <EVMWeb3ContextProvider>
+                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>
