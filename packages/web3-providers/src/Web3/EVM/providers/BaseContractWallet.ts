@@ -23,7 +23,7 @@ export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
         super(providerType)
     }
 
-    override async setup(context?: WalletAPI.IOContext) {
+    override async setup(context: WalletAPI.IOContext) {
         await super.setup(context)
 
         this.ownerStorage = InMemoryStorages.Web3.createSubScope(

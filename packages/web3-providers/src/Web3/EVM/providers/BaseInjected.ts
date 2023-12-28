@@ -28,7 +28,7 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
         return Promise.reject(new Error('Not available on extension site.'))
     }
 
-    override async setup(context?: WalletAPI.IOContext | undefined) {
+    override async setup(context: WalletAPI.IOContext | undefined) {
         this.bridge.on('accountsChanged', this.onAccountsChanged.bind(this))
         this.bridge.on('chainChanged', this.onChainChanged.bind(this))
         this.bridge.on('disconnect', this.onDisconnect.bind(this))

@@ -98,7 +98,7 @@ export namespace WalletAPI {
         /** connection status */
         readonly connected: boolean
         /** async setup tasks */
-        setup(context?: IOContext): Promise<void>
+        setup(context: IOContext): Promise<void>
         /** Add a new wallet. */
         addWallet(wallet: Wallet): Promise<void>
         /** Update a wallet. */

@@ -91,7 +91,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup(context?: WalletAPI.IOContext) {
+    override async setup(context: WalletAPI.IOContext) {
         await super.setup(context)
 
         this.subscription?.wallets?.subscribe(async () => {

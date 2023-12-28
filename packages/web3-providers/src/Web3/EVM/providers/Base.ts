@@ -54,12 +54,8 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
         return Promise.resolve()
     }
 
-    async setup(context?: WalletAPI.IOContext): Promise<void> {
-        if (context) {
-            this.context = context
-            return
-        }
-        throw new Error('Method not implemented.')
+    async setup(context: WalletAPI.IOContext): Promise<void> {
+        this.context = context
     }
 
     addWallet(wallet: Wallet): Promise<void> {
