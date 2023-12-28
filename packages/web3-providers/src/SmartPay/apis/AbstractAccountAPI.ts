@@ -142,26 +142,5 @@ class SmartPayAccountAPI implements AbstractAccountAPI.Provider<ChainId, UserOpe
             signer,
         )
     }
-
-    transfer(
-        chainId: ChainId,
-        owner: string,
-        sender: string,
-        recipient: string,
-        amount: string,
-        signer: Signer<ECKeyIdentifier> | Signer<string>,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    changeOwner(
-        chainId: ChainId,
-        owner: string,
-        sender: string,
-        recipient: string,
-        signer: Signer<ECKeyIdentifier> | Signer<string>,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
 }
 export const SmartPayAccount = new SmartPayAccountAPI()

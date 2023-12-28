@@ -26,12 +26,7 @@ const fetchFromRSS3 = <T>(url: string) => {
 }
 
 export class RSS3 {
-    static createRSS3(
-        address: string,
-        sign: (message: string) => Promise<string> = () => {
-            throw new Error('Not supported.')
-        },
-    ): RSS3Next.default {
+    static createRSS3(address: string, sign: (message: string) => Promise<string>): RSS3Next.default {
         return new RSS3Next.default({
             endpoint: RSS3_LEGACY_ENDPOINT,
             address,

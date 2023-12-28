@@ -66,8 +66,8 @@ export class FlowConnectionAPI
         return this.Web3.getWeb3(initial)
     }
 
-    getWeb3Provider(initial?: FlowConnectionOptions) {
-        return this.Web3.getWeb3Provider(initial)
+    getWeb3Provider(initial?: FlowConnectionOptions): never {
+        throw new Error('Method not implemented.')
     }
 
     async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {

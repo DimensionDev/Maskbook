@@ -9,23 +9,7 @@ export namespace AbstractAccountAPI {
     export interface Provider<ChainId, UserOperation, Transaction> {
         /** Deploy a new account. */
         deploy(chainId: ChainId, owner: string, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string>
-        /** Transfer some native tokens to recipient. */
-        transfer(
-            chainId: ChainId,
-            owner: string,
-            sender: string,
-            recipient: string,
-            amount: string,
-            signer: Signer<ECKeyIdentifier> | Signer<string>,
-        ): Promise<string>
-        /** Change account ownership to a new owner. */
-        changeOwner(
-            chainId: ChainId,
-            owner: string,
-            sender: string,
-            recipient: string,
-            signer: Signer<ECKeyIdentifier> | Signer<string>,
-        ): Promise<string>
+
         /** Send a transaction by the account. */
         sendTransaction(
             chainId: ChainId,
