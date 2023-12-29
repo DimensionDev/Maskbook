@@ -38,12 +38,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 encode === 'image' ?
                     decorateEncryptedText('', t, content.meta)
                 :   decorateEncryptedText(encrypted, t, content.meta)
+
+            const options = { interpolation: { escapeValue: false } }
             const defaultText: string =
                 encode === 'image' ?
                     t.additional_post_box__encrypted_post_pre({
                         encrypted: 'https://mask.io/',
                     })
-                :   t.additional_post_box__encrypted_post_pre({ encrypted })
+                :   t.additional_post_box__encrypted_post_pre({ encrypted, ...options })
             const mediaObject =
                 encode === 'image' ?
                     // We can send raw binary through the image, but for the text we still use the old way.
@@ -97,7 +99,8 @@ function decorateEncryptedText(
 ): string | null {
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account()
-    const options = { interpolation: { escapeValue: false } }
+    const token = meta?.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
+    const options = { interpolation: { escapeValue: false }, token }
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
