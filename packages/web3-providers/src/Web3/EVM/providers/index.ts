@@ -12,7 +12,6 @@ import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { MaskWalletProvider } from './MaskWallet.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
-import { EVMCustomNetworkProvider } from './CustomNetwork.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {}
@@ -30,5 +29,4 @@ export const EVMWalletProviders = {
     [ProviderType.Fortmatic]: new FortmaticProvider(),
     [ProviderType.Opera]: new OperaProvider(),
     [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
-    [ProviderType.CustomNetwork]: new EVMCustomNetworkProvider(),
 } satisfies Record<ProviderType, EVMWalletProvider>

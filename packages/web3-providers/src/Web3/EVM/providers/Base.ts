@@ -138,9 +138,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    async request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T> {
-        throw new Error('Method not implemented.')
-    }
+    abstract request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T>
 
     // Create a web3 instance from the external provider by default.
     createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {

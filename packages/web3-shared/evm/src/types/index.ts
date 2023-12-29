@@ -304,7 +304,6 @@ export enum ProviderType {
     Opera = 'Opera',
     Clover = 'Clover',
     CustomEvent = 'CustomEvent',
-    CustomNetwork = 'CustomNetwork',
 }
 
 /**
