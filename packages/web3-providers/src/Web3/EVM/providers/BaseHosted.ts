@@ -21,8 +21,9 @@ import {
 import { BaseEVMWalletProvider } from './Base.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
+export abstract class BaseHostedProvider extends BaseEVMWalletProvider implements WalletAPI.HostedProvider {
     protected abstract io_renameWallet(address: string, name: string): Promise<void>
+    abstract resetAllWallets(): Promise<void>
     protected walletStorage:
         | StorageObject<{
               account: string
@@ -101,7 +102,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         return this.walletStorage?.chainId.value ?? this.options.getDefaultChainId()
     }
 
-    override async addWallet(wallet: Wallet): Promise<void> {
+    async addWallet(wallet: Wallet): Promise<void> {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
 
@@ -121,7 +122,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         ])
     }
 
-    override async updateWallet(address: string, updates: Partial<UpdatableWallet>) {
+    async updateWallet(address: string, updates: Partial<UpdatableWallet>) {
         const wallet = this.walletStorage?.wallets.value.find((x) => isSameAddress(x.address, address))
         if (!wallet) throw new Error('Failed to find wallet.')
 
@@ -143,7 +144,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)
     }
 
-    override async renameWallet(address: string, name: string) {
+    async renameWallet(address: string, name: string) {
         const isNameExists = this.walletStorage?.wallets.value
             .filter((x) => !isSameAddress(x.address, address))
             .some((x) => x.name === name)
@@ -157,13 +158,13 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         })
     }
 
-    override async removeWallet(address: string, password?: string | undefined) {
+    async removeWallet(address: string, password?: string | undefined) {
         await this.walletStorage?.wallets.setValue(
             this.walletStorage?.wallets.value?.filter((x) => !isSameAddress(x.address, address)),
         )
     }
 
-    override async updateWallets(wallets: Wallet[]): Promise<void> {
+    async updateWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         const result = wallets.filter(
             (x) =>
@@ -178,7 +179,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         )
     }
 
-    override async removeWallets(wallets: Wallet[]): Promise<void> {
+    async removeWallets(wallets: Wallet[]): Promise<void> {
         if (!wallets.length) return
         await this.walletStorage?.wallets.setValue(
             this.walletStorage?.wallets.value?.filter((x) => !wallets.find((y) => isSameAddress(x.address, y.address))),
@@ -200,7 +201,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider {
         if (this.hostedChainId) this.emitter.emit('chainId', web3_utils.toHex(this.hostedChainId))
     }
 
-    override async switchAccount(account?: string) {
+    async switchAccount(account?: string) {
         if (!isValidAddress(account)) throw new Error(`Invalid address: ${account}`)
         const supported = await this.options.isSupportedAccount(account)
         if (!supported) throw new Error(`Not supported account: ${account}`)

@@ -35,30 +35,6 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
     }
 
     async setup(): Promise<void> {}
-    addWallet(wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    updateWallet(address: string, wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    renameWallet(address: string, name: string): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    removeWallet(address: string, password?: string | undefined): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    updateWallets(wallets: Wallet[]): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    removeWallets(wallets: Wallet[]): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    resetAllWallets(): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    switchAccount(account?: string): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }

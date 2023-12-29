@@ -138,7 +138,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         }
     }
 
-    override async resetAllWallets(): Promise<void> {
+    async resetAllWallets(): Promise<void> {
         await super.removeWallets(this.wallets)
         await this.walletStorage?.account.setValue('')
         await this.context?.MaskWalletContext?.resetAllWallets()

@@ -86,7 +86,7 @@ export namespace WalletAPI {
     }
     export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
         readonly ready: boolean
-        readonly readyPromise: Promise<void>
+        readonly readyPromise?: Promise<void> | undefined
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>
 
         readonly subscription: {
@@ -99,22 +99,6 @@ export namespace WalletAPI {
         readonly connected: boolean
         /** async setup tasks */
         setup(context: IOContext): Promise<void>
-        /** Add a new wallet. */
-        addWallet(wallet: Wallet): Promise<void>
-        /** Update a wallet. */
-        updateWallet(address: string, wallet: Wallet): Promise<void>
-        /** Rename a wallet */
-        renameWallet(address: string, name: string): Promise<void>
-        /** Remove a wallet */
-        removeWallet(address: string, password?: string | undefined): Promise<void>
-        /** Reset all wallets */
-        resetAllWallets(): Promise<void>
-        /** Update a bunch of wallets. */
-        updateWallets(wallets: Wallet[]): Promise<void>
-        /** Remove a bunch of wallets. */
-        removeWallets(wallets: Wallet[]): Promise<void>
-        /** Switch to the designate account. */
-        switchAccount(account?: string): Promise<void>
         /** Switch to the designate chain. */
         switchChain(chainId: ChainId): Promise<void>
         /** Create an instance from the network SDK. */
@@ -133,5 +117,23 @@ export namespace WalletAPI {
         ): Promise<Account<ChainId>>
         /** Dismiss the connection. */
         disconnect(): Promise<void>
+    }
+    export interface HostedProvider {
+        /** Add a new wallet. */
+        addWallet(wallet: Wallet): Promise<void>
+        /** Update a wallet. */
+        updateWallet(address: string, wallet: Wallet): Promise<void>
+        /** Rename a wallet */
+        renameWallet(address: string, name: string): Promise<void>
+        /** Remove a wallet */
+        removeWallet(address: string, password?: string | undefined): Promise<void>
+        /** Reset all wallets */
+        resetAllWallets(): Promise<void>
+        /** Update a bunch of wallets. */
+        updateWallets(wallets: readonly Wallet[]): Promise<void>
+        /** Remove a bunch of wallets. */
+        removeWallets(wallets: readonly Wallet[]): Promise<void>
+        /** Switch to the designate account. */
+        switchAccount(account?: string): Promise<void>
     }
 }
