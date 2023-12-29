@@ -141,8 +141,8 @@ export class SolanaConnectionAPI
         await solana.state?.Provider?.disconnect(options.providerType)
     }
 
-    getWeb3(initial?: SolanaConnectionOptions) {
-        return this.Web3.getWeb3(initial)
+    getWeb3(initial?: SolanaConnectionOptions): never {
+        throw new Error('Method not implemented.')
     }
 
     getWeb3Provider(initial?: SolanaConnectionOptions) {
@@ -391,15 +391,6 @@ export class SolanaConnectionAPI
 
     async signMessage(type: string, message: string, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signMessage(message)
-    }
-
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: SolanaConnectionOptions,
-    ): Promise<boolean> {
-        return this.Web3.getProviderInstance(initial).verifyMessage(message, signature)
     }
 
     async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {

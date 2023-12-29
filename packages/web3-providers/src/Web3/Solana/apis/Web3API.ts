@@ -20,11 +20,6 @@ export class SolanaWeb3API {
         return SolanaWalletProviders[options.providerType]
     }
 
-    getWeb3(initial?: SolanaConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.getProviderInstance(options).createWeb3(options)
-    }
-
     getWeb3Provider(initial?: SolanaConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return this.getProviderInstance(options).createWeb3Provider(options)

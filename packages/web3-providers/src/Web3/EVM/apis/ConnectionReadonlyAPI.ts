@@ -744,15 +744,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: EVMConnectionOptions,
-    ): Promise<boolean> {
-        throw new Error('Method not implemented.')
-    }
-
     async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }

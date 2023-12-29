@@ -10,7 +10,6 @@ export interface SolanaWalletProvider extends WalletAPI.Provider<ChainId, Provid
     /** Sign message */
     signMessage(message: string): Promise<string>
     /** Verify signature */
-    verifyMessage(message: string, signature: string): Promise<boolean>
     /** Sign a transaction */
     signTransaction(transaction: Transaction): Promise<Transaction>
     /** Sign multiple transactions */

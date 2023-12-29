@@ -152,9 +152,6 @@ export interface BaseConnection<
     /** Sign message */
     signMessage(type: string, message: string, initial?: Options): Promise<Signature>
 
-    /** Verify message */
-    verifyMessage(type: string, message: string, signature: Signature, initial?: Options): Promise<boolean>
-
     /** Approve a recipient for using a fungible token. */
     approveFungibleToken(address: string, recipient: string, amount: string, initial?: Options): Promise<string>
 

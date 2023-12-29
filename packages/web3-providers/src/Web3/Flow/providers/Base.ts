@@ -35,9 +35,6 @@ export abstract class BaseFlowWalletProvider implements FlowWalletProvider {
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>): Web3 {
-        throw new Error('Method not implemented.')
-    }
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider {
         throw new Error('Method not implemented.')
     }

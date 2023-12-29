@@ -260,12 +260,6 @@ export class ConnectionAPI
         }
     }
 
-    override async verifyMessage(type: string, message: string, signature: string, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const dataToSign = await this.getWeb3(options).eth.personal.ecRecover(message, signature)
-        return dataToSign === message
-    }
-
     override async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {

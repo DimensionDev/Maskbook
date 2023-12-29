@@ -315,24 +315,6 @@ export class FlowConnectionAPI
         return signed.signature
     }
 
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: FlowConnectionOptions,
-    ): Promise<boolean> {
-        const options = this.ConnectionOptions.fill(initial)
-        const web3 = this.getWeb3(options)
-        if (!options.account) throw new Error('No account found.')
-        return web3.verifyUserSignatures(message, [
-            {
-                addr: options.account,
-                keyId: 1,
-                signature,
-            },
-        ])
-    }
-
     createAccount(initial?: FlowConnectionOptions): Account<ChainId> {
         throw new Error('Method not implemented.')
     }

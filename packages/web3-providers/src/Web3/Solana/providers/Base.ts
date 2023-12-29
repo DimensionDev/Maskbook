@@ -39,15 +39,9 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
         throw new Error('Method not implemented.')
     }
     abstract signMessage(message: string): Promise<string>
-    verifyMessage(message: string, signature: string): Promise<boolean> {
-        throw new Error('Method not implemented.')
-    }
     abstract signTransaction(transaction: Transaction): Promise<Transaction>
     signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
-    }
-    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>): Web3 {
-        throw new Error('Method not implemented.')
     }
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider {
         throw new Error('Method not implemented.')
