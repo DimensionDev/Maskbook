@@ -12,7 +12,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { EVMWalletProvider } from './index.js'
@@ -113,15 +112,6 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
     abstract request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T>
-
-    // Create a web3 instance from the external provider by default.
-    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
-        return createWeb3FromProvider(
-            createWeb3ProviderFromRequest((requestArguments: RequestArguments) =>
-                this.request(requestArguments, options),
-            ),
-        )
-    }
 
     // Create an external provider from the basic request method.
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
