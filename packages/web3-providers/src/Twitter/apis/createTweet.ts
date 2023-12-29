@@ -42,8 +42,6 @@ const dataFieldMap = {
 export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     const variables = {
         ...tweet,
-        // TODO unescape properly
-        tweet_text: decodeURIComponent(tweet.tweet_text).replaceAll('&#x2F;', '/'),
         dark_request: false,
         withDownvotePerspective: false,
         withReactionsMetadata: false,
