@@ -13,7 +13,7 @@ export function useNFTs() {
         hasNextPage,
         fetchNextPage,
         dataUpdatedAt,
-    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+    } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, {
         chainId,
     })
     useEffect(() => {
