@@ -8,9 +8,7 @@ import { useNetworkContext } from './useContext.js'
  * @param expectedChainIdOrNetworkTypeOrID
  * @returns
  */
-export function useNetworkDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
-    expectedPluginID?: T,
-) {
+export function useNetworkDescriptors<T extends NetworkPluginID = NetworkPluginID>(expectedPluginID?: T) {
     const { pluginID } = useNetworkContext(expectedPluginID)
     return getRegisteredWeb3Networks(pluginID)
 }

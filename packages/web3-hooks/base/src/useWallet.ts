@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWallets } from './useWallets.js'
 
@@ -10,10 +8,7 @@ import { useWallets } from './useWallets.js'
  * @param pluginID
  * @returns
  */
-export function useWallet<T extends NetworkPluginID>(
-    pluginID?: T,
-    providerType?: Web3Helper.Definition[T]['ProviderType'],
-) {
+export function useWallet() {
     const { account } = useChainContext()
     const wallets = useWallets()
 

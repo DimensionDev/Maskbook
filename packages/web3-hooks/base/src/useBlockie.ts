@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { type BlockieOptions, create } from 'ethereum-blockies'
 
 export function generateBlockie(address: string, options?: BlockieOptions) {
@@ -12,10 +11,4 @@ export function generateBlockie(address: string, options?: BlockieOptions) {
     } catch {
         return ''
     }
-}
-
-export function useBlockie(address: string, options?: BlockieOptions) {
-    return useMemo(() => {
-        return generateBlockie(address, options)
-    }, [address])
 }

@@ -13,7 +13,7 @@ export function useNonFungibleOwnerTokens(
     chainId: ChainId,
     _balance?: number,
 ) {
-    const { data: collectibles_ } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, SchemaType.ERC721, {
+    const { data: collectibles_ } = useNonFungibleAssets(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         account: ownerAccount,
     })

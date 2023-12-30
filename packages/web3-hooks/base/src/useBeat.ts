@@ -8,7 +8,7 @@ import { useWeb3Utils } from './useWeb3Utils.js'
 const DEFAULT_SINGLE_BLOCK_DELAY = 10 * 1000 // 10 seconds
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2
 
-export function useBeat(delay = 1000) {
+function useBeat(delay = 1000) {
     const [beat, setBeat] = useState(0)
     const [, , reset] = useTimeoutFn(() => {
         setBeat((x) => (x + 1) % Number.MAX_SAFE_INTEGER)
@@ -20,7 +20,7 @@ export function useBeat(delay = 1000) {
 /**
  * @deprecated Use react-query with refetchInterval
  */
-export function useBeatRetry<T>(fn: () => Promise<T>, delay = 1000, deps: DependencyList = []): AsyncStateRetry<T> {
+function useBeatRetry<T>(fn: () => Promise<T>, delay = 1000, deps: DependencyList = []): AsyncStateRetry<T> {
     const beat = useBeat(delay)
     return useAsyncRetry(fn, deps.concat(beat))
 }

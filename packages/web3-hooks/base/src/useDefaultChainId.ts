@@ -15,7 +15,3 @@ export function useDefaultChainId<T extends NetworkPluginID>(expectedPluginID?: 
     const { pluginID } = useNetworkContext<T>(expectedPluginID)
     return DEFAULT_CHAIN_ID[pluginID]
 }
-
-export function getDefaultChainId<T extends NetworkPluginID>(pluginID: T) {
-    return DEFAULT_CHAIN_ID[pluginID]
-}

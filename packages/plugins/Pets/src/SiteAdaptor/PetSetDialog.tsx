@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar, useSharedTrans } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
@@ -124,7 +124,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const checked = useValueRef<boolean>(petShowSettings)
     const [isReady, cancel] = useTimeout(2000)
 
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const user = useUser()
     const { nfts, isPending } = useNFTs()
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
