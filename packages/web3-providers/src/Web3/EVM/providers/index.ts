@@ -14,7 +14,10 @@ import { MaskWalletProvider } from './MaskWallet.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {}
+export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+    /** Create an instance that implement the wallet protocol. */
+    createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider
+}
 
 export const EVMWalletProviders = {
     [ProviderType.None]: new EVMNoneProvider(),

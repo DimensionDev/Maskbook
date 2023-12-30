@@ -7,7 +7,6 @@ import {
     type SchemaType,
     ChainId,
     type Web3,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -50,8 +49,7 @@ export class FlowConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     constructor(options?: FlowConnectionOptions) {
@@ -64,10 +62,6 @@ export class FlowConnectionAPI
 
     getWeb3(initial?: FlowConnectionOptions) {
         return this.Web3.getWeb3(initial)
-    }
-
-    getWeb3Provider(initial?: FlowConnectionOptions): never {
-        throw new Error('Method not implemented.')
     }
 
     async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {

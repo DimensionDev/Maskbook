@@ -5,7 +5,6 @@ import {
     AddressType,
     SchemaType,
     type ChainId,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -86,8 +85,7 @@ export class EVMConnectionReadonlyAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     static Default = new EVMConnectionReadonlyAPI()

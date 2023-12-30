@@ -22,14 +22,10 @@ export interface BaseConnection<
     TransactionSignature,
     Block,
     Web3,
-    Web3Provider,
     Options = BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(initial?: Options): Web3
-
-    /** Get web3 provider instance */
-    getWeb3Provider(initial?: Options): Web3Provider
 
     /** Get the latest balance of the account. */
     getBalance(address: string, initial?: Options): Promise<string>

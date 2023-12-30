@@ -7,7 +7,6 @@ import {
     type TransactionDetailed,
     type TransactionReceipt,
     type Block,
-    type Web3Provider,
     type Web3,
     isNativeTokenAddress,
     getNativeTokenAddress,
@@ -53,8 +52,7 @@ export class SolanaConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     constructor(options?: SolanaConnectionOptions) {
@@ -143,10 +141,6 @@ export class SolanaConnectionAPI
 
     getWeb3(initial?: SolanaConnectionOptions): never {
         throw new Error('Method not implemented.')
-    }
-
-    getWeb3Provider(initial?: SolanaConnectionOptions) {
-        return this.Web3.getWeb3Provider(initial)
     }
 
     async getBalance(account: string, initial?: SolanaConnectionOptions) {

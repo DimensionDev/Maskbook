@@ -1,11 +1,11 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
     SchemaType,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -48,8 +48,7 @@ export class ConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     protected override Request = new EVMRequestAPI(this.options)
@@ -501,7 +500,8 @@ export class ConnectionAPI
     }
 }
 
-export const createConnection = createConnectionCreator<NetworkPluginID.PLUGIN_EVM>(
+export const createConnection = createConnectionCreator(
+    NetworkPluginID.PLUGIN_EVM,
     (initial) => new ConnectionAPI(initial),
     isValidChainId,
     new ConnectionOptionsAPI(),

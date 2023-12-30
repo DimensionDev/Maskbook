@@ -10,14 +10,14 @@ function resolver<ChainId, ProviderType, Transaction>(
     return [initial?.chainId, initial?.account, initial?.providerType].join(',')
 }
 
-export function createConnectionCreator<T extends NetworkPluginID>(
-    creator: (
-        initial?: BaseConnectionOptions<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['Transaction']
-        >,
-    ) => BaseConnection<
+export function createConnectionCreator<
+    const T extends NetworkPluginID,
+    InitialOptions extends BaseConnectionOptions<
+        Web3Helper.Definition[T]['ChainId'],
+        Web3Helper.Definition[T]['ProviderType'],
+        Web3Helper.Definition[T]['Transaction']
+    >,
+    Connection extends BaseConnection<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['AddressType'],
         Web3Helper.Definition[T]['SchemaType'],
@@ -29,16 +29,19 @@ export function createConnectionCreator<T extends NetworkPluginID>(
         Web3Helper.Definition[T]['TransactionDetailed'],
         Web3Helper.Definition[T]['TransactionSignature'],
         Web3Helper.Definition[T]['Block'],
-        Web3Helper.Definition[T]['Web3'],
-        Web3Helper.Definition[T]['Web3Provider']
+        Web3Helper.Definition[T]['Web3']
     >,
-    isValidChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => boolean,
-    ConnectionOptions: ConnectionOptionsProvider<
+    ConnectionOptions extends ConnectionOptionsProvider<
         Web3Helper.Definition[T]['ChainId'],
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['NetworkType'],
         Web3Helper.Definition[T]['Transaction']
     >,
+>(
+    _pluginID: T,
+    creator: (initial?: InitialOptions) => Connection,
+    isValidChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => boolean,
+    ConnectionOptions: ConnectionOptions,
 ) {
     const createCached = memoize(
         creator,
@@ -48,13 +51,7 @@ export function createConnectionCreator<T extends NetworkPluginID>(
             Web3Helper.Definition[T]['Transaction']
         >,
     )
-    return (
-        initial?: BaseConnectionOptions<
-            Web3Helper.Definition[T]['ChainId'],
-            Web3Helper.Definition[T]['ProviderType'],
-            Web3Helper.Definition[T]['Transaction']
-        >,
-    ) => {
+    return (initial?: InitialOptions) => {
         const options = ConnectionOptions.fill(initial)
         if (!isValidChainId(options.chainId)) return
         return createCached(initial)
