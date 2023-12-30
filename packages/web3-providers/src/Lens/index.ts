@@ -162,8 +162,8 @@ export class Lens {
             },
             body: JSON.stringify({
                 query: /* GraphQL */ `
-                    query handleOfDefaultProfile {
-                        defaultProfile(request: { for: "${address}" }) {
+                    query handleOfDefaultProfile($address: EvmAddress!) {
+                        defaultProfile(request: { for: $address }) {
                             id
                             handle {
                                 localName
@@ -174,7 +174,9 @@ export class Lens {
                 variables: { address },
             }),
         })
-        return data.defaultProfile?.handle.localName
+        const handle = data.defaultProfile?.handle.localName
+        if (!handle) return
+        return handle?.endsWith('.lens') ? handle : `${handle}.lens`
     }
 
     static async queryProfilesByAddress(address: string) {
