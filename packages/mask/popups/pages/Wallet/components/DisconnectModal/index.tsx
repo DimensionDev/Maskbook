@@ -1,5 +1,4 @@
 import Services from '#services'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
@@ -101,7 +100,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
     const queryClient = useQueryClient()
     const { classes } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const { mutate: onDisconnect } = useMutation({
         mutationFn: useCallback(async (): Promise<void> => {
             if (!wallet) return

@@ -171,7 +171,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         providerURL: network?.rpcUrl,
     })
 
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const { account } = useChainContext()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, {
         account,

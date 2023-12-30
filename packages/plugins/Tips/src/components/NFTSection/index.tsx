@@ -99,7 +99,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         fetchNextPage,
         isPending,
         error: loadError,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId })
+    } = useNonFungibleAssets(pluginID, { chainId })
 
     const isEvm = pluginID === NetworkPluginID.PLUGIN_EVM
     const tokens = useMemo(() => {

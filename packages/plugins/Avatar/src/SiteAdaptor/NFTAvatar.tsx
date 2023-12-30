@@ -102,7 +102,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         hasNextPage,
         fetchNextPage,
         error: loadError,
-    } = useNonFungibleAssets(pluginID, undefined, {
+    } = useNonFungibleAssets(pluginID, {
         chainId,
         account,
     })

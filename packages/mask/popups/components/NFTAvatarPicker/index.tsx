@@ -68,7 +68,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
         error,
         refetch,
         isPending,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
+    } = useNonFungibleAssets(pluginID, { chainId, account })
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 

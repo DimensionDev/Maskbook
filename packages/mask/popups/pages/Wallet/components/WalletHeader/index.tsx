@@ -18,7 +18,7 @@ export const WalletHeader = memo(function WalletHeader() {
     const modalNavigate = useModalNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const location = useLocation()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const { data: hasPassword } = useQuery({
         queryKey: ['@@has-password'],
         queryFn: Services.Wallet.hasPassword,
