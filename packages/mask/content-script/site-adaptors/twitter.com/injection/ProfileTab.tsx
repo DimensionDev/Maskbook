@@ -126,6 +126,16 @@ function tabClickHandler() {
     resetTwitterActivatedContent()
 }
 
+// How do we control color of the tab?
+// <tab-selector>
+//   <div>
+//     <div style="color: #xxx">      <~~ tab container, Twitter defined
+//       <span style="color: #yyy">   <~~ tab label, set #yyy to override, unset to reset
+//
+// Tab container has Twitter's own defined color
+// We override the color by setting color to tab label, and removing color from
+// tab label when reset tab color
+
 async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div > div')
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
@@ -133,13 +143,13 @@ async function hideTwitterActivatedContent() {
     const style = window.getComputedStyle(eleTab)
     // hide the activated indicator
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((v) => {
-        const _v = v.querySelector<HTMLDivElement>('div > div')
-        if (_v) _v.style.color = style.color
+    tabList.map((tab) => {
+        const tabLabel = tab.querySelector<HTMLDivElement>('div > div > span')
+        if (tabLabel) tabLabel.style.color = style.color
 
-        const line = v.querySelector<HTMLDivElement>('div > div > div')
-        if (line) line.style.display = 'none'
-        v.addEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
+        const indicator = tab.querySelector<HTMLDivElement>('div > div > div')
+        if (indicator) indicator.style.display = 'none'
+        tab.addEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
     if (loseConnectionEle) return
@@ -167,12 +177,12 @@ function resetTwitterActivatedContent() {
     if (!eleTab) return
 
     const tabList = searchProfileTabListSelector().evaluate()
-    tabList.map((v) => {
-        const _v = v.querySelector<HTMLDivElement>('div > div')
-        if (_v) _v.style.color = ''
-        const line = v.querySelector<HTMLDivElement>('div > div > div')
-        if (line) line.style.display = ''
-        v.removeEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
+    tabList.map((tab) => {
+        const tabLabel = tab.querySelector<HTMLDivElement>('div > div > span')
+        if (tabLabel) tabLabel.style.color = ''
+        const indicator = tab.querySelector<HTMLDivElement>('div > div > div')
+        if (indicator) indicator.style.display = ''
+        tab.removeEventListener('click', tab.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
     if (loseConnectionEle) return
