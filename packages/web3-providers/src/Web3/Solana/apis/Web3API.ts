@@ -2,8 +2,9 @@ import { memoize } from 'lodash-es'
 import type { Connection } from '@solana/web3.js'
 import { type ChainId, createClient } from '@masknet/web3-shared-solana'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { SolanaWalletProviders } from '../providers/index.js'
 import type { SolanaConnectionOptions } from '../types/index.js'
+import { solana } from '../../../Manager/registry.js'
+import type { SolanaProvider } from '../state/Provider.js'
 
 const createWeb3SDK = memoize(
     (chainId: ChainId) => createClient(chainId),
@@ -17,7 +18,7 @@ export class SolanaWeb3API {
     private ConnectionOptions
     getProviderInstance(initial?: SolanaConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        return SolanaWalletProviders[options.providerType]
+        return (solana.state!.Provider as SolanaProvider).providers[options.providerType]
     }
 
     getWeb3Connection(initial?: SolanaConnectionOptions): Connection {

@@ -17,13 +17,8 @@ export interface ProviderStorage<Account, ProviderType extends string> {
     providerType: ProviderType
 }
 
-export abstract class ProviderState<
-    ChainId extends number,
-    ProviderType extends string,
-    NetworkType extends string,
-    Web3Provider,
-    Web3,
-> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
+export abstract class ProviderState<ChainId extends number, ProviderType extends string, NetworkType extends string>
+    implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
 

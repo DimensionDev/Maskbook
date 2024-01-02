@@ -6,7 +6,6 @@ import {
     getSmartPayConstants,
     PayloadEditor,
     EthereumMethodType,
-    ProviderType,
     type MessageRequest,
     type MessageResponse,
     isNativeTokenAddress,
@@ -26,7 +25,7 @@ import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { EVMWalletProviders } from '../providers/index.js'
+import { MaskWalletProviderInstance } from '../providers/index.js'
 
 export class Popups implements Middleware<ConnectionContext> {
     private get networks() {
@@ -118,7 +117,7 @@ export class Popups implements Middleware<ConnectionContext> {
         }
 
         try {
-            const MaskProvider = EVMWalletProviders[ProviderType.MaskWallet]
+            const MaskProvider = MaskWalletProviderInstance
             const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
 
             if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {

@@ -19,17 +19,25 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider
 }
 
-export const EVMWalletProviders = {
-    [ProviderType.None]: new EVMNoneProvider(),
-    [ProviderType.MaskWallet]: new MaskWalletProvider(),
-    [ProviderType.Browser]: new BrowserProvider(),
-    [ProviderType.MetaMask]: new MetaMaskProvider(),
-    [ProviderType.WalletConnect]: Flags.wc_enabled ? new WalletConnectProvider() : new EVMNoneProvider(),
-    [ProviderType.Coin98]: new EVM_Coin98Provider(),
-    [ProviderType.Coinbase]: new CoinbaseProvider(),
-    [ProviderType.OKX]: new OKXProvider(),
-    [ProviderType.Clover]: new CloverProvider(),
-    [ProviderType.Fortmatic]: new FortmaticProvider(),
-    [ProviderType.Opera]: new OperaProvider(),
-    [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
-} satisfies Record<ProviderType, EVMWalletProvider>
+export let MaskWalletProviderInstance: MaskWalletProvider
+
+export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
+export function createEVMWalletProviders() {
+    const p = {
+        [ProviderType.None]: new EVMNoneProvider(),
+        [ProviderType.MaskWallet]: new MaskWalletProvider(),
+        [ProviderType.Browser]: new BrowserProvider(),
+        [ProviderType.MetaMask]: new MetaMaskProvider(),
+        [ProviderType.WalletConnect]: Flags.wc_enabled ? new WalletConnectProvider() : new EVMNoneProvider(),
+        [ProviderType.Coin98]: new EVM_Coin98Provider(),
+        [ProviderType.Coinbase]: new CoinbaseProvider(),
+        [ProviderType.OKX]: new OKXProvider(),
+        [ProviderType.Clover]: new CloverProvider(),
+        [ProviderType.Fortmatic]: new FortmaticProvider(),
+        [ProviderType.Opera]: new OperaProvider(),
+        [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
+    } satisfies Record<ProviderType, EVMWalletProvider>
+    EVMWalletProviders = p
+    MaskWalletProviderInstance = p[ProviderType.MaskWallet]
+    return p
+}

@@ -11,8 +11,6 @@ import {
     isValidAddress,
     NetworkType,
     ProviderType,
-    type Web3,
-    type Web3Provider,
     isValidChainId,
     getInvalidChainId,
     getDefaultChainId,
@@ -20,24 +18,24 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { EVMWalletProviders } from '../providers/index.js'
+import { createEVMWalletProviders } from '../providers/index.js'
 import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
+export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType> {
     constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
         super(context, storage)
         this.init()
     }
-    protected providers = EVMWalletProviders
-    protected override isValidAddress = isValidAddress
-    protected override isValidChainId = isValidChainId
-    protected override isSameAddress = isSameAddress
-    protected override getInvalidChainId = getInvalidChainId
-    protected override getDefaultNetworkType = getDefaultNetworkType
-    protected override getDefaultProviderType = getDefaultProviderType
-    protected override getDefaultChainId = getDefaultChainId
-    protected override getNetworkTypeFromChainId(chainId: ChainId) {
+    protected providers = createEVMWalletProviders()
+    protected isValidAddress = isValidAddress
+    protected isValidChainId = isValidChainId
+    protected isSameAddress = isSameAddress
+    protected getInvalidChainId = getInvalidChainId
+    protected getDefaultNetworkType = getDefaultNetworkType
+    protected getDefaultProviderType = getDefaultProviderType
+    protected getDefaultChainId = getDefaultChainId
+    protected getNetworkTypeFromChainId(chainId: ChainId) {
         return EVMChainResolver.networkType(chainId) ?? NetworkType.Ethereum
     }
 

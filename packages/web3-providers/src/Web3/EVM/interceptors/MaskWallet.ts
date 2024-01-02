@@ -1,13 +1,12 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Wallet } from '@masknet/shared-base'
-import { EthereumMethodType, type Middleware, ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, type Middleware, isValidAddress } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import { EVMWalletProviders } from '../providers/index.js'
-import type { BaseEIP4337WalletProvider } from '../providers/BaseContractWallet.js'
+import { MaskWalletProviderInstance } from '../providers/index.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
     private get walletProvider() {
-        return EVMWalletProviders[ProviderType.MaskWallet]
+        return MaskWalletProviderInstance
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
@@ -16,7 +15,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
             return
         }
 
-        const provider = EVMWalletProviders.Maskbook as BaseEIP4337WalletProvider
+        const provider = MaskWalletProviderInstance
 
         switch (context.request.method) {
             case EthereumMethodType.ETH_CHAIN_ID:

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useMemo, memo, type PropsWithChild
 import { isUndefined, omitBy } from 'lodash-es'
 import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
 import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
-import { EVMWalletProviders, type BaseEIP4337WalletProvider } from '@masknet/web3-providers'
+import { MaskWalletProvider } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
@@ -67,11 +67,9 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const globalChainId = useChainId(pluginID)
     const globalProviderType = useProviderType(pluginID)
 
-    const maskProvider = EVMWalletProviders[ProviderType.MaskWallet] as BaseEIP4337WalletProvider
-
     // The initial value of subscription.account could be empty string
-    const maskAccount = usePersistSubscription('@@mask-account', maskProvider.subscription.account, (x) => !!x)
-    const maskChainId = usePersistSubscription('@@mask-chain-id', maskProvider.subscription.chainId)
+    const maskAccount = usePersistSubscription('@@mask-account', MaskWalletProvider.subscription.account, (x) => !!x)
+    const maskChainId = usePersistSubscription('@@mask-chain-id', MaskWalletProvider.subscription.chainId)
 
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()

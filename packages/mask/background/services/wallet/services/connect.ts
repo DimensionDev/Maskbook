@@ -7,9 +7,9 @@ import {
 } from '@masknet/sdk'
 import { walletDatabase } from '../database/Plugin.db.js'
 import { produce, enableMapSet } from 'immer'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { openPopupWindow } from '../../helper/popup-opener.js'
-import { EVMWalletProviders } from '@masknet/web3-providers'
+import { MaskWalletProvider } from '@masknet/web3-providers'
 import { PopupRoutes } from '@masknet/shared-base'
 import { defer, type DeferTuple } from '@masknet/kit'
 import type { WalletGrantedPermission } from '../database/types.js'
@@ -49,7 +49,7 @@ export async function sdk_EIP2255_wallet_requestPermissions(
         promise: defer(),
     })
 
-    if (!EVMWalletProviders[ProviderType.MaskWallet].wallets) {
+    if (!MaskWalletProvider.wallets) {
         await openPopupWindow(PopupRoutes.Wallet, { external_request: id })
     } else {
         await openPopupWindow(PopupRoutes.SelectWallet, {

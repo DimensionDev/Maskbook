@@ -25,10 +25,7 @@ export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 export { FriendTech } from './FriendTech/index.js'
 
-export { EVMWalletProviders } from './Web3/EVM/providers/index.js'
-export { FlowWalletProviders } from './Web3/Flow/providers/index.js'
-export { SolanaWalletProviders } from './Web3/Solana/providers/index.js'
-export { BaseEIP4337WalletProvider } from './Web3/EVM/providers/BaseContractWallet.js'
+export { MaskWalletProviderInstance as MaskWalletProvider } from './Web3/EVM/providers/index.js'
 
 // Web3
 export { getHub } from './Web3/Router/apis/getHub.js'

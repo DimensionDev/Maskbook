@@ -11,7 +11,7 @@ import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver, EVMWalletProviders, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMExplorerResolver, MaskWalletProvider, EVMWeb3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useMaskSharedTrans, UserContext } from '../../../../shared-ui/index.js'
 import Services from '#services'
@@ -76,8 +76,7 @@ const Logout = memo(() => {
                 }
 
                 if (manageWallets.length) {
-                    const maskProvider = EVMWalletProviders[ProviderType.MaskWallet]
-                    await maskProvider?.removeWallets(manageWallets)
+                    await MaskWalletProvider?.removeWallets(manageWallets)
                 }
             }
             await Services.Identity.logoutPersona(currentPersona.identifier)

@@ -16,10 +16,12 @@ export interface SolanaWalletProvider extends WalletAPI.Provider<ChainId, Provid
     signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
-export const SolanaWalletProviders: Record<ProviderType, SolanaWalletProvider> = {
-    [ProviderType.None]: new NoneProvider(),
-    [ProviderType.Phantom]: new SolanaPhantomProvider(),
-    [ProviderType.Solflare]: new SolanaSolflareProvider(),
-    [ProviderType.Sollet]: new SolanaSolletProvider(),
-    [ProviderType.Coin98]: new SolanaCoin98Provider(),
+export function createSolanaWalletProviders(): Record<ProviderType, SolanaWalletProvider> {
+    return {
+        [ProviderType.None]: new NoneProvider(),
+        [ProviderType.Phantom]: new SolanaPhantomProvider(),
+        [ProviderType.Solflare]: new SolanaSolflareProvider(),
+        [ProviderType.Sollet]: new SolanaSolletProvider(),
+        [ProviderType.Coin98]: new SolanaCoin98Provider(),
+    }
 }
