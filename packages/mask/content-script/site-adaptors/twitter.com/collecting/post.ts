@@ -136,7 +136,8 @@ function registerPostCollectorInner(
             const tweetId = getPostId(tweetNode)
             // To distinguish tweet nodes between timeline and detail page
             const isDetailPage = isDetailTweet(tweetNode)
-            return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}`
+            const isCollapsed = !!tweetNode.querySelector('[data-testid="tweet-text-show-more-link"]')
+            return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}/collapse:${isCollapsed}`
         })
         .startWatch(250, cancel)
 }
