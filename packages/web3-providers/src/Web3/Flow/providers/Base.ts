@@ -24,11 +24,6 @@ export abstract class BaseFlowWalletProvider implements FlowWalletProvider {
         return true
     }
 
-    // No need to wait by default
-    get readyPromise() {
-        return Promise.resolve()
-    }
-
     setup(): Promise<void> {
         throw new Error('Method not implemented.')
     }

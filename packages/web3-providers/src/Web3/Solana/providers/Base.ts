@@ -29,11 +29,6 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
         return true
     }
 
-    // No need to wait by default
-    get readyPromise() {
-        return Promise.resolve()
-    }
-
     async setup(): Promise<void> {}
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')

@@ -84,7 +84,7 @@ export namespace WalletAPI {
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
-    export interface Provider<ChainId, ProviderType, Web3Provider, Web3> {
+    export interface Provider<ChainId, ProviderType> {
         readonly ready: boolean
         readonly readyPromise?: Promise<void> | undefined
         readonly emitter: Emitter<ProviderEvents<ChainId, ProviderType>>

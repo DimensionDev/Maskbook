@@ -44,15 +44,6 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
         return true
     }
 
-    /**
-     * This field indicates the provider is ready to be set up.
-     * Please make sure that the provider SDK or global environment is ready.
-     * No need to wait by default
-     */
-    get readyPromise() {
-        return Promise.resolve()
-    }
-
     async setup(context: WalletAPI.IOContext): Promise<void> {
         this.context = context
     }

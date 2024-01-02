@@ -23,7 +23,7 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
         return this.bridge.isReady
     }
 
-    override get readyPromise() {
+    get readyPromise() {
         if (isInPageEthereumInjected()) return this.bridge.untilAvailable()
         return Promise.reject(new Error('Not available on extension site.'))
     }

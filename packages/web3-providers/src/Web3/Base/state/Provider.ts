@@ -32,7 +32,7 @@ export abstract class ProviderState<
     public networkType?: Subscription<NetworkType>
     public providerType?: Subscription<ProviderType>
 
-    protected abstract providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>
+    protected abstract providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType>>
     protected abstract isValidAddress(address: string | undefined): boolean
     protected abstract isValidChainId(chainID: number | undefined): boolean
     protected abstract isSameAddress(a: string | undefined, b: string | undefined): boolean
@@ -72,7 +72,7 @@ export abstract class ProviderState<
 
     private setupProviders() {
         const providers = Object.entries(this.providers) as Array<
-            [ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>]
+            [ProviderType, WalletAPI.Provider<ChainId, ProviderType>]
         >
 
         providers.map(async ([providerType, provider]) => {

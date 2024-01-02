@@ -1,5 +1,5 @@
 import { Flags } from '@masknet/flags'
-import { type ChainId, ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-evm'
+import { type ChainId, ProviderType, type Web3Provider } from '@masknet/web3-shared-evm'
 import { EVMNoneProvider } from './None.js'
 import { BrowserProvider } from './Browser.js'
 import { MetaMaskProvider } from './MetaMask.js'
@@ -14,7 +14,7 @@ import { MaskWalletProvider } from './MaskWallet.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
-export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3> {
+export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider
 }

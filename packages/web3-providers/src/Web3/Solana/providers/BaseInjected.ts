@@ -11,7 +11,7 @@ export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvi
         return this.bridge.isReady
     }
 
-    override get readyPromise() {
+    get readyPromise() {
         if (!isExtensionSiteType()) return this.bridge.untilAvailable()
         return Promise.reject(new Error('Not available on extension site.'))
     }
