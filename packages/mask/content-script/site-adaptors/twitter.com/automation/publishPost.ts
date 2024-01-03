@@ -18,7 +18,7 @@ export async function publishPostTwitter(
 
     if (mediaIds.length > 0)
         variables.media = {
-            media_entities: mediaIds.map((x) => ({ media_id: x, togged_users: [] })),
+            media_entities: mediaIds.map((x) => ({ media_id: x, tagged_users: [] })),
             possibly_sensitive: false,
         }
 
