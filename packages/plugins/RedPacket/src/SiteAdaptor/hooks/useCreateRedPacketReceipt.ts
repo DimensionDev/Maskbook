@@ -1,5 +1,4 @@
 import type { AbiItem } from 'web3-utils'
-import type { BigNumber } from 'bignumber.js'
 import { decodeEvents, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -27,14 +26,17 @@ export function useCreateRedPacketReceipt(txid: string): UseQueryResult<Result> 
 
             const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
                 CreationSuccess: {
-                    id: string
-                    creation_time: BigNumber
+                    returnValues: {
+                        id: string
+                        creation_time: string
+                    }
                 }
             }
+            const { returnValues } = eventParams.CreationSuccess
 
             return {
-                rpid: eventParams.CreationSuccess.id ?? '',
-                creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
+                rpid: returnValues.id || '',
+                creation_time: Number.parseInt(returnValues.creation_time, 10) * 1000,
             } satisfies Result
         },
     })
