@@ -56,10 +56,8 @@ class ApprovalAPI implements AuthorizationAPI.Provider<ChainId> {
 
             return Array.from(spenderList.keys())
                 .flatMap((spender) => {
+                    const maskDappContractInfo = maskDappContractInfoList.find((y) => isSameAddress(y.address, spender))
                     return Array.from(spenderList.get(spender)!.keys()).map((address) => {
-                        const maskDappContractInfo = maskDappContractInfoList.find((y) =>
-                            isSameAddress(y.address, spender),
-                        )
                         return {
                             tokenInfo: { address, name: '', symbol: '' },
                             address: spender,
