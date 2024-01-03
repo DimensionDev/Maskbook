@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import { mapKeys } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
-import { createIndicator, createPageable, type PageIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { decodeFunctionData, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
@@ -121,13 +121,14 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         transactions: Array<Transaction<ChainId, SchemaType>> | undefined,
         senderAddress: string,
     ): NftRedPacketJSONPayload[] {
-        if (!transactions) return EMPTY_LIST
+        if (!transactions) return []
 
         return transactions.flatMap((tx) => {
+            if (!tx.input) return []
             try {
                 const decodedInputParam = decodeFunctionData(
                     NFT_REDPACKET_ABI as AbiItem[],
-                    tx.input ?? '',
+                    tx.input,
                     'create_red_packet',
                 ) as CreateNFTRedpacketParam
 
@@ -157,7 +158,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
 
                 return redpacketPayload
             } catch {
-                return EMPTY_LIST
+                return []
             }
         })
     }
@@ -166,7 +167,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         transactions: Array<Transaction<ChainId, SchemaType>> | undefined,
         senderAddress: string,
     ): RedPacketJSONPayloadFromChain[] {
-        if (!transactions) return EMPTY_LIST
+        if (!transactions) return []
 
         return transactions.flatMap((tx) => {
             try {
@@ -204,7 +205,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                 }
                 return redpacketPayload
             } catch {
-                return EMPTY_LIST
+                return []
             }
         })
     }
