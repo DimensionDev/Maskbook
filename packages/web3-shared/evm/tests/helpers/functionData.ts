@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest'
 import type { AbiItem } from 'web3-utils'
 import { encodeFunctionData } from '../../src/helpers/encodeFunctionData.js'
-import { decodeFunctionData } from '../../src/helpers/decodeFunctionData.js'
+import { decodeFunctionParams } from '../../src/helpers/decodeFunctionParams.js'
 
 const ERC20 = [
     {
@@ -39,7 +39,7 @@ describe('encode & decode function data', () => {
     })
 
     test('should decode function data', () => {
-        const result = decodeFunctionData(ERC20, DATA, 'approve')
+        const result = decodeFunctionParams(ERC20, DATA, 'approve')
 
         expect(result._spender).toBe('0x8ba1f109551bD432803012645Ac136ddd64DBA72')
         expect(result._value).toBe('0')

@@ -3,7 +3,7 @@ import { mapKeys } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { decodeFunctionData, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
@@ -125,7 +125,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
 
         return transactions.flatMap((tx) => {
             try {
-                const decodedInputParam = decodeFunctionData(
+                const decodedInputParam = decodeFunctionParams(
                     NFT_REDPACKET_ABI as AbiItem[],
                     tx.input ?? '',
                     'create_red_packet',
@@ -170,7 +170,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
 
         return transactions.flatMap((tx) => {
             try {
-                const decodedInputParam = decodeFunctionData(
+                const decodedInputParam = decodeFunctionParams(
                     REDPACKET_ABI as AbiItem[],
                     tx.input ?? '',
                     'create_red_packet',
