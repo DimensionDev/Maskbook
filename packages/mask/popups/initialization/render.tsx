@@ -9,7 +9,6 @@ if (location.hash === '') location.assign('#/personas')
  * Firefox will not help popup fixed width when user click browser action
  * So this will determine if the user has set maxWidth to 'unset' when resizing in the window
  */
-console.log('window', window.innerWidth, window.innerHeight)
 if (navigator.userAgent.includes('Firefox')) {
     setTimeout(() => {
         document.body.style.maxWidth = '350px'
