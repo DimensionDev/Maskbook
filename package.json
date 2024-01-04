@@ -29,7 +29,7 @@
     "clean": "npx gulp clean"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.9.0-20230307045856-46252fb",
+    "@dimensiondev/holoflows-kit": "0.9.0-20240104084316-88642f9",
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.1",
     "@emotion/serialize": "1.1.2",
