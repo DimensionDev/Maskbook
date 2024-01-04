@@ -53,13 +53,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                     await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
                 :   undefined
 
-            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost) {
-                await activatedSiteAdaptorUI.automation.endpoint.publishPost(
+            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost && reason === 'timeline') {
+                const postId = await activatedSiteAdaptorUI.automation.endpoint.publishPost(
                     mediaObject ? [decoratedText || defaultText, mediaObject] : [decoratedText || defaultText],
                     {
                         reason,
                     },
                 )
+                if (postId) location.reload()
             } else {
                 if (encode === 'image') {
                     if (!mediaObject) throw new Error('Failed to create image payload.')
