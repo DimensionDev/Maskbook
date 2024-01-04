@@ -4,12 +4,7 @@ import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import {
-    useChainContext,
-    useNativeToken,
-    useNonFungibleAssetsByCollection,
-    Web3ContextProvider,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeToken, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -128,11 +123,6 @@ const useStyles = makeStyles<{
         },
         nftList: {
             gap: 12,
-        },
-        hidden: {
-            padding: 0,
-            visibility: 'hidden',
-            height: 0,
         },
     }
 })
@@ -277,28 +267,13 @@ export function TrendingView(props: TrendingViewProps) {
     }, [t, isSwappable, isNFT])
     // #endregion
 
-    const { classes, cx } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })
+    const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })
 
     // #region api ready callback
     useEffect(() => {
         props.onUpdate?.()
     }, [loadingTrending])
     // #endregion
-
-    const collectionId =
-        trending?.coin.type === TokenType.NonFungible ?
-            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-                result.name
-            :   trending.coin.contract_address
-        :   undefined
-    const {
-        value: fetchedTokens = EMPTY_LIST,
-        done,
-        next,
-        error: loadError,
-    } = useNonFungibleAssetsByCollection(collectionId, result.pluginID, {
-        chainId: result.chainId,
-    })
 
     if (error) {
         return (
@@ -310,6 +285,12 @@ export function TrendingView(props: TrendingViewProps) {
             />
         )
     }
+    const collectionId =
+        trending?.coin.type === TokenType.NonFungible ?
+            result.pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                result.name
+            :   trending.coin.contract_address
+        :   undefined
 
     // #region display loading skeleton
     if (!trending?.currency || loadingTrending)
@@ -453,15 +434,13 @@ export function TrendingView(props: TrendingViewProps) {
                     </Web3ContextProvider>
                 :   null}
 
-                {isNFT ?
-                    <Box className={cx(classes.nftItems, currentTab === ContentTab.NFTItems ? '' : classes.hidden)}>
+                {isNFT && currentTab === ContentTab.NFTItems ?
+                    <Box className={classes.nftItems}>
                         <NFTList
                             pluginID={result.pluginID}
+                            chainId={result.chainId}
                             className={classes.nftList}
-                            tokens={fetchedTokens}
-                            onNextPage={next}
-                            finished={done}
-                            hasError={!!loadError}
+                            collectionId={collectionId}
                             gap={16}
                         />
                     </Box>

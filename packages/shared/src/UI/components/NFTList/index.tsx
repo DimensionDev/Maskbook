@@ -1,13 +1,14 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3Utils } from '@masknet/web3-hooks-base'
+import { CrossIsolationMessages, NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
+import { useWeb3Hub, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
+import { Checkbox, List, ListItem, Radio, Stack, Typography, type ListProps } from '@mui/material'
 import { isLens, resolveImageURL } from '@masknet/web3-shared-evm'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
@@ -15,23 +16,6 @@ interface NFTItemProps {
 }
 
 export type NFTKeyPair = [address: string, tokenId: string]
-
-interface Props {
-    selectable?: boolean
-    tokens: Web3Helper.NonFungibleAssetScope[]
-    selectedPairs?: NFTKeyPair[]
-    onChange?: (id: string | null, contractAddress?: string) => void
-    limit?: number
-    columns?: number
-    gap?: number
-    className?: string
-
-    onNextPage(): void
-
-    finished: boolean
-    hasError?: boolean
-    pluginID: NetworkPluginID
-}
 
 const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns = 4, gap = 12 }) => {
     const isLight = theme.palette.mode === 'light'
@@ -162,45 +146,67 @@ export function NFTItem({ token, pluginID }: NFTItemProps) {
     )
 }
 
+interface Props extends Omit<ListProps, 'onChange'> {
+    pluginID: NetworkPluginID
+    chainId: Web3Helper.ChainIdAll
+    selectable?: boolean
+    /** SimpleHash collection */
+    collectionId?: string
+    selectedPairs?: NFTKeyPair[]
+    onChange?: (id: string | null, contractAddress?: string) => void
+    limit?: number
+    columns?: number
+    gap?: number
+}
 export function NFTList({
     selectable,
     selectedPairs,
-    tokens,
+    collectionId,
     onChange,
     limit = 1,
     columns = 4,
     gap = 12,
     className,
-    onNextPage,
-    finished,
     pluginID,
-    hasError,
+    chainId,
+    ...rest
 }: Props) {
     const { classes, cx } = useStyles({ columns, gap })
 
-    const isRadio = limit === 1
     const reachedLimit = selectedPairs && selectedPairs.length >= limit
 
-    const toggleItem = useCallback(
-        (currentId: string | null, contractAddress?: string) => {
-            onChange?.(currentId, contractAddress)
-        },
-        [onChange],
-    )
+    const toggleItem = (currentId: string | null, contractAddress?: string) => {
+        onChange?.(currentId, contractAddress)
+    }
     const includes: (pairs: NFTKeyPair[], pair: NFTKeyPair) => boolean =
         pluginID === NetworkPluginID.PLUGIN_EVM ?
-            (pairs, pair) => {
-                return !!pairs.find(([address, tokenId]) => isSameAddress(address, pair[0]) && tokenId === pair[1])
-            }
-        :   (pairs, pair) => {
-                return !!pairs.find(([, tokenId]) => tokenId === pair[1])
-            }
+            (pairs, pair) => !!pairs.find(([address, id]) => isSameAddress(address, pair[0]) && id === pair[1])
+        :   (pairs, pair) => !!pairs.find(([, tokenId]) => tokenId === pair[1])
 
+    const isRadio = limit === 1
     const SelectComponent = isRadio ? Radio : Checkbox
+
+    const Hub = useWeb3Hub(pluginID, { chainId })
+    const { data, fetchNextPage, hasNextPage, error } = useInfiniteQuery({
+        queryKey: ['non-fungible-assets', 'by-collection', collectionId, chainId],
+        initialPageParam: undefined as any,
+        queryFn: async ({ pageParam }) => {
+            if (!collectionId) return
+            return Hub.getNonFungibleAssetsByCollection(collectionId, {
+                indicator: pageParam,
+                size: 50,
+                chainId,
+            })
+        },
+        getNextPageParam(lastPage) {
+            return lastPage?.nextIndicator as PageIndicator
+        },
+    })
+    const tokens = useMemo(() => data?.pages.flatMap((x) => x?.data ?? []) ?? [], [data?.pages])
 
     return (
         <>
-            <List className={cx(classes.list, className)}>
+            <List className={cx(classes.list, className)} {...rest}>
                 {tokens.map((token) => {
                     const selected =
                         selectedPairs ? includes(selectedPairs, [token.contract?.address!, token.tokenId]) : false
@@ -236,13 +242,17 @@ export function NFTList({
                     )
                 })}
             </List>
-            {hasError && finished && tokens.length ?
+            {error && !hasNextPage && tokens.length ?
                 <Stack py={1}>
-                    <RetryHint hint={false} retry={onNextPage} />
+                    <RetryHint hint={false} retry={() => fetchNextPage()} />
                 </Stack>
             :   null}
             <Stack py={1}>
-                <ElementAnchor callback={onNextPage}>{!finished && <LoadingBase />}</ElementAnchor>
+                <ElementAnchor callback={() => fetchNextPage()}>
+                    {hasNextPage ?
+                        <LoadingBase />
+                    :   null}
+                </ElementAnchor>
             </Stack>
         </>
     )
