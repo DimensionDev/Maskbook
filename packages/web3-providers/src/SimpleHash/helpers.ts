@@ -41,7 +41,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
 
     const spam_score = asset.collection.spam_score
     if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE)) return
-    const schema = asset.contract.type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155
+    const schema = ['ERC721', 'CRYPTOPUNKS'].includes(asset.contract.type) ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
     return {

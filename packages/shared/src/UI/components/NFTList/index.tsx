@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import { noop } from 'lodash-es'
+import { noop, range } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import { useWeb3Hub, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Checkbox, List, ListItem, Radio, Stack, Typography, type ListProps } from '@mui/material'
+import { Checkbox, List, ListItem, Radio, Stack, Typography, type ListProps, Skeleton } from '@mui/material'
 import { isLens, resolveImageURL } from '@masknet/web3-shared-evm'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
@@ -146,6 +146,16 @@ export function NFTItem({ token, pluginID }: NFTItemProps) {
     )
 }
 
+export function NFTItemSkeleton() {
+    const { classes } = useStyles({})
+    return (
+        <div className={classes.nftContainer}>
+            <Skeleton variant="rectangular" height={126} width={126} />
+            <Skeleton variant="text" className={classes.caption} />
+        </div>
+    )
+}
+
 interface Props extends Omit<ListProps, 'onChange'> {
     pluginID: NetworkPluginID
     chainId: Web3Helper.ChainIdAll
@@ -187,7 +197,7 @@ export function NFTList({
     const SelectComponent = isRadio ? Radio : Checkbox
 
     const Hub = useWeb3Hub(pluginID, { chainId })
-    const { data, fetchNextPage, hasNextPage, error } = useInfiniteQuery({
+    const { data, isFetching, fetchNextPage, hasNextPage, error } = useInfiniteQuery({
         queryKey: ['non-fungible-assets', 'by-collection', collectionId, chainId],
         initialPageParam: undefined as any,
         queryFn: async ({ pageParam }) => {
@@ -241,6 +251,13 @@ export function NFTList({
                         </ListItem>
                     )
                 })}
+                {isFetching ?
+                    range(8).map((i) => (
+                        <ListItem className={cx(classes.nftItem, classes.inactive)} key={i}>
+                            <NFTItemSkeleton />
+                        </ListItem>
+                    ))
+                :   null}
             </List>
             {error && !hasNextPage && tokens.length ?
                 <Stack py={1}>
@@ -248,11 +265,7 @@ export function NFTList({
                 </Stack>
             :   null}
             <Stack py={1}>
-                <ElementAnchor callback={() => fetchNextPage()}>
-                    {hasNextPage ?
-                        <LoadingBase />
-                    :   null}
-                </ElementAnchor>
+                <ElementAnchor callback={() => fetchNextPage()} />
             </Stack>
         </>
     )
