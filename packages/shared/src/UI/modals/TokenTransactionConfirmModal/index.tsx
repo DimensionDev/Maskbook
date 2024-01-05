@@ -10,7 +10,6 @@ export interface TransactionConfirmModalOpenProps extends Omit<TransactionConfir
 export const TransactionConfirmModal = forwardRef<SingletonModalRefCreator<TransactionConfirmModalOpenProps>>(
     (props, ref) => {
         const [shareText, setShareText] = useState('')
-        const [onSubmit, setOnSubmit] = useState<() => void>()
         const [share, setShare] = useState<(text: string) => void>()
         const [amount, setAmount] = useState<string | null>(null)
         const [token, setToken] = useState<Web3Helper.FungibleTokenAll | null>()
@@ -24,7 +23,6 @@ export const TransactionConfirmModal = forwardRef<SingletonModalRefCreator<Trans
         const [open, dispatch] = useSingletonModal(ref, {
             onOpen(props) {
                 setShareText(props.shareText)
-                setOnSubmit(() => props.onSubmit)
                 setShare(() => props.share)
                 setAmount(props.amount)
                 setToken(props.token)
@@ -48,7 +46,7 @@ export const TransactionConfirmModal = forwardRef<SingletonModalRefCreator<Trans
                 nonFungibleTokenId={nonFungibleTokenId}
                 nonFungibleTokenAddress={nonFungibleTokenAddress}
                 token={token}
-                onSubmit={onSubmit}
+                onSubmit={() => dispatch?.close()}
                 share={share}
                 title={title}
                 messageTextForFT={messageTextForFT}
