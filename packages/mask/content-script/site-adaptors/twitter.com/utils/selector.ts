@@ -200,6 +200,9 @@ export function postsContentSelector() {
             '[data-testid="tweet"] + div > div:first-child div[lang]',
             '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]',
 
+            // tweets have only link that rendered as social media card
+            '[data-testid="tweet"] [data-testid="card.wrapper"]:has([data-testid="card.layoutLarge.media"])',
+
             // quoted tweets in timeline
             '[data-testid="tweet"] [aria-labelledby] div[role="link"] div[lang]',
             // quoted tweets in detail page

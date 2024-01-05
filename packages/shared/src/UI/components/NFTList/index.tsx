@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { noop, range } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -214,6 +214,15 @@ export function NFTList({
     })
     const tokens = useMemo(() => data?.pages.flatMap((x) => x?.data ?? []) ?? [], [data?.pages])
 
+    // Automatically fetch next page if the last page is empty
+    const lastPage = data?.pages.at(-1)?.data
+    useEffect(() => {
+        if (lastPage?.length !== 0) return
+        fetchNextPage()
+    }, [lastPage, fetchNextPage])
+
+    const skeletonSize = columns - (tokens.length % columns)
+
     return (
         <>
             <List className={cx(classes.list, className)} {...rest}>
@@ -252,7 +261,7 @@ export function NFTList({
                     )
                 })}
                 {isFetching ?
-                    range(8).map((i) => (
+                    range(skeletonSize).map((i) => (
                         <ListItem className={cx(classes.nftItem, classes.inactive)} key={i}>
                             <NFTItemSkeleton />
                         </ListItem>
