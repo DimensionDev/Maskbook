@@ -29,8 +29,8 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         super(ProviderType.MaskWallet)
     }
 
-    async updateImmediately() {
-        const wallets = this.context.wallets.getCurrentValue() ?? EMPTY_LIST
+    private async updateImmediately() {
+        const wallets = this.context.wallets.getCurrentValue()
 
         // update local wallets immediately
         this.ref.value = sortBy(
@@ -39,7 +39,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         )
     }
 
-    async update() {
+    private async update() {
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
@@ -92,7 +92,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     }
 
     override async setup() {
-        super.setup()
+        await super.setup()
 
         this.subscription?.wallets?.subscribe(async () => {
             const primaryWallet = first(this.wallets)
