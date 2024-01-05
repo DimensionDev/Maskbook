@@ -3,6 +3,9 @@ import { CustomEventId, type InternalEvents, encodeEvent } from '../shared/index
 let warned = false
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
     if (!warned && typeof location === 'object' && location.protocol.includes('extension')) {
+        if (location.href.includes('background')) {
+            throw new Error('This package is not expected to be imported in background script. Please check your code.')
+        }
         console.warn('This code is not expected to be run in the extension pages. Please check your code.')
         warned = true
     }

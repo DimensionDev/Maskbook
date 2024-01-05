@@ -24,7 +24,14 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { getEnumAsArray } from '@masknet/kit'
-import { addressStorage, networkStorage, tokenStorage, settingsStorage, providerStorage } from '../../Base/storage.js'
+import {
+    addressStorage,
+    networkStorage,
+    tokenStorage,
+    settingsStorage,
+    providerStorage,
+    MaskWalletStorage,
+} from '../../Base/storage.js'
 
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: transaction } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_Transaction`, {
@@ -43,12 +50,13 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         messages: {},
     }).storage
 
-    const [address, network, token, settings, provider] = await Promise.all([
+    const [address, network, token, settings, provider, { baseHostedStorage, eip4337Storage }] = await Promise.all([
         addressStorage(NetworkPluginID.PLUGIN_EVM),
         networkStorage(NetworkPluginID.PLUGIN_EVM),
         tokenStorage(NetworkPluginID.PLUGIN_EVM),
         settingsStorage(NetworkPluginID.PLUGIN_EVM),
         providerStorage(NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType()),
+        MaskWalletStorage(),
 
         nameService.initializedPromise,
         transaction.initializedPromise,
@@ -58,7 +66,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
 
     const state: Web3State = lazyObject({
         Settings: () => new Settings.EVMSettings(settings),
-        Provider: () => new Provider.EVMProvider(context, provider),
+        Provider: () => new Provider.EVMProvider(context, provider, baseHostedStorage, eip4337Storage),
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(NetworkPluginID.PLUGIN_EVM, network.networkID, network.networks),

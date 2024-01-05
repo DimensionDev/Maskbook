@@ -123,22 +123,4 @@ export namespace WalletAPI {
         /** Dismiss the connection. */
         disconnect(): Promise<void>
     }
-    export interface HostedProvider {
-        /** Add a new wallet. */
-        addWallet(wallet: Wallet): Promise<void>
-        /** Update a wallet. */
-        updateWallet(address: string, wallet: Wallet): Promise<void>
-        /** Rename a wallet */
-        renameWallet(address: string, name: string): Promise<void>
-        /** Remove a wallet */
-        removeWallet(address: string, password?: string | undefined): Promise<void>
-        /** Reset all wallets */
-        resetAllWallets(): Promise<void>
-        /** Update a bunch of wallets. */
-        updateWallets(wallets: readonly Wallet[]): Promise<void>
-        /** Remove a bunch of wallets. */
-        removeWallets(wallets: readonly Wallet[]): Promise<void>
-        /** Switch to the designate account. */
-        switchAccount(account?: string): Promise<void>
-    }
 }

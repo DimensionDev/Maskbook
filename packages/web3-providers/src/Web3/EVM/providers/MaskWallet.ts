@@ -13,20 +13,29 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { BaseEIP4337WalletProvider } from './BaseContractWallet.js'
+import { BaseEIP4337WalletProvider, type EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import * as SmartPayOwner from /* webpackDefer: true */ '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
+import type { BaseHostedStorage } from './BaseHosted.js'
 
+export let MaskWalletProviderInstance: MaskWalletProvider
+export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
+    MaskWalletProviderInstance = mask
+}
 export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
     private walletsSubscription = createSubscriptionFromValueRef(this.ref)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
         await this.context.renameWallet(address, name)
     }
-    constructor(private context: WalletAPI.MaskWalletIOContext) {
-        super(ProviderType.MaskWallet)
+    constructor(
+        private context: WalletAPI.MaskWalletIOContext,
+        walletStorage: BaseHostedStorage,
+        eip4337Storage: EIP4337ProviderStorage,
+    ) {
+        super(ProviderType.MaskWallet, walletStorage, eip4337Storage)
     }
 
     private async updateImmediately() {
@@ -92,9 +101,9 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     }
 
     override async setup() {
-        await super.setup()
+        super.setup()
 
-        this.subscription?.wallets?.subscribe(async () => {
+        this.subscription.wallets.subscribe(async () => {
             const primaryWallet = first(this.wallets)
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {

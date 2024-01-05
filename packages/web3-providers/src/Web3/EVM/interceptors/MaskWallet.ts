@@ -5,9 +5,7 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { MaskWalletProviderInstance } from '../providers/index.js'
 
 export class MaskWallet implements Middleware<ConnectionContext> {
-    private get walletProvider() {
-        return MaskWalletProviderInstance
-    }
+    private walletProvider = MaskWalletProviderInstance
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         if (!context.writable) {
