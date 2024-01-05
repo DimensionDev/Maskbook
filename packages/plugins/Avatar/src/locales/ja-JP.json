@@ -1,4 +1,6 @@
 {
+    "application_dialog_title": "NFT PFP",
+    "application_edit_profile_dialog_title": "プロフィールを編集する",
     "set_nft": "NFT PFPを設定",
     "nft_set_success": "NFT PFPを正常にセットアップしました",
     "persona_verification_failed": "NFT PFPの検証に失敗しました",
