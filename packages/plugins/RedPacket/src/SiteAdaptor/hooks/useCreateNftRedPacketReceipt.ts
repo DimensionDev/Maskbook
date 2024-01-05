@@ -1,5 +1,4 @@
 import { useAsyncRetry } from 'react-use'
-import type { BigNumber } from 'bignumber.js'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, useNftRedPacketConstants, decodeEvents } from '@masknet/web3-shared-evm'
@@ -22,14 +21,17 @@ export function useCreateNftRedPacketReceipt(txid: string, expectedChainId: Chai
 
         const eventParams = decodeEvents(NFT_REDPACKET_ABI as AbiItem[], [log]) as unknown as {
             CreationSuccess: {
-                id: string
-                creation_time: BigNumber
+                returnValues: {
+                    id: string
+                    creation_time: string
+                }
             }
         }
 
+        const { returnValues } = eventParams.CreationSuccess
         return {
-            rpid: eventParams.CreationSuccess.id ?? '',
-            creation_time: eventParams.CreationSuccess.creation_time.toNumber() * 1000,
+            rpid: returnValues.id || '',
+            creation_time: Number.parseInt(returnValues.creation_time, 10) * 1000,
         }
     }, [txid, chainId, RED_PACKET_NFT_ADDRESS])
 }
