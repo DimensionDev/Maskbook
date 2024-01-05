@@ -28,8 +28,6 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
     get ready() {
         return true
     }
-
-    async setup(): Promise<void> {}
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }

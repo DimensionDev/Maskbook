@@ -24,10 +24,11 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType> {
     constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
-        super(context, storage)
+        super(context.signWithPersona, storage)
+        this.providers = createEVMWalletProviders(context)
         this.init()
     }
-    protected providers = createEVMWalletProviders()
+    protected providers
     protected isValidAddress = isValidAddress
     protected isValidChainId = isValidChainId
     protected isSameAddress = isSameAddress

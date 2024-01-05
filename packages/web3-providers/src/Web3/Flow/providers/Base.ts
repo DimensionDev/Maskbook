@@ -24,9 +24,6 @@ export abstract class BaseFlowWalletProvider implements FlowWalletProvider {
         return true
     }
 
-    setup(): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
     switchChain(chainId?: ChainId): Promise<void> {
         throw new Error('Method not implemented.')
     }

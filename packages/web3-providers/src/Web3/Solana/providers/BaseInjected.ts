@@ -16,7 +16,7 @@ export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvi
         return Promise.reject(new Error('Not available on extension site.'))
     }
 
-    override async setup(): Promise<void> {
+    setup() {
         this.bridge.on('accountChanged', this.onAccountChanged.bind(this))
         this.bridge.on('chainChanged', this.onChainChanged.bind(this))
         this.bridge.on('connect', this.onConnect.bind(this))

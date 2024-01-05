@@ -24,7 +24,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         protected account: AbstractAccountAPI.Provider<ChainId, UserOperation, Transaction>,
         protected bundler: BundlerAPI.Provider,
         protected funder: FunderAPI.Provider<ChainId>,
-        private signWithPersona: WalletAPI.IOContext['signWithPersona'],
+        private signWithPersona: WalletAPI.SignWithPersona,
     ) {}
 
     private async getNonce(context: ConnectionContext) {
@@ -114,7 +114,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (!context.writeable) {
+        if (!context.writable) {
             await next()
             return
         }

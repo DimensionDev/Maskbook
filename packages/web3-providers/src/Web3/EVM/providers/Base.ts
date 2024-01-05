@@ -17,8 +17,6 @@ import type { WalletAPI } from '../../../entry-types.js'
 import type { EVMWalletProvider } from './index.js'
 
 export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
-    protected context: WalletAPI.IOContext | undefined
-
     constructor(protected providerType: ProviderType) {}
 
     public emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
@@ -42,10 +40,6 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
      */
     get ready() {
         return true
-    }
-
-    async setup(context: WalletAPI.IOContext): Promise<void> {
-        this.context = context
     }
 
     // Switch chain with RPC calls by default

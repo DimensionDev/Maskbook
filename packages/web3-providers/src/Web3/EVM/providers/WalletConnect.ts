@@ -68,7 +68,7 @@ class Client {
 export class WalletConnectProvider extends BaseEVMWalletProvider {
     private client: Client = null!
 
-    constructor() {
+    constructor(private context: WalletAPI.WalletConnectIOContext) {
         super(ProviderType.WalletConnect)
         this.client = new Client(this.emitter)
         this.resume()

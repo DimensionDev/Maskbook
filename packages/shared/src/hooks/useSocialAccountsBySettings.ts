@@ -9,7 +9,7 @@ export function useSocialAccountsBySettings(
     identity: SocialIdentity | null | undefined,
     typeWhitelist: SocialAddressType[] | undefined,
     sorter: ((a: SocialAccount<Web3Helper.ChainIdAll>, z: SocialAccount<Web3Helper.ChainIdAll>) => number) | undefined,
-    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+    signWithPersona: WalletAPI.SignWithPersona,
 ) {
     const [
         socialAccounts,

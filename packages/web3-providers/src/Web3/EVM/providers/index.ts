@@ -22,13 +22,14 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
 export let MaskWalletProviderInstance: MaskWalletProvider
 
 export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
-export function createEVMWalletProviders() {
+export function createEVMWalletProviders(context: WalletAPI.IOContext) {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.MaskWallet]: new MaskWalletProvider(),
+        [ProviderType.MaskWallet]: new MaskWalletProvider(context.MaskWalletContext),
         [ProviderType.Browser]: new BrowserProvider(),
         [ProviderType.MetaMask]: new MetaMaskProvider(),
-        [ProviderType.WalletConnect]: Flags.wc_enabled ? new WalletConnectProvider() : new EVMNoneProvider(),
+        [ProviderType.WalletConnect]:
+            Flags.wc_enabled ? new WalletConnectProvider(context.WalletConnectContext) : new EVMNoneProvider(),
         [ProviderType.Coin98]: new EVM_Coin98Provider(),
         [ProviderType.Coinbase]: new CoinbaseProvider(),
         [ProviderType.OKX]: new OKXProvider(),

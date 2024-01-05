@@ -10,7 +10,7 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
         super(ProviderType.CustomEvent)
     }
 
-    override async setup() {
+    setup() {
         if (getSiteType() !== EnhanceableSite.App) return
 
         // @ts-expect-error TODO: define the custom event

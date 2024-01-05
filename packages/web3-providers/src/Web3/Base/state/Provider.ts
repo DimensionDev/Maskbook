@@ -37,16 +37,13 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
     constructor(
-        protected context: WalletAPI.IOContext,
+        public signWithPersona: WalletAPI.SignWithPersona,
         protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
-    ) {
-        this.signWithPersona = context.signWithPersona
-    }
+    ) {}
     protected init() {
         this.setupSubscriptions()
         this.setupProviders()
     }
-    public signWithPersona
 
     protected setupSubscriptions() {
         if (!this.site) return
@@ -110,7 +107,7 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
             })
 
             try {
-                await provider.setup(this.context)
+                await Promise.resolve(provider.setup?.())
             } catch {
                 // ignore setup errors
             }

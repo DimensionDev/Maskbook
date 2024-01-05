@@ -22,7 +22,7 @@ type StorageValue = StorageValueV1 | StorageValueV2 | StorageValueV3
 export function useHiddenAddressConfig(
     personaPubkey: string | undefined,
     pluginID: PluginID | undefined,
-    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+    signWithPersona: WalletAPI.SignWithPersona,
 ) {
     return useQuery({
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
@@ -54,7 +54,7 @@ export function useHiddenAddressConfigOf(
     personaPubkey: string | undefined,
     pluginID: PluginID | undefined,
     socialId: string | undefined,
-    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+    signWithPersona: WalletAPI.SignWithPersona,
 ): [string[] | undefined, ReturnType<typeof useHiddenAddressConfig>] {
     const result = useHiddenAddressConfig(personaPubkey, pluginID, signWithPersona)
     return [result.data ? getHiddenAddressesOf(result.data, socialId?.toLowerCase()) : undefined, result]
@@ -74,7 +74,7 @@ type ConfigResult = [UseQueryResult<Record<string, string[]>>, (config: Record<s
  */
 export function useUnlistedAddressConfig(
     { identifier, pluginID, socialIds }: Options,
-    signWithPersona: WalletAPI.IOContext['signWithPersona'],
+    signWithPersona: WalletAPI.SignWithPersona,
 ): ConfigResult {
     const query = useHiddenAddressConfig(identifier?.publicKeyAsHex, pluginID, signWithPersona)
     const { data: unlistedAddressConfig } = query

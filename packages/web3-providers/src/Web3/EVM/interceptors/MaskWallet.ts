@@ -10,7 +10,7 @@ export class MaskWallet implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (!context.writeable) {
+        if (!context.writable) {
             await next()
             return
         }

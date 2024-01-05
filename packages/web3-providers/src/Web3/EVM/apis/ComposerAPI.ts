@@ -9,7 +9,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 
 let instance: EVMComposer<ConnectionContext> | undefined
 export class Composer {
-    static compose(signWithPersona: WalletAPI.IOContext['signWithPersona']) {
+    static compose(signWithPersona: WalletAPI.SignWithPersona) {
         if (instance) return instance
 
         instance = EVMComposer.from<ConnectionContext>(

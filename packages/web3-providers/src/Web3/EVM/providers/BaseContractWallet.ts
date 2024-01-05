@@ -4,7 +4,7 @@ import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } 
 import { type ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import { BaseHostedProvider } from './BaseHosted.js'
 import * as SmartPayBundler from /* webpackDefer: true */ '../../../SmartPay/index.js'
-import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
+import type { BundlerAPI } from '../../../entry-types.js'
 
 /**
  * EIP-4337 compatible smart contract based wallet.
@@ -23,8 +23,8 @@ export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
         super(providerType)
     }
 
-    override async setup(context: WalletAPI.IOContext) {
-        await super.setup(context)
+    override async setup() {
+        await super.setup()
 
         this.ownerStorage = InMemoryStorages.Web3.createSubScope(
             `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_owner`,

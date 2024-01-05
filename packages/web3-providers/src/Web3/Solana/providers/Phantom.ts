@@ -13,10 +13,10 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         await (this.bridge as unknown as Web3Provider).connect()
     }
 
-    override async setup(): Promise<void> {
+    override async setup() {
         if (!injectedPhantomProvider.isReady) return
         await injectedPhantomProvider.untilAvailable()
-        await super.setup()
+        super.setup()
     }
 
     override async signMessage(message: string) {

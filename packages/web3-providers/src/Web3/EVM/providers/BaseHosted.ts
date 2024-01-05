@@ -45,9 +45,7 @@ export abstract class BaseHostedProvider extends BaseEVMWalletProvider implement
         super(providerType)
     }
 
-    override async setup(context: WalletAPI.IOContext) {
-        await super.setup(context)
-
+    async setup() {
         this.walletStorage = PersistentStorages.Web3.createSubScope(
             // if you change this (don't unless you have migration), please also be aware of packages/mask/background/services/wallet/services/sdk.ts
             `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_hosted`,

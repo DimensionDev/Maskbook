@@ -31,36 +31,20 @@ export namespace WalletAPI {
         account?: string
     }
 
+    export interface WalletConnectIOContext {
+        /** Open walletconnect dialog */
+        openWalletConnectDialog(uri: string): Promise<void>
+        /** Close walletconnect dialog */
+        closeWalletConnectDialog(): void
+    }
     export interface MaskWalletIOContext {
+        /** Get all wallets */
+        wallets: Subscription<Wallet[]>
         allPersonas: Subscription<readonly PersonaInformation[]>
         resetAllWallets(): Promise<void>
         /** Remove a old wallet */
         removeWallet(id: string, password?: string): Promise<void>
         renameWallet(address: string, name: string): Promise<void>
-    }
-    export interface IOContext {
-        MaskWalletContext?: MaskWalletIOContext
-        /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
-        hasPaymentPassword(): Promise<boolean>
-        /** Sign a message with persona (w or w/o popups) */
-        signWithPersona(
-            type: SignType,
-            message: unknown,
-            identifier?: ECKeyIdentifier,
-            silent?: boolean,
-        ): Promise<string>
-        /** Open popup window */
-        openPopupWindow<T extends PopupRoutes>(
-            route: T,
-            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
-        ): Promise<void>
-        /** Open walletconnect dialog */
-        openWalletConnectDialog(uri: string): Promise<void>
-        /** Close walletconnect dialog */
-        closeWalletConnectDialog(): void
-        /** Get all wallets */
-        wallets: Subscription<Wallet[]>
         /** Add a new wallet */
         addWallet(
             source: ImportSource,
@@ -84,6 +68,31 @@ export namespace WalletAPI {
         /** Disconnect origin from Mask wallet  */
         disconnectAllWalletsFromOrigin(origin: string, type: 'any' | 'sdk' | 'internal'): Promise<void>
     }
+    export type SignWithPersona = (
+        type: SignType,
+        message: unknown,
+        identifier?: ECKeyIdentifier,
+        silent?: boolean,
+    ) => Promise<string>
+    export interface MessageIOContext {
+        /** Send request to native API, for a risky request will be added into the waiting queue. */
+        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+        /** Open popup window */
+        openPopupWindow<T extends PopupRoutes>(
+            route: T,
+            params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
+        ): Promise<void>
+        hasPaymentPassword(): Promise<boolean>
+        /** Send request to native API, for a risky request will be added into the waiting queue. */
+        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+    }
+    export interface IOContext {
+        MaskWalletContext: MaskWalletIOContext
+        MessageContext: MessageIOContext
+        WalletConnectContext: WalletConnectIOContext
+        /** Sign a message with persona (w or w/o popups) */
+        signWithPersona: SignWithPersona
+    }
     export interface Provider<ChainId, ProviderType> {
         readonly ready: boolean
         readonly readyPromise?: Promise<void> | undefined
@@ -97,8 +106,8 @@ export namespace WalletAPI {
 
         /** connection status */
         readonly connected: boolean
-        /** async setup tasks */
-        setup(context: IOContext): Promise<void>
+        /** Post-constructor code */
+        setup?(): void
         /** Switch to the designate chain. */
         switchChain(chainId: ChainId): Promise<void>
         /** Create the connection. */

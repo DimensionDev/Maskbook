@@ -22,7 +22,7 @@ export class Web3Storage {
         proofIdentity: string,
         platform: NextIDPlatform,
         signerOrPublicKey: string | ECKeyIdentifier,
-        signWithPersona: WalletAPI.IOContext['signWithPersona'],
+        signWithPersona: WalletAPI.SignWithPersona,
     ) {
         if (!platform || !signerOrPublicKey) throw new Error('Instantiation parameter error.')
         return new NextIDStorage(proofIdentity, platform, signerOrPublicKey, signWithPersona)

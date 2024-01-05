@@ -66,9 +66,8 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
         RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),
-        Message: () => new Message.EVMMessage(context, messages),
-        Token: () =>
-            new Token.EVMToken(context, { account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
+        Message: () => new Message.EVMMessage(context.MessageContext, messages),
+        Token: () => new Token.EVMToken({ account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
         Transaction: () =>
             new Transaction.EVMTransaction(
                 { chainId: state.Provider?.chainId, account: state.Provider?.account },

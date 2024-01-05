@@ -18,7 +18,7 @@ let pid = 0
 
 export class ConnectionContext {
     private id = 0
-    private _writeable = true
+    private _writable = true
     private _error: Error | null = null
     private _result: unknown
     private _account = ''
@@ -53,8 +53,8 @@ export class ConnectionContext {
         return PayloadEditor.fromPayload(this.request, this._options)
     }
 
-    get writeable() {
-        return this._writeable
+    get writable() {
+        return this._writable
     }
 
     get account() {
@@ -197,12 +197,12 @@ export class ConnectionContext {
      * JSON RPC response object
      */
     get response() {
-        if (this._writeable) return
+        if (this._writable) return
         return createJsonRpcResponse(this.id, this._result)
     }
 
     get error() {
-        if (this._writeable) return null
+        if (this._writable) return null
         if (this.errorEditor.presence) return this.errorEditor.error
         return null
     }
@@ -237,8 +237,8 @@ export class ConnectionContext {
      * Seal a request by resolving or rejecting it.
      */
     end(error: Error | null = null, result?: unknown) {
-        if (!this._writeable) return
-        this._writeable = false
+        if (!this._writable) return
+        this._writable = false
         this.error = error
         this.result = result
     }

@@ -111,7 +111,7 @@ export class Popups implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        if (!context.risky || !context.writeable) {
+        if (!context.risky || !context.writable) {
             await next()
             return
         }
