@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, Markdown, NFTSpamBadge, RetryHint, useReportSpam } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, Markdown, NFTSpamBadge, ReloadStatus, useReportSpam } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     LoadingBase,
@@ -157,10 +157,7 @@ export function Collectible() {
     if (!asset.data) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" pb={2} pt={4}>
-                <RetryHint
-                    ButtonProps={{ startIcon: <Icons.Restore color="white" size={18} />, sx: { width: 256 } }}
-                    retry={() => asset.refetch()}
-                />
+                <ReloadStatus onRetry={() => asset.refetch()} />
             </Box>
         )
     }
