@@ -1,4 +1,4 @@
-import { LoadingBase , makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 
