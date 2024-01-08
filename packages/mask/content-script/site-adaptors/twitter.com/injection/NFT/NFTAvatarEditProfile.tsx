@@ -51,7 +51,7 @@ function useNFTAvatarButtonStyles() {
     const style = ButtonStyle[themeSettings.size]
     return useStyles(style)
 }
-function clickHandler() {
+function requestSettingAvatar() {
     CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
         open: true,
         startPicking: true,
@@ -66,17 +66,17 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useEffect(() => {
         const clearTasks = [
             CrossIsolationMessages.events.personaBindFinished.on((ev) => {
-                if (ev.pluginID === PluginID.Avatar) clickHandler()
+                if (ev.pluginID === PluginID.Avatar) requestSettingAvatar()
             }),
             CrossIsolationMessages.events.applicationDialogEvent.on((ev) => {
-                if (ev.pluginID === PluginID.Avatar) clickHandler()
+                if (ev.pluginID === PluginID.Avatar && ev.isVerified) requestSettingAvatar()
             }),
         ]
 
         return () => {
             clearTasks.forEach((task) => task())
         }
-    }, [clickHandler])
+    }, [])
 
     return (
         <ConnectPersonaBoundary
@@ -87,7 +87,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             handlerPosition="top-right"
             customHint
             directTo={PluginID.Avatar}>
-            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={requestSettingAvatar} />
         </ConnectPersonaBoundary>
     )
 }
