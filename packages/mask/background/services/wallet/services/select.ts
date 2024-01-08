@@ -1,7 +1,6 @@
 import { defer, type DeferTuple } from '@masknet/kit'
 import { PopupRoutes, type ECKeyIdentifier } from '@masknet/shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { MaskWalletProvider } from '@masknet/web3-providers'
 import { openPopupWindow } from '../../helper/popup-opener.js'
 
 let deferred: DeferTuple<MaskAccount[], Error> | undefined
@@ -19,7 +18,7 @@ export async function selectMaskAccount(
     defaultAddress?: string,
     source?: string,
 ): Promise<MaskAccount[]> {
-    await openPopupWindow(MaskWalletProvider.wallets ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
+    await openPopupWindow(PopupRoutes.SelectWallet, {
         chainId,
         address: defaultAddress,
         source,

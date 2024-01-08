@@ -215,7 +215,7 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
             if (result instanceof Err) throw result.error
             if (result instanceof Ok) result = result.value
         } catch (error: any) {
-            if (error instanceof MaskEthereumProviderRpcError) return { e: result.error }
+            if (error instanceof MaskEthereumProviderRpcError) return { e: error }
             if (error.message === 'User rejected the message.') return { e: err.user_rejected_the_request() }
 
             console.error(error)

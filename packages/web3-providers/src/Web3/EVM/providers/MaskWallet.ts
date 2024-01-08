@@ -52,8 +52,8 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.context.allPersonas.getCurrentValue() ?? EMPTY_LIST
-        const wallets = this.context.wallets.getCurrentValue() ?? EMPTY_LIST
+        const allPersonas = this.context.allPersonas.getCurrentValue()
+        const wallets = this.context.wallets.getCurrentValue()
 
         const chainId = await this.Bundler.getSupportedChainId()
         const accounts = await SmartPayOwner.SmartPayOwner.getAccountsByOwners(chainId, [

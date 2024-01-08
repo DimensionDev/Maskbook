@@ -89,6 +89,7 @@ namespace _ {
     export const block_object = z.any()
     export const EIP2255_PermissionList = z.array(
         z.object({
+            parentCapability: z.string().optional(),
             id: z.string().optional(),
             invoker: z.string(),
             caveats: z.array(
@@ -146,8 +147,8 @@ export const ParamsValidate = {
     wallet_switchEthereumChain: z.tuple([
         z.object({ chainId: _.chainId }).strict().describe('SwitchEthereumChainParameter'),
     ]),
-    wallet_requestPermissions: z.tuple([z.object({}).describe('requestPermissionsObject')]),
-    wallet_revokePermissions: z.tuple([z.object({}).describe('revokePermissionObject')]),
+    wallet_requestPermissions: z.tuple([z.object({}).passthrough().describe('requestPermissionsObject')]),
+    wallet_revokePermissions: z.tuple([z.object({}).passthrough().describe('revokePermissionObject')]),
     wallet_getPermissions: z.tuple([]),
     wallet_watchAsset: z.tuple([
         z.enum(['ERC20', 'ERC721', 'ERC1155']).describe('type'),
@@ -175,9 +176,9 @@ export const ParamsValidate = {
                         EIP712Domain: z.array(z.unknown()),
                     })
                     .describe('types'),
-                domain: z.object({}),
+                domain: z.object({}).passthrough(),
                 primaryType: z.string(),
-                message: z.object({}),
+                message: z.object({}).passthrough(),
             })
             .describe('TypedData'),
     ]),
