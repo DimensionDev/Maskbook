@@ -16,3 +16,13 @@ export async function getUserIdentity(userAddress: string): Promise<SocialIdenti
         homepage: writer.domain || getMirrorProfileUrl(writer.address),
     }
 }
+
+/**
+ * Could be ENS or address
+ */
+export function getAuthorWallet() {
+    let authorWallet = location.pathname.split('/')[1].toLowerCase()
+    const matches = location.hostname.match(/(.*)\.mirror\.xyz$/)
+    authorWallet = matches ? `${matches[1]}.eth` : authorWallet
+    return authorWallet
+}

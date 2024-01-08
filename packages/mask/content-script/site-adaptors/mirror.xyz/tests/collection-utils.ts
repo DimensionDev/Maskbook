@@ -37,18 +37,18 @@ describe('test mirror collection utils', () => {
 describe('should get mirror id', () => {
     test.each([
         // mirror ens
-        { give: 'https://test_ens.mirror.xyz', expected: 'test_ens' },
-        { give: 'https://test_ens.mirror.xyz/', expected: 'test_ens' },
-        { give: 'https://test_ens.mirror.xyz?p=test', expected: 'test_ens' },
-        { give: 'https://test_ens.mirror.xyz/collection', expected: 'test_ens' },
-        { give: 'https://test_ens.mirror.xyz/collection?p=test', expected: 'test_ens' },
+        { give: 'https://test_ens.mirror.xyz', expected: 'test_ens.eth' },
+        { give: 'https://test_ens.mirror.xyz/', expected: 'test_ens.eth' },
+        { give: 'https://test_ens.mirror.xyz?p=test', expected: 'test_ens.eth' },
+        { give: 'https://test_ens.mirror.xyz/collection', expected: 'test_ens.eth' },
+        { give: 'https://test_ens.mirror.xyz/collection?p=test', expected: 'test_ens.eth' },
         {
             give: 'https://test_ens.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro',
-            expected: 'test_ens',
+            expected: 'test_ens.eth',
         },
         {
             give: 'https://test_ens.mirror.xyz/aCCyRXugL4y4UxvqXgcMcDwh6TiChEFTZ_BHtY1cbro?p=test',
-            expected: 'test_ens',
+            expected: 'test_ens.eth',
         },
         // user ens
         { give: 'https://mirror.xyz/test.eth', expected: 'test.eth' },
