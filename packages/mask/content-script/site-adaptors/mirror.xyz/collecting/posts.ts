@@ -22,7 +22,7 @@ function queryInjectPoint(node: HTMLElement) {
             // post detail header
             isENS ?
                 `:scope [href^="https://${id}.mirror.xyz" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type` // img alt is always address
-            :   `:scope [href="/${id}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type`, // img alt is always address
+            :   `:scope [href$="/${id}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type`, // img alt is always address
             // collection page card footer
             ':scope header div:has(> span img[alt="Publisher"])',
         ].join(','),
