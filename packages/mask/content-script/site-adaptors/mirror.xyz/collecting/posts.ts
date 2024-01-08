@@ -9,16 +9,20 @@ import { startWatch } from '../../../utils/startWatch.js'
 import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/utils/create-post-context.js'
 import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from './utils.js'
 import { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
+import { getAuthorWallet } from '../utils/user.js'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
 function queryInjectPoint(node: HTMLElement) {
-    // Could be ENS or address
-    const authorWallet = location.pathname.split('/')[1].toLowerCase()
+    const authorWallet = getAuthorWallet()
+    const isENS = authorWallet.endsWith('.eth')
+    const id = isENS ? authorWallet.slice(0, -4) : authorWallet
     const allANode = node.querySelectorAll(
         [
             // post detail header
-            `:scope [href$="/${authorWallet}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type`, // img alt is always address
+            isENS ?
+                `:scope [href^="https://${id}.mirror.xyz" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type` // img alt is always address
+            :   `:scope [href="/${id}" i]:has(img[alt^="0x" i][decoding="async"]) > div:last-of-type`, // img alt is always address
             // collection page card footer
             ':scope header div:has(> span img[alt="Publisher"])',
         ].join(','),
