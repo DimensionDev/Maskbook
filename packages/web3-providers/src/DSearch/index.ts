@@ -188,35 +188,17 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
             ['', ChainIdEVM.Mainnet],
         )
 
-        if (isValidDomainEVM(domain)) {
-            return [
-                {
-                    type: SearchResultType.EOA,
-                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                    chainId: chainId as ChainId,
-                    keyword: address,
-                    domain,
-                    address,
-                },
-            ]
-        }
-
-        const bindingProofs = await NextIDProof.queryProfilesByAddress(address)
-
-        if (bindingProofs?.length > 0) {
-            return [
-                {
-                    type: SearchResultType.EOA,
-                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                    chainId: chainId as ChainId,
-                    keyword: address,
-                    bindingProofs,
-                    address,
-                },
-            ]
-        }
-
-        return EMPTY_LIST
+        return [
+            {
+                type: SearchResultType.EOA,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: chainId as ChainId,
+                keyword: address,
+                domain: isValidDomainEVM(domain) ? domain : undefined,
+                address,
+                bindingProofs: await NextIDProof.queryProfilesByAddress(address),
+            },
+        ]
     }
 
     private async searchTokens() {
@@ -483,7 +465,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
 
         // 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
-        if (isValidAddress?.(keyword) && !isZeroAddress?.(keyword)) {
+        if (isValidAddress(keyword) && !isZeroAddress(keyword)) {
             const tokenList = await this.searchTokenByAddress(keyword)
             if (tokenList.length) return tokenList as T[]
 
