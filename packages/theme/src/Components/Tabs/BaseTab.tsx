@@ -15,7 +15,7 @@ const BaseTabWrap = styled(Button, {
         :   'none',
     background: activated ? theme.palette.maskColor.bottom : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
-    color: activated ? theme.palette.maskColor.main : theme.palette.maskColor.secondaryDark,
+    color: activated ? theme.palette.maskColor.main : theme.palette.maskColor.second,
     fontSize: 16,
     fontWeight: 'bold',
 
