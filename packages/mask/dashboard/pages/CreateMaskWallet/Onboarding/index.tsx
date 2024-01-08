@@ -76,7 +76,9 @@ const Onboarding = memo(function Onboarding() {
         if (external_request) {
             await Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, { external_request })
         } else {
-            await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
+            await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {
+                hasPassword: true,
+            })
         }
         window.close()
     }, [external_request])

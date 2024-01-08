@@ -34,6 +34,7 @@ const Providers = [
     injectedCoin98EVMProvider,
     injectedCoin98SolanaProvider,
     injectedPhantomProvider,
+    injectedMetaMaskProvider,
 ]
 
 export function pasteText(text: string) {

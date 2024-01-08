@@ -45,7 +45,7 @@ function usePersonaContext(initialState?: {
 
     const currentPersona = personas.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
-    const { data: avatar } = useQuery({
+    const { data: avatar, refetch: refetchAvatar } = useQuery({
         enabled: !!currentPersona,
         queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
         queryFn: async (): Promise<string | null> => {
@@ -134,6 +134,9 @@ function usePersonaContext(initialState?: {
         selectedAccount,
         setSelectedAccount,
         avatar,
+        refreshAvatar: () => {
+            refetchAvatar()
+        },
         personas,
         currentPersona,
         selectedPersona,
