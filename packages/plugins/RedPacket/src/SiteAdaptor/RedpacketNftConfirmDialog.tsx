@@ -307,9 +307,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 onClick={onSendTx}
                                 className={cx(classes.button, classes.sendButton)}
                                 fullWidth>
-                                {t.send_symbol({
-                                    count: tokenList.length,
-                                })}
+                                {isSending ? t.confirming() : t.confirm()}
                             </ActionButton>
                         </WalletConnectedBoundary>
                     </ChainBoundary>

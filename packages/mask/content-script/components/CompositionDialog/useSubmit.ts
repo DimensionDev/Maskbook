@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { encodeByNetwork } from '@masknet/encryption'
-import { PluginID, type ProfileIdentifier, Sniffings } from '@masknet/shared-base'
+import { PluginID, Sniffings } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import Services from '#services'
-import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
@@ -18,8 +18,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            const fallbackProfile: ProfileIdentifier | undefined =
-                activatedSiteAdaptor_state!.profiles.value[0]?.identifier
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
             // rawEncrypted is either string or Uint8Array
@@ -28,7 +26,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 info.version,
                 content,
                 target,
-                lastRecognizedIdentity?.identifier ?? fallbackProfile,
+                lastRecognizedIdentity.identifier,
                 activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
