@@ -54,12 +54,12 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## Filters
 
-- [ ] eth_getFilterChanges
-- [ ] eth_getFilterLogs
-- [ ] eth_newBlockFilter
-- [ ] eth_newFilter
-- [ ] eth_newPendingTransactionFilter
-- [ ] eth_uninstallFilter
+- [x] eth_getFilterChanges
+- [x] eth_getFilterLogs
+- [x] eth_newBlockFilter
+- [x] eth_newFilter
+- [ ] eth_newPendingTransactionFilter (not supported by infura)
+- [x] eth_uninstallFilter
 
 ## Deprecated methods
 

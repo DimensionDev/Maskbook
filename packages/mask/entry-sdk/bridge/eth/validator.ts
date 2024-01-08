@@ -37,11 +37,12 @@ namespace _ {
     export const decimal = z.number().min(0).max(36)
     export const filter = z
         .object({
-            fromBlock: unpadded_hex.nullish(),
-            toBlock: unpadded_hex.nullish(),
-            address: address.or(address.array()),
-            topics: z.any(),
+            fromBlock: unpadded_hex.nullish().nullable(),
+            toBlock: unpadded_hex.nullish().nullable(),
+            address: address.or(address.array()).nullable(),
+            topics: z.any().nullable(),
         })
+        .partial()
         .strict()
         .describe('Filter')
     export const filter_identifier = unpadded_hex.describe('FilterIdentifier')

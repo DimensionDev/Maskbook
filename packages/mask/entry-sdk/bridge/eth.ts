@@ -10,9 +10,18 @@ import { maskSDK } from '../index.js'
 import { sample } from 'lodash-es'
 import { AsyncCall, JSONSerialization } from 'async-call-rpc/full'
 
-const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
-for (const method of readonlyMethodType) {
-    readonlyMethods[method] = async (...params: unknown[]) => {
+const PassthroughMethods = [
+    ...readonlyMethodType,
+    EthereumMethodType.ETH_GET_FILTER_CHANGES,
+    EthereumMethodType.ETH_GET_FILTER_LOGS,
+    EthereumMethodType.ETH_NEW_BLOCK_FILTER,
+    EthereumMethodType.ETH_NEW_FILTER,
+    EthereumMethodType.ETH_UNINSTALL_FILTER,
+]
+type PassthroughMethods = (typeof PassthroughMethods)[number]
+const passthroughMethods: Record<PassthroughMethods, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
+for (const method of PassthroughMethods) {
+    passthroughMethods[method] = async (...params: unknown[]) => {
         return (await Services.Wallet.send({ jsonrpc: '2.0', method, params })).result
     }
 }
@@ -69,7 +78,7 @@ function getInteractiveClient(): Promise<InteractiveClient> {
 // https://ethereum.github.io/execution-apis/api-documentation/
 // https://docs.metamask.io/wallet/reference/eth_subscribe/
 const methods = {
-    ...readonlyMethods,
+    ...passthroughMethods,
 
     async eth_chainId() {
         const chainId = await Services.Wallet.sdk_eth_chainId()
