@@ -19,6 +19,7 @@ export enum ErrorMessages {
     limit_exceeded = "Limit exceeded",
     json_rpc_version_not_supported = "JSON-RPC version not supported",
     invalid_request = "Invalid request",
+    the_method_eth_subscribe_is_only_available_on_the_mainnet = "The method \"eth_subscribe\" is only available on the mainnet.",
     invalid_params = "Invalid params",
     wallet_request_permissions_a_permission_request_must_contain_at_least_1_permission = "A permission request must contain at least 1 permission.",
     internal_error = "Internal error",
@@ -39,6 +40,7 @@ const codeMap = {
     "Limit exceeded": -32005,
     "JSON-RPC version not supported": -32006,
     "Invalid request": -32600,
+    "The method \"eth_subscribe\" is only available on the mainnet.": -32601,
     "Invalid params": -32602,
     "A permission request must contain at least 1 permission.": -32602,
     "Internal error": -32603,
@@ -77,6 +79,9 @@ export const err = {
     },
     the_method_method_does_not_exist_is_not_available({ method }: Record<"method", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32601, `The method "${method}" does not exist / is not available.`, options)
+    },
+    the_method_eth_subscribe_is_only_available_on_the_mainnet(options: MaskEthereumProviderRpcErrorOptions = {}) {
+        return new MaskEthereumProviderRpcError(-32601, "The method \"eth_subscribe\" is only available on the mainnet.", options)
     },
     invalid_params(options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32602, "Invalid params", options)

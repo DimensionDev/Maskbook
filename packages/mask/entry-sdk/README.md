@@ -49,8 +49,8 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## Subscribe to events (unknown specification)
 
-- [ ] eth_subscribe
-- [ ] eth_unsubscribe
+- [x] eth_subscribe
+- [x] eth_unsubscribe
 
 ## Filters
 

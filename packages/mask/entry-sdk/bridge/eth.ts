@@ -1,4 +1,4 @@
-import { readonlyMethodType, EthereumMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-evm'
+import { readonlyMethodType, EthereumMethodType, ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import Services from '#services'
 import { type EIP2255PermissionRequest, MaskEthereumProviderRpcError, err } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
@@ -7,6 +7,8 @@ import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
 import { ParamsValidate, fromZodError, requestSchema, ReturnValidate } from './eth/validator.js'
 import { ZodError, ZodTuple } from 'zod'
 import { maskSDK } from '../index.js'
+import { sample } from 'lodash-es'
+import { AsyncCall, JSONSerialization } from 'async-call-rpc/full'
 
 const readonlyMethods: Record<EthereumMethodType, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of readonlyMethodType) {
@@ -15,15 +17,54 @@ for (const method of readonlyMethodType) {
     }
 }
 
-let readonlyClient: Web3Provider
-function setReadonlyClient(): Web3Provider {
-    return (readonlyClient ??= providers.EVMWeb3.getWeb3Provider({
-        providerType: ProviderType.MaskWallet,
-        silent: true,
-        readonly: true,
-    }))
+interface InteractiveClient {
+    eth_subscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_subscribe']>): Promise<string>
+    eth_unsubscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_unsubscribe']>): Promise<string>
 }
-const subscriptionMap = new Map<string, () => void>()
+
+let interactiveClient: InteractiveClient | undefined
+// TODO: Our infrastructure uses HTTP endpoints (packages/web3-providers/src/helpers/createWeb3ProviderFromURL.ts).
+//       Only WebSocket infura endpoints can subscribe to events (required for eth_subscribe).
+//       As a workaround, we establish the WebSocket connection at the content script.
+//       This is a problem for unknown web pages (CSP limitations), but acceptable for Mask SDK users.
+//       They need to unblock mainnet.infura.io in their CSP.
+//       For initial implementation simplicity and cost consideration (subscription is only free on mainnet for infura),
+//       we only support subscribe on the mainnet.
+function getInteractiveClient(): Promise<InteractiveClient> {
+    if (interactiveClient) return Promise.resolve(interactiveClient)
+    return new Promise<InteractiveClient>((resolve, reject) => {
+        // The following endpoints are from packages/web3-constants/evm/rpc.json
+        const ws = new WebSocket(
+            sample([
+                'wss://mainnet.infura.io/ws/v3/d74bd8586b9e44449cef131d39ceeefb',
+                'wss://mainnet.infura.io/ws/v3/d65858b010d249419cf8687eca12b094',
+                'wss://mainnet.infura.io/ws/v3/a9d66980bf334e59a42ca19095f3daeb',
+                'wss://mainnet.infura.io/ws/v3/f39cc8734e294fba9c3938486df2b1bc',
+                'wss://mainnet.infura.io/ws/v3/659123dd11294baf8a294d7a11cec92c',
+            ])!,
+        )
+        interactiveClient = AsyncCall(
+            {
+                eth_subscription(data: unknown) {
+                    maskSDK.eth_message({ type: 'eth_subscription', data })
+                },
+            },
+            {
+                channel: {
+                    send: (message) => ws.send(message as string),
+                    on: (fn) => ws.addEventListener('message', (event) => fn(event.data)),
+                },
+                serializer: JSONSerialization(),
+                log: false,
+                thenable: false,
+            },
+        )
+        ws.addEventListener('close', () => (interactiveClient = undefined))
+        ws.addEventListener('open', () => resolve(interactiveClient!))
+        ws.addEventListener('error', () => reject(err.internal_error()))
+    })
+}
+
 // Reference:
 // https://ethereum.github.io/execution-apis/api-documentation/
 // https://docs.metamask.io/wallet/reference/eth_subscribe/
@@ -93,31 +134,13 @@ const methods = {
         })
     },
     async eth_subscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_subscribe']>) {
-        const id = String(
-            await setReadonlyClient().request({
-                method: EthereumMethodType.ETH_SUBSCRIBE,
-                params,
-            }),
-        )
-        const fn = (message: { type: string; data: unknown }): void => {
-            if (message.type === EthereumMethodType.ETH_SUBSCRIBE && (message.data as any).subscription === id) {
-                maskSDK.eth_message(message)
-            }
+        if ((await Services.Wallet.sdk_eth_chainId()) !== ChainId.Mainnet) {
+            return err.the_method_eth_subscribe_is_only_available_on_the_mainnet()
         }
-        subscriptionMap.set(id, () => readonlyClient.removeListener('message', fn))
-        readonlyClient.on('message', fn)
-        window.addEventListener('beforeunload', () =>
-            readonlyClient!.request({ method: EthereumMethodType.ETH_UNSUBSCRIBE, params: [id] }),
-        )
-        return id
+        return (await getInteractiveClient()).eth_subscribe(...params)
     },
     async eth_unsubscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_sendRawTransaction']>) {
-        await setReadonlyClient().request({
-            method: EthereumMethodType.ETH_UNSUBSCRIBE,
-            params,
-        })
-        subscriptionMap.get(params[0])?.()
-        return null
+        return (await getInteractiveClient()).eth_unsubscribe(...params)
     },
     // https://eips.ethereum.org/EIPS/eip-2255
     wallet_getPermissions() {
