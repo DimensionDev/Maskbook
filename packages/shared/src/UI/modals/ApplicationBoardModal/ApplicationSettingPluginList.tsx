@@ -93,9 +93,7 @@ export function ApplicationSettingPluginList() {
         return plugins
             .flatMap(({ ID, ApplicationEntries: entries }) => {
                 if (!entries) return []
-                return entries
-                    .filter((entry) => entry.appBoardSortingDefaultPriority && !entry.recommendFeature)
-                    .map((entry) => ({ entry, pluginID: ID }))
+                return entries.filter((entry) => !entry.recommendFeature).map((entry) => ({ entry, pluginID: ID }))
             })
             .sort((a, b) => {
                 return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
@@ -105,10 +103,10 @@ export function ApplicationSettingPluginList() {
     const unlisted = useUnlistedEntries()
     const listedEntries = useMemo(() => {
         return applicationList.filter((x) => !unlisted.includes(x.entry.ApplicationEntryID))
-    }, [unlisted])
+    }, [unlisted, applicationList])
     const unlistedEntries = useMemo(() => {
         return applicationList.filter((x) => unlisted.includes(x.entry.ApplicationEntryID))
-    }, [unlisted])
+    }, [unlisted, applicationList])
 
     return (
         <div>
