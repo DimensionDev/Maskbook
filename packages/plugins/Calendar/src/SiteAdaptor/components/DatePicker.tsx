@@ -10,7 +10,7 @@ import { useEventList, useNFTList, useNewsList } from '../../hooks/useEventList.
 
 const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
     container: {
-        background: theme.palette.mode === 'dark' ? '#18232E' : theme.palette.maskColor.white,
+        background: theme.palette.maskColor.bottom,
         boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
         borderRadius: '16px',
         display: open ? 'flex' : 'none',
