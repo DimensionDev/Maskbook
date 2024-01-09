@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
+import { PopupRoutes, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,7 +9,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/shared'
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -68,7 +68,8 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
-    const chainIdList = TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const traderDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Trader)
+    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 
     const disabledSwap = useMemo(() => !chainIdList.includes(chainId), [chainId, chainIdList])
 

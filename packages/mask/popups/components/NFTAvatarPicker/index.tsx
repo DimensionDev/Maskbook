@@ -3,7 +3,7 @@ import { Box, Button, Stack } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
-import { first, uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionList } from './CollectionList.js'
@@ -61,8 +61,6 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
 
     const { account, chainId, setAccount, setChainId } = useChainContext()
 
-    const defaultBindingWallet = first(bindingWallets)?.identity
-
     const {
         data: assets,
         hasNextPage,
@@ -70,7 +68,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
         error,
         refetch,
         isPending,
-    } = useNonFungibleAssets(pluginID, undefined, { chainId, account: account || defaultBindingWallet })
+    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 
@@ -92,7 +90,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     className={classes.collectionList}
                     tokens={tokens}
                     loading={isPending}
-                    account={account || defaultBindingWallet}
+                    account={account}
                     selected={selected}
                     onItemClick={setSelected}
                 />

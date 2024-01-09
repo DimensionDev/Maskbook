@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { getAllPluginsWeb3State, getUtils, getWeb3Connection } from '@masknet/web3-providers'
+import { getAllPluginsWeb3State, getUtils } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -178,11 +178,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 return
             }
 
-            const connection = getWeb3Connection(provider.providerAdaptorPluginID, { providerType: provider.type })
-            const chainId =
-                expectedChainId ?? provider.type === ProviderType.WalletConnect ?
-                    ChainId.Mainnet
-                :   await connection?.getChainId()
+            const chainId = expectedChainId ?? ChainId.Mainnet
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
             const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)

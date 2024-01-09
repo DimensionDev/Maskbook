@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         color: theme.palette.maskColor.second,
-        wordBreak: 'break-all',
     },
     messageTitle: {
         fontSize: 14,

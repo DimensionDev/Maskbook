@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants/index.js'
 import { languages } from './locales/languages.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/shared'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -17,7 +17,24 @@ export const base: Plugin.Shared.Definition = {
             },
         },
         target: 'stable',
-        web3: TRADER_WEB3_CONFIG,
+        web3: {
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Aurora,
+                    ChainId.Avalanche,
+                    ChainId.Fantom,
+                    ChainId.Astar,
+                    ChainId.Optimism,
+                ],
+            },
+            [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
+            [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
+        },
     },
     i18n: languages,
 }

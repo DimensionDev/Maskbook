@@ -5,7 +5,6 @@ import { getDefaultWalletPassword, CrossIsolationMessages, PopupRoutes } from '@
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import Services from '#services'
-import { queryClient } from '@masknet/shared-base-ui'
 
 function useContext() {
     const wallets = useWallets()
@@ -28,8 +27,6 @@ function useContext() {
 
             if (!hasPassword) await Services.Wallet.setDefaultPassword()
             const isLocked = await Services.Wallet.isLocked()
-
-            queryClient.removeQueries({ queryKey: ['@@has-password'] })
 
             if (isReset) {
                 await resetWallets(password, isReset)
