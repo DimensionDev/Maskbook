@@ -284,7 +284,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             nodeEnv: false, // provided in EnvironmentPlugin
             realContentHash: false,
             removeAvailableModules: productionLike,
-            runtimeChunk: false,
+            runtimeChunk: 'single',
             splitChunks:
                 productionLike ? undefined : (
                     {
