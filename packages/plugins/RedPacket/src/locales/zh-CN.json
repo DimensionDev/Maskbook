@@ -48,7 +48,7 @@
     "erc721_gas_cap": "当选择过多的 NFT时，总气费可能超过 1 {{symbol}} 的 Metamask 限制。请减少选中的 NFT数量。",
     "erc721_tab_title": "NFT",
     "erc20_tab_title": "代币",
-    "claimed": "已认领",
+    "claimed": "已认领 {{- amount}}",
     "details": "红包详情",
     "confirm": "确定",
     "confirming": "确认中",
