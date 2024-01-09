@@ -20,7 +20,7 @@ import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { queryClient } from '@masknet/shared-base-ui'
+import { useQueryClient } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -74,6 +74,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     const modalNavigate = useModalNavigate()
     const [params] = useSearchParams()
     const { classes } = useStyles()
+    const queryClient = useQueryClient()
     const [currentTab, onChange] = useTabs(
         params.get('tab') || ProfilePhotoType.Image,
         ProfilePhotoType.Image,
@@ -172,7 +173,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         } catch {
             showSnackbar(t.popups_set_avatar_failed(), { variant: 'error' })
         }
-    }, [file, currentPersona, account, bindingWallets, refreshAvatar])
+    }, [file, currentPersona, account, bindingWallets, refreshAvatar, queryClient])
 
     useTitle(t.popups_profile_photo())
 
