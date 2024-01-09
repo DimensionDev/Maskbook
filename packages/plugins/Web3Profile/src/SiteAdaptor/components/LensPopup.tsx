@@ -37,13 +37,15 @@ export const LensPopup = memo(() => {
     const [lens, setLens] = useState<FireflyBaseAPI.LensAccount[]>([])
     const active = useControlLensPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
+    const anchorElRef = useRef<HTMLElement | null>()
 
     useEffect(() => {
-        const unsubscribe = emitter.on('open', async ({ lensAccounts, userId, popupAnchorEl }) => {
+        const unsubscribeOpen = emitter.on('open', async ({ lensAccounts, popupAnchorEl }) => {
             setLens((oldAccounts) => {
                 return isEqual(oldAccounts, lensAccounts) ? oldAccounts : lensAccounts
             })
             setAnchorEl(popupAnchorEl)
+            anchorElRef.current = popupAnchorEl
             if (!lens[0]?.handle) return
             const accounts = await NextIDProof.queryAllLens(lens[0].handle)
             if (!accounts.length) return
@@ -53,7 +55,14 @@ export const LensPopup = memo(() => {
                 return sortBy(merged, [(x) => -accounts.findIndex((y) => x.handle === y.handle)])
             })
         })
-        return () => void unsubscribe()
+        const unsubscribeClose = emitter.on('close', ({ popupAnchorEl }) => {
+            if (popupAnchorEl !== anchorElRef.current) return
+            setAnchorEl(null)
+        })
+        return () => {
+            unsubscribeOpen()
+            unsubscribeClose()
+        }
     }, [])
 
     return (
