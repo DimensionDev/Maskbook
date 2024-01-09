@@ -189,7 +189,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
             await handleVerifyNextID(personaInfo, userId)
             Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
         }
-        await queryClient.invalidateQueries({
+        queryClient.removeQueries({
             queryKey: ['@@next-id', 'bindings-by-persona', personaInfo.identifier.publicKeyAsHex],
         })
 

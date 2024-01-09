@@ -82,8 +82,8 @@ const AccountDetail = memo(() => {
             await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
-            queryClient.invalidateQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
-            queryClient.invalidateQueries({ queryKey: ['my-own-persona-info'] })
+            queryClient.removeQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
+            queryClient.removeQueries({ queryKey: ['my-own-persona-info'] })
             showSnackbar(t.popups_disconnect_success(), {
                 variant: 'success',
             })

@@ -117,7 +117,6 @@ export interface PopupRoutesParamsMap {
         // Unlock
         close_after_unlock?: boolean
         from?: string | null
-        hasPassword?: boolean
     }
     [PopupRoutes.WalletUnlock]: {
         close_after_unlock?: boolean

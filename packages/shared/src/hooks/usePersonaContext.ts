@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
@@ -129,14 +129,16 @@ function usePersonaContext(initialState?: {
         )
     }, [proofs])
 
+    const refreshAvatar = useCallback(() => {
+        refetchAvatar()
+    }, [refetchAvatar])
+
     return {
         accounts,
         selectedAccount,
         setSelectedAccount,
         avatar,
-        refreshAvatar: () => {
-            refetchAvatar()
-        },
+        refreshAvatar,
         personas,
         currentPersona,
         selectedPersona,
