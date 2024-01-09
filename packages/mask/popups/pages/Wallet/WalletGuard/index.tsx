@@ -20,8 +20,6 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
 
-    const hasPassword = params.get('hasPassword')
-
     if (!wallets.length) {
         return (
             <>
@@ -31,7 +29,7 @@ export const WalletGuard = memo(function WalletGuard() {
         )
     }
 
-    if (hitPaymentPasswordGuard && !hasPassword) {
+    if (hitPaymentPasswordGuard) {
         params.set('from', location.pathname)
         return <Navigate to={{ pathname: PopupRoutes.SetPaymentPassword, search: params.toString() }} />
     }
