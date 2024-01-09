@@ -29,7 +29,6 @@ import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi
-const ADDRESS_FULL = /0x\w{40,}/i
 const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
@@ -58,12 +57,6 @@ function getCrossBellHandles(nickname: string, bio: string) {
     return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())
-}
-
-function getAddress(text: string) {
-    const [matched] = text.match(ADDRESS_FULL) ?? []
-    if (matched && isValidAddress(matched)) return matched
-    return
 }
 
 function getNextIDPlatform() {
@@ -128,13 +121,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             }
         }
         return
-    }
-
-    /** Read a social address from bio. */
-    private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
-        const address = getAddress(bio)
-        if (!address) return
-        return this.createSocialAddress(SocialAddressType.Address, address)
     }
 
     /** Read a social address from bio when it contains a csb handle. */
@@ -317,7 +303,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
-            this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromARBID(identity),
