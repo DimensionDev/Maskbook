@@ -4,7 +4,6 @@ import {
     type RedPacketJSONPayloadFromChain,
     type NftRedPacketJSONPayload,
 } from '@masknet/web3-providers/types'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import * as database from './database.js'
 import * as nftDb from './databaseForNft.js'
 
@@ -35,12 +34,12 @@ export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPa
 }
 
 export async function getNftRedPacketHistory(histories: NftRedPacketJSONPayload[]) {
-    let historiesWithPassword: NftRedPacketJSONPayload[] = EMPTY_LIST
+    const historiesWithPassword: NftRedPacketJSONPayload[] = []
 
     for (const history of histories) {
         const record = await nftDb.getRedPacketNft(history.txid)
 
-        historiesWithPassword = historiesWithPassword.concat({ ...history, password: record?.password || '' })
+        historiesWithPassword.push({ ...history, password: record?.password || '' })
     }
     return historiesWithPassword
 }
