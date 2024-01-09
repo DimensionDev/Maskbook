@@ -25,5 +25,6 @@
     "grant_status$active": "アクティブ",
     "grant_status$closed": "終了",
     "total_raised": "総発生 <bold>{{amount}}</bold>",
-    "admin": "<bold>{{admin}}</bold> によって"
+    "admin": "<bold>{{admin}}</bold> によって",
+    "give_back_to_match_pool": "Gitcoinのマッチングプールに戻る"
 }
