@@ -83,12 +83,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    poster: {
-        borderRadius: '8px',
-        width: '100%',
-        height: '156px',
-        objectFit: 'cover',
-    },
     dateDiv: {
         fontSize: '14px',
         fontWeight: 700,
