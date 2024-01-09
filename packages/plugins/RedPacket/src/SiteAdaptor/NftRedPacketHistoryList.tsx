@@ -83,7 +83,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const t = useRedPacketTrans()
     const sharedI18N = useSharedTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: histories, loading } = useNftRedPacketHistory(account, chainId)
+    const { data: histories, isPending } = useNftRedPacketHistory(account, chainId)
     const containerRef = useRef<HTMLDivElement>(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -100,7 +100,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
         setAnchorEl(null)
     }
 
-    if (loading) {
+    if (isPending) {
         return (
             <LoadingStatus className={classes.placeholder} iconSize={30}>
                 {sharedI18N.loading()}
@@ -132,13 +132,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                     ))}
                 </List>
             </div>
-            <Popper
-                className={classes.popper}
-                id="data-damaged"
-                open={!!anchorEl}
-                placement="top"
-                anchorEl={anchorEl}
-                disablePortal>
+            <Popper className={classes.popper} open={!!anchorEl} placement="top" anchorEl={anchorEl} disablePortal>
                 {({ placement }) => {
                     return (
                         <div className={classes.popperContent}>

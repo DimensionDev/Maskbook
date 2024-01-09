@@ -70,10 +70,15 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         fromBlock: number,
         endBlock: number,
     ): Promise<NftRedPacketJSONPayload[] | undefined> {
-        return this.parseNFTRedPacketCreationTransactions(
-            await this.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId, fromBlock, endBlock),
+        const transactions = await this.getHistoryTransactions(
+            chainId,
             senderAddress,
+            contractAddress,
+            methodId,
+            fromBlock,
+            endBlock,
         )
+        return this.parseNFTRedPacketCreationTransactions(transactions, senderAddress)
     }
 
     async getHistoryTransactions(

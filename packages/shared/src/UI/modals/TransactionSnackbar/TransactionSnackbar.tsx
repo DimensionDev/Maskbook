@@ -21,6 +21,7 @@ const useStyles = makeStyles()({
     link: {
         display: 'flex',
         alignItems: 'center',
+        outline: 'none',
     },
 })
 
@@ -145,6 +146,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                             className={classes.link}
                             color="inherit"
                             href={Utils.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
                             {progress.status === TransactionStatusType.SUCCEED ?

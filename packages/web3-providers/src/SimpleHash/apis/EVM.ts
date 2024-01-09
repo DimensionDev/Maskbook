@@ -22,7 +22,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { subSeconds, isAfter, secondsToMilliseconds, millisecondsToSeconds } from 'date-fns'
-import { ChainId, SchemaType, isValidChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId, ZERO_ADDRESS, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
     createNonFungibleAsset,
@@ -95,6 +95,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
+        // SimpleHash collection id is not address
+        if (isValidAddress(id)) return
         const path = urlcat('/api/v0/nfts/collections_activity', {
             collection_ids: id,
         })
@@ -234,6 +236,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getOneDaySaleAmounts(collectionId: string) {
+        // SimpleHash collection id is not address
+        if (isValidAddress(collectionId)) return
         const to_timeStamp = millisecondsToSeconds(Date.now())
         const from_timeStamp = millisecondsToSeconds(subSeconds(Date.now(), 60 * 60 * 24).getTime())
         let sales: Array<{ timestamp: string }> = []
@@ -562,6 +566,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getSimpleHashCollection(id: string): Promise<SimpleHash.Collection | undefined> {
+        // SimpleHash collection id is not address
+        if (isValidAddress(id)) return
         const path = urlcat('/api/v0/nfts/collections/ids', {
             collection_ids: id,
         })
