@@ -71,6 +71,7 @@ export function startPluginSiteAdaptor(
     currentNetwork: EnhanceableSite,
     host: Plugin.__Host.Host<Plugin.SiteAdaptor.Definition, Plugin.SiteAdaptor.SiteAdaptorContext>,
 ) {
+    console.log('trigger rebuild')
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)
         if (!def) return false
