@@ -10,6 +10,7 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useSwitchLogoTrans } from '../locales/i18n_generated.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -72,7 +73,9 @@ export const SwitchLogoDialog = memo(() => {
 
     const onSave = useCallback(async () => {
         if (!identity?.identifier?.userId || !switchLogoSettings) return
+
         switchLogoSettings[identity.identifier.userId].value = logoType ?? defaultLogoType
+        await delay(300)
         Telemetry.captureEvent(EventType.Access, EventID.EntrySwitchLogoSave)
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
