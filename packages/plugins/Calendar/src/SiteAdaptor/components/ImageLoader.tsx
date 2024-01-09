@@ -1,4 +1,4 @@
-import { LoadingBase , makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 
@@ -31,7 +31,6 @@ export function ImageLoader({ src }: ImageLoaderProps) {
     const [loaded, setLoaded] = useState(false)
     const [failed, setFailed] = useState(false)
     const { classes } = useStyles()
-    console.log(failed, loaded)
     return (
         <div className={classes.container}>
             {!failed ?
