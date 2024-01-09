@@ -6,6 +6,6 @@ export function useConnectedVerified(pubkey: string | undefined, userId: string)
     const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
     const checking = isLoading
     if (!platform || !proofs?.length) return [checking, false]
-    const verified = proofs.some((x) => x.platform === platform && x.identity === userId && x.is_valid)
+    const verified = proofs.some((x) => x.platform === platform && x.identity === userId.toLowerCase() && x.is_valid)
     return [checking, verified] as const
 }

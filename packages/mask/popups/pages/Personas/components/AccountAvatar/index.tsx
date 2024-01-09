@@ -55,7 +55,9 @@ export const AccountAvatar = memo<AccountAvatar>(({ avatar, network, isValid, ..
     return (
         <div className={classes.container}>
             {avatar ?
-                <Avatar className={classes.avatar} src={avatar} />
+                <Avatar className={classes.avatar} src={avatar}>
+                    <Icons.GrayMasks className={classes.avatar} />
+                </Avatar>
             :   <Icons.GrayMasks className={classes.avatar} />}
             {Icon ?
                 <div className={classes.network}>

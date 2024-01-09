@@ -20,6 +20,7 @@ import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -82,7 +83,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
-    const { proofs, currentPersona } = PersonaContext.useContainer()
+    const { proofs, currentPersona, refreshAvatar } = PersonaContext.useContainer()
 
     const bindingWallets = useVerifiedWallets(proofs)
 
@@ -160,12 +161,18 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                     reject()
                 })
             })
+
+            await queryClient.invalidateQueries({
+                queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
+            })
+            refreshAvatar()
+
             showSnackbar(t.popups_set_avatar_successfully())
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
             showSnackbar(t.popups_set_avatar_failed(), { variant: 'error' })
         }
-    }, [file, currentPersona, account, bindingWallets])
+    }, [file, currentPersona, account, bindingWallets, refreshAvatar])
 
     useTitle(t.popups_profile_photo())
 
