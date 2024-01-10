@@ -11,7 +11,7 @@ import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import urlcat from 'urlcat'
 import { base } from '../base.js'
-import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
+import { API_KEY, PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 import { PluginScamRPC } from '../messages.js'
 import ScamAlert from './ScamAlert.js'
 
@@ -23,7 +23,6 @@ function Renderer(
     usePluginWrapper(true)
     return <ScamAlert result={props.project} />
 }
-const API_KEY = '0c1276ff719aece'
 
 interface CheckResult {
     url: string
