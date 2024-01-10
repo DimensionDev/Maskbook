@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -40,6 +40,7 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
     const isMinimalMode = useIsMinimalMode(PluginID.Tips)
     const { pluginID } = useNetworkContext()
     const Utils = useWeb3Utils()
+    const [disabled, setDisabled] = useState(false)
 
     const accounts = useMemo((): Array<SocialAccount<Web3Helper.ChainIdAll>> => {
         if (!visitingIdentity?.identifier) return EMPTY_LIST
@@ -61,10 +62,18 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
-        return <Component identity={visitingIdentity.identifier} slot={slot} accounts={accounts} />
+        return (
+            <Component
+                identity={visitingIdentity.identifier}
+                slot={slot}
+                accounts={accounts}
+                onStatusUpdate={setDisabled}
+            />
+        )
     }, [visitingIdentity.identifier, accounts, slot])
 
-    if (!component || !visitingIdentity.identifier || isMinimalMode || location.pathname === '/') return null
+    if (disabled || !component || !visitingIdentity.identifier || isMinimalMode || location.pathname === '/')
+        return null
 
     return (
         <span className={slot === Plugin.SiteAdaptor.TipsSlot.MirrorMenu ? classes.root : undefined}>{component}</span>
