@@ -119,7 +119,7 @@ export function TipsRealmContent({
         )
     }
 
-    if (slot === TipsSlot.Post || slot === TipsSlot.MirrorEntry) {
+    if ((slot === TipsSlot.Post || slot === TipsSlot.MirrorEntry) && button) {
         return (
             <div
                 className={cx(
