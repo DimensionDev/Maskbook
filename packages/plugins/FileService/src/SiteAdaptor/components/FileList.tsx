@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     listRoot: {
-        padding: 0,
+        padding: theme.spacing(0, 0, 1.5),
     },
     listItem: {
         width: 'auto',
