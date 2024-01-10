@@ -42,6 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         color: theme.palette.maskColor.second,
     },
+    third: {
+        fontSize: 12,
+        color: theme.palette.maskColor.third,
+    },
     symbol: {
         marginLeft: 8,
     },
@@ -199,7 +203,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(function Der
                             significant={4}
                             symbol={symbol}
                             formatter={formatBalance}
-                            classes={{ symbol: cx(classes.second, classes.symbol) }}
+                            classes={{ symbol: cx(classes.third, classes.symbol) }}
                         />
                     </Typography>
                 }
