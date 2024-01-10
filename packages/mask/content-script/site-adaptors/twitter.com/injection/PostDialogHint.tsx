@@ -56,24 +56,29 @@ function renderPostDialogHintTo<T extends HTMLElement>(
 ) {
     const watcher = new MutationObserverWatcher(ls)
     startWatch(watcher, options)
+    let tag: HTMLSpanElement
+    function setTagProperties() {
+        if (!tag) return
+        Object.assign(tag.style, {
+            display: 'inline-flex',
+            alignItems: 'center',
+            height: '100%',
+        })
+        const svgIcon = document.querySelector('[data-testid="geoButton"] svg')
+        const size = svgIcon ? clamp(svgIcon.getBoundingClientRect().width, 18, 24) : undefined
+        const geoButton = document.querySelector('[data-testid="geoButton"]')
+        const padding = geoButton && size ? (geoButton.getBoundingClientRect().width - size) / 2 : undefined
+        if (padding) tag.style.setProperty('--icon-padding', `${padding}px`)
+        if (size) tag.style.setProperty('--icon-size', `${size}px`)
+    }
+    watcher.addListener('onChange', setTagProperties)
 
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, {
         signal: options.signal,
         tag: () => {
             // Vertical center the button when font size of Twitter is set to `large` or `very large`
-            const tag = document.createElement('span')
-            Object.assign(tag.style, {
-                display: 'inline-flex',
-                alignItems: 'center',
-                height: '100%',
-            })
-            const svgIcon = document.querySelector('[data-testid="geoButton"] svg')
-            const size = svgIcon ? clamp(svgIcon.getBoundingClientRect().width, 18, 24) : undefined
-            const geoButton = document.querySelector('[data-testid="geoButton"]')
-            const padding = geoButton && size ? (geoButton.getBoundingClientRect().width - size) / 2 : undefined
-            if (padding) tag.style.setProperty('--icon-padding', `${padding}px`)
-            if (size) tag.style.setProperty('--icon-size', `${size}px`)
-
+            tag = document.createElement('span')
+            setTagProperties()
             return tag
         },
     }).render(<PostDialogHintAtTwitter reason={reason} />)

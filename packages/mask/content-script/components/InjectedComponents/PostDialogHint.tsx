@@ -68,7 +68,7 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIPro
                 size="large"
                 className={cx(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
-                {ICON_MAP?.[props?.iconType ?? 'default']}
+                {ICON_MAP[props.iconType ?? 'default']}
             </IconButton>
         </ShadowRootTooltip>
     )
@@ -85,12 +85,17 @@ export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHi
     const { classes } = useStyles(undefined, { props })
     const t = useMaskSharedTrans()
 
-    return isMobileFacebook ?
+    if (isMobileFacebook)
+        return (
             <div className={classes.wrapper} onClick={onHintButtonClicked}>
                 <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
                 <Typography className={classes.text}>{t.post_modal_hint__button()}</Typography>
             </div>
-        :   <div className={classes.buttonTransform}>
-                <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />
-            </div>
+        )
+
+    return (
+        <div className={classes.buttonTransform}>
+            <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />
+        </div>
+    )
 })

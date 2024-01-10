@@ -62,7 +62,7 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
             })
         }
         const ob = new IntersectionObserver((entries) => {
-            if (!(entries[0].intersectionRatio === 0)) return
+            if (entries[0].intersectionRatio !== 0) return
             hide()
         })
         if (buttonRef.current) {
