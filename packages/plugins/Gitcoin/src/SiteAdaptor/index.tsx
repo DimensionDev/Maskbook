@@ -1,10 +1,8 @@
-import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
-import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { parseURLs, PluginID } from '@masknet/shared-base'
+import { type Plugin, usePluginWrapper } from '@masknet/plugin-infra/content-script'
+import { PluginID } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
-import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { ThemeProvider } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
@@ -29,28 +27,10 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
-    DecryptedInspector(props) {
-        const link = useMemo(() => {
-            const x = extractTextFromTypedMessage(props.message)
-            if (x.isNone()) return null
-            return parseURLs(x.value).find(isGitcoin)
-        }, [props.message])
-        const id = link?.match(/\d+/)?.[0]
-        if (!id) return null
-        return <Renderer id={id} />
-    },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
-    PostInspector() {
-        const links = usePostInfoDetails.mentionedLinks()
-
-        const link = links.find(isGitcoin)
-        const id = link?.match(/\d+/)?.[0]
-
-        if (!id) return null
-        return <Renderer id={id} />
-    },
     ApplicationEntries: [
         {
+            hiddenInList: true,
             ApplicationEntryID: base.ID,
             category: 'dapp',
             description: <Trans ns={PluginID.Gitcoin} i18nKey="description" />,

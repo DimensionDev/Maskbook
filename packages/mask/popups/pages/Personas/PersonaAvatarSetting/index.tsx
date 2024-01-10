@@ -129,7 +129,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                     updateAt: Date.now(),
                 }
                 // Verify Wallet sign with persona
-                if (bindingWallets.some((x) => isSameAddress(x.identity, account))) {
+                if (!bindingWallets.some((x) => isSameAddress(x.identity, account))) {
                     sign = await Services.Identity.signWithPersona(
                         SignType.Message,
                         JSON.stringify(data),
@@ -163,7 +163,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                 })
             })
 
-            await queryClient.invalidateQueries({
+            queryClient.removeQueries({
                 queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
             })
             refreshAvatar()

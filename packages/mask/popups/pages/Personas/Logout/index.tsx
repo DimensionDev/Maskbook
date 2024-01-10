@@ -149,7 +149,7 @@ const LogoutUI = memo<LogoutUIProps>(
                 if (hasPassword) {
                     const verified = await verifyPaymentPassword(paymentPassword)
                     if (!verified) {
-                        setPaymentPassword(t.popups_wallet_persona_log_out_error_payment_password())
+                        setPaymentPasswordError(t.popups_wallet_persona_log_out_error_payment_password())
                         return
                     }
                 } else if (!backupPassword) {

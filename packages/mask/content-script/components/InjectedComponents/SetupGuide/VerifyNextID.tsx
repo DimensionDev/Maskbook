@@ -179,7 +179,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { loading: connecting } = useConnectPersona()
 
     const [, handleVerifyNextID] = useNextIDVerify()
-    const [{ loading: verifying }, onVerify] = useAsyncFn(async () => {
+    const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
         if (!personaInfo) return
         if (!nextIdPlatform) return
@@ -196,6 +196,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
         await delay(1000)
 
         MaskMessages.events.ownProofChanged.sendToAll()
+        return true
     }, [userId, personaInfo, queryClient])
 
     const notify = useNotifyConnected()
@@ -269,7 +270,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {!nextIdPlatform || verified ?
+                    {!nextIdPlatform || verified || verifiedSuccess ?
                         <Typography className={classes.text}>
                             <Trans
                                 i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
@@ -303,7 +304,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 </Box>
 
                 <Box className={classes.footer}>
-                    {!nextIdPlatform || (nextIdPlatform && verified) ?
+                    {!nextIdPlatform || (nextIdPlatform && (verified || verifiedSuccess)) ?
                         <ActionButton
                             className={classes.button}
                             fullWidth

@@ -11,6 +11,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { lensStorage } from '../context.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -85,14 +86,15 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
         queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet],
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
-            let currentProfile = await Lens.queryDefaultProfileByAddress(wallet)
-            if (!currentProfile?.id) {
+            let currentProfileId =
+                lensStorage.latestProfile?.value ?? (await Lens.queryDefaultProfileByAddress(wallet))?.id
+            if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
-                currentProfile = first(profiles)
+                currentProfileId = first(profiles)?.id
             }
 
             const profiles = await Lens.getProfilesByHandles(accounts.map((x) => x.handle))
-            if (!currentProfile?.id)
+            if (!currentProfileId)
                 return compact(
                     profiles.map((profile) => {
                         const target = accounts.find((x) => x.handle.replace('.lens', '') === profile.handle.localName)
@@ -105,7 +107,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
                 )
 
             const followStatusList = await Lens.queryFollowStatusList(
-                currentProfile.id,
+                currentProfileId,
                 profiles.map((x) => x.id),
             )
             return compact(

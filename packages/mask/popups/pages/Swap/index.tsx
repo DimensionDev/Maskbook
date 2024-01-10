@@ -1,4 +1,4 @@
-import { AllProviderTradeContext } from '@masknet/plugin-trader'
+import { AllProviderTradeContext, languages } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
@@ -8,7 +8,8 @@ import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -63,12 +64,17 @@ export default function SwapPage() {
     const { chainId } = useTokenParams()
 
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
-    applyMaskColorVars(document.body, Appearance.light)
+
+    const init = useCallback(() => {
+        applyMaskColorVars(document.body, Appearance.light)
+        // TODO: extract the trader ui code to share and delete this.
+        createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
+    }, [])
 
     return (
         <SharedContextProvider>
             <ChainContextProvider chainId={chainId}>
-                <div className={classes.page}>
+                <div className={classes.page} ref={init}>
                     <div className={classes.container}>
                         <header className={classes.header}>
                             <Typography variant="h1" className={classes.title}>

@@ -181,23 +181,26 @@ export class Lens {
 
     static async queryProfilesByAddress(address: string) {
         if (!isValidAddress(address)) return []
-        const { data } = await fetchJSON<{ data: { profiles: { items: LensBaseAPI.Profile[] } } }>(LENS_ROOT_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                query: `query Profiles {
-                  profiles(request: { where: { ownedBy: ["${address}"] }, limit: ${LimitType.Ten} }) {
-                    items {
-                      ${LensProfileQuery}
-                    }
+        const { data } = await fetchJSON<{ data: { profilesManaged: { items: LensBaseAPI.Profile[] } } }>(
+            LENS_ROOT_API,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: `query ProfilesManaged {
+                    profilesManaged(request: { for: "${address}" }) {
+                        items {
+                            ${LensProfileQuery}
+                        }
                   }
                 }`,
-            }),
-        })
+                }),
+            },
+        )
 
-        return data.profiles.items
+        return data.profilesManaged.items
     }
 
     static async queryFollowStatus(follower: string, profileId: string) {
