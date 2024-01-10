@@ -1,4 +1,4 @@
-export interface LensTokenStorageType {
+export interface LensStorageType {
     accessToken?: Record<
         string,
         {
@@ -13,4 +13,5 @@ export interface LensTokenStorageType {
             expireDate: Date
         }
     >
+    latestProfile?: string
 }

@@ -98,6 +98,8 @@ export const SwitchLogoDialog = memo(() => {
         return false
     }, [defaultLogoType, logoType])
 
+    if (!open) return
+
     return (
         <InjectedDialog
             open={open}
