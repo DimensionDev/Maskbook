@@ -1,12 +1,12 @@
-import { useCallback } from 'react'
+import Services from '#services'
 import { encodeByNetwork } from '@masknet/encryption'
-import { PluginID, Sniffings } from '@masknet/shared-base'
+import { PluginID, Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import Services from '#services'
-import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
+import { useCallback } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
@@ -96,13 +96,15 @@ function decorateEncryptedText(
     t: ReturnType<typeof useMaskSharedTrans>,
     meta?: Meta,
 ): string | null {
+    if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account()
     const token = meta?.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
-    const options = { interpolation: { escapeValue: false }, token }
+    const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI?.networkIdentifier!]
+    const options = { interpolation: { escapeValue: false }, token, sns }
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
-    if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
+    if (meta.has(`${PluginID.RedPacket}:1`) || meta.has(`${PluginID.RedPacket}_nft:1`)) {
         return hasOfficialAccount ?
                 t.additional_post_box__encrypted_post_pre_red_packet_sns_official_account({
                     encrypted,
@@ -110,7 +112,7 @@ function decorateEncryptedText(
                     ...options,
                 })
             :   t.additional_post_box__encrypted_post_pre_red_packet({ encrypted, ...options })
-    } else if (meta?.has(`${PluginID.FileService}:3`)) {
+    } else if (meta.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount ?
                 t.additional_post_box__encrypted_post_pre_file_service_sns_official_account({
                     encrypted,
