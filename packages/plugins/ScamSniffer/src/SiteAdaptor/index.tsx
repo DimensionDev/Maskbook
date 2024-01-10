@@ -1,16 +1,19 @@
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
-import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
+import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
-import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { ScamResult } from '@scamsniffer/detector'
-import ScamAlert from './ScamAlert.js'
-import { PluginScamRPC } from '../messages.js'
-import { useAsync } from 'react-use'
-import { useState } from 'react'
+import { useQueries, useQuery } from '@tanstack/react-query'
+import { compact, first } from 'lodash-es'
+import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
+import urlcat from 'urlcat'
+import { base } from '../base.js'
+import { API_KEY, PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
+import { PluginScamRPC } from '../messages.js'
+import ScamAlert from './ScamAlert.js'
 
 function Renderer(
     props: React.PropsWithChildren<{
@@ -19,6 +22,12 @@ function Renderer(
 ) {
     usePluginWrapper(true)
     return <ScamAlert result={props.project} />
+}
+
+interface CheckResult {
+    url: string
+    host: string | null
+    status: 'PASSED' | 'BLOCKED'
 }
 
 const site: Plugin.SiteAdaptor.Definition = {
@@ -32,23 +41,61 @@ const site: Plugin.SiteAdaptor.Definition = {
         const message = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
         const network = id?.identifier.network
         const isTwitter = network === EnhanceableSite.Twitter
-        const postDetail = {
-            id: id ? id.postID : undefined,
-            nickname,
-            userId: author?.userId,
-            links: [...links],
-            content: message.isSome() ? message.value : null,
-        }
-        const [scamProject, setScamProject] = useState<ScamResult | null>(null)
-        useAsync(async () => {
-            if (!isTwitter) return
-            const scamProject = await PluginScamRPC.detectScam(postDetail)
-            if (scamProject) {
-                setScamProject(scamProject)
-            }
-        }, [])
 
-        return isTwitter && scamProject ? <Renderer project={scamProject} /> : null
+        const content = message.isSome() ? message.value : null
+        const postDetail = useMemo(
+            () => ({
+                id: id ? id.postID : undefined,
+                nickname,
+                userId: author?.userId,
+                links,
+                content,
+            }),
+            [id?.postID, author?.userId, nickname, links, content],
+        )
+        const { data: scamProject, isLoading } = useQuery({
+            queryKey: ['scam-sniffer', 'check-post', id?.postID, nickname, author?.userId, links, content],
+            enabled: isTwitter,
+            queryFn: () => {
+                return PluginScamRPC.detectScam(postDetail)
+            },
+        })
+
+        const origins = links.map((link) => new URL(link).origin)
+        const queries = useQueries({
+            queries: origins.map((origin) => ({
+                enabled: !scamProject && !isLoading,
+                queryKey: ['scam-sniffer', 'check-url', origin],
+                queryFn: async () => {
+                    const url = urlcat('https://domain-api.scamsniffer.io/check', {
+                        url: origin,
+                        api_key: API_KEY,
+                    })
+                    const res = await fetchJSON<CheckResult>(url)
+                    return res
+                },
+            })),
+        })
+        const firstHit = first(
+            compact(queries.filter((x) => x.isSuccess && x.data.status === 'BLOCKED').map((x) => x.data)),
+        )
+        const fallbackScamProject = useMemo(() => {
+            if (!firstHit) return null
+            return {
+                slug: '',
+                name: firstHit.host!,
+                twitterUsername: author?.userId || nickname,
+                externalUrl: firstHit?.url!,
+                post: postDetail,
+                matchType: 'sim',
+            } satisfies ScamResult
+        }, [firstHit?.host, firstHit?.url, author?.userId, nickname])
+
+        if (!isTwitter) return null
+        const project = scamProject || fallbackScamProject
+        if (!project) return null
+
+        return <Renderer project={project} />
     },
     ApplicationEntries: [
         (() => {

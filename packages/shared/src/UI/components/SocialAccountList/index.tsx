@@ -38,21 +38,22 @@ const useStyles = makeStyles()((theme) => {
                 zIndex: 0,
             },
         },
-        menu: {
+        menuPaper: {
             minWidth: 320,
             maxWidth: 340,
             boxSizing: 'border-box',
-            maxHeight: 296,
             borderRadius: 16,
-            padding: theme.spacing(1.5),
+            padding: theme.spacing(2, 1.5),
             translate: theme.spacing(1.9, 1),
             background: theme.palette.maskColor.bottom,
-            '::-webkit-scrollbar': {
-                display: 'none',
-            },
         },
         menuList: {
             padding: 0,
+            maxHeight: 296,
+            overflow: 'auto',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
     }
 })
@@ -120,7 +121,7 @@ export const SocialAccountList = memo(function SocialAccountList({
             anchorPosition,
             anchorReference,
             PaperProps: {
-                className: classes.menu,
+                className: classes.menuPaper,
             },
             MenuListProps: {
                 className: classes.menuList,

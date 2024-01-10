@@ -167,7 +167,15 @@ export function SocialAccountListItem({
     const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
 
     const icon =
-        profileUrl ? <Image size={20} src={profileUrl} className={classes.avatar} fallback={renderIcon} /> : renderIcon
+        profileUrl ?
+            <Image
+                size={20}
+                src={profileUrl}
+                className={classes.avatar}
+                fallback={renderIcon}
+                containerProps={{ className: classes.avatar }}
+            />
+        :   renderIcon
 
     return (
         <SocialTooltip platform={platform}>

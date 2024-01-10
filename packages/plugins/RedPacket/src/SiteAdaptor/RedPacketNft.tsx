@@ -81,9 +81,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         display: 'flex',
     },
     claimedTokenWrapper: {
-        position: 'absolute',
-        top: 80,
-        right: 'clamp(10px, 5.6%, 30px)',
+        background: theme.palette.maskColor.primary,
         borderRadius: 9,
         cursor: 'pointer',
     },
@@ -129,7 +127,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         width: 120,
     },
     description: {
-        background: theme.palette.maskColor.primary,
         alignSelf: 'stretch',
         borderRadius: '0 0 8px 8px',
     },
@@ -155,8 +152,11 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 0,
         left: 0,
     },
-    messageBox: {
-        width: '100%',
+    content: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(1),
+        padding: theme.spacing(0, 1),
     },
     words: {
         display: '-webkit-box',
@@ -335,44 +335,44 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 />
                 <Stack />
 
-                <div className={classes.messageBox}>
+                <Box className={classes.content}>
                     <ShadowRootTooltip title={payload.message}>
                         <Typography className={classes.words} variant="h6">
                             {payload.message}
                         </Typography>
                     </ShadowRootTooltip>
-                </div>
-                <ShadowRootTooltip
-                    title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
-                    placement="top"
-                    disableInteractive
-                    arrow
-                    PopperProps={{
-                        disablePortal: true,
-                    }}>
-                    <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
-                        <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                            {loadingAsset ? null : (
-                                <AssetPreviewer
-                                    url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
-                                    classes={{
-                                        root: classes.imgWrapper,
-                                        fallbackImage: classes.fallbackImage,
-                                    }}
-                                    fallbackImage={
-                                        <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
-                                    }
-                                />
-                            )}
-                        </Box>
+                    <ShadowRootTooltip
+                        title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                        placement="top"
+                        disableInteractive
+                        arrow
+                        PopperProps={{
+                            disablePortal: true,
+                        }}>
+                        <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
+                            <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                                {asset ?
+                                    <AssetPreviewer
+                                        url={asset.metadata?.imageURL || asset?.metadata?.mediaURL}
+                                        classes={{
+                                            root: classes.imgWrapper,
+                                            fallbackImage: classes.fallbackImage,
+                                        }}
+                                        fallbackImage={
+                                            <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
+                                        }
+                                    />
+                                :   null}
+                            </Box>
 
-                        <div className={classes.description}>
-                            <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
-                                {`${payload.contractName} #${availability.claimed_id}`}
-                            </Typography>
-                        </div>
-                    </Box>
-                </ShadowRootTooltip>
+                            <div className={classes.description}>
+                                <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
+                                    {`${payload.contractName} #${availability.claimed_id}`}
+                                </Typography>
+                            </div>
+                        </Box>
+                    </ShadowRootTooltip>
+                </Box>
 
                 <div className={classes.footer}>
                     {availability.isClaimed ?
