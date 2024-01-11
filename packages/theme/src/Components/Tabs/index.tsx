@@ -36,7 +36,6 @@ export interface MaskTabListProps
     'aria-label'?: string
     variant?: MaskTabVariant
     hideArrowButton?: boolean
-    textSecond?: boolean
 }
 
 const ArrowButtonWrap = styled(Button)(({ theme }) => ({
@@ -206,7 +205,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     setFirstTabId(value)
                 }
             },
-            textSecond: props.textSecond,
         }
 
         if (child.type !== Tab) return child
