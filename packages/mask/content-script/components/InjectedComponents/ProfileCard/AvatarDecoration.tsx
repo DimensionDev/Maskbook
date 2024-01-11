@@ -1,5 +1,5 @@
 import { Twitter } from '@masknet/web3-providers'
-import { RSS3_KEY_SITE, NFTAvatarMiniClip, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { RSS3_KEY_SITE, NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { useQuery } from '@tanstack/react-query'
 
 interface Props {
@@ -19,14 +19,14 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
 
     if (!userId || !user) return null
 
-    return user.has_nft_avatar ?
-            <NFTAvatarMiniClip className={className} id={clipPathId} size={size} screenName={userId} />
-        :   <NFTBadgeTimeline
-                classes={{ root: className }}
-                userId={userId}
-                avatarId={Twitter.getAvatarId(user.avatarURL)}
-                height={size}
-                width={size}
-                siteKey={RSS3_KEY_SITE.TWITTER}
-            />
+    return (
+        <NFTBadgeTimeline
+            classes={{ root: className }}
+            userId={userId}
+            avatarId={Twitter.getAvatarId(user.avatarURL)}
+            height={size}
+            width={size}
+            siteKey={RSS3_KEY_SITE.TWITTER}
+        />
+    )
 }

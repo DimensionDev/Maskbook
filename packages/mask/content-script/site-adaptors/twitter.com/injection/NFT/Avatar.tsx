@@ -41,7 +41,6 @@ function inject(selector: () => LiveSelector<HTMLElement>, signal: AbortSignal) 
                             zIndex: 2,
                         }}>
                         <MiniAvatarBorder
-                            avatarType={info.avatarType}
                             size={info.width}
                             screenName={
                                 userId ||

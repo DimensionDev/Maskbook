@@ -1,6 +1,4 @@
 import { Twitter } from '@masknet/web3-providers'
-import { getAvatarType } from './AvatarType.js'
-import { AvatarType } from '@masknet/plugin-avatar'
 
 export function getInjectNodeInfo(ele: HTMLElement) {
     const imgEle = ele.querySelector('img')
@@ -11,10 +9,7 @@ export function getInjectNodeInfo(ele: HTMLElement) {
 
     nftDom.style.overflow = 'unset'
     const avatarParent = nftDom.parentElement
-    let avatarType = AvatarType.Default
-
     if (avatarParent) {
-        avatarType = getAvatarType(avatarParent)
         if (process.env.NODE_ENV === 'development') {
             if (
                 avatarParent.style.clipPath &&
@@ -30,5 +25,5 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     const avatarId = Twitter.getAvatarId(imgEle.src)
     if (!avatarId) return
 
-    return { element: nftDom, width, height, avatarId, avatarType }
+    return { element: nftDom, width, height, avatarId }
 }

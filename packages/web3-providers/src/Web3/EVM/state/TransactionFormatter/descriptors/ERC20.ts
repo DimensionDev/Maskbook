@@ -30,13 +30,13 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         symbol: token?.symbol ?? 'token',
                     })
                     const approveDescription = i18NextInstance.t('plugin_infra_descriptor_token_approve', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        symbol: token?.symbol ?? 'token',
                     })
                     const revokeSuccessDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_success')
                     const approveSuccessDescription = i18NextInstance.t(
                         'plugin_infra_descriptor_token_approve_success',
                         {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                            symbol: token?.symbol ?? 'token',
                         },
                     )
                     const revokeFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')

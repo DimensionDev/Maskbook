@@ -13,7 +13,6 @@ import {
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
-import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
@@ -23,7 +22,6 @@ import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
 import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
 import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
-import * as Twitter from /* webpackDefer: true */ '../../../Twitter/index.js'
 import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
@@ -240,33 +238,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
-    /** Read a social address from Twitter Blue. */
-    private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
-        const userId = identifier?.userId
-        if (!userId) return
-
-        const response = await Twitter.Twitter.getUserNftContainer(userId)
-        if (!response) return
-        const ownerAddress = await EVMWeb3Readonly.getNonFungibleTokenOwner(
-            response.address,
-            response.token_id,
-            undefined,
-            {
-                chainId: ChainId.Mainnet,
-            },
-        )
-        if (!ownerAddress || !isValidAddress(ownerAddress)) return
-        return this.createSocialAddress(
-            SocialAddressType.TwitterBlue,
-            ownerAddress,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            true,
-        )
-    }
-
     /** Read social addresses from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -308,7 +279,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromARBID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromCrossbell(identity),
-            this.getSocialAddressFromTwitterBlue(identity),
             socialAddressFromNextID,
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),

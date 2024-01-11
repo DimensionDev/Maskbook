@@ -1,15 +1,12 @@
-import { AvatarType, NFTAvatarMiniClip, NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
 
 interface MiniAvatarBorderProps {
-    avatarType: AvatarType
     size: number
     screenName: string
     avatarId?: string
 }
 export function MiniAvatarBorder(props: MiniAvatarBorderProps) {
-    const { avatarType, size, screenName, avatarId } = props
-
-    if (avatarType === AvatarType.Clip) return <NFTAvatarMiniClip screenName={screenName} size={size} />
+    const { size, screenName, avatarId } = props
 
     return (
         <NFTBadgeTimeline
@@ -18,7 +15,6 @@ export function MiniAvatarBorder(props: MiniAvatarBorderProps) {
             width={size - 4}
             height={size - 4}
             siteKey={RSS3_KEY_SITE.TWITTER}
-            avatarType={avatarType}
         />
     )
 }
