@@ -58,6 +58,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+// TODO: extract the trader ui code to share and delete this.
+createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
+
 export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
@@ -67,9 +70,6 @@ export default function SwapPage() {
 
     const init = useCallback(() => {
         applyMaskColorVars(document.body, Appearance.light)
-        // TODO: extract the trader ui code to share and delete this.
-        createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
-        createI18NBundle('mask', languages)(i18NextInstance)
     }, [])
 
     return (
