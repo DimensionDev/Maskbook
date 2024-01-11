@@ -17,17 +17,19 @@ export class Firefly {
         if (result.code !== 200) return EMPTY_LIST
         return result.data
     }
-    static async verifyTwitterHandleByAddress(address: string, handle?: string): Promise<boolean> {
-        if (!handle || !address) return false
+    static async getVerifiedHandles(address: string) {
         const response = await fetchJSON<FireflyBaseAPI.VerifyTwitterResult>(
             urlcat(TWITTER_HANDLER_VERIFY_URL, '/v1/relation/handles', {
                 wallet: address.toLowerCase(),
                 isVerified: true,
             }),
         )
-
-        if ('error' in response) return false
-
-        return response.data.includes(handle)
+        if ('error' in response) return []
+        return response.data
+    }
+    static async verifyTwitterHandleByAddress(address: string, handle?: string): Promise<boolean> {
+        if (!handle || !address) return false
+        const verifiedHandles = await Firefly.getVerifiedHandles(address)
+        return verifiedHandles.includes(handle)
     }
 }
