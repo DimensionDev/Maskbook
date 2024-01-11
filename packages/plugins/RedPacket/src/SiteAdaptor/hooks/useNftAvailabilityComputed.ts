@@ -11,19 +11,12 @@ import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket.js'
  */
 export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account, chainId)
-
-    const result = asyncResult
-    const availability = result.value
+    const { data: availability } = useAvailabilityNftRedPacket(payload?.rpid, account, chainId)
 
     if (!availability) {
         return {
-            ...asyncResult,
-            payload,
-            computed: {
-                canClaim: false,
-                listOfStatus: EMPTY_LIST as RedPacketStatus[],
-            },
+            canClaim: false,
+            listOfStatus: EMPTY_LIST as RedPacketStatus[],
         }
     }
 
@@ -36,16 +29,13 @@ export function useNftAvailabilityComputed(account: string, payload: NftRedPacke
     const isClaimable = !isExpired && !isEmpty && !isClaimed
     const isSendable = !isEmpty && !isExpired && isCreator
     return {
-        ...asyncResult,
-        computed: {
-            canClaim: isClaimable && isPasswordValid,
-            canSend: isSendable,
-            isPasswordValid,
-            listOfStatus: compact([
-                isClaimed ? RedPacketStatus.claimed : undefined,
-                isEmpty ? RedPacketStatus.empty : undefined,
-                isExpired ? RedPacketStatus.expired : undefined,
-            ]),
-        },
+        canClaim: isClaimable && isPasswordValid,
+        canSend: isSendable,
+        isPasswordValid,
+        listOfStatus: compact([
+            isClaimed ? RedPacketStatus.claimed : undefined,
+            isEmpty ? RedPacketStatus.empty : undefined,
+            isExpired ? RedPacketStatus.expired : undefined,
+        ]),
     }
 }

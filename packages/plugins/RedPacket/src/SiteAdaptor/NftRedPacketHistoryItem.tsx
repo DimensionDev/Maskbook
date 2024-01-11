@@ -178,7 +178,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
     const t = useRedPacketTrans()
 
     const { value: receipt } = useCreateNftRedPacketReceipt(seen ? history.txid : '', history.chainId)
-    const rpid = receipt?.rpid ?? ''
+    const rpid = receipt?.rpid || history.rpid || ''
     const creation_time = receipt?.creation_time ?? 0
     const patchedHistory: NftRedPacketJSONPayload = useMemo(
         () => ({ ...history, rpid, creation_time }),
@@ -191,9 +191,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    const {
-        computed: { canSend, isPasswordValid },
-    } = useNftAvailabilityComputed(account, patchedHistory)
+    const { canSend, isPasswordValid } = useNftAvailabilityComputed(account, patchedHistory)
 
     const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
 
@@ -202,7 +200,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
         onSend(patchedHistory, collection)
     }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
 
-    const { value: redpacketStatus } = useAvailabilityNftRedPacket(patchedHistory.rpid, account, patchedHistory.chainId)
+    const { data: redpacketStatus } = useAvailabilityNftRedPacket(rpid, account, patchedHistory.chainId)
     const bitStatusList =
         redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
 

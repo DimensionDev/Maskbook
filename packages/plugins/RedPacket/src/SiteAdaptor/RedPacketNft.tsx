@@ -164,6 +164,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        flexGrow: 1,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             fontSize: 14,
         },
@@ -197,9 +198,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
     const {
-        value: availability,
-        loading,
-        retry: retryAvailability,
+        data: availability,
+        isPending: loading,
+        refetch: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
 
@@ -216,7 +217,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
-    const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
+    const { classes } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -256,7 +257,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { data: asset, isPending: loadingAsset } = useNonFungibleAsset(
+    const { data: asset } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,
