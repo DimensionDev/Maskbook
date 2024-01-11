@@ -12,7 +12,7 @@ const useStyle = makeStyles()((theme) => ({
         padding: theme.spacing(2, 1.5),
         backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0,0.80)' : 'rgba(255, 255, 255, 0.80)',
         width: '100%',
-        backdropFilter: 'blur(8px)',
+        backdropFilter: 'blur(16px)',
         boxShadow: theme.palette.maskColor.bottomBg,
         borderRadius: '12px 12px 0 0',
     },
