@@ -313,24 +313,35 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),
         ])
-        const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
+        const mergedIdentities = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
-        const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+        const identities = uniqBy(mergedIdentities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
         const identitiesFromNextID = await socialAddressFromNextID
 
         const handle = identity.identifier?.userId
+        if (!handle) return []
+        // Identity is address type, will check if it's verified by Firefly
+        const verifiedHandleMap = new Map<string, string[]>()
+        const getVerifiedHandles = Firefly.Firefly.getVerifiedHandles
         const verifiedResult = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
                 if (x.verified) return address
-                const isReliable = await Firefly.Firefly.verifyTwitterHandleByAddress(address, handle)
-                return isReliable ? address : null
+                const verifiedHandles = await getVerifiedHandles(address)
+                verifiedHandleMap.set(address, verifiedHandles)
+                return verifiedHandles.includes(handle) ? address : null
             }),
         )
         const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
 
-        return identities
-            .filter((x) => trustedAddresses.includes(x.address.toLowerCase()) || x.type === SocialAddressType.Address)
+        const result = identities
+            .filter((x) => {
+                const address = x.address.toLowerCase()
+                if (trustedAddresses.includes(address)) return true
+                if (x.type === SocialAddressType.Address) return (verifiedHandleMap.get(address) || []).includes(handle)
+                return false
+            })
             .concat(identitiesFromNextID)
+        return result
     }
 }

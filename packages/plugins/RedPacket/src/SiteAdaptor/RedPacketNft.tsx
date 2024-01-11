@@ -142,9 +142,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         minHeight: '1em',
         textIndent: '8px',
     },
-    hidden: {
-        visibility: 'hidden',
-    },
     tokenLabel: {
         width: 48,
         height: 48,
@@ -341,37 +338,43 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                             {payload.message}
                         </Typography>
                     </ShadowRootTooltip>
-                    <ShadowRootTooltip
-                        title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
-                        placement="top"
-                        disableInteractive
-                        arrow
-                        PopperProps={{
-                            disablePortal: true,
-                        }}>
-                        <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
-                            <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                                {asset ?
-                                    <AssetPreviewer
-                                        url={asset.metadata?.imageURL || asset?.metadata?.mediaURL}
-                                        classes={{
-                                            root: classes.imgWrapper,
-                                            fallbackImage: classes.fallbackImage,
-                                        }}
-                                        fallbackImage={
-                                            <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
-                                        }
-                                    />
-                                :   null}
-                            </Box>
+                    {availability.isClaimed ?
+                        <ShadowRootTooltip
+                            title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                            placement="top"
+                            disableInteractive
+                            arrow
+                            PopperProps={{
+                                disablePortal: true,
+                            }}>
+                            <Box className={classes.claimedTokenWrapper}>
+                                <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                                    {asset ?
+                                        <AssetPreviewer
+                                            url={asset.metadata?.imageURL || asset?.metadata?.mediaURL}
+                                            classes={{
+                                                root: classes.imgWrapper,
+                                                fallbackImage: classes.fallbackImage,
+                                            }}
+                                            fallbackImage={
+                                                <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
+                                            }
+                                        />
+                                    :   null}
+                                </Box>
 
-                            <div className={classes.description}>
-                                <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
-                                    {`${payload.contractName} #${availability.claimed_id}`}
-                                </Typography>
-                            </div>
-                        </Box>
-                    </ShadowRootTooltip>
+                                <div className={classes.description}>
+                                    <Typography
+                                        className={classes.name}
+                                        color="textPrimary"
+                                        variant="body2"
+                                        ref={textRef}>
+                                        {`${payload.contractName} #${availability.claimed_id}`}
+                                    </Typography>
+                                </div>
+                            </Box>
+                        </ShadowRootTooltip>
+                    :   null}
                 </Box>
 
                 <div className={classes.footer}>
