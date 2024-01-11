@@ -85,7 +85,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 slug: '',
                 name: firstHit.host!,
                 twitterUsername: author?.userId || nickname,
-                externalUrl: firstHit?.url!,
+                externalUrl: firstHit.url,
                 post: postDetail,
                 matchType: 'sim',
             } satisfies ScamResult
