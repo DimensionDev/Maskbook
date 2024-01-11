@@ -5,8 +5,6 @@ import {
     getDefaultUserSettings,
     getUserSettings,
     getUserViaTwitterIdentity,
-    getUserNFTAvatar,
-    getUserNFTContainer,
     getComputedUserSettings,
     getUserByScreenName,
     getUserByScreenNameShow,
@@ -48,33 +46,6 @@ export class Twitter {
                 ...computed,
             }
         }
-    }
-
-    static async getUserNftContainer(screenName: string) {
-        return await attemptUntil<TwitterBaseAPI.NFT | undefined>(
-            [
-                async () => {
-                    const response = await getUserNFTContainer(screenName)
-                    const result = response?.data.user?.result
-                    if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
-
-                    return {
-                        address: result.nft_avatar_metadata.smart_contract.address,
-                        token_id: result.nft_avatar_metadata.token_id,
-                    }
-                },
-                async () => {
-                    const response = await getUserNFTAvatar(screenName)
-                    const result = response.data.user?.result
-                    if (!result?.has_nft_avatar) throw new Error(`User ${screenName} doesn't have NFT avatar.`)
-                    return {
-                        address: result.nft_avatar_metadata.smart_contract.address,
-                        token_id: result.nft_avatar_metadata.token_id,
-                    }
-                },
-            ],
-            undefined,
-        )
     }
 
     static async uploadMedia(image: File | Blob): Promise<TwitterBaseAPI.MediaResponse> {

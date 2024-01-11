@@ -28,7 +28,6 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                 root.render(
                     <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
                         <MiniAvatarBorder
-                            avatarType={info.avatarType}
                             size={info.width}
                             screenName={
                                 userId ||

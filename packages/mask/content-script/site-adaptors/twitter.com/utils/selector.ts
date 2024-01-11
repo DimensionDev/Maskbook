@@ -54,7 +54,7 @@ export function searchNewTweetButtonSelector() {
 export function searchAvatarSelector() {
     return querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/photo"] img[src*="profile_images"]')
 }
-querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
+
 export function searchAvatarMetaSelector() {
     return querySelector<E>('head meta[property="og:image"]')
 }
@@ -300,28 +300,12 @@ export function searchTwitterAvatarNormalSelector() {
 
 // #endregion
 
-export function searchTwitterSquareAvatarSelector() {
-    return querySelector<E>('a[href$="/nft"] > div img')
-}
-
 export function searchTweetAvatarSelector() {
     return querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
 }
 
 export function searchRetweetAvatarSelector() {
     return querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)
-}
-
-export function searchTwitterAvatarNFTSelector() {
-    return querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
-}
-
-export function searchTwitterAvatarNFTStyleSelector() {
-    return querySelector<E>('a[href$="/nft"] > div')
-}
-
-export function searchTwitterAvatarNFTLinkSelector() {
-    return querySelector<E>('a[href$="/nft"]')
 }
 
 export function searchReplyToolbarSelector() {
