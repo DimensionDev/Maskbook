@@ -4,7 +4,7 @@ import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, EVMWeb3ContextProvider, useNetwork } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
-import { addMaskI18N, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
@@ -69,7 +69,7 @@ export default function SwapPage() {
         applyMaskColorVars(document.body, Appearance.light)
         // TODO: extract the trader ui code to share and delete this.
         createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
-        addMaskI18N(i18NextInstance)
+        createI18NBundle('mask', languages)(i18NextInstance)
     }, [])
 
     return (

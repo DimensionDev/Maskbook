@@ -174,7 +174,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         <Button
                             variant="roundedContained"
                             fullWidth
-                            onClick={() => SelectProviderModal.open()}
+                            onClick={onChangeWallet ? onChangeWallet : () => SelectProviderModal.open()}
                             sx={{ minWidth: 311 }}>
                             {t.connect_your_wallet()}
                         </Button>

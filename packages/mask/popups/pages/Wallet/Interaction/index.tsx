@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { BigNumber } from 'bignumber.js'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useUpdateEffect } from '@react-hookz/web'
 import { Icons } from '@masknet/icons'
@@ -16,7 +17,6 @@ import {
     formatEthereumAddress,
     ChainId,
     ErrorEditor,
-    addGasMargin,
 } from '@masknet/web3-shared-evm'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -205,7 +205,7 @@ const Interaction = memo(function Interaction() {
                                     return web3_utils.toHex(value)
                                 })
                             :   {}),
-                            gas: web3_utils.toHex(addGasMargin(gasConfig?.gas ?? x.gas).toString()),
+                            gas: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
                             chainId: web3_utils.toHex(x.chainId),
                             nonce: web3_utils.toHex(x.nonce),
                         }
