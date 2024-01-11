@@ -3,7 +3,7 @@ import { safeUnreachable } from '@masknet/kit'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { addDays, addMonths, endOfMonth, format, isAfter, startOfMonth } from 'date-fns'
+import { addMonths, endOfMonth, format, isAfter, startOfMonth } from 'date-fns'
 import { range } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { useEventList, useNFTList, useNewsList } from '../../hooks/useEventList.js'
@@ -86,7 +86,10 @@ interface DatePickerProps {
 export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, currentTab }: DatePickerProps) {
     const { classes } = useStyles({ open })
     const [currentDate, setCurrentDate] = useState(selectedDate)
-    const monthStart = useMemo(() => startOfMonth(currentDate), [currentDate])
+    const monthStart = startOfMonth(currentDate)
+    const startingDayOfWeek = monthStart.getDay()
+    const daysInMonth = endOfMonth(currentDate).getDate()
+    const daysInPrevMonth = endOfMonth(addMonths(currentDate, -1)).getDate()
     const { data: eventList } = useEventList(monthStart)
     const { data: newsList } = useNewsList(monthStart)
     const { data: nftList } = useNFTList(monthStart)
@@ -138,7 +141,27 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
                     {range(6).map((weekIndex) => (
                         <tr key={weekIndex} className={classes.row}>
                             {range(7).map((dayIndex) => {
-                                const currentDatePointer = addDays(monthStart, weekIndex * 7 + dayIndex)
+                                const dayOfMonth = weekIndex * 7 + dayIndex - startingDayOfWeek + 1
+                                let currentDatePointer = new Date(
+                                    currentDate.getFullYear(),
+                                    currentDate.getMonth(),
+                                    dayOfMonth,
+                                )
+
+                                if (dayOfMonth <= 0) {
+                                    currentDatePointer = new Date(
+                                        currentDate.getFullYear(),
+                                        currentDate.getMonth() - 1,
+                                        daysInPrevMonth + dayOfMonth,
+                                    )
+                                } else if (dayOfMonth > daysInMonth) {
+                                    currentDatePointer = new Date(
+                                        currentDate.getFullYear(),
+                                        currentDate.getMonth() + 1,
+                                        dayOfMonth - daysInMonth,
+                                    )
+                                }
+
                                 return (
                                     <td key={dayIndex}>
                                         <button
@@ -153,7 +176,7 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
                                                     : list?.[currentDatePointer.toLocaleDateString()] ? classes.canClick
                                                     : ''
                                                 }`}>
-                                                {format(currentDatePointer, 'd')}
+                                                {currentDatePointer.getDate()}
                                             </Typography>
                                         </button>
                                     </td>
