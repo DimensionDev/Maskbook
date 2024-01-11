@@ -37,16 +37,16 @@ namespace _ {
     export const decimal = z.number().min(0).max(36)
     export const filter = z
         .object({
-            fromBlock: unpadded_hex.nullish().nullable(),
-            toBlock: unpadded_hex.nullish().nullable(),
-            address: address.or(address.array()).nullable(),
-            topics: z.any().nullable(),
+            fromBlock: unpadded_hex.nullish(),
+            toBlock: unpadded_hex.nullish(),
+            address: address.or(address.array()).nullish(),
+            topics: z.any().nullish(),
         })
         .partial()
         .strict()
         .describe('Filter')
     export const filter_identifier = unpadded_hex.describe('FilterIdentifier')
-    export const hydrated_transactions = z.boolean().nullable().describe('HydratedTransactions')
+    export const hydrated_transactions = z.boolean().nullish().describe('HydratedTransactions')
     export const subscription_id = z.string()
     export const symbol = z.string().min(2).max(11)
     export const transaction = z
@@ -54,18 +54,18 @@ namespace _ {
             type: z
                 .string()
                 .regex(/^0x([\d,A-Fa-f]?){1,2}$/g)
-                .nullable(),
-            nonce: unpadded_hex.nullable(),
-            to: address.nullable(),
-            from: address.nullable(),
-            gas: unpadded_hex.nullable(),
-            value: unpadded_hex.nullable(),
-            data: hexAllowCap.nullable(),
-            input: hex.nullable(),
-            gasPrice: unpadded_hex.nullable(),
-            maxPriorityFeePerGas: unpadded_hex.nullable(),
-            maxFeePerGas: unpadded_hex.nullable(),
-            maxFeePerBlobGas: unpadded_hex.nullable(),
+                .nullish(),
+            nonce: unpadded_hex.nullish(),
+            to: address.nullish(),
+            from: address.nullish(),
+            gas: unpadded_hex.nullish(),
+            value: unpadded_hex.nullish(),
+            data: hexAllowCap.nullish(),
+            input: hex.nullish(),
+            gasPrice: unpadded_hex.nullish(),
+            maxPriorityFeePerGas: unpadded_hex.nullish(),
+            maxFeePerGas: unpadded_hex.nullish(),
+            maxFeePerBlobGas: unpadded_hex.nullish(),
             accessList: z
                 .object({
                     address,
@@ -73,9 +73,9 @@ namespace _ {
                 })
                 .strict()
                 .array()
-                .nullable(),
-            blobVersionedHashes: z.string().array().nullable(),
-            blobs: z.string().array().nullable(),
+                .nullish(),
+            blobVersionedHashes: z.string().array().nullish(),
+            blobs: z.string().array().nullish(),
             chainId,
         })
         .partial()
@@ -112,6 +112,7 @@ namespace _ {
 
 // No error message interpolation support until https://github.com/colinhacks/zod/issues/3048
 export const ParamsValidate = {
+    net_version: z.tuple([]),
     eth_subscribe: z.tuple([
         z.enum(['newHeads', 'logs', 'newPendingTransactions', 'syncing']).describe('subscriptionType'),
         z
@@ -187,14 +188,15 @@ export const ParamsValidate = {
         // ! not same as _.transaction
         z
             .object({
-                to: _.address.nullish(),
+                to: _.address.nullish().optional(),
                 from: _.address,
-                gas: _.unpadded_hex.nullish(),
-                value: _.unpadded_hex.nullish(),
-                data: _.hex.nullish(),
-                gasPrice: _.unpadded_hex.nullish(),
-                maxPriorityFeePerGas: _.unpadded_hex.nullish(),
-                maxFeePerGas: _.unpadded_hex.nullish(),
+                gas: _.unpadded_hex.nullish().optional(),
+                value: _.unpadded_hex.nullish().optional(),
+                data: _.hex.nullish().optional(),
+                gasLimit: _.unpadded_hex.nullish().optional(),
+                gasPrice: _.unpadded_hex.nullish().optional(),
+                maxPriorityFeePerGas: _.unpadded_hex.nullish().optional(),
+                maxFeePerGas: _.unpadded_hex.nullish().optional(),
             })
             .strict()
             .describe('Transaction'),
@@ -246,6 +248,7 @@ export const ParamsValidate = {
     eth_uninstallFilter: z.tuple([_.filter_identifier]),
 }
 export const ReturnValidate = {
+    net_version: z.string(),
     eth_subscribe: _.subscription_id,
     eth_unsubscribe: z.boolean(),
     wallet_addEthereumChain: z.null(),

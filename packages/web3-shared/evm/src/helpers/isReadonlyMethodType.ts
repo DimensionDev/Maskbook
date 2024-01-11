@@ -1,6 +1,7 @@
 import { EthereumMethodType } from '../types/index.js'
 
 export const readonlyMethodType = [
+    EthereumMethodType.NET_VERSION,
     EthereumMethodType.ETH_BLOCK_NUMBER,
     EthereumMethodType.ETH_CALL,
     EthereumMethodType.ETH_ESTIMATE_GAS,

@@ -76,15 +76,13 @@ export namespace WalletAPI {
     ) => Promise<string>
     export interface MessageIOContext {
         /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
+        send(payload: JsonRpcPayload, options: TransactionOptions): Promise<JsonRpcResponse>
         /** Open popup window */
         openPopupWindow<T extends PopupRoutes>(
             route: T,
             params: T extends keyof PopupRoutesParamsMap ? PopupRoutesParamsMap[T] : undefined,
         ): Promise<void>
         hasPaymentPassword(): Promise<boolean>
-        /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(payload: JsonRpcPayload, options?: TransactionOptions): Promise<JsonRpcResponse>
     }
     export interface IOContext {
         MaskWalletContext: MaskWalletIOContext

@@ -259,6 +259,8 @@ export enum EthereumMethodType {
     MASK_REMOVE_WALLETS = 'MASK_REMOVE_WALLETS',
     MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+
+    NET_VERSION = 'net_version',
 }
 
 export enum TransactionEventType {

@@ -219,24 +219,57 @@ export declare namespace Ethereum.RPC {
         }
     }
     interface ImplementedMethods {
-        // Readonly methods
-        eth_getCode(address: string, block?: string): string
-        eth_gasPrice(): string
-        eth_blockNumber(): string
-        eth_getBalance(address: string, block?: string): string
-        eth_getBlockByNumber(block: string, hydrated_transactions: boolean): Block | null
-        eth_getBlockByHash(hash: string, hydrated_transactions: boolean): Block | null
-        eth_getTransactionByHash(hash: string): Transaction | null
-        eth_getTransactionReceipt(transaction_hash: string): Receipt | null
-        eth_getTransactionCount(address: string, block?: string): string
-        eth_getFilterChanges(id: string): string[] | Log[]
-        eth_newPendingTransactionFilter(): string
-        eth_estimateGas(transaction: Transaction, block?: string): string
-        eth_call(transaction: Transaction, block?: string): string
-        eth_getLogs(filter: Filter): string[] | Log[]
+        net_version: () => string
+        eth_accounts: () => string[]
+        eth_blockNumber: () => string
+        eth_call: (transaction: Transaction, block?: string) => string
+        eth_chainId: () => string
+        eth_estimateGas: (transaction: Transaction, block?: string) => string
+        eth_feeHistory: (args_0: string | number, args_1: string, args_2: number[]) => any
+        eth_gasPrice: () => string
+        eth_getBalance: (address: string, block?: string | null | undefined) => string
+        eth_getBlockByHash: (hash: string, hydrated_transactions?: boolean | null | undefined) => Block | null
+        eth_getBlockByNumber: (block: string, hydrated_transactions?: boolean | null | undefined) => Block | null
+        eth_getBlockReceipts: (args_0: string) => any
+        eth_getBlockTransactionCountByHash: (args_0: string) => string | null | undefined
+        eth_getBlockTransactionCountByNumber: (args_0: string) => string | null | undefined
+        eth_getCode: (address: string, block?: string | null | undefined) => string
+        eth_getLogs: (filter: Filter) => string[] | Log[]
+        eth_getProof: (args_0: string, args_1: string[], args_2: string) => any
+        eth_getStorageAt: (args_0: string, args_1: string, args_2: string | null | undefined) => string
+        eth_getTransactionByBlockHashAndIndex: (args_0: string, args_1: string) => any
+        eth_getTransactionByBlockNumberAndIndex: (args_0: string, args_1: string) => any
+        eth_getTransactionByHash: (hash: string) => Transaction | null
+        eth_getTransactionCount: (address: string, block?: string | null | undefined) => string
+        eth_getTransactionReceipt: (transaction_hash: string) => Receipt | null
+        eth_getUncleCountByBlockHash: (args_0: string) => string | null | undefined
+        eth_getUncleCountByBlockNumber: (args_0: string) => string | null | undefined
+        eth_syncing: () => any
 
-        // https://eips.ethereum.org/EIPS/eip-2255
-        wallet_getPermissions(): EIP2255Permission[]
+        personal_sign: (args_0: string, args_1: string) => string
+        eth_sendTransaction: (transaction: any) => any
+        eth_sendRawTransaction: (args_0: string) => string
+        eth_subscribe: (
+            args_0: 'newHeads' | 'logs' | 'newPendingTransactions' | 'syncing',
+            args_1:
+                | {
+                      topics: string[]
+                      address?: string | string[] | null | undefined
+                  }
+                | null
+                | undefined,
+        ) => string
+        eth_unsubscribe: (args_0: string) => boolean
+
+        eth_getFilterChanges: (id: string) => string[] | Log[]
+        eth_getFilterLogs: (args_0: string) => any
+        eth_newBlockFilter: () => string
+        eth_newFilter: (args_0: any) => string
+        eth_uninstallFilter: (args_0: string) => boolean
+
+        eth_requestAccounts: () => string[]
+
+        wallet_getPermissions: () => EIP2255Permission[]
         wallet_requestPermissions(request: EIP2255PermissionRequest): EIP2255RequestedPermission[]
     }
 }

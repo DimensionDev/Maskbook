@@ -22,7 +22,10 @@ type PassthroughMethods = (typeof PassthroughMethods)[number]
 const passthroughMethods: Record<PassthroughMethods, (params: unknown[] | undefined) => Promise<unknown>> = {} as any
 for (const method of PassthroughMethods) {
     passthroughMethods[method] = async (...params: unknown[]) => {
-        return (await Services.Wallet.send({ jsonrpc: '2.0', method, params })).result
+        return providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            readonly: true,
+        }).request({ method, params })
     }
 }
 

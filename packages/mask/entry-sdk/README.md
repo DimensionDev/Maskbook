@@ -5,12 +5,11 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 - <https://ethereum.github.io/execution-apis/api-documentation/>
 
-- [ ] Do params check before sending them to the background.
-
 ## Need revisit
 
 ## Read ETH methods
 
+- [x] net_version
 - [x] eth_accounts
 - [x] eth_blockNumber
 - [x] eth_call
