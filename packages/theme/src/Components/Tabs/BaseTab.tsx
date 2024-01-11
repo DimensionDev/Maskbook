@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 
 const BaseTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
-})<{ activated?: boolean; textSecond?: boolean }>(({ theme, activated, textSecond }) => ({
+})<{ activated?: boolean }>(({ theme, activated }) => ({
     flex: 1,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -15,10 +15,7 @@ const BaseTabWrap = styled(Button, {
         :   'none',
     background: activated ? theme.palette.maskColor.bottom : 'transparent',
     borderRadius: `${theme.spacing(1.5)} ${theme.spacing(1.5)} 0px 0px !important`,
-    color:
-        activated ? theme.palette.maskColor.main
-        : textSecond ? theme.palette.maskColor.second
-        : theme.palette.maskColor.secondaryDark,
+    color: activated ? theme.palette.maskColor.main + ' !important' : theme.palette.maskColor.secondaryDark,
     fontSize: 16,
     fontWeight: 'bold',
 
@@ -36,7 +33,6 @@ interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onCh
     value: string
     selected?: boolean
     onChange?(event: object, value: string): void
-    textSecond?: boolean
 }
 
 export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
@@ -51,7 +47,6 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
     return (
         <BaseTabWrap
             activated={activated}
-            textSecond={props.textSecond}
             ref={ref}
             role="tab"
             {...props}
