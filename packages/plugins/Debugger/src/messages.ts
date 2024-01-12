@@ -5,7 +5,7 @@ type DialogUpdated = {
     open: boolean
 }
 
-interface DebuggerMessages {
+export interface DebuggerMessages {
     /**
      * Open console dialog
      */

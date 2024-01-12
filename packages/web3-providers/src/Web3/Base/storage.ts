@@ -1,11 +1,6 @@
-import {
-    PersistentStorages,
-    type NetworkPluginID,
-    EMPTY_LIST,
-    InMemoryStorages,
-    getSiteType,
-} from '@masknet/shared-base'
+import { PersistentStorages, NetworkPluginID, EMPTY_LIST, InMemoryStorages, getSiteType } from '@masknet/shared-base'
 import { CurrencyType, GasOptionType, SourceType, type Contact } from '@masknet/web3-shared-base'
+import { ProviderType, getDefaultChainId } from '@masknet/web3-shared-evm'
 
 export function addressStorage(plugin: NetworkPluginID) {
     const { value: address } = PersistentStorages.Web3.createSubScope(`${plugin}_AddressBookV2`, {
@@ -62,7 +57,7 @@ export function providerStorage<ChainId extends number, ProviderType extends str
     defaultChainId: ChainId,
     defaultProviderType: ProviderType,
 ) {
-    const { storage } = InMemoryStorages.Web3.createSubScope(`${pluginID}_${getSiteType() ?? 'Provider'}`, {
+    const { storage } = InMemoryStorages.Web3.createSubScope(pluginID, {}).createSubScope(getSiteType() ?? 'Provider', {
         account: {
             account: '',
             chainId: defaultChainId,
@@ -72,4 +67,34 @@ export function providerStorage<ChainId extends number, ProviderType extends str
     return Promise.all([storage.account.initializedPromise, storage.providerType.initializedPromise]).then(
         () => storage,
     )
+}
+export async function MaskWalletStorage() {
+    const baseHostedStorage = PersistentStorages.Web3.createSubScope(
+        // if you change this (don't, unless you have migration), please also be aware of packages/mask/background/services/wallet/services/sdk.ts
+        `${NetworkPluginID.PLUGIN_EVM}_${ProviderType.MaskWallet}_hosted`,
+        {
+            account: '',
+            chainId: getDefaultChainId(),
+            wallets: [],
+        },
+    ).storage
+
+    const eip4337Storage = InMemoryStorages.Web3.createSubScope(NetworkPluginID.PLUGIN_EVM, {}).createSubScope(
+        ProviderType.MaskWallet,
+        {
+            owner: {
+                account: '',
+                // empty string means EOA signer
+                identifier: '',
+            },
+        },
+    ).storage.owner
+
+    await Promise.all([
+        baseHostedStorage.account.initializedPromise,
+        baseHostedStorage.chainId.initializedPromise,
+        baseHostedStorage.wallets.initializedPromise,
+        eip4337Storage.initializedPromise,
+    ])
+    return { baseHostedStorage, eip4337Storage }
 }

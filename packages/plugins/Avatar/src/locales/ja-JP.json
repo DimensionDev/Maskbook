@@ -1,4 +1,6 @@
 {
+    "application_dialog_title": "NFT PFP",
+    "application_edit_profile_dialog_title": "プロフィールを編集する",
     "set_nft": "NFT PFPを設定",
     "nft_set_success": "NFT PFPを正常にセットアップしました",
     "persona_verification_failed": "NFT PFPの検証に失敗しました",
@@ -44,5 +46,11 @@
     "nft_input_tokenid_label": "トークンIDを入力してください",
     "plugin_avatar_web3_error": "web3 エラー",
     "plugin_avatar_asset": "アセットが見つかりません。",
-    "plugin_avatar_chain_error": "チェーンが一致しません。"
+    "plugin_avatar_chain_error": "チェーンが一致しません。",
+    "nft_owner_hint": "コントラクトアドレスが正しくないか、コレクションはあなたに属していません",
+    "nft_add_button_label_checking": "確認中",
+    "nft_add_button_label": "追加",
+    "plugin_avatar_input_token_address": "コントラクトアドレスを入力",
+    "plugin_avatar_input_token_id": "トークンID",
+    "dashboard_no_collectible_found": "コレクションが見つかりません."
 }

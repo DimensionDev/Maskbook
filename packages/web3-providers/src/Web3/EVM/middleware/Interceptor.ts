@@ -12,7 +12,7 @@ import * as SmartPay from /* webpackDefer: true */ '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {
-    constructor(private signWithPersona: WalletAPI.IOContext['signWithPersona']) {
+    constructor(private signWithPersona: WalletAPI.SignWithPersona) {
         this.composers = {
             [ProviderType.None]: Composer.from(new NoneWallet()),
             [ProviderType.MaskWallet]: Composer.from(
@@ -27,6 +27,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
                 ),
                 new MaskWallet(),
             ),
+            [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
             [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
             [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
             [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
@@ -39,7 +40,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const composer = this.composers[context.providerType]
-        if (!composer || !context.writeable) {
+        if (!composer || !context.writable) {
             await next()
             return
         }

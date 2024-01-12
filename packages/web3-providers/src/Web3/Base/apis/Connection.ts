@@ -22,14 +22,10 @@ export interface BaseConnection<
     TransactionSignature,
     Block,
     Web3,
-    Web3Provider,
     Options = BaseConnectionOptions<ChainId, ProviderType, Transaction>,
 > {
     /** Get web3 instance */
     getWeb3(initial?: Options): Web3
-
-    /** Get web3 provider instance */
-    getWeb3Provider(initial?: Options): Web3Provider
 
     /** Get the latest balance of the account. */
     getBalance(address: string, initial?: Options): Promise<string>
@@ -152,20 +148,8 @@ export interface BaseConnection<
     /** Sign message */
     signMessage(type: string, message: string, initial?: Options): Promise<Signature>
 
-    /** Verify message */
-    verifyMessage(type: string, message: string, signature: Signature, initial?: Options): Promise<boolean>
-
     /** Approve a recipient for using a fungible token. */
     approveFungibleToken(address: string, recipient: string, amount: string, initial?: Options): Promise<string>
-
-    /** Approve a recipient for using a non-fungible token. */
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: Options,
-    ): Promise<string>
 
     /** Approve a recipient for using all non-fungible tokens. */
     approveAllNonFungibleTokens(
@@ -195,8 +179,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<string>
 
-    /** Get all supported entry points */
-    supportedEntryPoints?: () => Promise<string[]>
     /** Call a operation */
     callUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<string>
     /** Send a operation */

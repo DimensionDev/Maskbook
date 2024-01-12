@@ -17,13 +17,8 @@ export interface ProviderStorage<Account, ProviderType extends string> {
     providerType: ProviderType
 }
 
-export abstract class ProviderState<
-    ChainId extends number,
-    ProviderType extends string,
-    NetworkType extends string,
-    Web3Provider,
-    Web3,
-> implements Web3ProviderState<ChainId, ProviderType, NetworkType>
+export abstract class ProviderState<ChainId extends number, ProviderType extends string, NetworkType extends string>
+    implements Web3ProviderState<ChainId, ProviderType, NetworkType>
 {
     protected site = getSiteType()
 
@@ -32,7 +27,7 @@ export abstract class ProviderState<
     public networkType?: Subscription<NetworkType>
     public providerType?: Subscription<ProviderType>
 
-    protected abstract providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>>
+    protected abstract providers: Record<ProviderType, WalletAPI.Provider<ChainId, ProviderType>>
     protected abstract isValidAddress(address: string | undefined): boolean
     protected abstract isValidChainId(chainID: number | undefined): boolean
     protected abstract isSameAddress(a: string | undefined, b: string | undefined): boolean
@@ -42,16 +37,13 @@ export abstract class ProviderState<
     protected abstract getDefaultProviderType(): ProviderType
     protected abstract getNetworkTypeFromChainId(chainId: ChainId): NetworkType
     constructor(
-        protected context: WalletAPI.IOContext,
+        public signWithPersona: WalletAPI.SignWithPersona,
         protected storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
-    ) {
-        this.signWithPersona = context.signWithPersona
-    }
+    ) {}
     protected init() {
         this.setupSubscriptions()
         this.setupProviders()
     }
-    public signWithPersona
 
     protected setupSubscriptions() {
         if (!this.site) return
@@ -72,7 +64,7 @@ export abstract class ProviderState<
 
     private setupProviders() {
         const providers = Object.entries(this.providers) as Array<
-            [ProviderType, WalletAPI.Provider<ChainId, ProviderType, Web3Provider, Web3>]
+            [ProviderType, WalletAPI.Provider<ChainId, ProviderType>]
         >
 
         providers.map(async ([providerType, provider]) => {
@@ -115,7 +107,7 @@ export abstract class ProviderState<
             })
 
             try {
-                await provider.setup(this.context)
+                await Promise.resolve(provider.setup?.())
             } catch {
                 // ignore setup errors
             }

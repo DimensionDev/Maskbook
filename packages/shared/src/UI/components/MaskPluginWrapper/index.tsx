@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { Typography, SnackbarContent, Link } from '@mui/material'
+import { Typography, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Box } from '@mui/system'
 import {
@@ -157,7 +157,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         </div>
     )
 
-    return <Suspense fallback={<SnackbarContent message="Mask is loading this content..." />} children={inner} />
+    return <Suspense children={inner} />
 }
 
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> = forwardRef(

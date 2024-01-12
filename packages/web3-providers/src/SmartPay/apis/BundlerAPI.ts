@@ -79,9 +79,6 @@ class SmartPayBundlerAPI implements BundlerAPI.Provider {
         const healthz = await this.healthz()
         return [healthz.entrypoint_contract_address]
     }
-    simulateUserOperation(): Promise<{ preOpGas: string; prefund: string }> {
-        throw new Error('Method not implemented.')
-    }
     async sendUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string> {
         await this.assetChainId(chainId)
         return this.handle(userOperation)

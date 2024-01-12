@@ -12,14 +12,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { EVMWalletProvider } from './index.js'
 
 export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
-    protected context: WalletAPI.IOContext | undefined
-
     constructor(protected providerType: ProviderType) {}
 
     public emitter = new Emitter<WalletAPI.ProviderEvents<ChainId, ProviderType>>()
@@ -43,49 +40,6 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
      */
     get ready() {
         return true
-    }
-
-    /**
-     * This field indicates the provider is ready to be set up.
-     * Please make sure that the provider SDK or global environment is ready.
-     * No need to wait by default
-     */
-    get readyPromise() {
-        return Promise.resolve()
-    }
-
-    async setup(context?: WalletAPI.IOContext): Promise<void> {
-        if (context) {
-            this.context = context
-            return
-        }
-        throw new Error('Method not implemented.')
-    }
-
-    addWallet(wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    updateWallet(address: string, wallet: Wallet): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    renameWallet(address: string, name: string): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    removeWallet(address: string, password?: string | undefined): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    updateWallets(wallets: Wallet[]): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    removeWallets(wallets: Wallet[]): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-    resetAllWallets(): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async switchAccount(account?: string | undefined): Promise<void> {
-        throw new Error('Method not implemented.')
     }
 
     // Switch chain with RPC calls by default
@@ -142,18 +96,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
     // A provider should at least implement a RPC request method.
     // Then it can be used to create an external provider for web3js.
-    async request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T> {
-        throw new Error('Method not implemented.')
-    }
-
-    // Create a web3 instance from the external provider by default.
-    createWeb3(options?: WalletAPI.ProviderOptions<ChainId>) {
-        return createWeb3FromProvider(
-            createWeb3ProviderFromRequest((requestArguments: RequestArguments) =>
-                this.request(requestArguments, options),
-            ),
-        )
-    }
+    abstract request<T>(requestArguments: RequestArguments, options?: WalletAPI.ProviderOptions<ChainId>): Promise<T>
 
     // Create an external provider from the basic request method.
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {

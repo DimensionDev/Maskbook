@@ -1,11 +1,11 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
     SchemaType,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -48,8 +48,7 @@ export class ConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     protected override Request = new EVMRequestAPI(this.options)
@@ -150,18 +149,6 @@ export class ConnectionAPI
             (x) => x?.methods.approve(recipient, web3_utils.toHex(amount)),
             options.overrides,
         )
-    }
-
-    override async approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema: SchemaType,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        // Do not use `approve()`, since it is buggy.
-        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
-        throw new Error('Method not implemented.')
     }
 
     override async approveAllNonFungibleTokens(
@@ -272,12 +259,6 @@ export class ConnectionAPI
         }
     }
 
-    override async verifyMessage(type: string, message: string, signature: string, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const dataToSign = await this.getWeb3(options).eth.personal.ecRecover(message, signature)
-        return dataToSign === message
-    }
-
     override async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
@@ -296,16 +277,6 @@ export class ConnectionAPI
         return this.Request.request<ChainId[]>(
             {
                 method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    override supportedEntryPoints(initial?: EVMConnectionOptions) {
-        return this.Request.request<string[]>(
-            {
-                method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
                 params: [],
             },
             initial,
@@ -529,7 +500,8 @@ export class ConnectionAPI
     }
 }
 
-export const createConnection = createConnectionCreator<NetworkPluginID.PLUGIN_EVM>(
+export const createConnection = createConnectionCreator(
+    NetworkPluginID.PLUGIN_EVM,
     (initial) => new ConnectionAPI(initial),
     isValidChainId,
     new ConnectionOptionsAPI(),

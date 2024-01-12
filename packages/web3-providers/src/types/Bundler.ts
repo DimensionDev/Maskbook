@@ -19,8 +19,6 @@ export namespace BundlerAPI {
         getSupportedChainId(): Promise<ChainId>
         /** Get all supported entry contracts. */
         getSupportedEntryPoints(chainId: ChainId): Promise<string[]>
-        /** Simulate a user operation. */
-        simulateUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<Simulation>
         /** Send a user operation. */
         sendUserOperation(chainId: ChainId, userOperation: UserOperation): Promise<string>
     }

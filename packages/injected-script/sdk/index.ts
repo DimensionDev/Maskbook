@@ -59,9 +59,10 @@ export function hookInputUploadOnce(
 }
 
 if (typeof location === 'object' && location.protocol.includes('extension')) {
-    console.warn(
-        'This package is not expected to be imported in background script or the extension script. Please check your code.',
-    )
+    if (location.href.includes('background')) {
+        throw new Error('This package is not expected to be imported in background script. Please check your code.')
+    }
+    console.warn('This package is not expected to be imported in the extension script. Please check your code.')
 }
 
 globalThis.document?.addEventListener?.(CustomEventId, (e) => {

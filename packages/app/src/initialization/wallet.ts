@@ -8,23 +8,31 @@ async function reject(): Promise<never> {
 }
 
 const WalletIO: WalletAPI.IOContext = {
-    wallets: EMPTY_ARRAY,
-    hasPaymentPassword: reject,
-    openPopupWindow: reject,
-    openWalletConnectDialog: async (uri: string) => {
-        await WalletConnectQRCodeModal.openAndWaitForClose({
-            uri,
-        })
+    MaskWalletContext: {
+        wallets: EMPTY_ARRAY,
+        addWallet: reject,
+        allPersonas: EMPTY_ARRAY,
+        disconnectAllWalletsFromOrigin: reject,
+        removeWallet: reject,
+        renameWallet: reject,
+        resetAllWallets: reject,
+        sdk_grantEIP2255Permission: reject,
+        selectMaskWalletAccount: reject,
     },
-    closeWalletConnectDialog: () => {
-        WalletConnectQRCodeModal.close()
+    MessageContext: {
+        hasPaymentPassword: reject,
+        openPopupWindow: reject,
+        send: reject,
     },
-    sdk_grantEIP2255Permission: reject,
-    disconnectAllWalletsFromOrigin: reject,
-    selectMaskWalletAccount: reject,
-    addWallet: reject,
+    WalletConnectContext: {
+        openWalletConnectDialog: async (uri: string) => {
+            await WalletConnectQRCodeModal.openAndWaitForClose({ uri })
+        },
+        closeWalletConnectDialog: () => {
+            WalletConnectQRCodeModal.close()
+        },
+    },
     signWithPersona: reject,
-    send: reject,
 }
 export function initWallet() {
     return setup(WalletIO)

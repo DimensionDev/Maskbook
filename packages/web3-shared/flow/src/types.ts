@@ -27,8 +27,6 @@ export enum NetworkType {
 export enum ProviderType {
     None = 'None',
     Blocto = 'Blocto',
-    Dapper = 'Dapper',
-    Ledger = 'Ledger',
 }
 
 export enum AssetProviderType {

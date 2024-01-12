@@ -212,7 +212,11 @@ export enum EthereumMethodType {
     ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
     ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
+    ETH_GET_FILTER_LOGS = 'eth_getFilterLogs',
+    ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
+    ETH_NEW_FILTER = 'eth_newFilter',
     ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
+    ETH_UNINSTALL_FILTER = 'eth_uninstallFilter',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
@@ -232,6 +236,8 @@ export enum EthereumMethodType {
     ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
     ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
     ETH_SYNCING = 'eth_syncing',
+    ETH_SUBSCRIBE = 'eth_subscribe',
+    ETH_UNSUBSCRIBE = 'eth_unsubscribe',
 
     // EIP-4337
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
@@ -301,7 +307,7 @@ export enum ProviderType {
     OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
-    CustomNetwork = 'CustomNetwork',
+    CustomEvent = 'CustomEvent',
 }
 
 /**

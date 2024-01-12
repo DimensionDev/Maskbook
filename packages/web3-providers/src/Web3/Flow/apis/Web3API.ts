@@ -1,8 +1,9 @@
 import { memoize } from 'lodash-es'
-import { type ChainId, type Web3Provider, createClient } from '@masknet/web3-shared-flow'
+import { type ChainId, createClient } from '@masknet/web3-shared-flow'
 import { FlowConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { FlowWalletProviders } from '../providers/index.js'
 import type { FlowConnectionOptions } from '../types/index.js'
+import { flow } from '../../../Manager/registry.js'
+import type { FlowProvider } from '../state/Provider.js'
 
 const createWeb3SDK = memoize(
     (chainId: ChainId) => createClient(chainId),
@@ -20,12 +21,8 @@ export class FlowWeb3API {
         return createWeb3SDK(options.chainId)
     }
 
-    getWeb3Provider(initial?: FlowConnectionOptions): Web3Provider {
-        throw new Error('Method not implemented.')
-    }
-
     getProviderInstance(initial?: FlowConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
-        return FlowWalletProviders[options.providerType]
+        return (flow.state!.Provider as FlowProvider).providers[options.providerType]
     }
 }

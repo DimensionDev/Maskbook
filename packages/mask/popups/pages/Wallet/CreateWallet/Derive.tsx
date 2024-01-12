@@ -4,7 +4,7 @@ import { defer, timeout } from '@masknet/kit'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
-import { EVMWalletProviders, EVMWeb3 } from '@masknet/web3-providers'
+import { MaskWalletProvider, EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Tooltip, Typography } from '@mui/material'
@@ -69,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 async function pollResult(address: string) {
-    const subscription = EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets
+    const subscription = MaskWalletProvider.subscription.wallets
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
     const [promise, resolve] = defer()
     const unsubscribe = subscription.subscribe(() => {
@@ -103,7 +103,7 @@ const DeriveWallet = memo(function DeriveWallet() {
         try {
             const nextWallet = await Services.Wallet.generateNextDerivationAddress()
             const ens = await NameService?.safeReverse?.(nextWallet, true)
-            const allWallets = EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets.getCurrentValue()
+            const allWallets = MaskWalletProvider.subscription.wallets.getCurrentValue()
             queryClient.invalidateQueries({ queryKey: ['@@mask-wallets'] })
             const name = ens || generateNewWalletName(allWallets)
             const address = await Services.Wallet.deriveWallet(name, mnemonicId)

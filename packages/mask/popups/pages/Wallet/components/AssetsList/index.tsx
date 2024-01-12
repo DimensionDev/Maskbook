@@ -184,7 +184,7 @@ export const AssetsList = memo(function AssetsList() {
         navigate(urlcat(PopupRoutes.TokenDetail, { chainId: asset.chainId, address: asset.address }))
     }, [])
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
-    const isSmartPay = !!useWallet(NetworkPluginID.PLUGIN_EVM)?.owner
+    const isSmartPay = !!useWallet()?.owner
     const filteredAssets = useMemo(() => {
         if (isSmartPay) return assets.filter((x) => x.chainId === ChainId.Matic)
         return assets

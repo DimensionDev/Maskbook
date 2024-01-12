@@ -17,7 +17,6 @@ import {
     type NonFungibleTokenContract,
     isSameAddress,
 } from '@masknet/web3-shared-base'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export interface TokenStorage<ChainId extends number, SchemaType> {
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
@@ -55,7 +54,6 @@ export abstract class TokenState<ChainId extends number, SchemaType> implements 
     >
 
     constructor(
-        protected context: WalletAPI.IOContext,
         protected storage: StorageObject<TokenStorage<ChainId, SchemaType>>,
         protected subscriptions: {
             account?: Subscription<string>

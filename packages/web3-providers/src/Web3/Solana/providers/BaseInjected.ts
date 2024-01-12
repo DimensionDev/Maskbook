@@ -2,7 +2,6 @@ import { isExtensionSiteType, type Account } from '@masknet/shared-base'
 import type { InjectedWalletBridge } from '@masknet/injected-script'
 import { ChainId, type ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
 import { BaseSolanaWalletProvider } from './Base.js'
-import type { WalletAPI } from '../../../entry-types.js'
 
 export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvider {
     protected abstract providerType: ProviderType
@@ -12,12 +11,12 @@ export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvi
         return this.bridge.isReady
     }
 
-    override get readyPromise() {
+    get readyPromise() {
         if (!isExtensionSiteType()) return this.bridge.untilAvailable()
         return Promise.reject(new Error('Not available on extension site.'))
     }
 
-    override async setup(): Promise<void> {
+    setup() {
         this.bridge.on('accountChanged', this.onAccountChanged.bind(this))
         this.bridge.on('chainChanged', this.onChainChanged.bind(this))
         this.bridge.on('connect', this.onConnect.bind(this))
@@ -43,7 +42,7 @@ export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvi
         this.emitter.emit('disconnect', this.providerType)
     }
 
-    override createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>) {
+    private createWeb3Provider() {
         if (!this.bridge) throw new Error('Failed to detect in-page provider.')
         return this.bridge as unknown as Web3Provider
     }

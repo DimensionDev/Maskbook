@@ -7,7 +7,6 @@ import {
     type SchemaType,
     ChainId,
     type Web3,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -50,8 +49,7 @@ export class FlowConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     constructor(options?: FlowConnectionOptions) {
@@ -64,10 +62,6 @@ export class FlowConnectionAPI
 
     getWeb3(initial?: FlowConnectionOptions) {
         return this.Web3.getWeb3(initial)
-    }
-
-    getWeb3Provider(initial?: FlowConnectionOptions) {
-        return this.Web3.getWeb3Provider(initial)
     }
 
     async getBalance(address: string, initial?: FlowConnectionOptions): Promise<string> {
@@ -262,16 +256,6 @@ export class FlowConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType,
-        initial?: FlowConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
     approveAllNonFungibleTokens(
         address: string,
         recipient: string,
@@ -323,24 +307,6 @@ export class FlowConnectionAPI
         const signed = first(await web3.currentUser.signUserMessage(toHex(data)))
         if (!signed) throw new Error('Failed to sign message.')
         return signed.signature
-    }
-
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: FlowConnectionOptions,
-    ): Promise<boolean> {
-        const options = this.ConnectionOptions.fill(initial)
-        const web3 = this.getWeb3(options)
-        if (!options.account) throw new Error('No account found.')
-        return web3.verifyUserSignatures(message, [
-            {
-                addr: options.account,
-                keyId: 1,
-                signature,
-            },
-        ])
     }
 
     createAccount(initial?: FlowConnectionOptions): Account<ChainId> {

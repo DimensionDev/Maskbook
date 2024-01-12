@@ -13,9 +13,8 @@ type T = [UseInfiniteQueryResult, InfiniteData<never>]
 /**
  * Blocked tokens would be filtered out
  */
-export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+export function useNonFungibleAssets<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: HubOptions<T>,
 ) {
     const { account, chainId } = useChainContext<T>({ account: options?.account })

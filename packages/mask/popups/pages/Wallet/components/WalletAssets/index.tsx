@@ -94,7 +94,7 @@ const StyledTabList = styled(TabList)`
 export const WalletAssets = memo(function WalletAssets() {
     const navigate = useNavigate()
     const { chainId } = useChainContext()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
 
     const handleAdd = useCallback(
         (assetTab: WalletAssetTabs) => navigate(`${PopupRoutes.AddToken}/${chainId}/${assetTab}`),

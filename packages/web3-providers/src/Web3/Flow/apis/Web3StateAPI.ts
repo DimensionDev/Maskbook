@@ -31,7 +31,7 @@ export async function createFlowState(context: WalletAPI.IOContext): Promise<Web
     ])
 
     const state: Web3State = lazyObject({
-        Provider: () => new Provider.FlowProvider(context, provider),
+        Provider: () => new Provider.FlowProvider(context.signWithPersona, provider),
         AddressBook: () => new AddressBook.FlowAddressBook(address),
         IdentityService: () => new IdentityService.FlowIdentityService(),
         Settings: () => new Settings.FlowSettings(settings),

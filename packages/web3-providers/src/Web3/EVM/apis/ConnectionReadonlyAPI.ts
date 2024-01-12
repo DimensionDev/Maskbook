@@ -5,7 +5,6 @@ import {
     AddressType,
     SchemaType,
     type ChainId,
-    type Web3Provider,
     type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
@@ -86,8 +85,7 @@ export class EVMConnectionReadonlyAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     static Default = new EVMConnectionReadonlyAPI()
@@ -164,16 +162,6 @@ export class EVMConnectionReadonlyAPI
         address: string,
         recipient: string,
         amount: string,
-        initial?: EVMConnectionOptions,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema: SchemaType,
         initial?: EVMConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -754,15 +742,6 @@ export class EVMConnectionReadonlyAPI
         throw new Error('Method not implemented.')
     }
 
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: EVMConnectionOptions,
-    ): Promise<boolean> {
-        throw new Error('Method not implemented.')
-    }
-
     async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
@@ -772,10 +751,6 @@ export class EVMConnectionReadonlyAPI
     }
 
     supportedChainIds(initial?: EVMConnectionOptions): Promise<ChainId[]> {
-        throw new Error('Method not implemented.')
-    }
-
-    supportedEntryPoints(initial?: EVMConnectionOptions): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
 

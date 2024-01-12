@@ -10,7 +10,7 @@ export class NextIDStorage implements StorageAPI.Storage {
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
         private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private signWithPersona?: WalletAPI.IOContext['signWithPersona'],
+        private signWithPersona?: WalletAPI.SignWithPersona,
     ) {
         if (typeof this.signerOrPublicKey === 'string') {
             this.publicKeyAsHex = this.signerOrPublicKey

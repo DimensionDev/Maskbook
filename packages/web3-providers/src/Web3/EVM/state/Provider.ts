@@ -11,8 +11,6 @@ import {
     isValidAddress,
     NetworkType,
     ProviderType,
-    type Web3,
-    type Web3Provider,
     isValidChainId,
     getInvalidChainId,
     getDefaultChainId,
@@ -20,24 +18,32 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { EVMWalletProviders } from '../providers/index.js'
+import { createEVMWalletProviders } from '../providers/index.js'
 import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import type { BaseHostedStorage } from '../providers/BaseHosted.js'
+import type { EIP4337ProviderStorage } from '../providers/BaseContractWallet.js'
 
-export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(context: WalletAPI.IOContext, storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>) {
-        super(context, storage)
+export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType> {
+    constructor(
+        context: WalletAPI.IOContext,
+        storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
+        hostedProviderStorage: BaseHostedStorage,
+        eip4337Storage: EIP4337ProviderStorage,
+    ) {
+        super(context.signWithPersona, storage)
+        this.providers = createEVMWalletProviders(context, hostedProviderStorage, eip4337Storage)
         this.init()
     }
-    protected providers = EVMWalletProviders
-    protected override isValidAddress = isValidAddress
-    protected override isValidChainId = isValidChainId
-    protected override isSameAddress = isSameAddress
-    protected override getInvalidChainId = getInvalidChainId
-    protected override getDefaultNetworkType = getDefaultNetworkType
-    protected override getDefaultProviderType = getDefaultProviderType
-    protected override getDefaultChainId = getDefaultChainId
-    protected override getNetworkTypeFromChainId(chainId: ChainId) {
+    protected providers
+    protected isValidAddress = isValidAddress
+    protected isValidChainId = isValidChainId
+    protected isSameAddress = isSameAddress
+    protected getInvalidChainId = getInvalidChainId
+    protected getDefaultNetworkType = getDefaultNetworkType
+    protected getDefaultProviderType = getDefaultProviderType
+    protected getDefaultChainId = getDefaultChainId
+    protected getNetworkTypeFromChainId(chainId: ChainId) {
         return EVMChainResolver.networkType(chainId) ?? NetworkType.Ethereum
     }
 

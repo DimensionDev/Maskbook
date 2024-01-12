@@ -28,7 +28,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
 
                 try {
                     await Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
-                        if (!context.writeable) return
+                        if (!context.writable) return
                         try {
                             switch (context.method) {
                                 case EthereumMethodType.MASK_LOGIN:

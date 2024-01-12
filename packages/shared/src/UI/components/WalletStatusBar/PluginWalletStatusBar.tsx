@@ -73,7 +73,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
 
         const { pluginID } = useNetworkContext()
         const { account, chainId, providerType } = useChainContext()
-        const wallet = useWallet(pluginID)
+        const wallet = useWallet()
         const providerDescriptor = useProviderDescriptor()
         const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
         const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)

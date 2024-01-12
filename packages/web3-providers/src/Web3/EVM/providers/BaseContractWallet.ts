@@ -1,50 +1,38 @@
 import { delay } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, InMemoryStorages, NetworkPluginID, type StorageItem } from '@masknet/shared-base'
+import { ECKeyIdentifier, type StorageItem } from '@masknet/shared-base'
 import { type ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
-import { BaseHostedProvider } from './BaseHosted.js'
+import { BaseHostedProvider, type BaseHostedStorage } from './BaseHosted.js'
 import * as SmartPayBundler from /* webpackDefer: true */ '../../../SmartPay/index.js'
-import type { BundlerAPI, WalletAPI } from '../../../entry-types.js'
+import type { BundlerAPI } from '../../../entry-types.js'
 
+export type EIP4337ProviderStorage = StorageItem<{
+    account: string
+    identifier: string
+}>
 /**
  * EIP-4337 compatible smart contract based wallet.
  */
 export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
     protected Bundler: BundlerAPI.Provider = SmartPayBundler.SmartPayBundler
 
-    private ownerStorage:
-        | StorageItem<{
-              account: string
-              identifier: string
-          }>
-        | undefined
-
-    constructor(protected override providerType: ProviderType) {
-        super(providerType)
+    constructor(
+        providerType: ProviderType,
+        baseHostedStorage: BaseHostedStorage,
+        private ownerStorage: EIP4337ProviderStorage,
+    ) {
+        super(providerType, baseHostedStorage)
     }
 
-    override async setup(context?: WalletAPI.IOContext) {
-        await super.setup(context)
+    override setup() {
+        super.setup()
 
-        this.ownerStorage = InMemoryStorages.Web3.createSubScope(
-            `${NetworkPluginID.PLUGIN_EVM}_${this.providerType}_owner`,
-            {
-                value: {
-                    account: this.options.getDefaultAccount(),
-                    // empty string means EOA signer
-                    identifier: '',
-                },
-            },
-        )?.storage.value
-
-        await this.ownerStorage?.initializedPromise
-
-        this.subscription.wallets?.subscribe(async () => {
+        this.subscription.wallets.subscribe(async () => {
             if (!this.hostedAccount) return
-            const target = this.wallets?.find((x) => isSameAddress(x.address, this.hostedAccount))
+            const target = this.wallets.find((x) => isSameAddress(x.address, this.hostedAccount))
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (target?.owner) {
-                await this.ownerStorage?.setValue({
+                await this.ownerStorage.setValue({
                     account: target.owner,
                     identifier: target.identifier ?? '',
                 })
@@ -56,11 +44,11 @@ export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
     }
 
     get ownerAccount() {
-        return this.ownerStorage?.value.account ?? this.options.getDefaultAccount()
+        return this.ownerStorage.value.account
     }
 
     get ownerIdentifier() {
-        const identifier = ECKeyIdentifier.from(this.ownerStorage?.value.identifier).unwrapOr(undefined)
+        const identifier = ECKeyIdentifier.from(this.ownerStorage.value.identifier).unwrapOr(undefined)
         return identifier?.rawPublicKey === 'EMPTY' ? undefined : identifier
     }
 
@@ -68,8 +56,8 @@ export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
         await super.switchAccount(account)
 
         if (!owner || !isValidAddress(owner.account)) {
-            await this.ownerStorage?.setValue({
-                account: this.options.getDefaultAccount(),
+            await this.ownerStorage.setValue({
+                account: this.getDefaultAccount(),
                 identifier: owner?.identifier?.toText() ?? '',
             })
         } else {
@@ -79,7 +67,7 @@ export abstract class BaseEIP4337WalletProvider extends BaseHostedProvider {
             // ensure account switching is successful
             if (!isSameAddress(this.hostedAccount, account)) return
 
-            await this.ownerStorage?.setValue({
+            await this.ownerStorage.setValue({
                 account: owner.account,
                 identifier: owner.identifier?.toText() ?? '',
             })

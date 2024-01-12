@@ -13,24 +13,33 @@ import {
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
-import { BaseEIP4337WalletProvider } from './BaseContractWallet.js'
+import { BaseEIP4337WalletProvider, type EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
 import * as SmartPayOwner from /* webpackDefer: true */ '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
+import type { BaseHostedStorage } from './BaseHosted.js'
 
+export let MaskWalletProviderInstance: MaskWalletProvider
+export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
+    MaskWalletProviderInstance = mask
+}
 export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     private ref = new ValueRef<Wallet[]>(EMPTY_LIST)
     private walletsSubscription = createSubscriptionFromValueRef(this.ref)
     protected override async io_renameWallet(address: string, name: string): Promise<void> {
-        await this.context?.MaskWalletContext?.renameWallet(address, name)
+        await this.context.renameWallet(address, name)
     }
-    constructor() {
-        super(ProviderType.MaskWallet)
+    constructor(
+        private context: WalletAPI.MaskWalletIOContext,
+        walletStorage: BaseHostedStorage,
+        eip4337Storage: EIP4337ProviderStorage,
+    ) {
+        super(ProviderType.MaskWallet, walletStorage, eip4337Storage)
     }
 
-    async updateImmediately() {
-        const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
+    private async updateImmediately() {
+        const wallets = this.context.wallets.getCurrentValue()
 
         // update local wallets immediately
         this.ref.value = sortBy(
@@ -39,12 +48,12 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         )
     }
 
-    async update() {
+    private async update() {
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.context?.MaskWalletContext?.allPersonas.getCurrentValue() ?? EMPTY_LIST
-        const wallets = this.context?.wallets.getCurrentValue() ?? EMPTY_LIST
+        const allPersonas = this.context.allPersonas.getCurrentValue()
+        const wallets = this.context.wallets.getCurrentValue()
 
         const chainId = await this.Bundler.getSupportedChainId()
         const accounts = await SmartPayOwner.SmartPayOwner.getAccountsByOwners(chainId, [
@@ -91,10 +100,10 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         return this.subscription.wallets.getCurrentValue()
     }
 
-    override async setup(context?: WalletAPI.IOContext) {
-        await super.setup(context)
+    override async setup() {
+        super.setup()
 
-        this.subscription?.wallets?.subscribe(async () => {
+        this.subscription.wallets.subscribe(async () => {
             const primaryWallet = first(this.wallets)
             const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
@@ -112,14 +121,14 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
 
         const debounceUpdate = debounce(this.update.bind(this), 1000)
 
-        this.context?.wallets.subscribe(debounceUpdate)
-        this.context?.MaskWalletContext?.allPersonas.subscribe(debounceUpdate)
+        this.context.wallets.subscribe(debounceUpdate)
+        this.context.allPersonas.subscribe(debounceUpdate)
         CrossIsolationMessages.events.renameWallet.on(debounceUpdate)
     }
 
     override async addWallet(wallet: Wallet): Promise<void> {
         if (!this.hostedAccount && !this.wallets.length) await this.walletStorage?.account.setValue(wallet.address)
-        await this.context?.addWallet(ImportSource.WalletRPC, wallet.address, wallet)
+        await this.context.addWallet(ImportSource.WalletRPC, wallet.address, wallet)
     }
 
     override async removeWallet(address: string, password?: string | undefined): Promise<void> {
@@ -127,21 +136,21 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         if (scWallets.length) await super.removeWallets(scWallets)
         if (isSameAddress(this.hostedAccount, address)) await this.walletStorage?.account.setValue('')
         await super.removeWallet(address, password)
-        await this.context?.MaskWalletContext?.removeWallet(address, password)
+        await this.context.removeWallet(address, password)
     }
 
     override async removeWallets(wallets: Wallet[]): Promise<void> {
         await super.removeWallets(wallets)
         for (const wallet of wallets) {
             if (isSameAddress(this.hostedAccount, wallet.address)) await this.walletStorage?.account.setValue('')
-            if (!wallet.owner) await this.context?.MaskWalletContext?.removeWallet(wallet.address)
+            if (!wallet.owner) await this.context.removeWallet(wallet.address)
         }
     }
 
-    override async resetAllWallets(): Promise<void> {
+    async resetAllWallets(): Promise<void> {
         await super.removeWallets(this.wallets)
         await this.walletStorage?.account.setValue('')
-        await this.context?.MaskWalletContext?.resetAllWallets()
+        await this.context.resetAllWallets()
     }
 
     override async renameWallet(address: string, name: string) {
@@ -165,7 +174,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 await this.switchChain(chainId)
 
                 if (externalRequestID) {
-                    await this.context?.sdk_grantEIP2255Permission(externalRequestID, [address])
+                    await this.context.sdk_grantEIP2255Permission(externalRequestID, [address])
                 }
 
                 return {
@@ -185,7 +194,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
             )
 
-        const account = first(await this.context?.selectMaskWalletAccount(chainId, address, location.origin))
+        const account = first(await this.context.selectMaskWalletAccount(chainId, address, location.origin))
         if (!account) throw new Error(`Failed to connect to ${EVMChainResolver.chainFullName(chainId)}`)
 
         // switch account
@@ -210,7 +219,7 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
     }
 
     override async disconnect() {
-        await this.context?.disconnectAllWalletsFromOrigin(location.origin, 'any')
+        await this.context.disconnectAllWalletsFromOrigin(location.origin, 'any')
     }
 
     override async request<T>(

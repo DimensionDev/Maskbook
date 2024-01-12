@@ -1,5 +1,4 @@
 import { BigNumber } from 'bignumber.js'
-import { isUndefined, omitBy } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { AbiItem } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
@@ -276,24 +275,6 @@ export class UserTransaction {
         return web3_utils.toHex(callGas)
     }
 
-    async signTransaction(web3: Web3, signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<string> {
-        const transaction = UserTransaction.toTransaction(this.chainId, this.userOperation)
-        if (!transaction.from || !transaction.to) throw new Error('Invalid transaction.')
-
-        return signer.signTransaction(
-            omitBy(
-                {
-                    ...transaction,
-                    to: transaction.from,
-                    data: this.createWalletContract(web3, transaction.from)
-                        .methods.exec(transaction.to, transaction.value ?? '0', transaction.data ?? '0x')
-                        .encodeABI(),
-                },
-                isUndefined,
-            ),
-        )
-    }
-
     async signUserOperation(signer: Signer<ECKeyIdentifier> | Signer<string>): Promise<UserOperation> {
         const { nonce, callGas, verificationGas, preVerificationGas, maxFeePerGas, maxPriorityFeePerGas } =
             this.userOperation
@@ -345,10 +326,6 @@ export class UserTransaction {
                 :   DEFAULT_USER_OPERATION.paymasterData,
             ...userOperation,
         }
-    }
-
-    static fillTransaction(chainId: ChainId, transaction: Transaction) {
-        throw new Error('Method not implemented.')
     }
 
     static toUserOperation(chainId: ChainId, transaction: Transaction): UserOperation {

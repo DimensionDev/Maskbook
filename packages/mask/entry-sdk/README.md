@@ -43,23 +43,23 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 - [x] personal_sign
 - [x] eth_sendTransaction
 - [ ] ~~eth_signTransaction: MetaMask refuse to add, we should follow them. <https://github.com/MetaMask/metamask-extension/issues/3475>~~
-- [ ] eth_sendRawTransaction
+- [x] eth_sendRawTransaction
 
 ## ETH methods
 
 ## Subscribe to events (unknown specification)
 
-- [ ] eth_subscribe
-- [ ] eth_unsubscribe
+- [x] eth_subscribe
+- [x] eth_unsubscribe
 
 ## Filters
 
-- [ ] eth_getFilterChanges
-- [ ] eth_getFilterLogs
-- [ ] eth_newBlockFilter
-- [ ] eth_newFilter
-- [ ] eth_newPendingTransactionFilter
-- [ ] eth_uninstallFilter
+- [x] eth_getFilterChanges
+- [x] eth_getFilterLogs
+- [x] eth_newBlockFilter
+- [x] eth_newFilter
+- [ ] eth_newPendingTransactionFilter (not supported by infura)
+- [x] eth_uninstallFilter
 
 ## Deprecated methods
 

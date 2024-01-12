@@ -48,7 +48,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const navigate = useNavigate()
     const { closeModal } = useActionModal()
     const { smartPayChainId } = PopupContext.useContainer()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const wallets = useWallets()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 

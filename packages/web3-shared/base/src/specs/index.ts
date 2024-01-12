@@ -1112,7 +1112,7 @@ export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** Detect if a provider is ready */
     isReady: (providerType: ProviderType) => boolean
     /** Wait until a provider ready */
-    untilReady: (providerType: ProviderType) => Promise<void>
+    untilReady: (providerType: ProviderType) => undefined | Promise<void>
 
     /** Connect with the provider and set chain id. */
     connect: (

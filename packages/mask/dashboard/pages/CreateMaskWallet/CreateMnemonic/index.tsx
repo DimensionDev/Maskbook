@@ -9,7 +9,7 @@ import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
-import { EVMWalletProviders, EVMWeb3 } from '@masknet/web3-providers'
+import { MaskWalletProvider, EVMWeb3 } from '@masknet/web3-providers'
 import { generateNewWalletName, isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -167,7 +167,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 async function pollResult(address: string) {
-    const subscription = EVMWalletProviders[ProviderType.MaskWallet].subscription.wallets
+    const subscription = MaskWalletProvider.subscription.wallets
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
     const [promise, resolve] = defer()
     const unsubscribe = subscription.subscribe(() => {

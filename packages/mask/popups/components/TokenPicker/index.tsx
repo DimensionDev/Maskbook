@@ -60,7 +60,7 @@ export const TokenPicker = memo(function TokenPicker({
         return assets.filter((x) => x.chainId === sidebarChainId)
     }, [assets, sidebarChainId])
 
-    const isSmartPay = !!useWallet(NetworkPluginID.PLUGIN_EVM)?.owner
+    const isSmartPay = !!useWallet()?.owner
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const filteredNetworks = useMemo(() => {
         if (isSmartPay) return networks.filter((x) => x.chainId === ChainId.Matic && !x.isCustomized)

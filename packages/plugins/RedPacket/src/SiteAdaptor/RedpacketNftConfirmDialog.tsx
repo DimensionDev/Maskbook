@@ -159,7 +159,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList, senderName, gasOption } = props
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!

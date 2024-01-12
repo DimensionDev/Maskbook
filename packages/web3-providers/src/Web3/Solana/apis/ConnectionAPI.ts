@@ -7,7 +7,6 @@ import {
     type TransactionDetailed,
     type TransactionReceipt,
     type Block,
-    type Web3Provider,
     type Web3,
     isNativeTokenAddress,
     getNativeTokenAddress,
@@ -53,8 +52,7 @@ export class SolanaConnectionAPI
             TransactionDetailed,
             TransactionSignature,
             Block,
-            Web3,
-            Web3Provider
+            Web3
         >
 {
     constructor(options?: SolanaConnectionOptions) {
@@ -89,16 +87,6 @@ export class SolanaConnectionAPI
         address: string,
         recipient: string,
         amount: string,
-        initial?: SolanaConnectionOptions | undefined,
-    ): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    approveNonFungibleToken(
-        address: string,
-        recipient: string,
-        tokenId: string,
-        schema?: SchemaType | undefined,
         initial?: SolanaConnectionOptions | undefined,
     ): Promise<string> {
         throw new Error('Method not implemented.')
@@ -151,12 +139,8 @@ export class SolanaConnectionAPI
         await solana.state?.Provider?.disconnect(options.providerType)
     }
 
-    getWeb3(initial?: SolanaConnectionOptions) {
-        return this.Web3.getWeb3(initial)
-    }
-
-    getWeb3Provider(initial?: SolanaConnectionOptions) {
-        return this.Web3.getWeb3Provider(initial)
+    getWeb3(initial?: SolanaConnectionOptions): never {
+        throw new Error('Method not implemented.')
     }
 
     async getBalance(account: string, initial?: SolanaConnectionOptions) {
@@ -401,15 +385,6 @@ export class SolanaConnectionAPI
 
     async signMessage(type: string, message: string, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signMessage(message)
-    }
-
-    async verifyMessage(
-        type: string,
-        message: string,
-        signature: string,
-        initial?: SolanaConnectionOptions,
-    ): Promise<boolean> {
-        return this.Web3.getProviderInstance(initial).verifyMessage(message, signature)
     }
 
     async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {

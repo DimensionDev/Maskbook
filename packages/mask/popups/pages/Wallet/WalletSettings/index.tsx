@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { ConfirmDialog } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, PopupModalRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupModalRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -34,7 +34,7 @@ const WalletSettings = memo(() => {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
+    const wallet = useWallet()
     const allWallets = useWallets()
 
     const handleSwitchWallet = useCallback(() => {

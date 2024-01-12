@@ -19,7 +19,7 @@ class CustomNetworkAPI implements Middleware<ConnectionContext> {
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const customNetwork = this.networks?.find((x) => x.isCustomized && isSameURL(x.rpcUrl, context.providerURL))
-        if (!customNetwork || context.risky || !context.writeable || isMaskOnlyMethodType(context.method)) {
+        if (!customNetwork || context.risky || !context.writable || isMaskOnlyMethodType(context.method)) {
             await next()
             return
         }

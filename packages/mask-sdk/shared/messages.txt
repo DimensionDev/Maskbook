@@ -22,3 +22,6 @@
 4200    The requested method is not supported by this Ethereum provider
 4900    The provider is disconnected from all chains
 4901    The provider is disconnected from the specified chain
+
+# Our special behavior
+-32601  The method "eth_subscribe" is only available on the mainnet.
