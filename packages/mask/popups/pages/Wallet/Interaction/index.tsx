@@ -106,7 +106,7 @@ const Interaction = memo(function Interaction() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    const [index, setIndex] = useState(0)
+    const [messageIndex, setMessageIndex] = useState(0)
     const [approveAmount, setApproveAmount] = useState('')
     const [expand, setExpand] = useState(false)
     const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
@@ -119,10 +119,7 @@ const Interaction = memo(function Interaction() {
     const { Message, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const source = params.get('source')
-    const currentRequest = useMemo(() => {
-        if (!messages?.length) return
-        return messages[index]
-    }, [messages, index])
+    const currentRequest = messages[messageIndex]
 
     const message = useMemo(() => {
         if (!currentRequest || !signRequest.includes(currentRequest.request.arguments.method)) return
@@ -166,7 +163,7 @@ const Interaction = memo(function Interaction() {
 
                 const parameters = abiCoder.decodeParameters(
                     approveParametersType,
-                    transaction?.formattedTransaction._tx.data.slice(10),
+                    transaction.formattedTransaction._tx.data.slice(10),
                 )
 
                 const parametersString = abiCoder
@@ -267,7 +264,7 @@ const Interaction = memo(function Interaction() {
     }, [])
 
     const content = useMemo(() => {
-        if (currentRequest && signRequest.includes(currentRequest?.request.arguments.method)) {
+        if (currentRequest && signRequest.includes(currentRequest.request.arguments.method)) {
             return <SignRequestInfo message={message} source={source} />
         }
 
@@ -310,11 +307,11 @@ const Interaction = memo(function Interaction() {
         setExpand(false)
         setApproveAmount('')
         setPaymentToken('')
-    }, [index])
+    }, [messageIndex])
 
     useEffect(() => {
         if (!messages.length) return
-        setIndex(messages.length - 1)
+        setMessageIndex(messages.length - 1)
     }, [messages.length])
 
     // update default payment token from transaction
@@ -344,7 +341,7 @@ const Interaction = memo(function Interaction() {
                 overflow="auto"
                 data-hide-scrollbar>
                 {content}
-                {currentRequest && !signRequest.includes(currentRequest?.request.arguments.method) ?
+                {currentRequest && !signRequest.includes(currentRequest.request.arguments.method) ?
                     <Box
                         display="flex"
                         justifyContent="center"
@@ -409,15 +406,15 @@ const Interaction = memo(function Interaction() {
                         <Box display="flex" alignItems="center">
                             <Icons.ArrowDrop
                                 size={16}
-                                className={cx(classes.left, index === 0 ? classes.disabled : undefined)}
+                                className={cx(classes.left, messageIndex === 0 ? classes.disabled : undefined)}
                                 onClick={() => {
-                                    if (index === 0) return
-                                    setIndex(index - 1)
+                                    if (messageIndex === 0) return
+                                    setMessageIndex(messageIndex - 1)
                                 }}
                             />
                             <Typography className={classes.text}>
                                 {t.popups_wallet_multiple_requests({
-                                    index: String(index + 1),
+                                    index: String(messageIndex + 1),
                                     total: String(messages.length),
                                 })}
                             </Typography>
@@ -425,11 +422,11 @@ const Interaction = memo(function Interaction() {
                                 size={16}
                                 className={cx(
                                     classes.right,
-                                    index === messages.length - 1 ? classes.disabled : undefined,
+                                    messageIndex === messages.length - 1 ? classes.disabled : undefined,
                                 )}
                                 onClick={() => {
-                                    if (index === messages.length - 1) return
-                                    setIndex(index + 1)
+                                    if (messageIndex === messages.length - 1) return
+                                    setMessageIndex(messageIndex + 1)
                                 }}
                             />
                         </Box>
