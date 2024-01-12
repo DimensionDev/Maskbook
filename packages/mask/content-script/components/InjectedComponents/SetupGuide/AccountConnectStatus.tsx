@@ -90,7 +90,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
 
     if (connected)
         return (
-            <Frame>
+            <Frame {...rest}>
                 <Typography className={classes.text}>
                     <Trans
                         i18nKey="connected_already"

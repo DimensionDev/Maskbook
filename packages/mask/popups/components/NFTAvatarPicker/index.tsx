@@ -74,7 +74,10 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 
-    const handleChangeWallet = useCallback(() => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }), [])
+    const handleChangeWallet = useCallback(
+        () => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }, { replace: true }),
+        [],
+    )
 
     const handleChange = useCallback((address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
         setAccount(address)
