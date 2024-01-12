@@ -72,9 +72,15 @@ export function useMnemonicWordsPuzzle() {
         [puzzleAnswer, words, setIsMatch],
     )
 
+    const refreshCallback = useCallback(() => {
+        wordsRetry()
+        setIsMatch(undefined)
+        setPuzzleAnswer({})
+    }, [wordsRetry])
+
     return {
         words,
-        refreshCallback: wordsRetry,
+        refreshCallback,
         puzzleWordList,
         answerCallback,
         puzzleAnswer,

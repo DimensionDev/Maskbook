@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     primary: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
+        lineHeight: '18px',
     },
     second: {
         display: 'flex',
@@ -74,6 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         maxHeight: 200,
         overflow: 'auto',
+        marginBottom: theme.spacing(1.5),
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 18,
@@ -93,6 +95,13 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(0.5),
         borderRadius: 4,
         lineHeight: '12px',
+    },
+    item: {
+        padding: theme.spacing(1.5),
+        borderRadius: 8,
+    },
+    listItemText: {
+        margin: 0,
     },
 }))
 
@@ -146,6 +155,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 {profiles?.map((profile) => {
                     return (
                         <ListItemButton
+                            className={classes.item}
                             key={profile.id}
                             onClick={() => {
                                 if (currentProfile.id === profile.id) return
@@ -162,7 +172,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                 :   <Icons.Lens size={36} className={classes.avatar} />}
                             </ListItemIcon>
                             <ListItemText
-                                classes={{ primary: classes.primary }}
+                                classes={{ primary: classes.primary, root: classes.listItemText }}
                                 primary={profile.metadata?.displayName}
                                 secondary={
                                     <div className={classes.second}>
