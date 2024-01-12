@@ -1,6 +1,5 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
-import { BigNumber } from 'bignumber.js'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
 import {
     type AddressType,
@@ -23,7 +22,7 @@ import {
     ContractTransaction,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { TransactionStatusType, plus } from '@masknet/web3-shared-base'
 import { evm } from '../../../Manager/registry.js'
 import { EVMRequestAPI } from './RequestAPI.js'
 import { EVMContractAPI } from './ContractAPI.js'
@@ -522,12 +521,8 @@ export class ConnectionAPI
                         to: transaction.from,
                         data: '0x0',
                         value: '0x0',
-                        nonce:
-                            transaction.nonce ?
-                                web3_utils.toHex(new BigNumber(transaction.nonce).plus(1).toString())
-                            :   undefined,
                         // There are times when cancel transaction requires more gas
-                        gas: transaction.gas ? new BigNumber(transaction.gas).plus(1000).toString() : undefined,
+                        gas: transaction.gas ? web3_utils.toHex(plus(transaction.gas, 1000).toFixed(0)) : undefined,
                     },
                 ],
             },
