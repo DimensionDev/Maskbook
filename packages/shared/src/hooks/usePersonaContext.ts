@@ -36,6 +36,7 @@ function usePersonaInformation(
 function usePersonaContext(initialState?: {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     queryPersonaAvatarLastUpdateTime?: (identifier?: ECKeyIdentifier) => Promise<Date | undefined>
+    queryPersonaAvatar?: (identifier: ECKeyIdentifier | undefined) => Promise<string | undefined>
 }) {
     const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
@@ -49,7 +50,8 @@ function usePersonaContext(initialState?: {
         enabled: !!currentPersona,
         queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
         queryFn: async (): Promise<string | null> => {
-            if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona!.avatar || null
+            if (!initialState?.queryPersonaAvatarLastUpdateTime || !initialState.queryPersonaAvatar)
+                return currentPersona!.avatar || null
 
             const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona!.identifier)
             const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
@@ -59,9 +61,9 @@ function usePersonaContext(initialState?: {
                 if (remote && lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
                     return remote.imageUrl
                 }
-                return currentPersona!.avatar || null
+                return (await initialState.queryPersonaAvatar(currentPersona?.identifier)) || null
             } catch {
-                return currentPersona!.avatar || null
+                return (await initialState.queryPersonaAvatar(currentPersona?.identifier)) || null
             }
         },
     })
