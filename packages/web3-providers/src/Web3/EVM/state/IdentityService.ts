@@ -154,19 +154,26 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
     /** Read a social address from NextID. */
     private async getSocialAddressesFromNextID(identity: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identity)
-        return compact(
-            listOfAddress.map((x) =>
-                this.createSocialAddress(
-                    SocialAddressType.NEXT_ID,
-                    x.identity,
-                    '',
-                    undefined,
-                    x.latest_checked_at,
-                    x.created_at,
+        try {
+            const listOfAddress = await getWalletAddressesFromNextID(identity)
+            return compact(
+                listOfAddress.map((x) =>
+                    this.createSocialAddress(
+                        SocialAddressType.NEXT_ID,
+                        x.identity,
+                        '',
+                        undefined,
+                        x.latest_checked_at,
+                        x.created_at,
+                    ),
                 ),
-            ),
-        )
+            )
+        } catch (err) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Failed to get social address from Next.ID', err)
+            }
+            return []
+        }
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
