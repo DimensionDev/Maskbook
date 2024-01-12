@@ -22,7 +22,7 @@ import {
     ContractTransaction,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType, plus } from '@masknet/web3-shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { evm } from '../../../Manager/registry.js'
 import { EVMRequestAPI } from './RequestAPI.js'
 import { EVMContractAPI } from './ContractAPI.js'
@@ -521,8 +521,6 @@ export class ConnectionAPI
                         to: transaction.from,
                         data: '0x0',
                         value: '0x0',
-                        // There are times when cancel transaction requires more gas
-                        gas: transaction.gas ? web3_utils.toHex(plus(transaction.gas, 1000).toFixed(0)) : undefined,
                     },
                 ],
             },
