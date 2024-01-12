@@ -11,7 +11,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { EVMWeb3, Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE, PersonaContext, type PersonaAvatarData } from '@masknet/shared'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { EVMWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, useChainContext, useWallets } from '@masknet/web3-hooks-base'
 import { NormalHeader, useModalNavigate } from '../../../components/index.js'
 import { PopupModalRoutes, PopupRoutes, SignType } from '@masknet/shared-base'
 import { ProfilePhotoType } from '../../Wallet/type.js'
@@ -80,6 +80,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         ProfilePhotoType.Image,
         ProfilePhotoType.NFT,
     )
+    const wallets = useWallets()
     const [avatarLoaded, setAvatarLoaded] = useState(false)
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -129,7 +130,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                     updateAt: Date.now(),
                 }
                 // Verify Wallet sign with persona
-                if (!bindingWallets.some((x) => isSameAddress(x.identity, account))) {
+                if (bindingWallets.some((x) => isSameAddress(x.identity, account))) {
                     sign = await Services.Identity.signWithPersona(
                         SignType.Message,
                         JSON.stringify(data),
@@ -137,11 +138,13 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                         location.origin,
                         true,
                     )
-                } else {
+                } else if (wallets.some((x) => isSameAddress(x.address, account))) {
                     sign = await EVMWeb3.signMessage('message', JSON.stringify(data), {
                         account,
                         silent: true,
                     })
+                } else {
+                    throw new Error(`Incorrect account: ${account}`)
                 }
 
                 const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
@@ -173,7 +176,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         } catch {
             showSnackbar(t.popups_set_avatar_failed(), { variant: 'error' })
         }
-    }, [file, currentPersona, account, bindingWallets, refreshAvatar, queryClient])
+    }, [file, currentPersona, account, bindingWallets, refreshAvatar, queryClient, JSON.stringify(wallets)])
 
     useTitle(t.popups_profile_photo())
 
