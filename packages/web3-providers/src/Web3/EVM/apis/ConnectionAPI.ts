@@ -1,6 +1,5 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
-import { BigNumber } from 'bignumber.js'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet, NetworkPluginID } from '@masknet/shared-base'
 import {
     type AddressType,
@@ -522,12 +521,6 @@ export class ConnectionAPI
                         to: transaction.from,
                         data: '0x0',
                         value: '0x0',
-                        nonce:
-                            transaction.nonce ?
-                                web3_utils.toHex(new BigNumber(transaction.nonce).plus(1).toString())
-                            :   undefined,
-                        // There are times when cancel transaction requires more gas
-                        gas: transaction.gas ? new BigNumber(transaction.gas).plus(1000).toString() : undefined,
                     },
                 ],
             },
