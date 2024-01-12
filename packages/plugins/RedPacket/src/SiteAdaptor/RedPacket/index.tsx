@@ -99,7 +99,7 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
         },
         words: {
             display: '-webkit-box',
-            WebkitLineClamp: 2,
+            WebkitLineClamp: 3,
             WebkitBoxOrient: 'vertical',
             color: theme.palette.common.white,
             fontSize: 24,
@@ -107,8 +107,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             wordBreak: 'break-all',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            width: '60%',
-            minWidth: 300,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
             },

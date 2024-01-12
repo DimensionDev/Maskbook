@@ -249,7 +249,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                                 <TabPanel
                                     value={tabs.collectibles}
-                                    style={{ padding: 0, height: openNFTConfirmDialog ? 564 : 474 }}>
+                                    style={{ padding: 0, overflow: 'auto', height: openNFTConfirmDialog ? 564 : 474 }}>
                                     <RedPacketERC721Form
                                         openSelectNFTDialog={openSelectNFTDialog}
                                         setOpenSelectNFTDialog={setOpenSelectNFTDialog}

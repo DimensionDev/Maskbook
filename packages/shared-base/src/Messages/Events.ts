@@ -91,6 +91,7 @@ export type CheckSecurityDialogEvent =
 export type ApplicationDialogEvent = {
     open: boolean
     pluginID: string
+    isVerified?: boolean
     selectedPersona?: PersonaInformation
 }
 

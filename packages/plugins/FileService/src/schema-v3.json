@@ -32,7 +32,7 @@
                     "title": "createdAt"
                 },
                 "key": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "title": "key"
                 },
                 "payloadTxID": {

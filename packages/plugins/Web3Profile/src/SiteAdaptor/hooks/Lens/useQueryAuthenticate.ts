@@ -3,7 +3,7 @@ import { isBefore, add } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
-import { lensTokenStorage as storage } from '../../context.js'
+import { lensStorage as storage } from '../../context.js'
 
 export function useQueryAuthenticate(address: string, profileId?: string) {
     const { chainId } = useChainContext()
@@ -20,6 +20,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
             if (!authenticate) return
             // Only reset accessToken
             await storage.accessToken?.setValue({
+                ...storage.accessToken.value,
                 [profileId]: {
                     token: authenticate.accessToken,
                     expireDate: add(new Date(), { minutes: 30 }),
@@ -41,6 +42,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
          */
 
         await storage.accessToken?.setValue({
+            ...storage.accessToken.value,
             [profileId]: {
                 token: authenticate.accessToken,
                 expireDate: add(new Date(), { minutes: 30 }),
@@ -48,6 +50,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
         })
 
         await storage.refreshToken?.setValue({
+            ...storage.refreshToken.value,
             [profileId]: {
                 token: authenticate.refreshToken,
                 expireDate: add(new Date(), { days: 7 }),

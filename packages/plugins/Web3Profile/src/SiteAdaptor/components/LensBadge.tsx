@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { openPopup } from '../emitter.js'
+import { closePopup, openPopup } from '../emitter.js'
 
 const LensIconSizeMap: Record<Plugin.SiteAdaptor.LensSlot, number> = {
     [Plugin.SiteAdaptor.LensSlot.Post]: 18,
@@ -54,6 +54,25 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
             button.removeEventListener('mouseleave', leave)
         }
     }, [accounts, userId])
+
+    useEffect(() => {
+        function hide() {
+            closePopup({
+                popupAnchorEl: buttonRef.current,
+            })
+        }
+        const ob = new IntersectionObserver((entries) => {
+            if (entries[0].intersectionRatio !== 0) return
+            hide()
+        })
+        if (buttonRef.current) {
+            ob.observe(buttonRef.current)
+        }
+        return () => {
+            hide()
+            ob.disconnect()
+        }
+    }, [buttonRef.current])
 
     return (
         <IconButton disableRipple className={classes.badge} ref={buttonRef}>

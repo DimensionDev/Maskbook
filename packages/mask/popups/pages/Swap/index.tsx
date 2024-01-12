@@ -1,13 +1,15 @@
-import { AllProviderTradeContext } from '@masknet/plugin-trader'
+import { AllProviderTradeContext, languages } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
-import { ChainContextProvider, EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { ChainContextProvider, EVMWeb3ContextProvider, useNetwork } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
 import { SwapBox } from './SwapBox/index.js'
+import { NetworkPluginID, PluginID, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -56,16 +58,24 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+// TODO: extract the trader ui code to share and delete this.
+createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
+
 export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useTokenParams()
-    applyMaskColorVars(document.body, Appearance.light)
+
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
+
+    const init = useCallback(() => {
+        applyMaskColorVars(document.body, Appearance.light)
+    }, [])
 
     return (
         <SharedContextProvider>
             <ChainContextProvider chainId={chainId}>
-                <div className={classes.page}>
+                <div className={classes.page} ref={init}>
                     <div className={classes.container}>
                         <header className={classes.header}>
                             <Typography variant="h1" className={classes.title}>
@@ -74,7 +84,7 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <EVMWeb3ContextProvider>
+                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type}>
                                 <AllProviderTradeContext.Provider>
                                     <SwapBox />
                                 </AllProviderTradeContext.Provider>

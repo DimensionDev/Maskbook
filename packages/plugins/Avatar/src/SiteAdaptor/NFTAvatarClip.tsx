@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
 import { keyframes, makeStyles } from '@masknet/theme'
-import { useNFTContainerAtTwitter } from '../hooks/useNFTContainerAtTwitter.js'
 import type { Keyframes } from '@emotion/serialize'
 
 // from twitter page
@@ -41,13 +40,6 @@ const rainbowBorderKeyFrames: Keyframes = keyframes`
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
-    miniBorder: {
-        transform: 'scale(0.94, 0.96) translate(7px, 4px)',
-        strokeWidth: 6,
-        stroke: '#00f8ff',
-        fill: 'none',
-    },
-
     borderPath: {
         transform: 'scale(0.98, 1.035) translate(2px, -3px)',
         strokeWidth: 3,
@@ -212,33 +204,6 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                         text={price}
                     />
                 </g>
-            </g>
-        </svg>
-    )
-}
-
-export function NFTAvatarMiniClip(props: NFTAvatarMiniClipProps) {
-    const { size, viewBoxHeight = ViewBoxHeight, viewBoxWidth = ViewBoxWidth, screenName, className } = props
-    const id = useMemo(() => props.id ?? uuid(), [props.id])
-    const { classes, cx } = useStyles(undefined, { props })
-    const { loading, value: avatarMetadata } = useNFTContainerAtTwitter(screenName)
-
-    if (loading || !avatarMetadata?.address || !avatarMetadata?.token_id) return null
-    return (
-        <svg
-            className={cx(classes.root, className)}
-            width={size}
-            height={size}
-            id={id}
-            viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
-            <defs>
-                <BorderPath id={`${id}-border-path`} />
-            </defs>
-            <clipPath id={`${id}-clip-path`}>
-                <BorderPath id={id} transform={`scale(${size / viewBoxWidth})`} />
-            </clipPath>
-            <g>
-                <use xlinkHref={`#${id}-border-path`} className={cx(classes.rainbowBorder, classes.miniBorder)} />
             </g>
         </svg>
     )

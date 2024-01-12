@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { EmojiAvatar } from '@masknet/shared'
-import { currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
+import { MaskMessages, currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -175,12 +175,11 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const disableVerify = useMemo(() => {
         return !myIdentity?.identifier || !userId ? false : myIdentity.identifier.userId !== userId
     }, [myIdentity, userId])
-
     // Show connect result for the first time.
     const { loading: connecting } = useConnectPersona()
 
     const [, handleVerifyNextID] = useNextIDVerify()
-    const [{ loading: verifying }, onVerify] = useAsyncFn(async () => {
+    const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
         if (!personaInfo) return
         if (!nextIdPlatform) return
@@ -190,8 +189,14 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
             await handleVerifyNextID(personaInfo, userId)
             Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
         }
-        await queryClient.invalidateQueries({ queryKey: ['@@next-id', 'bindings-by-persona'] })
+        await queryClient.invalidateQueries({
+            queryKey: ['@@next-id', 'bindings-by-persona', personaInfo.identifier.publicKeyAsHex],
+        })
+
         await delay(1000)
+
+        MaskMessages.events.ownProofChanged.sendToAll()
+        return true
     }, [userId, personaInfo, queryClient])
 
     const notify = useNotifyConnected()
@@ -265,7 +270,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Box>
                         </Box>
                     </Box>
-                    {!nextIdPlatform || verified ?
+                    {!nextIdPlatform || verified || verifiedSuccess ?
                         <Typography className={classes.text}>
                             <Trans
                                 i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
@@ -299,7 +304,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                 </Box>
 
                 <Box className={classes.footer}>
-                    {!nextIdPlatform || (nextIdPlatform && verified) ?
+                    {!nextIdPlatform || (nextIdPlatform && (verified || verifiedSuccess)) ?
                         <ActionButton
                             className={classes.button}
                             fullWidth

@@ -42,8 +42,6 @@ const dataFieldMap = {
 export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
     const variables = {
         ...tweet,
-        // TODO unescape properly
-        tweet_text: decodeURIComponent(tweet.tweet_text).replaceAll('&#x2F;', '/'),
         dark_request: false,
         withDownvotePerspective: false,
         withReactionsMetadata: false,
@@ -84,6 +82,8 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
             // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
             console.error(
                 "Errors occupied, query id chould be outdated. Please check twitter's client code in main.xxx.js",
+                'Response Errors:',
+                response.errors,
             )
         }
     }

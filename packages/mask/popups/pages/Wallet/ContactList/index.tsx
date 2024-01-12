@@ -15,8 +15,8 @@ import AddContactInputPanel from '../../../components/AddContactInputPanel/index
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
 import { ContactType } from '../type.js'
 
-const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()(
-    (theme, { showDivideLine, isManage }) => ({
+const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; hasError?: boolean }>()(
+    (theme, { showDivideLine, isManage, hasError }) => ({
         root: {
             overflowX: 'hidden',
             height: '100%',
@@ -32,7 +32,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean }>()
             display: 'flex',
             flexDirection: 'column',
             padding: '0',
-            maxHeight: isManage ? 470 : 400,
+            maxHeight: (isManage ? 470 : 400) - (hasError ? 20 : 0),
             overflow: 'scroll',
             '::-webkit-scrollbar': {
                 display: 'none',
@@ -145,9 +145,10 @@ const ContactListUI = memo(function ContactListUI() {
           }
         | undefined
     const isManage = state?.type === 'manage'
-    const { classes } = useStyles({ isManage })
+
     const wallets = useWallets()
-    const { userInput, address, contacts, inputValidationMessage } = ContactsContext.useContainer()
+    const { userInput, address, contacts, inputValidationMessage, inputWarningMessage } = ContactsContext.useContainer()
+    const { classes } = useStyles({ isManage, hasError: !!inputValidationMessage || !!inputWarningMessage })
     const [params] = useSearchParams()
 
     const addContact = useCallback(() => {

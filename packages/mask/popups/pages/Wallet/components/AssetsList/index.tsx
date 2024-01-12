@@ -28,7 +28,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         padding: theme.spacing(2),
     },
     item: {
-        padding: 14,
+        padding: '8px 12px',
         cursor: 'pointer',
         borderRadius: 8,
         '&:hover': {

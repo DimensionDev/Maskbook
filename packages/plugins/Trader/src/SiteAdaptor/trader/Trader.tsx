@@ -4,7 +4,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import { BigNumber } from 'bignumber.js'
 import { delay } from '@masknet/kit'
 import { Box, Typography, useTheme } from '@mui/material'
-import { ConfirmModal, SelectProviderModal, SelectFungibleTokenModal } from '@masknet/shared'
+import { ConfirmModal, SelectProviderModal, SelectFungibleTokenModal, TRADER_WEB3_CONFIG } from '@masknet/shared'
 import { formatBalance, isSameAddress, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import { addGasMargin, ChainId, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
@@ -18,8 +18,7 @@ import {
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID, PluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { type TraderAPI } from '@masknet/web3-providers/types'
 import { DepositPaymaster, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { useTraderTrans } from '../../locales/index.js'
@@ -59,8 +58,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         chainId: targetChainId,
     })
     const { pluginID } = useNetworkContext()
-    const traderDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Trader)
-    const chainIdList = traderDefinition?.enableRequirement?.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const chainIdList: number[] = TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const chainIdValid = useChainIdValid(pluginID, chainId)
     const Utils = useWeb3Utils()
 

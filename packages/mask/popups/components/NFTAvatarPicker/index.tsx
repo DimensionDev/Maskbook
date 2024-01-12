@@ -3,7 +3,7 @@ import { Box, Button, Stack } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
-import { uniqBy } from 'lodash-es'
+import { first, uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionList } from './CollectionList.js'
@@ -61,6 +61,8 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
 
     const { account, chainId, setAccount, setChainId } = useChainContext()
 
+    const defaultBindingWallet = first(bindingWallets)?.identity
+
     const {
         data: assets,
         hasNextPage,
@@ -68,11 +70,14 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
         error,
         refetch,
         isPending,
-    } = useNonFungibleAssets(pluginID, { chainId, account })
+    } = useNonFungibleAssets(pluginID, { chainId, account: account || defaultBindingWallet })
 
     const tokens = useMemo(() => uniqBy(assets, (x) => x.contract?.address.toLowerCase() + x.tokenId), [assets])
 
-    const handleChangeWallet = useCallback(() => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }), [])
+    const handleChangeWallet = useCallback(
+        () => modalNavigate(PopupModalRoutes.SelectProvider, { onlyMask: true }, { replace: true }),
+        [],
+    )
 
     const handleChange = useCallback((address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
         setAccount(address)
@@ -90,7 +95,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     className={classes.collectionList}
                     tokens={tokens}
                     loading={isPending}
-                    account={account}
+                    account={account || defaultBindingWallet}
                     selected={selected}
                     onItemClick={setSelected}
                 />

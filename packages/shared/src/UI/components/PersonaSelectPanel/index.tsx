@@ -160,6 +160,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                     open: true,
                     pluginID: finishTarget,
                     selectedPersona: selectedPersona.persona,
+                    isVerified,
                 })
             }
 

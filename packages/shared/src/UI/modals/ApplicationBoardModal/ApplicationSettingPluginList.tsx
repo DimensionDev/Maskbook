@@ -98,17 +98,17 @@ export function ApplicationSettingPluginList() {
                     .map((entry) => ({ entry, pluginID: ID }))
             })
             .sort((a, b) => {
-                return (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0)
+                return a.entry.appBoardSortingDefaultPriority! - b.entry.appBoardSortingDefaultPriority!
             })
     }, [plugins])
 
     const unlisted = useUnlistedEntries()
     const listedEntries = useMemo(() => {
         return applicationList.filter((x) => !unlisted.includes(x.entry.ApplicationEntryID))
-    }, [unlisted])
+    }, [unlisted, applicationList])
     const unlistedEntries = useMemo(() => {
         return applicationList.filter((x) => unlisted.includes(x.entry.ApplicationEntryID))
-    }, [unlisted])
+    }, [unlisted, applicationList])
 
     return (
         <div>

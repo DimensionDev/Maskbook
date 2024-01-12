@@ -72,7 +72,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
     return (
         <Stack>
-            <Grid spacing={4} className={classes.gridContainer}>
+            <Grid container className={classes.gridContainer}>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
                         {t.plugin_trader_total_assets()}

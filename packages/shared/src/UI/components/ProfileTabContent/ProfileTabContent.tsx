@@ -11,6 +11,7 @@ import {
     useAllPersonas,
     useLastRecognizedIdentity,
     useSocialIdentityByUserId,
+    useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
@@ -18,6 +19,7 @@ import {
     CrossIsolationMessages,
     EMPTY_LIST,
     MaskMessages,
+    NextIDPlatform,
     PluginID,
     ProfileTabs,
     Sniffings,
@@ -140,6 +142,7 @@ function Content(props: ProfileTabContentProps) {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const {
+        value: personaStatus,
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
@@ -182,8 +185,21 @@ function Content(props: ProfileTabContentProps) {
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const isOnTwitter = Sniffings.is_twitter_page
+    const doesOwnerHaveNoAddress =
+        isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
-    const showNextID = false
+    const myPersonaNotVerifiedYet = isOwnerIdentity && !personaStatus.verified
+    const showNextID =
+        isOnTwitter &&
+        // enabled the plugin
+        (isWeb3ProfileDisable ||
+            myPersonaNotVerifiedYet ||
+            // the owner persona and sns verified on next ID but not verify the wallet
+            doesOwnerHaveNoAddress ||
+            // the visiting persona not have social address list
+            (!isOwnerIdentity && !socialAccounts.length))
+
     const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const contentComponent = useMemo(() => {

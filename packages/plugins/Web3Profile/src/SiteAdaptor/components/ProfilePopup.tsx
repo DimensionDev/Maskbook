@@ -19,6 +19,7 @@ import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -40,10 +41,12 @@ const useStyles = makeStyles()((theme) => ({
     primary: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
+        lineHeight: '18px',
     },
     second: {
-        color: theme.palette.maskColor.second,
-        fontWeight: 700,
+        display: 'flex',
+        columnGap: 4,
+        alignItems: 'center',
     },
     container: {
         display: 'flex',
@@ -72,6 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         maxHeight: 200,
         overflow: 'auto',
+        marginBottom: theme.spacing(1.5),
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 18,
@@ -83,6 +87,21 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
+    },
+    managedTag: {
+        background: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.bottom,
+        fontSize: 12,
+        padding: theme.spacing(0.5),
+        borderRadius: 4,
+        lineHeight: '12px',
+    },
+    item: {
+        padding: theme.spacing(1.5),
+        borderRadius: 8,
+    },
+    listItemText: {
+        margin: 0,
     },
 }))
 
@@ -136,6 +155,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 {profiles?.map((profile) => {
                     return (
                         <ListItemButton
+                            className={classes.item}
                             key={profile.id}
                             onClick={() => {
                                 if (currentProfile.id === profile.id) return
@@ -152,9 +172,20 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                 :   <Icons.Lens size={36} className={classes.avatar} />}
                             </ListItemIcon>
                             <ListItemText
-                                classes={{ primary: classes.primary, secondary: classes.second }}
+                                classes={{ primary: classes.primary, root: classes.listItemText }}
                                 primary={profile.metadata?.displayName}
-                                secondary={formatEthereumAddress(profile.ownedBy.address, 4)}
+                                secondary={
+                                    <div className={classes.second}>
+                                        <Typography component="div" className={classes.address}>
+                                            {formatEthereumAddress(profile.ownedBy.address, 4)}
+                                        </Typography>
+                                        {!isSameAddress(profile.ownedBy.address, account) ?
+                                            <Typography component="span" className={classes.managedTag}>
+                                                Managed
+                                            </Typography>
+                                        :   null}
+                                    </div>
+                                }
                             />
                             <ListItemSecondaryAction>
                                 <Radio checked={currentProfile.id === profile.id} />

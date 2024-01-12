@@ -65,6 +65,7 @@ export function getMirrorUserId(href?: string) {
 
     const ens = last(tempURL.match(/https:\/\/mirror.xyz\/(.*)/))
     if (ens) return ens
+    const match = last(tempURL.match(/https:\/\/(.*)\.mirror\.xyz/))
 
-    return last(tempURL.match(/https:\/\/(.*)\.mirror\.xyz/)) as string | null
+    return match ? `${match}.eth` : match
 }

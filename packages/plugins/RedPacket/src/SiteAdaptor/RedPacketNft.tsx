@@ -81,9 +81,7 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         display: 'flex',
     },
     claimedTokenWrapper: {
-        position: 'absolute',
-        top: 80,
-        right: 'clamp(10px, 5.6%, 30px)',
+        background: theme.palette.maskColor.primary,
         borderRadius: 9,
         cursor: 'pointer',
     },
@@ -129,7 +127,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         width: 120,
     },
     description: {
-        background: theme.palette.maskColor.primary,
         alignSelf: 'stretch',
         borderRadius: '0 0 8px 8px',
     },
@@ -145,9 +142,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         minHeight: '1em',
         textIndent: '8px',
     },
-    hidden: {
-        visibility: 'hidden',
-    },
     tokenLabel: {
         width: 48,
         height: 48,
@@ -155,21 +149,22 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         top: 0,
         left: 0,
     },
-    messageBox: {
-        width: '100%',
+    content: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(1),
+        padding: theme.spacing(0, 1),
     },
     words: {
         display: '-webkit-box',
-        WebkitLineClamp: 2,
+        WebkitLineClamp: 3,
         WebkitBoxOrient: 'vertical',
         color: theme.palette.common.white,
-        wordBreak: 'break-all',
         fontSize: 24,
         fontWeight: 700,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        width: '60%',
-        minWidth: 300,
+        flexGrow: 1,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             fontSize: 14,
         },
@@ -203,9 +198,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
     const {
-        value: availability,
-        loading,
-        retry: retryAvailability,
+        data: availability,
+        isPending: loading,
+        refetch: retryAvailability,
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
 
@@ -222,7 +217,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
-    const { classes, cx } = useStyles({ claimed: !!availability?.isClaimed, outdated })
+    const { classes } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -262,7 +257,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [pluginID, payload.chainId, availability?.claimed_id, availability?.token_address])
 
-    const { data: asset, isPending: loadingAsset } = useNonFungibleAsset(
+    const { data: asset } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,
@@ -338,44 +333,50 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 />
                 <Stack />
 
-                <div className={classes.messageBox}>
+                <Box className={classes.content}>
                     <ShadowRootTooltip title={payload.message}>
                         <Typography className={classes.words} variant="h6">
                             {payload.message}
                         </Typography>
                     </ShadowRootTooltip>
-                </div>
-                <ShadowRootTooltip
-                    title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
-                    placement="top"
-                    disableInteractive
-                    arrow
-                    PopperProps={{
-                        disablePortal: true,
-                    }}>
-                    <Box className={cx(classes.claimedTokenWrapper, !availability.isClaimed ? classes.hidden : '')}>
-                        <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
-                            {loadingAsset ? null : (
-                                <AssetPreviewer
-                                    url={asset?.metadata?.imageURL || asset?.metadata?.mediaURL}
-                                    classes={{
-                                        root: classes.imgWrapper,
-                                        fallbackImage: classes.fallbackImage,
-                                    }}
-                                    fallbackImage={
-                                        <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
-                                    }
-                                />
-                            )}
-                        </Box>
+                    {availability.isClaimed ?
+                        <ShadowRootTooltip
+                            title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
+                            placement="top"
+                            disableInteractive
+                            arrow
+                            PopperProps={{
+                                disablePortal: true,
+                            }}>
+                            <Box className={classes.claimedTokenWrapper}>
+                                <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
+                                    {asset ?
+                                        <AssetPreviewer
+                                            url={asset.metadata?.imageURL || asset?.metadata?.mediaURL}
+                                            classes={{
+                                                root: classes.imgWrapper,
+                                                fallbackImage: classes.fallbackImage,
+                                            }}
+                                            fallbackImage={
+                                                <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
+                                            }
+                                        />
+                                    :   null}
+                                </Box>
 
-                        <div className={classes.description}>
-                            <Typography className={classes.name} color="textPrimary" variant="body2" ref={textRef}>
-                                {`${payload.contractName} #${availability.claimed_id}`}
-                            </Typography>
-                        </div>
-                    </Box>
-                </ShadowRootTooltip>
+                                <div className={classes.description}>
+                                    <Typography
+                                        className={classes.name}
+                                        color="textPrimary"
+                                        variant="body2"
+                                        ref={textRef}>
+                                        {`${payload.contractName} #${availability.claimed_id}`}
+                                    </Typography>
+                                </div>
+                            </Box>
+                        </ShadowRootTooltip>
+                    :   null}
+                </Box>
 
                 <div className={classes.footer}>
                     {availability.isClaimed ?

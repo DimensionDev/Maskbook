@@ -23,6 +23,7 @@ import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
 import { useQuery } from '@tanstack/react-query'
 import { HandlerDescription } from './HandlerDescription.js'
 import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
+import { lensStorage } from '../context.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
@@ -133,7 +134,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         const profiles = await Lens.queryProfilesByAddress(account)
 
         setCurrentProfile((prev) => {
-            if (!prev) return defaultProfile ?? first(profiles)
+            const profile =
+                defaultProfile ?? profiles.find((x) => x.id === lensStorage.latestProfile?.value) ?? first(profiles)
+            if (!prev && profile) {
+                if (!lensStorage.latestProfile?.value) lensStorage.latestProfile?.setValue(profile.id)
+                return profile
+            }
             return prev
         })
         return {
@@ -315,6 +321,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         return profile?.metadata?.picture.optimized.uri
     }, [profile?.metadata?.picture?.optimized.uri])
 
+    const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
+        setCurrentProfile(profile)
+        lensStorage.latestProfile?.setValue(profile.id)
+    }, [])
+
     return (
         <InjectedDialog
             open
@@ -425,7 +436,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <HandlerDescription
                                     currentProfile={currentProfile}
                                     profiles={profiles}
-                                    onChange={(profile) => setCurrentProfile(profile)}
+                                    onChange={handleProfileChange}
                                 />
                             </WalletConnectedBoundary>
                         </Box>

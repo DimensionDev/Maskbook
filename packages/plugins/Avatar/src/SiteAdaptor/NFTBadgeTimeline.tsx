@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AvatarType } from '../types.js'
-import type { AvatarMetaDB } from '../types.js'
+import { type AvatarMetaDB } from '../types.js'
 import { RainbowBox } from './RainbowBox.js'
 import type { RSS3_KEY_SITE } from '../constants.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -13,7 +12,6 @@ interface NFTBadgeTimelineProps extends withClasses<'root'> {
     width: number
     height: number
     siteKey: RSS3_KEY_SITE
-    avatarType?: AvatarType
 }
 
 const useStyles = makeStyles()(() => ({
@@ -53,10 +51,5 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
 
     return loading ?
             <LoadingBase size={width} />
-        :   <RainbowBox
-                width={width}
-                height={height}
-                radius={props.avatarType === AvatarType.Square ? '5px' : '100%'}
-                classes={{ root: classes.root }}
-            />
+        :   <RainbowBox width={width} height={height} radius={'100%'} classes={{ root: classes.root }} />
 }

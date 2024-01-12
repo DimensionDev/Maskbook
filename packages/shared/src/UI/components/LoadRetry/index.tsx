@@ -8,6 +8,9 @@ interface RetryHintProps {
     ButtonProps?: ButtonProps
 }
 
+/**
+ * @deprecated use ReloadStatus instead
+ */
 export const RetryHint = memo<RetryHintProps>(({ retry, hint = true, ButtonProps }) => {
     const t = useSharedTrans()
     return (

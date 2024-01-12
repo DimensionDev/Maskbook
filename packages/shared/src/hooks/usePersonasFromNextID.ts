@@ -14,7 +14,6 @@ export function usePersonasFromNextID(
 ): UseQueryResult<NextIDPersonaBindings[]> {
     const result = useQuery({
         queryKey: ['next-id', 'personas', userId],
-        enabled: Boolean(platform && userId),
         queryFn: async () => {
             if (!platform || !userId) return EMPTY_LIST
             const res = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)

@@ -4,6 +4,7 @@ import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { useCallback, useMemo } from 'react'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
+import { ImageLoader } from './ImageLoader.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -82,12 +83,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    poster: {
-        borderRadius: '8px',
-        width: '100%',
-        height: '156px',
-        objectFit: 'cover',
-    },
     dateDiv: {
         fontSize: '14px',
         fontWeight: 700,
@@ -157,7 +152,7 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                                         </div>
                                         <Typography className={classes.eventTitle}>{v.event_title}</Typography>
                                         <Typography className={classes.time}>{formatDate(v.event_date)}</Typography>
-                                        <img className={classes.poster} src={v.poster_url} alt="poster" />
+                                        <ImageLoader src={v.poster_url} />
                                     </Link>
                                 ))}
                             </div>

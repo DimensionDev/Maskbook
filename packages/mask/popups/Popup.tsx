@@ -56,6 +56,7 @@ const Settings = lazy(() => import('./pages/Settings/index.js'))
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
     queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
+    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
 const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()

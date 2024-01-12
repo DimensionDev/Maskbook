@@ -10,8 +10,6 @@ import {
     useNFT,
     type NextIDAvatarMeta,
     useSaveStringStorage,
-    NFTAvatarSquare,
-    AvatarType,
 } from '@masknet/plugin-avatar'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -21,7 +19,6 @@ import { MaskMessages, NetworkPluginID, type NFTAvatarEvent } from '@masknet/sha
 import { Twitter, EVMHub } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { getAvatarType } from '../../utils/AvatarType.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
@@ -94,33 +91,16 @@ export function NFTAvatarInTwitter() {
     }, [handlerWatcher])
     if (!showAvatar) return null
 
-    const avatarType = getAvatarType()
-    switch (avatarType) {
-        case AvatarType.Default:
-            return (
-                <NFTBadge
-                    nftInfo={nftInfo}
-                    borderSize={5}
-                    hasRainbow
-                    size={size}
-                    width={12}
-                    classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-                />
-            )
-        case AvatarType.Square:
-            return (
-                <NFTAvatarSquare
-                    stroke="black"
-                    strokeWidth={20}
-                    fontSize={9}
-                    name={nftInfo?.name ?? ''}
-                    price={nftInfo?.amount ?? ''}
-                    size={size}
-                />
-            )
-        default:
-            return null
-    }
+    return (
+        <NFTBadge
+            nftInfo={nftInfo}
+            borderSize={5}
+            hasRainbow
+            size={size}
+            width={12}
+            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+        />
+    )
 }
 
 function useNFTCircleAvatar(size: number) {

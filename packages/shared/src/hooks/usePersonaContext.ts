@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
@@ -36,6 +36,7 @@ function usePersonaInformation(
 function usePersonaContext(initialState?: {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     queryPersonaAvatarLastUpdateTime?: (identifier?: ECKeyIdentifier) => Promise<Date | undefined>
+    queryPersonaAvatar?: (identifier: ECKeyIdentifier | undefined) => Promise<string | undefined>
 }) {
     const [selectedAccount, setSelectedAccount] = useState<ProfileAccount>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
@@ -45,11 +46,12 @@ function usePersonaContext(initialState?: {
 
     const currentPersona = personas.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
-    const { data: avatar } = useQuery({
+    const { data: avatar, refetch: refetchAvatar } = useQuery({
         enabled: !!currentPersona,
         queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
         queryFn: async (): Promise<string | null> => {
-            if (!initialState?.queryPersonaAvatarLastUpdateTime) return currentPersona!.avatar || null
+            if (!initialState?.queryPersonaAvatarLastUpdateTime || !initialState.queryPersonaAvatar)
+                return currentPersona!.avatar || null
 
             const lastUpdateTime = await initialState.queryPersonaAvatarLastUpdateTime(currentPersona!.identifier)
             const storage = Web3Storage.createKVStorage(PERSONA_AVATAR_DB_NAMESPACE)
@@ -59,9 +61,9 @@ function usePersonaContext(initialState?: {
                 if (remote && lastUpdateTime && isBefore(lastUpdateTime, remote.updateAt)) {
                     return remote.imageUrl
                 }
-                return currentPersona!.avatar || null
+                return (await initialState.queryPersonaAvatar(currentPersona?.identifier)) || null
             } catch {
-                return currentPersona!.avatar || null
+                return (await initialState.queryPersonaAvatar(currentPersona?.identifier)) || null
             }
         },
     })
@@ -129,11 +131,16 @@ function usePersonaContext(initialState?: {
         )
     }, [proofs])
 
+    const refreshAvatar = useCallback(() => {
+        refetchAvatar()
+    }, [refetchAvatar])
+
     return {
         accounts,
         selectedAccount,
         setSelectedAccount,
         avatar,
+        refreshAvatar,
         personas,
         currentPersona,
         selectedPersona,

@@ -107,7 +107,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
             omitBy<TransactionOptions>(request.options, isUndefined),
         )
         const error = ErrorEditor.from(null, response)
-        if (error.presence) return
+        if (error.presence) return response
 
         await this.updateMessage(id, {
             request,

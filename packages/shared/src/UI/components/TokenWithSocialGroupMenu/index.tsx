@@ -27,15 +27,23 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
 
-    addressMenu: {
-        maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
-        minWidth: 320,
-        backgroundColor: theme.palette.maskColor.bottom,
+    menuPaper: {
+        padding: theme.spacing(2, 0),
+        borderRadius: 16,
         boxShadow:
             theme.palette.mode === 'dark' ?
                 '0px 4px 30px rgba(255, 255, 255, 0.15)'
             :   '0px 4px 30px rgba(0, 0, 0, 0.1)',
-        borderRadius: 16,
+    },
+    addressMenu: {
+        maxHeight: MENU_ITEM_HEIGHT * 9,
+        minWidth: 320,
+        padding: 0,
+        backgroundColor: theme.palette.maskColor.bottom,
+        overflow: 'auto',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 
     divider: {
@@ -125,6 +133,9 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
             disablePortal={disablePortal}
             disableScrollLock={disableScrollLock}
             PaperProps={{
+                className: classes.menuPaper,
+            }}
+            MenuListProps={{
                 className: classes.addressMenu,
             }}
             onClose={onClose}

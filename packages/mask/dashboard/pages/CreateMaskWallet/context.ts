@@ -5,10 +5,11 @@ import { getDefaultWalletPassword, CrossIsolationMessages, PopupRoutes } from '@
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import Services from '#services'
+import { useQueryClient } from '@tanstack/react-query'
 
 function useContext() {
     const wallets = useWallets()
-
+    const queryClient = useQueryClient()
     const resetWallets = useCallback(
         async (password: string | undefined, isReset: boolean | undefined) => {
             if (!isReset || !wallets.length || !password) return
@@ -28,6 +29,8 @@ function useContext() {
             if (!hasPassword) await Services.Wallet.setDefaultPassword()
             const isLocked = await Services.Wallet.isLocked()
 
+            queryClient.removeQueries({ queryKey: ['@@has-password'] })
+
             if (isReset) {
                 await resetWallets(password, isReset)
                 if (isLocked && password) await Services.Wallet.unlockWallet(password)
@@ -39,7 +42,7 @@ function useContext() {
             }
             return true
         },
-        [resetWallets],
+        [resetWallets, queryClient],
     )
 
     return {

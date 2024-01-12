@@ -1,12 +1,12 @@
-import { useCallback } from 'react'
+import Services from '#services'
 import { encodeByNetwork } from '@masknet/encryption'
-import { PluginID, type ProfileIdentifier, Sniffings } from '@masknet/shared-base'
+import { PluginID, Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import Services from '#services'
-import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
+import { useCallback } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
@@ -18,8 +18,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            const fallbackProfile: ProfileIdentifier | undefined =
-                activatedSiteAdaptor_state!.profiles.value[0]?.identifier
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
             // rawEncrypted is either string or Uint8Array
@@ -28,7 +26,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 info.version,
                 content,
                 target,
-                lastRecognizedIdentity?.identifier ?? fallbackProfile,
+                lastRecognizedIdentity.identifier,
                 activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
@@ -38,12 +36,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 encode === 'image' ?
                     decorateEncryptedText('', t, content.meta)
                 :   decorateEncryptedText(encrypted, t, content.meta)
+
+            const options = { interpolation: { escapeValue: false } }
             const defaultText: string =
                 encode === 'image' ?
                     t.additional_post_box__encrypted_post_pre({
                         encrypted: 'https://mask.io/',
                     })
-                :   t.additional_post_box__encrypted_post_pre({ encrypted })
+                :   t.additional_post_box__encrypted_post_pre({ encrypted, ...options })
             const mediaObject =
                 encode === 'image' ?
                     // We can send raw binary through the image, but for the text we still use the old way.
@@ -51,13 +51,14 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                     await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
                 :   undefined
 
-            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost) {
-                await activatedSiteAdaptorUI.automation.endpoint.publishPost(
+            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost && reason === 'timeline') {
+                const postId = await activatedSiteAdaptorUI.automation.endpoint.publishPost(
                     mediaObject ? [decoratedText || defaultText, mediaObject] : [decoratedText || defaultText],
                     {
                         reason,
                     },
                 )
+                if (postId) location.reload()
             } else {
                 if (encode === 'image') {
                     if (!mediaObject) throw new Error('Failed to create image payload.')
@@ -95,12 +96,15 @@ function decorateEncryptedText(
     t: ReturnType<typeof useMaskSharedTrans>,
     meta?: Meta,
 ): string | null {
+    if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account()
-    const options = { interpolation: { escapeValue: false } }
+    const token = meta?.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
+    const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI?.networkIdentifier!]
+    const options = { interpolation: { escapeValue: false }, token, sns }
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
-    if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
+    if (meta.has(`${PluginID.RedPacket}:1`) || meta.has(`${PluginID.RedPacket}_nft:1`)) {
         return hasOfficialAccount ?
                 t.additional_post_box__encrypted_post_pre_red_packet_sns_official_account({
                     encrypted,
@@ -108,7 +112,7 @@ function decorateEncryptedText(
                     ...options,
                 })
             :   t.additional_post_box__encrypted_post_pre_red_packet({ encrypted, ...options })
-    } else if (meta?.has(`${PluginID.FileService}:3`)) {
+    } else if (meta.has(`${PluginID.FileService}:3`)) {
         return hasOfficialAccount ?
                 t.additional_post_box__encrypted_post_pre_file_service_sns_official_account({
                     encrypted,

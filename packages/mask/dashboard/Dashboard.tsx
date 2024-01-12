@@ -34,6 +34,7 @@ const GlobalCss = (
 const PersonaContextIO = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
     queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
+    queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
 export default function Dashboard() {
     useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])

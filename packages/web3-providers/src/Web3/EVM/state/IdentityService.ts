@@ -13,7 +13,6 @@ import {
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
-import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
@@ -23,13 +22,11 @@ import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
 import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
 import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
-import * as Twitter from /* webpackDefer: true */ '../../../Twitter/index.js'
 import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi
-const ADDRESS_FULL = /0x\w{40,}/i
 const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
@@ -58,12 +55,6 @@ function getCrossBellHandles(nickname: string, bio: string) {
     return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())
-}
-
-function getAddress(text: string) {
-    const [matched] = text.match(ADDRESS_FULL) ?? []
-    if (matched && isValidAddress(matched)) return matched
-    return
 }
 
 function getNextIDPlatform() {
@@ -130,13 +121,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return
     }
 
-    /** Read a social address from bio. */
-    private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
-        const address = getAddress(bio)
-        if (!address) return
-        return this.createSocialAddress(SocialAddressType.Address, address)
-    }
-
     /** Read a social address from bio when it contains a csb handle. */
     private async getSocialAddressFromCrossbell({ nickname = '', bio = '' }: SocialIdentity) {
         const handles = getCrossBellHandles(nickname, bio)
@@ -170,19 +154,26 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
     /** Read a social address from NextID. */
     private async getSocialAddressesFromNextID(identity: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identity)
-        return compact(
-            listOfAddress.map((x) =>
-                this.createSocialAddress(
-                    SocialAddressType.NEXT_ID,
-                    x.identity,
-                    '',
-                    undefined,
-                    x.latest_checked_at,
-                    x.created_at,
+        try {
+            const listOfAddress = await getWalletAddressesFromNextID(identity)
+            return compact(
+                listOfAddress.map((x) =>
+                    this.createSocialAddress(
+                        SocialAddressType.NEXT_ID,
+                        x.identity,
+                        '',
+                        undefined,
+                        x.latest_checked_at,
+                        x.created_at,
+                    ),
                 ),
-            ),
-        )
+            )
+        } catch (err) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Failed to get social address from Next.ID', err)
+            }
+            return []
+        }
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
@@ -254,33 +245,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
-    /** Read a social address from Twitter Blue. */
-    private async getSocialAddressFromTwitterBlue({ identifier }: SocialIdentity) {
-        const userId = identifier?.userId
-        if (!userId) return
-
-        const response = await Twitter.Twitter.getUserNftContainer(userId)
-        if (!response) return
-        const ownerAddress = await EVMWeb3Readonly.getNonFungibleTokenOwner(
-            response.address,
-            response.token_id,
-            undefined,
-            {
-                chainId: ChainId.Mainnet,
-            },
-        )
-        if (!ownerAddress || !isValidAddress(ownerAddress)) return
-        return this.createSocialAddress(
-            SocialAddressType.TwitterBlue,
-            ownerAddress,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            true,
-        )
-    }
-
     /** Read social addresses from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -317,35 +281,47 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
-            this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromARBID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromCrossbell(identity),
-            this.getSocialAddressFromTwitterBlue(identity),
             socialAddressFromNextID,
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),
         ])
-        const identities_ = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
+        const mergedIdentities = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
-        const identities = uniqBy(identities_, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
+        const identities = uniqBy(mergedIdentities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
         const identitiesFromNextID = await socialAddressFromNextID
 
         const handle = identity.identifier?.userId
+        if (!handle) return []
+        // Identity is address type, will check if it's verified by Firefly
+        const verifiedHandleMap = new Map<string, string[]>()
+        const getVerifiedHandles = Firefly.Firefly.getVerifiedHandles
         const verifiedResult = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
                 if (x.verified) return address
-                const isReliable = await Firefly.Firefly.verifyTwitterHandleByAddress(address, handle)
-                return isReliable ? address : null
+                const verifiedHandles = await getVerifiedHandles(address)
+                verifiedHandleMap.set(address, verifiedHandles)
+                return verifiedHandles.includes(handle) ? address : null
             }),
         )
         const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
 
-        return identities
-            .filter((x) => trustedAddresses.includes(x.address.toLowerCase()) || x.type === SocialAddressType.Address)
+        const result = identities
+            .filter((x) => {
+                const address = x.address.toLowerCase()
+                if (trustedAddresses.includes(address)) return true
+                if (x.type === SocialAddressType.Address) {
+                    const handles = verifiedHandleMap.get(address) || []
+                    return handles.length ? handles.includes(handle) : true
+                }
+                return false
+            })
             .concat(identitiesFromNextID)
+        return result
     }
 }

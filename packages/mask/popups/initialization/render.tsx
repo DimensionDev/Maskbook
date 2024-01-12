@@ -24,4 +24,10 @@ if (navigator.userAgent.includes('Firefox')) {
         )
     }, 200)
 }
+// Resize window if page gets zoom in
+const { innerWidth, outerWidth } = window
+if (innerWidth !== outerWidth && innerWidth < outerWidth) {
+    const ratio = outerWidth / innerWidth
+    window.resizeTo(400 * ratio, 600)
+}
 createNormalReactRoot(<Popups />)

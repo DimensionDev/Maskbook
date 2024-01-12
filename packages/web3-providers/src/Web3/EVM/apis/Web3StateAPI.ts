@@ -15,7 +15,7 @@ import * as NameService from /* webpackDefer: true */ '../state/NameService.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
 import * as Settings from /* webpackDefer: true */ '../state/Settings.js'
 import * as TransactionFormatter from /* webpackDefer: true */ '../state/TransactionFormatter.js'
-import * as TransactionWatcher from /* webpackDefer: true */ '../state/TransactionWatcher.js'
+
 import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
 import * as BalanceNotifier from /* webpackDefer: true */ '../state/BalanceNotifier.js'
 import * as BlockNumberNotifier from /* webpackDefer: true */ '../state/BlockNumberNotifier.js'
@@ -32,6 +32,9 @@ import {
     providerStorage,
     MaskWalletStorage,
 } from '../../Base/storage.js'
+
+// If you use defer loading you will miss the subscription time.
+import * as TransactionWatcher from '../state/TransactionWatcher.js'
 
 export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: transaction } = PersistentStorages.Web3.createSubScope(`${NetworkPluginID.PLUGIN_EVM}_Transaction`, {

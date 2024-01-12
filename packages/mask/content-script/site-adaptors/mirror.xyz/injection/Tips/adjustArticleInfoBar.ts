@@ -1,5 +1,7 @@
+import { getAuthorWallet } from '../../utils/user.js'
+
 function selector() {
-    const authorWallet = location.pathname.split('/')[1].toLowerCase()
+    const authorWallet = getAuthorWallet()
     return `#__next div:has(> div > a[href$="mirror.xyz/${authorWallet}" i] button[data-state] img[alt^="0x" i]) + div`
 }
 

@@ -1,7 +1,7 @@
 import { Plugin } from '@masknet/plugin-infra'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide } from '@masknet/shared'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { Sniffings, type EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { useTipsUserGuide } from '../../../storage/index.js'
@@ -79,7 +79,7 @@ export function TipsRealmContent({
     const buttonClassMap: Partial<Record<Plugin.SiteAdaptor.TipsSlot, string>> = {
         [TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
         [TipsSlot.Post]: classes.postTipsButton,
-        [TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
+        [TipsSlot.Profile]: cx(classes.profileTipsButton, Sniffings.is_twitter_page ? classes.roundButton : null),
         [TipsSlot.MirrorMenu]: classes.profileTipsButton,
         [TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
@@ -119,7 +119,7 @@ export function TipsRealmContent({
         )
     }
 
-    if (slot === TipsSlot.Post || slot === TipsSlot.MirrorEntry) {
+    if ((slot === TipsSlot.Post || slot === TipsSlot.MirrorEntry) && button) {
         return (
             <div
                 className={cx(

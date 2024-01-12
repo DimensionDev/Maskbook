@@ -52,7 +52,7 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
         <div className={classes.root}>
             <List style={{ padding: '16px 0 0' }}>
                 {histories.map((history) => (
-                    <RedPacketInHistoryList key={history.rpid} history={history} onSelect={onSelect} />
+                    <RedPacketInHistoryList key={history.txid} history={history} onSelect={onSelect} />
                 ))}
             </List>
         </div>
