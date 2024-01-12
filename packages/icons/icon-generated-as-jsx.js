@@ -85,7 +85,33 @@ export const Danger = /*#__PURE__*/ __createIcon('Danger', [
 ])
 export const DangerOutline = /*#__PURE__*/ __createIcon('DangerOutline', [
     {
-        u: () => new URL('./brands/DangerOutline.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M10 7.134c.37 0 .668.299.668.667v3.658a.667.667 0 0 1-1.334 0V7.801c0-.368.299-.667.667-.667Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M10 3.78c-.526 0-1.201.36-1.787 1.417L3.78 13.172c-.544.981-.506 1.727-.236 2.187.27.46.9.855 2.024.855H10c.033 0 .066.003.099.007h4.335c1.118 0 1.75-.395 2.02-.855.272-.461.31-1.206-.233-2.186L13.94 9.068l-2.151-3.87C11.203 4.14 10.527 3.779 10 3.779Zm-.098 13.767H5.567c-1.416 0-2.585-.511-3.174-1.513-.587-1.001-.465-2.272.22-3.508l4.434-7.975c.717-1.292 1.76-2.105 2.954-2.105 1.193 0 2.236.812 2.953 2.104m0 0 2.151 3.87 2.283 4.113c.686 1.237.805 2.508.217 3.509-.589 1-1.758 1.513-3.17 1.513H10a.675.675 0 0 1-.1-.008',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M9.163 13.654c0-.46.373-.833.833-.833h.006a.833.833 0 0 1 0 1.667h-.006a.833.833 0 0 1-.833-.834Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const Debank = /*#__PURE__*/ __createIcon('Debank', [
@@ -664,7 +690,19 @@ export const Appearance = /*#__PURE__*/ __createIcon('Appearance', [
 ])
 export const Appendices = /*#__PURE__*/ __createIcon('Appendices', [
     {
-        u: () => new URL('./general/Appendices.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M12.537 4.226c-.486 0-.953.193-1.297.537l-5.744 5.744A3.085 3.085 0 1 0 9.86 14.87l5.744-5.744a.667.667 0 0 1 .942.943l-5.743 5.744a4.42 4.42 0 0 1-6.25-6.25l5.744-5.743a3.168 3.168 0 0 1 4.48 4.48l-5.75 5.744a1.918 1.918 0 0 1-2.711-2.711l5.307-5.3a.667.667 0 0 1 .942.943l-5.306 5.3a.584.584 0 1 0 .826.825l5.75-5.743a1.835 1.835 0 0 0-1.298-3.132Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
     },
 ])
 export const ApplicationNFT = /*#__PURE__*/ __createIcon('ApplicationNFT', [
