@@ -315,7 +315,10 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             .filter((x) => {
                 const address = x.address.toLowerCase()
                 if (trustedAddresses.includes(address)) return true
-                if (x.type === SocialAddressType.Address) return (verifiedHandleMap.get(address) || []).includes(handle)
+                if (x.type === SocialAddressType.Address) {
+                    const handles = verifiedHandleMap.get(address) || []
+                    return handles.length ? handles.includes(handle) : true
+                }
                 return false
             })
             .concat(identitiesFromNextID)
