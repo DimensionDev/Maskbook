@@ -7,6 +7,9 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## Need revisit
 
+- [ ] TransactionDescriptorType.DEPLOYMENT failed. Open <https://metamask.github.io/test-dapp/> and try TOKEN/NFTs deploy
+- [ ] Sign In With Ethereum (A special extension of personal_sign method?)
+
 ## Read ETH methods
 
 - [x] net_version
@@ -40,6 +43,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 - [ ] eth_sign (EIP-191): <https://support.metamask.io/hc/en-us/articles/14764161421467-What-is-eth-sign-and-why-is-it-a-risk->
 - [x] personal_sign
+- [ ] personal_ecRecover
 - [x] eth_sendTransaction
 - [ ] ~~eth_signTransaction: MetaMask refuse to add, we should follow them. <https://github.com/MetaMask/metamask-extension/issues/3475>~~
 - [x] eth_sendRawTransaction
@@ -78,7 +82,9 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 ## [EIP-712: Typed structured data hashing and signing](https://eips.ethereum.org/EIPS/eip-712)
 
-- [ ] eth_signTypedData or eth_signTypedData_v4?
+- [ ] eth_signTypedData
+- [ ] eth_signTypedData_v3
+- [ ] eth_signTypedData_v4
 
 ## Other EIP
 

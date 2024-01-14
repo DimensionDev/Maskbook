@@ -197,6 +197,7 @@ export const ParamsValidate = {
                 gasPrice: _.unpadded_hex.nullish().optional(),
                 maxPriorityFeePerGas: _.unpadded_hex.nullish().optional(),
                 maxFeePerGas: _.unpadded_hex.nullish().optional(),
+                type: _.hex.nullish().optional(),
             })
             .strict()
             .describe('Transaction'),

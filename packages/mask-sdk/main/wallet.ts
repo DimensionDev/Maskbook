@@ -1,4 +1,4 @@
-import { contentScript, readyPromise } from './bridge.js'
+import { contentScript } from './bridge.js'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import image from '../../icons/brands/MaskBlue.svg'
@@ -45,7 +45,8 @@ export const ethereum = new MaskProvider()
 
 const detail: Ethereum.EIP6963ProviderDetail = {
     info: {
-        uuid: 'f113ee3f-49e3-4576-8f77-c3991d82af41',
+        // MetaMask generate a random UUID each connect
+        uuid: crypto.randomUUID(),
         name: 'Mask Wallet',
         rdns: 'io.mask',
         icon: String(image),
@@ -56,9 +57,5 @@ Object.freeze(detail)
 Object.freeze(detail.info)
 const event = () => new CustomEvent('eip6963:announceProvider', { detail })
 
-setTimeout(() => {
-    readyPromise.then(() => {
-        window.dispatchEvent(event())
-        window.addEventListener('eip6963:requestProvider', () => window.dispatchEvent(event()))
-    })
-}, 0)
+window.dispatchEvent(event())
+window.addEventListener('eip6963:requestProvider', () => window.dispatchEvent(event()))

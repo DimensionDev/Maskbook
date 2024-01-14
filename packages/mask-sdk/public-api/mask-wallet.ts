@@ -283,21 +283,21 @@ export declare namespace Ethereum {
     export interface ExperimentalProvider {}
     export interface EthereumEventMap {
         message: CustomEvent<ProviderMessage | EthSubscription>
-        connect: CustomEvent<ProviderConnectInfo>
-        disconnect: CustomEvent<ProviderRpcError>
-        chainChanged: CustomEvent<string>
-        accountsChanged: CustomEvent<string[]>
+        // connect: CustomEvent<ProviderConnectInfo>
+        // disconnect: CustomEvent<ProviderRpcError>
+        // chainChanged: CustomEvent<string>
+        // accountsChanged: CustomEvent<string[]>
     }
     export interface MaskEthereumEventEmitter extends EthereumEventEmitter, EventTarget {
-        // addEventListener<K extends keyof EthereumEventMap>(
-        //     type: K,
-        //     callback: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
-        //     options?: boolean | AddEventListenerOptions,
-        // ): void
-        // removeEventListener<K extends keyof EthereumEventMap>(
-        //     type: K,
-        //     listener: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
-        //     options?: boolean | EventListenerOptions,
-        // ): void
+        addEventListener<K extends keyof EthereumEventMap>(
+            type: K,
+            callback: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
+            options?: boolean | AddEventListenerOptions,
+        ): void
+        removeEventListener<K extends keyof EthereumEventMap>(
+            type: K,
+            listener: EventListenerOrEventListenerObject | null | ((ev: EthereumEventMap[K]) => any),
+            options?: boolean | EventListenerOptions,
+        ): void
     }
 }

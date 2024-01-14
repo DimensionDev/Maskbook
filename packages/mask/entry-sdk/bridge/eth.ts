@@ -83,14 +83,14 @@ function getInteractiveClient(): Promise<InteractiveClient> {
 const methods = {
     ...passthroughMethods,
 
-    async eth_chainId() {
+    async [EthereumMethodType.ETH_CHAIN_ID]() {
         const chainId = await Services.Wallet.sdk_eth_chainId()
         return '0x' + chainId.toString(16)
     },
-    async eth_accounts() {
+    async [EthereumMethodType.ETH_ACCOUNTS]() {
         return Services.Wallet.sdk_eth_accounts(location.origin)
     },
-    async eth_requestAccounts() {
+    async [EthereumMethodType.ETH_REQUEST_ACCOUNTS]() {
         await Services.Wallet.requestUnlockWallet()
         let wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
@@ -100,7 +100,9 @@ const methods = {
         if (wallets.length) return wallets
         return err.user_rejected_the_request()
     },
-    async personal_sign(...[challenge, requestedAddress]: Zod.infer<(typeof ParamsValidate)['personal_sign']>) {
+    async [EthereumMethodType.PERSONAL_SIGN](
+        ...[challenge, requestedAddress]: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.PERSONAL_SIGN]>
+    ) {
         // check challenge is 0x hex
         await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
@@ -116,7 +118,9 @@ const methods = {
             params: [challenge, requestedAddress],
         })
     },
-    async eth_sendTransaction(...[options]: Zod.infer<(typeof ParamsValidate)['eth_sendTransaction']>) {
+    async [EthereumMethodType.ETH_SEND_TRANSACTION](
+        ...[options]: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.ETH_SEND_TRANSACTION]>
+    ) {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
@@ -134,7 +138,9 @@ const methods = {
             params: options as any,
         })
     },
-    async eth_sendRawTransaction(...[transaction]: Zod.infer<(typeof ParamsValidate)['eth_sendRawTransaction']>) {
+    async [EthereumMethodType.ETH_SEND_RAW_TRANSACTION](
+        ...[transaction]: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.ETH_SEND_RAW_TRANSACTION]>
+    ) {
         const p = providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             silent: false,
@@ -145,13 +151,17 @@ const methods = {
             params: [transaction] as any,
         })
     },
-    async eth_subscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_subscribe']>) {
+    async [EthereumMethodType.ETH_SUBSCRIBE](
+        ...params: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.ETH_SUBSCRIBE]>
+    ) {
         if ((await Services.Wallet.sdk_eth_chainId()) !== ChainId.Mainnet) {
             return err.the_method_eth_subscribe_is_only_available_on_the_mainnet()
         }
         return (await getInteractiveClient()).eth_subscribe(...params)
     },
-    async eth_unsubscribe(...params: Zod.infer<(typeof ParamsValidate)['eth_sendRawTransaction']>) {
+    async [EthereumMethodType.ETH_UNSUBSCRIBE](
+        ...params: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.ETH_UNSUBSCRIBE]>
+    ) {
         return (await getInteractiveClient()).eth_unsubscribe(...params)
     },
     // https://eips.ethereum.org/EIPS/eip-2255
@@ -168,6 +178,14 @@ const methods = {
                 })
         }
         return Services.Wallet.sdk_EIP2255_wallet_requestPermissions(location.origin, request)
+    },
+    async [EthereumMethodType.ETH_CALL](...params: Zod.infer<(typeof ParamsValidate)[EthereumMethodType.ETH_CALL]>) {
+        if (params[0].chainId) {
+            const chainId = await Services.Wallet.sdk_eth_chainId()
+            if (params[0].chainId !== '0x' + chainId.toString(16))
+                return err.the_provider_is_disconnected_from_the_specified_chain()
+        }
+        return passthroughMethods[EthereumMethodType.ETH_CALL](params)
     },
 }
 Object.setPrototypeOf(methods, null)
@@ -210,6 +228,9 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
         const paramsValidated = paramsSchema.safeParse(paramsArr)
         if (!paramsValidated.success) return { e: fromZodError(paramsValidated.error) }
 
+        if (process.env.NODE_ENV === 'development') {
+            console.debug('[Mask Wallet]', request, paramsValidated.data)
+        }
         // call the method
         const fn = Reflect.get(methods, method)
         let result
