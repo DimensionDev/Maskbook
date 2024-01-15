@@ -223,7 +223,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                     showSnackbar(t.hided_token_successfully())
                     navigate(-1)
                 }}>
-                <Icons.Trash size={24} />
+                <Icons.EyeOff size={24} />
             </Button>,
         )
         return () => setExtension(undefined)
