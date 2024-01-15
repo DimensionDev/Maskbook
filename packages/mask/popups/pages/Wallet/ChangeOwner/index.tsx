@@ -211,18 +211,18 @@ export default function ChangeOwner() {
             to: wallet.address,
             data: contract?.methods.changeOwner(manageAccount.address).encodeABI(),
         }
-        const gas = await EVMWeb3.estimateTransaction?.(tx, FALLBACK_GAS)
+        const gas = await EVMWeb3.estimateTransaction(tx, FALLBACK_GAS)
         return gas ? Number.parseInt(gas, 16).toString() : FALLBACK_GAS.toString()
     }, [manageAccount?.address, wallet?.address])
 
     const [{ loading: loadingHandleConfirm }, handleConfirm] = useAsyncFn(async () => {
         if (!manageAccount?.address || !wallet) return
 
-        const hash = await EVMWeb3.changeOwner?.(manageAccount.address, {
+        const hash = await EVMWeb3.changeOwner(manageAccount.address, {
             chainId: smartPayChainId,
-            account: wallet?.address,
+            account: wallet.address,
             providerType: ProviderType.MaskWallet,
-            owner: wallet?.owner,
+            owner: wallet.owner,
             identifier: ECKeyIdentifier.from(wallet.identifier).unwrapOr(undefined),
             gasOptionType: gasConfig?.gasOptionType,
             overrides: gasConfig,
@@ -236,7 +236,7 @@ export default function ChangeOwner() {
 
         if (!receipt.status) return
 
-        await EVMWeb3.updateWallet?.(
+        await EVMWeb3.updateWallet(
             wallet.address,
             {
                 owner: manageAccount.address,
@@ -402,15 +402,15 @@ export default function ChangeOwner() {
                                 <StyledRadio checked={isSameAddress(persona.address, manageAccount?.address)} />
                             </Box>
                         ))}
-                        {walletManagers?.map((wallet) => (
+                        {walletManagers.map((wallet) => (
                             <Box
                                 key={wallet.address}
                                 className={cx(
                                     classes.item,
-                                    isSameAddress(wallet.address, wallet?.owner) ? classes.disabledItem : undefined,
+                                    isSameAddress(wallet.address, wallet.owner) ? classes.disabledItem : undefined,
                                 )}
                                 onClick={() => {
-                                    if (isSameAddress(wallet.address, wallet?.owner)) return
+                                    if (isSameAddress(wallet.address, wallet.owner)) return
                                     setManageAccount({
                                         type: ManagerAccountType.Wallet,
                                         name: wallet.name,

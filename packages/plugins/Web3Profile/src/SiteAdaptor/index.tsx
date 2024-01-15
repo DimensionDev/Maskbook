@@ -42,7 +42,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
                                 onClick={() =>
-                                    EntryComponentProps?.onClick ?
+                                    EntryComponentProps.onClick ?
                                         EntryComponentProps.onClick()
                                     :   CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
                                             open: true,
@@ -80,7 +80,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
                     queryKey: ['next-id', 'all-lens', userId],
-                    enabled: isProfile && !!handle && !!accounts?.length,
+                    enabled: isProfile && !!handle && !!accounts.length,
                     queryFn: async () => {
                         const lensAccounts = await NextIDProof.queryAllLens(handle)
                         return lensAccounts.map(NextIdLensToFireflyLens)

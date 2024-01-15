@@ -63,7 +63,7 @@ export function useDeploy(
             if (
                 !chainId ||
                 !lastRecognizedIdentity?.isOwner ||
-                !lastRecognizedIdentity?.identifier?.userId ||
+                !lastRecognizedIdentity.identifier?.userId ||
                 !signAccount?.address ||
                 !contractAccount ||
                 (!signPersona && !signWallet)
@@ -84,7 +84,7 @@ export function useDeploy(
 
                 onSuccess?.()
 
-                return result?.transactionHash
+                return result.transactionHash
             }
             const payload = JSON.stringify({
                 twitterHandle: lastRecognizedIdentity.identifier.userId,

@@ -162,7 +162,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
-        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor?.icon}")` : undefined,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
     const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
@@ -243,9 +243,9 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
 
                             {contractDetailed ?
                                 <Typography className={classes.primaryText}>
-                                    {contractDetailed?.symbol ||
+                                    {contractDetailed.symbol ||
                                         spender.contract.name ||
-                                        contractDetailed?.name ||
+                                        contractDetailed.name ||
                                         collection?.name}
                                 </Typography>
                             :   null}

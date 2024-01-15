@@ -38,7 +38,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
         }
 
         try {
-            await EVMWeb3?.renameWallet?.(wallet.address, _name, { providerType: ProviderType.MaskWallet })
+            await EVMWeb3.renameWallet(wallet.address, _name, { providerType: ProviderType.MaskWallet })
             setName('')
             rest.onClose?.()
         } catch (error) {

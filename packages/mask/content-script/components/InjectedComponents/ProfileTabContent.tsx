@@ -174,7 +174,7 @@ function Content(props: ProfileTabContentProps) {
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
-        if (selectedSocialAccount?.address && selectedSocialAccount?.label) {
+        if (selectedSocialAccount?.address && selectedSocialAccount.label) {
             setPair(selectedSocialAccount.address, selectedSocialAccount.label)
         }
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
@@ -304,7 +304,7 @@ function Content(props: ProfileTabContentProps) {
     )
 
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)
-    const trendingResult = collectionList?.[currentTrendingIndex]
+    const trendingResult = collectionList[currentTrendingIndex]
 
     const { data: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 

@@ -111,7 +111,7 @@ export function PriceCard(props: PriceCardProps) {
                         </Typography>
                         {topListing?.price?.usd ?
                             <Typography className={classes.textBase}>
-                                ({priceUSD.includes('<') || isZero(topListing?.price?.usd) ? '' : '≈'}
+                                ({priceUSD.includes('<') || isZero(topListing.price.usd) ? '' : '≈'}
                                 {priceUSD})
                             </Typography>
                         :   null}

@@ -118,7 +118,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
                         const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
                         const collectibleKey = getCollectibleKey(token)
                         const checked = selectable ? value?.includes(collectibleKey) : false
-                        const inactive = value ? !!value?.length && !checked : false
+                        const inactive = value ? !!value.length && !checked : false
                         return (
                             <ShadowRootTooltip
                                 key={index}

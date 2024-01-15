@@ -116,7 +116,7 @@ const AccountDetail = memo(() => {
     const pubkey = currentPersona?.identifier.publicKeyAsHex
     const releaseBinding = useCallback(async () => {
         try {
-            if (!pubkey || !selectedAccount?.identity || !selectedAccount?.platform) return
+            if (!pubkey || !selectedAccount?.identity || !selectedAccount.platform) return
 
             const result = await NextIDProof.createPersonaPayload(
                 pubkey,

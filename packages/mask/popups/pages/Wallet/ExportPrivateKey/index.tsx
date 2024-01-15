@@ -151,9 +151,9 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
                         {(
                             wallet?.mnemonicId &&
                             walletGroup?.groups[wallet.mnemonicId] &&
-                            walletGroup?.groups[wallet.mnemonicId].length > 1
+                            walletGroup.groups[wallet.mnemonicId].length > 1
                         ) ?
-                            walletGroup?.groups[wallet.mnemonicId].map((x, index) => (
+                            walletGroup.groups[wallet.mnemonicId].map((x, index) => (
                                 <PrivateKeyDisplay wallet={x} key={index} />
                             ))
                         : wallet ?

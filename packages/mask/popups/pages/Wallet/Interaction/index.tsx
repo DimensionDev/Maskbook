@@ -389,7 +389,7 @@ const Interaction = memo(function Interaction() {
                         {transaction?.formattedTransaction?.popup?.method ?
                             <Typography className={classes.text}>
                                 {t.popups_wallet_transaction_function_name({
-                                    name: transaction?.formattedTransaction.popup.method,
+                                    name: transaction.formattedTransaction.popup.method,
                                 })}
                             </Typography>
                         :   null}

@@ -53,12 +53,12 @@ const createSearchTabConfig = (
                     label: result.type === SearchResultType.Domain ? result.keyword : '',
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
-                const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount.address ?? '-', props.tag ?? '-'].join('_')
 
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <EVMWeb3ContextProvider>
-                            <FeedsPage key={key} address={socialAccount?.address} {...props} />
+                            <FeedsPage key={key} address={socialAccount.address} {...props} />
                         </EVMWeb3ContextProvider>
                     </Box>
                 )

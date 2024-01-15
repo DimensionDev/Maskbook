@@ -150,7 +150,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             : '',
                         supportedAddressTypes: [SocialAddressType.ENS],
                     }
-                    const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
+                    const inspectCollectible = useInspectCollectible(socialAccount.pluginID)
 
                     return (
                         <Box style={{ minHeight: 300 }}>

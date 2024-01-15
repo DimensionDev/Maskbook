@@ -19,5 +19,5 @@ export const DonateModal = forwardRef<SingletonModalRefCreator<DonateModalOpenPr
     })
 
     if (!open || !props_?.grant) return null
-    return <DonateDialog open onClose={() => dispatch?.close()} {...props_} grant={props_?.grant} />
+    return <DonateDialog open onClose={() => dispatch?.close()} {...props_} grant={props_.grant} />
 })

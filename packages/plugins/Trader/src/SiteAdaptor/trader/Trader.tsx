@@ -386,8 +386,8 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
                     new BigNumber((gasConfig as EIP1559GasConfig).maxFeePerGas)
                         .multipliedBy(
-                            focusedTrade?.value?.gas && !isZero(focusedTrade?.value?.gas) ?
-                                addGasMargin(focusedTrade?.value.gas)
+                            focusedTrade?.value?.gas && !isZero(focusedTrade.value.gas) ?
+                                addGasMargin(focusedTrade.value.gas)
                             :   '150000',
                         )
                         .integerValue()

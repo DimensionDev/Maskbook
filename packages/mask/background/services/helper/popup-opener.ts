@@ -6,7 +6,7 @@ let currentPopupWindowId = 0
 
 async function openWindow(url: string): Promise<void> {
     const windows = await browser.windows.getAll()
-    const popup = windows.find((window) => window?.type === 'popup' && window.id === currentPopupWindowId)
+    const popup = windows.find((window) => window.type === 'popup' && window.id === currentPopupWindowId)
     if (popup) {
         await browser.windows.update(popup.id!, { focused: true })
     } else {

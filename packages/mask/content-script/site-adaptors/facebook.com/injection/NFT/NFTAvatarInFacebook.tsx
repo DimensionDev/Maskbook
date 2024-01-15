@@ -117,7 +117,7 @@ function NFTAvatarInFacebook() {
 
         if (!account) return
         if (!identity.identifier) return
-        if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
+        if (NFTEvent?.address && NFTEvent.tokenId && NFTEvent.avatarId) {
             try {
                 const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
                     ...NFTEvent,

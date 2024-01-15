@@ -42,7 +42,7 @@ export function ArticlesTab(props: ArticlesTabProps) {
                             return (
                                 <Video
                                     VideoProps={{ className: classes.hero, controls: true }}
-                                    src={resolveIPFS_URL(boxMetadata?.mediaUrl) ?? ''}
+                                    src={resolveIPFS_URL(boxMetadata.mediaUrl) ?? ''}
                                 />
                             )
                         default:
@@ -50,8 +50,8 @@ export function ArticlesTab(props: ArticlesTabProps) {
                                 <img
                                     className={classes.hero}
                                     src={
-                                        boxMetadata?.mediaUrl ?
-                                            resolveIPFS_URL(boxMetadata?.mediaUrl)
+                                        boxMetadata.mediaUrl ?
+                                            resolveIPFS_URL(boxMetadata.mediaUrl)
                                         :   new URL('../../assets/FallbackImage.svg', import.meta.url).toString()
                                     }
                                 />

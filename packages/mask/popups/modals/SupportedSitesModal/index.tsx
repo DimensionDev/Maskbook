@@ -69,7 +69,7 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
             <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
             <List className={classes.list}>
                 {!isPending && data ?
-                    data?.map((x) => {
+                    data.map((x) => {
                         const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[x.networkIdentifier]
 
                         return (

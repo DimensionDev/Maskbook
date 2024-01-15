@@ -31,7 +31,7 @@ export function useTradeCallback(
         }
 
         try {
-            const gas = await EVMWeb3.estimateTransaction?.(config, undefined, {
+            const gas = await EVMWeb3.estimateTransaction(config, undefined, {
                 chainId,
             })
             const hash = await EVMWeb3.sendTransaction(

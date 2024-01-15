@@ -133,7 +133,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
                 break
             case EthereumMethodType.ETH_ACCOUNTS:
                 if (isValidAddress(provider?.hostedAccount)) {
-                    context.write([provider?.hostedAccount])
+                    context.write([provider.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }

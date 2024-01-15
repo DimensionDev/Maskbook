@@ -173,8 +173,8 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
             <Box className={classes.tokenInfo}>
                 {contract?.address ?
                     <TokenIcon
-                        address={contract?.address}
-                        name={contract?.name}
+                        address={contract.address}
+                        name={contract.name}
                         label=""
                         logoURL={collection?.iconURL ?? ''}
                         className={classes.tokenIcon}

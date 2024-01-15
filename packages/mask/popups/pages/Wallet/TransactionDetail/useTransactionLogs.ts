@@ -24,7 +24,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
         networkMode: 'always',
         queryFn: async () => {
             if (!transactionState?.chainId) return
-            return Transaction?.getTransactions?.(transactionState?.chainId, account) ?? EMPTY_LIST
+            return Transaction?.getTransactions?.(transactionState.chainId, account) ?? EMPTY_LIST
         },
     })
     const logs = useMemo(() => {

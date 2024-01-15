@@ -82,7 +82,7 @@ function e2eMapToRecipientDetails(
 ): Map<ProfileIdentifier, Date> {
     const result = new Map<ProfileIdentifier, Date>()
     for (const [key] of input) {
-        const identifier = keyMap?.get(key.key)
+        const identifier = keyMap.get(key.key)
         if (!identifier) continue
         result.set(identifier, new Date())
     }

@@ -33,7 +33,7 @@ export function useTradeCallback(
             const tradeTransaction = data.length === 1 ? data[0] : data[1]
 
             const config = pick(tradeTransaction.transaction, ['to', 'data', 'from', 'value'])
-            const gas = await EVMWeb3.estimateTransaction?.(config, undefined, {
+            const gas = await EVMWeb3.estimateTransaction(config, undefined, {
                 chainId,
             })
             const config_ = {
@@ -48,9 +48,9 @@ export function useTradeCallback(
                 chainId,
             })
 
-            if (!receipt?.status) return
+            if (!receipt.status) return
 
-            return receipt?.transactionHash
+            return receipt.transactionHash
         } catch (error) {
             return
         }

@@ -293,7 +293,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
 
                             {errors.tokenIds ?
                                 <Typography className={classes.error} mt={0.5}>
-                                    {errors.tokenIds?.message}
+                                    {errors.tokenIds.message}
                                 </Typography>
                             :   null}
                         </>

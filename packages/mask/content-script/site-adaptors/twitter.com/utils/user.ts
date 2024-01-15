@@ -30,5 +30,5 @@ export async function getUserIdentity(twitterId: string): Promise<SocialIdentity
 }
 
 export function getUserId(ele: HTMLElement) {
-    return ele?.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
+    return ele.querySelector('a[href][role=link]')?.getAttribute('href')?.slice(1)
 }

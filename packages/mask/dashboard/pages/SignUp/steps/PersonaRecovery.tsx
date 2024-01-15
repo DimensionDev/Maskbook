@@ -48,7 +48,7 @@ export function PersonaRecovery() {
                     | undefined
 
                 if (state.mnemonic) {
-                    result = await Services.Identity.queryPersonaEOAByMnemonic(state?.mnemonic.join(' '), '')
+                    result = await Services.Identity.queryPersonaEOAByMnemonic(state.mnemonic.join(' '), '')
                 } else if (state.privateKey) {
                     result = await Services.Identity.queryPersonaEOAByPrivateKey(state.privateKey)
                 } else {
@@ -62,7 +62,7 @@ export function PersonaRecovery() {
 
                 let identifier: ECKeyIdentifier
                 if (state.mnemonic) {
-                    identifier = await createPersona(state?.mnemonic.join(' '), personaName)
+                    identifier = await createPersona(state.mnemonic.join(' '), personaName)
                 } else if (state.privateKey) {
                     identifier = await createPersonaByPrivateKey(state.privateKey, personaName)
                 } else {

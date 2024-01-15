@@ -24,7 +24,7 @@ export function useFriendsFromSearch(
         if (!searchResult?.length && !localSearchedResult?.length) return EMPTY_LIST
         const localProfiles: NextIDPersonaBindingsWithIdentifier[] =
             localSearchedResult
-                ?.filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
+                .filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
                 .map((item) => {
                     const profile = item.profile!
                     return {

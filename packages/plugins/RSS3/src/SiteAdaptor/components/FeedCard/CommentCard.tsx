@@ -140,7 +140,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 <div>
                     {commentTarget?.title ?
                         <Typography variant="h1" className={classes.title}>
-                            {commentTarget?.title}
+                            {commentTarget.title}
                         </Typography>
                     :   null}
                     {verbose && commentTarget?.body ?

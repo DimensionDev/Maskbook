@@ -247,7 +247,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #endregion
 
     const openNFTDialog = useCallback(() => {
-        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability?.token_address) return
+        if (!payload.chainId || !pluginID || !availability?.claimed_id || !availability.token_address) return
         CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
             open: true,
             chainId: payload.chainId,
@@ -352,7 +352,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 <Box className={classes.tokenImageWrapper} onClick={openNFTDialog}>
                                     {asset ?
                                         <AssetPreviewer
-                                            url={asset.metadata?.imageURL || asset?.metadata?.mediaURL}
+                                            url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
                                             classes={{
                                                 root: classes.imgWrapper,
                                                 fallbackImage: classes.fallbackImage,

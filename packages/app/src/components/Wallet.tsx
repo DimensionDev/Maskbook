@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor.dark,
     },
     walletItem: {
         display: 'flex',

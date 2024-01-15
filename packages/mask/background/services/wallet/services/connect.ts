@@ -104,7 +104,7 @@ export async function disconnectWalletFromOrigin(wallet: string, origin: string,
     }
     if (type === 'any' || type === 'internal') {
         const internalOrigins = new Set((await walletDatabase.get('internal_connected', wallet))?.origins)
-        if (internalOrigins?.has(origin)) {
+        if (internalOrigins.has(origin)) {
             internalOrigins.delete(origin)
             if (internalOrigins.size)
                 await walletDatabase.add({ type: 'internal_connected', id: wallet, origins: internalOrigins })

@@ -118,7 +118,7 @@ const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChai
                             network={currentNetwork}
                         />
                     }
-                    <Typography className={classes.title}>{currentNetwork?.name}</Typography>
+                    <Typography className={classes.title}>{currentNetwork.name}</Typography>
                 </div>
                 <Icons.ArrowDownRound size={16} color="#fff" />
             </Box>

@@ -46,7 +46,7 @@ export function useCreateNFTRedpacketGas(
             ]
 
             return toFixed(
-                await nftRedPacketContract?.methods.create_red_packet(...params).estimateGas({ from: account }),
+                await nftRedPacketContract.methods.create_red_packet(...params).estimateGas({ from: account }),
             )
         },
     })
