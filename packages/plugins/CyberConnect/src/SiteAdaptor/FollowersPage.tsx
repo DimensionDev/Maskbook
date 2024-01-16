@@ -17,7 +17,6 @@ interface FollowersPageProps {
 export function FollowersPage(props: FollowersPageProps) {
     const t = useCyberConnectTrans()
     const { data, fetchNextPage, hasNextPage, isPending, refetch, error } = useFollowers(props.tab, props.address)
-    // const { value, next, done, error, retry, loading } = useIterator<IFollowIdentity>(iterator)
     const followers = data?.pages.flatMap((x) => x?.data || []) || []
 
     if (error) {
