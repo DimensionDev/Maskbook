@@ -1,13 +1,15 @@
-import { useMemo } from 'react'
-import { pageableToIterator } from '@masknet/shared-base'
-import { PluginCyberConnectRPC } from '../messages.js'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import type { ProfileTab } from '../constants.js'
+import { PluginCyberConnectRPC } from '../messages.js'
 
 export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
-    return useMemo(() => {
-        if (!address) return
-        return pageableToIterator(async (indicator) => {
-            return PluginCyberConnectRPC.fetchFollowers(tab, address, size, indicator)
-        })
-    }, [address, tab, size])
+    return useInfiniteQuery({
+        queryKey: ['cyber-connect', 'followers', tab, address, size],
+        initialPageParam: undefined as any,
+        queryFn: async ({ pageParam }) => {
+            if (!address) return
+            return PluginCyberConnectRPC.fetchFollowers(tab, address, size, pageParam)
+        },
+        getNextPageParam: (lastPage) => lastPage?.nextIndicator,
+    })
 }

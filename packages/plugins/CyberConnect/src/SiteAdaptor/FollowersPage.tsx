@@ -1,18 +1,12 @@
-import { LoadingBase, MaskLightTheme, makeStyles } from '@masknet/theme'
-import { Box } from '@mui/material'
-import { ElementAnchor, LoadingStatus, ReloadStatus } from '@masknet/shared'
-import { useCyberConnectTrans } from '../locales/index.js'
-import { useFollowers } from '../hooks/useFollowers.js'
-import type { ProfileTab } from '../constants.js'
-import type { IFollowIdentity } from '../Worker/apis/index.js'
-import { FollowRow } from './FollowTab.js'
-import { useEffect } from 'react'
-import { useIterator } from '@masknet/web3-hooks-base'
 import { ThemeProvider } from '@emotion/react'
-
-const useStyles = makeStyles()((theme) => ({
-    root: {},
-}))
+import { ElementAnchor, LoadingStatus, ReloadStatus } from '@masknet/shared'
+import { LoadingBase, MaskLightTheme } from '@masknet/theme'
+import { Box } from '@mui/material'
+import type { IFollowIdentity } from '../Worker/apis/index.js'
+import type { ProfileTab } from '../constants.js'
+import { useFollowers } from '../hooks/useFollowers.js'
+import { useCyberConnectTrans } from '../locales/index.js'
+import { FollowRow } from './FollowTab.js'
 
 interface FollowersPageProps {
     address?: string
@@ -22,31 +16,26 @@ interface FollowersPageProps {
 
 export function FollowersPage(props: FollowersPageProps) {
     const t = useCyberConnectTrans()
-    const { classes } = useStyles()
-    const iterator = useFollowers(props.tab, props.address)
-    const { value, next, done, error, retry, loading } = useIterator<IFollowIdentity>(iterator)
-
-    useEffect(() => {
-        if (value?.length || loading) return
-        if (next) next()
-    }, [value?.length, loading, next])
+    const { data, fetchNextPage, hasNextPage, isPending, refetch, error } = useFollowers(props.tab, props.address)
+    const followers = data?.pages.flatMap((x) => x?.data || []) || []
 
     if (error) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
-                <ReloadStatus height={400} p={2} message={t.failed()} onRetry={retry} />
+                <ReloadStatus height={400} p={2} message={t.failed()} onRetry={refetch} />
             </ThemeProvider>
         )
     }
 
-    if (!value?.length && loading) return <LoadingStatus height={400} omitText />
+    if (!followers.length && isPending) return <LoadingStatus height={400} omitText />
+
     return (
-        <Box className={classes.root}>
-            {value?.length ?
-                value.map((x: IFollowIdentity) => <FollowRow key={x.ens || x.address} identity={x} />)
-            :   props.hint}
-            <ElementAnchor callback={() => next?.()}>
-                {!done && value?.length ?
+        <Box>
+            {followers.map((x: IFollowIdentity) => (
+                <FollowRow key={x.ens || x.address} identity={x} />
+            ))}
+            <ElementAnchor callback={() => fetchNextPage()}>
+                {hasNextPage && isPending ?
                     <LoadingBase />
                 :   null}
             </ElementAnchor>
