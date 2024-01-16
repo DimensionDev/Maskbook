@@ -36,5 +36,6 @@ export function openWindow(
     if (Number.isFinite(features.height)) flags.push(`height=${features.height}`)
     if (Number.isFinite(features.screenX)) flags.push(`screenX=${features.screenX}`)
     if (Number.isFinite(features.screenY)) flags.push(`screenY=${features.screenY}`)
+    
     return window.open(url, target, flags.join(' '))
 }
