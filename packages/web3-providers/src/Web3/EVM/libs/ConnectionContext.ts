@@ -72,7 +72,7 @@ export class ConnectionContext {
     }
 
     get providerType() {
-        return this.requestOptions?.providerType ?? this._options?.providerType ?? this._providerType
+        return this.requestOptions.providerType ?? this._options?.providerType ?? this._providerType
     }
 
     get providerURL() {
@@ -96,7 +96,7 @@ export class ConnectionContext {
             {
                 ...this.payloadEditor.config,
                 ...this._options?.overrides,
-                from: this._options?.overrides?.from || this.payloadEditor.config?.from,
+                from: this._options?.overrides?.from || this.payloadEditor.config.from,
                 chainId: parseChainId(this._options?.overrides?.chainId) ?? this.payloadEditor.config.chainId,
             },
             isUndefined,

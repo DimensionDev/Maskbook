@@ -139,7 +139,7 @@ export class Popups implements Middleware<ConnectionContext> {
                         'Failed to locate network. The providerURL must be given when sending risky requests to a custom network.',
                     )
 
-                await evm.state?.Network?.switchNetwork(network?.ID)
+                await evm.state?.Network?.switchNetwork(network.ID)
             }
 
             if (!evm.state?.Message) throw new Error('Failed to approve request.')

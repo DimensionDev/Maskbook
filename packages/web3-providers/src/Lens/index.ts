@@ -176,7 +176,7 @@ export class Lens {
         })
         const handle = data.defaultProfile?.handle.localName
         if (!handle) return
-        return handle?.endsWith('.lens') ? handle : `${handle}.lens`
+        return handle.endsWith('.lens') ? handle : `${handle}.lens`
     }
 
     static async queryProfilesByAddress(address: string) {
@@ -365,7 +365,7 @@ export class Lens {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                'x-access-token': options.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
                 query: /* GraphQL */ `
@@ -401,7 +401,7 @@ export class Lens {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': options?.token ? `Bearer ${options.token}` : '',
+                'x-access-token': options.token ? `Bearer ${options.token}` : '',
             },
             body: JSON.stringify({
                 query: /* GraphQL */ `

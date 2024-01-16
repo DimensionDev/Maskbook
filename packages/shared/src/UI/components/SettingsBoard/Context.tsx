@@ -43,9 +43,9 @@ function useSettingsContext(initial?: {
     const networkSignature = `${pluginID}_${chainId}`
     const transactionSignature = Utils.getTransactionSignature!(chainId, transactionOptions) ?? ''
     const needToResetByNetwork =
-        !!IN_MEMORY_CACHE?.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
+        !!IN_MEMORY_CACHE.lastNetworkSignature && IN_MEMORY_CACHE.lastNetworkSignature !== networkSignature
     const needToResetByTransaction =
-        !!IN_MEMORY_CACHE?.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
+        !!IN_MEMORY_CACHE.lastTransactionSignature && IN_MEMORY_CACHE.lastTransactionSignature !== transactionSignature
     const [gasSettingsType, setGasSettingsType] = useState<GasSettingsType>(
         needToResetByNetwork || needToResetByTransaction ?
             GasSettingsType.Basic

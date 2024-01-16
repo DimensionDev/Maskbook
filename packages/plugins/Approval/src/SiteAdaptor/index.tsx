@@ -34,7 +34,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 icon={icon}
                                 onClick={() => {
                                     EntryComponentProps.onClick ?
-                                        EntryComponentProps.onClick?.(clickHandler, NetworkPluginID.PLUGIN_EVM)
+                                        EntryComponentProps.onClick(clickHandler, NetworkPluginID.PLUGIN_EVM)
                                     :   clickHandler()
                                     Telemetry.captureEvent(EventType.Access, EventID.EntryAppApprovalOpen)
                                 }}

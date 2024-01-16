@@ -178,7 +178,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
         <>
             <ApplicationRecommendArea
                 classes={{
-                    recommendFeatureAppListWrapper: classes?.recommendFeatureAppListWrapper,
+                    recommendFeatureAppListWrapper: classes.recommendFeatureAppListWrapper,
                 }}
                 recommendFeatureAppList={recommendFeatureAppList}
                 isCarouselReady={isCarouselReady}

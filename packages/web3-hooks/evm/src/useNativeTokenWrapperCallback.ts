@@ -31,7 +31,7 @@ export function useNativeTokenWrapperCallback(chainId?: ChainId) {
             const receipt = await EVMWeb3.getTransactionReceipt(hash)
 
             if (!receipt?.status) return
-            return receipt?.transactionHash
+            return receipt.transactionHash
         },
         [account, wrapperContract],
     )

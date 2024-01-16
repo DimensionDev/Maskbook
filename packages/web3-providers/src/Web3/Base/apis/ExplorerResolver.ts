@@ -45,7 +45,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
         if (!explorerUrl.url || !address) return
         return urlcat(explorerUrl.url, this.options.addressPathname, {
             address,
-            ...explorerUrl?.parameters,
+            ...explorerUrl.parameters,
         })
     }
 
@@ -55,7 +55,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
 
         return urlcat(explorerUrl.url, this.options.blockPathname, {
             blockNumber,
-            ...explorerUrl?.parameters,
+            ...explorerUrl.parameters,
         })
     }
 
@@ -65,7 +65,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
 
         return urlcat(explorerUrl.url, this.options.transactionPathname, {
             id,
-            ...explorerUrl?.parameters,
+            ...explorerUrl.parameters,
         })
     }
 
@@ -74,7 +74,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
         if (!address || !explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.fungibleTokenPathname, {
             address,
-            ...explorerUrl?.parameters,
+            ...explorerUrl.parameters,
         })
     }
 
@@ -84,7 +84,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
         return urlcat(explorerUrl.url, this.options.nonFungibleTokenPathname, {
             address,
             tokenId,
-            ...explorerUrl?.parameters,
+            ...explorerUrl.parameters,
         })
     }
 

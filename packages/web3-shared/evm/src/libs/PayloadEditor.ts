@@ -52,7 +52,7 @@ export class PayloadEditor {
                 return first(params)
             default:
                 const config = this.config
-                return config?.from
+                return config.from
         }
     }
 

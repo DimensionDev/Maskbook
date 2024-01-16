@@ -15,7 +15,7 @@ function createUser(response: TwitterBaseAPI.UserShowResponse): TwitterBaseAPI.U
         avatarURL: response.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
         bio: response.description,
         location: response.location,
-        homepage: response.entities?.url?.urls[0]?.expanded_url,
+        homepage: response.entities.url.urls[0]?.expanded_url,
     }
 }
 

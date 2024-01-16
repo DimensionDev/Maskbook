@@ -217,7 +217,7 @@ export function TrendingView(props: TrendingViewProps) {
         !isMinimalMode &&
         !isNFT &&
         !!trending?.coin.contract_address &&
-        (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
+        (!swapExpectedContract?.pluginID || swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     // #region tabs
@@ -363,9 +363,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={
-                                currentPriceChange ?? trending?.market?.price_change_percentage_24h_in_currency ?? 0
-                            }
+                            amount={currentPriceChange ?? trending.market?.price_change_percentage_24h_in_currency ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             loading={loadingStats}>

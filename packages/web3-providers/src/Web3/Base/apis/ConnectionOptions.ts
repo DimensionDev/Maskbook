@@ -67,7 +67,7 @@ export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkTy
             ...pickBy(this.options, identity),
             ...pickBy(initials, identity),
             overrides: {
-                ...pickBy(this.refs?.overrides, identity),
+                ...pickBy(this.refs.overrides, identity),
                 ...pickBy(this.options?.overrides, identity),
                 ...pickBy(initials?.overrides, identity),
                 ...pickBy(overrides, identity),

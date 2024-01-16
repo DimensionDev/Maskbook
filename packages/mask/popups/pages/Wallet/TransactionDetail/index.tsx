@@ -349,7 +349,7 @@ export const TransactionDetail = memo(function TransactionDetail() {
                         :   ''}
                     </ProgressiveText>
                 </Box>
-                {logs?.length ?
+                {logs.length ?
                     <>
                         <Typography variant="h2" className={classes.sectionName}>
                             {t.activity_log()}

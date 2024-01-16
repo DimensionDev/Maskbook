@@ -43,7 +43,7 @@ export abstract class NameServiceState implements Web3NameServiceState {
         if (!name) return
         const callbacks = this.createResolvers().map((resolver) => {
             return async () => {
-                const address = this.storage.value[resolver.id][name] || (await resolver.lookup?.(name))
+                const address = this.storage.value[resolver.id][name] || (await resolver.lookup(name))
                 if (address && this.isValidAddress(address)) {
                     const formattedAddress = this.formatAddress(address)
                     await this.addAddress(resolver.id, name, formattedAddress)
@@ -60,7 +60,7 @@ export abstract class NameServiceState implements Web3NameServiceState {
         const callbacks = this.createResolvers(domainOnly).map((resolver) => {
             return async () => {
                 let name: string | undefined = this.storage.value[resolver.id][this.formatAddress(address)]
-                if (!name) name = await resolver.reverse?.(address)
+                if (!name) name = await resolver.reverse(address)
                 if (name) {
                     await this.addName(resolver.id, address, name)
                     return name
