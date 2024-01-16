@@ -71,7 +71,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         const type = resultList.value[0].type
         let timer: NodeJS.Timeout | undefined
         if (
-            type === SearchResultType.CollectionListByTwitterHandler ||
+            type === SearchResultType.CollectionListByTwitterHandle ||
             type === SearchResultType.NonFungibleCollection ||
             type === SearchResultType.NonFungibleToken
         )

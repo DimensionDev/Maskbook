@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST, type SocialIdentity } from '@masknet/shared-base'
 import { useDialogStacking } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -10,6 +9,7 @@ import { SearchResultType, SourceType } from '@masknet/web3-shared-base'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 import { TrendingViewProvider } from './context.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function TagInspector() {
     const createTrendingView = useCallback(
@@ -67,14 +67,19 @@ function TrendingViewWrapper({
     identity,
     isCollectionProjectPopper,
 }: TrendingViewWrapperProps) {
-    const { value: resultList, loading: loadingResultList } = useAsyncRetry(async () => {
-        if (!name || !type) return EMPTY_LIST
-        const results = await DSearch.search<Web3Helper.TokenResultAll>(
-            isCollectionProjectPopper ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`,
-            isCollectionProjectPopper ? SearchResultType.CollectionListByTwitterHandler : undefined,
-        )
-        return results.sort((a) => (a.source === SourceType.CoinMarketCap ? 1 : 0))
-    }, [name, type, isCollectionProjectPopper])
+    const keyword = isCollectionProjectPopper && name ? name : `${type === TrendingAPI.TagType.CASH ? '$' : '#'}${name}`
+    const searchType = isCollectionProjectPopper ? SearchResultType.CollectionListByTwitterHandle : undefined
+    const { data: resultList, isLoading: loadingResultList } = useQuery({
+        queryKey: ['dsearch', keyword, searchType],
+        queryFn: async () => {
+            if (!keyword || !searchType) return EMPTY_LIST
+            const results = await DSearch.search<Web3Helper.TokenResultAll>(keyword, searchType)
+            return results
+        },
+        select(data) {
+            return data.sort((a) => (a.source === SourceType.CoinMarketCap ? 1 : 0))
+        },
+    })
 
     if (!resultList?.length || loadingResultList) return null
 

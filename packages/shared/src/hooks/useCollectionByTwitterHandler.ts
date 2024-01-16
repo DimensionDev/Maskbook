@@ -6,9 +6,6 @@ import { useAsync } from 'react-use'
 export function useCollectionByTwitterHandler(twitterHandler?: string) {
     return useAsync(async () => {
         if (!twitterHandler) return
-        return DSearch.search<Web3Helper.TokenResultAll>(
-            twitterHandler,
-            SearchResultType.CollectionListByTwitterHandler,
-        )
+        return DSearch.search<Web3Helper.TokenResultAll>(twitterHandler, SearchResultType.CollectionListByTwitterHandle)
     }, [twitterHandler])
 }

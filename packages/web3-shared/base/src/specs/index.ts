@@ -102,7 +102,7 @@ export enum SearchResultType {
     // e.g., #punks
     NonFungibleCollection = 'NonFungibleCollection',
     // e.g., realMaskNetwork
-    CollectionListByTwitterHandler = 'CollectionListByTwitterHandler',
+    CollectionListByTwitterHandle = 'CollectionListByTwitterHandle',
     // e.g., PancakeSwap
     DAO = 'DAO',
 }
@@ -712,7 +712,7 @@ export type TokenResult<ChainId, SchemaType> =
     | NonFungibleCollectionResult<ChainId, SchemaType>
 
 export interface NonFungibleCollectionResult<ChainId, SchemaType> extends Result<ChainId> {
-    type: SearchResultType.CollectionListByTwitterHandler
+    type: SearchResultType.CollectionListByTwitterHandle
     address: string
     id?: string
     rank?: number

@@ -58,7 +58,7 @@ describe('DSearch test', () => {
     })
 
     it('should return collection by twitter handle', async () => {
-        const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandler)
+        const result = await DSearch.search('mathcastles', SearchResultType.CollectionListByTwitterHandle)
 
         expect(result.length).toBe(1)
         if (result[0].type === SearchResultType.NonFungibleCollection) {

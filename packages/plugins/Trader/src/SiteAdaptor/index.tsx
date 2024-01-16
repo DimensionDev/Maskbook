@@ -55,7 +55,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     SearchResultType.FungibleToken,
                     SearchResultType.NonFungibleToken,
                     SearchResultType.NonFungibleCollection,
-                    SearchResultType.CollectionListByTwitterHandler,
+                    SearchResultType.CollectionListByTwitterHandle,
                 ].includes(result.type)
             },
         },
