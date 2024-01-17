@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
-import { useNetworkContext, useNativeTokenAddress , useNetworks } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNativeTokenAddress, useNetworks } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
@@ -9,7 +9,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { FungibleTokenList , SelectNetworkSidebar } from '../../components/index.js'
+import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
