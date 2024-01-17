@@ -140,7 +140,9 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                 MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t.popups_wallet_disconnect_success())
             } catch {
-                showSnackbar(t.popups_wallet_disconnect_failed())
+                showSnackbar(t.popups_wallet_disconnect_failed(), {
+                    variant: 'error',
+                })
             }
         },
         [currentPersona],

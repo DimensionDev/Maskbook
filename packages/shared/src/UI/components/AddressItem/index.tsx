@@ -1,11 +1,11 @@
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, type TypographyProps } from '@mui/material'
 import { SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { isEnsSubdomain } from '@masknet/web3-shared-evm'
+import { formatDomainName, isEnsSubdomain } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ReversedAddress } from '../../../index.js'
 
@@ -51,6 +51,8 @@ export function AddressItem({
         socialAccount.supportedAddressTypes?.includes(SocialAddressType.Firefly) || // Label from Firefly is not reliable
         isSameAddress(socialAccount.label, socialAccount.address)
 
+    const formattedDomain = formatDomainName(socialAccount.label)
+
     return (
         <>
             <Box onClick={(ev: React.MouseEvent) => onClick?.(ev)}>
@@ -60,9 +62,11 @@ export function AddressItem({
                         address={socialAccount.address}
                         pluginID={socialAccount.pluginID}
                     />
-                :   <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
-                        {socialAccount.label}
-                    </Typography>
+                :   <ShadowRootTooltip title={formattedDomain === socialAccount.label ? '' : socialAccount.label}>
+                        <Typography fontSize="14px" fontWeight={700} {...TypographyProps}>
+                            {formattedDomain}
+                        </Typography>
+                    </ShadowRootTooltip>
                 }
             </Box>
             {disableLinkIcon ? null : (
