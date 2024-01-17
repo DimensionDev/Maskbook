@@ -72,7 +72,7 @@ export const CollectibleCard = memo(function CollectibleCard({
 
     const networkIcon = useMemo(() => {
         if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === asset.chainId)?.icon
+            return NETWORK_DESCRIPTORS.find((network) => network.chainId === asset.chainId)?.icon
         }
         return networkDescriptor?.icon
     }, [asset.chainId, pluginID])

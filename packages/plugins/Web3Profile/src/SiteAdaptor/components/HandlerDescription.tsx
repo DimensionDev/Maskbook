@@ -69,7 +69,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
 
     const walletName = useMemo(() => {
         if (domain) return domain
-        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
+        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
         return providerDescriptor?.name
     }, [account, domain, providerType, wallet?.name, providerDescriptor?.name])
 

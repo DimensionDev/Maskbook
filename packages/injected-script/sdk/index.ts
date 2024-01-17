@@ -78,7 +78,7 @@ globalThis.document?.addEventListener?.(CustomEventId, (e) => {
         // web3
         case 'web3BridgeEmitEvent': {
             const [pathname, eventName, data] = r[1]
-            Providers.filter((x) => x.pathname === pathname).forEach((x) => x?.emit(eventName, data))
+            Providers.filter((x) => x.pathname === pathname).forEach((x) => x.emit(eventName, data))
             break
         }
         case 'web3BridgeBindEvent':

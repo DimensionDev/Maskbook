@@ -158,7 +158,7 @@ export const WalletList = memo<WalletListProps>(function WalletList({
 
     return (
         <List>
-            {walletProofs?.map((proof, index) => (
+            {walletProofs.map((proof, index) => (
                 <WalletItem
                     checked={listingAddresses.includes(proof.identity)}
                     proof={proof}

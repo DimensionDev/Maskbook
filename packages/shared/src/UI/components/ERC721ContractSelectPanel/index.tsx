@@ -99,7 +99,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 {(
                     !collection?.address ||
                     !Utils.isValidAddress(collection.address) ||
-                    (collection.source === SourceType.SimpleHash && !collection?.id)
+                    (collection.source === SourceType.SimpleHash && !collection.id)
                 ) ?
                     null
                 :   <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
@@ -109,11 +109,11 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
             <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>
                 <div className={classes.tokenWrapper}>
                     {collection?.iconURL ?
-                        <img className={classes.icon} src={collection?.iconURL} />
+                        <img className={classes.icon} src={collection.iconURL} />
                     :   null}
                     {collection?.name ?
                         <Typography className={classes.nftName} color="textPrimary">
-                            {collection?.name}
+                            {collection.name}
                         </Typography>
                     :   null}
                 </div>

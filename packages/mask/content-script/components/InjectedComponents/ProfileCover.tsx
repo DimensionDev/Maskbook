@@ -29,5 +29,5 @@ export function ProfileCover(props: ProfileCoverProps) {
     }, [currentVisitingIdentity])
 
     if (!component) return null
-    return <div className={classes?.root}>{component}</div>
+    return <div className={classes.root}>{component}</div>
 }

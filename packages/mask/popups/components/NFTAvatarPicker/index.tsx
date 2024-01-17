@@ -122,7 +122,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                         disabled={isPending || !selected || !!wallet?.owner}
                         onClick={() => {
                             if (!selected?.metadata?.imageURL) return
-                            onChange(selected?.metadata?.imageURL)
+                            onChange(selected.metadata.imageURL)
                         }}>
                         {wallet?.owner ? t.coming_soon() : t.confirm()}
                     </Button>

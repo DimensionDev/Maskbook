@@ -112,7 +112,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
         identifier: item.linkedPersona,
         linkedProfiles: new Map(),
         publicKey: await decompressK256Key(item.linkedPersona.rawPublicKey),
-        publicHexKey: item.linkedPersona?.publicKeyAsHex,
+        publicHexKey: item.linkedPersona.publicKeyAsHex,
         nickname: item.nickname,
         hasLogout: false,
         uninitialized: false,

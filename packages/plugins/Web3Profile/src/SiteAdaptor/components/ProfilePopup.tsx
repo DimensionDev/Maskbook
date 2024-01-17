@@ -152,7 +152,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 horizontal: 'right',
             }}>
             <List disablePadding className={classes.list}>
-                {profiles?.map((profile) => {
+                {profiles.map((profile) => {
                     return (
                         <ListItemButton
                             className={classes.item}

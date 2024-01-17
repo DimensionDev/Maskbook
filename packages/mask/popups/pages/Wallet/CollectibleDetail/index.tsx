@@ -257,7 +257,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
             {availableAsset ?
                 <AssetPreviewer
                     classes={{ root: classes.image, fallbackImage: classes.fallbackImage }}
-                    url={availableAsset?.metadata?.imageURL}
+                    url={availableAsset.metadata?.imageURL}
                     fallbackImage={fallbackImage}
                 />
             :   <Skeleton className={classes.image} />}

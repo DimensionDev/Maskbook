@@ -87,7 +87,7 @@ export function useFriendFromList(searchedRecords: RelationRecord[]) {
                         const profile = first(await Services.Identity.queryProfileInformation(x.profile))
                         if (
                             profile?.linkedPersona !== undefined &&
-                            profile?.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
+                            profile.linkedPersona.publicKeyAsHex !== currentPersona?.identifier.publicKeyAsHex
                         )
                             return {
                                 persona: profile.linkedPersona,

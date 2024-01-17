@@ -34,7 +34,7 @@ export async function hasWallet(address: string) {
 export async function hasStoredKeyInfo(storedKeyInfo?: api.IStoredKeyInfo) {
     const wallets = await getWallets()
     if (!storedKeyInfo) return false
-    return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo?.hash)
+    return wallets.filter((x) => x.storedKeyInfo?.hash).some((x) => x.storedKeyInfo?.hash === storedKeyInfo.hash)
 }
 
 async function getWalletRecords() {
@@ -102,9 +102,9 @@ export async function updateWallet(
         type: 'wallet',
         ...wallet,
         name: updates.name ?? wallet.name,
-        derivationPath: updates?.derivationPath ?? wallet.derivationPath,
-        latestDerivationPath: updates?.latestDerivationPath ?? wallet.latestDerivationPath,
-        mnemonicId: updates?.mnemonicId ?? wallet.mnemonicId,
+        derivationPath: updates.derivationPath ?? wallet.derivationPath,
+        latestDerivationPath: updates.latestDerivationPath ?? wallet.latestDerivationPath,
+        mnemonicId: updates.mnemonicId ?? wallet.mnemonicId,
         updatedAt: new Date(),
     })
     CrossIsolationMessages.events.walletsUpdated.sendToAll(undefined)

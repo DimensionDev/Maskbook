@@ -31,7 +31,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             onClick={() => {
-                                EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick(openDialog) : openDialog()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppFileOpen)
                             }}
                         />

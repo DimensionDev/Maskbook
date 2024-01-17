@@ -30,7 +30,7 @@ export function useConnectPersona() {
         }
         // auto-finish the setup process
         if (!personaInfo) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(personaInfo?.identifier)
+        await Services.Identity.setupPersona(personaInfo.identifier)
         queryClient.removeQueries({ queryKey: ['query-persona-info', persona.publicKeyAsHex] })
         MaskMessages.events.ownPersonaChanged.sendToAll()
 

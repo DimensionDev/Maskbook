@@ -35,7 +35,7 @@ export function useFriendProfiles(seen: boolean, nextId?: string, profile?: Prof
             if (profile?.userId) {
                 return [
                     {
-                        platform: profile?.network as
+                        platform: profile.network as
                             | EnhanceableSite.Twitter
                             | EnhanceableSite.Facebook
                             | EnhanceableSite.Instagram,

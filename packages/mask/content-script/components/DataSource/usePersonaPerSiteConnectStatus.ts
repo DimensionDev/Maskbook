@@ -28,8 +28,8 @@ export function usePersonaPerSiteConnectStatus() {
         return {
             isSiteConnectedToCurrentPersona:
                 currentPersona ? checkSiteConnectedToCurrentPersona(currentPersona) : false,
-            currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
-            currentSiteConnectedPersonaPublicKey: currentSiteConnectedPersona?.identifier.rawPublicKey,
+            currentPersonaPublicKey: currentPersona.identifier.rawPublicKey,
+            currentSiteConnectedPersonaPublicKey: currentSiteConnectedPersona.identifier.rawPublicKey,
         }
     }, [checkSiteConnectedToCurrentPersona, personas.map((x) => x.identifier.toText()).join(',')])
 }

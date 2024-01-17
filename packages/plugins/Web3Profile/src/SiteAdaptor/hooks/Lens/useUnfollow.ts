@@ -77,7 +77,7 @@ export function useUnfollow(
             let hash: string | undefined
             try {
                 onSuccess?.(cloneEvent)
-                setLoading?.(false)
+                setLoading(false)
                 const broadcast = await Lens.broadcast(typedData.id, signature, { token, fetcher: fetchJSON })
                 if (broadcast?.__typename === BroadcastType.RelayError) throw new Error(broadcast.reason)
                 else hash = broadcast?.txHash

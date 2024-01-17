@@ -116,7 +116,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={() => {
-                                EntryComponentProps.onClick ? EntryComponentProps.onClick?.(openDialog) : openDialog()
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick(openDialog) : openDialog()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
                             }}
                         />

@@ -158,7 +158,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                         if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork?.iconUrl ?
-                        <ImageIcon size={30} icon={currentNetwork?.iconUrl} name={currentNetwork?.name || '?'} />
+                        <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
                     :   <ChainIcon size={30} color={currentNetwork?.color} name={currentNetwork?.name} />}
 
                     <Box ml={0.5} overflow="auto">

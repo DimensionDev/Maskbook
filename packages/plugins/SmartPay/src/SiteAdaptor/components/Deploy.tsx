@@ -261,7 +261,7 @@ export function Deploy({ open }: { open: boolean }) {
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
                             <Typography fontSize={18} fontWeight={700} lineHeight="22px">
                                 {manager?.type === 'Persona' ?
-                                    formatPersonaFingerprint(manager?.identifier?.rawPublicKey ?? '', 4)
+                                    formatPersonaFingerprint(manager.identifier?.rawPublicKey ?? '', 4)
                                 :   formatEthereumAddress(manager?.address ?? '', 4)}
                             </Typography>
                         </Box>
@@ -314,7 +314,7 @@ export function Deploy({ open }: { open: boolean }) {
                             }
                             addressLink={
                                 signWallet?.address && chainId ?
-                                    EVMExplorerResolver.addressLink(chainId, signWallet?.address)
+                                    EVMExplorerResolver.addressLink(chainId, signWallet.address)
                                 :   undefined
                             }
                         />
@@ -335,7 +335,7 @@ export function Deploy({ open }: { open: boolean }) {
                     await EVMWeb3.addWallet?.(
                         {
                             name: 'Smart pay',
-                            address: contractAccount?.address,
+                            address: contractAccount.address,
                         },
                         {
                             providerType: ProviderType.MaskWallet,

@@ -29,7 +29,7 @@ export function ContractSection({
     return (
         <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
             {chain ?
-                <WalletIcon mainIcon={chain?.icon} size={14} />
+                <WalletIcon mainIcon={chain.icon} size={14} />
             : iconURL ?
                 <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} />
             :   <Box width={16} />}

@@ -7,6 +7,6 @@ export function usePostLink() {
     const identifier = usePostInfoDetails.identifier()
     return useMemo(() => {
         if (!id || !identifier) return ''
-        return getPostURL?.(identifier) ?? ''
+        return getPostURL(identifier) ?? ''
     }, [id, identifier, getPostURL])
 }

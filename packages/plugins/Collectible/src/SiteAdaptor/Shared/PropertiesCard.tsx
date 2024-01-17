@@ -93,7 +93,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
                 :   null}
             </div>
             <div className={classes.content}>
-                {asset.traits?.map((trait, i) => {
+                {asset.traits.map((trait, i) => {
                     const uiValue = formatTrait(trait)
                     return (
                         <div key={i} className={classes.traitsItem}>

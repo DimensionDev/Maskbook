@@ -150,7 +150,7 @@ export async function connectSite(
         status: SetupGuideStep.VerifyOnNextID,
         persona: identifier.toText(),
         username: profile?.userId,
-        tabId: targetTab?.id,
+        tabId: targetTab.id,
     })
 }
 

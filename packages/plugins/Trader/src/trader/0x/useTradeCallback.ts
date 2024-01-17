@@ -38,7 +38,7 @@ export function useTradeCallback(
         }
 
         try {
-            const gas = await EVMWeb3.estimateTransaction?.(
+            const gas = await EVMWeb3.estimateTransaction(
                 {
                     from: account,
                     ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
@@ -54,8 +54,8 @@ export function useTradeCallback(
                 { chainId, overrides: { ...gasConfig } },
             )
             const receipt = await EVMWeb3.getTransactionReceipt(hash)
-            if (!receipt?.status) return
-            return receipt?.transactionHash
+            if (!receipt.status) return
+            return receipt.transactionHash
         } catch (error: unknown) {
             return
         }

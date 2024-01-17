@@ -592,7 +592,7 @@ export async function queryRelationsPagedDB(
         if (cursor.value.linked !== linked.toText()) continue
         if (options.network !== 'all' && cursor.value.network !== options.network) continue
 
-        if (firstRecord && options.after && options.after.profile.toText() !== cursor?.value.profile) {
+        if (firstRecord && options.after && options.after.profile.toText() !== cursor.value.profile) {
             cursor.continue([options.after.favor, options.after.profile.toText(), options.after.linked.toText()])
             firstRecord = false
             continue
@@ -602,8 +602,8 @@ export async function queryRelationsPagedDB(
 
         // after this record
         if (
-            options.after?.linked.toText() === cursor?.value.linked &&
-            options.after?.profile.toText() === cursor?.value.profile
+            options.after?.linked.toText() === cursor.value.linked &&
+            options.after.profile.toText() === cursor.value.profile
         )
             continue
 

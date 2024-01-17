@@ -156,7 +156,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
         queryFn: async () => {
             if (!value?.profile.id || !currentProfile) return false
-            const result = await Lens.queryFollowStatus(currentProfile.id, value?.profile.id)
+            const result = await Lens.queryFollowStatus(currentProfile.id, value.profile.id)
             setIsFollowing(result)
             return result
         },
@@ -318,7 +318,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const avatar = useMemo(() => {
         if (!profile?.metadata?.picture?.optimized.uri) return
-        return profile?.metadata?.picture.optimized.uri
+        return profile.metadata.picture.optimized.uri
     }, [profile?.metadata?.picture?.optimized.uri])
 
     const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
@@ -353,7 +353,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             />
                             <Web3ProfileTrans.following
                                 components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats?.following ?? '0') }}
+                                values={{ following: String(profile?.stats.following ?? '0') }}
                             />
                         </Typography>
                         <Box className={classes.actions}>

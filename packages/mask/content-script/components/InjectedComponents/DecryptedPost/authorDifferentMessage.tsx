@@ -11,7 +11,7 @@ export function useAuthorDifferentMessage(
     if (author === postBy) return jsx
     return (
         <>
-            {t.decrypted_postbox_author_mismatch({ name: author?.userId })}
+            {t.decrypted_postbox_author_mismatch({ name: author.userId })}
             {jsx}
         </>
     )

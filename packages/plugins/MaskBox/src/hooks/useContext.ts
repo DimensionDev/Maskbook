@@ -85,7 +85,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo?.creator || isZeroAddress(maskBoxInfo?.creator)) return null
+        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo.creator || isZeroAddress(maskBoxInfo.creator)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
@@ -131,7 +131,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #region qualification
     const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
     const proofBytes =
-        value?.proof ? abiCoder.encodeParameters(['bytes32[]'], [value?.proof?.map((p) => `0x${p}`) ?? []]) : undefined
+        value?.proof ? abiCoder.encodeParameters(['bytes32[]'], [value.proof.map((p) => `0x${p}`) ?? []]) : undefined
     const qualification = useQualification(
         boxInfo?.qualificationAddress,
         account,

@@ -84,7 +84,7 @@ function check() {
             if (!result) continue
             if (result !== true) {
                 // eslint-disable-next-line @typescript-eslint/no-loop-func
-                result.then((x) => x || reporter?.(name))
+                result.then((x) => x || reporter(name))
                 continue
             }
         } else if (Array.isArray(rule)) {

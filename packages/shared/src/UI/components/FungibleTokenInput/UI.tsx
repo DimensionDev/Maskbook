@@ -159,8 +159,8 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                         {token && !loadingBalance ?
                                             <FormattedBalance
                                                 value={balance}
-                                                decimals={token?.decimals}
-                                                significant={token?.decimals}
+                                                decimals={token.decimals}
+                                                significant={token.decimals}
                                                 formatter={formatBalance}
                                             />
                                         :   '--'}
@@ -205,10 +205,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 }
                 {...props}
                 onChange={(ev) => {
-                    if (
-                        ev.currentTarget.value &&
-                        !new RegExp(props?.inputProps?.pattern).test(ev.currentTarget.value)
-                    ) {
+                    if (ev.currentTarget.value && !new RegExp(props.inputProps?.pattern).test(ev.currentTarget.value)) {
                         return
                     }
                     props.onChange?.(ev)

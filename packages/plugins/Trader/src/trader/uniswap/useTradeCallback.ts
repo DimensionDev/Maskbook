@@ -61,7 +61,7 @@ export function useTradeCallback(
                 }
 
                 try {
-                    const gas = await EVMWeb3.estimateTransaction?.(config, undefined, { chainId })
+                    const gas = await EVMWeb3.estimateTransaction(config, undefined, { chainId })
                     return {
                         call: x,
                         gasEstimate: new BigNumber(gas ?? 0),

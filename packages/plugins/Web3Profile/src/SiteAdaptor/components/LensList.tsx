@@ -168,7 +168,7 @@ const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
                 }}>
                 {isSameAddress(wallet, account.ownedBy) ?
                     t.view()
-                : account?.isFollowing ?
+                : account.isFollowing ?
                     t.following_action()
                 :   t.follow()}
             </ActionButton>

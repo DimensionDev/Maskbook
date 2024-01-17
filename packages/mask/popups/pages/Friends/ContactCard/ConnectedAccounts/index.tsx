@@ -81,7 +81,7 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
                         })
                     }}>
                     <Typography fontSize={12} fontWeight={400} lineHeight="16px" color={theme.palette.maskColor.main}>
-                        {`+${profiles?.length - 2}`}
+                        {`+${profiles.length - 2}`}
                     </Typography>
                 </ButtonBase>
             :   null}

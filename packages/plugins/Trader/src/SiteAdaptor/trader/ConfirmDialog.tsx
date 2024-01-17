@@ -84,7 +84,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     const handlePriceImpactDialogConfirm = useCallback(() => {
         if (!trade.priceImpact) return
-        setTemporarySlippage(new BigNumber(trade?.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
+        setTemporarySlippage(new BigNumber(trade.priceImpact.multipliedBy(PERCENT_DENOMINATOR).toFixed(0)).toNumber())
         onConfirm()
         setPriceImpactDialogOpen(false)
     }, [trade])

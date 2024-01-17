@@ -104,9 +104,9 @@ const CreateWallet = memo(function CreateWallet() {
                                         className={classes.groupText}
                                         secondary={
                                             theFirstWallet?.address ?
-                                                <Tooltip title={theFirstWallet?.address}>
+                                                <Tooltip title={theFirstWallet.address}>
                                                     <Typography component="span">
-                                                        {formatEthereumAddress(theFirstWallet?.address, 4)}
+                                                        {formatEthereumAddress(theFirstWallet.address, 4)}
                                                     </Typography>
                                                 </Tooltip>
                                             :   null

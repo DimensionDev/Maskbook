@@ -99,7 +99,7 @@ function decorateEncryptedText(
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account()
-    const token = meta?.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
+    const token = meta.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI?.networkIdentifier!]
     const options = { interpolation: { escapeValue: false }, token, sns }
 
