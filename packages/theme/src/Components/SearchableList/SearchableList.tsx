@@ -60,7 +60,7 @@ export function SearchableList<T extends {}>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const theme = useTheme()
-    const { classes } = useStyles(undefined, { props })
+    const { classes, cx } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
@@ -110,7 +110,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box className={classes.searchInput}>
+                <Box className={cx(classes.searchInput, classes.input)}>
                     <MaskTextField
                         value={keyword}
                         placeholder="Search"
@@ -193,6 +193,9 @@ const useStyles = makeStyles()((theme) => ({
             position: 'relative',
             margin: 'auto',
         },
+    },
+    input: {
+        paddingBottom: '16px',
     },
     list: {
         scrollbarWidth: 'thin',

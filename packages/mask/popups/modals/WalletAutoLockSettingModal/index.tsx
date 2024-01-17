@@ -45,9 +45,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 enum OptionName {
-    ONE_QUARTE = '15',
-    TWO_QUARTE = '30',
-    ONE_HOUR = '60',
+    ONE_QUARTE = '15 Min',
+    TWO_QUARTE = '30 Min',
+    ONE_HOUR = '60 Min',
     ONE_DAY = '1 Day',
     NEVER = 'Never',
 }

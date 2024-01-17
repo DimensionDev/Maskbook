@@ -62,9 +62,9 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     mode?: TokenListMode
 }
 
-const useStyles = makeStyles<{ enableMange: boolean }>()((theme, { enableMange }) => ({
+const useStyles = makeStyles<{}>()(() => ({
     channel: {
-        position: enableMange ? 'relative' : 'unset',
+        width: '100%',
     },
     bar: {
         position: 'absolute',
@@ -90,7 +90,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedTrans()
-    const { classes } = useStyles({ enableMange: mode === TokenListMode.List && enableManage }, { props })
+    const { classes } = useStyles({}, { props })
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)

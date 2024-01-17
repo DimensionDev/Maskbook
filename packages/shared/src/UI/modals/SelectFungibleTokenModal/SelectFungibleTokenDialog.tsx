@@ -1,21 +1,33 @@
 import { useState, useMemo } from 'react'
 import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
-import { useNetworkContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
+import { useNetworkContext, useNativeTokenAddress, useNetworks } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EnhanceableSite, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { FungibleTokenList } from '../../components/index.js'
+import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     compact: boolean
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
+    container: {
+        display: 'flex',
+        flex: 1,
+        width: '100%',
+        gap: '16px',
+        position: 'relative',
+    },
+    sidebarContainer: {
+        width: '27px',
+        height: '432px',
+    },
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(2),
@@ -36,7 +48,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
         },
     },
     wrapper: {
-        paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
     },
 }))
@@ -55,6 +66,7 @@ interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPlug
     disableNativeToken?: boolean
     selectedTokens?: string[]
     onClose(token: Web3Helper.FungibleTokenAll | null): void
+    setChainId(chainId: Web3Helper.Definition[T]['ChainId']): void
 }
 
 export function SelectFungibleTokenDialog({
@@ -70,6 +82,7 @@ export function SelectFungibleTokenDialog({
     title,
     enableManage = true,
     onClose,
+    setChainId,
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -77,6 +90,7 @@ export function SelectFungibleTokenDialog({
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
+    const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
     const rowSize = useRowSize()
     const [mode, setMode] = useState(TokenListMode.List)
@@ -101,26 +115,37 @@ export function SelectFungibleTokenDialog({
                 :   t.select_token()
             }>
             <DialogContent classes={{ root: classes.content }}>
-                <FungibleTokenList
-                    mode={mode}
-                    setMode={setMode}
-                    pluginID={currentPluginID}
-                    chainId={chainId}
-                    tokens={tokens ?? EMPTY_LIST}
-                    whitelist={whitelist}
-                    enableManage={enableManage}
-                    blacklist={
-                        disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
-                    }
-                    disableSearch={disableSearchBar}
-                    selectedTokens={selectedTokens}
-                    onSelect={onClose}
-                    FixedSizeListProps={FixedSizeListProps}
-                    SearchTextFieldProps={{
-                        InputProps: { classes: { root: classes.search } },
-                    }}
-                    isHiddenChainIcon={false}
-                />
+                <div className={classes.container}>
+                    <div className={classes.sidebarContainer}>
+                        <SelectNetworkSidebar
+                            hideAllButton
+                            chainId={chainId}
+                            onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
+                            networks={allNetworks}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                        />
+                    </div>
+                    <FungibleTokenList
+                        mode={mode}
+                        setMode={setMode}
+                        pluginID={currentPluginID}
+                        chainId={chainId}
+                        tokens={tokens ?? EMPTY_LIST}
+                        whitelist={whitelist}
+                        enableManage={enableManage}
+                        blacklist={
+                            disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
+                        }
+                        disableSearch={disableSearchBar}
+                        selectedTokens={selectedTokens}
+                        onSelect={onClose}
+                        FixedSizeListProps={FixedSizeListProps}
+                        SearchTextFieldProps={{
+                            InputProps: { classes: { root: classes.search } },
+                        }}
+                        isHiddenChainIcon={false}
+                    />
+                </div>
             </DialogContent>
         </InjectedDialog>
     )
