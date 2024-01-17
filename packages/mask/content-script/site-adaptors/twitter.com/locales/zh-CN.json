@@ -1,3 +1,3 @@
 {
-    "additional_post_box__encrypted_post_pre": "此推特使用 #mask_io (@realMaskNetwork) 加密。 📪🔑\n\n🎭 🎭🎭 厌烦了纯文本？尝试向你的朋友发送加密消息。安装 {{encrypted}} 以发送你第一个加密推文。"
+    "additional_post_box__encrypted_post_pre": "此推特使用 #mask_io (@realMaskNetwork) 加密。 📪🔑\n\n🎭 🎭🎭 厌烦了纯文本？尝试向你的朋友发送加密消息。安装 {{- encrypted}} 以发送你第一个加密推文。"
 }
