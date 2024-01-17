@@ -65,6 +65,7 @@ export const SelectFungibleTokenModal = forwardRef<
             disableSearchBar={disableSearchBar}
             selectedTokens={selectedTokens}
             onClose={(token) => dispatch?.close(token)}
+            setChainId={setChainId}
         />
     )
 })

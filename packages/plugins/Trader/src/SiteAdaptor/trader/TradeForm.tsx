@@ -52,7 +52,7 @@ const useStyles = makeStyles()((theme) => {
         },
         reverse: {
             backgroundColor:
-                Sniffings.is_dashboard_page ? MaskColorVar.lightBackground : theme.palette.background.default,
+                Sniffings.is_dashboard_page ? MaskColorVar.lightBackground : theme.palette.maskColor.bottom,
             width: 32,
             height: 32,
             borderRadius: 99,
@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         reverseWrapper: {
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.maskColor.line,
             padding: 2,
             borderRadius: 99,
             marginTop: -16,
