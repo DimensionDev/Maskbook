@@ -14,9 +14,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <SnapshotContext.Provider value={identifier}>
-            <Cache>
-                <Component />
-            </Cache>
+            <Component />
         </SnapshotContext.Provider>
     )
 }
