@@ -42,7 +42,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
-    const baseConfig: webpack.Configuration = {
+    const baseConfig = {
         name: 'mask',
         // to set a correct base path for source map
         context: join(__dirname, '../../../'),
@@ -342,7 +342,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             client: flags.hmr ? undefined : false,
         } as DevServerConfiguration,
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
-    }
+    } satisfies webpack.Configuration
 
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: withReactDevTools(join(__dirname, '../dashboard/initialization/index.ts')),
@@ -351,7 +351,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         background: normalizeEntryDescription(join(__dirname, '../background/initialization/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/initialization/mv3-entry.ts')),
     })
-    baseConfig.plugins!.push(
+    baseConfig.plugins.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
         await addHTMLEntry({
@@ -363,7 +363,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
-        baseConfig.plugins!.push(
+        baseConfig.plugins.push(
             await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', perf: flags.profiling }),
         )
     }
