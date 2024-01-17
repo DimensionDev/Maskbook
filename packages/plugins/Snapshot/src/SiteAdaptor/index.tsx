@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
 const isSnapshotURL = (x: string): boolean =>
     /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
 
-function Renderer({ url }: { url: string }) {
+export function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
     usePluginWrapper(true)
     const fallbackUI = Array.from({ length: 2 })
