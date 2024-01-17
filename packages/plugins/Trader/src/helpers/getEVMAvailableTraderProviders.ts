@@ -61,6 +61,8 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
         case NetworkType.Conflux:
         case NetworkType.Moonbeam:
         case NetworkType.CustomNetwork:
+        case NetworkType.X1:
+        case NetworkType.X1_Testnet:
             console.error('To be implement network:', networkType)
             return EMPTY_LIST
         default:
