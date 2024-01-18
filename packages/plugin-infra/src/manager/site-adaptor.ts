@@ -37,6 +37,14 @@ export function useIsMinimalMode(pluginID: string) {
     return useValueRef(minimalModeSub).includes(pluginID)
 }
 
+export async function getIsMinimalMode(pluginID: string) {
+    if (minimalModeSub.ready) {
+        return minimalModeSub.value.includes(pluginID)
+    }
+    await minimalModeSub.readyPromise
+    return minimalModeSub.value.includes(pluginID)
+}
+
 /**
  *
  * @param pluginID Get the plugin ID

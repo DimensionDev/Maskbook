@@ -5,6 +5,7 @@ export {
     useActivatedPluginsSiteAdaptor,
     useActivatedPluginSiteAdaptor,
     useIsMinimalMode,
+    getIsMinimalMode,
 } from './manager/site-adaptor.js'
 
 export {
