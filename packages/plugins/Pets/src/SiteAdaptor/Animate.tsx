@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks/index.js'
+import { useEssay, useDefaultEssay, useCurrentVisitingUser, DEFAULT_USER } from '../hooks/index.js'
 import { NormalNFT } from './NormalNFT.js'
 import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
@@ -19,11 +19,8 @@ function AnimatePic() {
 
     const petShow = useValueRef<boolean>(petShowSettings)
 
-    const [start, setStart] = useState(true)
-    const [refresh, setRefresh] = useState(0)
-
-    const visitor = useCurrentVisitingUser(refresh)
-    const visitorMeta = useEssay(visitor, refresh)
+    const { value: visitor = DEFAULT_USER, retry: retryUser } = useCurrentVisitingUser()
+    const { value: visitorMeta, retry: retryEssay } = useEssay(visitor)
     const defMeta = useDefaultEssay(visitor)
     const showMeta = visitorMeta ?? defMeta
 
@@ -34,18 +31,10 @@ function AnimatePic() {
     const handleMouseLeave = () => setInfoShow(false)
 
     useEffect(() => {
-        const refreshHandle = async (data: number) => setRefresh(data)
-        PluginPetMessages.setResult.on(refreshHandle)
-        let count = 0
-        const timer = setInterval(() => {
-            const check = count % 9 < 5
-            setStart(check)
-            count += 1
-        }, 1000)
-        return () => {
-            clearInterval(timer)
-            PluginPetMessages.setResult.off(refreshHandle)
-        }
+        return PluginPetMessages.setResult.on(() => {
+            retryUser()
+            retryEssay()
+        })
     }, [])
     if (!petShow || !visitor.userId || visitor.userId === '$unknown' || !showMeta?.image) return null
     return (
@@ -54,7 +43,7 @@ function AnimatePic() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             key={visitor.userId}>
-            <NormalNFT start={start} infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
+            <NormalNFT infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
         </div>
     )
 }

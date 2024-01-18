@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { useStyles as useBoxStyles } from './PreviewBox.js'
-import Drag from './Drag.js'
-import type { ShowMeta } from '../types.js'
+import { useState } from 'react'
 import { CloseIcon } from '../constants.js'
-import { Image } from '@masknet/shared'
+import type { ShowMeta } from '../types.js'
+import Drag from './Drag.js'
+import { useStyles as useBoxStyles } from './PreviewBox.js'
 
 const useStyles = makeStyles()(() => ({
     imgContent: {
@@ -36,6 +36,12 @@ const useStyles = makeStyles()(() => ({
     wordContent: {
         display: 'flex',
         justifyContent: 'center',
+        animation: 'words-toggle 9s linear infinite',
+        '@keyframes words-toggle': {
+            '50%, 100%': {
+                display: 'none',
+            },
+        },
     },
     wordBox: {
         position: 'absolute',
@@ -45,7 +51,6 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface NormalNFTProps {
-    start: boolean
     infoShow: boolean
     showMeta: ShowMeta | undefined
     handleClose: () => void
@@ -55,7 +60,7 @@ function handleMenuShow(e: React.MouseEvent) {
     e.preventDefault()
 }
 export function NormalNFT(props: NormalNFTProps) {
-    const { start, infoShow, showMeta, handleClose } = props
+    const { infoShow, showMeta, handleClose } = props
     const { classes, cx } = useStyles()
     const { classes: boxClasses } = useBoxStyles()
 
@@ -66,18 +71,9 @@ export function NormalNFT(props: NormalNFTProps) {
 
     return (
         <Drag moveHandle={moveHandle} baseWidth={150} baseHeight={150}>
-            {start && showMeta?.word ?
+            {showMeta?.word ?
                 <Box className={classes.wordContent}>
-                    <Box
-                        className={cx(
-                            {
-                                [boxClasses.msgBox]: true,
-                                [boxClasses.wordShow]: true,
-                            },
-                            classes.wordBox,
-                        )}>
-                        {showMeta.word}
-                    </Box>
+                    <Box className={cx(boxClasses.msgBox, boxClasses.wordShow, classes.wordBox)}>{showMeta.word}</Box>
                 </Box>
             :   null}
             <Box className={classes.imgContent} onContextMenu={handleMenuShow}>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
 import { ImageType } from '../types.js'
 import type { User, ShowMeta, EssayRSSNode } from '../types.js'
@@ -7,8 +7,8 @@ import { MASK_TWITTER, PunkIcon, Punk3D } from '../constants.js'
 import { useUser } from './useUser.js'
 import { usePetsTrans } from '../locales/i18n_generated.js'
 
-export function useEssay(user: User, refresh?: number) {
-    const { value } = useAsync(async () => {
+export function useEssay(user: User) {
+    return useAsyncRetry(async () => {
         if (!user.address) return null
         const stringStorage = Web3Storage.createFireflyStorage('Pets', user.address)
         let result: EssayRSSNode | undefined = await stringStorage.get<EssayRSSNode>('pet')
@@ -17,9 +17,7 @@ export function useEssay(user: User, refresh?: number) {
             result = await rss3Storage.get<EssayRSSNode>('_pet')
         }
         return result?.essay.userId === user.userId ? result.essay : null
-    }, [user, refresh])
-
-    return value
+    }, [user.userId, user.address])
 }
 
 export function useDefaultEssay(user: User) {
