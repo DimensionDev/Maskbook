@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, PersistentStorages } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
@@ -11,7 +11,6 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
-import { lensStorage } from '../context.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -87,7 +86,8 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
             let currentProfileId =
-                lensStorage.latestProfile?.value ?? (await Lens.queryDefaultProfileByAddress(wallet))?.id
+                PersistentStorages.Settings.storage.latestLensProfile.value ||
+                (await Lens.queryDefaultProfileByAddress(wallet))?.id
             if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
                 currentProfileId = first(profiles)?.id
