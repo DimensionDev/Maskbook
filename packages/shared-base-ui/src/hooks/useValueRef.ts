@@ -8,7 +8,7 @@ function getServerSnapshot(): never {
 export function useValueRef<T>(ref: ValueRef<T>): T {
     if ('readyPromise' in ref) {
         const ref2 = ref as ValueRefWithReady<T>
-        if (!ref2.nowReady) use(ref2.readyPromise)
+        if (!ref2.ready) use(ref2.readyPromise)
     }
     return useSyncExternalStore(
         (f) => ref.addListener(f),
