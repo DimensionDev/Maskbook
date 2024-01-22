@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Web3Storage } from '@masknet/web3-providers'
@@ -19,20 +19,20 @@ export function useUser() {
     }, [account, whoAmI])
 }
 
-const DEFAULT_USER = { userId: '', address: '' }
+export const DEFAULT_USER = { userId: '', address: '' }
 
-export function useCurrentVisitingUser(flag?: number) {
+export function useCurrentVisitingUser() {
     const identity = useCurrentVisitingIdentity()
-    const { value: user = DEFAULT_USER } = useAsync(async () => {
+    return useAsyncRetry(async () => {
         const userId =
-            location.href?.endsWith(identity?.identifier?.userId ?? '') ? identity?.identifier?.userId ?? '' : ''
+            location.href.endsWith(identity?.identifier?.userId ?? '') ? identity?.identifier?.userId ?? '' : ''
         try {
             if (!userId || userId === '$unknown') return DEFAULT_USER
             const storage = Web3Storage.createKVStorage(PetsPluginID)
-            const address = (await storage.get<string>(userId)) ?? ''
+            const address = await storage.get<string>(userId)
             return {
                 userId,
-                address,
+                address: address ?? '',
             }
         } catch {
             return {
@@ -40,6 +40,5 @@ export function useCurrentVisitingUser(flag?: number) {
                 address: '',
             }
         }
-    }, [identity, flag, location.href])
-    return user
+    }, [identity, location.href])
 }

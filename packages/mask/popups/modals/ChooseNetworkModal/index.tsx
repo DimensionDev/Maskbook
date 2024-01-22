@@ -1,10 +1,10 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
 import { ImageIcon, NetworkIcon, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { useBalance, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { useBalance, useChainContext, useNetwork, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
@@ -66,14 +66,8 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
     const { classes, theme } = useStyles()
     const { closeModal } = useActionModal()
     const chainId = network.chainId
-    const liRef = useRef<HTMLLIElement>(null)
     const selected = network.ID === currentNetworkId
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    useEffect(() => {
-        if (!selected) return
-        liRef.current?.scrollIntoView()
-    }, [selected, liRef.current])
 
     const providerURL = network.isCustomized ? network.rpcUrl : undefined
     const { data: balance, isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM, {
@@ -86,7 +80,10 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
         <li
             className={classes.network}
             role="option"
-            ref={liRef}
+            ref={(element) => {
+                if (!element || !selected) return
+                element.scrollIntoView()
+            }}
             onClick={async () => {
                 await Network?.switchNetwork(network.ID)
                 await EVMWeb3.switchChain?.(chainId, {
@@ -132,7 +129,8 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: Action
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const network = useNetwork(NetworkPluginID.PLUGIN_EVM)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
     const action = (
