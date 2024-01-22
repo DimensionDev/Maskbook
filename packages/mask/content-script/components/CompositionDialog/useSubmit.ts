@@ -51,7 +51,12 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                     await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
                 :   undefined
 
-            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost && reason === 'timeline') {
+            const isTwitterCompose = location.href === 'https://twitter.com/compose/tweet'
+            if (
+                activatedSiteAdaptorUI?.automation.endpoint?.publishPost &&
+                reason === 'timeline' &&
+                !isTwitterCompose // the reason could be incorrect by chance, checking url to ensure the compose is not open
+            ) {
                 const postId = await activatedSiteAdaptorUI.automation.endpoint.publishPost(
                     mediaObject ? [decoratedText || defaultText, mediaObject] : [decoratedText || defaultText],
                     {
