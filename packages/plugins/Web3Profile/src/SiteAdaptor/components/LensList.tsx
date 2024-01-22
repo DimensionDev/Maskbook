@@ -1,15 +1,16 @@
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, EMPTY_STRING } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { List, ListItem, Typography, type ListProps } from '@mui/material'
-import { memo } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
+import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
+import { memo } from 'react'
+import { useSubscription } from 'use-subscription'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { lensStorage } from '../context.js'
 
@@ -82,12 +83,12 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     const { classes, cx } = useStyles()
     const { account: wallet } = useChainContext()
 
+    const latestProfile = useSubscription(lensStorage.latestProfile?.subscription ?? EMPTY_STRING)
     const { data = accounts, isPending } = useQuery({
-        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet],
+        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet, latestProfile],
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
-            let currentProfileId =
-                lensStorage.latestProfile?.value ?? (await Lens.queryDefaultProfileByAddress(wallet))?.id
+            let currentProfileId = latestProfile ?? (await Lens.queryDefaultProfileByAddress(wallet))?.id
             if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
                 currentProfileId = first(profiles)?.id
