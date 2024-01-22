@@ -72,7 +72,7 @@ function TrendingViewWrapper({
     const { data: resultList, isLoading: loadingResultList } = useQuery({
         queryKey: ['dsearch', keyword, searchType],
         queryFn: async () => {
-            if (!keyword || !searchType) return EMPTY_LIST
+            if (!keyword) return EMPTY_LIST
             const results = await DSearch.search<Web3Helper.TokenResultAll>(keyword, searchType)
             return results
         },
