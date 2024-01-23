@@ -1,10 +1,9 @@
 // DO NOT import React in this file. This file is also used by worker.
 import type { Subscription } from 'use-subscription'
 import { env, type BuildInfoFile } from '@masknet/flags'
-import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import type { Plugin } from '../types.js'
 
-const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
+const __registered = new Map<string, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
 
 type onNewPluginRegisteredListener = (id: string, def: Plugin.DeferredDefinition) => void
@@ -13,7 +12,7 @@ export function onNewPluginRegistered(f: onNewPluginRegisteredListener) {
     return () => listeners.delete(f)
 }
 
-export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDefinition]>> = (() => {
+export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefinition]>> = (() => {
     let value: any[] | undefined
     onNewPluginRegistered(() => (value = undefined))
     return {
@@ -26,8 +25,8 @@ export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDef
     }
 })()
 
-export function getPluginDefine(id: PluginID | NetworkPluginID) {
-    return __registered.get(id as unknown as PluginID)
+export function getPluginDefine(id: string) {
+    return __registered.get(id)
 }
 
 export function registerPlugin(def: Plugin.DeferredDefinition) {

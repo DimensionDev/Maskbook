@@ -1,40 +1,58 @@
-import { useMemo } from 'react'
-import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRefWithReady } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRef, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
 
-const { events, activated, startDaemon, minimalMode } = createManager(
-    (def) => def.SiteAdaptor,
-    createManager.NoManagedContext,
-)
-const activatedSub = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([], isEqual)
-events.on('activateChanged', () => (activatedSub.value = [...activated.plugins]))
+const {
+    events,
+    activated,
+    startDaemon,
+    minimalMode: minimalModeSub,
+} = createManager((def) => def.SiteAdaptor, createManager.NoManagedContext)
 
-const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
-events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
+const ActivatedPluginsSiteAdaptorAny = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([])
+const ActivatedPluginsSiteAdaptorTrue = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([])
+const ActivatedPluginsSiteAdaptorFalse = new ValueRefWithReady<Plugin.SiteAdaptor.Definition[]>([])
+
+{
+    const update = () => {
+        ActivatedPluginsSiteAdaptorTrue.value = query(true)
+        ActivatedPluginsSiteAdaptorFalse.value = query(false)
+    }
+    events.on('activateChanged', () => {
+        ActivatedPluginsSiteAdaptorAny.value = [...activated.plugins]
+    })
+    events.on('activateChanged', update)
+    events.on('minimalModeChanged', update)
+
+    function query(minimalModeEqualsTo: boolean): Plugin.SiteAdaptor.Definition[] {
+        const result = [...activated.plugins]
+        if (minimalModeEqualsTo === true) return result.filter((x) => minimalModeSub[x.ID]?.value)
+        else if (minimalModeEqualsTo === false) return result.filter((x) => !minimalModeSub[x.ID]?.value)
+        return result
+    }
+}
 
 export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {
-    const minimalMode = useValueRef(minimalModeSub)
-    const result = useValueRef(activatedSub)
-    return useMemo(() => {
-        if (minimalModeEqualsTo === 'any') return result
-        else if (minimalModeEqualsTo === true) return result.filter((x) => minimalMode.includes(x.ID))
-        else if (minimalModeEqualsTo === false) return result.filter((x) => !minimalMode.includes(x.ID))
-        unreachable(minimalModeEqualsTo)
-    }, [result, minimalMode, minimalModeEqualsTo])
+    return useValueRef(
+        minimalModeEqualsTo === 'any' ? ActivatedPluginsSiteAdaptorAny
+        : minimalModeEqualsTo === true ? ActivatedPluginsSiteAdaptorTrue
+        : minimalModeEqualsTo === false ? ActivatedPluginsSiteAdaptorFalse
+        : unreachable(minimalModeEqualsTo),
+    )
 }
 useActivatedPluginsSiteAdaptor.visibility = {
-    useMinimalMode: useActivatedPluginsSiteAdaptor.bind(null, true),
-    useNotMinimalMode: useActivatedPluginsSiteAdaptor.bind(null, false),
-    useAnyMode: useActivatedPluginsSiteAdaptor.bind(null, 'any'),
+    useMinimalMode: () => useValueRef(ActivatedPluginsSiteAdaptorTrue),
+    useNotMinimalMode: () => useValueRef(ActivatedPluginsSiteAdaptorFalse),
+    useAnyMode: () => useValueRef(ActivatedPluginsSiteAdaptorAny),
 }
 
+// this should never be used for a normal plugin
+const TRUE = new ValueRef(true)
 export function useIsMinimalMode(pluginID: string) {
-    return useValueRef(minimalModeSub).includes(pluginID)
+    return useValueRef(minimalModeSub[pluginID] || TRUE)
 }
 
 /**
@@ -45,21 +63,19 @@ export function useIsMinimalMode(pluginID: string) {
  */
 export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
     const plugins = useActivatedPluginsSiteAdaptor(minimalModeEqualsTo)
-    const minimalMode = useValueRef(minimalModeSub)
+    const minimalMode = useIsMinimalMode(pluginID)
 
-    return useMemo(() => {
-        const result = plugins.find((x) => x.ID === pluginID)
-        if (!result) return result
-        if (minimalModeEqualsTo === 'any') return result
-        else if (minimalModeEqualsTo === true) {
-            if (minimalMode.includes(result.ID)) return result
-            return undefined
-        } else if (minimalModeEqualsTo === false) {
-            if (minimalMode.includes(result.ID)) return undefined
-            return result
-        }
-        unreachable(minimalModeEqualsTo)
-    }, [pluginID, plugins, minimalMode, minimalModeEqualsTo])
+    const result = plugins.find((x) => x.ID === pluginID)
+    if (!result) return undefined
+    if (minimalModeEqualsTo === 'any') return result
+    else if (minimalModeEqualsTo === true) {
+        if (minimalMode) return result
+        return undefined
+    } else if (minimalModeEqualsTo === false) {
+        if (minimalMode) return undefined
+        return result
+    }
+    unreachable(minimalModeEqualsTo)
 }
 useActivatedPluginSiteAdaptor.visibility = {
     useMinimalMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, true),
