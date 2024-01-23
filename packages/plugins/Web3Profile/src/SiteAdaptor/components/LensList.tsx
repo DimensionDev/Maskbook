@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { memo } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface Props extends ListProps {
-    accounts: FireflyBaseAPI.LensAccount[]
+    accounts: FireflyConfigAPI.LensAccount[]
 }
 
 export const LensList = memo(({ className, accounts, ...rest }: Props) => {
@@ -138,7 +138,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
 LensList.displayName = 'LensList'
 
 interface LensListItemProps {
-    account: FireflyBaseAPI.LensAccount
+    account: FireflyConfigAPI.LensAccount
     loading: boolean
 }
 
