@@ -23,7 +23,7 @@ export namespace FireflyConfigAPI {
 }
 
 export namespace FireflyRedPacketAPI {
-    export type PlatformType = 'lens' | 'farcaster'
+    export type PlatformType = 'lens' | 'farcaster' | 'twitter'
 
     export enum ActionType {
         Send = 'send',
@@ -78,8 +78,8 @@ export namespace FireflyRedPacketAPI {
         token_symbol: string
         token_decimal: number
         token_logo: string
-        redpacket_id: `0x${string}`
-        trans_hash: `0x${string}`
+        redpacket_id: HexString
+        trans_hash: HexString
         log_idx: number
         chain_id: string
         redpacket_status: 'VIEW'
@@ -87,16 +87,16 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface RedPacketClaimedInfo {
-        redpacket_id: `0x${string}`
+        redpacket_id: HexString
         received_time: string
         rp_msg: string
         token_amounts: string
         token_symbol: string
         token_decimal: number
         token_logo: string
-        trans_hash: `0x${string}`
+        trans_hash: HexString
         log_idx: string
-        creator: `0x${string}`
+        creator: HexString
         chain_id: string
     }
 
@@ -112,16 +112,66 @@ export namespace FireflyRedPacketAPI {
     }
 
     export type PublicKeyResponse = Response<{
-        publicKey: `0x${string}`
+        publicKey: HexString
     }>
 
     export type ClaimResponse = Response<{
-        signedMessage: `0x${string}`
+        signedMessage: HexString
     }>
 
     export type HistoryResponse = Response<{
         cursor: number
         size: number
         list: RedPacketSentInfo[] | RedPacketClaimedInfo[]
+    }>
+
+    export type CheckClaimStrategyStatusOptions = {
+        rpid: string
+        profile: {
+            platform: PlatformType
+            profileId: string
+            lensToken?: string
+        }
+        wallet: {
+            address: string
+        }
+    }
+    type PostReactionKind = 'like' | 'repost' | 'quote' | 'comment' | 'collect'
+    export type ClaimStrategyStatus =
+        | {
+              type: 'profileFollow'
+              payload: Array<{ platform: PlatformType; profileId: string; handle: string }>
+              result: boolean
+          }
+        | {
+              type: 'nftOwned'
+              payload: Array<{
+                  chain: string
+                  contractAddress: HexString
+                  collectionName: string
+              }>
+              result: boolean
+          }
+        | {
+              type: 'postReaction'
+              payload: {
+                  reactions: PostReactionKind[]
+                  params: Array<
+                      [
+                          {
+                              platform: PlatformType
+                              postId: string
+                          },
+                      ]
+                  >
+              }
+              result: {
+                  conditions: Array<{ key: PostReactionKind; value: boolean }>
+                  hasPassed: boolean
+              }
+          }
+    export type CheckClaimStrategyStatusResponse = Response<{
+        claimStrategyStatus: ClaimStrategyStatus[]
+        canClaim: boolean
     }>
 }

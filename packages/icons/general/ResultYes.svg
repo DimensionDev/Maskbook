@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="37" fill="none" viewBox="0 0 36 37">
+    <g id="Radio/yes" filter="url(#filter0_d_8755_16815)">
+        <circle id="Ellipse 71" cx="18" cy="14.667" r="8" fill="#3DC233"/>
+        <path id="Vector" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.1328 15.1721L16.7995 17.9721L22.1328 12.3721"/>
+    </g>
+    <defs>
+        <filter id="filter0_d_8755_16815" width="36" height="36" x="0" y="0.666992" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="5"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.239216 0 0 0 0 0.760784 0 0 0 0 0.2 0 0 0 0.2 0"/>
+            <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_8755_16815"/>
+            <feBlend in="SourceGraphic" in2="effect1_dropShadow_8755_16815" mode="normal" result="shape"/>
+        </filter>
+    </defs>
+</svg>

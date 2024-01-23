@@ -11,3 +11,5 @@ type LiteralUnion<
     : U extends number ? number
     : never,
 > = U | (T & Nothing)
+
+type HexString = `0x${string}`

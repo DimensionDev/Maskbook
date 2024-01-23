@@ -29,11 +29,21 @@ import { useRedPacketTrans } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
+import { Requirements } from './Requirements.js'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
         position: 'relative',
         width: '100%',
+    },
+    requirements: {
+        width: 407,
+        height: 238,
+        boxSizing: 'border-box',
+        position: 'absolute',
+        zIndex: 9,
+        inset: 0,
+        margin: 'auto',
     },
     card: {
         display: 'flex',
@@ -415,6 +425,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     claim={claim}
                 />
             )}
+            <Requirements className={classes.requirements} />
         </div>
     )
 }

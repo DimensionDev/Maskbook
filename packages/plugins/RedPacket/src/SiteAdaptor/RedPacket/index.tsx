@@ -1,23 +1,29 @@
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import {
+    RedPacketStatus,
+    type RedPacketJSONPayload,
+    type FireflyRedPacketAPI as F,
+} from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId, signMessage } from '@masknet/web3-shared-evm'
-import { Card, Typography } from '@mui/material'
+import { Card, Grow, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { Requirements } from '../Requirements.js'
+import { useCheckClaimStrategyStatus } from '../hooks/useCheckClaimStrategyStats.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -44,6 +50,15 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             width: 'calc(100% - 32px)',
         },
 
+        requirements: {
+            width: 407,
+            height: 238,
+            boxSizing: 'border-box',
+            position: 'absolute',
+            zIndex: 9,
+            inset: 0,
+            margin: 'auto',
+        },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -214,9 +229,20 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         })
     }, [token, redPacketContract, payload.rpid, account])
 
+    // const [requirements, setRequirements] = useState([])
+    const [showRequirements, setShowRequirements] = useState(false)
+    const [claimStrategyStatus, setClaimStrategyStatus] = useState<F.ClaimStrategyStatus[]>(EMPTY_LIST)
+    const checkClaimStrategyStatus = useCheckClaimStrategyStatus(payload.rpid)
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
+            // TODO 检查
+            const { data } = await checkClaimStrategyStatus()
+            if (!data.canClaim) {
+                setShowRequirements(true)
+                setClaimStrategyStatus(data.claimStrategyStatus)
+                return
+            }
             hash = await claimCallback()
             checkResult()
         } else if (canRefund) {
@@ -225,7 +251,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback])
+    }, [canClaim, canRefund, claimCallback, checkClaimStrategyStatus])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''
@@ -309,6 +335,13 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         </Typography>
                     </div>
                 </div>
+                <Grow in={showRequirements} timeout={250}>
+                    <Requirements
+                        statusList={claimStrategyStatus}
+                        className={classes.requirements}
+                        onClose={() => setShowRequirements(false)}
+                    />
+                </Grow>
             </Card>
             {outdated ? null : (
                 <OperationFooter

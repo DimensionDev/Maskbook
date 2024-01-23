@@ -1,0 +1,24 @@
+import { useLastRecognizedSocialIdentity } from '@masknet/plugin-infra/content-script'
+import { useAccount } from '@masknet/web3-hooks-base'
+import { FireflyRedPacket } from '@masknet/web3-providers'
+import { useCallback } from 'react'
+
+export function useCheckClaimStrategyStatus(rpid: string) {
+    const account = useAccount()
+    const identity = useLastRecognizedSocialIdentity()
+    console.log('checkClaimStrategyStatus', identity)
+    const check = useCallback(async () => {
+        return FireflyRedPacket.checkClaimStrategyStatus({
+            rpid,
+            profile: {
+                platform: 'twitter', // TODO
+                profileId: 'app',
+                lensToken: '',
+            },
+            wallet: {
+                address: account,
+            },
+        })
+    }, [rpid, account])
+    return check
+}

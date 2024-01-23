@@ -121,5 +121,6 @@
     "select_all": "Select All",
     "retry": "Retry",
     "go_wrong": "Something went wrong.",
-    "no_enough_gas_fees": "No Enough Gas Fees"
+    "no_enough_gas_fees": "No Enough Gas Fees",
+    "requirements": "Requirements"
 }
