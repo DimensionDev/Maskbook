@@ -7,7 +7,7 @@ import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo, useRef, type HTMLProps, memo } from 'react'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
@@ -65,7 +65,7 @@ interface SocialAccountListProps
     userId?: string
 }
 
-const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingProof => {
+const FireflyLensToNextIdLens = (account: FireflyConfigAPI.LensAccount): BindingProof => {
     return {
         platform: NextIDPlatform.LENS,
         name: account.name,
