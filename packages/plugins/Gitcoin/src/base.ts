@@ -19,6 +19,6 @@ export const base: Plugin.Shared.Definition = {
         host_permissions: ['https://gitcoin.co/'],
     },
     inMinimalModeByDefault: true,
-    contribution: {},
+    contribution: { postContent: new Set([/https:\/\/gitcoin.co\/grants\/\d+/]) },
     i18n: languages,
 }
