@@ -1,6 +1,3 @@
-import { useMemo, useState, type MouseEvent, useCallback } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
     ChainBoundary,
@@ -13,16 +10,19 @@ import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { useWeb3ProfileTrans, Web3ProfileTrans } from '../../locales/i18n_generated.js'
+import { ZERO, formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
+import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { first } from 'lodash-es'
+import { useCallback, useMemo, useState, type MouseEvent } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
+import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
-import { useQuery } from '@tanstack/react-query'
 import { HandlerDescription } from './HandlerDescription.js'
-import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
