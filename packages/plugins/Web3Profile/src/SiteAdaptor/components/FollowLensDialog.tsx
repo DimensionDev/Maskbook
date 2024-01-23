@@ -5,7 +5,7 @@ import {
     InjectedDialog,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EMPTY_STRING, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PersistentStorages } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
@@ -17,10 +17,8 @@ import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useSubscription } from 'use-subscription'
 import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
-import { lensStorage } from '../context.js'
 import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
@@ -123,7 +121,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { showSnackbar } = useCustomSnackbar()
 
-    const latestProfile = useSubscription(lensStorage.latestProfile?.subscription ?? EMPTY_STRING)
     // #region profile information
     const { value, loading } = useAsyncRetry(async () => {
         if (!handle || !open || !open) return
@@ -135,10 +132,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
         const profiles = await Lens.queryProfilesByAddress(account)
 
+        const latestProfile = PersistentStorages.Settings.storage.latestLensProfile?.value
         setCurrentProfile((prev) => {
             const profile = defaultProfile ?? profiles.find((x) => x.id === latestProfile) ?? first(profiles)
             if (!prev && profile) {
-                if (!lensStorage.latestProfile?.value) lensStorage.latestProfile?.setValue(profile.id)
+                if (latestProfile) PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
                 return profile
             }
             return prev
@@ -149,7 +147,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             profiles,
             defaultProfile: defaultProfile ?? first(profiles),
         }
-    }, [handle, open, account, latestProfile])
+    }, [handle, open, account])
 
     const { profile, defaultProfile, isSelf, profiles } = value ?? {}
 
@@ -324,7 +322,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
         setCurrentProfile(profile)
-        lensStorage.latestProfile?.setValue(profile.id)
+        PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
     }, [])
 
     return (

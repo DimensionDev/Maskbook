@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { CopyButton, Image, useSharedTrans } from '@masknet/shared'
-import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import { CrossIsolationMessages, NextIDPlatform, type BindingProof, PersistentStorages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -11,6 +11,7 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -156,7 +157,15 @@ export function SocialAccountListItem({
     const { loading, value } = useAsync(async () => {
         if (platform !== NextIDPlatform.LENS || !identity) return
         const profile = await Lens.getProfileByHandle(identity)
-        const isFollowing = await Lens.queryFollowStatus(account, profile.id)
+        let currentProfileId =
+            PersistentStorages.Settings.storage.latestLensProfile.value ||
+            (await Lens.queryDefaultProfileByAddress(account))?.id
+        if (!currentProfileId) {
+            const profiles = await Lens.queryProfilesByAddress(account)
+            currentProfileId = first(profiles)?.id
+        }
+
+        const isFollowing = await Lens.queryFollowStatus(currentProfileId ?? '', profile.id)
         return {
             ownedBy: profile.ownedBy,
             isFollowing,
