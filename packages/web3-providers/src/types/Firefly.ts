@@ -1,4 +1,4 @@
-export namespace FireflyBaseAPI {
+export namespace FireflyConfigAPI {
     export type Result<T> = {
         code: number
         reason: string
