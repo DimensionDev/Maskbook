@@ -3,7 +3,7 @@ import { getProposalIdentifier } from './helpers.js'
 import { Snapshot } from './Snapshot.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 // @ts-expect-error undocumented api
-import { unstable_Cache as Cache, unstable_useCacheRefresh } from 'react'
+import { unstable_useCacheRefresh } from 'react'
 
 interface PostInspectorProps {
     url: string
