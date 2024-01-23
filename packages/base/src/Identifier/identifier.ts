@@ -137,9 +137,9 @@ export class ECKeyIdentifier extends Identifier {
         )
     }
     declare [Symbol.toStringTag]: string
-    #ec: undefined
+    ec = 'ec'
     static [Symbol.hasInstance](x: any): boolean {
-        return typeof x === 'object' && x !== null && #ec in x
+        return typeof x === 'object' && x !== null && 'ec' in x
     }
     static {
         ECKeyIdentifier.prototype[Symbol.toStringTag] = 'ECKeyIdentifier'
@@ -184,9 +184,9 @@ export class PostIVIdentifier extends Identifier {
         return new Uint8Array(decodeArrayBuffer(x))
     }
     declare [Symbol.toStringTag]: string
-    #post_iv: undefined
+    post_iv = 'post_iv'
     static [Symbol.hasInstance](x: any): boolean {
-        return typeof x === 'object' && x !== null && #post_iv in x
+        return typeof x === 'object' && x !== null && 'post_iv' in x
     }
     static {
         PostIVIdentifier.prototype[Symbol.toStringTag] = 'PostIVIdentifier'
@@ -234,9 +234,9 @@ export class PostIdentifier extends Identifier {
         return this.postID
     }
     declare [Symbol.toStringTag]: string
-    #post: undefined
+    post = 'post'
     static [Symbol.hasInstance](x: any): boolean {
-        return typeof x === 'object' && x !== null && #post in x
+        return typeof x === 'object' && x !== null && 'post' in x
     }
     static {
         PostIdentifier.prototype[Symbol.toStringTag] = 'PostIdentifier'
@@ -293,9 +293,9 @@ export class ProfileIdentifier extends Identifier {
         return `person:${this.network}/${this.userId}`
     }
     declare [Symbol.toStringTag]: string
-    #profile: undefined
+    profile = 'profile'
     static [Symbol.hasInstance](x: any): boolean {
-        return typeof x === 'object' && x !== null && #profile in x
+        return typeof x === 'object' && x !== null && 'profile' in x
     }
     static {
         ProfileIdentifier.prototype[Symbol.toStringTag] = 'ProfileIdentifier'
