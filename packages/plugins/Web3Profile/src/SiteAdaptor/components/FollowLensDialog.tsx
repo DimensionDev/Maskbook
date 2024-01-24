@@ -151,15 +151,16 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { profile, defaultProfile, isSelf, profiles } = value ?? {}
 
-    const { isPending } = useQuery({
+    const { isPending, isFetching } = useQuery({
         queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
         queryFn: async () => {
             if (!value?.profile.id || !currentProfile) return false
-            const result = await Lens.queryFollowStatus(currentProfile.id, value?.profile.id)
+            const result = await Lens.queryFollowStatus(currentProfile.id, value.profile.id)
             setIsFollowing(result)
             return result
         },
         refetchOnWindowFocus: false,
+        staleTime: 0,
     })
 
     const followModule = useMemo(() => {
@@ -401,7 +402,13 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 variant="roundedContained"
                                                 className={classes.followAction}
                                                 disabled={disabled}
-                                                loading={followLoading || unfollowLoading || loading || isPending}
+                                                loading={
+                                                    followLoading ||
+                                                    unfollowLoading ||
+                                                    loading ||
+                                                    isPending ||
+                                                    isFetching
+                                                }
                                                 onClick={handleClick}
                                                 onMouseOver={() => setIsHovering(true)}
                                                 onMouseOut={() => setIsHovering(false)}>
