@@ -112,11 +112,11 @@ export namespace FireflyRedPacketAPI {
     }
 
     export type PublicKeyResponse = Response<{
-        publicKey: string
+        publicKey: `0x${string}`
     }>
 
     export type ClaimResponse = Response<{
-        signedMessage: string
+        signedMessage: `0x${string}`
     }>
 
     export type HistoryResponse = Response<{

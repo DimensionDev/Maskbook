@@ -48,7 +48,10 @@ export class FireflyRedPacket {
         ]
     }
 
-    static async createPublicKey(themeId: number, payloads: FireflyRedPacketAPI.StrategyPayload[]): Promise<string> {
+    static async createPublicKey(
+        themeId: number,
+        payloads: FireflyRedPacketAPI.StrategyPayload[],
+    ): Promise<`0x${string}`> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
@@ -77,7 +80,7 @@ export class FireflyRedPacket {
         rpid: string,
         from: `0x${string}`,
         reaction: FireflyRedPacketAPI.ProfileReaction,
-    ): Promise<string> {
+    ): Promise<`0x${string}`> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
@@ -116,5 +119,3 @@ export class FireflyRedPacket {
         )
     }
 }
-
-export const FireflyRedPacketProvider = new FireflyRedPacket()
