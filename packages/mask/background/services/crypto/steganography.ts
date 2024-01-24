@@ -7,7 +7,9 @@ async function fetchImage(url: string) {
     if (!res.ok) throw new Error('Fetch failed.')
     return res.arrayBuffer()
 }
+
 const steganographyDownloadImage = memoizePromise(memoize, fetchImage, (x) => x)
+
 export function steganographyEncodeImage(
     buf: ArrayBuffer,
     options: Omit<EncodeImageOptions, 'downloadImage'>,
