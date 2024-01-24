@@ -309,8 +309,8 @@ export function searchRetweetAvatarSelector() {
 }
 
 export function searchReplyToolbarSelector() {
-    return querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
-        '[role="presentation"]:has(> div[data-testid="geoButton"])',
+    return querySelector<E>(
+        'div[data-testid="primaryColumn"] div[data-testid="toolBar"] [role="presentation"]:has(> div[data-testid="geoButton"])',
     )
 }
 

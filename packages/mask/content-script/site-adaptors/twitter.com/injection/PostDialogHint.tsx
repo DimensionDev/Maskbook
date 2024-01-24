@@ -36,9 +36,10 @@ export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
         missingReportRule: { name: 'PostDialog hint timeline', rule: 'https://twitter.com/home' },
     })
 
+    const composeWithEditor = isCompose() && hasEditor()
     renderPostDialogHintTo(
         'popup',
-        postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
+        postEditorInPopupSelector().map((x) => (composeWithEditor ? x : emptyNode)),
         {
             signal,
             missingReportRule: {
