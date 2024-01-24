@@ -26,6 +26,7 @@ const libV1AlgrDefaults: Omit<EncodeOptions, 'text'> = {
     transformAlgorithm: TransformAlgorithm.FFT1D,
     version: AlgorithmVersion.V1,
 }
+
 const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
     size: 8,
     narrow: 0,
@@ -135,6 +136,7 @@ export function getPreset(preset: SteganographyPreset): Preset {
     if (preset === SteganographyPreset.Preset202312) return Preset202312
     unreachable(preset)
 }
+
 function isSameDimension(dimension: Dimension, otherDimension: Dimension) {
     return dimension.width === otherDimension.width && dimension.height === otherDimension.height
 }

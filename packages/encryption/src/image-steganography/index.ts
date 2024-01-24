@@ -1,7 +1,8 @@
 import { encode, decode, type GrayscaleAlgorithm, DEFAULT_MASK, type EncodeOptions } from '@masknet/stego-js'
-import { getDimension } from './utils.js'
-import { getPreset, findPreset, type SteganographyPreset } from './presets.js'
 import { decodeArrayBuffer, encodeArrayBuffer } from '@masknet/kit'
+import { getDimensionAsBuffer } from './getDimensionAsBuffer.js'
+import { getDimensionAsBlob } from './getDimensionAsBlob.js'
+import { getPreset, findPreset, type SteganographyPreset } from './presets.js'
 
 export { GrayscaleAlgorithm } from '@masknet/stego-js'
 
@@ -46,9 +47,13 @@ export interface DecodeImageOptions extends SteganographyIO {
 
 export async function steganographyDecodeImage(image: Blob | string, options: DecodeImageOptions) {
     const buffer = typeof image === 'string' ? await options.downloadImage(image) : await image.arrayBuffer()
-    const dimension = getDimension(buffer)
+
+    const dimension = (await getDimensionAsBlob(image)) ?? getDimensionAsBuffer(buffer)
+    if (!dimension) return null
+
     const preset = findPreset(dimension)
     if (!preset) return null
+
     const result = decode(
         buffer,
         preset.mask ? await options.downloadImage(preset.mask) : new Uint8Array(DEFAULT_MASK),
