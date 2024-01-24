@@ -10,7 +10,6 @@ import { memo } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
-import RedPacketDialog from './RedPacketDialog.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
 import { RedPacketNftInPost } from './RedPacketNftInPost.js'
@@ -89,13 +88,15 @@ const site: Plugin.SiteAdaptor.Definition = {
     ]),
     GlobalInjection: RedPacketInjection,
     CompositionDialogEntry: {
-        dialog: RedPacketDialog,
         label: (
             <>
                 <Icons.RedPacket size={16} />
                 <Trans ns={PluginID.RedPacket} i18nKey="name" />
             </>
         ),
+        onClick: ({ compositionType }) => {
+            openDialog(compositionType)
+        },
     },
     ApplicationEntries: [
         (() => {
@@ -116,7 +117,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={() => {
-                                EntryComponentProps.onClick ? EntryComponentProps.onClick(openDialog) : openDialog()
+                                EntryComponentProps.onClick ?
+                                    EntryComponentProps.onClick(() => openDialog('timeline'))
+                                :   openDialog()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
                             }}
                         />

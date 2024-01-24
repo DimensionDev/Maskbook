@@ -7,11 +7,12 @@ import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabPanel } from '@mui/lab'
 import { Box } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { NftRedPacketHistoryList } from './NftRedPacketHistoryList.js'
 import { RedPacketHistoryList } from './RedPacketHistoryList.js'
 import { openComposition } from './openComposition.js'
+import { CompositionTypeContext } from './RedPacketInjection.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
@@ -32,25 +33,30 @@ export const RedPacketPast = memo(function RedPacketPast({ onSelect, onClose, ta
     const linkedPersona = useCurrentLinkedPersona()
 
     const senderName = currentIdentity?.identifier?.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const compositionType = useContext(CompositionTypeContext)
     const handleSendNftRedpacket = useCallback(
         (history: NftRedPacketJSONPayload, collection: NonFungibleCollection<ChainId, SchemaType>) => {
             const { rpid, txid, duration, sender, password, chainId } = history
-            openComposition(RedPacketNftMetaKey, {
-                id: rpid,
-                txid,
-                duration,
-                message: sender.message,
-                senderName,
-                contractName: collection.name,
-                contractAddress: collection.address,
-                contractTokenURI: collection.iconURL ?? '',
-                privateKey: password,
-                chainId,
-            })
+            openComposition(
+                RedPacketNftMetaKey,
+                {
+                    id: rpid,
+                    txid,
+                    duration,
+                    message: sender.message,
+                    senderName,
+                    contractName: collection.name,
+                    contractAddress: collection.address,
+                    contractTokenURI: collection.iconURL ?? '',
+                    privateKey: password,
+                    chainId,
+                },
+                compositionType,
+            )
             ApplicationBoardModal.close()
             onClose?.()
         },
-        [senderName],
+        [senderName, compositionType],
     )
 
     return (
