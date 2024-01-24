@@ -1,6 +1,5 @@
 import { unreachable } from '@masknet/kit'
 import { AlgorithmVersion, GrayscaleAlgorithm, TransformAlgorithm, type EncodeOptions } from '@masknet/stego-js'
-import { SteganographyPreset } from './index.js'
 
 /** @internal */
 export interface Dimension {
@@ -67,6 +66,15 @@ const Preset2023: Preset = {
     options: libV2AlgrDefaults,
 }
 
+const Preset202312: Preset = {
+    type: 'raw',
+    description: 'the preset we used for firefly PC',
+    width: 1200,
+    height: 840,
+    mask: null,
+    options: libV2AlgrDefaults,
+}
+
 const dimensionPreset: readonly Preset[] = [
     Preset2023,
     Preset2022,
@@ -108,14 +116,23 @@ const dimensionPreset: readonly Preset[] = [
     },
 ]
 
+export enum SteganographyPreset {
+    Preset2021 = '2021',
+    Preset2022 = '2022',
+    Preset2023 = '2023',
+    Preset202312 = '202312',
+}
+
 /** @internal */
 export function findPreset(dimension: Dimension) {
     return dimensionPreset.find((d) => isSameDimension(d, dimension))
 }
+
 export function getPreset(preset: SteganographyPreset): Preset {
     if (preset === SteganographyPreset.Preset2021) return Preset2021
     if (preset === SteganographyPreset.Preset2022) return Preset2022
     if (preset === SteganographyPreset.Preset2023) return Preset2023
+    if (preset === SteganographyPreset.Preset202312) return Preset202312
     unreachable(preset)
 }
 function isSameDimension(dimension: Dimension, otherDimension: Dimension) {
