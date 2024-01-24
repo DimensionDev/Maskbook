@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useState, memo } from 'react'
+import { useMemo, useCallback, useState, memo, useContext } from 'react'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -26,6 +26,7 @@ import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCall
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
 import { openComposition } from './openComposition.js'
+import { CompositionTypeContext } from './RedPacketInjection.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -194,24 +195,29 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         onClose()
     }, [publicKey])
 
+    const compositionType = useContext(CompositionTypeContext)
     const onSendPost = useCallback(
         (id: string) => {
-            openComposition(RedPacketNftMetaKey, {
-                id,
-                transactionId,
-                duration,
-                message,
-                senderName,
-                contractName: contract.name,
-                contractAddress: contract.address,
-                contractTokenURI: contract.iconURL ?? '',
-                contractVersion: 1,
-                privateKey,
-                chainId: contract.chainId,
-            })
+            openComposition(
+                RedPacketNftMetaKey,
+                {
+                    id,
+                    transactionId,
+                    duration,
+                    message,
+                    senderName,
+                    contractName: contract.name,
+                    contractAddress: contract.address,
+                    contractTokenURI: contract.iconURL ?? '',
+                    contractVersion: 1,
+                    privateKey,
+                    chainId: contract.chainId,
+                },
+                compositionType,
+            )
             ApplicationBoardModal.close()
         },
-        [duration, message, senderName, contract, privateKey, transactionId],
+        [duration, message, senderName, contract, privateKey, transactionId, compositionType],
     )
 
     return (
