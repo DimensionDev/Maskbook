@@ -6,6 +6,8 @@ import { getPreset, findPreset, type SteganographyPreset } from './presets.js'
 
 export { GrayscaleAlgorithm } from '@masknet/stego-js'
 
+export { SteganographyPreset } from './presets.js'
+
 export interface SteganographyIO {
     downloadImage: (url: string) => Promise<ArrayBuffer>
 }
