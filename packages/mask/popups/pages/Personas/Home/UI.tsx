@@ -1,19 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { PopupHomeTabType, useParamTab } from '@masknet/shared'
-import {
-    LockStatus,
-    PopupModalRoutes,
-    PopupRoutes,
-    currentMaskWalletLockStatusSettings,
-    type EnhanceableSite,
-    type ProfileAccount,
-} from '@masknet/shared-base'
+import { PopupModalRoutes, PopupRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
@@ -199,7 +191,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         onAccountClick,
         bindingWallets,
         hasProofs,
-        hasPaymentPassword,
     }) => {
         const theme = useTheme()
         const t = useMaskSharedTrans()
@@ -209,20 +200,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
 
         const [currentTab, onChange] = useParamTab<PopupHomeTabType>(PopupHomeTabType.SocialAccounts)
 
-        const onChangeTab = useCallback(
-            (event: object, value: PopupHomeTabType) => {
-                if (
-                    currentMaskWalletLockStatusSettings.value === LockStatus.LOCKED &&
-                    value === PopupHomeTabType.ConnectedWallets &&
-                    hasPaymentPassword
-                ) {
-                    navigate(urlcat(PopupRoutes.Wallet, { from: PopupRoutes.Personas, goBack: true, popup: true }))
-                    return
-                }
-                onChange(event, value)
-            },
-            [hasPaymentPassword],
-        )
         return (
             <div className={classes.container}>
                 {!isEmpty ?
@@ -263,7 +240,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
 
                             <MaskTabList
-                                onChange={onChangeTab}
+                                onChange={onChange}
                                 aria-label="persona-tabs"
                                 classes={{ root: classes.tabs, grouped: classes.groupedButton }}>
                                 <Tab label={t.popups_social_account()} value={PopupHomeTabType.SocialAccounts} />
