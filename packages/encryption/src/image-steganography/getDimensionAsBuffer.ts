@@ -2,18 +2,14 @@ import { getImageType } from '@masknet/stego-js'
 import type { Dimension } from './presets.js'
 
 /** @internal */
-export function getDimension(buf: ArrayBuffer): Dimension {
-    const fallback = {
-        width: 0,
-        height: 0,
-    }
+export function getDimensionAsBuffer(buf: ArrayBuffer): Dimension | undefined {
     switch (getImageType(new Uint8Array(buf))) {
         case 'image/jpeg':
-            return getDimensionAsJPEG(buf) ?? fallback
+            return getDimensionAsJPEG(buf)
         case 'image/png':
             return getDimensionAsPNG(buf)
         default:
-            return fallback
+            return
     }
 }
 
