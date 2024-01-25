@@ -77,6 +77,7 @@ const Preset2023_Firefly: Preset = {
 }
 
 const dimensionPreset: readonly Preset[] = [
+    Preset2023_Firefly,
     Preset2023,
     Preset2022,
     Preset2021,
