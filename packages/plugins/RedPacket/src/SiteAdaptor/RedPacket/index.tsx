@@ -24,6 +24,7 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { Requirements } from '../Requirements.js'
 import { useCheckClaimStrategyStatus } from '../hooks/useCheckClaimStrategyStats.js'
+import { getRedPacketCover } from '../utils/getRedPacketCover.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -36,20 +37,29 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             color: theme.palette.common.white,
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: 335,
-            margin: 'auto',
+            aspectRatio: '10 / 7',
             marginBottom: outdated ? '12px' : 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
             boxSizing: 'border-box',
-            backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover',
+            // backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
+            // backgroundRepeat: 'no-repeat',
+            // backgroundSize: 'cover',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
             },
             width: 'calc(100% - 32px)',
         },
-
+        cover: {
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            inset: 0,
+            margin: 'auto',
+            zIndex: 0,
+        },
         requirements: {
             width: 407,
             height: 238,
@@ -65,6 +75,8 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             alignItems: 'flex-start',
         },
         content: {
+            position: 'relative',
+            zIndex: 1,
             display: 'flex',
             flex: 1,
             flexDirection: 'column',
@@ -299,9 +311,19 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token) return <LoadingStatus minHeight={148} />
 
+    const cover = getRedPacketCover()
+    console.log('cover', cover)
+
     return (
         <>
-            <Card className={classes.root} component="article" elevation={0}>
+            <Card
+                className={classes.root}
+                component="article"
+                elevation={0}
+                style={{
+                    backgroundImage: `url("${cover}")`,
+                }}>
+                <img className={classes.cover} src={cover} />
                 <img
                     src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}

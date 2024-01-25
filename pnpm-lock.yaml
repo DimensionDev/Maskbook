@@ -2016,6 +2016,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      urlcat:
+        specifier: ^3.1.0
+        version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
       web3-core:
         specifier: 1.10.2
         version: 1.10.2(patch_hash=7c6knffilb7dxuf3r2r5ttgbem)
