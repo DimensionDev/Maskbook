@@ -67,7 +67,7 @@ const Preset2023: Preset = {
     options: libV2AlgrDefaults,
 }
 
-const Preset2023_12: Preset = {
+const Preset2023_Firefly: Preset = {
     type: 'raw',
     description: 'the preset we used for firefly PC',
     width: 1200,
@@ -121,7 +121,7 @@ export enum SteganographyPreset {
     Preset2021 = '2021',
     Preset2022 = '2022',
     Preset2023 = '2023',
-    Preset2023_12 = '2023_12',
+    Preset2023_Firefly = '2023_Firefly',
 }
 
 /** @internal */
@@ -133,7 +133,7 @@ export function getPreset(preset: SteganographyPreset): Preset {
     if (preset === SteganographyPreset.Preset2021) return Preset2021
     if (preset === SteganographyPreset.Preset2022) return Preset2022
     if (preset === SteganographyPreset.Preset2023) return Preset2023
-    if (preset === SteganographyPreset.Preset2023_12) return Preset2023_12
+    if (preset === SteganographyPreset.Preset2023_Firefly) return Preset2023_Firefly
     unreachable(preset)
 }
 
