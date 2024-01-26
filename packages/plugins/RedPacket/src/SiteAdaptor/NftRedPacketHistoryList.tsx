@@ -1,4 +1,3 @@
-import { useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { EmptyStatus, LoadingStatus, useSharedTrans } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -6,7 +5,7 @@ import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { List, Popper, Typography } from '@mui/material'
+import { List } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -79,26 +78,15 @@ interface Props {
 }
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const t = useRedPacketTrans()
     const sharedI18N = useSharedTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: histories, isPending } = useNftRedPacketHistory(account, chainId)
-    const containerRef = useRef<HTMLDivElement>(null)
-    const [popperText, setPopperText] = useState('')
-    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
         chainId,
         schemaType: SchemaType.ERC721,
     })
-
-    const handleShowPopover = (anchor: HTMLElement, text: string) => {
-        setAnchorEl(anchor)
-        setPopperText(text)
-    }
-    const handleHidePopover = () => {
-        setAnchorEl(null)
-    }
 
     if (isPending) {
         return (
@@ -117,31 +105,17 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     }
 
     return (
-        <>
-            <div ref={containerRef} className={classes.root}>
-                <List style={{ padding: '16px 0 0' }}>
-                    {histories.map((history) => (
-                        <NftRedPacketHistoryItem
-                            key={history.txid}
-                            collections={collections}
-                            history={history}
-                            onSend={onSend}
-                            onShowPopover={handleShowPopover}
-                            onHidePopover={handleHidePopover}
-                        />
-                    ))}
-                </List>
-            </div>
-            <Popper className={classes.popper} open={!!anchorEl} placement="top" anchorEl={anchorEl} disablePortal>
-                {({ placement }) => {
-                    return (
-                        <div className={classes.popperContent}>
-                            <Typography className={classes.popperText}>{popperText}</Typography>
-                            <div className={cx(classes.arrow, placement === 'bottom' ? classes.atBottom : '')} />
-                        </div>
-                    )
-                }}
-            </Popper>
-        </>
+        <div className={classes.root}>
+            <List style={{ padding: '16px 0 0' }}>
+                {histories.map((history) => (
+                    <NftRedPacketHistoryItem
+                        key={history.txid}
+                        collections={collections}
+                        history={history}
+                        onSend={onSend}
+                    />
+                ))}
+            </List>
+        </div>
     )
 }
