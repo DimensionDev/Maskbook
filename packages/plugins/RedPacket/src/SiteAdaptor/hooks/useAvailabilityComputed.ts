@@ -37,6 +37,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         return {
             ...asyncResult,
             payload,
+            password,
             computed: {
                 canClaim: false,
                 canRefund: false,
@@ -51,6 +52,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
     return {
         ...asyncResult,
+        password,
         computed: {
             canClaim: !isExpired && !isEmpty && !isClaimed && isPasswordValid,
             canRefund: isExpired && !isEmpty && isCreator,
