@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
 import { timeout } from '@masknet/kit'
 import { Emitter } from '@servie/events'
-import { BooleanPreference, ValueRefWithReady } from '@masknet/shared-base'
+import { BooleanPreference, ObservableSet, type PluginID } from '@masknet/shared-base'
 import { type Plugin } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
 
@@ -21,10 +21,18 @@ export function createManager<
         instance: T
         controller: AbortController
         context: Context
-        minimalModeEnabled: ValueRefWithReady<boolean>
     }
-    const resolved = new Map<string, T>()
-    const activated = new Map<string, ActivatedPluginInstance>()
+    const resolved = new Map<PluginID, T>()
+    const activated = new Map<PluginID, ActivatedPluginInstance>()
+    const minimalModePluginIDs = (() => {
+        const value = new ObservableSet<string>()
+        value.event.on('add', (id) => id.forEach((id) => events.emit('minimalModeChanged', id, true)))
+        value.event.on('delete', (id) => events.emit('minimalModeChanged', id, false))
+        value.clear = () => {
+            throw new TypeError('[@masknet/plugin-infra] Cannot clear minimal mode plugin IDs')
+        }
+        return value
+    })()
     let _host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>> = undefined!
     const events = new Emitter<{
         activateChanged: [id: string, enabled: boolean]
@@ -35,6 +43,7 @@ export function createManager<
         configureHostHooks: (host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>>) => (_host = host),
         activatePlugin,
         stopPlugin,
+        isMinimalMode,
         isActivated,
         startDaemon,
         activated: {
@@ -45,21 +54,14 @@ export function createManager<
                 },
             } as Iterable<T>,
         },
-        minimalMode: new Proxy(
-            {},
-            {
-                get(_, pluginID) {
-                    if (typeof pluginID === 'symbol') return undefined
-                    if (activated.has(pluginID)) return activated.get(pluginID)!.minimalModeEnabled
-                    return undefined
-                },
-            },
-        ) as Partial<Record<string, ValueRefWithReady<boolean>>>,
+        minimalMode: {
+            [Symbol.iterator]: () => minimalModePluginIDs.values(),
+        } as Iterable<string>,
         events,
     }
 
     async function updateCompositedMinimalMode(id: string) {
-        const definition = await __getDefinition(id)
+        const definition = await __getDefinition(id as PluginID)
         if (!definition) return
 
         const settings = await _host.minimalMode.isEnabled(id)
@@ -69,13 +71,12 @@ export function createManager<
         // plugin default minimal mode is false
         else result = !!definition.inMinimalModeByDefault
 
-        const instance = activated.get(id)
-        if (instance) instance.minimalModeEnabled.value = result
+        result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
     }
 
     function startDaemon(
         host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>>,
-        extraCheck?: (id: string) => boolean,
+        extraCheck?: (id: PluginID) => boolean,
     ) {
         _host = host
         const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
@@ -109,7 +110,7 @@ export function createManager<
             }
         }
 
-        async function meetRequirement(id: string) {
+        async function meetRequirement(id: PluginID) {
             const define = getPluginDefine(id)
             if (!define) return false
 
@@ -125,7 +126,7 @@ export function createManager<
             )
     }
 
-    async function activatePlugin(id: string) {
+    async function activatePlugin(id: PluginID) {
         if (activated.has(id)) return
         const definition = await __getDefinition(id)
         if (!definition) return
@@ -143,11 +144,13 @@ export function createManager<
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,
+            // Type 'Pick<Context, ManagedContext> & Omit<Context, ManagedContext>' is not assignable to type 'Context'. but it does.
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             context: {
                 ...getManagedContext(id, abort.signal),
                 ..._host.createContext(id, definition, abort.signal),
-            } as any,
-            minimalModeEnabled: new ValueRefWithReady(),
+            },
         }
         activated.set(id, activatedPlugin)
         if (definition.init) {
@@ -160,7 +163,7 @@ export function createManager<
         events.emit('activateChanged', id, true)
     }
 
-    function stopPlugin(id: string) {
+    function stopPlugin(id: PluginID) {
         const instance = activated.get(id)
         if (!instance) return
         instance.controller.abort()
@@ -168,11 +171,15 @@ export function createManager<
         events.emit('activateChanged', id, false)
     }
 
-    function isActivated(id: string) {
+    function isActivated(id: PluginID) {
         return activated.has(id)
     }
 
-    async function __getDefinition(id: string) {
+    function isMinimalMode(id: PluginID) {
+        return minimalModePluginIDs.has(id)
+    }
+
+    async function __getDefinition(id: PluginID) {
         if (resolved.has(id)) return resolved.get(id)!
 
         const deferredDefinition = getPluginDefine(id)

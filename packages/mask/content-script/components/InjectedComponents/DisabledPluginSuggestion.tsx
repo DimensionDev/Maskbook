@@ -19,8 +19,8 @@ import Services from '#services'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 function useDisabledPlugins() {
-    const activated = new Set<string>(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
-    const minimalMode = new Set<string>(useActivatedPluginsSiteAdaptor(true).map((x) => x.ID))
+    const activated = new Set(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
+    const minimalMode = new Set(useActivatedPluginsSiteAdaptor(true).map((x) => x.ID))
     const disabledPlugins = useSubscription(registeredPlugins)
         .filter((plugin) => !activated.has(plugin[0]) || minimalMode.has(plugin[0]))
         .map((x) => x[1])
