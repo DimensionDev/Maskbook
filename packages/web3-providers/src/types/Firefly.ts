@@ -23,7 +23,10 @@ export namespace FireflyConfigAPI {
 }
 
 export namespace FireflyRedPacketAPI {
-    export type PlatformType = 'lens' | 'farcaster'
+    export enum PlatformType {
+        lens = 'lens',
+        farcaster = 'farcaster'
+    }
 
     export enum ActionType {
         Send = 'send',
@@ -37,9 +40,15 @@ export namespace FireflyRedPacketAPI {
         MaskNetwork = 'mask_network',
     }
 
+    export enum StrategyType {
+        profileFollow = 'profileFollow',
+        postReaction = 'postReaction',
+        nftOwned = 'nftOwned'
+    }
+
     export interface StrategyPayload {
-        type: 'profileFollow' | 'postReaction' | 'nftOwned'
-        payload: Array<ProfileFollowStrategyPayload | PostReactionStrategyPayload | NftOwnedStrategyPayload>
+        type: StrategyType
+        payload:  Array<ProfileFollowStrategyPayload | NftOwnedStrategyPayload> | PostReactionStrategyPayload
     }
 
     export interface ProfileFollowStrategyPayload {
@@ -48,8 +57,11 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface PostReactionStrategyPayload {
-        platform: PlatformType
-        postId: string
+        params?: {
+            platform: PlatformType
+            postId: string
+            handle?: string
+        }[]
         reactions: string[]
     }
 
@@ -101,7 +113,7 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface ThemeSettings {
-        id: number
+        id: string
         payloadUrl: string
         coverUrl: string
     }

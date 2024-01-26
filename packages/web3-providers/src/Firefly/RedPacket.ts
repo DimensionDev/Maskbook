@@ -13,12 +13,19 @@ const SITE_URL = 'https://firefly-staging.mask.io'
 const FIREFLY_ROOT_URL = 'https://api.firefly.land'
 
 export class FireflyRedPacket {
-    static async getThemeSettings(): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
+    static async getThemeSettings(from: string, amount?: string, type?: string, symbol?: string, decimals?: number): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
         return [
             {
-                id: 0,
+                // TODO: Change this id to keep it the same as the backend
+                id: '0',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'golden-flower',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'golden-flower',
@@ -26,9 +33,15 @@ export class FireflyRedPacket {
                 }),
             },
             {
-                id: 1,
+                id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-firefly',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-firefly',
@@ -36,9 +49,15 @@ export class FireflyRedPacket {
                 }),
             },
             {
-                id: 2,
+                id: 'e480132f-a853-43ea-bbab-883b463e55b3',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-flower',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-flower',
@@ -49,7 +68,7 @@ export class FireflyRedPacket {
     }
 
     static async createPublicKey(
-        themeId: number,
+        themeId: string,
         payloads: FireflyRedPacketAPI.StrategyPayload[],
     ): Promise<`0x${string}`> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')

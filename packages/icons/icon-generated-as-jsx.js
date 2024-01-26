@@ -740,6 +740,35 @@ export const ArrowBack = /*#__PURE__*/ __createIcon('ArrowBack', [
         u: () => new URL('./general/ArrowBack.svg', import.meta.url).href,
     },
 ])
+export const ArrowCircle = /*#__PURE__*/ __createIcon('ArrowCircle', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '24',
+                height: '25',
+                fill: 'none',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M12 22.2c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeWidth: '1.5',
+                        d: 'M13.26 15.73 9.74 12.2l3.52-3.53',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const ArrowDownRound = /*#__PURE__*/ __createIcon('ArrowDownRound', [
     {
         j: () =>
@@ -1341,6 +1370,40 @@ export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
                     fill: 'currentColor',
                     d: 'M20 11H7.414l4.293-4.293a1 1 0 0 0-1.414-1.414l-6 6a1 1 0 0 0 0 1.414l6 6a.996.996 0 0 0 1.415 0 1 1 0 0 0 0-1.414L7.413 13H20a1 1 0 1 0 0-2Z',
                 }),
+            }),
+        s: true,
+    },
+])
+export const Comment = /*#__PURE__*/ __createIcon('Comment', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '20',
+                height: '20',
+                fill: 'none',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        d: 'M14.984 8.992v3.333c0 .217-.009.425-.034.625-.191 2.25-1.516 3.367-3.958 3.367h-.333c-.209 0-.409.1-.534.266l-1 1.334c-.441.591-1.158.591-1.6 0l-1-1.334a.77.77 0 0 0-.533-.266h-.333c-2.659 0-3.992-.659-3.992-3.992V8.992c0-2.442 1.125-3.767 3.367-3.959.2-.025.408-.033.625-.033h5.333c2.658 0 3.992 1.333 3.992 3.992Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        d: 'M18.317 5.658v3.334c0 2.45-1.125 3.766-3.367 3.958.025-.2.033-.408.033-.625V8.992C14.983 6.333 13.65 5 10.991 5H5.659c-.216 0-.425.008-.625.033.192-2.241 1.517-3.366 3.959-3.366h5.333c2.658 0 3.992 1.333 3.992 3.991Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        d: 'M11.246 11.042h.007M8.33 11.042h.007M5.413 11.042h.007',
+                    }),
+                ],
             }),
         s: true,
     },
@@ -2178,6 +2241,24 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
         s: true,
     },
 ])
+export const Like = /*#__PURE__*/ __createIcon('Like', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '22',
+                height: '20',
+                fill: 'none',
+                children: /*#__PURE__*/ _jsx('path', {
+                    stroke: 'currentColor',
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    d: 'M11.62 18.662c-.34.117-.9.117-1.24 0C7.48 17.688 1 13.628 1 6.745 1 3.708 3.49 1.25 6.56 1.25c1.82 0 3.43.865 4.44 2.202a5.56 5.56 0 0 1 4.44-2.202c3.07 0 5.56 2.458 5.56 5.496 0 6.882-6.48 10.942-9.38 11.916Z',
+                }),
+            }),
+        s: true,
+    },
+])
 export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
         c: ['dark'],
@@ -2389,6 +2470,24 @@ export const NextIdAvatar = /*#__PURE__*/ __createIcon('NextIdAvatar', [
 export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWarning', [
     {
         u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url).href,
+    },
+])
+export const NFTHolder = /*#__PURE__*/ __createIcon('NFTHolder', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '21',
+                height: '20',
+                fill: 'none',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M5.362 1.037A.575.575 0 0 1 5.77.33a.583.583 0 0 1 .711.41l.15.554L11.542 0l.153.56.758-.2.923 3.393-.757.2.154.563L7.856 5.81l2.503 9.234h-.258v1.937h.587v.581h.354l.464 1.71a.575.575 0 0 1-.409.708.583.583 0 0 1-.71-.411l-1.053-3.88h.076v-1.936h-.586v-.582h-.172L6.736 6.106 1.834 7.4l-.153-.561-.758.2L0 3.646l.757-.2-.153-.563 4.908-1.294-.15-.552Zm6.89 16.138-1.17-.002v-.58h-.303v.002h-.287v-1.06l.002.005v-.108h.202l.383.001v-.58l.847.002v-.004h.326v.486h-.003v.098l.492.001v-.004h.098v.712h-.003l.001.45h-.585v.581Zm.978-1.03h4.398v-.808h.815v-.807h.815v-.807h.815V9.687h-.815V8.073h-.815V6.459h-.815V5.65h.815v-.807h-.815v.807h-.814v-.807h-.815v-.807h-1.63V3.23h-.814v1.614h.815v.807h-.815v1.615h-.814v-.807h-.815V5.65h.815v-.807h-.815v.807h-.815V8.88h-.815v4.036h.815v1.548h1.532v.58h.587v1.1ZM9.02 14.14v.386l-.106-.386h.105ZM9.681 1.7l-1.737.458.177.65.434-.115.413 1.516.868-.23-.412-1.515.434-.115-.177-.65ZM5.465 2.812l2.17-.572.178.65-1.086.285.118.433.673-.177.118.433-.673.178.177.65-1.086.285-.589-2.165Zm-1.178.31.869-.228.589 2.165-.868.229-.118-.433-.217.057-.118-.433-.217.057.236.867-.869.229-.59-2.166.87-.229.117.433.217-.057.118.433.217-.057-.236-.866ZM15.184 8.88H16v.807h-.815V8.88Zm-1.63 2.422v-.808h3.26v.808h.814v3.228h-.814v.807h-3.26v-.807h-.814v-3.228h.815Zm-.032.936h.64v.507h.51v.633h-.51v.506h-.64v-.633h.511v-.38h-.51v-.633Zm2.723 0h.64v.633h-.512v.38h.511v.633h-.639v-.505h-.511v-.634h.511v-.507Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
     },
 ])
 export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
@@ -2724,6 +2823,44 @@ export const Refresh = /*#__PURE__*/ __createIcon('Refresh', [
                         }),
                     ],
                 }),
+            }),
+        s: true,
+    },
+])
+export const Repost = /*#__PURE__*/ __createIcon('Repost', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                width: '20',
+                height: '20',
+                fill: 'none',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M2.983 4.3h11.534c1.383 0 2.5 1.117 2.5 2.5v2.767',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M5.617 1.667 2.983 4.3l2.634 2.633M17.017 15.7H5.483a2.497 2.497 0 0 1-2.5-2.5v-2.767',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'm14.384 18.333 2.633-2.633-2.633-2.633',
+                    }),
+                ],
             }),
         s: true,
     },
