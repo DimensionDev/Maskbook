@@ -1,6 +1,6 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import {
     RedPacketStatus,
@@ -9,9 +9,9 @@ import {
 } from '@masknet/web3-providers/types'
 import { formatBalance, minus, type FungibleToken } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, ListItem, Popper, Typography, useMediaQuery, type Theme } from '@mui/material'
+import { Box, ListItem, Typography, useMediaQuery, type Theme } from '@mui/material'
 import { intervalToDuration, nextDay } from 'date-fns'
-import { memo, useCallback, useMemo, useState, type MouseEvent } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useEverSeen } from '../../../../shared-base-ui/src/hooks/useEverSeen.js'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
@@ -224,6 +224,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
+        password,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, patchedHistory)
 
@@ -255,13 +256,8 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect({ ...patchedHistory, token: historyToken })
-    }, [onSelect, refundCallback, canRefund, canSend, patchedHistory, historyToken])
-
-    // #region password lost tips
-    const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
-    const openPopper = !!anchorEl
-    // #endregion
+        if (canSend) onSelect({ ...patchedHistory, password, token: historyToken })
+    }, [onSelect, refundCallback, canRefund, canSend, patchedHistory, historyToken, password])
 
     // #region refund time
     const refundDuration =
@@ -295,45 +291,38 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                 </div>
                             </div>
                             {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ?
-                                <>
-                                    <ActionButton
-                                        loading={isRefunding}
-                                        fullWidth={isSmall}
-                                        onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
-                                        onMouseEnter={(event: MouseEvent<HTMLButtonElement>) => {
-                                            canSend && !isPasswordValid ? setAnchorEl(event.currentTarget) : undefined
-                                        }}
-                                        onMouseLeave={() => {
-                                            canSend && !isPasswordValid ? setAnchorEl(null) : undefined
-                                        }}
-                                        disabled={
-                                            listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
-                                        }
-                                        className={cx(
-                                            classes.actionButton,
-                                            canSend && !isPasswordValid ? classes.disabledButton : '',
-                                        )}
-                                        size="large">
-                                        {canSend ?
-                                            t.share()
-                                        : isRefunding ?
-                                            t.refunding()
-                                        : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
-                                            t.empty()
-                                        :   t.refund()}
-                                    </ActionButton>
-                                    <Popper
-                                        className={classes.popper}
-                                        open={openPopper}
-                                        anchorEl={anchorEl}
-                                        transition
-                                        disablePortal>
-                                        <Typography className={classes.popperText}>
-                                            {t.data_broken({ duration: formatRefundDuration })}
-                                        </Typography>
-                                        <div className={classes.arrow} />
-                                    </Popper>
-                                </>
+                                <ShadowRootTooltip
+                                    placement="top"
+                                    title={
+                                        canSend && !isPasswordValid ?
+                                            <Typography className={classes.popperText}>
+                                                {t.data_broken({ duration: formatRefundDuration })}
+                                            </Typography>
+                                        :   undefined
+                                    }>
+                                    <span style={{ display: 'inline-block' }}>
+                                        <ActionButton
+                                            loading={isRefunding}
+                                            fullWidth={isSmall}
+                                            onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
+                                            disabled={
+                                                listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
+                                            }
+                                            className={cx(
+                                                classes.actionButton,
+                                                canSend && !isPasswordValid ? classes.disabledButton : '',
+                                            )}
+                                            size="large">
+                                            {canSend ?
+                                                t.share()
+                                            : isRefunding ?
+                                                t.refunding()
+                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
+                                                t.empty()
+                                            :   t.refund()}
+                                        </ActionButton>
+                                    </span>
+                                </ShadowRootTooltip>
                             :   null}
                         </section>
 
