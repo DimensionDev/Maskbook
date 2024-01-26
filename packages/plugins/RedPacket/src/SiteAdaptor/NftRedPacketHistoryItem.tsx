@@ -1,14 +1,14 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { fill } from 'lodash-es'
-import { memo, useCallback, useMemo, type MouseEventHandler } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
@@ -163,14 +163,10 @@ interface NftRedPacketHistoryItemProps {
     history: NftRedPacketJSONPayload
     collections: Array<NonFungibleCollection<ChainId, SchemaType>>
     onSend: (history: NftRedPacketJSONPayload, contract: NonFungibleCollection<ChainId, SchemaType>) => void
-    onShowPopover: (anchorEl: HTMLElement, text: string) => void
-    onHidePopover: () => void
 }
 export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
     history,
     onSend,
-    onShowPopover,
-    onHidePopover,
     collections,
 }: NftRedPacketHistoryItemProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -191,27 +187,18 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    const { canSend, isPasswordValid } = useNftAvailabilityComputed(account, patchedHistory)
+    const { canSend, isPasswordValid, password } = useNftAvailabilityComputed(account, patchedHistory)
 
     const collection = collections.find((x) => isSameAddress(x.address, patchedHistory.token_address))
 
     const handleSend = useCallback(() => {
         if (!(canSend && collection && isPasswordValid)) return
-        onSend(patchedHistory, collection)
-    }, [onSend, canSend, patchedHistory, collection, isPasswordValid])
+        onSend({ ...patchedHistory, password: patchedHistory.password || password }, collection)
+    }, [onSend, canSend, patchedHistory, collection, isPasswordValid, password])
 
     const { data: redpacketStatus } = useAvailabilityNftRedPacket(rpid, account, patchedHistory.chainId)
     const bitStatusList =
         redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
-
-    const handleMouseEnter: MouseEventHandler<HTMLButtonElement> = (event) => {
-        if (canSend && !isPasswordValid) {
-            handleShowPopover(event.currentTarget)
-        }
-    }
-    const handleShowPopover = (anchor: HTMLElement) => {
-        onShowPopover(anchor, t.nft_data_broken())
-    }
 
     return (
         <ListItem className={classes.root}>
@@ -243,17 +230,19 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
                                 </div>
                             </div>
 
-                            {canSend ?
-                                <ActionButton
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={onHidePopover}
-                                    onClick={handleSend}
-                                    disabled={!isPasswordValid}
-                                    className={classes.actionButton}
-                                    size="large">
-                                    {t.share()}
-                                </ActionButton>
-                            :   null}
+                            <ShadowRootTooltip
+                                placement="top"
+                                title={canSend && !isPasswordValid ? t.nft_data_broken() : ''}>
+                                <span style={{ display: 'inline-block' }}>
+                                    <ActionButton
+                                        onClick={handleSend}
+                                        disabled={!isPasswordValid}
+                                        className={classes.actionButton}
+                                        size="large">
+                                        {t.share()}
+                                    </ActionButton>
+                                </span>
+                            </ShadowRootTooltip>
                         </section>
 
                         <section className={classes.footer}>
