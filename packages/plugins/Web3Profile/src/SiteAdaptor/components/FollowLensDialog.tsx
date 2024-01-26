@@ -1,6 +1,3 @@
-import { useMemo, useState, type MouseEvent, useCallback } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import {
     ChainBoundary,
@@ -8,22 +5,24 @@ import {
     InjectedDialog,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PersistentStorages } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
-import { formatBalance, isLessThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Token, formatAmount, ProviderType } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
-import { useWeb3ProfileTrans, Web3ProfileTrans } from '../../locales/i18n_generated.js'
+import { ZERO, formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, ProviderType, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
+import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { first } from 'lodash-es'
+import { useCallback, useMemo, useState, type MouseEvent } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { getLensterLink } from '../../utils.js'
+import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
-import { useQuery } from '@tanstack/react-query'
 import { HandlerDescription } from './HandlerDescription.js'
-import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
-import { lensStorage } from '../context.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
@@ -133,11 +132,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
         const profiles = await Lens.queryProfilesByAddress(account)
 
+        const latestProfile = PersistentStorages.Settings.storage.latestLensProfile?.value
         setCurrentProfile((prev) => {
-            const profile =
-                defaultProfile ?? profiles.find((x) => x.id === lensStorage.latestProfile?.value) ?? first(profiles)
+            const profile = defaultProfile ?? profiles.find((x) => x.id === latestProfile) ?? first(profiles)
             if (!prev && profile) {
-                if (!lensStorage.latestProfile?.value) lensStorage.latestProfile?.setValue(profile.id)
+                if (latestProfile) PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
                 return profile
             }
             return prev
@@ -152,15 +151,16 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { profile, defaultProfile, isSelf, profiles } = value ?? {}
 
-    const { isPending } = useQuery({
+    const { isPending, isFetching } = useQuery({
         queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
         queryFn: async () => {
             if (!value?.profile.id || !currentProfile) return false
-            const result = await Lens.queryFollowStatus(currentProfile.id, value?.profile.id)
+            const result = await Lens.queryFollowStatus(currentProfile.id, value.profile.id)
             setIsFollowing(result)
             return result
         },
         refetchOnWindowFocus: false,
+        staleTime: 0,
     })
 
     const followModule = useMemo(() => {
@@ -323,7 +323,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
         setCurrentProfile(profile)
-        lensStorage.latestProfile?.setValue(profile.id)
+        PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
     }, [])
 
     return (
@@ -402,7 +402,13 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 variant="roundedContained"
                                                 className={classes.followAction}
                                                 disabled={disabled}
-                                                loading={followLoading || unfollowLoading || loading || isPending}
+                                                loading={
+                                                    followLoading ||
+                                                    unfollowLoading ||
+                                                    loading ||
+                                                    isPending ||
+                                                    isFetching
+                                                }
                                                 onClick={handleClick}
                                                 onMouseOver={() => setIsHovering(true)}
                                                 onMouseOut={() => setIsHovering(false)}>

@@ -16,7 +16,7 @@ export function TypedMessageRender(props: RenderProps) {
     if (isEmpty) return null
 
     return (
-        <span ref={textResize}>
+        <span ref={textResize} onClick={(e) => e.stopPropagation()}>
             <Container>
                 <TypedMessageRenderInline {...props} />
             </Container>

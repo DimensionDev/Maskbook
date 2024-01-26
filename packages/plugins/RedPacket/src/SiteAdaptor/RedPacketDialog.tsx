@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -27,6 +27,7 @@ import { RedPacketPast } from './RedPacketPast.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
+import { CompositionTypeContext } from './RedPacketInjection.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -104,6 +105,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const senderName =
         lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
 
+    const compositionType = useContext(CompositionTypeContext)
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -126,12 +128,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
 
             senderName && (payload.sender.name = senderName)
-            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload))
+            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType)
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             handleClose()
         },
-        [senderName, handleClose],
+        [senderName, handleClose, compositionType],
     )
 
     const onBack = useCallback(() => {

@@ -1,18 +1,25 @@
-import { useCallback, useEffect, useState } from 'react'
 import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
+import { createContext, useCallback, useEffect, useState } from 'react'
 
-import RedPacketDialog from './RedPacketDialog.js'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import RedPacketDialog from './RedPacketDialog.js'
+
+export const CompositionTypeContext = createContext<CompositionType>('timeline')
 
 export function RedPacketInjection() {
     const [open, setOpen] = useState(false)
     const [source, setSource] = useState<PluginID>()
+    const [compositionType, setCompositionType] = useState<CompositionType>('timeline')
 
     useEffect(() => {
-        return CrossIsolationMessages.events.redpacketDialogEvent.on(({ open, source: pluginId }) => {
-            setOpen(open)
-            setSource(pluginId)
-        })
+        return CrossIsolationMessages.events.redpacketDialogEvent.on(
+            ({ open, source: pluginId, compositionType = 'timeline' }) => {
+                setCompositionType(compositionType)
+                setOpen(open)
+                setSource(pluginId)
+            },
+        )
     }, [])
 
     const handleClose = useCallback(() => {
@@ -22,7 +29,9 @@ export function RedPacketInjection() {
     if (!open) return null
     return (
         <EVMWeb3ContextProvider>
-            <RedPacketDialog open onClose={handleClose} source={source} />
+            <CompositionTypeContext.Provider value={compositionType}>
+                <RedPacketDialog open onClose={handleClose} source={source} />
+            </CompositionTypeContext.Provider>
         </EVMWeb3ContextProvider>
     )
 }
