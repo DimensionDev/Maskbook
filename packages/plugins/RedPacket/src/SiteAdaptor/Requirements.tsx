@@ -1,8 +1,9 @@
-import { forwardRef, useMemo } from 'react'
-import { Box, Typography, type BoxProps, ListItem, List, IconButton } from '@mui/material'
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { Box, IconButton, List, ListItem, Typography, type BoxProps } from '@mui/material'
+import { sortBy } from 'lodash-es'
+import { forwardRef, useMemo } from 'react'
 import { useRedPacketTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -74,16 +75,20 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const requirements = useMemo(() => {
-        return statusList.flatMap((status) => {
+        const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
+        const orderedStatusList = sortBy(statusList, (x) => orders.indexOf(x.type))
+        return orderedStatusList.flatMap((status) => {
             if (status.type === 'profileFollow') {
-                // TODO
                 const payload = status.payload.filter((x) => x.platform === 'lens')
                 const handles = payload.map((x) => `@${x.handle}`).join(', ')
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.UserPlus className={classes.icon} size={16} />
                         <Typography className={classes.text}>
-                            Follow {handles} on {payload[0].platform}
+                            {t.follow_somebody_on_somewhere({
+                                handles,
+                                platform: payload[0].platform,
+                            })}
                         </Typography>
                         <ResultIcon className={classes.state} size={18} result={status.result} />
                     </ListItem>
@@ -117,10 +122,16 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />
                         <Typography className={classes.text}>NFT Holder of {collectionNames}</Typography>
+                        <Typography className={classes.text}>
+                            {t.nft_holder_of({
+                                names: collectionNames,
+                            })}
+                        </Typography>
                         <ResultIcon className={classes.state} size={18} result={status.result} />
                     </ListItem>
                 )
             }
+            return null
         })
     }, [statusList])
     return (

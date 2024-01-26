@@ -6,7 +6,6 @@ import { useCallback } from 'react'
 export function useCheckClaimStrategyStatus(rpid: string) {
     const account = useAccount()
     const identity = useLastRecognizedSocialIdentity()
-    console.log('checkClaimStrategyStatus', identity)
     const check = useCallback(async () => {
         return FireflyRedPacket.checkClaimStrategyStatus({
             rpid,

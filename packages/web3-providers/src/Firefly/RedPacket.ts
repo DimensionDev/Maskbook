@@ -12,17 +12,6 @@ import { FireflyRedPacketAPI } from '../entry-types.js'
 const SITE_URL = 'https://firefly-staging.mask.io'
 const FIREFLY_ROOT_URL = 'https://api.firefly.land'
 
-type CheckClaimStrategyStatusOptions = {
-    rpid: string
-    profile: {
-        platform: LiteralUnion<'lens' | 'farcaster' | 'twitter', string>
-        profileId: string
-        lensToken: string
-    }
-    wallet: {
-        address: string
-    }
-}
 export class FireflyRedPacket {
     static async getThemeSettings(): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
         return [

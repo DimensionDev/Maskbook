@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { makeStyles, ActionButton, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { makeStyles, ActionButton, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
 import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
-import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { Card, Typography, Button, Box } from '@mui/material'
+import { type RedPacketNftJSONPayload, type FireflyRedPacketAPI as F } from '@masknet/web3-providers/types'
+import { Card, Typography, Button, Box, Grow } from '@mui/material'
 import {
     WalletConnectedBoundary,
     ChainBoundary,
@@ -22,16 +22,18 @@ import {
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages, Sniffings, EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useRedPacketTrans } from '../locales/index.js'
+import { useCheckClaimStrategyStatus } from './hooks/useCheckClaimStrategyStats.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
 import { Requirements } from './Requirements.js'
+import { getRedPacketCover } from './utils/getRedPacketCover.js'
 
-const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
+const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => ({
     root: {
         position: 'relative',
         width: '100%',
@@ -55,21 +57,21 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         position: 'relative',
         color: theme.palette.common.white,
         boxSizing: 'border-box',
-        backgroundImage:
-            claimed ?
-                `url(${new URL('./assets/nftClaimedCover.png', import.meta.url)})`
-            :   `url(${new URL('./assets/cover.png', import.meta.url)})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        width: 'calc(100% - 32px)',
         margin: 'auto',
+        width: 'calc(100% - 32px)',
         marginBottom: outdated ? '12px' : 'auto',
-        height: 335,
+        aspectRatio: '10 / 7',
     },
-    remain: {
-        fontSize: 12,
-        fontWeight: 600,
-        color: theme.palette.common.white,
+    cover: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        inset: 0,
+        margin: 'auto',
+        zIndex: 0,
     },
     button: {
         backgroundColor: theme.palette.maskColor.dark,
@@ -78,13 +80,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
             backgroundColor: theme.palette.maskColor.dark,
         },
         margin: '0 !important',
-    },
-    footer: {
-        display: 'flex',
-        justifyContent: 'space-between !important',
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-        paddingBottom: theme.spacing(1),
     },
     buttonWrapper: {
         marginTop: 0,
@@ -108,26 +103,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
             justifyContent: 'center',
             overflow: 'hidden',
         },
-    },
-    claimedText: {
-        fontSize: 12,
-        fontWeight: 600,
-    },
-    badge: {
-        width: 76,
-        height: 27,
-        display: 'flex',
-        color: theme.palette.common.white,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        top: 12,
-        right: 12,
-        backgroundColor: parseColor(theme.palette.common.black).setAlpha(0.5).toString(),
-        borderRadius: 8,
-    },
-    badgeText: {
-        fontSize: 12,
     },
     imgWrapper: {
         maxWidth: 180,
@@ -164,31 +139,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         alignItems: 'center',
         gap: theme.spacing(1),
         padding: theme.spacing(0, 1),
-    },
-    words: {
-        display: '-webkit-box',
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: 'vertical',
-        color: theme.palette.common.white,
-        fontSize: 24,
-        fontWeight: 700,
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        flexGrow: 1,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            fontSize: 14,
-        },
-    },
-    from: {
-        fontSize: '14px',
-        color: theme.palette.common.white,
-        alignSelf: 'end',
-        fontWeight: 500,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            fontSize: 14,
-            right: 12,
-            bottom: 8,
-        },
     },
     fallbackImageWrapper: {
         width: '100%',
@@ -227,7 +177,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
-    const { classes } = useStyles({ claimed: !!availability?.isClaimed, outdated })
+    const { classes } = useStyles({ outdated })
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
@@ -322,13 +272,36 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [nftRedPacketContract, payload.id, account, Hub])
 
+    const [showRequirements, setShowRequirements] = useState(false)
+    const [claimStrategyStatus, setClaimStrategyStatus] = useState<F.ClaimStrategyStatus[]>(EMPTY_LIST)
+    const checkClaimStrategyStatus = useCheckClaimStrategyStatus(payload.id)
     const claim = useCallback(async () => {
+        const { data } = await checkClaimStrategyStatus()
+        if (!data.canClaim) {
+            setShowRequirements(true)
+            setClaimStrategyStatus(data.claimStrategyStatus)
+            return
+        }
         const hash = await claimCallback()
         await checkResult()
         if (typeof hash === 'string') {
             retryAvailability()
         }
-    }, [claimCallback, retryAvailability])
+    }, [claimCallback, retryAvailability, checkClaimStrategyStatus])
+
+    const cover = useMemo(() => {
+        if (!availability) return ''
+        return getRedPacketCover({
+            symbol: asset?.metadata?.symbol!,
+            theme: 'lucky-flower',
+            shares: availability.totalAmount,
+            amount: availability.totalAmount,
+            from: `@${payload.senderName}`,
+            message: payload.message,
+            remainingAmount: availability.balance,
+            remainingShares: availability.remaining,
+        })
+    }, [asset?.metadata?.symbol, availability])
 
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
@@ -337,6 +310,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     return (
         <div className={classes.root}>
             <Card className={classes.card} component="article" elevation={0}>
+                <img className={classes.cover} src={cover} />
                 <img
                     src={new URL('./assets/nftLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}
@@ -344,11 +318,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Stack />
 
                 <Box className={classes.content}>
-                    <ShadowRootTooltip title={payload.message}>
-                        <Typography className={classes.words} variant="h6">
-                            {payload.message}
-                        </Typography>
-                    </ShadowRootTooltip>
                     {availability.isClaimed ?
                         <ShadowRootTooltip
                             title={showTooltip ? `${payload.contractName} #${availability.claimed_id}` : undefined}
@@ -387,34 +356,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         </ShadowRootTooltip>
                     :   null}
                 </Box>
-
-                <div className={classes.footer}>
-                    {availability.isClaimed ?
-                        <Typography className={classes.claimedText}>
-                            {t.got_nft({ name: payload.contractName || 'NFT' })}
-                        </Typography>
-                    :   <Typography className={classes.remain}>
-                            {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
-                        </Typography>
-                    }
-                    <Typography variant="body1" className={classes.from}>
-                        {t.from({ name: payload.senderName || '-' })}
-                    </Typography>
-                </div>
-
-                {availability.isClaimed ?
-                    <div className={classes.badge}>
-                        <Typography variant="body2" className={classes.badgeText}>
-                            {t.claimed({ amount: '' })}
-                        </Typography>
-                    </div>
-                : availability.isEnd ?
-                    <div className={classes.badge}>
-                        <Typography variant="body2" className={classes.badgeText}>
-                            {availability.expired ? t.expired() : t.completed()}
-                        </Typography>
-                    </div>
-                :   null}
             </Card>
             {outdated ? null : (
                 <OperationFooter
@@ -425,7 +366,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     claim={claim}
                 />
             )}
-            <Requirements className={classes.requirements} />
+            <Grow in={showRequirements} timeout={250}>
+                <Requirements
+                    className={classes.requirements}
+                    statusList={claimStrategyStatus}
+                    onClose={() => setShowRequirements(false)}
+                />
+            </Grow>
         </div>
     )
 }
@@ -439,7 +386,7 @@ interface OperationFooterProps {
 }
 
 function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
-    const { classes } = useStyles({ claimed, outdated: false })
+    const { classes } = useStyles({ outdated: false })
     const t = useRedPacketTrans()
 
     return (

@@ -11,10 +11,9 @@ import {
     type RedPacketJSONPayload,
     type FireflyRedPacketAPI as F,
 } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId, signMessage } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
-import { Stack } from '@mui/system'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
@@ -42,9 +41,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             boxSizing: 'border-box',
-            // backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
-            // backgroundRepeat: 'no-repeat',
-            // backgroundSize: 'cover',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,
@@ -74,42 +70,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             justifyContent: 'space-between',
             alignItems: 'flex-start',
         },
-        content: {
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-        },
-        bottomContent: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-        },
-        myStatus: {
-            fontSize: 12,
-            fontWeight: 600,
-            lineHeight: 1.8,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                left: 12,
-                bottom: 8,
-            },
-        },
-        from: {
-            fontSize: '14px',
-            color: theme.palette.common.white,
-            alignSelf: 'end',
-            fontWeight: 500,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                right: 12,
-                bottom: 8,
-            },
-        },
         label: {
             width: 76,
             height: 27,
@@ -123,23 +83,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             position: 'absolute',
             right: 12,
             top: 12,
-        },
-        words: {
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            color: theme.palette.common.white,
-            fontSize: 24,
-            fontWeight: 700,
-            wordBreak: 'break-all',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-            },
-        },
-        messageBox: {
-            width: '100%',
         },
         tokenLabel: {
             width: 48,
@@ -241,14 +184,12 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         })
     }, [token, redPacketContract, payload.rpid, account])
 
-    // const [requirements, setRequirements] = useState([])
     const [showRequirements, setShowRequirements] = useState(false)
     const [claimStrategyStatus, setClaimStrategyStatus] = useState<F.ClaimStrategyStatus[]>(EMPTY_LIST)
     const checkClaimStrategyStatus = useCheckClaimStrategyStatus(payload.rpid)
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
-            // TODO 检查
             const { data } = await checkClaimStrategyStatus()
             if (!data.canClaim) {
                 setShowRequirements(true)
@@ -265,40 +206,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         }
     }, [canClaim, canRefund, claimCallback, checkClaimStrategyStatus])
 
-    const myStatus = useMemo(() => {
-        if (!availability) return ''
-        if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return t.description_claimed(
-                availability.claimed_amount ?
-                    {
-                        amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
-                        symbol: token.symbol,
-                    }
-                :   { amount: '-', symbol: '-' },
-            )
-        return ''
-    }, [listOfStatus, t, token])
-
-    const subtitle = useMemo(() => {
-        if (!availability || !token) return
-
-        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals, { significant: 2 }),
-                symbol: token.symbol ?? '-',
-            })
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
-        if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
-        if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
-        if (!payload.password) return t.description_broken()
-        const i18nParams = {
-            total: formatBalance(payload.total, token.decimals, { significant: 2 }),
-            symbol: token.symbol ?? '-',
-            count: payload.shares.toString() ?? '-',
-        }
-        return payload.shares > 1 ? t.description_failover_other(i18nParams) : t.description_failover_one(i18nParams)
-    }, [availability, canRefund, token, t, payload, listOfStatus])
-
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText)
     }, [shareText])
@@ -307,12 +214,22 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes } = useStyles({ outdated })
+    const cover = useMemo(() => {
+        if (!token?.symbol) return ''
+        return getRedPacketCover({
+            theme: 'lucky-flower',
+            symbol: token.symbol,
+            shares: payload.shares,
+            amount: formatBalance(payload.total, token.decimals, { significant: 2 }),
+            from: `@${payload.sender.name}`,
+            message: payload.sender.message,
+            remainingAmount: payload.total_remaining!,
+            remainingShares: minus(payload.shares, availability?.claimed || 0).toNumber(),
+        })
+    }, [token?.symbol, payload, availability])
 
     // the red packet can fetch without account
     if (!availability || !token) return <LoadingStatus minHeight={148} />
-
-    const cover = getRedPacketCover()
-    console.log('cover', cover)
 
     return (
         <>
@@ -335,27 +252,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                             {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
                     :   null}
-                </div>
-                <div className={classes.content}>
-                    <Stack />
-                    <div className={classes.messageBox}>
-                        <Typography className={classes.words} variant="h6">
-                            {payload.sender.message}
-                        </Typography>
-                    </div>
-                    <div className={classes.bottomContent}>
-                        <div>
-                            <Typography variant="body2" className={classes.myStatus}>
-                                {subtitle}
-                            </Typography>
-                            <Typography className={classes.myStatus} variant="body1">
-                                {myStatus}
-                            </Typography>
-                        </div>
-                        <Typography className={classes.from} variant="body1">
-                            {t.from({ name: payload.sender.name || '-' })}
-                        </Typography>
-                    </div>
                 </div>
                 <Grow in={showRequirements} timeout={250}>
                     <Requirements

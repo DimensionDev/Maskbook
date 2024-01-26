@@ -122,5 +122,7 @@
     "retry": "Retry",
     "go_wrong": "Something went wrong.",
     "no_enough_gas_fees": "No Enough Gas Fees",
-    "requirements": "Requirements"
+    "requirements": "Requirements",
+    "follow_somebody_on_somewhere": "Follow {{- handles }} on {{platform}}",
+    "nft_holder_of": "NFT Holder of {{- names }}"
 }
