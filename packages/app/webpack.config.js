@@ -89,6 +89,7 @@ function Configuration(env, argv) {
                     loader: require.resolve('swc-loader'),
                     options: {
                         jsc: {
+                            preserveAllComments: true,
                             externalHelpers: true,
                             parser: {
                                 syntax: 'typescript',
