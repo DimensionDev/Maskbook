@@ -1,5 +1,8 @@
 // this file must be in the root due to limitation of mv3 service worker.
 try {
+    if (typeof trustedTypes === 'object') {
+        trustedTypes.createPolicy('default', { createScriptURL: (string) => string })
+    }
     importScripts(
         '/worker.js',
         '/js/gun.js',

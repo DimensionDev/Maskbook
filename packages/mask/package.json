@@ -2,6 +2,7 @@
   "name": "@masknet/extension",
   "private": true,
   "sideEffects": [
+    "./public/js/trusted-types.js",
     "./background/initialization/**",
     "./background/tasks/**",
     "./content-script/site-adaptor-infra/sandboxed-plugin.ts",
