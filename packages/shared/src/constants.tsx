@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { EnhanceableSite } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
     [EnhanceableSite.Twitter]: <Icons.TwitterX />,
@@ -40,23 +39,4 @@ export const PERSONA_AVATAR_DB_NAMESPACE = 'com.maskbook.persona.avatar.storage'
 export enum PopupHomeTabType {
     SocialAccounts = 'Social Accounts',
     ConnectedWallets = 'Connected Wallets',
-}
-
-export const TRADER_WEB3_CONFIG = {
-    [NetworkPluginID.PLUGIN_EVM]: {
-        supportedChainIds: [
-            ChainId.Mainnet,
-            ChainId.BSC,
-            ChainId.Matic,
-            ChainId.Arbitrum,
-            ChainId.xDai,
-            ChainId.Aurora,
-            ChainId.Avalanche,
-            ChainId.Fantom,
-            ChainId.Astar,
-            ChainId.Optimism,
-        ],
-    },
-    [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
-    [NetworkPluginID.PLUGIN_SOLANA]: { supportedChainIds: [] },
 }

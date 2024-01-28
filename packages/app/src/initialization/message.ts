@@ -24,7 +24,7 @@ function MessageEventReceiver(event: MessageEvent): void {
 
 export function startBackgroundWorker() {
     return new Promise<void>((resolve, reject) => {
-        if (typeof SharedWorker === 'function') {
+        if (typeof SharedWorker === 'function' && !sessionStorage.getItem('background-worker-failed')) {
             const worker = new SharedWorker(new URL('../background-worker/init.ts', import.meta.url), {
                 name: 'mask',
             })

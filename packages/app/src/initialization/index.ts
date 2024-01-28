@@ -3,10 +3,19 @@ import '../styles/index.css'
 
 import { setupBuildInfo } from '@masknet/flags/build-info'
 import { startBackgroundWorker } from './message.js'
+import { timeout } from '@masknet/kit'
 
 async function initApp() {
     await setupBuildInfo()
-    await startBackgroundWorker()
+    const background = timeout(
+        startBackgroundWorker(),
+        2000,
+        'Background worker timed out, please check out chrome://inspect/#workers. Please refresh the page, SharedWorker has been temporarily set to non-shared for debug purpose.',
+    )
+    background.catch(() => {
+        sessionStorage.setItem('background-worker-failed', 'true')
+    })
+    await background
 
     await Promise.all([
         import(/* webpackMode: 'eager' */ './fetch-flag.js').then(({ initFetchFlags }) => initFetchFlags()),

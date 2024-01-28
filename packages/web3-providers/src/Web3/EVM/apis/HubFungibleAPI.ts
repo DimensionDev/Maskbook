@@ -15,6 +15,7 @@ import * as GoPlusAuthorization from /* webpackDefer: true */ '../../../GoPlusLa
 import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
 import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
 import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
+console.log('hey')
 
 export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
