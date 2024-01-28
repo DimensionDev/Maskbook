@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
-import { createPortal } from 'react-dom'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DialogStackingProvider } from '@masknet/theme'
 import { compose, i18NextInstance } from '@masknet/shared-base'
@@ -20,9 +19,10 @@ function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <QueryClientProvider client={queryClient}>
-                {process.env.NODE_ENV === 'development' ?
+                {/* https://github.com/TanStack/query/issues/5417 */}
+                {/* {process.env.NODE_ENV === 'development' ?
                     createPortal(<ReactQueryDevtools buttonPosition="bottom-right" />, document.body)
-                :   null}
+                :   null} */}
                 <RootWeb3ContextProvider>
                     <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
                 </RootWeb3ContextProvider>

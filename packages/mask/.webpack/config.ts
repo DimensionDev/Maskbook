@@ -23,6 +23,7 @@ import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheK
 import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
 
 import './clean-hmr.js'
+import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
 
 const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
@@ -206,6 +207,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             }),
             flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
             flags.profiling && new ProfilingPlugin(),
+            new TrustedTypesPlugin(),
             ...emitManifestFile(flags, computedFlags),
             new CopyPlugin({
                 patterns: [
