@@ -132,7 +132,13 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
                     ))}
                 </List>
             </div>
-            <Popper className={classes.popper} open={!!anchorEl} placement="top" anchorEl={anchorEl} disablePortal>
+            <Popper
+                placeholder={undefined}
+                className={classes.popper}
+                open={!!anchorEl}
+                placement="top"
+                anchorEl={anchorEl}
+                disablePortal>
                 {({ placement }) => {
                     return (
                         <div className={classes.popperContent}>

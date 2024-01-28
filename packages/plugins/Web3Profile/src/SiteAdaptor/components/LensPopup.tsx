@@ -68,6 +68,7 @@ export const LensPopup = memo(() => {
     return (
         <Fade in={active} easing="linear" timeout={250}>
             <ShadowRootPopper
+                placeholder={undefined}
                 open={!!anchorEl}
                 anchorEl={anchorEl}
                 keepMounted
