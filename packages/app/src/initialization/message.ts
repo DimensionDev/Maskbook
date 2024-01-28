@@ -15,7 +15,6 @@ export let postMessage: (type: string, data: unknown) => void
 const messageHandlers = new Map<string, Set<MessageHandler>>()
 
 function MessageEventReceiver(event: MessageEvent): void {
-    console.log(event.data)
     const [type, data] = event.data
     const handler = messageHandlers.get(type)
     if (!handler?.size) return
@@ -143,8 +142,8 @@ export function startBackgroundWorker() {
             resolve()
             clearTimeout(timer)
         })
-        const timer = setInterval(() => postMessage('request-ready', null), 25)
-        postMessage('request-ready', null)
+        const timer = setInterval(() => postMessage('ready-request', null), 25)
+        postMessage('ready-request', null)
     })
 }
 

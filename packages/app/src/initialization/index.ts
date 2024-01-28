@@ -9,7 +9,7 @@ async function initApp() {
     await setupBuildInfo()
     const background = timeout(
         startBackgroundWorker(),
-        2000,
+        3000,
         'Background worker timed out, please check out chrome://inspect/#workers. Please refresh the page, SharedWorker has been temporarily set to non-shared for debug purpose.',
     )
     background.catch(() => {
