@@ -38,6 +38,7 @@ export function MainUI() {
                             {process.env.NODE_ENV === 'development' ?
                                 <Route path={`${ApplicationRoutes.Debug}/*`} element={<DebugPage />} />
                             :   null}
+                            <Route path="/" element={<ComposePage />} />
                             <Route path="*" element={<Navigate to={ApplicationRoutes.Compose} />} />
                         </Routes>
                     </Suspense>
