@@ -122,7 +122,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
 
     const onCreateOrSelect = useCallback(
-        async (payload: RedPacketJSONPayload, payloadImage?: string, claimRequirements?: FireflyRedPacketAPI.StrategyPayload[]) => {
+        async (
+            payload: RedPacketJSONPayload,
+            payloadImage?: string,
+            claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
+        ) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
                     // eslint-disable-next-line no-alert
@@ -145,7 +149,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             senderName && (payload.sender.name = senderName)
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), {
                 payloadImage,
-                claimRequirements
+                claimRequirements,
             })
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
@@ -185,7 +189,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [])
 
     const handleCreated = useCallback(
-        (payload: RedPacketJSONPayload, payloadImage?: string, claimRequirements?: FireflyRedPacketAPI.StrategyPayload[]) => {
+        (
+            payload: RedPacketJSONPayload,
+            payloadImage?: string,
+            claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
+        ) => {
             onCreateOrSelect(payload, payloadImage, claimRequirements)
             setSettings(undefined)
         },

@@ -425,13 +425,15 @@ export function FireflyRedpacketConfirmDialog({
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                     classes={{ paper: classes.accountList }}>
                     {accounts.map(({ displayName, icon }, index) => {
-                        const isChecked = displayName?.toLowerCase() === currentAccount?.toLowerCase()
+                        const isChecked = currentAccount && displayName?.toLowerCase() === currentAccount.toLowerCase()
 
                         return (
                             <Box
                                 key={index}
                                 className={classes.accountListItem}
-                                onClick={() => setCurrentAccount(displayName || '')}>
+                                onClick={() => {
+                                    if(displayName) setCurrentAccount(displayName)
+                                }}>
                                 <Box display="flex" columnGap={1} flex={1} alignItems="center">
                                     {icon}
                                     <Typography className={classes.accountName}>

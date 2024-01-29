@@ -103,7 +103,7 @@ interface ClaimRequirementsDialogProps {
     onNext: (settings: FireflyRedpacketSettings) => void
 }
 
-export const REQUIREMENT_ICON_MAP: Record<RequirementType | string, GeneratedIcon> = {
+export const REQUIREMENT_ICON_MAP: Record<RequirementType, GeneratedIcon> = {
     [RequirementType.Follow]: Icons.AddUser,
     [RequirementType.Like]: Icons.Like,
     [RequirementType.Repost]: Icons.Repost,
@@ -111,7 +111,7 @@ export const REQUIREMENT_ICON_MAP: Record<RequirementType | string, GeneratedIco
     [RequirementType.NFTHolder]: Icons.NFTHolder,
 }
 
-export const REQUIREMENT_TITLE_MAP: Record<RequirementType | string, React.ReactElement> = {
+export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactElement> = {
     [RequirementType.Follow]: <Trans ns={PluginID.RedPacket} i18nKey='follow_me' />,
     [RequirementType.Like]: <Trans ns={PluginID.RedPacket} i18nKey='like' />,
     [RequirementType.Repost]: <Trans ns={PluginID.RedPacket} i18nKey='repost' />,
