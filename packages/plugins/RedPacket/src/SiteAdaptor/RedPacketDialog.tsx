@@ -23,13 +23,11 @@ import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
-import { RedPacketPast } from './RedPacketPast.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
 import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistroyDetails.js'
-import { set } from 'date-fns'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -174,10 +172,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const title =
         showHistory ? t.history()
-            : openSelectNFTDialog ? t.nft_select_collection()
-                : openNFTConfirmDialog ? t.confirm()
-                    : isCreateStep ? t.display_name()
-                        : t.details()
+        : openSelectNFTDialog ? t.nft_select_collection()
+        : openNFTConfirmDialog ? t.confirm()
+        : isCreateStep ? t.display_name()
+        : t.details()
 
     // #region gas config
     const [defaultGasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -197,11 +195,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
     // #endregion
 
-    const handleOpenDetails = useCallback((redpacket_id: string) => {
-        setRpid(redpacket_id)
-        setShowDetails(true)
-        setShowHistory(false)
-    }, [setShowDetails, setRpid, setShowHistory])
+    const handleOpenDetails = useCallback(
+        (redpacket_id: string) => {
+            setRpid(redpacket_id)
+            setShowDetails(true)
+            setShowHistory(false)
+        },
+        [setShowDetails, setRpid, setShowHistory],
+    )
 
     return (
         <TabContext value={showHistory ? currentHistoryTab : currentTab}>
@@ -212,21 +213,29 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory ?
                         <Icons.History onClick={() => setShowHistory((history) => !history)} />
-                        : null
+                    :   null
                 }
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ? showHistory ? <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
-                        <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
-                        <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
-                    </MaskTabList> :
-                        <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                            <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                            <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
-                        </MaskTabList>
-                        : null
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
+                        showHistory ?
+                            <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
+                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
+                                <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
+                            </MaskTabList>
+                        :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                                <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                                <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
+                            </MaskTabList>
+
+                    :   null
                 }
                 networkTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !openSelectNFTDialog && !showHistory ?
+                    (
+                        step === CreateRedPacketPageStep.NewRedPacketPage &&
+                        !openNFTConfirmDialog &&
+                        !openSelectNFTDialog &&
+                        !showHistory
+                    ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chains={chainIdList}
@@ -235,7 +244,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 classes={{ arrowButton: classes.arrowButton }}
                             />
                         </div>
-                        : null
+                    :   null
                 }
                 onClose={onDialogClose}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
@@ -248,8 +257,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     ...(showHistory || showDetails ? { display: 'none' } : {}),
                                     height:
                                         showHistory || showDetails ? 0
-                                            : currentTab === 'collectibles' && isNFTRedPacketLoaded ? 'calc(100% + 84px)'
-                                                : 'auto',
+                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded ? 'calc(100% + 84px)'
+                                        : 'auto',
                                 }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
                                     <RedPacketERC20Form
@@ -278,14 +287,19 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory ?
-                                <FireflyRedPacketPast tabs={historyTabs} onSelect={onCreateOrSelect} onClose={handleClose} handleOpenDetails={handleOpenDetails} />
-                                : null}
+                                <FireflyRedPacketPast
+                                    tabs={historyTabs}
+                                    onSelect={onCreateOrSelect}
+                                    onClose={handleClose}
+                                    handleOpenDetails={handleOpenDetails}
+                                />
+                            :   null}
 
                             {showDetails ?
                                 <FireflyRedPacketHistoryDetails rpid={rpid} />
-                                : null}
+                            :   null}
                         </>
-                        : null}
+                    :   null}
 
                     {step === CreateRedPacketPageStep.ConfirmPage ?
                         <RedPacketConfirmDialog
@@ -297,9 +311,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             gasOption={gasOption}
                             onGasOptionChange={handleGasSettingChange}
                         />
-                        : null}
+                    :   null}
                 </DialogContent>
             </InjectedDialog>
-        </TabContext >
+        </TabContext>
     )
 }
