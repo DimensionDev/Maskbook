@@ -9,9 +9,9 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
-import { dateTimeFormat } from './utils/formatDate.js'
 import { isAddress } from 'web3-utils'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
   theme,
@@ -167,7 +167,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
       cursor: 'pointer',
       border: 'none',
       color: '#181818',
-      zIndex: 99,
     },
     invisible: {
       visibility: 'hidden',
@@ -200,7 +199,7 @@ export const FireflyRedPacketInClaimedHistoryList = memo(function FireflyRedPack
               <div className={classes.div}>
                 <div className={classes.fullWidthBox}>
                   <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                    {rp_msg === '' ?
+                    {!rp_msg ?
                       t.best_wishes()
                       : rp_msg}
                   </Typography>
@@ -212,7 +211,7 @@ export const FireflyRedPacketInClaimedHistoryList = memo(function FireflyRedPack
                   <Typography
                     variant="body1"
                     className={cx(classes.info, classes.message)}>
-                    {t.history_duration({ time: dateTimeFormat(new Date(Number(received_time) * 1000)) })}
+                    {t.history_duration({ time: format(new Date(Number(received_time) * 1000), 'M/d/yyyy HH:mm') })}
                   </Typography>
                 </div>
                 <div className={classes.fullWidthBox}>
@@ -246,7 +245,7 @@ export const FireflyRedPacketInClaimedHistoryList = memo(function FireflyRedPack
                   : null}
               </div>
               <button className={classes.moreDetails} onClick={() => { handleOpenDetails(redpacket_id) }}>
-                More details
+                {t.more_details()}
               </button>
             </section>
           </Box>

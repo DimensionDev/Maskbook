@@ -9,8 +9,8 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import { dateTimeFormat } from './utils/formatDate.js'
 import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
   theme,
@@ -166,7 +166,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
       cursor: 'pointer',
       border: 'none',
       color: '#181818',
-      zIndex: 50,
     },
     invisible: {
       visibility: 'hidden',
@@ -210,7 +209,7 @@ export const FireflyRedPacketInSentHistoryList = memo(function FireflyRedPacketI
                   <Typography
                     variant="body1"
                     className={cx(classes.info, classes.message, redpacket_id ? '' : classes.invisible)}>
-                    {t.history_duration({ time: dateTimeFormat(new Date(Number(create_time) * 1000)) })}
+                    {t.history_duration({ time: format(new Date(Number(create_time) * 1000), 'M/d/yyyy HH:mm') })}
                   </Typography>
                 </div>
               </div>
@@ -251,7 +250,7 @@ export const FireflyRedPacketInSentHistoryList = memo(function FireflyRedPacketI
                   : null}
               </div>
               <button className={classes.moreDetails} onClick={() => { handleOpenDetails(redpacket_id) }}>
-                More details
+                {t.more_details()}
               </button>
             </section>
           </Box>

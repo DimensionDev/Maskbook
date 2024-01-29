@@ -47,7 +47,8 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({ 
   const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
   const { data: historiesData, isLoading, fetchNextPage } = useSuspenseInfiniteQuery({
     queryKey: ['fireflyRedPacketHistory', account, historyType], initialPageParam: createIndicator(undefined, ''), queryFn: async ({ pageParam }) => {
-      const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`, pageParam)
+      const res = await FireflyRedPacket.getHistory(historyType, '0x790116d0685eb197b886dacad9c247f785987a4a', pageParam)
+      console.log(res, pageParam)
       return res
     },
     getNextPageParam: (lastPage) => lastPage.nextIndicator
