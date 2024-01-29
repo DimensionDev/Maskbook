@@ -179,8 +179,8 @@ interface Props {
   history: FireflyRedPacketAPI.RedPacketClaimedInfo,
   handleOpenDetails: (rpid: string) => void
 }
-export const FireflyRedPacketInClaimedHistoryList = memo(function FireflyRedPacketInClaimedHistoryList(props: Props) {
-  const { history, handleOpenDetails } = props
+
+export const FireflyRedPacketInClaimedHistoryList = memo(function FireflyRedPacketInClaimedHistoryList({ history, handleOpenDetails }: Props) {
   const { rp_msg, redpacket_id, received_time, token_decimal, token_amounts, token_symbol, token_logo, chain_id, creator } = history
   const t = useRedPacketTrans()
 

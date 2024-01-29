@@ -1,12 +1,12 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import { ElementAnchor, EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { createIndicator, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { FireflyRedPacketInSentHistoryList } from './FIreflyRedPacketInSentHistoryList.js'
 import { FireflyRedPacketInClaimedHistoryList } from './FireflyRedPacketInClaimedHistoryList.js'
@@ -45,25 +45,28 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({ 
   const t = useRedPacketTrans()
   const { classes } = useStyles()
   const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-  const { data: histories, isLoading } = useQuery({
-    queryKey: ['fireflyRedPacketHistory', account, historyType], queryFn: async () => {
-      const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`)
+  const { data: historiesData, isLoading, fetchNextPage } = useSuspenseInfiniteQuery({
+    queryKey: ['fireflyRedPacketHistory', account, historyType], initialPageParam: createIndicator(undefined, ''), queryFn: async ({ pageParam }) => {
+      const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`, pageParam)
       return res
-    }
+    },
+    getNextPageParam: (lastPage) => lastPage.nextIndicator
   })
+  const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
   if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
-  if (!histories?.data?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
+  if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
 
   return (
     <div className={classes.root}>
       <List style={{ padding: '16px 0 0' }}>
-        {histories?.data?.map((history) => (
+        {histories.map((history) => (
           historyType === FireflyRedPacketAPI.ActionType.Send ? <FireflyRedPacketInSentHistoryList key={history.trans_hash} history={history as FireflyRedPacketAPI.RedPacketSentInfo} handleOpenDetails={handleOpenDetails} />
             : <FireflyRedPacketInClaimedHistoryList key={history.trans_hash} history={history as FireflyRedPacketAPI.RedPacketClaimedInfo} handleOpenDetails={handleOpenDetails} />
         ))}
       </List>
+      <ElementAnchor callback={() => fetchNextPage()} />
     </div>
   )
 })
