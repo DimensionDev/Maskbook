@@ -32,7 +32,6 @@ export function createManager<
     }>()
 
     return {
-        configureHostHooks: (host: Plugin.__Host.Host<T, Omit<Context, ManagedContext>>) => (_host = host),
         activatePlugin,
         stopPlugin,
         isActivated,
@@ -71,6 +70,7 @@ export function createManager<
 
         const instance = activated.get(id)
         if (instance) instance.minimalModeEnabled.value = result
+        events.emit('minimalModeChanged', id, result)
     }
 
     function startDaemon(
