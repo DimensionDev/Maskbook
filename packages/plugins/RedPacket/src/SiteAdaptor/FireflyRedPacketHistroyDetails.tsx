@@ -1,0 +1,76 @@
+import { makeStyles } from '@masknet/theme'
+import { TabPanel } from '@mui/lab'
+import { Box, Typography } from '@mui/material'
+import { memo, useMemo } from 'react'
+import { useRedPacketTrans } from '../locales/index.js'
+import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
+import { LoadingStatus } from '@masknet/shared'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { createIndicator, createPageable } from '@masknet/shared-base'
+import { first } from 'lodash-es'
+import { formatBalance } from '@masknet/web3-shared-base'
+
+const useStyles = makeStyles()((theme) => ({
+  container: {
+    padding: theme.spacing(0, 2, 0, 2),
+  },
+  placeholder: {
+    height: 474,
+    boxSizing: 'border-box',
+  },
+  claimer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(1.5),
+    fontSize: 14,
+    fontWeight: 700,
+    lineHeight: '18px',
+  },
+}))
+
+interface Props {
+  rpid: string
+}
+
+export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid }: Props) {
+  const { classes } = useStyles()
+  const t = useRedPacketTrans()
+  const { data: claimData, isLoading } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketCliamListInfo>({
+    queryKey: ['fireflyClaimHistory', rpid], initialPageParam: '', queryFn: async ({ pageParam }) => {
+      const res = await FireflyRedPacket.getClaimHistory(rpid, createIndicator(undefined, pageParam as string))
+      return res
+    },
+    getNextPageParam: (lastPage) => lastPage.cursor
+  })
+
+  if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
+  const claimList = useMemo(() => claimData?.pages.flatMap((x) => x.list) ?? [], [claimData])
+  const claimInfo = useMemo(() => first(claimData.pages), [claimData])
+
+  console.log(claimList, claimInfo)
+  return (
+    <div className={classes.container}>
+      {claimInfo ?
+        <FireflyRedPacketDetailsItem claimInfo={claimInfo} redpacket_id={rpid} />
+        : null
+      }
+      {claimList.map((item) => <div className={classes.claimer}>
+        <Box>
+          <Typography>
+            {item.creator}
+          </Typography>
+        </Box>
+        <Typography>
+          {formatBalance(
+            item.token_amounts,
+            item.token_decimal,
+            { significant: 2, isPrecise: true },
+          )} {item.token_symbol}
+        </Typography>
+      </div>)}
+    </div>
+  )
+})
