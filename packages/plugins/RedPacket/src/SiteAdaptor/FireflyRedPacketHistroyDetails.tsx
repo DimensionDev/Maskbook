@@ -8,9 +8,10 @@ import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { LoadingStatus } from '@masknet/shared'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { createIndicator, createPageable } from '@masknet/shared-base'
+import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { ElementAnchor } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -38,7 +39,7 @@ interface Props {
 export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid }: Props) {
   const { classes } = useStyles()
   const t = useRedPacketTrans()
-  const { data: claimData, isLoading } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketCliamListInfo>({
+  const { data: claimData, isLoading, fetchNextPage } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketCliamListInfo>({
     queryKey: ['fireflyClaimHistory', rpid], initialPageParam: '', queryFn: async ({ pageParam }) => {
       const res = await FireflyRedPacket.getClaimHistory(rpid, createIndicator(undefined, pageParam as string))
       return res
@@ -50,27 +51,30 @@ export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid
   const claimList = useMemo(() => claimData?.pages.flatMap((x) => x.list) ?? [], [claimData])
   const claimInfo = useMemo(() => first(claimData.pages), [claimData])
 
-  console.log(claimList, claimInfo)
   return (
     <div className={classes.container}>
       {claimInfo ?
         <FireflyRedPacketDetailsItem claimInfo={claimInfo} redpacket_id={rpid} />
         : null
       }
-      {claimList.map((item) => <div className={classes.claimer}>
-        <Box>
+      <Box>
+        {claimList.map((item) => <div className={classes.claimer}>
+          <Box>
+            <Typography>
+              {item.creator}
+            </Typography>
+          </Box>
           <Typography>
-            {item.creator}
+            {formatBalance(
+              item.token_amounts,
+              item.token_decimal,
+              { significant: 2, isPrecise: true },
+            )} {item.token_symbol}
           </Typography>
-        </Box>
-        <Typography>
-          {formatBalance(
-            item.token_amounts,
-            item.token_decimal,
-            { significant: 2, isPrecise: true },
-          )} {item.token_symbol}
-        </Typography>
-      </div>)}
-    </div>
+        </div>)
+        }
+        <ElementAnchor callback={() => fetchNextPage()} height={10} />
+      </Box>
+    </div >
   )
 })
