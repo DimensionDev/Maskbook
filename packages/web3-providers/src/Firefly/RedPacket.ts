@@ -11,6 +11,7 @@ import { FireflyRedPacketAPI } from '../entry-types.js'
 
 const SITE_URL = 'https://firefly-staging.mask.io'
 const FIREFLY_ROOT_URL = 'https://api.firefly.land'
+const FIREFLY_DEV_ROOT_URL = 'https://api-dev.firefly.land'
 
 export class FireflyRedPacket {
     static async getThemeSettings(): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
@@ -97,7 +98,7 @@ export class FireflyRedPacket {
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
     >(actionType: T, from: `0x${string}`, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
-        const url = urlcat('https://api-dev.firefly.land', '/v1/redpacket/history', {
+        const url = urlcat(FIREFLY_DEV_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,
             claimFrom: FireflyRedPacketAPI.SourceType.All,
@@ -118,7 +119,7 @@ export class FireflyRedPacket {
         redpacket_id: string,
         indicator?: PageIndicator,
     ): Promise<FireflyRedPacketAPI.RedPacketCliamListInfo> {
-        const url = urlcat('https://api-dev.firefly.land', '/v1/redpacket/claimHistory', {
+        const url = urlcat(FIREFLY_DEV_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpackedId: redpacket_id,
             cursor: indicator?.id,
             size: 20,
