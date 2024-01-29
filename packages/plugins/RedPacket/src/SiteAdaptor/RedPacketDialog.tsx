@@ -172,6 +172,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const title =
         showHistory ? t.history()
+        : showDetails ? t.more_details()
         : openSelectNFTDialog ? t.nft_select_collection()
         : openNFTConfirmDialog ? t.confirm()
         : isCreateStep ? t.display_name()
@@ -211,7 +212,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 open={props.open}
                 title={title}
                 titleTail={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory ?
+                    (
+                        step === CreateRedPacketPageStep.NewRedPacketPage &&
+                        !openNFTConfirmDialog &&
+                        !showHistory &&
+                        !showDetails
+                    ) ?
                         <Icons.History onClick={() => setShowHistory((history) => !history)} />
                     :   null
                 }
@@ -234,7 +240,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         step === CreateRedPacketPageStep.NewRedPacketPage &&
                         !openNFTConfirmDialog &&
                         !openSelectNFTDialog &&
-                        !showHistory
+                        !showHistory &&
+                        !showDetails
                     ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
@@ -287,12 +294,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory ?
-                                <FireflyRedPacketPast
-                                    tabs={historyTabs}
-                                    onSelect={onCreateOrSelect}
-                                    onClose={handleClose}
-                                    handleOpenDetails={handleOpenDetails}
-                                />
+                                <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
                             :   null}
 
                             {showDetails ?

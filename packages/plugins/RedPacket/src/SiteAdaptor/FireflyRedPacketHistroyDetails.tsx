@@ -14,7 +14,11 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        padding: theme.spacing(0, 2, 0, 2),
+        padding: '12px 16px',
+        height: 474,
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     placeholder: {
         height: 474,
