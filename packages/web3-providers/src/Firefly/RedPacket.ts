@@ -48,10 +48,7 @@ export class FireflyRedPacket {
         ]
     }
 
-    static async createPublicKey(
-        themeId: number,
-        payloads: FireflyRedPacketAPI.StrategyPayload[],
-    ): Promise<`0x${string}`> {
+    static async createPublicKey(themeId: number, payloads: FireflyRedPacketAPI.StrategyPayload[]): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
@@ -78,9 +75,9 @@ export class FireflyRedPacket {
 
     static async createClaimSignature(
         rpid: string,
-        from: `0x${string}`,
+        from: HexString,
         reaction: FireflyRedPacketAPI.ProfileReaction,
-    ): Promise<`0x${string}`> {
+    ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
@@ -99,7 +96,7 @@ export class FireflyRedPacket {
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(actionType: T, from: `0x${string}`, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
+    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history')
         const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url, {
             method: 'GET',
@@ -117,5 +114,13 @@ export class FireflyRedPacket {
             createIndicator(indicator),
             createNextIndicator(indicator, data.cursor.toString()),
         )
+    }
+
+    static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/checkClaimStrategyStatus')
+        return fetchJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
     }
 }
