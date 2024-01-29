@@ -40,7 +40,6 @@ interface Props {
 
 export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid }: Props) {
   const { classes } = useStyles()
-  const t = useRedPacketTrans()
   const { data: claimData, isLoading, fetchNextPage } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketCliamListInfo>({
     queryKey: ['fireflyClaimHistory', rpid], initialPageParam: '', queryFn: async ({ pageParam }) => {
       const res = await FireflyRedPacket.getClaimHistory(rpid, createIndicator(undefined, pageParam as string))

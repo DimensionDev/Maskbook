@@ -44,11 +44,10 @@ interface RedPacketHistoryListProps {
 export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({ handleOpenDetails, historyType }: RedPacketHistoryListProps) {
   const t = useRedPacketTrans()
   const { classes } = useStyles()
-  const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+  const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
   const { data: histories, isLoading } = useQuery({
     queryKey: ['fireflyRedPacketHistory', account, historyType], queryFn: async () => {
-      const res = await FireflyRedPacket.getHistory(historyType, '0x790116d0685eb197b886dacad9c247f785987a4a' as `0x${string}`)
-      console.log(res, historyType)
+      const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`)
       return res
     }
   })

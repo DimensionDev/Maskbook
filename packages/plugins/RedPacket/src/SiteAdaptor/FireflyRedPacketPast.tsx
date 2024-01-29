@@ -5,7 +5,6 @@ import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-pr
 import { TabPanel } from '@mui/lab'
 import { Box } from '@mui/material'
 import { memo } from 'react'
-import { useRedPacketTrans } from '../locales/index.js'
 import { FireflyRedPacketHistoryList } from './FireflyRedPacketHistroyList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -23,7 +22,6 @@ interface Props {
 
 export const FireflyRedPacketPast = memo(function RedPacketPast({ onClose, tabs, handleOpenDetails }: Props) {
   const { classes } = useStyles()
-  const t = useRedPacketTrans()
 
   return (
     <>
