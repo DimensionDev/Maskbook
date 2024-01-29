@@ -48,7 +48,7 @@ export class FireflyRedPacket {
         ]
     }
 
-    static async createPublicKey(themeId: number, payloads: FireflyRedPacketAPI.StrategyPayload[]): Promise<string> {
+    static async createPublicKey(themeId: number, payloads: FireflyRedPacketAPI.StrategyPayload[]): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
@@ -75,9 +75,9 @@ export class FireflyRedPacket {
 
     static async createClaimSignature(
         rpid: string,
-        from: `0x${string}`,
+        from: HexString,
         reaction: FireflyRedPacketAPI.ProfileReaction,
-    ): Promise<string> {
+    ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
@@ -97,12 +97,12 @@ export class FireflyRedPacket {
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
     >(actionType: T, from: `0x${string}`, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
-        const url = urlcat("https://api-dev.firefly.land", '/v1/redpacket/history', {
-                address: from,
-                redpacketType: actionType,
-                claimFrom: FireflyRedPacketAPI.SourceType.All,
-                cursor: indicator?.id,
-                size: 20,
+        const url = urlcat('https://api-dev.firefly.land', '/v1/redpacket/history', {
+            address: from,
+            redpacketType: actionType,
+            claimFrom: FireflyRedPacketAPI.SourceType.All,
+            cursor: indicator?.id,
+            size: 20,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url, {
             method: 'GET',
@@ -114,17 +114,26 @@ export class FireflyRedPacket {
         )
     }
 
-    static async getClaimHistory(redpacket_id: string, indicator?: PageIndicator): Promise<FireflyRedPacketAPI.RedPacketCliamListInfo>{
-        const url = urlcat("https://api-dev.firefly.land", '/v1/redpacket/claimHistory', {
+    static async getClaimHistory(
+        redpacket_id: string,
+        indicator?: PageIndicator,
+    ): Promise<FireflyRedPacketAPI.RedPacketCliamListInfo> {
+        const url = urlcat('https://api-dev.firefly.land', '/v1/redpacket/claimHistory', {
             redpackedId: redpacket_id,
             cursor: indicator?.id,
-            size: 20, 
+            size: 20,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistroyResponse>(url, {
             method: 'GET',
         })
         return data
     }
-}
 
-export const FireflyRedPacketProvider = new FireflyRedPacket()
+    static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/checkClaimStrategyStatus')
+        return fetchJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
+    }
+}
