@@ -12,6 +12,8 @@ import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ElementAnchor } from '@masknet/shared'
+import { isAddress } from 'web3-utils'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -61,7 +63,7 @@ export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid
         {claimList.map((item) => <div className={classes.claimer}>
           <Box>
             <Typography>
-              {item.creator}
+              {isAddress(item.creator) ? formatEthereumAddress(item.creator, 4) : item.creator}
             </Typography>
           </Box>
           <Typography>
