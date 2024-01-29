@@ -44,7 +44,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
                             "Unreachable: it used to call Hub.getNonFungibleTokenIconURLs, but it's default implementation is throw an error, and not override by any subclass.",
                         )
                     })()
-                    : await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
+                :   await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
             return first(logoURLs)
         },
     })

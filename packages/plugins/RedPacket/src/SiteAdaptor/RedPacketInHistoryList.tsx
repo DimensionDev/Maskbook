@@ -280,7 +280,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     <Typography variant="body1" className={cx(classes.title, classes.message)}>
                                         {patchedHistory.sender.message === '' ?
                                             t.best_wishes()
-                                            : patchedHistory.sender.message}
+                                        :   patchedHistory.sender.message}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
@@ -316,11 +316,11 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         size="large">
                                         {canSend ?
                                             t.share()
-                                            : isRefunding ?
-                                                t.refunding()
-                                                : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
-                                                    t.empty()
-                                                    : t.refund()}
+                                        : isRefunding ?
+                                            t.refunding()
+                                        : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
+                                            t.empty()
+                                        :   t.refund()}
                                     </ActionButton>
                                     <Popper
                                         className={classes.popper}
@@ -334,7 +334,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         <div className={classes.arrow} />
                                     </Popper>
                                 </>
-                                : null}
+                            :   null}
                         </section>
 
                         <section className={classes.footer}>
@@ -357,7 +357,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                                     historyToken.decimals,
                                                     { significant: 6, isPrecise: true },
                                                 )
-                                                : '',
+                                            :   '',
                                         symbol: historyToken.symbol,
                                     }}
                                 />
@@ -369,7 +369,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     name={historyToken.name}
                                     logoURL={historyToken.logoURL}
                                 />
-                                : null}
+                            :   null}
                         </section>
                     </Box>
                 </Box>
