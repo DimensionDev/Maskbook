@@ -286,7 +286,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             nodeEnv: false, // provided in EnvironmentPlugin
             realContentHash: false,
             removeAvailableModules: productionLike,
-            runtimeChunk: 'single',
+            // cannot use single, mv3 requires a different runtime.
+            // cannot use false, in some cases there are more than 1 runtime in the single page and cause bug.
+            runtimeChunk: {
+                name: (entry: { name: string }) => {
+                    return entry.name === 'backgroundWorker' ? false : 'runtime'
+                },
+            },
             splitChunks:
                 productionLike ? undefined : (
                     {
@@ -346,13 +352,16 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
     } satisfies webpack.Configuration
 
-    const entries: Record<string, EntryDescription> = (baseConfig.entry = {
+    const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(__dirname, '../dashboard/initialization/index.ts')),
         popups: withReactDevTools(join(__dirname, '../popups/initialization/index.ts')),
         contentScript: withReactDevTools(join(__dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(__dirname, '../background/initialization/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/initialization/mv3-entry.ts')),
-    })
+        devtools: undefined as EntryDescription | undefined,
+    }) satisfies Record<string, EntryDescription | undefined>
+    delete entries.devtools
+
     baseConfig.plugins.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),

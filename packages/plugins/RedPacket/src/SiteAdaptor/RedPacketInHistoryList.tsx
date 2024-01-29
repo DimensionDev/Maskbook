@@ -323,6 +323,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         :   t.refund()}
                                     </ActionButton>
                                     <Popper
+                                        placeholder={undefined}
                                         className={classes.popper}
                                         open={openPopper}
                                         anchorEl={anchorEl}
