@@ -130,16 +130,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             height: 18,
             marginLeft: 6,
         },
-        moreDetails: {
-            fontSize: 12,
-            fontStyle: 'normal',
-            fontWeight: 700,
-            lineHeight: '16px',
-            background: 'none',
-            cursor: 'pointer',
-            border: 'none',
-            color: 'var(--color-light-main)',
-        },
         invisible: {
             visibility: 'hidden',
         },

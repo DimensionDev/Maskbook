@@ -1,7 +1,7 @@
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { TabPanel } from '@mui/lab'
 import { Box } from '@mui/material'
 import { memo } from 'react'
