@@ -122,6 +122,7 @@ export function appendices_url() { return new URL("./general/Appendices.svg", im
 export function application_nft_url() { return new URL("./general/ApplicationNFT.svg", import.meta.url).href }
 export function approve_url() { return new URL("./general/Approve.svg", import.meta.url).href }
 export function arrow_back_url() { return new URL("./general/ArrowBack.svg", import.meta.url).href }
+export function arrow_circle_url() { return new URL("./general/ArrowCircle.svg", import.meta.url).href }
 export function arrow_down_round_url() { return new URL("./general/ArrowDownRound.svg", import.meta.url).href }
 export function arrow_downward_url() { return new URL("./general/ArrowDownward.svg", import.meta.url).href }
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url).href }
@@ -163,6 +164,7 @@ export function cloud_link_url() { return new URL("./general/CloudLink.png", imp
 export function cny_url() { return new URL("./general/CNY.svg", import.meta.url).href }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url).href }
 export function comeback_url() { return new URL("./general/Comeback.svg", import.meta.url).href }
+export function comment_url() { return new URL("./general/Comment.svg", import.meta.url).href }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url).href }
 export function contacts_url() { return new URL("./general/Contacts.svg", import.meta.url).href }
 export function copy_url() { return new URL("./general/Copy.svg", import.meta.url).href }
@@ -223,6 +225,7 @@ export function japan_url() { return new URL("./general/Japan.svg", import.meta.
 export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url).href }
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url).href }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url).href }
+export function like_url() { return new URL("./general/Like.svg", import.meta.url).href }
 export function linear_calendar_dark_url() { return new URL("./general/LinearCalendar.dark.svg", import.meta.url).href }
 export function linear_calendar_light_url() { return new URL("./general/LinearCalendar.light.svg", import.meta.url).href }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url).href }
@@ -246,6 +249,7 @@ export function more_url() { return new URL("./general/More.svg", import.meta.ur
 export function next_id_avatar_dark_url() { return new URL("./general/NextIdAvatar.dark.svg", import.meta.url).href }
 export function next_id_avatar_light_url() { return new URL("./general/NextIdAvatar.light.svg", import.meta.url).href }
 export function next_id_persona_warning_url() { return new URL("./general/NextIdPersonaWarning.svg", import.meta.url).href }
+export function nft_holder_url() { return new URL("./general/NFTHolder.svg", import.meta.url).href }
 export function nft_red_packet_url() { return new URL("./general/NFTRedPacket.svg", import.meta.url).href }
 export function outlined_mask_url() { return new URL("./general/OutlinedMask.svg", import.meta.url).href }
 export function personas_outline_url() { return new URL("./general/PersonasOutline.svg", import.meta.url).href }
