@@ -203,7 +203,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                             <div className={classes.div}>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                        {rp_msg === '' ? t.best_wishes() : rp_msg}
+                                        {!rp_msg ? t.best_wishes() : rp_msg}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
