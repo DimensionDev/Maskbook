@@ -80,6 +80,9 @@ export class FireflyRedPacket {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 themeId,
                 shareFrom,
@@ -99,6 +102,9 @@ export class FireflyRedPacket {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
         await fetchJSON(url, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 rpid,
                 postReaction: reactions,
