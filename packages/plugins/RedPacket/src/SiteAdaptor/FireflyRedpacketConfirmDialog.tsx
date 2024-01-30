@@ -145,8 +145,7 @@ export function FireflyRedpacketConfirmDialog({
         currentLensProfile?.handle || currentFarcasterProfile?.handle || ensName || account,
     )
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const [imageLoading, setImageLoading] = useState(true)
-
+    
     const { data: price } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, settings?.token?.address)
 
     const amount = useMemo(
@@ -195,21 +194,9 @@ export function FireflyRedpacketConfirmDialog({
         )
     }, [account, fireflyContext, farcasterOwnerENS, lensOwnerENS, ensName])
 
-    // image loading
-    useEffect(() => {
-        if (!state?.payloadUrl) return
-        const image = new Image()
-        image.src = state.payloadUrl
-        setImageLoading(true)
-        const handler = () => {
-            setImageLoading(false)
-        }
-        image.addEventListener('load', handler)
-        image.addEventListener('error', handler)
-        return () => {
-            image.removeEventListener('load', handler)
-            image.removeEventListener('error', handler)
-        }
+    const { loading: imageLoading } = useAsync(async () => {
+        if(!state?.payloadUrl) return
+        await fetch(state.payloadUrl)
     }, [state?.payloadUrl])
 
     const { value, loading } = useAsync(async () => {
