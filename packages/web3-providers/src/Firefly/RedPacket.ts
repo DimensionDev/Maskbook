@@ -9,16 +9,28 @@ import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
 import { FireflyRedPacketAPI } from '../entry-types.js'
 
-const SITE_URL = 'https://firefly-staging.mask.io'
-const FIREFLY_ROOT_URL = 'https://api.firefly.land'
+const SITE_URL = 'https://firefly-staging.mask.social'
+const FIREFLY_ROOT_URL = 'https://api-dev.firefly.land'
 
 export class FireflyRedPacket {
-    static async getThemeSettings(): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
+    static async getThemeSettings(
+        from: string,
+        amount?: string,
+        type?: string,
+        symbol?: string,
+        decimals?: number,
+    ): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
         return [
             {
-                id: 0,
+                id: 'b64f9af2-447c-471f-998a-fa7336c57849',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'golden-flower',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals,
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'golden-flower',
@@ -26,9 +38,15 @@ export class FireflyRedPacket {
                 }),
             },
             {
-                id: 1,
+                id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-firefly',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals,
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-firefly',
@@ -36,9 +54,15 @@ export class FireflyRedPacket {
                 }),
             },
             {
-                id: 2,
+                id: 'e480132f-a853-43ea-bbab-883b463e55b3',
                 payloadUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-flower',
+                    usage: 'payload',
+                    from,
+                    amount,
+                    type,
+                    symbol,
+                    decimals,
                 }),
                 coverUrl: urlcat(SITE_URL, '/api/rp', {
                     theme: 'lucky-flower',
@@ -48,12 +72,20 @@ export class FireflyRedPacket {
         ]
     }
 
-    static async createPublicKey(themeId: number, payloads: FireflyRedPacketAPI.StrategyPayload[]): Promise<HexString> {
+    static async createPublicKey(
+        themeId: string,
+        shareFrom: string,
+        payloads: FireflyRedPacketAPI.StrategyPayload[],
+    ): Promise<`0x${string}`> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 themeId,
+                shareFrom,
                 claimFrom: FireflyRedPacketAPI.SourceType.FireflyPC,
                 claimStrategy: JSON.stringify(payloads),
             }),
@@ -62,13 +94,21 @@ export class FireflyRedPacket {
         return data.publicKey
     }
 
-    static async updateClaimStrategy(rpid: string, reactions: FireflyRedPacketAPI.PostReaction[]): Promise<void> {
+    static async updateClaimStrategy(
+        rpid: string,
+        reactions: FireflyRedPacketAPI.PostReaction[],
+        claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
+    ): Promise<void> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
         await fetchJSON(url, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 rpid,
                 postReaction: reactions,
+                claimPlatform,
             }),
         })
     }

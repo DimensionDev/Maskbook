@@ -81,6 +81,11 @@ const useStyles = makeStyles()((theme) => ({
     tokenValue: {
         flexGrow: 1,
     },
+    title: {
+        fontSize: 14,
+        fontWEight: 700,
+        lineHeight: '18px'
+    }
 }))
 
 interface RedPacketFormProps {
@@ -231,7 +236,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             chainId,
         },
     )
-
+    
     const { transactionValue, loading: loadingTransactionValue } = useTransactionValue(
         origin?.total,
         gasOption?.gas,
@@ -267,7 +272,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue])
+    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue, isGasSufficient])
 
     if (!token) return null
 
@@ -311,7 +316,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     fontSize={14}
                                     marginRight={0.5}
                                     whiteSpace="nowrap">
-                                    {t.quantity()}
+                                    {t.winners()}
                                 </Typography>
                                 <Icons.RedPacket size={18} />
                             </>
@@ -320,7 +325,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: t.enter_quantity(),
+                            placeholder: t.enter_number_of_winners(),
                             spellCheck: false,
                             pattern: '^[0-9]+$',
                         },
@@ -329,9 +334,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </div>
             <div className={classes.field}>
                 <FungibleTokenInput
-                    label={t.token()}
+                    label={t.total_amount()}
                     token={token}
-                    placeholder={isRandom ? t.total() : t.amount_each()}
+                    placeholder={isRandom ? t.random_amount_share_tips() : t.equal_amount_share_tips()}
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
@@ -345,6 +350,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     maxAmountShares={isRandom || shares === '' ? 1 : shares}
                 />
             </div>
+            <Box margin={2}>
+                <Typography className={classes.title}>
+                    {t.message()}
+                </Typography>
+            </Box>
             <Box margin={2}>
                 <InputBase
                     fullWidth
