@@ -54,15 +54,18 @@ export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid
         },
         getNextPageParam: (lastPage) => lastPage.cursor,
     })
-    const claimList = useMemo(() => claimData?.pages.flatMap((x) => x.list) ?? [], [claimData])
-    const claimInfo = useMemo(() => first(claimData.pages), [claimData])
+
+    const { claimInfo, claimList } = useMemo(
+        () => ({ claimList: claimData?.pages.flatMap((x) => x.list) ?? [], claimInfo: first(claimData?.pages) }),
+        [claimData],
+    )
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
     return (
         <div className={classes.container}>
             {claimInfo ?
-                <FireflyRedPacketDetailsItem claimInfo={claimInfo} redpacket_id={rpid} />
+                <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} />
             :   null}
             <Box>
                 {claimList.map((item) => (

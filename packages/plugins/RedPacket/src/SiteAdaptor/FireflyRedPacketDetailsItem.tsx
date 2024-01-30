@@ -2,14 +2,13 @@ import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import { dateTimeFormat } from './utils/formatDate.js'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { format, fromUnixTime } from 'date-fns'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -133,15 +132,43 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         invisible: {
             visibility: 'hidden',
         },
+        moreDetails: {
+            fontSize: 12,
+            fontStyle: 'normal',
+            fontWeight: 700,
+            lineHeight: '16px',
+            background: 'none',
+            cursor: 'pointer',
+            border: 'none',
+            color: theme.palette.maskColor.secondaryMain,
+        },
     }
 })
 
-interface Props {
-    claimInfo: FireflyRedPacketAPI.RedPacketCliamListInfo
+interface HistoryInfo {
+    rp_msg: string
     redpacket_id: string
+    received_time?: string
+    token_decimal: number
+    total_amounts?: string
+    token_symbol: string
+    token_amounts?: string
+    token_logo: string
+    chain_id: string
+    creator?: string
+    claim_numbers?: string
+    total_numbers?: string
+    claim_amounts?: string
+    create_time?: number
 }
+
+interface Props {
+    history: HistoryInfo
+    handleOpenDetails?: (rpid: string) => void
+}
+
 export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(props: Props) {
-    const { claimInfo, redpacket_id } = props
+    const { history, handleOpenDetails } = props
     const {
         rp_msg,
         create_time,
@@ -154,7 +181,10 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
         token_logo,
         chain_id,
         creator,
-    } = claimInfo
+        redpacket_id,
+        token_amounts,
+        received_time,
+    } = history
     const t = useRedPacketTrans()
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, Number(chain_id))
@@ -178,7 +208,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                                 </div>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                        {t.create_time()}
+                                        {create_time ? t.create_time() : t.received_time()}
                                     </Typography>
                                     <Typography
                                         variant="body1"
@@ -187,52 +217,98 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                                             classes.message,
                                             redpacket_id ? '' : classes.invisible,
                                         )}>
-                                        {t.history_duration({
-                                            time: dateTimeFormat(new Date(Number(create_time) * 1000)),
-                                        })}
+                                        {create_time ?
+                                            t.history_duration({
+                                                time: format(fromUnixTime(create_time), 'M/d/yyyy HH:mm'),
+                                            })
+                                        :   null}
+                                        {received_time ?
+                                            t.history_duration({
+                                                time: format(
+                                                    fromUnixTime(Number.parseInt(received_time, 10)),
+                                                    'M/d/yyyy HH:mm',
+                                                ),
+                                            })
+                                        :   null}
                                     </Typography>
                                 </div>
-                                <div className={classes.fullWidthBox}>
-                                    <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                        {t.creator()}
-                                    </Typography>
-                                    <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                        {web3_utils.isAddress(creator) ? formatEthereumAddress(creator, 4) : creator}
-                                    </Typography>
-                                </div>
+                                {creator ?
+                                    <div className={classes.fullWidthBox}>
+                                        <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                            {t.creator()}
+                                        </Typography>
+                                        <Typography variant="body1" className={cx(classes.info, classes.message)}>
+                                            {web3_utils.isAddress(creator) ?
+                                                formatEthereumAddress(creator, 4)
+                                            :   creator}
+                                        </Typography>
+                                    </div>
+                                :   null}
                             </div>
                         </section>
                         <section className={classes.footer}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography variant="body1" className={classes.footerInfo}>
-                                    <RedPacketTrans.history_claimed
-                                        components={{
-                                            span: <span />,
-                                        }}
-                                        values={{
-                                            claimedShares: String(claim_numbers),
-                                            shares: String(total_numbers),
-                                            amount: formatBalance(total_amounts, token_decimal ?? 18, {
-                                                significant: 2,
-                                                isPrecise: true,
-                                            }),
-                                            claimedAmount: formatBalance(claim_amounts, token_decimal, {
-                                                significant: 2,
-                                                isPrecise: true,
-                                            }),
-                                            symbol: token_symbol,
-                                        }}
-                                    />
-                                </Typography>
-                                {token_logo ?
-                                    <TokenIcon
-                                        className={classes.icon}
-                                        address={''}
-                                        name={token_symbol}
-                                        logoURL={token_logo}
-                                    />
-                                :   null}
-                            </div>
+                            {claim_numbers ?
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography variant="body1" className={classes.footerInfo}>
+                                        <RedPacketTrans.history_claimed
+                                            components={{
+                                                span: <span />,
+                                            }}
+                                            values={{
+                                                claimedShares: String(claim_numbers),
+                                                shares: String(total_numbers),
+                                                amount: formatBalance(total_amounts, token_decimal ?? 18, {
+                                                    significant: 2,
+                                                    isPrecise: true,
+                                                }),
+                                                claimedAmount: formatBalance(claim_amounts, token_decimal, {
+                                                    significant: 2,
+                                                    isPrecise: true,
+                                                }),
+                                                symbol: token_symbol,
+                                            }}
+                                        />
+                                    </Typography>
+                                    {token_logo ?
+                                        <TokenIcon
+                                            className={classes.icon}
+                                            address={''}
+                                            name={token_symbol}
+                                            logoURL={token_logo}
+                                        />
+                                    :   null}
+                                </div>
+                            :   null}
+                            {token_amounts ?
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography variant="body1" className={classes.footerInfo}>
+                                        <span>{t.received()}</span>
+                                        {formatBalance(token_amounts, token_decimal, {
+                                            significant: 2,
+                                            isPrecise: true,
+                                        })}{' '}
+                                        {token_symbol}
+                                    </Typography>
+                                    {token_logo ?
+                                        <TokenIcon
+                                            className={classes.icon}
+                                            address={''}
+                                            name={token_symbol}
+                                            logoURL={token_logo}
+                                        />
+                                    :   null}
+                                </div>
+                            :   null}
+                            {handleOpenDetails ?
+                                <button
+                                    type="button"
+                                    className={classes.moreDetails}
+                                    onClick={() => {
+                                        handleOpenDetails(redpacket_id)
+                                    }}>
+                                    {t.more_details()}
+                                </button>
+                            :   null}
                         </section>
                     </Box>
                 </Box>
