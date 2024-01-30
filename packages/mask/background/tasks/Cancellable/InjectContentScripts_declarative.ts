@@ -3,12 +3,17 @@ import { hmr } from '../../../utils-pure/index.js'
 import type { Scripting } from 'webextension-polyfill'
 import { injectedScriptURL, fetchInjectContentScriptList, maskSDK_URL } from '../../utils/injectScript.js'
 import { Sniffings } from '@masknet/shared-base'
+import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'function') {
     await unregisterExistingScripts()
     await browser.scripting.registerContentScripts([
-        ...prepareMainWorldScript(['<all_urls>']),
+        ...prepareMainWorldScript(['<all_urls>'], maskSDK_URL),
+        ...prepareMainWorldScript(
+            Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),
+            injectedScriptURL,
+        ),
         ...(await prepareContentScript(['<all_urls>'])),
     ])
 
@@ -19,12 +24,12 @@ async function unregisterExistingScripts() {
     await browser.scripting.unregisterContentScripts().catch(noop)
 }
 
-function prepareMainWorldScript(matches: string[]): Scripting.RegisteredContentScript[] {
+function prepareMainWorldScript(matches: string[], url: string): Scripting.RegisteredContentScript[] {
     if (Sniffings.is_firefox) return []
     const result: Scripting.RegisteredContentScript = {
         id: 'injected',
         allFrames: true,
-        js: [maskSDK_URL, injectedScriptURL],
+        js: [url],
         persistAcrossSessions: false,
         // @ts-expect-error Chrome API
         world: 'MAIN',
