@@ -136,24 +136,37 @@ export class FireflyRedPacket {
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history')
+    >(actionType: T, from: `0x${string}`, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
+            address: from,
+            redpacketType: actionType,
+            claimFrom: FireflyRedPacketAPI.SourceType.All,
+            cursor: indicator?.id,
+            size: 20,
+        })
         const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url, {
             method: 'GET',
-            body: JSON.stringify({
-                address: from,
-                redpacketType: actionType,
-                claimFrom: FireflyRedPacketAPI.SourceType.FireflyPC,
-                cursor: indicator?.id,
-                size: 20,
-            }),
         })
-
         return createPageable(
             data.list as R[],
             createIndicator(indicator),
-            createNextIndicator(indicator, data.cursor.toString()),
+            createNextIndicator(indicator, data.cursor?.toString()),
         )
+    }
+
+    static async getClaimHistory(
+        redpacket_id: string,
+        indicator?: PageIndicator,
+    ): Promise<FireflyRedPacketAPI.RedPacketCliamListInfo> {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
+            redpackedId: redpacket_id,
+            cursor: indicator?.id,
+            size: 20,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistroyResponse>(url, {
+            method: 'GET',
+        })
+        return data
     }
 
     static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {

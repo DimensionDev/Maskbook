@@ -41,6 +41,15 @@ export namespace FireflyRedPacketAPI {
         MaskNetwork = 'mask_network',
     }
 
+    export enum RedPacketStatus {
+        View = 'VIEW',
+        Refunding = 'REFUNDING',
+        Refund = 'REFUND',
+        Expired = 'EXPIRED',
+        Empty = 'EMPTY',
+        Send = 'SEND',
+    }
+
     export enum StrategyType {
         profileFollow = 'profileFollow',
         postReaction = 'postReaction',
@@ -82,7 +91,7 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface ClaimPlatform {
-        platform: PlatformType,
+        platform: PlatformType
         platformId: string
     }
 
@@ -100,7 +109,7 @@ export namespace FireflyRedPacketAPI {
         trans_hash: HexString
         log_idx: number
         chain_id: string
-        redpacket_status: 'VIEW'
+        redpacket_status: RedPacketStatus
         claim_strategy: StrategyPayload[]
     }
 
@@ -116,6 +125,38 @@ export namespace FireflyRedPacketAPI {
         log_idx: string
         creator: HexString
         chain_id: string
+        redpacket_status: RedPacketStatus
+    }
+
+    export interface ClaimList {
+        creator: string
+        claim_platform: Platform[]
+        token_amounts: string
+        token_symbol: string
+        token_decimal: number
+    }
+
+    export interface Platform {
+        platformName: PlatformType
+        platformId: string
+        platform_handle: string
+    }
+
+    export interface RedPacketCliamListInfo {
+        list: ClaimList[]
+        creator: string
+        create_time: number
+        rp_msg: string
+        claim_numbers: string
+        claim_amounts: string
+        total_numbers: string
+        total_amounts: string
+        token_symbol: string
+        token_decimal: number
+        token_logo: string
+        chain_id: string
+        cursor: string
+        size: string
     }
 
     export interface ThemeSettings {
@@ -142,6 +183,8 @@ export namespace FireflyRedPacketAPI {
         size: number
         list: RedPacketSentInfo[] | RedPacketClaimedInfo[]
     }>
+
+    export type ClaimHistroyResponse = Response<RedPacketCliamListInfo>
 
     export type CheckClaimStrategyStatusOptions = {
         rpid: string
