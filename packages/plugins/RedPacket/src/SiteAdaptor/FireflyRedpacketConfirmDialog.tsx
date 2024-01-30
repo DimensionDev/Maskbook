@@ -1,17 +1,15 @@
-import { Box, Button, Popover, Radio, Skeleton, Typography } from '@mui/material'
+import { Box, Popover, Radio, Skeleton, Typography } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
 import { compact, flatten, isUndefined, uniqBy } from 'lodash-es'
 import { ActionButton, ShadowRootTooltip, makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useCreateCallback, type RedPacketSettings } from './hooks/useCreateCallback.js'
+import { type RedPacketSettings } from './hooks/useCreateCallback.js'
 import {
     RequirementType,
-    type FireflyAccountSource,
     type FireflyContext,
     type FireflyRedpacketSettings,
-    type FireflySocialProfile,
 } from '../types.js'
 import { Alert, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { useAccount, useChainContext, useFungibleTokenPrice, useReverseAddress } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenPrice, useReverseAddress } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { BigNumber } from 'bignumber.js'
 import { formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
@@ -19,10 +17,8 @@ import { REQUIREMENT_ICON_MAP, REQUIREMENT_TITLE_MAP } from './ClaimRequirements
 import { Icons } from '@masknet/icons'
 import { useEffect, useMemo, useState } from 'react'
 import { useAsync, useStateList } from 'react-use'
-import { useQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import urlcat from 'urlcat'
 import { formatEthereumAddress, isValidAddress, isValidDomain, type GasConfig } from '@masknet/web3-shared-evm'
 import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallback.js'
 
@@ -273,12 +269,12 @@ export function FireflyRedpacketConfirmDialog({
                 ])
             :   EMPTY_LIST
 
-        const publicKey = await FireflyRedPacket.createPublicKey(state.id, payload)
+        const publicKey = await FireflyRedPacket.createPublicKey(state.id, currentAccount, payload)
         return {
             publicKey,
             claimRequirements: payload,
         }
-    }, [state, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId])
+    }, [state, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId, currentAccount])
 
     const { createRedpacket, isCreating } = useCreateFTRedpacketCallback(
         value?.publicKey ?? '',
@@ -432,7 +428,7 @@ export function FireflyRedpacketConfirmDialog({
                                 key={index}
                                 className={classes.accountListItem}
                                 onClick={() => {
-                                    if(displayName) setCurrentAccount(displayName)
+                                    if (displayName) setCurrentAccount(displayName)
                                 }}>
                                 <Box display="flex" columnGap={1} flex={1} alignItems="center">
                                     {icon}

@@ -80,6 +80,11 @@ export namespace FireflyRedPacketAPI {
         profileId: string
     }
 
+    export interface ClaimPlatform {
+        platformName: PlatformType,
+        platformId: string
+    }
+
     export interface RedPacketSentInfo {
         create_time: number
         total_numbers: string

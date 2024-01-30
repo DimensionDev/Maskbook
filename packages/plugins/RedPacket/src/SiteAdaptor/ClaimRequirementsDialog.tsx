@@ -89,13 +89,15 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     footer: {
-        bottom: 36,
+        bottom: 0,
         left: 0,
         right: 0,
         position: 'absolute',
         width: '100%',
         padding: theme.spacing(2),
         boxSizing: 'border-box',
+        background: theme.palette.maskColor.secondaryBottom,
+        boxShadow: theme.palette.maskColor.bottomBg,
     },
 }))
 
