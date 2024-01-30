@@ -125,7 +125,6 @@
     "select_all": "Select All",
     "retry": "Retry",
     "go_wrong": "Something went wrong.",
-    "no_enough_gas_fees": "No Enough Gas Fees",
     "total_amount": "Total amount",
     "random_amount_share_tips": "Total amount shared among all winners",
     "equal_amount_share_tips": "Enter the amount that each winner can claim",
@@ -150,5 +149,9 @@
     "share_from_tips": "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet.",
     "image_preview": "Image Preview",
     "unclaim_tips": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
-    "create_redpacket_tips": "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
+    "create_redpacket_tips": "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products.",
+    "no_enough_gas_fees": "No Enough Gas Fees",
+    "requirements": "Requirements",
+    "follow_somebody_on_somewhere": "Follow {{- handles }} on {{platform}}",
+    "nft_holder_of": "NFT Holder of {{- names }}"
 }

@@ -200,6 +200,7 @@ export function file_url() { return new URL("./general/File.svg", import.meta.ur
 export function file_message_url() { return new URL("./general/FileMessage.svg", import.meta.url).href }
 export function fill_success_url() { return new URL("./general/FillSuccess.svg", import.meta.url).href }
 export function filter_url() { return new URL("./general/Filter.svg", import.meta.url).href }
+export function firefly_nft_url() { return new URL("./general/FireflyNFT.svg", import.meta.url).href }
 export function flag_url() { return new URL("./general/Flag.svg", import.meta.url).href }
 export function folder_url() { return new URL("./general/Folder.svg", import.meta.url).href }
 export function gas_url() { return new URL("./general/Gas.svg", import.meta.url).href }
@@ -210,6 +211,7 @@ export function gear_settings_url() { return new URL("./general/GearSettings.svg
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url).href }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url).href }
 export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url).href }
+export function heart_url() { return new URL("./general/Heart.svg", import.meta.url).href }
 export function history_url() { return new URL("./general/History.svg", import.meta.url).href }
 export function hkd_url() { return new URL("./general/HKD.svg", import.meta.url).href }
 export function hong_kong_url() { return new URL("./general/HongKong.svg", import.meta.url).href }
@@ -240,6 +242,7 @@ export function mask_me_url() { return new URL("./general/MaskMe.svg", import.me
 export function masks_url() { return new URL("./general/Masks.svg", import.meta.url).href }
 export function medal_url() { return new URL("./general/Medal.svg", import.meta.url).href }
 export function message_url() { return new URL("./general/Message.svg", import.meta.url).href }
+export function messages_url() { return new URL("./general/Messages.svg", import.meta.url).href }
 export function minus_url() { return new URL("./general/Minus.svg", import.meta.url).href }
 export function mnemonic_url() { return new URL("./general/Mnemonic.svg", import.meta.url).href }
 export function more_url() { return new URL("./general/More.svg", import.meta.url).href }
@@ -277,6 +280,8 @@ export function refresh_url() { return new URL("./general/Refresh.svg", import.m
 export function repost_url() { return new URL("./general/Repost.svg", import.meta.url).href }
 export function restore_url() { return new URL("./general/Restore.svg", import.meta.url).href }
 export function restore_colorful_url() { return new URL("./general/RestoreColorful.svg", import.meta.url).href }
+export function result_no_url() { return new URL("./general/ResultNo.svg", import.meta.url).href }
+export function result_yes_url() { return new URL("./general/ResultYes.svg", import.meta.url).href }
 export function retweet_dark_url() { return new URL("./general/Retweet.dark.svg", import.meta.url).href }
 export function retweet_light_url() { return new URL("./general/Retweet.light.svg", import.meta.url).href }
 export function right_url() { return new URL("./general/Right.svg", import.meta.url).href }
@@ -320,6 +325,7 @@ export function undo_url() { return new URL("./general/Undo.svg", import.meta.ur
 export function upload_url() { return new URL("./general/Upload.svg", import.meta.url).href }
 export function usd_url() { return new URL("./general/USD.svg", import.meta.url).href }
 export function user_url() { return new URL("./general/User.svg", import.meta.url).href }
+export function user_plus_url() { return new URL("./general/UserPlus.svg", import.meta.url).href }
 export function verification_url() { return new URL("./general/Verification.svg", import.meta.url).href }
 export function wallet_url() { return new URL("./general/Wallet.svg", import.meta.url).href }
 export function wallet_nav_url() { return new URL("./general/WalletNav.svg", import.meta.url).href }
