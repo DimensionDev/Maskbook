@@ -1,10 +1,11 @@
 import urlcat from 'urlcat'
 
 interface Options {
-    theme: 'mask' | 'golden-flower' | 'lucky-flower' | 'lucky-firefly' | 'co-branding'
+    theme: string
     symbol: string
     shares: number | string
     amount: number | string
+    decimals?: number
     from: string
     message: string
     remainingAmount: number | string

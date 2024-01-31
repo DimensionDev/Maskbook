@@ -12,71 +12,62 @@ import { FireflyRedPacketAPI } from '../entry-types.js'
 const SITE_URL = 'https://firefly-staging.mask.social'
 const FIREFLY_ROOT_URL = 'https://api-dev.firefly.land'
 
+const themes = [
+    {
+        id: 'b64f9af2-447c-471f-998a-fa7336c57849',
+        name: 'golden-flower',
+    },
+    {
+        id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
+        name: 'lucky-firefly',
+    },
+    {
+        id: 'e480132f-a853-43ea-bbab-883b463e55b3',
+        name: 'lucky-flower',
+    },
+] as const
+
 export class FireflyRedPacket {
-    static async getThemeSettings(
+    static getThemeSettings(
         from: string,
         amount?: string,
         type?: string,
         symbol?: string,
         decimals?: number,
-    ): Promise<FireflyRedPacketAPI.ThemeSettings[]> {
-        return [
-            {
-                id: 'b64f9af2-447c-471f-998a-fa7336c57849',
-                payloadUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'golden-flower',
-                    usage: 'payload',
-                    from,
-                    amount,
-                    type,
-                    symbol,
-                    decimals,
-                }),
-                coverUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'golden-flower',
-                    usage: 'cover',
-                }),
-            },
-            {
-                id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
-                payloadUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'lucky-firefly',
-                    usage: 'payload',
-                    from,
-                    amount,
-                    type,
-                    symbol,
-                    decimals,
-                }),
-                coverUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'lucky-firefly',
-                    usage: 'cover',
-                }),
-            },
-            {
-                id: 'e480132f-a853-43ea-bbab-883b463e55b3',
-                payloadUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'lucky-flower',
-                    usage: 'payload',
-                    from,
-                    amount,
-                    type,
-                    symbol,
-                    decimals,
-                }),
-                coverUrl: urlcat(SITE_URL, '/api/rp', {
-                    theme: 'lucky-flower',
-                    usage: 'cover',
-                }),
-            },
-        ]
+    ): FireflyRedPacketAPI.ThemeSettings[] {
+        return themes.map((theme) => ({
+            id: theme.id,
+            payloadUrl: urlcat(SITE_URL, '/api/rp', {
+                theme: theme.name,
+                usage: 'payload',
+                from,
+                amount,
+                type,
+                symbol,
+                decimals,
+            }),
+            coverUrl: urlcat(SITE_URL, '/api/rp', {
+                theme: theme.name,
+                usage: 'cover',
+            }),
+        }))
+    }
+
+    static async getThemeByRpid(rpid: string) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
+            rpid,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        const themeId = data.tid
+        const setting = themes.find((x) => x.id === themeId) || themes[0]
+        return setting.name
     }
 
     static async createPublicKey(
         themeId: string,
         shareFrom: string,
         payloads: FireflyRedPacketAPI.StrategyPayload[],
-    ): Promise<`0x${string}`> {
+    ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
@@ -136,7 +127,7 @@ export class FireflyRedPacket {
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(actionType: T, from: `0x${string}`, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
+    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,

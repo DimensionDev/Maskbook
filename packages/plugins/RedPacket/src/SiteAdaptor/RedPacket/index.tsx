@@ -1,4 +1,4 @@
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostLink, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -12,7 +12,7 @@ import {
     type FireflyRedPacketAPI as F,
 } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId, signMessage } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
@@ -24,6 +24,9 @@ import { OperationFooter } from './OperationFooter.js'
 import { Requirements } from '../Requirements.js'
 import { useCheckClaimStrategyStatus } from '../hooks/useCheckClaimStrategyStats.js'
 import { getRedPacketCover } from '../utils/getRedPacketCover.js'
+import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
+import { useSignedMessage } from '../hooks/useSignedMessage.js'
+import { usePlatformType } from '../hooks/usePlatformType.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -122,11 +125,20 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
+    const author = usePostInfoDetails.author()
+    const platform = usePlatformType()
+    const signedMsg = useSignedMessage({
+        account,
+        contractVersion: payload.contract_version,
+        password: payload.password,
+        rpid: payload.rpid,
+        profile: platform ? { platform, profileId: author?.userId || '' } : undefined,
+    })
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? signMessage(account, payload.password).signature : payload.password,
+        signedMsg,
         payloadChainId,
     )
 
@@ -214,22 +226,24 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes } = useStyles({ outdated })
+    const theme = useCoverTheme(payload.rpid)
     const cover = useMemo(() => {
-        if (!token?.symbol) return ''
+        if (!token?.symbol || !theme) return ''
         return getRedPacketCover({
-            theme: 'lucky-flower',
+            theme,
             symbol: token.symbol,
             shares: payload.shares,
-            amount: formatBalance(payload.total, token.decimals, { significant: 2 }),
+            amount: payload.total,
+            decimals: token.decimals,
             from: `@${payload.sender.name}`,
             message: payload.sender.message,
             remainingAmount: payload.total_remaining!,
             remainingShares: minus(payload.shares, availability?.claimed || 0).toNumber(),
         })
-    }, [token?.symbol, payload, availability])
+    }, [token?.symbol, payload, availability, theme])
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || !cover) return <LoadingStatus minHeight={148} />
 
     return (
         <>

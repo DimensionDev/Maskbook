@@ -235,4 +235,22 @@ export namespace FireflyRedPacketAPI {
         claimStrategyStatus: ClaimStrategyStatus[]
         canClaim: boolean
     }>
+
+    export type ThemeByIdResponse = Response<{
+        /** theme id */
+        tid: string
+        cover: {
+            [key in 'title1' | 'title2' | 'title3' | 'title4']: {
+                color: '#F1D590'
+                font_size: 55
+                font_family: 'Helvetica'
+                font_weight: 700
+                line_height: 63.25
+            }
+        } & {
+            bg_color: string
+            bg_image: string
+            logo_image: string
+        }
+    }>
 }

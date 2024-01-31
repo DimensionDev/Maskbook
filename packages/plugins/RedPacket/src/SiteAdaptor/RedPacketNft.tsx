@@ -32,6 +32,7 @@ import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
 import { Requirements } from './Requirements.js'
 import { getRedPacketCover } from './utils/getRedPacketCover.js'
+import { useCoverTheme } from './hooks/useRedPacketCoverTheme.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => ({
     root: {
@@ -289,11 +290,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, retryAvailability, checkClaimStrategyStatus])
 
+    const theme = useCoverTheme(payload.id)
     const cover = useMemo(() => {
-        if (!availability) return ''
+        if (!availability || !theme) return ''
         return getRedPacketCover({
             symbol: asset?.metadata?.symbol!,
-            theme: 'lucky-flower',
+            theme,
             shares: availability.totalAmount,
             amount: availability.totalAmount,
             from: `@${payload.senderName}`,
@@ -301,11 +303,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             remainingAmount: availability.balance,
             remainingShares: availability.remaining,
         })
-    }, [asset?.metadata?.symbol, availability])
+    }, [asset?.metadata?.symbol, availability, theme])
 
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
-    if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
+    if (!availability || loading || !cover) return <LoadingStatus minHeight={148} iconSize={24} />
 
     return (
         <div className={classes.root}>
