@@ -583,7 +583,7 @@
     "plugin_infra_descriptor_token_revoke_fail": "トークンコントラクトの取り消しに失敗しました。",
     "plugin_infra_descriptor_token_approve_title": "トークンのロック解除",
     "plugin_infra_descriptor_token_approve": "{{- tokenAmountDescription}} のロックを解除",
-    "plugin_infra_descriptor_token_approve_success": "{{- tokenAmountDescription}} のロックを解除しました",
+    "plugin_infra_descriptor_token_approve_success": "{{- symbol}} のロックを解除しました",
     "plugin_infra_descriptor_token_revoke_but_set_positive_cap": " {{spender}}の{{- tokenAmountDescription}} を承認しました。トークンを取り消したい場合は、カスタム支出上限金額を 0 にしてからもう一度お試しください。",
     "plugin_infra_descriptor_token_approve_but_set_zero_cap": "{{symbol}} は正常に承認されませんでした。支出上限を 0 に設定せず、もう一度お試しください。",
     "plugin_infra_descriptor_token_fail": "トークンコントラクトのロック解除に失敗しました。",
