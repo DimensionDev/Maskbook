@@ -582,7 +582,7 @@
     "plugin_infra_descriptor_token_revoke_fail": "撤销代币授权失败。",
     "plugin_infra_descriptor_token_approve_title": "解锁代币",
     "plugin_infra_descriptor_token_approve": "解锁 {{tokenAmountDescription}}",
-    "plugin_infra_descriptor_token_approve_success": "解锁 {{tokenAmountDescription}} 成功",
+    "plugin_infra_descriptor_token_approve_success": "解锁 {{- symbol}} 成功",
     "plugin_infra_descriptor_token_revoke_but_set_positive_cap": "您已经授权了{{spender}} 的 {{- tokenAmountDescription}} 。如果您想要撤销该Token，请将自定义支出上限保持为 0 并再试一次。",
     "plugin_infra_descriptor_token_approve_but_set_zero_cap": "您没有成功授权 {{symbol}} 。请不要设置支出上限为 0，然后再试一次。",
     "plugin_infra_descriptor_token_fail": "解锁代币合约失败。",
