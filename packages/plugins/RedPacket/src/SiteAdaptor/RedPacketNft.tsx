@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { makeStyles, ActionButton, parseColor, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
+import {
+    makeStyles,
+    ActionButton,
+    parseColor,
+    ShadowRootTooltip,
+    useDetectOverflow,
+    useCustomSnackbar,
+} from '@masknet/theme'
 import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Card, Typography, Button, Box } from '@mui/material'
@@ -312,13 +319,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
     }, [nftRedPacketContract, payload.id, account, Hub])
 
+    const { showSnackbar } = useCustomSnackbar()
     const claim = useCallback(async () => {
         const hash = await claimCallback()
         await checkResult()
         if (typeof hash === 'string') {
             retryAvailability()
+        } else if (hash instanceof Error) {
+            showSnackbar(hash.message, {
+                variant: 'error',
+            })
         }
-    }, [claimCallback, retryAvailability])
+    }, [claimCallback, retryAvailability, showSnackbar])
 
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
@@ -412,7 +424,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     isClaiming={isClaiming}
                     claimed={availability.isClaimed}
                     onShare={onShare}
-                    claim={claim}
+                    onClaim={claim}
                 />
             )}
         </div>
@@ -422,12 +434,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 interface OperationFooterProps {
     claimed: boolean
     isClaiming: boolean
-    onShare(): void
-    claim(): Promise<void>
     chainId: ChainId
+    onShare(): void
+    onClaim(): Promise<void>
 }
 
-function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
+function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
     const t = useRedPacketTrans()
 
@@ -460,7 +472,7 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                                 variant="roundedDark"
                                 loading={isClaiming}
                                 disabled={isClaiming}
-                                onClick={claim}
+                                onClick={onClaim}
                                 className={classes.button}
                                 fullWidth>
                                 {isClaiming ? t.claiming() : t.claim()}
