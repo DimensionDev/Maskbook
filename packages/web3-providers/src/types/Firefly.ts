@@ -193,6 +193,7 @@ export namespace FireflyRedPacketAPI {
     export type CheckClaimStrategyStatusOptions = {
         rpid: string
         profile: {
+            needLensAndFarcasterHandle?: boolean
             platform: PlatformType
             profileId: string
             lensToken?: string
@@ -201,7 +202,7 @@ export namespace FireflyRedPacketAPI {
             address: string
         }
     }
-    type PostReactionKind = 'like' | 'repost' | 'quote' | 'comment' | 'collect'
+    export type PostReactionKind = 'like' | 'repost' | 'quote' | 'comment' | 'collect'
     export type ClaimStrategyStatus =
         | {
               type: 'profileFollow'

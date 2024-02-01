@@ -28,6 +28,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
             return FireflyRedPacket.checkClaimStrategyStatus({
                 rpid,
                 profile: {
+                    needLensAndFarcasterHandle: true,
                     platform,
                     profileId: author?.userId || '',
                     lensToken: lensToken,

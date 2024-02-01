@@ -1,4 +1,4 @@
-import { Icons, type GeneratedIconProps } from '@masknet/icons'
+import { Icons, type GeneratedIconProps, type GeneratedIcon } from '@masknet/icons'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, List, ListItem, Typography, type BoxProps, Link } from '@mui/material'
@@ -72,6 +72,14 @@ interface Props extends BoxProps {
     statusList: FireflyRedPacketAPI.ClaimStrategyStatus[]
 }
 
+const IconMap: Record<FireflyRedPacketAPI.PostReactionKind, GeneratedIcon> = {
+    like: Icons.Heart,
+    repost: Icons.Repost,
+    quote: Icons.Repost,
+    comment: Icons.Comment,
+    collect: Icons.Heart,
+}
+
 export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
     { onClose, statusList, ...props }: Props,
     ref,
@@ -112,16 +120,19 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                         }
                         return [...arr, condition]
                     }, [])
-                    .map((condition) => (
-                        <ListItem className={classes.item} key={condition.key}>
-                            <Icons.Heart className={classes.icon} size={16} />
-                            <Typography className={classes.text}>{condition.key}</Typography>
-                            <Link href={link.toString()} classes={classes.link} target="_blank">
-                                <Icons.LinkOut size={16} className={classes.linkIcon} />
-                            </Link>
-                            <ResultIcon className={classes.state} size={18} result={condition.value} />
-                        </ListItem>
-                    ))
+                    .map((condition) => {
+                        const Icon = IconMap[condition.key]
+                        return (
+                            <ListItem className={classes.item} key={condition.key}>
+                                <Icon className={classes.icon} size={16} />
+                                <Typography className={classes.text}>{condition.key}</Typography>
+                                <Link href={link.toString()} classes={classes.link} target="_blank">
+                                    <Icons.LinkOut size={16} className={classes.linkIcon} />
+                                </Link>
+                                <ResultIcon className={classes.state} size={18} result={condition.value} />
+                            </ListItem>
+                        )
+                    })
             }
             if (status.type === 'nftOwned') {
                 const collectionNames = status.payload.map((x) => x.collectionName).join(', ')
