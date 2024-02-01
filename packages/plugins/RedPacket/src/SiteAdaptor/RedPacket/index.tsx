@@ -188,8 +188,8 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const [showRequirements, setShowRequirements] = useState(false)
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
-        const { data: newData } = await recheckClaimStatus()
-        if (newData?.data.canClaim === false) {
+        const result = await recheckClaimStatus()
+        if (result === false) {
             setShowRequirements(true)
             return
         }
