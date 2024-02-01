@@ -27,6 +27,10 @@ const themes = [
     },
 ] as const
 
+const jsonHeaders = {
+    'Content-Type': 'application/json',
+}
+
 export class FireflyRedPacket {
     static getThemeSettings(
         from: string,
@@ -71,9 +75,7 @@ export class FireflyRedPacket {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers,
             body: JSON.stringify({
                 themeId,
                 shareFrom,
@@ -93,9 +95,7 @@ export class FireflyRedPacket {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
         await fetchJSON(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: jsonHeaders,
             body: JSON.stringify({
                 rpid,
                 postReaction: reactions,
@@ -148,7 +148,7 @@ export class FireflyRedPacket {
     static async getClaimHistory(
         redpacket_id: string,
         indicator?: PageIndicator,
-    ): Promise<FireflyRedPacketAPI.RedPacketCliamListInfo> {
+    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpackedId: redpacket_id,
             cursor: indicator?.id,
@@ -164,6 +164,7 @@ export class FireflyRedPacket {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/checkClaimStrategyStatus')
         return fetchJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
+            headers: jsonHeaders,
             body: JSON.stringify(options),
         })
     }

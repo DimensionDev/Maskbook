@@ -1,10 +1,11 @@
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { Box, IconButton, List, ListItem, Typography, type BoxProps } from '@mui/material'
+import { Box, IconButton, List, ListItem, Typography, type BoxProps, Link } from '@mui/material'
 import { sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
 import { useRedPacketTrans } from '../locales/i18n_generated.js'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -48,10 +49,13 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         marginRight: 10,
     },
+    link: {
+        display: 'inline-flex',
+        alignItems: 'center',
+    },
     linkIcon: {
         opacity: 0.5,
         color: theme.palette.common.white,
-        cursor: 'pointer',
     },
     state: {
         marginLeft: 'auto',
@@ -74,6 +78,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
 ) {
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
+    const link = usePostLink()
     const requirements = useMemo(() => {
         const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
         const orderedStatusList = sortBy(statusList, (x) => orders.indexOf(x.type))
@@ -111,7 +116,9 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                         <ListItem className={classes.item} key={condition.key}>
                             <Icons.Heart className={classes.icon} size={16} />
                             <Typography className={classes.text}>{condition.key}</Typography>
-                            <Icons.LinkOut size={16} className={classes.linkIcon} />
+                            <Link href={link.toString()} classes={classes.link} target="_blank">
+                                <Icons.LinkOut size={16} className={classes.linkIcon} />
+                            </Link>
                             <ResultIcon className={classes.state} size={18} result={condition.value} />
                         </ListItem>
                     ))
@@ -133,7 +140,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
             }
             return null
         })
-    }, [statusList])
+    }, [statusList, link])
     return (
         <Box {...props} className={cx(classes.box, props.className)} ref={ref}>
             <Typography variant="h2" className={classes.header}>

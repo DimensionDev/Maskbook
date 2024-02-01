@@ -1,14 +1,11 @@
-import { compact } from 'lodash-es'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { EVMNetworkResolver } from '@masknet/web3-providers'
+import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
-import { type RedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-providers/types'
+import { compact } from 'lodash-es'
 import { useAvailability } from './useAvailability.js'
-import { useQuery } from '@tanstack/react-query'
-import { RedPacketRPC } from '../../messages.js'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { useClaimStrategyStatus } from './useClaimStrategyStatus.js'
 import { useSignedMessage } from './useSignedMessage.js'
-import { usePlatformType } from './usePlatformType.js'
 
 /**
  * Fetch the red packet info from the chain
@@ -25,31 +22,20 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         chainId: parsedChainId,
     })
 
-    const author = usePostInfoDetails.author()
-    const platform = usePlatformType()
-    const signedMsg = useSignedMessage({
-        account,
-        contractVersion: payload.contract_version,
-        password: payload.password,
-        rpid: payload.rpid,
-        profile: platform ? { platform, profileId: author?.userId || '' } : undefined,
-    })
-    const { data: password = signedMsg } = useQuery({
-        queryKey: ['red-packet', 'password', payload.txid],
-        queryFn: async () => {
-            const record = await RedPacketRPC.getRedPacketRecord(payload.txid)
-            return record?.password
-        },
-    })
+    const password = useSignedMessage(account, payload)
+    const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
 
     const availability = asyncResult.value
 
-    if (!availability)
+    if (!availability || (!payload.password && !data))
         return {
             ...asyncResult,
             payload,
+            claimStrategyStatus: null,
+            checkingClaimStatus: isFetching,
+            recheckClaimStatus: refetch,
             computed: {
-                canClaim: false,
+                canClaim: false || data?.data.canClaim,
                 canRefund: false,
                 listOfStatus: [] as RedPacketStatus[],
             },
@@ -60,10 +46,14 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
+    const canClaim = (!isExpired && !isEmpty && !isClaimed && isPasswordValid) || !!data?.data.canClaim
     return {
         ...asyncResult,
+        claimStrategyStatus: data?.data,
+        recheckClaimStatus: refetch,
+        checkingClaimStatus: isFetching,
         computed: {
-            canClaim: !isExpired && !isEmpty && !isClaimed && isPasswordValid,
+            canClaim: canClaim,
             canRefund: isExpired && !isEmpty && isCreator,
             canSend: !isEmpty && !isExpired && !isRefunded && isCreator,
             isPasswordValid,

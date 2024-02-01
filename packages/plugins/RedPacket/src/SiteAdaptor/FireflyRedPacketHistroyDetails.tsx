@@ -45,7 +45,7 @@ export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid
         data: claimData,
         isLoading,
         fetchNextPage,
-    } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketCliamListInfo>({
+    } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketClaimListInfo>({
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
         queryFn: async ({ pageParam }) => {

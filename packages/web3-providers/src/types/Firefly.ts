@@ -146,7 +146,7 @@ export namespace FireflyRedPacketAPI {
         platform_handle: string
     }
 
-    export interface RedPacketCliamListInfo {
+    export interface RedPacketClaimListInfo {
         list: ClaimList[]
         creator: string
         create_time: number
@@ -188,7 +188,7 @@ export namespace FireflyRedPacketAPI {
         list: RedPacketSentInfo[] | RedPacketClaimedInfo[]
     }>
 
-    export type ClaimHistroyResponse = Response<RedPacketCliamListInfo>
+    export type ClaimHistroyResponse = Response<RedPacketClaimListInfo>
 
     export type CheckClaimStrategyStatusOptions = {
         rpid: string
