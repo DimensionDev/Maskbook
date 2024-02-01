@@ -2,14 +2,18 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    Sniffings,
     type Pageable,
     type PageIndicator,
+    getSiteType,
+    EnhanceableSite,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
 import { FireflyRedPacketAPI } from '../entry-types.js'
 
-const SITE_URL = 'https://firefly-staging.mask.social'
+const siteType = getSiteType()
+const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly-staging.mask.social'
 const FIREFLY_ROOT_URL = 'https://api-dev.firefly.land'
 
 export class FireflyRedPacket {

@@ -91,7 +91,7 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface ClaimPlatform {
-        platform: PlatformType
+        platformName: PlatformType
         platformId: string
     }
 
