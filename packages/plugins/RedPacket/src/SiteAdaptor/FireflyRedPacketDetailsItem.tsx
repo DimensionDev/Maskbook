@@ -9,6 +9,8 @@ import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { format, fromUnixTime } from 'date-fns'
+import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -160,6 +162,7 @@ interface HistoryInfo {
     total_numbers?: string
     claim_amounts?: string
     create_time?: number
+    redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
 }
 
 interface Props {
@@ -184,6 +187,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
         redpacket_id,
         token_amounts,
         received_time,
+        redpacket_status,
     } = history
     const t = useRedPacketTrans()
 
@@ -245,6 +249,9 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                                     </div>
                                 :   null}
                             </div>
+                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
+                                <FireflyRedPacketActionButton redpacketStatus={redpacket_status} />
+                            :   null}
                         </section>
                         <section className={classes.footer}>
                             {claim_numbers ?
