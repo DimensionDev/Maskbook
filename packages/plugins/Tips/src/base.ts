@@ -35,6 +35,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Astar,
                     ChainId.Scroll,
                     ChainId.Optimism,
+                    ChainId.X1_Testnet,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
