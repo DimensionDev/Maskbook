@@ -309,7 +309,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         type: NetworkType.X1,
         icon: new URL('../assets/x1.png', import.meta.url).href,
         iconColor: 'rgb(255, 255, 255)',
-        name: 'X1_Testnet',
+        name: 'X1 Testnet',
         isMainnet: true,
         averageBlockDelay: 10,
     },
