@@ -6,6 +6,9 @@ import { type RedPacketJSONPayload, RedPacketStatus } from '@masknet/web3-provid
 import { useAvailability } from './useAvailability.js'
 import { useQuery } from '@tanstack/react-query'
 import { RedPacketRPC } from '../../messages.js'
+import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { useSignedMessage } from './useSignedMessage.js'
+import { usePlatformType } from './usePlatformType.js'
 
 /**
  * Fetch the red packet info from the chain
@@ -22,7 +25,16 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         chainId: parsedChainId,
     })
 
-    const { data: password = payload.password } = useQuery({
+    const author = usePostInfoDetails.author()
+    const platform = usePlatformType()
+    const signedMsg = useSignedMessage({
+        account,
+        contractVersion: payload.contract_version,
+        password: payload.password,
+        rpid: payload.rpid,
+        profile: platform ? { platform, profileId: author?.userId || '' } : undefined,
+    })
+    const { data: password = signedMsg } = useQuery({
         queryKey: ['red-packet', 'password', payload.txid],
         queryFn: async () => {
             const record = await RedPacketRPC.getRedPacketRecord(payload.txid)
@@ -30,8 +42,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         },
     })
 
-    const result = asyncResult
-    const availability = result.value
+    const availability = asyncResult.value
 
     if (!availability)
         return {

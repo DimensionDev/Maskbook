@@ -88,6 +88,10 @@ export namespace FireflyRedPacketAPI {
     export interface ProfileReaction {
         platform: PlatformType
         profileId: string
+        lensToken?: string
+        farcasterSignature?: HexString
+        farcasterSigner?: HexString
+        farcasterMessage?: HexString
     }
 
     export interface ClaimPlatform {
