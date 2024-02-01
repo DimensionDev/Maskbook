@@ -1,18 +1,14 @@
 import { Box, Popover, Radio, Skeleton, Typography } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
-import { compact, flatten, isUndefined, uniqBy } from 'lodash-es'
+import { compact, flatten, uniqBy } from 'lodash-es'
 import { ActionButton, ShadowRootTooltip, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { type RedPacketSettings } from './hooks/useCreateCallback.js'
-import {
-    RequirementType,
-    type FireflyContext,
-    type FireflyRedpacketSettings,
-} from '../types.js'
+import { RequirementType, type FireflyContext, type FireflyRedpacketSettings } from '../types.js'
 import { Alert, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useChainContext, useFungibleTokenPrice, useReverseAddress } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { BigNumber } from 'bignumber.js'
-import { formatBalance, formatCurrency, isSameAddress, leftShift } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
 import { REQUIREMENT_ICON_MAP, REQUIREMENT_TITLE_MAP } from './ClaimRequirementsDialog.js'
 import { Icons } from '@masknet/icons'
 import { useMemo, useState } from 'react'
@@ -145,7 +141,7 @@ export function FireflyRedpacketConfirmDialog({
         currentLensProfile?.handle || currentFarcasterProfile?.handle || ensName || account,
     )
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    
+
     const { data: price } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, settings?.token?.address)
 
     const amount = useMemo(
@@ -153,7 +149,7 @@ export function FireflyRedpacketConfirmDialog({
         [settings.total, settings.token?.decimals],
     )
 
-    const { value: themes } = useAsync(async () => {
+    const themes = useMemo(() => {
         if (!currentAccount) return EMPTY_LIST
         return FireflyRedPacket.getThemeSettings(
             currentAccount,
@@ -195,7 +191,7 @@ export function FireflyRedpacketConfirmDialog({
     }, [account, fireflyContext, farcasterOwnerENS, lensOwnerENS, ensName])
 
     const { loading: imageLoading } = useAsync(async () => {
-        if(!state?.payloadUrl) return
+        if (!state?.payloadUrl) return
         await fetch(state.payloadUrl)
     }, [state?.payloadUrl])
 

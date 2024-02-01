@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { makeStyles, ActionButton, ShadowRootTooltip, useDetectOverflow } from '@masknet/theme'
-import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
-import { type RedPacketNftJSONPayload, type FireflyRedPacketAPI as F } from '@masknet/web3-providers/types'
-import { Card, Typography, Button, Box, Grow } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import {
-    WalletConnectedBoundary,
-    ChainBoundary,
     AssetPreviewer,
-    NFTFallbackImage,
-    TransactionConfirmModal,
+    ChainBoundary,
     LoadingStatus,
+    NFTFallbackImage,
     ReloadStatus,
+    TransactionConfirmModal,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { ActionButton, ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import {
     useChainContext,
     useNetwork,
@@ -19,18 +19,19 @@ import {
     useNonFungibleAsset,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
+import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
-import { share } from '@masknet/plugin-infra/content-script/context'
-import { NetworkPluginID, CrossIsolationMessages, Sniffings, EMPTY_LIST } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
+import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Card, Grow, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
-import { useCheckClaimStrategyStatus } from './hooks/useCheckClaimStrategyStats.js'
-import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
-import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
-import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
 import { Requirements } from './Requirements.js'
+import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
+import { useClaimStrategyStatus } from './hooks/useClaimStrategyStatus.js'
+import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
+import { useCoverTheme } from './hooks/useRedPacketCoverTheme.js'
 import { getRedPacketCover } from './utils/getRedPacketCover.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => ({
@@ -273,13 +274,16 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     }, [nftRedPacketContract, payload.id, account, Hub])
 
     const [showRequirements, setShowRequirements] = useState(false)
-    const [claimStrategyStatus, setClaimStrategyStatus] = useState<F.ClaimStrategyStatus[]>(EMPTY_LIST)
-    const checkClaimStrategyStatus = useCheckClaimStrategyStatus(payload.id)
+    const {
+        data: strategyStatusData,
+        refetch: recheckClaimStatus,
+        isFetching: checkingClaimStatus,
+    } = useClaimStrategyStatus(payload)
+    const claimStrategyStatus = strategyStatusData?.data
     const claim = useCallback(async () => {
-        const { data } = await checkClaimStrategyStatus()
-        if (!data.canClaim) {
+        const { data: newData } = await recheckClaimStatus()
+        if (newData?.data.canClaim === false) {
             setShowRequirements(true)
-            setClaimStrategyStatus(data.claimStrategyStatus)
             return
         }
         const hash = await claimCallback()
@@ -287,13 +291,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         if (typeof hash === 'string') {
             retryAvailability()
         }
-    }, [claimCallback, retryAvailability, checkClaimStrategyStatus])
+    }, [claimCallback, retryAvailability, recheckClaimStatus])
 
+    const theme = useCoverTheme(payload.id)
     const cover = useMemo(() => {
-        if (!availability) return ''
+        if (!availability || !theme) return ''
         return getRedPacketCover({
             symbol: asset?.metadata?.symbol!,
-            theme: 'lucky-flower',
+            theme,
             shares: availability.totalAmount,
             amount: availability.totalAmount,
             from: `@${payload.senderName}`,
@@ -301,11 +306,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             remainingAmount: availability.balance,
             remainingShares: availability.remaining,
         })
-    }, [asset?.metadata?.symbol, availability])
+    }, [asset?.metadata?.symbol, availability, theme])
 
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
-    if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
+    if (!availability || loading || !cover) return <LoadingStatus minHeight={148} iconSize={24} />
 
     return (
         <div className={classes.root}>
@@ -366,10 +371,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     claim={claim}
                 />
             )}
-            <Grow in={showRequirements} timeout={250}>
+            <Grow in={showRequirements && !checkingClaimStatus} timeout={250}>
                 <Requirements
                     className={classes.requirements}
-                    statusList={claimStrategyStatus}
+                    statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                     onClose={() => setShowRequirements(false)}
                 />
             </Grow>

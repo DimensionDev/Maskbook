@@ -88,6 +88,10 @@ export namespace FireflyRedPacketAPI {
     export interface ProfileReaction {
         platform: PlatformType
         profileId: string
+        lensToken?: string
+        farcasterSignature?: HexString
+        farcasterSigner?: HexString
+        farcasterMessage?: HexString
     }
 
     export interface ClaimPlatform {
@@ -142,7 +146,7 @@ export namespace FireflyRedPacketAPI {
         platform_handle: string
     }
 
-    export interface RedPacketCliamListInfo {
+    export interface RedPacketClaimListInfo {
         list: ClaimList[]
         creator: string
         create_time: number
@@ -184,7 +188,7 @@ export namespace FireflyRedPacketAPI {
         list: RedPacketSentInfo[] | RedPacketClaimedInfo[]
     }>
 
-    export type ClaimHistroyResponse = Response<RedPacketCliamListInfo>
+    export type ClaimHistroyResponse = Response<RedPacketClaimListInfo>
 
     export type CheckClaimStrategyStatusOptions = {
         rpid: string
@@ -234,5 +238,23 @@ export namespace FireflyRedPacketAPI {
     export type CheckClaimStrategyStatusResponse = Response<{
         claimStrategyStatus: ClaimStrategyStatus[]
         canClaim: boolean
+    }>
+
+    export type ThemeByIdResponse = Response<{
+        /** theme id */
+        tid: string
+        cover: {
+            [key in 'title1' | 'title2' | 'title3' | 'title4']: {
+                color: '#F1D590'
+                font_size: 55
+                font_family: 'Helvetica'
+                font_weight: 700
+                line_height: 63.25
+            }
+        } & {
+            bg_color: string
+            bg_image: string
+            logo_image: string
+        }
     }>
 }

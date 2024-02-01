@@ -12,13 +12,13 @@ export function useClaimCallback(
     version: number,
     from: string,
     id: string,
-    password?: string,
+    signedMsg?: string,
     expectedChainId?: ChainId,
 ) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const redPacketContract = useRedPacketContract(chainId, version)
     return useAsyncFn(async () => {
-        if (!redPacketContract || !id || !password) return
+        if (!redPacketContract || !id || !signedMsg) return
 
         const config = {
             from,
@@ -29,16 +29,16 @@ export function useClaimCallback(
         const tx =
             version === 4 ?
                 await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV4).methods.claim(id, password, from),
+                    (redPacketContract as HappyRedPacketV4).methods.claim(id, signedMsg, from),
                     config,
                 )
             :   await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV1).methods.claim(id, password, from, web3_utils.sha3(from)!),
+                    (redPacketContract as HappyRedPacketV1).methods.claim(id, signedMsg, from, web3_utils.sha3(from)!),
                     config,
                 )
 
         return EVMWeb3.sendTransaction(tx, {
             chainId,
         })
-    }, [id, password, from, chainId, redPacketContract, version])
+    }, [id, signedMsg, from, chainId, redPacketContract, version])
 }

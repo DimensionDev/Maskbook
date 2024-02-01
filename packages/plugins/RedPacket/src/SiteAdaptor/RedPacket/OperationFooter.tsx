@@ -30,6 +30,7 @@ interface OperationFooterProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
+    /** Is claiming or checking claim status */
     isClaiming: boolean
     isRefunding: boolean
     onShare?(): void

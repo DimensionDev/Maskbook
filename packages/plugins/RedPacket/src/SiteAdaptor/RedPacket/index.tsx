@@ -6,24 +6,21 @@ import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import {
-    RedPacketStatus,
-    type RedPacketJSONPayload,
-    type FireflyRedPacketAPI as F,
-} from '@masknet/web3-providers/types'
+import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId, signMessage } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
+import { Requirements } from '../Requirements.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
+import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
-import { OperationFooter } from './OperationFooter.js'
-import { Requirements } from '../Requirements.js'
-import { useCheckClaimStrategyStatus } from '../hooks/useCheckClaimStrategyStats.js'
+import { useSignedMessage } from '../hooks/useSignedMessage.js'
 import { getRedPacketCover } from '../utils/getRedPacketCover.js'
+import { OperationFooter } from './OperationFooter.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -58,7 +55,7 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
         },
         requirements: {
             width: 407,
-            height: 238,
+            height: 'fit-content',
             boxSizing: 'border-box',
             position: 'absolute',
             zIndex: 9,
@@ -113,6 +110,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         value: availability,
         computed: availabilityComputed,
         retry: revalidateAvailability,
+        claimStrategyStatus,
+        recheckClaimStatus,
+        checkingClaimStatus,
     } = useAvailabilityComputed(account ?? payload.contract_address, payload)
 
     // #endregion
@@ -122,11 +122,12 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
+    const signedMsg = useSignedMessage(account, payload)
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payload.contract_version > 3 ? signMessage(account, payload.password).signature : payload.password,
+        signedMsg,
         payloadChainId,
     )
 
@@ -185,17 +186,14 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [token, redPacketContract, payload.rpid, account])
 
     const [showRequirements, setShowRequirements] = useState(false)
-    const [claimStrategyStatus, setClaimStrategyStatus] = useState<F.ClaimStrategyStatus[]>(EMPTY_LIST)
-    const checkClaimStrategyStatus = useCheckClaimStrategyStatus(payload.rpid)
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
+        const { data: newData } = await recheckClaimStatus()
+        if (newData?.data.canClaim === false) {
+            setShowRequirements(true)
+            return
+        }
         if (canClaim) {
-            const { data } = await checkClaimStrategyStatus()
-            if (!data.canClaim) {
-                setShowRequirements(true)
-                setClaimStrategyStatus(data.claimStrategyStatus)
-                return
-            }
             hash = await claimCallback()
             checkResult()
         } else if (canRefund) {
@@ -204,7 +202,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkClaimStrategyStatus])
+    }, [canClaim, canRefund, claimCallback, recheckClaimStatus])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText)
@@ -214,22 +212,24 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes } = useStyles({ outdated })
+    const theme = useCoverTheme(payload.rpid)
     const cover = useMemo(() => {
-        if (!token?.symbol) return ''
+        if (!token?.symbol || !theme) return ''
         return getRedPacketCover({
-            theme: 'lucky-flower',
+            theme,
             symbol: token.symbol,
             shares: payload.shares,
-            amount: formatBalance(payload.total, token.decimals, { significant: 2 }),
-            from: `@${payload.sender.name}`,
+            amount: payload.total,
+            decimals: token.decimals,
+            from: `@${formatEthereumAddress(payload.sender.name, 4)}`,
             message: payload.sender.message,
             remainingAmount: payload.total_remaining!,
             remainingShares: minus(payload.shares, availability?.claimed || 0).toNumber(),
         })
-    }, [token?.symbol, payload, availability])
+    }, [token?.symbol, payload, availability, theme])
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || !cover) return <LoadingStatus minHeight={148} />
 
     return (
         <>
@@ -253,9 +253,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         </Typography>
                     :   null}
                 </div>
-                <Grow in={showRequirements} timeout={250}>
+                <Grow in={showRequirements && !checkingClaimStatus} timeout={250}>
                     <Requirements
-                        statusList={claimStrategyStatus}
+                        statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.requirements}
                         onClose={() => setShowRequirements(false)}
                     />
@@ -264,9 +264,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             {outdated ? null : (
                 <OperationFooter
                     chainId={payloadChainId}
-                    canClaim={canClaim}
+                    canClaim={canClaim || !payload.password}
                     canRefund={canRefund}
-                    isClaiming={isClaiming}
+                    isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}
                     onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
