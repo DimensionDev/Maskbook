@@ -35,6 +35,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Conflux,
                     ChainId.Astar,
                     ChainId.Scroll,
+                    ChainId.X1_Testnet,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
