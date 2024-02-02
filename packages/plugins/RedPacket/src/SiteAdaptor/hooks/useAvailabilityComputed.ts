@@ -6,6 +6,7 @@ import { compact } from 'lodash-es'
 import { useAvailability } from './useAvailability.js'
 import { useClaimStrategyStatus } from './useClaimStrategyStatus.js'
 import { useSignedMessage } from './useSignedMessage.js'
+import { useCallback } from 'react'
 
 /**
  * Fetch the red packet info from the chain
@@ -25,6 +26,11 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const password = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
 
+    const recheckClaimStatus = useCallback(async () => {
+        const { data } = await refetch()
+        return data?.data.canClaim
+    }, [refetch])
+
     const availability = asyncResult.value
 
     if (!availability || (!payload.password && !data))
@@ -33,7 +39,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             payload,
             claimStrategyStatus: null,
             checkingClaimStatus: isFetching,
-            recheckClaimStatus: refetch,
+            recheckClaimStatus,
             computed: {
                 canClaim: false || data?.data.canClaim,
                 canRefund: false,
@@ -50,7 +56,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     return {
         ...asyncResult,
         claimStrategyStatus: data?.data,
-        recheckClaimStatus: refetch,
+        recheckClaimStatus,
         checkingClaimStatus: isFetching,
         computed: {
             canClaim: canClaim,
