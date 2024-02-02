@@ -29,7 +29,6 @@
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-providers": "workspace:^",
         "web3-utils": "1.10.2",
-        "bignumber.js": "9.1.2",
         "date-fns": "^2.30.0",
         "react-use": "^17.4.0",
         "merkletreejs": "^0.3.10"
