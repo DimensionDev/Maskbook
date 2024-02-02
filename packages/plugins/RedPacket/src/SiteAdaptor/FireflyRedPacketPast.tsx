@@ -38,7 +38,7 @@ export const FireflyRedPacketPast = memo(function RedPacketPast({ tabs, handleOp
                 </TabPanel>
             </div>
             <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
-                <PluginWalletStatusBar requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} />
+                <PluginWalletStatusBar requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} readonlyMode />
             </Box>
         </>
     )
