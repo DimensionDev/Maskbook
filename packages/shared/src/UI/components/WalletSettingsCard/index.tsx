@@ -8,16 +8,16 @@ import {
     useWallets,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { WalletSettingCardUI } from './UI.js'
+import { WalletSettingsCardUI } from './WalletSettingsCardUI.js'
 
-interface WalletSettingCardProps {
+interface WalletSettingsCardProps {
     wallet: BindingProof
     fallbackName?: string
     checked: boolean
     onSwitchChange: (address: string) => void
 }
 
-export const WalletSettingCard = memo<WalletSettingCardProps>(function WalletSettingCard({
+export const WalletSettingsCard = memo<WalletSettingsCardProps>(function WalletSettingsCard({
     wallet,
     fallbackName,
     checked,
@@ -40,7 +40,7 @@ export const WalletSettingCard = memo<WalletSettingCardProps>(function WalletSet
     const formattedAddress = Utils.formatAddress(wallet.identity, 4)
     const addressLink = Utils.explorerResolver.addressLink(chainId, wallet.identity)
     return (
-        <WalletSettingCardUI
+        <WalletSettingsCardUI
             onSwitchChange={() => onSwitchChange(wallet.identity)}
             icon={networkDescriptor?.icon}
             formattedAddress={formattedAddress}

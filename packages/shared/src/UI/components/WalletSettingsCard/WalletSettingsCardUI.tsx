@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface WalletSettingCardUIProps {
+interface WalletSettingsCardUIProps {
     icon?: string
     walletName?: string
     formattedAddress?: string
@@ -45,7 +45,7 @@ interface WalletSettingCardUIProps {
     onSwitchChange: () => void
 }
 
-export const WalletSettingCardUI = memo<WalletSettingCardUIProps>(
+export const WalletSettingsCardUI = memo<WalletSettingsCardUIProps>(
     ({ icon, walletName, formattedAddress, addressLink, checked, onSwitchChange }) => {
         const { classes } = useStyles()
 
