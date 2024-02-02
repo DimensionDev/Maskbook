@@ -3,7 +3,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../../locales/index.js'
+import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
