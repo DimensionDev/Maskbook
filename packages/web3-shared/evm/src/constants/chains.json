@@ -703,7 +703,7 @@
         "type": "X1",
         "name": "X1 testnet",
         "fullName": "X1 testnet",
-        "network": "x1_testnet",
+        "network": "mainnet",
         "shortName": "x1",
         "features": [],
         "nativeCurrency": {
