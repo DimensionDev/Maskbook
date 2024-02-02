@@ -162,9 +162,9 @@ export namespace SiteAdaptorUI {
             attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
         }
         export interface Redirect {
-            profilePage?(profile: ProfileIdentifier): void
-            postPage?(post: PostIdentifier): void
-            newsFeed?(): void
+            gotoProfilePage?(profile: ProfileIdentifier): void
+            gotoPostPage?(post: PostIdentifier): void
+            gotoNewsFeed?(): void
         }
         export interface Endpoint {
             publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<string>
