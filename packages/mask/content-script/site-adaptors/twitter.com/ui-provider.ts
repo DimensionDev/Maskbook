@@ -146,8 +146,8 @@ const twitterUI: SiteAdaptorUI.Definition = {
             attachImage: pasteImageToCompositionTwitter,
         },
         redirect: {
-            newsFeed: gotoNewsFeedPageTwitter,
-            profilePage: gotoProfilePageTwitter,
+            gotoNewsFeed: gotoNewsFeedPageTwitter,
+            gotoProfilePage: gotoProfilePageTwitter,
         },
         endpoint: {
             publishPost: publishPostTwitter,

@@ -132,8 +132,8 @@ const mindsUI: SiteAdaptorUI.Definition = {
             attachImage: pasteImageToCompositionMinds(),
         },
         redirect: {
-            newsFeed: gotoNewsFeedPageMinds,
-            profilePage: gotoProfilePageMinds,
+            gotoNewsFeed: gotoNewsFeedPageMinds,
+            gotoProfilePage: gotoProfilePageMinds,
         },
     },
     collecting: {
