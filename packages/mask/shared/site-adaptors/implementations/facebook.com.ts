@@ -1,8 +1,8 @@
-import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 import type { SiteAdaptor } from '../types.js'
 
 const origins = ['https://www.facebook.com/*', 'https://m.facebook.com/*', 'https://facebook.com/*']
+
 export const FacebookAdaptor: SiteAdaptor.Definition = {
     name: 'Facebook',
     networkIdentifier: EnhanceableSite.Facebook,
@@ -10,12 +10,4 @@ export const FacebookAdaptor: SiteAdaptor.Definition = {
     homepage: 'https://www.facebook.com',
     isSocialNetwork: true,
     sortIndex: 1,
-    getProfilePage: () => new URL('https://www.facebook.com'),
-    getShareLinkURL(message) {
-        const url = urlcat('https://www.facebook.com/sharer/sharer.php', {
-            quote: message,
-            u: 'mask.io',
-        })
-        return new URL(url)
-    },
 }
