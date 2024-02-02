@@ -9,11 +9,9 @@ const log: AsyncCallLogLevel = {
     requestReplay: process.env.NODE_ENV === 'development',
     sendLocalStack: process.env.NODE_ENV === 'development',
 }
-let isBackground = () => isEnvironment(Environment.ManifestBackground)
-export function __workaround__replaceIsBackground__(f: () => boolean) {
-    isBackground = f
+function isBackground() {
+    return isEnvironment(Environment.ManifestBackground)
 }
-
 function getPluginRPCInternal(
     cache: Map<string, object>,
     pluginID: string,

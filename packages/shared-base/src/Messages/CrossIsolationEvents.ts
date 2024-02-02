@@ -35,12 +35,8 @@ import type {
  *       e.g. packages/plugins/Example to the main Mask extension.
  */
 // TODO: find a way to use a good API for cross isolation communication.
-export let CrossIsolationMessages: { readonly events: PluginMessageEmitter<CrossIsolationEvents> } =
+export const CrossIsolationMessages: { readonly events: PluginMessageEmitter<CrossIsolationEvents> } =
     new WebExtensionMessage<CrossIsolationEvents>({ domain: 'cross-isolation' })
-
-export function __workaround__replaceImplementationOfCrossIsolationMessage__(msg: PluginMessageEmitter<any>) {
-    CrossIsolationMessages = { events: msg }
-}
 
 export interface CrossIsolationEvents {
     compositionDialogEvent: CompositionDialogEvent
