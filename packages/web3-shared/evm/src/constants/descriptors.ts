@@ -331,7 +331,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: difference(EnhanceableSiteList, [
                 EnhanceableSite.Localhost,
-                EnhanceableSite.App,
+                EnhanceableSite.Firefly,
             ]),
             supportedExtensionSites: ExtensionSiteList,
         },
@@ -411,7 +411,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
                     supportedChainIds: ChainIdList,
                     supportedEnhanceableSites: difference(EnhanceableSiteList, [
                         EnhanceableSite.Localhost,
-                        EnhanceableSite.App,
+                        EnhanceableSite.Firefly,
                     ]),
                     supportedExtensionSites: Flags.wc_enabled ? ExtensionSiteList : [],
                 }

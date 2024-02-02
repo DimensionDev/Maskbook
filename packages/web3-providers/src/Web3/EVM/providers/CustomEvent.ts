@@ -11,7 +11,7 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     }
 
     setup() {
-        if (getSiteType() !== EnhanceableSite.App) return
+        if (getSiteType() !== EnhanceableSite.Firefly) return
 
         // @ts-expect-error TODO: define the custom event
         document.addEventListener(
