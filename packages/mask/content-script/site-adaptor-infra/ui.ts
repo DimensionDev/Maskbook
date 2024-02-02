@@ -147,6 +147,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         currentNextIDPlatform: ui.configuration.nextIDConfig?.platform,
         currentPersonaIdentifier: createSubscriptionFromValueRef(currentPersonaIdentifier, signal),
         getPostURL: ui.utils.getPostURL || (() => null),
+        getProfileURL: ui.utils.getProfileURL || (() => null),
         share: ui.utils.share,
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         connectPersona,

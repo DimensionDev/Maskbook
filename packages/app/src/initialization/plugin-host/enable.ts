@@ -47,6 +47,7 @@ __setSiteAdaptorContext__({
     currentNextIDPlatform: undefined,
     currentPersonaIdentifier: UNDEFINED,
     getPostURL: () => null,
+    getProfileURL: () => null,
     share: undefined,
     connectPersona: reject,
     getPostIdFromNewPostToast: undefined,

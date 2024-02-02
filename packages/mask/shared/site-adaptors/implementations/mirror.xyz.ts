@@ -9,8 +9,4 @@ export const MirrorAdaptor: SiteAdaptor.Definition = {
     homepage: 'https://mirror.xyz',
     isSocialNetwork: false,
     sortIndex: 2,
-    getProfilePage: () => new URL('https://mirror.xyz/dashboard'),
-    getShareLinkURL(message) {
-        return new URL('https://mirror.xyz')
-    },
 }

@@ -163,6 +163,7 @@ export namespace SiteAdaptorUI {
         }
         export interface Redirect {
             profilePage?(profile: ProfileIdentifier): void
+            postPage?(post: PostIdentifier): void
             newsFeed?(): void
         }
         export interface Endpoint {
