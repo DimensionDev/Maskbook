@@ -4,7 +4,6 @@
     { "path": "./tsconfig.npm.json" },
     // Only list top-level projects here
     { "path": "./packages/polyfills/tsconfig.json" },
-    { "path": "./packages/app/tsconfig.json" },
     { "path": "./packages/mask/tsconfig.json" },
     { "path": "./packages/injected-script/main/tsconfig.json" },
     { "path": "./packages/mask-sdk/main/tsconfig.json" },

@@ -19,7 +19,6 @@ const NetworkToNextIDPlatform = {
     [EnhanceableSite.OpenSea]: undefined,
     [EnhanceableSite.Localhost]: undefined,
     [EnhanceableSite.Mirror]: undefined,
-    [EnhanceableSite.App]: undefined,
     [EnhanceableSite.Firefly]: undefined,
     [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
 }

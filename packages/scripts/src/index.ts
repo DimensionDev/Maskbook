@@ -22,7 +22,6 @@ export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk.js'
 export { buildPolyfill } from './projects/polyfill.js'
 export { buildGun } from './projects/gun.js'
 export { buildSandboxedPlugin, watchSandboxedPlugin } from './projects/sandboxed-plugins.js'
-export { buildSPA } from './projects/app.js'
 
 // Linter
 export { fixPluginsTSConfig } from './linter/plugin-projects.js'

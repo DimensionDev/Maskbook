@@ -23,7 +23,6 @@ import type {
 } from './SelectAdvancedSettingsDialog/index.js'
 import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 import type { PersonaSelectPanelModalOpenProps } from './PersonaSelectPanelModal/index.js'
-import type { ShareSelectNetworkModalOpenProps } from './ShareSelectNetwork/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
@@ -50,7 +49,5 @@ export const SelectFungibleTokenModal = new SingletonModal<
 >()
 
 export const PersonaSelectPanelModal = new SingletonModal<PersonaSelectPanelModalOpenProps>()
-
-export const ShareSelectNetworkModal = new SingletonModal<ShareSelectNetworkModalOpenProps>()
 
 export { ApplicationSettingTabs } from './ApplicationBoardModal/ApplicationBoardDialog.js'

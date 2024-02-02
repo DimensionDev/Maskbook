@@ -35,10 +35,6 @@ const config: KnipConfig = {
             ignore: ['main/debugger.ts'],
             entry: ['main/index.ts'],
         },
-        'packages/app': {
-            entry: ['webpack.config.js', 'postcss.config.cjs', 'src/background-worker/init.ts', 'src/index.tsx'],
-            ignoreDependencies: ['autoprefixer', 'webpack-cli', 'webpack-dev-server'],
-        },
         'packages/mask-sdk': {
             ignore: ['public-api'],
             entry: ['main/index.ts'],

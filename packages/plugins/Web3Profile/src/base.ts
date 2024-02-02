@@ -12,7 +12,6 @@ export const base: Plugin.Shared.Definition = {
         supports: {
             type: 'opt-in',
             sites: {
-                [EnhanceableSite.App]: true,
                 [EnhanceableSite.Twitter]: true,
             },
         },
