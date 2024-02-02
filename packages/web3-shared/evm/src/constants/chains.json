@@ -679,7 +679,7 @@
         "type": "X1",
         "name": "X1",
         "fullName": "X1",
-        "network": "x1",
+        "network": "testnet",
         "shortName": "x1",
         "features": [],
         "nativeCurrency": {
