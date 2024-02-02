@@ -567,7 +567,7 @@
     "plugin_infra_descriptor_token_revoke_fail": "토큰 컨트렉트 승인 취소 실패",
     "plugin_infra_descriptor_token_approve_title": "토큰 언락",
     "plugin_infra_descriptor_token_approve": "{{- tokenAmountDescription}} 언락",
-    "plugin_infra_descriptor_token_approve_success": "{{- tokenAmountDescription}} 언락 성공",
+    "plugin_infra_descriptor_token_approve_success": "{{- symbol}} 언락 성공",
     "plugin_infra_descriptor_token_revoke_but_set_positive_cap": "{{spender}} 에 대해 {{- tokenAmountDescription}} 을(를) 승인했습니다. 해당 토큰을 취소하려면 맞춤형 지출 한도 금액을 0으로 유지한 후 다시 시도하세요.",
     "plugin_infra_descriptor_token_approve_but_set_zero_cap": "{{symbol}} 승인하지 않습니다. 지출 한도 0으로 설치하지 마시고 다시 시도하세요.",
     "plugin_infra_descriptor_token_fail": "토큰 컨트렉트 언락 실패",
