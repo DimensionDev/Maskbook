@@ -22,7 +22,7 @@ export interface PostContextActions {
 export interface PostContextAuthor {
     readonly site: EnhanceableSite | null
     /** Firefly only */
-    readonly source?: 'Lens' | 'Farcaster'
+    readonly source: 'Lens' | 'Farcaster' | null
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>

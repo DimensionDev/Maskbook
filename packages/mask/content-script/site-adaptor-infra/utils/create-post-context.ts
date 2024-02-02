@@ -50,6 +50,7 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         })()
         // #endregion
         const author: PostContextAuthor = {
+            source: null,
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
@@ -75,6 +76,7 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
+            source: null,
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
@@ -159,6 +161,7 @@ export function createRefsForCreatePostContext() {
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),
         postID: createSubscriptionFromValueRef(postID),
+        source: null,
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => postMetadataImages.asValues,

@@ -134,23 +134,23 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
-    const link = postLink || postUrl?.toString()
+    const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
         if (isOnFirefly) {
             return t.share_on_firefly({
-                context: source?.toLowerCase(),
+                context: source?.toLowerCase() as 'lens' | 'farcaster',
                 sender: payload.sender.name,
-                link,
+                link: link!,
             })
         }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
             sender: payload.sender.name,
-            payload: link,
+            payload: link!,
             network: network?.name ?? 'Mainnet',
             account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
