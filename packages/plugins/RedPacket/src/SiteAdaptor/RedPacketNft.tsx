@@ -21,7 +21,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Card, Grow, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -166,9 +166,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
 
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
-        payload.id,
+        account,
+        payload,
         availability?.totalAmount,
-        signMessage(account, payload.privateKey).signature ?? '',
     )
     const [showTooltip, textRef] = useDetectOverflow()
 

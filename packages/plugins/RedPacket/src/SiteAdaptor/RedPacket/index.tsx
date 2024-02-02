@@ -122,14 +122,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const signedMsg = useSignedMessage(account, payload)
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
-        payload.contract_version,
-        account,
-        payload.rpid,
-        signedMsg,
-        payloadChainId,
-    )
+    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly

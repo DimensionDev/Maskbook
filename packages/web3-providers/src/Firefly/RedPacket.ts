@@ -109,20 +109,13 @@ export class FireflyRedPacket {
     }
 
     static async createClaimSignature(
-        rpid: string,
-        from: HexString,
-        reaction: FireflyRedPacketAPI.ProfileReaction,
+        options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions,
     ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
-            body: JSON.stringify({
-                rpid,
-                profile: reaction,
-                wallet: {
-                    address: from,
-                },
-            }),
+            headers: jsonHeaders,
+            body: JSON.stringify(options),
         })
         return data.signedMessage
     }

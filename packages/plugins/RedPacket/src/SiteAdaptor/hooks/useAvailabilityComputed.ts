@@ -23,7 +23,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         chainId: parsedChainId,
     })
 
-    const password = useSignedMessage(account, payload)
+    const { data: password } = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
 
     const recheckClaimStatus = useCallback(async () => {
