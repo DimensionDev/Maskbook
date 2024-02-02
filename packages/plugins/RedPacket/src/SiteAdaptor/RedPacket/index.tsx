@@ -1,7 +1,7 @@
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
@@ -130,15 +130,27 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         signedMsg,
         payloadChainId,
     )
+    const site = usePostInfoDetails.site()
+    const source = usePostInfoDetails.source()
+    const isOnFirefly = site === EnhanceableSite.Firefly
+    const postUrl = usePostInfoDetails.url()
+    const link = postLink || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
+        if (isOnFirefly) {
+            return t.share_on_firefly({
+                context: source?.toLowerCase(),
+                sender: payload.sender.name,
+                link,
+            })
+        }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
             sender: payload.sender.name,
-            payload: postLink.toString(),
+            payload: link,
             network: network?.name ?? 'Mainnet',
             account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
@@ -152,7 +164,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         return isOnTwitter || isOnFacebook ?
                 t.share_unclaimed_message_official_account(shareTextOption)
             :   t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, postLink, claimTxHash, listOfStatus, t, network?.name])
+    }, [payload, link, claimTxHash, listOfStatus, t, network?.name, source, isOnFirefly])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,

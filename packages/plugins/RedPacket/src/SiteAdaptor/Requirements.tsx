@@ -44,7 +44,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginRight: 10,
-        textTransform: 'capitalize',
+        fontWeight: 'bold',
+        '&::first-letter': {
+            textTransform: 'uppercase',
+        },
     },
     icon: {
         marginRight: 10,

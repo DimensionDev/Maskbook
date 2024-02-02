@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import {
     AssetPreviewer,
@@ -10,7 +10,7 @@ import {
     TransactionConfirmModal,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import {
     useChainContext,
@@ -175,18 +175,30 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     useEffect(() => {
         retryAvailability()
     }, [account])
-    const network = useNetwork(pluginID, payload.chainId)
 
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
     const { classes } = useStyles({ outdated })
     // #region on share
     const postLink = usePostLink()
+    const network = useNetwork(pluginID, payload.chainId)
+    const site = usePostInfoDetails.site()
+    const source = usePostInfoDetails.source()
+    const isOnFirefly = site === EnhanceableSite.Firefly
+    const postUrl = usePostInfoDetails.url()
+    const link = postLink || postUrl?.toString()
     const shareText = useMemo(() => {
+        if (isOnFirefly) {
+            return t.share_on_firefly({
+                context: source?.toLowerCase(),
+                sender: payload.sender.name,
+                link,
+            })
+        }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
-            payload: postLink.toString(),
+            payload: link,
             network: network?.name || '',
             account_promote: t.account_promote({
                 context:
@@ -200,7 +212,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             return t.nft_share_claimed_message(options)
         }
         return t.nft_share_foreshow_message(options)
-    }, [availability?.isClaimed, t, network?.name])
+    }, [availability?.isClaimed, t, network?.name, link, source, isOnFirefly])
 
     const onShare = useCallback(() => {
         if (shareText) share?.(shareText)
