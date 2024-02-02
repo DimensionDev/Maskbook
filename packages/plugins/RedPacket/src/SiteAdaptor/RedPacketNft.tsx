@@ -185,20 +185,20 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
-    const link = postLink || postUrl?.toString()
+    const link = postLink.toString() || postUrl?.toString()
     const shareText = useMemo(() => {
         if (isOnFirefly) {
             return t.share_on_firefly({
-                context: source?.toLowerCase(),
-                sender: payload.sender.name,
-                link,
+                context: source?.toLowerCase() as 'lens' | 'farcaster',
+                sender: payload.senderName,
+                link: link!,
             })
         }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
-            payload: link,
+            payload: link!,
             network: network?.name || '',
             account_promote: t.account_promote({
                 context:

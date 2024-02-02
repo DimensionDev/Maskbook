@@ -161,6 +161,7 @@
     "requirements": "Requirements",
     "follow_somebody_on_somewhere": "Follow {{- handles }} on {{platform}}",
     "nft_holder_of": "NFT Holder of {{- names }}",
+    "share_on_firefly$default": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on: {{- link}}",
     "share_on_firefly$lens": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Lens: {{- link}}",
     "share_on_firefly$farcaster": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Farcaster: {{- link}}"
 }
