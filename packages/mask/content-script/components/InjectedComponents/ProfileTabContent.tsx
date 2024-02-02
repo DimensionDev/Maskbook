@@ -25,7 +25,7 @@ import {
     SocialAccountList,
     useCollectionByTwitterHandler,
     addressSorter,
-    WalletSettingEntry,
+    WalletSettingsEntry,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -415,7 +415,7 @@ function Content(props: ProfileTabContentProps) {
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
-                            <WalletSettingEntry />
+                            <WalletSettingsEntry />
                         </Stack>
                     </PluginCardFrameMini>
                 </div>

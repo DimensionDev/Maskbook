@@ -20,7 +20,7 @@ function openWeb3ProfileSettingDialog() {
         open: true,
     })
 }
-export const WalletSettingEntry = memo(function WalletSettingEntry() {
+export const WalletSettingsEntry = memo(function WalletSettingsEntry() {
     const t = useSharedTrans()
     const { classes, theme } = useStyles()
 

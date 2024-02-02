@@ -1,4 +1,3 @@
-export * from '../modals/ApplicationBoardModal/ApplicationBoardForm.js'
 export * from './AccountIcons/index.js'
 export * from './ActionButton/index.js'
 export * from './AddCollectibles/index.js'
