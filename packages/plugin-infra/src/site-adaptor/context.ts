@@ -3,7 +3,7 @@
 
 import type { Subscription } from 'use-subscription'
 import type { IdentityResolved } from '../types.js'
-import type { NextIDPlatform, PersonaIdentifier, PostIdentifier } from '@masknet/shared-base'
+import type { NextIDPlatform, PersonaIdentifier, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 
 export interface __SiteAdaptorContext__ {
     lastRecognizedProfile: Subscription<IdentityResolved | undefined>
@@ -11,6 +11,7 @@ export interface __SiteAdaptorContext__ {
     currentNextIDPlatform: NextIDPlatform | undefined
     currentPersonaIdentifier: Subscription<PersonaIdentifier | undefined>
     getPostURL: (identifier: PostIdentifier) => URL | null
+    getProfileURL: (identifier: ProfileIdentifier) => URL | null
     share: undefined | ((text: string) => void)
     getUserIdentity: ((useId: string) => Promise<IdentityResolved | undefined>) | undefined
     getPostIdFromNewPostToast: (() => string) | undefined
@@ -23,6 +24,7 @@ export let currentVisitingProfile: __SiteAdaptorContext__['currentVisitingProfil
 export let currentNextIDPlatform: NextIDPlatform | undefined
 export let currentPersonaIdentifier: __SiteAdaptorContext__['currentPersonaIdentifier']
 export let getPostURL: __SiteAdaptorContext__['getPostURL']
+export let getProfileURL: __SiteAdaptorContext__['getProfileURL']
 export let share: __SiteAdaptorContext__['share']
 export let getUserIdentity: __SiteAdaptorContext__['getUserIdentity']
 export let getPostIdFromNewPostToast: __SiteAdaptorContext__['getPostIdFromNewPostToast']
@@ -36,6 +38,7 @@ export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
         currentNextIDPlatform,
         currentPersonaIdentifier,
         getPostURL,
+        getProfileURL,
         share,
         getUserIdentity,
         getPostIdFromNewPostToast,
