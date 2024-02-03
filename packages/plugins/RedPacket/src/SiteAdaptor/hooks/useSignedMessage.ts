@@ -30,8 +30,10 @@ export function useSignedMessage(
     return useQuery({
         queryKey: ['red-packet', 'signed-message', rpid, version, password, account, profile],
         queryFn: async () => {
-            const record = await RedPacketRPC.getRedPacketRecord(payload.txid)
-            if (record?.password) return record.password
+            try {
+                const record = await RedPacketRPC.getRedPacketRecord(payload.txid)
+                if (record?.password) return record.password
+            } catch {}
             if (version <= 3) return password
             if (password) return signMessage(account, password).signature
             if (!profile) return ''
