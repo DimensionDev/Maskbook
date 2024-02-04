@@ -52,7 +52,9 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
-    const canClaim = (!isExpired && !isEmpty && !isClaimed && isPasswordValid) || !!data?.data.canClaim
+    // For a central RedPacket, we don't need to check about if the password is valid
+    const canClaimByContract = !isExpired && !isEmpty && !isClaimed
+    const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
     return {
         ...asyncResult,
         claimStrategyStatus: data?.data,

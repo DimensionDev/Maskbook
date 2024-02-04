@@ -159,9 +159,11 @@
     "create_redpacket_tips": "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products.",
     "no_enough_gas_fees": "No Enough Gas Fees",
     "requirements": "Requirements",
-    "follow_somebody_on_somewhere": "Follow {{- handles }} on {{platform}}",
+    "follow_somebody_on_somewhere": "Follow <handles>{{- handles}}</handles> on {{ platform }}",
     "nft_holder_of": "NFT Holder of {{- names }}",
-    "share_on_firefly$default": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on: {{- link}}",
-    "share_on_firefly$lens": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Lens: {{- link}}",
-    "share_on_firefly$farcaster": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender}}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Farcaster: {{- link}}"
+    "share_on_firefly$default": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender }}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on: {{- link }}",
+    "share_on_firefly$lens": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender }}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Lens: {{- link }}",
+    "share_on_firefly$farcaster": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender }}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Farcaster: {{- link }}",
+    "share_on_firefly$lens_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }}! \n\n Claim on Lens: {{- link }}",
+    "share_on_firefly$farcaster_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }}! \n\n Claim on Farcaster: {{- link }}"
 }
