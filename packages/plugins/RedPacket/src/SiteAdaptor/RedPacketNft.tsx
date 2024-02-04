@@ -315,8 +315,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             amount: availability.totalAmount,
             from: `@${payload.senderName}`,
             message: payload.message,
-            remainingAmount: availability.balance,
-            remainingShares: availability.remaining,
+            'remaining-amount': availability.balance,
+            'remaining-shares': availability.remaining,
         })
     }, [asset?.metadata?.symbol, availability, theme])
 
