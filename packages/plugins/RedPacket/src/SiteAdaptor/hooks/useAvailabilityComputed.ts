@@ -28,7 +28,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
 
     const recheckClaimStatus = useCallback(async () => {
         const { data } = await refetch()
-        return data?.data.canClaim
+        return data?.data?.canClaim
     }, [refetch])
 
     const availability = asyncResult.value
@@ -41,7 +41,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             checkingClaimStatus: isFetching,
             recheckClaimStatus,
             computed: {
-                canClaim: false || data?.data.canClaim,
+                canClaim: false || !!data?.data?.canClaim,
                 canRefund: false,
                 listOfStatus: [] as RedPacketStatus[],
             },

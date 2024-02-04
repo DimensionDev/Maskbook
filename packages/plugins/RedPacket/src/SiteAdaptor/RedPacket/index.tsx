@@ -281,7 +281,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             {outdated ? null : (
                 <OperationFooter
                     chainId={payloadChainId}
-                    canClaim={!!canClaim}
+                    canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}
