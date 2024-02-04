@@ -6,11 +6,10 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { format, fromUnixTime } from 'date-fns'
 import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -142,7 +141,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             background: 'none',
             cursor: 'pointer',
             border: 'none',
-            color: theme.palette.maskColor.secondaryMain,
+            color: '#181818',
         },
     }
 })
@@ -170,7 +169,7 @@ interface Props {
     handleOpenDetails?: (rpid: string) => void
 }
 
-export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(props: Props) {
+export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetailsItem(props: Props) {
     const { history, handleOpenDetails } = props
     const {
         rp_msg,
@@ -191,6 +190,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
     } = history
     const t = useRedPacketTrans()
 
+    console.log(chain_id, 'xxx')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, Number(chain_id))
 
     const { classes, cx } = useStyles({
@@ -241,11 +241,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.creator()}
                                         </Typography>
-                                        <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                            {web3_utils.isAddress(creator) ?
-                                                formatEthereumAddress(creator, 4)
-                                            :   creator}
-                                        </Typography>
+                                        <FireflyRedPacketAccountItem addressOrEns={creator} chainId={chain_id} />
                                     </div>
                                 :   null}
                             </div>
@@ -254,7 +250,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                             :   null}
                         </section>
                         <section className={classes.footer}>
-                            {claim_numbers ?
+                            {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography variant="body1" className={classes.footerInfo}>
                                         <RedPacketTrans.history_claimed

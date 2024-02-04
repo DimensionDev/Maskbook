@@ -9,8 +9,7 @@ import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -39,7 +38,7 @@ interface Props {
     rpid: string
 }
 
-export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid }: Props) {
+export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
     const {
         data: claimData,
@@ -70,13 +69,7 @@ export const FireflyRedPacketHistoryDetails = memo(function RedPacketPast({ rpid
             <Box>
                 {claimList.map((item) => (
                     <div className={classes.claimer} key={item.creator}>
-                        <Box>
-                            <Typography>
-                                {web3_utils.isAddress(item.creator) ?
-                                    formatEthereumAddress(item.creator, 4)
-                                :   item.creator}
-                            </Typography>
-                        </Box>
+                        <FireflyRedPacketAccountItem addressOrEns={item.creator} />
                         <Typography>
                             {formatBalance(item.token_amounts, item.token_decimal, { significant: 2, isPrecise: true })}{' '}
                             {item.token_symbol}
