@@ -127,7 +127,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                                 {handles.map((handle) => (
                                                     <Link
                                                         href={resolveProfileUrl(platform, handle)}
-                                                        target={_blank}
+                                                        target='_blank'
                                                         key={handle}>
                                                         @{handle}
                                                     </Link>
