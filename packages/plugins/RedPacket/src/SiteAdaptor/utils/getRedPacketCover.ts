@@ -8,8 +8,8 @@ interface Options {
     decimals?: number
     from: string
     message: string
-    remainingAmount: number | string
-    remainingShares: number | string
+    'remaining-amount': number | string
+    'remaining-shares': number | string
 }
 
 export function getRedPacketCover(options: Options) {
