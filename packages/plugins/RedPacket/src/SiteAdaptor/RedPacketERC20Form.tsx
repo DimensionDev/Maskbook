@@ -97,13 +97,14 @@ interface RedPacketFormProps {
     gasOption?: GasConfig
     onGasOptionChange?: (config: GasConfig) => void
     expectedChainId: ChainId
+    isFirefly?: boolean
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
-    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props
+    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId, isFirefly } = props
     // context
     const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
@@ -334,7 +335,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </div>
             <div className={classes.field}>
                 <FungibleTokenInput
-                    label={t.total_amount()}
+                    label={isRandom ? t.total_amount() : t.amount_each()}
                     token={token}
                     placeholder={isRandom ? t.random_amount_share_tips() : t.equal_amount_share_tips()}
                     onSelectToken={onSelectTokenChipClick}
@@ -406,7 +407,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <WalletConnectedBoundary expectedChainId={chainId}>
+                            <WalletConnectedBoundary expectedChainId={chainId} hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}

@@ -21,8 +21,6 @@ import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallba
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
-        minHeight: 568,
-        position: 'relative',
     },
     info: {
         display: 'flex',
@@ -71,7 +69,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         padding: theme.spacing(2),
         boxSizing: 'border-box',
-        marginTop: 2,
+        position: 'sticky',
+        bottom: 0,
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: theme.palette.maskColor.bottomBg,
     },
@@ -140,6 +139,7 @@ export function FireflyRedpacketConfirmDialog({
     const [currentAccount, setCurrentAccount] = useState(
         currentLensProfile?.handle || currentFarcasterProfile?.handle || ensName || account,
     )
+
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     const { data: price } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, settings?.token?.address)
@@ -152,7 +152,7 @@ export function FireflyRedpacketConfirmDialog({
     const themes = useMemo(() => {
         if (!currentAccount) return EMPTY_LIST
         return FireflyRedPacket.getThemeSettings(
-            currentAccount,
+            isValidAddress(currentAccount) || isValidDomain(currentAccount) ? currentAccount : `@${currentAccount}`,
             settings.total,
             'fungible',
             settings.token?.symbol,
@@ -266,6 +266,7 @@ export function FireflyRedpacketConfirmDialog({
         gasOption,
         (payload: RedPacketJSONPayload) => onCreated(payload, state?.payloadUrl, value?.claimRequirements),
         onClose,
+        currentAccount,
     )
 
     if (!settings) return null
@@ -314,17 +315,19 @@ export function FireflyRedpacketConfirmDialog({
                     </Box>
                     <Box className={classes.item}>
                         <Typography className={classes.title}>{t.claim_requirements_title()}</Typography>
-                        <Box className={classes.requirements}>
-                            {fireflySettings?.requirements.map((x) => {
-                                const Icon = REQUIREMENT_ICON_MAP[x]
-                                const title = REQUIREMENT_TITLE_MAP[x]
-                                return (
-                                    <ShadowRootTooltip key={x} title={title} placement="top" arrow>
-                                        <Icon size={16} />
-                                    </ShadowRootTooltip>
-                                )
-                            })}
-                        </Box>
+                        {fireflySettings?.requirements.length ?
+                            <Box className={classes.requirements}>
+                                {fireflySettings?.requirements.map((x) => {
+                                    const Icon = REQUIREMENT_ICON_MAP[x]
+                                    const title = REQUIREMENT_TITLE_MAP[x]
+                                    return (
+                                        <ShadowRootTooltip key={x} title={title} placement="top" arrow>
+                                            <Icon size={16} />
+                                        </ShadowRootTooltip>
+                                    )
+                                })}
+                            </Box>
+                        :   <Typography className={classes.title}>{t.no()}</Typography>}
                     </Box>
                     <Box className={classes.item}>
                         <Typography className={classes.title} display="flex" columnGap={0.5}>
@@ -411,7 +414,10 @@ export function FireflyRedpacketConfirmDialog({
                                 key={index}
                                 className={classes.accountListItem}
                                 onClick={() => {
-                                    if (displayName) setCurrentAccount(displayName)
+                                    if (displayName) {
+                                        setCurrentAccount(displayName)
+                                        setAnchorEl(null)
+                                    }
                                 }}>
                                 <Box display="flex" columnGap={1} flex={1} alignItems="center">
                                     {icon}

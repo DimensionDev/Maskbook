@@ -17,6 +17,7 @@ export function useCreateFTRedpacketCallback(
     gasOption?: GasConfig,
     onCreated?: (payload: RedPacketJSONPayload) => void,
     onClose?: () => void,
+    currentAccount?: string,
 ) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
@@ -82,7 +83,7 @@ export function useCreateFTRedpacketCallback(
 
         payload.current.sender = {
             address: account,
-            name: settings.name,
+            name: currentAccount || settings.name,
             message: settings.message,
         }
         payload.current.is_random = settings.isRandom
@@ -104,7 +105,7 @@ export function useCreateFTRedpacketCallback(
 
         // output the redpacket as JSON payload
         onCreated?.(payload.current)
-    }, [createCallback, settings, onCreated])
+    }, [createCallback, settings, onCreated, currentAccount])
 
 
     const payload = useRef<RedPacketJSONPayload>({

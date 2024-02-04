@@ -18,16 +18,16 @@ const FIREFLY_ROOT_URL = 'https://api-dev.firefly.land'
 
 const themes = [
     {
-        id: 'b64f9af2-447c-471f-998a-fa7336c57849',
-        name: 'golden-flower',
-    },
-    {
         id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
         name: 'lucky-firefly',
     },
     {
         id: 'e480132f-a853-43ea-bbab-883b463e55b3',
         name: 'lucky-flower',
+    },
+    {
+        id: 'b64f9af2-447c-471f-998a-fa7336c57849',
+        name: 'golden-flower',
     },
 ] as const
 
