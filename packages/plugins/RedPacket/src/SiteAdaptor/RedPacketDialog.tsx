@@ -33,7 +33,7 @@ import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings, RequirementType } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
 
-const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim }) => {
+const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
     const darkBackgroundColor = isDim ? '#38414b' : '#292929'
     return {
@@ -45,6 +45,7 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
 
             overflowX: 'hidden',
             overflowY: scrollY ? 'auto' : 'hidden',
+            position: 'relative'
         },
         abstractTabWrapper: {
             width: '100%',
@@ -90,7 +91,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('sent', 'claimed')
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)
+
     const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
+
     const chainIdList: ChainId[] = useMemo(() => {
         if (currentTab === tabs.tokens)
             return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
@@ -259,9 +262,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     return (
         <TabContext value={showHistory ? currentHistoryTab : currentTab}>
             <InjectedDialog
-                classes={{
-                    paper: step === CreateRedPacketPageStep.ConfirmPage && isFirefly ? classes.paper : undefined,
-                }}
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                 open={props.open}
                 title={title}
@@ -275,7 +275,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                                <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
+                                <Tab label={t.nfts()} value={tabs.collectibles} disabled={isFirefly} />
                             </MaskTabList>
 
                     :   null
@@ -322,6 +322,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         onChange={_onChange}
                                         gasOption={gasOption}
                                         onGasOptionChange={handleGasSettingChange}
+                                        isFirefly={isFirefly}
                                     />
                                 </TabPanel>
                                 <TabPanel
@@ -371,7 +372,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     :   null}
                     {step === CreateRedPacketPageStep.ClaimRequirementsPage ?
                         <>
-                            <ClaimRequirementsDialog onNext={handleClaimRequirmenetsNext} />
+                            <ClaimRequirementsDialog onNext={handleClaimRequirmenetsNext} isFirefly={isFirefly} />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />
                         </>
                     :   null}
