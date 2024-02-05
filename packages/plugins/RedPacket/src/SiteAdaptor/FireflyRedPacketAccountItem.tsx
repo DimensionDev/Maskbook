@@ -11,15 +11,15 @@ import { openWindow } from '@masknet/shared-base-ui'
 const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         color: theme.palette.maskColor.second,
-        height: 14,
-        width: 14,
+        height: 16,
+        width: 16,
     },
     linkButton: {
         cursor: 'pointer',
         background: 'none',
         border: 'none',
         padding: 0,
-        height: 14,
+        height: 16,
     },
 }))
 

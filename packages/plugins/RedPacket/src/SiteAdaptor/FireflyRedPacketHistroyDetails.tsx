@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 700,
         lineHeight: '18px',
+        padding: '0 12px',
     },
 }))
 
@@ -51,11 +52,11 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
             const res = await FireflyRedPacket.getClaimHistory(rpid, createIndicator(undefined, pageParam as string))
             return res
         },
-        getNextPageParam: (lastPage) => lastPage.cursor,
+        getNextPageParam: (lastPage) => lastPage?.cursor,
     })
 
     const { claimInfo, claimList } = useMemo(
-        () => ({ claimList: claimData?.pages.flatMap((x) => x.list) ?? [], claimInfo: first(claimData?.pages) }),
+        () => ({ claimList: claimData?.pages.flatMap((x) => x?.list) ?? [], claimInfo: first(claimData?.pages) }),
         [claimData],
     )
 
@@ -68,11 +69,14 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
             :   null}
             <Box>
                 {claimList.map((item) => (
-                    <div className={classes.claimer} key={item.creator}>
-                        <FireflyRedPacketAccountItem addressOrEns={item.creator} />
+                    <div className={classes.claimer} key={item?.creator}>
+                        <FireflyRedPacketAccountItem addressOrEns={item?.creator} />
                         <Typography>
-                            {formatBalance(item.token_amounts, item.token_decimal, { significant: 2, isPrecise: true })}{' '}
-                            {item.token_symbol}
+                            {formatBalance(item?.token_amounts, item?.token_decimal, {
+                                significant: 2,
+                                isPrecise: true,
+                            })}{' '}
+                            {item?.token_symbol}
                         </Typography>
                     </div>
                 ))}

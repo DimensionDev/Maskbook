@@ -2,7 +2,6 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    Sniffings,
     type Pageable,
     type PageIndicator,
     getSiteType,
@@ -154,7 +153,7 @@ export class FireflyRedPacket {
         indicator?: PageIndicator,
     ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
-            redpackedId: redpacket_id,
+            redpacketId: redpacket_id,
             cursor: indicator?.id,
             size: 20,
         })
