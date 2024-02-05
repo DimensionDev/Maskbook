@@ -1,7 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress , isValidAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -32,7 +31,7 @@ export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccount
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
     const handleClick = useCallback(async () => {
-        if (web3_utils.isAddress(addressOrEns))
+        if (isValidAddress(addressOrEns))
             openWindow(Utils.explorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), addressOrEns)
         else {
             const address = await ENS.lookup(addressOrEns)
@@ -44,7 +43,7 @@ export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccount
     return (
         <Box display="flex" gap="4px" alignItems="center">
             <Typography>
-                {web3_utils.isAddress(addressOrEns) ? formatEthereumAddress(addressOrEns, 4) : addressOrEns}
+                {isValidAddress(addressOrEns) ? formatEthereumAddress(addressOrEns, 4) : addressOrEns}
             </Typography>
             <button
                 type="button"
