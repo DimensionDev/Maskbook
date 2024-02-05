@@ -192,7 +192,6 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
     } = history
     const t = useRedPacketTrans()
 
-    console.log(chain_id, 'xxx')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, Number(chain_id))
 
     const { classes, cx } = useStyles({
@@ -247,8 +246,16 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                     </div>
                                 :   null}
                             </div>
-                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
-                                <FireflyRedPacketActionButton redpacketStatus={redpacket_status} />
+                            {(
+                                redpacket_status &&
+                                redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View &&
+                                creator
+                            ) ?
+                                <FireflyRedPacketActionButton
+                                    redpacketStatus={redpacket_status}
+                                    rpid={redpacket_id}
+                                    account={creator}
+                                />
                             :   null}
                         </section>
                         <section className={classes.footer}>

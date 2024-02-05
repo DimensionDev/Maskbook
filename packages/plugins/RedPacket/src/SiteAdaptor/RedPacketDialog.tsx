@@ -184,8 +184,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const onDialogClose = useCallback(() => {
         if (openSelectNFTDialog) return setOpenSelectNFTDialog(false)
         if (openNFTConfirmDialog) return setOpenNFTConfirmDialog(false)
-        if (showHistory) return setShowHistory(false)
         if (showDetails) return setShowDetails(false)
+        if (showHistory) return setShowHistory(false)
         onBack()
     }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack, showDetails])
 
@@ -206,8 +206,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const title = useMemo(() => {
-        if (showHistory) return t.history()
         if (showDetails) return t.more_details()
+        if (showHistory) return t.history()
         if (openSelectNFTDialog) return t.nft_select_collection()
         if (openNFTConfirmDialog) return t.confirm()
         if (step === CreateRedPacketPageStep.NewRedPacketPage) return t.display_name()
@@ -253,7 +253,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         (redpacket_id: string) => {
             setRpid(redpacket_id)
             setShowDetails(true)
-            setShowHistory(false)
         },
         [setShowDetails, setRpid, setShowHistory],
     )
@@ -307,7 +306,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={onDialogClose}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder
-                titleBarIconStyle={step !== CreateRedPacketPageStep.NewRedPacketPage ? 'back' : 'close'}>
+                titleBarIconStyle={
+                    step !== CreateRedPacketPageStep.NewRedPacketPage || showHistory || showDetails ? 'back' : 'close'
+                }>
                 <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ?
                         <>
@@ -345,7 +346,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     />
                                 </TabPanel>
                             </div>
-                            {showHistory ?
+                            {showHistory && !showDetails ?
                                 <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
                             :   null}
 
