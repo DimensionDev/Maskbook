@@ -4,7 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
@@ -17,8 +17,9 @@ export function useClaimCallback(
     const payloadChainId = payload.chainId
     const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
     const rpid = 'rpid' in payload ? payload.rpid : payload.id
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
-    console.log('claimCallback', chainId)
+    const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
+    const chainIdByName = EVMChainResolver.chainId('network' in payload ? payload.network! : '')
+    const chainId = payloadChainId || chainIdByName || contextChainId
     const redPacketContract = useRedPacketContract(chainId, version)
     const { refetch } = useSignedMessage(account, payload)
     return useAsyncFn(async () => {
