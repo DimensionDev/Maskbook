@@ -212,7 +212,7 @@ export namespace FireflyRedPacketAPI {
         | {
               type: 'nftOwned'
               payload: Array<{
-                  chain: string
+                  chainId: number
                   contractAddress: HexString
                   collectionName: string
               }>

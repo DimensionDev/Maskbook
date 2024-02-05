@@ -1,11 +1,14 @@
-import { Icons, type GeneratedIconProps, type GeneratedIcon } from '@masknet/icons'
+import { Icons, type GeneratedIcon, type GeneratedIconProps } from '@masknet/icons'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { MaskColors, makeStyles } from '@masknet/theme'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
+import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { Box, IconButton, List, ListItem, Typography, type BoxProps, Link } from '@mui/material'
+import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
+import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
-import { useRedPacketTrans, RedPacketTrans } from '../locales/i18n_generated.js'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     item: {
+        minWidth: 0,
         marginTop: theme.spacing(2),
         padding: 0,
         fontSize: 12,
@@ -42,10 +46,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 18,
     },
     text: {
-        display: 'flex',
-        alignItems: 'center',
+        display: 'block',
         marginRight: 10,
+        flexGrow: 1,
         fontWeight: 'bold',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
         '&::first-letter': {
             textTransform: 'uppercase',
         },
@@ -95,6 +102,59 @@ function resolveProfileUrl(platform: FireflyRedPacketAPI.PlatformType, handle: s
             return `/${handle}`
     }
 }
+interface NFTListProps {
+    nfts: Array<{
+        chainId: number
+        contractAddress: string
+        collectionName?: string
+    }>
+}
+function NFTList({ nfts }: NFTListProps) {
+    const queries = useQueries({
+        queries: nfts.map((nft) => ({
+            queryKey: ['nft-contract', nft.chainId, nft.contractAddress],
+            queryFn: async () => {
+                return NFTScanNonFungibleTokenEVM.getCollectionRaw(nft.contractAddress, {
+                    chainId: nft.chainId,
+                })
+            },
+        })),
+    })
+    const Utils = useWeb3Utils()
+    return (
+        <Box component="span" mx="0.2em">
+            {queries.map(async (query, index) => {
+                const { data } = query
+                const nft = nfts[index]
+                if (!data) return nft.collectionName
+                const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
+                const name = nft.collectionName || data.name || data.symbol
+                return (
+                    <Link href={url} target="_blank">
+                        {name}
+                    </Link>
+                )
+            })}
+        </Box>
+    )
+}
+
+interface FollowProfileProps {
+    payload: Array<{ platform: FireflyRedPacketAPI.PlatformType; profileId: string; handle: string }>
+    platform: FireflyRedPacketAPI.PlatformType
+}
+
+function FollowProfile({ payload, platform }: FollowProfileProps) {
+    return (
+        <span>
+            {payload.map(({ handle }) => (
+                <Link key={handle} href={resolveProfileUrl(platform, handle)} target="_blank">
+                    @{handle}
+                </Link>
+            ))}
+        </span>
+    )
+}
 
 export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
     { onClose, statusList, showResults = true, ...props }: Props,
@@ -102,8 +162,10 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
 ) {
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
-    const link = usePostLink()
-    const platform = usePlatformType()
+    const postLink = usePostLink()
+    const postUrl = usePostInfoDetails.url()
+    const link = postUrl || postLink
+    const platform = usePlatformType() as FireflyRedPacketAPI.PlatformType
     const requirements = useMemo(() => {
         const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
         const orderedStatusList = sortBy(statusList, (x) => orders.indexOf(x.type))
@@ -121,19 +183,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                     platform,
                                 }}
                                 components={{
-                                    handles:
-                                        platform ?
-                                            <span>
-                                                {handles.map((handle) => (
-                                                    <Link
-                                                        href={resolveProfileUrl(platform, handle)}
-                                                        target='_blank'
-                                                        key={handle}>
-                                                        @{handle}
-                                                    </Link>
-                                                ))}
-                                            </span>
-                                        :   <span />,
+                                    span: <FollowProfile platform={platform} payload={payload} />,
                                 }}
                             />
                         </Typography>
@@ -145,14 +195,15 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
             }
             if (status.type === 'postReaction') {
                 // discard `collect` for now
-                let hasRepostCondition = false
                 const conditions = status.result.conditions.filter((x) => x.key !== 'collect')
+                let hasRepost = !!conditions.find((x) => (x.key === 'quote' || x.key === 'repost') && x.value)
+                let hasRepostCondition = false
                 return conditions
                     .reduce((arr: typeof conditions, condition) => {
                         if (condition.key === 'quote' || condition.key === 'repost') {
                             if (hasRepostCondition) return arr
                             hasRepostCondition = true
-                            return [...arr, { ...condition, key: 'repost' }] as typeof conditions
+                            return [...arr, { ...condition, key: 'repost', value: hasRepost }] as typeof conditions
                         }
                         return [...arr, condition]
                     }, [])
@@ -161,8 +212,17 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                         return (
                             <ListItem className={classes.item} key={condition.key}>
                                 <Icon className={classes.icon} size={16} />
-                                <Typography className={classes.text}>{condition.key}</Typography>
-                                <Link href={link.toString()} className={classes.link} target="_blank">
+                                <Typography
+                                    className={classes.text}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexGrow: 0,
+                                        textTransform: 'capitalize',
+                                    }}>
+                                    {condition.key}
+                                </Typography>
+                                <Link href={link} className={classes.link} target="_blank">
                                     <Icons.LinkOut size={16} className={classes.linkIcon} />
                                 </Link>
                                 {showResults ?
@@ -177,11 +237,15 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />
-                        <Typography className={classes.text}>NFT Holder of {collectionNames}</Typography>
                         <Typography className={classes.text}>
-                            {t.nft_holder_of({
-                                names: collectionNames,
-                            })}
+                            <RedPacketTrans.nft_holder_of
+                                values={{
+                                    names: collectionNames,
+                                }}
+                                components={{
+                                    nfts: <NFTList nfts={status.payload} />,
+                                }}
+                            />
                         </Typography>
                         {showResults ?
                             <ResultIcon className={classes.state} size={18} result={status.result} />
