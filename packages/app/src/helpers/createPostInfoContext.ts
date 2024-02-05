@@ -16,6 +16,7 @@ const emptyValueRef = new ValueRefWithReady<any>()
 
 export function createPostInfoContext(): PostInfo {
     return {
+        source: null,
         nickname: NULL,
         avatarURL: NULL,
         author: NULL,

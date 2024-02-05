@@ -204,6 +204,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
             className: child.props.className,
+            disabled: child.props.disabled,
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)

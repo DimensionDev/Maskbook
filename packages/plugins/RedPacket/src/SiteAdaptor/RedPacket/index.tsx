@@ -18,7 +18,6 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
-import { useSignedMessage } from '../hooks/useSignedMessage.js'
 import { getRedPacketCover } from '../utils/getRedPacketCover.js'
 import { OperationFooter } from './OperationFooter.js'
 
@@ -122,40 +121,36 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const signedMsg = useSignedMessage(account, payload)
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(
-        payload.contract_version,
-        account,
-        payload.rpid,
-        signedMsg,
-        payloadChainId,
-    )
+    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
-    const link = postLink || postUrl?.toString()
+    const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
     const shareText = useMemo(() => {
+        const hasClaimed = listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash
         if (isOnFirefly) {
+            const platform = source?.toLowerCase() as 'lens' | 'farcaster'
+            const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
             return t.share_on_firefly({
-                context: source?.toLowerCase(),
+                context,
                 sender: payload.sender.name,
-                link,
+                link: link!,
             })
         }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
             sender: payload.sender.name,
-            payload: link,
+            payload: link!,
             network: network?.name ?? 'Mainnet',
             account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
             interpolation: { escapeValue: false },
         }
-        if (listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash) {
+        if (hasClaimed) {
             return isOnTwitter || isOnFacebook ?
                     t.share_message_official_account(shareTextOption)
                 :   t.share_message_not_twitter(shareTextOption)
@@ -231,17 +226,20 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             theme,
             symbol: token.symbol,
             shares: payload.shares,
+            'remaining-shares': minus(payload.shares, availability?.claimed || 0).toNumber(),
             amount: payload.total,
+            'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
             from: `@${formatEthereumAddress(payload.sender.name, 4)}`,
             message: payload.sender.message,
-            remainingAmount: payload.total_remaining!,
-            remainingShares: minus(payload.shares, availability?.claimed || 0).toNumber(),
         })
     }, [token?.symbol, payload, availability, theme])
 
     // the red packet can fetch without account
     if (!availability || !token || !cover) return <LoadingStatus minHeight={148} />
+
+    const claimedOrEmpty =
+        listOfStatus.includes(RedPacketStatus.claimed) || listOfStatus.includes(RedPacketStatus.empty)
 
     return (
         <>
@@ -260,13 +258,20 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 <div className={classes.header}>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {listOfStatus.length ?
-                        <Typography className={classes.label} variant="body2">
+                        <Typography
+                            className={classes.label}
+                            variant="body2"
+                            style={{ cursor: claimedOrEmpty ? 'pointer' : undefined }}
+                            onClick={() => {
+                                if (claimedOrEmpty) setShowRequirements((v) => !v)
+                            }}>
                             {resolveRedPacketStatus(listOfStatus)}
                         </Typography>
                     :   null}
                 </div>
                 <Grow in={showRequirements && !checkingClaimStatus} timeout={250}>
                     <Requirements
+                        showResults={!claimedOrEmpty}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.requirements}
                         onClose={() => setShowRequirements(false)}
@@ -276,7 +281,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             {outdated ? null : (
                 <OperationFooter
                     chainId={payloadChainId}
-                    canClaim={canClaim || !payload.password}
+                    canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}

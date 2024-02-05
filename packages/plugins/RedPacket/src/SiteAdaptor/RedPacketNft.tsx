@@ -21,7 +21,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Card, Grow, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -166,9 +166,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
 
     const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
-        payload.id,
+        account,
+        payload,
         availability?.totalAmount,
-        signMessage(account, payload.privateKey).signature ?? '',
     )
     const [showTooltip, textRef] = useDetectOverflow()
 
@@ -185,20 +185,20 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
-    const link = postLink || postUrl?.toString()
+    const link = postLink.toString() || postUrl?.toString()
     const shareText = useMemo(() => {
         if (isOnFirefly) {
             return t.share_on_firefly({
-                context: source?.toLowerCase(),
-                sender: payload.sender.name,
-                link,
+                context: source?.toLowerCase() as 'lens' | 'farcaster',
+                sender: payload.senderName,
+                link: link!,
             })
         }
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
-            payload: link,
+            payload: link!,
             network: network?.name || '',
             account_promote: t.account_promote({
                 context:
@@ -315,8 +315,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             amount: availability.totalAmount,
             from: `@${payload.senderName}`,
             message: payload.message,
-            remainingAmount: availability.balance,
-            remainingShares: availability.remaining,
+            'remaining-amount': availability.balance,
+            'remaining-shares': availability.remaining,
         })
     }, [asset?.metadata?.symbol, availability, theme])
 

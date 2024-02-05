@@ -5,23 +5,27 @@ import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPac
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
+import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useRedPacketContract } from './useRedPacketContract.js'
+import { useSignedMessage } from './useSignedMessage.js'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 
 export function useClaimCallback(
-    version: number,
-    from: string,
-    id: string,
-    signedMsg?: string,
-    expectedChainId?: ChainId,
+    account: string,
+    payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,
 ) {
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
+    const payloadChainId = payload.chainId
+    const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
+    const rpid = 'rpid' in payload ? payload.rpid : payload.id
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
     const redPacketContract = useRedPacketContract(chainId, version)
+    const { refetch } = useSignedMessage(account, payload)
     return useAsyncFn(async () => {
-        if (!redPacketContract || !id || !signedMsg) return
-
+        if (!redPacketContract || !rpid) return
+        const { data: signedMsg } = await refetch()
+        if (!signedMsg) return
         const config = {
-            from,
+            from: account,
         }
         // note: despite the method params type of V1 and V2 is the same,
         // but it is more understandable to declare respectively
@@ -29,16 +33,21 @@ export function useClaimCallback(
         const tx =
             version === 4 ?
                 await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV4).methods.claim(id, signedMsg, from),
+                    (redPacketContract as HappyRedPacketV4).methods.claim(rpid, signedMsg, account),
                     config,
                 )
             :   await contractTransaction.fillAll(
-                    (redPacketContract as HappyRedPacketV1).methods.claim(id, signedMsg, from, web3_utils.sha3(from)!),
+                    (redPacketContract as HappyRedPacketV1).methods.claim(
+                        rpid,
+                        signedMsg,
+                        account,
+                        web3_utils.sha3(account)!,
+                    ),
                     config,
                 )
 
         return EVMWeb3.sendTransaction(tx, {
             chainId,
         })
-    }, [id, signedMsg, from, chainId, redPacketContract, version])
+    }, [rpid, account, chainId, redPacketContract, version, refetch])
 }

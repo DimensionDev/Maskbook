@@ -23,12 +23,12 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         chainId: parsedChainId,
     })
 
-    const password = useSignedMessage(account, payload)
+    const { data: password } = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
 
     const recheckClaimStatus = useCallback(async () => {
         const { data } = await refetch()
-        return data?.data.canClaim
+        return data?.data?.canClaim
     }, [refetch])
 
     const availability = asyncResult.value
@@ -41,7 +41,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             checkingClaimStatus: isFetching,
             recheckClaimStatus,
             computed: {
-                canClaim: false || data?.data.canClaim,
+                canClaim: false || !!data?.data?.canClaim,
                 canRefund: false,
                 listOfStatus: [] as RedPacketStatus[],
             },
@@ -52,7 +52,9 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
-    const canClaim = (!isExpired && !isEmpty && !isClaimed && isPasswordValid) || !!data?.data.canClaim
+    // For a central RedPacket, we don't need to check about if the password is valid
+    const canClaimByContract = !isExpired && !isEmpty && !isClaimed
+    const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
     return {
         ...asyncResult,
         claimStrategyStatus: data?.data,

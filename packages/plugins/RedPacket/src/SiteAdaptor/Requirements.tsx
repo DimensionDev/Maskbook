@@ -1,11 +1,12 @@
 import { Icons, type GeneratedIconProps, type GeneratedIcon } from '@masknet/icons'
 import { MaskColors, makeStyles } from '@masknet/theme'
-import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, List, ListItem, Typography, type BoxProps, Link } from '@mui/material'
 import { sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
-import { useRedPacketTrans } from '../locales/i18n_generated.js'
+import { useRedPacketTrans, RedPacketTrans } from '../locales/i18n_generated.js'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePlatformType } from './hooks/usePlatformType.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     header: {
         fontSize: 16,
         height: 20,
-        fontWeight: 400,
+        fontWeight: 700,
         paddingBottom: theme.spacing(2),
         borderBottom: `1px solid ${theme.palette.common.white}`,
 
@@ -73,6 +74,7 @@ function ResultIcon({ result, ...props }: GeneratedIconProps & { result: boolean
 interface Props extends BoxProps {
     onClose?(): void
     statusList: FireflyRedPacketAPI.ClaimStrategyStatus[]
+    showResults?: boolean
 }
 
 const IconMap: Record<FireflyRedPacketAPI.PostReactionKind, GeneratedIcon> = {
@@ -83,30 +85,61 @@ const IconMap: Record<FireflyRedPacketAPI.PostReactionKind, GeneratedIcon> = {
     collect: Icons.Heart,
 }
 
+function resolveProfileUrl(platform: FireflyRedPacketAPI.PlatformType, handle: string) {
+    switch (platform) {
+        case FireflyRedPacketAPI.PlatformType.farcaster:
+            return `/profile/farcaster/${handle}`
+        case FireflyRedPacketAPI.PlatformType.lens:
+            return `/profile/lens/${handle}`
+        case FireflyRedPacketAPI.PlatformType.twitter:
+            return `/${handle}`
+    }
+}
+
 export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
-    { onClose, statusList, ...props }: Props,
+    { onClose, statusList, showResults = true, ...props }: Props,
     ref,
 ) {
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const link = usePostLink()
+    const platform = usePlatformType()
     const requirements = useMemo(() => {
         const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
         const orderedStatusList = sortBy(statusList, (x) => orders.indexOf(x.type))
         return orderedStatusList.flatMap((status) => {
             if (status.type === 'profileFollow') {
-                const payload = status.payload.filter((x) => x.platform === 'lens')
-                const handles = payload.map((x) => `@${x.handle}`).join(', ')
+                const payload = status.payload.filter((x) => x.platform === platform)
+                const handles = payload.map((x) => `@${x.handle}`)
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.UserPlus className={classes.icon} size={16} />
                         <Typography className={classes.text}>
-                            {t.follow_somebody_on_somewhere({
-                                handles,
-                                platform: payload[0].platform,
-                            })}
+                            <RedPacketTrans.follow_somebody_on_somewhere
+                                values={{
+                                    handles: handles.join(', '),
+                                    platform,
+                                }}
+                                components={{
+                                    handles:
+                                        platform ?
+                                            <span>
+                                                {handles.map((handle) => (
+                                                    <Link
+                                                        href={resolveProfileUrl(platform, handle)}
+                                                        target='_blank'
+                                                        key={handle}>
+                                                        @{handle}
+                                                    </Link>
+                                                ))}
+                                            </span>
+                                        :   <span />,
+                                }}
+                            />
                         </Typography>
-                        <ResultIcon className={classes.state} size={18} result={status.result} />
+                        {showResults ?
+                            <ResultIcon className={classes.state} size={18} result={status.result} />
+                        :   null}
                     </ListItem>
                 )
             }
@@ -129,10 +162,12 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                             <ListItem className={classes.item} key={condition.key}>
                                 <Icon className={classes.icon} size={16} />
                                 <Typography className={classes.text}>{condition.key}</Typography>
-                                <Link href={link.toString()} classes={classes.link} target="_blank">
+                                <Link href={link.toString()} className={classes.link} target="_blank">
                                     <Icons.LinkOut size={16} className={classes.linkIcon} />
                                 </Link>
-                                <ResultIcon className={classes.state} size={18} result={condition.value} />
+                                {showResults ?
+                                    <ResultIcon className={classes.state} size={18} result={condition.value} />
+                                :   null}
                             </ListItem>
                         )
                     })
@@ -148,13 +183,15 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                 names: collectionNames,
                             })}
                         </Typography>
-                        <ResultIcon className={classes.state} size={18} result={status.result} />
+                        {showResults ?
+                            <ResultIcon className={classes.state} size={18} result={status.result} />
+                        :   null}
                     </ListItem>
                 )
             }
             return null
         })
-    }, [statusList, link])
+    }, [statusList, platform, showResults])
     return (
         <Box {...props} className={cx(classes.box, props.className)} ref={ref}>
             <Typography variant="h2" className={classes.header}>
