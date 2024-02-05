@@ -1,11 +1,14 @@
-import { Icons, type GeneratedIconProps, type GeneratedIcon } from '@masknet/icons'
+import { Icons, type GeneratedIcon, type GeneratedIconProps } from '@masknet/icons'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { MaskColors, makeStyles } from '@masknet/theme'
+import { useWeb3Utils } from '@masknet/web3-hooks-base'
+import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { Box, IconButton, List, ListItem, Typography, type BoxProps, Link } from '@mui/material'
+import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
+import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
-import { useRedPacketTrans, RedPacketTrans } from '../locales/i18n_generated.js'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
     },
     item: {
+        minWidth: 0,
         marginTop: theme.spacing(2),
         padding: 0,
         fontSize: 12,
@@ -42,10 +46,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 18,
     },
     text: {
-        display: 'flex',
-        alignItems: 'center',
+        display: 'block',
         marginRight: 10,
+        flexGrow: 1,
         fontWeight: 'bold',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
         '&::first-letter': {
             textTransform: 'uppercase',
         },
@@ -95,6 +102,42 @@ function resolveProfileUrl(platform: FireflyRedPacketAPI.PlatformType, handle: s
             return `/${handle}`
     }
 }
+interface NFTListProps {
+    nfts: Array<{
+        chainId: number
+        contractAddress: string
+        collectionName?: string
+    }>
+}
+function NFTList({ nfts }: NFTListProps) {
+    const queries = useQueries({
+        queries: nfts.map((nft) => ({
+            queryKey: ['nft-contract', nft.chainId, nft.contractAddress],
+            queryFn: async () => {
+                return NFTScanNonFungibleTokenEVM.getCollectionRaw(nft.contractAddress, {
+                    chainId: nft.chainId,
+                })
+            },
+        })),
+    })
+    const Utils = useWeb3Utils()
+    return (
+        <Box component="span" mx="0.2em">
+            {queries.map(async (query, index) => {
+                const { data } = query
+                const nft = nfts[index]
+                if (!data) return nft.collectionName
+                const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
+                const name = nft.collectionName || data.name || data.symbol
+                return (
+                    <Link href={url} target="_blank">
+                        {name}
+                    </Link>
+                )
+            })}
+        </Box>
+    )
+}
 
 export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
     { onClose, statusList, showResults = true, ...props }: Props,
@@ -127,7 +170,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                                 {handles.map((handle) => (
                                                     <Link
                                                         href={resolveProfileUrl(platform, handle)}
-                                                        target='_blank'
+                                                        target="_blank"
                                                         key={handle}>
                                                         @{handle}
                                                     </Link>
@@ -177,11 +220,15 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />
-                        <Typography className={classes.text}>NFT Holder of {collectionNames}</Typography>
                         <Typography className={classes.text}>
-                            {t.nft_holder_of({
-                                names: collectionNames,
-                            })}
+                            <RedPacketTrans.nft_holder_of
+                                values={{
+                                    names: collectionNames,
+                                }}
+                                components={{
+                                    nfts: <NFTList nfts={status.payload} />,
+                                }}
+                            />
                         </Typography>
                         {showResults ?
                             <ResultIcon className={classes.state} size={18} result={status.result} />
