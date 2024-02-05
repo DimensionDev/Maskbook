@@ -482,8 +482,8 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         icon: new URL('../assets/okx.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: [],
-            supportedExtensionSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
