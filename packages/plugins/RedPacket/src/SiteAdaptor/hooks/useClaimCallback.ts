@@ -18,6 +18,7 @@ export function useClaimCallback(
     const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
     const rpid = 'rpid' in payload ? payload.rpid : payload.id
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
+    console.log('claimCallback', chainId)
     const redPacketContract = useRedPacketContract(chainId, version)
     const { refetch } = useSignedMessage(account, payload)
     return useAsyncFn(async () => {
