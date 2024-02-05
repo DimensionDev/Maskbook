@@ -1,10 +1,16 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, Suspense } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
+import {
+    ApplicationBoardModal,
+    InjectedDialog,
+    NetworkTab,
+    useCurrentLinkedPersona,
+    LoadingStatus,
+} from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -45,7 +51,7 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
 
             overflowX: 'hidden',
             overflowY: scrollY ? 'auto' : 'hidden',
-            position: 'relative'
+            position: 'relative',
         },
         abstractTabWrapper: {
             width: '100%',
@@ -56,6 +62,10 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
         },
         paper: {
             maxHeight: 'unset',
+        },
+        placeholder: {
+            height: 474,
+            boxSizing: 'border-box',
         },
     }
 })
@@ -352,7 +362,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             :   null}
 
                             {showDetails ?
-                                <FireflyRedPacketHistoryDetails rpid={rpid} />
+                                <Suspense fallback={<LoadingStatus className={classes.placeholder} iconSize={30} />}>
+                                    <FireflyRedPacketHistoryDetails rpid={rpid} />
+                                </Suspense>
                             :   null}
                         </>
                     :   null}

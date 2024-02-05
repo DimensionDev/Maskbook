@@ -4,7 +4,7 @@ import { memo, useMemo } from 'react'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
-import { LoadingStatus, ElementAnchor } from '@masknet/shared'
+import { ElementAnchor } from '@masknet/shared'
 import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
@@ -54,11 +54,7 @@ interface Props {
 export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
     const t = useRedPacketTrans()
-    const {
-        data: claimData,
-        isLoading,
-        fetchNextPage,
-    } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketClaimListInfo>({
+    const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketClaimListInfo>({
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
         queryFn: async ({ pageParam }) => {
@@ -72,8 +68,6 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
         () => ({ claimList: claimData?.pages.flatMap((x) => x?.list) ?? [], claimInfo: first(claimData?.pages) }),
         [claimData],
     )
-
-    if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
     return (
         <div className={classes.container}>
