@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         position: 'sticky',
         bottom: 0,
-        background: theme.palette.maskColor.secondaryBottom,
+        background: theme.palette.maskColor.bottom,
         boxShadow: theme.palette.maskColor.bottomBg,
     },
     accountList: {

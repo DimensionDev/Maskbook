@@ -67,6 +67,10 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
             height: 474,
             boxSizing: 'border-box',
         },
+        disabledTab: {
+            background: 'transparent',
+            color: theme.palette.maskColor.third,
+        },
     }
 })
 
@@ -163,7 +167,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-            senderName && (payload.sender.name = senderName)
+            if (!isFirefly && senderName) {
+                payload.sender.name === senderName
+            }
+
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), {
                 payloadImage,
                 claimRequirements,
@@ -290,7 +297,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                                <Tab label={t.nfts()} value={tabs.collectibles} disabled={isFirefly} />
+                                <Tab
+                                    className={isFirefly ? classes.disabledTab : undefined}
+                                    label={t.nfts()}
+                                    value={tabs.collectibles}
+                                    disabled={isFirefly}
+                                />
                             </MaskTabList>
 
                     :   null

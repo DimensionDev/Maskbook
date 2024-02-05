@@ -20,9 +20,6 @@ import {
     EMPTY_LIST,
     NetworkPluginID,
     PluginID,
-    Sniffings,
-    createLookupTableResolver,
-    i18NextInstance,
 } from '@masknet/shared-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
@@ -33,7 +30,7 @@ import { getEnumAsArray } from '@masknet/kit'
 const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
     container: {
         padding: theme.spacing(2),
-        minHeight: 532,
+        minHeight: 460,
     },
     list: {
         padding: theme.spacing(1.5, 0),

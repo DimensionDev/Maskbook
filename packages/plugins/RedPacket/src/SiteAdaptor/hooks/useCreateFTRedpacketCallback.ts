@@ -32,7 +32,6 @@ export function useCreateFTRedpacketCallback(
         gasOption?.gasCurrency,
     )
 
-
     const { isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
 
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken

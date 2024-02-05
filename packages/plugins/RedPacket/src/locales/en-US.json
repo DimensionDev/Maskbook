@@ -159,7 +159,7 @@
     "image_preview": "Image Preview",
     "unclaim_tips": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
     "create_redpacket_tips": "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products.",
-    "no_enough_gas_fees": "No Enough Gas Fees",
+    "no_enough_gas_fees": "Not Enough Gas Fees",
     "requirements": "Requirements",
     "follow_somebody_on_somewhere": "Follow <handles>{{- handles}}</handles> on {{ platform }}",
     "nft_holder_of": "NFT Holder of {{- names }}",
