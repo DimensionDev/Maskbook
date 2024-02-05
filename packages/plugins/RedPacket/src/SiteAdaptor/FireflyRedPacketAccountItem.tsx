@@ -1,10 +1,9 @@
 import { memo, useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
-import { formatEthereumAddress , isValidAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useWeb3Utils } from '@masknet/web3-hooks-base'
-import { ENS } from '@masknet/web3-providers'
+import { ENS , EVMExplorerResolver } from '@masknet/web3-providers'
 import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
@@ -29,14 +28,12 @@ interface Props {
 
 export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccountItem({ addressOrEns, chainId }: Props) {
     const { classes } = useStyles()
-    const Utils = useWeb3Utils()
     const handleClick = useCallback(async () => {
         if (isValidAddress(addressOrEns))
-            openWindow(Utils.explorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), addressOrEns)
+            openWindow(EVMExplorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), addressOrEns)
         else {
             const address = await ENS.lookup(addressOrEns)
-            if (address)
-                openWindow(Utils.explorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), address)
+            if (address) openWindow(EVMExplorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), address)
         }
     }, [addressOrEns, chainId])
 
