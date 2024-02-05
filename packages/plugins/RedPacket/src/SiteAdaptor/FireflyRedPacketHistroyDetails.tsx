@@ -10,6 +10,7 @@ import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
+import { useRedPacketTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -33,6 +34,17 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         padding: '0 12px',
     },
+    noData: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '318px',
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '24px',
+        color: theme.palette.maskColor.secondaryDark,
+    },
 }))
 
 interface Props {
@@ -41,6 +53,7 @@ interface Props {
 
 export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
+    const t = useRedPacketTrans()
     const {
         data: claimData,
         isLoading,
@@ -68,18 +81,20 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
                 <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} />
             :   null}
             <Box>
-                {claimList.map((item) => (
-                    <div className={classes.claimer} key={item?.creator}>
-                        <FireflyRedPacketAccountItem addressOrEns={item?.creator} />
-                        <Typography>
-                            {formatBalance(item?.token_amounts, item?.token_decimal, {
-                                significant: 2,
-                                isPrecise: true,
-                            })}{' '}
-                            {item?.token_symbol}
-                        </Typography>
-                    </div>
-                ))}
+                {claimList.length ?
+                    claimList.map((item) => (
+                        <div className={classes.claimer} key={item?.creator}>
+                            <FireflyRedPacketAccountItem addressOrEns={item?.creator} />
+                            <Typography>
+                                {formatBalance(item?.token_amounts, item?.token_decimal, {
+                                    significant: 2,
+                                    isPrecise: true,
+                                })}{' '}
+                                {item?.token_symbol}
+                            </Typography>
+                        </div>
+                    ))
+                :   <div className={classes.noData}>{t.no_claim_data()}</div>}
                 <ElementAnchor callback={() => fetchNextPage()} height={10} />
             </Box>
         </div>

@@ -55,7 +55,11 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
         queryKey: ['fireflyRedPacketHistory', account, historyType],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
-            const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`, pageParam)
+            const res = await FireflyRedPacket.getHistory(
+                historyType,
+                '0x790116d0685eB197B886DAcAD9C247f785987A4a' as `0x${string}`,
+                pageParam,
+            )
             return res
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,

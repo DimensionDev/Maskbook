@@ -144,6 +144,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             cursor: 'pointer',
             border: 'none',
             color: '#181818',
+            zIndex: 10,
         },
     }
 })
