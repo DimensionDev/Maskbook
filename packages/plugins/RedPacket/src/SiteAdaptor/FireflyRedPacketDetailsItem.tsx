@@ -41,7 +41,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(1.5),
-            background: listItemBackground ?? theme.palette.background.default,
+            background:
+                listItemBackground ??
+                'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%)',
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -115,9 +117,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         footerInfo: {
             fontSize: 14,
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.palette.maskColor.dark,
             '& span': {
-                color: theme.palette.maskColor.dark,
+                color: theme.palette.maskColor.secondaryDark,
                 marginRight: 2,
             },
         },
