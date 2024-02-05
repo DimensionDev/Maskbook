@@ -1,5 +1,5 @@
 import { Icons, type GeneratedIcon, type GeneratedIconProps } from '@masknet/icons'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
@@ -139,14 +139,33 @@ function NFTList({ nfts }: NFTListProps) {
     )
 }
 
+interface FollowProfileProps {
+    payload: Array<{ platform: FireflyRedPacketAPI.PlatformType; profileId: string; handle: string }>
+    platform: FireflyRedPacketAPI.PlatformType
+}
+
+function FollowProfile({ payload, platform }: FollowProfileProps) {
+    return (
+        <span>
+            {payload.map(({ handle }) => (
+                <Link key={handle} href={resolveProfileUrl(platform, handle)} target="_blank">
+                    @{handle}
+                </Link>
+            ))}
+        </span>
+    )
+}
+
 export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
     { onClose, statusList, showResults = true, ...props }: Props,
     ref,
 ) {
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
-    const link = usePostLink()
-    const platform = usePlatformType()
+    const postLink = usePostLink()
+    const postUrl = usePostInfoDetails.url()
+    const link = postUrl || postLink
+    const platform = usePlatformType() as FireflyRedPacketAPI.PlatformType
     const requirements = useMemo(() => {
         const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
         const orderedStatusList = sortBy(statusList, (x) => orders.indexOf(x.type))
@@ -164,19 +183,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                     platform,
                                 }}
                                 components={{
-                                    handles:
-                                        platform ?
-                                            <span>
-                                                {handles.map((handle) => (
-                                                    <Link
-                                                        href={resolveProfileUrl(platform, handle)}
-                                                        target="_blank"
-                                                        key={handle}>
-                                                        @{handle}
-                                                    </Link>
-                                                ))}
-                                            </span>
-                                        :   <span />,
+                                    span: <FollowProfile platform={platform} payload={payload} />,
                                 }}
                             />
                         </Typography>
@@ -215,7 +222,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                     }}>
                                     {condition.key}
                                 </Typography>
-                                <Link href={link.toString()} className={classes.link} target="_blank">
+                                <Link href={link} className={classes.link} target="_blank">
                                     <Icons.LinkOut size={16} className={classes.linkIcon} />
                                 </Link>
                                 {showResults ?
