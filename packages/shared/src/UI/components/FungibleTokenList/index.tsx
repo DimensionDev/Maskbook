@@ -135,7 +135,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         blockedFungibleTokens,
     ])
 
-    const { value: fungibleTokensBalance = EMPTY_OBJECT } = useFungibleTokensBalance(
+    const fungibleTokensBalance = useFungibleTokensBalance(
         pluginID,
         filteredFungibleTokens.map((x) => x.address),
         { account, chainId },
