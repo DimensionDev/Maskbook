@@ -143,7 +143,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             background: 'none',
             cursor: 'pointer',
             border: 'none',
-            color: '#181818',
+            color: theme.palette.maskColor.secondaryMainDark,
             zIndex: 10,
         },
     }
