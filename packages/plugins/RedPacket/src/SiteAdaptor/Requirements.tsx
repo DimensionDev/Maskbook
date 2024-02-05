@@ -188,14 +188,15 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
             }
             if (status.type === 'postReaction') {
                 // discard `collect` for now
-                let hasRepostCondition = false
                 const conditions = status.result.conditions.filter((x) => x.key !== 'collect')
+                let hasRepost = !!conditions.find((x) => (x.key === 'quote' || x.key === 'repost') && x.value)
+                let hasRepostCondition = false
                 return conditions
                     .reduce((arr: typeof conditions, condition) => {
                         if (condition.key === 'quote' || condition.key === 'repost') {
                             if (hasRepostCondition) return arr
                             hasRepostCondition = true
-                            return [...arr, { ...condition, key: 'repost' }] as typeof conditions
+                            return [...arr, { ...condition, key: 'repost', value: hasRepost }] as typeof conditions
                         }
                         return [...arr, condition]
                     }, [])
@@ -204,7 +205,16 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                         return (
                             <ListItem className={classes.item} key={condition.key}>
                                 <Icon className={classes.icon} size={16} />
-                                <Typography className={classes.text}>{condition.key}</Typography>
+                                <Typography
+                                    className={classes.text}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        flexGrow: 0,
+                                        textTransform: 'capitalize',
+                                    }}>
+                                    {condition.key}
+                                </Typography>
                                 <Link href={link.toString()} className={classes.link} target="_blank">
                                     <Icons.LinkOut size={16} className={classes.linkIcon} />
                                 </Link>
