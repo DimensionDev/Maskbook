@@ -110,6 +110,7 @@ const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) =>
 interface ClaimRequirementsDialogProps {
     onNext: (settings: FireflyRedpacketSettings) => void
     isFirefly: boolean
+    origin?: RequirementType[]
 }
 
 export const REQUIREMENT_ICON_MAP: Record<RequirementType, GeneratedIcon> = {
@@ -130,9 +131,9 @@ export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactElement> 
 
 export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
     const t = useRedPacketTrans()
-    const [selectedRules, setSelectedRules] = useState([RequirementType.Follow])
+    const [selectedRules, setSelectedRules] = useState(props.origin ?? [RequirementType.Follow])
     const [selectedCollection, setSelectedCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
-    const { classes, cx } = useStyles({ isFirefly: props.isFirefly })
+    const { classes } = useStyles({ isFirefly: props.isFirefly })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const hasNFTHolder = useMemo(() => selectedRules.includes(RequirementType.NFTHolder), [selectedRules])
@@ -219,6 +220,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                     props.onNext({
                         requirements: selectedRules,
                         nftHolderContract: selectedCollection?.address,
+                        nftCollectionName: selectedCollection?.name
                     })
                 }>
                 <Button disabled={disabled} fullWidth>
