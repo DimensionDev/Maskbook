@@ -77,14 +77,14 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
             <Box>
                 {claimList.length ?
                     claimList.map((item) => (
-                        <div className={classes.claimer} key={item?.creator}>
-                            <FireflyRedPacketAccountItem addressOrEns={item?.creator} />
+                        <div className={classes.claimer} key={item.creator}>
+                            <FireflyRedPacketAccountItem addressOrEns={item.creator} />
                             <Typography>
-                                {formatBalance(item?.token_amounts, item?.token_decimal, {
+                                {formatBalance(item.token_amounts, item.token_decimal, {
                                     significant: 2,
                                     isPrecise: true,
                                 })}{' '}
-                                {item?.token_symbol}
+                                {item.token_symbol}
                             </Typography>
                         </div>
                     ))

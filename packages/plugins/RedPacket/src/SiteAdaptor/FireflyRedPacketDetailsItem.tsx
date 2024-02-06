@@ -10,6 +10,7 @@ import { format, fromUnixTime } from 'date-fns'
 import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
+import { type ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -243,7 +244,10 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.creator()}
                                         </Typography>
-                                        <FireflyRedPacketAccountItem addressOrEns={creator} chainId={chain_id} />
+                                        <FireflyRedPacketAccountItem
+                                            addressOrEns={creator}
+                                            chainId={Number(chain_id) as ChainId}
+                                        />
                                     </div>
                                 :   null}
                             </div>

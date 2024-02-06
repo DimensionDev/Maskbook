@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -64,10 +64,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
         }
     }, [_redpacketStatus])
 
-    const redpacketStatus = useMemo(
-        () => (updatedStatus ? updatedStatus : _redpacketStatus),
-        [updatedStatus, _redpacketStatus],
-    )
+    const redpacketStatus = updatedStatus || _redpacketStatus
 
     return (
         <ActionButton

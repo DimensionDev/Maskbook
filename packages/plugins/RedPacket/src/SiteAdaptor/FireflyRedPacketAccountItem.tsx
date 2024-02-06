@@ -1,10 +1,11 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { ENS , EVMExplorerResolver } from '@masknet/web3-providers'
+import { ENS, EVMExplorerResolver } from '@masknet/web3-providers'
 import { openWindow } from '@masknet/shared-base-ui'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     linkIcon: {
@@ -23,19 +24,18 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props {
     addressOrEns: string
-    chainId?: string
+    chainId?: ChainId
 }
 
-export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccountItem({ addressOrEns, chainId }: Props) {
+export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccountItem({
+    addressOrEns,
+    chainId = ChainId.Mainnet,
+}: Props) {
     const { classes } = useStyles()
-    const handleClick = useCallback(async () => {
-        if (isValidAddress(addressOrEns))
-            openWindow(EVMExplorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), addressOrEns)
-        else {
-            const address = await ENS.lookup(addressOrEns)
-            if (address) openWindow(EVMExplorerResolver.addressLink(chainId ? Number(chainId) : 1, '_blank'), address)
-        }
-    }, [addressOrEns, chainId])
+    const { value: address } = useAsync(
+        async () => (isValidAddress(addressOrEns) ? addressOrEns : ENS.lookup(addressOrEns)),
+        [addressOrEns],
+    )
 
     return (
         <Box display="flex" gap="4px" alignItems="center">
@@ -46,7 +46,8 @@ export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccount
                 type="button"
                 className={classes.linkButton}
                 onClick={() => {
-                    handleClick()
+                    if (isValidAddress(address))
+                        openWindow(EVMExplorerResolver.addressLink(chainId, '_blank'), addressOrEns)
                 }}>
                 <Icons.LinkOut className={classes.linkIcon} />
             </button>
