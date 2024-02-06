@@ -115,6 +115,8 @@ export namespace FireflyRedPacketAPI {
         chain_id: string
         redpacket_status: RedPacketStatus
         claim_strategy: StrategyPayload[]
+        theme_id: string
+        share_from: string
     }
 
     export interface RedPacketClaimedInfo {

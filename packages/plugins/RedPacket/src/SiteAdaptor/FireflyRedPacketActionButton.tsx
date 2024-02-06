@@ -4,6 +4,9 @@ import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
+import { openComposition } from './openComposition.js'
+import { RedPacketMetaKey } from '../constants.js'
+import { FireflyRedPacket } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -32,19 +35,29 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+interface TokenInfo {
+    symbol: string
+    decimals: number
+    amount?: string
+}
 interface Props {
     rpid: string
     account: string
     redpacketStatus: FireflyRedPacketAPI.RedPacketStatus
+    claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
+    shareFrom?: string
+    themeId?: string
+    tokenInfo: TokenInfo
 }
 
 export const FireflyRedPacketActionButton = memo(function FireflyRedPacketActionButton(props: Props) {
-    const { redpacketStatus: _redpacketStatus, rpid, account } = props
+    const { redpacketStatus: _redpacketStatus, rpid, account, claim_strategy, shareFrom, themeId, tokenInfo } = props
     const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
     const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(3, account, rpid)
+
+    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid)
     const statusToTransMap = {
         [FireflyRedPacketAPI.RedPacketStatus.Send]: t.share(),
         [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
@@ -54,9 +67,23 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
         [FireflyRedPacketAPI.RedPacketStatus.Refunding]: t.refund(),
     }
 
+    const handleShare = useCallback(() => {
+        if (!shareFrom || !themeId) return
+
+        const payloadImage = FireflyRedPacket.getPayloadUrlByThemeId(
+            themeId,
+            shareFrom,
+            tokenInfo.amount,
+            'fungible',
+            tokenInfo.symbol,
+            Number(tokenInfo.decimals),
+        )
+        openComposition(RedPacketMetaKey, {}, { claimRequirements: claim_strategy, payloadImage })
+    }, [])
+
     const handleClick = useCallback(async () => {
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) {
-            // to do
+            handleShare()
         }
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
             await refundCallback()

@@ -1,7 +1,7 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor , useChainContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -167,6 +167,9 @@ interface HistoryInfo {
     create_time?: number
     redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
     ens_name?: string
+    claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
+    share_from?: string
+    theme_id?: string
 }
 
 interface Props {
@@ -193,9 +196,13 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
         received_time,
         redpacket_status,
         ens_name,
+        claim_strategy,
+        share_from,
+        theme_id,
     } = history
     const t = useRedPacketTrans()
 
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, Number(chain_id))
 
     const { classes, cx } = useStyles({
@@ -254,15 +261,19 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                     </div>
                                 :   null}
                             </div>
-                            {(
-                                redpacket_status &&
-                                redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View &&
-                                creator
-                            ) ?
+                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
                                 <FireflyRedPacketActionButton
-                                    redpacketStatus={redpacket_status}
+                                    redpacketStatus={FireflyRedPacketAPI.RedPacketStatus.Send}
                                     rpid={redpacket_id}
-                                    account={creator}
+                                    account={account}
+                                    claim_strategy={claim_strategy}
+                                    shareFrom={share_from}
+                                    themeId={theme_id}
+                                    tokenInfo={{
+                                        symbol: token_symbol,
+                                        decimals: token_decimal,
+                                        amount: total_amounts,
+                                    }}
                                 />
                             :   null}
                         </section>
