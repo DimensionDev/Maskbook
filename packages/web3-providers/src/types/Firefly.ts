@@ -201,6 +201,9 @@ export namespace FireflyRedPacketAPI {
             platform: PlatformType
             profileId: string
             lensToken?: string
+            farcasterSignature?: HexString
+            farcasterSigner?: HexString
+            farcasterMessage?: HexString
         }
         wallet: {
             address: string

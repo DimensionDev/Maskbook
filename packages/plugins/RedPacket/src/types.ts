@@ -17,6 +17,7 @@ export enum RequirementType {
 export type FireflyRedpacketSettings = {
     requirements: RequirementType[]
     nftHolderContract?: string
+    nftCollectionName?: string
 }
 
 
