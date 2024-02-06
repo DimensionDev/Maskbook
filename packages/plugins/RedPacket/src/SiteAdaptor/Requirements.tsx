@@ -123,14 +123,14 @@ function NFTList({ nfts }: NFTListProps) {
     const Utils = useWeb3Utils()
     return (
         <Box component="span" mx="0.2em">
-            {queries.map(async (query, index) => {
+            {queries.map((query, index) => {
                 const { data } = query
                 const nft = nfts[index]
-                if (!data) return nft.collectionName
+                if (!data) return <>{nft.collectionName}</>
                 const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
                 const name = nft.collectionName || data.name || data.symbol
                 return (
-                    <Link href={url} target="_blank">
+                    <Link href={url!} target="_blank">
                         {name}
                     </Link>
                 )
@@ -164,7 +164,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
     const { classes, cx } = useStyles()
     const postLink = usePostLink()
     const postUrl = usePostInfoDetails.url()
-    const link = postUrl || postLink
+    const link = postUrl?.href || postLink.toString()
     const platform = usePlatformType() as FireflyRedPacketAPI.PlatformType
     const requirements = useMemo(() => {
         const orders = ['profileFollow', 'postReaction', 'nftOwned'] as const
