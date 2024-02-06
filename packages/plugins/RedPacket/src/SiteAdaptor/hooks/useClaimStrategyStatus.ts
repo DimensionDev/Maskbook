@@ -19,10 +19,9 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
     })
     const signedMessage = 'password' in payload ? payload.password : payload.privateKey
     const me = useLastRecognizedIdentity()
-    const lensToken = me?.lensToken
     return useQuery({
         enabled: !signedMessage && !!platform,
-        queryKey: ['red-packet', 'claim-strategy', rpid, platform, author?.userId, account, lensToken],
+        queryKey: ['red-packet', 'claim-strategy', rpid, platform, author?.userId, account, me],
         queryFn: async () => {
             if (!platform) return null
             return FireflyRedPacket.checkClaimStrategyStatus({
@@ -31,7 +30,10 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
                     needLensAndFarcasterHandle: true,
                     platform,
                     profileId: author?.userId || '',
-                    lensToken: lensToken,
+                    lensToken: me?.lensToken,
+                    farcasterMessage: me?.farcasterMessage as HexString,
+                    farcasterSigner: me?.farcasterSigner as HexString,
+                    farcasterSignature: me?.farcasterSignature as HexString,
                 },
                 wallet: {
                     address: account,
