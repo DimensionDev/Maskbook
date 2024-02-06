@@ -92,7 +92,7 @@
     "chain_not_supported": "Not supported on {{chain}} yet.",
     "nft_no_history": "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends.",
     "token_no_history": "You haven't created any Token lucky drop yet. Try to create and share lucky with your friends.",
-    "history_claimed": "Claimed: <span>{{claimedShares}}/{{shares}}</span> {{claimedAmount}}/{{amount}} <span>{{symbol}}</span>",
+    "history_claimed": "Claimed: <span>{{claimedShares}}/{{shares}}</span> <span>{{claimedAmount}}/{{amount}}</span> <span>{{symbol}}</span>",
     "history_nft_claimed": "Claimed: <span>{{claimedShares}}/{{shares}}</span> <span>{{symbol}}</span>",
     "send": "Send",
     "history_duration": "{{- time}} (UTC+8)",

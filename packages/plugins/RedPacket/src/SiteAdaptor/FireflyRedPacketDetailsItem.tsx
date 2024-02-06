@@ -124,6 +124,14 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 marginRight: 2,
             },
         },
+        claimFooterInfo: {
+            fontSize: 14,
+            color: theme.palette.maskColor.secondaryDark,
+            '& span': {
+                color: theme.palette.maskColor.dark,
+                marginRight: 2,
+            },
+        },
         fullWidthBox: {
             width: '100%',
             display: 'flex',
@@ -263,7 +271,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                             </div>
                             {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
                                 <FireflyRedPacketActionButton
-                                    redpacketStatus={FireflyRedPacketAPI.RedPacketStatus.Send}
+                                    redpacketStatus={redpacket_status}
                                     rpid={redpacket_id}
                                     account={account}
                                     claim_strategy={claim_strategy}
@@ -282,7 +290,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                         <section className={classes.footer}>
                             {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography variant="body1" className={classes.footerInfo}>
+                                    <Typography variant="body1" className={classes.claimFooterInfo}>
                                         <RedPacketTrans.history_claimed
                                             components={{
                                                 span: <span />,
