@@ -80,7 +80,7 @@ export const ContractItem = memo(function ContractItem({
                 <Typography className={classes.contractName}>
                     {collection.name}
                     <Link
-                        href={Utils.explorerResolver.addressLink(collection.chainId, collection.address!)}
+                        href={Utils.explorerResolver.collectionTokenLink(collection.chainId, collection.address!)}
                         className={classes.linkIcon}
                         target="_blank"
                         rel="noopener noreferrer"

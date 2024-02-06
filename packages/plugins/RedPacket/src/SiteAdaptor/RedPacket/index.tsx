@@ -8,7 +8,7 @@ import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-ho
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
@@ -238,7 +238,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: payload.total,
             'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
-            from: `@${formatEthereumAddress(payload.sender.name, 4)}`,
+            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${payload.sender.name}`,
             message: payload.sender.message,
         })
     }, [token?.symbol, payload, availability, theme])

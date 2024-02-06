@@ -245,6 +245,7 @@ export function FireflyRedpacketConfirmDialog({
                                 {
                                     chainId,
                                     contractAddress: fireflySettings.nftHolderContract,
+                                    collectionName: fireflySettings.nftCollectionName
                                 },
                             ],
                         }
