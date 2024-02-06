@@ -3,13 +3,13 @@ import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
+import { closeFarcasterPopup, openFarcasterPopup } from '../../emitter.js'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { closePopup, openPopup } from '../emitter.js'
 
-const LensIconSizeMap: Record<Plugin.SiteAdaptor.LensSlot, number> = {
-    [Plugin.SiteAdaptor.LensSlot.Post]: 18,
-    [Plugin.SiteAdaptor.LensSlot.ProfileName]: 18,
-    [Plugin.SiteAdaptor.LensSlot.Sidebar]: 16,
+const FarcasterIconSizeMap: Record<Plugin.SiteAdaptor.FarcasterSlot, number> = {
+    [Plugin.SiteAdaptor.FarcasterSlot.Post]: 18,
+    [Plugin.SiteAdaptor.FarcasterSlot.ProfileName]: 18,
+    [Plugin.SiteAdaptor.FarcasterSlot.Sidebar]: 16,
 }
 
 const useStyles = makeStyles()({
@@ -19,12 +19,12 @@ const useStyles = makeStyles()({
     },
 })
 interface Props {
-    slot: Plugin.SiteAdaptor.LensSlot
-    accounts: FireflyBaseAPI.LensAccount[]
+    slot: Plugin.SiteAdaptor.FarcasterSlot
+    accounts: FireflyBaseAPI.FarcasterProfile[]
     userId: string
 }
 
-export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
+export const FarcasterBadge = memo(({ slot, accounts, userId }: Props) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes } = useStyles()
 
@@ -36,8 +36,8 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
             clearTimeout(openTimer)
 
             openTimer = setTimeout(() => {
-                openPopup({
-                    lensAccounts: accounts,
+                openFarcasterPopup({
+                    accounts,
                     userId,
                     popupAnchorEl: buttonRef.current,
                 })
@@ -57,7 +57,7 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
 
     useEffect(() => {
         function hide() {
-            closePopup({
+            closeFarcasterPopup({
                 popupAnchorEl: buttonRef.current,
             })
         }
@@ -76,9 +76,9 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
 
     return (
         <IconButton disableRipple className={classes.badge} ref={buttonRef}>
-            <Icons.Lens size={LensIconSizeMap[slot]} />
+            <Icons.Farcaster size={FarcasterIconSizeMap[slot]} />
         </IconButton>
     )
 })
 
-LensBadge.displayName = 'LensBadge'
+FarcasterBadge.displayName = 'FarcasterBadge'

@@ -74,7 +74,10 @@ export function Image({
                     height={size}
                     {...rest}
                     src={rest.src}
-                    onError={() => setFailed(true)}
+                    onError={(e) => {
+                        rest.onError?.(e)
+                        setFailed(true)
+                    }}
                 />
             </div>
         )
