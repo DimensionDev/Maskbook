@@ -1,7 +1,7 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { toFixed } from '@masknet/web3-shared-base'
 import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
@@ -10,15 +10,18 @@ import { useSignedMessage } from './useSignedMessage.js'
 
 const EXTRA_GAS_PER_NFT = 335
 
+/**
+ * Claim NFT red packet.
+ */
 export function useClaimNftRedpacketCallback(
     account: string,
-    payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,
+    payload: RedPacketNftJSONPayload = {} as RedPacketNftJSONPayload,
     totalAmount: number | undefined,
 ) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     const { refetch } = useSignedMessage(account, payload)
-    const id = 'rpid' in payload ? payload.rpid : payload.id
+    const id = payload.id
     return useAsyncFn(async () => {
         if (!nftRedPacketContract || !id || !account || !totalAmount) return
         const { data: signedMsg } = await refetch()
