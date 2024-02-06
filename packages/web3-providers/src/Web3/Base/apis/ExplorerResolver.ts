@@ -23,6 +23,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
             domainPathname: '/address/:domain',
             fungibleTokenPathname: '/address/:address',
             nonFungibleTokenPathname: '/nft/:address/:tokenId',
+            collectionPathname: '/token/:address'
         }
         return {
             ...defaults,
@@ -84,6 +85,15 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
             address,
             tokenId,
             ...explorerUrl?.parameters,
+        })
+    }
+
+    nonFungibleTokenCollectionLink(chainId: ChainId, address: string) {
+        const explorerUrl = this.getExplorerURL(chainId)
+        if(!explorerUrl.url) return
+        return urlcat(explorerUrl.url, this.options.collectionPathname, {
+            address,
+            ...explorerUrl?.parameters
         })
     }
 }
