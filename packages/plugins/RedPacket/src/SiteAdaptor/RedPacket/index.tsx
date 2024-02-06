@@ -130,36 +130,44 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
+
+    const getShareText = useCallback(
+        (hasClaimed: boolean) => {
+            if (isOnFirefly) {
+                const platform = source?.toLowerCase() as 'lens' | 'farcaster'
+                const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
+                return t.share_on_firefly({
+                    context,
+                    sender: payload.sender.name,
+                    link: link!,
+                })
+            }
+            const isOnTwitter = Sniffings.is_twitter_page
+            const isOnFacebook = Sniffings.is_facebook_page
+            const shareTextOption = {
+                sender: payload.sender.name,
+                payload: link!,
+                network: network?.name ?? 'Mainnet',
+                account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
+                interpolation: { escapeValue: false },
+            }
+            if (hasClaimed) {
+                return isOnTwitter || isOnFacebook ?
+                        t.share_message_official_account(shareTextOption)
+                    :   t.share_message_not_twitter(shareTextOption)
+            }
+
+            return isOnTwitter || isOnFacebook ?
+                    t.share_unclaimed_message_official_account(shareTextOption)
+                :   t.share_unclaimed_message_not_twitter(shareTextOption)
+        },
+        [payload, link, claimTxHash, t, network?.name, source, isOnFirefly],
+    )
+    const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {
         const hasClaimed = listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash
-        if (isOnFirefly) {
-            const platform = source?.toLowerCase() as 'lens' | 'farcaster'
-            const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
-            return t.share_on_firefly({
-                context,
-                sender: payload.sender.name,
-                link: link!,
-            })
-        }
-        const isOnTwitter = Sniffings.is_twitter_page
-        const isOnFacebook = Sniffings.is_facebook_page
-        const shareTextOption = {
-            sender: payload.sender.name,
-            payload: link!,
-            network: network?.name ?? 'Mainnet',
-            account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
-            interpolation: { escapeValue: false },
-        }
-        if (hasClaimed) {
-            return isOnTwitter || isOnFacebook ?
-                    t.share_message_official_account(shareTextOption)
-                :   t.share_message_not_twitter(shareTextOption)
-        }
-
-        return isOnTwitter || isOnFacebook ?
-                t.share_unclaimed_message_official_account(shareTextOption)
-            :   t.share_unclaimed_message_not_twitter(shareTextOption)
-    }, [payload, link, claimTxHash, listOfStatus, t, network?.name, source, isOnFirefly])
+        return getShareText(!!hasClaimed)
+    }, [getShareText, listOfStatus, claimTxHash])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
@@ -176,7 +184,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         })
         if (isZero(data.claimed_amount)) return
         TransactionConfirmModal.open({
-            shareText,
+            shareText: claimedShareText,
             amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
             token,
             tokenType: TokenType.Fungible,
@@ -190,7 +198,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             title: t.lucky_drop(),
             share,
         })
-    }, [token, redPacketContract, payload.rpid, account])
+    }, [token, redPacketContract, payload.rpid, account, claimedShareText])
 
     const [showRequirements, setShowRequirements] = useState(false)
     const onClaimOrRefund = useCallback(async () => {
@@ -209,7 +217,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, recheckClaimStatus])
+    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText)
