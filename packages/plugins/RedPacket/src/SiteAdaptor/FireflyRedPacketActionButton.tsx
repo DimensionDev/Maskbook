@@ -7,6 +7,7 @@ import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { openComposition } from './openComposition.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { FireflyRedPacket } from '@masknet/web3-providers'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -48,10 +49,22 @@ interface Props {
     shareFrom?: string
     themeId?: string
     tokenInfo: TokenInfo
+    redpacketMsg?: string
+    chainId: ChainId
 }
 
 export const FireflyRedPacketActionButton = memo(function FireflyRedPacketActionButton(props: Props) {
-    const { redpacketStatus: _redpacketStatus, rpid, account, claim_strategy, shareFrom, themeId, tokenInfo } = props
+    const {
+        redpacketStatus: _redpacketStatus,
+        rpid,
+        account,
+        claim_strategy,
+        shareFrom,
+        themeId,
+        tokenInfo,
+        redpacketMsg,
+        chainId,
+    } = props
     const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
     const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
@@ -78,7 +91,24 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
             tokenInfo.symbol,
             Number(tokenInfo.decimals),
         )
-        openComposition(RedPacketMetaKey, {}, { claimRequirements: claim_strategy, payloadImage })
+        openComposition(
+            RedPacketMetaKey,
+            {
+                contract_version: 4,
+                sender: {
+                    address: account,
+                    name: shareFrom,
+                    message: redpacketMsg,
+                },
+                chainId,
+                token: {
+                    amount: tokenInfo.amount,
+                    symbol: tokenInfo.symbol,
+                    decimals: tokenInfo.decimals,
+                },
+            },
+            { claimRequirements: claim_strategy, payloadImage },
+        )
     }, [])
 
     const handleClick = useCallback(async () => {

@@ -1,7 +1,7 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useNetworkDescriptor , useChainContext } from '@masknet/web3-hooks-base'
+import { useNetworkDescriptor, useChainContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -269,11 +269,13 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                     claim_strategy={claim_strategy}
                                     shareFrom={share_from}
                                     themeId={theme_id}
+                                    redpacketMsg={rp_msg}
                                     tokenInfo={{
                                         symbol: token_symbol,
                                         decimals: token_decimal,
                                         amount: total_amounts,
                                     }}
+                                    chainId={Number(chain_id) as ChainId}
                                 />
                             :   null}
                         </section>
