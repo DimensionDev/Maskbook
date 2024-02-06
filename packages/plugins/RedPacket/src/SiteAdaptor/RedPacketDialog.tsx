@@ -1,12 +1,18 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, Suspense } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import { ApplicationBoardModal, InjectedDialog, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
+import {
+    ApplicationBoardModal,
+    InjectedDialog,
+    NetworkTab,
+    useCurrentLinkedPersona,
+    LoadingStatus,
+} from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
-import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
     useActivatedPluginSiteAdaptor,
@@ -30,7 +36,7 @@ import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
 import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistroyDetails.js'
 import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
-import type { FireflyContext, FireflyRedpacketSettings, RequirementType } from '../types.js'
+import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
@@ -45,7 +51,7 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
 
             overflowX: 'hidden',
             overflowY: scrollY ? 'auto' : 'hidden',
-            position: 'relative'
+            position: 'relative',
         },
         abstractTabWrapper: {
             width: '100%',
@@ -57,10 +63,14 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
         paper: {
             maxHeight: 'unset',
         },
+        placeholder: {
+            height: 474,
+            boxSizing: 'border-box',
+        },
         disabledTab: {
             background: 'transparent',
-            color: theme.palette.maskColor.third
-        }
+            color: theme.palette.maskColor.third,
+        },
     }
 })
 
@@ -194,9 +204,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const onDialogClose = useCallback(() => {
         if (openSelectNFTDialog) return setOpenSelectNFTDialog(false)
         if (openNFTConfirmDialog) return setOpenNFTConfirmDialog(false)
+        if (showDetails) return setShowDetails(false)
         if (showHistory) return setShowHistory(false)
         onBack()
-    }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
+    }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack, showDetails])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
@@ -215,17 +226,22 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const title = useMemo(() => {
-        if (showHistory) return t.history()
         if (showDetails) return t.more_details()
+        if (showHistory) return t.history()
         if (openSelectNFTDialog) return t.nft_select_collection()
         if (openNFTConfirmDialog) return t.confirm()
         if (step === CreateRedPacketPageStep.NewRedPacketPage) return t.display_name()
         if (step === CreateRedPacketPageStep.ClaimRequirementsPage) return t.claim_requirements_title()
         return t.details()
-    }, [showHistory, openSelectNFTDialog, openNFTConfirmDialog, step])
+    }, [showHistory, openSelectNFTDialog, openNFTConfirmDialog, step, showDetails])
 
     const titleTail = useMemo(() => {
-        if (step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showHistory) {
+        if (
+            step === CreateRedPacketPageStep.NewRedPacketPage &&
+            !openNFTConfirmDialog &&
+            !showHistory &&
+            !showDetails
+        ) {
             return <Icons.History onClick={() => setShowHistory((history) => !history)} />
         }
 
@@ -233,7 +249,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             return <Icons.Questions onClick={() => setShowClaimRule(true)} />
         }
         return null
-    }, [step, openNFTConfirmDialog, showHistory])
+    }, [step, openNFTConfirmDialog, showHistory, showDetails])
 
     // #region gas config
     const [defaultGasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -257,7 +273,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         (redpacket_id: string) => {
             setRpid(redpacket_id)
             setShowDetails(true)
-            setShowHistory(false)
         },
         [setShowDetails, setRpid, setShowHistory],
     )
@@ -282,7 +297,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                                <Tab className={isFirefly ? classes.disabledTab : undefined} label={t.nfts()} value={tabs.collectibles} disabled={isFirefly} />
+                                <Tab
+                                    className={isFirefly ? classes.disabledTab : undefined}
+                                    label={t.nfts()}
+                                    value={tabs.collectibles}
+                                    disabled={isFirefly}
+                                />
                             </MaskTabList>
 
                     :   null
@@ -308,7 +328,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={onDialogClose}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder
-                titleBarIconStyle={step !== CreateRedPacketPageStep.NewRedPacketPage ? 'back' : 'close'}>
+                titleBarIconStyle={
+                    step !== CreateRedPacketPageStep.NewRedPacketPage || showHistory || showDetails ? 'back' : 'close'
+                }>
                 <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ?
                         <>
@@ -347,12 +369,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     />
                                 </TabPanel>
                             </div>
-                            {showHistory ?
+                            {showHistory && !showDetails ?
                                 <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
                             :   null}
 
                             {showDetails ?
-                                <FireflyRedPacketHistoryDetails rpid={rpid} />
+                                <Suspense fallback={<LoadingStatus className={classes.placeholder} iconSize={30} />}>
+                                    <FireflyRedPacketHistoryDetails rpid={rpid} />
+                                </Suspense>
                             :   null}
                         </>
                     :   null}

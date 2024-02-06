@@ -1,4 +1,4 @@
-import { ElementAnchor, EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { createIndicator, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -47,11 +47,7 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const {
-        data: historiesData,
-        isLoading,
-        fetchNextPage,
-    } = useSuspenseInfiniteQuery({
+    const { data: historiesData, fetchNextPage } = useSuspenseInfiniteQuery({
         queryKey: ['fireflyRedPacketHistory', account, historyType],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
@@ -62,9 +58,7 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     })
     const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
-    if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
-
-    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
+    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.no_history_data()}</EmptyStatus>
 
     return (
         <div className={classes.root}>

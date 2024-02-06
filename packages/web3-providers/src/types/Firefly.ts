@@ -130,6 +130,7 @@ export namespace FireflyRedPacketAPI {
         creator: HexString
         chain_id: string
         redpacket_status: RedPacketStatus
+        ens_name: string
     }
 
     export interface ClaimList {
@@ -161,6 +162,7 @@ export namespace FireflyRedPacketAPI {
         chain_id: string
         cursor: string
         size: string
+        ens_name: string
     }
 
     export interface ThemeSettings {

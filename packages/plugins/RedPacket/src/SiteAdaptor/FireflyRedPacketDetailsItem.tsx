@@ -6,11 +6,11 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { format, fromUnixTime } from 'date-fns'
 import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
+import { type ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -42,7 +42,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(1.5),
-            background: listItemBackground ?? theme.palette.background.default,
+            background:
+                listItemBackground ??
+                'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%)',
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -116,9 +118,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         footerInfo: {
             fontSize: 14,
-            color: theme.palette.maskColor.secondaryDark,
+            color: theme.palette.maskColor.dark,
             '& span': {
-                color: theme.palette.maskColor.dark,
+                color: theme.palette.maskColor.secondaryDark,
                 marginRight: 2,
             },
         },
@@ -142,7 +144,8 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             background: 'none',
             cursor: 'pointer',
             border: 'none',
-            color: theme.palette.maskColor.secondaryMain,
+            color: theme.palette.maskColor.secondaryMainDark,
+            zIndex: 10,
         },
     }
 })
@@ -163,6 +166,7 @@ interface HistoryInfo {
     claim_amounts?: string
     create_time?: number
     redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
+    ens_name?: string
 }
 
 interface Props {
@@ -170,7 +174,7 @@ interface Props {
     handleOpenDetails?: (rpid: string) => void
 }
 
-export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(props: Props) {
+export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetailsItem(props: Props) {
     const { history, handleOpenDetails } = props
     const {
         rp_msg,
@@ -188,6 +192,7 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
         token_amounts,
         received_time,
         redpacket_status,
+        ens_name,
     } = history
     const t = useRedPacketTrans()
 
@@ -241,20 +246,28 @@ export const FireflyRedPacketDetailsItem = memo(function RedPacketInHistoryList(
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.creator()}
                                         </Typography>
-                                        <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                            {web3_utils.isAddress(creator) ?
-                                                formatEthereumAddress(creator, 4)
-                                            :   creator}
-                                        </Typography>
+                                        <FireflyRedPacketAccountItem
+                                            address={creator}
+                                            ens={ens_name}
+                                            chainId={Number(chain_id) as ChainId}
+                                        />
                                     </div>
                                 :   null}
                             </div>
-                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
-                                <FireflyRedPacketActionButton redpacketStatus={redpacket_status} />
+                            {(
+                                redpacket_status &&
+                                redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View &&
+                                creator
+                            ) ?
+                                <FireflyRedPacketActionButton
+                                    redpacketStatus={redpacket_status}
+                                    rpid={redpacket_id}
+                                    account={creator}
+                                />
                             :   null}
                         </section>
                         <section className={classes.footer}>
-                            {claim_numbers ?
+                            {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography variant="body1" className={classes.footerInfo}>
                                         <RedPacketTrans.history_claimed

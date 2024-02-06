@@ -61,7 +61,7 @@
     "details": "Confirm the Lucky Drop",
     "confirm": "Confirm",
     "confirming": "Confirming",
-    "more_details": "More Details",
+    "more_details": "More details",
     "enter_each_amount": "Enter Amount Each",
     "enter_total_amount": "Enter Total Amount",
     "enter_shares": "Enter Number of Winners",
@@ -167,5 +167,7 @@
     "share_on_firefly$lens": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender }}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Lens: {{- link }}",
     "share_on_firefly$farcaster": "🤑 Check this Lucky Drop  🧧💰✨ sent by @{{- sender }}.\n\n Go to https://firefly.mask.social or download Firefly to create and claim any #LuckyDrop!\n\nClaim on Farcaster: {{- link }}",
     "share_on_firefly$lens_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }}! \n\n Claim on Lens: {{- link }}",
-    "share_on_firefly$farcaster_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }}! \n\n Claim on Farcaster: {{- link }}"
+    "share_on_firefly$farcaster_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }}! \n\n Claim on Farcaster: {{- link }}",
+    "no_claim_data": "Nobody claimed this lucky drop yet",
+    "no_history_data": "There is no data available for display"
 }
