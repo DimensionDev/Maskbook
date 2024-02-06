@@ -166,6 +166,7 @@ interface HistoryInfo {
     claim_amounts?: string
     create_time?: number
     redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
+    ens_name?: string
 }
 
 interface Props {
@@ -191,6 +192,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
         token_amounts,
         received_time,
         redpacket_status,
+        ens_name,
     } = history
     const t = useRedPacketTrans()
 
@@ -245,7 +247,8 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                             {t.creator()}
                                         </Typography>
                                         <FireflyRedPacketAccountItem
-                                            addressOrEns={creator}
+                                            address={creator}
+                                            ens={ens_name}
                                             chainId={Number(chain_id) as ChainId}
                                         />
                                     </div>
