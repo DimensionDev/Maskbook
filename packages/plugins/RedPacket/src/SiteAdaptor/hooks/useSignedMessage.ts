@@ -24,9 +24,9 @@ export function useSignedMessage(
                 platform,
                 profileId: author?.userId || '',
                 lensToken: me?.lensToken,
-                farcasterMessage: me?.farcasterMessage,
-                farcasterSigner: me?.farcasterSigner,
-                farcasterSignature: me?.farcasterSignature,
+                farcasterMessage: me?.farcasterMessage as HexString,
+                farcasterSigner: me?.farcasterSigner as HexString,
+                farcasterSignature: me?.farcasterSignature as HexString,
             }
         :   undefined
 
