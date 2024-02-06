@@ -60,6 +60,9 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         marginRight: 10,
     },
+    textLink: {
+        color: '#8E96FF',
+    },
     link: {
         display: 'inline-flex',
         alignItems: 'center',
@@ -110,6 +113,7 @@ interface NFTListProps {
     }>
 }
 function NFTList({ nfts }: NFTListProps) {
+    const { classes } = useStyles()
     const queries = useQueries({
         queries: nfts.map((nft) => ({
             queryKey: ['nft-contract', nft.chainId, nft.contractAddress],
@@ -130,7 +134,7 @@ function NFTList({ nfts }: NFTListProps) {
                 const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
                 const name = nft.collectionName || data.name || data.symbol
                 return (
-                    <Link href={url!} target="_blank">
+                    <Link href={url!} target="_blank" className={classes.textLink}>
                         {name}
                     </Link>
                 )
@@ -145,10 +149,15 @@ interface FollowProfileProps {
 }
 
 function FollowProfile({ payload, platform }: FollowProfileProps) {
+    const { classes } = useStyles()
     return (
         <span>
             {payload.map(({ handle }) => (
-                <Link key={handle} href={resolveProfileUrl(platform, handle)} target="_blank">
+                <Link
+                    key={handle}
+                    href={resolveProfileUrl(platform, handle)}
+                    target="_blank"
+                    className={classes.textLink}>
                     @{handle}
                 </Link>
             ))}

@@ -1,22 +1,22 @@
-import { useAsyncFn } from 'react-use'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NetworkPluginID } from '@masknet/shared-base'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
+import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { ContractTransaction } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 
-export function useClaimCallback(
-    account: string,
-    payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,
-) {
+/**
+ * Claim fungible token red packet.
+ */
+export function useClaimCallback(account: string, payload: RedPacketJSONPayload = {} as RedPacketJSONPayload) {
     const payloadChainId = payload.chainId
-    const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
-    const rpid = 'rpid' in payload ? payload.rpid : payload.id
+    const version = payload.contract_version
+    const rpid = payload.rpid
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })
     const chainIdByName = EVMChainResolver.chainId('network' in payload ? payload.network! : '')
     const chainId = payloadChainId || chainIdByName || contextChainId
