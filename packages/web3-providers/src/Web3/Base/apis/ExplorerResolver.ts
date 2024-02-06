@@ -88,7 +88,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
         })
     }
 
-    collectionTokenLink(chainId: ChainId, address: string) {
+    nonFungibleTokenCollectionLink(chainId: ChainId, address: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if(!explorerUrl.url) return
         return urlcat(explorerUrl.url, this.options.collectionPathname, {
