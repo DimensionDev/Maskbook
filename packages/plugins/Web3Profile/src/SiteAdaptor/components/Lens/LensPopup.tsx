@@ -4,8 +4,8 @@ import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { FireflyBaseAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
 import { Fade } from '@mui/material'
-import { emitter } from '../emitter.js'
-import { useControlLensPopup } from '../hooks/Lens/useControlLensPopup.js'
+import { emitter } from '../../emitter.js'
+import { useControlLensPopup } from '../../hooks/Lens/useControlLensPopup.js'
 import { LensList } from './LensList.js'
 
 const useStyles = makeStyles()((theme) => ({

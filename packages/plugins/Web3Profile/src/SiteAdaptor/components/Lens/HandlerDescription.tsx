@@ -14,8 +14,8 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ProfilePopup } from './ProfilePopup.js'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { ProfilePopup } from '../ProfilePopup.js'
+import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -105,7 +105,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     size={36}
                     mainIcon={
                         currentProfile.metadata?.picture?.optimized.uri ||
-                        new URL('../assets/Lens.png', import.meta.url).href
+                        new URL('../../assets/Lens.png', import.meta.url).href
                     }
                 />
                 <Box>
