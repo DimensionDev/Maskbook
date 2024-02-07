@@ -309,8 +309,7 @@ export function FireflyRedpacketConfirmDialog({
                                     value={new BigNumber(price || 0).times(amount)}
                                     formatter={formatCurrency}
                                     options={{ onlyRemainTwoOrZeroDecimal: true }}
-                                />{' '}
-                                USD)
+                                />)
                             </Typography>
                         </Typography>
                     </Box>
