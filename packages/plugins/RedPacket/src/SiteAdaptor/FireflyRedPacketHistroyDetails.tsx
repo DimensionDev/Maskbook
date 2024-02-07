@@ -20,10 +20,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    placeholder: {
-        height: 474,
-        boxSizing: 'border-box',
-    },
     claimer: {
         display: 'flex',
         alignItems: 'center',
@@ -72,7 +68,7 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
     return (
         <div className={classes.container}>
             {claimInfo ?
-                <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} />
+                <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} isDetail />
             :   null}
             <Box>
                 {claimList.length ?
