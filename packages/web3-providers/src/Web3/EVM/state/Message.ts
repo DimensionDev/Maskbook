@@ -90,7 +90,6 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
                 // open the popups window and wait for approval from the user.
                 await this.context.openPopupWindow(route, {
                     source: location.origin,
-                    ...fromState,
                 })
             }
         }

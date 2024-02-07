@@ -224,6 +224,8 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
 export interface MessageDescriptor<Request, Response> {
     ID: string
     state: MessageStateType
+    /** The origin of this request (if this request is from third party URL) */
+    origin: string | undefined
     request: Request
     response?: Response
 }

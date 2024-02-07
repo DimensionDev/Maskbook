@@ -6,8 +6,8 @@ if (!Reflect.get(globalThis, loaded)) {
     Reflect.set(globalThis, loaded, true)
 
     const { matchesAnySiteAdaptor } = await import(/* webpackMode: 'eager' */ '../shared/site-adaptors/definitions.js')
+    await import(/* webpackMode: 'eager' */ '../shared-ui/initialization/index.js')
     if (matchesAnySiteAdaptor(location.href)) {
-        await import('../shared-ui/initialization/index.js')
         await import('./site-adaptors/index.js')
         const { activateSiteAdaptorUI } = await import('./site-adaptor-infra/define.js')
         await activateSiteAdaptorUI()

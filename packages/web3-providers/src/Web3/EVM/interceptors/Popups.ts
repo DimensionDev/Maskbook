@@ -146,6 +146,7 @@ export class Popups implements Middleware<ConnectionContext> {
 
             const request: TransferableMessage<MessageRequest, MessageResponse> = {
                 state: MessageStateType.NOT_DEPEND,
+                origin: location.origin,
                 request: {
                     arguments: context.requestArguments,
                     options: {
