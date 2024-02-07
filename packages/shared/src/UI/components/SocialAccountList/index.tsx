@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef, type HTMLProps, memo } from 'react'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
-import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
+import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -75,6 +75,16 @@ const FireflyLensToNextIdLens = (account: FireflyBaseAPI.LensAccount): BindingPr
         last_checked_at: '',
     }
 }
+const FireflyFarcasterToNextIdFarcaster = (account: FireflyBaseAPI.FarcasterProfile): BindingProof => {
+    return {
+        platform: NextIDPlatform.Farcaster,
+        name: account.display_name,
+        identity: account.username,
+        created_at: '',
+        is_valid: true,
+        last_checked_at: '',
+    }
+}
 
 export const SocialAccountList = memo(function SocialAccountList({
     nextIdBindings,
@@ -88,17 +98,25 @@ export const SocialAccountList = memo(function SocialAccountList({
     const ref = useRef<HTMLDivElement | null>(null)
 
     const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
+    const { data: farcasterAccounts = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
     // Merge and sort
     const orderedBindings = useMemo(() => {
         const merged = uniqBy(
-            [...lensAccounts.map(FireflyLensToNextIdLens), ...nextIdBindings],
+            [
+                ...lensAccounts.map(FireflyLensToNextIdLens),
+                ...farcasterAccounts.map(FireflyFarcasterToNextIdFarcaster),
+                ...nextIdBindings,
+            ],
             (x) => `${x.platform}.${x.identity}`,
         )
+        const priorities = [NextIDPlatform.ENS, NextIDPlatform.Farcaster, NextIDPlatform.LENS]
         return merged.sort((a, z) => {
             if (a.platform === z.platform) return 0
-            return a.platform === NextIDPlatform.LENS ? -1 : 0
+            const aPriority = priorities.indexOf(a.platform)
+            const zPriority = priorities.indexOf(z.platform)
+            return aPriority > zPriority ? -1 : 0
         })
-    }, [lensAccounts, nextIdBindings])
+    }, [lensAccounts, farcasterAccounts, nextIdBindings])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         orderedBindings.map((x, i) => {
