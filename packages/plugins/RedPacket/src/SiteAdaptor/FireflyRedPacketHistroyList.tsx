@@ -5,7 +5,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo } from 'react'
-import { useRedPacketTrans } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
@@ -31,6 +31,12 @@ const useStyles = makeStyles()((theme) => {
         placeholder: {
             height: 474,
             boxSizing: 'border-box',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            '& div': {
+                textAlign: 'center',
+            },
         },
     }
 })
@@ -63,7 +69,19 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     })
     const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
-    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.no_history_data()}</EmptyStatus>
+    if (!histories?.length)
+        return (
+            <EmptyStatus className={classes.placeholder}>
+                {historyType === FireflyRedPacketAPI.ActionType.Claim ?
+                    t.no_claim_history_data()
+                :   <RedPacketTrans.no_sent_history_data
+                        components={{
+                            div: <div />,
+                        }}
+                    />
+                }
+            </EmptyStatus>
+        )
 
     return (
         <div className={classes.root}>
