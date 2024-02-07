@@ -209,15 +209,15 @@ interface Props {
 
 const PlatformButton = memo(function PlatformButton(props: {
     platform: FireflyRedPacketAPI.PlatformType
-    profileId: string
+    postId: string
     className: string
 }) {
-    const { platform, profileId, className } = props
+    const { platform, postId, className } = props
     return (
         <button
             type="button"
             onClick={() => {
-                openWindow(urlcat(SITE_URL, `/profile/${platform}/${profileId}`), '_blank')
+                openWindow(urlcat(SITE_URL, `/post/${platform}/${postId}`), '_blank')
             }}
             className={className}>
             {platformIconMap[platform]}
@@ -309,7 +309,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         />
                                     </div>
                                 :   null}
-                                {(postReactionStrategy || profileFollowStrategy) && isDetail ?
+                                {postReactionStrategy && isDetail ?
                                     <div className={classes.fullWidthBox}>
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.post_on()}
@@ -320,16 +320,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                             )?.params?.map((x) => (
                                                 <PlatformButton
                                                     platform={x.platform}
-                                                    profileId={x.postId}
-                                                    className={classes.button}
-                                                />
-                                            ))}
-                                            {(
-                                                profileFollowStrategy?.payload as FireflyRedPacketAPI.ProfileFollowStrategyPayload[]
-                                            )?.map((x) => (
-                                                <PlatformButton
-                                                    platform={x.platform}
-                                                    profileId={x.profileId}
+                                                    postId={x.postId}
                                                     className={classes.button}
                                                 />
                                             ))}
