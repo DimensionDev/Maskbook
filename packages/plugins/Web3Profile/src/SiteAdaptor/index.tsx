@@ -3,8 +3,8 @@ import { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
-import { useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { NextIDProof, Firefly, Twitter } from '@masknet/web3-providers'
+import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
@@ -110,25 +110,14 @@ const site: Plugin.SiteAdaptor.Definition = {
             Content({ identity, slot, onStatusUpdate }) {
                 const userId = identity?.userId
 
-                const { data: profiles } = useQuery({
-                    queryKey: ['union-profile', 'by-twitter-id', userId],
-                    queryFn: async () => {
-                        if (!userId) return null
-                        const user = await Twitter.getUserByScreenName(userId)
-                        if (!user?.userId) return
-                        return Firefly.getUnionProfile({
-                            twitterId: user?.userId,
-                        })
-                    },
-                })
-                const disabled = !profiles?.farcasterProfiles?.length
+                const { data: profiles = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
+                const disabled = !profiles.length
 
                 useEffect(() => {
                     onStatusUpdate?.(disabled)
                 }, [onStatusUpdate, disabled])
                 if (!userId) return null
-                const accounts = profiles?.farcasterProfiles ?? EMPTY_LIST
-                return <FarcasterBadge slot={slot} accounts={accounts} userId={userId} />
+                return <FarcasterBadge slot={slot} accounts={profiles} userId={userId} />
             },
         },
     },

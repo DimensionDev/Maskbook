@@ -63,6 +63,8 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
         },
         link: {
+            display: 'flex',
+            alignItems: 'center',
             color: theme.palette.maskColor.main,
         },
     }
@@ -100,7 +102,7 @@ const FarcasterListItem = memo<FarcasterListItemProps>(({ account }) => {
                 {profileUri.length ?
                     <Image
                         size={30}
-                        src={profileUri[0]}
+                        src={account.avatar.url}
                         classes={{ failed: classes.avatar }}
                         className={classes.avatar}
                         fallback={farcasterIcon}
