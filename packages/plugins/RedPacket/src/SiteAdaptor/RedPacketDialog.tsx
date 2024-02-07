@@ -292,8 +292,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
                         showHistory ?
                             <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
-                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
                                 <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
+                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
