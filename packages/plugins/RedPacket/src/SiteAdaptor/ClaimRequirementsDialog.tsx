@@ -216,14 +216,14 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
             </Box>
             <Box
                 className={classes.footer}
-                onClick={() =>
+               >
+                <Button disabled={disabled} fullWidth  onClick={() =>
                     props.onNext({
                         requirements: selectedRules,
                         nftHolderContract: selectedCollection?.address,
                         nftCollectionName: selectedCollection?.name
                     })
                 }>
-                <Button disabled={disabled} fullWidth>
                     {t.next_button()}
                 </Button>
             </Box>

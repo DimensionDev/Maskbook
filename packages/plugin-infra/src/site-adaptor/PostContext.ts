@@ -26,6 +26,7 @@ export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
     readonly avatarURL: Subscription<URL | null>
     readonly author: Subscription<ProfileIdentifier | null>
+    readonly handle: Subscription<string | null>
     /** post id on the network. */
     readonly postID: Subscription<string | null>
 }
@@ -36,6 +37,7 @@ export interface PostContextCoAuthor {
     avatarURL?: URL
     author: ProfileIdentifier
     post: PostIdentifier
+
 }
 
 export interface PostContextComment {
