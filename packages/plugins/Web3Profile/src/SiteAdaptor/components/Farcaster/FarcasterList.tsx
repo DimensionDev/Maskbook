@@ -63,6 +63,8 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
         },
         link: {
+            display: 'flex',
+            alignItems: 'center',
             color: theme.palette.maskColor.main,
         },
     }
