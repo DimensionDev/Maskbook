@@ -284,6 +284,8 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         amount: total_amounts,
                                     }}
                                     chainId={Number(chain_id) as ChainId}
+                                    totalAmount={total_amounts}
+                                    createdAt={create_time}
                                 />
                             :   null}
                         </section>

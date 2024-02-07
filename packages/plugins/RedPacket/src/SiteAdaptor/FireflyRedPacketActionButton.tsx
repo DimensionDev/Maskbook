@@ -51,6 +51,8 @@ interface Props {
     tokenInfo: TokenInfo
     redpacketMsg?: string
     chainId: ChainId
+    totalAmount?: string
+    createdAt?: number
 }
 
 export const FireflyRedPacketActionButton = memo(function FireflyRedPacketActionButton(props: Props) {
@@ -64,6 +66,8 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
         tokenInfo,
         redpacketMsg,
         chainId,
+        totalAmount,
+        createdAt,
     } = props
     const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
     const { classes, cx } = useStyles()
@@ -72,7 +76,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid)
     const statusToTransMap = {
-        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.share(),
+        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.send(),
         [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
         [FireflyRedPacketAPI.RedPacketStatus.Empty]: t.empty(),
         [FireflyRedPacketAPI.RedPacketStatus.Refund]: t.expired(),
@@ -81,7 +85,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
     }
 
     const handleShare = useCallback(() => {
-        if (!shareFrom || !themeId) return
+        if (!shareFrom || !themeId || !createdAt) return
 
         const payloadImage = FireflyRedPacket.getPayloadUrlByThemeId(
             themeId,
@@ -91,6 +95,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
             tokenInfo.symbol,
             Number(tokenInfo.decimals),
         )
+
         openComposition(
             RedPacketMetaKey,
             {
@@ -100,12 +105,16 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
                     name: shareFrom,
                     message: redpacketMsg,
                 },
-                chainId,
+                creation_time: createdAt * 1000,
                 token: {
-                    amount: tokenInfo.amount,
+                    chainId,
                     symbol: tokenInfo.symbol,
                     decimals: tokenInfo.decimals,
                 },
+                contract_address: rpid,
+                rpid,
+                shares: totalAmount,
+                total: tokenInfo.amount,
             },
             { claimRequirements: claim_strategy, payloadImage },
         )
