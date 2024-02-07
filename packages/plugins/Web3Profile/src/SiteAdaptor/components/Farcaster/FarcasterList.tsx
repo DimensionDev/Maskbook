@@ -102,7 +102,7 @@ const FarcasterListItem = memo<FarcasterListItemProps>(({ account }) => {
                 {profileUri.length ?
                     <Image
                         size={30}
-                        src={profileUri[0]}
+                        src={account.avatar.url}
                         classes={{ failed: classes.avatar }}
                         className={classes.avatar}
                         fallback={farcasterIcon}
