@@ -37,7 +37,6 @@ export interface PostContextCoAuthor {
     avatarURL?: URL
     author: ProfileIdentifier
     post: PostIdentifier
-
 }
 
 export interface PostContextComment {

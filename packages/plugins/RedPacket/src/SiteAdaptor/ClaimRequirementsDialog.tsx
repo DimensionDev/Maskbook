@@ -16,11 +16,7 @@ import { makeStyles } from '@masknet/theme'
 import { useCallback, useMemo, useState, type ReactElement, type ComponentType } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
-import {
-    EMPTY_LIST,
-    NetworkPluginID,
-    PluginID,
-} from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -214,16 +210,17 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                     {t.clear_all_requirements()}
                 </Button>
             </Box>
-            <Box
-                className={classes.footer}
-               >
-                <Button disabled={disabled} fullWidth  onClick={() =>
-                    props.onNext({
-                        requirements: selectedRules,
-                        nftHolderContract: selectedCollection?.address,
-                        nftCollectionName: selectedCollection?.name
-                    })
-                }>
+            <Box className={classes.footer}>
+                <Button
+                    disabled={disabled}
+                    fullWidth
+                    onClick={() =>
+                        props.onNext({
+                            requirements: selectedRules,
+                            nftHolderContract: selectedCollection?.address,
+                            nftCollectionName: selectedCollection?.name,
+                        })
+                    }>
                     {t.next_button()}
                 </Button>
             </Box>
