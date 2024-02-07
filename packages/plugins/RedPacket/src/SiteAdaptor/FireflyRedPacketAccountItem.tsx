@@ -40,7 +40,7 @@ export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccount
                 type="button"
                 className={classes.linkButton}
                 onClick={() => {
-                    if (isValidAddress(address)) openWindow(EVMExplorerResolver.addressLink(chainId, '_blank'), address)
+                    if (isValidAddress(address)) openWindow(EVMExplorerResolver.addressLink(chainId, address), '_blank')
                 }}>
                 <Icons.LinkOut className={classes.linkIcon} />
             </button>

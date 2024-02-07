@@ -60,6 +60,25 @@ export class FireflyRedPacket {
         }))
     }
 
+    static getPayloadUrlByThemeId(
+        themeId: string,
+        from: string,
+        amount?: string,
+        type?: string,
+        symbol?: string,
+        decimals?: number,
+    ) {
+        return urlcat(SITE_URL, '/api/rp', {
+            theme: themes.find((x) => x.id === themeId)?.name || themes[0].name,
+            usage: 'payload',
+            from,
+            amount,
+            type,
+            symbol,
+            decimals,
+        })
+    }
+
     static async getThemeByRpid(rpid: string) {
         const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
             rpid,
