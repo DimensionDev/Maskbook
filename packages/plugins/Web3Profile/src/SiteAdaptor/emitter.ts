@@ -10,9 +10,20 @@ interface OpenPopupOptions {
 interface ClosePopupOptions {
     popupAnchorEl: HTMLElement | null
 }
+interface OpenFarcasterPopupOptions {
+    accounts: FireflyBaseAPI.FarcasterProfile[]
+    /** For lazy load lens accounts from NextID */
+    userId: string
+    popupAnchorEl: HTMLElement | null
+}
+interface CloseFarcasterPopupOptions {
+    popupAnchorEl: HTMLElement | null
+}
 export const emitter = new Emitter<{
     open: [OpenPopupOptions]
     close: [ClosePopupOptions]
+    'open-farcaster': [OpenFarcasterPopupOptions]
+    'close-farcaster': [CloseFarcasterPopupOptions]
 }>()
 
 export function openPopup(options: OpenPopupOptions) {
@@ -21,4 +32,12 @@ export function openPopup(options: OpenPopupOptions) {
 
 export function closePopup(options: ClosePopupOptions) {
     emitter.emit('close', options)
+}
+
+export function openFarcasterPopup(options: OpenFarcasterPopupOptions) {
+    emitter.emit('open-farcaster', options)
+}
+
+export function closeFarcasterPopup(options: CloseFarcasterPopupOptions) {
+    emitter.emit('close-farcaster', options)
 }

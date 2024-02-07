@@ -10,8 +10,8 @@ import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
 import { memo } from 'react'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { useSubscription } from 'use-subscription'
+import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -45,14 +45,27 @@ const useStyles = makeStyles()((theme) => {
                 marginBottom: 0,
             },
         },
+        avatarContainer: {
+            width: 30,
+            height: 30,
+            borderRadius: '50%',
+            position: 'relative',
+        },
         avatar: {
             borderRadius: '50%',
+        },
+        badge: {
+            border: `1px solid ${theme.palette.maskColor.bg}`,
+            borderRadius: '50%',
+            position: 'absolute',
+            right: -3,
+            bottom: -3,
         },
         name: {
             color: theme.palette.maskColor.main,
             fontWeight: 400,
-            marginLeft: theme.spacing(0.5),
-            marginRight: theme.spacing(2),
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
@@ -148,13 +161,16 @@ const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
     const { account: wallet } = useChainContext()
     const t = useWeb3ProfileTrans()
     const profileUri = account.profileUri.filter(Boolean)
-    const lensIcon = <Icons.Lens size={20} />
+    const lensIcon = <Icons.Lens size={30} />
 
     return (
         <ListItem className={classes.listItem} key={account.handle}>
-            {profileUri.length ?
-                <Image size={20} src={profileUri[0]} className={classes.avatar} fallback={lensIcon} />
-            :   lensIcon}
+            <div className={classes.avatarContainer}>
+                {profileUri.length ?
+                    <Image size={30} classes={{ failed: classes.avatar }} src={profileUri[0]} fallback={lensIcon} />
+                :   lensIcon}
+                <Icons.DarkLens className={classes.badge} size={12} />
+            </div>
             <Typography className={classes.name}>{account.name || account.handle}</Typography>
             <ActionButton
                 variant="text"

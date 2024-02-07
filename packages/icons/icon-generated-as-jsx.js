@@ -114,6 +114,11 @@ export const DangerOutline = /*#__PURE__*/ __createIcon('DangerOutline', [
         s: true,
     },
 ])
+export const DarkLens = /*#__PURE__*/ __createIcon('DarkLens', [
+    {
+        u: () => new URL('./brands/DarkLens.svg', import.meta.url).href,
+    },
+])
 export const Debank = /*#__PURE__*/ __createIcon('Debank', [
     {
         u: () => new URL('./brands/Debank.svg', import.meta.url).href,

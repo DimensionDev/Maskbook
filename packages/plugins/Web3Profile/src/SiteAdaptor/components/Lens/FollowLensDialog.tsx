@@ -17,11 +17,11 @@ import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
-import { getLensterLink } from '../../utils.js'
-import { useConfettiExplosion } from '../hooks/ConfettiExplosion/index.js'
-import { useFollow } from '../hooks/Lens/useFollow.js'
-import { useUnfollow } from '../hooks/Lens/useUnfollow.js'
+import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
+import { getLensterLink } from '../../../utils.js'
+import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
+import { useFollow } from '../../hooks/Lens/useFollow.js'
+import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
@@ -339,7 +339,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                     </Box>
                 :   <Box className={classes.container}>
                         <Avatar
-                            src={avatar ?? new URL('../assets/Lens.png', import.meta.url).toString()}
+                            src={avatar ?? new URL('../../assets/Lens.png', import.meta.url).toString()}
                             sx={{ width: 64, height: 64 }}
                         />
                         <Typography className={classes.name}>
