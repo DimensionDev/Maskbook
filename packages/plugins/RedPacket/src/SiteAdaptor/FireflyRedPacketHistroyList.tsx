@@ -2,7 +2,7 @@ import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { createIndicator, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -51,7 +51,12 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
         queryKey: ['fireflyRedPacketHistory', account, historyType],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
-            const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`, pageParam)
+            const res = await FireflyRedPacket.getHistory(
+                historyType,
+                account as `0x${string}`,
+                FireflyRedPacketAPI.SourceType.FireflyPC,
+                pageParam,
+            )
             return res
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,

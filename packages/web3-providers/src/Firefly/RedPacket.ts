@@ -142,11 +142,16 @@ export class FireflyRedPacket {
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
+    >(
+        actionType: T,
+        from: HexString,
+        platform: FireflyRedPacketAPI.SourceType,
+        indicator?: PageIndicator,
+    ): Promise<Pageable<R, PageIndicator>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,
-            claimFrom: FireflyRedPacketAPI.SourceType.All,
+            claimFrom: platform,
             cursor: indicator?.id,
             size: 20,
         })
