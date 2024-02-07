@@ -1,5 +1,5 @@
 import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton, MaskTextField, RadioIndicator } from '@masknet/theme'
@@ -177,11 +177,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
-    useEffect(() => {
-        setToken(nativeTokenDetailed as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
-    }, [chainId, nativeTokenDetailed])
+    useUpdateEffect(() => {
+        setToken(EVMChainResolver.nativeCurrency(chainId))
+    }, [chainId])
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         setRawAmount('')
     }, [token])
 
@@ -363,7 +363,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     placeholder={t.blessing_words()}
                     value={message}
                     inputProps={{
-                        maxLength: 100,
+                        maxLength: isFirefly ? 40 : 100,
                     }}
                 />
             </Box>
@@ -402,6 +402,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 token
                             :   undefined
                         }
+                        tooltip={t.infinte_unlock_tips({ token: token.symbol })}
                         spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}

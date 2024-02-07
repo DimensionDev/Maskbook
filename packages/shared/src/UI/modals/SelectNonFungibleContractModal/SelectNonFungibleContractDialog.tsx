@@ -159,7 +159,7 @@ export const SelectNonFungibleContractDialog = memo(
                 titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
                 open={open}
                 onClose={onClose}
-                title={t.select_collectibles()}>
+                title={t.select_collection()}>
                 <DialogContent classes={{ root: classes.content }}>
                     <Box px={2}>
                         <MaskTextField

@@ -95,7 +95,6 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
             tokenInfo.symbol,
             Number(tokenInfo.decimals),
         )
-
         openComposition(
             RedPacketMetaKey,
             {

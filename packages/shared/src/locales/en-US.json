@@ -32,6 +32,7 @@
     "select_token": "Select",
     "select_a_token": "Select a token",
     "select_collectibles": "Select Collectibles",
+    "select_collection": "Select Collection",
     "no_collectible_found": "No collectible found.",
     "manage_token_list": "Manage Token List",
     "mobile_number": "Mobile Number",

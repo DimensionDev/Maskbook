@@ -68,8 +68,8 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
             boxSizing: 'border-box',
         },
         disabledTab: {
-            background: 'transparent',
-            color: theme.palette.maskColor.third,
+            background: 'transparent !important',
+            color: `${theme.palette.maskColor.third} !important`,
         },
     }
 })
@@ -183,15 +183,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const onBack = useCallback(() => {
-        if (step === CreateRedPacketPageStep.ConfirmPage || step === CreateRedPacketPageStep.ClaimRequirementsPage)
+        if (step === CreateRedPacketPageStep.ConfirmPage) {
+            if (isFirefly) setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
+            else setStep(CreateRedPacketPageStep.NewRedPacketPage)
+        }
+        if (step === CreateRedPacketPageStep.ClaimRequirementsPage) {
             setStep(CreateRedPacketPageStep.NewRedPacketPage)
+        }
         if (step === CreateRedPacketPageStep.NewRedPacketPage) {
             handleClose()
             if (props.source === PluginID.SmartPay) {
                 CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
             }
         }
-    }, [step, props.source === PluginID.SmartPay, handleClose])
+    }, [step, props.source === PluginID.SmartPay, handleClose, isFirefly])
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const onNext = useCallback(() => {
         if (!isCreateStep) return
@@ -403,7 +408,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     :   null}
                     {step === CreateRedPacketPageStep.ClaimRequirementsPage ?
                         <>
-                            <ClaimRequirementsDialog onNext={handleClaimRequirmenetsNext} isFirefly={isFirefly} />
+                            <ClaimRequirementsDialog origin={fireflyRpSettings?.requirements} onNext={handleClaimRequirmenetsNext} isFirefly={isFirefly} />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />
                         </>
                     :   null}
