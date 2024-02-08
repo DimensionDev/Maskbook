@@ -54,7 +54,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) =>
     },
     connectWith: {
         fontSize: '14px',
-        color: Sniffings.is_dashboard_page ? '#07101B' : theme.palette.maskColor.dark,
+        color: Sniffings.is_dashboard_page ? '#07101B' : theme.palette.common.black,
         fontWeight: 700,
     },
     error: {
