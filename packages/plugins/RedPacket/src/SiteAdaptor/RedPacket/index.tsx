@@ -239,7 +239,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: payload.total,
             'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
-            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${payload.sender.name}`,
+            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${payload.sender.name.replace('@', '')}`,
             message: payload.sender.message,
         })
     }, [token?.symbol, payload, availability, theme])
