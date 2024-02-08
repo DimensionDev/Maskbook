@@ -126,7 +126,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
-    const handle = usePostInfoDetails.handle?.()
+    const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
@@ -139,7 +139,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
                 return t.share_on_firefly({
                     context,
-                    sender: handle?.getCurrentValue() ?? '',
+                    sender: handle ?? '',
                     link: link!,
                 })
             }
