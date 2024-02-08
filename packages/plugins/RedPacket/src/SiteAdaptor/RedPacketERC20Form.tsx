@@ -389,7 +389,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 <PluginWalletStatusBar
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
-                    actualPluginID={pluginID}>
+                    actualPluginID={pluginID}
+                    readonlyMode={isFirefly}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
                         balance={balance}
