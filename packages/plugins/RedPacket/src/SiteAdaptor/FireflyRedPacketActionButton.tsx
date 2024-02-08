@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -74,7 +74,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
 
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid)
+    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
     const statusToTransMap = {
         [FireflyRedPacketAPI.RedPacketStatus.Send]: t.send(),
         [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
@@ -124,10 +124,13 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
             handleShare()
         }
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
-            await refundCallback()
-            setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+            console.log(await refundCallback())
         }
     }, [_redpacketStatus])
+
+    useEffect(() => {
+        if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+    }, [refunded])
 
     const redpacketStatus = updatedStatus || _redpacketStatus
 

@@ -5,7 +5,6 @@ import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { ElementAnchor } from '@masknet/shared'
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -50,7 +49,7 @@ interface Props {
 export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
     const t = useRedPacketTrans()
-    const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketClaimListInfo>({
+    const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery({
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
         queryFn: async ({ pageParam }) => {
