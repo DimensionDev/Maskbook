@@ -102,6 +102,7 @@ export namespace SiteAdaptorUI {
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void
+            farcaster?(signal: AbortSignal): void
             nameWidget?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
             switchLogo?(signal: AbortSignal): void
@@ -162,8 +163,9 @@ export namespace SiteAdaptorUI {
             attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
         }
         export interface Redirect {
-            profilePage?(profile: ProfileIdentifier): void
-            newsFeed?(): void
+            gotoProfilePage?(profile: ProfileIdentifier): void
+            gotoPostPage?(post: PostIdentifier): void
+            gotoNewsFeed?(): void
         }
         export interface Endpoint {
             publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<string>

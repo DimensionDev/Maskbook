@@ -1,4 +1,3 @@
-import urlcat from 'urlcat'
 import { EnhanceableSite } from '@masknet/shared-base'
 import type { SiteAdaptor } from '../types.js'
 
@@ -10,9 +9,4 @@ export const TwitterAdaptor: SiteAdaptor.Definition = {
     homepage: 'https://twitter.com',
     isSocialNetwork: true,
     sortIndex: 0,
-    getProfilePage: (userId) => new URL(`https://twitter.com/${userId.userId}`),
-    getShareLinkURL(message) {
-        const url = urlcat('https://twitter.com/intent/tweet', { text: message })
-        return new URL(url)
-    },
 }

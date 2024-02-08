@@ -3,9 +3,14 @@ import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infr
 import { hasPayloadLike } from '../../utils/index.js'
 import { instagramBase } from './base.js'
 
+function getProfileURL(): URL | null {
+    return new URL('https://www.instagram.com/')
+}
+
 export const instagramShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...instagramBase,
     utils: {
+        getProfileURL,
         createPostContext: createSiteAdaptorSpecializedPostContext(instagramBase.networkIdentifier, {
             hasPayloadLike,
         }),

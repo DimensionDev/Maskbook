@@ -464,12 +464,14 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         icon: new URL('../assets/okx.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
         downloadLink: 'https://www.okx.com/web3',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_opera`,

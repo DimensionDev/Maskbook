@@ -116,12 +116,12 @@ const facebookUI: SiteAdaptorUI.Definition = {
     ...facebookShared,
     automation: {
         redirect: {
-            profilePage(profile) {
+            gotoProfilePage(profile) {
                 // there is no PWA way on Facebook desktop.
                 // mobile not tested
                 location.assign(getProfilePageUrlAtFacebook(profile))
             },
-            newsFeed() {
+            gotoNewsFeed() {
                 const homeLink = document.querySelector<HTMLAnchorElement>(
                     [
                         '[data-click="bluebar_logo"] a[href]',
