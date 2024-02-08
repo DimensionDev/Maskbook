@@ -73,7 +73,7 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
                 {claimList.length ?
                     claimList.map((item) => (
                         <div className={classes.claimer} key={item.creator}>
-                            <FireflyRedPacketAccountItem address={item.creator} chainId={Number(claimInfo?.chain_id)} />
+                            <FireflyRedPacketAccountItem address={item.creator} chainId={claimInfo?.chain_id} />
                             <Typography>
                                 {formatBalance(item.token_amounts, item.token_decimal, {
                                     significant: 2,
