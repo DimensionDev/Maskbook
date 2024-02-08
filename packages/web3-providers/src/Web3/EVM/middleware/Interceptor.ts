@@ -34,6 +34,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
             [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
             [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
+            [ProviderType.Browser]: Composer.from(new MetaMaskLike(ProviderType.Browser)),
         }
     }
     private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>>
