@@ -91,15 +91,5 @@
             "title": "token"
         }
     },
-    "required": [
-        "contract_address",
-        "creation_time",
-        "duration",
-        "is_random",
-        "password",
-        "rpid",
-        "sender",
-        "shares",
-        "total"
-    ]
+    "required": ["contract_address", "creation_time", "duration", "is_random", "rpid", "sender", "shares", "total"]
 }
