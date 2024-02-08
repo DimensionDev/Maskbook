@@ -5,7 +5,6 @@ import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { ElementAnchor } from '@masknet/shared'
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -19,10 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-    },
-    placeholder: {
-        height: 474,
-        boxSizing: 'border-box',
     },
     claimer: {
         display: 'flex',
@@ -54,7 +49,7 @@ interface Props {
 export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
     const t = useRedPacketTrans()
-    const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery<FireflyRedPacketAPI.RedPacketClaimListInfo>({
+    const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery({
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
         queryFn: async ({ pageParam }) => {
@@ -72,13 +67,13 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
     return (
         <div className={classes.container}>
             {claimInfo ?
-                <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} />
+                <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} isDetail />
             :   null}
             <Box>
                 {claimList.length ?
                     claimList.map((item) => (
                         <div className={classes.claimer} key={item.creator}>
-                            <FireflyRedPacketAccountItem address={item.creator} />
+                            <FireflyRedPacketAccountItem address={item.creator} chainId={claimInfo?.chain_id} />
                             <Typography>
                                 {formatBalance(item.token_amounts, item.token_decimal, {
                                     significant: 2,

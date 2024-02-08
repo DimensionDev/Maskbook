@@ -34,6 +34,9 @@ const jsonHeaders = {
     'Content-Type': 'application/json',
 }
 
+type WithoutChainId<T> = Omit<T, 'chain_id'>
+type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
+
 export class FireflyRedPacket {
     static getThemeSettings(
         from: string,
@@ -140,13 +143,18 @@ export class FireflyRedPacket {
 
     static async getHistory<
         T extends FireflyRedPacketAPI.ActionType,
-        R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
-        :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
+        R = T extends FireflyRedPacketAPI.ActionType.Claim ? WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimedInfo>
+        :   WithNumberChainId<FireflyRedPacketAPI.RedPacketSentInfo>,
+    >(
+        actionType: T,
+        from: HexString,
+        platform: FireflyRedPacketAPI.SourceType,
+        indicator?: PageIndicator,
+    ): Promise<Pageable<R, PageIndicator>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,
-            claimFrom: FireflyRedPacketAPI.SourceType.All,
+            claimFrom: platform,
             cursor: indicator?.id,
             size: 20,
         })
@@ -154,7 +162,7 @@ export class FireflyRedPacket {
             method: 'GET',
         })
         return createPageable(
-            data.list as R[],
+            data.list.map((v) => ({ ...v, chain_id: Number(v.chain_id) })) as R[],
             createIndicator(indicator),
             createNextIndicator(indicator, data.cursor?.toString()),
         )
@@ -163,7 +171,7 @@ export class FireflyRedPacket {
     static async getClaimHistory(
         redpacket_id: string,
         indicator?: PageIndicator,
-    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
+    ): Promise<WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimListInfo>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpacketId: redpacket_id,
             cursor: indicator?.id,
@@ -172,7 +180,7 @@ export class FireflyRedPacket {
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistroyResponse>(url, {
             method: 'GET',
         })
-        return data
+        return { ...data, chain_id: Number(data.chain_id) }
     }
 
     static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {

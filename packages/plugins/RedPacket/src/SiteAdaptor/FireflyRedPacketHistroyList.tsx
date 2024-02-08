@@ -2,10 +2,10 @@ import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { createIndicator, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo } from 'react'
-import { useRedPacketTrans } from '../locales/index.js'
+import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
@@ -31,6 +31,12 @@ const useStyles = makeStyles()((theme) => {
         placeholder: {
             height: 474,
             boxSizing: 'border-box',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            '& div': {
+                textAlign: 'center',
+            },
         },
     }
 })
@@ -51,14 +57,31 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
         queryKey: ['fireflyRedPacketHistory', account, historyType],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
-            const res = await FireflyRedPacket.getHistory(historyType, account as `0x${string}`, pageParam)
+            const res = await FireflyRedPacket.getHistory(
+                historyType,
+                account as `0x${string}`,
+                FireflyRedPacketAPI.SourceType.FireflyPC,
+                pageParam,
+            )
             return res
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
     })
     const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
-    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.no_history_data()}</EmptyStatus>
+    if (!histories?.length)
+        return (
+            <EmptyStatus className={classes.placeholder}>
+                {historyType === FireflyRedPacketAPI.ActionType.Claim ?
+                    t.no_claim_history_data()
+                :   <RedPacketTrans.no_sent_history_data
+                        components={{
+                            div: <div />,
+                        }}
+                    />
+                }
+            </EmptyStatus>
+        )
 
     return (
         <div className={classes.root}>

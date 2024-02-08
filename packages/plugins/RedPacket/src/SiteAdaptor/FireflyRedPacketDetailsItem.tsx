@@ -10,7 +10,8 @@ import { format, fromUnixTime } from 'date-fns'
 import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -149,15 +150,33 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             fontStyle: 'normal',
             fontWeight: 700,
             lineHeight: '16px',
+        },
+        icons: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+        },
+        button: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             background: 'none',
             cursor: 'pointer',
             border: 'none',
+            padding: 0,
             color: theme.palette.maskColor.secondaryMainDark,
             zIndex: 10,
         },
     }
 })
 
+const platformIconMap = {
+    [FireflyRedPacketAPI.PlatformType.twitter]: <Icons.TwitterX size={18} />,
+    [FireflyRedPacketAPI.PlatformType.lens]: <Icons.Lens size={18} />,
+    [FireflyRedPacketAPI.PlatformType.farcaster]: <Icons.Farcaster size={18} />,
+}
+
+const SITE_URL = 'https://firefly.mask.social'
 interface HistoryInfo {
     rp_msg: string
     redpacket_id: string
@@ -167,7 +186,7 @@ interface HistoryInfo {
     token_symbol: string
     token_amounts?: string
     token_logo: string
-    chain_id: string
+    chain_id: number
     creator?: string
     claim_numbers?: string
     total_numbers?: string
@@ -183,10 +202,29 @@ interface HistoryInfo {
 interface Props {
     history: HistoryInfo
     handleOpenDetails?: (rpid: string) => void
+    isDetail?: boolean
 }
 
+const PlatformButton = memo(function PlatformButton(props: {
+    platform: FireflyRedPacketAPI.PlatformType
+    postId: string
+    className: string
+}) {
+    const { platform, postId, className } = props
+    console.log('PlatformButton', platform, postId, className)
+    return (
+        <a
+            href={urlcat(SITE_URL, `/post/${platform}/${postId}`)}
+            target="_blank"
+            className={className}
+            rel="noreferrer noopener">
+            {platformIconMap[platform]}
+        </a>
+    )
+})
+
 export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetailsItem(props: Props) {
-    const { history, handleOpenDetails } = props
+    const { history, handleOpenDetails, isDetail } = props
     const {
         rp_msg,
         create_time,
@@ -211,13 +249,13 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
     const t = useRedPacketTrans()
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, Number(chain_id))
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chain_id)
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
-
+    const postReactionStrategy = claim_strategy?.find((x) => x.type === FireflyRedPacketAPI.StrategyType.postReaction)
     return (
         <ListItem className={classes.root}>
             <section className={classes.contentItem}>
@@ -264,8 +302,29 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         <FireflyRedPacketAccountItem
                                             address={creator}
                                             ens={ens_name}
-                                            chainId={Number(chain_id) as ChainId}
+                                            chainId={chain_id}
                                         />
+                                    </div>
+                                :   null}
+                                {(
+                                    (postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload)
+                                        ?.params && isDetail
+                                ) ?
+                                    <div className={classes.fullWidthBox}>
+                                        <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
+                                            {t.post_on()}
+                                        </Typography>
+                                        <div className={classes.icons}>
+                                            {(
+                                                postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload
+                                            )?.params?.map((x) => (
+                                                <PlatformButton
+                                                    platform={x.platform}
+                                                    postId={x.postId}
+                                                    className={classes.button}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
                                 :   null}
                             </div>
@@ -283,7 +342,9 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         decimals: token_decimal,
                                         amount: total_amounts,
                                     }}
-                                    chainId={Number(chain_id) as ChainId}
+                                    chainId={chain_id}
+                                    totalAmount={total_amounts}
+                                    createdAt={create_time}
                                 />
                             :   null}
                         </section>
@@ -291,7 +352,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                             {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography variant="body1" className={classes.claimFooterInfo}>
-                                        <RedPacketTrans.history_claimed
+                                        <RedPacketTrans.history_claimed_firefly
                                             components={{
                                                 span: <span />,
                                             }}
@@ -343,7 +404,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                             {handleOpenDetails ?
                                 <button
                                     type="button"
-                                    className={classes.moreDetails}
+                                    className={cx(classes.moreDetails, classes.button)}
                                     onClick={() => {
                                         handleOpenDetails(redpacket_id)
                                     }}>

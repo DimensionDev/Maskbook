@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -51,6 +51,8 @@ interface Props {
     tokenInfo: TokenInfo
     redpacketMsg?: string
     chainId: ChainId
+    totalAmount?: string
+    createdAt?: number
 }
 
 export const FireflyRedPacketActionButton = memo(function FireflyRedPacketActionButton(props: Props) {
@@ -64,15 +66,17 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
         tokenInfo,
         redpacketMsg,
         chainId,
+        totalAmount,
+        createdAt,
     } = props
     const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
     const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
 
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid)
+    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
     const statusToTransMap = {
-        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.share(),
+        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.send(),
         [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
         [FireflyRedPacketAPI.RedPacketStatus.Empty]: t.empty(),
         [FireflyRedPacketAPI.RedPacketStatus.Refund]: t.expired(),
@@ -81,7 +85,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
     }
 
     const handleShare = useCallback(() => {
-        if (!shareFrom || !themeId) return
+        if (!shareFrom || !themeId || !createdAt) return
 
         const payloadImage = FireflyRedPacket.getPayloadUrlByThemeId(
             themeId,
@@ -100,12 +104,16 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
                     name: shareFrom,
                     message: redpacketMsg,
                 },
-                chainId,
+                creation_time: createdAt * 1000,
                 token: {
-                    amount: tokenInfo.amount,
+                    chainId,
                     symbol: tokenInfo.symbol,
                     decimals: tokenInfo.decimals,
                 },
+                contract_address: rpid,
+                rpid,
+                shares: totalAmount,
+                total: tokenInfo.amount,
             },
             { claimRequirements: claim_strategy, payloadImage },
         )
@@ -116,10 +124,13 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
             handleShare()
         }
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
-            await refundCallback()
-            setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+            console.log(await refundCallback())
         }
     }, [_redpacketStatus])
+
+    useEffect(() => {
+        if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+    }, [refunded])
 
     const redpacketStatus = updatedStatus || _redpacketStatus
 

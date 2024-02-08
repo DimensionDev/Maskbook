@@ -38,6 +38,7 @@ import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
+import { RedPacketPast } from './RedPacketPast.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -102,7 +103,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const { account, chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const definition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
-    const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('sent', 'claimed')
+    const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('claimed', 'sent')
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)
 
@@ -287,7 +288,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [])
 
     return (
-        <TabContext value={showHistory ? currentHistoryTab : currentTab}>
+        <TabContext value={showHistory && isFirefly ? currentHistoryTab : currentTab}>
             <InjectedDialog
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                 open={props.open}
@@ -295,10 +296,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 titleTail={titleTail}
                 titleTabs={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
-                        showHistory ?
+                        showHistory && isFirefly ?
                             <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
-                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
                                 <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
+                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
@@ -317,8 +318,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         step === CreateRedPacketPageStep.NewRedPacketPage &&
                         !openNFTConfirmDialog &&
                         !openSelectNFTDialog &&
-                        !showHistory &&
-                        !showDetails
+                        ((!showHistory && !showDetails) || !isFirefly)
                     ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
@@ -375,7 +375,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory && !showDetails ?
-                                <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
+                                isFirefly ?
+                                    <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
+                                :   <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={handleClose} />
                             :   null}
 
                             {showDetails ?
@@ -408,7 +410,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     :   null}
                     {step === CreateRedPacketPageStep.ClaimRequirementsPage ?
                         <>
-                            <ClaimRequirementsDialog origin={fireflyRpSettings?.requirements} onNext={handleClaimRequirmenetsNext} isFirefly={isFirefly} />
+                            <ClaimRequirementsDialog
+                                origin={fireflyRpSettings?.requirements}
+                                onNext={handleClaimRequirmenetsNext}
+                                isFirefly={isFirefly}
+                            />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />
                         </>
                     :   null}
