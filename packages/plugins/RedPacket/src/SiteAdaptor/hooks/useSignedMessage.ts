@@ -12,7 +12,7 @@ export function useSignedMessage(
     payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,
 ) {
     const rpid = 'rpid' in payload ? payload.rpid : payload.id
-    const password = 'password' in payload ? payload.password : payload.privateKey
+    const password = 'privateKey' in payload ? payload.privateKey : payload.password
     const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
     const author = usePostInfoDetails.author()
     const platform = usePlatformType()
