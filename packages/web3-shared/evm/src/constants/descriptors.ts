@@ -483,7 +483,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
