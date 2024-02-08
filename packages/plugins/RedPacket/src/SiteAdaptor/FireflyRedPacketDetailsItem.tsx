@@ -213,7 +213,11 @@ const PlatformButton = memo(function PlatformButton(props: {
     const { platform, postId, className } = props
     console.log('PlatformButton', platform, postId, className)
     return (
-        <a href={urlcat(SITE_URL, `/post/${platform}/${postId}`)} target="_blank" className={className}>
+        <a
+            href={urlcat(SITE_URL, `/post/${platform}/${postId}`)}
+            target="_blank"
+            className={className}
+            rel="noreferrer noopener">
             {platformIconMap[platform]}
         </a>
     )
