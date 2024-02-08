@@ -38,6 +38,7 @@ import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
+import { RedPacketPast } from './RedPacketPast.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -375,7 +376,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory && !showDetails ?
-                                <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
+                                isFirefly ?
+                                    <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
+                                :   <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={handleClose} />
                             :   null}
 
                             {showDetails ?
@@ -408,7 +411,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     :   null}
                     {step === CreateRedPacketPageStep.ClaimRequirementsPage ?
                         <>
-                            <ClaimRequirementsDialog origin={fireflyRpSettings?.requirements} onNext={handleClaimRequirmenetsNext} isFirefly={isFirefly} />
+                            <ClaimRequirementsDialog
+                                origin={fireflyRpSettings?.requirements}
+                                onNext={handleClaimRequirmenetsNext}
+                                isFirefly={isFirefly}
+                            />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />
                         </>
                     :   null}
