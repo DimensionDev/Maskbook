@@ -221,7 +221,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
 
     const handleShare = useCallback(() => {
-        if (shareText) share?.(shareText, { source })
+        if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
 
     const outdated =
