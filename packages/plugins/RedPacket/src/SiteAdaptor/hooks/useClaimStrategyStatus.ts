@@ -17,7 +17,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
         chainId: payload.chainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
     })
-    const signedMessage = 'password' in payload ? payload.password : payload.privateKey
+    const signedMessage = 'privateKey' in payload ? payload.privateKey : payload.password
     const me = useLastRecognizedIdentity()
     return useQuery({
         enabled: !signedMessage && !!platform,

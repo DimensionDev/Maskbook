@@ -126,6 +126,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const source = usePostInfoDetails.source()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
+    const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
@@ -138,7 +139,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
                 return t.share_on_firefly({
                     context,
-                    sender: payload.sender.name,
+                    sender: handle ?? '',
                     link: link!,
                 })
             }
@@ -161,7 +162,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     t.share_unclaimed_message_official_account(shareTextOption)
                 :   t.share_unclaimed_message_not_twitter(shareTextOption)
         },
-        [payload, link, claimTxHash, t, network?.name, source, isOnFirefly],
+        [payload, link, claimTxHash, t, network?.name, source, isOnFirefly, handle],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {
@@ -220,8 +221,8 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
 
     const handleShare = useCallback(() => {
-        if (shareText) share?.(shareText)
-    }, [shareText])
+        if (shareText) share?.(shareText, { source })
+    }, [shareText, source])
 
     const outdated =
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))

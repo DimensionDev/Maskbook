@@ -15,6 +15,7 @@ export function RedPacketInPost({ payload }: RedPacketProps) {
     useEffect(() => {
         if (!fromUrl) return
         if (!payload.txid && payload.contract_version !== 1) return
+        if (!payload.password) return
         const record: RedPacketRecord = {
             id: payload.contract_version === 1 ? payload.rpid : payload.txid,
             from: fromUrl.toString(),

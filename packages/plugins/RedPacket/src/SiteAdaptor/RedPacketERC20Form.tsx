@@ -408,7 +408,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <WalletConnectedBoundary expectedChainId={chainId} hideRiskWarningConfirmed={isFirefly}>
+                            <WalletConnectedBoundary noGasText={t.no_enough_gas_fees()} expectedChainId={chainId} hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}
