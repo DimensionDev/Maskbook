@@ -245,7 +245,7 @@ export function FireflyRedpacketConfirmDialog({
                                 {
                                     chainId,
                                     contractAddress: fireflySettings.nftHolderContract,
-                                    collectionName: fireflySettings.nftCollectionName
+                                    collectionName: fireflySettings.nftCollectionName,
                                 },
                             ],
                         }
@@ -270,6 +270,40 @@ export function FireflyRedpacketConfirmDialog({
         currentAccount,
     )
 
+    const popover = usePortalShadowRoot((container) => (
+        <Popover
+            open={!!anchorEl}
+            onClose={() => setAnchorEl(null)}
+            anchorEl={anchorEl}
+            container={container}
+            disableScrollLock
+            disableRestoreFocus
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            classes={{ paper: classes.accountList }}>
+            {accounts.map(({ displayName, icon }, index) => {
+                const isChecked = currentAccount && displayName?.toLowerCase() === currentAccount.toLowerCase()
+
+                return (
+                    <Box
+                        key={index}
+                        className={classes.accountListItem}
+                        onClick={() => {
+                            if (!displayName) return
+                            setCurrentAccount(displayName)
+                            setAnchorEl(null)
+                        }}>
+                        <Box display="flex" columnGap={1} flex={1} alignItems="center">
+                            {icon}
+                            <Typography className={classes.accountName}>{formatAccountName(displayName)}</Typography>
+                        </Box>
+                        {isChecked ?
+                            <Radio checked sx={{ p: 0 }} />
+                        :   null}
+                    </Box>
+                )
+            })}
+        </Popover>
+    ))
     if (!settings) return null
 
     return (
@@ -309,7 +343,8 @@ export function FireflyRedpacketConfirmDialog({
                                     value={new BigNumber(price || 0).times(amount)}
                                     formatter={formatCurrency}
                                     options={{ onlyRemainTwoOrZeroDecimal: true }}
-                                />)
+                                />
+                                )
                             </Typography>
                         </Typography>
                     </Box>
@@ -396,43 +431,7 @@ export function FireflyRedpacketConfirmDialog({
                     {t.next_button()}
                 </ActionButton>
             </Box>
-            {usePortalShadowRoot((container) => (
-                <Popover
-                    open={!!anchorEl}
-                    onClose={() => setAnchorEl(null)}
-                    anchorEl={anchorEl}
-                    container={container}
-                    disableScrollLock
-                    disableRestoreFocus
-                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                    classes={{ paper: classes.accountList }}>
-                    {accounts.map(({ displayName, icon }, index) => {
-                        const isChecked = currentAccount && displayName?.toLowerCase() === currentAccount.toLowerCase()
-
-                        return (
-                            <Box
-                                key={index}
-                                className={classes.accountListItem}
-                                onClick={() => {
-                                    if (displayName) {
-                                        setCurrentAccount(displayName)
-                                        setAnchorEl(null)
-                                    }
-                                }}>
-                                <Box display="flex" columnGap={1} flex={1} alignItems="center">
-                                    {icon}
-                                    <Typography className={classes.accountName}>
-                                        {formatAccountName(displayName)}
-                                    </Typography>
-                                </Box>
-                                {isChecked ?
-                                    <Radio checked sx={{ p: 0 }} />
-                                :   null}
-                            </Box>
-                        )
-                    })}
-                </Popover>
-            ))}
+            {popover}
         </>
     )
 }
