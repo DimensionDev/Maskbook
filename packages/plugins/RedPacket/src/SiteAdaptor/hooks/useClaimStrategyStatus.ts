@@ -1,15 +1,14 @@
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { usePlatformType } from './usePlatformType.js'
 import { useQuery, type UseQueryResult } from '@tanstack/react-query'
-import { useLastRecognizedIdentity, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { usePlatformType } from './usePlatformType.js'
 
 type T = UseQueryResult
 export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacketNftJSONPayload) {
     const platform = usePlatformType()
-    const author = usePostInfoDetails.author()
     const { pluginID } = useNetworkContext()
     const rpid = 'rpid' in payload ? payload.rpid : payload.id
 
@@ -21,7 +20,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
     const me = useLastRecognizedIdentity()
     return useQuery({
         enabled: !signedMessage && !!platform,
-        queryKey: ['red-packet', 'claim-strategy', rpid, platform, author?.userId, account, me],
+        queryKey: ['red-packet', 'claim-strategy', rpid, platform, account, me],
         queryFn: async () => {
             if (!platform) return null
             return FireflyRedPacket.checkClaimStrategyStatus({
@@ -29,7 +28,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
                 profile: {
                     needLensAndFarcasterHandle: true,
                     platform,
-                    profileId: author?.userId || '',
+                    profileId: me?.profileId,
                     lensToken: me?.lensToken,
                     farcasterMessage: me?.farcasterMessage as HexString,
                     farcasterSigner: me?.farcasterSigner as HexString,

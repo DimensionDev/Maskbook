@@ -999,6 +999,7 @@ export interface IdentityResolved {
     homepage?: string
     identifier?: ProfileIdentifier
     isOwner?: boolean
+    profileId?: string
     /** Firefly only */
     lensToken?: string
     /** Firefly only */
