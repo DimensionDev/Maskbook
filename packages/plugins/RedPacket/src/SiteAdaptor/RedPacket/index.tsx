@@ -20,6 +20,7 @@ import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { getRedPacketCover } from '../utils/getRedPacketCover.js'
 import { OperationFooter } from './OperationFooter.js'
+import { replace } from 'lodash-es'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -239,7 +240,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: payload.total,
             'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
-            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${payload.sender.name.replace('@', '')}`,
+            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${replace(payload.sender.name, '@', '')}`,
             message: payload.sender.message,
         })
     }, [token?.symbol, payload, availability, theme])
