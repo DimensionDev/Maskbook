@@ -232,6 +232,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const cover = useMemo(() => {
         if (!token?.symbol || !theme) return ''
         const name = payload.sender.name
+
         return getRedPacketCover({
             theme,
             symbol: token.symbol,
@@ -240,7 +241,10 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: payload.total,
             'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
-            from: isValidAddress(name) || isValidDomain(name) || name.startsWith('@') ? name : `@${name}`,
+            from:
+                [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (
+                    `@${name}`
+                ),
             message: payload.sender.message,
         })
     }, [token?.symbol, payload, availability, theme])
@@ -279,7 +283,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         </Typography>
                     :   null}
                 </div>
-                <Grow in={showRequirements && !checkingClaimStatus} timeout={250}>
+                <Grow in={showRequirements ? !checkingClaimStatus : null} timeout={250}>
                     <Requirements
                         showResults={!claimedOrEmpty}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}

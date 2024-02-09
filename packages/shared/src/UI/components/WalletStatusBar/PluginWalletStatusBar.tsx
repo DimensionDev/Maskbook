@@ -70,7 +70,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         requiredSupportChainIds,
         requiredSupportPluginID,
         readonlyMode,
-        disableSwitchAccount
+        disableSwitchAccount,
     }) => {
         const t = useSharedTrans()
         const { classes, cx } = useStyles()

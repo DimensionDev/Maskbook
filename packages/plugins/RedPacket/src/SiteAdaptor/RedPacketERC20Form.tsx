@@ -1,4 +1,4 @@
-import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
@@ -84,8 +84,8 @@ const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 14,
         fontWEight: 700,
-        lineHeight: '18px'
-    }
+        lineHeight: '18px',
+    },
 }))
 
 interface RedPacketFormProps {
@@ -237,7 +237,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             chainId,
         },
     )
-    
+
     const { transactionValue, loading: loadingTransactionValue } = useTransactionValue(
         origin?.total,
         gasOption?.gas,
@@ -352,9 +352,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 />
             </div>
             <Box margin={2}>
-                <Typography className={classes.title}>
-                    {t.message()}
-                </Typography>
+                <Typography className={classes.title}>{t.message()}</Typography>
             </Box>
             <Box margin={2}>
                 <InputBase
@@ -409,7 +407,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <WalletConnectedBoundary noGasText={t.no_enough_gas_fees()} expectedChainId={chainId} hideRiskWarningConfirmed={isFirefly}>
+                            <WalletConnectedBoundary
+                                noGasText={t.no_enough_gas_fees()}
+                                expectedChainId={chainId}
+                                hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}

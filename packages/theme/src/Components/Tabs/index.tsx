@@ -211,7 +211,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     setFirstTabId(value)
                 }
             },
-            disabled: child.props.disabled
+            disabled: child.props.disabled,
         }
 
         if (child.type !== Tab) return child

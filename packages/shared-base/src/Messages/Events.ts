@@ -157,13 +157,13 @@ interface SettingsUpdateEvent {
 }
 
 type FireflySocialProfile = {
-    profileId: string;
-    displayName: string;
-    handle: string;
-    fullHandle: string;
-    pfp: string;
-    address?: string;
-    ownedBy?: string;
+    profileId: string
+    displayName: string
+    handle: string
+    fullHandle: string
+    pfp: string
+    address?: string
+    ownedBy?: string
 }
 
 interface FireflyContext {

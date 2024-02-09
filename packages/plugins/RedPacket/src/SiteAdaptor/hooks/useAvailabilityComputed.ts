@@ -61,7 +61,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         recheckClaimStatus,
         checkingClaimStatus: isFetching,
         computed: {
-            canClaim: canClaim,
+            canClaim,
             canRefund: isExpired && !isEmpty && isCreator,
             canSend: !isEmpty && !isExpired && !isRefunded && isCreator,
             isPasswordValid,

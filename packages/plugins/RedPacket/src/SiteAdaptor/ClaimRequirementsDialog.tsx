@@ -1,4 +1,4 @@
-import { Alert, ERC721ContractSelectPanel, SelectNonFungibleContractModal } from '@masknet/shared'
+import { Alert, SelectNonFungibleContractModal } from '@masknet/shared'
 import {
     Box,
     Button,
@@ -8,12 +8,11 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    Select,
     Typography,
 } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useMemo, useState, type ReactElement, type ComponentType } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
 import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -49,7 +48,7 @@ const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) =>
         margin: 0,
     },
     checkbox: {
-        [`& > .MuiBox-root`]: {
+        '& > .MuiBox-root': {
             width: 20,
             height: 20,
         },
@@ -117,7 +116,7 @@ export const REQUIREMENT_ICON_MAP: Record<RequirementType, GeneratedIcon> = {
     [RequirementType.NFTHolder]: Icons.NFTHolder,
 }
 
-export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactElement> = {
+export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactNode> = {
     [RequirementType.Follow]: <Trans ns={PluginID.RedPacket} i18nKey="follow_me" />,
     [RequirementType.Like]: <Trans ns={PluginID.RedPacket} i18nKey="like" />,
     [RequirementType.Repost]: <Trans ns={PluginID.RedPacket} i18nKey="repost" />,

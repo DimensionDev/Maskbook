@@ -86,7 +86,9 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 variant="contained"
                 onClick={nativeTokenBalance.retry}
                 {...props.ActionButtonProps}>
-                {nativeTokenBalance.loading ? t.plugin_wallet_update_gas_fee() : (noGasText ?? t.plugin_wallet_no_gas_fee())}
+                {nativeTokenBalance.loading ?
+                    t.plugin_wallet_update_gas_fee()
+                :   noGasText ?? t.plugin_wallet_no_gas_fee()}
             </ActionButton>
         )
 

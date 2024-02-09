@@ -319,6 +319,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                                 postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload
                                             )?.params?.map((x) => (
                                                 <PlatformButton
+                                                    key={x.postId}
                                                     platform={x.platform}
                                                     postId={x.postId}
                                                     className={classes.button}

@@ -26,7 +26,7 @@ export function isZeroString(str?: string): str is undefined {
     return !str || str === '0'
 }
 
-export const isValidAddress: (address?: string) => boolean = memoize(function isValidAddress(
+export const isValidAddress: (address?: string) => address is string = memoize(function isValidAddress(
     address?: string,
 ): address is string {
     if (!address) return false

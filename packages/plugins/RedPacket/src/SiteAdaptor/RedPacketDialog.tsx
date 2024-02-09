@@ -61,9 +61,6 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
         arrowButton: {
             backgroundColor: theme.palette.mode === 'dark' ? darkBackgroundColor : undefined,
         },
-        paper: {
-            maxHeight: 'unset',
-        },
         placeholder: {
             height: 474,
             boxSizing: 'border-box',

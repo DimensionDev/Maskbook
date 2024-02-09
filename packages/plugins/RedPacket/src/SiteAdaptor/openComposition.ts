@@ -10,7 +10,7 @@ export function openComposition(metadataKey: string, payload: unknown, extraMeta
             initialMetas: {
                 [metadataKey]: payload,
             },
-            pluginMeta: extraMeta
+            pluginMeta: extraMeta,
         },
     })
 }
