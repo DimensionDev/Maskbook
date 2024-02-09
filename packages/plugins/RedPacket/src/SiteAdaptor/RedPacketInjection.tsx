@@ -8,7 +8,7 @@ import type { FireflyContext } from '../types.js'
 export function RedPacketInjection() {
     const [open, setOpen] = useState(false)
     const [source, setSource] = useState<PluginID>()
-    
+
     const [fireflyContext, setFireflyContext] = useState<FireflyContext>()
     useEffect(() => {
         return CrossIsolationMessages.events.redpacketDialogEvent.on(({ open, source: pluginId, fireflyContext }) => {

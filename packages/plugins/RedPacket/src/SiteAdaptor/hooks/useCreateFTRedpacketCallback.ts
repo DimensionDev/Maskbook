@@ -45,12 +45,12 @@ export function useCreateFTRedpacketCallback(
             :   transactionValue
         :   (settings?.total as string)
 
-        const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
-        const formatAvg = formatBalance(
-            new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
-            settings?.token?.decimals ?? 18,
-            { significant: isNativeToken ? 3 : 0 },
-        )
+    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
+    const formatAvg = formatBalance(
+        new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
+        settings?.token?.decimals ?? 18,
+        { significant: isNativeToken ? 3 : 0 },
+    )
 
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         chainId,
@@ -106,7 +106,6 @@ export function useCreateFTRedpacketCallback(
         onCreated?.(payload.current)
     }, [createCallback, settings, onCreated, currentAccount])
 
-
     const payload = useRef<RedPacketJSONPayload>({
         network: EVMChainResolver.chainName(chainId),
     } as RedPacketJSONPayload)
@@ -123,7 +122,6 @@ export function useCreateFTRedpacketCallback(
         payload.current.contract_version = contract_version
         payload.current.network = EVMChainResolver.networkType(chainId)
     }, [chainId, networkType, contract_version])
-    
 
     return {
         createRedpacket,

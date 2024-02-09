@@ -1,4 +1,4 @@
-import type { NetworkType } from "@masknet/web3-shared-evm";
+import type { NetworkType } from '@masknet/web3-shared-evm'
 
 export enum NFTSelectOption {
     All = 'All',
@@ -10,9 +10,8 @@ export enum RequirementType {
     Like = 'Like',
     Repost = 'Repost',
     Comment = 'Comment',
-    NFTHolder = 'NFTHolder'
+    NFTHolder = 'NFTHolder',
 }
-
 
 export type FireflyRedpacketSettings = {
     requirements: RequirementType[]
@@ -20,17 +19,15 @@ export type FireflyRedpacketSettings = {
     nftCollectionName?: string
 }
 
-
 export type FireflySocialProfile = {
-    profileId: string;
-    displayName: string;
-    handle: string;
-    fullHandle: string;
-    pfp: string;
-    address?: string;
+    profileId: string
+    displayName: string
+    handle: string
+    fullHandle: string
+    pfp: string
+    address?: string
     ownedBy?: string
 }
-
 
 export interface FireflyContext {
     currentLensProfile?: FireflySocialProfile | null
@@ -40,5 +37,5 @@ export interface FireflyContext {
 export enum FireflyAccountSource {
     Lens = 'Lens',
     Farcaster = 'Farcaster',
-    Wallet = 'Wallet'
+    Wallet = 'Wallet',
 }
