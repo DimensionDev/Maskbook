@@ -198,9 +198,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
-            share,
+            share: text => share?.(text, source ? source : undefined),
         })
-    }, [token, redPacketContract, payload.rpid, account, claimedShareText])
+    }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
     const onClaimOrRefund = useCallback(async () => {
