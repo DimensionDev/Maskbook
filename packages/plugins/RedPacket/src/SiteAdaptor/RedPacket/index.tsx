@@ -8,7 +8,7 @@ import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-ho
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId, formatEthereumAddress, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
@@ -20,7 +20,6 @@ import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { getRedPacketCover } from '../utils/getRedPacketCover.js'
 import { OperationFooter } from './OperationFooter.js'
-import { replace } from 'lodash-es'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -198,7 +197,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 name: `$${token?.symbol}`,
             }),
             title: t.lucky_drop(),
-            share: text => share?.(text, source ? source : undefined),
+            share: (text) => share?.(text, source ? source : undefined),
         })
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
 
@@ -232,6 +231,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const theme = useCoverTheme(payload.rpid)
     const cover = useMemo(() => {
         if (!token?.symbol || !theme) return ''
+        const name = payload.sender.name
         return getRedPacketCover({
             theme,
             symbol: token.symbol,
@@ -240,7 +240,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: payload.total,
             'remaining-amount': availability?.balance ?? payload.total,
             decimals: token.decimals,
-            from: isValidAddress(payload.sender.name) || isValidDomain(payload.sender.name) ? payload.sender.name : `@${replace(payload.sender.name, '@', '')}`,
+            from: isValidAddress(name) || isValidDomain(name) || name.startsWith('@') ? name : `@${name}`,
             message: payload.sender.message,
         })
     }, [token?.symbol, payload, availability, theme])
