@@ -199,7 +199,7 @@ export namespace FireflyRedPacketAPI {
         profile: {
             needLensAndFarcasterHandle?: boolean
             platform: PlatformType
-            profileId: string
+            profileId?: string
             lensToken?: string
             farcasterSignature?: HexString
             farcasterSigner?: HexString
