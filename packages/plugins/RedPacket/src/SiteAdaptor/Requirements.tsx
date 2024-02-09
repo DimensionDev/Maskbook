@@ -134,7 +134,7 @@ function NFTList({ nfts }: NFTListProps) {
                 const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
                 const name = nft.collectionName || data.name || data.symbol
                 return (
-                    <Link href={url!} target="_blank" className={classes.textLink}>
+                    <Link key={index} href={url!} target="_blank" className={classes.textLink}>
                         {name}
                     </Link>
                 )
@@ -205,7 +205,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
             if (status.type === 'postReaction') {
                 // discard `collect` for now
                 const conditions = status.result.conditions.filter((x) => x.key !== 'collect')
-                let hasRepost = !!conditions.find((x) => (x.key === 'quote' || x.key === 'repost') && x.value)
+                const hasRepost = !!conditions.find((x) => (x.key === 'quote' || x.key === 'repost') && x.value)
                 let hasRepostCondition = false
                 return conditions
                     .reduce((arr: typeof conditions, condition) => {

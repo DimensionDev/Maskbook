@@ -1,28 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
-import {
-    useChainContext,
-    useBalance,
-    useNativeToken,
-    useNativeTokenAddress,
-    useNativeTokenPrice,
-    useWallet,
-} from '@masknet/web3-hooks-base'
-import { type GasConfig, useRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
-import { type RedPacketRecord, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import { type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
+import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '@masknet/shared'
-import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
-import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
-import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
+import { isZero } from '@masknet/web3-shared-base'
+import { type RedPacketSettings } from './hooks/useCreateCallback.js'
 import { useRedPacketTrans } from '../locales/index.js'
-import { RedPacketRPC } from '../messages.js'
 import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallback.js'
 
 const useStyles = makeStyles()((theme) => ({

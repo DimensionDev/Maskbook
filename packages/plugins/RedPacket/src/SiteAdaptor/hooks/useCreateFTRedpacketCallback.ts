@@ -1,4 +1,4 @@
-import { isNativeTokenAddress, type GasConfig, useRedPacketConstants, NetworkType } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type GasConfig, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useCreateParams, type RedPacketSettings, useCreateCallback } from './useCreateCallback.js'
 import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'

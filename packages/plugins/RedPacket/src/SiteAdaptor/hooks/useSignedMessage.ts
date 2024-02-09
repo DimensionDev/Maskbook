@@ -41,7 +41,7 @@ export function useSignedMessage(
             if (!profile) return ''
             return FireflyRedPacket.createClaimSignature({
                 rpid,
-                profile: profile,
+                profile,
                 wallet: {
                     address: account,
                 },

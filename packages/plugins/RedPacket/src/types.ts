@@ -1,5 +1,3 @@
-import type { NetworkType } from '@masknet/web3-shared-evm'
-
 export enum NFTSelectOption {
     All = 'All',
     Partial = 'Partial',

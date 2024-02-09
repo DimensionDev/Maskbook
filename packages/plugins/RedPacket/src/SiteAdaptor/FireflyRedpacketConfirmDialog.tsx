@@ -304,6 +304,7 @@ export function FireflyRedpacketConfirmDialog({
             })}
         </Popover>
     ))
+
     if (!settings) return null
 
     return (

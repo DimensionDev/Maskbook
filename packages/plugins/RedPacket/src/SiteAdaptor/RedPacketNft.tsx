@@ -383,7 +383,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     claim={claim}
                 />
             )}
-            <Grow in={showRequirements && !checkingClaimStatus} timeout={250}>
+            <Grow in={showRequirements ? !checkingClaimStatus : null} timeout={250}>
                 <Requirements
                     className={classes.requirements}
                     statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
