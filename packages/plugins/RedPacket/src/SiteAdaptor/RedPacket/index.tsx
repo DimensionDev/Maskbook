@@ -283,7 +283,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         </Typography>
                     :   null}
                 </div>
-                <Grow in={showRequirements ? !checkingClaimStatus : null} timeout={250}>
+                <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
                     <Requirements
                         showResults={!claimedOrEmpty}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
