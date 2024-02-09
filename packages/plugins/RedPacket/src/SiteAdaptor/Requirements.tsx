@@ -6,7 +6,7 @@ import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
-import { sortBy } from 'lodash-es'
+import { first, sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
@@ -152,10 +152,13 @@ function FollowProfile({ payload, platform }: FollowProfileProps) {
     const { classes } = useStyles()
     return (
         <span>
-            {payload.map(({ handle }) => (
+            {payload.map(({ handle, profileId, platform }) => (
                 <Link
                     key={handle}
-                    href={resolveProfileUrl(platform, handle)}
+                    href={resolveProfileUrl(
+                        platform,
+                        platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : handle,
+                    )}
                     target="_blank"
                     className={classes.textLink}>
                     @{handle}
