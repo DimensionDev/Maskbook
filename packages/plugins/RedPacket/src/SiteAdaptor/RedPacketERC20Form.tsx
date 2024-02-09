@@ -390,7 +390,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
                     actualPluginID={pluginID}
-                    readonlyMode={isFirefly}>
+                    disableSwitchAccount={isFirefly}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
                         balance={balance}
