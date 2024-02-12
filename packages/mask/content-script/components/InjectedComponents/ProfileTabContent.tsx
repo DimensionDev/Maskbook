@@ -23,7 +23,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     SocialAccountList,
-    useCollectionByTwitterHandler,
+    useCollectionByTwitterHandle,
     addressSorter,
     WalletSettingsEntry,
 } from '@masknet/shared'
@@ -295,9 +295,8 @@ function Content(props: ProfileTabContentProps) {
         setMenuOpen(false)
     }
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(
-        profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '',
-    )
+    const collectionList =
+        useCollectionByTwitterHandle(profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '') ?? EMPTY_LIST
 
     const { value: spaceList = EMPTY_LIST } = useSnapshotSpacesByTwitterHandler(
         profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
