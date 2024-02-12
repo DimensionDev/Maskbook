@@ -206,7 +206,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                 onAddressChange={onAddressChange}
                 currentAddress={address}
                 socialAccounts={socialAccounts}
-                collectionList={collectionList ?? EMPTY_LIST}
+                collectionList={collectionList || EMPTY_LIST}
                 onTokenChange={(currentResult) => {
                     setWalletMenuOpen(false)
                     if (!anchorBounding) return

@@ -4,7 +4,7 @@ import { useCollectionByTwitterHandle } from '@masknet/shared'
 import { BooleanPreference, MaskMessages, PluginID, ProfileTabs } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import { useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
 import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import Color from 'color'
 import { useEffect, useRef, useState } from 'react'
@@ -244,7 +244,7 @@ function ProfileTabForTokenAndPersona() {
 function ProfileTabForDAO() {
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
-    const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
+    const { data: spaceList, isPending } = useSnapshotSpacesByTwitterHandle(currentVisitingUserId)
 
     const { value: snapshotDisabled } = useAsync(() => {
         return Services.Settings.getPluginMinimalModeEnabled(PluginID.Snapshot)
@@ -258,7 +258,7 @@ function ProfileTabForDAO() {
         })
     }, [])
 
-    return hidden || loading || !spaceList?.length ?
+    return hidden || isPending || !spaceList?.length ?
             null
         :   <ProfileTab
                 title="DAO"
