@@ -31,8 +31,12 @@ class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
         if (!result) return
 
         methodId = methodId.toLowerCase()
+        const methodIdLength = methodId.length
         return result
-            .filter((x) => x.methodId?.toLowerCase() === methodId && isSameAddress(x.from, senderAddress))
+            .filter((x) => {
+                const txMethodId = x.methodId || x.input?.slice(0, methodIdLength)
+                return txMethodId?.toLowerCase() === methodId && isSameAddress(x.from, senderAddress)
+            })
             .map((x) => ({ ...x, chainId }))
     }
 }
