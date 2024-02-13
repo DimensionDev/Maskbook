@@ -16,28 +16,24 @@ class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
         if (!senderAddress || !contractAddress || !startBlock || !endBlock || !methodId) return
 
-        try {
-            const { result } = await fetchJSON<{ result: Array<Transaction<ChainId, SchemaType>> }>(
-                urlcat(EtherscanURL.from(chainId), {
-                    action: 'txlist',
-                    module: 'account',
-                    sort: 'desc',
-                    startBlock,
-                    endBlock,
-                    address: contractAddress,
-                    chain_id: chainId,
-                }),
-            )
+        const { result } = await fetchJSON<{ result: Array<Transaction<ChainId, SchemaType>> }>(
+            urlcat(EtherscanURL.from(chainId), {
+                action: 'txlist',
+                module: 'account',
+                sort: 'desc',
+                startBlock,
+                endBlock,
+                address: contractAddress,
+                chain_id: chainId,
+            }),
+        )
 
-            if (!result) return
+        if (!result) return
 
-            methodId = methodId.toLowerCase()
-            return result
-                .filter((x) => x.methodId?.toLowerCase() === methodId && isSameAddress(x.from, senderAddress))
-                .map((x) => ({ ...x, chainId }))
-        } catch {
-            return
-        }
+        methodId = methodId.toLowerCase()
+        return result
+            .filter((x) => x.methodId?.toLowerCase() === methodId && isSameAddress(x.from, senderAddress))
+            .map((x) => ({ ...x, chainId }))
     }
 }
 export const EtherscanRedPacket = new EtherscanRedPacketAPI()
