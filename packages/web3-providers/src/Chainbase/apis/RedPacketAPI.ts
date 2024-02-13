@@ -7,14 +7,30 @@ import {
     createPageable,
     pageableToIterator,
 } from '@masknet/shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TRANSACTIONS_BY_CONTRACT_METHOD_ENDPOINT, MAX_SIZE_PER_PAGE } from '../constants.js'
 import type { Tx } from '../types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { RedPacketBaseAPI } from '../../entry-types.js'
 
-class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
-    async getHistoryTransactions(
+export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
+    /**
+     * @see https://docs.chainbase.com/reference/supported-chains
+     */
+    static isSupportedChain(chainId: ChainId) {
+        const supported = [
+            ChainId.Mainnet,
+            ChainId.Matic,
+            ChainId.BSC,
+            ChainId.Avalanche,
+            ChainId.Arbitrum,
+            ChainId.Base,
+            /** zkSync */ 324,
+        ].includes(chainId)
+        console.error('Unsupported chain by ChainBase, see https://docs.chainbase.com/reference/supported-chains')
+        return supported
+    }
+    static async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
         contractAddress: string,
