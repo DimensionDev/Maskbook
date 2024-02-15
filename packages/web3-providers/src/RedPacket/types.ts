@@ -46,6 +46,10 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     chainId?: ChainId
     network?: string
     token?: FungibleToken<ChainId, SchemaType>
+    /**
+     * For contract_version === 1, payload has no token but token_type
+     */
+    token_type?: 0 | number
     total_remaining?: string
 }
 
