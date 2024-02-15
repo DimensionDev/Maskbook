@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     env:
       WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
       MASK_SENTRY_DSN: ${{ secrets.MASK_SENTRY_DSN }}
