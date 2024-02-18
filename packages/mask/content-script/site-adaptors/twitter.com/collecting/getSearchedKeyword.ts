@@ -5,6 +5,7 @@
  */
 const SAFE_PATHNAMES_ON_TWITTER = [
     '/compose/tweet',
+    '/compose/post',
     '/search-advanced',
     '/settings/trends',
     '/settings/search',
