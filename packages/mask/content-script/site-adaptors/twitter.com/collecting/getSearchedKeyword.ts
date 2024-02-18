@@ -4,7 +4,9 @@
  * Otherwise, if a pathname not in this list the keyword will be cleaned and remove relative components from DOM.
  */
 const SAFE_PATHNAMES_ON_TWITTER = [
+    // redirect to /compose/post
     '/compose/tweet',
+    '/compose/post',
     '/search-advanced',
     '/settings/trends',
     '/settings/search',

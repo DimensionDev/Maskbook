@@ -13,7 +13,7 @@ export function injectBannerAtTwitter(signal: AbortSignal) {
     })
     injectBanner(
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
-        { signal, missingReportRule: { name: 'Setup prompt', rule: 'https://twitter.com/compose/tweet' } },
+        { signal, missingReportRule: { name: 'Setup prompt', rule: 'https://twitter.com/compose/post' } },
     )
 }
 
