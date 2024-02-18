@@ -18,9 +18,7 @@ class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaT
         methodId: string,
         fromBlock: number,
         toBlock: number,
-    ): Promise<RedPacketJSONPayloadFromChain[] | undefined> {
-        if (!senderAddress || !contractAddress || !fromBlock || !toBlock || !methodId) return
-
+    ): Promise<RedPacketJSONPayloadFromChain[]> {
         const logs = await EVMWeb3Readonly.getWeb3({ chainId }).eth.getPastLogs({
             topics: [CREATE_LUCKY_DROP_TOPIC],
             address: contractAddress,

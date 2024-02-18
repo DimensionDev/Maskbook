@@ -1,23 +1,24 @@
-import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
-import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
+import { attemptUntil, type NonFungibleCollection, type Transaction } from '@masknet/web3-shared-base'
+import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { mapKeys, range, sortBy } from 'lodash-es'
+import asyncPool from 'tiny-async-pool'
+import urlcat from 'urlcat'
+import type { AbiItem } from 'web3-utils'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacket } from '../Etherscan/index.js'
-import { ContractRedPacket } from './api.js'
-import {
-    type RedPacketJSONPayloadFromChain,
-    type NftRedPacketJSONPayload,
-    type CreateNFTRedpacketParam,
-} from './types.js'
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { BaseHubOptions, RedPacketBaseAPI } from '../entry-types.js'
+import { ContractRedPacket } from './api.js'
+import {
+    type CreateNFTRedpacketParam,
+    type NftRedPacketJSONPayload,
+    type RedPacketJSONPayloadFromChain,
+} from './types.js'
 
 function toNumber(val: any) {
     if (typeof val.toNumber === 'function') return val.toNumber()
@@ -46,16 +47,26 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     )
                     return this.parseRedPacketCreationTransactions(transactions, senderAddress)
                 },
-                () => {
-                    // block range might be too large
-                    return ContractRedPacket.getHistories(
-                        chainId,
-                        senderAddress,
-                        contractAddress,
-                        methodId,
-                        fromBlock,
-                        endBlock,
-                    )
+                async () => {
+                    if (!senderAddress || !contractAddress || !fromBlock || !endBlock || !methodId) return
+                    const step = 10000
+                    const blocks = range(fromBlock, endBlock, step)
+                    const results: RedPacketJSONPayloadFromChain[] = []
+                    const run = (from: number) => {
+                        return ContractRedPacket.getHistories(
+                            chainId,
+                            senderAddress,
+                            contractAddress,
+                            methodId,
+                            from,
+                            Math.min(from + step, endBlock),
+                        )
+                    }
+                    for await (const history of asyncPool(5, blocks, run)) {
+                        if (history.length) results.push(...history)
+                    }
+
+                    return sortBy(results, (x) => -x.block_number!)
                 },
             ],
             [],

@@ -3027,6 +3027,9 @@ importers:
       immer:
         specifier: ^10.0.2
         version: 10.0.2
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       lru-cache:
         specifier: ^10.0.0
         version: 10.0.0
@@ -3036,6 +3039,9 @@ importers:
       socket.io-client:
         specifier: 2.4.0
         version: 2.4.0
+      tiny-async-pool:
+        specifier: ^2.1.0
+        version: 2.1.0
       twitter-text:
         specifier: ^3.1.0
         version: 3.1.0
@@ -3070,6 +3076,9 @@ importers:
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
+      '@types/tiny-async-pool':
+        specifier: ^2.0.3
+        version: 2.0.3
       '@types/twitter-text':
         specifier: ^3.1.7
         version: 3.1.7
@@ -9971,6 +9980,10 @@ packages:
   /@types/stack-utils@2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: false
+
+  /@types/tiny-async-pool@2.0.3:
+    resolution: {integrity: sha512-n3l1s538tKo9RBoHs4I3DG/VmD3VYhF5mHcgu1sU4Lq7JCNBtxnpBy3OkWSbZsp5r5QOuplh2UkXXXwufoAuNQ==}
+    dev: true
 
   /@types/tinycolor2@1.4.3:
     resolution: {integrity: sha512-Kf1w9NE5HEgGxCRyIcRXR/ZYtDv0V8FVPtYHwLxl0O+maGX0erE77pQlD0gpP+/KByMZ87mOA79SjifhSB3PjQ==}
@@ -25172,6 +25185,10 @@ packages:
       retimer: 3.0.0
     dev: false
 
+  /tiny-async-pool@2.1.0:
+    resolution: {integrity: sha512-ltAHPh/9k0STRQqaoUX52NH4ZQYAJz24ZAEwf1Zm+HYg3l9OXTWeqWKyYsHu40wF/F0rxd2N2bk5sLvX2qlSvg==}
+    dev: false
+
   /tiny-invariant@1.1.0:
     resolution: {integrity: sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==}
     dev: false
@@ -27761,6 +27778,7 @@ time:
   /@types/node@20.11.9: '2024-01-28T10:06:52.096Z'
   /@types/react-dom@18.2.18: '2023-12-15T23:35:44.650Z'
   /@types/react@18.2.48: '2024-01-15T09:07:06.676Z'
+  /@types/tiny-async-pool@2.0.3: '2023-11-21T01:38:39.238Z'
   /@types/web@0.0.135: '2024-01-11T04:07:01.401Z'
   /@types/webextension-polyfill@0.10.7: '2023-11-22T00:54:20.532Z'
   /@walletconnect/sign-client@2.10.5: '2023-11-15T14:53:29.849Z'
@@ -27769,10 +27787,12 @@ time:
   /core-js-compat@3.35.1: '2024-01-20T22:50:36.723Z'
   /core-js@3.35.1: '2024-01-20T22:50:31.455Z'
   /immer@10.0.2: '2023-05-09T18:24:24.940Z'
+  /lodash-es@4.17.21: '2021-02-20T15:43:35.756Z'
   /react-devtools-inline@4.28.5: '2023-10-25T17:20:37.097Z'
   /react-dom@0.0.0-experimental-8039e6d0b-20231026: '2023-10-26T16:16:45.339Z'
   /react-use@17.4.0: '2022-05-20T12:10:53.726Z'
   /react@0.0.0-experimental-8039e6d0b-20231026: '2023-10-26T16:16:33.985Z'
+  /tiny-async-pool@2.1.0: '2022-05-10T11:07:33.475Z'
   /ts-results-es@4.0.0: '2023-08-08T10:13:15.427Z'
   /typescript@5.3.3: '2023-12-06T19:07:51.067Z'
   /web3-utils@1.10.2: '2023-08-28T12:56:10.815Z'
