@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useCallback, useMemo, useState, Suspense } from 'react'
-=======
 import { useCallback, useContext, useMemo, useState } from 'react'
->>>>>>> develop
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -36,7 +32,6 @@ import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
-<<<<<<< HEAD
 import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
 import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistroyDetails.js'
 import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
@@ -44,9 +39,7 @@ import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
-=======
 import { CompositionTypeContext } from './RedPacketInjection.js'
->>>>>>> develop
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -174,19 +167,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-<<<<<<< HEAD
             if (!isFirefly && senderName) {
                 payload.sender.name === senderName
             }
 
-            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), {
+            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
                 payloadImage,
                 claimRequirements,
             })
-=======
-            senderName && (payload.sender.name = senderName)
-            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType)
->>>>>>> develop
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             handleClose()

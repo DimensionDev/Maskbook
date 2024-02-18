@@ -115,6 +115,7 @@ export const FireflyRedPacketActionButton = memo(function FireflyRedPacketAction
                 shares: totalAmount,
                 total: tokenInfo.amount,
             },
+            undefined,
             { claimRequirements: claim_strategy, payloadImage },
         )
     }, [])
