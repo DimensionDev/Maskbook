@@ -1,5 +1,5 @@
 import type { EncryptPayloadNetwork } from '@masknet/encryption'
-import type { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { IdentityResolved, PostContext, PostContextCreation } from '@masknet/plugin-infra/content-script'
 import type { SiteAdaptorUI } from './SiteAdaptorUI.js'
 
@@ -7,6 +7,8 @@ export declare namespace SiteAdaptor {
     export interface Utils {
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier): URL | null
+        getProfileURL?(profile: ProfileIdentifier): URL | null
+        getShareURL?(text: string): URL | null
         getUserIdentity?(userId: string): Promise<IdentityResolved | undefined>
         /** Is this username valid in this network */
         isValidUsername?(username: string): boolean
@@ -33,6 +35,5 @@ export declare namespace SiteAdaptor {
         shouldActivate(location: Location | URL): boolean
         /** This provider is not ready for production, Mask will not use it in production */
         notReadyForProduction?: boolean
-        shouldLoadMaskSDK?: boolean
     }
 }

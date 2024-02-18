@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
     applyMaskColorVars,
@@ -70,9 +70,10 @@ export default function Dashboard() {
         <>
             <CssBaseline />
             {GlobalCss}
-            {process.env.NODE_ENV === 'development' ?
+            {/* https://github.com/TanStack/query/issues/5417 */}
+            {/* {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null}
+            :   null} */}
             <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
             <Pages />
         </>,

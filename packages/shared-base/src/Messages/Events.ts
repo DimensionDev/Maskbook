@@ -173,6 +173,8 @@ interface FireflyContext {
 
 export interface redpacketDialogEvent {
     open: boolean
+    // CompositionType from '@masknet/plugin-infra/content-script'
+    compositionType?: 'popup' | 'timeline'
     source?: PluginID
     fireflyContext?: FireflyContext
 }

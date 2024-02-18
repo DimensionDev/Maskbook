@@ -4,10 +4,6 @@ import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /^localhost$/i,
-    [EnhanceableSite.App]:
-        process.env.NODE_ENV === 'production' ?
-            /^(app\.mask\.io|app-(beta|stage|test)\.mask\.io|[\w-]*\.?maskbook\.pages\.dev)$/i
-        :   /^localhost$/,
     [EnhanceableSite.Facebook]: /(^|\.)facebook\.com$/i,
     [EnhanceableSite.Twitter]: /(^|\.)twitter\.com$/i,
     [EnhanceableSite.Minds]: /(^|\.)minds\.com$/i,

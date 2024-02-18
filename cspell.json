@@ -3,9 +3,6 @@
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
-        "./packages/app/postcss.config.cjs",
-        "./packages/app/src/styles/index.css",
-        "./packages/app/tailwind.config.cjs",
         "./packages/icons/countries/**",
         "./packages/web3-contracts/types/**",
         ".github",

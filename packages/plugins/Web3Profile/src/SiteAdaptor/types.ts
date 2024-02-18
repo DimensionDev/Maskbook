@@ -13,5 +13,4 @@ export interface LensStorageType {
             expireDate: Date
         }
     >
-    latestProfile?: string
 }

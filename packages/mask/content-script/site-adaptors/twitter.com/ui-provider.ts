@@ -47,6 +47,7 @@ import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 import { injectSwitchLogoButton } from './injection/SwitchLogo.js'
 import { injectCalendar } from './injection/Calendar.js'
 import { injectNameWidget } from './injection/NameWidget/index.js'
+import { injectFarcaster } from './injection/Farcaster/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -146,8 +147,8 @@ const twitterUI: SiteAdaptorUI.Definition = {
             attachImage: pasteImageToCompositionTwitter,
         },
         redirect: {
-            newsFeed: gotoNewsFeedPageTwitter,
-            profilePage: gotoProfilePageTwitter,
+            gotoNewsFeed: gotoNewsFeedPageTwitter,
+            gotoProfilePage: gotoProfilePageTwitter,
         },
         endpoint: {
             publishPost: publishPostTwitter,
@@ -210,6 +211,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         avatar: injectAvatar,
         tips: injectTips,
         lens: injectLens,
+        farcaster: injectFarcaster,
         nameWidget: injectNameWidget,
         profileCard: injectProfileCardHolder,
         switchLogo: injectSwitchLogoButton,

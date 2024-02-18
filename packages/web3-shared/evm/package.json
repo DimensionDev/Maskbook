@@ -28,8 +28,5 @@
     "web3-eth-accounts": "1.10.2",
     "web3-eth-contract": "1.10.2",
     "web3-utils": "1.10.2"
-  },
-  "devDependencies": {
-    "@types/punycode": "^2.1.0"
   }
 }

@@ -583,7 +583,7 @@
     "plugin_infra_descriptor_token_revoke_fail": "crwdns18420:0crwdne18420:0",
     "plugin_infra_descriptor_token_approve_title": "crwdns18422:0crwdne18422:0",
     "plugin_infra_descriptor_token_approve": "crwdns18424:0{{- tokenAmountDescription}}crwdne18424:0",
-    "plugin_infra_descriptor_token_approve_success": "crwdns18426:0{{- tokenAmountDescription}}crwdne18426:0",
+    "plugin_infra_descriptor_token_approve_success": "crwdns18426:0{{- symbol}}crwdne18426:0",
     "plugin_infra_descriptor_token_revoke_but_set_positive_cap": "crwdns20007:0{{- tokenAmountDescription}}crwdnd20007:0{{spender}}crwdne20007:0",
     "plugin_infra_descriptor_token_approve_but_set_zero_cap": "crwdns20009:0{{symbol}}crwdne20009:0",
     "plugin_infra_descriptor_token_fail": "crwdns18428:0crwdne18428:0",

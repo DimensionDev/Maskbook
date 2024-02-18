@@ -1,3 +1,4 @@
+/// <reference path="../../../polyfills/types/dom.d.ts" />
 import { attachListener } from './utils.js'
 
 function init() {

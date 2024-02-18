@@ -10,11 +10,8 @@ export type Output = {
     response: api.MWResponse
 }
 
-async function load() {
-    return import('@dimensiondev/mask-wallet-core/bundle')
-}
 const promise = (async () => {
-    const { request } = await load()
+    const { request } = await import('@dimensiondev/mask-wallet-core/bundle')
     const { api } = await import('@dimensiondev/mask-wallet-core/proto')
     return { request, api }
 })()
@@ -35,3 +32,5 @@ self.addEventListener('message', async (ev: MessageEvent) => {
         self.postMessage(out)
     }
 })
+// see: packages/shared-base/src/onDemandWorker/index.ts
+self.postMessage('Alive')

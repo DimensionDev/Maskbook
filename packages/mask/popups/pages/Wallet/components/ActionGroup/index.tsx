@@ -9,7 +9,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/shared'
+import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'

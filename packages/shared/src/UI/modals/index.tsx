@@ -17,7 +17,6 @@ import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
 import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
 import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
-import { ShareSelectNetworkModal } from './ShareSelectNetwork/index.js'
 
 import { noop } from 'lodash-es'
 import * as modals from './modals.js'
@@ -48,7 +47,6 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
-            <ShareSelectNetworkModal ref={modals.ShareSelectNetworkModal.register} />
         </RootWeb3ContextProvider>
     )
 })

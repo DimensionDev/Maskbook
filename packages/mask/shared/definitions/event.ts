@@ -7,7 +7,6 @@ export const EventMap: Record<EnhanceableSite, EventID> = {
     [EnhanceableSite.Minds]: EventID.EntryPopupSocialAccountConnectMinds,
     [EnhanceableSite.Instagram]: EventID.EntryPopupSocialAccountConnectIns,
     [EnhanceableSite.Localhost]: EventID.Debug,
-    [EnhanceableSite.App]: EventID.Debug,
     [EnhanceableSite.OpenSea]: EventID.Debug,
     [EnhanceableSite.Mirror]: EventID.Debug,
     [EnhanceableSite.Firefly]: EventID.Debug,

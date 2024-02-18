@@ -241,7 +241,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             onChange={(_event, newValue) => onCollectionChange(newValue)}
             isOptionEqualToValue={(op, value) => isSameAddress(op.contract, value.contract)}
             getOptionLabel={(option) => option.name}
-            PopperComponent={ShadowRootPopper}
+            PopperComponent={ShadowRootPopper as any}
             PaperComponent={({ children }) => paperComponent(children)}
             renderOption={(props, option) => (
                 <MenuItem
@@ -288,7 +288,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             isOptionEqualToValue={(op, value) =>
                 isSameAddress(op.address, value.address) && op.tokenId === value.tokenId
             }
-            PopperComponent={ShadowRootPopper}
+            PopperComponent={ShadowRootPopper as any}
             renderOption={(props, option) => (
                 <MenuItem {...props} key={option.tokenId}>
                     <Box className={classes.itemFix}>

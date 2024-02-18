@@ -291,6 +291,28 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: false,
         averageBlockDelay: 10,
     },
+    {
+        ID: `${PLUGIN_ID}_x1_testnet`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.X1_Testnet,
+        type: NetworkType.X1_Testnet,
+        icon: new URL('../assets/x1.png', import.meta.url).href,
+        iconColor: 'rgb(255, 255, 255)',
+        name: 'X1 Testnet',
+        isMainnet: true,
+        averageBlockDelay: 10,
+    },
+    {
+        ID: `${PLUGIN_ID}_x1`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.X1,
+        type: NetworkType.X1_Testnet,
+        icon: new URL('../assets/x1.png', import.meta.url).href,
+        iconColor: 'rgb(255, 255, 255)',
+        name: 'X1',
+        isMainnet: false,
+        averageBlockDelay: 10,
+    },
 ]
 
 export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
@@ -331,7 +353,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: difference(EnhanceableSiteList, [
                 EnhanceableSite.Localhost,
-                EnhanceableSite.App,
+                EnhanceableSite.Firefly,
             ]),
             supportedExtensionSites: ExtensionSiteList,
         },
@@ -411,7 +433,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
                     supportedChainIds: ChainIdList,
                     supportedEnhanceableSites: difference(EnhanceableSiteList, [
                         EnhanceableSite.Localhost,
-                        EnhanceableSite.App,
+                        EnhanceableSite.Firefly,
                     ]),
                     supportedExtensionSites: Flags.wc_enabled ? ExtensionSiteList : [],
                 }
@@ -460,12 +482,14 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         icon: new URL('../assets/okx.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
         downloadLink: 'https://www.okx.com/web3',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_opera`,

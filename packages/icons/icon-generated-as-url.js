@@ -14,6 +14,7 @@ export function cross_sync_url() { return new URL("./brands/CrossSync.svg", impo
 export function cyber_connect_url() { return new URL("./brands/CyberConnect.svg", import.meta.url).href }
 export function danger_url() { return new URL("./brands/Danger.svg", import.meta.url).href }
 export function danger_outline_url() { return new URL("./brands/DangerOutline.svg", import.meta.url).href }
+export function dark_lens_url() { return new URL("./brands/DarkLens.svg", import.meta.url).href }
 export function debank_url() { return new URL("./brands/Debank.svg", import.meta.url).href }
 export function discord_url() { return new URL("./brands/Discord.svg", import.meta.url).href }
 export function discord_round_url() { return new URL("./brands/DiscordRound.svg", import.meta.url).href }

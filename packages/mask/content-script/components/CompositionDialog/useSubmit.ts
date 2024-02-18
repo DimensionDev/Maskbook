@@ -1,6 +1,6 @@
 import Services from '#services'
 import { encodeByNetwork } from '@masknet/encryption'
-import { PluginID, Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
+import { PluginID, PostIdentifier, Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -58,7 +58,17 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                         reason,
                     },
                 )
-                if (postId) location.reload()
+                const postIdentifier =
+                    lastRecognizedIdentity.identifier && postId ?
+                        new PostIdentifier(lastRecognizedIdentity.identifier, postId)
+                    :   undefined
+
+                if (postIdentifier) {
+                    const postUrl = activatedSiteAdaptorUI.utils.getPostURL?.(postIdentifier)
+                    if (postUrl) location.assign(postUrl)
+                } else if (postId) {
+                    location.reload()
+                }
             } else {
                 if (encode === 'image') {
                     if (!mediaObject) throw new Error('Failed to create image payload.')

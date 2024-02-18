@@ -1,7 +1,7 @@
 import { memo, useState, useCallback, useMemo, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
-import { PlatformAvatar, WalletSettingCard } from '@masknet/shared'
+import { PlatformAvatar, WalletSettingsCard } from '@masknet/shared'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
@@ -219,7 +219,7 @@ export const ProfileCard = memo(function ProfileCard({
                                 const checked = listingAddresses.includes(proof.identity)
                                 const fallbackName = resolveNextIDPlatformWalletName(proof.platform)
                                 return (
-                                    <WalletSettingCard
+                                    <WalletSettingsCard
                                         key={proof.identity}
                                         wallet={proof}
                                         fallbackName={`${fallbackName} ${walletProofs.length - i}`}

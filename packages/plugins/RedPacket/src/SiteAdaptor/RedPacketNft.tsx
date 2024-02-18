@@ -1,6 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { makeStyles, ActionButton, ShadowRootTooltip, useDetectOverflow, useCustomSnackbar } from '@masknet/theme'
+import { type ChainId } from '@masknet/web3-shared-evm'
+import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import { Button, Card, Grow, Typography } from '@mui/material'
 import {
     AssetPreviewer,
     ChainBoundary,
@@ -11,7 +16,6 @@ import {
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, ShadowRootTooltip, makeStyles, useDetectOverflow } from '@masknet/theme'
 import {
     useChainContext,
     useNetwork,
@@ -19,12 +23,8 @@ import {
     useNonFungibleAsset,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
-import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Button, Card, Grow, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
 import { Requirements } from './Requirements.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
@@ -292,6 +292,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         isFetching: checkingClaimStatus,
     } = useClaimStrategyStatus(payload)
     const claimStrategyStatus = strategyStatusData?.data
+    const { showSnackbar } = useCustomSnackbar()
     const claim = useCallback(async () => {
         const { data: newData } = await recheckClaimStatus()
         if (newData?.data.canClaim === false) {
@@ -302,6 +303,10 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         await checkResult()
         if (typeof hash === 'string') {
             retryAvailability()
+        } else if (hash instanceof Error) {
+            showSnackbar(hash.message, {
+                variant: 'error',
+            })
         }
     }, [claimCallback, retryAvailability, recheckClaimStatus])
 
@@ -380,7 +385,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     isClaiming={isClaiming}
                     claimed={availability.isClaimed}
                     onShare={onShare}
-                    claim={claim}
+                    onClaim={claim}
                 />
             )}
             <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
@@ -397,13 +402,13 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 interface OperationFooterProps {
     claimed: boolean
     isClaiming: boolean
-    onShare(): void
-    claim(): Promise<void>
     chainId: ChainId
+    onShare(): void
+    onClaim(): Promise<void>
 }
 
-function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: OperationFooterProps) {
-    const { classes } = useStyles({ outdated: false })
+function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: OperationFooterProps) {
+    const { classes } = useStyles({ claimed, outdated: false })
     const t = useRedPacketTrans()
 
     return (
@@ -435,7 +440,7 @@ function OperationFooter({ claimed, onShare, chainId, claim, isClaiming }: Opera
                                 variant="roundedDark"
                                 loading={isClaiming}
                                 disabled={isClaiming}
-                                onClick={claim}
+                                onClick={onClaim}
                                 className={classes.button}
                                 fullWidth>
                                 {isClaiming ? t.claiming() : t.claim()}

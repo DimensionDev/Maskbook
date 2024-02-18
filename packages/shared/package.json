@@ -51,9 +51,7 @@
     "react-use": "^17.4.0",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
-    "remarkable": "^2.0.1",
     "unstated-next": "^1.1.0",
-    "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "web3-core-helpers": "1.10.2",
     "web3-utils": "1.10.2",
@@ -61,7 +59,6 @@
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.2",
-    "@types/remarkable": "^2.0.3",
     "@types/use-subscription": "^1.0.0"
   }
 }

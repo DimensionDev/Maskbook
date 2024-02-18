@@ -5,6 +5,7 @@ import type { FireflyConfigAPI } from '../entry-types.js'
 
 const BASE_URL = 'https://api.dimension.im/v1'
 const TWITTER_HANDLER_VERIFY_URL = 'https://twitter-handler-proxy.r2d2.to'
+const FIREFLY_BASE_URL = 'https://api.firefly.land'
 
 export class FireflyConfig {
     static async getLensByTwitterId(
@@ -30,6 +31,17 @@ export class FireflyConfig {
             }),
         )
         if ('error' in response) return []
+        return response.data
+    }
+
+    /**
+     * @see https://www.notion.so/mask/v2-wallet-profile-f1cc2b3cd9dc49119cf493ae8a59dde9?pvs=4
+     */
+    static async getUnionProfile(
+        profileOptions: FireflyConfigAPI.UnionProfileOptions,
+    ): Promise<FireflyConfigAPI.UnionProfile> {
+        const url = urlcat(FIREFLY_BASE_URL, 'v2/wallet/profile', profileOptions)
+        const response = await fetchJSON<FireflyConfigAPI.UnionProfileResponse>(url)
         return response.data
     }
 }

@@ -9,7 +9,7 @@ export function getEditorContent() {
 }
 
 export function isCompose() {
-    return globalThis.location.pathname.includes('compose')
+    return globalThis.location.pathname === '/compose/tweet'
 }
 
 export function hasFocus(x: LiveSelector<HTMLElement, true>) {

@@ -1,5 +1,17 @@
 # @masknet/encryption
 
+## 0.4.1
+
+### Patch Changes
+
+-   a831a2b05: fix: firefly preset
+
+## 0.4.0
+
+### Minor Changes
+
+-   180c0ae15: add preset 2023_Firefly
+
 ## 0.3.1
 
 ### Patch Changes

@@ -3,9 +3,10 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { LensPopup } from './components/LensPopup.js'
-import { FollowLensDialog } from './components/FollowLensDialog.js'
+import { LensPopup } from './components/Lens/LensPopup.js'
+import { FollowLensDialog } from './components/Lens/FollowLensDialog.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
+import { FarcasterPopup } from './components/Farcaster/FarcasterPopup.js'
 
 export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjection() {
     const [profileOpen, setProfileOpen] = useState(false)
@@ -39,6 +40,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             :   null}
 
             <LensPopup />
+            <FarcasterPopup />
         </>
     )
 })

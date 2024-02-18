@@ -675,6 +675,54 @@
         ]
     },
     {
+        "chainId": 196,
+        "type": "X1",
+        "name": "X1",
+        "fullName": "X1",
+        "network": "testnet",
+        "shortName": "x1",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 196,
+            "name": "OKB",
+            "symbol": "OKB",
+            "decimals": 18,
+            "logoURL": "https://static.okx.com/cdn/wallet/logo/okb.png?x-oss-process=image/format,webp/ignore-error,1"
+        },
+        "infoURL": "https://www.okx.com/web3",
+        "explorers": [
+            {
+                "name": "X1 explorer",
+                "url": "https://www.okx.com/explorer/x1",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
+        "chainId": 195,
+        "type": "X1",
+        "name": "X1 Testnet",
+        "fullName": "X1 Testnet",
+        "network": "mainnet",
+        "shortName": "x1",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 195,
+            "name": "OKB",
+            "symbol": "OKB",
+            "decimals": 18,
+            "logoURL": "https://static.okx.com/cdn/wallet/logo/okb.png?x-oss-process=image/format,webp/ignore-error,1"
+        },
+        "infoURL": "https://www.okx.com/web3",
+        "explorers": [
+            {
+                "name": "X1 explorer",
+                "url": "https://www.okx.com/explorer/x1-test",
+                "standard": "EIP3091"
+            }
+        ]
+    },
+    {
         "chainId": 25,
         "name": "Cronos",
         "type": "Cronos Mainnet Beta",
