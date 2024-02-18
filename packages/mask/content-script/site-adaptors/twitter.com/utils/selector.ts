@@ -92,8 +92,8 @@ export function rootSelector() {
 export function composeAnchorSelector() {
     return querySelector<HTMLAnchorElement>(
         [
-            'header[role=banner] a[href="/compose/tweet"]',
-            'aside a[href="/compose/tweet"]',
+            'header[role=banner] a[href="/compose/post"]',
+            'aside a[href="/compose/post"]',
             // can't see the compose button on share popup, use the tweetButton instead
             '[role=main] [role=button][data-testid=tweetButton]',
         ].join(','),
@@ -123,7 +123,7 @@ export function isReplyPageSelector() {
     return !!location.pathname.match(/^\/\w+\/status\/\d+$/)
 }
 export function postEditorDraftContentSelector() {
-    if (location.pathname === '/compose/tweet') {
+    if (location.pathname === '/compose/post') {
         return querySelector<HTMLDivElement>(
             '[contenteditable][aria-label][spellcheck],textarea[aria-label][spellcheck]',
         )
