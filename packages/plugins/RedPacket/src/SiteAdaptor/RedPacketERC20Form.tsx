@@ -401,7 +401,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 token
                             :   undefined
                         }
-                        tooltip={t.infinte_unlock_tips({ token: token.symbol })}
+                        tooltip={t.infinite_unlock_tips({ token: token.symbol })}
                         spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}

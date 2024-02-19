@@ -177,7 +177,7 @@ export class FireflyRedPacket {
             cursor: indicator?.id,
             size: 20,
         })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistroyResponse>(url, {
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistoryResponse>(url, {
             method: 'GET',
         })
         return { ...data, chain_id: Number(data.chain_id) }

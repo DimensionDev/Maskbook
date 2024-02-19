@@ -33,7 +33,7 @@ import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
 import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
-import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistroyDetails.js'
+import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
 import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
@@ -118,7 +118,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [settings, setSettings] = useState<RedPacketSettings>()
     // #endregion
 
-    // #region firelfy redpacket
+    // #region firefly redpacket
     const [fireflyRpSettings, setFireflyRpSettings] = useState<FireflyRedpacketSettings>()
     // #endregion
 
@@ -281,7 +281,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         },
         [setShowDetails, setRpid, setShowHistory],
     )
-    const handleClaimRequirmenetsNext = useCallback((settings: FireflyRedpacketSettings) => {
+    const handleClaimRequirementsNext = useCallback((settings: FireflyRedpacketSettings) => {
         setFireflyRpSettings(settings)
         setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [])
@@ -411,7 +411,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         <>
                             <ClaimRequirementsDialog
                                 origin={fireflyRpSettings?.requirements}
-                                onNext={handleClaimRequirmenetsNext}
+                                onNext={handleClaimRequirementsNext}
                                 isFirefly={isFirefly}
                             />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />

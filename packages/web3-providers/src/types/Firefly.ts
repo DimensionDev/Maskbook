@@ -276,7 +276,7 @@ export namespace FireflyRedPacketAPI {
         list: RedPacketSentInfo[] | RedPacketClaimedInfo[]
     }>
 
-    export type ClaimHistroyResponse = Response<RedPacketClaimListInfo>
+    export type ClaimHistoryResponse = Response<RedPacketClaimListInfo>
 
     export type CheckClaimStrategyStatusOptions = {
         rpid: string
