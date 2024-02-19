@@ -42,11 +42,13 @@ export function createBindingProofFromProfileQuery(
     link?: string,
     source?: NextIDPlatform,
     relatedList?: BindingProof[],
+    uid?: string,
 ): BindingProof {
     return {
         platform,
         source,
-        identity,
+        uid,
+        identity: platform === NextIDPlatform.Farcaster ? uid || identity : identity,
         name,
         created_at: '',
         last_checked_at: '',

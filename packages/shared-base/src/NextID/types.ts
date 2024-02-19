@@ -32,6 +32,11 @@ export interface NextIDEnsRecord {
 export interface NextIDIdentity {
     uuid: string
     platform: NextIDPlatform
+    /**
+     * Uid on target platform. uid is the unique ID on each platform e.g. for
+     * Farcaster, this is the fid, for Lens this is the lens profile_id(0xabcd)
+     */
+    uid?: string
     identity: string
     displayName: string
     nft: NextIDEnsRecord[]
@@ -67,6 +72,7 @@ export interface BindingProof {
      * For Twitter, it's twitter account
      */
     identity: string
+    uid?: NextIDIdentity['uid']
     name: string
     created_at: string
     latest_checked_at?: string

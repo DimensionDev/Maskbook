@@ -1,10 +1,10 @@
-import { memo, useRef, useEffect } from 'react'
-import { IconButton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
-import { closeFarcasterPopup, openFarcasterPopup } from '../../emitter.js'
+import { makeStyles } from '@masknet/theme'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
+import { IconButton } from '@mui/material'
+import { memo, useEffect, useRef } from 'react'
+import { closeFarcasterPopup, openFarcasterPopup } from '../../emitter.js'
 
 const FarcasterIconSizeMap: Record<Plugin.SiteAdaptor.FarcasterSlot, number> = {
     [Plugin.SiteAdaptor.FarcasterSlot.Post]: 18,
