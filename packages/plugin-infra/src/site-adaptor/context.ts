@@ -10,8 +10,8 @@ export interface __SiteAdaptorContext__ {
     currentVisitingProfile: Subscription<IdentityResolved | undefined>
     currentNextIDPlatform: NextIDPlatform | undefined
     currentPersonaIdentifier: Subscription<PersonaIdentifier | undefined>
-    getPostURL: (identifier: PostIdentifier) => URL | null
     share: undefined | ((text: string, source?: string) => void)
+    getPostURL: (identifier: PostIdentifier) => URL | null
     getProfileURL: (identifier: ProfileIdentifier) => URL | null
     getUserIdentity: ((useId: string) => Promise<IdentityResolved | undefined>) | undefined
     getPostIdFromNewPostToast: (() => string) | undefined
