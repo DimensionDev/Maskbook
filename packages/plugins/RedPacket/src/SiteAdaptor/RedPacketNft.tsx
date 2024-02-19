@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles, ActionButton, ShadowRootTooltip, useDetectOverflow, useCustomSnackbar } from '@masknet/theme'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { Button, Card, Grow, Typography } from '@mui/material'
+import { Box, Button, Card, Grow, Typography } from '@mui/material'
 import {
     AssetPreviewer,
     ChainBoundary,
@@ -299,12 +299,14 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             setShowRequirements(true)
             return
         }
-        const hash = await claimCallback()
-        await checkResult()
-        if (typeof hash === 'string') {
-            retryAvailability()
-        } else if (hash instanceof Error) {
-            showSnackbar(hash.message, {
+        try {
+            const hash = await claimCallback()
+            await checkResult()
+            if (typeof hash === 'string') {
+                retryAvailability()
+            }
+        } catch (error) {
+            showSnackbar(error instanceof Error ? error.message : t.go_wrong(), {
                 variant: 'error',
             })
         }
@@ -408,7 +410,7 @@ interface OperationFooterProps {
 }
 
 function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: OperationFooterProps) {
-    const { classes } = useStyles({ claimed, outdated: false })
+    const { classes } = useStyles({ outdated: false })
     const t = useRedPacketTrans()
 
     return (
