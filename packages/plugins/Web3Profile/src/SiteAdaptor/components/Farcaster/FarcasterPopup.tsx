@@ -1,7 +1,7 @@
 import { isEqual } from 'lodash-es'
 import { memo, useEffect, useRef, useState } from 'react'
 import { ShadowRootPopper, makeStyles } from '@masknet/theme'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { Fade } from '@mui/material'
 import { emitter } from '../../emitter.js'
 import { useControlFarcasterPopup } from '../../hooks/Farcaster/useControlFarcasterPopup.js'
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
 export const FarcasterPopup = memo(() => {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
-    const [accounts, setAccounts] = useState<FireflyBaseAPI.FarcasterProfile[]>([])
+    const [accounts, setAccounts] = useState<FireflyConfigAPI.FarcasterProfile[]>([])
     const active = useControlFarcasterPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const anchorElRef = useRef<HTMLElement | null>()

@@ -3,6 +3,7 @@ import { createContext, useCallback, useEffect, useState } from 'react'
 
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import type { FireflyContext } from '../types.js'
 import RedPacketDialog from './RedPacketDialog.js'
 
 export const CompositionTypeContext = createContext<CompositionType>('timeline')
@@ -12,12 +13,14 @@ export function RedPacketInjection() {
     const [source, setSource] = useState<PluginID>()
     const [compositionType, setCompositionType] = useState<CompositionType>('timeline')
 
+    const [fireflyContext, setFireflyContext] = useState<FireflyContext>()
     useEffect(() => {
         return CrossIsolationMessages.events.redpacketDialogEvent.on(
-            ({ open, source: pluginId, compositionType = 'timeline' }) => {
-                setCompositionType(compositionType)
+            ({ open, source: pluginId, fireflyContext, compositionType = 'timeline' }) => {
                 setOpen(open)
                 setSource(pluginId)
+                setFireflyContext(fireflyContext)
+                setCompositionType(compositionType)
             },
         )
     }, [])
@@ -30,7 +33,7 @@ export function RedPacketInjection() {
     return (
         <EVMWeb3ContextProvider>
             <CompositionTypeContext.Provider value={compositionType}>
-                <RedPacketDialog open onClose={handleClose} source={source} />
+                <RedPacketDialog open onClose={handleClose} source={source} fireflyContext={fireflyContext} />
             </CompositionTypeContext.Provider>
         </EVMWeb3ContextProvider>
     )

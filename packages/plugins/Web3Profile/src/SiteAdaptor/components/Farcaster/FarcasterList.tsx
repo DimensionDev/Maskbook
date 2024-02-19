@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { List, ListItem, Typography, type ListProps, Link } from '@mui/material'
 import { memo } from 'react'
 
@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface Props extends ListProps {
-    accounts: FireflyBaseAPI.FarcasterProfile[]
+    accounts: FireflyConfigAPI.FarcasterProfile[]
 }
 
 export const FarcasterList = memo(({ className, accounts, ...rest }: Props) => {
@@ -88,7 +88,7 @@ export const FarcasterList = memo(({ className, accounts, ...rest }: Props) => {
 FarcasterList.displayName = 'FarcasterList'
 
 interface FarcasterListItemProps {
-    account: FireflyBaseAPI.FarcasterProfile
+    account: FireflyConfigAPI.FarcasterProfile
 }
 
 const FarcasterListItem = memo<FarcasterListItemProps>(({ account }) => {

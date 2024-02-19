@@ -14,6 +14,7 @@ import {
     EMPTY_LIST,
     PostIVIdentifier,
     EnhanceableSite,
+    NULL,
 } from '@masknet/shared-base'
 import type {
     PostContext,
@@ -50,6 +51,8 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         })()
         // #endregion
         const author: PostContextAuthor = {
+            source: null,
+            handle: NULL,
             avatarURL: opt.avatarURL,
             nickname: opt.nickname,
             author: opt.author,
@@ -75,6 +78,8 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
+            source: null,
+            handle: NULL,
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
@@ -156,9 +161,11 @@ export function createRefsForCreatePostContext() {
             if (!URL.canParse(x)) return null
             return new URL(x)
         }),
+        handle: NULL,
         nickname: createSubscriptionFromValueRef(nickname),
         author: createSubscriptionFromValueRef(postBy),
         postID: createSubscriptionFromValueRef(postID),
+        source: null,
         rawMessage: createSubscriptionFromValueRef(postMessage),
         postImagesProvider: debug({
             getCurrentValue: () => postMetadataImages.asValues,

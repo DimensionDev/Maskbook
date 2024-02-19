@@ -39,6 +39,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     contractName?: string
     showHelperToken?: boolean
     failedContent?: React.ReactNode
+    tooltip?: string
     callback?: () => void
 }
 
@@ -54,6 +55,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         showHelperToken = true,
         failedContent,
         callback,
+        tooltip,
     } = props
 
     const t = useSharedTrans()
@@ -140,10 +142,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 endIcon={
                     showHelperToken ?
                         <ShadowRootTooltip
-                            title={t.plugin_wallet_token_infinite_unlock_tips({
-                                provider: contractName ?? '',
-                                symbol: token.symbol,
-                            })}
+                            title={
+                                tooltip ??
+                                t.plugin_wallet_token_infinite_unlock_tips({
+                                    provider: contractName ?? '',
+                                    symbol: token.symbol,
+                                })
+                            }
                             placement="top"
                             arrow
                             leaveDelay={2000}

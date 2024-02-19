@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
 import { closeFarcasterPopup, openFarcasterPopup } from '../../emitter.js'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 
 const FarcasterIconSizeMap: Record<Plugin.SiteAdaptor.FarcasterSlot, number> = {
     [Plugin.SiteAdaptor.FarcasterSlot.Post]: 18,
@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
 })
 interface Props {
     slot: Plugin.SiteAdaptor.FarcasterSlot
-    accounts: FireflyBaseAPI.FarcasterProfile[]
+    accounts: FireflyConfigAPI.FarcasterProfile[]
     userId: string
 }
 

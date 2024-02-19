@@ -3,7 +3,7 @@ import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { closePopup, openPopup } from '../../emitter.js'
 
 const LensIconSizeMap: Record<Plugin.SiteAdaptor.LensSlot, number> = {
@@ -20,7 +20,7 @@ const useStyles = makeStyles()({
 })
 interface Props {
     slot: Plugin.SiteAdaptor.LensSlot
-    accounts: FireflyBaseAPI.LensAccount[]
+    accounts: FireflyConfigAPI.LensAccount[]
     userId: string
 }
 

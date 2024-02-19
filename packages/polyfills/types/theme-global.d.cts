@@ -28,6 +28,7 @@ declare module '@mui/material/styles/createPalette.d' {
             white: string
             dark: string
             secondaryDark: string
+            secondaryMainDark: string
             publicMain: string
             publicSecond: string
             publicThird: string

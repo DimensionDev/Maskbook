@@ -2,14 +2,14 @@ import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PersistentStorages } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
+import { memo } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
-import { memo } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 
@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 interface Props extends ListProps {
-    accounts: FireflyBaseAPI.LensAccount[]
+    accounts: FireflyConfigAPI.LensAccount[]
 }
 
 export const LensList = memo(({ className, accounts, ...rest }: Props) => {
@@ -152,7 +152,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
 LensList.displayName = 'LensList'
 
 interface LensListItemProps {
-    account: FireflyBaseAPI.LensAccount
+    account: FireflyConfigAPI.LensAccount
     loading: boolean
 }
 

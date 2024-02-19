@@ -7,7 +7,7 @@ export interface RedPacketRecord {
     id: string
     /** From twitter/facebook url */
     from: string
-    password: string
+    password?: string
     contract_version: number
 }
 
@@ -27,7 +27,8 @@ interface RedPacketBasic {
     contract_address: string
     rpid: string
     txid: string
-    password: string
+    /** RedPacket created via Firefly app omits the password field */
+    password?: string
     shares: number
     is_random: boolean
     total: string

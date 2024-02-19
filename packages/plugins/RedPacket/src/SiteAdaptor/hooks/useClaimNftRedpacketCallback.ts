@@ -1,18 +1,31 @@
-import { useAsyncFn } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ContractTransaction } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { toFixed } from '@masknet/web3-shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
+import type { RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import { toFixed } from '@masknet/web3-shared-base'
+import { ContractTransaction } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
+import { useSignedMessage } from './useSignedMessage.js'
 
 const EXTRA_GAS_PER_NFT = 335
 
-export function useClaimNftRedpacketCallback(id: string, totalAmount: number | undefined, signedMsg: string) {
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+/**
+ * Claim NFT red packet.
+ */
+export function useClaimNftRedpacketCallback(
+    account: string,
+    payload: RedPacketNftJSONPayload = {} as RedPacketNftJSONPayload,
+    totalAmount: number | undefined,
+) {
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nftRedPacketContract = useNftRedPacketContract(chainId)
-    return useAsyncFn(async (): Promise<string | undefined | Error> => {
-        if (!nftRedPacketContract || !id || !signedMsg || !account || !totalAmount) return
+    const { refetch } = useSignedMessage(account, payload)
+    const id = payload.id
+    return useAsyncFn(async () => {
+        if (!nftRedPacketContract || !id || !account || !totalAmount) return
+        const { data: signedMsg } = await refetch()
+        if (!signedMsg) return
 
         const transaction = nftRedPacketContract.methods.claim(id, signedMsg, account)
         const estimatedGas = await transaction.estimateGas({ from: account })
@@ -22,5 +35,5 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             chainId,
         })
         return EVMWeb3.sendTransaction(tx, { chainId })
-    }, [id, signedMsg, account, chainId, totalAmount])
+    }, [id, account, chainId, totalAmount, refetch])
 }

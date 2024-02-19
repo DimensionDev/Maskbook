@@ -66,6 +66,7 @@ export interface CompositionDialogEvent {
         startupPlugin?: string
         startupPluginProps?: any
         isOpenFromApplicationBoard?: boolean
+        pluginMeta?: any
     }
 }
 
@@ -155,11 +156,27 @@ interface SettingsUpdateEvent {
     value: any
 }
 
+type FireflySocialProfile = {
+    profileId: string
+    displayName: string
+    handle: string
+    fullHandle: string
+    pfp: string
+    address?: string
+    ownedBy?: string
+}
+
+interface FireflyContext {
+    currentLensProfile?: FireflySocialProfile | null
+    currentFarcasterProfile?: FireflySocialProfile | null
+}
+
 export interface redpacketDialogEvent {
     open: boolean
     // CompositionType from '@masknet/plugin-infra/content-script'
     compositionType?: 'popup' | 'timeline'
     source?: PluginID
+    fireflyContext?: FireflyContext
 }
 
 export interface SmartPayDialogEvent {

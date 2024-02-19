@@ -1,8 +1,8 @@
-import type { FireflyBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { Emitter } from '@servie/events'
 
 interface OpenPopupOptions {
-    lensAccounts: FireflyBaseAPI.LensAccount[]
+    lensAccounts: FireflyConfigAPI.LensAccount[]
     /** For lazy load lens accounts from NextID */
     userId: string
     popupAnchorEl: HTMLElement | null
@@ -11,7 +11,7 @@ interface ClosePopupOptions {
     popupAnchorEl: HTMLElement | null
 }
 interface OpenFarcasterPopupOptions {
-    accounts: FireflyBaseAPI.FarcasterProfile[]
+    accounts: FireflyConfigAPI.FarcasterProfile[]
     /** For lazy load lens accounts from NextID */
     userId: string
     popupAnchorEl: HTMLElement | null
