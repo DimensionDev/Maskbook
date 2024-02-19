@@ -79,7 +79,7 @@ const FireflyFarcasterToNextIdFarcaster = (account: FireflyConfigAPI.FarcasterPr
     return {
         platform: NextIDPlatform.Farcaster,
         name: account.display_name,
-        identity: account.username,
+        identity: account.fid,
         created_at: '',
         is_valid: true,
         last_checked_at: '',

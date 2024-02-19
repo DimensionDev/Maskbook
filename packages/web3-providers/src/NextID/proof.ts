@@ -114,6 +114,7 @@ function relationServiceIdentityQuery(depth?: number) {
     identity(platform: $platform, identity: $identity) {
         platform
         identity
+        uid
         displayName
         uuid
         ownedBy {
@@ -142,6 +143,7 @@ function relationServiceIdentityQuery(depth?: number) {
               uuid
               platform
               identity
+              uid
               displayName
             }
             to {
@@ -154,6 +156,7 @@ function relationServiceIdentityQuery(depth?: number) {
               uuid
               platform
               identity
+              uid
               displayName
             }
           }
@@ -169,6 +172,7 @@ function relationServiceIdentityQuery(depth?: number) {
               uuid
               platform
               identity
+              uid
               displayName
             }
             to {
@@ -181,6 +185,7 @@ function relationServiceIdentityQuery(depth?: number) {
               uuid
               platform
               identity
+              uid
               displayName
             }
           }
@@ -590,6 +595,7 @@ function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, sour
         undefined,
         source,
         nft,
+        nextIDIdentity.uid,
     )
 }
 
