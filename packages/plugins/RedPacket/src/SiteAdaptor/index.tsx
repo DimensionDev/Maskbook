@@ -64,7 +64,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             (_payload) => {
                 return {
                     text: (
-                        <ERC20RedpacketBadge
+                        <RedpacketBadge
                             message={(_payload as RedPacketJSONPayload).sender.message}
                             fallback={'A Token Lucky Drop'}
                         />
@@ -77,7 +77,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             (_payload) => {
                 return {
                     text: (
-                        <ERC20RedpacketBadge
+                        <RedpacketBadge
                             message={(_payload as RedPacketNftJSONPayload).message}
                             fallback={'An NFT Lucky Drop'}
                         />
@@ -142,12 +142,12 @@ const site: Plugin.SiteAdaptor.Definition = {
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
     },
 }
-interface ERC20RedpacketBadgeProps {
+interface RedpacketBadgeProps {
     message: string
     fallback: string
 }
 
-function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
+function RedpacketBadge(props: RedpacketBadgeProps) {
     const { message, fallback } = props
 
     return (

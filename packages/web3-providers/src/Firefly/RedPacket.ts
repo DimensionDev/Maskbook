@@ -13,7 +13,7 @@ import { FireflyRedPacketAPI } from '../entry-types.js'
 
 const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
-const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL ?? 'https://api.firefly.land'
+const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
 
 const themes = [
     {

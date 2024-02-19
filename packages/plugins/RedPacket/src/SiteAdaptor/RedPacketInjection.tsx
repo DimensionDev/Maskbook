@@ -2,6 +2,7 @@ import { CrossIsolationMessages, type PluginID } from '@masknet/shared-base'
 import { createContext, useCallback, useEffect, useState } from 'react'
 
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
+import { WalletGuard } from '@masknet/shared'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import type { FireflyContext } from '../types.js'
 import RedPacketDialog from './RedPacketDialog.js'
@@ -33,7 +34,9 @@ export function RedPacketInjection() {
     return (
         <EVMWeb3ContextProvider>
             <CompositionTypeContext.Provider value={compositionType}>
-                <RedPacketDialog open onClose={handleClose} source={source} fireflyContext={fireflyContext} />
+                <WalletGuard>
+                    <RedPacketDialog open onClose={handleClose} source={source} fireflyContext={fireflyContext} />
+                </WalletGuard>
             </CompositionTypeContext.Provider>
         </EVMWeb3ContextProvider>
     )
