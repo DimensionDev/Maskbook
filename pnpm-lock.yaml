@@ -12119,20 +12119,6 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-<<<<<<< HEAD
-  /browserslist@4.21.5:
-    resolution: {integrity: sha512-tUkiguQGW7S3IhB7N+c2MV/HZPSCPAAiYBZXLsBhFB/PCy6ZKKsZrmBayHV9fdGV/ARIfJ14NkxKzRDjvp7L6w==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-    dependencies:
-      caniuse-lite: 1.0.30001565
-      electron-to-chromium: 1.4.616
-      node-releases: 2.0.14
-      update-browserslist-db: 1.0.13(browserslist@4.21.5)
-    dev: false
-
-=======
->>>>>>> develop
   /browserslist@4.22.2:
     resolution: {integrity: sha512-0UgcrvQmBDvZHFGdYUehrCNIazki7/lUP3kkoi/r3YB2amZbFM9J43ZRkJTXBUZK4gmx56+Sqk9+Vs9mwZx9+A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -12393,13 +12379,6 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-<<<<<<< HEAD
-  /caniuse-lite@1.0.30001480:
-    resolution: {integrity: sha512-q7cpoPPvZYgtyC4VaBSN0Bt+PJ4c4EYRf0DrduInOz2SkFpHD5p3LnvEpqBp7UnJn+8x1Ogl1s38saUxe+ihQQ==}
-    dev: false
-
-=======
->>>>>>> develop
   /caniuse-lite@1.0.30001565:
     resolution: {integrity: sha512-xrE//a3O7TP0vaJ8ikzkD2c2NgcVUvsEe2IvFTntV4Yd1Z9FVzh+gW+enX96L0psrbaFMcVcH2l90xNuGDWc8w==}
 
@@ -26094,20 +26073,6 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-<<<<<<< HEAD
-  /update-browserslist-db@1.0.13(browserslist@4.21.5):
-    resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
-    hasBin: true
-    peerDependencies:
-      browserslist: '>= 4.21.0'
-    dependencies:
-      browserslist: 4.21.5
-      escalade: 3.1.1
-      picocolors: 1.0.0
-    dev: false
-
-=======
->>>>>>> develop
   /update-browserslist-db@1.0.13(browserslist@4.22.2):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
     hasBin: true
@@ -27785,9 +27750,6 @@ packages:
     dev: true
 
 time:
-<<<<<<< HEAD
-  /@types/web@0.0.115: '2023-09-20T04:07:22.191Z'
-=======
   /@dimensiondev/holoflows-kit@0.9.0-20240104084316-88642f9: '2024-01-04T08:43:44Z'
   /@masknet/kit@0.3.0: '2024-01-25T08:08:18.361Z'
   /@swc/core@1.3.106: '2024-01-25T06:26:44.205Z'
@@ -27814,4 +27776,3 @@ time:
   /ts-results-es@4.0.0: '2023-08-08T10:13:15.427Z'
   /typescript@5.3.3: '2023-12-06T19:07:51.067Z'
   /web3-utils@1.10.2: '2023-08-28T12:56:10.815Z'
->>>>>>> develop
