@@ -5,4 +5,9 @@ import type { PluginMessageEmitter } from './CrossIsolationEvents.js'
 
 const m = new WebExtensionMessage<MaskEvents>({ domain: 'mask' })
 m.serialization = serializer
-export const MaskMessages: { readonly events: PluginMessageEmitter<MaskEvents> } = m
+
+export let MaskMessages: { readonly events: PluginMessageEmitter<MaskEvents> } = m
+
+export function __workaround__replaceImplementationOfMaskMessage__(msg: PluginMessageEmitter<any>) {
+    MaskMessages = { events: msg }
+}
