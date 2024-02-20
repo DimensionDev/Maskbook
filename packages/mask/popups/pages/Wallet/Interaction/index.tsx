@@ -445,6 +445,7 @@ const InteractionItem = memo((props: InteractionItemProps) => {
     if (typeof message === 'object') {
         if (message.invalidFields.filter((x) => x !== 'chainId' && x !== 'version').length || !message.parsed)
             isDangerRequest = true
+        if (origin && !origin.startsWith('https:')) isDangerRequest = true
     }
     const isUnlockERC20 = transaction.formattedTransaction?.popup?.spender
     const isUnlockERC721 = transaction.formattedTransaction?.popup?.erc721Spender

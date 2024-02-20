@@ -950,6 +950,7 @@
     "popups_set_avatar_successfully": "Avatar set successfully",
     "popups_set_avatar_failed": "Failed to set Avatar.",
     "popups_wallet_request_source": "Request Source",
+    "popups_wallet_request_source_insecure": "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request.",
     "popups_wallet_sign_message": "Signing Messsage (Text)",
     "popups_wallet_sign_raw_message": "Signing Message (Hex)",
     "popups_wallet_sign_in_message": "Sign-in Request",

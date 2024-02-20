@@ -55,7 +55,7 @@ interface SignRequestInfoProps {
 // TODO: render typed sign
 export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage, origin }) => {
     const t = useMaskSharedTrans()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const isEIP4361 = typeof message === 'object' && message.type === 'eip4361'
 
@@ -89,7 +89,18 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
                     <Typography fontSize={16} fontWeight={700}>
                         {t.popups_wallet_request_source()}
                     </Typography>
-                    <Typography className={classes.sourceText}>{origin}</Typography>
+                    <Typography
+                        className={cx(
+                            classes.sourceText,
+                            origin.startsWith('https://') ? undefined : classes.dangerField,
+                        )}>
+                        {origin}
+                    </Typography>
+                    {!origin.startsWith('https://') ?
+                        <Alert className={classes.dangerField} open>
+                            {t.popups_wallet_request_source_insecure()}
+                        </Alert>
+                    :   null}
                 </Box>
             :   null}
             {EIP4361Message}
