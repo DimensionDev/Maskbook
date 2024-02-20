@@ -6,10 +6,10 @@ import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-
 import { ImageIcon, NetworkIcon, useMenuConfig } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { first } from 'lodash-es'
+import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -42,8 +42,7 @@ export const NetworkSelector = memo(() => {
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const { Network } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const traderDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Trader)
-    const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const chainIdList = TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 
     const actualNetworks = useMemo(
         () => networks.filter((x) => chainIdList.includes(x.chainId)),
