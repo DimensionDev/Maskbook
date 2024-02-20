@@ -56,6 +56,8 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     requiredSupportChainIds?: Array<Web3Helper.Definition[T]['ChainId']>
     requiredSupportPluginID?: NetworkPluginID
+    readonlyMode?: boolean
+    disableSwitchAccount?: boolean
 }
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
@@ -67,6 +69,8 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         children,
         requiredSupportChainIds,
         requiredSupportPluginID,
+        readonlyMode,
+        disableSwitchAccount,
     }) => {
         const t = useSharedTrans()
         const { classes, cx } = useStyles()
@@ -115,10 +119,12 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     name={walletName}
                     formattedAddress={Utils.formatAddress(account, 4)}
                     addressLink={Utils.explorerResolver.addressLink(chainId, account)}
-                    onClick={onClick ?? openSelectProviderDialog}
-                    onPendingClick={() => WalletStatusModal.open()}
+                    onClick={readonlyMode || disableSwitchAccount ? undefined : onClick ?? openSelectProviderDialog}
+                    onPendingClick={readonlyMode || disableSwitchAccount ? undefined : () => WalletStatusModal.open()}
                 />
-                <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
+                {!readonlyMode ?
+                    <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
+                :   null}
             </Box>
         )
     },

@@ -56,7 +56,7 @@ export function getComputedUserSettings(): TwitterBaseAPI.UserSettings {
     }
 
     const getThemeColor = () => {
-        const tweetButton = document.querySelector('a[href="/compose/tweet"][data-testid="SideNav_NewTweet_Button"]')
+        const tweetButton = document.querySelector('a[href="/compose/post"][data-testid="SideNav_NewTweet_Button"]')
         if (!tweetButton) return
 
         const { backgroundColor } = getComputedStyle(tweetButton)

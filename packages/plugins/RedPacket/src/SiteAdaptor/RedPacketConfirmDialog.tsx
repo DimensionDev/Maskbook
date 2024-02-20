@@ -1,28 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { BigNumber } from 'bignumber.js'
 import { Icons } from '@masknet/icons'
-import {
-    useChainContext,
-    useBalance,
-    useNativeToken,
-    useNativeTokenAddress,
-    useNativeTokenPrice,
-    useWallet,
-} from '@masknet/web3-hooks-base'
-import { type GasConfig, useRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
-import { type RedPacketRecord, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import { type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
+import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '@masknet/shared'
-import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
-import { formatBalance, isSameAddress, isZero } from '@masknet/web3-shared-base'
-import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
+import { isZero } from '@masknet/web3-shared-base'
+import { type RedPacketSettings } from './hooks/useCreateCallback.js'
 import { useRedPacketTrans } from '../locales/index.js'
-import { RedPacketRPC } from '../messages.js'
+import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallback.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -68,7 +59,7 @@ interface ConfirmRedPacketFormProps {
     onCreated: (payload: RedPacketJSONPayload) => void
     onBack: () => void
     onClose: () => void
-    settings?: RedPacketSettings
+    settings: RedPacketSettings
     gasOption?: GasConfig
     onGasOptionChange?: (config: GasConfig) => void
     expectedChainId: ChainId
@@ -78,123 +69,27 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const t = useRedPacketTrans()
     const { settings, onCreated, onClose, gasOption, onGasOptionChange, expectedChainId } = props
     const { classes, cx } = useStyles()
-    const { isPending: loadingBalance } = useBalance(NetworkPluginID.PLUGIN_EVM)
-    const { account, chainId, networkType } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     useEffect(() => {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
 
-    // #region blocking
-    // password should remain the same rather than change each time when createState change,
-    //  otherwise password in database would be different from creating red-packet.
-    const contract_version = 4
-
-    const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    // #region amount minus estimate gas fee
-    const { value: createParams } = useCreateParams(chainId, settings!, contract_version, publicKey)
-    const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
-    const { transactionValue, estimateGasFee } = useTransactionValue(
-        settings?.total,
-        createParams?.gas,
-        gasOption?.gasCurrency,
-    )
-    const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
-
-    const isBalanceInsufficient =
-        isSameAddress(gasOption?.gasCurrency, nativeToken?.address) &&
-        new BigNumber(transactionValue).isLessThanOrEqualTo(0)
-    const total =
-        isNativeToken ?
-            isBalanceInsufficient ? '0'
-            :   transactionValue
-        :   (settings?.total as string)
-    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
-    const formatAvg = formatBalance(
-        new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
-        settings?.token?.decimals ?? 18,
-        { significant: isNativeToken ? 3 : 0 },
-    )
-    const [{ loading: isCreating }, createCallback] = useCreateCallback(
-        chainId,
-        { ...settings!, total },
-        contract_version,
-        publicKey,
-        gasOption,
-    )
-    // #endregion
-    const createRedpacket = useCallback(async () => {
-        const result = await createCallback()
-        const { hash, receipt, events } = result ?? {}
-        if (typeof hash !== 'string') return
-        if (typeof receipt?.transactionHash !== 'string') return
-
-        // the settings is not available
-        if (!settings?.token) return
-
-        const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
-            creation_time: string
-            creator: string
-            id: string
-            token_address: string
-            total: string
-        }
-
-        // the events log is not available
-        if (!events?.CreationSuccess?.returnValues.id) return
-
-        payload.current.sender = {
-            address: account,
-            name: settings.name,
-            message: settings.message,
-        }
-        payload.current.is_random = settings.isRandom
-        payload.current.shares = settings.shares
-        payload.current.password = privateKey
-        payload.current.rpid = CreationSuccess.id
-        payload.current.total = CreationSuccess.total
-        payload.current.duration = settings.duration
-        payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-        payload.current.token = settings.token
-
-        const record: RedPacketRecord = {
-            id: receipt.transactionHash,
-            from: '',
-            password: privateKey,
-            contract_version,
-        }
-        RedPacketRPC.addRedPacket(record, chainId)
-
-        // output the redpacket as JSON payload
-        onCreated(payload.current)
-    }, [createCallback, settings, onCreated])
-    // #endregion
-
-    // assemble JSON payload
-    const payload = useRef<RedPacketJSONPayload>({
-        network: EVMChainResolver.chainName(chainId),
-    } as RedPacketJSONPayload)
-
-    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-
-    useEffect(() => {
-        const contractAddress = HAPPY_RED_PACKET_ADDRESS_V4
-        if (!contractAddress) {
-            onClose()
-            return
-        }
-        payload.current.contract_address = contractAddress
-        payload.current.contract_version = contract_version
-        payload.current.network = EVMChainResolver.networkType(chainId)
-    }, [chainId, networkType, contract_version])
-
+    const {
+        isBalanceInsufficient,
+        formatTotal,
+        estimateGasFee,
+        formatAvg,
+        gas,
+        isCreating,
+        isWaitGasBeMinus,
+        createRedpacket,
+    } = useCreateFTRedpacketCallback(publicKey, privateKey, settings, gasOption, onCreated, onClose)
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
-    const { value: params } = useCreateParams(chainId, settings!, contract_version, publicKey)
 
     return (
         <>
@@ -290,7 +185,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         nativeTokenPrice={nativeTokenPrice}
                         supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                         gasConfig={gasOption}
-                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                        gasLimit={Number.parseInt(gas ?? '0', 10)}
                         onChange={onGasOptionChange}
                         estimateGasFee={estimateGasFee}
                         editMode

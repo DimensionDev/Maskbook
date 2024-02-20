@@ -299,12 +299,11 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         if (!handle) return []
         // Identity is address type, will check if it's verified by Firefly
         const verifiedHandleMap = new Map<string, string[]>()
-        const getVerifiedHandles = Firefly.Firefly.getVerifiedHandles
         const verifiedResult = await Promise.allSettled(
             uniqBy(identities, (x) => x.address.toLowerCase()).map(async (x) => {
                 const address = x.address.toLowerCase()
                 if (x.verified) return address
-                const verifiedHandles = await getVerifiedHandles(address)
+                const verifiedHandles = await Firefly.FireflyConfig.getVerifiedHandles(address)
                 verifiedHandleMap.set(address, verifiedHandles)
                 return verifiedHandles.includes(handle) ? address : null
             }),

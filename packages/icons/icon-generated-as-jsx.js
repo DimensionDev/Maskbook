@@ -114,6 +114,11 @@ export const DangerOutline = /*#__PURE__*/ __createIcon('DangerOutline', [
         s: true,
     },
 ])
+export const DarkLens = /*#__PURE__*/ __createIcon('DarkLens', [
+    {
+        u: () => new URL('./brands/DarkLens.svg', import.meta.url).href,
+    },
+])
 export const Debank = /*#__PURE__*/ __createIcon('Debank', [
     {
         u: () => new URL('./brands/Debank.svg', import.meta.url).href,
@@ -645,25 +650,31 @@ export const Add = /*#__PURE__*/ __createIcon('Add', [
 export const AddUser = /*#__PURE__*/ __createIcon('AddUser', [
     {
         j: () =>
-            /*#__PURE__*/ _jsx('svg', {
+            /*#__PURE__*/ _jsxs('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                viewBox: '0 0 18 18',
-                children: /*#__PURE__*/ _jsxs('g', {
-                    fill: 'currentColor',
-                    fillRule: 'evenodd',
-                    clipRule: 'evenodd',
-                    children: [
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M15.5 12.159a.6.6 0 0 1 .6.6v4.062a.6.6 0 0 1-1.2 0v-4.062a.6.6 0 0 1 .6-.6Z',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: [
+                    /*#__PURE__*/ _jsx('g', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeWidth: '1.5',
+                        clipPath: "url('#AddUser_svg__addUser_a')",
+                        children: /*#__PURE__*/ _jsx('path', {
+                            d: 'M6.667 5.833a3.333 3.333 0 1 0 6.667 0 3.333 3.333 0 0 0-6.667 0Zm6.666 10h5m-2.5-2.5v5M5 17.5v-1.667A3.333 3.333 0 0 1 8.333 12.5h3.334',
                         }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M18.132 14.79a.6.6 0 0 1-.6.6h-4.065a.6.6 0 0 1 0-1.2h4.065a.6.6 0 0 1 .6.6ZM9.298 2.41a2.992 2.992 0 1 0 0 5.984 2.992 2.992 0 0 0 0-5.983ZM5.106 5.403a4.192 4.192 0 1 1 8.384 0 4.192 4.192 0 0 1-8.384 0Z',
+                    }),
+                    /*#__PURE__*/ _jsx('defs', {
+                        children: /*#__PURE__*/ _jsx('clipPath', {
+                            id: 'AddUser_svg__addUser_a',
+                            children: /*#__PURE__*/ _jsx('path', {
+                                fill: '#fff',
+                                d: 'M0 0h20v20H0z',
+                            }),
                         }),
-                        /*#__PURE__*/ _jsx('path', {
-                            d: 'M6.519 8.988a7.797 7.797 0 0 1 8.497 1.69.6.6 0 0 1-.848.848 6.597 6.597 0 0 0-11.263 4.666.6.6 0 0 1-1.2 0A7.798 7.798 0 0 1 6.52 8.988Z',
-                        }),
-                    ],
-                }),
+                    }),
+                ],
             }),
         s: true,
     },
@@ -740,6 +751,38 @@ export const ArrowBack = /*#__PURE__*/ __createIcon('ArrowBack', [
         u: () => new URL('./general/ArrowBack.svg', import.meta.url).href,
     },
 ])
+export const ArrowCircle = /*#__PURE__*/ __createIcon(
+    'ArrowCircle',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 24 25',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            stroke: 'currentColor',
+                            strokeLinecap: 'round',
+                            strokeLinejoin: 'round',
+                            strokeMiterlimit: '10',
+                            strokeWidth: '1.5',
+                            d: 'M12 22.2c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10Z',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            stroke: 'currentColor',
+                            strokeLinecap: 'round',
+                            strokeLinejoin: 'round',
+                            strokeWidth: '1.5',
+                            d: 'M13.26 15.73 9.74 12.2l3.52-3.53',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [24, 25],
+)
 export const ArrowDownRound = /*#__PURE__*/ __createIcon('ArrowDownRound', [
     {
         j: () =>
@@ -1345,6 +1388,39 @@ export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
         s: true,
     },
 ])
+export const Comment = /*#__PURE__*/ __createIcon('Comment', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        d: 'M14.984 8.992v3.333c0 .217-.009.425-.034.625-.191 2.25-1.516 3.367-3.958 3.367h-.333c-.209 0-.409.1-.534.266l-1 1.334c-.441.591-1.158.591-1.6 0l-1-1.334a.77.77 0 0 0-.533-.266h-.333c-2.659 0-3.992-.659-3.992-3.992V8.992c0-2.442 1.125-3.767 3.367-3.959.2-.025.408-.033.625-.033h5.333c2.658 0 3.992 1.333 3.992 3.992Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        d: 'M18.317 5.658v3.334c0 2.45-1.125 3.766-3.367 3.958.025-.2.033-.408.033-.625V8.992C14.983 6.333 13.65 5 10.991 5H5.659c-.216 0-.425.008-.625.033.192-2.241 1.517-3.366 3.959-3.366h5.333c2.658 0 3.992 1.333 3.992 3.991Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        d: 'M11.246 11.042h.007m-2.923 0h.007m-2.924 0h.007',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const Connect = /*#__PURE__*/ __createIcon('Connect', [
     {
         j: () =>
@@ -1838,6 +1914,32 @@ export const Filter = /*#__PURE__*/ __createIcon('Filter', [
         s: true,
     },
 ])
+export const FireflyNFT = /*#__PURE__*/ __createIcon('FireflyNFT', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: /*#__PURE__*/ _jsxs('g', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    clipRule: 'evenodd',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            id: 'FireflyNFT_svg__Union',
+                            d: 'M6.722 10.808h-.935v.463h-.468v.926h.468v.463h.935v-.463h.467v-.926h-.467v-.463Z',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            id: 'FireflyNFT_svg__Subtract',
+                            d: 'M4.274.826a.458.458 0 0 1 .325-.564c.246-.065.5.082.567.328l.12.441L9.199 0l.122.447.604-.16.736 2.704-.604.16.123.448-3.918 1.033 1.995 7.36h-.205v1.544h.468v.463h.28l.37 1.363a.458.458 0 0 1-.326.563.465.465 0 0 1-.567-.327l-.838-3.092H7.5v-1.544h-.467V10.5h-.138L5.369 4.867l-3.907 1.03-.122-.447-.604.16L0 2.905l.603-.16-.122-.448 3.912-1.031-.12-.441Zm5.492 12.863-.932-.001v-.463H8.59v.002h-.227v-.84l.001.004v-.09h.466v-.463l.676.002v-.002h.26v.386h-.003v.079h.392v-.002h.078v.566h-.002l.001.36h-.467v.462Zm.78-.822h3.506v-.643h.65v-.644h.649v-.643H16V7.72h-.65V6.434h-.649V5.147h-.649v-.643h.65V3.86h-.65v.644h-.65V3.86h-.649v-.643h-1.298v-.643h-.65V3.86h.65v.644h-.65V5.79h-.649v-.643h-.65v-.643h.65V3.86h-.65v.644h-.649v2.573h-.649v3.217h.65v1.235h1.22v.463h.468v.875ZM7.19 11.27v.312l-.085-.312h.085Zm.527-9.917-1.384.365.14.518.347-.091.328 1.208.692-.183-.328-1.208.346-.09-.141-.519Zm-3.361.887 1.73-.456.14.517-.864.228.094.346.536-.142.094.345-.536.142.14.517-.864.229-.47-1.726Zm-.939.248.692-.183.47 1.726-.692.182-.094-.345-.173.046-.094-.345-.173.045.188.69-.692.183-.47-1.726.692-.182.094.345.173-.046.094.345.173-.045-.188-.69Zm8.687 4.588h.65v.643h-.65v-.643Zm-1.299 1.93v-.643h2.598v.643h.649v2.573h-.65v.644h-2.597v-.644h-.649V9.007h.65Zm-.026.746h.51v.404h.408v.505h-.408v.404h-.51v-.505h.408v-.303h-.408v-.505Zm2.17 0h.51v.505h-.408v.303h.408v.505h-.51v-.404h-.407v-.505h.407v-.404Z',
+                        }),
+                    ],
+                }),
+            }),
+        s: true,
+    },
+])
 export const Flag = /*#__PURE__*/ __createIcon('Flag', [
     {
         j: () =>
@@ -1987,6 +2089,11 @@ export const HamburgerMenu = /*#__PURE__*/ __createIcon('HamburgerMenu', [
                 }),
             }),
         s: true,
+    },
+])
+export const Heart = /*#__PURE__*/ __createIcon('Heart', [
+    {
+        u: () => new URL('./general/Heart.svg', import.meta.url).href,
     },
 ])
 export const History = /*#__PURE__*/ __createIcon('History', [
@@ -2178,6 +2285,27 @@ export const LeftArrow = /*#__PURE__*/ __createIcon('LeftArrow', [
         s: true,
     },
 ])
+export const Like = /*#__PURE__*/ __createIcon(
+    'Like',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 22 20',
+                    children: /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        d: 'M11.62 18.662c-.34.117-.9.117-1.24 0C7.48 17.688 1 13.628 1 6.745 1 3.708 3.49 1.25 6.56 1.25c1.82 0 3.43.865 4.44 2.202a5.56 5.56 0 0 1 4.44-2.202c3.07 0 5.56 2.458 5.56 5.496 0 6.882-6.48 10.942-9.38 11.916Z',
+                    }),
+                }),
+            s: true,
+        },
+    ],
+    [22, 20],
+)
 export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
         c: ['dark'],
@@ -2304,6 +2432,42 @@ export const Message = /*#__PURE__*/ __createIcon('Message', [
         u: () => new URL('./general/Message.svg', import.meta.url).href,
     },
 ])
+export const Messages = /*#__PURE__*/ __createIcon('Messages', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M17.98 10.79v4c0 .26-.01.51-.04.75-.23 2.7-1.82 4.04-4.75 4.04h-.4c-.25 0-.49.12-.64.32l-1.2 1.6c-.53.71-1.39.71-1.92 0l-1.2-1.6a.924.924 0 0 0-.64-.32h-.4C3.6 19.58 2 18.79 2 14.79v-4c0-2.93 1.35-4.52 4.04-4.75.24-.03.49-.04.75-.04h6.4c3.19 0 4.79 1.6 4.79 4.79Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M21.98 6.79v4c0 2.94-1.35 4.52-4.04 4.75.03-.24.04-.49.04-.75v-4c0-3.19-1.6-4.79-4.79-4.79h-6.4c-.26 0-.51.01-.75.04C6.27 3.35 7.86 2 10.79 2h6.4c3.19 0 4.79 1.6 4.79 4.79Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeWidth: '2',
+                        d: 'M13.495 13.25h.01m-3.51 0h.01m-3.51 0h.01',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const Minus = /*#__PURE__*/ __createIcon('Minus', [
     {
         j: () =>
@@ -2391,6 +2555,27 @@ export const NextIdPersonaWarning = /*#__PURE__*/ __createIcon('NextIdPersonaWar
         u: () => new URL('./general/NextIdPersonaWarning.svg', import.meta.url).href,
     },
 ])
+export const NFTHolder = /*#__PURE__*/ __createIcon(
+    'NFTHolder',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 21 20',
+                    children: /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M5.362 1.037A.575.575 0 0 1 5.77.33a.583.583 0 0 1 .711.41l.15.554L11.542 0l.153.56.758-.2.923 3.393-.757.2.154.563L7.856 5.81l2.503 9.234h-.258v1.937h.587v.581h.354l.464 1.71a.575.575 0 0 1-.409.708.583.583 0 0 1-.71-.411l-1.053-3.88h.076v-1.936h-.586v-.582h-.172L6.736 6.106 1.834 7.4l-.153-.561-.758.2L0 3.646l.757-.2-.153-.563 4.908-1.294-.15-.552Zm6.89 16.138-1.17-.002v-.58h-.303v.002h-.287v-1.06l.002.005v-.108h.202l.383.001v-.58l.847.002v-.004h.326v.486h-.003v.098l.492.001v-.004h.098v.712h-.003l.001.45h-.585v.581Zm.978-1.03h4.398v-.808h.815v-.807h.815v-.807h.815V9.687h-.815V8.073h-.815V6.459h-.815V5.65h.815v-.807h-.815v.807h-.814v-.807h-.815v-.807h-1.63V3.23h-.814v1.614h.815v.807h-.815v1.615h-.814v-.807h-.815V5.65h.815v-.807h-.815v.807h-.815v3.23h-.815v4.036h.815v1.548h1.532v.58h.587v1.1ZM9.02 14.14v.386l-.106-.386h.105ZM9.681 1.7l-1.737.458.177.65.434-.115.413 1.516.868-.23-.412-1.515.434-.115-.177-.65ZM5.465 2.812l2.17-.572.178.65-1.086.285.118.433.673-.177.118.433-.673.178.177.65-1.086.285-.589-2.165Zm-1.178.31.869-.228.589 2.165-.868.229-.118-.433-.217.057-.118-.433-.217.057.236.867-.869.229-.59-2.166.87-.229.117.433.217-.057.118.433.217-.057-.236-.866ZM15.184 8.88H16v.807h-.815V8.88Zm-1.63 2.422v-.808h3.26v.808h.814v3.228h-.814v.807h-3.26v-.807h-.814v-3.228h.815Zm-.032.936h.64v.507h.51v.633h-.51v.506h-.64v-.633h.511v-.38h-.51v-.633Zm2.723 0h.64v.633h-.512v.38h.511v.633h-.639v-.505h-.511v-.634h.511v-.507Z',
+                        clipRule: 'evenodd',
+                    }),
+                }),
+            s: true,
+        },
+    ],
+    [21, 20],
+)
 export const NFTRedPacket = /*#__PURE__*/ __createIcon('NFTRedPacket', [
     {
         u: () => new URL('./general/NFTRedPacket.svg', import.meta.url).href,
@@ -2728,6 +2913,43 @@ export const Refresh = /*#__PURE__*/ __createIcon('Refresh', [
         s: true,
     },
 ])
+export const Repost = /*#__PURE__*/ __createIcon('Repost', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M2.983 4.3h11.534c1.383 0 2.5 1.117 2.5 2.5v2.767',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'M5.617 1.667 2.983 4.3l2.634 2.633m11.4 8.767H5.483a2.497 2.497 0 0 1-2.5-2.5v-2.767',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: 'currentColor',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeMiterlimit: '10',
+                        strokeWidth: '1.5',
+                        d: 'm14.384 18.333 2.633-2.633-2.633-2.633',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const Restore = /*#__PURE__*/ __createIcon('Restore', [
     {
         u: () => new URL('./general/Restore.svg', import.meta.url).href,
@@ -2736,6 +2958,16 @@ export const Restore = /*#__PURE__*/ __createIcon('Restore', [
 export const RestoreColorful = /*#__PURE__*/ __createIcon('RestoreColorful', [
     {
         u: () => new URL('./general/RestoreColorful.svg', import.meta.url).href,
+    },
+])
+export const ResultNo = /*#__PURE__*/ __createIcon('ResultNo', [
+    {
+        u: () => new URL('./general/ResultNo.svg', import.meta.url).href,
+    },
+])
+export const ResultYes = /*#__PURE__*/ __createIcon('ResultYes', [
+    {
+        u: () => new URL('./general/ResultYes.svg', import.meta.url).href,
     },
 ])
 export const Retweet = /*#__PURE__*/ __createIcon('Retweet', [
@@ -3279,6 +3511,24 @@ export const USD = /*#__PURE__*/ __createIcon('USD', [
 export const User = /*#__PURE__*/ __createIcon('User', [
     {
         u: () => new URL('./general/User.svg', import.meta.url).href,
+    },
+])
+export const UserPlus = /*#__PURE__*/ __createIcon('UserPlus', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    stroke: 'currentColor',
+                    strokeLinecap: 'round',
+                    strokeLinejoin: 'round',
+                    strokeWidth: '2',
+                    d: 'M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0Zm8 12h6m-3-3v6M6 21v-2a4 4 0 0 1 4-4h4',
+                }),
+            }),
+        s: true,
     },
 ])
 export const Verification = /*#__PURE__*/ __createIcon('Verification', [

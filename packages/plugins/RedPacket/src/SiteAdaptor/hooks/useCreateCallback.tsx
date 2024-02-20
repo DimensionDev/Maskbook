@@ -71,7 +71,7 @@ function useCreateParamsCallback(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const redPacketContract = useRedPacketContract(chainId, version)
     const getCreateParams = useCallback(async (): Promise<CreateParams | null> => {
-        if (!redPacketSettings || !redPacketContract) return null
+        if (!redPacketSettings || !redPacketContract || !publicKey) return null
         const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
         const tokenType = token!.schema === SchemaType.Native ? 0 : 1

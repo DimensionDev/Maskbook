@@ -15,6 +15,8 @@ export class Interceptor implements Middleware<ConnectionContext> {
     constructor(private signWithPersona: WalletAPI.SignWithPersona) {
         this.composers = {
             [ProviderType.None]: Composer.from(new NoneWallet()),
+            [ProviderType.Browser]: null,
+            [ProviderType.Coinbase]: null,
             [ProviderType.MaskWallet]: Composer.from(
                 new Popups(),
                 CustomNetwork,
@@ -29,6 +31,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             ),
             [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
             [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
+            [ProviderType.OKX]: Composer.from(new MetaMaskLike(ProviderType.OKX)),
             [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
             [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
             [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
@@ -36,7 +39,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
         }
     }
-    private composers: Partial<Record<ProviderType, Composer<ConnectionContext>>>
+    private composers: Record<ProviderType, Composer<ConnectionContext> | null>
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const composer = this.composers[context.providerType]

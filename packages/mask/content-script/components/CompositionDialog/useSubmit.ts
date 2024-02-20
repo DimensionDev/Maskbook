@@ -51,32 +51,19 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                     await SteganographyPayload(typeof rawEncrypted === 'string' ? encrypted : rawEncrypted)
                 :   undefined
 
-            if (activatedSiteAdaptorUI?.automation.endpoint?.publishPost && reason === 'timeline') {
-                const postId = await activatedSiteAdaptorUI.automation.endpoint.publishPost(
-                    mediaObject ? [decoratedText || defaultText, mediaObject] : [decoratedText || defaultText],
-                    {
-                        reason,
-                    },
-                )
-                if (postId) location.reload()
+            if (encode === 'image') {
+                if (!mediaObject) throw new Error('Failed to create image payload.')
+                // Don't await this, otherwise the dialog won't disappear
+                activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachImage?.(mediaObject, {
+                    recover: true,
+                    relatedTextPayload: decoratedText || defaultText,
+                    reason,
+                })
             } else {
-                if (encode === 'image') {
-                    if (!mediaObject) throw new Error('Failed to create image payload.')
-                    // Don't await this, otherwise the dialog won't disappear
-                    activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachImage?.(mediaObject, {
-                        recover: true,
-                        relatedTextPayload: decoratedText || defaultText,
-                        reason,
-                    })
-                } else {
-                    activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachText?.(
-                        decoratedText || defaultText,
-                        {
-                            recover: true,
-                            reason,
-                        },
-                    )
-                }
+                activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachText?.(decoratedText || defaultText, {
+                    recover: true,
+                    reason,
+                })
             }
 
             if (content.meta?.has(`${PluginID.RedPacket}:1`) || content.meta?.has(`${PluginID.RedPacket}_nft:1`))

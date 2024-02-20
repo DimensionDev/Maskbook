@@ -259,6 +259,8 @@ export namespace Plugin.SiteAdaptor {
         TipsRealm?: TipsRealm
         /** This UI will be rendered components on the Lens realm */
         Lens?: LensWidget
+        /** This UI will be rendered components on the Lens realm */
+        Farcaster?: FarcasterWidget
         NameWidget?: NameWidget
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
@@ -533,10 +535,23 @@ export namespace Plugin.SiteAdaptor {
         Sidebar = 'sidebar',
     }
 
+    export enum FarcasterSlot {
+        ProfileName = 'profile-name',
+        Post = 'post',
+        Sidebar = 'sidebar',
+    }
+
     export interface LensOptions {
         identity?: ProfileIdentifier
         slot: LensSlot
         accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
+        /** To update enabled/disabled status */
+        onStatusUpdate?(disabled: boolean): void
+    }
+    export interface FarcasterOptions {
+        identity?: ProfileIdentifier
+        slot: FarcasterSlot
+        accounts?: string[][]
         /** To update enabled/disabled status */
         onStatusUpdate?(disabled: boolean): void
     }
@@ -548,6 +563,15 @@ export namespace Plugin.SiteAdaptor {
              * The injected Lens Content component
              */
             Content: InjectUI<LensOptions>
+        }
+    }
+    export interface FarcasterWidget {
+        ID: string
+        UI?: {
+            /**
+             * The injected Lens Content component
+             */
+            Content: InjectUI<FarcasterOptions>
         }
     }
     export enum NameWidgetSlot {
@@ -999,6 +1023,15 @@ export interface IdentityResolved {
     homepage?: string
     identifier?: ProfileIdentifier
     isOwner?: boolean
+    profileId?: string
+    /** Firefly only */
+    lensToken?: string
+    /** Firefly only */
+    farcasterMessage?: string
+    /** Firefly only */
+    farcasterSignature?: string
+    /** Firefly only */
+    farcasterSigner?: string
 }
 
 /**

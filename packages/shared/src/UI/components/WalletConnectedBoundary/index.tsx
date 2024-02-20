@@ -27,10 +27,11 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
     hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
+    noGasText?: string
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId } = props
+    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId, noGasText } = props
 
     const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
@@ -85,7 +86,9 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 variant="contained"
                 onClick={nativeTokenBalance.retry}
                 {...props.ActionButtonProps}>
-                {nativeTokenBalance.loading ? t.plugin_wallet_update_gas_fee() : t.plugin_wallet_no_gas_fee()}
+                {nativeTokenBalance.loading ?
+                    t.plugin_wallet_update_gas_fee()
+                :   noGasText ?? t.plugin_wallet_no_gas_fee()}
             </ActionButton>
         )
 

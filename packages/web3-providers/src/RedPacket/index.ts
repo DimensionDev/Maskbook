@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
+import { mapKeys, sortBy } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -8,7 +8,7 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
-import { ChainbaseRedPacket } from '../Chainbase/index.js'
+import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacket } from '../Etherscan/index.js'
 import { ContractRedPacket } from './api.js'
 import {
@@ -46,9 +46,9 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     )
                     return this.parseRedPacketCreationTransactions(transactions, senderAddress)
                 },
-                () => {
+                async () => {
                     // block range might be too large
-                    return ContractRedPacket.getHistories(
+                    const results = await ContractRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -56,6 +56,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                         fromBlock,
                         endBlock,
                     )
+                    return sortBy(results, (x) => -x.block_number!)
                 },
             ],
             [],
@@ -89,24 +90,24 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         fromBlock: number,
         endBlock: number,
     ) {
-        return attemptUntil(
-            [
-                () => {
-                    return ChainbaseRedPacket.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId)
-                },
-                () => {
-                    return EtherscanRedPacket.getHistoryTransactions(
-                        chainId,
-                        senderAddress,
-                        contractAddress,
-                        methodId,
-                        fromBlock,
-                        endBlock,
-                    )
-                },
-            ],
-            [],
-        )
+        const attempts = [
+            () => {
+                return EtherscanRedPacket.getHistoryTransactions(
+                    chainId,
+                    senderAddress,
+                    contractAddress,
+                    methodId,
+                    fromBlock,
+                    endBlock,
+                )
+            },
+        ]
+        if (ChainbaseRedPacketAPI.isSupportedChain(chainId)) {
+            attempts.unshift(() => {
+                return ChainbaseRedPacketAPI.getHistoryTransactions(chainId, senderAddress, contractAddress, methodId)
+            })
+        }
+        return attemptUntil(attempts, [])
     }
 
     async getCollectionsByOwner(

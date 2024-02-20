@@ -2,10 +2,10 @@ import { isEqual, sortBy, uniqBy } from 'lodash-es'
 import { memo, useEffect, useRef, useState } from 'react'
 import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { FireflyBaseAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
 import { Fade } from '@mui/material'
-import { emitter } from '../emitter.js'
-import { useControlLensPopup } from '../hooks/Lens/useControlLensPopup.js'
+import { emitter } from '../../emitter.js'
+import { useControlLensPopup } from '../../hooks/Lens/useControlLensPopup.js'
 import { LensList } from './LensList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyBaseAPI.LensAccount => {
+export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyConfigAPI.LensAccount => {
     return {
         address: account.address,
         name: account.displayName,
@@ -34,7 +34,7 @@ export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): Fir
 export const LensPopup = memo(() => {
     const { classes } = useStyles()
     const holderRef = useRef<HTMLDivElement>(null)
-    const [lens, setLens] = useState<FireflyBaseAPI.LensAccount[]>([])
+    const [lens, setLens] = useState<FireflyConfigAPI.LensAccount[]>([])
     const active = useControlLensPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const anchorElRef = useRef<HTMLElement | null>()

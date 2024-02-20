@@ -1,6 +1,6 @@
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRef, ValueRefWithReady } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRef, ValueRefWithReady, Sniffings } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -33,6 +33,17 @@ const ActivatedPluginsSiteAdaptorFalse = new ValueRefWithReady<Plugin.SiteAdapto
         else if (minimalModeEqualsTo === false) return result.filter((x) => !minimalModeSub[x.ID]?.value)
         return result
     }
+}
+
+/**
+ * On the popup page, the plugin is not loaded.
+ * So in order for the valueRef not to remain pending,
+ * manually assigning the value solves this problem
+ */
+if (Sniffings.is_popup_page) {
+    ActivatedPluginsSiteAdaptorAny.value = []
+    ActivatedPluginsSiteAdaptorTrue.value = []
+    ActivatedPluginsSiteAdaptorFalse.value = []
 }
 
 export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {

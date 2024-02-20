@@ -1,5 +1,5 @@
-import { type ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
+import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { omit } from 'lodash-es'
 import { makeStyles, ActionButton, MaskTextField, RadioIndicator } from '@masknet/theme'
@@ -81,6 +81,11 @@ const useStyles = makeStyles()((theme) => ({
     tokenValue: {
         flexGrow: 1,
     },
+    title: {
+        fontSize: 14,
+        fontWEight: 700,
+        lineHeight: '18px',
+    },
 }))
 
 interface RedPacketFormProps {
@@ -92,13 +97,14 @@ interface RedPacketFormProps {
     gasOption?: GasConfig
     onGasOptionChange?: (config: GasConfig) => void
     expectedChainId: ChainId
+    isFirefly?: boolean
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
-    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId } = props
+    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId, isFirefly } = props
     // context
     const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
@@ -171,11 +177,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
-    useEffect(() => {
-        setToken(nativeTokenDetailed as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>)
-    }, [chainId, nativeTokenDetailed])
+    useUpdateEffect(() => {
+        setToken(EVMChainResolver.nativeCurrency(chainId))
+    }, [chainId])
 
-    useEffect(() => {
+    useUpdateEffect(() => {
         setRawAmount('')
     }, [token])
 
@@ -267,7 +273,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             return t.insufficient_balance()
 
         return ''
-    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue])
+    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue, isGasSufficient])
 
     if (!token) return null
 
@@ -311,7 +317,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     fontSize={14}
                                     marginRight={0.5}
                                     whiteSpace="nowrap">
-                                    {t.quantity()}
+                                    {t.winners()}
                                 </Typography>
                                 <Icons.RedPacket size={18} />
                             </>
@@ -320,7 +326,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: t.enter_quantity(),
+                            placeholder: t.enter_number_of_winners(),
                             spellCheck: false,
                             pattern: '^[0-9]+$',
                         },
@@ -329,9 +335,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </div>
             <div className={classes.field}>
                 <FungibleTokenInput
-                    label={t.token()}
+                    label={isRandom ? t.total_amount() : t.amount_each()}
                     token={token}
-                    placeholder={isRandom ? t.total() : t.amount_each()}
+                    placeholder={isRandom ? t.random_amount_share_tips() : t.equal_amount_share_tips()}
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
@@ -346,13 +352,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 />
             </div>
             <Box margin={2}>
+                <Typography className={classes.title}>{t.message()}</Typography>
+            </Box>
+            <Box margin={2}>
                 <InputBase
                     fullWidth
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t.blessing_words()}
                     value={message}
                     inputProps={{
-                        maxLength: 100,
+                        maxLength: isFirefly ? 40 : 100,
                     }}
                 />
             </Box>
@@ -378,7 +387,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 <PluginWalletStatusBar
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
-                    actualPluginID={pluginID}>
+                    actualPluginID={pluginID}
+                    disableSwitchAccount={isFirefly}>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
                         balance={balance}
@@ -391,12 +401,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 token
                             :   undefined
                         }
+                        tooltip={t.infinite_unlock_tips({ token: token.symbol })}
                         spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
-                            <WalletConnectedBoundary expectedChainId={chainId}>
+                            <WalletConnectedBoundary
+                                noGasText={t.no_enough_gas_fees()}
+                                expectedChainId={chainId}
+                                hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}

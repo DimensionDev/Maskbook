@@ -11,7 +11,9 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/i,
     [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
     [EnhanceableSite.Firefly]:
-        process.env.NODE_ENV === 'production' ? /(?:^(?:firefly\.)?mask\.social|\.vercel\.app)$/i : /^localhost:\d+$/,
+        process.env.NODE_ENV === 'production' ?
+            /(?:^(?:firefly\.|firefly-staging\.)?mask\.social|\.vercel\.app)$/i
+        :   /^localhost:\d+$/,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {

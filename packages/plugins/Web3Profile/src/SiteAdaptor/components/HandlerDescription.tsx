@@ -13,9 +13,9 @@ import {
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ProfilePopup } from './ProfilePopup.js'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

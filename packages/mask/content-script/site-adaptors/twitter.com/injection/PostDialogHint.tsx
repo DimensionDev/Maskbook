@@ -43,7 +43,7 @@ export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
             signal,
             missingReportRule: {
                 name: 'PostDialog hint popup',
-                rule: 'https://twitter.com/compose/tweet',
+                rule: 'https://twitter.com/compose/post',
             },
         },
     )

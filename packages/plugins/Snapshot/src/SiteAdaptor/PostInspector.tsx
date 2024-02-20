@@ -2,8 +2,7 @@ import { SnapshotContext } from '../context.js'
 import { getProposalIdentifier } from './helpers.js'
 import { Snapshot } from './Snapshot.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
-// @ts-expect-error undocumented api
-import { unstable_Cache as Cache, unstable_useCacheRefresh } from 'react'
+import { unstable_useCacheRefresh } from 'react'
 
 interface PostInspectorProps {
     url: string
@@ -14,9 +13,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <SnapshotContext.Provider value={identifier}>
-            <Cache>
-                <Component />
-            </Cache>
+            <Component />
         </SnapshotContext.Provider>
     )
 }
