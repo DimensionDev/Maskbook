@@ -174,7 +174,7 @@ const Interaction = memo((props: InteractionProps) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [paymentToken, setPaymentToken] = useState('')
-    const [, startTranstition] = useTransition()
+    const [, startTransition] = useTransition()
     const requestOrigin = currentRequest.origin
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -375,7 +375,7 @@ const Interaction = memo((props: InteractionProps) => {
                 <Box display="flex" alignItems="center">
                     <IconButton
                         disabled={currentMessageIndex === 0}
-                        onClick={() => startTranstition(() => setMessageIndex(currentMessageIndex - 1))}>
+                        onClick={() => startTransition(() => setMessageIndex(currentMessageIndex - 1))}>
                         <Icons.ArrowDrop size={16} className={classes.left} />
                     </IconButton>
                     <Typography className={classes.text}>
@@ -385,7 +385,7 @@ const Interaction = memo((props: InteractionProps) => {
                         })}
                     </Typography>
                     <IconButton
-                        onClick={() => startTranstition(() => setMessageIndex(currentMessageIndex + 1))}
+                        onClick={() => startTransition(() => setMessageIndex(currentMessageIndex + 1))}
                         disabled={currentMessageIndex === totalMessages - 1}>
                         <Icons.ArrowDrop size={16} className={classes.right} />
                     </IconButton>
@@ -408,7 +408,7 @@ const Interaction = memo((props: InteractionProps) => {
             cancelRunning={cancelLoading}
             confirmRunning={confirmLoading}
             onCancel={handleCancel}
-            onConfrim={handleConfirm}
+            onConfirm={handleConfirm}
             requestOrigin={requestOrigin}
             pager={pager}
         />
@@ -427,7 +427,7 @@ const InteractionItem = memo((props: InteractionItemProps) => {
         cancelRunning,
         confirmRunning,
         onCancel,
-        onConfrim,
+        onConfirm: onConfrim,
         paymentToken,
         setPaymentToken,
     } = props
@@ -590,7 +590,7 @@ interface InteractionItemProps {
     transaction: TransactionDetail
     pager: JSX.Element | undefined | null
     onCancel: MouseEventHandler<HTMLButtonElement>
-    onConfrim: (paymentToken: string, approvedAmount: string, gasConfig: GasConfig | undefined) => void
+    onConfirm: (paymentToken: string, approvedAmount: string, gasConfig: GasConfig | undefined) => void
     cancelRunning: boolean
     confirmRunning: boolean
     paymentToken: string
