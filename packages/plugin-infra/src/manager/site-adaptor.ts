@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { isEqual } from 'lodash-es'
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRefWithReady } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRefWithReady, Sniffings } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -16,6 +16,16 @@ events.on('activateChanged', () => (activatedSub.value = [...activated.plugins])
 
 const minimalModeSub = new ValueRefWithReady<string[]>([], isEqual)
 events.on('minimalModeChanged', () => (minimalModeSub.value = [...minimalMode]))
+
+/**
+ * On the popup page, the plugin is not loaded.
+ * So in order for the valueRef not to remain pending,
+ * manually assigning the value solves this problem
+ */
+if (Sniffings.is_popup_page) {
+    activatedSub.value = []
+    minimalModeSub.value = []
+}
 
 export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {
     const minimalMode = useValueRef(minimalModeSub)
