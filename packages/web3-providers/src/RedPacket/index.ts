@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { mapKeys } from 'lodash-es'
+import { mapKeys, sortBy } from 'lodash-es'
 import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -46,9 +46,9 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                     )
                     return this.parseRedPacketCreationTransactions(transactions, senderAddress)
                 },
-                () => {
+                async () => {
                     // block range might be too large
-                    return ContractRedPacket.getHistories(
+                    const results = await ContractRedPacket.getHistories(
                         chainId,
                         senderAddress,
                         contractAddress,
@@ -56,6 +56,7 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
                         fromBlock,
                         endBlock,
                     )
+                    return sortBy(results, (x) => -x.block_number!)
                 },
             ],
             [],
