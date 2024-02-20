@@ -197,6 +197,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 NODE_DEBUG: false,
                 WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
+                NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
             new DefinePlugin({
                 'process.browser': 'true',
