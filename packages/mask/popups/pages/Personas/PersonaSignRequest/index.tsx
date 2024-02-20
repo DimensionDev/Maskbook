@@ -21,7 +21,7 @@ const PersonaSignRequest = memo(() => {
     const personas = usePersonasFromDB()
     const { currentPersona } = PersonaContext.useContainer()
 
-    const source = params.get('source')
+    const source = params.get('source') || undefined
 
     useEffect(() => {
         if (!personas.length) return
@@ -110,7 +110,7 @@ const PersonaSignRequest = memo(() => {
 
     return (
         <Box p={2}>
-            <SignRequestInfo message={message} source={source} />
+            <SignRequestInfo message={message} rawMessage={message} origin={source} />
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
                     {t.cancel()}

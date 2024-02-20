@@ -108,9 +108,6 @@ export interface PopupRoutesParamsMap {
         isCreating?: boolean
         source?: string
     }
-    [PopupRoutes.ContractInteraction]: {
-        source?: string
-    }
     [PopupRoutes.Wallet]: {
         isCreating?: boolean
         external_request?: string
