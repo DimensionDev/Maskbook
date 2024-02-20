@@ -427,7 +427,7 @@ const InteractionItem = memo((props: InteractionItemProps) => {
         cancelRunning,
         confirmRunning,
         onCancel,
-        onConfirm: onConfrim,
+        onConfirm,
         paymentToken,
         setPaymentToken,
     } = props
@@ -540,7 +540,7 @@ const InteractionItem = memo((props: InteractionItemProps) => {
             sx={isDangerRequest ? { background: (theme) => theme.palette.maskColor.danger } : undefined}
             onClick={() => {
                 if (isDangerRequest && !dangerDialogOpen) return setDangerDialogOpen(true)
-                else onConfrim(paymentToken, approvedAmount, gasConfig)
+                else onConfirm(paymentToken, approvedAmount, gasConfig)
             }}
             fullWidth>
             {actionName}
