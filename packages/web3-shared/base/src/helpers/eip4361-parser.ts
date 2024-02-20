@@ -197,19 +197,21 @@ function _parseEIP4361Message(message: string): ParsedEIP4361Message | EIP4361Me
         resources,
     }
 }
-export const parseEIP4361Message = memoize(
-    (message: string, messageOrigin: string | undefined): EIP4361Message | undefined => {
-        const parsed = _parseEIP4361Message(message)
-        if (parsed === EIP4361MessageState.NotContain) return undefined
-        if (parsed === EIP4361MessageState.Invalid)
-            return { type: 'eip4361', message, parsed: undefined, invalidFields: [] }
-        const invalidFields: Array<keyof ParsedEIP4361Message> = []
-        if (!messageOrigin || !isEIP4361DomainMatch(messageOrigin, parsed)) invalidFields.push('domain')
-        if (parsed.expiration_time && parsed.expiration_time < new Date()) invalidFields.push('expiration_time')
-        if (parsed.not_before && parsed.not_before > new Date()) invalidFields.push('not_before')
-        return { type: 'eip4361', message, parsed, invalidFields }
-    },
-)
+export const parseEIP4361Message: (message: string, messageOrigin: string | undefined) => EIP4361Message | undefined =
+    memoize(
+        (message: string, messageOrigin: string | undefined): EIP4361Message | undefined => {
+            const parsed = _parseEIP4361Message(message)
+            if (parsed === EIP4361MessageState.NotContain) return undefined
+            if (parsed === EIP4361MessageState.Invalid)
+                return { type: 'eip4361', message, parsed: undefined, invalidFields: [] }
+            const invalidFields: Array<keyof ParsedEIP4361Message> = []
+            if (!messageOrigin || !isEIP4361DomainMatch(messageOrigin, parsed)) invalidFields.push('domain')
+            if (parsed.expiration_time && parsed.expiration_time < new Date()) invalidFields.push('expiration_time')
+            if (parsed.not_before && parsed.not_before > new Date()) invalidFields.push('not_before')
+            return { type: 'eip4361', message, parsed, invalidFields }
+        },
+        (a, b) => a + b,
+    )
 export function isEIP4361DomainMatch(messageOrigin: string, message: ParsedEIP4361Message): boolean {
     if (messageOrigin === message.domain) return true
     if ('https://' + message.domain === messageOrigin) return true

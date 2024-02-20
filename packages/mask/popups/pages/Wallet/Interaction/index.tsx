@@ -49,9 +49,8 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import type { ReasonableMessage } from '@masknet/web3-shared-base'
+import { type ReasonableMessage, parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { parseEIP4361Message, type EIP4361Message } from '../../../components/SignRequestInfo/eip4361-parser.js'
 import { useInteractionWalletContext } from './InteractionContext.js'
 
 const useStyles = makeStyles()((theme) => ({
