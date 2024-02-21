@@ -39,8 +39,6 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         reloadStatus: {
-            padding: theme.spacing(1, 2, 2, 2),
-            minHeight: 148,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -63,7 +61,7 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
     onClose?: () => void
 }
 
-export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
+export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function PersonaSelectPanel(props) {
     const { finishTarget, enableVerify = true, onClose } = props
 
     const t = useSharedTrans()
@@ -141,7 +139,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
 
         const handleClick = async () => {
             if (!isConnected) {
-                await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
+                await connect(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
                 if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
                 else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
             }
@@ -216,9 +214,19 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         selectedPersona?.persona.linkedProfiles,
     ])
 
-    if (isPending) return <LoadingStatus iconSize={24} />
+    if (isPending)
+        return (
+            <Stack height="100%" justifyContent="center">
+                <LoadingStatus iconSize={24} />
+            </Stack>
+        )
 
-    if (error) return <ReloadStatus className={classes.reloadStatus} onRetry={refetch} />
+    if (error)
+        return (
+            <Stack height="100%" justifyContent="center">
+                <ReloadStatus className={classes.reloadStatus} onRetry={refetch} />
+            </Stack>
+        )
 
     if (!personas.length) return <Stack height="100%" justifyContent="space-between" />
 
