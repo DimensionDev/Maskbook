@@ -4,7 +4,6 @@ import { BigNumber } from 'bignumber.js'
 import { alpha } from '@mui/system'
 import { Box } from '@mui/material'
 import { TokenSecurityBoundary } from '@masknet/plugin-go-plus-security'
-import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import {
     PluginWalletStatusBar,
@@ -26,6 +25,7 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 import { useTraderTrans } from '../../locales/index.js'
+import { useActivatedPlugins } from './hooks/useMinimalMaybe.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -100,8 +100,7 @@ export function TraderStateBar({
     )
     // #endregion
 
-    const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
-    const isGoPlusMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+    const isGoPlusMinimal = useActivatedPlugins().some((x) => x.ID === PluginID.GoPlusSecurity)
 
     const isTokenSecurityEnable = !isGoPlusMinimal
 
