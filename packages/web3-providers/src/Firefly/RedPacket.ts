@@ -15,40 +15,34 @@ const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
 const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
 
-const themes = [
-    {
-        id: 'e171b936-b5f5-415c-8938-fa1b74d1d612',
-        name: 'lucky-firefly',
-    },
-    {
-        id: 'e480132f-a853-43ea-bbab-883b463e55b3',
-        name: 'lucky-flower',
-    },
-    {
-        id: 'b64f9af2-447c-471f-998a-fa7336c57849',
-        name: 'golden-flower',
-    },
-] as const
-
-const jsonHeaders = {
-    'Content-Type': 'application/json',
-}
-
 type WithoutChainId<T> = Omit<T, 'chain_id'>
 type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
 
+function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
+    return fetchJSON<T>(url, {
+        ...init,
+        headers: {
+            'Content-Type': 'application/json',
+            ...init?.headers,
+        },
+    })
+}
+
 export class FireflyRedPacket {
-    static getThemeSettings(
+    static async getPayloadUrls(
         from: string,
         amount?: string,
         type?: string,
         symbol?: string,
         decimals?: number,
-    ): FireflyRedPacketAPI.ThemeSettings[] {
-        return themes.map((theme) => ({
-            id: theme.id,
-            payloadUrl: urlcat(SITE_URL, '/api/rp', {
-                theme: theme.name,
+    ): Promise<Array<{ themeId: string; url: string }>> {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
+
+        return data.list.map((theme) => ({
+            themeId: theme.tid,
+            url: urlcat(SITE_URL, '/api/rp', {
+                themeId: theme.tid,
                 usage: 'payload',
                 from,
                 amount,
@@ -56,11 +50,39 @@ export class FireflyRedPacket {
                 symbol,
                 decimals,
             }),
-            coverUrl: urlcat(SITE_URL, '/api/rp', {
-                theme: theme.name,
-                usage: 'cover',
-            }),
         }))
+    }
+
+    static async getCoverUrlByRpid(
+        rpid: string,
+        symbol?: string,
+        decimals?: number,
+        shares?: number,
+        amount?: string,
+        from?: string,
+        message?: string,
+        remainingAmount?: string,
+        remainingShares?: string,
+    ) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
+            rpid,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        return {
+            themeId: data.tid,
+            url: urlcat(SITE_URL, '/api/rp', {
+                usage: 'cover',
+                themeId: data.tid,
+                symbol,
+                decimals,
+                shares,
+                amount,
+                from,
+                message,
+                'remaining-amount': remainingAmount,
+                'remaining-shares': remainingShares,
+            }),
+        }
     }
 
     static getPayloadUrlByThemeId(
@@ -72,7 +94,7 @@ export class FireflyRedPacket {
         decimals?: number,
     ) {
         return urlcat(SITE_URL, '/api/rp', {
-            theme: themes.find((x) => x.id === themeId)?.name || themes[0].name,
+            themeId,
             usage: 'payload',
             from,
             amount,
@@ -82,25 +104,14 @@ export class FireflyRedPacket {
         })
     }
 
-    static async getThemeByRpid(rpid: string) {
-        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
-            rpid,
-        })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
-        const themeId = data.tid
-        const setting = themes.find((x) => x.id === themeId) || themes[0]
-        return setting.name
-    }
-
     static async createPublicKey(
         themeId: string,
         shareFrom: string,
         payloads: FireflyRedPacketAPI.StrategyPayload[],
     ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
-        const { data } = await fetchJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
             method: 'POST',
-            headers: jsonHeaders,
             body: JSON.stringify({
                 themeId,
                 shareFrom,
@@ -108,7 +119,6 @@ export class FireflyRedPacket {
                 claimStrategy: JSON.stringify(payloads),
             }),
         })
-
         return data.publicKey
     }
 
@@ -118,9 +128,8 @@ export class FireflyRedPacket {
         claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
     ): Promise<void> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
-        await fetchJSON(url, {
+        await fetchFireflyJSON(url, {
             method: 'POST',
-            headers: jsonHeaders,
             body: JSON.stringify({
                 rpid,
                 postReaction: reactions,
@@ -133,9 +142,8 @@ export class FireflyRedPacket {
         options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions,
     ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
-            headers: jsonHeaders,
             body: JSON.stringify(options),
         })
         return data.signedMessage
@@ -185,9 +193,8 @@ export class FireflyRedPacket {
 
     static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/checkClaimStrategyStatus')
-        return fetchJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
+        return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
-            headers: jsonHeaders,
             body: JSON.stringify(options),
         })
     }

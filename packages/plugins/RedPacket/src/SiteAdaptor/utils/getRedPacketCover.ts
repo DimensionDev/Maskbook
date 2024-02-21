@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 
 interface Options {
-    theme: string
+    themeId: string
     symbol: string
     shares: number | string
     amount: number | string

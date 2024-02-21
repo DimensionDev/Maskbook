@@ -149,9 +149,9 @@ export function FireflyRedpacketConfirmDialog({
         [settings.total, settings.token?.decimals],
     )
 
-    const themes = useMemo(() => {
+    const { value: themes, loading: themesLoading } = useAsync(async () => {
         if (!currentAccount) return EMPTY_LIST
-        return FireflyRedPacket.getThemeSettings(
+        return FireflyRedPacket.getPayloadUrls(
             isValidAddress(currentAccount) || isValidDomain(currentAccount) ? currentAccount : `@${currentAccount}`,
             settings.total,
             'fungible',
@@ -160,7 +160,7 @@ export function FireflyRedpacketConfirmDialog({
         )
     }, [currentAccount, settings.total, settings.token])
 
-    const { state, currentIndex, prev, next } = useStateList<FireflyRedPacketAPI.ThemeSettings | undefined>(themes)
+    const { state, currentIndex, prev, next } = useStateList<{ themeId: string; url: string } | undefined>(themes)
 
     const isFirst = currentIndex === 0
     const isLatest = themes?.length && currentIndex === themes.length - 1
@@ -191,9 +191,9 @@ export function FireflyRedpacketConfirmDialog({
     }, [account, fireflyContext, farcasterOwnerENS, lensOwnerENS, ensName])
 
     const { loading: imageLoading } = useAsync(async () => {
-        if (!state?.payloadUrl) return
-        await fetch(state.payloadUrl)
-    }, [state?.payloadUrl])
+        if (!state?.url) return
+        await fetch(state.url)
+    }, [state?.url])
 
     const { value, loading } = useAsync(async () => {
         if (!state) return
@@ -253,9 +253,8 @@ export function FireflyRedpacketConfirmDialog({
                 ])
             :   EMPTY_LIST
 
-        const publicKey = await FireflyRedPacket.createPublicKey(state.id, currentAccount, payload)
         return {
-            publicKey,
+            publicKey: await FireflyRedPacket.createPublicKey(state.themeId, currentAccount, payload),
             claimRequirements: payload,
         }
     }, [state, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId, currentAccount])
@@ -265,7 +264,7 @@ export function FireflyRedpacketConfirmDialog({
         '',
         settings,
         gasOption,
-        (payload: RedPacketJSONPayload) => onCreated(payload, state?.payloadUrl, value?.claimRequirements),
+        (payload: RedPacketJSONPayload) => onCreated(payload, state?.url, value?.claimRequirements),
         onClose,
         currentAccount,
     )
@@ -388,14 +387,14 @@ export function FireflyRedpacketConfirmDialog({
                     {state ?
                         <Box py={2} display="flex" justifyContent="center">
                             <img
-                                key={state.id}
+                                key={state.themeId}
                                 style={{
                                     width: 288,
                                     height: 202,
                                     borderRadius: 16,
                                     display: imageLoading ? 'none' : 'block',
                                 }}
-                                src={state.payloadUrl}
+                                src={state.url}
                             />
                             {imageLoading ?
                                 <Skeleton style={{ width: 288, height: 202 }} variant="rounded" />
