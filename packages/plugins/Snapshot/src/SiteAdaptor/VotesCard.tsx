@@ -15,6 +15,7 @@ import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useSnapshotTrans } from '../locales/index.js'
+import { isArray } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -104,7 +105,7 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {votes?.map(function voteItemIter(v) {
+                {isArray(votes) && votes?.map(function voteItemIter(v) {
                     const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices ?

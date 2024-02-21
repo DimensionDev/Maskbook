@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
         },
         tabActive: {
             background: theme.palette.maskColor.white,
-            color: theme.palette.maskColor.publicMain,
+            color: `${theme.palette.maskColor.publicMain}!important`,
             '&:hover': {
                 background: theme.palette.maskColor.white,
             },
