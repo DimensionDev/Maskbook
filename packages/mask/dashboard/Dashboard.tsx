@@ -10,13 +10,12 @@ import {
     DialogStackingProvider,
 } from '@masknet/theme'
 import { I18NextProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
-import { ErrorBoundary, queryClient } from '@masknet/shared-base-ui'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
 import { Pages } from './pages/routes.js'
-import { UserContext, useAppearance, queryPersistOptions } from '../shared-ui/index.js'
+import { UserContext, useAppearance } from '../shared-ui/index.js'
 import Services from '#services'
 
 const GlobalCss = (
@@ -54,9 +53,6 @@ export default function Dashboard() {
     // #endregion
 
     return compose(
-        (children) => (
-            <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} children={children} />
-        ),
         (children) => <RootWeb3ContextProvider enforceEVM children={children} />,
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,
         (children) => <StyledEngineProvider injectFirst children={children} />,
