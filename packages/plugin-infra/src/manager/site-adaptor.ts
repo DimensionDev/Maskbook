@@ -35,18 +35,8 @@ const ActivatedPluginsSiteAdaptorFalse = new ValueRefWithReady<Plugin.SiteAdapto
     }
 }
 
-/**
- * On the popup page, the plugin is not loaded.
- * So in order for the valueRef not to remain pending,
- * manually assigning the value solves this problem
- */
-if (Sniffings.is_popup_page) {
-    ActivatedPluginsSiteAdaptorAny.value = []
-    ActivatedPluginsSiteAdaptorTrue.value = []
-    ActivatedPluginsSiteAdaptorFalse.value = []
-}
-
 export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {
+    assertLocation()
     return useValueRef(
         minimalModeEqualsTo === 'any' ? ActivatedPluginsSiteAdaptorAny
         : minimalModeEqualsTo === true ? ActivatedPluginsSiteAdaptorTrue
@@ -54,19 +44,28 @@ export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | bool
         : unreachable(minimalModeEqualsTo),
     )
 }
+
+function assertLocation() {
+    if (Sniffings.is_popup_page || Sniffings.is_dashboard_page) {
+        throw new Error('This hook should not be called in popup or dashboard.')
+    }
+}
+
 useActivatedPluginsSiteAdaptor.visibility = {
-    useMinimalMode: () => useValueRef(ActivatedPluginsSiteAdaptorTrue),
-    useNotMinimalMode: () => useValueRef(ActivatedPluginsSiteAdaptorFalse),
-    useAnyMode: () => useValueRef(ActivatedPluginsSiteAdaptorAny),
+    useMinimalMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorTrue)),
+    useNotMinimalMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorFalse)),
+    useAnyMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorAny)),
 }
 
 // this should never be used for a normal plugin
 const TRUE = new ValueRef(true)
 export function useIsMinimalMode(pluginID: string) {
+    assertLocation()
     return useValueRef(minimalModeSub[pluginID] || TRUE)
 }
 
 export async function checkIsMinimalMode(pluginID: string) {
+    assertLocation()
     const sub = minimalModeSub[pluginID]
     if (!sub) return true
     await sub.readyPromise
