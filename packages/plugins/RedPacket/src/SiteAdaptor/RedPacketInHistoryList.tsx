@@ -1,23 +1,14 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import {
-    RedPacketStatus,
-    type RedPacketJSONPayload,
-    type RedPacketJSONPayloadFromChain,
-} from '@masknet/web3-providers/types'
-import { formatBalance, minus, type FungibleToken } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import { Box, ListItem, Typography, useMediaQuery, type Theme } from '@mui/material'
-import { intervalToDuration, nextDay } from 'date-fns'
-import { memo, useCallback, useMemo } from 'react'
-import { useEverSeen } from '../../../../shared-base-ui/src/hooks/useEverSeen.js'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { type RedPacketJSONPayload, FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { Box, ListItem, Typography } from '@mui/material'
+import { format, fromUnixTime } from 'date-fns'
+import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
-import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
-import { useRefundCallback } from './hooks/useRefundCallback.js'
-import { dateTimeFormat } from './utils/formatDate.js'
+import { RedPacketActionButton } from './RedPacketActionButton.js'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -176,88 +167,48 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 })
 
 interface RedPacketInHistoryListProps {
-    history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
+    history: FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const { history, onSelect } = props
+    const { history } = props
+    const {
+        rp_msg,
+        create_time,
+        claim_numbers,
+        total_numbers,
+        total_amounts,
+        token_decimal,
+        claim_amounts,
+        token_symbol,
+        token_logo,
+        chain_id,
+        redpacket_id,
+        redpacket_status,
+        claim_strategy,
+        share_from,
+        theme_id,
+    } = history
     const t = useRedPacketTrans()
 
-    const [seen, ref] = useEverSeen()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const { data: receipt } = useCreateRedPacketReceipt(seen && !history.rpid ? history.txid : '')
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
-
-    const rpid = history.rpid || receipt?.rpid || ''
-    const creation_time = history.creation_time || receipt?.creation_time || 0
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
-        () => ({ ...props.history, rpid, creation_time }),
-        [props.history, rpid, creation_time],
-    )
-
-    const {
-        value: availability,
-        computed: { canRefund, canSend, listOfStatus, isPasswordValid },
-        password,
-        retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, patchedHistory)
-
-    const claimerNumber = availability ? Number(availability.claimed) : 0
-    const total_remaining = availability?.balance
-
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
-        patchedHistory.contract_version,
-        account,
-        rpid,
-    )
-    const tokenAddress =
-        (patchedHistory as RedPacketJSONPayload).token?.address ??
-        (patchedHistory as RedPacketJSONPayloadFromChain).token_address
-
-    const { data: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '', undefined, {
-        chainId,
-    })
-
-    const historyToken = useMemo(() => {
-        return {
-            ...(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token),
-            address: tokenAddress,
-        } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
-    }, [tokenDetailed, patchedHistory, tokenAddress])
-
-    const onSendOrRefund = useCallback(async () => {
-        if (canRefund) {
-            await refundCallback()
-            revalidateAvailability()
-        }
-        if (canSend) onSelect({ ...patchedHistory, password, token: historyToken })
-    }, [onSelect, refundCallback, canRefund, canSend, patchedHistory, historyToken, password])
-
-    // #region refund time
-    const refundDuration =
-        canSend && !isPasswordValid ? intervalToDuration({ start: Date.now(), end: nextDay(creation_time, 1) }) : null
-    const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
-    // #endregion
-
     return (
         <ListItem className={classes.root}>
-            <section className={classes.contentItem} ref={ref}>
+            <section className={classes.contentItem}>
                 <Box className={classes.box}>
                     <Box className={classes.content}>
                         <section className={classes.section}>
                             <div className={classes.div}>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                        {patchedHistory.sender.message === '' ?
-                                            t.best_wishes()
-                                        :   patchedHistory.sender.message}
+                                        {!rp_msg ? t.best_wishes() : rp_msg}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
@@ -266,44 +217,35 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     </Typography>
                                     <Typography
                                         variant="body1"
-                                        className={cx(classes.info, classes.message, rpid ? '' : classes.invisible)}>
-                                        {t.history_duration({ time: dateTimeFormat(new Date(creation_time)) })}
+                                        className={cx(
+                                            classes.info,
+                                            classes.message,
+                                            redpacket_id ? '' : classes.invisible,
+                                        )}>
+                                        {t.history_duration({
+                                            time: format(fromUnixTime(create_time), 'M/d/yyyy HH:mm'),
+                                        })}
                                     </Typography>
                                 </div>
                             </div>
-                            {canRefund || canSend || listOfStatus.includes(RedPacketStatus.empty) || refunded ?
-                                <ShadowRootTooltip
-                                    placement="top"
-                                    title={
-                                        canSend && !isPasswordValid ?
-                                            <Typography className={classes.popperText}>
-                                                {t.data_broken({ duration: formatRefundDuration })}
-                                            </Typography>
-                                        :   undefined
-                                    }>
-                                    <span style={{ display: 'inline-block' }}>
-                                        <ActionButton
-                                            loading={isRefunding}
-                                            fullWidth={isSmall}
-                                            onClick={canSend && !isPasswordValid ? undefined : onSendOrRefund}
-                                            disabled={
-                                                listOfStatus.includes(RedPacketStatus.empty) || refunded || isRefunding
-                                            }
-                                            className={cx(
-                                                classes.actionButton,
-                                                canSend && !isPasswordValid ? classes.disabledButton : '',
-                                            )}
-                                            size="large">
-                                            {canSend ?
-                                                t.share()
-                                            : isRefunding ?
-                                                t.refunding()
-                                            : listOfStatus.includes(RedPacketStatus.empty) || refunded ?
-                                                t.empty()
-                                            :   t.refund()}
-                                        </ActionButton>
-                                    </span>
-                                </ShadowRootTooltip>
+                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
+                                <RedPacketActionButton
+                                    redpacketStatus={redpacket_status}
+                                    rpid={redpacket_id}
+                                    account={account}
+                                    claim_strategy={claim_strategy}
+                                    shareFrom={share_from}
+                                    themeId={theme_id}
+                                    redpacketMsg={rp_msg}
+                                    tokenInfo={{
+                                        symbol: token_symbol,
+                                        decimals: token_decimal,
+                                        amount: total_amounts,
+                                    }}
+                                    chainId={chain_id}
+                                    totalAmount={total_amounts}
+                                    createdAt={create_time}
+                                />
                             :   null}
                         </section>
 
@@ -314,30 +256,26 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                         span: <span />,
                                     }}
                                     values={{
-                                        claimedShares: String(claimerNumber),
-                                        shares: String(patchedHistory.shares),
-                                        amount: formatBalance(patchedHistory.total, historyToken.decimals ?? 18, {
-                                            significant: 6,
+                                        claimedShares: String(claim_numbers),
+                                        shares: String(total_numbers),
+                                        amount: formatBalance(total_amounts, token_decimal ?? 18, {
+                                            significant: 2,
                                             isPrecise: true,
                                         }),
-                                        claimedAmount:
-                                            rpid ?
-                                                formatBalance(
-                                                    minus(patchedHistory.total, total_remaining ?? 0),
-                                                    historyToken.decimals,
-                                                    { significant: 6, isPrecise: true },
-                                                )
-                                            :   '',
-                                        symbol: historyToken.symbol,
+                                        claimedAmount: formatBalance(claim_amounts, token_decimal, {
+                                            significant: 2,
+                                            isPrecise: true,
+                                        }),
+                                        symbol: token_symbol,
                                     }}
                                 />
                             </Typography>
-                            {historyToken.logoURL ?
+                            {token_logo ?
                                 <TokenIcon
                                     className={classes.icon}
-                                    address={historyToken.address}
-                                    name={historyToken.name}
-                                    logoURL={historyToken.logoURL}
+                                    address={''}
+                                    name={token_symbol}
+                                    logoURL={token_logo}
                                 />
                             :   null}
                         </section>

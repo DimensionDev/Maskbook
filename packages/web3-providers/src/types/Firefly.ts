@@ -1,3 +1,6 @@
+type WithoutChainId<T> = Omit<T, 'chain_id'>
+type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
+
 export namespace FireflyConfigAPI {
     export type Result<T> = {
         code: number
@@ -218,6 +221,10 @@ export namespace FireflyRedPacketAPI {
         redpacket_status: RedPacketStatus
         ens_name: string
     }
+
+    export interface RedPacketClaimedInfoWithNumberChainId extends WithNumberChainId<RedPacketClaimedInfo> {}
+    export interface RedPacketSentInfoWithNumberChainId extends WithNumberChainId<RedPacketSentInfo> {}
+    export interface RedPacketClaimListInfoWithNumberChainId extends WithNumberChainId<RedPacketClaimListInfo> {}
 
     export interface ClaimList {
         creator: string

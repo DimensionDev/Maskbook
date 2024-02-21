@@ -34,9 +34,6 @@ const jsonHeaders = {
     'Content-Type': 'application/json',
 }
 
-type WithoutChainId<T> = Omit<T, 'chain_id'>
-type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
-
 export class FireflyRedPacket {
     static getThemeSettings(
         from: string,
@@ -143,8 +140,8 @@ export class FireflyRedPacket {
 
     static async getHistory<
         T extends FireflyRedPacketAPI.ActionType,
-        R = T extends FireflyRedPacketAPI.ActionType.Claim ? WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimedInfo>
-        :   WithNumberChainId<FireflyRedPacketAPI.RedPacketSentInfo>,
+        R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId
+        :   FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId,
     >(
         actionType: T,
         from: HexString,
@@ -171,7 +168,7 @@ export class FireflyRedPacket {
     static async getClaimHistory(
         redpacket_id: string,
         indicator?: PageIndicator,
-    ): Promise<WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimListInfo>> {
+    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfoWithNumberChainId> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpacketId: redpacket_id,
             cursor: indicator?.id,

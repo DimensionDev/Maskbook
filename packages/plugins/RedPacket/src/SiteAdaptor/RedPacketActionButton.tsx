@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
                 marginTop: theme.spacing(1),
             },
             '&:disabled': {
-                background: theme.palette.maskColor.dark,
+                background: theme.palette.maskColor.primaryMain,
                 color: theme.palette.common.white,
             },
             '&:hover': {
@@ -55,7 +55,7 @@ interface Props {
     createdAt?: number
 }
 
-export const FireflyRedPacketActionButton = memo(function FireflyRedPacketActionButton(props: Props) {
+export const RedPacketActionButton = memo(function RedPacketActionButton(props: Props) {
     const {
         redpacketStatus: _redpacketStatus,
         rpid,
