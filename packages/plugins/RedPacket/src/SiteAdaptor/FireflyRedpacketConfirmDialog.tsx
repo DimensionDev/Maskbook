@@ -149,7 +149,7 @@ export function FireflyRedpacketConfirmDialog({
         [settings.total, settings.token?.decimals],
     )
 
-    const { value: urls } = useAsync(async () => {
+    const { value: urls, loading: fetchUrlsLoading } = useAsync(async () => {
         if (!currentAccount) return EMPTY_LIST
         return FireflyRedPacket.getPayloadUrls(
             isValidAddress(currentAccount) || isValidDomain(currentAccount) ? currentAccount : `@${currentAccount}`,
@@ -392,11 +392,11 @@ export function FireflyRedpacketConfirmDialog({
                                     width: 288,
                                     height: 202,
                                     borderRadius: 16,
-                                    display: imageLoading ? 'none' : 'block',
+                                    display: imageLoading || fetchUrlsLoading ? 'none' : 'block',
                                 }}
                                 src={state.url}
                             />
-                            {imageLoading ?
+                            {imageLoading || fetchUrlsLoading ?
                                 <Skeleton style={{ width: 288, height: 202 }} variant="rounded" />
                             :   null}
                         </Box>
@@ -427,7 +427,7 @@ export function FireflyRedpacketConfirmDialog({
                 </Box>
             </Box>
             <Box className={classes.footer}>
-                <ActionButton loading={isCreating || loading} onClick={createRedpacket} fullWidth>
+                <ActionButton loading={isCreating || loading || fetchUrlsLoading} onClick={createRedpacket} fullWidth>
                     {t.next_button()}
                 </ActionButton>
             </Box>
