@@ -149,7 +149,7 @@ export function FireflyRedpacketConfirmDialog({
         [settings.total, settings.token?.decimals],
     )
 
-    const { value: themes, loading: themesLoading } = useAsync(async () => {
+    const { value: urls } = useAsync(async () => {
         if (!currentAccount) return EMPTY_LIST
         return FireflyRedPacket.getPayloadUrls(
             isValidAddress(currentAccount) || isValidDomain(currentAccount) ? currentAccount : `@${currentAccount}`,
@@ -160,10 +160,10 @@ export function FireflyRedpacketConfirmDialog({
         )
     }, [currentAccount, settings.total, settings.token])
 
-    const { state, currentIndex, prev, next } = useStateList<{ themeId: string; url: string } | undefined>(themes)
+    const { state, currentIndex, prev, next } = useStateList<{ themeId: string; url: string } | undefined>(urls)
 
     const isFirst = currentIndex === 0
-    const isLatest = themes?.length && currentIndex === themes.length - 1
+    const isLatest = urls?.length && currentIndex === urls.length - 1
 
     const accounts = useMemo(() => {
         const { currentFarcasterProfile, currentLensProfile } = fireflyContext
