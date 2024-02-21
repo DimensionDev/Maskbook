@@ -2,23 +2,21 @@
 import { Flags } from '@masknet/flags'
 import Services from '#services'
 import { Box, Link } from '@mui/material'
-import { Suspense, cache, use, useState } from 'react'
+import { useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { useAsync } from '@react-hookz/web'
 
-const f = cache(Services.SiteAdaptor.shouldSuggestConnectInPopup)
 export default function MaskSDK() {
     if (!Flags.mask_sdk_enabled) return null
     return (
         <ErrorBoundary>
-            <Suspense>
-                <MaskSDKLoader />
-            </Suspense>
+            <MaskSDKLoader />
         </ErrorBoundary>
     )
 }
 
 function MaskSDKLoader() {
-    const shouldShow = use(f())
+    const [shouldShow] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
     const [dismissed, setDismissed] = useState(false)
     if (!shouldShow) return null
     if (dismissed) return null

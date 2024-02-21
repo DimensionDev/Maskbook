@@ -1,5 +1,15 @@
 import { MaskMessages } from '@masknet/shared-base'
 import Services from '#services'
-import { createHook } from './createHook.js'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
-export const useLanguage = createHook(Services.Settings.getLanguage, MaskMessages.events.languageSettings.on)
+export function useLanguage() {
+    const { data, refetch } = useSuspenseQuery({
+        queryKey: ['shared-ui', 'useLanguage'],
+        queryFn: Services.Settings.getLanguage,
+        networkMode: 'always',
+    })
+    useEffect(() => MaskMessages.events.languageSettings.on(() => refetch()), [refetch])
+    console.log(data)
+    return data
+}
