@@ -127,7 +127,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
 
-    const isFirefly = useMemo(() => true, [props.fireflyContext])
+    const isFirefly = useMemo(() => !!props.fireflyContext, [props.fireflyContext])
 
     const handleClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
