@@ -13,7 +13,6 @@ import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@mask
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { TokenPanel } from '../../types/index.js'
@@ -23,6 +22,7 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { useTraderTrans } from '../../locales/index.js'
+import { useActivatedPlugins } from './hooks/useMinimalMaybe.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -215,9 +215,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
 
-        const minimalPlugins = useActivatedPluginsSiteAdaptor(true)
-        const isGoPlusSecurityMinimal = minimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
-        const isTokenSecurityEnable = !isGoPlusSecurityMinimal
+        const isTokenSecurityEnable = !useActivatedPlugins().some((x) => x.ID === PluginID.GoPlusSecurity)
 
         // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
