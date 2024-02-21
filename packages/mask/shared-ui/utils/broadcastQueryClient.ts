@@ -6,6 +6,10 @@ interface BroadcastQueryClientOptions {
     queryClient: QueryClient
 }
 
+/**
+ * @deprecated
+ * Broadcasting cache changes might decrease performance, freezes web page sometimes
+ */
 export function broadcastQueryClient({ queryClient }: BroadcastQueryClientOptions) {
     let transaction = false
     const tx = (cb: () => void) => {
