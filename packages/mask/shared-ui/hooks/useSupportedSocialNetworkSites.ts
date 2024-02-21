@@ -1,11 +1,13 @@
-import { noop } from 'lodash-es'
 import Services from '#services'
-import { createHook } from './createHook.js'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
-export const useSupportedSocialNetworkSites = createHook(
-    () => Services.SiteAdaptor.getSupportedSites({ isSocialNetwork: true }),
-    noop,
-)
+export function useSupportedSocialNetworkSites() {
+    return useSuspenseQuery({
+        queryKey: ['shared-ui', 'useSupportedSocialNetworkSites'],
+        networkMode: 'always',
+        queryFn: () => Services.SiteAdaptor.getSupportedSites({ isSocialNetwork: true }),
+    }).data
+}
 
 export interface SiteAdaptor {
     networkIdentifier: string

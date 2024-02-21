@@ -1,5 +1,14 @@
 import { MaskMessages } from '@masknet/shared-base'
 import Services from '#services'
-import { createHook } from './createHook.js'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
-export const useAppearance = createHook(Services.Settings.getTheme, MaskMessages.events.appearanceSettings.on)
+export function useAppearance() {
+    const { data, refetch } = useSuspenseQuery({
+        queryKey: ['shared-ui', 'useAppearance'],
+        queryFn: Services.Settings.getTheme,
+        networkMode: 'always',
+    })
+    useEffect(() => MaskMessages.events.appearanceSettings.on(() => refetch()), [refetch])
+    return data
+}
