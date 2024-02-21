@@ -52,9 +52,18 @@ function assertLocation() {
 }
 
 useActivatedPluginsSiteAdaptor.visibility = {
-    useMinimalMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorTrue)),
-    useNotMinimalMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorFalse)),
-    useAnyMode: () => (assertLocation(), useValueRef(ActivatedPluginsSiteAdaptorAny)),
+    useMinimalMode: () => {
+        assertLocation()
+        return useValueRef(ActivatedPluginsSiteAdaptorTrue)
+    },
+    useNotMinimalMode: () => {
+        assertLocation()
+        return useValueRef(ActivatedPluginsSiteAdaptorFalse)
+    },
+    useAnyMode: () => {
+        assertLocation()
+        return useValueRef(ActivatedPluginsSiteAdaptorAny)
+    },
 }
 
 // this should never be used for a normal plugin
