@@ -5,10 +5,11 @@ import { useEffect } from 'react'
 
 export function useLanguage() {
     const { data, refetch } = useSuspenseQuery({
-        queryKey: ['shared-ui', 'useAppearance'],
+        queryKey: ['shared-ui', 'useLanguage'],
         queryFn: Services.Settings.getLanguage,
         networkMode: 'always',
     })
     useEffect(() => MaskMessages.events.languageSettings.on(() => refetch()), [refetch])
+    console.log(data)
     return data
 }
