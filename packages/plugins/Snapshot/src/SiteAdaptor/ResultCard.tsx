@@ -13,6 +13,8 @@ import { LoadingFailCard } from './LoadingFailCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
 import { useSnapshotTrans } from '../locales/index.js'
 import { LoadingCard } from './LoadingCard.js'
+import { isArray } from 'lodash-es'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const choiceMaxWidth = 240
 
@@ -92,18 +94,17 @@ function Content() {
     const { classes, cx } = useStyles()
     const t = useSnapshotTrans()
 
-    const dataForCsv = useMemo(
-        () =>
-            votes.map((vote) => ({
-                address: vote.address,
-                choice: vote.choiceIndex,
-                balance: vote.balance,
-                timestamp: vote.timestamp,
-                dateUtc: new Date(vote.timestamp * 1000).toUTCString(),
-                authorIpfsHash: vote.authorIpfsHash,
-            })),
-        [votes],
-    )
+    const dataForCsv = useMemo(() => {
+        if (!isArray(votes)) return EMPTY_LIST
+        return votes.map((vote) => ({
+            address: vote.address,
+            choice: vote.choiceIndex,
+            balance: vote.balance,
+            timestamp: vote.timestamp,
+            dateUtc: new Date(vote.timestamp * 1000).toUTCString(),
+            authorIpfsHash: vote.authorIpfsHash,
+        }))
+    }, [votes])
 
     return (
         <SnapshotCard
