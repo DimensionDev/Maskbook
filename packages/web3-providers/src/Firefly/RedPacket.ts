@@ -42,7 +42,7 @@ export class FireflyRedPacket {
         return data.list.map((theme) => ({
             themeId: theme.tid,
             url: urlcat(SITE_URL, '/api/rp', {
-                themeId: theme.tid,
+                'theme-id': theme.tid,
                 usage: 'payload',
                 from,
                 amount,
@@ -71,8 +71,8 @@ export class FireflyRedPacket {
         return {
             themeId: data.tid,
             url: urlcat(SITE_URL, '/api/rp', {
+                'theme-id': data.tid,
                 usage: 'cover',
-                themeId: data.tid,
                 symbol,
                 decimals,
                 shares,
@@ -94,7 +94,7 @@ export class FireflyRedPacket {
         decimals?: number,
     ) {
         return urlcat(SITE_URL, '/api/rp', {
-            themeId,
+            'theme-id': themeId,
             usage: 'payload',
             from,
             amount,
