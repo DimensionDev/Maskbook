@@ -79,7 +79,7 @@ export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: Int
 export function isTwitter() {
     const url = new $.URL(window.location.href)
     const origin = $.URL_origin(url)
-    return origin === 'twitter.com' || $.StringEndsWith(origin, '.twitter.com')
+    return origin === 'https://twitter.com' || $.StringEndsWith(origin, '.twitter.com')
 }
 
 export function noop() {}
