@@ -1,14 +1,21 @@
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult , type InfiniteData } from '@tanstack/react-query'
 import { createIndicator } from '@masknet/shared-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
+import type { Pageable, PageIndicator } from '@masknet/shared-base'
 
 export function useRedPacketHistory(
     address: string,
     historyType: FireflyRedPacketAPI.ActionType,
     platform?: FireflyRedPacketAPI.SourceType,
 ): UseSuspenseInfiniteQueryResult<
-    FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId | FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId
+    InfiniteData<
+        Pageable<
+            | FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId
+            | FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId,
+            PageIndicator
+        >
+    >
 > {
     return useSuspenseInfiniteQuery({
         queryKey: ['RedPacketHistory', address, historyType],
