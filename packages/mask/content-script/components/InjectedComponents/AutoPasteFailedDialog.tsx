@@ -55,7 +55,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     </DialogTitle>
                 </nav>
                 <DialogContent sx={{ paddingTop: 0 }}>
-                    <DialogContentText>
+                    <DialogContentText component="div">
                         <Typography color="textPrimary" sx={{ marginBottom: 1 }}>
                             {t.auto_paste_failed_dialog_content()}
                         </Typography>
