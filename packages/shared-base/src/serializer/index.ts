@@ -2,7 +2,6 @@ import { Typeson, TypesonPromise } from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
-import { EncryptError, DecryptError } from '@masknet/encryption'
 import { MaskEthereumProviderRpcError } from '@masknet/sdk'
 
 import { blob, builtin, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
@@ -27,35 +26,6 @@ function setup() {
 
     addClass('BigNumber', BigNumber)
 
-    registerSerializableClass(
-        'MaskDecryptError',
-        (x) => x instanceof DecryptError,
-        (e: DecryptError) => ({
-            cause: (e as any).cause,
-            recoverable: e.recoverable,
-            message: e.message,
-            stack: e.stack,
-        }),
-        (o) => {
-            const e = new DecryptError(o.message, o.cause, o.recoverable)
-            e.stack = o.stack
-            return e
-        },
-    )
-    registerSerializableClass(
-        'MaskEncryptError',
-        (x) => x instanceof EncryptError,
-        (e: EncryptError) => ({
-            cause: e.cause,
-            message: e.message,
-            stack: e.stack,
-        }),
-        (o) => {
-            const e = new EncryptError(o.message, o.cause)
-            e.stack = o.stack
-            return e
-        },
-    )
     registerSerializableClass(
         'MaskEthereumProviderRpcError',
         (x) => x instanceof MaskEthereumProviderRpcError,
