@@ -258,7 +258,7 @@ export namespace FireflyRedPacketAPI {
     }
 
     export type ThemeSettings = {
-        [key in 'title1' | 'title2' | 'title3' | 'title4']: {
+        [key in 'title1' | 'title2' | 'title3' | 'title4' | 'title_symbol']: {
             color: '#F1D590'
             font_size: 55
             font_family: 'Helvetica'
