@@ -1,5 +1,5 @@
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult , type InfiniteData } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult, type InfiniteData } from '@tanstack/react-query'
 import { createIndicator } from '@masknet/shared-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { Pageable, PageIndicator } from '@masknet/shared-base'
