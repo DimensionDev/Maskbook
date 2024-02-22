@@ -1,5 +1,5 @@
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult } from '@tanstack/react-query'
 import { createIndicator } from '@masknet/shared-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 
@@ -7,7 +7,9 @@ export function useRedPacketHistory(
     address: string,
     historyType: FireflyRedPacketAPI.ActionType,
     platform?: FireflyRedPacketAPI.SourceType,
-) {
+): UseSuspenseInfiniteQueryResult<
+    FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId | FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId
+> {
     return useSuspenseInfiniteQuery({
         queryKey: ['RedPacketHistory', address, historyType],
         initialPageParam: createIndicator(undefined, ''),
