@@ -104,27 +104,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 fontSize: 13,
             },
         },
-        actionButton: {
-            fontSize: 12,
-            width: 88,
-            height: 32,
-            background: theme.palette.maskColor.dark,
-            color: theme.palette.maskColor.white,
-            borderRadius: '999px',
-            minHeight: 'auto',
-            [smallQuery]: {
-                marginTop: theme.spacing(1),
-            },
-            '&:disabled': {
-                background: theme.palette.maskColor.dark,
-                color: theme.palette.common.white,
-            },
-            '&:hover': {
-                background: theme.palette.maskColor.dark,
-                color: theme.palette.maskColor.white,
-                opacity: 0.8,
-            },
-        },
         footer: {
             width: '100%',
             display: 'flex',
@@ -139,16 +118,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 color: theme.palette.maskColor.dark,
                 marginRight: 2,
             },
-        },
-        popperText: {
-            cursor: 'default',
-            color: theme.palette.common.white,
-            fontSize: 12,
-        },
-        disabledButton: {
-            background: theme.palette.maskColor.dark,
-            color: theme.palette.common.white,
-            opacity: 0.6,
         },
         fullWidthBox: {
             width: '100%',
