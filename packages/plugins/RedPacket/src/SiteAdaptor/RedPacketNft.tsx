@@ -23,7 +23,7 @@ import {
     useNonFungibleAsset,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
-import { TokenType } from '@masknet/web3-shared-base'
+import { TokenType, toFixed } from '@masknet/web3-shared-base'
 import { Stack } from '@mui/system'
 import { useRedPacketTrans } from '../locales/index.js'
 import { Requirements } from './Requirements.js'
@@ -31,8 +31,8 @@ import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useClaimStrategyStatus } from './hooks/useClaimStrategyStatus.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
-import { useCoverTheme } from './hooks/useRedPacketCoverTheme.js'
-import { getRedPacketCover } from './utils/getRedPacketCover.js'
+import { FireflyRedPacket } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => ({
     root: {
@@ -312,29 +312,32 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, retryAvailability, recheckClaimStatus])
 
-    const theme = useCoverTheme(payload.id)
-    const cover = useMemo(() => {
-        if (!availability || !theme) return ''
-        return getRedPacketCover({
-            symbol: asset?.metadata?.symbol!,
-            theme,
-            shares: availability.totalAmount,
-            amount: availability.totalAmount,
-            from: `@${payload.senderName}`,
-            message: payload.message,
-            'remaining-amount': availability.balance,
-            'remaining-shares': availability.remaining,
-        })
-    }, [asset?.metadata?.symbol, availability, theme])
+    const { data } = useQuery({
+        enabled: !!availability && !!payload.id,
+        queryKey: ['red-packet', 'theme-id', payload.id],
+        queryFn: async () => {
+            return FireflyRedPacket.getCoverUrlByRpid(
+                payload.id,
+                asset?.metadata?.symbol!,
+                0,
+                availability?.totalAmount,
+                toFixed(availability?.totalAmount),
+                `@${payload.senderName}`,
+                payload.message,
+                availability?.balance,
+                toFixed(availability?.remaining),
+            )
+        },
+    })
 
     if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
 
-    if (!availability || loading || !cover) return <LoadingStatus minHeight={148} iconSize={24} />
+    if (!availability || loading || !data?.url) return <LoadingStatus minHeight={148} iconSize={24} />
 
     return (
         <div className={classes.root}>
             <Card className={classes.card} component="article" elevation={0}>
-                <img className={classes.cover} src={cover} />
+                <img className={classes.cover} src={data.url} />
                 <img
                     src={new URL('./assets/nftLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}

@@ -5,9 +5,9 @@ import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@maskne
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, isZero, minus, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { Card, Grow, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -16,10 +16,9 @@ import { Requirements } from '../Requirements.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
-import { useCoverTheme } from '../hooks/useRedPacketCoverTheme.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
-import { getRedPacketCover } from '../utils/getRedPacketCover.js'
 import { OperationFooter } from './OperationFooter.js'
+import { useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -228,29 +227,31 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes } = useStyles({ outdated })
-    const theme = useCoverTheme(payload.rpid)
-    const cover = useMemo(() => {
-        if (!token?.symbol || !theme) return ''
-        const name = payload.sender.name
 
-        return getRedPacketCover({
-            theme,
-            symbol: token.symbol,
-            shares: payload.shares,
-            'remaining-shares': minus(payload.shares, availability?.claimed || 0).toNumber(),
-            amount: payload.total,
-            'remaining-amount': availability?.balance ?? payload.total,
-            decimals: token.decimals,
-            from:
+    const { data } = useQuery({
+        enabled: !!availability && !!payload.rpid && !!token?.symbol,
+        queryKey: ['red-packet', 'theme-id', payload.rpid],
+        queryFn: async () => {
+            const name = payload.sender.name
+
+            return FireflyRedPacket.getCoverUrlByRpid(
+                payload.rpid,
+                token?.symbol,
+                token?.decimals,
+                payload.shares,
+                payload.total,
                 [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (
                     `@${name}`
                 ),
-            message: payload.sender.message,
-        })
-    }, [token?.symbol, payload, availability, theme])
+                payload.sender.message,
+                availability?.balance ?? payload.total,
+                toFixed(minus(payload.shares, availability?.claimed || 0)),
+            )
+        },
+    })
 
     // the red packet can fetch without account
-    if (!availability || !token || !cover) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || !data?.url) return <LoadingStatus minHeight={148} />
 
     const claimedOrEmpty =
         listOfStatus.includes(RedPacketStatus.claimed) || listOfStatus.includes(RedPacketStatus.empty)
@@ -262,9 +263,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 component="article"
                 elevation={0}
                 style={{
-                    backgroundImage: `url("${cover}")`,
+                    backgroundImage: `url("${data.url}")`,
                 }}>
-                <img className={classes.cover} src={cover} />
+                <img className={classes.cover} src={data.url} />
                 <img
                     src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}
