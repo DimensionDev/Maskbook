@@ -2595,9 +2595,6 @@ importers:
       '@masknet/base':
         specifier: workspace:^
         version: link:../base
-      '@masknet/encryption':
-        specifier: workspace:^
-        version: link:../encryption
       '@masknet/public-api':
         specifier: workspace:^
         version: link:../public-api

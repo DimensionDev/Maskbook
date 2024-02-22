@@ -13,7 +13,6 @@ export {
 
 export {
     encrypt,
-    EncryptError,
     EncryptErrorReasons,
     type EncryptOptions,
     type EncryptIO,
@@ -26,7 +25,6 @@ export {
 
 export {
     decrypt,
-    DecryptError,
     DecryptProgressKind,
     DecryptIntermediateProgressKind,
     DecryptErrorReasons,

@@ -105,7 +105,7 @@ export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress
     event: DecryptIntermediateProgressKind
 }
-export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress | DecryptReportedInfo
+export type DecryptProgress = DecryptSuccess | Error | DecryptIntermediateProgress | DecryptReportedInfo
 export interface DecryptReportedInfo {
     type: DecryptProgressKind.Info
     iv?: Uint8Array
@@ -125,7 +125,6 @@ export interface DecryptSuccess {
     type: DecryptProgressKind.Success
     content: TypedMessage
 }
-// TODO: rename as DecryptErrorReasons
 export enum DecryptErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
     PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
@@ -138,15 +137,4 @@ export enum DecryptErrorReasons {
     UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
     CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot decrypt by E2E because no persona is linked with the current profile.',
     NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
-}
-export class DecryptError extends Error {
-    static Reasons = DecryptErrorReasons
-    readonly type = DecryptProgressKind.Error
-    constructor(
-        public override message: DecryptErrorReasons,
-        cause: any,
-        public recoverable = false,
-    ) {
-        super(message, { cause })
-    }
 }

@@ -11,7 +11,6 @@ import { type EC_Key, encodePayload, type PayloadWellFormed } from '../payload/i
 import { encryptWithAES } from '../utils/index.js'
 
 import {
-    EncryptError,
     EncryptErrorReasons,
     type EncryptIO,
     type EncryptOptions,
@@ -27,7 +26,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
     const postIV = fillIV(io)
     const postKey = await aes256GCM(io)
     if (!postKey.usages.includes('encrypt') || !postKey.usages.includes('decrypt') || !postKey.extractable) {
-        throw new EncryptError(EncryptErrorReasons.AESKeyUsageError)
+        throw new Error(EncryptErrorReasons.AESKeyUsageError)
     }
 
     const encodedMessage = encodeMessage(options.version, options.message)
@@ -94,7 +93,7 @@ async function e2e_v37(
     io: EncryptIO,
 ): Promise<[PayloadWellFormed.EndToEndEncryption, EncryptResult['e2e']]> {
     const { authorPublic, postIV, postKeyEncoded } = context
-    if (!authorPublic.isSome()) throw new EncryptError(EncryptErrorReasons.PublicKeyNotFound)
+    if (!authorPublic.isSome()) throw new Error(EncryptErrorReasons.PublicKeyNotFound)
 
     const { ephemeralKeys, getEphemeralKey } = createEphemeralKeysMap(io)
     const ecdhResult = v37_addReceiver(true, { ...context, getEphemeralKey }, target, io)
@@ -148,8 +147,7 @@ async function e2e_v38(
 
 async function encodeMessage(version: -38 | -37, message: SerializableTypedMessages) {
     if (version === -37) return encodeTypedMessageToDocument(message)
-    if (!isTypedMessageText(message))
-        throw new EncryptError(EncryptErrorReasons.ComplexTypedMessageNotSupportedInPayload38)
+    if (!isTypedMessageText(message)) throw new Error(EncryptErrorReasons.ComplexTypedMessageNotSupportedInPayload38)
     return encodeTypedMessageToDeprecatedFormat(message)
 }
 async function aes256GCM(io: EncryptIO): Promise<AESCryptoKey> {
