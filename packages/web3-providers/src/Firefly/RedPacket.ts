@@ -148,8 +148,8 @@ export class FireflyRedPacket {
 
     static async getHistory<
         T extends FireflyRedPacketAPI.ActionType,
-        R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId
-        :   FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId,
+        R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
+        :   FireflyRedPacketAPI.RedPacketSentInfo,
     >(
         actionType: T,
         from: HexString,
@@ -176,7 +176,7 @@ export class FireflyRedPacket {
     static async getClaimHistory(
         redpacket_id: string,
         indicator?: PageIndicator,
-    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfoWithNumberChainId> {
+    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpacketId: redpacket_id,
             cursor: indicator?.id,

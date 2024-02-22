@@ -136,7 +136,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 })
 
 interface RedPacketInHistoryListProps {
-    history: FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId
+    history: FireflyRedPacketAPI.RedPacketSentInfo
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {

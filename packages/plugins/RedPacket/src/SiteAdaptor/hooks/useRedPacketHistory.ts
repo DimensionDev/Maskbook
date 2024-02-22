@@ -10,11 +10,7 @@ export function useRedPacketHistory(
     platform?: FireflyRedPacketAPI.SourceType,
 ): UseSuspenseInfiniteQueryResult<
     InfiniteData<
-        Pageable<
-            | FireflyRedPacketAPI.RedPacketClaimedInfoWithNumberChainId
-            | FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId,
-            PageIndicator
-        >
+        Pageable<FireflyRedPacketAPI.RedPacketClaimedInfo | FireflyRedPacketAPI.RedPacketSentInfo, PageIndicator>
     >
 > {
     return useSuspenseInfiniteQuery({
