@@ -1,17 +1,11 @@
 import type { ProposalIdentifier, VoteItem } from '../../types.js'
-import { cache, use } from 'react'
 import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getScores } from '../../utils.js'
 
-const Request = cache(Suspender)
 export function useVotes(identifier: ProposalIdentifier, account?: string) {
-    return use(Request(identifier.id, identifier.space, account))
-}
-
-async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], account?: string) {
-    const proposal = useProposal(id)
+    const proposal = useProposal(identifier.id)
     const strategies = proposal.strategies
     const scores = getScores(proposal)
     return proposal.votes

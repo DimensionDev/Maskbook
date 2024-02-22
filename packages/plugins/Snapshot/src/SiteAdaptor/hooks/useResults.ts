@@ -1,15 +1,9 @@
 import type { Proposal, ProposalIdentifier, ProposalResult, VoteItem } from '../../types.js'
-import { cache, use } from 'react'
 import { useVotes } from './useVotes.js'
 import { sumBy } from 'lodash-es'
 
-const Request = cache(Suspender)
 export function useResults(identifier: ProposalIdentifier, proposal: Proposal) {
-    return use(Request(identifier.id, identifier.space, proposal))
-}
-
-async function Suspender(id: ProposalIdentifier['id'], space: ProposalIdentifier['space'], proposal: Proposal) {
-    const votes = useVotes({ id, space })
+    const votes = useVotes({ id: identifier.id, space: identifier.space })
     const strategies = proposal.strategies
     const powerOfChoices = proposal.choices.map((_choice, index) =>
         sumBy(voteForChoice(votes, index), (choice) => {
