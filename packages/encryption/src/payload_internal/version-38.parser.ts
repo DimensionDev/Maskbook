@@ -1,6 +1,6 @@
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import { type EC_Key, type PayloadParseResult, EC_KeyCurve, type Signature } from '../payload/index.js'
-import { CryptoException, PayloadException } from '../types/index.js'
+import { CryptoException, PayloadException, type Readwrite } from '../types/index.js'
 import { Result, Ok, Some } from 'ts-results-es'
 import {
     decodeUint8ArrayF,

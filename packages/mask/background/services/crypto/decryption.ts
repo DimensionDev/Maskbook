@@ -77,7 +77,7 @@ export async function* decryptWithDecoding(
         decoded = decodeByNetwork(context.encryptPayloadNetwork, encoded.text)[0]
     } else {
         if (!context.authorHint) {
-            return yield new Error(DecryptErrorReasons.UnrecognizedAuthor)
+            return yield { type: DecryptProgressKind.Error, error: new Error(DecryptErrorReasons.UnrecognizedAuthor) }
         }
         const result = await steganographyDecodeImage(encoded.image, {
             password: context.authorHint.toText(),
@@ -86,13 +86,13 @@ export async function* decryptWithDecoding(
         if (typeof result === 'string') {
             decoded = decodeByNetwork(context.encryptPayloadNetwork, result)[0]
         } else if (result === null) {
-            return yield new Error(DecryptErrorReasons.NoPayloadFound)
+            return yield { type: DecryptProgressKind.Error, error: new Error(DecryptErrorReasons.NoPayloadFound) }
         } else {
             decoded = result
         }
     }
 
-    if (!decoded) return yield new Error(DecryptErrorReasons.NoPayloadFound)
+    if (!decoded) return yield { type: DecryptProgressKind.Error, error: new Error(DecryptErrorReasons.NoPayloadFound) }
     yield* decryption(decoded, context)
 }
 

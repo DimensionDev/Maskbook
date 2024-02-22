@@ -1,7 +1,7 @@
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type { PayloadParseResult, Signature } from '../payload/index.js'
 import { Ok } from 'ts-results-es'
-import { PayloadException } from '../types/index.js'
+import { PayloadException, type Readwrite } from '../types/index.js'
 import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils/index.js'
 import type { PayloadParserResult } from './index.js'
 import { encodeText } from '@masknet/kit'

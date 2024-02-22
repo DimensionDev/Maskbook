@@ -2,6 +2,7 @@ import { encode, decode, type GrayscaleAlgorithm, DEFAULT_MASK, type EncodeOptio
 import { decodeArrayBuffer, encodeArrayBuffer, getDimensionByDOM } from '@masknet/kit'
 import { getDimensionAsBuffer } from './getDimensionAsBuffer.js'
 import { getPreset, findPreset, type SteganographyPreset } from './presets.js'
+import type { Readwrite } from '../types/index.js'
 
 export { GrayscaleAlgorithm } from '@masknet/stego-js'
 
