@@ -318,9 +318,12 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                             {(
                                                 postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload
                                             )?.params
-                                                ?.sort((a, b) =>
-                                                    a.platform === FireflyRedPacketAPI.PlatformType.lens ? 1 : -1,
-                                                )
+                                                ?.sort((a, b) => {
+                                                    if (a.platform === b.platform) return 0
+                                                    if (a.platform === FireflyRedPacketAPI.PlatformType.lens) return 1
+                                                    if (b.platform === FireflyRedPacketAPI.PlatformType.lens) return -1
+                                                    return 0
+                                                })
                                                 .map((x) => (
                                                     <PlatformButton
                                                         key={x.postId}
