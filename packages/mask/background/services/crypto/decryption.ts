@@ -2,7 +2,6 @@ import { encodeArrayBuffer } from '@masknet/kit'
 import {
     decrypt,
     parsePayload,
-    DecryptProgressKind,
     EC_KeyCurve,
     type DecryptProgress,
     type EncryptPayloadNetwork,
@@ -10,8 +9,6 @@ import {
     type EC_Key,
     decodeByNetwork,
     steganographyDecodeImage,
-    DecryptError,
-    DecryptErrorReasons,
     type DecryptReportedInfo,
 } from '@masknet/encryption'
 import {
@@ -21,6 +18,9 @@ import {
     PostIVIdentifier,
     type ProfileIdentifier,
     ECKeyIdentifier,
+    DecryptProgressKind,
+    DecryptError,
+    DecryptErrorReasons,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import { noop } from 'lodash-es'

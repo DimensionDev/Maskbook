@@ -4,7 +4,13 @@ import {
     decodeTypedMessageFromDeprecatedFormat,
     type TypedMessage,
 } from '@masknet/typed-message'
-import { type AESCryptoKey, type EC_Public_CryptoKey, andThenAsync } from '@masknet/base'
+import {
+    type AESCryptoKey,
+    type EC_Public_CryptoKey,
+    andThenAsync,
+    DecryptError,
+    DecryptProgressKind,
+} from '@masknet/base'
 import { None, Result } from 'ts-results-es'
 import type { PayloadParseResult } from '../payload/index.js'
 import { decryptWithAES, importAES } from '../utils/index.js'
@@ -12,8 +18,6 @@ import {
     type DecryptOptions,
     type DecryptIO,
     type DecryptProgress,
-    DecryptProgressKind,
-    DecryptError,
     type DecryptEphemeralECDH_PostKey,
     type DecryptSuccess,
     type DecryptIntermediateProgress,
@@ -21,9 +25,12 @@ import {
     type DecryptStaticECDH_PostKey,
 } from './DecryptionTypes.js'
 import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh.js'
+
 export * from './DecryptionTypes.js'
+
 const ErrorReasons = DecryptError.Reasons
 type Version = PayloadParseResult.Payload['version']
+
 export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIterableIterator<DecryptProgress> {
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
     const { authorPublicKey: _authorPublicKey } = options.message

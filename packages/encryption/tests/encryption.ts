@@ -4,14 +4,13 @@ import {
     decrypt,
     DecryptIntermediateProgressKind,
     type DecryptIO,
-    DecryptProgressKind,
     encrypt,
     type EncryptIO,
     type EncryptOptions,
     parsePayload,
     importAESFromJWK,
 } from '../src/index.js'
-import { ProfileIdentifier, type AESCryptoKey } from '@masknet/base'
+import { DecryptProgressKind, ProfileIdentifier, type AESCryptoKey } from '@masknet/base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 import {
     deriveAESKey,

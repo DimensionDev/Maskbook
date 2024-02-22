@@ -9,6 +9,13 @@ export {
     convertRawMapToIdentifierMap,
 } from './Identifier/index.js'
 export {
+    DecryptProgressKind,
+    DecryptErrorReasons,
+    DecryptError,
+    EncryptErrorReasons,
+    EncryptError,
+} from './Encryption/index.js'
+export {
     type AESCryptoKey,
     type AESJsonWebKey,
     type EC_CryptoKey,

@@ -13,8 +13,6 @@ export {
 
 export {
     encrypt,
-    EncryptError,
-    EncryptErrorReasons,
     type EncryptOptions,
     type EncryptIO,
     type EncryptResult,
@@ -26,10 +24,7 @@ export {
 
 export {
     decrypt,
-    DecryptError,
-    DecryptProgressKind,
     DecryptIntermediateProgressKind,
-    DecryptErrorReasons,
     type DecryptOptions,
     type DecryptIO,
     type DecryptEphemeralECDH_PostKey,
@@ -40,12 +35,7 @@ export {
     type DecryptSuccess,
 } from './encryption/index.js'
 
-export {
-    //
-    type AppendEncryptionIO,
-    type AppendEncryptionOptions,
-    appendEncryptionTarget,
-} from './encryption/index.js'
+export { type AppendEncryptionIO, type AppendEncryptionOptions, appendEncryptionTarget } from './encryption/index.js'
 
 export { encodeByNetwork, decodeByNetwork, TwitterDecoder } from './network-encoding/index.js'
 

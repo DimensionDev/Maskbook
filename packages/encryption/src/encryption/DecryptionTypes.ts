@@ -1,5 +1,11 @@
 import type { TypedMessage } from '@masknet/typed-message'
-import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/base'
+import type {
+    ProfileIdentifier,
+    AESCryptoKey,
+    EC_Public_CryptoKey,
+    DecryptProgressKind,
+    DecryptError,
+} from '@masknet/base'
 import type { PayloadParseResult, SupportedPayloadVersions } from '../payload/index.js'
 
 export interface DecryptOptions {
@@ -95,12 +101,6 @@ export interface DecryptEphemeralECDH_PostKey {
     ephemeralPublicKey?: EC_Public_CryptoKey
     ephemeralPublicKeySignature?: Uint8Array
 }
-export enum DecryptProgressKind {
-    Success = 'success',
-    Error = 'error',
-    Info = 'info',
-    Progress = 'progress',
-}
 export interface DecryptIntermediateProgress {
     type: DecryptProgressKind.Progress
     event: DecryptIntermediateProgressKind
@@ -124,29 +124,4 @@ export enum DecryptIntermediateProgressKind {
 export interface DecryptSuccess {
     type: DecryptProgressKind.Success
     content: TypedMessage
-}
-// TODO: rename as DecryptErrorReasons
-export enum DecryptErrorReasons {
-    PayloadBroken = '[@masknet/encryption] Payload is broken.',
-    PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
-    CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
-    DecryptFailed = '[@masknet/encryption] Post key found, but decryption failed.',
-    AuthorPublicKeyNotFound = "[@masknet/encryption] Cannot found author's public key",
-    PrivateKeyNotFound = '[@masknet/encryption] Cannot continue to decrypt because there is no private key found.',
-    NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
-    // Not used in this library.
-    UnrecognizedAuthor = '[@masknet/encryption] No author is recognized which is required for the image steganography decoding.',
-    CurrentProfileDoesNotConnectedToPersona = '[@masknet/encryption] Cannot decrypt by E2E because no persona is linked with the current profile.',
-    NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
-}
-export class DecryptError extends Error {
-    static Reasons = DecryptErrorReasons
-    readonly type = DecryptProgressKind.Error
-    constructor(
-        public override message: DecryptErrorReasons,
-        cause: any,
-        public recoverable = false,
-    ) {
-        super(message, { cause })
-    }
 }
