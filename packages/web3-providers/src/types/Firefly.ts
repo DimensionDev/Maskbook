@@ -258,10 +258,31 @@ export namespace FireflyRedPacketAPI {
         ens_name: string
     }
 
-    export interface ThemeSettings {
-        id: string
+    export interface Theme {
+        themeId: string
         payloadUrl: string
         coverUrl: string
+    }
+
+    export type ThemeSettings = {
+        [key in 'title1' | 'title2' | 'title3' | 'title4' | 'title_symbol']: {
+            color: '#F1D590'
+            font_size: 55
+            font_family: 'Helvetica'
+            font_weight: 700
+            line_height: 63.25
+        }
+    } & {
+        bg_color: string
+        bg_image: string
+        logo_image: string
+    }
+
+    export interface ThemeGroupSettings {
+        /** theme id */
+        tid: string
+        cover: ThemeSettings
+        normal: ThemeSettings
     }
 
     interface Response<T> {
@@ -339,21 +360,9 @@ export namespace FireflyRedPacketAPI {
         canClaim: boolean
     }>
 
-    export type ThemeByIdResponse = Response<{
-        /** theme id */
-        tid: string
-        cover: {
-            [key in 'title1' | 'title2' | 'title3' | 'title4']: {
-                color: '#F1D590'
-                font_size: 55
-                font_family: 'Helvetica'
-                font_weight: 700
-                line_height: 63.25
-            }
-        } & {
-            bg_color: string
-            bg_image: string
-            logo_image: string
-        }
+    export type ThemeListResponse = Response<{
+        list: ThemeGroupSettings[]
     }>
+
+    export type ThemeByIdResponse = Response<ThemeGroupSettings>
 }
