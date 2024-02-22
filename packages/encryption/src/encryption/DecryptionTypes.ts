@@ -143,6 +143,6 @@ export enum DecryptErrorReasons {
     NoPayloadFound = '[@masknet/encryption] No payload found in this material.',
 }
 /** @internal */
-export function e(message: DecryptErrorReasons, options?: ErrorOptions | undefined): DecryptError {
+export function makeDecryptError(message: DecryptErrorReasons, options?: ErrorOptions | undefined): DecryptError {
     return { type: DecryptProgressKind.Error, error: new Error(message, options) }
 }
