@@ -62,7 +62,7 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
                 {histories.map((history) => (
                     <RedPacketInHistoryList
                         key={history.redpacket_id}
-                        history={history as FireflyRedPacketAPI.RedPacketSentInfoWithNumberChainId}
+                        history={history as FireflyRedPacketAPI.RedPacketSentInfo}
                         onSelect={onSelect}
                     />
                 ))}
