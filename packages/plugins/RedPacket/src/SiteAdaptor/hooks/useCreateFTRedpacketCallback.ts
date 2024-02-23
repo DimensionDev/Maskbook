@@ -54,7 +54,7 @@ export function useCreateFTRedpacketCallback(
 
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         chainId,
-        { ...settings!, total },
+        { ...settings!, total, name: currentAccount || settings.name },
         contract_version,
         publicKey,
         gasOption,
