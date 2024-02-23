@@ -25,6 +25,7 @@ const useStyles = makeStyles()({
         boxSizing: 'border-box',
         height: '100%',
         overflow: 'auto',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
