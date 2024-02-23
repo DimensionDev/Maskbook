@@ -1,14 +1,13 @@
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { createIndicator, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
+import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -53,20 +52,7 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: historiesData, fetchNextPage } = useSuspenseInfiniteQuery({
-        queryKey: ['fireflyRedPacketHistory', account, historyType],
-        initialPageParam: createIndicator(undefined, ''),
-        queryFn: async ({ pageParam }) => {
-            const res = await FireflyRedPacket.getHistory(
-                historyType,
-                account as `0x${string}`,
-                FireflyRedPacketAPI.SourceType.FireflyPC,
-                pageParam,
-            )
-            return res
-        },
-        getNextPageParam: (lastPage) => lastPage.nextIndicator,
-    })
+    const { data: historiesData, fetchNextPage } = useRedPacketHistory(account, historyType)
     const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
     if (!histories?.length)

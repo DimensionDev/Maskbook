@@ -94,7 +94,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [rpid, setRpid] = useState<string>('')
     const [showClaimRule, setShowClaimRule] = useState(false)
     const [gasOption, setGasOption] = useState<GasConfig>()
-    const isFirefly = !!props.fireflyContext
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
@@ -127,6 +126,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openNFTConfirmDialog, setOpenNFTConfirmDialog] = useState(false)
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
+
+    const isFirefly = !!props.fireflyContext
 
     const handleClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)

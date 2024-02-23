@@ -15,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '12px 16px',
         height: 474,
+        overflow: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -76,7 +77,7 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
                             <FireflyRedPacketAccountItem address={item.creator} chainId={claimInfo?.chain_id} />
                             <Typography>
                                 {formatBalance(item.token_amounts, item.token_decimal, {
-                                    significant: 2,
+                                    significant: 6,
                                     isPrecise: true,
                                 })}{' '}
                                 {item.token_symbol}

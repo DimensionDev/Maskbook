@@ -1,10 +1,10 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, ElementAnchor } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
@@ -42,9 +42,17 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: histories, isPending } = useRedPacketHistory(account, chainId)
+    const {
+        data: historiesData,
+        isLoading,
+        fetchNextPage,
+    } = useRedPacketHistory(account, FireflyRedPacketAPI.ActionType.Send, FireflyRedPacketAPI.SourceType.MaskNetwork)
+    const histories = useMemo(
+        () => historiesData.pages.flatMap((page) => page.data).filter((x) => x.chain_id === chainId),
+        [historiesData, chainId],
+    )
 
-    if (isPending) return <LoadingStatus className={classes.placeholder} iconSize={30} />
+    if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
     if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
 
@@ -52,8 +60,13 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
         <div className={classes.root}>
             <List style={{ padding: '16px 0 0' }}>
                 {histories.map((history) => (
-                    <RedPacketInHistoryList key={history.txid} history={history} onSelect={onSelect} />
+                    <RedPacketInHistoryList
+                        key={history.redpacket_id}
+                        history={history as FireflyRedPacketAPI.RedPacketSentInfo}
+                        onSelect={onSelect}
+                    />
                 ))}
+                <ElementAnchor callback={() => fetchNextPage()} />
             </List>
         </div>
     )

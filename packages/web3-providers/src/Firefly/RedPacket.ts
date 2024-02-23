@@ -15,9 +15,6 @@ const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
 const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
 
-type WithoutChainId<T> = Omit<T, 'chain_id'>
-type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
-
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
     return fetchJSON<T>(url, {
         ...init,
@@ -151,8 +148,8 @@ export class FireflyRedPacket {
 
     static async getHistory<
         T extends FireflyRedPacketAPI.ActionType,
-        R = T extends FireflyRedPacketAPI.ActionType.Claim ? WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimedInfo>
-        :   WithNumberChainId<FireflyRedPacketAPI.RedPacketSentInfo>,
+        R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
+        :   FireflyRedPacketAPI.RedPacketSentInfo,
     >(
         actionType: T,
         from: HexString,
@@ -179,7 +176,7 @@ export class FireflyRedPacket {
     static async getClaimHistory(
         redpacket_id: string,
         indicator?: PageIndicator,
-    ): Promise<WithNumberChainId<FireflyRedPacketAPI.RedPacketClaimListInfo>> {
+    ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpacketId: redpacket_id,
             cursor: indicator?.id,

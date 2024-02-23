@@ -7,7 +7,7 @@ import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { format, fromUnixTime } from 'date-fns'
-import { FireflyRedPacketActionButton } from './FireflyRedPacketActionButton.js'
+import { RedPacketActionButton } from './RedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
 import { Icons } from '@masknet/icons'
@@ -317,20 +317,27 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         <div className={classes.icons}>
                                             {(
                                                 postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload
-                                            )?.params?.map((x) => (
-                                                <PlatformButton
-                                                    key={x.postId}
-                                                    platform={x.platform}
-                                                    postId={x.postId}
-                                                    className={classes.button}
-                                                />
-                                            ))}
+                                            )?.params
+                                                ?.sort((a, b) => {
+                                                    if (a.platform === b.platform) return 0
+                                                    if (a.platform === FireflyRedPacketAPI.PlatformType.lens) return 1
+                                                    if (b.platform === FireflyRedPacketAPI.PlatformType.lens) return -1
+                                                    return 0
+                                                })
+                                                .map((x) => (
+                                                    <PlatformButton
+                                                        key={x.postId}
+                                                        platform={x.platform}
+                                                        postId={x.postId}
+                                                        className={classes.button}
+                                                    />
+                                                ))}
                                         </div>
                                     </div>
                                 :   null}
                             </div>
                             {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
-                                <FireflyRedPacketActionButton
+                                <RedPacketActionButton
                                     redpacketStatus={redpacket_status}
                                     rpid={redpacket_id}
                                     account={account}

@@ -1,3 +1,6 @@
+type WithoutChainId<T> = Omit<T, 'chain_id'>
+type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
+
 export namespace FireflyConfigAPI {
     export type Result<T> = {
         code: number
@@ -183,7 +186,7 @@ export namespace FireflyRedPacketAPI {
         platformId: string
     }
 
-    export interface RedPacketSentInfo {
+    export interface RedPacketSentInfoItem {
         create_time: number
         total_numbers: string
         total_amounts: string
@@ -203,7 +206,7 @@ export namespace FireflyRedPacketAPI {
         share_from: string
     }
 
-    export interface RedPacketClaimedInfo {
+    export interface RedPacketClaimedInfoItem {
         redpacket_id: HexString
         received_time: string
         rp_msg: string
@@ -219,6 +222,10 @@ export namespace FireflyRedPacketAPI {
         ens_name: string
     }
 
+    export interface RedPacketClaimedInfo extends WithNumberChainId<RedPacketClaimedInfoItem> {}
+    export interface RedPacketSentInfo extends WithNumberChainId<RedPacketSentInfoItem> {}
+    export interface RedPacketClaimListInfo extends WithNumberChainId<RedPacketClaimListInfoItem> {}
+
     export interface ClaimList {
         creator: string
         claim_platform: Platform[]
@@ -233,7 +240,7 @@ export namespace FireflyRedPacketAPI {
         platform_handle: string
     }
 
-    export interface RedPacketClaimListInfo {
+    export interface RedPacketClaimListInfoItem {
         list: ClaimList[]
         creator: string
         create_time: number
