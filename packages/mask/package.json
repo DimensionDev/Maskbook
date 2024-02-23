@@ -108,7 +108,7 @@
     "@types/uuid": "^9.0.3",
     "@types/webextension-polyfill": "^0.10.7",
     "assert": "^2.1.0",
-    "async-call-rpc": "^6.3.1",
+    "async-call-rpc": "^6.4.0",
     "bignumber.js": "9.1.2",
     "bip39": "^3.1.0",
     "buffer": "^6.0.3",

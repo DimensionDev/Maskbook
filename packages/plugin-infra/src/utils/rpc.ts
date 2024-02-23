@@ -1,6 +1,6 @@
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, type AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { serializer, getOrUpdateLocalImplementationHMR } from '@masknet/shared-base'
+import { encoder, getOrUpdateLocalImplementationHMR } from '@masknet/shared-base'
 import { getPluginMessage } from '@masknet/plugin-infra'
 import { DOMAIN_RPC } from './message.js'
 
@@ -31,7 +31,7 @@ function getPluginRPCInternal(
             on: message[entry].on,
             send: message[entry].sendToBackgroundPage,
         },
-        serializer,
+        encoder,
         log,
         thenable: false,
     })
@@ -71,9 +71,10 @@ function startPluginRPCInternal(
             on: message[entry].on,
             send: message[entry].sendByBroadcast,
         },
-        serializer,
+        encoder,
         log,
         thenable: false,
+        signal,
     })
 }
 /** @internal */

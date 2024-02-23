@@ -1,5 +1,5 @@
 import type { MaskEthereumProviderRpcError } from '../shared/error.js'
-import { type BridgeAPI, type UserScriptAPI, createMaskSDKChannel, serializer } from '../shared/index.js'
+import { type BridgeAPI, type UserScriptAPI, createMaskSDKChannel, encoder } from '../shared/index.js'
 import { AsyncCall, type AsyncVersionOf } from 'async-call-rpc/full'
 
 export * from '../shared/types.js'
@@ -16,9 +16,9 @@ export {
 } from '../shared/index.js'
 
 export function createMaskSDKServer(api: BridgeAPI, signal?: AbortSignal): AsyncVersionOf<UserScriptAPI> {
-    // TODO: support AbortSignal
     return AsyncCall<UserScriptAPI>(api, {
-        serializer,
+        signal,
+        encoder,
         channel: createMaskSDKChannel('content'),
         log: false,
         thenable: false,
