@@ -3,7 +3,7 @@ import { type BasicHostHooks, type BasicHostInstance, SandboxedPluginHost } from
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { serializer } from '@masknet/shared-base'
+import { encoder } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
 import type { ExportAllBinding } from '@masknet/compartment'
 import type { BackupHandler } from '../types/worker-api.js'
@@ -76,17 +76,19 @@ export class BackgroundPluginHost extends SandboxedPluginHost<BackgroundHostHook
         if (hasRPC) {
             AsyncCall(rpcReExport.worker, {
                 channel: this.hooks.createRpcChannel(instance.id, this.signal),
-                serializer,
+                encoder,
                 log: true,
                 thenable: false,
+                signal: this.signal,
             })
         }
         if (hasRPCGenerator) {
             AsyncGeneratorCall(rpcReExport.workerGenerator, {
                 channel: this.hooks.createRpcGeneratorChannel(instance.id, this.signal),
-                serializer,
+                encoder,
                 log: true,
                 thenable: false,
+                signal: this.signal,
             })
         }
     }

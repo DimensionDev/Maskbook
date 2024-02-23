@@ -5,7 +5,7 @@
 
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { assertEnvironment, Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { getOrUpdateLocalImplementationHMR, serializer, setDebugObject } from '@masknet/shared-base'
+import { getOrUpdateLocalImplementationHMR, encoder, setDebugObject } from '@masknet/shared-base'
 import type { GeneratorServices, Services } from './types.js'
 
 import { decryptWithDecoding } from './crypto/decryption.js'
@@ -48,7 +48,7 @@ export function startServices() {
 
     AsyncGeneratorCall(GeneratorService, {
         key: 'GeneratorService',
-        serializer,
+        encoder,
         channel,
         log: {
             beCalled: false,
@@ -74,7 +74,7 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
     // setup server
     AsyncCall(load(), {
         key,
-        serializer,
+        encoder,
         channel,
         log:
             hasLog ?

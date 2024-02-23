@@ -8,7 +8,7 @@ import { ParamsValidate, fromZodError, requestSchema, ReturnValidate } from './e
 import { ZodError, ZodTuple } from 'zod'
 import { maskSDK } from '../index.js'
 import { sample } from 'lodash-es'
-import { AsyncCall, JSONSerialization } from 'async-call-rpc/full'
+import { AsyncCall, JSONEncoder } from 'async-call-rpc/full'
 
 const PassthroughMethods = [
     ...readonlyMethodType,
@@ -55,6 +55,7 @@ function getInteractiveClient(): Promise<InteractiveClient> {
                 'wss://mainnet.infura.io/ws/v3/659123dd11294baf8a294d7a11cec92c',
             ])!,
         )
+        const signal = new AbortController()
         interactiveClient = AsyncCall(
             {
                 eth_subscription(data: unknown) {
@@ -66,14 +67,21 @@ function getInteractiveClient(): Promise<InteractiveClient> {
                     send: (message) => ws.send(message as string),
                     on: (fn) => ws.addEventListener('message', (event) => fn(event.data)),
                 },
-                serializer: JSONSerialization(),
+                forceSignal: signal.signal,
+                encoder: JSONEncoder(),
                 log: false,
                 thenable: false,
             },
         )
-        ws.addEventListener('close', () => (interactiveClient = undefined))
+        ws.addEventListener('close', () => {
+            interactiveClient = undefined
+            signal.abort()
+        })
         ws.addEventListener('open', () => resolve(interactiveClient!))
-        ws.addEventListener('error', () => reject(err.internal_error()))
+        ws.addEventListener('error', () => {
+            reject(err.internal_error())
+            signal.abort()
+        })
     })
 }
 

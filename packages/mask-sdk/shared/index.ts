@@ -12,7 +12,7 @@ export interface UserScriptAPI {
 export interface InitInformation {
     debuggerMode: boolean
 }
-export { serializer } from './serializer.js'
+export { encoder } from './serializer.js'
 export { createMaskSDKChannel } from './channel.js'
 export * from './types.js'
 export * from './error.js'

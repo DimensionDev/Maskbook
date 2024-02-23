@@ -11,7 +11,7 @@ import {
     type AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { WebExtensionMessage, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { serializer } from '../../shared-base/src/serializer/index.js'
+import { encoder } from '../../shared-base/src/serializer/index.js'
 import type {
     BackupService,
     CryptoService,
@@ -57,7 +57,7 @@ function add<T extends object>(key: string, generator = false): AsyncVersionOf<T
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {
         key,
-        serializer,
+        encoder,
         log,
         channel,
         strict: true,

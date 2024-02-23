@@ -22,7 +22,7 @@
   "devDependencies": {
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-node-resolve": "^15.2.1",
-    "async-call-rpc": "^6.3.1",
+    "async-call-rpc": "^6.4.0",
     "rollup": "^3.28.1",
     "rollup-plugin-swc3": "^0.10.1"
   }

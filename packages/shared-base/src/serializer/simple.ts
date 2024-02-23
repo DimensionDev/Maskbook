@@ -1,5 +1,5 @@
 import { Typeson } from 'typeson'
-import type { Serialization } from 'async-call-rpc'
+import type { IsomorphicEncoder } from 'async-call-rpc'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import { BigNumber } from 'bignumber.js'
 
@@ -26,13 +26,12 @@ function setup() {
         ],
     })
 }
-export const simpleSerializer: Serialization = {
-    serialization(from: unknown) {
+export const simpleEncoder: IsomorphicEncoder = {
+    encode(from: unknown) {
         if (!typeson) setup()
         return typeson!.encapsulate(from)
     },
-    // cspell:disable-next-line
-    deserialization(to: any) {
+    decode(to: any) {
         if (!typeson) setup()
         return typeson!.revive(to)
     },

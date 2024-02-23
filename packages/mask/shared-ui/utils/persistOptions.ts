@@ -1,6 +1,6 @@
 // https://github.com/TanStack/query/discussions/6446
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
-import { simpleSerializer } from '@masknet/shared-base'
+import { simpleEncoder } from '@masknet/shared-base'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import type { PersistQueryClientOptions, PersistedClient } from '@tanstack/react-query-persist-client'
 import { produce } from 'immer'
@@ -38,10 +38,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
         const next = produce(data, (data) => {
             data.clientState.queries.forEach((query) => {
                 for (const key in query.state) {
-                    // we're doing the javascript-ish things
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-expect-error
-                    query.state[key] = simpleSerializer.serialization(query.state[key]) as any
+                    ;(query.state as any)[key] = simpleEncoder.encode((query.state as any)[key])
                 }
             })
         })
@@ -51,10 +48,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
         const data = _data as unknown as PersistedClient
         data.clientState.queries.forEach((query) => {
             for (const key in query.state) {
-                // we're doing the javascript-ish things
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                query.state[key] = simpleSerializer.deserialization(query.state[key]) as any
+                ;(query.state as any)[key] = simpleEncoder.decode((query.state as any)[key])
             }
         })
         return data

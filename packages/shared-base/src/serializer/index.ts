@@ -1,5 +1,6 @@
 import { Typeson, TypesonPromise } from 'typeson'
-import type { Serialization } from 'async-call-rpc'
+import type { IsomorphicEncoder } from 'async-call-rpc'
+import type { Serialization } from '@dimensiondev/holoflows-kit'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { MaskEthereumProviderRpcError } from '@masknet/sdk'
@@ -26,7 +27,7 @@ function setup() {
 
     addClass('BigNumber', BigNumber)
 
-    registerSerializableClass(
+    registerEncodableClass(
         'MaskEthereumProviderRpcError',
         (x) => x instanceof MaskEthereumProviderRpcError,
         (e: MaskEthereumProviderRpcError) => ({
@@ -54,25 +55,31 @@ function setup() {
 
     for (const a of pendingRegister) a()
 }
-export const serializer: Serialization = {
-    async serialization(from: unknown) {
+export const encoder: Serialization & IsomorphicEncoder = {
+    async encode(from: unknown) {
         if (!typeson) setup()
         return typeson!.encapsulate(from)
     },
-    // cspell:disable-next-line
-    deserialization(to: any) {
+    decode(to: any) {
         if (!typeson) setup()
         return typeson!.revive(to)
     },
+    serialization(from) {
+        return encoder.encode(from)
+    },
+    // cspell:disable-next-line
+    deserialization(to: any) {
+        return encoder.decode(to)
+    },
 }
-function registerSerializableClass(name: string, constructor: NewableFunction): void
-function registerSerializableClass<T, Q>(
+function registerEncodableClass(name: string, constructor: NewableFunction): void
+function registerEncodableClass<T, Q>(
     name: string,
     isT: (x: unknown) => boolean,
     ser: (x: T) => Q | TypesonPromise<Q>,
     de_ser: (x: Q) => T,
 ): void
-function registerSerializableClass(name: string, a: any, b?: any, c?: any): void {
+function registerEncodableClass(name: string, a: any, b?: any, c?: any): void {
     if (typeson) {
         if (b) typeson.register({ [name]: [a, b, c] })
         else addClass(name, a)

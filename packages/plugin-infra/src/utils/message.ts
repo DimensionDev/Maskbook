@@ -1,6 +1,6 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { PluginMessageEmitterItem } from '@masknet/plugin-infra'
-import { serializer } from '@masknet/shared-base'
+import { encoder } from '@masknet/shared-base'
 
 /** @internal */
 export const DOMAIN_RPC = Symbol('create RPC instead of normal message')
@@ -17,7 +17,7 @@ export let getPluginMessage = <T>(pluginID: string, type?: typeof DOMAIN_RPC): P
 
     const messageCenter = new WebExtensionMessage<T>({ domain })
     const events = messageCenter.events
-    messageCenter.serialization = serializer
+    messageCenter.serialization = encoder
     cache.set(domain, events)
     return events
 }

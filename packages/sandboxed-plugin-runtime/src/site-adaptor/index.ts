@@ -4,7 +4,7 @@ import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dependencies-dom/index.js'
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { serializer } from '@masknet/shared-base'
+import { encoder } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
 import { Children } from 'react'
 
@@ -124,17 +124,19 @@ export class SiteAdaptorPluginHost extends SandboxedPluginHost<SiteAdaptorHostHo
         if (hasRPC) {
             namespace.worker = AsyncCall(null, {
                 channel: this.hooks.createRpcChannel(id, this.signal),
-                serializer,
+                encoder,
                 log: true,
                 thenable: false,
+                signal: this.signal,
             })
         }
         if (hasRPCGenerator) {
             namespace.workerGenerator = AsyncGeneratorCall(null, {
                 channel: this.hooks.createRpcGeneratorChannel(id, this.signal),
-                serializer,
+                encoder,
                 log: true,
                 thenable: false,
+                signal: this.signal,
             })
         }
         runtime.addNamespaceModule('@masknet/plugin/utils/rpc', namespace)
