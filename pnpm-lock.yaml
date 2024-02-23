@@ -2450,9 +2450,6 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.1
         version: 3.1.1(react-hook-form@7.45.2)
-      '@masknet/encryption':
-        specifier: workspace:^
-        version: link:../encryption
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
