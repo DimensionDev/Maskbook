@@ -57,7 +57,7 @@ function add<T extends object>(key: string, generator = false): AsyncVersionOf<T
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {
         key,
-        serializer: encoder,
+        encoder,
         log,
         channel,
         strict: true,
