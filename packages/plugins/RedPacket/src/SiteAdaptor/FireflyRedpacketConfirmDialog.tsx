@@ -106,6 +106,7 @@ export interface FireflyRedpacketConfirmDialogProps {
         payload: RedPacketJSONPayload,
         payloadImage?: string,
         claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
+        publicKey?: string,
     ) => void
     onClose: () => void
 }
@@ -264,7 +265,7 @@ export function FireflyRedpacketConfirmDialog({
         '',
         settings,
         gasOption,
-        (payload: RedPacketJSONPayload) => onCreated(payload, state?.url, value?.claimRequirements),
+        (payload: RedPacketJSONPayload) => onCreated(payload, state?.url, value?.claimRequirements, value?.publicKey),
         onClose,
         currentAccount,
     )
