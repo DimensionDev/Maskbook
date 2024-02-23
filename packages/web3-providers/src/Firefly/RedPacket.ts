@@ -123,11 +123,13 @@ export class FireflyRedPacket {
         rpid: string,
         reactions: FireflyRedPacketAPI.PostReaction[],
         claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
+        publicKey: string,
     ): Promise<void> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
         await fetchFireflyJSON(url, {
             method: 'POST',
             body: JSON.stringify({
+                publicKey,
                 rpid,
                 postReaction: reactions,
                 claimPlatform,

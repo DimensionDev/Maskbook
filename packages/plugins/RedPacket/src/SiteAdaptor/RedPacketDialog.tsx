@@ -147,6 +147,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             payload: RedPacketJSONPayload,
             payloadImage?: string,
             claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
+            publicKey?: string,
         ) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
@@ -174,6 +175,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
                 payloadImage,
                 claimRequirements,
+                publicKey,
             })
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
@@ -223,8 +225,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             payload: RedPacketJSONPayload,
             payloadImage?: string,
             claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
+            publicKey?: string,
         ) => {
-            onCreateOrSelect(payload, payloadImage, claimRequirements)
+            onCreateOrSelect(payload, payloadImage, claimRequirements, publicKey)
             setSettings(undefined)
         },
         [onCreateOrSelect],
