@@ -178,6 +178,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'visible',
     },
     listBox: {
+        '& > div': {
+            scrollbarWidth: 'none',
+        },
         '& > div::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 0,
@@ -198,7 +201,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingBottom: '16px',
     },
     list: {
-        scrollbarWidth: 'thin',
+        scrollbarWidth: 'none',
     },
     error: {
         backgroundColor: theme.palette.maskColor.bottom,

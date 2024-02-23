@@ -14,9 +14,10 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     compact: boolean
+    isList: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
     container: {
         display: 'flex',
         flex: 1,
@@ -25,8 +26,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
         position: 'relative',
     },
     sidebarContainer: {
-        width: '27px',
-        height: '432px',
+        width: 27,
+        height: isList ? 486 : undefined,
     },
     content: {
         ...(compact ? { minWidth: 552 } : {}),
@@ -86,14 +87,14 @@ export function SelectFungibleTokenDialog({
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
+    const [mode, setMode] = useState(TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { classes } = useStyles({ compact })
+    const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
     const rowSize = useRowSize()
-    const [mode, setMode] = useState(TokenListMode.List)
 
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
@@ -116,15 +117,14 @@ export function SelectFungibleTokenDialog({
             }>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>
-                    <div className={classes.sidebarContainer}>
-                        <SelectNetworkSidebar
-                            hideAllButton
-                            chainId={chainId}
-                            onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                            networks={allNetworks}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                        />
-                    </div>
+                    <SelectNetworkSidebar
+                        className={classes.sidebarContainer}
+                        hideAllButton
+                        chainId={chainId}
+                        onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
+                        networks={allNetworks}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                    />
                     <FungibleTokenList
                         mode={mode}
                         setMode={setMode}
