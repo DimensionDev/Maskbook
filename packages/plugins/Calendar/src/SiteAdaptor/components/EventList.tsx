@@ -1,5 +1,6 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { useCallback, useMemo } from 'react'
@@ -67,9 +68,8 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
     },
     logo: {
-        width: '24px',
-        height: '24px',
         borderRadius: '50%',
+        overflow: 'hidden',
     },
     eventTitle: {
         fontSize: '14px',
@@ -144,7 +144,12 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                                         target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
-                                                <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                                <Image
+                                                    src={resolveIPFS_URL(v.project.logo)}
+                                                    classes={{ container: classes.logo }}
+                                                    size={24}
+                                                    alt={v.project.name}
+                                                />
                                                 <Typography className={classes.projectName}>
                                                     {v.project.name}
                                                 </Typography>

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
@@ -72,9 +72,8 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
     },
     logo: {
-        width: '24px',
-        height: '24px',
         borderRadius: '50%',
+        overflow: 'hidden',
     },
     eventTitle: {
         fontSize: '14px',
@@ -168,7 +167,12 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                         target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
-                                                <img src={v.project.logo} className={classes.logo} alt="logo" />
+                                                <Image
+                                                    src={v.project.logo}
+                                                    classes={{ container: classes.logo }}
+                                                    size={24}
+                                                    alt={v.project.name}
+                                                />
                                                 <Typography className={classes.projectName}>
                                                     {v.project.name}
                                                 </Typography>

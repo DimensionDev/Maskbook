@@ -1,4 +1,4 @@
-import { EmptyStatus, LoadingStatus } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
@@ -69,9 +69,8 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
     },
     logo: {
-        width: '24px',
-        height: '24px',
         borderRadius: '50%',
+        overflow: 'hidden',
     },
     eventTitle: {
         fontSize: '14px',
@@ -152,9 +151,10 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
                                         target="_blank">
                                         <div className={classes.eventHeader}>
                                             <div className={classes.projectWrap}>
-                                                <img
+                                                <Image
                                                     src={v.project.logo}
-                                                    className={classes.logo}
+                                                    classes={{ container: classes.logo }}
+                                                    size={24}
                                                     alt={v.project.name}
                                                 />
                                                 <Typography className={classes.projectName}>
