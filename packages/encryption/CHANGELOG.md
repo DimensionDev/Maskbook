@@ -1,5 +1,12 @@
 # @masknet/encryption
 
+## 0.5.0
+
+### Minor Changes
+
+-   2f0c6d0c0: remove EncryptError and DecryptError
+-   400a2f5e6: add preset 2023_Firefly
+
 ## 0.4.1
 
 ### Patch Changes
