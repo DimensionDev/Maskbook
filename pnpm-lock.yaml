@@ -1015,6 +1015,9 @@ importers:
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
+      '@masknet/web3-shared-base':
+        specifier: workspace:^
+        version: link:../../web3-shared/base
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
