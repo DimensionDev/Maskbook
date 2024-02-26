@@ -38,6 +38,8 @@ export class FireflyRedPacket {
 
         return data.list.map((theme) => ({
             themeId: theme.tid,
+            backgroundImageUrl: theme.cover.bg_image,
+            backgroundColor: theme.cover.bg_color,
             url: urlcat(SITE_URL, '/api/rp', {
                 'theme-id': theme.tid,
                 usage: 'payload',
@@ -67,6 +69,8 @@ export class FireflyRedPacket {
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
         return {
             themeId: data.tid,
+            backgroundImageUrl: data.normal.bg_image,
+            backgroundColor: data.normal.bg_color,
             url: urlcat(SITE_URL, '/api/rp', {
                 'theme-id': data.tid,
                 usage: 'cover',

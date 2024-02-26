@@ -263,7 +263,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 component="article"
                 elevation={0}
                 style={{
-                    backgroundImage: `url("${data.url}")`,
+                    backgroundSize: 'contain',
+                    backgroundImage: data.backgroundImageUrl ? `url(${data.backgroundImageUrl})` : 'none',
+                    backgroundColor: data.backgroundColor,
                 }}>
                 <img className={classes.cover} src={data.url} />
                 <img
