@@ -1,8 +1,5 @@
 import type { Configuration } from 'webpack'
-import { join, isAbsolute, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const __dirname = fileURLToPath(dirname(import.meta.url))
+import { join, isAbsolute } from 'node:path'
 
 export enum ManifestFile {
     ChromiumMV2 = 'chromium-mv2',
@@ -49,9 +46,9 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         reactRefresh = hmr,
         devtools = mode === 'development' || channel !== 'stable',
         sourceMapPreference = mode === 'development',
-        outputPath = join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
+        outputPath = join(import.meta.dirname, '../../../', mode === 'development' ? 'dist' : 'build'),
     } = flags
-    if (!isAbsolute(outputPath)) outputPath = join(__dirname, '../../../', outputPath)
+    if (!isAbsolute(outputPath)) outputPath = join(import.meta.dirname, '../../../', outputPath)
 
     if (mode === 'production' || profiling) hmr = false
     if (!hmr) reactRefresh = false

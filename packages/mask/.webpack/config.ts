@@ -25,11 +25,10 @@ import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
 import './clean-hmr.js'
 import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
 
-const __dirname = fileURLToPath(dirname(import.meta.url))
 const require = createRequire(import.meta.url)
-const patchesDir = join(__dirname, '../../../patches')
-const templateContent = readFile(join(__dirname, './template.html'), 'utf8')
-const popupTemplateContent = readFile(join(__dirname, './popups.html'), 'utf8')
+const patchesDir = join(import.meta.dirname, '../../../patches')
+const templateContent = readFile(join(import.meta.dirname, './template.html'), 'utf8')
+const popupTemplateContent = readFile(join(import.meta.dirname, './popups.html'), 'utf8')
 
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
@@ -46,7 +45,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const baseConfig = {
         name: 'mask',
         // to set a correct base path for source map
-        context: join(__dirname, '../../../'),
+        context: join(import.meta.dirname, '../../../'),
         mode: flags.mode,
         devtool: computedFlags.sourceMapKind,
         target: ['web', 'es2022'],
@@ -64,7 +63,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         cache: {
             type: 'filesystem',
             buildDependencies: {
-                config: [fileURLToPath(import.meta.url)],
+                config: [import.meta.filename],
                 patches: await pnpmPatches,
             },
             version: cacheKey,
@@ -122,7 +121,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     test: /\.tsx?$/,
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
-                    include: join(__dirname, '../../'),
+                    include: join(import.meta.dirname, '../../'),
                     loader: require.resolve('swc-loader'),
                     options: {
                         sourceMaps: !!computedFlags.sourceMapKind,
@@ -212,15 +211,15 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             ...emitManifestFile(flags, computedFlags),
             new CopyPlugin({
                 patterns: [
-                    { from: join(__dirname, '../public/'), to: flags.outputPath },
+                    { from: join(import.meta.dirname, '../public/'), to: flags.outputPath },
                     {
-                        from: join(__dirname, '../../injected-script/dist/injected-script.js'),
+                        from: join(import.meta.dirname, '../../injected-script/dist/injected-script.js'),
                         to: nonWebpackJSFiles,
                     },
-                    { from: join(__dirname, '../../gun-utils/gun.js'), to: nonWebpackJSFiles },
-                    { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: nonWebpackJSFiles },
+                    { from: join(import.meta.dirname, '../../gun-utils/gun.js'), to: nonWebpackJSFiles },
+                    { from: join(import.meta.dirname, '../../mask-sdk/dist/mask-sdk.js'), to: nonWebpackJSFiles },
                     {
-                        context: join(__dirname, '../../polyfills/dist/'),
+                        context: join(import.meta.dirname, '../../polyfills/dist/'),
                         from: '*.js',
                         to: polyfillFolder,
                     },
@@ -233,7 +232,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
                     {
-                        from: join(__dirname, '../../sentry/dist/sentry.js'),
+                        from: join(import.meta.dirname, '../../sentry/dist/sentry.js'),
                         to: nonWebpackJSFiles,
                     },
                 ],
@@ -354,11 +353,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     } satisfies webpack.Configuration
 
     const entries = (baseConfig.entry = {
-        dashboard: withReactDevTools(join(__dirname, '../dashboard/initialization/index.ts')),
-        popups: withReactDevTools(join(__dirname, '../popups/initialization/index.ts')),
-        contentScript: withReactDevTools(join(__dirname, '../content-script/index.ts')),
-        background: normalizeEntryDescription(join(__dirname, '../background/initialization/mv2-entry.ts')),
-        backgroundWorker: normalizeEntryDescription(join(__dirname, '../background/initialization/mv3-entry.ts')),
+        dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
+        popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
+        contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
+        background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv2-entry.ts')),
+        backgroundWorker: normalizeEntryDescription(
+            join(import.meta.dirname, '../background/initialization/mv3-entry.ts'),
+        ),
         devtools: undefined as EntryDescription | undefined,
     }) satisfies Record<string, EntryDescription | undefined>
     delete entries.devtools
@@ -374,7 +375,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true, perf: flags.profiling }),
     )
     if (flags.devtools) {
-        entries.devtools = normalizeEntryDescription(join(__dirname, '../devtools/panels/index.tsx'))
+        entries.devtools = normalizeEntryDescription(join(import.meta.dirname, '../devtools/panels/index.tsx'))
         baseConfig.plugins.push(
             await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', perf: flags.profiling }),
         )
@@ -384,7 +385,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     function withReactDevTools(entry: string | string[] | EntryDescription): EntryDescription {
         if (!flags.devtools) return normalizeEntryDescription(entry)
         entry = normalizeEntryDescription(entry)
-        entry.import = joinEntryItem(join(__dirname, '../devtools/content-script/index.ts'), entry.import)
+        entry.import = joinEntryItem(join(import.meta.dirname, '../devtools/content-script/index.ts'), entry.import)
         return entry
     }
 }
