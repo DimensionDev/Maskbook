@@ -223,16 +223,21 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
 
-    const outdated =
-        listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
+    const empty = listOfStatus.includes(RedPacketStatus.empty)
+    const outdated = empty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
+    const claimed = listOfStatus.includes(RedPacketStatus.claimed)
 
     const { classes } = useStyles({ outdated })
 
     const { data } = useQuery({
         enabled: !!availability && !!payload.rpid && !!token?.symbol,
-        queryKey: ['red-packet', 'theme-id', payload.rpid],
+        queryKey: ['red-packet', 'theme-id', payload.rpid, claimed],
         queryFn: async () => {
             const name = payload.sender.name
+            const data = await redPacketContract.methods.check_availability(payload.rpid).call({
+                // check availability is ok w/o account
+                from: account,
+            })
 
             return FireflyRedPacket.getCoverUrlByRpid(
                 payload.rpid,
@@ -246,6 +251,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 payload.sender.message,
                 availability?.balance ?? payload.total,
                 toFixed(minus(payload.shares, availability?.claimed || 0)),
+                data.claimed_amount,
             )
         },
     })
@@ -253,8 +259,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token || !data?.url) return <LoadingStatus minHeight={148} />
 
-    const claimedOrEmpty =
-        listOfStatus.includes(RedPacketStatus.claimed) || listOfStatus.includes(RedPacketStatus.empty)
+    const claimedOrEmpty = claimed || empty
 
     return (
         <>

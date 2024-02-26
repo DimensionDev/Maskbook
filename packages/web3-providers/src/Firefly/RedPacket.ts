@@ -60,6 +60,7 @@ export class FireflyRedPacket {
         message?: string,
         remainingAmount?: string,
         remainingShares?: string,
+        claimedAmount?: string,
     ) {
         const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
             rpid,
@@ -78,6 +79,7 @@ export class FireflyRedPacket {
                 message,
                 'remaining-amount': remainingAmount,
                 'remaining-shares': remainingShares,
+                'claimed-amount': claimedAmount,
             }),
         }
     }
