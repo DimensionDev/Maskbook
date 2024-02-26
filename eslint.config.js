@@ -8,7 +8,6 @@ import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-i'
-import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
