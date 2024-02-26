@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '12px 16px',
         height: 474,
-        overflow: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -29,6 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         padding: '0 12px',
+    },
+    claimerList: {
+        overflow: 'auto',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     noData: {
         display: 'flex',
@@ -70,7 +75,7 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
             {claimInfo ?
                 <FireflyRedPacketDetailsItem history={{ ...claimInfo, redpacket_id: rpid }} isDetail />
             :   null}
-            <Box>
+            <Box className={classes.claimerList}>
                 {claimList.length ?
                     claimList.map((item) => (
                         <div className={classes.claimer} key={item.creator}>
