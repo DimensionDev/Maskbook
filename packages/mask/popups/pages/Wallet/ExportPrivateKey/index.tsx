@@ -20,7 +20,7 @@ import { PrivateKeyDisplay } from '../../../components/PrivateKeyDisplay/index.j
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 
 const a = ''
-if (a[0] === 'x') {
+if (a.startsWith('x')) {
 }
 
 enum TabType {
