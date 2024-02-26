@@ -1,5 +1,4 @@
 // Defined in EIP-1193
-// https://github.com/typescript-eslint/typescript-eslint/issues/7192
 export declare namespace Ethereum {
     export interface ProviderObject extends EIP1193Provider, EthereumEventEmitter {}
     export interface EIP1193Provider {
@@ -57,7 +56,6 @@ export declare namespace Ethereum {
 }
 
 // Defined in EIP-6963
-// https://github.com/typescript-eslint/typescript-eslint/issues/7192
 export declare namespace Ethereum {
     export interface EIP6963ProviderInfo {
         uuid: string
@@ -72,7 +70,6 @@ export declare namespace Ethereum {
 }
 
 // Implemented RPCs
-// https://github.com/typescript-eslint/typescript-eslint/issues/7192
 
 export declare namespace Ethereum.RPC {
     export interface Block {
@@ -275,7 +272,6 @@ export declare namespace Ethereum.RPC {
 }
 
 // Mask specific part
-// https://github.com/typescript-eslint/typescript-eslint/issues/7192
 export declare namespace Ethereum {
     export interface ProviderObject extends EIP1193Provider, ExperimentalProvider, EthereumEventEmitter {}
 
