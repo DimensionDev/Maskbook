@@ -143,14 +143,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .eslintcache
-          key: linter-${{ steps.get-date.outputs.date }}
-          restore-keys: linter-
+          key: linter-v2-${{ steps.get-date.outputs.date }}
+          restore-keys: linter-v2-
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp codegen
       - name: Run Eslint
         run: |
-          # report to stdio and to file, it's cached, the second run should be fast
+          export NODE_OPTIONS="--max-old-space-size=8192"
+          # report to stdio and to a file, it's cached so the second run should be fast
           pnpm run lint:ci
           pnpm run lint:ci-report
       - uses: EndBug/add-and-commit@v9
