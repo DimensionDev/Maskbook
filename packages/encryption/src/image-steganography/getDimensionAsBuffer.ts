@@ -15,10 +15,10 @@ export function getDimensionAsBuffer(buf: ArrayBuffer): Dimension | undefined {
 
 function getDimensionAsPNG(buf: ArrayBuffer) {
     const dataView = new DataView(buf, 0, 28)
-    return {
-        width: dataView.getInt32(16),
-        height: dataView.getInt32(20),
-    }
+    const width = dataView.getInt32(16)
+    const height = dataView.getInt32(20)
+    if (width < 0 || height < 0) return
+    return { width, height }
 }
 
 /**
