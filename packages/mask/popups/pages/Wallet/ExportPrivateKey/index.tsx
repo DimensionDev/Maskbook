@@ -19,6 +19,9 @@ import { MnemonicDisplay } from '../../../components/MnemonicDisplay/index.js'
 import { PrivateKeyDisplay } from '../../../components/PrivateKeyDisplay/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 
+const a = ''
+if (a[0] === 'x') { }
+
 enum TabType {
     Mnemonic = 'Mnemonic',
     PrivateKey = 'Private Key',

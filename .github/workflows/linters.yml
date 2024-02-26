@@ -142,7 +142,7 @@ jobs:
       - name: Restore ESLint cache
         uses: actions/cache@v3
         with:
-          path: ./.eslintcache
+          path: .eslintcache
           key: linter-${{ steps.get-date.outputs.date }}
           restore-keys: linter-
       - run: git config --global url."https://github.com/".insteadOf git@github.com

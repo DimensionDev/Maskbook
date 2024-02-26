@@ -73,7 +73,7 @@ export declare namespace Ethereum {
 
 // Implemented RPCs
 // https://github.com/typescript-eslint/typescript-eslint/issues/7192
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
+ 
 export declare namespace Ethereum.RPC {
     export interface Block {
         hash: string

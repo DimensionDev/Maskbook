@@ -1,5 +1,6 @@
 // cSpell:disable
-import TypescriptParser from '@typescript-eslint/parser'
+// @ts-check
+import tseslint from 'typescript-eslint'
 
 import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
@@ -11,7 +12,8 @@ import TypeScriptPlugin from '@typescript-eslint/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
-import { pathToFileURL } from 'url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
+import { join } from 'node:path'
 
 // this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
 if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
@@ -519,13 +521,13 @@ const plugins = {
     react: ReactPlugin,
     import: ImportPlugin,
     unicorn: UnicornPlugin,
-    '@typescript-eslint': TypeScriptPlugin,
+    '@typescript-eslint': tseslint.plugin,
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
     '@tanstack/query': ReactQueryPlugin,
 }
-export default [
+export default tseslint.config(
     {
         settings: {
             react: { version: '18.3' },
@@ -553,10 +555,13 @@ export default [
     {
         files: ['packages/**/*.ts', 'packages/**/*.tsx'],
         languageOptions: {
-            parser: TypescriptParser,
+            parser: tseslint.parser,
             parserOptions: {
                 ecmaVersion: 'latest',
-                project: './tsconfig.eslint.json',
+                // project: './tsconfig.eslint.json',
+                EXPERIMENTAL_useProjectService: true,
+                // projectService: true,
+                tsconfigRootDir: join(fileURLToPath(import.meta.url), '..'),
                 warnOnUnsupportedTypeScriptVersion: false,
                 allowAutomaticSingleRunInference: true,
             },
@@ -577,4 +582,4 @@ export default [
             'unicorn/consistent-function-scoping': 'off',
         },
     },
-]
+)
