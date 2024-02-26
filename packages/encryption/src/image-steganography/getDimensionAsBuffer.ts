@@ -49,8 +49,9 @@ function getDimensionAsJPEG(buf: ArrayBuffer) {
                 if (i >= dataView.byteLength) return
                 if (dataView.getUint8(i) !== 0xff) return
                 if (
-                    dataView.getUint8(i + 1) === 0xc0 || // SOF0 marker
-                    dataView.getUint8(i + 1) === 0xc2 // SOF2 marker
+                    dataView.getUint8(i + 1) === 0xc0 || // 0xFFC0 is baseline standard(SOF)
+                    dataView.getUint8(i + 1) === 0xc1 || // 0xFFC1 is baseline optimized(SOF)
+                    dataView.getUint8(i + 1) === 0xc2 // 0xFFC2 is progressive(SOF2)
                 ) {
                     return {
                         height: dataView.getUint8(i + 5) * 256 + dataView.getUint8(i + 6),
