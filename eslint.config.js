@@ -558,7 +558,6 @@ export default tseslint.config(
             parser: tseslint.parser,
             parserOptions: {
                 ecmaVersion: 'latest',
-                // project: './tsconfig.eslint.json',
                 EXPERIMENTAL_useProjectService: true,
                 // projectService: true,
                 tsconfigRootDir: join(fileURLToPath(import.meta.url), '..'),
