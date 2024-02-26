@@ -63,7 +63,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
             if (
                 typeof errorMessage === 'string' &&
                 (errorMessage.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN) ||
-                    errorMessage.includes('addEthereumChain'))
+                    errorMessage.includes('addEthereumChain') || errorMessage.includes('configured for connector'))
             ) {
                 await this.request<void>({
                     method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
