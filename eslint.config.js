@@ -559,7 +559,7 @@ export default tseslint.config(
                 ecmaVersion: 'latest',
                 EXPERIMENTAL_useProjectService: true,
                 // projectService: true,
-                tsconfigRootDir: join(fileURLToPath(import.meta.url), '..'),
+                tsconfigRootDir: import.meta.dirname,
                 warnOnUnsupportedTypeScriptVersion: false,
                 allowAutomaticSingleRunInference: true,
             },

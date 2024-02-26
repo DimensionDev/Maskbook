@@ -1,7 +1,6 @@
 // TODO: load this lazy
 import Lock from 'proper-lockfile'
 import { fileURLToPath } from 'url'
-const __filename = fileURLToPath(import.meta.url)
 
 export async function getProcessLock(lockName: string) {
     const lockfilePath = getLockPosition(lockName)
@@ -10,7 +9,7 @@ export async function getProcessLock(lockName: string) {
             await new Promise((resolve) => setTimeout(resolve, 500))
         } else {
             try {
-                Lock.lockSync(__filename, { lockfilePath, update: 200 })
+                Lock.lockSync(import.meta.filename, { lockfilePath, update: 200 })
                 return
             } catch {
                 // ignore

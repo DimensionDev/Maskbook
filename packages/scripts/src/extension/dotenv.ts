@@ -1,5 +1,4 @@
 import { config } from 'dotenv'
-import { fileURLToPath } from 'url'
 import { ROOT_PATH } from '../utils/paths.js'
 import type { BuildFlags } from './flags.js'
 import { ManifestFile } from '../../../mask/.webpack/flags.js'
@@ -7,7 +6,7 @@ import { ManifestFile } from '../../../mask/.webpack/flags.js'
 export function applyDotEnv(flags: BuildFlags) {
     if (flags.mode === 'production') return
 
-    const { parsed, error } = config({ path: fileURLToPath(new URL('./.env/dev-preference', ROOT_PATH)) })
+    const { parsed, error } = config({ path: new URL('./.env/dev-preference', ROOT_PATH) })
     if (error) console.error(new TypeError('Failed to parse env file', { cause: error }))
     if (!parsed) return
 

@@ -38,7 +38,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           # Keep consistent between node version in the .node-version file and below.
-          node-version: "20"
+          node-version: "21"
           cache: 'pnpm'
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest
