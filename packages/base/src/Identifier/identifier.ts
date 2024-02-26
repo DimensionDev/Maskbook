@@ -137,8 +137,9 @@ export class ECKeyIdentifier extends Identifier {
         )
     }
     declare [Symbol.toStringTag]: string
+    #ec: undefined
     static [Symbol.hasInstance](x: any): boolean {
-        return toText(x)?.startsWith('ec_key:') ?? false
+        return typeof x === 'object' && x !== null && #ec in x
     }
     static {
         ECKeyIdentifier.prototype[Symbol.toStringTag] = 'ECKeyIdentifier'
@@ -183,8 +184,9 @@ export class PostIVIdentifier extends Identifier {
         return new Uint8Array(decodeArrayBuffer(x))
     }
     declare [Symbol.toStringTag]: string
+    #post_iv: undefined
     static [Symbol.hasInstance](x: any): boolean {
-        return toText(x)?.startsWith('post_iv:') ?? false
+        return typeof x === 'object' && x !== null && #post_iv in x
     }
     static {
         PostIVIdentifier.prototype[Symbol.toStringTag] = 'PostIVIdentifier'
@@ -232,8 +234,9 @@ export class PostIdentifier extends Identifier {
         return this.postID
     }
     declare [Symbol.toStringTag]: string
+    #post: undefined
     static [Symbol.hasInstance](x: any): boolean {
-        return toText(x)?.startsWith('post:') ?? false
+        return typeof x === 'object' && x !== null && #post in x
     }
     static {
         PostIdentifier.prototype[Symbol.toStringTag] = 'PostIdentifier'
@@ -290,8 +293,9 @@ export class ProfileIdentifier extends Identifier {
         return `person:${this.network}/${this.userId}`
     }
     declare [Symbol.toStringTag]: string
+    #profile: undefined
     static [Symbol.hasInstance](x: any): boolean {
-        return toText(x)?.startsWith('person:') ?? false
+        return typeof x === 'object' && x !== null && #profile in x
     }
     static {
         ProfileIdentifier.prototype[Symbol.toStringTag] = 'ProfileIdentifier'
@@ -310,14 +314,4 @@ export class ProfileIdentifier extends Identifier {
 function banSlash(input: string | undefined | null, source?: string) {
     if (!input) return
     if (input.includes('/')) throw new TypeError(`Cannot contain / in a part of identifier (${source}): ${input}`)
-}
-
-function toText(x: any) {
-    try {
-        const text = x.toText()
-        if (typeof text === 'string') return text
-        return
-    } catch {
-        return
-    }
 }
