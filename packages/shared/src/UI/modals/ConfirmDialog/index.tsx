@@ -107,6 +107,7 @@ const Dialog = memo(function Dialog({
 })
 
 export type ConfirmDialogOpenProps = Omit<ConfirmDialogProps, 'open' | 'onConfirm'>
+
 export const ConfirmDialogComponent = forwardRef<SingletonModalRefCreator<ConfirmDialogOpenProps, boolean>>(
     function ConfirmDialog(_, ref) {
         const [props, setProps] = useState<ConfirmDialogOpenProps>({
@@ -119,6 +120,7 @@ export const ConfirmDialogComponent = forwardRef<SingletonModalRefCreator<Confir
                 setProps(p)
             },
         })
+        if (!open) return null
         return (
             <Dialog
                 open={open}
