@@ -21,7 +21,7 @@ import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { stableSquashedCached } from '../entry-helpers.js'
+import { Expiration, stableSquashedCached } from '../entry-helpers.js'
 import { env } from '@masknet/flags'
 
 const BASE_URL =
@@ -233,7 +233,9 @@ function getExistedBindingQueryURL(platform: string, identity: string, personaPu
 }
 
 function fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-    return fetchJSON<T>(request, init)
+    return fetchJSON<T>(request, init, {
+        squashExpiration: Expiration.ONE_MINUTE,
+    })
 }
 
 export class NextIDProof {
