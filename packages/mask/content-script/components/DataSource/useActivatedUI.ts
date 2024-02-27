@@ -17,9 +17,9 @@ async function queryPersonaFromDB(identityResolved: IdentityResolved) {
 
 async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
-    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return
+    if (!activatedSiteAdaptorUI?.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
-        activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform,
+        activatedSiteAdaptorUI.configuration.nextIDConfig.platform,
         identityResolved.identifier.userId,
     )
 }
