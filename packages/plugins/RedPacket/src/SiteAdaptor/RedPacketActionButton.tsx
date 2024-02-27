@@ -8,6 +8,7 @@ import { openComposition } from './openComposition.js'
 import { RedPacketMetaKey } from '../constants.js'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -84,10 +85,10 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         [FireflyRedPacketAPI.RedPacketStatus.Refunding]: t.refund(),
     }
 
-    const handleShare = useCallback(() => {
+    const [{ loading: isSharing }, shareCallback] = useAsyncFn(async () => {
         if (!shareFrom || !themeId || !createdAt) return
 
-        const payloadImage = FireflyRedPacket.getPayloadUrlByThemeId(
+        const payloadImage = await FireflyRedPacket.getPayloadUrlByThemeId(
             themeId,
             shareFrom,
             tokenInfo.amount,
@@ -120,24 +121,20 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         )
     }, [])
 
+    const redpacketStatus = updatedStatus || _redpacketStatus
+
     const handleClick = useCallback(async () => {
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) {
-            handleShare()
-        }
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
-            console.log(await refundCallback())
-        }
-    }, [_redpacketStatus])
+        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) await shareCallback()
+        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) await refundCallback()
+    }, [redpacketStatus, shareCallback, refundCallback])
 
     useEffect(() => {
         if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
     }, [refunded])
 
-    const redpacketStatus = updatedStatus || _redpacketStatus
-
     return (
         <ActionButton
-            loading={isRefunding}
+            loading={isRefunding || isSharing}
             fullWidth={isSmall}
             onClick={() => {
                 handleClick()
