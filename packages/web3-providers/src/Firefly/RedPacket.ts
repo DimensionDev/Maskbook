@@ -26,13 +26,7 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
-    static async getPayloadUrls(
-        from: string,
-        amount?: string,
-        type?: string,
-        symbol?: string,
-        decimals?: number,
-    ): Promise<Array<{ themeId: string; url: string }>> {
+    static async getPayloadUrls(from: string, amount?: string, type?: string, symbol?: string, decimals?: number) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
 
@@ -52,6 +46,35 @@ export class FireflyRedPacket {
         }))
     }
 
+    static async getPayloadUrlByThemeId(
+        themeId: string,
+        from: string,
+        amount?: string,
+        type?: string,
+        symbol?: string,
+        decimals?: number,
+    ) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
+            themeId,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+
+        return {
+            themeId,
+            url: urlcat(SITE_URL, '/api/rp', {
+                'theme-id': themeId,
+                usage: 'payload',
+                from,
+                amount,
+                type,
+                symbol,
+                decimals,
+            }),
+            backgroundImageUrl: data.cover.bg_image,
+            backgroundColor: data.cover.bg_color,
+        }
+    }
+
     static async getCoverUrlByRpid(
         rpid: string,
         symbol?: string,
@@ -67,6 +90,7 @@ export class FireflyRedPacket {
             rpid,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+
         return {
             themeId: data.tid,
             backgroundImageUrl: data.normal.bg_image,
@@ -84,25 +108,6 @@ export class FireflyRedPacket {
                 'remaining-shares': remainingShares,
             }),
         }
-    }
-
-    static getPayloadUrlByThemeId(
-        themeId: string,
-        from: string,
-        amount?: string,
-        type?: string,
-        symbol?: string,
-        decimals?: number,
-    ) {
-        return urlcat(SITE_URL, '/api/rp', {
-            'theme-id': themeId,
-            usage: 'payload',
-            from,
-            amount,
-            type,
-            symbol,
-            decimals,
-        })
     }
 
     static async createPublicKey(
