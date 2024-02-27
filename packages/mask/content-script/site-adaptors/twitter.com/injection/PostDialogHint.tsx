@@ -33,7 +33,6 @@ export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
 
     renderPostDialogHintTo('timeline', searchReplyToolbarSelector(), {
         signal,
-        missingReportRule: { name: 'PostDialog hint timeline', rule: 'https://twitter.com/home' },
     })
 
     renderPostDialogHintTo(
@@ -41,10 +40,6 @@ export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
         postEditorInPopupSelector().map((x) => (isCompose() && hasEditor() ? x : emptyNode)),
         {
             signal,
-            missingReportRule: {
-                name: 'PostDialog hint popup',
-                rule: 'https://twitter.com/compose/post',
-            },
         },
     )
 }

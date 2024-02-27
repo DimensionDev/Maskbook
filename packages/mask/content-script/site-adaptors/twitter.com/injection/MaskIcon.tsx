@@ -8,12 +8,7 @@ import { Flags } from '@masknet/flags'
 import Services from '#services'
 import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import {
-    bioPageUserIDSelector,
-    bioPageUserNickNameSelector,
-    floatingBioCardSelector,
-    isProfilePageLike,
-} from '../utils/selector.js'
+import { bioPageUserIDSelector, bioPageUserNickNameSelector, floatingBioCardSelector } from '../utils/selector.js'
 
 function Icon(props: { size: number }) {
     return (
@@ -54,7 +49,7 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, options: W
 
 export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
     // profile
-    _(bioPageUserNickNameSelector, 24, { signal, missingReportRule: { name: 'User badge', rule: isProfilePageLike } })
+    _(bioPageUserNickNameSelector, 24, { signal })
     // floating bio
     _(floatingBioCardSelector, 20, { signal })
 }

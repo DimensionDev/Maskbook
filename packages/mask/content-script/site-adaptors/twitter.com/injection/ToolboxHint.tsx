@@ -23,13 +23,6 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
 
     startWatch(watcher, {
         signal,
-        missingReportRule: {
-            name: 'Sidebar toolbox',
-            rule() {
-                // return false where the page should not match. maybe on mobile size?
-                return true
-            },
-        },
     })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
         <RootWeb3ContextProvider>

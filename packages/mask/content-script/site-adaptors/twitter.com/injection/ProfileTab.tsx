@@ -20,7 +20,6 @@ import {
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
-    isProfilePageLike,
     nextTabListSelector,
 } from '../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
@@ -283,10 +282,6 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, {
                 signal,
-                missingReportRule: {
-                    name: 'Last tab in the profile page',
-                    rule: isProfilePageLike,
-                },
                 shadowRootDelegatesFocus: false,
             })
             attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectProfileTab />)
@@ -296,7 +291,6 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
 
     startWatch(contentWatcher, {
         signal,
-        missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
         shadowRootDelegatesFocus: false,
     })
 }
