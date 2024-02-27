@@ -61,6 +61,7 @@ const useStyles = makeStyles()((theme) => {
             flexGrow: 1,
             backgroundColor: theme.palette.maskColor.bottom,
             overflow: 'auto',
+            scrollbarWidth: 'none',
             '::-webkit-scrollbar': {
                 display: 'none',
             },

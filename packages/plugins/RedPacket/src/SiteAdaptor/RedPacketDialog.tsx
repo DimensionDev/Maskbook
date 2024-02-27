@@ -47,6 +47,7 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
     return {
         dialogContent: {
             padding: 0,
+            scrollbarWidth: 'none',
             '::-webkit-scrollbar': {
                 display: 'none',
             },
