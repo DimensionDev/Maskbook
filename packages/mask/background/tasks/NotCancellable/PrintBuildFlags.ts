@@ -1,2 +1,2 @@
 import { env } from '@masknet/flags'
-console.log(env)
+if (process.env.NODE_ENV === 'production') console.log(env)
