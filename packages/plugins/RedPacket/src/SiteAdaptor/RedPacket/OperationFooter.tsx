@@ -51,8 +51,6 @@ export function OperationFooter({
     const theme = useTheme()
 
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {
-        if (!canClaim && !canRefund) return null
-
         if (!account) {
             return (
                 <ActionButton fullWidth onClick={() => SelectProviderModal.open()} variant="roundedDark">
@@ -60,6 +58,7 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        if (!canClaim && !canRefund) return null
         if (!currentChainId) {
             return (
                 <ActionButton disabled fullWidth variant="roundedDark">
@@ -108,7 +107,7 @@ export function OperationFooter({
                     </ActionButton>
                 )}
 
-                {canClaim || canRefund ?
+                {canClaim || canRefund || !account ?
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
