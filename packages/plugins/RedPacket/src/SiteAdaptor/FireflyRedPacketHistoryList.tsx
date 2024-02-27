@@ -52,7 +52,10 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: historiesData, fetchNextPage } = useRedPacketHistory(account, historyType)
+    const { data: historiesData, fetchNextPage } = useRedPacketHistory(
+        '0xf527d7db0196e39daaff79d6a6b79214f7220fa6',
+        historyType,
+    )
     const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
 
     if (!histories?.length)
