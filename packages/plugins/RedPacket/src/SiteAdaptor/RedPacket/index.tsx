@@ -19,7 +19,6 @@ import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { useQuery } from '@tanstack/react-query'
-import { avalancheFuji } from 'viem/chains'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -106,13 +105,13 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // #region token detailed
     const {
-        value: availability,
+        availability,
         computed: availabilityComputed,
-        retry: revalidateAvailability,
+        checkAvailability,
         claimStrategyStatus,
         recheckClaimStatus,
         checkingClaimStatus,
-    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
+    } = useAvailabilityComputed(account, payload)
 
     // #endregion
 
@@ -216,9 +215,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
-            revalidateAvailability()
+            checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, revalidateAvailability])
+    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, checkAvailability])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
