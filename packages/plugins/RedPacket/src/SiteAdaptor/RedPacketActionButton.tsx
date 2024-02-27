@@ -132,6 +132,9 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
     }, [refunded])
 
+    // TODO: remove this and implement send redpacket from history list
+    if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) return null
+
     return (
         <ActionButton
             loading={isRefunding || isSharing}
