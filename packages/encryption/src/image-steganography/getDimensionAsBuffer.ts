@@ -28,39 +28,25 @@ function getDimensionAsPNG(buf: ArrayBuffer) {
  */
 function getDimensionAsJPEG(buf: ArrayBuffer) {
     const dataView = new DataView(buf)
-    let i = 0
-    if (
-        dataView.getUint8(i) === 0xff &&
-        dataView.getUint8(i + 1) === 0xd8 && // SOI marker
-        dataView.getUint8(i + 2) === 0xff &&
-        dataView.getUint8(i + 3) === 0xe0 // APP0 marker
-    ) {
-        i += 4
+    let i = 4 // skip the first 4 bytes
+    let block_length = dataView.getUint8(i) * 256 + dataView.getUint8(i + 1)
+
+    while (i < dataView.byteLength) {
+        i += block_length
+        if (i >= dataView.byteLength) return
+        if (dataView.getUint8(i) !== 0xff) return
         if (
-            dataView.getUint8(i + 2) === 'J'.charCodeAt(0) &&
-            dataView.getUint8(i + 3) === 'F'.charCodeAt(0) &&
-            dataView.getUint8(i + 4) === 'I'.charCodeAt(0) &&
-            dataView.getUint8(i + 5) === 'F'.charCodeAt(0) &&
-            dataView.getUint8(i + 6) === 0x00
+            dataView.getUint8(i + 1) === 0xc0 || // 0xFFC0 is baseline standard(SOF)
+            dataView.getUint8(i + 1) === 0xc1 || // 0xFFC1 is baseline optimized(SOF)
+            dataView.getUint8(i + 1) === 0xc2 // 0xFFC2 is progressive(SOF2)
         ) {
-            let block_length = dataView.getUint8(i) * 256 + dataView.getUint8(i + 1)
-            while (i < dataView.byteLength) {
-                i += block_length
-                if (i >= dataView.byteLength) return
-                if (dataView.getUint8(i) !== 0xff) return
-                if (
-                    dataView.getUint8(i + 1) === 0xc0 || // SOF0 marker
-                    dataView.getUint8(i + 1) === 0xc2 // SOF2 marker
-                ) {
-                    return {
-                        height: dataView.getUint8(i + 5) * 256 + dataView.getUint8(i + 6),
-                        width: dataView.getUint8(i + 7) * 256 + dataView.getUint8(i + 8),
-                    }
-                } else {
-                    i += 2
-                    block_length = dataView.getUint8(i) * 256 + dataView.getUint8(i + 1)
-                }
+            return {
+                height: dataView.getUint8(i + 5) * 256 + dataView.getUint8(i + 6),
+                width: dataView.getUint8(i + 7) * 256 + dataView.getUint8(i + 8),
             }
+        } else {
+            i += 2
+            block_length = dataView.getUint8(i) * 256 + dataView.getUint8(i + 1)
         }
     }
     return

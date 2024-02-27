@@ -41,7 +41,7 @@ export async function fixPluginsTSConfig() {
         .map((x) => x.name)
         .sort()
     config.references = plugins.map((name) => ({ path: `./${name}/tsconfig.json` }))
-    return writeFile(fileURLToPath(file), await prettier(JSON.stringify(config), 'json', 2), 'utf-8')
+    return writeFile(file, await prettier(JSON.stringify(config), 'json', 2), 'utf-8')
 }
 
 task(fixPluginsTSConfig, 'fix-plugins-tsconfig', 'Fix plugins/tsconfig.json')

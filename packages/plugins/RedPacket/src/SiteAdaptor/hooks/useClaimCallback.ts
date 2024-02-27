@@ -14,7 +14,7 @@ import { useSignedMessage } from './useSignedMessage.js'
  * Claim fungible token red packet.
  */
 export function useClaimCallback(account: string, payload: RedPacketJSONPayload = {} as RedPacketJSONPayload) {
-    const payloadChainId = payload.chainId
+    const payloadChainId = payload.token?.chainId
     const version = payload.contract_version
     const rpid = payload.rpid
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: payloadChainId })

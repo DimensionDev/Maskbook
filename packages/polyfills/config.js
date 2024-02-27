@@ -49,7 +49,7 @@ globalThis[Symbol.for('mask_init_polyfill')] = true;
         ],
     },
     {
-        input: fileURLToPath(new URL('./web-apis/index.ts', import.meta.url)),
+        input: fileURLToPath(import.meta.resolve('./web-apis/index.ts')),
         output: {
             file: 'dist/dom.js',
             format: 'iife',
@@ -58,7 +58,7 @@ globalThis[Symbol.for('mask_init_polyfill')] = true;
         plugins: plugins(),
     },
     {
-        input: fileURLToPath(new URL('./web-apis/worker.ts', import.meta.url)),
+        input: fileURLToPath(import.meta.resolve('./web-apis/worker.ts')),
         output: {
             file: 'dist/worker.js',
             format: 'iife',

@@ -105,13 +105,13 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // #region token detailed
     const {
-        value: availability,
+        availability,
         computed: availabilityComputed,
-        retry: revalidateAvailability,
+        checkAvailability,
         claimStrategyStatus,
         recheckClaimStatus,
         checkingClaimStatus,
-    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
+    } = useAvailabilityComputed(account, payload)
 
     // #endregion
 
@@ -215,9 +215,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
-            revalidateAvailability()
+            checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
+    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, checkAvailability])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
@@ -230,22 +230,23 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const { data } = useQuery({
         enabled: !!availability && !!payload.rpid && !!token?.symbol,
-        queryKey: ['red-packet', 'theme-id', payload.rpid],
+        queryKey: ['red-packet', 'theme-id', payload.rpid, availability?.balance, availability?.claimed],
         queryFn: async () => {
+            if (!token || !availability) return null
             const name = payload.sender.name
 
             return FireflyRedPacket.getCoverUrlByRpid(
                 payload.rpid,
-                token?.symbol,
-                token?.decimals,
+                token.symbol,
+                token.decimals,
                 payload.shares,
                 payload.total,
                 [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (
                     `@${name}`
                 ),
                 payload.sender.message,
-                availability?.balance ?? payload.total,
-                toFixed(minus(payload.shares, availability?.claimed || 0)),
+                availability.balance ?? payload.total,
+                toFixed(minus(payload.shares, availability.claimed || 0)),
             )
         },
     })
@@ -263,7 +264,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 component="article"
                 elevation={0}
                 style={{
-                    backgroundImage: `url("${data.url}")`,
+                    backgroundSize: 'contain',
+                    backgroundImage: data.backgroundImageUrl ? `url(${data.backgroundImageUrl})` : 'none',
+                    backgroundColor: data.backgroundColor,
                 }}>
                 <img className={classes.cover} src={data.url} />
                 <img

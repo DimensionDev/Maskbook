@@ -1,5 +1,11 @@
 # @masknet/encryption
 
+## 0.5.1
+
+### Patch Changes
+
+-   773a3408c: fix: read dimension as JPEG
+
 ## 0.5.0
 
 ### Minor Changes

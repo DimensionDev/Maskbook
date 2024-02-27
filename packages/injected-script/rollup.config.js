@@ -1,11 +1,8 @@
-import { createRequire } from 'node:module'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
-
-const require = createRequire(import.meta.url)
-const { swc } = require('rollup-plugin-swc3')
+import swc from 'rollup-plugin-swc3'
 
 export default {
     input: 'main/index.ts',

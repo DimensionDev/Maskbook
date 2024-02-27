@@ -18,10 +18,14 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         EVMNetworkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
         ChainId.Mainnet
 
-    const asyncResult = useAvailability(payload.rpid, payload.contract_address, payload.contract_version, {
-        account,
-        chainId: parsedChainId,
-    })
+    const { data: availability, refetch: recheckAvailability } = useAvailability(
+        payload.rpid,
+        payload.contract_version,
+        {
+            account,
+            chainId: parsedChainId,
+        },
+    )
 
     const { data: password } = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
@@ -31,11 +35,15 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         return data?.data?.canClaim
     }, [refetch])
 
-    const availability = asyncResult.value
+    // Wrapping the refetch callback to workaround react-query typing inferring failure
+    const checkAvailability = useCallback(() => {
+        recheckAvailability()
+    }, [recheckAvailability])
 
     if (!availability || (!payload.password && !data))
         return {
-            ...asyncResult,
+            availability,
+            checkAvailability,
             payload,
             claimStrategyStatus: null,
             checkingClaimStatus: isFetching,
@@ -57,7 +65,8 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const canClaimByContract = !isExpired && !isEmpty && !isClaimed
     const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
     return {
-        ...asyncResult,
+        availability,
+        checkAvailability,
         claimStrategyStatus: data?.data,
         recheckClaimStatus,
         checkingClaimStatus: isFetching,

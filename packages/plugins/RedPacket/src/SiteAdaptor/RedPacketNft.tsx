@@ -336,7 +336,15 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
     return (
         <div className={classes.root}>
-            <Card className={classes.card} component="article" elevation={0}>
+            <Card
+                className={classes.card}
+                component="article"
+                elevation={0}
+                style={{
+                    backgroundSize: 'contain',
+                    backgroundImage: data.backgroundImageUrl ? `url(${data.backgroundImageUrl})` : 'none',
+                    backgroundColor: data.backgroundColor,
+                }}>
                 <img className={classes.cover} src={data.url} />
                 <img
                     src={new URL('./assets/nftLabel.png', import.meta.url).toString()}
