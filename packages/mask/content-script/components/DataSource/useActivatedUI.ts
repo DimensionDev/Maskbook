@@ -68,10 +68,15 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         enabled: !!identity,
         queryKey: ['social-identity', identity],
         queryFn: async () => {
-            if (!identity) return null
             try {
-                const bindings = await queryPersonasFromNextID(identity)
+                if (!identity) return null
+
                 const persona = await queryPersonaFromDB(identity)
+                if (!persona) return identity
+
+                const bindings = await queryPersonasFromNextID(identity)
+                if (!bindings) return identity
+
                 const personaBindings =
                     bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
                 return {

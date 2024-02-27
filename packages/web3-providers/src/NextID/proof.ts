@@ -234,7 +234,7 @@ function getExistedBindingQueryURL(platform: string, identity: string, personaPu
 
 function fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
     return fetchJSON<T>(request, init, {
-        squashExpiration: Expiration.ONE_MINUTE,
+        squashExpiration: Expiration.TEN_SECONDS,
     })
 }
 

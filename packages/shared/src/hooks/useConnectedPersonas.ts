@@ -16,6 +16,7 @@ export function useConnectedPersonas(): UseQueryResult<
 > {
     const personasInDB = useAllPersonas()
     const result = useQuery({
+        enabled: personasInDB.length > 0,
         queryKey: ['connected-persona', personasInDB],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
