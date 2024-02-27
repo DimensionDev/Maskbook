@@ -14,7 +14,7 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
     ): void
-    collections?: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>[]
+    collections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractModal = forwardRef<
@@ -25,7 +25,7 @@ export const SelectNonFungibleContractModal = forwardRef<
     const [schemaType, setSchemaType] = useState<SchemaType>()
     const [title, setTitle] = useState<string>()
     const [collections, setCollections] =
-        useState<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>[]>()
+        useState<Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [onSubmit, setOnSubmit] =
         useState<(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void>()
 

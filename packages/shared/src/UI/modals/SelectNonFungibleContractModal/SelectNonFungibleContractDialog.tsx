@@ -69,7 +69,7 @@ interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = Netwo
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
     ): void
-    initialCollections?: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>[]
+    initialCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractDialog = memo(
