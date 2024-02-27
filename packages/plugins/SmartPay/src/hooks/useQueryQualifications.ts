@@ -43,14 +43,14 @@ export function useQueryQualifications(): AsyncState<{
                 }
         }
 
-        const response = await NextIDProof.queryAllExistedBindingsByPlatform(
+        const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
             NextIDPlatform.Twitter,
             currentIdentity.identifier.userId,
         )
 
         const verifiedPersona = intersectionWith(
             personas.map((x) => ({ ...x, persona: x.identifier.publicKeyAsHex.toLowerCase() })),
-            response,
+            bindings,
             (a, b) => a.persona === b.persona,
         )
 
@@ -59,7 +59,7 @@ export function useQueryQualifications(): AsyncState<{
                 ...x,
                 identity: x.address,
             })),
-            response.flatMap((x) =>
+            bindings.flatMap((x) =>
                 x.proofs.filter((y) => y.platform === NextIDPlatform.Ethereum && isValidAddress(y.identity)),
             ),
             (a, b) => isSameAddress(a.identity, b.identity),
