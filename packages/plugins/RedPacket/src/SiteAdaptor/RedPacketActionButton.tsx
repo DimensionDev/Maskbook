@@ -121,11 +121,11 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
     }, [])
 
     const handleClick = useCallback(async () => {
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) {
+        if (_redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) {
             handleShare()
         }
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
-            console.log(await refundCallback())
+        if (_redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) {
+            await refundCallback()
         }
     }, [_redpacketStatus])
 

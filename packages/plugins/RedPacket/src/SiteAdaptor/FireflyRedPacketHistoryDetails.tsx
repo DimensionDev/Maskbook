@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 12px',
     },
     claimerList: {
+        height: 324,
         overflow: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
