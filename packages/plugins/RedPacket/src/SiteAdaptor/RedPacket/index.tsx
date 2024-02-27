@@ -233,7 +233,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         enabled: !!availability && !!payload.rpid && !!token?.symbol,
         queryKey: ['red-packet', 'theme-id', payload.rpid, availability?.balance, availability?.claimed],
         queryFn: async () => {
-          if (!token || !availability) return null
+            if (!token || !availability) return null
             const name = payload.sender.name
 
             return FireflyRedPacket.getCoverUrlByRpid(
