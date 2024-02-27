@@ -57,11 +57,12 @@ export abstract class InjectedWalletBridge {
     /**
      * Wait until the sdk object injected into the page.
      */
-    async untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
-        await createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname.split('.')[0], id))
-        if (await validator()) {
-            this.isReadyInternal = true
-        }
+    untilAvailable(validator: () => Promise<boolean> = () => Promise.resolve(true)): Promise<void> {
+        return createPromise((id) => sendEvent('web3UntilBridgeOnline', this.pathname.split('.')[0], id))
+            .then(validator, () => false)
+            .then((ok) => {
+                this.isReadyInternal = ok
+            })
     }
 
     /**

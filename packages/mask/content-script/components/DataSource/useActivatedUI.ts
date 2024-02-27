@@ -99,9 +99,9 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
 export function useSocialIdentityByUserId(userId?: string) {
     const { data: identity } = useQuery({
         queryKey: ['social-identity', 'by-id', userId],
+        enabled: !!userId,
         queryFn: async () => {
-            if (!userId) return
-            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
+            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId!)
         },
         networkMode: 'always',
     })

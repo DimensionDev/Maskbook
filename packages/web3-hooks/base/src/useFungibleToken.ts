@@ -24,20 +24,19 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const networks = useNetworks(pluginID)
 
     return useQuery({
-        enabled: true,
+        enabled: !!address,
         queryKey: ['fungible-token', pluginID, address, chainId, options],
         queryFn: async () => {
-            if (!address) return
             return attemptUntil(
                 [
                     async () => {
-                        if (pluginID !== NetworkPluginID.PLUGIN_EVM || !isNativeTokenAddress(address) || !chainId)
+                        if (pluginID !== NetworkPluginID.PLUGIN_EVM || !isNativeTokenAddress(address!) || !chainId)
                             return
                         const network = networks.find((x) => x.chainId === chainId)
                         return network?.nativeCurrency
                     },
                     async () => {
-                        const token = await Hub.getFungibleToken(address, { chainId })
+                        const token = await Hub.getFungibleToken(address!, { chainId })
                         if (!token) return
                         const logoURL = token.logoURL ?? fallbackToken?.logoURL
                         const symbol =
