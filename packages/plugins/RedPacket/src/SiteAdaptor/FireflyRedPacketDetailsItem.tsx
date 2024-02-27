@@ -336,7 +336,11 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                     </div>
                                 :   null}
                             </div>
-                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
+                            {(
+                                redpacket_status &&
+                                redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View &&
+                                redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.Send
+                            ) ?
                                 <RedPacketActionButton
                                     redpacketStatus={redpacket_status}
                                     rpid={redpacket_id}
