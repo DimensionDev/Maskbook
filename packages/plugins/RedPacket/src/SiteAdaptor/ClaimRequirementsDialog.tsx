@@ -17,7 +17,7 @@ import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
 import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Trans } from 'react-i18next'
 import { getEnumAsArray } from '@masknet/kit'
@@ -139,6 +139,20 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
             schemaType: SchemaType.ERC721,
             chainId,
             onSubmit: (value: NonFungibleCollection<ChainId, SchemaType>) => setSelectedCollection(value),
+            collections:
+                chainId === ChainId.Base ?
+                    [
+                        {
+                            chainId: 8453,
+                            name: 'Firefly (Base) Friends',
+                            address: '0x577294402BA4679b6ba4A24B8e03Ce9d0C728e72',
+                            slug: 'Firefly (Base) Friends',
+                            symbol: '',
+                            iconURL:
+                                'https://remote-image.decentralized-content.com/image?url=https%3A%2F%2Fipfs.decentralized-content.com%2Fipfs%2Fbafybeic5qugbigrxmb4vbyt4qk6cfyqlgmvembkwyrjj3go3lrt74aysci&w=1080&q=75',
+                        },
+                    ]
+                :   undefined,
         })
     }, [chainId])
 

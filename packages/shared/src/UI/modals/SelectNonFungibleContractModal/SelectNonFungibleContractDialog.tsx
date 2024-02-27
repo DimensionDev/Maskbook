@@ -69,10 +69,19 @@ interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = Netwo
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
     ): void
+    initialCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractDialog = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }: SelectNonFungibleContractDialogProps) => {
+    ({
+        open,
+        pluginID,
+        chainId,
+        onClose,
+        onSubmit,
+        schemaType,
+        initialCollections,
+    }: SelectNonFungibleContractDialogProps) => {
         const t = useSharedTrans()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -116,7 +125,8 @@ export const SelectNonFungibleContractDialog = memo(
 
         const filteredCollections = useMemo(() => {
             const allCollections = [...customizedCollections, ...collections]
-            return pluginID === NetworkPluginID.PLUGIN_EVM ?
+            const result =
+                pluginID === NetworkPluginID.PLUGIN_EVM ?
                     allCollections.filter((x) => {
                         return (
                             x.address &&
@@ -127,7 +137,9 @@ export const SelectNonFungibleContractDialog = memo(
                         )
                     })
                 :   allCollections
-        }, [customizedCollections, collections, pluginID])
+
+            return [...result, ...(initialCollections ?? [])]
+        }, [customizedCollections, collections, pluginID, initialCollections])
         const fuse = useMemo(() => {
             return FuseNonFungibleCollection.create(filteredCollections)
         }, [filteredCollections])

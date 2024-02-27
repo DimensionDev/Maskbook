@@ -14,6 +14,7 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
     ): void
+    collections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractModal = forwardRef<
@@ -23,8 +24,11 @@ export const SelectNonFungibleContractModal = forwardRef<
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [schemaType, setSchemaType] = useState<SchemaType>()
     const [title, setTitle] = useState<string>()
+    const [collections, setCollections] =
+        useState<Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [onSubmit, setOnSubmit] =
         useState<(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void>()
+
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setPluginID(props.pluginID)
@@ -32,6 +36,7 @@ export const SelectNonFungibleContractModal = forwardRef<
             setSchemaType(props.schemaType)
             setTitle(props.title)
             setOnSubmit(() => props.onSubmit)
+            setCollections(props.collections)
         },
     })
 
@@ -45,6 +50,7 @@ export const SelectNonFungibleContractModal = forwardRef<
             chainId={chainId}
             pluginID={pluginID}
             onSubmit={onSubmit}
+            initialCollections={collections}
         />
     )
 })
