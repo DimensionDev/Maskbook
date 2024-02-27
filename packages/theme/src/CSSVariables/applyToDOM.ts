@@ -26,7 +26,7 @@ export function CSSVariableInjectorCSS(scheme: PaletteMode) {
                 display: 'none',
             },
         },
-    }
+    } as const
 }
 
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {
