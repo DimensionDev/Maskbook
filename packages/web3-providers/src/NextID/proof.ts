@@ -21,7 +21,7 @@ import { staleNextIDCached } from './helpers.js'
 import PRESET_LENS from './preset-lens.json'
 import { fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
-import { stableSquashedCached } from '../entry-helpers.js'
+import { Expiration, stableSquashedCached } from '../entry-helpers.js'
 import { env } from '@masknet/flags'
 
 const BASE_URL =
@@ -109,7 +109,7 @@ function relationServiceDomainQuery(depth?: number) {
     }`
 }
 
-function relationServiceIdentityQuery(depth?: number) {
+function relationServiceIdentityQuery(depth = 5) {
     return `
     identity(platform: $platform, identity: $identity) {
         platform
@@ -129,7 +129,7 @@ function relationServiceIdentityQuery(depth?: number) {
           address
           id
         }
-        neighborWithTraversal(depth: ${depth ?? 5}) {
+        neighborWithTraversal(depth: ${depth}) {
           ... on ProofRecord {
             source
             from {
@@ -211,12 +211,11 @@ interface RestorePubkeyResponse {
     public_key: string
 }
 
-type NeighborNode = {
+interface NeighborNode {
     source: NextIDPlatform
     to: NextIDIdentity
     from: NextIDIdentity
 }
-type NeighborList = NeighborNode[]
 
 function getPersonaQueryURL(platform: string, identity: string) {
     return urlcat(BASE_URL, '/v1/proof', {
@@ -233,11 +232,13 @@ function getExistedBindingQueryURL(platform: string, identity: string, personaPu
     })
 }
 
-export class NextIDProof {
-    static fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
-        return fetchJSON<T>(request, init)
-    }
+function fetchFromProofService<T>(request: Request | RequestInfo, init?: RequestInit) {
+    return fetchJSON<T>(request, init, {
+        squashExpiration: Expiration.TEN_SECONDS,
+    })
+}
 
+export class NextIDProof {
     static async clearPersonaQueryCache(personaPublicKey: string) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         await staleNextIDCached(url)
@@ -293,9 +294,8 @@ export class NextIDProof {
     }
 
     static async queryExistedBindingByPersona(personaPublicKey: string) {
-        const { ids } = await this.fetchFromProofService<NextIDBindings>(
+        const { ids } = await fetchFromProofService<NextIDBindings>(
             getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey),
-            undefined,
         )
         // Will have only one item when query by personaPublicKey
         return first(ids)
@@ -304,7 +304,7 @@ export class NextIDProof {
     static async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page = 1, exact = true) {
         if (!platform && !identity) return []
 
-        const response = await this.fetchFromProofService<NextIDBindings>(
+        const bindings = await fetchFromProofService<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', {
                 platform,
                 identity,
@@ -314,7 +314,7 @@ export class NextIDProof {
             }),
         )
 
-        return sortBy(response.ids, (x) => -x.activated_at)
+        return sortBy(bindings.ids, (x) => -x.activated_at)
     }
 
     static async queryLatestBindingByPlatform(
@@ -324,9 +324,9 @@ export class NextIDProof {
     ): Promise<NextIDPersonaBindings | null> {
         if (!platform && !identity) return null
 
-        const result = await this.queryAllExistedBindingsByPlatform(platform, identity, true)
-        if (publicKey) return result.find((x) => x.persona === publicKey) ?? null
-        return first(result) ?? null
+        const bindings = await this.queryAllExistedBindingsByPlatform(platform, identity, true)
+        if (publicKey) return bindings.find((x) => x.persona === publicKey) ?? null
+        return first(bindings) ?? null
     }
 
     static async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, exact?: boolean) {
@@ -335,7 +335,7 @@ export class NextIDProof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const result = await this.fetchFromProofService<NextIDBindings>(
+            const bindings = await fetchFromProofService<NextIDBindings>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
@@ -343,14 +343,13 @@ export class NextIDProof {
                     page,
                     order: 'desc',
                 }),
-                undefined,
             )
-            const personaBindings = result.ids
+            const personaBindings = bindings.ids
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
 
             // next is `0` if current page is the last one.
-            if (result.pagination.next === 0) return nextIDPersonaBindings
+            if (bindings.pagination.next === 0) return nextIDPersonaBindings
 
             page += 1
         } while (page > 1)
@@ -361,11 +360,10 @@ export class NextIDProof {
         try {
             if (!platform && !identity) return false
 
-            const result = await this.fetchFromProofService<BindingProof | undefined>(
+            const proof = await fetchFromProofService<BindingProof | undefined>(
                 getExistedBindingQueryURL(platform, identity, personaPublicKey),
-                undefined,
             )
-            return !!result?.is_valid
+            return !!proof?.is_valid
         } catch {
             return false
         }
@@ -378,7 +376,7 @@ export class NextIDProof {
             data: {
                 domain: {
                     owner: {
-                        neighborWithTraversal: NeighborList
+                        neighborWithTraversal: NeighborNode[]
                         nft: NextIDEnsRecord[]
                     }
                 } | null
@@ -396,8 +394,8 @@ export class NextIDProof {
                 `,
             }),
         })
-
         if (!data.domain) return EMPTY_LIST
+
         const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal)
         return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
     }
@@ -407,7 +405,7 @@ export class NextIDProof {
             data: {
                 identity: {
                     nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
+                    neighborWithTraversal: NeighborNode[]
                 }
             }
         }>(RELATION_SERVICE_URL, {
@@ -419,7 +417,7 @@ export class NextIDProof {
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery(depth)}
-                      }
+                    }
                 `,
             }),
         })
@@ -435,7 +433,7 @@ export class NextIDProof {
             data: {
                 identity: {
                     nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
+                    neighborWithTraversal: NeighborNode[]
                 }
             }
         }>(RELATION_SERVICE_URL, {
@@ -447,7 +445,7 @@ export class NextIDProof {
                 query: `
                     query GET_PROFILES_QUERY($platform: String, $identity: String) {
                        ${relationServiceIdentityQuery(depth)}
-                      }
+                    }
                 `,
             }),
         })
@@ -460,7 +458,7 @@ export class NextIDProof {
             data: {
                 identity: {
                     nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborList
+                    neighborWithTraversal: NeighborNode[]
                 }
             }
         }>(RELATION_SERVICE_URL, {
@@ -470,9 +468,9 @@ export class NextIDProof {
                 operationName: 'GET_PROFILES_BY_TWITTER_ID',
                 variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
                 query: `
-                        query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                            ${relationServiceIdentityQuery(depth)}
-                        }
+                    query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
+                        ${relationServiceIdentityQuery(depth)}
+                    }
                 `,
             }),
         })
@@ -486,7 +484,7 @@ export class NextIDProof {
             data: {
                 domain: {
                     owner: {
-                        neighborWithTraversal: NeighborList
+                        neighborWithTraversal: NeighborNode[]
                     }
                 } | null
             }
@@ -497,9 +495,9 @@ export class NextIDProof {
                 operationName: 'GET_LENS_PROFILES',
                 variables: { domainSystem: 'lens', domain: lowerCaseId },
                 query: `
-                        query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
-                            ${relationServiceDomainQuery(depth)}
-                        }
+                    query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
+                        ${relationServiceDomainQuery(depth)}
+                    }
                 `,
             }),
         })
@@ -593,7 +591,7 @@ function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, sour
     )
 }
 
-function createBindProofsFromNeighbor(neighborList: NeighborList): BindingProof[] {
+function createBindProofsFromNeighbor(neighborList: NeighborNode[]): BindingProof[] {
     const bindings = neighborList.flatMap((x) => {
         return [
             {

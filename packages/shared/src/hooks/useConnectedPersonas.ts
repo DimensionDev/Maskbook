@@ -16,23 +16,23 @@ export function useConnectedPersonas(): UseQueryResult<
 > {
     const personasInDB = useAllPersonas()
     const result = useQuery({
+        enabled: personasInDB.length > 0,
         queryKey: ['connected-persona', personasInDB],
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
             const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
             const avatars = await queryPersonaAvatar?.(allPersonaIdentifiers)
-            const allNextIDBindings = await NextIDProof.queryAllExistedBindingsByPlatform(
+            const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
                 NextIDPlatform.NextID,
                 allPersonaPublicKeys.join(','),
-                undefined,
             )
 
             return personasInDB.map((x) => {
                 return {
                     persona: x,
                     proof:
-                        allNextIDBindings
+                        bindings
                             .find((p) => p.persona.toLowerCase() === x.identifier.publicKeyAsHex.toLowerCase())
                             ?.proofs.filter((x) => x.is_valid) ?? EMPTY_LIST,
                     avatar: avatars?.get(x.identifier),

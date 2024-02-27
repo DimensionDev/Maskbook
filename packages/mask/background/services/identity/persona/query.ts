@@ -99,8 +99,12 @@ export async function querySocialIdentity(
     identity: IdentityResolved | undefined,
 ): Promise<SocialIdentity | undefined> {
     if (!identity?.identifier) return
-    const bindings = await queryPersonasFromNextID(platform, identity)
     const persona = await queryPersonaByProfile(identity.identifier)
+    if (!persona) return identity
+
+    const bindings = await queryPersonasFromNextID(platform, identity)
+    if (!bindings) return identity
+
     const personaBindings =
         bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
     return {
