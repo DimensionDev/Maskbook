@@ -75,7 +75,7 @@ export function DetailsCard(props: DetailsCardProps) {
     const Utils = useWeb3Utils()
     const { pluginID } = useNetworkContext()
 
-    const infos: Array<{ title: string; value?: string; link?: boolean; tooltip?: string }> = []
+    const infos: Array<{ title: string; value: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
             title: t.plugin_collectible_mint_address(),

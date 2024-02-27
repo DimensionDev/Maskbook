@@ -22,6 +22,7 @@ const GlobalCss = (
     <GlobalStyles
         styles={{
             '[data-hide-scrollbar]': {
+                scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },

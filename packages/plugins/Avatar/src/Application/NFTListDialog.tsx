@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         padding: 0,
         backgroundColor: theme.palette.maskColor.bottom,
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },

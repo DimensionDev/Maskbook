@@ -12,6 +12,9 @@ const useStyles = makeStyles()({
         margin: 0,
         minHeight: 564,
         padding: '0px !important',
+        display: 'flex',
+        flexDirection: 'column',
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },

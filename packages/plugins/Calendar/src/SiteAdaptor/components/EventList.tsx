@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'scroll',
         position: 'relative',
         gap: '10px',
+        scrollbarWidth: 'thin',
         '&::-webkit-scrollbar': {
             width: '4px',
         },

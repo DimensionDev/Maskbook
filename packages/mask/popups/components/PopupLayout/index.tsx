@@ -16,11 +16,13 @@ const GlobalCss = (
                 margin: '0 auto !important',
                 maxWidth: '100%',
                 WebkitFontSmoothing: 'subpixel-antialiased',
+                scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
             },
             '[data-hide-scrollbar]': {
+                scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
