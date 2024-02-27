@@ -2,11 +2,12 @@ import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
+import type { RefetchOptions, QueryObserverResult } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
+import { useCallback } from 'react'
 import { useAvailability } from './useAvailability.js'
 import { useClaimStrategyStatus } from './useClaimStrategyStatus.js'
 import { useSignedMessage } from './useSignedMessage.js'
-import { useCallback } from 'react'
 
 /**
  * Fetch the red packet info from the chain
@@ -26,6 +27,9 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
+    const checkAvailability = recheckAvailability as (
+        options?: RefetchOptions,
+    ) => Promise<QueryObserverResult<typeof availability>>
 
     const { data: password } = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
@@ -34,11 +38,6 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         const { data } = await refetch()
         return data?.data?.canClaim
     }, [refetch])
-
-    // Wrapping the refetch callback to workaround react-query typing inferring failure
-    const checkAvailability = useCallback(() => {
-        recheckAvailability()
-    }, [recheckAvailability])
 
     if (!availability || (!payload.password && !data))
         return {
