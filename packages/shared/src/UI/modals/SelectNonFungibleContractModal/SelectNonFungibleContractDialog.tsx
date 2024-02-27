@@ -125,7 +125,8 @@ export const SelectNonFungibleContractDialog = memo(
 
         const filteredCollections = useMemo(() => {
             const allCollections = [...customizedCollections, ...collections]
-            const result =  pluginID === NetworkPluginID.PLUGIN_EVM ?
+            const result =
+                pluginID === NetworkPluginID.PLUGIN_EVM ?
                     allCollections.filter((x) => {
                         return (
                             x.address &&
@@ -137,7 +138,7 @@ export const SelectNonFungibleContractDialog = memo(
                     })
                 :   allCollections
 
-                return [...result, ...(initialCollections ?? [])]
+            return [...result, ...(initialCollections ?? [])]
         }, [customizedCollections, collections, pluginID, initialCollections])
         const fuse = useMemo(() => {
             return FuseNonFungibleCollection.create(filteredCollections)
