@@ -18,9 +18,7 @@ export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.Iden
 }
 
 function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolved>, signal: AbortSignal) {
-    const self = (isMobileFacebook ? myUsernameLiveSelectorMobile : myUsernameLiveSelectorPC)
-        .clone()
-        .map((x) => getProfileIdentifierAtFacebook(x, false))
+    const self = myUsernameLiveSelectorPC.clone().map((x) => getProfileIdentifierAtFacebook(x, false))
     new MutationObserverWatcher(self)
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
