@@ -19,6 +19,7 @@ import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { useQuery } from '@tanstack/react-query'
+import { avalancheFuji } from 'viem/chains'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -217,7 +218,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (typeof hash === 'string') {
             revalidateAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
+    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, revalidateAvailability])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
@@ -230,22 +231,23 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const { data } = useQuery({
         enabled: !!availability && !!payload.rpid && !!token?.symbol,
-        queryKey: ['red-packet', 'theme-id', payload.rpid],
+        queryKey: ['red-packet', 'theme-id', payload.rpid, availability?.balance, availability?.claimed],
         queryFn: async () => {
+          if (!token || !availability) return null
             const name = payload.sender.name
 
             return FireflyRedPacket.getCoverUrlByRpid(
                 payload.rpid,
-                token?.symbol,
-                token?.decimals,
+                token.symbol,
+                token.decimals,
                 payload.shares,
                 payload.total,
                 [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (
                     `@${name}`
                 ),
                 payload.sender.message,
-                availability?.balance ?? payload.total,
-                toFixed(minus(payload.shares, availability?.claimed || 0)),
+                availability.balance ?? payload.total,
+                toFixed(minus(payload.shares, availability.claimed || 0)),
             )
         },
     })
