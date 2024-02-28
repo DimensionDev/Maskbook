@@ -49,7 +49,12 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { type ReasonableMessage, parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
+import {
+    type ReasonableMessage,
+    parseEIP4361Message,
+    type EIP4361Message,
+    TransactionDescriptorType,
+} from '@masknet/web3-shared-base'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useInteractionWalletContext } from './InteractionContext.js'
 
@@ -342,9 +347,12 @@ const Interaction = memo((props: InteractionProps) => {
                 showSnackbar(
                     <Typography textAlign="center" width="275px">
                         {t.popups_wallet_rpc_error()}
+                        <br />
+                        {String((error as any).message)}
                     </Typography>,
                     {
                         variant: 'error',
+                        autoHideDuration: 5000,
                     },
                 )
             }
@@ -435,7 +443,9 @@ const InteractionItem = memo((props: InteractionItemProps) => {
 
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
-    const [expand, setExpand] = useState(false)
+    const [expand, setExpand] = useState(
+        transaction.formattedTransaction?.type === TransactionDescriptorType.DEPLOYMENT,
+    )
 
     const [approvedAmount, setApproveAmount] = useState('')
     const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()

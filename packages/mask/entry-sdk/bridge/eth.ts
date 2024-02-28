@@ -137,13 +137,10 @@ const methods = {
             account: options.from,
             silent: false,
             readonly: false,
-            // this is strange. why I cannot pass options via request.params?
-            overrides: options as any,
         })
         return p.request({
             method: EthereumMethodType.ETH_SEND_TRANSACTION,
-            // this options here actually get ignored!
-            params: options as any,
+            params: [options],
         })
     },
     async [EthereumMethodType.ETH_SEND_RAW_TRANSACTION](

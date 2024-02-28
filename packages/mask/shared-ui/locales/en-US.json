@@ -292,6 +292,7 @@
     "wallet_transfer_receiving_account": "Receiving Account",
     "wallet_transfer_to_address": "To Address",
     "wallet_transfer_send": "Send",
+    "wallet_transfer_deploy": "Deploy Contract",
     "wallet_transfer_placeholder": "Ens or Address(0x)",
     "wallet_transfer_title": "Transfer",
     "wallet_transfer_my_wallets_title": "My Wallets",
