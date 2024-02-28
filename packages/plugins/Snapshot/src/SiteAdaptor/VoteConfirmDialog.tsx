@@ -18,12 +18,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     field: {
         color: theme.palette.maskColor.second,
+        '&:first-of-type': {
+            marginTop: 0,
+        },
     },
     content: {
         padding: 16,
-        '& > :first-child': {
-            marginTop: 0,
-        },
         height: 492,
     },
     button: {
