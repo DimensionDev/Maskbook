@@ -385,7 +385,7 @@ export interface Transaction {
     data?: string
     nonce?: number
     chainId?: number
-    type?: string
+    type?: '0x0' | '0x1' | '0x2'
 
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
