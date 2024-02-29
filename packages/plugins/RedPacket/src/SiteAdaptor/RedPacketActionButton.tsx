@@ -17,7 +17,8 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 12,
             width: 88,
             height: 32,
-            background: theme.palette.maskColor.dark,
+            background: `${theme.palette.maskColor.dark} !important`,
+            opacity: '1 !important',
             color: theme.palette.maskColor.white,
             borderRadius: '999px',
             minHeight: 'auto',
@@ -146,7 +147,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
                 redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refund
             }
             size="large">
-            {statusToTransMap[redpacketStatus]}
+            <span>{statusToTransMap[redpacketStatus]}</span>
         </ActionButton>
     )
 })
