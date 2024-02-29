@@ -132,7 +132,6 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
     useEffect(() => {
         if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
     }, [refunded])
-    console.log('redpacketStatus', redpacketStatus)
 
     return (
         <ActionButton
