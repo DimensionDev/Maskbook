@@ -19,6 +19,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         height: 16,
     },
+    creator: {
+        color: theme.palette.maskColor.secondaryMainDark,
+    },
 }))
 
 interface Props {
@@ -35,7 +38,7 @@ export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccount
     const { classes } = useStyles()
     return (
         <Box display="flex" gap="4px" alignItems="center">
-            <Typography>{ens ? ens : formatEthereumAddress(address, 4)}</Typography>
+            <Typography className={classes.creator}>{ens ? ens : formatEthereumAddress(address, 4)}</Typography>
             <button
                 type="button"
                 className={classes.linkButton}
