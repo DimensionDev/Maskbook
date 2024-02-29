@@ -49,8 +49,9 @@ export function NetworkContextProvider({
     initialNetwork,
     children,
 }: PropsWithChildren<{ initialNetwork: NetworkPluginID }>) {
-    const [pluginID, setPluginID] = useState(initialNetwork)
-    const context = useMemo(() => ({ pluginID, setPluginID }), [pluginID])
+    const [pluginID, setPluginID] = useState<NetworkPluginID>()
+    const networkPluginID = pluginID || initialNetwork
+    const context = useMemo(() => ({ pluginID: networkPluginID, setPluginID }), [networkPluginID])
     return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
 }
 
@@ -66,6 +67,7 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
     const globalProviderType = useProviderType(pluginID)
+    const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
 
     // The initial value of subscription.account could be empty string
     const maskAccount = usePersistSubscription('@@mask-account', MaskWalletProvider.subscription.account, (x) => !!x)
@@ -90,10 +92,12 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
         () => ({
             account,
             chainId,
+            networkType,
             providerType,
             setAccount,
             setChainId,
             setProviderType,
+            setNetworkType,
         }),
         [account, chainId, providerType],
     )
