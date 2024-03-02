@@ -30,6 +30,7 @@ interface StyleProps {
     radius?: string
     size?: number
 }
+
 const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%', size = 2 }) => ({
     root: {
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
@@ -53,6 +54,7 @@ interface RainbowBoxProps extends withClasses<'root'> {
     radius?: string
     children?: React.ReactNode
 }
+
 export function RainbowBox(props: RainbowBoxProps) {
     const { classes } = useStyles(
         {

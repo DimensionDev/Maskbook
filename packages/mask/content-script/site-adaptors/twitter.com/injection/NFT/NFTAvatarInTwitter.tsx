@@ -1,26 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    NFTBadge,
-    RSS3_KEY_SITE,
-    usePersonaNFTAvatar,
-    useWallet,
-    useNFT,
-    type NextIDAvatarMeta,
-    useSaveStringStorage,
-} from '@masknet/plugin-avatar'
-import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { Box, Typography } from '@mui/material'
-import { AssetPreviewer, ConfirmModal } from '@masknet/shared'
-import { MaskMessages, NetworkPluginID, type NFTAvatarEvent } from '@masknet/shared-base'
-import { Twitter, EVMHub } from '@masknet/web3-providers'
+import { NFTBadge } from '@masknet/plugin-avatar'
+import { useLocation, useWindowSize } from 'react-use'
+import { AvatarStore, Twitter } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
+import { useSaveAvatarInTwitter } from './useSaveAvatarInTwitter.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
@@ -56,22 +42,20 @@ export function NFTAvatarInTwitter() {
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
-        if (ele) {
-            const style = window.getComputedStyle(ele)
-            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
-        }
-        return 0
+        if (!ele) return 0
+        const style = window.getComputedStyle(ele)
+        return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
     }, [windowSize, _location])
 
-    const { showAvatar, nftInfo, nftAvatar } = useNFTCircleAvatar(size)
+    const { showAvatar, token, avatar } = useNFTCircleAvatar(size)
 
     useInjectedCSS(showAvatar, updatedAvatar)
-    useUpdatedAvatar(showAvatar, nftAvatar)
+    useUpdatedAvatar(showAvatar, avatar)
 
     const handlerWatcher = () => {
-        const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
-        if (!avatar || !nftAvatar?.avatarId) return
-        setUpdatedAvatar(!!nftAvatar.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId)
+        const avatarUrl = searchAvatarSelector().evaluate()?.getAttribute('src')
+        if (!avatarUrl || !avatar?.avatarId) return
+        setUpdatedAvatar(!!avatar?.avatarId && Twitter.getAvatarId(avatarUrl ?? '') === avatar.avatarId)
     }
     useEffect(() => {
         const abortController = new AbortController()
@@ -93,7 +77,7 @@ export function NFTAvatarInTwitter() {
 
     return (
         <NFTBadge
-            nftInfo={nftInfo}
+            token={token}
             borderSize={5}
             hasRainbow
             size={size}
@@ -104,108 +88,23 @@ export function NFTAvatarInTwitter() {
 }
 
 function useNFTCircleAvatar(size: number) {
-    const t = useMaskSharedTrans()
-
     const identity = useCurrentVisitingIdentity()
-    const { value: nftAvatar } = usePersonaNFTAvatar(
-        identity.identifier?.userId ?? '',
-        Twitter.getAvatarId(identity.avatar),
-        '',
-        RSS3_KEY_SITE.TWITTER,
-    )
-    const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
-    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
-        storage?.address ?? account,
-        nftAvatar?.address,
-        nftAvatar?.tokenId,
-        nftAvatar?.pluginId,
-        nftAvatar?.chainId,
-        nftAvatar?.ownerAddress,
-    )
+    const savedAvatar = useSaveAvatarInTwitter(identity)
+
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
+    const avatar =
+        savedAvatar ?? store.retrieveAvatar(identity.identifier?.userId, Twitter.getAvatarId(identity.avatar))
+    const token = store.retrieveToken(identity.identifier?.userId, Twitter.getAvatarId(identity.avatar))
 
     const showAvatar = useMemo(() => {
-        const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
-        return !!nftAvatar?.avatarId && Twitter.getAvatarId(avatar ?? '') === nftAvatar.avatarId
-    }, [nftAvatar?.avatarId, identity.avatar])
-
-    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
-
-    // After the avatar is set, it cannot be saved immediately,
-    // and must wait until the avatar of twitter gets updated
-    useAsync(async () => {
-        if (!account || !nftAvatar || !identity.identifier) return
-
-        if (!NFTEvent?.address || !NFTEvent.tokenId) {
-            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
-                userId: identity.identifier.userId,
-                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
-                address: '',
-                tokenId: '',
-                schema: SchemaType.ERC721,
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainId.Mainnet,
-            })
-            return
-        }
-
-        const avatar = await saveNFTAvatar(identity.identifier.userId, account, {
-            ...NFTEvent,
-            avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
-        } as NextIDAvatarMeta).catch((error) => {
-            setNFTEvent(undefined)
-            // eslint-disable-next-line no-alert
-            alert(error.message)
-            return
-        })
-        if (!avatar) {
-            setNFTEvent(undefined)
-            // eslint-disable-next-line no-alert
-            alert('Sorry, failed to save NFT Avatar. Please set again.')
-            return
-        }
-
-        const NFTDetailed = await EVMHub.getNonFungibleAsset(avatar.address ?? '', avatar.tokenId, {
-            chainId: ChainId.Mainnet,
-        })
-
-        const confirmed = await ConfirmModal.openAndWaitForClose({
-            title: t.plugin_avatar_setup_share_title(),
-            content: (
-                <Box display="flex" flexDirection="column" alignItems="center">
-                    <AssetPreviewer url={NFTDetailed?.metadata?.imageURL || NFTDetailed?.metadata?.mediaURL} />
-                    <Typography mt={3} fontSize="18px">
-                        {t.plugin_avatar_setup_success()}
-                    </Typography>
-                </Box>
-            ),
-            confirmLabel: t.share(),
-        })
-        if (confirmed) activatedSiteAdaptorUI!.utils.share?.(t.plugin_avatar_setup_pfp_share())
-
-        MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
-            (avatar ?? {
-                userId: identity.identifier.userId,
-                avatarId: Twitter.getAvatarId(identity.avatar ?? ''),
-                address: '',
-                tokenId: '',
-                schema: SchemaType.ERC721,
-                pluginId: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainId.Mainnet,
-            }) as NFTAvatarEvent,
-        )
-
-        setNFTEvent(undefined)
-    }, [identity.avatar, t, saveNFTAvatar])
-    useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) => setNFTEvent(data))
-    }, [])
+        const avatarUrl = searchAvatarSelector().evaluate()?.getAttribute('src')
+        if (!avatarUrl || !avatar?.avatarId) return false
+        return Twitter.getAvatarId(avatarUrl ?? '') === avatar.avatarId
+    }, [avatar?.avatarId, identity.avatar])
 
     return {
-        showAvatar: Boolean(size && nftAvatar && !loadingWallet && !loadingNFTInfo && showAvatar && nftInfo),
-        nftAvatar,
-        nftInfo,
-        loading: loadingWallet || loadingNFTInfo,
+        showAvatar: Boolean(size && avatar && showAvatar && token),
+        avatar,
+        token,
     }
 }

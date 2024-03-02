@@ -89,18 +89,18 @@ export type CheckSecurityDialogEvent =
           open: false
       }
 
-export type ApplicationDialogEvent = {
+export interface ApplicationDialogEvent {
     open: boolean
     pluginID: string
     isVerified?: boolean
     selectedPersona?: PersonaInformation
 }
 
-export type PersonaBindFinishEvent = {
+export interface PersonaBindFinishEvent {
     pluginID?: string
 }
 
-export type AvatarSettingDialogEvent = {
+export interface AvatarSettingsDialogEvent {
     open: boolean
     startPicking?: boolean
 }
@@ -211,11 +211,11 @@ export interface HideSearchResultInspectorEvent {
 }
 export interface NFTAvatarEvent {
     userId: string
-    avatarId: string
-    address?: string
     tokenId?: string
-    schema?: number
+    address?: string
+    avatarId: string
     chainId?: number
+    schema?: number
     pluginID?: NetworkPluginID
 }
 

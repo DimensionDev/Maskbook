@@ -114,3 +114,6 @@ export { Calendar } from './Calendar/index.js'
 
 // NFT Spam
 export { NFTSpam } from './NFTSpam/index.js'
+
+// Stores
+export { AvatarStore } from './AvatarStore/index.js'

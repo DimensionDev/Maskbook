@@ -17,6 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         border: '2px solid #00f8ff',
     },
 }))
+
 interface NFTAvatarRingProps {
     stroke: string
     strokeWidth: number

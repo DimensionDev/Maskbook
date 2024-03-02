@@ -16,12 +16,14 @@ export function getWeb3Connection<const T extends NetworkPluginID>(
         Web3Helper.Definition[T]['ProviderType'],
         Web3Helper.Definition[T]['Transaction']
     >,
-):
-    | ReturnType<typeof createConnection>
-    | ReturnType<typeof createFlowConnection>
-    | ReturnType<typeof createSolanaConnection> {
-    if (pluginID === NetworkPluginID.PLUGIN_EVM) return createConnection(initial as EVMConnectionOptions)
-    if (pluginID === NetworkPluginID.PLUGIN_FLOW) return createFlowConnection(initial as FlowConnectionOptions)
-    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) return createSolanaConnection(initial as SolanaConnectionOptions)
-    unreachable(pluginID)
+) {
+    type Creator = ReturnType<typeof createConnectionCreator<T>>
+
+    const creator = (
+        pluginID === NetworkPluginID.PLUGIN_EVM ? createConnection
+        : pluginID === NetworkPluginID.PLUGIN_FLOW ? createFlowConnection
+        : pluginID === NetworkPluginID.PLUGIN_SOLANA ? createSolanaConnection
+        : unreachable(pluginID)) as Creator
+
+    return creator(initial)
 }

@@ -52,7 +52,7 @@ function useNFTAvatarButtonStyles() {
     return useStyles(style)
 }
 function requestSettingAvatar() {
-    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
         open: true,
         startPicking: true,
     })

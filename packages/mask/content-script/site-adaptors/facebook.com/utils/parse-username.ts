@@ -1,6 +1,7 @@
 import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
-import { isMobileFacebook } from './isMobile.js'
 import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
+
+const HOST_NAME = 'https://www.facebook.com'
 
 /**
  * @see https://www.facebook.com/help/105399436216001#What-are-the-guidelines-around-creating-a-custom-username?
@@ -23,10 +24,9 @@ export function getPostUrlAtFacebook(post: PostIdentifier) {
     const id = post.identifier
     const { postId } = post
     const { userId } = id
-    const host = getFacebookHostName()
-    if (!isValidFacebookUsername(userId)) return host
-    if (Number.parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
-    return `${host}/${userId}/posts/${postId}`
+    if (!isValidFacebookUsername(userId)) return HOST_NAME
+    if (Number.parseFloat(userId)) return `${HOST_NAME}/permalink.php?story_fbid=${postId}&id=${userId}`
+    return `${HOST_NAME}/${userId}/posts/${postId}`
 }
 /**
  * Normalize profile url
@@ -34,13 +34,8 @@ export function getPostUrlAtFacebook(post: PostIdentifier) {
 export function getProfilePageUrlAtFacebook(user: ProfileIdentifier) {
     if (user.network !== 'facebook.com') throw new Error('Wrong origin')
 
-    const host = getFacebookHostName()
     const username = user.userId
     if (!isValidFacebookUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
-    if (Number.parseFloat(username)) return `${host}/profile.php?id=${username}`
-    return `${host}/${username}`
-}
-function getFacebookHostName() {
-    if (isMobileFacebook) return 'https://m.facebook.com'
-    return 'https://www.facebook.com'
+    if (Number.parseFloat(username)) return `${HOST_NAME}/profile.php?id=${username}`
+    return `${HOST_NAME}/${username}`
 }

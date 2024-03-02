@@ -1,10 +1,10 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
-import type { NFTInfo } from '../types.js'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NFTAvatarRing } from './NFTAvatarRing.js'
 import { useAvatarTrans } from '../locales/i18n_generated.js'
+import type { AvatarToken } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
-    nftInfo?: NFTInfo
+    token: AvatarToken | null
     size?: number
     width?: number
     hasRainbow?: boolean
@@ -23,11 +23,11 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { nftInfo, size = 140, hasRainbow, borderSize } = props
+    const { token, size = 140, hasRainbow, borderSize } = props
     const { classes } = useStyles(undefined, { props })
     const t = useAvatarTrans()
 
-    if (!nftInfo)
+    if (!token)
         return (
             <div className={classes.root}>
                 <NFTAvatarRing
@@ -43,15 +43,15 @@ export function NFTBadge(props: NFTBadgeProps) {
                 />
             </div>
         )
+
     return (
         <div
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                if (!nftInfo.permalink) return
-                openWindow(nftInfo.permalink)
+                if (token.permalink) openWindow(token.permalink)
             }}>
-            <Link href={nftInfo.permalink ?? ''} target="_blank" rel="noopener noreferrer">
+            <Link href={token?.permalink ?? ''} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing
                     id="NFTAvatarRing"
                     width={size}
@@ -60,8 +60,8 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={formatText(nftInfo.name ?? '', nftInfo.tokenId)}
-                    price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
+                    text={formatText(token.name ?? '', token.tokenId)}
+                    price={formatPrice(token.amount ?? '0', token.symbol ?? 'ETH')}
                 />
             </Link>
         </div>
