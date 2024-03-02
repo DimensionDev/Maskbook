@@ -4,11 +4,9 @@ export * from './utils/index.js'
 
 export * from './SiteAdaptor/NFTAvatar.js'
 export * from './SiteAdaptor/NFTAvatarButton.js'
-export * from './SiteAdaptor/NFTAvatarClip.js'
 export * from './SiteAdaptor/NFTAvatarRing.js'
 export * from './SiteAdaptor/NFTBadge.js'
 export * from './SiteAdaptor/NFTBadgeTimeline.js'
-export * from './SiteAdaptor/NFTBadgeTweet.js'
 export * from './SiteAdaptor/NFTImage.js'
 export * from './SiteAdaptor/RainbowBox.js'
 
