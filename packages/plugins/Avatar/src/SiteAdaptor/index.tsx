@@ -41,6 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 setPicking(startPicking)
             })
         }, [])
+
         if (!open) return null
 
         return (

@@ -36,7 +36,7 @@ export interface NextIDAvatarMeta extends AvatarMetaDB {
     imageUrl: string
 }
 
-export interface NFTRSSNode {
+export interface NFTRSS3Node {
     signature: string
     nft: AvatarMetaDB
 }

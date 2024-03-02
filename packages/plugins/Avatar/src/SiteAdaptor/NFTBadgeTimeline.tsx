@@ -31,10 +31,10 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const onUpdate = (data: AvatarMetaDB) => {
         if (!data.address || !data.tokenId) {
             setAvatar(undefined)
-            return
+        } else {
+            setAvatar(data)
+            setAvatarId_(data.avatarId)
         }
-        setAvatar(data)
-        setAvatarId_(data.avatarId)
     }
 
     useEffect(() => {

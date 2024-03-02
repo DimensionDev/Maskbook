@@ -122,11 +122,14 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const Hub = useWeb3Hub(pluginID)
 
     const handleAddCollectibles = useCallback(async () => {
+        if (!chainId) return
+
         const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId,
         })
-        if (!results || !chainId) return
+        if (!results) return
+
         const [contract, tokenIds] = results
         const address = contract.address
         const allSettled = await Promise.allSettled(
@@ -151,6 +154,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         )
         const fetchedTokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!fetchedTokens.length) return
+
         setSelectedToken(fetchedTokens[0])
         setCustomCollectibles((tokens) =>
             uniqBy([...tokens, ...fetchedTokens], (x) => `${x.contract?.address}_${x.tokenId}`),
