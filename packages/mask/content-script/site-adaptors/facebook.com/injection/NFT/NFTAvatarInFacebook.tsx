@@ -1,9 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import { useAsync, useLocation, useWindowSize } from 'react-use'
 import { max, pickBy } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { AvatarStore } from '@masknet/web3-providers'
 import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
 import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useNFTAvatarAddress } from '@masknet/plugin-avatar'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
@@ -65,6 +66,11 @@ function NFTAvatarInFacebook() {
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
     const { account } = useChainContext()
+
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
+
+    // const nftAvatar_ = store[identity.identifier?.userId ]
+
     const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.FACEBOOK)
     const { value: address, loading: loadingAddress } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(

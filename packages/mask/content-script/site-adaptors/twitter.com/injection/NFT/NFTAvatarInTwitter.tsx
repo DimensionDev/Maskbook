@@ -106,14 +106,15 @@ export function NFTAvatarInTwitter() {
 function useNFTCircleAvatar(size: number) {
     const t = useMaskSharedTrans()
 
+    const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
+
     const { value: nftAvatar } = usePersonaNFTAvatar(
         identity.identifier?.userId ?? '',
         Twitter.getAvatarId(identity.avatar),
         '',
         RSS3_KEY_SITE.TWITTER,
     )
-    const { account } = useChainContext()
     const { loading: loadingWallet, value: storage } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,

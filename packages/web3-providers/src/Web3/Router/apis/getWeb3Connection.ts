@@ -15,10 +15,13 @@ export function getWeb3Connection<T extends NetworkPluginID>(
         Web3Helper.Definition[T]['Transaction']
     >,
 ) {
+    type Creator = ReturnType<typeof createConnectionCreator<T>>
+
     const creator = (
         pluginID === NetworkPluginID.PLUGIN_EVM ? createConnection
         : pluginID === NetworkPluginID.PLUGIN_FLOW ? createFlowConnection
         : pluginID === NetworkPluginID.PLUGIN_SOLANA ? createSolanaConnection
-        : unreachable(pluginID)) as ReturnType<typeof createConnectionCreator<T>>
+        : unreachable(pluginID)) as Creator
+
     return creator(initial)
 }
