@@ -5,7 +5,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
-import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useWallet } from '@masknet/plugin-avatar'
+import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useNFTAvatarAddress } from '@masknet/plugin-avatar'
 import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { type NFTAvatarEvent, NetworkPluginID, MaskMessages, InMemoryStorages } from '@masknet/shared-base'
@@ -64,11 +64,11 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.FACEBOOK)
     const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
+    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.FACEBOOK)
+    const { value: address, loading: loadingAddress } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
-        storage?.address ?? account,
+        address?.address ?? account,
         nftAvatar?.address,
         nftAvatar?.tokenId,
         nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
@@ -76,7 +76,7 @@ function NFTAvatarInFacebook() {
     )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
@@ -113,37 +113,32 @@ function NFTAvatarInFacebook() {
 
     // Because of the mobile upload step, need to use memory storage to store NFTEven
     useAsync(async () => {
+        if (!account || !identity.identifier) return
         const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
 
-        if (!account) return
-        if (!identity.identifier) return
         if (NFTEvent?.address && NFTEvent?.tokenId && NFTEvent?.avatarId) {
             try {
-                const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
+                const avatarMetadata = await saveNFTAvatar(identity.identifier.userId, account, {
                     ...NFTEvent,
                     avatarId: getAvatarId(identity.avatar ?? ''),
                 } as NextIDAvatarMeta)
-                if (!avatarInfo) {
+                if (!avatarMetadata) {
                     setNFTEvent(undefined)
                     setAvatar(undefined)
-                    // eslint-disable-next-line no-alert
-                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
                     return
                 }
 
-                setAvatar(avatarInfo)
-
+                setAvatar(avatarMetadata)
                 setNFTEvent(undefined)
             } catch (error) {
                 setNFTEvent(undefined)
                 setAvatar(undefined)
-                // eslint-disable-next-line no-alert
-                alert((error as any).message)
-                return
             }
         } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
             try {
-                const avatarInfo = await saveNFTAvatar(storages.userId.value, account, {
+                const avatarMetadata = {
+                    nickname: '',
+                    imageUrl: '',
                     userId: storages.userId.value,
                     tokenId: storages.tokenId.value,
                     address: storages.address.value,
@@ -151,22 +146,18 @@ function NFTAvatarInFacebook() {
                     chainId: storages.chainId.value,
                     pluginID: storages.pluginID.value,
                     schema: storages.schema.value,
-                } as unknown as NextIDAvatarMeta)
-                if (!avatarInfo) {
+                } as NextIDAvatarMeta
+                const saved = await saveNFTAvatar(storages.userId.value, account, avatarMetadata)
+                if (!saved) {
                     clearStorages()
                     setAvatar(undefined)
-                    // eslint-disable-next-line no-alert
-                    alert('Sorry, failed to save NFT Avatar. Please set again.')
-                    return
+                } else {
+                    setAvatar(avatarMetadata)
+                    clearStorages()
                 }
-                setAvatar(avatarInfo)
-                clearStorages()
             } catch (error) {
                 clearStorages()
                 setAvatar(undefined)
-                // eslint-disable-next-line no-alert
-                alert((error as any).message)
-                return
             }
         }
     }, [identity.avatar])
@@ -185,7 +176,7 @@ function NFTAvatarInFacebook() {
     })
     // #endregion
 
-    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
+    if (!avatar || !size || !showAvatar || loadingAddress || loadingNFTInfo) return null
 
     return (
         <NFTBadge

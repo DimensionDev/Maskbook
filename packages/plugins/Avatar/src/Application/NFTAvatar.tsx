@@ -44,7 +44,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     <Avatar src={avatar} />
                 </Box>
             }
-
             <Stack
                 sx={{
                     position: 'absolute',

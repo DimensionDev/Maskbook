@@ -30,7 +30,7 @@ import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@m
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
-import { useAvatarManagement } from '../contexts/index.js'
+import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 import { useAvatarTrans } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'

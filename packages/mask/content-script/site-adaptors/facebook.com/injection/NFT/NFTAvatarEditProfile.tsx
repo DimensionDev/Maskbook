@@ -80,7 +80,7 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
                 root: classes.root,
             }}
             onClick={openNFTAvatarSettingDialog}
-            showSetting={false}
+            showSettings={false}
         />
     )
 }

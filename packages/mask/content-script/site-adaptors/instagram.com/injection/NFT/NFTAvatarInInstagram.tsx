@@ -10,7 +10,7 @@ import {
     RSS3_KEY_SITE,
     useNFT,
     useNFTAvatar,
-    useWallet,
+    useNFTAvatarAddress,
     NFTBadge,
     rainbowBorderKeyFrames,
 } from '@masknet/plugin-avatar'
@@ -54,7 +54,7 @@ function NFTAvatarInInstagram() {
     const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.INSTAGRAM)
 
     const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
+    const { loading: loadingWallet, value: storage } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,

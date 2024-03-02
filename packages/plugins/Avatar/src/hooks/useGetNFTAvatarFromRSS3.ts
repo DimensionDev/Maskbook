@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Web3Storage } from '@masknet/web3-providers'
-import type { RSS3_KEY_SITE } from '../../constants.js'
-import type { NFTRSSNode } from '../../types.js'
+import type { RSS3_KEY_SITE } from '../constants.js'
+import type { NFTRSSNode } from '../types.js'
 
 export function useGetNFTAvatarFromRSS3() {
     return useCallback(async (userId: string, address: string, key: RSS3_KEY_SITE) => {

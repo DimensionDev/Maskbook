@@ -20,6 +20,7 @@ export function NFTInfo(props: NFTInfoProps) {
     const t = useAvatarTrans()
 
     if (loading) return <LoadingBase size={24} />
+
     const node = (
         <Box className={classes.root}>
             {isNFT ?

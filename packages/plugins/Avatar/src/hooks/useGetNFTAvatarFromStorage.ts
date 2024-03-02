@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Web3Storage } from '@masknet/web3-providers'
-import { StorageKey } from '../../constants.js'
-import type { NextIDAvatarMeta } from '../../types.js'
+import { StorageKey } from '../constants.js'
+import type { NextIDAvatarMeta } from '../types.js'
 
 export function useGetNFTAvatarFromStorage() {
     return useCallback(

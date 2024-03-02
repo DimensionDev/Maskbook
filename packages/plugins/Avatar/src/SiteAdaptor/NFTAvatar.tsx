@@ -120,6 +120,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
+
     const handleAddCollectibles = useCallback(async () => {
         const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
@@ -148,13 +149,15 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 return { ...token, ...asset } as AllChainsNonFungibleToken
             }),
         )
-        const tokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
-        if (!tokens.length) return
-        setSelectedToken(tokens[0])
-        setCustomCollectibles((tokens) => uniqBy([...tokens, ...tokens], (x) => x.contract?.address && x.tokenId))
+        const fetchedTokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
+        if (!fetchedTokens.length) return
+        setSelectedToken(fetchedTokens[0])
+        setCustomCollectibles((tokens) =>
+            uniqBy([...tokens, ...fetchedTokens], (x) => `${x.contract?.address}_${x.tokenId}`),
+        )
     }, [pluginID, chainId, account])
 
-    const loadingSkeletons = (
+    const LoadingSkeletons = (
         <List className={classes.list}>
             {range(8).map((i) => (
                 <ListItem key={i} className={classes.nftItem}>
@@ -188,7 +191,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                 <Box className={classes.galleryItem}>
                     {hasNextPage && !loadError && !collectibles.length ?
-                        loadingSkeletons
+                        LoadingSkeletons
                     : loadError || (!collectibles.length && !customCollectibles.length) ?
                         <ReloadStatus
                             message={t.dashboard_no_collectible_found()}
@@ -198,7 +201,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     :   <List className={classes.list}>
                             {uniqBy(
                                 [...customCollectibles, ...collectibles],
-                                (x) => x.contract?.address && x.tokenId,
+                                (x) => `${x.contract?.address}_${x.tokenId}`,
                             ).map((token: AllChainsNonFungibleToken, i) => (
                                 <ListItem className={classes.nftItem} key={i}>
                                     <NFTImage

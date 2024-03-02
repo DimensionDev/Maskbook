@@ -17,10 +17,8 @@ export function RouterDialog(props: InjectedDialogProps) {
     const isOnBack = pathname !== RoutePaths.Personas
 
     useLayoutEffect(() => {
-        if (pathname === RoutePaths.Exit) {
-            props.onClose?.()
-        }
-    }, [pathname === RoutePaths.Exit, props.onClose])
+        if (pathname === RoutePaths.Exit) props.onClose?.()
+    }, [pathname, props.onClose])
 
     return (
         <InjectedDialog

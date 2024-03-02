@@ -11,8 +11,8 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
 import { useAvatarTrans } from '../locales/i18n_generated.js'
-import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
-import { useAvatarManagement } from '../contexts/index.js'
+import { type AvatarInfo, useSave } from '../hooks/useSave.js'
+import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 import { RoutePaths } from './Routes.js'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
@@ -45,9 +45,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
     try {
         const media = await Twitter.uploadMedia(blob)
         const data = await Twitter.updateProfileImage(userId, media.media_id_string)
-        if (!data) {
-            return
-        }
+        if (!data) return
         const avatarId = Twitter.getAvatarId(data?.imageUrl ?? '')
         return { ...data, avatarId }
     } catch (err) {

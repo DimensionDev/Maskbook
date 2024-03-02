@@ -88,18 +88,18 @@ export type CheckSecurityDialogEvent =
           open: false
       }
 
-export type ApplicationDialogEvent = {
+export interface ApplicationDialogEvent {
     open: boolean
     pluginID: string
     isVerified?: boolean
     selectedPersona?: PersonaInformation
 }
 
-export type PersonaBindFinishEvent = {
+export interface PersonaBindFinishEvent {
     pluginID?: string
 }
 
-export type AvatarSettingDialogEvent = {
+export interface AvatarSettingsDialogEvent {
     open: boolean
     startPicking?: boolean
 }

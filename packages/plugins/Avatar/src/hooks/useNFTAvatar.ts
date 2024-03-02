@@ -11,6 +11,7 @@ export function useNFTAvatar(userId: string | undefined, key: RSS3_KEY_SITE): As
     return useAsync(async () => {
         const siteType = getEnhanceableSiteType()
         if (!siteType) return
+
         return getNFTAvatar(userId, siteType, key)
     }, [userId, key, getNFTAvatar])
 }

@@ -67,7 +67,7 @@ const useStyles = makeStyles<{ buttonSize: number; fontSize: number }>()((theme,
     },
 }))
 function clickHandler() {
-    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
         open: true,
     })
 }

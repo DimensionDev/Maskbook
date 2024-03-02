@@ -3,7 +3,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MemoryRouter } from 'react-router-dom'
 import { AvatarRoutes, RoutePaths } from './Routes.js'
-import { AvatarManagementProvider } from '../contexts/index.js'
+import { AvatarManagementProvider } from '../contexts/AvatarManagement.js'
 import { RouterDialog } from './RouterDialog.js'
 import type { InjectedDialogProps } from '@masknet/shared'
 

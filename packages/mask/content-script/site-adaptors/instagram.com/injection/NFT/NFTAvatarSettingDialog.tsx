@@ -35,7 +35,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
@@ -57,8 +57,6 @@ export function NFTAvatarSettingDialog() {
                 } as NextIDAvatarMeta)
 
                 if (!avatarInfo) {
-                    // eslint-disable-next-line no-alert
-                    alert('Sorry, failed to save NFT Avatar. Please set again.')
                     setOpen(false)
                     return
                 }
@@ -68,11 +66,8 @@ export function NFTAvatarSettingDialog() {
 
                 setOpen(false)
             } catch (error) {
-                if (error instanceof Error) {
-                    // eslint-disable-next-line no-alert
-                    alert(error.message)
-                    return
-                }
+                // eslint-disable-next-line no-alert
+                if (error instanceof Error) alert(error.message)
             }
         },
         [identity, account, saveNFTAvatar],

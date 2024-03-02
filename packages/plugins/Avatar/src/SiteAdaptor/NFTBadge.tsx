@@ -48,8 +48,7 @@ export function NFTBadge(props: NFTBadgeProps) {
             className={classes.root}
             onClick={(e) => {
                 e.preventDefault()
-                if (!nftInfo.permalink) return
-                openWindow(nftInfo.permalink)
+                if (nftInfo.permalink) openWindow(nftInfo.permalink)
             }}>
             <Link href={nftInfo?.permalink ?? ''} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing

@@ -150,6 +150,7 @@ function NFTAvatarListInFaceBookMobile() {
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
             if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+
             const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
 

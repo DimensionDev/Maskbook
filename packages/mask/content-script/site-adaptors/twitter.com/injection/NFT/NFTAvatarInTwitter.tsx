@@ -6,7 +6,7 @@ import {
     NFTBadge,
     RSS3_KEY_SITE,
     usePersonaNFTAvatar,
-    useWallet,
+    useNFTAvatarAddress,
     useNFT,
     type NextIDAvatarMeta,
     useSaveStringStorage,
@@ -114,7 +114,7 @@ function useNFTCircleAvatar(size: number) {
         RSS3_KEY_SITE.TWITTER,
     )
     const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
+    const { loading: loadingWallet, value: storage } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
         nftAvatar?.address,
@@ -130,7 +130,7 @@ function useNFTCircleAvatar(size: number) {
     }, [nftAvatar?.avatarId, identity.avatar])
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     // After the avatar is set, it cannot be saved immediately,
     // and must wait until the avatar of twitter gets updated

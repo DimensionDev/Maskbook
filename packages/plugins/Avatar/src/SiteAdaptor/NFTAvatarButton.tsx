@@ -31,11 +31,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
-    showSetting?: boolean
+    showSettings?: boolean
 }
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
-    const { onClick } = props
+    const { onClick, showSettings } = props
     const t = useAvatarTrans()
     const { classes } = useStyles(undefined, { props })
 
@@ -46,7 +46,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
                 <Typography style={{ marginLeft: 4 }} className={classes.text}>
                     {t.nft_avatar()}
                 </Typography>
-                {props.showSetting ?
+                {showSettings ?
                     <Icons.GearSettings className={classes.setIcon} />
                 :   null}
             </Stack>

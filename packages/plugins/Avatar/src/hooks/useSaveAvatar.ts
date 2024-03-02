@@ -1,14 +1,14 @@
-import { useCallback } from 'react'
 import { Web3Storage } from '@masknet/web3-providers'
 import { NetworkPluginID, type EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'
-import type { NextIDAvatarMeta, AvatarMeta } from '../../types.js'
-import { NFT_AVATAR_METADATA_STORAGE } from '../../constants.js'
+import type { NextIDAvatarMeta, AvatarMeta } from '../types.js'
+import { NFT_AVATAR_METADATA_STORAGE } from '../constants.js'
+import { useAsyncFn } from 'react-use'
 
 export function useSaveAvatar(pluginID?: NetworkPluginID) {
-    const saveAddress = useSaveAddress(pluginID)
+    const [, saveAddress] = useSaveAddress()
 
-    return useCallback(
+    return useAsyncFn(
         async (account: string, network: EnhanceableSite, avatar: NextIDAvatarMeta, sign: string) => {
             if (avatar.userId === '$unknown') return
             await saveAddress(avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, network)
@@ -17,7 +17,6 @@ export function useSaveAvatar(pluginID?: NetworkPluginID) {
                 ...avatar,
                 sign,
             })
-
             return avatar
         },
         [saveAddress],

@@ -14,13 +14,12 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { RoutePaths } from './Routes.js'
-import { useAvatarManagement } from '../contexts/index.js'
+import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 
 export function PersonaPage() {
     const t = useAvatarTrans()
-    const [visible, setVisible] = useState(true)
-    const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
+    const [visible, setVisible] = useState(true)
     const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
 
     const socialIdentity = useLastRecognizedIdentity()
@@ -43,7 +42,7 @@ export function PersonaPage() {
     const bindingProofs = useMemo(
         () =>
             uniqBy(
-                bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
+                bindingPersonas.flatMap((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)),
                 'identity',
             ),
         [bindingPersonas, network],
@@ -73,7 +72,7 @@ export function PersonaPage() {
                         <LoadingBase />
                     </Stack>
                 :   <>
-                        <Alert open={visible} onClose={dismissAlert}>
+                        <Alert open={visible} onClose={() => setVisible(false)}>
                             {t.persona_hint()}
                         </Alert>
                         {bindingProofs
