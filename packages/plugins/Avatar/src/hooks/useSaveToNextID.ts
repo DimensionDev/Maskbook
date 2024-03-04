@@ -10,13 +10,14 @@ export function useSaveToNextID() {
     const [, saveAddress] = useSaveAddress()
     return useAsyncFn(
         async (info: NextIDAvatarMeta, account: string, persona?: ECKeyIdentifier, proof?: BindingProof) => {
-            if (!proof?.identity || !persona) return false
+            if (!proof?.identity || !persona) return
 
             const siteType = getEnhanceableSiteType()
-            if (!siteType) return false
+            if (!siteType) return
 
             const storage = Web3Storage.createNextIDStorage(proof.identity, proof.platform, persona, signWithPersona)
             await storage.set(PLUGIN_ID, info)
+
             await saveAddress(info.userId, info.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, siteType)
 
             return info

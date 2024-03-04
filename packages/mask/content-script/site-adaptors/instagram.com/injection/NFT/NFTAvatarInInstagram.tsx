@@ -49,11 +49,11 @@ function NFTAvatarInInstagram() {
     const { classes } = useStyles()
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
 
-    const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.INSTAGRAM)
-
+    const identity = useCurrentVisitingIdentity()
     const { account } = useChainContext()
+
+    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.INSTAGRAM)
     const { loading: loadingWallet, value: storage } = useNFTAvatarAddress(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,

@@ -36,6 +36,7 @@ export * from './types/Snapshot.js'
 export * from './types/PluginContext.js'
 export * from './types/Trader.js'
 export * from './types/FriendTech.js'
+export * from './types/Store.js'
 
 // Provider Implementations
 export * from './DeBank/types.js'

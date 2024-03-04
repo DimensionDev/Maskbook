@@ -1,11 +1,10 @@
 import { first } from 'lodash-es'
 import {
     EnhanceableSite,
-    type NextIDPersonaBindings,
     NextIDPlatform,
-    getSiteType,
     PluginID,
     type NetworkPluginID,
+    type NextIDPersonaBindings,
 } from '@masknet/shared-base'
 import { NextIDProof, NextIDStorageProvider } from '@masknet/web3-providers'
 import type { AvatarNextID } from '../types.js'
@@ -39,11 +38,12 @@ function sortPersonaBindings(a: NextIDPersonaBindings, b: NextIDPersonaBindings,
 }
 
 export async function getAvatarFromNextID<T extends NetworkPluginID>(
+    siteType: EnhanceableSite,
     userId: string,
     avatarId: string,
     persona: string,
 ): Promise<AvatarNextID<T> | undefined> {
-    const platform = getSiteType() === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
+    const platform = siteType === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
     if (!platform) return
 
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)

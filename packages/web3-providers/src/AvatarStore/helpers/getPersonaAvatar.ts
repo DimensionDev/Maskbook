@@ -1,28 +1,31 @@
-import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { safeUnreachable } from '@masknet/kit'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { getAvatarFromNextID } from './getAvatarFromNextID.js'
 import { getAvatar } from './getAvatar.js'
-import { ChainId } from '@masknet/web3-shared-evm'
 import type { AvatarNextID } from '../types.js'
 
 export async function getPersonaAvatar<T extends NetworkPluginID>(
+    siteType: EnhanceableSite,
     userId: string,
     avatarId: string,
     persona: string,
-): Promise<AvatarNextID<T> | undefined> {
-    const siteType = getEnhanceableSiteType()
-
+): Promise<AvatarNextID<T> | null> {
     // only twitter is supported
-    if (siteType !== EnhanceableSite.Twitter) return
+    if (siteType !== EnhanceableSite.Twitter) return null
 
-    const personaAvatar = await getAvatarFromNextID<T>(userId, avatarId, persona)
+    const personaAvatar = await getAvatarFromNextID<T>(EnhanceableSite.Twitter, userId, avatarId, persona)
     if (personaAvatar) return personaAvatar
 
-    const avatar = await getAvatar(userId)
-    if (!avatar) return
+    const avatar = await getAvatar(EnhanceableSite.Twitter, userId)
+    if (!avatar) return null
 
-    if (avatarId !== avatar.avatarId) return
+    if (avatarId !== avatar.avatarId) return null
 
-    switch (avatar.pluginId) {
+    const pluginId = avatar.pluginId
+    if (!pluginId) return null
+
+    switch (pluginId) {
         case NetworkPluginID.PLUGIN_EVM:
             return {
                 pluginId: NetworkPluginID.PLUGIN_EVM,
@@ -40,8 +43,9 @@ export async function getPersonaAvatar<T extends NetworkPluginID>(
                 address: avatar.tokenId,
             } as AvatarNextID<T>
         case NetworkPluginID.PLUGIN_FLOW:
-            return
+            return null
         default:
-            return
+            safeUnreachable(pluginId)
+            return null
     }
 }

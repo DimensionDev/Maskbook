@@ -22,9 +22,9 @@ async function fetchImage(url: string) {
 }
 
 export async function toPNG(url: string) {
-    const resolvedURL = resolveResourceURL(url)
+    const resolvedURL = resolveResourceURL(url) || url
 
-    const imageData = await fetchImage(resolvedURL || url)
+    const imageData = await fetchImage(resolvedURL)
     if (imageData) return imageData
 
     return new Promise<Blob | null>((resolve, reject) => {

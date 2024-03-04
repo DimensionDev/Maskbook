@@ -5,7 +5,7 @@ import type { AddressStorageV1, AddressStorageV2 } from '../types.js'
 const NFT_AVATAR_DB_NAME = 'com.maskbook.user'
 
 export async function getAddress(siteType: EnhanceableSite, userId: string) {
-    if (userId === '$unknown') return
+    if (userId === '$unknown') return null
 
     let storageV1, storageV2
 
@@ -28,5 +28,5 @@ export async function getAddress(siteType: EnhanceableSite, userId: string) {
     // V1 only supports EVM
     if (storageV1.address) return storageV1
 
-    return
+    return null
 }

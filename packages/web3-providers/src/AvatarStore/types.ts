@@ -37,9 +37,12 @@ export interface AvatarRSS3 {
     nft: AvatarNextID<NetworkPluginID.PLUGIN_EVM>
 }
 
-export interface Store {
-    [key: string]: AvatarNextID<NetworkPluginID>
+export interface AvatarAddress {
+    address: string
+    networkPluginID: NetworkPluginID
 }
+
+export type Store = Record<string, AvatarToken | null>
 
 export type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID.PLUGIN_EVM }
 export type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>

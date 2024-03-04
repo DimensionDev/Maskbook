@@ -11,7 +11,7 @@ export async function getAvatarToken<T extends NetworkPluginID>(
     pluginID: T,
     account: string,
     avatar: AvatarNextID<T>,
-): Promise<AvatarToken | undefined> {
+): Promise<AvatarToken> {
     const { chainId = ChainId.Mainnet, address, tokenId } = avatar
 
     const Utils = getUtils<T>(pluginID)
