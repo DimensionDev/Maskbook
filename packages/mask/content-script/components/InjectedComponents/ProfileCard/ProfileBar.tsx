@@ -63,6 +63,7 @@ const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
         marginLeft: 10,
         overflow: 'auto',
         flexGrow: 1,
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

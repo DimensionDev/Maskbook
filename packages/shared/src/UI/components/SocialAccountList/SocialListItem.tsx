@@ -62,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },

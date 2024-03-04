@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 48,
     },
     textarea: {
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,

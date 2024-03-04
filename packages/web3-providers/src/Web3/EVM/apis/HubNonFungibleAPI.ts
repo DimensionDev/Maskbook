@@ -5,7 +5,6 @@ import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 import * as AlchemyEVM from /* webpackDefer: true */ '../../../Alchemy/index.js'
-import * as Approval from /* webpackDefer: true */ '../../../Approval/index.js'
 import * as ChainbaseNonFungibleToken from /* webpackDefer: true */ '../../../Chainbase/index.js'
 import * as Gem from /* webpackDefer: true */ '../../../Gem/index.js'
 import * as GoPlusAuthorization from /* webpackDefer: true */ '../../../GoPlusLabs/index.js'
@@ -34,7 +33,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                 [SourceType.Zerion]: ZerionNonFungibleToken.ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
                 [SourceType.OpenSea]: OpenSea.OpenSea,
-                [SourceType.Approval]: Approval.Approval,
                 [SourceType.Alchemy_EVM]: AlchemyEVM.AlchemyEVM,
                 [SourceType.Zora]: Zora.Zora,
                 [SourceType.Gem]: Gem.Gem,
@@ -53,7 +51,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                     AlchemyEVM.AlchemyEVM,
                     Zora.Zora,
                     Gem.Gem,
-                    Approval.Approval,
                     GoPlusAuthorization.GoPlusAuthorization,
                     Rabby.Rabby,
                     R2D2TokenList.R2D2TokenList,
@@ -65,7 +62,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                     AlchemyEVM.AlchemyEVM,
                     OpenSea.OpenSea,
                     Zora.Zora,
-                    Approval.Approval,
                     Gem.Gem,
                     GoPlusAuthorization.GoPlusAuthorization,
                     Rabby.Rabby,

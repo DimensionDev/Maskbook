@@ -41,6 +41,7 @@ const useStyles = makeStyles<{
         gridTemplateRows: 'repeat(3, 1fr)',
         width: '100%',
         padding: theme.spacing(2, 0),
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

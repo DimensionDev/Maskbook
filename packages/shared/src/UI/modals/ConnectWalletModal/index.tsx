@@ -1,21 +1,29 @@
-import { forwardRef, useRef } from 'react'
-import { useAsyncFn } from 'react-use'
-import { Trans } from 'react-i18next'
-import { DialogContent, Box, Card, Typography, Paper, Link, dialogClasses } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { WalletIcon, useSharedTrans } from '@masknet/shared'
 import {
     NetworkPluginID,
     Sniffings,
     getSiteType,
-    type SingletonModalRefCreator,
     pluginIDsSettings,
+    type SingletonModalRefCreator,
 } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
+import { ActionButton, LoadingBase, MaskColorVar, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import {
+    useChainContext,
+    useNetworkContext,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useWeb3Utils,
+} from '@masknet/web3-hooks-base'
+import { getUtils, getWeb3Connection } from '@masknet/web3-providers'
+import type { Connection } from '@masknet/web3-providers/types'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
-import { useProviderDescriptor, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { Box, Card, DialogContent, Link, Paper, Typography, dialogClasses } from '@mui/material'
+import { forwardRef, useRef } from 'react'
+import { Trans } from 'react-i18next'
+import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 
 const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
@@ -106,25 +114,31 @@ export const ConnectWalletModal = forwardRef<
 
     const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
 
-    const Web3 = useWeb3Connection(pluginID, { providerType })
     const Utils = useWeb3Utils(pluginID)
+    const { setPluginID } = useNetworkContext()
+    const { setNetworkType, setProviderType } = useChainContext()
 
     const [{ loading, value: connected, error }, onConnect] = useAsyncFn(async () => {
-        if (!connectionRef.current) throw new Error('Failed to connect to provider.')
+        if (!connectionRef.current) throw new Error('Failed to connect to provider. No connection info provided')
 
         const { pluginID, providerType, networkType } = connectionRef.current
 
+        const Utils = getUtils<NetworkPluginID>(pluginID)
+        const Web3 = getWeb3Connection<NetworkPluginID>(pluginID, { providerType }) as Connection<NetworkPluginID>
         const chainId = Utils.networkResolver.networkChainId(networkType)
-        if (!chainId) throw new Error('Failed to connect to provider.')
+        if (!chainId) throw new Error(`Failed to connect to provider. Invalid chainId for network type: ${networkType}`)
 
         try {
             const account = await Web3.connect({
                 chainId,
                 providerType,
             })
+            setPluginID(pluginID)
+            setNetworkType(networkType)
+            setProviderType(providerType)
             if (!account) throw new Error('Failed to build connection.')
         } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to connect to provider.')
+            throw new Error(err instanceof Error ? err.message : 'Failed to connect to provider. Unknown reason')
         }
 
         const site = getSiteType()
@@ -137,7 +151,7 @@ export const ConnectWalletModal = forwardRef<
         }
 
         return true
-    }, [connectionRef.current, Utils, Web3])
+    }, [])
 
     const [open, dispatch] = useSingletonModal(ref, {
         async onOpen(props) {

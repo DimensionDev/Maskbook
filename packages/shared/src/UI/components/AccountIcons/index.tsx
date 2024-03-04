@@ -192,6 +192,12 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
                 icon: <Icons.Lens className={roundedClasses} size={18} style={iconStyle} />,
             }
         :   null,
+        supportedAddressTypes.includes(SocialAddressType.SOL) ?
+            {
+                type: SocialAddressType.SOL,
+                icon: <Icons.Solana className={roundedClasses} size={18} style={iconStyle} />,
+            }
+        :   null,
     ])
 
     if (configs.length <= 3) {

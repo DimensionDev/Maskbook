@@ -16,7 +16,7 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
     const { pluginID } = useNetworkContext(expectedPluginID)
     const { providerType } = useChainContext()
 
-    return getRegisteredWeb3Providers(pluginID).find((x) =>
-        [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    )
+    const providers = getRegisteredWeb3Providers(pluginID)
+    const typeOrId = expectedProviderTypeOrID ?? providerType ?? ''
+    return providers.find((x) => [x.type, x.ID].includes(typeOrId))
 }

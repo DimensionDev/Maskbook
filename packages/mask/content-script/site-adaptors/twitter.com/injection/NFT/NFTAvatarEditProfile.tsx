@@ -85,8 +85,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
             handlerPosition="top-right"
-            customHint
-            directTo={PluginID.Avatar}>
+            customHint>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={requestSettingAvatar} />
         </ConnectPersonaBoundary>
     )
