@@ -42,6 +42,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             boxSizing: 'border-box',
             paddingBottom: 72,
             overflow: 'auto',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -50,6 +51,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: 'calc(100% - 336px)',
             marginLeft: 36,
             overflowY: 'auto',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

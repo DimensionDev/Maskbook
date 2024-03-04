@@ -39,6 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         flexShrink: 1,
         flexGrow: 1,
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

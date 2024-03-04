@@ -13,8 +13,8 @@ import { PluginProviderRender } from './PluginProviderRender.js'
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(0),
-        scrollbarWidth: 'none',
         minHeight: 430,
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

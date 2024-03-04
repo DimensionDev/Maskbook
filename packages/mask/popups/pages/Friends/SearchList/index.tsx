@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 16px 16px 16px',
         flexGrow: 1,
         overflow: 'auto',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

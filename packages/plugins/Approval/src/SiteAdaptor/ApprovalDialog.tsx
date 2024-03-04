@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme, props) => ({
         overflowY: 'auto',
         overflowX: 'hidden',
         height: '100%',
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 18,

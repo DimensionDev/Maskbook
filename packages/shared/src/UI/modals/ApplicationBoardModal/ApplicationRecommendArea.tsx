@@ -12,6 +12,7 @@ const useStyles = makeStyles()(() => {
             overflowX: 'scroll',
             margin: '0 2px 8px',
             padding: '8px 16px',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -28,6 +29,7 @@ const useStyles = makeStyles()(() => {
                 width: 562,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
+                scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },

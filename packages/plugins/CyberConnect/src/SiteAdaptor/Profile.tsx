@@ -73,6 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     panel: {
         padding: theme.spacing(2),
         backgroundColor: theme.palette.maskColor.white,
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },
