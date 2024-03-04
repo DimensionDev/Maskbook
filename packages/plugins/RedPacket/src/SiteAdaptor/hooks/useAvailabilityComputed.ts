@@ -1,8 +1,9 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
-import type { RefetchOptions, QueryObserverResult } from '@tanstack/react-query'
+import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
 import { useCallback } from 'react'
 import { useAvailability } from './useAvailability.js'
@@ -51,7 +52,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             computed: {
                 canClaim: !!data?.data?.canClaim,
                 canRefund: false,
-                listOfStatus: [] as RedPacketStatus[],
+                listOfStatus: EMPTY_LIST as RedPacketStatus[],
             },
         }
     const isEmpty = availability.balance === '0'
