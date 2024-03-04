@@ -46,6 +46,17 @@ export class FireflyRedPacket {
         }))
     }
 
+    /**
+     * By RedPacket id
+     */
+    static async getThemeById(rpid: string) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
+            rpid,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        return data
+    }
+
     static async getPayloadUrlByThemeId(
         themeId: string,
         from: string,
@@ -86,10 +97,7 @@ export class FireflyRedPacket {
         remainingAmount?: string,
         remainingShares?: string,
     ) {
-        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
-            rpid,
-        })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        const data = await FireflyRedPacket.getThemeById(rpid)
 
         return {
             themeId: data.tid,
@@ -108,6 +116,31 @@ export class FireflyRedPacket {
                 'remaining-shares': remainingShares,
             }),
         }
+    }
+
+    static composeRedPacketCover(
+        themeId: string,
+        symbol?: string,
+        decimals?: number,
+        shares?: number,
+        amount?: string,
+        from?: string,
+        message?: string,
+        remainingAmount?: string,
+        remainingShares?: string,
+    ) {
+        return urlcat(SITE_URL, '/api/rp', {
+            'theme-id': themeId,
+            usage: 'cover',
+            symbol,
+            decimals,
+            shares,
+            amount,
+            from,
+            message,
+            'remaining-amount': remainingAmount,
+            'remaining-shares': remainingShares,
+        })
     }
 
     static async createPublicKey(
