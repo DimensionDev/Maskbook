@@ -116,6 +116,7 @@ export const getTokenListConstants = transformAll(ChainId, TokenList)
 export const useTokenListConstant = transformHook(getTokenListConstants)
 export const useTokenListConstants = transformAllHook(getTokenListConstants)
 
+// see https://github.com/DimensionDev/assets/
 export const getTokenAssetBaseURLConstant = transform(ChainId, TokenAssetBaseURL)
 export const getTokenAssetBaseURLConstants = transformAll(ChainId, TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstant = transformHook(getTokenAssetBaseURLConstants)
