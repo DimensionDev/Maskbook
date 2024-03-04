@@ -9,6 +9,10 @@ export abstract class BaseHubProvider<ChainId, SchemaType, GasOption> extends Ab
         initial?: BaseHubOptions<ChainId>,
     ): Promise<Record<GasOptionType, GasOption> | undefined>
 
+    abstract getGasLimit?(
+        chainId: ChainId,
+    ): [min: string | undefined, defaultGas: string | undefined, max: string | undefined] | undefined
+
     abstract getTransactions?(
         chainId: ChainId,
         account: string,

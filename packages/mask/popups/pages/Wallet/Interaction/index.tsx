@@ -320,7 +320,7 @@ const Interaction = memo((props: InteractionProps) => {
                                         return web3_utils.toHex(value)
                                     })
                                 :   {}),
-                                gas: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
+                                gasLimit: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
                                 chainId: web3_utils.toHex(x.chainId),
                                 nonce: web3_utils.toHex(x.nonce),
                             }
@@ -328,6 +328,12 @@ const Interaction = memo((props: InteractionProps) => {
                     )
                 }
 
+                if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                    if (params[0].type === '0x0') {
+                        delete params[0].type
+                        delete params[0].gasPrice
+                    }
+                }
                 const response = await Message?.approveRequest(currentRequest.ID, {
                     ...currentRequest.request,
                     arguments: {
@@ -483,15 +489,6 @@ const InteractionItem = memo((props: InteractionItemProps) => {
                 onPaymentTokenChange={setPaymentToken}
             />
 
-    const ViewFullTransactionDetailsButton =
-        isSignRequest ? null : (
-            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-                <Button variant="text" onClick={() => setExpand(!expand)}>
-                    <Typography className={classes.text}>{t.popups_wallet_view_full_detail_transaction()}</Typography>
-                    <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
-                </Button>
-            </Box>
-        )
     const FullTransactionDetails =
         expand ?
             <Box className={classes.transactionDetail} marginBottom={pager ? 16 : 0}>
@@ -529,6 +526,15 @@ const InteractionItem = memo((props: InteractionItemProps) => {
                 :   null}
             </Box>
         :   null
+    const ViewFullTransactionDetailsButton =
+        isSignRequest || !FullTransactionDetails ? null : (
+            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+                <Button variant="text" onClick={() => setExpand(!expand)}>
+                    <Typography className={classes.text}>{t.popups_wallet_view_full_detail_transaction()}</Typography>
+                    <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
+                </Button>
+            </Box>
+        )
     const CancelButton = (
         <ActionButton
             loading={cancelRunning}

@@ -359,7 +359,7 @@ export const GasSetting1559 = memo(() => {
                             <FormattedCurrency
                                 value={formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
-                                    .times(gasLimit ?? 21000)}
+                                    .times(gasLimit)}
                                 formatter={formatCurrency}
                             />
                         </Typography>

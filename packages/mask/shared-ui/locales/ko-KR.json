@@ -805,7 +805,6 @@
     "popups_wallet_gas_fee_settings_custom": "커스텀",
     "popups_wallet_gas_fee": "가스비",
     "popups_wallet_gas_price_too_low": "가스 가격이 너무 낮으면 거래가 실패할 수 있습니다.",
-    "popups_wallet_invalid_gas_limit": "가스 한도는 21,000 이상 15M 이하이어야 합니다.",
     "popups_wallet_priority_fee_is_zero": "우선 기스비는 0보다 높아야 합니다. ",
     "popups_wallet_priority_fee_is_too_high": "현재 네트워크 컨디션에 대한 최대 가스비가 너무 높습니다.",
     "popups_wallet_priority_fee_is_too_low": "네트워크 컨디션에 대한 최대 우선 가스비는 매우 낮습니다.",

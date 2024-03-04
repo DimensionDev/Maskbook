@@ -1,8 +1,8 @@
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { noop } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import { Box } from '@mui/system'
-import { Typography, useTheme } from '@mui/material'
+import { Button, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { FormattedBalance, FormattedCurrency, useGasCurrencyMenu } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -11,18 +11,19 @@ import {
     useChainIdSupport,
     useFungibleToken,
     useFungibleTokenPrice,
+    useGasLimitRange,
     useGasOptions,
     useNativeTokenAddress,
 } from '@masknet/web3-hooks-base'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
-import { type EIP1559GasConfig, type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useGasOptionsMenu } from '../../hooks/index.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 
 interface GasSettingMenuProps {
-    minimumGas: string
-    initConfig?: GasConfig
+    defaultGasLimit: string | undefined
+    defaultGasConfig?: GasConfig
     defaultChainId?: ChainId
     disable?: boolean
     onChange?: (config: GasConfig) => void
@@ -34,9 +35,9 @@ interface GasSettingMenuProps {
 }
 
 export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({
-    minimumGas,
+    defaultGasLimit,
     defaultChainId,
-    initConfig,
+    defaultGasConfig,
     paymentToken,
     disable,
     allowMaskAsGas,
@@ -46,10 +47,15 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 }) {
     const t = useMaskSharedTrans()
     const theme = useTheme()
+
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const gasRatio = useGasRatio(paymentToken)
-    const [gasConfig = initConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const [gasConfig, setGasConfig] = useState(defaultGasConfig)
+    const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const gasLimit = gasConfig?.gas || chainDefaultGasLimit
+
     const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
-        initConfig?.gasOptionType ?? GasOptionType.SLOW,
+        gasConfig?.gasOptionType ?? GasOptionType.SLOW,
     )
 
     const handleChange = useCallback(
@@ -61,7 +67,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(minimumGas, !disable ? handleChange : noop, paymentToken)
+    const [menu, openMenu] = useGasOptionsMenu(gasLimit, !disable ? handleChange : noop, paymentToken)
 
     const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
         NetworkPluginID.PLUGIN_EVM,
@@ -71,8 +77,26 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const { data: gasOptions } = useGasOptions()
 
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
-    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
+    {
+        const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
+        if (gasOptions && !gasConfig) {
+            const target = gasOptions[GasOptionType.SLOW]
+            setGasConfig(
+                isSupport1559 ?
+                    {
+                        gasOptionType: GasOptionType.SLOW,
+                        maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
+                        maxFeePerGas: target.suggestedMaxFeePerGas,
+                        gas: defaultGasLimit,
+                    }
+                :   {
+                        gasOptionType: GasOptionType.SLOW,
+                        gasPrice: target.suggestedMaxFeePerGas,
+                        gas: defaultGasLimit,
+                    },
+            )
+        }
+    }
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -102,40 +126,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     }, [gasOptionType])
 
     const totalGas = useMemo(() => {
-        if (!gasConfig) return ZERO
-        const result = new BigNumber(
-            (isSupport1559 ? (gasConfig as EIP1559GasConfig).maxFeePerGas : gasConfig.gasPrice) || ZERO,
-        ).times(minimumGas)
-
-        if (!gasRatio) return toFixed(result, 0)
-        return toFixed(result.multipliedBy(gasRatio), 0)
-    }, [gasConfig, minimumGas, gasRatio])
-
-    // If there is no init configuration, set a default config
-    useEffect(() => {
-        if (!!initConfig || !gasOptions || !onChange) return
-        const target = gasOptions[GasOptionType.SLOW]
-        const result =
-            isSupport1559 ?
-                {
-                    gasOptionType: GasOptionType.SLOW,
-                    maxPriorityFeePerGas: target.suggestedMaxPriorityFeePerGas,
-                    maxFeePerGas: target.suggestedMaxFeePerGas,
-                    gas: minimumGas,
-                }
-            :   {
-                    gasOptionType: GasOptionType.SLOW,
-                    gasPrice: target.suggestedMaxFeePerGas,
-                    gas: minimumGas,
-                }
-
-        setGasConfig((prev) => {
-            if (prev) return
-            return result
-        })
-
-        onChange(result)
-    }, [onChange, initConfig, gasOptions, isSupport1559, minimumGas])
+        if (!gasConfig || !gasLimit) return ZERO
+        const maxGasPrice = 'maxFeePerGas' in gasConfig ? gasConfig.maxFeePerGas : gasConfig.gasPrice
+        if (!maxGasPrice) return ZERO
+        const maxPriceUsed = new BigNumber(maxGasPrice).times(gasLimit)
+        if (!gasRatio) return toFixed(maxPriceUsed, 0)
+        return toFixed(maxPriceUsed.multipliedBy(gasRatio), 0)
+    }, [gasConfig, gasLimit, gasRatio])
 
     return (
         <Box display="flex" alignItems="center">
@@ -161,20 +158,23 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                 />
             </Typography>
             {!disable ?
-                <Box
-                    py={0.5}
-                    px={1.5}
-                    border={`1px solid ${theme.palette.maskColor.line}`}
-                    onClick={openMenu}
-                    borderRadius={99}
-                    display="inline-flex"
-                    alignItems="center"
-                    columnGap={0.5}>
+                <Button
+                    variant="text"
+                    sx={{
+                        py: 0.5,
+                        px: 1.5,
+                        border: `1px solid ${theme.palette.maskColor.line}`,
+                        borderRadius: 99,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        columnGap: 0.5,
+                    }}
+                    onClick={openMenu}>
                     <Typography fontWeight={700} lineHeight="18px" fontSize={14}>
                         {gasOptionName}
                     </Typography>
                     <Icons.Candle size={12} />
-                </Box>
+                </Button>
             :   null}
             {owner && allowMaskAsGas ?
                 <>

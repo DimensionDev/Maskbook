@@ -822,7 +822,6 @@
     "popups_wallet_gas_fee_settings_custom": "カスタム",
     "popups_wallet_gas_fee": "ガス料金",
     "popups_wallet_gas_price_too_low": "ガス価格が低すぎるため、取引が失敗します",
-    "popups_wallet_invalid_gas_limit": "ガス限界は21,000以上と15M以下でなければなりません。",
     "popups_wallet_priority_fee_is_zero": "優先料金は0より大きくなければなりません。 ",
     "popups_wallet_priority_fee_is_too_high": "最大優先料金がネットワーク状況に対して高すぎます。",
     "popups_wallet_priority_fee_is_too_low": "最大優先料金がネットワーク状況に対して低すぎます。",

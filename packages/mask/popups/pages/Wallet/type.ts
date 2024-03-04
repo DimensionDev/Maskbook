@@ -27,7 +27,7 @@ export enum WalletAssetTabs {
 }
 
 export type GasSetting = {
-    gas: string
+    gasLimit?: string | undefined
     gasPrice?: string
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string

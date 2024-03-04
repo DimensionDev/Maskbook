@@ -231,17 +231,15 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             </Box>
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
-                {transaction.computedPayload.gas && !!initConfig ?
-                    <GasSettingMenu
-                        minimumGas={transaction.computedPayload.gas}
-                        initConfig={initConfig}
-                        onChange={onConfigChange}
-                        paymentToken={paymentToken}
-                        allowMaskAsGas={transaction.allowMaskAsGas}
-                        owner={transaction.owner}
-                        onPaymentTokenChange={onPaymentTokenChange}
-                    />
-                :   null}
+                <GasSettingMenu
+                    defaultGasLimit={transaction.computedPayload.gas}
+                    defaultGasConfig={initConfig}
+                    onChange={onConfigChange}
+                    paymentToken={paymentToken}
+                    allowMaskAsGas={transaction.allowMaskAsGas}
+                    owner={transaction.owner}
+                    onPaymentTokenChange={onPaymentTokenChange}
+                />
             </Box>
         </Box>
     )

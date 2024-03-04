@@ -13,7 +13,7 @@ import {
     decodeFunctionParams,
 } from '@masknet/web3-shared-evm'
 import { GasSettingModal } from '../../modals/modals.js'
-import { ReplaceType } from './type.js'
+import { ReplaceType, type GasSetting } from './type.js'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -23,8 +23,8 @@ export async function modifyTransaction(
 ) {
     const candidate = transaction.candidates[transaction.indexId]
     if (!candidate) return
-    const oldGasSettings = {
-        gas: candidate.gas!,
+    const oldGasSettings: GasSetting = {
+        gasLimit: candidate.gas,
         gasPrice: candidate.gasPrice ? formatWeiToGwei(candidate.gasPrice).toFixed() : undefined,
         maxFeePerGas: candidate.maxFeePerGas ? formatWeiToGwei(candidate.maxFeePerGas).toFixed() : undefined,
         maxPriorityFeePerGas:

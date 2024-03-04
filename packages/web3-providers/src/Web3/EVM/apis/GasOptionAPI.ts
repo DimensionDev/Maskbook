@@ -7,6 +7,13 @@ import type { BaseGasOptions } from '../../../entry-types.js'
 import { EVMChainResolver } from './ResolverAPI.js'
 
 class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
+    getGasLimit(chainId: ChainId) {
+        return [
+            EVMChainResolver.minGasLimit(chainId),
+            EVMChainResolver.defaultGasLimit(chainId),
+            EVMChainResolver.maxGasLimit(chainId),
+        ]
+    }
     static HISTORICAL_BLOCKS = 4
 
     private avg(arr: number[]) {

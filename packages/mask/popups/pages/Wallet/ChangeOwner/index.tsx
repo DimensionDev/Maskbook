@@ -345,8 +345,8 @@ export default function ChangeOwner() {
                         <Typography className={classes.label}>{t.gas_fee()}</Typography>
                         <ChainContextProvider chainId={smartPayChainId}>
                             <GasSettingMenu
-                                minimumGas={gas ?? FALLBACK_GAS.toString()}
-                                initConfig={gasConfig}
+                                defaultGasLimit={gas}
+                                defaultGasConfig={gasConfig}
                                 paymentToken={paymentToken}
                                 defaultChainId={chainId}
                                 owner={wallet?.owner}
