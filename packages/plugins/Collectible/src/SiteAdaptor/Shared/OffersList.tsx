@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 247,
         justifyContent: 'center',
         overflowY: 'auto',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

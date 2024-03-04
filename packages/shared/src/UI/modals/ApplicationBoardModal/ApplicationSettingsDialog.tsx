@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1.5, 2, '6px'),
             height: 'auto',
             overflow: 'hidden scroll',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

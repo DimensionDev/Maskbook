@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         maxHeight: 240,
         overflow: 'auto',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

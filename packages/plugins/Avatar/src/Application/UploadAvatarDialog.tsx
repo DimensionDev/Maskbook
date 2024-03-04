@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         margin: 0,
         padding: 16,
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },

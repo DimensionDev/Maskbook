@@ -28,7 +28,7 @@ const useStyles = makeStyles<{
         content: {
             padding: theme.spacing(1.5, openSettings ? 2 : 0, '6px'),
             height: openSettings ? 'auto' : 546,
-            overflow: openSettings ? 'hidden scroll' : 'hidden',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

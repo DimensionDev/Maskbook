@@ -20,6 +20,7 @@ const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
             maxHeight: 1018,
             paddingTop: 0,
             overflow: 'scroll',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

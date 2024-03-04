@@ -62,6 +62,7 @@ const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
                 display: 'block !important',
                 margin: 12,
             },
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

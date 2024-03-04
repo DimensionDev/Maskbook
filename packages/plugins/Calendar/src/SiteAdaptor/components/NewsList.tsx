@@ -14,13 +14,9 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'scroll',
         position: 'relative',
         gap: '10px',
-        scrollbarWidth: 'thin',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
-            width: '4px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-            backgroundColor: theme.palette.maskColor.secondaryLine,
-            borderRadius: '99px',
+            display: 'none',
         },
         marginBottom: '50px',
     },
