@@ -11,7 +11,7 @@ export abstract class BaseHubProvider<ChainId, SchemaType, GasOption> extends Ab
 
     abstract getGasLimit?(
         chainId: ChainId,
-    ): [min: string | undefined, defaultGas: string | undefined, max: string | undefined] | undefined
+    ): readonly [min: string | undefined, defaultGas: string | undefined, max: string | undefined] | undefined
 
     abstract getTransactions?(
         chainId: ChainId,

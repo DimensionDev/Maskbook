@@ -12,7 +12,7 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
             EVMChainResolver.minGasLimit(chainId),
             EVMChainResolver.defaultGasLimit(chainId),
             EVMChainResolver.maxGasLimit(chainId),
-        ]
+        ] as const
     }
     static HISTORICAL_BLOCKS = 4
 
