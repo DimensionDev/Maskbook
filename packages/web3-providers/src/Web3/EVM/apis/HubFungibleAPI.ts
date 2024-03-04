@@ -6,7 +6,6 @@ import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
-import * as Approval from /* webpackDefer: true */ '../../../Approval/index.js'
 import * as ChainbaseFungibleToken from /* webpackDefer: true */ '../../../Chainbase/index.js'
 import * as Cloudflare from /* webpackDefer: true */ '../../../Cloudflare/index.js'
 import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
@@ -38,14 +37,12 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
                 [SourceType.Zerion]: Zerion.Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization.GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby.Rabby,
-                [SourceType.Approval]: Approval.Approval,
                 [SourceType.R2D2]: R2D2TokenList.R2D2TokenList,
                 [SourceType.CF]: Cloudflare.Cloudflare,
                 [SourceType.CoinGecko]: CoinGeckoPriceEVM.CoinGeckoPriceEVM,
             },
             [
                 DeBankFungibleToken.DeBankFungibleToken,
-                Approval.Approval,
                 Zerion.Zerion,
                 ChainbaseFungibleToken.ChainbaseFungibleToken,
                 Rabby.Rabby,
