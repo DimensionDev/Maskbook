@@ -25,7 +25,7 @@ function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
     const { data: personas = EMPTY_LIST, refetch } = useQuery({
-        queryKey: ['@@queryOwnedPersonaInformation(false)'],
+        queryKey: ['my-own-persona-info'],
         queryFn: () => queryOwnedPersonaInformation?.(false),
     })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
