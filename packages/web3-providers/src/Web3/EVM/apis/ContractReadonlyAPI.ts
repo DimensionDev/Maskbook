@@ -13,8 +13,6 @@ import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall.js'
 import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
-import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2.js'
-import type { SwapRouter } from '@masknet/web3-contracts/types/SwapRouter.js'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import type { Pair } from '@masknet/web3-contracts/types/Pair.js'
 import type { Quoter } from '@masknet/web3-contracts/types/Quoter.js'
@@ -30,8 +28,6 @@ import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
 import CryptoPunksABI from '@masknet/web3-contracts/abis/CryptoPunks.json'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
-import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
-import SwapRouterABI from '@masknet/web3-contracts/abis/SwapRouter.json'
 import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
 import PairABI from '@masknet/web3-contracts/abis/Pair.json'
 import QuoterABI from '@masknet/web3-contracts/abis/Quoter.json'
@@ -105,14 +101,6 @@ export class EVMContractReadonlyAPI {
 
     getPairContract(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<Pair>(address, PairABI as AbiItem[], initial)
-    }
-
-    getRouterV2Contract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<RouterV2>(address, RouterV2ABI as AbiItem[], initial)
-    }
-
-    getSwapRouterContract(address: string | undefined, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<SwapRouter>(address, SwapRouterABI as AbiItem[], initial)
     }
 
     getWETHContract(address: string | undefined, initial?: EVMConnectionOptions) {

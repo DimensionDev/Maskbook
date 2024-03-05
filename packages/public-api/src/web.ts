@@ -40,27 +40,6 @@ export enum Appearance {
     dark = 'dark',
 }
 
-export enum TradeProvider {
-    UNISWAP_V2 = 0,
-    ZRX = 1,
-    SUSHISWAP = 2,
-    QUICKSWAP = 5,
-    PANCAKESWAP = 6,
-    DODO = 7,
-    UNISWAP_V3 = 8,
-    BANCOR = 9,
-    OPENOCEAN = 10,
-    WANNASWAP = 11,
-    TRISOLARIS = 12,
-    TRADERJOE = 13,
-    PANGOLIN = 14,
-    MDEX = 15,
-    ARTHSWAP = 19,
-    VERSA = 20,
-    ASTAREXCHANGE = 21,
-    YUMISWAP = 22,
-}
-
 /** Supported language settings */
 export enum LanguageOptions {
     __auto__ = 'auto',

@@ -6,7 +6,6 @@ import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
 import Token from '@masknet/web3-constants/evm/token.json'
-import Trader from '@masknet/web3-constants/evm/trader.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
@@ -85,11 +84,6 @@ export const getTokenConstant = transform(ChainId, Token)
 export const getTokenConstants = transformAll(ChainId, Token)
 export const useTokenConstant = transformHook(getTokenConstants)
 export const useTokenConstants = transformAllHook(getTokenConstants)
-
-export const getTraderConstant = transform(ChainId, Trader)
-export const getTraderConstants = transformAll(ChainId, Trader)
-export const useTraderConstant = transformHook(getTraderConstants)
-export const useTraderConstants = transformAllHook(getTraderConstants)
 
 export const getTrendingConstant = transform(ChainId, Trending)
 export const getTrendingConstants = transformAll(ChainId, Trending)
