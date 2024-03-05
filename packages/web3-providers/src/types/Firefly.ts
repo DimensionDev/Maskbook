@@ -283,6 +283,8 @@ export namespace FireflyRedPacketAPI {
         tid: string
         cover: ThemeSettings
         normal: ThemeSettings
+        /** Redpacket without theme settings preset, current ones are default */
+        is_default?: boolean
     }
 
     interface Response<T> {

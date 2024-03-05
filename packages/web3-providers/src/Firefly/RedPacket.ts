@@ -90,6 +90,8 @@ export class FireflyRedPacket {
             rpid,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        // Just discard default theme, and this RedPacket will be treated as created from Mask
+        if (data.is_default) return null
 
         return {
             themeId: data.tid,
