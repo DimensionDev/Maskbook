@@ -6,9 +6,9 @@ import { Icons } from '@masknet/icons'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { openWindow } from '@masknet/shared-base-ui'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDarkFont?: boolean }>()((theme, { isDarkFont }) => ({
     linkIcon: {
-        color: theme.palette.maskColor.secondaryMainDark,
+        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : theme.palette.maskColor.secondaryMain,
         height: 16,
         width: 16,
     },
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 16,
     },
     creator: {
-        color: theme.palette.maskColor.secondaryMainDark,
+        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : theme.palette.maskColor.secondaryMain,
     },
 }))
 
@@ -28,14 +28,16 @@ interface Props {
     address: string
     ens?: string
     chainId?: ChainId
+    isDarkFont?: boolean
 }
 
 export const FireflyRedPacketAccountItem = memo(function FireflyRedPacketAccountItem({
     address,
     ens,
     chainId = ChainId.Mainnet,
+    isDarkFont,
 }: Props) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ isDarkFont })
     return (
         <Box display="flex" gap="4px" alignItems="center">
             <Typography className={classes.creator}>{ens ? ens : formatEthereumAddress(address, 4)}</Typography>
