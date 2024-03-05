@@ -292,7 +292,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 :   { amount: '-', symbol: '-' },
             )
         return ''
-    }, [listOfStatus, t, token])
+    }, [listOfStatus, t, token, availability?.claimed_amount])
 
     const subtitle = useMemo(() => {
         if (!availability || !token) return
