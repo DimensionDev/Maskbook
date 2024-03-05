@@ -163,8 +163,10 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const nextIdPlatform = configuration.nextIDConfig?.platform
 
     const { data: personaAvatar } = useQuery({
-        queryKey: ['my-own-persona-info'],
+        queryKey: ['@@my-own-persona-info'],
         queryFn: () => Services.Identity.queryOwnedPersonaInformation(false),
+        refetchOnMount: true,
+        networkMode: 'always',
         select(data) {
             const pubkey = personaInfo?.identifier.publicKeyAsHex
             const info = data.find((x) => x.identifier.publicKeyAsHex === pubkey)

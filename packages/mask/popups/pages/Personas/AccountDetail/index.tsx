@@ -83,7 +83,7 @@ const AccountDetail = memo(() => {
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.removeQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
-            queryClient.removeQueries({ queryKey: ['my-own-persona-info'] })
+            queryClient.removeQueries({ queryKey: ['@@my-own-persona-info'] })
             showSnackbar(t.popups_disconnect_success(), {
                 variant: 'success',
             })
@@ -154,7 +154,7 @@ const AccountDetail = memo(() => {
             MaskMessages.events.ownProofChanged.sendToAll()
             MaskMessages.events.ownPersonaChanged.sendToAll()
             await queryClient.refetchQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
-            await queryClient.refetchQueries({ queryKey: ['my-own-persona-info'] })
+            await queryClient.refetchQueries({ queryKey: ['@@my-own-persona-info'] })
 
             showSnackbar(t.popups_disconnect_success(), {
                 variant: 'success',
