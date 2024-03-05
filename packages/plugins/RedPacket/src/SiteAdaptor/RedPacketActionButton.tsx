@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState, useContext } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -9,6 +9,7 @@ import { RedPacketMetaKey } from '../constants.js'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
+import { CompositionTypeContext } from './RedPacketInjection.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -75,6 +76,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
     const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
+    const compositionType = useContext(CompositionTypeContext)
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
     const statusToTransMap = {
@@ -117,7 +119,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
                 shares: totalAmount,
                 total: tokenInfo.amount,
             },
-            undefined,
+            compositionType,
             { claimRequirements: claim_strategy, payloadImage },
         )
     }, [])

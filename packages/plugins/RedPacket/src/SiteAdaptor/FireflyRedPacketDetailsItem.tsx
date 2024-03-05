@@ -303,6 +303,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                             address={creator}
                                             ens={ens_name}
                                             chainId={chain_id}
+                                            isDarkFont
                                         />
                                     </div>
                                 :   null}
