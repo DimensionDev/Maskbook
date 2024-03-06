@@ -1,28 +1,28 @@
-import { injectedOKXProvider } from '@masknet/injected-script'
+import { injectedZerionProvider } from '@masknet/injected-script'
 import { isEthereumInjected, isInPageEthereumInjected } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
-    if (isEthereumInjected('okxwallet')) return Reflect.get(window, 'okxwallet')
-    if (isInPageEthereumInjected()) return injectedOKXProvider
+    if (isEthereumInjected('zerionWallet')) return Reflect.get(window, 'zerionWallet')
+    if (isInPageEthereumInjected()) return injectedZerionProvider
     // Not available on extension site.
-    return injectedOKXProvider
+    return injectedZerionProvider
 }
 
-export class OKXProvider extends EVMInjectedWalletProvider {
+export class ZerionProvider extends EVMInjectedWalletProvider {
     constructor() {
-        super(ProviderType.OKX, getInjectedProvider())
+        super(ProviderType.Coinbase, getInjectedProvider())
     }
 
     override get ready() {
-        if (isEthereumInjected('okxwallet')) return true
+        if (isEthereumInjected('zerionWallet')) return true
         if (isInPageEthereumInjected()) return super.ready
         return false
     }
 
     override get readyPromise() {
-        if (isEthereumInjected('okxwallet')) return Promise.resolve()
+        if (isEthereumInjected('zerionWallet')) return Promise.resolve()
         if (isInPageEthereumInjected()) return super.readyPromise
         return Promise.resolve()
     }

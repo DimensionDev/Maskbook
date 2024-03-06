@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <mask id="bitget_svg__mask0_9925_44" width="24" height="24" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance">
+        <path fill="#fff" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12s5.373 12 12 12 12-5.373 12-12Z"/>
+    </mask>
+    <g mask="url('#bitget_svg__mask0_9925_44')">
+        <path fill="#000" d="M23.86 11.96c0-6.609-5.357-11.968-11.967-11.968S-.074 5.35-.074 11.96c0 6.609 5.357 11.967 11.967 11.967 6.609 0 11.968-5.357 11.968-11.967Z"/>
+        <path fill="#54FFF5" d="M23.86 11.96c0-6.609-5.357-11.968-11.967-11.968S-.074 5.35-.074 11.96c0 6.609 5.357 11.967 11.967 11.967 6.609 0 11.968-5.357 11.968-11.967Z"/>
+        <g filter="url('#bitget_svg__filter0_f_9925_44')">
+            <path fill="#fff" d="M1.186 18.56c-4.003 11.26 17.408 8.08 28.613 5.083C41.267 19.838 33.34 3.061 25.114 2.69c-8.225-.372 1.02 7.757-5.966 10.078-6.987 2.323-12.96-8.284-17.963 5.792Z"/>
+        </g>
+        <g filter="url('#bitget_svg__filter1_f_9925_44')">
+            <path fill="#00FFF0" fill-opacity=".67" d="M7.921-4.293c-2.1-5.736-9.577 2.041-13.053 6.647-3.316 5.01 5.34 9.339 8.735 6.991C6.997 6.997.653 6.54 2.672 3.487c2.02-3.053 7.874-.609 5.249-7.78Z"/>
+        </g>
+        <g filter="url('#bitget_svg__filter2_f_9925_44')">
+            <path fill="#9D81FF" d="M8.947 21.068c-2.864-9.636-15.2-4.561-21.009-.82-5.589 4.43 7.68 17.175 13.191 16.522 5.512-.651-4.42-6.2-1.017-8.901 3.403-2.7 12.414 5.244 8.835-6.8Z"/>
+        </g>
+        <g filter="url('#bitget_svg__filter3_f_9925_44')">
+            <path fill="#4D94FF" d="M26.303-10.046c-6.178-7.356-15.02-1.273-18.67 2.688C4.44-2.874 20.894 5.342 25.46 3.934c4.568-1.408-6.227-4.322-4.284-7.055 1.943-2.734 12.848 2.27 5.126-6.925Z"/>
+        </g>
+        <path fill="#000" fill-rule="evenodd" d="M8.81 14.328h3.985L8.261 9.661l4.591-4.667 1.252-1.244H9.966L4.698 9.167a.708.708 0 0 0 .003.986l4.108 4.175Zm2.395-4.656 4.533 4.667-4.591 4.667-1.252 1.244h4.138l5.268-5.416a.708.708 0 0 0-.003-.986L15.19 9.672h-3.986.001Z" clip-rule="evenodd"/>
+    </g>
+    <defs>
+        <filter id="bitget_svg__filter0_f_9925_44" width="62.532" height="51.487" x="-13.152" y="-11.169" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur result="effect1_foregroundBlur_9925_44" stdDeviation="6.923"/>
+        </filter>
+        <filter id="bitget_svg__filter1_f_9925_44" width="42.153" height="44.015" x="-19.721" y="-20.168" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur result="effect1_foregroundBlur_9925_44" stdDeviation="6.923"/>
+        </filter>
+        <filter id="bitget_svg__filter2_f_9925_44" width="50.873" height="48.965" x="-27.254" y="1.676" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur result="effect1_foregroundBlur_9925_44" stdDeviation="6.923"/>
+        </filter>
+        <filter id="bitget_svg__filter3_f_9925_44" width="49.502" height="45.286" x="-6.621" y="-27.346" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur result="effect1_foregroundBlur_9925_44" stdDeviation="6.923"/>
+        </filter>
+    </defs>
+</svg>

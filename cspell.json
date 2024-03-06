@@ -1,7 +1,13 @@
 {
     "version": "0.2",
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-    "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "dictionaries": [
+        "typescript",
+        "node",
+        "html",
+        "css",
+        "fonts"
+    ],
     "ignorePaths": [
         "./packages/icons/countries/**",
         "./packages/web3-contracts/types/**",
@@ -44,6 +50,8 @@
         "bips",
         "birthdate",
         "bitcointalk",
+        "bitget",
+        "bitkeep",
         "blockhash",
         "blockie",
         "blockies",
@@ -195,6 +203,7 @@
         "nomics",
         "nums",
         "oeth",
+        "onekey",
         "opengraph",
         "opensea",
         "openswap",
@@ -251,6 +260,7 @@
         "resizer",
         "rhonin",
         "rindexed",
+        "Ronin",
         "rpid",
         "sablier",
         "sbch",
@@ -293,6 +303,7 @@
         "traderjoe",
         "transak",
         "trisolaris",
+        "trustwallet",
         "twimg",
         "twitterblue",
         "txid",
@@ -463,15 +474,22 @@
         "yumiswap",
         "zkscan"
     ],
-    "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
+    "ignoreRegExpList": [
+        "/@servie/",
+        "/[A-Za-z0-9]{46}/"
+    ],
     "overrides": [
         {
             "filename": "**/*.md",
-            "ignoreWords": ["jkoeaghipilijlahjplgbfiocjhldnap"]
+            "ignoreWords": [
+                "jkoeaghipilijlahjplgbfiocjhldnap"
+            ]
         },
         {
             "filename": "packages/web3-shared/evm/assets/**/*.json",
-            "ignoreWords": ["görli"]
+            "ignoreWords": [
+                "görli"
+            ]
         },
         {
             "filename": "**/qya-AA.json",

@@ -1,87 +1,51 @@
-import { Icons } from '@masknet/icons'
 import { WalletIcon, useSharedTrans } from '@masknet/shared'
-import {
-    NetworkPluginID,
-    Sniffings,
-    getSiteType,
-    pluginIDsSettings,
-    type SingletonModalRefCreator,
-} from '@masknet/shared-base'
+import { NetworkPluginID, getSiteType, pluginIDsSettings, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { ActionButton, LoadingBase, MaskColorVar, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useChainContext,
-    useNetworkContext,
-    useNetworkDescriptor,
-    useProviderDescriptor,
-    useWeb3Utils,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
 import { getUtils, getWeb3Connection } from '@masknet/web3-providers'
 import type { Connection } from '@masknet/web3-providers/types'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box, Card, DialogContent, Link, Paper, Typography, dialogClasses } from '@mui/material'
+import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
 import { forwardRef, useRef } from 'react'
-import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
+import { Spinner } from './Spinner.js'
+import { Icons } from '@masknet/icons'
 
-const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
+const useStyles = makeStyles()((theme) => ({
     dialog: {
         minHeight: 'auto !important',
         [`.${dialogClasses.paper}`]: {
             minHeight: 'unset !important',
+            height: 400,
+            width: 600,
         },
     },
     dialogContent: {
-        padding: theme.spacing(2),
-    },
-
-    cardContent: {
-        padding: theme.spacing('22px', '12px'),
-        borderRadius: 8,
-        background: props.contentBackground ?? theme.palette.background.default,
-    },
-    tipContent: {
+        padding: 0,
+        flexDirection: 'column',
         display: 'flex',
-        flexWrap: 'nowrap',
         alignItems: 'center',
-        marginTop: 12,
-        backgroundColor: MaskColorVar.warningBackground,
-        padding: '13px 12px',
-        borderRadius: 8,
     },
-    tipContentText: {
-        color: MaskColorVar.warning,
-        fontSize: 13,
-        marginLeft: 8.5,
+    spinner: {
+        position: 'absolute',
     },
-    tipLink: {
-        color: MaskColorVar.warning,
-        textDecoration: 'underline',
+    walletIcon: {
+        position: 'absolute',
+        inset: 0,
+        margin: 'auto',
     },
-    connectWith: {
-        fontSize: '14px',
-        color: Sniffings.is_dashboard_page ? '#07101B' : theme.palette.common.black,
-        fontWeight: 700,
-    },
-    error: {
-        paddingRight: theme.spacing(1),
-    },
-    progressIcon: {
-        fontSize: 14,
-        color: theme.palette.common.white,
-    },
-    progress: {
-        color: theme.palette.common.black,
-    },
-    warningTriangleIcon: {
-        fontSize: 20,
+    errorIcon: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
     },
     retryButton: {
         fontSize: 12,
         backgroundColor: theme.palette.maskColor.publicMain,
         color: theme.palette.maskColor.white,
+        marginTop: theme.spacing(1.5),
         '&:hover': {
             backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
@@ -110,15 +74,13 @@ export const ConnectWalletModal = forwardRef<
     const { pluginID, providerType, networkType } = connectionRef.current ?? {}
 
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)
-    const networkDescriptor = useNetworkDescriptor(pluginID, networkType)
 
-    const { classes } = useStyles({ contentBackground: providerDescriptor?.backgroundGradient })
+    const { classes, theme } = useStyles()
 
-    const Utils = useWeb3Utils(pluginID)
     const { setPluginID } = useNetworkContext()
     const { setNetworkType, setProviderType } = useChainContext()
 
-    const [{ loading, value: connected, error }, onConnect] = useAsyncFn(async () => {
+    const [{ loading, error }, onConnect] = useAsyncFn(async () => {
         if (!connectionRef.current) throw new Error('Failed to connect to provider. No connection info provided')
 
         const { pluginID, providerType, networkType } = connectionRef.current
@@ -162,7 +124,7 @@ export const ConnectWalletModal = forwardRef<
             }
 
             const connected = await onConnect()
-            if (connected === true) dispatch?.close(true)
+            if (connected) dispatch?.close(true)
         },
     })
 
@@ -170,95 +132,61 @@ export const ConnectWalletModal = forwardRef<
 
     if (!pluginID || !providerType || !networkType) return null
 
+    const providerName = providerDescriptor?.name || '...'
+    const { maskColor } = theme.palette
+    const isCanceled = error?.message === 'User rejected the request.'
+
     return (
         <InjectedDialog
-            title={t.plugin_wallet_dialog_title()}
+            title={t.connect_with_wallet({ wallet: providerName })}
             open={open}
             onClose={() => dispatch?.close(false)}
             maxWidth="sm"
             className={classes.dialog}>
             <DialogContent className={classes.dialogContent}>
-                <Paper elevation={0}>
-                    <Card className={`${classes.cardContent} dashboard-style`} elevation={0}>
-                        <Box display="flex" alignItems="center">
-                            <WalletIcon
-                                size={30}
-                                badgeSize={12}
-                                mainIcon={providerDescriptor?.icon}
-                                badgeIcon={networkDescriptor?.icon}
-                            />
-                            <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
-                                <Typography className={classes.connectWith}>
-                                    {loading ?
-                                        t.plugin_wallet_connect_to()
-                                    : connected ?
-                                        t.plugin_wallet_connected_to()
-                                    :   t.plugin_wallet_connect_to()}{' '}
-                                    {Utils.providerResolver.providerName(providerType)}
-                                </Typography>
-                                {loading ?
-                                    <Box display="flex" alignItems="center">
-                                        <LoadingBase
-                                            className={classes.progressIcon}
-                                            size={14}
-                                            sx={{ marginRight: 1 }}
-                                        />
-                                        <Typography variant="body2" className={classes.progress}>
-                                            {t.initializing()}
-                                        </Typography>
-                                    </Box>
-                                :   null}
-                                {!loading && error ?
-                                    <Typography className={classes.error} color="red" variant="body2">
-                                        {(
-                                            error.message?.includes('Already processing eth_requestAccounts') ||
-                                            error.message?.includes(
-                                                "Request of type 'wallet_requestPermissions' already pending for origin",
-                                            )
-                                        ) ?
-                                            t.plugin_wallet_metamask_error_already_request()
-                                        :   error.message ?? 'Something went wrong.'}
-                                    </Typography>
-                                :   null}
-                            </Box>
-                            {!connected && error ?
-                                <ActionButton
-                                    loading={loading}
-                                    color="primary"
-                                    onClick={onConnect}
-                                    disabled={loading}
-                                    className={classes.retryButton}>
-                                    {t.plugin_wallet_connect_to_retry()}
-                                </ActionButton>
-                            :   null}
-                        </Box>
-                    </Card>
-                </Paper>
-                {providerDescriptor?.type === ProviderType.WalletConnect ? null : (
-                    <Card className={classes.tipContent} elevation={0}>
-                        <Icons.WarningTriangle className={classes.warningTriangleIcon} />
-                        <Typography className={classes.tipContentText} variant="body2">
-                            <Trans
-                                i18nKey="plugin_wallet_connect_tip"
-                                components={{
-                                    providerLink:
-                                        Utils.providerResolver.providerHomeLink(providerType) ?
-                                            <Link
-                                                className={classes.tipLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                href={Utils.providerResolver.providerHomeLink(providerType)}
-                                            />
-                                        :   <span />,
-                                }}
-                                values={{
-                                    providerName: Utils.providerResolver.providerName(providerType),
-                                    providerShortenLink: Utils.providerResolver.providerShortenLink(providerType),
-                                }}
-                            />
-                        </Typography>
-                    </Card>
-                )}
+                <Box width={90} height={90} position="relative" mt={9}>
+                    <Spinner
+                        className={classes.spinner}
+                        variant={
+                            loading ? 'loading'
+                            : error ?
+                                'error'
+                            :   'loading'
+                        }
+                    />
+                    {error && !loading ?
+                        <Icons.ColorfulClose className={classes.errorIcon} size={24} color={maskColor.danger} />
+                    :   null}
+                    <WalletIcon
+                        className={classes.walletIcon}
+                        size={60}
+                        badgeSize={12}
+                        mainIcon={providerDescriptor?.icon}
+                    />
+                </Box>
+                <Typography
+                    fontWeight={700}
+                    fontSize={16}
+                    mt={1.5}
+                    color={error && !loading ? maskColor.danger : undefined}>
+                    {t.requesting_connection()}
+                </Typography>
+                <Typography fontWeight={400} mt={1.5}>
+                    {isCanceled && !loading ?
+                        t.you_canceled_the_request()
+                    :   t.check_to_confirm_connect({ wallet: providerName })}
+                </Typography>
+                {error ?
+                    <ActionButton
+                        variant="roundedContained"
+                        loading={loading}
+                        color="primary"
+                        onClick={onConnect}
+                        disabled={loading}
+                        className={classes.retryButton}>
+                        {t.retry()}
+                    </ActionButton>
+                :   null}
             </DialogContent>
         </InjectedDialog>
     )

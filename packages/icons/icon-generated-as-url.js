@@ -152,6 +152,7 @@ export function checkbox_no_url() { return new URL("./general/CheckboxNo.svg", i
 export function check_circle_url() { return new URL("./general/CheckCircle.svg", import.meta.url).href }
 export function chevron_up_url() { return new URL("./general/ChevronUp.svg", import.meta.url).href }
 export function china_url() { return new URL("./general/China.svg", import.meta.url).href }
+export function chrome_url() { return new URL("./general/Chrome.svg", import.meta.url).href }
 export function circle_close_url() { return new URL("./general/CircleClose.svg", import.meta.url).href }
 export function circle_loading_url() { return new URL("./general/CircleLoading.svg", import.meta.url).href }
 export function circle_warning_url() { return new URL("./general/CircleWarning.svg", import.meta.url).href }
@@ -164,6 +165,7 @@ export function cloud_backup_2_url() { return new URL("./general/CloudBackup2.sv
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url).href }
 export function cny_url() { return new URL("./general/CNY.svg", import.meta.url).href }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url).href }
+export function colorful_close_url() { return new URL("./general/ColorfulClose.svg", import.meta.url).href }
 export function comeback_url() { return new URL("./general/Comeback.svg", import.meta.url).href }
 export function comment_url() { return new URL("./general/Comment.svg", import.meta.url).href }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url).href }
