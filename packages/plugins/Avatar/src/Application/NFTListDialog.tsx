@@ -61,13 +61,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         display: 'flex',
     },
-    addButton: {
-        cursor: 'pointer',
-        fontWeight: 700,
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.primary,
-    },
     noWallet: {
         display: 'flex',
         justifyContent: 'center',
