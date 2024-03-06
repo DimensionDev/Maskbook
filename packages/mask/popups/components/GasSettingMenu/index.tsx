@@ -50,7 +50,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const gasRatio = useGasRatio(paymentToken)
-    const [gasConfig, setGasConfig] = useState(defaultGasConfig)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gasLimit = gasConfig?.gas || defaultGasLimit || chainDefaultGasLimit
 
@@ -79,7 +79,10 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     {
         const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
-        if (gasOptions && !gasConfig) {
+        const [prevChainId, setPrevChainId] = useState(chainId)
+        if (prevChainId !== chainId) setPrevChainId(chainId)
+
+        if (gasOptions && (!gasConfig || prevChainId !== chainId)) {
             const target = gasOptions[GasOptionType.SLOW]
             setGasConfig(
                 isSupport1559 ?
