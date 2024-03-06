@@ -155,7 +155,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const gasLimit = gasResult.data?.toString() ?? fallbackGasLimit
     const { isPending: isLoadingGasLimit } = gasResult
     const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
-    const [gasConfig, setGasConfig] = useState(defaultGasConfig)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const patchedGasConfig = useMemo(
         () => ({ gas: gasLimit, ...gasConfig, gasCurrency: paymentAddress }),
         [gasConfig, paymentAddress, gasLimit],

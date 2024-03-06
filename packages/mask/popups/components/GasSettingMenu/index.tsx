@@ -112,7 +112,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken ? paymentToken : nativeTokenAddress,
     )
 
-    const gasOptionName = useMemo(() => {
+    const gasOptionName = (() => {
         switch (gasOptionType) {
             case GasOptionType.FAST:
                 return t.popups_wallet_gas_fee_settings_instant()
@@ -123,7 +123,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             default:
                 return t.popups_wallet_gas_fee_settings_custom()
         }
-    }, [gasOptionType])
+    })()
 
     const totalGas = useMemo(() => {
         if (!gasConfig || !gasLimit) return ZERO
