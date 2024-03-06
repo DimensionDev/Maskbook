@@ -4,6 +4,7 @@ import { BaseHubProvider } from '../../Base/apis/HubBase.js'
 
 export class FlowBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> {
     override getGasOptions = undefined
+    override getGasLimit = undefined
     override getTransactions = undefined
     protected override HubOptions = new FlowHubOptionsAPI(this.options)
 }

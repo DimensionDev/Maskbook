@@ -822,7 +822,6 @@
     "popups_wallet_gas_fee_settings_custom": "crwdns21889:0crwdne21889:0",
     "popups_wallet_gas_fee": "crwdns21891:0crwdne21891:0",
     "popups_wallet_gas_price_too_low": "crwdns21893:0crwdne21893:0",
-    "popups_wallet_invalid_gas_limit": "crwdns22039:0crwdne22039:0",
     "popups_wallet_priority_fee_is_zero": "crwdns22041:0crwdne22041:0",
     "popups_wallet_priority_fee_is_too_high": "crwdns22043:0crwdne22043:0",
     "popups_wallet_priority_fee_is_too_low": "crwdns22045:0crwdne22045:0",

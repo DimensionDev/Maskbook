@@ -269,8 +269,8 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
                 {transaction.computedPayload.gas && initConfig ?
                     <GasSettingMenu
-                        minimumGas={transaction.computedPayload.gas}
-                        initConfig={initConfig}
+                        defaultGasLimit={transaction.computedPayload.gas}
+                        defaultGasConfig={initConfig}
                         onChange={onConfigChange}
                         onPaymentTokenChange={onPaymentTokenChange}
                         owner={transaction.owner}

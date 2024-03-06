@@ -820,7 +820,6 @@
     "popups_wallet_gas_fee_settings_custom": "自定义",
     "popups_wallet_gas_fee": "Gas 费",
     "popups_wallet_gas_price_too_low": "Gas 加个过低有几率会导致交易失败。",
-    "popups_wallet_invalid_gas_limit": "Gas 限制必须大于21,000和< 15M。",
     "popups_wallet_priority_fee_is_zero": "优先费必须大于0。 ",
     "popups_wallet_priority_fee_is_too_high": "最大优先费用在当前网络环境下过高。",
     "popups_wallet_priority_fee_is_too_low": "最大优先费用在当前网络环境下过低。",
