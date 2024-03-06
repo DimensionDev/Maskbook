@@ -47,9 +47,9 @@ export async function shouldSuggestConnectInPopup(url?: string): Promise<boolean
     if (!url) {
         const tabs = await browser.tabs.query({ active: true })
         if (!tabs.length) return false
-        ;[{ url }] = tabs
-        if (!url) return false
+        url = tabs[0].url
     }
+    if (!url) return false
     return canInject(url) && !(await browser.permissions.contains({ origins: [new URL(url).origin + '/*'] }))
 }
 

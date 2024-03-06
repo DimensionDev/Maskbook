@@ -52,7 +52,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const gasRatio = useGasRatio(paymentToken)
     const [gasConfig, setGasConfig] = useState(defaultGasConfig)
     const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const gasLimit = gasConfig?.gas || chainDefaultGasLimit
+    const gasLimit = gasConfig?.gas || defaultGasLimit || chainDefaultGasLimit
 
     const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
         gasConfig?.gasOptionType ?? GasOptionType.SLOW,

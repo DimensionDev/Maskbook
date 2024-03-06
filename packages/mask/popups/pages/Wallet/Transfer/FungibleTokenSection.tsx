@@ -157,7 +157,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
     const defaultGasConfig = useDefaultGasConfig(chainId, gasLimit)
     const [gasConfig, setGasConfig] = useState(defaultGasConfig)
     const patchedGasConfig = useMemo(
-        () => ({ ...gasConfig, gasCurrency: paymentAddress, gas: gasLimit }),
+        () => ({ gas: gasLimit, ...gasConfig, gasCurrency: paymentAddress }),
         [gasConfig, paymentAddress, gasLimit],
     )
     const {
