@@ -227,6 +227,7 @@ export function jpy_url() { return new URL("./general/JPY.svg", import.meta.url)
 export function key_square_url() { return new URL("./general/KeySquare.svg", import.meta.url).href }
 export function left_arrow_url() { return new URL("./general/LeftArrow.svg", import.meta.url).href }
 export function like_url() { return new URL("./general/Like.svg", import.meta.url).href }
+export function line_add_url() { return new URL("./general/LineAdd.svg", import.meta.url).href }
 export function linear_calendar_dark_url() { return new URL("./general/LinearCalendar.dark.svg", import.meta.url).href }
 export function linear_calendar_light_url() { return new URL("./general/LinearCalendar.light.svg", import.meta.url).href }
 export function link_url() { return new URL("./general/Link.svg", import.meta.url).href }

@@ -19,6 +19,7 @@ export function useFriendsPaged() {
     const relationQuery = useQuery({
         queryKey: ['relation-records', currentPersona?.identifier.rawPublicKey],
         queryFn: async () => {
+            if (!currentPersona) return EMPTY_LIST
             return Services.Identity.queryRelationPaged(
                 currentPersona?.identifier,
                 {
@@ -69,7 +70,7 @@ export function useFriendsPaged() {
     }, [relationQuery.refetch, friendsQuery.refetch])
 
     return [
-        { isPending: relationQuery.isPending || friendsQuery.isPending, refetch, records },
+        { isPending: relationQuery.isLoading || friendsQuery.isLoading, refetch, records },
         relationQuery,
         friendsQuery,
     ] as const
