@@ -21,7 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         alignSelf: 'stretch',
     },
     listItem: {
-        padding: '8px 12px',
         borderRadius: 6,
         display: 'flex',
         gap: 4,

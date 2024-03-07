@@ -2306,6 +2306,11 @@ export const Like = /*#__PURE__*/ __createIcon(
     ],
     [22, 20],
 )
+export const LineAdd = /*#__PURE__*/ __createIcon('LineAdd', [
+    {
+        u: () => new URL('./general/LineAdd.svg', import.meta.url).href,
+    },
+])
 export const LinearCalendar = /*#__PURE__*/ __createIcon('LinearCalendar', [
     {
         c: ['dark'],
