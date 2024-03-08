@@ -114,6 +114,7 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
         SocialAddressType.Lens,
         SocialAddressType.TwitterBlue,
         SocialAddressType.Address,
+        SocialAddressType.SOL,
     ].find((x) => supportedAddressTypes.includes(x))
     const fromNextId = supportedAddressTypes.includes(SocialAddressType.NEXT_ID)
 
@@ -190,12 +191,6 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
             {
                 type: SocialAddressType.Lens,
                 icon: <Icons.Lens className={roundedClasses} size={18} style={iconStyle} />,
-            }
-        :   null,
-        supportedAddressTypes.includes(SocialAddressType.SOL) ?
-            {
-                type: SocialAddressType.SOL,
-                icon: <Icons.Solana className={roundedClasses} size={18} style={iconStyle} />,
             }
         :   null,
     ])
