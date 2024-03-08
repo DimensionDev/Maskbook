@@ -16,7 +16,7 @@ export const WalletConnectQRCodeModal = forwardRef<SingletonModalRefCreator<Wall
             },
         })
 
-        if (!open) return null
+        if (!open || !uri) return null
         return <QRCodeDialog uri={uri} open onClose={() => dispatch?.close()} />
     },
 )

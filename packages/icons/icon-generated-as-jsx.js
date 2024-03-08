@@ -1198,6 +1198,11 @@ export const China = /*#__PURE__*/ __createIcon('China', [
         u: () => new URL('./general/China.svg', import.meta.url).href,
     },
 ])
+export const Chrome = /*#__PURE__*/ __createIcon('Chrome', [
+    {
+        u: () => new URL('./general/Chrome.svg', import.meta.url).href,
+    },
+])
 export const CircleClose = /*#__PURE__*/ __createIcon('CircleClose', [
     {
         u: () => new URL('./general/CircleClose.svg', import.meta.url).href,
@@ -1373,6 +1378,35 @@ export const Collectible = /*#__PURE__*/ __createIcon(
     ],
     [13, 12],
 )
+export const ColorfulClose = /*#__PURE__*/ __createIcon('ColorfulClose', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
     {
         j: () =>

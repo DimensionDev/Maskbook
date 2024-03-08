@@ -7,14 +7,21 @@ import { WalletConnectProvider } from './WalletConnect.js'
 import { EVM_Coin98Provider } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
+import { BitGetProvider } from './BitGet.js'
+import { RainbowProvider } from './Rainbow.js'
+import { RoninProvider } from './Ronin.js'
+import { OneKeyProvider } from './OneKey.js'
+import { RabbyProvider } from './Rabby.js'
 import { CloverProvider } from './Clover.js'
 import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
+import { ZerionProvider } from './Zerion.js'
 import { MaskWalletProvider, setMaskWalletProviderInstance } from './MaskWallet.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
 import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
+import { TrustProvider } from './Trust.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
@@ -37,10 +44,17 @@ export function createEVMWalletProviders(
             Flags.wc_enabled ? new WalletConnectProvider(context.WalletConnectContext) : new EVMNoneProvider(),
         [ProviderType.Coin98]: new EVM_Coin98Provider(),
         [ProviderType.Coinbase]: new CoinbaseProvider(),
+        [ProviderType.BitGet]: new BitGetProvider(),
         [ProviderType.OKX]: new OKXProvider(),
+        [ProviderType.OneKey]: new OneKeyProvider(),
+        [ProviderType.Rabby]: new RabbyProvider(),
+        [ProviderType.Rainbow]: new RainbowProvider(),
+        [ProviderType.Ronin]: new RoninProvider(),
+        [ProviderType.Trust]: new TrustProvider(),
         [ProviderType.Clover]: new CloverProvider(),
         [ProviderType.Fortmatic]: new FortmaticProvider(),
         [ProviderType.Opera]: new OperaProvider(),
+        [ProviderType.Zerion]: new ZerionProvider(),
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     } satisfies Record<ProviderType, EVMWalletProvider>
     EVMWalletProviders = p

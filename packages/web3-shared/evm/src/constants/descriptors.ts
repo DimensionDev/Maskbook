@@ -369,7 +369,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Browser,
         name: 'Browser Wallet',
-        icon: new URL('../assets/metamask.png', import.meta.url).href,
+        icon: new URL('../assets/metamask.svg', import.meta.url).href,
         enableRequirements:
             process.env.NODE_ENV === 'development' ?
                 {
@@ -390,7 +390,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.CustomEvent,
         name: 'Custom Event Wallet',
-        icon: new URL('../assets/metamask.png', import.meta.url).href,
+        icon: new URL('../assets/metamask.svg', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [EnhanceableSite.Firefly],
@@ -408,7 +408,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.MetaMask,
         name: 'MetaMask',
-        icon: new URL('../assets/metamask.png', import.meta.url).href,
+        icon: new URL('../assets/metamask.svg', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
@@ -479,7 +479,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.OKX,
         name: 'OKX Wallet',
-        icon: new URL('../assets/okx.png', import.meta.url).href,
+        icon: new URL('../assets/okx.svg', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
             supportedEnhanceableSites: EnhanceableSiteList,
@@ -488,6 +488,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
         downloadLink: 'https://www.okx.com/web3',
+        iconFilterColor: 'rgba(0, 0, 0, 0.20)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
@@ -540,6 +541,127 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         shortenLink: 'fortmatic.com',
         downloadLink: 'https://fortmatic.com',
         iconFilterColor: 'rgba(104, 81, 255, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_bitget`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.BitGet,
+        name: 'BitGet',
+        icon: new URL('../assets/bitget.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://web3.bitget.com/',
+        shortenLink: 'web3.bitget.com',
+        downloadLink: 'https://web3.bitget.com/en/wallet-download?type=2',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_onekey`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.OneKey,
+        name: 'OneKey',
+        icon: new URL('../assets/onekey.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://onekey.so/',
+        shortenLink: 'onekey.so',
+        downloadLink: 'https://onekey.so/download?client=browserExtension',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_rabby`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Rabby,
+        name: 'Rabby',
+        icon: new URL('../assets/rabby.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://rabby.io/',
+        shortenLink: 'rabby.io',
+        downloadLink: 'https://rabby.io/',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_rainbow`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Rainbow,
+        name: 'Rainbow',
+        icon: new URL('../assets/rainbow.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://rainbow.me/',
+        shortenLink: 'rainbow.me',
+        downloadLink: 'https://rainbow.me/download',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_ronin`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Ronin,
+        name: 'Ronin',
+        icon: new URL('../assets/ronin.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://wallet.roninchain.com/',
+        shortenLink: 'wallet.roninchain.com',
+        downloadLink: 'https://wallet.roninchain.com/',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_zerion`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Zerion,
+        name: 'Zerion',
+        icon: new URL('../assets/zerion.svg', import.meta.url).href,
+        enableRequirements:
+            process.env.NODE_ENV === 'development' ?
+                {
+                    supportedChainIds: ChainIdList,
+                    supportedEnhanceableSites: EnhanceableSiteList,
+                    supportedExtensionSites: ExtensionSiteList,
+                }
+            :   undefined,
+        homeLink: 'https://zerion.io/',
+        shortenLink: 'zerion.io',
+        downloadLink: 'https://zerion.io/',
+        iconFilterColor: 'rgba(41, 98, 239, 0.20)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },

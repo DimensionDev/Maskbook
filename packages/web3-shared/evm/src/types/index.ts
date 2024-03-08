@@ -316,6 +316,13 @@ export enum ProviderType {
     OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
+    BitGet = 'BitGet',
+    OneKey = 'OneKey',
+    Rabby = 'Rabby',
+    Rainbow = 'Rainbow',
+    Ronin = 'Ronin',
+    Trust = 'Trust',
+    Zerion = 'Zerion',
     CustomEvent = 'CustomEvent',
 }
 

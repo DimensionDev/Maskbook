@@ -1,28 +1,28 @@
-import { injectedOKXProvider } from '@masknet/injected-script'
+import { injectedRoninProvider } from '@masknet/injected-script'
 import { isEthereumInjected, isInPageEthereumInjected } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
-    if (isEthereumInjected('okxwallet')) return Reflect.get(window, 'okxwallet')
-    if (isInPageEthereumInjected()) return injectedOKXProvider
+    if (isEthereumInjected('ronin')) return Reflect.get(window, 'ronin')
+    if (isInPageEthereumInjected()) return injectedRoninProvider
     // Not available on extension site.
-    return injectedOKXProvider
+    return injectedRoninProvider
 }
 
-export class OKXProvider extends EVMInjectedWalletProvider {
+export class RoninProvider extends EVMInjectedWalletProvider {
     constructor() {
-        super(ProviderType.OKX, getInjectedProvider())
+        super(ProviderType.Ronin, getInjectedProvider())
     }
 
     override get ready() {
-        if (isEthereumInjected('okxwallet')) return true
+        if (isEthereumInjected('ronin')) return true
         if (isInPageEthereumInjected()) return super.ready
         return false
     }
 
     override get readyPromise() {
-        if (isEthereumInjected('okxwallet')) return Promise.resolve()
+        if (isEthereumInjected('ronin')) return Promise.resolve()
         if (isInPageEthereumInjected()) return super.readyPromise
         return Promise.resolve()
     }
