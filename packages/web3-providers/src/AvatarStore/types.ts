@@ -13,6 +13,7 @@ export interface AvatarNextID<T extends NetworkPluginID> {
     ownerAddress?: string
     nickname?: string
     imageUrl?: string
+    sign?: string
 }
 
 export interface AvatarToken {

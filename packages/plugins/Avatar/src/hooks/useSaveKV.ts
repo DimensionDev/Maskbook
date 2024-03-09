@@ -6,7 +6,7 @@ import {
     type NetworkPluginID,
     getEnhanceableSiteType,
 } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types.js'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { useSaveAvatar } from './useSaveAvatar.js'
 
 export function useSaveKV(pluginID: NetworkPluginID) {
@@ -14,15 +14,14 @@ export function useSaveKV(pluginID: NetworkPluginID) {
     const [, saveAvatar] = useSaveAvatar(pluginID)
 
     return useAsyncFn(
-        async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
+        async (info: AvatarNextID<NetworkPluginID>, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
             const siteType = getEnhanceableSiteType()
             if (!siteType) return
 
             const sign = await Web3.signMessage('message', JSON.stringify(info), {
                 account,
             })
-
-            return saveAvatar(account, siteType, info, sign)
+            return saveAvatar(siteType, account, info, sign)
         },
         [Web3, saveAvatar],
     )

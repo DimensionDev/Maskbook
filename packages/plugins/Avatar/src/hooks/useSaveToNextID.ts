@@ -1,15 +1,20 @@
 import { useAsyncFn } from 'react-use'
 import { type BindingProof, type ECKeyIdentifier, NetworkPluginID, getEnhanceableSiteType } from '@masknet/shared-base'
 import { Web3Storage } from '@masknet/web3-providers'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 import { useSaveAddress } from './useSaveAddress.js'
-import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
 
 export function useSaveToNextID() {
     const [, saveAddress] = useSaveAddress()
     return useAsyncFn(
-        async (info: NextIDAvatarMeta, account: string, persona?: ECKeyIdentifier, proof?: BindingProof) => {
+        async (
+            info: AvatarNextID<NetworkPluginID>,
+            account: string,
+            persona?: ECKeyIdentifier,
+            proof?: BindingProof,
+        ) => {
             if (!proof?.identity || !persona) return
 
             const siteType = getEnhanceableSiteType()

@@ -1,11 +1,11 @@
 import { useAsyncFn } from 'react-use'
 import { NetworkPluginID, type BindingProof, type ECKeyIdentifier } from '@masknet/shared-base'
-import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
+import type { AvatarNextID, TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../types.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
+import { useSaveKV } from './useSaveKV.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
 import { useSaveStringStorage } from './useSaveStringStorage.js'
-import { useSaveKV } from './useSaveKV.js'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
@@ -26,7 +26,7 @@ export function useSave(pluginID: NetworkPluginID) {
             proof?: BindingProof,
         ) => {
             if (!token.contract?.address) return
-            const info: NextIDAvatarMeta = {
+            const info: AvatarNextID<NetworkPluginID> = {
                 pluginId: pluginID,
                 nickname: data.nickname,
                 userId: data.userId,

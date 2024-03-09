@@ -26,7 +26,7 @@ export async function getAvatar<T extends NetworkPluginID>(
     siteType: EnhanceableSite,
     userId: string,
 ): Promise<AvatarNextID<T> | null> {
-    const storage = await getAddress(userId)
+    const storage = await getAddress(siteType, userId)
     if (!storage?.address) return null
 
     if (storage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {

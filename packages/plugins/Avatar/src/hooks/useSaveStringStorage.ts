@@ -9,15 +9,15 @@ export function useSaveStringStorage(pluginID: NetworkPluginID) {
     const [, saveAddress] = useSaveAddress()
 
     return useAsyncFn(
-        async (userId: string, address: string, nft: AvatarNextID<NetworkPluginID>) => {
+        async (userId: string, address: string, avatar: AvatarNextID<NetworkPluginID>) => {
             const stringStorage = Web3Storage.createFireflyStorage(
                 `${PLUGIN_NAME}-${(getEnhanceableSiteType() || EnhanceableSite.Twitter).replace('.com', '')}`,
                 address,
             )
-            await stringStorage.set?.(userId, nft)
-            await saveAddress(nft.userId, pluginID, address, getEnhanceableSiteType())
+            await stringStorage.set?.(userId, avatar)
+            await saveAddress(avatar.userId, pluginID, address, getEnhanceableSiteType())
 
-            return nft
+            return avatar
         },
         [saveAddress],
     )

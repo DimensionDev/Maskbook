@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PersonaItemProps {
-    owner?: boolean
+    isOwner?: boolean
     avatarUrl?: string
     userId: string
     nickname?: string
@@ -41,7 +41,7 @@ interface PersonaItemProps {
 }
 
 export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
-    const { userId, onSelect, owner = false, proof, avatarUrl, nickname = '', persona = '' } = props
+    const { userId, onSelect, isOwner = false, proof, avatarUrl, nickname = '', persona = '' } = props
     const t = useAvatarTrans()
     const { classes } = useStyles()
 
@@ -75,12 +75,12 @@ export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
         onSelect(proof, tokenDetailed)
     }, [avatar, proof, onSelect])
 
-    const inactive = !owner || !proof
+    const inactive = !isOwner || !proof
 
     return (
         <ListItemButton className={classes.root} onClick={handleSelect} disabled={inactive}>
             <NFTAvatar
-                owner={owner}
+                isOwner={isOwner}
                 avatar={avatarUrl || avatar?.imageUrl}
                 hasBorder={!!avatar}
                 platform={proof?.platform}

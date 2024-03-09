@@ -1,19 +1,19 @@
 import { useAsyncFn } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
+import { type AvatarNextID } from '@masknet/web3-providers/types'
 import { NetworkPluginID, type EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'
-import type { NextIDAvatarMeta, AvatarMeta } from '../types.js'
 import { NFT_AVATAR_METADATA_STORAGE } from '../constants.js'
 
 export function useSaveAvatar(pluginID?: NetworkPluginID) {
     const [, saveAddress] = useSaveAddress()
 
     return useAsyncFn(
-        async (account: string, network: EnhanceableSite, avatar: NextIDAvatarMeta, sign: string) => {
+        async (siteType: EnhanceableSite, account: string, avatar: AvatarNextID<NetworkPluginID>, sign: string) => {
             if (avatar.userId === '$unknown') return
-            await saveAddress(avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, network)
-            const avatarStorage = Web3Storage.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${network}`)
-            avatarStorage?.set<AvatarMeta>(avatar.userId, {
+            await saveAddress(avatar.userId, avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM, account, siteType)
+            const avatarStorage = Web3Storage.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${siteType}`)
+            await avatarStorage?.set<AvatarNextID<NetworkPluginID>>(avatar.userId, {
                 ...avatar,
                 sign,
             })

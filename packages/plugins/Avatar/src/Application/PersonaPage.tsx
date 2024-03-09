@@ -81,9 +81,9 @@ export function PersonaPage() {
                                 <PersonaItem
                                     persona={binding?.persona}
                                     key={`avatar${i}`}
-                                    avatarUrl={socialIdentity!.avatar ?? ''}
-                                    owner
-                                    nickname={socialIdentity!.nickname}
+                                    isOwner
+                                    avatarUrl={socialIdentity?.avatar}
+                                    nickname={socialIdentity?.nickname}
                                     proof={x}
                                     userId={userId ?? x.identity}
                                     onSelect={handleSelect}
@@ -99,18 +99,12 @@ export function PersonaPage() {
                                     )
                                 ) ?
                                     null
-                                :   <PersonaItem avatarUrl="" key={`persona${i}`} userId={x.identifier.userId} />,
+                                :   <PersonaItem key={`persona${i}`} userId={x.identifier.userId} />,
                             )}
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
                             .map((x, i) => (
-                                <PersonaItem
-                                    key={i}
-                                    persona={binding?.persona}
-                                    avatarUrl=""
-                                    userId={x.identity}
-                                    proof={x}
-                                />
+                                <PersonaItem key={i} persona={binding?.persona} userId={x.identity} proof={x} />
                             ))}
                     </>
                 }

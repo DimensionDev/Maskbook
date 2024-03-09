@@ -18,14 +18,14 @@ const useStyles = makeStyles()({
 })
 
 interface NFTAvatarProps {
+    isOwner?: boolean
     hasBorder: boolean
     platform?: string
     avatar?: string
-    owner?: boolean
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
-    const { avatar, hasBorder, owner = false } = props
+    const { avatar, hasBorder, isOwner = false } = props
     const { classes } = useStyles()
 
     return (
@@ -50,7 +50,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 <Icons.TwitterXRound size={14} />
             </Stack>
-            {owner ?
+            {isOwner ?
                 <div className={classes.indicator} />
             :   null}
         </Stack>
