@@ -1,5 +1,4 @@
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import { isMobileFacebook } from '../utils/isMobile.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
 import { Flags } from '@masknet/flags'
@@ -25,24 +24,13 @@ function zipPostLinkPreview(node: DOMProxy) {
     if (node.destroyed) return
     const parentEle = node.current.parentElement
     if (!parentEle) return
-    if (isMobileFacebook) {
-        const img =
-            parentEle.querySelector('a[href*="maskbook.io"]') ??
-            parentEle.querySelector('a[href*="mask.io"]') ??
-            parentEle.querySelector('a[href*="maskbook.com"]')
-        const parent = img?.closest('section')
-        if (img && parent) {
-            parent.style.display = 'none'
-        }
-    } else {
-        const img =
-            parentEle.querySelector('a[href*="maskbook.io"] img') ??
-            parentEle.querySelector('a[href*="mask.io"] img') ??
-            parentEle.querySelector('a[href*="maskbook.com"] img')
-        const parent = img?.closest('span')
-        if (img && parent) {
-            parent.style.display = 'none'
-        }
+    const img =
+        parentEle.querySelector('a[href*="maskbook.io"] img') ??
+        parentEle.querySelector('a[href*="mask.io"] img') ??
+        parentEle.querySelector('a[href*="maskbook.com"] img')
+    const parent = img?.closest('span')
+    if (img && parent) {
+        parent.style.display = 'none'
     }
 }
 function zipEncryptedPostContent(node: DOMProxy) {
@@ -76,7 +64,7 @@ padding: 0 10px;`,
 export function clickSeeMore(node: HTMLElement | undefined | null) {
     if (!node) return
     const more = node.querySelector<HTMLDivElement | HTMLSpanElement>(
-        isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
+        '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )
 
     if (more && node.querySelector('img[alt="\uD83C\uDFBC"]')) {

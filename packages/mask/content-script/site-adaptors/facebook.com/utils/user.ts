@@ -1,48 +1,36 @@
 import { ValueRef } from '@masknet/shared-base'
 import {
-    bioDescriptionSelectorOnMobile,
     searchAvatarSelector,
     searchBioSelector,
-    searchFacebookAvatarOnMobileSelector,
     searchHomepageSelector,
     searchIntroSectionSelector,
     searchNickNameSelector,
-    searchNickNameSelectorOnMobile,
     searchUserIdSelector,
-    searchUserIdSelectorOnMobile,
 } from './selector.js'
 import { collectNodeText } from '../../../utils/index.js'
-import { isMobileFacebook } from './isMobile.js'
 
 export function getNickName(userId?: string | null) {
-    const node =
-        isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector(userId).evaluate()
+    const node = searchNickNameSelector(userId).evaluate()
     if (!node) return ''
 
     return collectNodeText(node)
 }
 
 export function getAvatar() {
-    const node =
-        isMobileFacebook ? searchFacebookAvatarOnMobileSelector().evaluate() : searchAvatarSelector().evaluate()
+    const node = searchAvatarSelector().evaluate()
     if (!node) return
 
-    const imageURL =
-        (isMobileFacebook ?
-            node.style.background.match(/\(["']?(.*?)["']?\)/)?.[1]
-        :   node.getAttribute('xlink:href')) ?? ''
-
+    const imageURL = node.getAttribute('xlink:href') ?? ''
     return imageURL.trim()
 }
 
 const bioDescription = new ValueRef('')
 export function getBioDescription() {
     const intro = searchIntroSectionSelector().evaluate()
-    const node = isMobileFacebook ? bioDescriptionSelectorOnMobile().evaluate() : searchBioSelector().evaluate()
+    const node = searchBioSelector().evaluate()
 
     if (intro && node) {
-        const text = collectNodeText(node)
-        bioDescription.value = text
+        bioDescription.value = collectNodeText(node)
     } else if (intro) {
         bioDescription.value = ''
     }
@@ -51,12 +39,12 @@ export function getBioDescription() {
 }
 
 export function getFacebookId() {
-    const node = isMobileFacebook ? searchUserIdSelectorOnMobile().evaluate() : searchUserIdSelector().evaluate()
+    const node = searchUserIdSelector().evaluate()
     if (!node?.href) return ''
 
     if (!URL.canParse(node.href, location.href)) return ''
     const url = new URL(node.href, location.href)
-    if (url.pathname === '/profile.php') return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
+    if (url.pathname === '/profile.php') return url.searchParams.get('id')
     return url.pathname.replaceAll('/', '')
 }
 

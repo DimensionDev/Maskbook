@@ -2,9 +2,8 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
-import { isMobileFacebook } from '../utils/isMobile.js'
 import { ProfileIdentifier, EnhanceableSite, type ValueRef } from '@masknet/shared-base'
-import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
+import { searchFacebookAvatarSelector } from '../utils/selector.js'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
 import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -47,8 +46,6 @@ function resolveCurrentVisitingIdentityInner(
     ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
-
     const assign = async () => {
         await delay(3000)
         const nickname = getNickName()
@@ -86,7 +83,7 @@ function resolveCurrentVisitingIdentityInner(
 
     assign()
 
-    createWatcher(selector)
+    createWatcher(searchFacebookAvatarSelector())
 }
 
 export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {

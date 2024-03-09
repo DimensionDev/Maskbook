@@ -9,7 +9,6 @@ import { searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
-import { isMobileFacebook } from '../../utils/isMobile.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { useSaveAvatarInFacebook } from './useSaveAvatarInFacebook.js'
 
@@ -60,7 +59,7 @@ function NFTAvatarInFacebook() {
         if (!ele) return 0
         const style = window.getComputedStyle(ele)
         return max([148, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])
-    }, [windowSize, isMobileFacebook, avatar])
+    }, [windowSize, avatar])
 
     // #region clear white border
     useLayoutEffect(() => {
