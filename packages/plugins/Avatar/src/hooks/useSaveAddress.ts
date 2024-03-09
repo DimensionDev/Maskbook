@@ -1,8 +1,8 @@
+import { useAsyncFn } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
 import { type NetworkPluginID, EnhanceableSite } from '@masknet/shared-base'
 import { NFT_AVATAR_DB_NAME } from '../constants.js'
 import type { AddressStorageV2 } from '../types.js'
-import { useAsyncFn } from 'react-use'
 
 export function useSaveAddress() {
     return useAsyncFn(async (userId: string, pluginID: NetworkPluginID, account: string, network?: EnhanceableSite) => {

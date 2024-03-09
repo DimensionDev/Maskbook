@@ -11,7 +11,3 @@ export * from './SiteAdaptor/NFTImage.js'
 export * from './SiteAdaptor/RainbowBox.js'
 
 export * from './hooks/useSaveStringStorage.js'
-export * from './hooks/useNFTAvatarAddress.js'
-export * from './hooks/useNFTAvatar.js'
-export * from './hooks/usePersonaNFTAvatar.js'
-export * from './hooks/useNFT.js'

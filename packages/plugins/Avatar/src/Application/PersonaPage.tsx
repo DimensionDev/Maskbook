@@ -6,13 +6,13 @@ import { useSubscription } from 'use-subscription'
 import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
-import { useAvatarTrans } from '../locales/index.js'
-import { PersonaItem } from './PersonaItem.js'
-import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
+import { useAvatarTrans } from '../locales/index.js'
+import { PersonaItem } from './PersonaItem.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 
@@ -81,7 +81,7 @@ export function PersonaPage() {
                                 <PersonaItem
                                     persona={binding?.persona}
                                     key={`avatar${i}`}
-                                    avatar={socialIdentity!.avatar ?? ''}
+                                    avatarUrl={socialIdentity!.avatar ?? ''}
                                     owner
                                     nickname={socialIdentity!.nickname}
                                     proof={x}
@@ -99,7 +99,7 @@ export function PersonaPage() {
                                     )
                                 ) ?
                                     null
-                                :   <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />,
+                                :   <PersonaItem avatarUrl="" key={`persona${i}`} userId={x.identifier.userId} />,
                             )}
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
@@ -107,7 +107,7 @@ export function PersonaPage() {
                                 <PersonaItem
                                     key={i}
                                     persona={binding?.persona}
-                                    avatar=""
+                                    avatarUrl=""
                                     userId={x.identity}
                                     proof={x}
                                 />

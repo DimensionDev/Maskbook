@@ -1,15 +1,15 @@
+import { useAsyncFn } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { type NetworkPluginID, getEnhanceableSiteType, EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'
-import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_NAME } from '../constants.js'
-import { useAsyncFn } from 'react-use'
 
 export function useSaveStringStorage(pluginID: NetworkPluginID) {
     const [, saveAddress] = useSaveAddress()
 
     return useAsyncFn(
-        async (userId: string, address: string, nft: NextIDAvatarMeta) => {
+        async (userId: string, address: string, nft: AvatarNextID<NetworkPluginID>) => {
             const stringStorage = Web3Storage.createFireflyStorage(
                 `${PLUGIN_NAME}-${(getEnhanceableSiteType() || EnhanceableSite.Twitter).replace('.com', '')}`,
                 address,

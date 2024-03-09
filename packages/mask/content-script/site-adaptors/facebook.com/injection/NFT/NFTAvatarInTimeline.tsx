@@ -2,13 +2,12 @@ import { memo } from 'react'
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { makeStyles } from '@masknet/theme'
-import { NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { searchFaceBookPostAvatarOnMobileSelector, searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
-import { isMobileFacebook } from '../../utils/isMobile.js'
+import { searchFaceBookPostAvatarSelector } from '../../utils/selector.js'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -33,7 +32,6 @@ const TimelineRainbow = memo(
                     width={width}
                     height={height}
                     classes={{ root: classes.root }}
-                    siteKey={RSS3_KEY_SITE.FACEBOOK}
                 />
             </div>
         )
@@ -41,12 +39,12 @@ const TimelineRainbow = memo(
 )
 
 function getFacebookId(element: HTMLElement | SVGElement) {
-    const node = (isMobileFacebook ? element.firstChild : element.parentNode?.parentNode) as HTMLLinkElement
+    const node = element.parentNode?.parentNode as HTMLLinkElement
     if (!node) return ''
-    const url = new URL(node.href, location.href)
 
+    const url = new URL(node.href, location.href)
     if (url.pathname === '/profile.php' && url.searchParams.get('id')) {
-        return url.searchParams.get(isMobileFacebook ? 'lst' : 'id')
+        return url.searchParams.get('id')
     }
 
     if (url.pathname.includes('/groups')) {
@@ -65,11 +63,9 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
 
             const run = async () => {
                 const facebookId = getFacebookId(element)
-
                 if (!facebookId) return
 
                 const info = getInjectNodeInfo(element)
-
                 if (!info) return
 
                 const proxy = DOMProxy({
@@ -78,7 +74,6 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
                 proxy.realCurrent = info.element
 
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
-
                 root.render(
                     <div
                         style={{
@@ -112,5 +107,5 @@ function _(selector: () => LiveSelector<HTMLElement | SVGElement>, signal: Abort
 }
 
 export async function injectUserNFTAvatarAtFacebook(signal: AbortSignal) {
-    _(isMobileFacebook ? searchFaceBookPostAvatarOnMobileSelector : searchFaceBookPostAvatarSelector, signal)
+    _(searchFaceBookPostAvatarSelector, signal)
 }

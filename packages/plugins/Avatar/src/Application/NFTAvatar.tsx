@@ -1,13 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Stack } from '@mui/material'
 import { RainbowBox } from '../SiteAdaptor/RainbowBox.js'
-
-const SOCIAL_MEDIA_ICON_MAPPING: Record<string, React.ReactNode> = {
-    [EnhanceableSite.Twitter]: <Icons.TwitterXRound size={14} />,
-    [EnhanceableSite.Localhost]: null,
-}
 
 const useStyles = makeStyles()({
     indicator: {
@@ -54,7 +48,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     backgroundColor: 'white',
                     padding: '1px',
                 }}>
-                {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
+                <Icons.TwitterXRound size={14} />
             </Stack>
             {owner ?
                 <div className={classes.indicator} />

@@ -1,9 +1,9 @@
+import { useAsyncFn } from 'react-use'
 import { Web3Storage } from '@masknet/web3-providers'
 import { NetworkPluginID, type EnhanceableSite } from '@masknet/shared-base'
 import { useSaveAddress } from './useSaveAddress.js'
 import type { NextIDAvatarMeta, AvatarMeta } from '../types.js'
 import { NFT_AVATAR_METADATA_STORAGE } from '../constants.js'
-import { useAsyncFn } from 'react-use'
 
 export function useSaveAvatar(pluginID?: NetworkPluginID) {
     const [, saveAddress] = useSaveAddress()

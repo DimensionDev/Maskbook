@@ -9,16 +9,16 @@ export function RouterDialog(props: InjectedDialogProps) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
+    useLayoutEffect(() => {
+        if (pathname === RoutePaths.Exit) props.onClose?.()
+    }, [pathname, props.onClose])
+
     const title =
         matchPath(RoutePaths.Upload, pathname) ?
             t.application_edit_profile_dialog_title()
         :   t.application_dialog_title()
 
     const isOnBack = pathname !== RoutePaths.Personas
-
-    useLayoutEffect(() => {
-        if (pathname === RoutePaths.Exit) props.onClose?.()
-    }, [pathname, props.onClose])
 
     return (
         <InjectedDialog

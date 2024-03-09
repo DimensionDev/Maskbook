@@ -1,3 +1,4 @@
+import { useAsyncFn } from 'react-use'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import {
     type BindingProof,
@@ -7,7 +8,6 @@ import {
 } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types.js'
 import { useSaveAvatar } from './useSaveAvatar.js'
-import { useAsyncFn } from 'react-use'
 
 export function useSaveKV(pluginID: NetworkPluginID) {
     const Web3 = useWeb3Connection(pluginID)

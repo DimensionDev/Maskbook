@@ -194,11 +194,11 @@ export interface HideSearchResultInspectorEvent {
 }
 export interface NFTAvatarEvent {
     userId: string
-    avatarId: string
-    address?: string
     tokenId?: string
-    schema?: number
+    address?: string
+    avatarId: string
     chainId?: number
+    schema?: number
     pluginID?: NetworkPluginID
 }
 

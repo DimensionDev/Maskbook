@@ -10,17 +10,6 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
 
-const NAME_FIELD = {
-    fallback: 'NFT PFP',
-}
-
-const ICON = <Icons.NFTAvatar size={36} />
-
-const RECOMMEND_FEATURE = {
-    description: <Trans i18nKey="plugin_nft_avatar_recommend_feature_description" />,
-    backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
-}
-
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
         open: true,
@@ -32,11 +21,11 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()
-        const [picking, setPicking] = useState<boolean>()
+        const [picking, setPicking] = useState(false)
         const [open, setOpen] = useState(false)
 
         useEffect(() => {
-            return CrossIsolationMessages.events.avatarSettingsDialogEvent.on(({ open, startPicking }) => {
+            return CrossIsolationMessages.events.avatarSettingsDialogEvent.on(({ open, startPicking = false }) => {
                 setOpen(open)
                 setPicking(startPicking)
             })
@@ -46,19 +35,30 @@ const site: Plugin.SiteAdaptor.Definition = {
 
         return (
             <Web3ContextProvider network={pluginID} chainId={chainId}>
-                <NFTAvatarDialog open startPicking={!!picking} onClose={() => setOpen(false)} />
+                <NFTAvatarDialog open startPicking={picking} onClose={() => setOpen(false)} />
             </Web3ContextProvider>
         )
     },
     ApplicationEntries: [
         (() => {
+            const field = {
+                fallback: 'NFT PFP',
+            }
+
+            const icon = <Icons.NFTAvatar size={36} />
+
+            const recommendFeature = {
+                description: <Trans i18nKey="plugin_nft_avatar_recommend_feature_description" />,
+                backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
+            }
+
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
-                            title={<PluginTransFieldRender field={NAME_FIELD} pluginID={base.ID} />}
-                            icon={ICON}
-                            recommendFeature={RECOMMEND_FEATURE}
+                            title={<PluginTransFieldRender field={field} pluginID={base.ID} />}
+                            icon={icon}
+                            recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             onClick={() => {
                                 EntryComponentProps.onClick ?
@@ -74,11 +74,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                     )
                 },
                 appBoardSortingDefaultPriority: 3,
-                name: NAME_FIELD,
-                icon: ICON,
+                name: field,
+                icon,
                 ApplicationEntryID: base.ID,
                 nextIdRequired: true,
-                recommendFeature: RECOMMEND_FEATURE,
+                recommendFeature,
             }
         })(),
     ],

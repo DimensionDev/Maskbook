@@ -40,6 +40,7 @@ export async function getAvatarToken<T extends NetworkPluginID>(
     const metadata = asset?.metadata || token?.metadata
 
     return {
+        avatarId: avatar.avatarId,
         amount:
             asset?.priceInToken ?
                 formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)

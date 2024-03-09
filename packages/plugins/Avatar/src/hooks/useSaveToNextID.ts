@@ -1,10 +1,10 @@
+import { useAsyncFn } from 'react-use'
 import { type BindingProof, type ECKeyIdentifier, NetworkPluginID, getEnhanceableSiteType } from '@masknet/shared-base'
 import { Web3Storage } from '@masknet/web3-providers'
 import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 import { useSaveAddress } from './useSaveAddress.js'
 import type { NextIDAvatarMeta } from '../types.js'
 import { PLUGIN_ID } from '../constants.js'
-import { useAsyncFn } from 'react-use'
 
 export function useSaveToNextID() {
     const [, saveAddress] = useSaveAddress()

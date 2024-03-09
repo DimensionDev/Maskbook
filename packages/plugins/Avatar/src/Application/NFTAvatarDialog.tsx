@@ -27,7 +27,7 @@ export function NFTAvatarDialog({ startPicking, ...rest }: NFTAvatarDialogProps)
 
     const initialEntries = useMemo(() => {
         return [RoutePaths.Exit, startPicking ? RoutePaths.NFTPicker : RoutePaths.Personas]
-    }, [!startPicking])
+    }, [startPicking])
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>

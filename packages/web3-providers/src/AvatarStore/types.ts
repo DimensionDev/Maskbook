@@ -16,6 +16,7 @@ export interface AvatarNextID<T extends NetworkPluginID> {
 }
 
 export interface AvatarToken {
+    avatarId: string
     amount: string
     name: string
     symbol: string
@@ -42,7 +43,18 @@ export interface AvatarAddress {
     networkPluginID: NetworkPluginID
 }
 
-export type Store = Record<string, AvatarToken | null>
+export interface StoreItem {
+    address: AvatarAddress
+    avatar: AvatarNextID<NetworkPluginID>
+    token: AvatarToken
+}
+
+export interface Store {
+    items: Map<string, StoreItem | null>
+    retrieveAddress: (userId?: string) => AvatarAddress | null
+    retrieveAvatar: (userId?: string, avatarId?: string, publicKey?: string) => AvatarNextID<NetworkPluginID> | null
+    retrieveToken: (userId?: string, avatarId?: string, publicKey?: string) => AvatarToken | null
+}
 
 export type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID.PLUGIN_EVM }
 export type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>

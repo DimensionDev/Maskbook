@@ -67,10 +67,11 @@ function NFTAvatarInFacebookFirstStep() {
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
+            if (!identity.identifier) return
             if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+
             const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
-            if (!identity.identifier) return
 
             await changeImageToActiveElements(image)
 
@@ -94,6 +95,7 @@ function NFTAvatarInFacebookSecondStep() {
     useEffect(() => {
         const save = searchFacebookSaveAvatarButtonSelector().evaluate().at(0)
         if (!save) return
+
         const handler = () => {
             const image = searchFacebookConfirmAvatarImageSelector().evaluate()
             if (!image) return

@@ -93,12 +93,11 @@ export function NFTListDialog() {
     const { account, chainId, setChainId, setAccount } = useChainContext()
     const [assetChainId, setAssetChainId] = useState<ChainId>()
     const wallets = useWallets()
-    const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
-    const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
+    const [selectedPluginId, setSelectedPluginId] = useState(pluginID)
+    const [selectedToken, setSelectedToken] = useState(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => setSelectedToken(undefined), [chainId])
 
@@ -180,10 +179,6 @@ export function NFTListDialog() {
         setSelectedPluginId(pluginID)
     }, [pluginID])
 
-    const walletItems = proofs.sort((a, z) => {
-        return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
-    })
-
     useUpdateEffect(() => {
         if (account) setTargetAccount(account)
     }, [account])
@@ -191,6 +186,11 @@ export function NFTListDialog() {
     useUpdateEffect(() => {
         if (originAccount) setAccount(originAccount)
     }, [originAccount])
+
+    const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
+    const walletItems = proofs.sort((a, z) => {
+        return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
+    })
 
     return (
         <>

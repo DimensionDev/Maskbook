@@ -51,6 +51,7 @@ function NFTAvatarSave() {
     }, [identity.identifier?.userId])
     return null
 }
+
 const useStyles = makeStyles<{ buttonSize: number; fontSize: number }>()((theme, { buttonSize, fontSize }) => ({
     root: {
         display: 'flex',
@@ -66,6 +67,7 @@ const useStyles = makeStyles<{ buttonSize: number; fontSize: number }>()((theme,
         fontSize,
     },
 }))
+
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
         open: true,

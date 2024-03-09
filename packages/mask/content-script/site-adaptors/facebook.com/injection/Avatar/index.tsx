@@ -1,8 +1,6 @@
 import { noop } from 'lodash-es'
 import { Flags } from '@masknet/flags'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Plugin } from '@masknet/plugin-infra'
-import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { inpageAvatarSelector } from '../../utils/selector.js'
@@ -20,8 +18,6 @@ export async function injectAvatar(signal: AbortSignal) {
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 // create stacking context
                 ele.style.position = 'relative'
-                // TODO fetch userId
-                const userId = ''
 
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
@@ -33,11 +29,8 @@ export async function injectAvatar(signal: AbortSignal) {
                             width: '100%',
                             height: '100%',
                             zIndex: 2,
-                        }}>
-                        {userId ?
-                            <Avatar userId={userId} sourceType={Plugin.SiteAdaptor.AvatarRealmSourceType.Post} />
-                        :   null}
-                    </div>,
+                        }}
+                    />,
                 )
                 remover = root.destroy
             }
