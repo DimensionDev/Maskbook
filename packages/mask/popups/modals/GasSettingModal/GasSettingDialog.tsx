@@ -102,10 +102,12 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     )
 
     const [minGas, defaultGas, maxGas] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const [gasLimit, setGasLimit] = useState(config.gasLimit || defaultGas)
-    const [gasPrice, setGasPrice] = useState(config.gasPrice || '1')
-    const [maxPriorityFeePerGas, setMaxPriorityFeePerGas] = useState(config.maxPriorityFeePerGas || '1')
-    const [maxFeePerGas, setMaxFeePerGas] = useState(config.maxFeePerGas || '1')
+    const [gasLimit = config.gasLimit || defaultGas, setGasLimit] = useState<string | undefined>()
+    const [gasPrice = config.gasPrice || '1', setGasPrice] = useState<string | undefined>()
+    const [maxPriorityFeePerGas = config.maxPriorityFeePerGas || '1', setMaxPriorityFeePerGas] = useState<
+        string | undefined
+    >()
+    const [maxFeePerGas = config.maxFeePerGas || '1', setMaxFeePerGas] = useState<string | undefined>()
 
     const estimateSecond = useMemo(() => {
         if (!gasOptions || replaceType) return

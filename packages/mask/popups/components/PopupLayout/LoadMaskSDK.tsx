@@ -16,7 +16,7 @@ export default function MaskSDK() {
 }
 
 function MaskSDKLoader() {
-    const [shouldShow] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
+    const [{ result: shouldShow }] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
     const [dismissed, setDismissed] = useState(false)
     if (!shouldShow) return null
     if (dismissed) return null

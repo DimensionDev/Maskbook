@@ -17,7 +17,7 @@
         },
         "defaultGasLimit": "90000",
         "minGasLimit": "21000",
-        "maxGasLimit": "30000000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://ethereum.org",
         "explorers": [
             {
@@ -143,6 +143,9 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://base.org/",
         "explorers": [
             {
@@ -195,7 +198,7 @@
         },
         "defaultGasLimit": "90000",
         "minGasLimit": "21000",
-        "maxGasLimit": "140000000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://www.binance.org",
         "explorers": [
             {
@@ -245,6 +248,9 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/polygon/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://matic.network/",
         "explorers": [
             {
@@ -295,6 +301,9 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "782919",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://arbitrum.io",
         "explorers": [
             {
@@ -342,6 +351,9 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://optimistic.etherscan.io/",
         "fullName": "Optimism",
         "shortName": "op",
@@ -410,6 +422,9 @@
             "symbol": "xDAI",
             "decimals": 18
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://blockscout.com/xdai/mainnet",
         "explorers": [
             {
@@ -435,6 +450,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://scrollscan.com/",
         "explorers": [
             {
@@ -458,6 +475,9 @@
             "decimals": 18,
             "address": "0x471ece3750da237f93b8e339c536989b8978a438"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://explorer.celo.org/",
         "explorers": [
             {
@@ -482,6 +502,9 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/avalanchec/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "maxGasLimit": "7920026",
         "infoURL": "https://snowtrace.dev/",
         "explorers": [
             {
@@ -530,6 +553,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://aurora.dev",
         "explorers": [
             {
@@ -601,6 +626,8 @@
             "symbol": "CFX",
             "decimals": 18
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://evm.confluxscan.net",
         "explorers": [
             {
@@ -647,6 +674,8 @@
             "decimals": 18,
             "logoURL": "https://static.debank.com/image/chain/logo_url/astar/398c7e0014bdada3d818367a7273fabe.png"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://blockscout.com/astar/",
         "explorers": [
             {
@@ -671,6 +700,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fantom/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://fantom.foundation",
         "explorers": [
             {
@@ -741,6 +772,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/cronos/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://cronos.org/",
         "shortName": "cro"
     },
@@ -757,6 +790,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/xdc/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://xinfin.org/",
         "shortName": "xdc xinfin",
         "explorers": [
@@ -779,6 +814,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/xdc/cet/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.coinex.org/",
         "shortName": "cet",
         "explorers": [
@@ -801,6 +838,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/syscoin/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.syscoin.org",
         "shortName": "sys",
         "explorers": [
@@ -823,6 +862,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/okt/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.okex.com/okc",
         "shortName": "okt"
     },
@@ -839,6 +880,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/meter/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.meter.io",
         "shortName": "Meter",
         "explorers": [
@@ -861,6 +904,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/tomochain/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://tomochain.com",
         "shortName": "tomo"
     },
@@ -877,6 +922,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/nsc/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.nextsmartchain.com/",
         "shortName": "nsc",
         "explorers": [
@@ -899,6 +946,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/vlx/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://velas.com",
         "shortName": "vlx",
         "explorers": [
@@ -921,6 +970,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/tt/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://thundercore.com",
         "shortName": "TT",
         "explorers": [
@@ -943,6 +994,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fuse/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://fuse.io/",
         "shortName": "fuse"
     },
@@ -959,6 +1012,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/heco/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.hecochain.com",
         "shortName": "heco",
         "explorers": [
@@ -981,6 +1036,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/btt/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://bittorrentchain.io/",
         "shortName": "BTT"
     },
@@ -997,6 +1054,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://boba.network",
         "shortName": "Boba",
         "explorers": [
@@ -1019,6 +1078,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/kcc/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://kcc.io",
         "shortName": "kcs",
         "explorers": [
@@ -1041,6 +1102,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/theta/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.thetatoken.org/",
         "shortName": "theta-mainnet",
         "explorers": [
@@ -1063,6 +1126,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fx/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://functionx.io/",
         "shortName": "Function X",
         "explorers": [
@@ -1085,6 +1150,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/metis/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://www.metis.io",
         "shortName": "metis-andromeda",
         "explorers": [
@@ -1107,6 +1174,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/moonbeam/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://moonbeam.network/networks/moonbeam/",
         "shortName": "mbeam",
         "explorers": [
@@ -1129,6 +1198,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/moonriver/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://moonbeam.network/networks/moonriver/",
         "shortName": "mriver",
         "explorers": [
@@ -1151,6 +1222,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/canto/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://canto.io",
         "shortName": "canto",
         "explorers": [
@@ -1173,6 +1246,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/evmos/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://evmos.org",
         "shortName": "evmos",
         "explorers": [
@@ -1196,6 +1271,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://arbitrum.io",
         "explorers": [
             {
@@ -1217,6 +1294,8 @@
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/oasis/info/logo.png/quality=85"
         },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
         "infoURL": "https://docs.oasis.dev/general/developer-resources/overview",
         "shortName": "emerald",
         "explorers": [
