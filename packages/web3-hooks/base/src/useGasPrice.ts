@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import type { UseQueryResult } from '@tanstack/react-query'
 
 type T = UseQueryResult
-export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID?: T, options?: ConnectionOptions<T>) {
+export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID: T, options?: ConnectionOptions<T>) {
     const Web3 = useWeb3Connection(pluginID, options)
     const gasOption = useGasOption(pluginID, GasOptionType.NORMAL)
     const gasPrice = useQuery({

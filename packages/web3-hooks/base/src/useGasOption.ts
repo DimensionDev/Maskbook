@@ -5,7 +5,7 @@ import type { HubOptions } from '@masknet/web3-providers/types'
 import { useGasOptions } from './useGasOptions.js'
 
 export function useGasOption<T extends NetworkPluginID = NetworkPluginID>(
-    pluginID?: T,
+    pluginID: T,
     optionType?: GasOptionType,
     options?: HubOptions<T>,
 ) {

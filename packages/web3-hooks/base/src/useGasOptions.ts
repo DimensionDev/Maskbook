@@ -8,7 +8,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 
 type T = UseQueryResult
 export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
-    pluginID?: T,
+    pluginID: T,
     options?: HubOptions<T>,
     live?: boolean,
 ) {
