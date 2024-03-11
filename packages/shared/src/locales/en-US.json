@@ -365,5 +365,7 @@
     "spam": "Spam",
     "report_spam": "Report Spam",
     "report_spam_success": "Successfully reported.",
-    "report_spam_fail": "Failed to report spam."
+    "report_spam_fail": "Failed to report spam.",
+    "verify_next_id_post_content": "Post content:",
+    "verify_next_id_tips": "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 }

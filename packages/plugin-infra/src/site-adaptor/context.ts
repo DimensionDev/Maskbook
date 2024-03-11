@@ -16,6 +16,7 @@ export interface __SiteAdaptorContext__ {
     getUserIdentity: ((useId: string) => Promise<IdentityResolved | undefined>) | undefined
     getPostIdFromNewPostToast: (() => string) | undefined
     postMessage: ((text: string, options?: any) => Promise<void>) | undefined
+    publishPost: ((mediaObjects: Array<string | Blob>, options?: any) => Promise<string | null>) | undefined
     getSearchedKeyword: (() => string) | undefined
     connectPersona: () => Promise<void>
 }
@@ -29,6 +30,7 @@ export let share: __SiteAdaptorContext__['share']
 export let getUserIdentity: __SiteAdaptorContext__['getUserIdentity']
 export let getPostIdFromNewPostToast: __SiteAdaptorContext__['getPostIdFromNewPostToast']
 export let postMessage: __SiteAdaptorContext__['postMessage']
+export let publishPost: __SiteAdaptorContext__['publishPost']
 export let getSearchedKeyword: __SiteAdaptorContext__['getSearchedKeyword']
 export let connectPersona: __SiteAdaptorContext__['connectPersona']
 export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
@@ -43,6 +45,7 @@ export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
         getUserIdentity,
         getPostIdFromNewPostToast,
         postMessage,
+        publishPost,
         getSearchedKeyword,
         connectPersona,
     } = value)

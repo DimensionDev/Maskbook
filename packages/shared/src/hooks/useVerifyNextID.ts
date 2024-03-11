@@ -1,13 +1,20 @@
-import { useAsyncFn } from 'react-use'
-import { NextIDAction, type PersonaInformation, SignType, MaskMessages, toBase64, fromHex } from '@masknet/shared-base'
+import { publishPost } from '@masknet/plugin-infra/content-script/context'
+import { signWithPersona } from '@masknet/plugin-infra/dom/context'
+import {
+    MaskMessages,
+    NextIDAction,
+    SignType,
+    fromHex,
+    resolveNetworkToNextIDPlatform,
+    toBase64,
+    type NextIDPlatform,
+    type PersonaInformation,
+} from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '#services'
-import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
+import { useAsyncFn } from 'react-use'
+import { useBaseUIRuntime } from '../UI/contexts/index.js'
 
-async function createAndSignMessage(persona: PersonaInformation, username: string) {
-    const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
-    if (!platform) return null
-
+async function createAndSignMessage(platform: NextIDPlatform, persona: PersonaInformation, username: string) {
     const payload = await NextIDProof.createPersonaPayload(
         persona.identifier.publicKeyAsHex,
         NextIDAction.Create,
@@ -16,31 +23,25 @@ async function createAndSignMessage(persona: PersonaInformation, username: strin
     )
     if (!payload) throw new Error('Failed to create persona payload.')
 
-    const signature = await Services.Identity.signWithPersona(
-        SignType.Message,
-        payload.signPayload,
-        persona.identifier,
-        location.origin,
-        true,
-    )
+    const signature = await signWithPersona(SignType.Message, payload.signPayload, persona.identifier, true)
     if (!signature) throw new Error('Failed to sign by persona.')
     return { payload, signature }
 }
 
-export function useNextIDVerify() {
-    const postMessage = activatedSiteAdaptorUI!.automation?.nativeCompositionDialog?.attachText
-    const platform = activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform
+export function useVerifyNextID() {
+    const { networkIdentifier } = useBaseUIRuntime()
+    const platform = resolveNetworkToNextIDPlatform(networkIdentifier)
 
     return useAsyncFn(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
             if (!platform || !persona || !username) return
 
-            const message = await createAndSignMessage(persona, username)
+            const message = await createAndSignMessage(platform, persona, username)
             if (!message) return
             const { signature, payload } = message
 
             const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-            const postId = await activatedSiteAdaptorUI!.automation.endpoint?.publishPost?.([postContent], {
+            const postId = await publishPost?.([postContent], {
                 reason: 'verify',
             })
             if (!postId) throw new Error('Failed to verify.')
@@ -65,6 +66,6 @@ export function useNextIDVerify() {
             MaskMessages.events.ownProofChanged.sendToAll()
             await verifiedCallback?.()
         },
-        [postMessage, platform],
+        [platform],
     )
 }
