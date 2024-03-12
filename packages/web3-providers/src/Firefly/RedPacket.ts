@@ -208,4 +208,17 @@ export class FireflyRedPacket {
             body: JSON.stringify(options),
         })
     }
+    static async finishClaiming(rpid: string, profileId: string, handle: string, txHash: string) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
+        return fetchFireflyJSON<FireflyRedPacketAPI.Response<string>>(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                rpid,
+                claimPlatform: FireflyRedPacketAPI.SourceType.FireflyPC,
+                claimProfileId: profileId,
+                claimHandle: handle,
+                txHash,
+            }),
+        })
+    }
 }

@@ -287,7 +287,7 @@ export namespace FireflyRedPacketAPI {
         is_default?: boolean
     }
 
-    interface Response<T> {
+    export interface Response<T> {
         code: number
         data: T
     }

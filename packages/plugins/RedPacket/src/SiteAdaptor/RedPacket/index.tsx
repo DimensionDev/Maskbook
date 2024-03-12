@@ -1,11 +1,11 @@
-import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver } from '@masknet/web3-providers'
+import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -262,6 +262,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
+    const me = useLastRecognizedIdentity()
+    const myProfileId = me?.profileId
+    const myHandle = me?.identifier?.userId
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         const result = await recheckClaimStatus()
@@ -271,6 +274,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         }
         if (canClaim) {
             hash = await claimCallback()
+            if (myProfileId && myHandle && hash) {
+                await FireflyRedPacket.finishClaiming(payload.rpid, myProfileId, myHandle, hash)
+            }
             checkResult()
         } else if (canRefund) {
             hash = await refundCallback()
@@ -278,7 +284,17 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (typeof hash === 'string') {
             checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, checkAvailability])
+    }, [
+        canClaim,
+        canRefund,
+        claimCallback,
+        checkResult,
+        recheckClaimStatus,
+        checkAvailability,
+        payload.rpid,
+        myProfileId,
+        myHandle,
+    ])
 
     const myStatus = useMemo(() => {
         if (!availability) return ''
