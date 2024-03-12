@@ -73,7 +73,6 @@
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": [
             "https://andromeda.metis.io/?owner=1088",
-            "https://lb.nodies.app/v1/f5c5ecde09414b3384842a8740a8c998"
         ],
         "X1": ["https://rpc.x1.tech"],
         "X1_Testnet": ["https://testrpc.x1.tech"]
