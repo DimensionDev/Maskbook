@@ -71,6 +71,10 @@
         "Conflux": ["https://evm.confluxrpc.com"],
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
+        "Metis": [
+            "https://andromeda.metis.io/?owner=1088",
+            "https://lb.nodies.app/v1/f5c5ecde09414b3384842a8740a8c998"
+        ],
         "X1": ["https://rpc.x1.tech"],
         "X1_Testnet": ["https://testrpc.x1.tech"]
     },
@@ -101,6 +105,7 @@
         "Conflux": ["https://evm.confluxrpc.com"],
         "Astar": ["https://rpc.astar.network:8545"],
         "Scroll": ["https://rpc.scroll.io"],
+        "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "X1": ["https://rpc.x1.tech"],
         "X1_Testnet": ["https://testrpc.x1.tech"]
     },
@@ -131,6 +136,7 @@
         "Conflux": [0, 0, 0, 0, 0],
         "Astar": [0, 0, 0, 0, 0],
         "Scroll": [0, 0, 0, 0, 0],
+        "Metis": [0, 0],
         "X1": [0, 0, 0, 0, 0],
         "X1_Testnet": [0, 0, 0, 0, 0]
     }
