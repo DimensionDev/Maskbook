@@ -71,9 +71,7 @@
         "Conflux": ["https://evm.confluxrpc.com"],
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
-        "Metis": [
-            "https://andromeda.metis.io/?owner=1088",
-        ],
+        "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "X1": ["https://rpc.x1.tech"],
         "X1_Testnet": ["https://testrpc.x1.tech"]
     },
