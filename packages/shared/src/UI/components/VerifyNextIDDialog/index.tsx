@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { publishPost } from '@masknet/plugin-infra/content-script/context'
 import {
     formatPersonaFingerprint,
@@ -161,7 +161,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
     const { classes, cx } = useStyles()
     const queryClient = useQueryClient()
 
-    const myIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const userId = myIdentity?.identifier?.userId || 'you'
     const username = myIdentity?.nickname
     const avatar = myIdentity?.avatar

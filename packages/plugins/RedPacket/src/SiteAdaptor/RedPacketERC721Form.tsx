@@ -260,9 +260,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const currentIdentity = useCurrentVisitingIdentity()
     const linkedPersona = useCurrentLinkedPersona()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const senderName =
-        lastRecognized?.identifier?.userId ??
+        myIdentity?.identifier?.userId ??
         currentIdentity?.identifier?.userId ??
         linkedPersona?.nickname ??
         'Unknown User'

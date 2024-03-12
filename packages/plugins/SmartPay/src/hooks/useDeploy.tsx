@@ -34,7 +34,7 @@ export function useDeploy(
     const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -62,8 +62,8 @@ export function useDeploy(
             }
             if (
                 !chainId ||
-                !me?.isOwner ||
-                !me.identifier?.userId ||
+                !myIdentity?.isOwner ||
+                !myIdentity.identifier?.userId ||
                 !signAccount?.address ||
                 !contractAccount ||
                 (!signPersona && !signWallet)
@@ -87,7 +87,7 @@ export function useDeploy(
                 return result.transactionHash
             }
             const payload = JSON.stringify({
-                twitterHandle: me.identifier.userId,
+                twitterHandle: myIdentity.identifier.userId,
                 ts: getUnixTime(new Date()),
                 ownerAddress: signAccount.address,
                 nonce,
@@ -166,7 +166,7 @@ export function useDeploy(
     }, [
         chainId,
         signAccount,
-        me,
+        myIdentity,
         signWallet,
         signPersona,
         contractAccount,

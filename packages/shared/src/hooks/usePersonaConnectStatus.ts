@@ -11,10 +11,10 @@ export function usePersonaConnectStatus(): {
     currentPersona?: PersonaInformation
 } {
     const personas = useAllPersonas()
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
 
     return useMemo(() => {
-        const id = me?.identifier
+        const id = myIdentity?.identifier
         const currentPersona = personas.find((x) => id && x.linkedProfiles.some((x) => x.identifier === id))
         return {
             /** @deprecated */
@@ -26,5 +26,5 @@ export function usePersonaConnectStatus(): {
             connected: !!currentPersona,
             hasPersona: !!personas.length,
         }
-    }, [personas, me?.identifier?.toText()])
+    }, [personas, myIdentity?.identifier?.toText()])
 }

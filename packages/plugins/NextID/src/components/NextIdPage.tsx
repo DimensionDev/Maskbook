@@ -22,7 +22,7 @@ import {
 import { openDashboard, openPopupWindow, queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
 
 export const NextIdPage = memo(function NextIdPage() {
-    const currentProfileIdentifier = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
@@ -31,13 +31,11 @@ export const NextIdPage = memo(function NextIdPage() {
         allPersonas,
         currentIdentifier,
         openDashboard,
-        currentProfileIdentifier,
+        myIdentity,
     )
 
     const [openBindDialog, toggleBindDialog] = useState(false)
-    const isOwn =
-        currentProfileIdentifier &&
-        currentProfileIdentifier?.identifier?.userId === visitingPersonaIdentifier?.identifier?.userId
+    const isOwn = myIdentity && myIdentity?.identifier?.userId === visitingPersonaIdentifier?.identifier?.userId
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return

@@ -147,7 +147,7 @@ function Content(props: ProfileTabContentProps) {
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const {
@@ -155,7 +155,7 @@ function Content(props: ProfileTabContentProps) {
         loading: loadingPersonaStatus,
         error: loadPersonaStatusError,
         retry: retryLoadPersonaStatus,
-    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, Services.Helper.openDashboard, lastRecognized)
+    } = useCurrentPersonaConnectStatus(allPersonas, currentIdentifier, Services.Helper.openDashboard, myIdentity)
 
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const { data: currentSocialIdentity } = useSocialIdentity(currentVisitingSocialIdentity)
@@ -483,7 +483,7 @@ function Content(props: ProfileTabContentProps) {
                             {isOwnerIdentity && isOnTwitter ?
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}
-                                    identity={lastRecognized}
+                                    identity={myIdentity}
                                     currentPersonaIdentifier={currentIdentifier}
                                     openDashboard={Services.Helper.openDashboard}
                                     customHint

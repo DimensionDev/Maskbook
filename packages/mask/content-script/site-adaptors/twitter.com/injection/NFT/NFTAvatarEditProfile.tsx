@@ -60,7 +60,7 @@ function requestSettingAvatar() {
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useNFTAvatarButtonStyles()
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     useEffect(() => {
@@ -81,7 +81,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     return (
         <ConnectPersonaBoundary
             personas={allPersonas}
-            identity={lastRecognized}
+            identity={myIdentity}
             currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
             handlerPosition="top-right"

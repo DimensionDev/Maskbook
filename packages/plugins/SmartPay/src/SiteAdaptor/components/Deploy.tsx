@@ -138,7 +138,7 @@ export function Deploy({ open }: { open: boolean }) {
     const { signWallet, signPersona } = signer || {}
     const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
 
     const { value: avatar } = useAsync(async () => {
         if (signPersona) return queryPersonaAvatar(signPersona.identifier)
@@ -293,7 +293,7 @@ export function Deploy({ open }: { open: boolean }) {
                         classes={{ bottomFixed: classes.bottomFixed }}
                         avatar={avatar !== null ? avatar : undefined}
                         currentPersona={signPersona}
-                        currentVisitingProfile={me}>
+                        currentVisitingProfile={myIdentity}>
                         <ActionButton
                             onClick={handleDeploy}
                             loading={deployLoading}

@@ -13,12 +13,12 @@ import { SteganographyPayload } from './SteganographyPayload.js'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const t = useMaskSharedTrans()
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
 
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            if (encode === 'image' && !me) throw new Error('No Current Profile')
+            if (encode === 'image' && !myIdentity) throw new Error('No Current Profile')
 
             // rawEncrypted is either string or Uint8Array
             // string is the old format, Uint8Array is the new format.
@@ -26,7 +26,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 info.version,
                 content,
                 target,
-                me.identifier,
+                myIdentity.identifier,
                 activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
@@ -72,7 +72,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             onClose()
         },
-        [t, me, onClose, reason],
+        [t, myIdentity, onClose, reason],
     )
 }
 

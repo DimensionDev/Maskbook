@@ -51,13 +51,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: connectStatus } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
         Services.Helper.openDashboard,
-        lastRecognized,
+        myIdentity,
     )
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(

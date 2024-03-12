@@ -65,11 +65,11 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const { classes } = useStyles()
     const { setSigner } = SmartPayContext.useContainer()
     const personas = useAllPersonas()
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const { value = 0, retry } = useAsyncRetry(async () => {
-        if (!me?.identifier?.userId) return 0
-        return SmartPayFunder.getRemainFrequency(me.identifier.userId)
-    }, [me])
+        if (!myIdentity?.identifier?.userId) return 0
+        return SmartPayFunder.getRemainFrequency(myIdentity.identifier.userId)
+    }, [myIdentity])
 
     const { value: qualifications, loading } = useQueryQualifications()
 
@@ -157,10 +157,10 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             }}>
             <Typography className={classes.title}>{t.add_smart_pay_wallet()}</Typography>
             <Box className={classes.info}>
-                <Icon logoURL={me?.avatar} name={me?.nickname} size={30} />
+                <Icon logoURL={myIdentity?.avatar} name={myIdentity?.nickname} size={30} />
                 <Box>
-                    <Typography className={classes.name}>{me?.nickname}</Typography>
-                    <Typography className={classes.identifier}>@{me?.identifier?.userId}</Typography>
+                    <Typography className={classes.name}>{myIdentity?.nickname}</Typography>
+                    <Typography className={classes.identifier}>@{myIdentity?.identifier?.userId}</Typography>
                 </Box>
             </Box>
             <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>

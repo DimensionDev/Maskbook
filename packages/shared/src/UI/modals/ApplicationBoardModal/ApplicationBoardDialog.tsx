@@ -49,7 +49,7 @@ interface ApplicationBoardProps {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
     allPersonas: PersonaInformation[]
-    lastRecognized?: IdentityResolved
+    myIdentity?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled?: (id: string, checked: boolean) => Promise<void>
@@ -66,7 +66,7 @@ export function ApplicationBoard({
     queryOwnedPersonaInformation,
     currentSite,
     allPersonas,
-    lastRecognized,
+    myIdentity,
     applicationCurrentStatus,
     personaPerSiteConnectStatusLoading,
     setPluginMinimalModeEnabled,
@@ -144,7 +144,7 @@ export function ApplicationBoard({
                                 openDashboard={openDashboard}
                                 queryOwnedPersonaInformation={queryOwnedPersonaInformation}
                                 currentSite={currentSite}
-                                lastRecognized={lastRecognized}
+                                myIdentity={myIdentity}
                                 allPersonas={allPersonas}
                                 applicationCurrentStatus={applicationCurrentStatus}
                                 personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}

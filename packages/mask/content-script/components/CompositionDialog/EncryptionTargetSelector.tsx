@@ -62,7 +62,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const e2eDisabledMessage =
@@ -72,7 +72,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 <Box flex={1} />
                 <ConnectPersonaBoundary
                     personas={allPersonas}
-                    identity={lastRecognized}
+                    identity={myIdentity}
                     currentPersonaIdentifier={currentIdentifier}
                     openDashboard={Services.Helper.openDashboard}
                     customHint

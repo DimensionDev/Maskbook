@@ -54,14 +54,14 @@ function BannerUI(props: BannerUIProps) {
 interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
-    const lastRecognizedIdentity = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const allPersonas = usePersonasFromDB()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personaConnectStatus } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
         Services.Helper.openDashboard,
-        lastRecognizedIdentity,
+        myIdentity,
     )
     const { nextStep } = props
     const networkIdentifier = activatedSiteAdaptorUI!.networkIdentifier
@@ -82,7 +82,7 @@ export function Banner(props: BannerProps) {
     const defaultUserName =
         networkIdentifier ?
             {
-                defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
+                defaultValue: myIdentity.identifier?.userId ?? '',
                 value,
                 onChange,
                 isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),

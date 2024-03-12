@@ -87,7 +87,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
         chainId,
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useSubscription(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {
@@ -142,7 +142,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     {origin === 'pfp' && currentVisitingIdentity?.isOwner ?
                         <ConnectPersonaBoundary
                             personas={personas}
-                            identity={lastRecognized}
+                            identity={myIdentity}
                             currentPersonaIdentifier={currentIdentifier}
                             openDashboard={openDashboard}
                             handlerPosition="top-right"

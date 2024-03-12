@@ -137,10 +137,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props.onClose, step])
 
     const currentIdentity = useCurrentVisitingIdentity()
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const linkedPersona = useCurrentLinkedPersona()
-    const senderName =
-        lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
+    const senderName = myIdentity?.identifier?.userId || currentIdentity?.identifier?.userId || linkedPersona?.nickname
 
     const compositionType = useContext(CompositionTypeContext)
     const onCreateOrSelect = useCallback(

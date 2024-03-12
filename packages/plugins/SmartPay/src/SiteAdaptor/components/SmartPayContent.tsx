@@ -228,11 +228,11 @@ export const SmartPayContent = memo(() => {
 
     // #endregion
 
-    const currentProfile = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const { value = 0, retry: refreshRemainFrequency } = useAsyncRetry(async () => {
-        if (!currentProfile?.identifier?.userId) return 0
-        return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
-    }, [currentProfile])
+        if (!myIdentity?.identifier?.userId) return 0
+        return SmartPayFunder.getRemainFrequency(myIdentity.identifier.userId)
+    }, [myIdentity])
 
     const [menu, openMenu] = useMenuConfig(
         contractAccounts.map((contractAccount, index) => {

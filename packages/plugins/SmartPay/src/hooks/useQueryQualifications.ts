@@ -13,13 +13,13 @@ export function useQueryQualifications(): AsyncState<{
     signPersona?: PersonaInformation
     signWallet?: Wallet
 }> {
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const currentPersona = useCurrentPersonaInformation()
     const wallets = useWallets()
     const personas = useAllPersonas()
 
     return useAsync(async () => {
-        if (!me?.identifier?.userId || (!currentPersona && !wallets.length) || !me.isOwner)
+        if (!myIdentity?.identifier?.userId || (!currentPersona && !wallets.length) || !myIdentity.isOwner)
             return {
                 hasVerifiedPersona: false,
             }
@@ -29,7 +29,7 @@ export function useQueryQualifications(): AsyncState<{
             const isVerifiedPersona = await NextIDProof.queryIsBound(
                 currentPersona.identifier.publicKeyAsHex.toLowerCase(),
                 NextIDPlatform.Twitter,
-                me?.identifier?.userId,
+                myIdentity.identifier.userId,
             )
 
             if (isVerifiedPersona)
@@ -41,7 +41,7 @@ export function useQueryQualifications(): AsyncState<{
 
         const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
             NextIDPlatform.Twitter,
-            me.identifier.userId,
+            myIdentity.identifier.userId,
         )
 
         const verifiedPersona = intersectionWith(
@@ -75,5 +75,5 @@ export function useQueryQualifications(): AsyncState<{
         return {
             hasVerifiedPersona: false,
         }
-    }, [me, currentPersona, wallets, personas])
+    }, [myIdentity, currentPersona, wallets, personas])
 }

@@ -73,7 +73,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
-    const currentProfileIdentify = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
     useEffect(() => {
@@ -114,42 +114,38 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     }, [!personas.length, isPending, !error])
 
     const isConnected = useMemo(() => {
-        if (!selectedPersona || !currentProfileIdentify) return false
+        if (!selectedPersona || !myIdentity) return false
         // Selected persona does not link the current site
-        const linked = selectedPersona.persona.linkedProfiles.find((x) =>
-            isSameProfile(x, currentProfileIdentify.identifier),
-        )
+        const linked = selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, myIdentity.identifier))
         if (!linked) return false
         return isSamePersona(selectedPersona.persona, currentPersonaIdentifier)
-    }, [selectedPersona, currentProfileIdentify, currentPersonaIdentifier])
+    }, [selectedPersona, myIdentity, currentPersonaIdentifier])
 
     const isVerified = useMemo(() => {
-        if (!currentProfileIdentify || !selectedPersona) return false
+        if (!myIdentity || !selectedPersona) return false
 
         const verifiedAtSite = selectedPersona.proof.find((x) => {
             return (
-                isSameProfile(
-                    resolveNextIDIdentityToProfile(x.identity, x.platform),
-                    currentProfileIdentify.identifier,
-                ) && x.is_valid
+                isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), myIdentity.identifier) &&
+                x.is_valid
             )
         })
         return !!verifiedAtSite
-    }, [currentProfileIdentify, selectedPersona?.proof])
+    }, [myIdentity, selectedPersona?.proof])
 
     const actionButton = useMemo(() => {
-        if (!currentProfileIdentify || !selectedPersona) return null
+        if (!myIdentity || !selectedPersona) return null
 
         const handleClick = async () => {
             if (!isConnected) {
-                await connect(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
+                await connect(myIdentity.identifier, selectedPersona.persona.identifier)
                 if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectTwitter)
                 else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeConnectTwitter)
             }
             if (!isVerified && enableVerify) {
                 onClose?.()
                 ApplicationBoardModal.close()
-                await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
+                await handleVerifyNextID(selectedPersona.persona, myIdentity.identifier?.userId)
                 if (!finishTarget) Telemetry.captureEvent(EventType.Access, EventID.EntryProfileConnectVerify)
                 else Telemetry.captureEvent(EventType.Access, EventID.EntryMaskComposeVerifyTwitter)
             }
@@ -211,7 +207,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         isConnected,
         isVerified,
         currentPersonaIdentifier,
-        currentProfileIdentify,
+        myIdentity,
         enableVerify,
         finishTarget,
         selectedPersona?.persona,
@@ -245,7 +241,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                             onClick={() => setSelectedPersona(x)}
                             currentPersona={selectedPersona}
                             currentPersonaIdentifier={currentPersonaIdentifier}
-                            currentProfileIdentify={currentProfileIdentify}
+                            currentProfileIdentify={myIdentity}
                             classes={{ unchecked: props.classes?.unchecked }}
                         />
                     )

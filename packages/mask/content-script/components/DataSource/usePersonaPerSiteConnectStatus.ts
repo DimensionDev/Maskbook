@@ -10,8 +10,8 @@ import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
 export function usePersonaPerSiteConnectStatus() {
     const personas = usePersonasFromDB()
     const lastState = useSetupGuideStatus()
-    const lastRecognized = useMyIdentity()
-    const username = lastState.username || lastRecognized.identifier?.userId
+    const myIdentity = useMyIdentity()
+    const username = lastState.username || myIdentity.identifier?.userId
     const checkSiteConnectedToCurrentPersona = useCallback(
         (persona: PersonaInformation) =>
             username ? persona.linkedProfiles.some((x) => x.identifier.userId === username) : false,

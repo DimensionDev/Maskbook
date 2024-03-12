@@ -66,24 +66,24 @@ export function RouterDialog() {
         CrossIsolationMessages.events.smartPayDialogEvent,
     )
 
-    const me = useMyIdentity()
+    const myIdentity = useMyIdentity()
 
     // #region query white list
     const { loading: queryVerifyLoading } = useAsync(async () => {
-        if (!me?.identifier?.userId || !open) return
+        if (!myIdentity?.identifier?.userId || !open) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.filter((x) => !x.owner).map((x) => x.address),
             ...compact(personas.map((x) => x.address)),
         ])
-        const verified = await SmartPayFunder.verify(me.identifier.userId)
+        const verified = await SmartPayFunder.verify(myIdentity.identifier.userId)
 
         if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
 
         if (verified || accounts.filter((x) => !x.deployed && x.funded).length) return navigate(RoutePaths.Deploy)
 
         return navigate(RoutePaths.InEligibility)
-    }, [open, me, personas.length, wallets.length])
+    }, [open, myIdentity, personas.length, wallets.length])
     // #endregion
 
     const title = useMemo(() => {

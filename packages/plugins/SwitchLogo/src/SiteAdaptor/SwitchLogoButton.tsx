@@ -65,8 +65,8 @@ const useStyles = makeStyles()(() => ({
 
 export function SwitchLogoButton() {
     const { classes, cx } = useStyles()
-    const current = useMyIdentity()
-    const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
+    const myIdentity = useMyIdentity()
+    const logoType = useValueRef(switchLogoSettings[myIdentity?.identifier?.userId || ''])
     const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
 
     useLayoutEffect(() => {

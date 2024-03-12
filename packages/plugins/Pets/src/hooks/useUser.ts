@@ -8,15 +8,15 @@ import { useCurrentVisitingIdentity, useMyIdentity } from '@masknet/plugin-infra
 
 export function useUser() {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const whoAmI = useMyIdentity()
+    const myIdentity = useMyIdentity()
 
     return useMemo(() => {
-        if (!account || !whoAmI?.identifier || whoAmI.identifier?.userId === '$unknown') return
+        if (!account || !myIdentity?.identifier || myIdentity.identifier?.userId === '$unknown') return
         return {
-            userId: whoAmI.identifier.userId,
+            userId: myIdentity.identifier.userId,
             address: account,
         }
-    }, [account, whoAmI])
+    }, [account, myIdentity])
 }
 
 export const DEFAULT_USER = { userId: '', address: '' }

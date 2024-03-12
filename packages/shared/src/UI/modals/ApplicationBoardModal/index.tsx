@@ -1,10 +1,11 @@
 import { forwardRef, useState } from 'react'
-import type {
-    DashboardRoutes,
-    EnhanceableSite,
-    PersonaInformation,
-    PluginID,
-    SingletonModalRefCreator,
+import {
+    EMPTY_LIST,
+    type DashboardRoutes,
+    type EnhanceableSite,
+    type PersonaInformation,
+    type PluginID,
+    type SingletonModalRefCreator,
 } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -17,7 +18,7 @@ export interface ApplicationBoardModalOpenProps {
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite: EnhanceableSite
     allPersonas: PersonaInformation[]
-    lastRecognized: IdentityResolved
+    myIdentity: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
     setPluginMinimalModeEnabled: (id: string, checked: boolean) => Promise<void>
@@ -34,7 +35,7 @@ export const ApplicationBoardModal = forwardRef<SingletonModalRefCreator<Applica
             useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
         const [currentSite, setCurrentSite] = useState<EnhanceableSite>()
         const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
-        const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
+        const [myIdentity, setMyIdentity] = useState<IdentityResolved>()
         const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()
         const [personaPerSiteConnectStatusLoading, setPersonaPerSiteConnectStatusLoading] = useState(false)
         const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
@@ -49,7 +50,7 @@ export const ApplicationBoardModal = forwardRef<SingletonModalRefCreator<Applica
                 setQueryOwnedPersonaInformation(() => props.queryOwnedPersonaInformation)
                 setCurrentSite(props.currentSite)
                 setAllPersonas(props.allPersonas)
-                setLastRecognized(props.lastRecognized)
+                setMyIdentity(props.myIdentity)
                 setApplicationCurrentStatus(props.applicationCurrentStatus)
                 setPersonaPerSiteConnectStatusLoading(props.personaPerSiteConnectStatusLoading)
                 setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
@@ -63,8 +64,8 @@ export const ApplicationBoardModal = forwardRef<SingletonModalRefCreator<Applica
         return (
             <ApplicationBoard
                 open
-                allPersonas={allPersonas ?? []}
-                lastRecognized={lastRecognized}
+                allPersonas={allPersonas ?? EMPTY_LIST}
+                myIdentity={myIdentity}
                 currentSite={currentSite}
                 applicationCurrentStatus={applicationCurrentStatus}
                 queryOwnedPersonaInformation={queryOwnedPersonaInformation}

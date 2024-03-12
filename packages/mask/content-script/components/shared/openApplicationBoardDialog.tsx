@@ -8,7 +8,7 @@ import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteC
 import Services from '#services'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
-    const lastRecognized = useMyIdentity()
+    const myIdentity = useMyIdentity()
     const allPersonas = usePersonasFromDB()
     const { value: applicationCurrentStatus, loading: personaPerSiteConnectStatusLoading } =
         usePersonaPerSiteConnectStatus()
@@ -17,7 +17,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
         () =>
             ApplicationBoardModal.open({
                 allPersonas,
-                lastRecognized,
+                myIdentity,
                 openDashboard: Services.Helper.openDashboard,
                 currentSite: activatedSiteAdaptorUI!.networkIdentifier,
                 queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -29,7 +29,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
             }),
         [
             allPersonas,
-            lastRecognized,
+            myIdentity,
             applicationCurrentStatus,
             personaPerSiteConnectStatusLoading,
             quickMode,
