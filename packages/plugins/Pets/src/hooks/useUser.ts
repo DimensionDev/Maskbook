@@ -4,11 +4,11 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PetsPluginID } from '../constants.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useCurrentVisitingIdentity, useMyIdentity } from '@masknet/plugin-infra/content-script'
 
 export function useUser() {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const whoAmI = useLastRecognizedIdentity()
+    const whoAmI = useMyIdentity()
 
     return useMemo(() => {
         if (!account || !whoAmI?.identifier || whoAmI.identifier?.userId === '$unknown') return

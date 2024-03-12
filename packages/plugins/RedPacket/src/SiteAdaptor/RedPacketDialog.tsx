@@ -17,7 +17,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
     useActivatedPluginSiteAdaptor,
     useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
+    useMyIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
@@ -137,7 +137,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [props.onClose, step])
 
     const currentIdentity = useCurrentVisitingIdentity()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const linkedPersona = useCurrentLinkedPersona()
     const senderName =
         lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname

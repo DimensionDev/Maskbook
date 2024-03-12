@@ -10,7 +10,7 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import Services from '#services'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentIdentity, useMyIdentity } from '../DataSource/useActivatedUI.js'
 import { CompositionDialogUI, type CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
 import { useRecipientsList } from './useRecipientsList.js'
@@ -51,7 +51,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: connectStatus } = useCurrentPersonaConnectStatus(
         allPersonas,

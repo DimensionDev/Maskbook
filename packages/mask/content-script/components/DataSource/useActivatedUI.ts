@@ -50,7 +50,7 @@ export function useCurrentIdentity() {
     return useSubscription(CurrentIdentitySubscription)
 }
 
-export function useLastRecognizedIdentity() {
+export function useMyIdentity() {
     return useValueRef(activatedSiteAdaptorUI!.collecting.identityProvider?.recognized || defaultIdentityResolved)
 }
 

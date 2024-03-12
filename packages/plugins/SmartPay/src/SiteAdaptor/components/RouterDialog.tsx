@@ -2,7 +2,7 @@ import { compact } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -66,24 +66,24 @@ export function RouterDialog() {
         CrossIsolationMessages.events.smartPayDialogEvent,
     )
 
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const me = useMyIdentity()
 
     // #region query white list
     const { loading: queryVerifyLoading } = useAsync(async () => {
-        if (!lastRecognizedIdentity?.identifier?.userId || !open) return
+        if (!me?.identifier?.userId || !open) return
         const chainId = await SmartPayBundler.getSupportedChainId()
         const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [
             ...wallets.filter((x) => !x.owner).map((x) => x.address),
             ...compact(personas.map((x) => x.address)),
         ])
-        const verified = await SmartPayFunder.verify(lastRecognizedIdentity.identifier.userId)
+        const verified = await SmartPayFunder.verify(me.identifier.userId)
 
         if (accounts.filter((x) => x.deployed).length) return navigate(RoutePaths.Main)
 
         if (verified || accounts.filter((x) => !x.deployed && x.funded).length) return navigate(RoutePaths.Deploy)
 
         return navigate(RoutePaths.InEligibility)
-    }, [open, lastRecognizedIdentity, personas.length, wallets.length])
+    }, [open, me, personas.length, wallets.length])
     // #endregion
 
     const title = useMemo(() => {

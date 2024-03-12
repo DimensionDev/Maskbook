@@ -2,11 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { ThemeProvider } from '@mui/material'
 import { MaskLightTheme } from '@masknet/theme'
-import {
-    useAllPersonas,
-    useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
-} from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useCurrentVisitingIdentity, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import {
     PluginCardFrameMini,
     useCurrentPersonaConnectStatus,
@@ -26,7 +22,7 @@ import {
 import { openDashboard, openPopupWindow, queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
 
 export const NextIdPage = memo(function NextIdPage() {
-    const currentProfileIdentifier = useLastRecognizedIdentity()
+    const currentProfileIdentifier = useMyIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const allPersonas = useAllPersonas()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)

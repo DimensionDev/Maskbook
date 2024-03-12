@@ -1,5 +1,5 @@
 import { Plugin } from '@masknet/plugin-infra'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide } from '@masknet/shared'
 import { Sniffings, type EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -71,7 +71,7 @@ export function TipsRealmContent({
 }: Plugin.SiteAdaptor.TipsRealmOptions) {
     const t = useTipsTrans()
     const { classes, cx } = useStyles({ buttonSize })
-    const myIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const userGuide = useTipsUserGuide(myIdentity?.identifier?.network as EnhanceableSite)
 
     if (!identity || identity.userId === myIdentity?.identifier?.userId) return null

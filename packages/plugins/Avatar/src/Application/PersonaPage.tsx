@@ -11,7 +11,7 @@ import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
@@ -23,7 +23,7 @@ export function PersonaPage() {
     const navigate = useNavigate()
     const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
 
-    const socialIdentity = useLastRecognizedIdentity()
+    const socialIdentity = useMyIdentity()
 
     const network = socialIdentity?.identifier?.network.replace('.com', '')
     const userId = socialIdentity?.identifier?.userId

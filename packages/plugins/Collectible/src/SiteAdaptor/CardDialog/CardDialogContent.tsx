@@ -8,11 +8,7 @@ import { ConnectPersonaBoundary, LoadingStatus, PluginWalletStatusBar, ReloadSta
 import { PluginID, NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import {
-    useAllPersonas,
-    useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
-} from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useCurrentVisitingIdentity, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersonaIdentifier } from '@masknet/plugin-infra/content-script/context'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
 import { AboutTab } from './tabs/AboutTab.js'
@@ -91,7 +87,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
         chainId,
     } = Context.useContainer()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const currentIdentifier = useSubscription(currentPersonaIdentifier)
     const personas = useAllPersonas()
     const onBeforeAction = useCallback(() => {

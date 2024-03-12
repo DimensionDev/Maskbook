@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react'
 import { useAsyncFn } from 'react-use'
 import { getUnixTime } from 'date-fns'
 import { Typography } from '@mui/material'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import {
     type NetworkPluginID,
     type PersonaInformation,
@@ -34,7 +34,7 @@ export function useDeploy(
     const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -62,8 +62,8 @@ export function useDeploy(
             }
             if (
                 !chainId ||
-                !lastRecognizedIdentity?.isOwner ||
-                !lastRecognizedIdentity.identifier?.userId ||
+                !me?.isOwner ||
+                !me.identifier?.userId ||
                 !signAccount?.address ||
                 !contractAccount ||
                 (!signPersona && !signWallet)
@@ -87,7 +87,7 @@ export function useDeploy(
                 return result.transactionHash
             }
             const payload = JSON.stringify({
-                twitterHandle: lastRecognizedIdentity.identifier.userId,
+                twitterHandle: me.identifier.userId,
                 ts: getUnixTime(new Date()),
                 ownerAddress: signAccount.address,
                 nonce,
@@ -166,7 +166,7 @@ export function useDeploy(
     }, [
         chainId,
         signAccount,
-        lastRecognizedIdentity,
+        me,
         signWallet,
         signPersona,
         contractAccount,

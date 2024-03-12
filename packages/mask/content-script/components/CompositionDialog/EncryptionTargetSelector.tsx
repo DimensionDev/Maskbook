@@ -10,7 +10,7 @@ import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { PopoverListItem } from './PopoverListItem.js'
 import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../DataSource/useActivatedUI.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
 
@@ -62,7 +62,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const e2eDisabledMessage =

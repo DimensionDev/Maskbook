@@ -45,7 +45,7 @@ import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@maskn
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
+    useMyIdentity,
     useSocialIdentity,
     useSocialIdentityByUserId,
 } from '../DataSource/useActivatedUI.js'
@@ -147,7 +147,7 @@ function Content(props: ProfileTabContentProps) {
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     const {

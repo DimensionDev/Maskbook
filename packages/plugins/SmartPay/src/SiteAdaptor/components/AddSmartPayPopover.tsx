@@ -7,7 +7,7 @@ import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } 
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
@@ -65,11 +65,11 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
     const { classes } = useStyles()
     const { setSigner } = SmartPayContext.useContainer()
     const personas = useAllPersonas()
-    const currentProfile = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     const { value = 0, retry } = useAsyncRetry(async () => {
-        if (!currentProfile?.identifier?.userId) return 0
-        return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)
-    }, [currentProfile])
+        if (!me?.identifier?.userId) return 0
+        return SmartPayFunder.getRemainFrequency(me.identifier.userId)
+    }, [me])
 
     const { value: qualifications, loading } = useQueryQualifications()
 
@@ -157,10 +157,10 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             }}>
             <Typography className={classes.title}>{t.add_smart_pay_wallet()}</Typography>
             <Box className={classes.info}>
-                <Icon logoURL={currentProfile?.avatar} name={currentProfile?.nickname} size={30} />
+                <Icon logoURL={me?.avatar} name={me?.nickname} size={30} />
                 <Box>
-                    <Typography className={classes.name}>{currentProfile?.nickname}</Typography>
-                    <Typography className={classes.identifier}>@{currentProfile?.identifier?.userId}</Typography>
+                    <Typography className={classes.name}>{me?.nickname}</Typography>
+                    <Typography className={classes.identifier}>@{me?.identifier?.userId}</Typography>
                 </Box>
             </Box>
             <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>

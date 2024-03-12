@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import {
     useCurrentVisitingIdentity,
-    useLastRecognizedIdentity,
+    useMyIdentity,
     useThemeSettings,
 } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../../shared-ui/hooks/usePersonasFromDB.js'
@@ -73,7 +73,7 @@ function clickHandler() {
 }
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const personas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]

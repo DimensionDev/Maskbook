@@ -7,18 +7,18 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCallback } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const t = useMaskSharedTrans()
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const me = useMyIdentity()
 
     return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
-            if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
+            if (encode === 'image' && !me) throw new Error('No Current Profile')
 
             // rawEncrypted is either string or Uint8Array
             // string is the old format, Uint8Array is the new format.
@@ -26,7 +26,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 info.version,
                 content,
                 target,
-                lastRecognizedIdentity.identifier,
+                me.identifier,
                 activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
@@ -72,7 +72,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             onClose()
         },
-        [t, lastRecognizedIdentity, onClose, reason],
+        [t, me, onClose, reason],
     )
 }
 

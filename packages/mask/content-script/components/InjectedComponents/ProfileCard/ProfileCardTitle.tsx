@@ -14,7 +14,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona, usePersonasFromDB } from '../../../../shared-ui/hooks/index.js'
 import { ProfileBar, ProfileBarSkeleton } from './ProfileBar.js'
 
@@ -59,7 +59,7 @@ function Web3ProfileSettingButton() {
 
     const personas = usePersonasFromDB()
     const persona = useCurrentPersona()
-    const identity = useLastRecognizedIdentity()
+    const identity = useMyIdentity()
     const { value: status, loading } = useCurrentPersonaConnectStatus(
         personas,
         persona?.identifier,
@@ -100,7 +100,7 @@ export function ProfileCardTitle({
     onAddressChange,
     ...rest
 }: ProfileCardTitleProps) {
-    const me = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     const { classes, cx } = useStyles()
 
     const userId = identity?.identifier?.userId

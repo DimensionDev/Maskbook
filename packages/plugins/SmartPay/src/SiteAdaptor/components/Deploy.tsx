@@ -4,7 +4,7 @@ import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useCurrentPersonaInformation, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { CopyButton, ImageIcon, PersonaAction, WalletDescription } from '@masknet/shared'
 import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
@@ -138,7 +138,7 @@ export function Deploy({ open }: { open: boolean }) {
     const { signWallet, signPersona } = signer || {}
     const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, ProviderType.MaskWallet)
     const polygonDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
-    const currentVisitingProfile = useLastRecognizedIdentity()
+    const me = useMyIdentity()
 
     const { value: avatar } = useAsync(async () => {
         if (signPersona) return queryPersonaAvatar(signPersona.identifier)
@@ -293,7 +293,7 @@ export function Deploy({ open }: { open: boolean }) {
                         classes={{ bottomFixed: classes.bottomFixed }}
                         avatar={avatar !== null ? avatar : undefined}
                         currentPersona={signPersona}
-                        currentVisitingProfile={currentVisitingProfile}>
+                        currentVisitingProfile={me}>
                         <ActionButton
                             onClick={handleDeploy}
                             loading={deployLoading}

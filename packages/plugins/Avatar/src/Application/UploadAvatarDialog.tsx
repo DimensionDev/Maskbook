@@ -14,7 +14,7 @@ import { useAvatarTrans } from '../locales/i18n_generated.js'
 import { type AvatarInfo, useSave } from '../hooks/save/useSave.js'
 import { useAvatarManagement } from '../contexts/index.js'
 import { RoutePaths } from './Routes.js'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -69,7 +69,7 @@ export function UploadAvatarDialog() {
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
-    const identity = useLastRecognizedIdentity()
+    const identity = useMyIdentity()
     const [, saveAvatar] = useSave(currentPluginID)
     const navigate = useNavigate()
 

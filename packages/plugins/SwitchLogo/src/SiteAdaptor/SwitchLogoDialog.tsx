@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { useSwitchLogoTrans } from '../locales/i18n_generated.js'
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SwitchLogoDialog = memo(() => {
     const t = useSwitchLogoTrans()
     const { classes, cx } = useStyles()
-    const identity = useLastRecognizedIdentity()
+    const identity = useMyIdentity()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
     const [logoType, setLogoType] = useState<SwitchLogoType>(SwitchLogoType.Classics)
     const [needShare, setNeedShare] = useState(true)

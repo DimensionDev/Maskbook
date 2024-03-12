@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { attachProfile, openDashboard, setCurrentPersonaIdentifier } from '@masknet/plugin-infra/dom/context'
 import {
     CrossIsolationMessages,
@@ -73,7 +73,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
-    const currentProfileIdentify = useLastRecognizedIdentity()
+    const currentProfileIdentify = useMyIdentity()
     const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
     useEffect(() => {

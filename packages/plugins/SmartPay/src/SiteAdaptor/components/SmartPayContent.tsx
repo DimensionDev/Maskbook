@@ -42,7 +42,7 @@ import {
     isSameAddress,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { EVMUtils, SmartPayFunder, EVMWeb3 } from '@masknet/web3-providers'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
@@ -228,7 +228,7 @@ export const SmartPayContent = memo(() => {
 
     // #endregion
 
-    const currentProfile = useLastRecognizedIdentity()
+    const currentProfile = useMyIdentity()
     const { value = 0, retry: refreshRemainFrequency } = useAsyncRetry(async () => {
         if (!currentProfile?.identifier?.userId) return 0
         return SmartPayFunder.getRemainFrequency(currentProfile.identifier.userId)

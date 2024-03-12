@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import type { PersonaInformation } from '@masknet/shared-base'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { connectPersona } from '@masknet/plugin-infra/content-script/context'
 import { createPersona } from '@masknet/plugin-infra/dom/context'
 
@@ -11,10 +11,10 @@ export function usePersonaConnectStatus(): {
     currentPersona?: PersonaInformation
 } {
     const personas = useAllPersonas()
-    const lastRecognized = useLastRecognizedIdentity()
+    const me = useMyIdentity()
 
     return useMemo(() => {
-        const id = lastRecognized?.identifier
+        const id = me?.identifier
         const currentPersona = personas.find((x) => id && x.linkedProfiles.some((x) => x.identifier === id))
         return {
             /** @deprecated */
@@ -26,5 +26,5 @@ export function usePersonaConnectStatus(): {
             connected: !!currentPersona,
             hasPersona: !!personas.length,
         }
-    }, [personas, lastRecognized?.identifier?.toText()])
+    }, [personas, me?.identifier?.toText()])
 }

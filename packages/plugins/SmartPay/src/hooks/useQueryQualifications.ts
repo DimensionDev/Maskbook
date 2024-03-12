@@ -1,11 +1,7 @@
 import { intersectionWith, first } from 'lodash-es'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import {
-    useLastRecognizedIdentity,
-    useCurrentPersonaInformation,
-    useAllPersonas,
-} from '@masknet/plugin-infra/content-script'
+import { useMyIdentity, useCurrentPersonaInformation, useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { NextIDPlatform, type PersonaInformation, type Wallet } from '@masknet/shared-base'
 import { useWallets } from '@masknet/web3-hooks-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,13 +13,13 @@ export function useQueryQualifications(): AsyncState<{
     signPersona?: PersonaInformation
     signWallet?: Wallet
 }> {
-    const currentIdentity = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     const currentPersona = useCurrentPersonaInformation()
     const wallets = useWallets()
     const personas = useAllPersonas()
 
     return useAsync(async () => {
-        if (!currentIdentity?.identifier?.userId || (!currentPersona && !wallets.length) || !currentIdentity.isOwner)
+        if (!me?.identifier?.userId || (!currentPersona && !wallets.length) || !me.isOwner)
             return {
                 hasVerifiedPersona: false,
             }
@@ -33,7 +29,7 @@ export function useQueryQualifications(): AsyncState<{
             const isVerifiedPersona = await NextIDProof.queryIsBound(
                 currentPersona.identifier.publicKeyAsHex.toLowerCase(),
                 NextIDPlatform.Twitter,
-                currentIdentity?.identifier?.userId,
+                me?.identifier?.userId,
             )
 
             if (isVerifiedPersona)
@@ -45,7 +41,7 @@ export function useQueryQualifications(): AsyncState<{
 
         const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
             NextIDPlatform.Twitter,
-            currentIdentity.identifier.userId,
+            me.identifier.userId,
         )
 
         const verifiedPersona = intersectionWith(
@@ -79,5 +75,5 @@ export function useQueryQualifications(): AsyncState<{
         return {
             hasVerifiedPersona: false,
         }
-    }, [currentIdentity, currentPersona, wallets, personas])
+    }, [me, currentPersona, wallets, personas])
 }

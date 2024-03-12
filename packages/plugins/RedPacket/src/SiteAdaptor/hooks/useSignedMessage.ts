@@ -1,4 +1,4 @@
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import { type RedPacketJSONPayload, type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { signMessage } from '@masknet/web3-shared-evm'
@@ -15,7 +15,7 @@ export function useSignedMessage(
     const password = 'privateKey' in payload ? payload.privateKey : payload.password
     const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
     const platform = usePlatformType()
-    const me = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     const profile =
         platform ?
             {

@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'
 import { useCurrentUserId } from './hooks/useCurrentUserId.js'
 import { useConnectedVerified } from './hooks/useConnectedVerified.js'
@@ -22,7 +22,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     const setupGuide = useSetupGuideStatus()
     // #endregion
 
-    const myIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const [loadingCurrentUserId, currentUserId] = useCurrentUserId()
     const userId = setupGuide.username || currentUserId || ''
 

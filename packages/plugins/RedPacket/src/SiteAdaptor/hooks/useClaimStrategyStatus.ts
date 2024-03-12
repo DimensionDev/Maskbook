@@ -1,4 +1,4 @@
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
@@ -17,7 +17,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
     })
     const signedMessage = 'privateKey' in payload ? payload.privateKey : payload.password
-    const me = useLastRecognizedIdentity()
+    const me = useMyIdentity()
     return useQuery({
         enabled: !signedMessage && !!platform,
         queryKey: ['red-packet', 'claim-strategy', rpid, platform, account, me],

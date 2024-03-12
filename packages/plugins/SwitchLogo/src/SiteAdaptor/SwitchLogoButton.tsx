@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { CrossIsolationMessages, PluginID, SwitchLogoType, switchLogoSettings } from '@masknet/shared-base'
-import { useIsMinimalMode, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useIsMinimalMode, useMyIdentity } from '@masknet/plugin-infra/content-script'
 
 const BlueBirdHTML = `
      <svg
@@ -65,7 +65,7 @@ const useStyles = makeStyles()(() => ({
 
 export function SwitchLogoButton() {
     const { classes, cx } = useStyles()
-    const current = useLastRecognizedIdentity()
+    const current = useMyIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
     const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
 

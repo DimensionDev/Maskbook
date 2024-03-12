@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { CopyButton, FormattedBalance, Image, ProgressiveText, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
@@ -108,7 +108,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 export const UserProfile = memo(function UserProfile({ user, address, loading, variant, className, ...rest }: Props) {
     const { classes, theme, cx } = useStyles()
     const t = useI18N()
-    const identity = useLastRecognizedIdentity()
+    const identity = useMyIdentity()
     const myAccount = useAccount()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const isOther = variant === 'other'

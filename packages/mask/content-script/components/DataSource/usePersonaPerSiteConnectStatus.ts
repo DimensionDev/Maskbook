@@ -3,14 +3,14 @@ import { useAsyncRetry } from 'react-use'
 import type { PersonaPerSiteConnectStatus } from '@masknet/shared'
 import type { PersonaInformation } from '@masknet/shared-base'
 import Services from '#services'
-import { useLastRecognizedIdentity } from './useActivatedUI.js'
+import { useMyIdentity } from './useActivatedUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus.js'
 
 export function usePersonaPerSiteConnectStatus() {
     const personas = usePersonasFromDB()
     const lastState = useSetupGuideStatus()
-    const lastRecognized = useLastRecognizedIdentity()
+    const lastRecognized = useMyIdentity()
     const username = lastState.username || lastRecognized.identifier?.userId
     const checkSiteConnectedToCurrentPersona = useCallback(
         (persona: PersonaInformation) =>
