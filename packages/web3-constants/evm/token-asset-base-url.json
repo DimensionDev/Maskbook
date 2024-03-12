@@ -25,7 +25,8 @@
         "Aurora_Testnet": [],
         "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux"],
         "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar"],
-        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll"]
+        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll"],
+        "Metis": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/metis"]
     },
     "ERC20_TOKEN_ASSET_BASE_URI": {
         "Mainnet": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/assets"],
@@ -53,6 +54,7 @@
         "Aurora_Testnet": [],
         "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux/assets"],
         "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar/assets"],
-        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll/assets"]
+        "Scroll": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/scroll/assets"],
+        "Metis": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/metis/assets"]
     }
 }
