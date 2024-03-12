@@ -36,6 +36,7 @@ import { ConfirmDialog } from './ConfirmDialog.js'
 import { Icons } from '@masknet/icons'
 
 export interface TraderProps extends withClasses<'root'> {
+    isTokenSecurityEnabled: boolean
     defaultInputCoin?: Web3Helper.FungibleTokenAll
     defaultOutputCoin?: Web3Helper.FungibleTokenAll
     chainId?: Web3Helper.ChainIdAll
@@ -413,6 +414,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     return (
         <>
             <TradeForm
+                isTokenSecurityEnabled={props.isTokenSecurityEnabled}
                 isSmartPay={
                     !!wallet?.owner &&
                     chainId === smartPayConfig?.smartPayChainId &&
@@ -454,6 +456,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             :   null}
 
             <TraderStateBar
+                isTokenSecurityEnabled={props.isTokenSecurityEnabled}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}

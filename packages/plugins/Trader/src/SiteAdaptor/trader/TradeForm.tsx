@@ -11,7 +11,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
 import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
-import { PluginID, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { TraderAPI } from '@masknet/web3-providers/types'
 import { InputTokenPanel } from './InputTokenPanel.js'
@@ -22,7 +22,6 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import { useTraderTrans } from '../../locales/index.js'
-import { useActivatedPlugins } from './hooks/useMinimalMaybe.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -170,6 +169,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface AllTradeFormProps extends withClasses<'root'> {
+    isTokenSecurityEnabled: boolean
     inputAmount: string
     inputToken?: Web3Helper.FungibleTokenAll
     outputToken?: Web3Helper.FungibleTokenAll
@@ -203,6 +203,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
         settings,
         gasConfig,
+        isTokenSecurityEnabled,
         ...props
     }) => {
         const maxAmountTrade = useRef<AsyncStateRetry<TraderAPI.TradeInfo> | null>(null)
@@ -214,8 +215,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         const Utils = useWeb3Utils()
         const { allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
-
-        const isTokenSecurityEnable = !useActivatedPlugins().some((x) => x.ID === PluginID.GoPlusSecurity)
 
         // #region token balance
         const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
@@ -348,7 +347,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { value: tokenSecurityInfo, error } = useTokenSecurity(
             pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
             outputToken?.address.trim(),
-            isTokenSecurityEnable,
+            isTokenSecurityEnabled,
         )
 
         return (
@@ -401,7 +400,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 }}
                             />
                             <Box marginTop="8px">
-                                {isTokenSecurityEnable && tokenSecurityInfo && !error ?
+                                {isTokenSecurityEnabled && tokenSecurityInfo && !error ?
                                     <TokenSecurityBar tokenSecurity={tokenSecurityInfo} />
                                 :   null}
                             </Box>

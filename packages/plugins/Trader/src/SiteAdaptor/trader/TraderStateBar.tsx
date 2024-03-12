@@ -12,7 +12,7 @@ import {
     useTokenSecurity,
     ChainBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID, PluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useEnvironmentContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -25,7 +25,6 @@ import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
 import type { NativeTokenWrapper } from '../../trader/native/useTradeComputed.js'
 import { useTraderTrans } from '../../locales/index.js'
-import { useActivatedPlugins } from './hooks/useMinimalMaybe.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -52,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TradeStateBarProps {
+    isTokenSecurityEnabled: boolean
     inputAmount: string
     focusedTrade?: AsyncStateRetry<TraderAPI.TradeInfo>
     inputToken?: Web3Helper.FungibleTokenAll
@@ -73,6 +73,7 @@ export function TraderStateBar({
     gasPrice,
     onSwap,
     refresh,
+    isTokenSecurityEnabled,
 }: TradeStateBarProps) {
     const t = useTraderTrans()
     const { classes } = useStyles()
@@ -100,14 +101,10 @@ export function TraderStateBar({
     )
     // #endregion
 
-    const isGoPlusMinimal = useActivatedPlugins().some((x) => x.ID === PluginID.GoPlusSecurity)
-
-    const isTokenSecurityEnable = !isGoPlusMinimal
-
     const { value: tokenSecurityInfo } = useTokenSecurity(
         pluginID === NetworkPluginID.PLUGIN_EVM ? (chainId as ChainId) : undefined,
         outputToken?.address.trim(),
-        isTokenSecurityEnable,
+        isTokenSecurityEnabled,
     )
 
     const isRisky = tokenSecurityInfo?.is_high_risk
@@ -216,7 +213,7 @@ export function TraderStateBar({
                                     focusedTrade?.loading || !focusedTrade?.value || !!validationMessage || isSwapping
                                 }
                                 onSwap={onSwap}
-                                showTokenSecurity={!!(isTokenSecurityEnable && isRisky)}>
+                                showTokenSecurity={!!(isTokenSecurityEnabled && isRisky)}>
                                 <ActionButton
                                     fullWidth
                                     loading={isSwapping}

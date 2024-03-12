@@ -48,7 +48,7 @@ import { CoinIcon } from './CoinIcon.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { TrendingViewContext } from './context.js'
-import { useActivatedPlugins } from '../trader/hooks/useMinimalMaybe.js'
+import { useActivatedPluginSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -194,15 +194,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
-    const transakPluginEnabled = useActivatedPlugins('any').some((x) => x.ID === PluginID.Transak)
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-    const minimalPlugins = useActivatedPlugins()
-    const isTokenSecurityEnable = !isNFT && !minimalPlugins.some((x) => x.ID === PluginID.GoPlusSecurity)
-    const transakIsMinimalMode = minimalPlugins.some((x) => x.ID === PluginID.Transak)
+    const isTokenSecurityEnable = !useIsMinimalMode(PluginID.GoPlusSecurity) && !isNFT
+    const isTransakEnabled = !!useActivatedPluginSiteAdaptor(PluginID.Transak, false)
 
     const { value: tokenSecurity, error } = useTokenSecurity(
         coin.chainId,
@@ -210,7 +208,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
-    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
+    const isBuyable = !isNFT && isTransakEnabled && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,

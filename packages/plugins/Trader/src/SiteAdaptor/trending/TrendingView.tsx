@@ -143,6 +143,7 @@ export function TrendingView(props: TrendingViewProps) {
     const t = useTraderTrans()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
+    const isTokenSecurityEnabled = !useIsMinimalMode(PluginID.GoPlusSecurity)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -408,6 +409,7 @@ export function TrendingView(props: TrendingViewProps) {
                             classes={{ root: classes.tradeViewRoot }}
                             TraderProps={{
                                 share,
+                                isTokenSecurityEnabled,
                                 defaultInputCoin: createFungibleToken(
                                     result.chainId,
                                     SchemaType.Native,
