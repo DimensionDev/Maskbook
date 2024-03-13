@@ -38,7 +38,15 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
             return [
                 ...registeredNetworks
                     .filter((x) => x.isMainnet)
-                    .map((x) => registeredChains.find((y) => y.chainId === x.chainId)!),
+                    .map((x) => {
+                        const match = registeredChains.find((y) => y.chainId === x.chainId)
+                        if (process.env.NODE_ENV === 'development' && !match) {
+                            console.error(
+                                `No chain declaration for ${x.chainId} yet. Please check out web3-shared/*/src/constants/chains.json for ensure`,
+                            )
+                        }
+                        return match
+                    }),
                 ...customizedNetworks.map((x) => ({
                     ...x,
                     isCustomized: true,

@@ -72,8 +72,11 @@
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
+        "Manta": ["https://pacific-rpc.manta.network/http"],
+        "Linea": ["https://rpc.linea.build"],
         "X1": ["https://rpc.x1.tech"],
-        "X1_Testnet": ["https://testrpc.x1.tech"]
+        "X1_Testnet": ["https://testrpc.x1.tech"],
+        "ZKSync": ["https://mainnet.era.zksync.io"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -135,6 +138,9 @@
         "Scroll": [0, 0, 0, 0, 0],
         "Metis": [0, 0, 0, 0, 0],
         "X1": [0, 0, 0, 0, 0],
-        "X1_Testnet": [0, 0, 0, 0, 0]
+        "X1_Testnet": [0, 0, 0, 0, 0],
+        "Manta": [0, 0, 0, 0],
+        "Linea": [0, 0, 0, 0],
+        "ZKSync": [0, 0, 0, 0]
     }
 }

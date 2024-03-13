@@ -69,9 +69,14 @@ export enum ChainId {
     // Boba
     Boba = 288,
 
+    Linea = 59144,
+
     // Metis
     Metis = 1088,
     Metis_Sepolia = 59902,
+
+    // Manta
+    Manta = 169,
 
     // Optimism
     Optimism = 10,
@@ -86,6 +91,7 @@ export enum ChainId {
 
     Scroll = 534352,
 
+    ZKSync = 324,
     ZKSync_Alpha_Testnet = 280,
 
     Crossbell = 3737,
@@ -295,6 +301,8 @@ export enum NetworkType {
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',
+    Manta = 'Manta',
+    Linea = 'Linea',
     Optimism = 'Optimism',
     Conflux = 'Conflux',
     Astar = 'Astar',
@@ -302,6 +310,7 @@ export enum NetworkType {
     Moonbeam = 'Moonbeam',
     X1 = 'X1',
     X1_Testnet = 'X1_Testnet',
+    ZKSync = 'ZKSync',
     CustomNetwork = 'CustomNetwork',
 }
 

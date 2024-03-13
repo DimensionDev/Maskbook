@@ -1162,6 +1162,78 @@
         ]
     },
     {
+        "chainId": 169,
+        "name": "Manta",
+        "type": "Manta",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 169,
+            "name": "Manta",
+            "symbol": "METIS",
+            "decimals": 18,
+            "logoURL": "0x95CeF13441Be50d20cA4558CC0a27B601aC544E5"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://manta.network/",
+        "shortName": "manta",
+        "explorers": [
+            {
+                "name": "Manta Pacific",
+                "url": "https://pacific-explorer.manta.network/"
+            }
+        ]
+    },
+    {
+        "chainId": 59144,
+        "name": "Linea",
+        "type": "Linea",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 59144,
+            "name": "Linea ETH",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "0x0000000000000000000000000000000000000000"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://linea.build/",
+        "shortName": "linea",
+        "explorers": [
+            {
+                "name": "Linea",
+                "url": "https://explorer.linea.build/"
+            }
+        ]
+    },
+    {
+        "chainId": 324,
+        "name": "ZKSync",
+        "type": "ZKSync",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 324,
+            "name": "ETH",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "0x0000000000000000000000000000000000000000"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://zksync.io/",
+        "shortName": "zksync",
+        "explorers": [
+            {
+                "name": "ZKSync",
+                "url": "https://explorer.zksync.io/"
+            }
+        ]
+    },
+    {
         "chainId": 1284,
         "name": "Moonbeam",
         "type": "Moonbeam",

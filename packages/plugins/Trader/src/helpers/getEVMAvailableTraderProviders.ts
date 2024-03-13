@@ -58,6 +58,9 @@ export function getEVMAvailableTraderProviders(networkType?: NetworkType) {
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
+        case NetworkType.Manta:
+        case NetworkType.Linea:
+        case NetworkType.ZKSync:
         case NetworkType.Conflux:
         case NetworkType.Moonbeam:
         case NetworkType.CustomNetwork:
