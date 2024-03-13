@@ -71,6 +71,7 @@ export enum ChainId {
 
     // Metis
     Metis = 1088,
+    Metis_Sepolia = 59902,
 
     // Optimism
     Optimism = 10,

@@ -292,6 +292,28 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         averageBlockDelay: 10,
     },
     {
+        ID: `${PLUGIN_ID}_metis`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Metis,
+        type: NetworkType.Metis,
+        icon: new URL('../assets/metis.svg', import.meta.url).href,
+        iconColor: 'rgb(36, 150, 238)',
+        name: 'Metis Andromeda',
+        isMainnet: true,
+        averageBlockDelay: 10,
+    },
+    {
+        ID: `${PLUGIN_ID}_metis_sepolia`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Metis_Sepolia,
+        type: NetworkType.Metis,
+        icon: new URL('../assets/metis.svg', import.meta.url).href,
+        iconColor: 'rgb(36, 150, 238)',
+        name: 'Metis Sepolia',
+        isMainnet: false,
+        averageBlockDelay: 10,
+    },
+    {
         ID: `${PLUGIN_ID}_x1_testnet`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.X1_Testnet,
@@ -550,14 +572,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.BitGet,
         name: 'BitGet',
         icon: new URL('../assets/bitget.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://web3.bitget.com/',
         shortenLink: 'web3.bitget.com',
         downloadLink: 'https://web3.bitget.com/en/wallet-download?type=2',
@@ -570,14 +589,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.OneKey,
         name: 'OneKey',
         icon: new URL('../assets/onekey.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://onekey.so/',
         shortenLink: 'onekey.so',
         downloadLink: 'https://onekey.so/download?client=browserExtension',
@@ -590,14 +606,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.Rabby,
         name: 'Rabby',
         icon: new URL('../assets/rabby.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://rabby.io/',
         shortenLink: 'rabby.io',
         downloadLink: 'https://rabby.io/',
@@ -610,14 +623,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.Rainbow,
         name: 'Rainbow',
         icon: new URL('../assets/rainbow.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://rainbow.me/',
         shortenLink: 'rainbow.me',
         downloadLink: 'https://rainbow.me/download',
@@ -630,14 +640,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.Ronin,
         name: 'Ronin',
         icon: new URL('../assets/ronin.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://wallet.roninchain.com/',
         shortenLink: 'wallet.roninchain.com',
         downloadLink: 'https://wallet.roninchain.com/',
@@ -650,14 +657,11 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         type: ProviderType.Zerion,
         name: 'Zerion',
         icon: new URL('../assets/zerion.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
         homeLink: 'https://zerion.io/',
         shortenLink: 'zerion.io',
         downloadLink: 'https://zerion.io/',
