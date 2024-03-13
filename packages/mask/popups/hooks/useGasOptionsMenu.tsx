@@ -49,9 +49,9 @@ export function useGasOptionsMenu(
 ) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
-    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
-
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
+
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const [customGasConfig, setCustomGasConfig] = useState<GasConfig>()

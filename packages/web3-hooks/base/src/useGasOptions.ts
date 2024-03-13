@@ -9,7 +9,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 type T = UseQueryResult
 export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
-    options?: HubOptions<T>,
+    options: HubOptions<T>,
     live?: boolean,
 ) {
     const { chainId } = useChainContext<T>({ chainId: options?.chainId })
@@ -17,7 +17,7 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
     const Utils = useWeb3Utils(pluginID)
 
     return useQuery({
-        queryKey: ['get-gas-options', pluginID, chainId, options],
+        queryKey: ['get-gas-options', pluginID, chainId, JSON.stringify(options)],
         queryFn: async () => {
             if (!Utils.isValidChainId(chainId)) return
             return Hub.getGasOptions!(chainId, options)

@@ -75,7 +75,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken,
     )
 
-    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     {
         const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)

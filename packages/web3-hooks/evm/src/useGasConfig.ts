@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 
 export function useGasConfig(chainId: Web3Helper.ChainIdAll) {
     const [gasConfig, setGasConfig] = useState<GasConfig>()
-    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId: chainId as ChainId })
 
     const editor = GasEditor.fromGasOptions(chainId as ChainId, gasOptions)
 
