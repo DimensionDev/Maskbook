@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function useGasOptionsMenu(
     gasLimit: string | undefined,
-    callback: (config: GasConfig, type?: GasOptionType) => void,
+    callback: (config: GasConfig, type: GasOptionType) => void,
     paymentToken?: string,
 ) {
     const t = useMaskSharedTrans()
@@ -70,20 +70,22 @@ export function useGasOptionsMenu(
                 maxFeePerGas: result.maxFeePerGas ? formatWeiToGwei(result.maxFeePerGas).toFixed(2) : '',
                 maxPriorityFeePerGas:
                     result.maxPriorityFeePerGas ? formatWeiToGwei(result.maxPriorityFeePerGas).toFixed(2) : '',
+                gasOptionType: GasOptionType.CUSTOM,
             })
         } else {
             setCustomGasConfig({
                 ...result,
                 gasPrice: formatWeiToGwei(result.gasPrice).toFixed(2),
+                gasOptionType: GasOptionType.CUSTOM,
             })
         }
-        callback(result)
+        callback(result, GasOptionType.CUSTOM)
     }, [chainId, gasLimit, callback, customGasConfig, paymentToken])
 
     const handleClick = useCallback(
-        (type?: GasOptionType, option?: GasOption) => {
+        (type: GasOptionType, option: GasOption | undefined) => {
             if (!option) return
-            const config =
+            const config: GasConfig =
                 isSupport1559 ?
                     {
                         gasOptionType: type,

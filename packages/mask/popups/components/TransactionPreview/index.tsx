@@ -162,7 +162,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (!transaction.computedPayload.gasPrice) return
 
         return {
-            gasPrice: transaction.computedPayload.gasPrice,
+            gas: transaction.gas || transaction.computedPayload.gas,
+            gasPrice: transaction.gasPrice || transaction.computedPayload.gasPrice,
             gasOptionType: transaction.gasOptionType,
         }
     }, [transaction.computedPayload, transaction.gasOptionType, isSupport1559])

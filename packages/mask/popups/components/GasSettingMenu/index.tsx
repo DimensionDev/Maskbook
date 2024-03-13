@@ -54,12 +54,12 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gasLimit = gasConfig?.gas || defaultGasLimit || chainDefaultGasLimit
 
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
-        gasConfig?.gasOptionType ?? GasOptionType.SLOW,
-    )
+    const [gasOptionType = gasConfig?.gasOptionType ?? GasOptionType.SLOW, setGasOptionType] = useState<
+        GasOptionType | undefined
+    >()
 
     const handleChange = useCallback(
-        (config: GasConfig, type?: GasOptionType) => {
+        (config: GasConfig, type: GasOptionType) => {
             setGasOptionType(type)
             setGasConfig(config)
             onChange?.(config)
