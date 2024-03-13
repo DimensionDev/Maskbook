@@ -6,8 +6,8 @@ import { useGasOptions } from './useGasOptions.js'
 
 export function useGasOption<T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
-    optionType?: GasOptionType,
-    options?: HubOptions<T>,
+    optionType: GasOptionType,
+    options: HubOptions<T>,
 ) {
     const { data: gasOptions } = useGasOptions(pluginID, options)
 
