@@ -10,6 +10,7 @@ import {
     Suspense,
     useTransition,
     useLayoutEffect,
+    useCallback,
 } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useAsyncFn, useLatest } from 'react-use'
@@ -54,9 +55,11 @@ import {
     parseEIP4361Message,
     type EIP4361Message,
     TransactionDescriptorType,
+    GasOptionType,
 } from '@masknet/web3-shared-base'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useInteractionWalletContext } from './InteractionContext.js'
+import { produce } from 'immer'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -412,7 +415,7 @@ const Interaction = memo((props: InteractionProps) => {
         :   null
     return (
         <InteractionItem
-            key={currentMessageIndex}
+            key={currentRequest.ID}
             paymentToken={paymentToken}
             setPaymentToken={setPaymentToken}
             currentRequest={currentRequest}
@@ -454,7 +457,36 @@ const InteractionItem = memo((props: InteractionItemProps) => {
     )
 
     const [approvedAmount, setApproveAmount] = useState('')
-    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
+    const { Message } = useWeb3State()
+    const setGasConfig = useCallback(
+        (gasConfig: GasConfig) => {
+            _setGasConfig(gasConfig)
+            Message?.updateMessage(
+                currentRequest.ID,
+                produce(currentRequest, (draft) => {
+                    if (gasConfig.gasOptionType) draft.request.options.gasOptionType = gasConfig.gasOptionType
+                    if (gasConfig.gasOptionType === GasOptionType.CUSTOM) {
+                        draft.request.options.gas = gasConfig.gas
+                        if ('gasPrice' in gasConfig) {
+                            if (gasConfig.gasPrice) draft.request.options.gasPrice = gasConfig.gasPrice
+                        } else {
+                            if (gasConfig.maxFeePerGas) draft.request.options.maxFeePerGas = gasConfig.maxFeePerGas
+                            if (gasConfig.maxPriorityFeePerGas)
+                                draft.request.options.maxPriorityFeePerGas = gasConfig.maxPriorityFeePerGas
+                        }
+                    } else if (gasConfig.gasOptionType) {
+                        // remove them to use new default next time.
+                        delete draft.request.options.gas
+                        delete draft.request.options.gasPrice
+                        delete draft.request.options.maxFeePerGas
+                        delete draft.request.options.maxPriorityFeePerGas
+                    }
+                }),
+            )
+        },
+        [Message],
+    )
 
     const isSignRequest = signRequest.includes(currentRequest.request.arguments.method)
     let isDangerRequest = false

@@ -373,6 +373,10 @@ export interface RequestOptions {
     allowMaskAsGas?: boolean
     providerURL?: string
     gasOptionType?: GasOptionType
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+    gasPrice?: string
+    gas?: string
 }
 
 export interface MessageRequest {
