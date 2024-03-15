@@ -360,6 +360,7 @@ export function TrendingView(props: TrendingViewProps) {
                         isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
                     flexGrow: 1,
                     overflow: 'auto',
+                    scrollbarWidth: 'none',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },

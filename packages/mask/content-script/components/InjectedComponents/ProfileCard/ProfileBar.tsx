@@ -1,13 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
-import {
-    AddressItem,
-    CopyButton,
-    Image,
-    TokenWithSocialGroupMenu,
-    useCollectionByTwitterHandler,
-} from '@masknet/shared'
+import { AddressItem, CopyButton, Image, TokenWithSocialGroupMenu, useCollectionByTwitterHandle } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
 import { useAnchor } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
@@ -132,7 +126,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
     const { current: avatarClipPathId } = useRef<string>(uuid())
     const { anchorEl, anchorBounding } = useAnchor()
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(identity.identifier?.userId)
+    const collectionList = useCollectionByTwitterHandle(identity.identifier?.userId)
 
     const Utils = useWeb3Utils()
     const { chainId } = useChainContext()
@@ -212,7 +206,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                 onAddressChange={onAddressChange}
                 currentAddress={address}
                 socialAccounts={socialAccounts}
-                collectionList={collectionList}
+                collectionList={collectionList || EMPTY_LIST}
                 onTokenChange={(currentResult) => {
                     setWalletMenuOpen(false)
                     if (!anchorBounding) return
