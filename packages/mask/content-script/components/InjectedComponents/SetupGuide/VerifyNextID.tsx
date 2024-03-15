@@ -4,7 +4,7 @@ import {
     BindingDialog,
     EmojiAvatar,
     type BindingDialogProps,
-    useVerifyPostContent,
+    useVerifyContent,
     useBaseUIRuntime,
     useVerifyNextID,
 } from '@masknet/shared'
@@ -166,7 +166,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const personaIdentifier = personaInfo?.identifier
 
     const [customUserId, setCustomUserId] = useState('')
-    const { data: post, isPending: creatingPostContent } = useVerifyPostContent(
+    const { data: verifyInfo, isPending: creatingPostContent } = useVerifyContent(
         personaIdentifier,
         userId || customUserId,
     )
@@ -305,10 +305,10 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
-                    : post ?
+                    : verifyInfo ?
                         <>
                             <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
-                            <Typography className={classes.postContent}>{post}</Typography>
+                            <Typography className={classes.postContent}>{verifyInfo.post}</Typography>
                             <Typography className={classes.tip} component="div">
                                 {t.setup_guide_verify_tip()}
                             </Typography>

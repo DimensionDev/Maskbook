@@ -17,7 +17,10 @@ export const VerifyNextIDModal = forwardRef<
         <VerifyNextIDDialog
             personaInfo={personaInfo}
             onClose={() => dispatch?.close({ aborted: true })}
-            onSentPost={(postId) => dispatch?.close({ postId })}
+            onSentPost={(res) => {
+                if (!dispatch || !res) return
+                dispatch.close(res)
+            }}
         />
     )
 })

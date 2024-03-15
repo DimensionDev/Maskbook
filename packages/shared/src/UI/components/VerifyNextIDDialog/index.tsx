@@ -1,7 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { publishPost } from '@masknet/plugin-infra/content-script/context'
-import { formatPersonaFingerprint, resolveNetworkToNextIDPlatform, type PersonaInformation } from '@masknet/shared-base'
+import {
+    formatPersonaFingerprint,
+    resolveNetworkToNextIDPlatform,
+    type NextIDPayload,
+    type PersonaInformation,
+} from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -10,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { useVerifyPostContent } from '../../../hooks/index.js'
+import { useVerifyContent } from '../../../hooks/index.js'
 import { useSharedTrans } from '../../../locales/i18n_generated.js'
 import { useBaseUIRuntime } from '../../contexts/index.js'
 import { BindingDialog, type BindingDialogProps } from '../BindingDialog/index.js'
@@ -142,11 +147,13 @@ const useStyles = makeStyles()((theme) => ({
 export type VerifyNextIDDialogCloseProps = {
     aborted?: boolean
     postId?: string | null
+    signature?: string
+    payload?: NextIDPayload
 }
 
 export interface VerifyNextIDDialogProps extends BindingDialogProps {
     personaInfo: PersonaInformation
-    onSentPost?(postId?: string | null): void
+    onSentPost?(result?: VerifyNextIDDialogCloseProps | undefined): void
 }
 
 export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyNextIDDialogProps) {
@@ -161,7 +168,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
     const personaName = personaInfo?.nickname
     const personaIdentifier = personaInfo?.identifier
 
-    const { data: post, isPending: creatingPostContent, refetch } = useVerifyPostContent(personaIdentifier, userId)
+    const { data: content, isPending: creatingVerifyContent, refetch } = useVerifyContent(personaIdentifier, userId)
 
     const { networkIdentifier } = useBaseUIRuntime()
     const platform = resolveNetworkToNextIDPlatform(networkIdentifier)
@@ -171,6 +178,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
     }, [myIdentity, userId])
 
     const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
+        const post = content?.post
         if (!personaInfo || !platform || !post) return
 
         const postId = await publishPost?.([post], {
@@ -183,8 +191,12 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
             queryKey: ['@@next-id', 'bindings-by-persona', personaInfo.identifier.publicKeyAsHex],
         })
 
-        onSentPost?.(postId)
-    }, [personaInfo, queryClient, platform, onSentPost, refetch])
+        onSentPost?.({
+            postId,
+            signature: content.signature,
+            payload: content.payload,
+        })
+    }, [personaInfo, content, queryClient, platform, onSentPost])
 
     if (!personaIdentifier) return null
 
@@ -228,7 +240,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                                 components={{ br: <br /> }}
                             />
                         </Typography>
-                    : creatingPostContent ?
+                    : creatingVerifyContent ?
                         <>
                             <Typography className={classes.postContentTitle}>
                                 {t.verify_next_id_post_content()}
@@ -245,12 +257,12 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                                 {t.verify_next_id_tips()}
                             </Typography>
                         </>
-                    : post ?
+                    : content?.post ?
                         <>
                             <Typography className={classes.postContentTitle}>
                                 {t.verify_next_id_post_content()}
                             </Typography>
-                            <Typography className={classes.postContent}>{post}</Typography>
+                            <Typography className={classes.postContent}>{content.post}</Typography>
                             <Typography className={classes.tip} component="div">
                                 {t.verify_next_id_tips()}
                             </Typography>

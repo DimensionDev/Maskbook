@@ -1,6 +1,5 @@
 import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
-import { signWithPersona } from '@masknet/plugin-infra/dom/context'
-import { MaskMessages, NextIDAction, SignType, languageSettings, type PersonaInformation } from '@masknet/shared-base'
+import { MaskMessages, NextIDAction, type PersonaInformation } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncFn } from 'react-use'
 import { VerifyNextIDModal } from '../UI/modals/index.js'
@@ -10,21 +9,11 @@ export function useNextIDVerify() {
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
             if (!currentNextIDPlatform || !persona || !username) return
 
-            const payload = await NextIDProof.createPersonaPayload(
-                persona.identifier.publicKeyAsHex,
-                NextIDAction.Create,
-                username,
-                currentNextIDPlatform,
-                languageSettings.value ?? 'default',
-            )
-            if (!payload) throw new Error('Failed to create persona payload.')
-
-            const signature = await signWithPersona?.(SignType.Message, payload.signPayload, persona.identifier, true)
-            if (!signature) throw new Error('Failed to sign by persona.')
-
-            const { postId, aborted } = await VerifyNextIDModal.openAndWaitForClose({
+            const { postId, signature, payload, aborted } = await VerifyNextIDModal.openAndWaitForClose({
                 personaInfo: persona,
             })
+            if (!payload) throw new Error('Failed to create persona payload.')
+            if (!signature) throw new Error('Failed to sign by persona.')
             if (aborted) return
             if (process.env.NODE_ENV === 'development') {
                 if (!postId) {

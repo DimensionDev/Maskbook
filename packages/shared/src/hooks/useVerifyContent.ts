@@ -12,7 +12,10 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useBaseUIRuntime } from '../UI/contexts/index.js'
 
 type T = UseQueryResult
-export function useVerifyPostContent(personaIdentifier: PersonaIdentifier | undefined, userId: string) {
+/**
+ * Get verify payload, signature and post content
+ */
+export function useVerifyContent(personaIdentifier: PersonaIdentifier | undefined, userId: string) {
     const { networkIdentifier } = useBaseUIRuntime()
 
     return useQuery({
@@ -30,7 +33,12 @@ export function useVerifyPostContent(personaIdentifier: PersonaIdentifier | unde
             if (!payload) throw new Error('Failed to create persona payload.')
 
             const signature = await signWithPersona(SignType.Message, payload.signPayload, personaIdentifier, true)
-            return payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
+            const post = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
+            return {
+                post,
+                payload,
+                signature,
+            }
         },
     })
 }
