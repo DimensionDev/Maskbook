@@ -1,0 +1,31 @@
+diff --git a/useAutocomplete/index.d.ts b/useAutocomplete/index.d.ts
+index 6f01318688c9f265c24273623696d69b2ed40387..b2082f74c8e3b2c910816ef94548e5eafeafff5f 100644
+--- a/useAutocomplete/index.d.ts
++++ b/useAutocomplete/index.d.ts
+@@ -1,2 +1,2 @@
+-export { default } from './useAutocomplete';
+-export * from './useAutocomplete';
++export { default, createFilterOptions } from "./useAutocomplete";
++export * from "./useAutocomplete";
+diff --git a/useAutocomplete/useAutocomplete.d.ts b/useAutocomplete/useAutocomplete.d.ts
+index 6091303d93a923e6dde391108d5e011e005482eb..99989770f749389df8df16fd1ec782052e036666 100644
+--- a/useAutocomplete/useAutocomplete.d.ts
++++ b/useAutocomplete/useAutocomplete.d.ts
+@@ -1,2 +1,2 @@
+-export { useAutocomplete as default } from '@mui/base/useAutocomplete';
+-export * from '@mui/base/useAutocomplete';
++export { useAutocomplete as default } from "@mui/base/useAutocomplete";
++export * from "@mui/base/useAutocomplete";
+diff --git a/useAutocomplete/useAutocomplete.js b/useAutocomplete/useAutocomplete.js
+index 0fc7bec37e7b33b28ad9b2b79c62f6d68bea4bd0..d61b71351f896b8d7b678afd7d7b481412c2125f 100644
+--- a/useAutocomplete/useAutocomplete.js
++++ b/useAutocomplete/useAutocomplete.js
+@@ -1,4 +1,4 @@
+-'use client';
++"use client";
+ 
+-export { useAutocomplete as default } from '@mui/base/useAutocomplete';
+-export * from '@mui/base/useAutocomplete';
+\ No newline at end of file
++export { useAutocomplete as default } from "@mui/base/useAutocomplete";
++export * from "@mui/base/useAutocomplete";

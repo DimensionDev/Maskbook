@@ -220,7 +220,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, coin.symbol])
     // #endregion
 
-    const titleRef = useRef<HTMLElement>(null)
+    const titleRef = useRef<HTMLDivElement>(null)
 
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
@@ -293,7 +293,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
-                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                            <Stack component="div" flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
                                 <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon

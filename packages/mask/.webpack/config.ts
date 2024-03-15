@@ -152,6 +152,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         },
                     },
                 },
+                {
+                    test: /\.svg$/,
+                    include: /node_modules[\\/]@lifi[\\/]wallet-management/, // 只对 node_modules 下的 @lifi/wallet-management 生效
+                    loader: require.resolve('file-loader'),
+                },
                 // compress svg files
                 flags.mode === 'production' ?
                     {

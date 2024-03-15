@@ -117,6 +117,7 @@
     "date-fns": "^2.30.0",
     "elliptic": "^6.5.4",
     "event-iterator": "^2.0.0",
+    "file-loader": "^6.2.0",
     "guess-calling-code": "^1.1.8",
     "html-to-image": "^1.11.11",
     "https-browserify": "^1.0.0",
