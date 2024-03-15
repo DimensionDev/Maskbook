@@ -1148,7 +1148,7 @@
             "name": "Metis",
             "symbol": "METIS",
             "decimals": 18,
-            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/metis/info/logo.png/quality=85"
+            "logoURL": "https://bridge.metis.io/static/media/logo.f1bdb422692299f1b236d7144106b7af.svg"
         },
         "defaultGasLimit": "90000",
         "minGasLimit": "21000",

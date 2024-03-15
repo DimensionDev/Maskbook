@@ -298,7 +298,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         type: NetworkType.Metis,
         icon: new URL('../assets/metis.svg', import.meta.url).href,
         iconColor: 'rgb(36, 150, 238)',
-        name: 'Metis Andromeda',
+        name: 'Metis',
         isMainnet: true,
         averageBlockDelay: 10,
     },
