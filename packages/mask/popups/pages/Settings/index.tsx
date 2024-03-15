@@ -140,23 +140,17 @@ const Settings = memo(function Settings() {
         [classes],
     )
 
-    const localBackupTip = useMemo(() => {
+    const localBackupTip = (() => {
         if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
-        const backupMethod = localStorage.getItem('backupMethod')
-        // old data
-        if (backupMethod === 'local' && !user.localBackupAt) return t.popups_settings_local_backup_exist()
         if (!user.localBackupAt) return t.popups_settings_no_backup()
         return t.popups_settings_backup_on({ time: user.localBackupAt })
-    }, [user, t])
+    })()
 
-    const cloudBackupTip = useMemo(() => {
+    const cloudBackupTip = (() => {
         if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
-        const backupMethod = localStorage.getItem('backupMethod')
-        // old data
-        if (backupMethod === 'cloud' && !user.cloudBackupAt) return t.popups_settings_cloud_backup_exist()
         if (!user.cloudBackupAt) return t.popups_settings_no_backup()
         return t.popups_settings_backup_on({ time: user.cloudBackupAt })
-    }, [user, t])
+    })()
 
     const { data } = useSupportedSites()
 
