@@ -7,9 +7,11 @@ export interface IO {
 }
 export function createRemoteFlag<T extends object>(
     defaultFlags: T,
-): readonly [T, ((io: IO, signal?: AbortSignal, url?: string) => void) & { io: (typeof createRemoteFlag)['io'] }] {
+): readonly [T, (io: IO, signal?: AbortSignal, url?: string) => void] {
+    // eslint-disable-next-line no-restricted-globals
     if (typeof localStorage === 'object') {
         // keep for a few releases, added in Nov 29 2023
+        // eslint-disable-next-line no-restricted-globals
         localStorage.removeItem('mask-last-fetch-result')
     }
     const flags = Object.assign(Object.create(null), defaultFlags)
@@ -50,25 +52,7 @@ export function createRemoteFlag<T extends object>(
             }
         }
     }
-    fetch.io = createRemoteFlag.io
-
     return [flagProxy, fetch] as const
-}
-createRemoteFlag.io = {
-    localStorage: {
-        async getCache(url) {
-            const data = localStorage.getItem('flag:' + url)
-            if (!data) return null
-            const time = Number(localStorage.getItem('flag-time:' + url))
-            return { response: data, time }
-        },
-        async refetch(url) {
-            const res = await fetch(url)
-            const data = await res.text()
-            localStorage.setItem('flag:' + url, data)
-            localStorage.setItem('flag-time:' + url, String(Date.now()))
-        },
-    } satisfies IO as IO,
 }
 
 function isOutdated(cacheTime: number) {

@@ -53,6 +53,8 @@ export function getMirrorUserId(href?: string) {
     const pageType = getMirrorPageType(url)
 
     // If dashboard, get from local storage
+    // This localStorage usage is Okay because it is accessing website's localStorage
+    // eslint-disable-next-line no-restricted-globals
     if (pageType === MirrorPageType.Dashboard) return localStorage.getItem('mirror.userAddress')
 
     let tempURL = url

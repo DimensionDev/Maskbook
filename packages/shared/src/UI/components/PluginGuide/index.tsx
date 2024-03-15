@@ -1,4 +1,3 @@
-import type { PluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
 import React, {
@@ -6,12 +5,10 @@ import React, {
     createContext,
     useEffect,
     useLayoutEffect,
-    useMemo,
     useRef,
     useState,
     type ReactElement,
 } from 'react'
-import { usePluginGuideRecord } from './usePluginGuideRecord.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -221,34 +218,3 @@ interface PluginGuideContext {
     nextStep: () => void
 }
 const PluginGuideContext = createContext<PluginGuideContext>(null!)
-
-export function PluginGuideProvider({
-    value,
-    children,
-}: React.ProviderProps<{
-    pluginID: PluginID
-    totalStep: number
-    storageKey?: string
-    onFinish?: () => void
-    guides: Array<{
-        title: string
-        actionText: string
-    }>
-}>) {
-    const { guides, totalStep, onFinish, storageKey = 'default', pluginID } = value
-    const { currentStep, finished, nextStep } = usePluginGuideRecord(pluginID, totalStep, storageKey, onFinish)
-    const title = guides[currentStep - 1]?.title
-    const actionText = guides[currentStep - 1]?.actionText
-    const context = useMemo(
-        () => ({
-            title,
-            actionText,
-            finished,
-            currentStep,
-            totalStep,
-            nextStep,
-        }),
-        [title, actionText, finished, currentStep, totalStep, nextStep],
-    )
-    return <PluginGuideContext.Provider value={context}>{children}</PluginGuideContext.Provider>
-}

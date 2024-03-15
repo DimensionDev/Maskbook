@@ -17,11 +17,9 @@ interface GuideStorage {
     userGuide: Partial<Record<EnhanceableSite, number>>
 }
 
-// TODO Keep this for 5 versions until 2.23
-const legacyStorageStep = localStorage.getItem('plugin_userGuide_com.maskbook.tip_mirror.xyz')
 export const guideStorageDefaultValue: GuideStorage = {
     userGuide: {
-        'mirror.xyz': legacyStorageStep ? Number.parseInt(legacyStorageStep, 10) : undefined,
+        'mirror.xyz': undefined,
     },
 }
 

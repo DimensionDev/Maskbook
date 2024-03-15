@@ -981,8 +981,6 @@
     "popups_settings_set_backup_password_tips": "백업 비밀번호를 설정하세요.",
     "popups_settings_no_backup": "백업 없음",
     "popups_settings_backup_on": "백업 시간 {{time}}",
-    "popups_settings_local_backup_exist": "이미 백업되었습니다.",
-    "popups_settings_cloud_backup_exist": "이메일/전화번호로 백업하였습니다.",
     "popups_settings_not_set": "설정되지 않음",
     "nft_wallet_label": "월렛",
     "plugin_profile_no_wallets": "월렛 연결합니다. <br/>이 섹션은 암호화된 친구에게 표시됩니다.<br/>전시 내용에는 디지털 아트, 기부, 배지<br/>와 다른 온체인 공개 정보가 포함됩니다.",

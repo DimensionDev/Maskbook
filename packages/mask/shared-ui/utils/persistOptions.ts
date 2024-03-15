@@ -8,6 +8,7 @@ import { produce } from 'immer'
 try {
     isEnvironment(Environment.ExtensionProtocol) &&
         // Leave it for a few releases (added in Nov 28 2023)
+        // eslint-disable-next-line no-restricted-globals
         localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
 } catch {}
 

@@ -1,9 +1,7 @@
 import { memo, useState } from 'react'
 import { QRCode } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
@@ -68,7 +66,6 @@ interface Props {
 const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
     const t = useSmartPayTrans()
     const { classes } = useStyles()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
