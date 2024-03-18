@@ -62,9 +62,7 @@ function useSettingsContext(initial?: {
         isPending: gasOptionsLoading,
         error: gasOptionsError,
         refetch: gasOptionRetry,
-    } = useGasOptions(pluginID, {
-        chainId,
-    })
+    } = useGasOptions(pluginID, { chainId })
 
     const onClearInMemoryCache = useCallback(() => {
         delete IN_MEMORY_CACHE.lastNetworkSignature

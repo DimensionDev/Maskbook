@@ -41,7 +41,7 @@ import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { queryClient } from '@masknet/shared-base-ui'
 
@@ -180,9 +180,9 @@ export default function Popups() {
     return (
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
             {/* https://github.com/TanStack/query/issues/5417 */}
-            {/* {process.env.NODE_ENV === 'development' ?
+            {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null} */}
+            :   null}
             {PageUIProvider(
                 usePopupTheme,
                 <PopupSnackbarProvider>

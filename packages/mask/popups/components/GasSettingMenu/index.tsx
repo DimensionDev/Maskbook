@@ -50,16 +50,16 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const gasRatio = useGasRatio(paymentToken)
-    const [gasConfig, setGasConfig] = useState(defaultGasConfig)
+    const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const gasLimit = gasConfig?.gas || chainDefaultGasLimit
+    const gasLimit = gasConfig?.gas || defaultGasLimit || chainDefaultGasLimit
 
-    const [gasOptionType, setGasOptionType] = useState<GasOptionType | undefined>(
-        gasConfig?.gasOptionType ?? GasOptionType.SLOW,
-    )
+    const [gasOptionType = gasConfig?.gasOptionType ?? GasOptionType.SLOW, setGasOptionType] = useState<
+        GasOptionType | undefined
+    >()
 
     const handleChange = useCallback(
-        (config: GasConfig, type?: GasOptionType) => {
+        (config: GasConfig, type: GasOptionType) => {
             setGasOptionType(type)
             setGasConfig(config)
             onChange?.(config)
@@ -75,11 +75,14 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken,
     )
 
-    const { data: gasOptions } = useGasOptions()
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     {
         const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
-        if (gasOptions && !gasConfig) {
+        const [prevChainId, setPrevChainId] = useState(chainId)
+        if (prevChainId !== chainId) setPrevChainId(chainId)
+
+        if (gasOptions && (!gasConfig || prevChainId !== chainId)) {
             const target = gasOptions[GasOptionType.SLOW]
             setGasConfig(
                 isSupport1559 ?
@@ -112,7 +115,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         paymentToken ? paymentToken : nativeTokenAddress,
     )
 
-    const gasOptionName = useMemo(() => {
+    const gasOptionName = (() => {
         switch (gasOptionType) {
             case GasOptionType.FAST:
                 return t.popups_wallet_gas_fee_settings_instant()
@@ -123,7 +126,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
             default:
                 return t.popups_wallet_gas_fee_settings_custom()
         }
-    }, [gasOptionType])
+    })()
 
     const totalGas = useMemo(() => {
         if (!gasConfig || !gasLimit) return ZERO

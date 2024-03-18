@@ -21,6 +21,7 @@ import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
 import { noop } from 'lodash-es'
 import * as modals from './modals.js'
 import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
+import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
 export * from './modals.js'
 
 export interface ModalProps {
@@ -47,6 +48,7 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
+            <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
         </RootWeb3ContextProvider>
     )
 })

@@ -1,9 +1,9 @@
-import { type IconButtonProps, Box } from '@mui/material'
+import { useCollectionByTwitterHandle } from '@masknet/shared'
 import { NetworkPluginID, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { Box, type IconButtonProps } from '@mui/material'
 import { CollectionProjectAvatarBadge } from './CollectionProjectAvatarBadge.js'
 import { ProfileAvatarBadge } from './ProfileAvatarBadge.js'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useCollectionByTwitterHandler } from '@masknet/shared'
 
 interface Props extends IconButtonProps {
     userId: string
@@ -11,7 +11,7 @@ interface Props extends IconButtonProps {
     socialAccounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
 }
 export function AvatarBadge({ userId, identity, socialAccounts }: Props) {
-    const { value: collectionList } = useCollectionByTwitterHandler(userId)
+    const collectionList = useCollectionByTwitterHandle(userId)
     if (collectionList?.[0]) {
         return (
             <Box display="flex" alignItems="top" justifyContent="center">

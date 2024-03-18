@@ -6,9 +6,7 @@ import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 export function useDefaultGasConfig(chainId: ChainId, gasLimit: string): GasConfig | undefined {
     const Utils = useWeb3Utils()
     const isSupportEIP1559 = Utils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
-    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
-        chainId,
-    })
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId }, true)
 
     const gasOption = gasOptions?.[GasOptionType.SLOW]
 

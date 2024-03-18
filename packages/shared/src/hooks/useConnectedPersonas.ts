@@ -18,6 +18,7 @@ export function useConnectedPersonas(): UseQueryResult<
     const result = useQuery({
         enabled: personasInDB.length > 0,
         queryKey: ['connected-persona', personasInDB],
+        refetchOnMount: true,
         queryFn: async () => {
             const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
             const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)

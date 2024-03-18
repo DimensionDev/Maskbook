@@ -152,9 +152,11 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (isSupport1559) {
             if (transaction.computedPayload.maxFeePerGas && transaction.computedPayload.maxPriorityFeePerGas)
                 return {
+                    gas: transaction.gas || transaction.computedPayload.gas,
                     gasOptionType: transaction.gasOptionType,
-                    maxFeePerGas: transaction.computedPayload.maxFeePerGas,
-                    maxPriorityFeePerGas: transaction.computedPayload.maxPriorityFeePerGas,
+                    maxFeePerGas: transaction.maxFeePerGas || transaction.computedPayload.maxFeePerGas,
+                    maxPriorityFeePerGas:
+                        transaction.maxPriorityFeePerGas || transaction.computedPayload.maxPriorityFeePerGas,
                 }
             return
         }
@@ -162,7 +164,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (!transaction.computedPayload.gasPrice) return
 
         return {
-            gasPrice: transaction.computedPayload.gasPrice,
+            gas: transaction.gas || transaction.computedPayload.gas,
+            gasPrice: transaction.gasPrice || transaction.computedPayload.gasPrice,
             gasOptionType: transaction.gasOptionType,
         }
     }, [transaction.computedPayload, transaction.gasOptionType, isSupport1559])

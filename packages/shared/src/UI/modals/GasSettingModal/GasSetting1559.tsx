@@ -95,7 +95,9 @@ export const GasSetting1559 = memo(
             chainId,
         })
 
-        const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+        const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+            chainId,
+        })
 
         // #region Gas options
         const options = useMemo(

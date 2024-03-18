@@ -153,6 +153,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         connectPersona,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
+        publishPost: ui.automation.endpoint?.publishPost,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
         getUserIdentity: ui.utils.getUserIdentity,
     })

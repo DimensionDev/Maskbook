@@ -71,6 +71,7 @@ export enum ChainId {
 
     // Metis
     Metis = 1088,
+    Metis_Sepolia = 59902,
 
     // Optimism
     Optimism = 10,
@@ -372,6 +373,10 @@ export interface RequestOptions {
     allowMaskAsGas?: boolean
     providerURL?: string
     gasOptionType?: GasOptionType
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+    gasPrice?: string
+    gas?: string
 }
 
 export interface MessageRequest {

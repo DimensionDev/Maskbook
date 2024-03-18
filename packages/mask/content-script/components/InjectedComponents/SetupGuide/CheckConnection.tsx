@@ -1,5 +1,5 @@
+import type { BindingDialogProps } from '@masknet/shared'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
-import type { BindingDialogProps } from './BindingDialog.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 
 export function CheckConnection({ onClose }: BindingDialogProps) {

@@ -22,7 +22,7 @@ class TTL<T> {
 }
 
 /**
- * Fetch latest tx list of the the given account. It creates a signature for each transaction.
+ * Fetch latest tx list of the given account. It creates a signature for each transaction.
  * Treat two transactions the same with the identical transaction hash or signature.
  */
 class AccountCheckerAPI implements TransactionChecker<ChainId, Transaction> {

@@ -1,7 +1,19 @@
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { EmojiAvatar } from '@masknet/shared'
-import { MaskMessages, currentSetupGuideStatus, formatPersonaFingerprint } from '@masknet/shared-base'
+import {
+    BindingDialog,
+    EmojiAvatar,
+    type BindingDialogProps,
+    useVerifyContent,
+    useBaseUIRuntime,
+    useVerifyNextID,
+} from '@masknet/shared'
+import {
+    MaskMessages,
+    currentSetupGuideStatus,
+    formatPersonaFingerprint,
+    resolveNetworkToNextIDPlatform,
+} from '@masknet/shared-base'
 import { ActionButton, MaskColorVar, MaskTextField, makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -12,15 +24,11 @@ import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
-import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { useNextIDVerify } from '../../DataSource/useNextIDVerify.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
-import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
-import { usePostContent } from './hooks/usePostContent.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -158,9 +166,12 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const personaIdentifier = personaInfo?.identifier
 
     const [customUserId, setCustomUserId] = useState('')
-    const { data: post, isPending: creatingPostContent } = usePostContent(personaIdentifier, userId || customUserId)
-    const { configuration, networkIdentifier } = activatedSiteAdaptorUI!
-    const nextIdPlatform = configuration.nextIDConfig?.platform
+    const { data: verifyInfo, isPending: creatingPostContent } = useVerifyContent(
+        personaIdentifier,
+        userId || customUserId,
+    )
+    const { networkIdentifier } = useBaseUIRuntime()
+    const nextIdPlatform = resolveNetworkToNextIDPlatform(networkIdentifier)
 
     const { data: personaAvatar } = useQuery({
         queryKey: ['@@my-own-persona-info'],
@@ -180,7 +191,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     // Show connect result for the first time.
     const { loading: connecting } = useConnectPersona()
 
-    const [, handleVerifyNextID] = useNextIDVerify()
+    const [, handleVerifyNextID] = useVerifyNextID()
     const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
         if (!personaInfo) return
@@ -294,10 +305,10 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 {t.setup_guide_verify_tip()}
                             </Typography>
                         </>
-                    : post ?
+                    : verifyInfo ?
                         <>
                             <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
-                            <Typography className={classes.postContent}>{post}</Typography>
+                            <Typography className={classes.postContent}>{verifyInfo.post}</Typography>
                             <Typography className={classes.tip} component="div">
                                 {t.setup_guide_verify_tip()}
                             </Typography>
