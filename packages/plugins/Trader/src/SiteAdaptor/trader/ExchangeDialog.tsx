@@ -5,11 +5,13 @@ import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { Web3Provider } from '@ethersproject/providers'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { Icons } from '@masknet/icons'
-import { useAppearance } from '@lifi/widget/stores/index.js'
+import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { type ChainId, getRPCConstant } from '@masknet/web3-shared-evm'
+import { reduce } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -29,9 +31,11 @@ export interface ExchangeDialogProps {
 
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog({ open, onClose }) {
     const t = useTraderTrans()
-    const [mode] = useAppearance()
+    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { theme, classes } = useStyles()
     const [containerRef, setContainerRef] = useState<HTMLElement>()
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
     const widgetRef = useRef<{
         navigateToTransaction?: () => void
         navigateToSettings?: () => void
@@ -51,8 +55,26 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
         }
     }, [onClose])
 
-    const widgetConfig = useMemo<WidgetConfig>(
-        () => ({
+    const getSigner = useCallback(() => {
+        const provider = EVMWeb3.getWeb3Provider({ providerType })
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        return new Web3Provider(provider, 'any').getSigner()
+    }, [providerType])
+
+    const widgetConfig = useMemo<WidgetConfig>(() => {
+        const rpcs = reduce(
+            networks,
+            (acc, current) => {
+                const urls = getRPCConstant(current.chainId, 'RPC_URLS') || []
+                acc[current.chainId] = urls
+                return acc
+            },
+            {} as Record<ChainId, string[]>,
+        )
+
+        return {
             integrator: 'Mask Network',
             variant: 'expandable',
             theme: {
@@ -62,21 +84,19 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                 },
             },
             walletManagement: {
+                signer: getSigner(),
                 connect: async () => {
-                    const provider = EVMWeb3.getWeb3Provider({ providerType: ProviderType.MetaMask })
-
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-expect-error
-                    const signer = new Web3Provider(provider, 'any').getSigner()
-                    return signer
+                    return getSigner()
                 },
                 disconnect: async () => {},
             },
             hiddenUI: [HiddenUI.Header],
             appearance: theme.palette.mode,
-        }),
-        [theme],
-    )
+            sdkConfig: {
+                rpcs,
+            },
+        }
+    }, [theme])
 
     return (
         <InjectedDialog

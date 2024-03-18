@@ -68,9 +68,9 @@ const useStyles = makeStyles<{
                     minHeight: 374,
                     maxHeight:
                         props.isCollectionProjectPopper ?
-                            props.currentTab === ContentTab.Price ? 450
-                            : props.currentTab === ContentTab.Swap ? 'unset'
-                            : 374
+                            props.currentTab === ContentTab.Price ?
+                                450
+                            :   374
                         :   'unset',
                     overflow: 'hidden',
                     display: 'flex',
@@ -222,7 +222,6 @@ export function TrendingView(props: TrendingViewProps) {
     // #region tabs
     const tabs = useMemo(() => {
         const list = [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
-        if (isSwappable) list.push(ContentTab.Swap)
         if (isNFT) list.push(ContentTab.NFTItems)
         return list
     }, [isSwappable, isNFT])
@@ -245,12 +244,6 @@ export function TrendingView(props: TrendingViewProps) {
                 key: ContentTab.Exchange,
                 label: isNFT ? t.plugin_trader_tab_activities() : t.plugin_trader_tab_exchange(),
             },
-            isSwappable ?
-                {
-                    key: ContentTab.Swap,
-                    label: t.plugin_trader_tab_swap(),
-                }
-            :   undefined,
             isNFT ?
                 {
                     key: ContentTab.NFTItems,
@@ -303,6 +296,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const Component = (
         <TrendingViewDeck
+            isSwappable={isSwappable}
             classes={{
                 body: classes.body,
                 content: classes.content,
