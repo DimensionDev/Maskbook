@@ -2068,6 +2068,11 @@ export const GearSettings = /*#__PURE__*/ __createIcon('GearSettings', [
         u: () => new URL('./general/GearSettings.svg', import.meta.url).href,
     },
 ])
+export const Gift = /*#__PURE__*/ __createIcon('Gift', [
+    {
+        u: () => new URL('./general/Gift.svg', import.meta.url).href,
+    },
+])
 export const Globe = /*#__PURE__*/ __createIcon('Globe', [
     {
         j: () =>
