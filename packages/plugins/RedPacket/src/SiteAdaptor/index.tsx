@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
+import { EnhanceableSite, PluginID, getEnhanceableSiteType } from '@masknet/shared-base'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -33,6 +33,9 @@ const containerStyle = {
     display: 'flex',
     alignItems: 'center',
 }
+
+const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
+const PluginIcon = isFirefly ? Icons.Gift : Icons.RedPacket
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -100,7 +103,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.RedPacket size={36} />
+            const icon = <PluginIcon size={36} />
             const name = <Trans ns={PluginID.RedPacket} i18nKey="name" />
             const recommendFeature = {
                 description: <Trans ns={PluginID.RedPacket} i18nKey="recommend_feature_description" />,
@@ -137,7 +140,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         })(),
     ],
     wrapperProps: {
-        icon: <Icons.RedPacket size={20} style={{ filter: 'drop-shadow(0px 6px 12px rgba(240, 51, 51, 0.2))' }} />,
+        icon: <PluginIcon size={20} style={{ filter: 'drop-shadow(0px 6px 12px rgba(240, 51, 51, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
     },

@@ -211,6 +211,7 @@ export function gas_station_url() { return new URL("./general/GasStation.svg", i
 export function gear_dark_url() { return new URL("./general/Gear.dark.svg", import.meta.url).href }
 export function gear_light_url() { return new URL("./general/Gear.light.svg", import.meta.url).href }
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url).href }
+export function gift_url() { return new URL("./general/Gift.svg", import.meta.url).href }
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url).href }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url).href }
 export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url).href }
