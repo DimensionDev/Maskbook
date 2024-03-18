@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 padding: 0,
             },
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

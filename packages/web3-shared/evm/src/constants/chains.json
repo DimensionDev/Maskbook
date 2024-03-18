@@ -1139,8 +1139,8 @@
     },
     {
         "chainId": 1088,
-        "name": "Metis Andromeda Mainnet",
-        "type": "Metis Andromeda Mainnet",
+        "name": "Metis",
+        "type": "Metis",
         "network": "mainnet",
         "features": [],
         "nativeCurrency": {
@@ -1156,7 +1156,7 @@
         "shortName": "metis-andromeda",
         "explorers": [
             {
-                "name": "Metis Andromeda Mainnet",
+                "name": "Metis",
                 "url": "https://andromeda-explorer.metis.io/"
             }
         ]
