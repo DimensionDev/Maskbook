@@ -151,7 +151,7 @@ export const PostProviderTwitter: SiteAdaptorUI.CollectingCapabilities.PostsProv
 
 export function getPostIdFromNewPostToast() {
     const toastLinkNode = toastLinkSelector().evaluate()
-    return toastLinkNode?.href ? parseId(toastLinkNode?.href) : ''
+    return toastLinkNode?.href ? parseId(toastLinkNode.href) : ''
 }
 
 export function collectVerificationPost(keyword: string) {
