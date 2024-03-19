@@ -639,6 +639,23 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
+        ID: `${PLUGIN_ID}_trust`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Trust,
+        name: 'Rainbow',
+        icon: new URL('../assets/trust.svg', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
+        homeLink: 'https://trustwallet.com/',
+        shortenLink: 'trustwallet.com',
+        downloadLink: 'https://trustwallet.com/',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
         ID: `${PLUGIN_ID}_zerion`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Zerion,
