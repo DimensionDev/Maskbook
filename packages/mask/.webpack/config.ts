@@ -168,15 +168,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                 pretty: false,
                             },
                         },
-                        dependency(data) {
-                            if (data === '') return false
-                            if (data !== 'url')
-                                throw new TypeError(
-                                    'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
-                                        data,
-                                )
-                            return true
-                        },
+                        exclude: /node_modules/,
+                        dependency: 'url',
                         type: 'asset/resource',
                     }
                 :   null,
