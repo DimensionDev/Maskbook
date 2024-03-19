@@ -9,6 +9,8 @@ export interface ReverseAddressProps extends ComponentProps<typeof Typography> {
     address: string
     pluginID?: NetworkPluginID
     size?: number
+    // declare explicitly to avoid ts warning
+    component?: string
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, ...rest }) => {

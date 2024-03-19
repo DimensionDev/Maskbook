@@ -1,10 +1,8 @@
 import { memo } from 'react'
 import { MenuItem, Select, type SelectProps } from '@mui/material'
 
-interface Props extends SelectProps<number> {}
-
 const OPTIONS = [0, 0.05, 0.1, 0.15]
-export const GiveBackSelect = memo((props: Props) => {
+export const GiveBackSelect = memo((props: SelectProps<number>) => {
     return (
         <Select
             {...props}
