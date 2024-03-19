@@ -4,7 +4,6 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { Composition } from '../../../components/CompositionDialog/Composition.js'
-import { isMobileFacebook } from '../utils/isMobile.js'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { startWatch } from '../../../utils/startWatch.js'
@@ -29,23 +28,18 @@ function isGroup() {
     return matched[0]
 }
 
-if (isMobileFacebook) {
-    composeBox = new LiveSelector().querySelector('#structured_composer_form')
+if (isGroup()) {
+    composeBox = new LiveSelector()
+        .querySelector('[id="toolbarLabel"]')
+        .closest(1)
+        .querySelector('div:nth-child(2) > div:nth-child(4)')
 } else {
-    if (isGroup()) {
-        composeBox = new LiveSelector()
-            .querySelector('[id="toolbarLabel"]')
-            .closest(1)
-            .querySelector('div:nth-child(2) > div:nth-child(4)')
-    } else {
-        composeBox = new LiveSelector()
-            .querySelectorAll(
-                '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
-            )
-            .at(-2)
-    }
+    composeBox = new LiveSelector()
+        .querySelectorAll(
+            '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
+        )
+        .at(-2)
 }
-
 export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)

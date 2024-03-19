@@ -6,21 +6,20 @@ import { useSubscription } from 'use-subscription'
 import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { LoadingBase } from '@masknet/theme'
 import { DialogActions, DialogContent, Stack } from '@mui/material'
-import { useAvatarTrans } from '../locales/index.js'
-import { PersonaItem } from './PersonaItem.js'
-import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
+import { useAvatarTrans } from '../locales/index.js'
+import { PersonaItem } from './PersonaItem.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 import { RoutePaths } from './Routes.js'
-import { useAvatarManagement } from '../contexts/index.js'
+import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 
 export function PersonaPage() {
     const t = useAvatarTrans()
-    const [visible, setVisible] = useState(true)
-    const dismissAlert = useCallback(() => setVisible(false), [])
     const navigate = useNavigate()
+    const [visible, setVisible] = useState(true)
     const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
 
     const socialIdentity = useLastRecognizedIdentity()
@@ -43,7 +42,7 @@ export function PersonaPage() {
     const bindingProofs = useMemo(
         () =>
             uniqBy(
-                bindingPersonas.map((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)).flat(),
+                bindingPersonas.flatMap((x) => x.proofs.filter((y) => y.is_valid && y.platform === network)),
                 'identity',
             ),
         [bindingPersonas, network],
@@ -73,7 +72,7 @@ export function PersonaPage() {
                         <LoadingBase />
                     </Stack>
                 :   <>
-                        <Alert open={visible} onClose={dismissAlert}>
+                        <Alert open={visible} onClose={() => setVisible(false)}>
                             {t.persona_hint()}
                         </Alert>
                         {bindingProofs
@@ -82,9 +81,9 @@ export function PersonaPage() {
                                 <PersonaItem
                                     persona={binding?.persona}
                                     key={`avatar${i}`}
-                                    avatar={socialIdentity!.avatar ?? ''}
-                                    owner
-                                    nickname={socialIdentity!.nickname}
+                                    isOwner
+                                    avatarUrl={socialIdentity?.avatar}
+                                    nickname={socialIdentity?.nickname}
                                     proof={x}
                                     userId={userId ?? x.identity}
                                     onSelect={handleSelect}
@@ -100,18 +99,12 @@ export function PersonaPage() {
                                     )
                                 ) ?
                                     null
-                                :   <PersonaItem avatar="" key={`persona${i}`} userId={x.identifier.userId} />,
+                                :   <PersonaItem key={`persona${i}`} userId={x.identifier.userId} />,
                             )}
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() !== userId?.toLowerCase())
                             .map((x, i) => (
-                                <PersonaItem
-                                    key={i}
-                                    persona={binding?.persona}
-                                    avatar=""
-                                    userId={x.identity}
-                                    proof={x}
-                                />
+                                <PersonaItem key={i} persona={binding?.persona} userId={x.identity} proof={x} />
                             ))}
                     </>
                 }

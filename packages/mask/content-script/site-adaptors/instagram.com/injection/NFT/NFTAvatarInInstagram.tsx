@@ -1,23 +1,15 @@
 import { max } from 'lodash-es'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useSyncExternalStore } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
 import { type LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
-import type { AvatarMetaDB } from '@masknet/plugin-avatar'
+import { AvatarStore } from '@masknet/web3-providers'
+import { NFTBadge, rainbowBorderKeyFrames } from '@masknet/plugin-avatar'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import {
-    RSS3_KEY_SITE,
-    useNFT,
-    useNFTAvatar,
-    useWallet,
-    NFTBadge,
-    rainbowBorderKeyFrames,
-} from '@masknet/plugin-avatar'
+import { getAvatarId } from '../../utils/user.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { searchInstagramAvatarSelector } from '../../utils/selector.js'
-import { getAvatarId } from '../../utils/user.js'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
@@ -47,21 +39,13 @@ const useStyles = makeStyles()(() => ({
 
 function NFTAvatarInInstagram() {
     const { classes } = useStyles()
-    const [avatar, setAvatar] = useState<AvatarMetaDB>()
 
-    const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.INSTAGRAM)
+    const identity = useCurrentVisitingIdentity()
 
-    const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
-    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
-        storage?.address ?? account,
-        nftAvatar?.address,
-        nftAvatar?.tokenId,
-        nftAvatar?.pluginId,
-        nftAvatar?.chainId,
-    )
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
+    const avatar = store.retrieveAvatar(identity.identifier?.userId)
+    const token = store.retrieveToken(identity.identifier?.userId)
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {
@@ -114,13 +98,11 @@ function NFTAvatarInInstagram() {
         }
     }, [location.pathname, showAvatar])
 
-    useEffect(() => setAvatar(nftAvatar), [nftAvatar, location])
-
-    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
+    if (!avatar || !size || !showAvatar) return null
 
     return (
         <NFTBadge
-            nftInfo={nftInfo}
+            token={token}
             hasRainbow={false}
             size={size}
             classes={{ root: classes.root, text: classes.text, icon: classes.icon }}

@@ -11,7 +11,7 @@ import type {
     SettingsDialogEvent,
     NonFungibleTokenDialogEvent,
     WalletSettingsDialogEvent,
-    AvatarSettingDialogEvent,
+    AvatarSettingsDialogEvent,
     redpacketDialogEvent,
     PersonaBindFinishEvent,
     SmartPayDialogEvent,
@@ -56,7 +56,7 @@ export interface CrossIsolationEvents {
     renameWallet: RenameWalletEvent
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
-    avatarSettingDialogEvent: AvatarSettingDialogEvent
+    avatarSettingsDialogEvent: AvatarSettingsDialogEvent
     redpacketDialogEvent: redpacketDialogEvent
     smartPayDialogEvent: SmartPayDialogEvent
     followLensDialogEvent: FollowLensDialogEvent

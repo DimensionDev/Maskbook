@@ -8,7 +8,6 @@ import { MaskMessages, NetworkPluginID, InMemoryStorages } from '@masknet/shared
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     searchFacebookAvatarListSelector,
-    searchFacebookAvatarMobileListSelector,
     searchFacebookAvatarOpenFilesOnMobileSelector,
     searchFacebookAvatarOpenFilesSelector,
     searchFacebookConfirmAvatarImageSelector,
@@ -18,33 +17,25 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
-import { isMobileFacebook } from '../../utils/isMobile.js'
 
 export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
-    if (!isMobileFacebook) {
-        // The first step in setting an avatar
-        const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
-        startWatch(watcher, signal)
-        attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-            <NFTAvatarInFacebookFirstStep />,
-        )
-
-        // The second step in setting an avatar
-        const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
-            (node, key, proxy) => {
-                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
-                root.render(<NFTAvatarInFacebookSecondStep />)
-                return () => root.destroy()
-            },
-        )
-
-        startWatch(saveButtonWatcher, signal)
-    }
-    const watcher = new MutationObserverWatcher(searchFacebookAvatarMobileListSelector())
+    // The first step in setting an avatar
+    const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <NFTAvatarListInFaceBookMobile />,
+        <NFTAvatarInFacebookFirstStep />,
     )
+
+    // The second step in setting an avatar
+    const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
+        (node, key, proxy) => {
+            const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
+            root.render(<NFTAvatarInFacebookSecondStep />)
+            return () => root.destroy()
+        },
+    )
+
+    startWatch(saveButtonWatcher, signal)
 }
 
 const useStyles = makeStyles()({
@@ -67,10 +58,11 @@ function NFTAvatarInFacebookFirstStep() {
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
+            if (!identity.identifier) return
             if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+
             const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
-            if (!identity.identifier) return
 
             await changeImageToActiveElements(image)
 
@@ -94,6 +86,7 @@ function NFTAvatarInFacebookSecondStep() {
     useEffect(() => {
         const save = searchFacebookSaveAvatarButtonSelector().evaluate().at(0)
         if (!save) return
+
         const handler = () => {
             const image = searchFacebookConfirmAvatarImageSelector().evaluate()
             if (!image) return
@@ -150,6 +143,7 @@ function NFTAvatarListInFaceBookMobile() {
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
             if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+
             const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
 

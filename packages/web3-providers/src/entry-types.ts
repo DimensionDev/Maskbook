@@ -36,6 +36,7 @@ export * from './types/Snapshot.js'
 export * from './types/PluginContext.js'
 export * from './types/Trader.js'
 export * from './types/FriendTech.js'
+export * from './types/Store.js'
 
 // Provider Implementations
 export * from './DeBank/types.js'
@@ -44,6 +45,7 @@ export * from './RSS3/types.js'
 export * from './GoPlusLabs/types.js'
 export * from './Web3/Router/types/index.js'
 export * from './RedPacket/types.js'
+export * from './AvatarStore/types.js'
 
 export type { BaseConnectionOptions } from './Web3/Base/apis/ConnectionOptions.js'
 export type { BaseHubOptions } from './Web3/Base/apis/HubOptions.js'

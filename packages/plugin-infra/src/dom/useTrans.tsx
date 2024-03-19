@@ -5,6 +5,7 @@ export interface PluginTransFieldRenderProps {
     field: I18NFieldOrReactNode
     pluginID: string
 }
+
 export function PluginTransFieldRender({ pluginID, field }: PluginTransFieldRenderProps) {
     const [t] = useTranslation()
     if (!field) return null

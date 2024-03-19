@@ -1,19 +1,20 @@
 import { useAsyncFn } from 'react-use'
 import { NetworkPluginID, type BindingProof, type ECKeyIdentifier } from '@masknet/shared-base'
-import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
+import type { AvatarNextID, TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
+import { useSaveKV } from './useSaveKV.js'
 import { useSaveToNextID } from './useSaveToNextID.js'
-import { useSaveKV, useSaveStringStorage } from '../index.js'
+import { useSaveStringStorage } from './useSaveStringStorage.js'
 
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
     avatarId: string
 }
 
 export function useSave(pluginID: NetworkPluginID) {
-    const saveToNextID = useSaveToNextID()
-    const saveToStringStorage = useSaveStringStorage(pluginID)
-    const saveToKV = useSaveKV(pluginID)
+    const [, saveToNextID] = useSaveToNextID()
+    const [, saveToStringStorage] = useSaveStringStorage(pluginID)
+    const [, saveToKV] = useSaveKV(pluginID)
 
     return useAsyncFn(
         async (
@@ -25,7 +26,7 @@ export function useSave(pluginID: NetworkPluginID) {
             proof?: BindingProof,
         ) => {
             if (!token.contract?.address) return
-            const info: NextIDAvatarMeta = {
+            const info: AvatarNextID<NetworkPluginID> = {
                 pluginId: pluginID,
                 nickname: data.nickname,
                 userId: data.userId,
@@ -41,9 +42,7 @@ export function useSave(pluginID: NetworkPluginID) {
             try {
                 switch (pluginID) {
                     case NetworkPluginID.PLUGIN_EVM: {
-                        if (isBindAccount) {
-                            return await saveToNextID(info, account, persona, proof)
-                        }
+                        if (isBindAccount) return await saveToNextID(info, account, persona, proof)
                         return await saveToStringStorage(data.userId, account, info)
                     }
                     default:
@@ -54,6 +53,6 @@ export function useSave(pluginID: NetworkPluginID) {
                 return
             }
         },
-        [saveToNextID, saveToStringStorage, pluginID, saveToKV],
+        [pluginID, saveToNextID, saveToStringStorage, saveToKV],
     )
 }

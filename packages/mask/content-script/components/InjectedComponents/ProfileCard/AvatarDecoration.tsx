@@ -1,14 +1,13 @@
 import { Twitter } from '@masknet/web3-providers'
-import { RSS3_KEY_SITE, NFTBadgeTimeline } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { useQuery } from '@tanstack/react-query'
 
 interface Props {
     className?: string
-    clipPathId: string
     size: number
     userId?: string
 }
-export function AvatarDecoration({ clipPathId, userId, className, size }: Props) {
+export function AvatarDecoration({ userId, className, size }: Props) {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', 'check-nft-avatar', userId],
         queryFn: () => {
@@ -26,7 +25,6 @@ export function AvatarDecoration({ clipPathId, userId, className, size }: Props)
             avatarId={Twitter.getAvatarId(user.avatarURL)}
             height={size}
             width={size}
-            siteKey={RSS3_KEY_SITE.TWITTER}
         />
     )
 }
