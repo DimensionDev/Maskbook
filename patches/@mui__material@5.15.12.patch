@@ -1,3 +1,131 @@
+diff --git a/Modal/Modal.d.ts b/Modal/Modal.d.ts
+index a9ad08c406c944ec47dc9fe09e33507119bccbac..fb96a59fa93b721dccfa024307de1a043c080cc2 100644
+--- a/Modal/Modal.d.ts
++++ b/Modal/Modal.d.ts
+@@ -1,12 +1,12 @@
+-import * as React from 'react';
+-import { SxProps } from '@mui/system';
+-import { OverrideProps } from '@mui/types';
+-import { SlotComponentProps } from '@mui/base';
+-import { PortalProps } from '../Portal';
+-import { Theme } from '../styles';
+-import Backdrop, { BackdropProps } from '../Backdrop';
+-import { OverridableComponent } from '../OverridableComponent';
+-import { ModalClasses } from './modalClasses';
++import * as React from "react";
++import { SxProps } from "@mui/system";
++import { OverrideProps } from "@mui/types";
++import { SlotComponentProps } from "@mui/base";
++import { PortalProps } from "../Portal";
++import { Theme } from "../styles";
++import Backdrop, { BackdropProps } from "../Backdrop";
++import { OverridableComponent } from "../OverridableComponent";
++import { ModalClasses } from "./modalClasses";
+ 
+ export interface ModalComponentsPropsOverrides {}
+ 
+@@ -86,8 +86,16 @@ export interface ModalOwnProps {
+    * @default {}
+    */
+   componentsProps?: {
+-    root?: SlotComponentProps<'div', ModalComponentsPropsOverrides, ModalOwnerState>;
+-    backdrop?: SlotComponentProps<typeof Backdrop, ModalComponentsPropsOverrides, ModalOwnerState>;
++    root?: SlotComponentProps<
++      "div",
++      ModalComponentsPropsOverrides,
++      ModalOwnerState
++    >;
++    backdrop?: SlotComponentProps<
++      typeof Backdrop,
++      ModalComponentsPropsOverrides,
++      ModalOwnerState
++    >;
+   };
+   /**
+    * An HTML element or function that returns one.
+@@ -99,7 +107,8 @@ export interface ModalOwnProps {
+    * By default, it uses the body of the top-level document object,
+    * so it's simply `document.body` most of the time.
+    */
+-  container?: PortalProps['container'];
++  container?: PortalProps["container"];
++  scrollContainer?: Element;
+   /**
+    * If `true`, the modal will not automatically shift focus to itself when it opens, and
+    * replace it to the last focused element when it closes.
+@@ -127,7 +136,7 @@ export interface ModalOwnProps {
+    * The `children` will be under the DOM hierarchy of the parent component.
+    * @default false
+    */
+-  disablePortal?: PortalProps['disablePortal'];
++  disablePortal?: PortalProps["disablePortal"];
+   /**
+    * If `true`, the modal will not restore focus to previously focused element once
+    * modal is hidden or unmounted.
+@@ -164,8 +173,8 @@ export interface ModalOwnProps {
+    * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
+    */
+   onClose?: {
+-    bivarianceHack(event: {}, reason: 'backdropClick' | 'escapeKeyDown'): void;
+-  }['bivarianceHack'];
++    bivarianceHack(event: {}, reason: "backdropClick" | "escapeKeyDown"): void;
++  }["bivarianceHack"];
+   /**
+    * A function called when a transition enters.
+    */
+@@ -189,8 +198,16 @@ export interface ModalOwnProps {
+    * @default {}
+    */
+   slotProps?: {
+-    root?: SlotComponentProps<'div', ModalComponentsPropsOverrides, ModalOwnerState>;
+-    backdrop?: SlotComponentProps<typeof Backdrop, ModalComponentsPropsOverrides, ModalOwnerState>;
++    root?: SlotComponentProps<
++      "div",
++      ModalComponentsPropsOverrides,
++      ModalOwnerState
++    >;
++    backdrop?: SlotComponentProps<
++      typeof Backdrop,
++      ModalComponentsPropsOverrides,
++      ModalOwnerState
++    >;
+   };
+   /**
+    * The system prop that allows defining system overrides as well as additional CSS styles.
+@@ -199,14 +216,14 @@ export interface ModalOwnProps {
+ }
+ 
+ export interface ModalTypeMap<
+-  RootComponent extends React.ElementType = 'div',
+-  AdditionalProps = {},
++  RootComponent extends React.ElementType = "div",
++  AdditionalProps = {}
+ > {
+   props: AdditionalProps & ModalOwnProps;
+   defaultComponent: RootComponent;
+ }
+ 
+-type ModalRootProps = NonNullable<ModalTypeMap['props']['slotProps']>['root'];
++type ModalRootProps = NonNullable<ModalTypeMap["props"]["slotProps"]>["root"];
+ 
+ export declare const ModalRoot: React.FC<ModalRootProps>;
+ 
+@@ -234,9 +251,12 @@ export declare const ModalRoot: React.FC<ModalRootProps>;
+ declare const Modal: OverridableComponent<ModalTypeMap>;
+ 
+ export type ModalProps<
+-  RootComponent extends React.ElementType = ModalTypeMap['defaultComponent'],
+-  AdditionalProps = {},
+-> = OverrideProps<ModalTypeMap<RootComponent, AdditionalProps>, RootComponent> & {
++  RootComponent extends React.ElementType = ModalTypeMap["defaultComponent"],
++  AdditionalProps = {}
++> = OverrideProps<
++  ModalTypeMap<RootComponent, AdditionalProps>,
++  RootComponent
++> & {
+   component?: React.ElementType;
+ };
+ 
 diff --git a/useAutocomplete/index.d.ts b/useAutocomplete/index.d.ts
 index 6f01318688c9f265c24273623696d69b2ed40387..b2082f74c8e3b2c910816ef94548e5eafeafff5f 100644
 --- a/useAutocomplete/index.d.ts
