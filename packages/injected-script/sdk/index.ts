@@ -4,7 +4,6 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
-import { RoninProvider } from './Ronin.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { TrustProvider } from './Trust.js'
@@ -31,7 +30,6 @@ export const injectedOneKeyProvider = new OneKeyProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedBitGetProvider = new BitGetProvider()
 export const injectedRainbowProvider = new RainbowProvider()
-export const injectedRoninProvider = new RoninProvider()
 export const injectedRabbyProvider = new RabbyProvider()
 export const injectedTrustProvider = new TrustProvider()
 export const injectedZerionProvider = new ZerionProvider()
@@ -45,7 +43,6 @@ const Providers = [
     injectedOneKeyProvider,
     injectedRabbyProvider,
     injectedRainbowProvider,
-    injectedRoninProvider,
     injectedOKXProvider,
     injectedZerionProvider,
     injectedOperaProvider,

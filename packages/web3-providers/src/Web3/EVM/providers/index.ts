@@ -9,7 +9,6 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
-import { RoninProvider } from './Ronin.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { CloverProvider } from './Clover.js'
@@ -49,7 +48,6 @@ export function createEVMWalletProviders(
         [ProviderType.OneKey]: new OneKeyProvider(),
         [ProviderType.Rabby]: new RabbyProvider(),
         [ProviderType.Rainbow]: new RainbowProvider(),
-        [ProviderType.Ronin]: new RoninProvider(),
         [ProviderType.Trust]: new TrustProvider(),
         [ProviderType.Clover]: new CloverProvider(),
         [ProviderType.Fortmatic]: new FortmaticProvider(),

@@ -478,7 +478,8 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         icon: new URL('../assets/coin98.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
@@ -492,8 +493,8 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         icon: new URL('../assets/coinbase.png', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
-            supportedEnhanceableSites: [],
-            supportedExtensionSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://www.coinbase.com/wallet',
         shortenLink: 'coinbase.com',
@@ -634,23 +635,6 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         homeLink: 'https://rainbow.me/',
         shortenLink: 'rainbow.me',
         downloadLink: 'https://rainbow.me/download',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
-        ID: `${PLUGIN_ID}_ronin`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Ronin,
-        name: 'Ronin',
-        icon: new URL('../assets/ronin.svg', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
-        },
-        homeLink: 'https://wallet.roninchain.com/',
-        shortenLink: 'wallet.roninchain.com',
-        downloadLink: 'https://wallet.roninchain.com/',
         backgroundGradient:
             'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },

@@ -321,7 +321,6 @@ export enum ProviderType {
     OneKey = 'OneKey',
     Rabby = 'Rabby',
     Rainbow = 'Rainbow',
-    Ronin = 'Ronin',
     Trust = 'Trust',
     Zerion = 'Zerion',
     CustomEvent = 'CustomEvent',
