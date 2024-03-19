@@ -40,6 +40,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.Rabby]: Composer.from(new MetaMaskLike(ProviderType.Rabby)),
             [ProviderType.Rainbow]: Composer.from(new MetaMaskLike(ProviderType.Rainbow)),
             [ProviderType.Trust]: Composer.from(new MetaMaskLike(ProviderType.Trust)),
+            [ProviderType.TokenPocket]: Composer.from(new MetaMaskLike(ProviderType.TokenPocket)),
             [ProviderType.OneKey]: Composer.from(new MetaMaskLike(ProviderType.OneKey)),
             [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
             [ProviderType.Zerion]: Composer.from(new MetaMaskLike(ProviderType.Zerion)),

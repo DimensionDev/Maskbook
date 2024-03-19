@@ -21,6 +21,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
 import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { TrustProvider } from './Trust.js'
+import { TokenPocketProvider } from './TokenPocket.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
@@ -49,6 +50,7 @@ export function createEVMWalletProviders(
         [ProviderType.Rabby]: new RabbyProvider(),
         [ProviderType.Rainbow]: new RainbowProvider(),
         [ProviderType.Trust]: new TrustProvider(),
+        [ProviderType.TokenPocket]: new TokenPocketProvider(),
         [ProviderType.Clover]: new CloverProvider(),
         [ProviderType.Fortmatic]: new FortmaticProvider(),
         [ProviderType.Opera]: new OperaProvider(),

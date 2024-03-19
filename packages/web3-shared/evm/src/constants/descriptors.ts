@@ -483,7 +483,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
-        downloadLink: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        downloadLink: 'https://coin98.com/wallet',
     },
     {
         ID: `${PLUGIN_ID}_coinbase`,
@@ -492,13 +492,28 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         name: 'Coinbase',
         icon: new URL('../assets/coinbase.png', import.meta.url).href,
         enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: ExtensionSiteList,
         },
         homeLink: 'https://www.coinbase.com/wallet',
         shortenLink: 'coinbase.com',
         downloadLink: 'https://www.coinbase.com/wallet/downloads',
+    },
+    {
+        ID: `${PLUGIN_ID}_tokenpocket`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.TokenPocket,
+        name: 'TokenPocket',
+        icon: new URL('../assets/tokenpocket.svg', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: ExtensionSiteList,
+        },
+        homeLink: 'https://tokenpocket.pro/',
+        shortenLink: 'tokenpocket.pro',
+        downloadLink: 'https://www.tokenpocket.pro/en/download/app',
     },
     {
         ID: `${PLUGIN_ID}_okx`,

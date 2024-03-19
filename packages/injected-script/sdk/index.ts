@@ -7,6 +7,7 @@ import { RainbowProvider } from './Rainbow.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { TrustProvider } from './Trust.js'
+import { TokenPocketProvider } from './TokenPocket.js'
 import { ZerionProvider } from './Zerion.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
@@ -32,6 +33,7 @@ export const injectedBitGetProvider = new BitGetProvider()
 export const injectedRainbowProvider = new RainbowProvider()
 export const injectedRabbyProvider = new RabbyProvider()
 export const injectedTrustProvider = new TrustProvider()
+export const injectedTokenPocketProvider = new TokenPocketProvider()
 export const injectedZerionProvider = new ZerionProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
@@ -53,6 +55,7 @@ const Providers = [
     injectedPhantomProvider,
     injectedMetaMaskProvider,
     injectedTrustProvider,
+    injectedTokenPocketProvider,
 ]
 
 export function pasteText(text: string) {
