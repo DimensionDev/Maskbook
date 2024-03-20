@@ -329,6 +329,18 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         averageBlockDelay: 10,
     },
     {
+        ID: `${PLUGIN_ID}_sei`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Sei,
+        type: NetworkType.Sei,
+        name: 'Sei',
+        icon: new URL('../assets/sei.svg', import.meta.url).href,
+        iconColor: 'rgb(112, 212, 74)',
+        averageBlockDelay: 10,
+        backgroundGradient: 'linear-gradient(180deg, rgba(112, 212, 75, 0.15) 0%, rgba(112, 212, 75, 0.05) 100%)',
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_xlayer_testnet`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.XLayer_Testnet,
