@@ -12,7 +12,7 @@ function getInjectedProvider() {
 
 export class ZerionProvider extends EVMInjectedWalletProvider {
     constructor() {
-        super(ProviderType.Coinbase, getInjectedProvider())
+        super(ProviderType.Zerion, getInjectedProvider())
     }
 
     override get ready() {

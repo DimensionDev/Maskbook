@@ -4,10 +4,10 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
-import { RoninProvider } from './Ronin.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { TrustProvider } from './Trust.js'
+import { TokenPocketProvider } from './TokenPocket.js'
 import { ZerionProvider } from './Zerion.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
@@ -31,9 +31,9 @@ export const injectedOneKeyProvider = new OneKeyProvider()
 export const injectedOKXProvider = new OKXProvider()
 export const injectedBitGetProvider = new BitGetProvider()
 export const injectedRainbowProvider = new RainbowProvider()
-export const injectedRoninProvider = new RoninProvider()
 export const injectedRabbyProvider = new RabbyProvider()
 export const injectedTrustProvider = new TrustProvider()
+export const injectedTokenPocketProvider = new TokenPocketProvider()
 export const injectedZerionProvider = new ZerionProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
@@ -45,7 +45,6 @@ const Providers = [
     injectedOneKeyProvider,
     injectedRabbyProvider,
     injectedRainbowProvider,
-    injectedRoninProvider,
     injectedOKXProvider,
     injectedZerionProvider,
     injectedOperaProvider,
@@ -56,6 +55,7 @@ const Providers = [
     injectedPhantomProvider,
     injectedMetaMaskProvider,
     injectedTrustProvider,
+    injectedTokenPocketProvider,
 ]
 
 export function pasteText(text: string) {

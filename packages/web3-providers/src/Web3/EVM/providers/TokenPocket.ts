@@ -1,28 +1,28 @@
-import { injectedRoninProvider } from '@masknet/injected-script'
+import { injectedTokenPocketProvider } from '@masknet/injected-script'
 import { isEthereumInjected, isInPageEthereumInjected } from '@masknet/shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
-    if (isEthereumInjected('ronin')) return Reflect.get(window, 'ronin')
-    if (isInPageEthereumInjected()) return injectedRoninProvider
+    if (isEthereumInjected('tokenpocket')) return Reflect.get(window, 'tokenpocket')
+    if (isInPageEthereumInjected()) return injectedTokenPocketProvider
     // Not available on extension site.
-    return injectedRoninProvider
+    return injectedTokenPocketProvider
 }
 
-export class RoninProvider extends EVMInjectedWalletProvider {
+export class TokenPocketProvider extends EVMInjectedWalletProvider {
     constructor() {
-        super(ProviderType.Ronin, getInjectedProvider())
+        super(ProviderType.TokenPocket, getInjectedProvider())
     }
 
     override get ready() {
-        if (isEthereumInjected('ronin')) return true
+        if (isEthereumInjected('tokenpocket')) return true
         if (isInPageEthereumInjected()) return super.ready
         return false
     }
 
     override get readyPromise() {
-        if (isEthereumInjected('ronin')) return Promise.resolve()
+        if (isEthereumInjected('tokenpocket')) return Promise.resolve()
         if (isInPageEthereumInjected()) return super.readyPromise
         return Promise.resolve()
     }

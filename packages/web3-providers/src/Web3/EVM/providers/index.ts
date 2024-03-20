@@ -9,7 +9,6 @@ import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
-import { RoninProvider } from './Ronin.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { CloverProvider } from './Clover.js'
@@ -22,6 +21,7 @@ import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
 import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { TrustProvider } from './Trust.js'
+import { TokenPocketProvider } from './TokenPocket.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
@@ -49,8 +49,8 @@ export function createEVMWalletProviders(
         [ProviderType.OneKey]: new OneKeyProvider(),
         [ProviderType.Rabby]: new RabbyProvider(),
         [ProviderType.Rainbow]: new RainbowProvider(),
-        [ProviderType.Ronin]: new RoninProvider(),
         [ProviderType.Trust]: new TrustProvider(),
+        [ProviderType.TokenPocket]: new TokenPocketProvider(),
         [ProviderType.Clover]: new CloverProvider(),
         [ProviderType.Fortmatic]: new FortmaticProvider(),
         [ProviderType.Opera]: new OperaProvider(),

@@ -106,7 +106,7 @@ export abstract class InjectedWalletBridge {
     /**
      * Access primitive property on the sdk object.
      */
-    getProperty<T = unknown>(key: string): Promise<T | null> {
-        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', this.pathname, id, key))
+    getProperty<T = unknown>(key: string, pathname = this.pathname): Promise<T | null> {
+        return createPromise((id) => sendEvent('web3BridgePrimitiveAccess', pathname, id, key))
     }
 }

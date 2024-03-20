@@ -1,13 +1,13 @@
 import { InjectedWalletBridge } from './BaseInjected.js'
 import { createPromise, sendEvent } from './utils.js'
 
-export class RoninProvider extends InjectedWalletBridge {
+export class TokenPocketProvider extends InjectedWalletBridge {
     constructor() {
-        super('ronin.provider')
+        super('tokenpocket.ethereum')
     }
 
     override async untilAvailable(): Promise<void> {
-        await super.untilAvailable(async () => !!(await super.getProperty<boolean>('isRonin')))
+        await super.untilAvailable(async () => !!(await super.getProperty<string>('isTokenPocket')))
     }
 
     override connect(options: unknown): Promise<void> {
