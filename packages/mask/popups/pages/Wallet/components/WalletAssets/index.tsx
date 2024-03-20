@@ -124,7 +124,7 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
         <div className={classes.content}>
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
-                    <StyledTabList value={currentTab} onChange={handleTabChange}>
+                    <StyledTabList onChange={handleTabChange}>
                         <Tab
                             className={classes.tab}
                             label={t.popups_wallet_tab_assets()}

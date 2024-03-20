@@ -1,4 +1,4 @@
-import { AllProviderTradeContext, languages } from '@masknet/plugin-trader'
+import { languages } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SharedContextProvider, SwapPageModals } from '@masknet/shared'
 import { applyMaskColorVars, makeStyles } from '@masknet/theme'
@@ -7,7 +7,6 @@ import { Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 import { useTokenParams } from '../../hooks/index.js'
-import { SwapBox } from './SwapBox/index.js'
 import { NetworkPluginID, PluginID, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { useCallback } from 'react'
 
@@ -84,11 +83,7 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type}>
-                                <AllProviderTradeContext.Provider>
-                                    <SwapBox />
-                                </AllProviderTradeContext.Provider>
-                            </EVMWeb3ContextProvider>
+                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type} />
                         </main>
                     </div>
                 </div>

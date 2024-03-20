@@ -152,6 +152,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         },
                     },
                 },
+                {
+                    test: /\.svg$/,
+                    include: /node_modules[\\/]@lifi[\\/]wallet-management/, // Only effective for @lifi/wallet-management
+                    loader: require.resolve('file-loader'),
+                },
                 // compress svg files
                 flags.mode === 'production' ?
                     {
@@ -163,15 +168,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                 pretty: false,
                             },
                         },
-                        dependency(data) {
-                            if (data === '') return false
-                            if (data !== 'url')
-                                throw new TypeError(
-                                    'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
-                                        data,
-                                )
-                            return true
-                        },
+                        exclude: /node_modules/,
+                        dependency: 'url',
                         type: 'asset/resource',
                     }
                 :   null,

@@ -164,6 +164,7 @@ interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer'
     resultList?: Web3Helper.TokenResultAll[]
     children?: React.ReactNode
     TrendingCardProps?: Partial<TrendingCardProps>
+    isSwappable?: boolean
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
@@ -178,6 +179,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         setActive,
         currentTab,
         identity,
+        isSwappable,
     } = props
 
     const { coin, market } = trending
@@ -218,7 +220,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, coin.symbol])
     // #endregion
 
-    const titleRef = useRef<HTMLElement>(null)
+    // #region swap
+    const { setDialog: setExchangeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
+    const onExchangeButtonClicked = useCallback(() => {
+        setExchangeDialog({
+            open: true,
+        })
+    }, [])
+    // #endregion
+
+    const titleRef = useRef<HTMLDivElement>(null)
 
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
@@ -291,7 +302,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
-                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                            <Stack component="div" flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
                                 <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
@@ -349,13 +360,24 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                     </>
                                 :   null}
                                 <ThemeProvider theme={MaskLightTheme}>
+                                    {isSwappable ?
+                                        <Button
+                                            color="primary"
+                                            className={classes.buyButton}
+                                            size="small"
+                                            endIcon={<Icons.Swap size={16} />}
+                                            variant="roundedContained"
+                                            onClick={onExchangeButtonClicked}>
+                                            {t.swap()}
+                                        </Button>
+                                    :   null}
                                     {isBuyable ?
                                         <Button
                                             color="primary"
                                             className={classes.buyButton}
                                             size="small"
-                                            startIcon={<Icons.Buy size={16} />}
-                                            variant="contained"
+                                            endIcon={<Icons.Buy size={16} />}
+                                            variant="roundedContained"
                                             onClick={onBuyButtonClicked}>
                                             {t.buy_now()}
                                         </Button>
@@ -424,7 +446,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
                     :   null}
                 </Paper>
-                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTab.Swap ?
+                {isCollectionProjectPopper || isTokenTagPopper ?
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>

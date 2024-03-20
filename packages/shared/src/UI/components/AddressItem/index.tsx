@@ -23,9 +23,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+interface OverrideTypographyProps extends Omit<TypographyProps, 'component'> {
+    component?: string
+}
+
 export interface AddressItemProps {
     socialAccount?: SocialAccount<Web3Helper.ChainIdAll>
-    TypographyProps?: TypographyProps
+    TypographyProps?: OverrideTypographyProps
     linkIconClassName?: string
     disableLinkIcon?: boolean
     onClick?: (ev: React.MouseEvent) => void

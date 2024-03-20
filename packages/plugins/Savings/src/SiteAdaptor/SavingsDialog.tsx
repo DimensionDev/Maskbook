@@ -15,7 +15,6 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { ChainId, getAaveConstant } from '@masknet/web3-shared-evm'
 import { InjectedDialog, PluginWalletStatusBar, NetworkTab } from '@masknet/shared'
-import { AllProviderTradeContext } from '@masknet/plugin-trader'
 import { EVMContract } from '@masknet/web3-providers'
 import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/AaveProtocolDataProvider.js'
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
@@ -119,68 +118,66 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     return (
         <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} chainId={ChainId.Mainnet}>
-            <AllProviderTradeContext.Provider>
-                <ChainContextProvider chainId={chainId}>
-                    <TabContext value={currentTab}>
-                        <InjectedDialog
-                            open={open}
-                            classes={{ paper: classes.dialogRoot }}
-                            title={t.plugin_savings()}
-                            onClose={() => {
-                                onClose?.()
-                                setSelectedProtocol(null)
-                            }}
-                            titleTabs={
-                                <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                                    <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
-                                    <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
-                                </MaskTabList>
-                            }>
-                            <DialogContent className={classes.content}>
-                                <div className={classes.abstractTabWrapper}>
-                                    <NetworkTab
-                                        requireChains
-                                        chains={chains.filter(Boolean)}
-                                        pluginID={NetworkPluginID.PLUGIN_EVM}
+            <ChainContextProvider chainId={chainId}>
+                <TabContext value={currentTab}>
+                    <InjectedDialog
+                        open={open}
+                        classes={{ paper: classes.dialogRoot }}
+                        title={t.plugin_savings()}
+                        onClose={() => {
+                            onClose?.()
+                            setSelectedProtocol(null)
+                        }}
+                        titleTabs={
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                                <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
+                                <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
+                            </MaskTabList>
+                        }>
+                        <DialogContent className={classes.content}>
+                            <div className={classes.abstractTabWrapper}>
+                                <NetworkTab
+                                    requireChains
+                                    chains={chains.filter(Boolean)}
+                                    pluginID={NetworkPluginID.PLUGIN_EVM}
+                                />
+                            </div>
+                            <div className={classes.tableTabWrapper}>
+                                <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.deposit}>
+                                    <SavingsTable
+                                        loadingProtocols={loadingProtocols}
+                                        tab={TabType.Deposit}
+                                        protocols={protocols}
+                                        setSelectedProtocol={setSelectedProtocol}
                                     />
-                                </div>
-                                <div className={classes.tableTabWrapper}>
-                                    <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.deposit}>
-                                        <SavingsTable
-                                            loadingProtocols={loadingProtocols}
-                                            tab={TabType.Deposit}
-                                            protocols={protocols}
-                                            setSelectedProtocol={setSelectedProtocol}
-                                        />
-                                    </TabPanel>
-                                    <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.withdraw}>
-                                        <SavingsTable
-                                            loadingProtocols={loadingProtocols}
-                                            tab={TabType.Withdraw}
-                                            protocols={protocols}
-                                            setSelectedProtocol={setSelectedProtocol}
-                                        />
-                                    </TabPanel>
-                                </div>
-                            </DialogContent>
+                                </TabPanel>
+                                <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.withdraw}>
+                                    <SavingsTable
+                                        loadingProtocols={loadingProtocols}
+                                        tab={TabType.Withdraw}
+                                        protocols={protocols}
+                                        setSelectedProtocol={setSelectedProtocol}
+                                    />
+                                </TabPanel>
+                            </div>
+                        </DialogContent>
 
-                            <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
-                                <PluginWalletStatusBar />
-                            </DialogActions>
-                        </InjectedDialog>
-                    </TabContext>
-                </ChainContextProvider>
-                {selectedProtocol ?
-                    <RevokeChainContextProvider>
-                        <SavingsFormDialog
-                            tab={currentTab}
-                            chainId={chainId}
-                            protocol={selectedProtocol}
-                            onClose={() => setSelectedProtocol(null)}
-                        />
-                    </RevokeChainContextProvider>
-                :   null}
-            </AllProviderTradeContext.Provider>
+                        <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
+                            <PluginWalletStatusBar />
+                        </DialogActions>
+                    </InjectedDialog>
+                </TabContext>
+            </ChainContextProvider>
+            {selectedProtocol ?
+                <RevokeChainContextProvider>
+                    <SavingsFormDialog
+                        tab={currentTab}
+                        chainId={chainId}
+                        protocol={selectedProtocol}
+                        onClose={() => setSelectedProtocol(null)}
+                    />
+                </RevokeChainContextProvider>
+            :   null}
         </Web3ContextProvider>
     )
 }
