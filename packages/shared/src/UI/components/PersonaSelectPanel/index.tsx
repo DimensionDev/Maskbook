@@ -74,7 +74,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { data: personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
+    const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
     useEffect(() => {
         if (!currentPersonaIdentifier) {
@@ -84,7 +84,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 
         const persona = personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier))
         setSelectedPersona(persona ?? personas[0])
-    }, [currentPersonaIdentifier?.toText(), personas.length])
+    }, [currentPersonaIdentifier?.toText(), personas])
 
     const [, connect] = useAsyncFn(
         async (profileIdentifier?: ProfileIdentifier, personaIdentifier?: PersonaIdentifier) => {
@@ -113,29 +113,32 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
         })
     }, [!personas.length, isPending, !error])
 
-    const actionButton = useMemo(() => {
-        let isConnected = true
-        let isVerified = true
-
-        if (!currentProfileIdentify || !selectedPersona) return null
-
+    const isConnected = useMemo(() => {
+        if (!selectedPersona || !currentProfileIdentify) return false
         // Selected persona does not link the current site
-        if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
-            isConnected = false
-        }
+        const linked = selectedPersona.persona.linkedProfiles.find((x) =>
+            isSameProfile(x, currentProfileIdentify.identifier),
+        )
+        const same = isSamePersona(selectedPersona.persona, currentPersonaIdentifier)
+        return !!linked && same
+    }, [selectedPersona, currentProfileIdentify, currentPersonaIdentifier])
 
-        if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
+    const isVerified = useMemo(() => {
+        if (!currentProfileIdentify || !selectedPersona) return false
 
-        const verifiedAtSite = selectedPersona.proof.find(
-            (x) =>
+        const verifiedAtSite = selectedPersona.proof.find((x) => {
+            return (
                 isSameProfile(
                     resolveNextIDIdentityToProfile(x.identity, x.platform),
                     currentProfileIdentify.identifier,
-                ) && x.is_valid,
-        )
-        if (!verifiedAtSite) {
-            isVerified = false
-        }
+                ) && x.is_valid
+            )
+        })
+        return !!verifiedAtSite
+    }, [currentProfileIdentify, selectedPersona?.proof])
+
+    const actionButton = useMemo(() => {
+        if (!currentProfileIdentify || !selectedPersona) return null
 
         const handleClick = async () => {
             if (!isConnected) {
@@ -205,13 +208,14 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 
         return <ActionContent {...actionProps} classes={{ button: props.classes?.button }} />
     }, [
+        isConnected,
+        isVerified,
         currentPersonaIdentifier,
         currentProfileIdentify,
         enableVerify,
         finishTarget,
         selectedPersona?.persona,
         selectedPersona?.proof,
-        selectedPersona?.persona.linkedProfiles,
     ])
 
     if (isPending)
