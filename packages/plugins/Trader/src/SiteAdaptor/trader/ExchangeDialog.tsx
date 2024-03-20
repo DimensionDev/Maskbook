@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTraderTrans } from '../../locales/i18n_generated.js'
-import { LiFiWidget, HiddenUI, type WidgetConfig } from '@lifi/widget'
+import { LiFiWidget, HiddenUI, type WidgetConfig, type WidgetDrawer } from '@lifi/widget'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
 import { Web3Provider } from '@ethersproject/providers'
@@ -36,16 +36,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
     const [containerRef, setContainerRef] = useState<HTMLElement>()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
-    const widgetRef = useRef<{
-        navigateToTransaction?: () => void
-        navigateToSettings?: () => void
-        navigateBack?: () => void
-        isOpen(): void
-        toggleDrawer(): void
-        openDrawer(): void
-        closeDrawer(): void
-        isHome: boolean
-    }>(null)
+    const widgetRef = useRef<WidgetDrawer>(null)
 
     const handleBackOrClose = useCallback(() => {
         if (widgetRef.current?.isHome) {
@@ -60,7 +51,8 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        return new Web3Provider(provider, 'any').getSigner()
+        const signer = new Web3Provider(provider, 'any').getSigner()
+        return signer
     }, [providerType])
 
     const widgetConfig = useMemo<WidgetConfig>(() => {

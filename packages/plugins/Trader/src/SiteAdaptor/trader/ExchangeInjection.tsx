@@ -12,7 +12,7 @@ export function ExchangeInjection() {
         return CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
             setOpen(open)
         })
-    })
+    }, [])
 
     if (!open) return null
     return (

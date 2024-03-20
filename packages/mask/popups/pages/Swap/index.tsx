@@ -83,11 +83,7 @@ export default function SwapPage() {
                             <NetworkSelector />
                         </header>
                         <main className={classes.main}>
-                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type}>
-                                {/* <AllProviderTradeContext.Provider>
-                                    <SwapBox />
-                                </AllProviderTradeContext.Provider> */}
-                            </EVMWeb3ContextProvider>
+                            <EVMWeb3ContextProvider chainId={chainId} networkType={network?.type} />
                         </main>
                     </div>
                 </div>
