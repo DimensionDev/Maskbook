@@ -31,6 +31,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
     Avatar,
+    Box,
     Button,
     CardContent,
     IconButton,
@@ -123,8 +124,10 @@ const useStyles = makeStyles<{
             fontSize: 10,
             backgroundColor: theme.palette.common.white,
         },
-        buyButton: {
+        buttons: {
             marginLeft: 'auto',
+            display: 'flex',
+            gap: theme.spacing(0.5),
         },
         icon: {
             color: MaskColors.dark.maskColor.dark,
@@ -359,41 +362,40 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     </>
                                 :   null}
-                                <ThemeProvider theme={MaskLightTheme}>
-                                    {isSwappable ?
+                                <Box className={classes.buttons}>
+                                    <ThemeProvider theme={MaskLightTheme}>
+                                        {isSwappable ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.Swap size={16} />}
+                                                variant="roundedContained"
+                                                onClick={onExchangeButtonClicked}>
+                                                {t.swap()}
+                                            </Button>
+                                        :   null}
+                                        {/* {isBuyable ? */}
                                         <Button
                                             color="primary"
-                                            className={classes.buyButton}
-                                            size="small"
-                                            endIcon={<Icons.Swap size={16} />}
-                                            variant="roundedContained"
-                                            onClick={onExchangeButtonClicked}>
-                                            {t.swap()}
-                                        </Button>
-                                    :   null}
-                                    {isBuyable ?
-                                        <Button
-                                            color="primary"
-                                            className={classes.buyButton}
                                             size="small"
                                             endIcon={<Icons.Buy size={16} />}
                                             variant="roundedContained"
                                             onClick={onBuyButtonClicked}>
                                             {t.buy_now()}
                                         </Button>
-                                    :   null}
-                                    {isNFT && first(coin.home_urls) ?
-                                        <Button
-                                            color="primary"
-                                            className={classes.buyButton}
-                                            size="small"
-                                            endIcon={<Icons.LinkOut size={16} />}
-                                            variant="roundedContained"
-                                            onClick={() => window.open(first(coin.home_urls))}>
-                                            {t.open()}
-                                        </Button>
-                                    :   null}
-                                </ThemeProvider>
+                                        {/* :   null} */}
+                                        {isNFT && first(coin.home_urls) ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.LinkOut size={16} />}
+                                                variant="roundedContained"
+                                                onClick={() => window.open(first(coin.home_urls))}>
+                                                {t.open()}
+                                            </Button>
+                                        :   null}
+                                    </ThemeProvider>
+                                </Box>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between" marginTop={2}>
                                 <Stack direction="row" gap={1} alignItems="center">
