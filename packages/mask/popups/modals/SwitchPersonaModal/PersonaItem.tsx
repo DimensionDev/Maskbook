@@ -51,7 +51,12 @@ export const PersonaItem = memo<PersonaItemProps>(function PersonaItem({ isSelec
             secondaryAction={<Radio checked={isSelected} />}
             onClick={handleClick}
             {...rest}>
-            <PersonaAvatar avatar={persona.avatar} classes={{ root: classes.avatar }} size={36} />
+            <PersonaAvatar
+                avatar={persona.avatar}
+                pubkey={persona.identifier.publicKeyAsHex}
+                classes={{ root: classes.avatar }}
+                size={36}
+            />
             <Box ml={1}>
                 <Typography className={classes.name}>{persona.nickname}</Typography>
                 <PersonaPublicKey

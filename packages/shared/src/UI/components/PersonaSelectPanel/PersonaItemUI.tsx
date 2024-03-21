@@ -1,18 +1,19 @@
-import { useMemo } from 'react'
-import { Avatar, Box, Stack, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import {
-    type BindingProof,
-    resolveNextIDIdentityToProfile,
-    type ECKeyIdentifier,
     formatPersonaFingerprint,
     isSamePersona,
     isSameProfile,
+    resolveNextIDIdentityToProfile,
+    type BindingProof,
+    type ECKeyIdentifier,
     type PersonaInformation,
 } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { Avatar, Box, Stack, Typography } from '@mui/material'
+import { useMemo } from 'react'
 import { CopyButton } from '../CopyButton/index.js'
+import { EmojiAvatar } from '../EmojiAvatar/index.js'
 
 /* cspell:disable-next-line */
 // TODO: Migrate to SocialIdentity by @Lanttcat
@@ -88,8 +89,7 @@ export function PersonaItemUI(props: PersonaItemProps) {
                             borderRadius: '50%',
                         }}
                     />
-                :   null}
-                {!data.avatar && <Icons.MenuPersonasActive size={30} />}
+                :   <EmojiAvatar value={data.persona.identifier.publicKeyAsHex} />}
                 {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>
             <Stack flexGrow={1}>

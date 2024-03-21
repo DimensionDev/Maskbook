@@ -239,7 +239,11 @@ const LogoutUI = memo<LogoutUIProps>(
             <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
                 <Box p={2} pb={11}>
                     <Box className={classes.infoBox}>
-                        <PersonaAvatar size={30} avatar={currentPersona?.avatar} />
+                        <PersonaAvatar
+                            size={30}
+                            avatar={currentPersona?.avatar}
+                            pubkey={currentPersona?.identifier.publicKeyAsHex!}
+                        />
                         <Box>
                             <Typography fontWeight={700}>{currentPersona?.nickname}</Typography>
                             <Typography fontSize={10} color={theme.palette.maskColor.third} lineHeight="10px">

@@ -160,7 +160,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PersonaHomeUIProps {
-    hasProofs?: boolean
     avatar?: string | null
     fingerprint?: string
     publicKey?: string
@@ -190,7 +189,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         publicKey,
         onAccountClick,
         bindingWallets,
-        hasProofs,
     }) => {
         const theme = useTheme()
         const t = useMaskSharedTrans()
@@ -214,7 +212,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                             </Box>
                             <Box className={classes.info}>
                                 <Box position="relative" height="60px">
-                                    <PersonaAvatar size={60} avatar={avatar} hasProofs={hasProofs} />
+                                    <PersonaAvatar size={60} avatar={avatar} pubkey={publicKey!} />
                                     <Box
                                         className={classes.edit}
                                         onClick={() => navigate(PopupRoutes.PersonaAvatarSetting)}>

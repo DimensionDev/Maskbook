@@ -657,7 +657,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         ID: `${PLUGIN_ID}_trust`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.Trust,
-        name: 'Rainbow',
+        name: 'Trust',
         icon: new URL('../assets/trust.svg', import.meta.url).href,
         enableRequirements: {
             supportedChainIds: ChainIdList,

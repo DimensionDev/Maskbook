@@ -14,10 +14,12 @@ export const allPersonas: Subscription<PersonaInformation[]> = createSubscriptio
     (x) => {
         const clearCurrentPersonaIdentifier = MaskMessages.events.currentPersonaIdentifier.on(x)
         const clearPersonasChanged = MaskMessages.events.personasChanged.on(x)
+        const clearMyPersonaChanged = MaskMessages.events.ownPersonaChanged.on(x)
 
         return () => {
             clearCurrentPersonaIdentifier()
             clearPersonasChanged()
+            clearMyPersonaChanged()
         }
     },
 )
