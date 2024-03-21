@@ -51,7 +51,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
-    const { currentPersona, avatar, proofs } = PersonaContext.useContainer()
+    const { currentPersona, avatar } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
 
@@ -69,7 +69,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 <Box className={classes.right}>
                     <PersonaAvatar
                         avatar={avatar}
-                        hasProofs={!!proofs?.length}
+                        pubkey={currentPersona?.identifier.publicKeyAsHex!}
                         size={48}
                         classes={{ root: classes.avatar }}
                     />

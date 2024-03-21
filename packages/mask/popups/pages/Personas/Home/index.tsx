@@ -59,7 +59,6 @@ const PersonaHome = memo(() => {
 
     return (
         <PersonaHomeUI
-            hasProofs={!!proofs?.length}
             bindingWallets={bindingWallets}
             accounts={accounts}
             networks={definedSocialNetworks}
