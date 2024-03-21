@@ -26,6 +26,14 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
+    static async parse(options: FireflyRedPacketAPI.ParseOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/parse')
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ParseResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
+        return data
+    }
     static async getPayloadUrls(from: string, amount?: string, type?: string, symbol?: string, decimals?: number) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
