@@ -27,8 +27,8 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 
 export class FireflyRedPacket {
     static async parse(options: FireflyRedPacketAPI.ParseOptions) {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/parse')
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ParseResponse>(url, {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/misc/redpacket/parse')
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
         })
@@ -216,13 +216,19 @@ export class FireflyRedPacket {
             body: JSON.stringify(options),
         })
     }
-    static async finishClaiming(rpid: string, profileId: string, handle: string, txHash: string) {
+    static async finishClaiming(
+        rpid: string,
+        platform: FireflyRedPacketAPI.PlatformType,
+        profileId: string,
+        handle: string,
+        txHash: string,
+    ) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
         return fetchFireflyJSON<FireflyRedPacketAPI.Response<string>>(url, {
             method: 'POST',
             body: JSON.stringify({
                 rpid,
-                claimPlatform: FireflyRedPacketAPI.SourceType.FireflyPC,
+                claimPlatform: platform,
                 claimProfileId: profileId,
                 claimHandle: handle,
                 txHash,

@@ -6,7 +6,7 @@ import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { RedPacketStatus, type RedPacketJSONPayload, type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Stack, Typography } from '@mui/material'
@@ -184,6 +184,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
+    const platform = source?.toLowerCase() as 'lens' | 'farcaster'
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
@@ -195,7 +196,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
             if (isOnFirefly) {
-                const platform = source?.toLowerCase() as 'lens' | 'farcaster'
                 const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
                 return t.share_on_firefly({
                     context,
@@ -222,7 +222,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     t.share_unclaimed_message_official_account(shareTextOption)
                 :   t.share_unclaimed_message_not_twitter(shareTextOption)
         },
-        [payload, link, claimTxHash, t, network?.name, source, isOnFirefly, handle],
+        [payload, link, claimTxHash, t, network?.name, platform, isOnFirefly, handle],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {
@@ -274,8 +274,14 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         }
         if (canClaim) {
             hash = await claimCallback()
-            if (myProfileId && myHandle && hash) {
-                await FireflyRedPacket.finishClaiming(payload.rpid, myProfileId, myHandle, hash)
+            if (platform && myProfileId && myHandle && hash) {
+                await FireflyRedPacket.finishClaiming(
+                    payload.rpid,
+                    platform as FireflyRedPacketAPI.PlatformType,
+                    myProfileId,
+                    myHandle,
+                    hash,
+                )
             }
             checkResult()
         } else if (canRefund) {
@@ -287,6 +293,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [
         canClaim,
         canRefund,
+        platform,
         claimCallback,
         checkResult,
         recheckClaimStatus,
