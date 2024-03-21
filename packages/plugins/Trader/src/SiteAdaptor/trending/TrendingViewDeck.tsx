@@ -374,16 +374,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 {t.swap()}
                                             </Button>
                                         :   null}
-                                        {/* {isBuyable ? */}
-                                        <Button
-                                            color="primary"
-                                            size="small"
-                                            endIcon={<Icons.Buy size={16} />}
-                                            variant="roundedContained"
-                                            onClick={onBuyButtonClicked}>
-                                            {t.buy_now()}
-                                        </Button>
-                                        {/* :   null} */}
+                                        {isBuyable ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.Buy size={16} />}
+                                                variant="roundedContained"
+                                                onClick={onBuyButtonClicked}>
+                                                {t.buy_now()}
+                                            </Button>
+                                        :   null}
                                         {isNFT && first(coin.home_urls) ?
                                             <Button
                                                 color="primary"

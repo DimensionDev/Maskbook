@@ -10,8 +10,7 @@ import { Box } from '@mui/system'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { type ChainId, getRPCConstant, ProviderType } from '@masknet/web3-shared-evm'
-import { reduce } from 'lodash-es'
+import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -60,16 +59,6 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
     }, [Provider])
 
     const widgetConfig = useMemo<WidgetConfig>(() => {
-        const rpcs = reduce(
-            networks,
-            (acc, current) => {
-                const urls = getRPCConstant(current.chainId, 'RPC_URLS') || []
-                acc[current.chainId] = urls
-                return acc
-            },
-            {} as Record<ChainId, string[]>,
-        )
-
         return {
             integrator: 'Mask Network',
             variant: 'expandable',
@@ -84,7 +73,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                 beforeSwitchChain: async (chainId: ChainId) => {
                     const providerType = Provider?.providerType?.getCurrentValue()
                     if (providerType === ProviderType.MaskWallet) {
-                        EVMWeb3.switchChain(chainId, { silent: true })
+                        await EVMWeb3.switchChain(chainId, { silent: true })
                     }
 
                     return
@@ -97,9 +86,6 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             },
             hiddenUI: [HiddenUI.Header],
             appearance: theme.palette.mode,
-            sdkConfig: {
-                rpcs,
-            },
         }
     }, [theme, providerType])
 
