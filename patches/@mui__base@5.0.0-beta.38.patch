@@ -80,7 +80,7 @@ index 477ee12c6af5be2a4dcfcf7e732906381e24ae17..565ad74838fd0861495f1cb4e3d7f572
  }
  export { ClickAwayListener };
 diff --git a/ClickAwayListener/ClickAwayListener.js b/ClickAwayListener/ClickAwayListener.js
-index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d1db41351 100644
+index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..55ff15c7fe6da03dbe4650291dd105df63ae16ce 100644
 --- a/ClickAwayListener/ClickAwayListener.js
 +++ b/ClickAwayListener/ClickAwayListener.js
 @@ -1,8 +1,14 @@
@@ -140,7 +140,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
  
    // The handler doesn't take event.defaultPrevented into account:
    //
-@@ -56,36 +68,54 @@ function ClickAwayListener(props) {
+@@ -56,44 +68,54 @@ function ClickAwayListener(props) {
    // clicking a checkbox to check it, hitting a button to submit a form,
    // and hitting left arrow to move the cursor in a text input etc.
    // Only special HTML elements have these default behaviors.
@@ -166,11 +166,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
 -    if (!activatedRef.current || !nodeRef.current || 'clientX' in event && clickedRootScrollbar(event, doc)) {
 -      return;
 -    }
-+      if (
-+        !activatedRef.current ||
-+        !nodeRef.current ||
-+        ("clientX" in event && clickedRootScrollbar(event, doc))
-+      ) {
++      if (!activatedRef.current || !nodeRef.current || ("clientX" in event && clickedRootScrollbar(event, doc))) {
 +        return;
 +      } // Do not act if user performed touchmove
  
@@ -179,45 +175,48 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
 -      movedRef.current = false;
 -      return;
 -    }
+-    let insideDOM;
 +      if (movedRef.current) {
 +        movedRef.current = false;
 +        return;
 +      }
-+
-+      // If useCapture is true, `childrenPropsHandler` created by
-+      // `createHandleSynthetic` will fire after `handleClickAway`,
-+      // `syntheticEventRef.current` (or `insideReactTree`) will always be false
-+      // at the first checking
-+      if (useCapture) {
-+        setTimeout(check);
++      let insideDOM;
+ 
+-    // If not enough, can use https://github.com/DieterHolvoet/event-propagation-path/blob/master/propagationPath.js
+-    if (event.composedPath) {
+-      insideDOM = event.composedPath().indexOf(nodeRef.current) > -1;
++      // If not enough, can use https://github.com/DieterHolvoet/event-propagation-path/blob/master/propagationPath.js
++      if (event.composedPath) {
++        insideDOM = event.composedPath().indexOf(nodeRef.current) > -1;
 +      } else {
-+        check();
++        insideDOM = !doc.documentElement.contains(
++            // @ts-expect-error returns `false` as intended when not dispatched from a Node
++            event.target) || nodeRef.current.contains(
++            // @ts-expect-error returns `false` as intended when not dispatched from a Node
++            event.target);
++      }
++      if (!insideDOM && (disableReactTree || !insideReactTree)) {
++        onClickAway(event);
 +      }
 +    };
-     let insideDOM;
- 
-     // If not enough, can use https://github.com/DieterHolvoet/event-propagation-path/blob/master/propagationPath.js
-     if (event.composedPath) {
-       insideDOM = event.composedPath().indexOf(nodeRef.current) > -1;
++
++    // If useCapture is true, `childrenPropsHandler` created by
++    // `createHandleSynthetic` will fire after `handleClickAway`,
++    // `syntheticEventRef.current` (or `insideReactTree`) will always be false
++    // at the first checking
++    if (useCapture) {
++      setTimeout(check);
      } else {
 -      insideDOM = !doc.documentElement.contains(
 -      // @ts-expect-error returns `false` as intended when not dispatched from a Node
 -      event.target) || nodeRef.current.contains(
 -      // @ts-expect-error returns `false` as intended when not dispatched from a Node
 -      event.target);
-+      insideDOM =
-+        !doc.documentElement.contains(
-+          // @ts-expect-error returns `false` as intended when not dispatched from a Node
-+          event.target
-+        ) ||
-+        nodeRef.current.contains(
-+          // @ts-expect-error returns `false` as intended when not dispatched from a Node
-+          event.target
-+        );
+-    }
+-    if (!insideDOM && (disableReactTree || !insideReactTree)) {
+-      onClickAway(event);
++      check();
      }
-     if (!insideDOM && (disableReactTree || !insideReactTree)) {
-       onClickAway(event);
-@@ -93,7 +123,7 @@ function ClickAwayListener(props) {
    });
  
    // Keep track of mouse/touch events that bubbled up through the portal.
@@ -226,7 +225,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
      syntheticEventRef.current = true;
      const childrenPropsHandler = children.props[handlerName];
      if (childrenPropsHandler) {
-@@ -101,7 +131,7 @@ function ClickAwayListener(props) {
+@@ -101,7 +123,7 @@ function ClickAwayListener(props) {
      }
    };
    const childrenProps = {
@@ -235,7 +234,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
    };
    if (touchEvent !== false) {
      childrenProps[touchEvent] = createHandleSynthetic(touchEvent);
-@@ -113,15 +143,15 @@ function ClickAwayListener(props) {
+@@ -113,15 +135,15 @@ function ClickAwayListener(props) {
        const handleTouchMove = () => {
          movedRef.current = true;
        };
@@ -256,7 +255,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
    if (mouseEvent !== false) {
      childrenProps[mouseEvent] = createHandleSynthetic(mouseEvent);
    }
-@@ -129,49 +159,63 @@ function ClickAwayListener(props) {
+@@ -129,49 +151,63 @@ function ClickAwayListener(props) {
      if (mouseEvent !== false) {
        const mappedMouseEvent = mapEventPropToEvent(mouseEvent);
        const doc = ownerDocument(nodeRef.current);
@@ -358,7 +357,7 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..d2a806493e8539a22e34895ccdd4d05d
  }
  export { ClickAwayListener };
 diff --git a/Modal/Modal.js b/Modal/Modal.js
-index 507fb16dca9257e308e7a03a1618ddc0802292f7..426f609faf60fcaeff57b2c63e2c3b4af3e6b5bf 100644
+index 507fb16dca9257e308e7a03a1618ddc0802292f7..df801781f87de034291cb08e08610c74f92f8443 100644
 --- a/Modal/Modal.js
 +++ b/Modal/Modal.js
 @@ -1,28 +1,49 @@
@@ -829,6 +828,7 @@ index 507fb16dca9257e308e7a03a1618ddc0802292f7..426f609faf60fcaeff57b2c63e2c3b4a
 +    })
 +  : void 0;
  export { Modal };
+\ No newline at end of file
 diff --git a/Modal/Modal.types.d.ts b/Modal/Modal.types.d.ts
 index 02b3627201170f1c32ebb644504e7a18008a4269..876cfec5412eac2d3ea923012faaa08a5532f4e4 100644
 --- a/Modal/Modal.types.d.ts
@@ -1155,7 +1155,7 @@ index 02b3627201170f1c32ebb644504e7a18008a4269..876cfec5412eac2d3ea923012faaa08a
 +  ownerState: ModalOwnerState;
  }
 diff --git a/legacy/Modal/Modal.js b/legacy/Modal/Modal.js
-index de54a4d61385d0f31b16a150e5993cf1fc9b8475..b5f96c529f78c3064e19c26b9d89e61da995301b 100644
+index de54a4d61385d0f31b16a150e5993cf1fc9b8475..971293a466eace56c91387c2d474dbf4dfefebdd 100644
 --- a/legacy/Modal/Modal.js
 +++ b/legacy/Modal/Modal.js
 @@ -1,25 +1,25 @@
@@ -1629,6 +1629,7 @@ index de54a4d61385d0f31b16a150e5993cf1fc9b8475..b5f96c529f78c3064e19c26b9d89e61d
 +    })
 +  : void 0;
  export { Modal };
+\ No newline at end of file
 diff --git a/legacy/unstable_useModal/ModalManager.js b/legacy/unstable_useModal/ModalManager.js
 index 208c4ab08d4f6fc6da451ae712e9cacb0c6787b7..bd2f994760e070830d447aa148a05b3942b7ed4e 100644
 --- a/legacy/unstable_useModal/ModalManager.js
@@ -2024,7 +2025,7 @@ index 208c4ab08d4f6fc6da451ae712e9cacb0c6787b7..bd2f994760e070830d447aa148a05b39
 \ No newline at end of file
 +})();
 diff --git a/legacy/unstable_useModal/useModal.js b/legacy/unstable_useModal/useModal.js
-index b93b3281b99cf9a997e38f7c1c2acf110ba65ee0..5a4dfc71edaa9f0d79de8528a12693e666e71834 100644
+index b93b3281b99cf9a997e38f7c1c2acf110ba65ee0..ceb0ec10c34b795e68b306db2f5fecaa41d5e916 100644
 --- a/legacy/unstable_useModal/useModal.js
 +++ b/legacy/unstable_useModal/useModal.js
 @@ -1,15 +1,20 @@
@@ -2286,8 +2287,9 @@ index b93b3281b99cf9a997e38f7c1c2acf110ba65ee0..5a4dfc71edaa9f0d79de8528a12693e6
 +    hasTransition: hasTransition,
    };
  }
+\ No newline at end of file
 diff --git a/modern/Modal/Modal.js b/modern/Modal/Modal.js
-index 30b052cdbf52daced08af0bb3041c687ad6c394e..9c4fbfcab3af5c8ff1f52e1186e721da9e5a5737 100644
+index 30b052cdbf52daced08af0bb3041c687ad6c394e..d23ee42c4f4421235543489897c7a02f2dd91952 100644
 --- a/modern/Modal/Modal.js
 +++ b/modern/Modal/Modal.js
 @@ -1,28 +1,46 @@
@@ -2748,8 +2750,9 @@ index 30b052cdbf52daced08af0bb3041c687ad6c394e..9c4fbfcab3af5c8ff1f52e1186e721da
 +    })
 +  : void 0;
  export { Modal };
+\ No newline at end of file
 diff --git a/modern/unstable_useModal/ModalManager.js b/modern/unstable_useModal/ModalManager.js
-index 8afc8d2ba4746c2b5cbba43e559b96ed075e1aed..8b9467bcaec2f04845033fc79f122cf8e07c6c3f 100644
+index 8afc8d2ba4746c2b5cbba43e559b96ed075e1aed..c706cf9c5805ca6356ce94bb73811f02b6bdd85f 100644
 --- a/modern/unstable_useModal/ModalManager.js
 +++ b/modern/unstable_useModal/ModalManager.js
 @@ -1,4 +1,8 @@
@@ -3013,8 +3016,9 @@ index 8afc8d2ba4746c2b5cbba43e559b96ed075e1aed..8b9467bcaec2f04845033fc79f122cf8
 +    );
    }
  }
+\ No newline at end of file
 diff --git a/modern/unstable_useModal/useModal.js b/modern/unstable_useModal/useModal.js
-index a727b86939976547fa1c92a3066dd8548fa03020..a8e90e5724ec6ccaea2a55f37f3acd3a8a5016f7 100644
+index a727b86939976547fa1c92a3066dd8548fa03020..0dd8081f90dc5e7d6506df523095d05972bb659d 100644
 --- a/modern/unstable_useModal/useModal.js
 +++ b/modern/unstable_useModal/useModal.js
 @@ -1,15 +1,20 @@
@@ -3207,8 +3211,9 @@ index a727b86939976547fa1c92a3066dd8548fa03020..a8e90e5724ec6ccaea2a55f37f3acd3a
 +    hasTransition,
    };
  }
+\ No newline at end of file
 diff --git a/node/unstable_useModal/ModalManager.js b/node/unstable_useModal/ModalManager.js
-index 953a225520914f90e464b544d83a60e7ed03188e..1328c7708920bcea5c6ac1787510bb9c75fe2b54 100644
+index 953a225520914f90e464b544d83a60e7ed03188e..cd40f58880ceb103e9a253086a49dfee75b7bf18 100644
 --- a/node/unstable_useModal/ModalManager.js
 +++ b/node/unstable_useModal/ModalManager.js
 @@ -1,7 +1,7 @@
@@ -3483,6 +3488,7 @@ index 953a225520914f90e464b544d83a60e7ed03188e..1328c7708920bcea5c6ac1787510bb9c
    }
  }
  exports.ModalManager = ModalManager;
+\ No newline at end of file
 diff --git a/unstable_useModal/ModalManager.d.ts b/unstable_useModal/ModalManager.d.ts
 index 478880941a013db273ae72c30f5b3dd3607dde82..993e2d6ae075b9bebb9aedfac6a3e2c93cbdcc39 100644
 --- a/unstable_useModal/ModalManager.d.ts
@@ -3523,7 +3529,7 @@ index 478880941a013db273ae72c30f5b3dd3607dde82..993e2d6ae075b9bebb9aedfac6a3e2c9
  }
  export {};
 diff --git a/unstable_useModal/ModalManager.js b/unstable_useModal/ModalManager.js
-index 5c7d9c687f778138caf72126abe68e81679474a6..90875dcb5978f5de2cbf4c6ae382c38ba3ca2f68 100644
+index 5c7d9c687f778138caf72126abe68e81679474a6..ee2912320fd759ada516238cd3829d7ccd9ec2dc 100644
 --- a/unstable_useModal/ModalManager.js
 +++ b/unstable_useModal/ModalManager.js
 @@ -1,4 +1,8 @@
@@ -3787,8 +3793,9 @@ index 5c7d9c687f778138caf72126abe68e81679474a6..90875dcb5978f5de2cbf4c6ae382c38b
 +    );
    }
  }
+\ No newline at end of file
 diff --git a/unstable_useModal/useModal.js b/unstable_useModal/useModal.js
-index 70f1af1d3514fc4b77b482511b0de5da0375f701..c29039bbfc2611139f3731b0c2ce3554b5f40ee7 100644
+index 70f1af1d3514fc4b77b482511b0de5da0375f701..4b9615636ab338117af167a1f2d07ef61413d6a2 100644
 --- a/unstable_useModal/useModal.js
 +++ b/unstable_useModal/useModal.js
 @@ -1,15 +1,20 @@
