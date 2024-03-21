@@ -31,7 +31,7 @@ export interface ExchangeDialogProps {
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog({ open, onClose }) {
     const t = useTraderTrans()
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { theme, classes } = useStyles()
     const [containerRef, setContainerRef] = useState<HTMLElement>()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -48,15 +48,18 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
         }
     }, [onClose])
 
-    const getSigner = useCallback(() => {
-        const providerType = Provider?.providerType?.getCurrentValue()
-        const provider = EVMWeb3.getWeb3Provider({ providerType })
+    const getSigner = useCallback(
+        (requiredChainId?: ChainId) => {
+            const providerType = Provider?.providerType?.getCurrentValue()
+            const provider = EVMWeb3.getWeb3Provider({ providerType, chainId: requiredChainId ?? chainId, account })
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const signer = new Web3Provider(provider, 'any').getSigner()
-        return signer
-    }, [Provider])
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            const signer = new Web3Provider(provider, 'any').getSigner()
+            return signer
+        },
+        [Provider, chainId, account],
+    )
 
     const widgetConfig = useMemo<WidgetConfig>(() => {
         return {
@@ -70,13 +73,10 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             },
             walletManagement: {
                 signer: getSigner(),
-                beforeSwitchChain: async (chainId: ChainId) => {
+                switchChain: async (chainId: ChainId) => {
                     const providerType = Provider?.providerType?.getCurrentValue()
-                    if (providerType === ProviderType.MaskWallet) {
-                        await EVMWeb3.switchChain(chainId, { silent: true })
-                    }
-
-                    return
+                    await EVMWeb3.switchChain(chainId, { silent: providerType === ProviderType.MaskWallet })
+                    return getSigner(chainId)
                 },
                 connect: async () => {
                     if (providerType === ProviderType.None) await SelectProviderModal.openAndWaitForClose()
@@ -87,7 +87,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             hiddenUI: [HiddenUI.Header],
             appearance: theme.palette.mode,
         }
-    }, [theme, providerType])
+    }, [theme, providerType, getSigner])
 
     return (
         <InjectedDialog
