@@ -31,7 +31,7 @@ patchedDependencies:
     hash: gblkhicgnrvmzo5mfmkzlaxbye
     path: patches/@lifi__widget@2.10.1.patch
   '@mui/base@5.0.0-beta.38':
-    hash: tehxezckgecejdvjhtjemg5nh4
+    hash: oukor3tid7cl6jy4xpoprwzzym
     path: patches/@mui__base@5.0.0-beta.38.patch
   '@mui/material@5.15.12':
     hash: pazpgmj4gmp6yuv75wbb5yvia4
@@ -115,7 +115,7 @@ importers:
         version: 0.3.0
       '@mui/base':
         specifier: 5.0.0-beta.38
-        version: 5.0.0-beta.38(patch_hash=tehxezckgecejdvjhtjemg5nh4)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+        version: 5.0.0-beta.38(patch_hash=oukor3tid7cl6jy4xpoprwzzym)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/icons-material':
         specifier: 5.15.12
         version: 5.15.12(@mui/material@5.15.12)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -7207,7 +7207,7 @@ packages:
       - supports-color
     dev: true
 
-  /@mui/base@5.0.0-beta.38(patch_hash=tehxezckgecejdvjhtjemg5nh4)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
+  /@mui/base@5.0.0-beta.38(patch_hash=oukor3tid7cl6jy4xpoprwzzym)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026):
     resolution: {integrity: sha512-AsjD6Y1X5A1qndxz8xCcR8LDqv31aiwlgWMPxFAX/kCKiIGKlK65yMeVZ62iQr/6LBz+9hSKLiD1i4TZdAHKcQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -7287,7 +7287,7 @@ packages:
       '@babel/runtime': 7.24.0
       '@emotion/react': 11.11.1(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
-      '@mui/base': 5.0.0-beta.38(patch_hash=tehxezckgecejdvjhtjemg5nh4)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      '@mui/base': 5.0.0-beta.38(patch_hash=oukor3tid7cl6jy4xpoprwzzym)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/material': 5.15.12(patch_hash=pazpgmj4gmp6yuv75wbb5yvia4)(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/system': 5.15.12(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/types': 7.2.13(@types/react@18.2.48)
@@ -7323,7 +7323,7 @@ packages:
       '@babel/runtime': 7.24.0
       '@emotion/react': 11.11.1(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
-      '@mui/base': 5.0.0-beta.38(patch_hash=tehxezckgecejdvjhtjemg5nh4)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
+      '@mui/base': 5.0.0-beta.38(patch_hash=oukor3tid7cl6jy4xpoprwzzym)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/core-downloads-tracker': 5.15.12
       '@mui/system': 5.15.12(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/types': 7.2.13(@types/react@18.2.48)
