@@ -26,6 +26,14 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
+    static async parse(options: FireflyRedPacketAPI.ParseOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/misc/redpacket/parse')
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
+        return data
+    }
     static async getPayloadUrls(from: string, amount?: string, type?: string, symbol?: string, decimals?: number) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
@@ -206,6 +214,25 @@ export class FireflyRedPacket {
         return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
+        })
+    }
+    static async finishClaiming(
+        rpid: string,
+        platform: FireflyRedPacketAPI.PlatformType,
+        profileId: string,
+        handle: string,
+        txHash: string,
+    ) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
+        return fetchFireflyJSON<FireflyRedPacketAPI.Response<string>>(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                rpid,
+                claimPlatform: platform,
+                claimProfileId: profileId,
+                claimHandle: handle,
+                txHash,
+            }),
         })
     }
 }

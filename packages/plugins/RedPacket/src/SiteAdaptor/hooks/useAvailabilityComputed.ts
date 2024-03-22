@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { useAvailability } from './useAvailability.js'
 import { useClaimStrategyStatus } from './useClaimStrategyStatus.js'
 import { useSignedMessage } from './useSignedMessage.js'
+import { useParseRedPacket } from './useParseRedPacket.js'
 
 /**
  * Fetch the red packet info from the chain
@@ -28,6 +29,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
+    const parsed = useParseRedPacket(parsedChainId)
     const checkAvailability = recheckAvailability as (
         options?: RefetchOptions,
     ) => Promise<QueryObserverResult<typeof availability>>
@@ -57,7 +59,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = availability.claimed_amount !== '0'
+    const isClaimed = parsed?.redpacket.isClaimed || availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')

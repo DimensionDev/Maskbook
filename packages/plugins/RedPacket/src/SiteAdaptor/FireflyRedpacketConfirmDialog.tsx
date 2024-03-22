@@ -329,7 +329,12 @@ export function FireflyRedpacketConfirmDialog({
                     </Box>
                     <Box className={classes.item}>
                         <Typography className={classes.title}>{t.amount()}</Typography>
-                        <Typography className={classes.title} display="flex" alignItems="center" columnGap={0.5}>
+                        <Typography
+                            className={classes.title}
+                            display="flex"
+                            alignItems="center"
+                            columnGap={0.5}
+                            component="div">
                             <FormattedBalance
                                 value={settings.total}
                                 decimals={settings.token?.decimals}

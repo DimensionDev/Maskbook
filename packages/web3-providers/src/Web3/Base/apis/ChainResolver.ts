@@ -16,11 +16,12 @@ export class ChainResolver<ChainId, SchemaType, NetworkType> {
      * Guess chain id by name, it's not perfectly accurate
      */
     chainId(name: string) {
+        if (!name) return
         return this.descriptors().find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]
                 .map((x) => x?.toLowerCase())
                 .filter(Boolean)
-                .includes(name?.toLowerCase()),
+                .includes(name.toLowerCase()),
         )?.chainId
     }
     chainName(chainId: ChainId) {

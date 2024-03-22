@@ -22,6 +22,7 @@ export function useSignedMessage(
                 needLensAndFarcasterHandle: true,
                 platform,
                 profileId: me?.profileId,
+                handle: me?.identifier?.userId,
                 lensToken: me?.lensToken,
                 farcasterMessage: me?.farcasterMessage as HexString,
                 farcasterSigner: me?.farcasterSigner as HexString,
