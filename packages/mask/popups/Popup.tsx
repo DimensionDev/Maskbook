@@ -1,9 +1,9 @@
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
-import { PopupSnackbarProvider } from '@masknet/theme'
+import { MaskLightTheme, PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
+import { Box, ThemeProvider } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
@@ -82,7 +82,18 @@ const PopupRoutes = memo(function PopupRoutes() {
                             <Route path={PopupPaths.Friends + '/*'} element={withSuspense(<Contacts />)} />
                             <Route path={PopupPaths.Settings} element={withSuspense(<Settings />)} />
                         </Route>
-                        <Route path={PopupPaths.Swap} element={<SwapPage />} />
+
+                        <Route
+                            path={PopupPaths.Swap}
+                            element={
+                                <EVMWeb3ContextProvider>
+                                    <ThemeProvider theme={MaskLightTheme}>
+                                        <SwapPage />
+                                    </ThemeProvider>
+                                </EVMWeb3ContextProvider>
+                            }
+                        />
+
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />

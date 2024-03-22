@@ -8,7 +8,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 
@@ -34,7 +34,6 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { theme, classes } = useStyles()
     const [containerRef, setContainerRef] = useState<HTMLElement>()
-    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
     const widgetRef = useRef<WidgetDrawer>(null)
     const [showActions, setShowActions] = useState(true)
@@ -70,6 +69,9 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                     primary: { main: theme.palette.maskColor.main },
                     secondary: { main: theme.palette.maskColor.primary },
                 },
+            },
+            chains: {
+                deny: [324],
             },
             walletManagement: {
                 signer: getSigner(),

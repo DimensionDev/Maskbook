@@ -27,7 +27,6 @@ import {
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
 import { DialogDismissIconUI, ImageIcon, useSharedTrans } from '@masknet/shared'
-import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { ProviderItem } from './ProviderItem.js'
 
 const descriptors: Record<
@@ -151,7 +150,6 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 }: PluginProviderRenderProps) {
     const { classes, cx } = useStyles()
     const t = useSharedTrans()
-    const plugins = useActivatedPluginsSiteAdaptor('any')
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
@@ -183,7 +181,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
             onSelect(networkDescriptor, provider)
         },
-        [plugins, onOpenGuide],
+        [onOpenGuide],
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
