@@ -33,6 +33,7 @@ export function Background() {
                 type: 'float',
                 value: 1,
             },
+            // cspell: disable-next-line
             u_itensity: {
                 type: 'float',
                 value: 0.5,

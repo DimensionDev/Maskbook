@@ -4,6 +4,7 @@
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         "./packages/icons/countries/**",
+        "./packages/mask/popups/pages/swap/utils/**",
         "./packages/web3-contracts/types/**",
         ".github",
         ".gitignore",
