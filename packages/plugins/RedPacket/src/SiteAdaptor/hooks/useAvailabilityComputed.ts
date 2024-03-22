@@ -29,7 +29,6 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
-    const parsed = useParseRedPacket(parsedChainId)
     const checkAvailability = recheckAvailability as (
         options?: RefetchOptions,
     ) => Promise<QueryObserverResult<typeof availability>>
@@ -59,7 +58,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = parsed?.redpacket.isClaimed || availability.claimed_amount !== '0'
+    const isClaimed = availability.isClaimed
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
