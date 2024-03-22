@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 function uuid() {
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const s4 = () =>
         Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
@@ -106,6 +107,7 @@ class TickManager {
         const { delta, elapsed, stamp } = this.state.time
         const keys = Object.keys(this.stack)
 
+        // eslint-disable-next-line no-plusplus
         for (let i = 0, len = keys.length; i < len; i++) {
             this.stack[keys[i]](delta, elapsed, stamp)
         }
