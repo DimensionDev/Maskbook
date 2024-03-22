@@ -1,4 +1,4 @@
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import { type RedPacketJSONPayload, type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { signMessage } from '@masknet/web3-shared-evm'
@@ -15,17 +15,17 @@ export function useSignedMessage(
     const password = 'privateKey' in payload ? payload.privateKey : payload.password
     const version = 'contract_version' in payload ? payload.contract_version : payload.contractVersion
     const platform = usePlatformType()
-    const me = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const profile =
         platform ?
             {
                 needLensAndFarcasterHandle: true,
                 platform,
-                profileId: me?.profileId,
-                lensToken: me?.lensToken,
-                farcasterMessage: me?.farcasterMessage as HexString,
-                farcasterSigner: me?.farcasterSigner as HexString,
-                farcasterSignature: me?.farcasterSignature as HexString,
+                profileId: myIdentity?.profileId,
+                lensToken: myIdentity?.lensToken,
+                farcasterMessage: myIdentity?.farcasterMessage as HexString,
+                farcasterSigner: myIdentity?.farcasterSigner as HexString,
+                farcasterSignature: myIdentity?.farcasterSignature as HexString,
             }
         :   undefined
 

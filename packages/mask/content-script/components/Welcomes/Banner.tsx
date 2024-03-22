@@ -8,7 +8,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { activatedSiteAdaptorUI, activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 
 interface BannerUIProps extends withClasses<'header' | 'content' | 'actions' | 'buttonText'> {
@@ -54,14 +54,14 @@ function BannerUI(props: BannerUIProps) {
 interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const allPersonas = usePersonasFromDB()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personaConnectStatus } = useCurrentPersonaConnectStatus(
         allPersonas,
         currentIdentifier,
         Services.Helper.openDashboard,
-        lastRecognizedIdentity,
+        myIdentity,
     )
     const { nextStep } = props
     const networkIdentifier = activatedSiteAdaptorUI!.networkIdentifier
@@ -82,7 +82,7 @@ export function Banner(props: BannerProps) {
     const defaultUserName =
         networkIdentifier ?
             {
-                defaultValue: lastRecognizedIdentity.identifier?.userId ?? '',
+                defaultValue: myIdentity.identifier?.userId ?? '',
                 value,
                 onChange,
                 isValid: activatedSiteAdaptorUI!.utils.isValidUsername || (() => true),

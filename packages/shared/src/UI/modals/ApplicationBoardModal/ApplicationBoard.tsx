@@ -83,7 +83,7 @@ interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' 
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
-    lastRecognized?: IdentityResolved
+    myIdentity?: IdentityResolved
     allPersonas: PersonaInformation[]
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
@@ -93,7 +93,7 @@ export function ApplicationBoardContent({
     openDashboard,
     queryOwnedPersonaInformation,
     currentSite,
-    lastRecognized,
+    myIdentity,
     allPersonas,
     applicationCurrentStatus,
     personaPerSiteConnectStatusLoading,
@@ -103,7 +103,7 @@ export function ApplicationBoardContent({
         <PersonaContext.Provider initialState={{ queryOwnedPersonaInformation }}>
             <ApplicationEntryStatusProvider
                 openDashboard={openDashboard}
-                lastRecognized={lastRecognized}
+                myIdentity={myIdentity}
                 allPersonas={allPersonas}
                 applicationCurrentStatus={applicationCurrentStatus}
                 personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}>
@@ -303,7 +303,7 @@ ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
     openDashboard?: (route?: DashboardRoutes, search?: string) => void
-    lastRecognized?: IdentityResolved
+    myIdentity?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean
     allPersonas: PersonaInformation[]
@@ -311,7 +311,7 @@ interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
 function ApplicationEntryStatusProvider({
     children,
     openDashboard,
-    lastRecognized,
+    myIdentity,
     applicationCurrentStatus,
     personaPerSiteConnectStatusLoading,
     allPersonas,
@@ -321,7 +321,7 @@ function ApplicationEntryStatusProvider({
         allPersonas,
         currentIdentifier,
         openDashboard,
-        lastRecognized,
+        myIdentity,
     )
 
     const { isSiteConnectedToCurrentPersona, currentPersonaPublicKey, currentSiteConnectedPersonaPublicKey } =

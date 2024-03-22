@@ -1,9 +1,9 @@
 import { useTimeout } from 'react-use'
-import { useLastRecognizedIdentity } from '../../../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../../../DataSource/useActivatedUI.js'
 
 export function useCurrentUserId() {
-    const lastRecognized = useLastRecognizedIdentity()
-    const currentUserId = lastRecognized.identifier?.userId
+    const myIdentity = useMyIdentity()
+    const currentUserId = myIdentity.identifier?.userId
     // There is not state for getting current userId, setting a timeout for that.
     const [timeout] = useTimeout(5000)
     const [delay] = useTimeout(800)

@@ -11,7 +11,7 @@ import {
     useChainContext,
 } from '@masknet/web3-hooks-base'
 import {
-    useLastRecognizedIdentity,
+    useMyIdentity,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
 } from '@masknet/plugin-infra/content-script'
@@ -40,7 +40,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { data: reversedName } = useReverseAddress(currentPluginID, account)
     const { value: lookedAddress } = useLookupAddress(currentPluginID, reversedName)
     const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const currentVisitingSocialIdentity = useCurrentVisitingSocialIdentity()
 
     useRemoteControlledDialog(CrossIsolationMessages.events.followLensDialogEvent)
@@ -102,7 +102,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Owner Identity',
             content: (
                 <Typography variant="body2">
-                    {lastRecognizedIdentity?.identifier?.userId} {lastRecognizedIdentity?.isOwner ? 'OWNER' : ''}
+                    {myIdentity?.identifier?.userId} {myIdentity?.isOwner ? 'OWNER' : ''}
                 </Typography>
             ),
         },

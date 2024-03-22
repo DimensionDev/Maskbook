@@ -40,7 +40,7 @@ import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shar
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useCurrentVisitingIdentity, useMyIdentity } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -260,9 +260,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const currentIdentity = useCurrentVisitingIdentity()
     const linkedPersona = useCurrentLinkedPersona()
-    const lastRecognized = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const senderName =
-        lastRecognized?.identifier?.userId ??
+        myIdentity?.identifier?.userId ??
         currentIdentity?.identifier?.userId ??
         linkedPersona?.nickname ??
         'Unknown User'

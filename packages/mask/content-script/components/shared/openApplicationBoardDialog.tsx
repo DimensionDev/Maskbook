@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 import type { PluginID } from '@masknet/shared-base'
 import { ApplicationBoardModal } from '@masknet/shared'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
+import { useMyIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { usePersonaPerSiteConnectStatus } from '../DataSource/usePersonaPerSiteConnectStatus.js'
 import Services from '#services'
 
 export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID?: PluginID) {
-    const lastRecognized = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const allPersonas = usePersonasFromDB()
     const { value: applicationCurrentStatus, loading: personaPerSiteConnectStatusLoading } =
         usePersonaPerSiteConnectStatus()
@@ -17,7 +17,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
         () =>
             ApplicationBoardModal.open({
                 allPersonas,
-                lastRecognized,
+                myIdentity,
                 openDashboard: Services.Helper.openDashboard,
                 currentSite: activatedSiteAdaptorUI!.networkIdentifier,
                 queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -29,7 +29,7 @@ export function useOpenApplicationBoardDialog(quickMode?: boolean, focusPluginID
             }),
         [
             allPersonas,
-            lastRecognized,
+            myIdentity,
             applicationCurrentStatus,
             personaPerSiteConnectStatusLoading,
             quickMode,

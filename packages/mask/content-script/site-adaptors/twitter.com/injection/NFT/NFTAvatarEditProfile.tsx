@@ -10,7 +10,7 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { searchEditProfileSelector } from '../../utils/selector.js'
 import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog.js'
 import { ButtonStyle, type ButtonProps } from '../../constant.js'
-import { useLastRecognizedIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
+import { useMyIdentity, useThemeSettings } from '../../../../components/DataSource/useActivatedUI.js'
 import { usePersonasFromDB } from '../../../../../shared-ui/hooks/usePersonasFromDB.js'
 import Services from '#services'
 
@@ -60,7 +60,7 @@ function requestSettingAvatar() {
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useNFTAvatarButtonStyles()
     const allPersonas = usePersonasFromDB()
-    const lastRecognized = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
     useEffect(() => {
@@ -81,7 +81,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     return (
         <ConnectPersonaBoundary
             personas={allPersonas}
-            identity={lastRecognized}
+            identity={myIdentity}
             currentPersonaIdentifier={currentIdentifier}
             openDashboard={Services.Helper.openDashboard}
             handlerPosition="top-right"

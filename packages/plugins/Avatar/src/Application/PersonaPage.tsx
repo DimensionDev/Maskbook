@@ -11,7 +11,7 @@ import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useAllPersonas, useMyIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/index.js'
@@ -23,10 +23,10 @@ export function PersonaPage() {
     const navigate = useNavigate()
     const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
 
-    const socialIdentity = useLastRecognizedIdentity()
+    const myIdentity = useMyIdentity()
 
-    const network = socialIdentity?.identifier?.network.replace('.com', '')
-    const userId = socialIdentity?.identifier?.userId
+    const network = myIdentity?.identifier?.network.replace('.com', '')
+    const userId = myIdentity?.identifier?.userId
 
     const myPersonas = useAllPersonas()
     const currentPersonaIdentifier = useSubscription(currentPersona)
@@ -82,9 +82,9 @@ export function PersonaPage() {
                                 <PersonaItem
                                     persona={binding?.persona}
                                     key={`avatar${i}`}
-                                    avatar={socialIdentity!.avatar ?? ''}
+                                    avatar={myIdentity!.avatar ?? ''}
                                     owner
-                                    nickname={socialIdentity!.nickname}
+                                    nickname={myIdentity!.nickname}
                                     proof={x}
                                     userId={userId ?? x.identity}
                                     onSelect={handleSelect}
@@ -120,7 +120,7 @@ export function PersonaPage() {
                 <PersonaAction
                     avatar={avatar === null ? undefined : avatar}
                     currentPersona={currentPersonaInfo}
-                    currentVisitingProfile={socialIdentity}
+                    currentVisitingProfile={myIdentity}
                 />
             </DialogActions>
         </>
