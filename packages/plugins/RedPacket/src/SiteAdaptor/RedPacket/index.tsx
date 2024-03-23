@@ -1,12 +1,12 @@
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
-import { share } from '@masknet/plugin-infra/content-script/context'
+import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { RedPacketStatus, type RedPacketJSONPayload, type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Stack, Typography } from '@mui/material'
@@ -18,6 +18,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
@@ -422,7 +423,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     </div>
                 }
             </Card>
-            {outdated ? null : (
+            {outdated ?
+                null
+            : myProfileId ?
                 <OperationFooter
                     chainId={payloadChainId}
                     canClaim={canClaim}
@@ -432,7 +435,12 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />
-            )}
+            :   <RequestLoginFooter
+                    onRequest={() => {
+                        requestLogin?.(source)
+                    }}
+                />
+            }
         </>
     )
 })
