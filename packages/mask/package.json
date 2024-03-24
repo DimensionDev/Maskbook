@@ -143,7 +143,7 @@
     "uuid": "^9.0.0",
     "wallet.ts": "^1.0.1",
     "web3-core-helpers": "1.10.2",
-    "web3-utils": "1.10.2",
+    "web3-utils": "4.2.1",
     "webextension-polyfill": "^0.10.0",
     "zlib-browserify": "^0.0.3",
     "zod": "^3.22.2"
