@@ -3,14 +3,14 @@ import { Appearance, LanguageOptions } from '@masknet/public-api'
 import { createGlobalSettings, createBulkSettings } from './createSettings.js'
 import { updateLanguage } from '../i18n/index.js'
 import { BooleanPreference } from '../types.js'
-import { NetworkPluginID, PluginID } from '../types/PluginID.js'
-import { LockStatus } from '../types/Wallet.js'
+import { NetworkPluginID } from '../types/PluginID.js'
 import { EnhanceableSite, ExtensionSite } from '../Site/types.js'
 import { SwitchLogoType } from '../types/SwitchLogo.js'
 import { ValueRefWithReady, type PersonaIdentifier, ECKeyIdentifier } from '../index.js'
 
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
 languageSettings.addListener(updateLanguage)
+export const lastDatabaseCleanupTime = createGlobalSettings('lastDatabaseCleanupTime', 0)
 
 export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | ExtensionSite, NetworkPluginID>>(
     'PluginIdBySite',
@@ -32,18 +32,11 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
 
 export const InjectSwitchSettings = createBulkSettings<boolean>('InjectSwitchBySite', true)
 
-export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
-    `${PluginID.Wallet}+maskWalletLockStatus`,
-    LockStatus.INIT,
-)
-
 export const currentSetupGuideStatus = createBulkSettings('currentSetupGuideStatus', '')
 export const userGuideStatus = createBulkSettings('userGuideStatus', '')
 export const userGuideFinished = createBulkSettings('userGuideFinished', false)
 export const sayHelloShowed = createBulkSettings('sayHelloShowed', false)
 export const userPinExtension = createGlobalSettings('userPinExtension', false)
-export const dismissVerifyNextID = createBulkSettings<Record<string, boolean>>('dismissVerifyNextID', {}, isEqual)
-export const decentralizedSearchSettings = createGlobalSettings('decentralizedSearchSettings', true)
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 
 /**

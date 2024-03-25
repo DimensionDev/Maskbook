@@ -1,12 +1,10 @@
 import { consistentPersonaDBWriteAccess } from '../../database/persona/db.js'
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, lastDatabaseCleanupTime } from '@masknet/shared-base'
 import { cleanAvatarDB } from '../../database/avatar-cache/cleanup.js'
 import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-try {
-    cleanProfileWithNoLinkedPersona(signal)
-} catch {}
+cleanProfileWithNoLinkedPersona(signal)
 
 async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
@@ -20,8 +18,8 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
 }
 
 async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
-    const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */, signal)
-    signal.addEventListener('abort', () => clearTimeout(timeout))
+    if (lastDatabaseCleanupTime.value < Date.now() - 1000 * 60 * 60 * 24 * 3 /** 3 day */) return
+    lastDatabaseCleanupTime.value = Date.now()
 
     const cleanedList = new Set<ProfileIdentifier>()
     const expired = new Date(Date.now() - 1000 * 60 * 60 * 24 * 14 /** days */)

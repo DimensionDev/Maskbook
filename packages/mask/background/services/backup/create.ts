@@ -2,10 +2,9 @@ import { type BackupSummary, generateBackupRAW, getBackupSummary } from '@maskne
 import { createNewBackup } from './internal_create.js'
 import { env } from '@masknet/flags'
 
-const maskVersion = env.VERSION
 export async function generateBackupPreviewInfo(): Promise<BackupSummary> {
     // can we avoid create a full backup?
-    const backup = await createNewBackup({ allProfile: true, maskVersion })
+    const backup = await createNewBackup({ allProfile: true, maskVersion: env.VERSION })
     return getBackupSummary(backup)
 }
 
@@ -24,7 +23,7 @@ export async function createBackupFile(options: BackupOptions): Promise<{
         noPosts: excludeBase,
         noProfiles: excludeBase,
         noWallets: excludeWallet,
-        maskVersion,
+        maskVersion: env.VERSION,
     })
     const file = generateBackupRAW(backup)
     const personaNickNames = [...backup.personas.values()].map((p) => p.nickname.unwrapOr('')).filter(Boolean)
