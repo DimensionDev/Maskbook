@@ -1,4 +1,3 @@
-import type { UnboundedRegistry as MessageChannel } from '@dimensiondev/holoflows-kit'
 import { combineAbortSignal } from '@masknet/kit'
 import type { Subscription } from 'use-subscription'
 import type { KVStorageBackend } from './types.js'
@@ -19,7 +18,9 @@ export * from './types.js'
  */
 export function createKVStorageHost(
     backend: KVStorageBackend,
-    message: Pick<MessageChannel<[string, unknown]>, 'on'>,
+    message: {
+        on(callback: (data: [string, unknown]) => void, options?: AddEventListenerOptions): () => void
+    },
     signal = new AbortController().signal,
 ): ScopedStorage<never>['createSubScope'] {
     return (name, defaultValues) => {
@@ -53,7 +54,9 @@ const alwaysThrowHandler = () => {
 function createScope(
     signal: AbortSignal,
     backend: KVStorageBackend,
-    message: Pick<MessageChannel<any>, 'on'>,
+    message: {
+        on(callback: (data: any) => void, options?: AddEventListenerOptions): () => void
+    },
     parentScope: string | null,
     scope: string,
     defaultValues: any,
@@ -101,7 +104,9 @@ function createScope(
 function createState(
     signal: AbortSignal,
     backend: KVStorageBackend,
-    message: Pick<MessageChannel<any>, 'on'>,
+    message: {
+        on(callback: (data: any) => void, options?: AddEventListenerOptions): () => void
+    },
     scope: string,
     prop: string,
     defaultValue: any,

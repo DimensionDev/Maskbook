@@ -1,6 +1,6 @@
 import { Typeson, TypesonPromise } from 'typeson'
 import type { IsomorphicEncoder } from 'async-call-rpc'
-import type { Serialization } from '@dimensiondev/holoflows-kit'
+import type { Encoder } from '@dimensiondev/holoflows-kit'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
 import { MaskEthereumProviderRpcError } from '@masknet/sdk'
@@ -55,7 +55,7 @@ function setup() {
 
     for (const a of pendingRegister) a()
 }
-export const encoder: Serialization & IsomorphicEncoder = {
+export const encoder: Encoder & IsomorphicEncoder = {
     async encode(from: unknown) {
         if (!typeson) setup()
         return typeson!.encapsulate(from)
@@ -63,13 +63,6 @@ export const encoder: Serialization & IsomorphicEncoder = {
     decode(to: any) {
         if (!typeson) setup()
         return typeson!.revive(to)
-    },
-    serialization(from) {
-        return encoder.encode(from)
-    },
-    // cspell:disable-next-line
-    deserialization(to: any) {
-        return encoder.decode(to)
     },
 }
 function registerEncodableClass(name: string, constructor: NewableFunction): void

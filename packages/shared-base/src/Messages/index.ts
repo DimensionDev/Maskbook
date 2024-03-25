@@ -4,7 +4,7 @@ import { encoder } from '../serializer/index.js'
 import type { PluginMessageEmitter } from './CrossIsolationEvents.js'
 
 const m = new WebExtensionMessage<MaskEvents>({ domain: 'mask' })
-m.serialization = encoder
+m.encoder = encoder
 
 export let MaskMessages: { readonly events: PluginMessageEmitter<MaskEvents> } = m
 
