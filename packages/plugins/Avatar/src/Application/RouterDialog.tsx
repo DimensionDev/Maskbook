@@ -35,7 +35,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         :   t.application_dialog_title()
     const titleTail =
         matchPath(RoutePaths.NFTPicker, pathname) ?
-            <Icons.LineAdd
+            <Icons.Plus
                 onClick={() => {
                     nftListRef.current?.handleAddCollectibles()
                 }}
