@@ -19,6 +19,7 @@ export interface __SiteAdaptorContext__ {
     publishPost: ((mediaObjects: Array<string | Blob>, options?: any) => Promise<string | null>) | undefined
     getSearchedKeyword: (() => string) | undefined
     connectPersona: () => Promise<void>
+    requestLogin?: (...args: any[]) => void
 }
 export let lastRecognizedProfile: __SiteAdaptorContext__['lastRecognizedProfile']
 export let currentVisitingProfile: __SiteAdaptorContext__['currentVisitingProfile']
@@ -33,6 +34,7 @@ export let postMessage: __SiteAdaptorContext__['postMessage']
 export let publishPost: __SiteAdaptorContext__['publishPost']
 export let getSearchedKeyword: __SiteAdaptorContext__['getSearchedKeyword']
 export let connectPersona: __SiteAdaptorContext__['connectPersona']
+export let requestLogin: __SiteAdaptorContext__['requestLogin']
 export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
     ;({
         lastRecognizedProfile,
@@ -48,5 +50,6 @@ export function __setSiteAdaptorContext__(value: __SiteAdaptorContext__) {
         publishPost,
         getSearchedKeyword,
         connectPersona,
+        requestLogin,
     } = value)
 }
