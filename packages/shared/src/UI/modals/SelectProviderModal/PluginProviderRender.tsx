@@ -149,7 +149,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     requiredSupportChainIds,
     requiredSupportPluginID,
 }: PluginProviderRenderProps) {
-    const { classes, cx } = useStyles()
+    const { classes, theme, cx } = useStyles()
     const t = useSharedTrans()
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
@@ -272,7 +272,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                         ))}
                     </List>
                 </section>
-                <Typography mt={2} color="secondary" fontSize={14}>
+                <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
                     {t.not_installed_or_conflict()}
                 </Typography>
                 <section className={classes.section}>

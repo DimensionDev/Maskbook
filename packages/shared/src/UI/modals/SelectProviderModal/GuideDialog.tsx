@@ -3,7 +3,6 @@ import { useSharedTrans } from '../../../locales/i18n_generated.js'
 import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DialogContent, Link, Stack, Switch, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1.5),
         '&:hover': {
             textDecoration: 'none',
         },
@@ -70,9 +68,9 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                         target="_blank"
                         rel="noopener noreferrer"
                         className={cx(classes.card, classes.downloadButton)}>
-                        <Icons.Chrome size={36} />
+                        <img width={30} height={30} src={provider.icon} />
                         <Typography fontSize={16} fontWeight={700} ml={1.5}>
-                            {t.install_the_extension()}
+                            {t.check_out_website()}
                         </Typography>
                     </Link>
                 </section>
