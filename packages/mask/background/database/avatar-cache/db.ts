@@ -3,6 +3,8 @@ import { ECKeyIdentifier, Identifier, type PersonaIdentifier, ProfileIdentifier 
 import { createDBAccess, createTransaction, type IDBPSafeTransaction } from '../utils/openDB.js'
 
 const pendingUpdate = new Map<IdentifierWithAvatar, Partial<AvatarMetadataRecord>>()
+// This setTimeout is ok because it is only 10 seconds in mv3 and ok if data is lost.
+// eslint-disable-next-line no-restricted-globals
 let pendingUpdateTimer: ReturnType<typeof setTimeout> | null
 
 // #region Schema
@@ -73,7 +75,8 @@ function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<Avatar
     pendingUpdate.set(id, meta)
 
     if (pendingUpdateTimer) return
-    const _1_minute = 60 * 1000
+    const timeout = browser.runtime.getManifest().version === '2' ? 60 * 1000 : 10 * 1000
+    // eslint-disable-next-line no-restricted-globals
     pendingUpdateTimer = setTimeout(async () => {
         try {
             const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('metadata')
@@ -85,7 +88,7 @@ function scheduleAvatarMetaUpdate(id: IdentifierWithAvatar, meta: Partial<Avatar
             pendingUpdateTimer = null
             pendingUpdate.clear()
         }
-    }, _1_minute)
+    }, timeout)
 }
 
 /**

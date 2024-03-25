@@ -177,6 +177,7 @@ const avoidMistakeRules = {
     'no-unmodified-loop-condition': 'error', // loop bug
     'no-unreachable-loop': 'error', // loop bug
     'no-restricted-globals': [
+        'error',
         // source of bug (those names are too common)
         'error',
         'event',
@@ -593,6 +594,13 @@ export default tseslint.config(
             ...avoidMistakeRules,
             ...codeStyleRules,
             ...moduleSystemRules,
+        },
+    },
+    {
+        files: ['packages/mask/background/**/*.ts'],
+        plugins,
+        rules: {
+            'no-restricted-globals': ['error', 'setTimeout', 'setInterval'],
         },
     },
     {

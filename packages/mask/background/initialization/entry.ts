@@ -2,4 +2,4 @@
 import /* webpackSync: true */ '../tasks/NotCancellable/OnInstall.js'
 
 import './async-setup.js'
-await import(/* webpackMode: 'eager' */ './post-async-setup.js')
+import './post-async-setup.js'

@@ -7,17 +7,18 @@ import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.j
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'function') {
-    await unregisterExistingScripts()
-    await browser.scripting.registerContentScripts([
-        ...prepareMainWorldScript('sdk', ['<all_urls>'], maskSDK_URL),
-        ...prepareMainWorldScript(
-            'script',
-            Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),
-            injectedScriptURL,
-        ),
-        ...(await prepareContentScript(['<all_urls>'])),
-    ])
-
+    ;(async () => {
+        await unregisterExistingScripts()
+        await browser.scripting.registerContentScripts([
+            ...prepareMainWorldScript('sdk', ['<all_urls>'], maskSDK_URL),
+            ...prepareMainWorldScript(
+                'script',
+                Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),
+                injectedScriptURL,
+            ),
+            ...(await prepareContentScript(['<all_urls>'])),
+        ])
+    })()
     signal.addEventListener('abort', unregisterExistingScripts)
 }
 
