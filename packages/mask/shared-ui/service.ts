@@ -24,7 +24,6 @@ import type {
 import { setDebugObject } from '@masknet/shared-base'
 assertNotEnvironment(Environment.ManifestBackground)
 
-debugger
 const message = new WebExtensionMessage<any>({ domain: '$' })
 message.enableLog = true
 const log: AsyncCallOptions['log'] = {
