@@ -96,8 +96,8 @@ importers:
   .:
     dependencies:
       '@dimensiondev/holoflows-kit':
-        specifier: 0.9.0-20240104084316-88642f9
-        version: 0.9.0-20240104084316-88642f9
+        specifier: 0.9.0-20240322092738-f9180f3
+        version: 0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)
       '@emotion/cache':
         specifier: 11.11.0
         version: 11.11.0
@@ -332,8 +332,8 @@ importers:
   packages/flags:
     dependencies:
       '@dimensiondev/holoflows-kit':
-        specifier: 0.9.0-20230307045856-46252fb
-        version: 0.9.0-20230307045856-46252fb
+        specifier: 0.9.0-20240322092738-f9180f3
+        version: 0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -4931,30 +4931,13 @@ packages:
       '@msgpack/msgpack': 1.12.2
     dev: false
 
-  /@dimensiondev/holoflows-kit@0.9.0-20230307045856-46252fb:
-    resolution: {integrity: sha512-SprqopLhwmps3Zjrr/fsl+kPmYv6hEc9gZvF3EDtr4v2D2zj1PUkUwktku7fBgzvidivOxyarsLGgGorzhsK6Q==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20230307045856-46252fb/70734fddff9acedef83c8f3925fd0ae615c00be7}
+  /@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7):
+    resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
-    peerDependenciesMeta:
-      '@types/webextension-polyfill':
-        optional: true
     dependencies:
       '@servie/events': 3.0.0
-      event-iterator: 2.0.0
-      lodash-es: 4.17.21
-      tslib: 2.6.2
-    dev: false
-
-  /@dimensiondev/holoflows-kit@0.9.0-20240104084316-88642f9:
-    resolution: {integrity: sha512-XsF54fIlanXn16vqzS/UB673qAq4/k+KUaEBLUCwjUH0B1cj/SM2y4TNOeRjti2getgxbWWAxzP/c9uqvUFKpA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240104084316-88642f9/2099fc5f2819fc0d3b5b2680886ce1108a02102b}
-    peerDependencies:
-      '@types/webextension-polyfill': ^0.10.0
-    peerDependenciesMeta:
-      '@types/webextension-polyfill':
-        optional: true
-    dependencies:
-      '@servie/events': 3.0.0
-      event-iterator: 2.0.0
+      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.2
     dev: false
@@ -8802,7 +8785,7 @@ packages:
   /@solana/web3.js@1.78.4:
     resolution: {integrity: sha512-up5VG1dK+GPhykmuMIozJZBbVqpm77vbOG6/r5dS7NBGZonwHfTLdBbsYc3rjmaQ4DpCXUa3tUc4RZHRORvZrw==}
     dependencies:
-      '@babel/runtime': 7.24.0
+      '@babel/runtime': 7.23.2
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
       '@solana/buffer-layout': 4.0.1
@@ -23976,7 +23959,7 @@ packages:
   /rpc-websockets@7.6.0:
     resolution: {integrity: sha512-Jgcs8q6t8Go98dEulww1x7RysgTkzpCMelVxZW4hvuyFtOGpeUz9prpr2KjUa/usqxgFCd9Tu3+yhHEP9GVmiQ==}
     dependencies:
-      '@babel/runtime': 7.24.0
+      '@babel/runtime': 7.23.2
       eventemitter3: 4.0.7
       uuid: 8.3.2
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -28041,7 +28024,7 @@ packages:
     dev: true
 
 time:
-  /@dimensiondev/holoflows-kit@0.9.0-20240104084316-88642f9: '2024-01-04T08:43:44Z'
+  /@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3: '2024-03-22T09:28:16Z'
   /@ethersproject/providers@5.7.2: '2022-10-19T22:59:19.925Z'
   /@lifi/widget@2.10.1: '2024-02-09T12:01:28.461Z'
   /@masknet/kit@0.3.0: '2024-01-25T08:08:18.361Z'

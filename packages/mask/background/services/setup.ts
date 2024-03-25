@@ -49,7 +49,10 @@ export function startServices() {
     AsyncGeneratorCall(GeneratorService, {
         key: 'GeneratorService',
         encoder,
-        channel,
+        channel: {
+            on: (c) => channel.on((d) => c(d)),
+            send: (d) => channel.send(d),
+        },
         log: {
             beCalled: false,
             remoteError: false,
@@ -75,7 +78,10 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
     AsyncCall(load(), {
         key,
         encoder,
-        channel,
+        channel: {
+            on: (c) => channel.on((d) => c(d)),
+            send: (d) => channel.send(d),
+        },
         log:
             hasLog ?
                 {

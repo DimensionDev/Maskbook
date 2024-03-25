@@ -5,8 +5,6 @@ import {
     AsyncCall,
     AsyncGeneratorCall,
     type AsyncCallOptions,
-    type CallbackBasedChannel,
-    type EventBasedChannel,
     type AsyncVersionOf,
     type AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
@@ -26,7 +24,9 @@ import type {
 import { setDebugObject } from '@masknet/shared-base'
 assertNotEnvironment(Environment.ManifestBackground)
 
-const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
+debugger
+const message = new WebExtensionMessage<any>({ domain: '$' })
+message.enableLog = true
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
@@ -52,14 +52,17 @@ export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> =
  * @param generator Is the service is a generator?
  */
 function add<T extends object>(key: string, generator = false): AsyncVersionOf<T> {
-    const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(Environment.ManifestBackground)
+    const channel = message.events[key].bind(Environment.ManifestBackground)
 
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {
         key,
         encoder,
         log,
-        channel,
+        channel: {
+            on: (c) => channel.on((d) => c(d)),
+            send: (d) => channel.send(d),
+        },
         strict: true,
         thenable: false,
     })

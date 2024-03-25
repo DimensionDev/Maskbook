@@ -3,6 +3,7 @@ import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import type { BasicHostHooks } from '@masknet/sandboxed-plugin-runtime'
 
 export function createHostAPIs(isBackground: boolean): BasicHostHooks {
+    let message: WebExtensionMessage<{ f: any; g: any }>
     return {
         async getPluginList() {
             const plugins = await fetch(browser.runtime.getURL('/sandboxed-modules/plugins.json'))
@@ -33,17 +34,27 @@ export function createHostAPIs(isBackground: boolean): BasicHostHooks {
             }
             createI18NBundle(id, locales)(i18NextInstance)
         },
-        // TODO: support signal
-        createRpcChannel(id: string) {
-            return new WebExtensionMessage<{ f: any }>({ domain: `mask-plugin-${id}-rpc` }).events.f.bind(
+        createRpcChannel(id, signal) {
+            message ??= new WebExtensionMessage({ domain: `mask-plugin-${id}-rpc` })
+            const o = message.events.f.bind(
                 isBackground ? MessageTarget.Broadcast : Environment.ManifestBackground,
+                signal,
             )
+            return {
+                send: (data) => o.send(data),
+                on: (callback) => o.on((data) => callback(data)),
+            }
         },
-        // TODO: support signal
-        createRpcGeneratorChannel(id: string) {
-            return new WebExtensionMessage<{ g: any }>({ domain: `mask-plugin-${id}-rpc` }).events.g.bind(
+        createRpcGeneratorChannel(id, signal) {
+            message ??= new WebExtensionMessage({ domain: `mask-plugin-${id}-rpc` })
+            const o = message.events.g.bind(
                 isBackground ? MessageTarget.Broadcast : Environment.ManifestBackground,
+                signal,
             )
+            return {
+                send: (data) => o.send(data),
+                on: (callback) => o.on((data) => callback(data)),
+            }
         },
     }
 }
