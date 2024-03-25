@@ -25,7 +25,6 @@ import { setDebugObject } from '@masknet/shared-base'
 assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<any>({ domain: '$' })
-message.enableLog = true
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
