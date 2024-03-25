@@ -99,7 +99,7 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
             setProviderType,
             setNetworkType,
         }),
-        [account, chainId, providerType],
+        [account, chainId, providerType, networkType],
     )
 
     return <ChainContext.Provider value={context}>{props.children}</ChainContext.Provider>
@@ -192,6 +192,7 @@ export function useNetworkContext<T extends NetworkPluginID = NetworkPluginID>(o
 
 export function useChainContext<T extends NetworkPluginID = NetworkPluginID>(overrides?: ChainContextGetter<T>) {
     const context = useContext(ChainContext)
+
     return {
         ...context,
         ...omitBy(overrides, isUndefined),

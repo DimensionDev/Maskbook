@@ -1,9 +1,9 @@
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
 import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
-import { MaskLightTheme, PopupSnackbarProvider } from '@masknet/theme'
+import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Box, ThemeProvider } from '@mui/material'
+import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
@@ -47,7 +47,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
-const SwapPage = lazy(() => import('./pages/Swap/index.js'))
+// const SwapPage = lazy(() => import('../swap/pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
@@ -83,7 +83,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                             <Route path={PopupPaths.Settings} element={withSuspense(<Settings />)} />
                         </Route>
 
-                        <Route
+                        {/* <Route
                             path={PopupPaths.Swap}
                             element={
                                 <EVMWeb3ContextProvider>
@@ -92,7 +92,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                                     </ThemeProvider>
                                 </EVMWeb3ContextProvider>
                             }
-                        />
+                        /> */}
 
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />

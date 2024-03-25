@@ -1,7 +1,6 @@
-import { languages } from '@masknet/plugin-trader'
 import { Appearance } from '@masknet/public-api'
 import { SelectProviderModal, SharedContextProvider, SwapPageModals, WalletIcon } from '@masknet/shared'
-import { applyMaskColorVars, makeStyles } from '@masknet/theme'
+import { ActionButton, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import {
     ChainContextProvider,
     useChainContext,
@@ -14,15 +13,16 @@ import {
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
-import { NetworkPluginID, PluginID, createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { Background } from './SwapBackground.js'
+import { Background } from '../../components/SwapBackground.js'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, alpha } from '@mui/material'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LiFiWidget, type WidgetConfig, type WidgetDrawer } from '@lifi/widget'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { Web3Provider } from '@ethersproject/providers'
+import { AccountManager } from '../../components/AccountManager.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -71,6 +71,12 @@ const useStyles = makeStyles()((theme) => {
             background: alpha(theme.palette.maskColor.white, 0.1),
             borderRadius: 12,
             padding: theme.spacing(2),
+            minWidth: 392,
+            minHeight: 494,
+            maxHeight: '70vh',
+            display: 'flex',
+            overflow: 'auto',
+            position: 'relative',
         },
         powerBy: {
             position: 'fixed',
@@ -81,19 +87,18 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-// TODO: extract the trader ui code to share and delete this.
-createI18NBundle(PluginID.Trader, languages)(i18NextInstance)
-
 export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
+    const [anchorEl, setAnchorEl] = useState<HTMLElement>()
+    const [containerRef, setContainerRef] = useState<HTMLElement>()
     const { pluginID } = useNetworkContext()
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
-    const providerDescriptor = useProviderDescriptor()
-    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor(pluginID)
+    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
     const wallet = useWallet()
     const { data: domain } = useReverseAddress(pluginID, account)
     const Utils = useWeb3Utils()
@@ -109,7 +114,6 @@ export default function SwapPage() {
     }, [])
 
     const widgetRef = useRef<WidgetDrawer>(null)
-    const [showActions, setShowActions] = useState(true)
 
     const getSigner = useCallback(
         (requiredChainId?: ChainId) => {
@@ -151,6 +155,10 @@ export default function SwapPage() {
                 disconnect: async () => {},
             },
             appearance: theme.palette.mode,
+            containerStyle: {
+                maxHeight: '100%',
+                overflow: 'auto',
+            },
         }
     }, [theme, providerType, getSigner])
 
@@ -163,20 +171,39 @@ export default function SwapPage() {
                     </div>
                     <header className={classes.header}>
                         <Icons.Mask width={140} height={40} variant={'light'} />
-                        <Box className={classes.connect} onClick={() => SelectProviderModal.open()}>
-                            <WalletIcon
-                                size={30}
-                                badgeSize={12}
-                                mainIcon={providerDescriptor?.icon ?? networkDescriptor?.icon}
-                                badgeIcon={providerDescriptor?.icon ? networkDescriptor?.icon : undefined}
-                                iconFilterColor={providerDescriptor?.iconFilterColor}
-                            />
-                            <Typography className={classes.walletName}>{walletName}</Typography>
-                        </Box>
+                        {account ?
+                            <Box className={classes.connect} onClick={(event) => setAnchorEl(event.currentTarget)}>
+                                <WalletIcon
+                                    size={30}
+                                    badgeSize={12}
+                                    mainIcon={providerDescriptor?.icon ?? networkDescriptor?.icon}
+                                    badgeIcon={providerDescriptor?.icon ? networkDescriptor?.icon : undefined}
+                                    iconFilterColor={providerDescriptor?.iconFilterColor}
+                                />
+                                <Typography className={classes.walletName}>{walletName}</Typography>
+                            </Box>
+                        :   <ActionButton variant="roundedContained" onClick={() => SelectProviderModal.open()}>
+                                {t.connect()}
+                            </ActionButton>
+                        }
+                        <AccountManager
+                            open={!!anchorEl}
+                            onClose={() => setAnchorEl(undefined)}
+                            anchorEl={anchorEl}
+                            walletName={walletName}
+                        />
                     </header>
 
-                    <Box className={classes.container}>
-                        <LiFiWidget integrator="MaskNetwork" config={widgetConfig} ref={widgetRef} />
+                    <Box
+                        className={classes.container}
+                        ref={(_: HTMLElement) => {
+                            setContainerRef(_)
+                        }}>
+                        <LiFiWidget
+                            integrator="MaskNetwork"
+                            config={{ ...widgetConfig, containerRef }}
+                            ref={widgetRef}
+                        />
                     </Box>
                     <Typography className={classes.powerBy}>
                         {t.powered_by()} <strong>LI.FI</strong>

@@ -25,6 +25,7 @@ export const pluginIDsSettings = createGlobalSettings<Record<EnhanceableSite | E
         [EnhanceableSite.Firefly]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
+        [ExtensionSite.Swap]: NetworkPluginID.PLUGIN_EVM,
     },
     isEqual,
 )

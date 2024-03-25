@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.leaf.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "tsBuildInfoFile": "../dist/popup.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [
+    { "path": "../shared/tsconfig.json" },
+    { "path": "../shared-ui/tsconfig.json" },
+    { "path": "../../plugins/Trader/tsconfig.json" }
+  ]
+}

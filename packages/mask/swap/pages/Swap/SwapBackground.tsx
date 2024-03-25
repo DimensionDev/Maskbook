@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import TickManager from './utils/TickerManager.js'
-import Shader2d from './utils/shader2d.js'
-import circleVert from './utils/circleVert.vert.js'
-import circleFrag from './utils/circleFrag.frag.js'
+import TickManager from '../../webgl/TickerManager.js'
+import Shader2d from '../../webgl/shader2d.js'
+import circleVert from '../../webgl/circleVert.vert.js'
+import circleFrag from '../../webgl/circleFrag.frag.js'
 
 export function Background() {
     const [ticker] = useState(typeof window !== 'undefined' ? new TickManager() : null)

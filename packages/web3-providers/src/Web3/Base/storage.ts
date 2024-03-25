@@ -57,6 +57,7 @@ export function providerStorage<ChainId extends number, ProviderType extends str
     defaultChainId: ChainId,
     defaultProviderType: ProviderType,
 ) {
+    console.log(getSiteType())
     const { storage } = InMemoryStorages.Web3.createSubScope(pluginID, {}).createSubScope(getSiteType() ?? 'Provider', {
         account: {
             account: '',

@@ -74,7 +74,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
 
     const handleSwap = useCallback(() => {
         if (disabledSwap) return
-        const url = urlcat('popups.html#/', PopupRoutes.Swap)
+        const url = 'swap.html#/'
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, disabledSwap])
 

@@ -12,4 +12,5 @@ export enum EnhanceableSite {
 export enum ExtensionSite {
     Dashboard = 'dashboard',
     Popup = 'popup',
+    Swap = 'swap',
 }

@@ -3242,6 +3242,11 @@ export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
         s: true,
     },
 ])
+export const ShutDown = /*#__PURE__*/ __createIcon('ShutDown', [
+    {
+        u: () => new URL('./general/ShutDown.svg', import.meta.url).href,
+    },
+])
 export const SignUpAccount = /*#__PURE__*/ __createIcon('SignUpAccount', [
     {
         u: () => new URL('./general/SignUpAccount.png', import.meta.url).href,
