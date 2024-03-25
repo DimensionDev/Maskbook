@@ -47,7 +47,6 @@ import { queryClient } from '@masknet/shared-base-ui'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
-const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index.js'))
 const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
@@ -82,7 +81,7 @@ const PopupRoutes = memo(function PopupRoutes() {
                             <Route path={PopupPaths.Friends + '/*'} element={withSuspense(<Contacts />)} />
                             <Route path={PopupPaths.Settings} element={withSuspense(<Settings />)} />
                         </Route>
-                        <Route path={PopupPaths.Swap} element={<SwapPage />} />
+
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />

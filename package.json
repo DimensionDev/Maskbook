@@ -99,7 +99,8 @@
       "@protobufjs/inquire": "1.1.0",
       "reflect-metadata": "0.1.13",
       "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770",
-      "@tanstack/react-query": "^5.8.7"
+      "@tanstack/react-query": "^5.8.7",
+      "@lifi/widget": "^2.10.1"
     },
     "override comments": {
       "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"

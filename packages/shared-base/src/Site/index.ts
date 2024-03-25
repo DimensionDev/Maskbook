@@ -19,6 +19,7 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Dashboard]: /dashboard\.html/i,
     [ExtensionSite.Popup]: /popups\.html/i,
+    [ExtensionSite.Swap]: /swap\.html/i,
 }
 
 export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)

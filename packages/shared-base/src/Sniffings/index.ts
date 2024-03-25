@@ -11,6 +11,7 @@ const isChromium = navigator_?.userAgent.includes('Chrome') || navigator_?.userA
 export const Sniffings = {
     is_dashboard_page: location_?.protocol.includes('extension') && location_.href.includes('dashboard.html'),
     is_popup_page: location_?.protocol.includes('extension') && location_.href.includes('popups.html'),
+    is_swap_page: location_?.protocol.includes('extension') && location_.href.includes('swap.html'),
 
     is_twitter_page: location_?.href.includes(SiteHost.Twitter),
     is_facebook_page: location_?.href.includes(SiteHost.Facebook),

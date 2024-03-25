@@ -303,6 +303,7 @@ export function setting_url() { return new URL("./general/Setting.svg", import.m
 export function settings_url() { return new URL("./general/Settings.svg", import.meta.url).href }
 export function settings_2_url() { return new URL("./general/Settings2.svg", import.meta.url).href }
 export function sharp_mask_url() { return new URL("./general/SharpMask.svg", import.meta.url).href }
+export function shut_down_url() { return new URL("./general/ShutDown.svg", import.meta.url).href }
 export function sign_up_account_url() { return new URL("./general/SignUpAccount.png", import.meta.url).href }
 export function smart_pay_url() { return new URL("./general/SmartPay.svg", import.meta.url).href }
 export function star_url() { return new URL("./general/Star.svg", import.meta.url).href }
