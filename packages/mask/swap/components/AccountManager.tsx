@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     disconnectButton: {
         background: alpha(theme.palette.maskColor.danger, 0.1),
+        color: theme.palette.maskColor.danger,
     },
     text: {
         fontSize: 10,
@@ -74,7 +75,6 @@ export const AccountManager = memo<AccountManagerProps>(function AccountManager(
             providerType,
         })
         onClose()
-        return
     }, [providerType])
     return (
         <Popover
