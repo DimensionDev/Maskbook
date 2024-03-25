@@ -16,7 +16,7 @@ function createUser(response: TwitterBaseAPI.IdentifyResponse): TwitterBaseAPI.U
         avatarURL: response.profile_image_url_https,
         bio: response.description,
         location: response.location,
-        homepage: response.entities?.url?.urls[0]?.expanded_url,
+        homepage: response.entities.url.urls[0]?.expanded_url,
     }
 }
 export async function getUserViaTwitterIdentity(screenName: string): Promise<TwitterBaseAPI.User | null> {

@@ -191,7 +191,7 @@ export const GasSetting1559 = memo(
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
-                onConfirm?.({
+                onConfirm({
                     gasLimit: data.gasLimit as any,
                     maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
                     priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),

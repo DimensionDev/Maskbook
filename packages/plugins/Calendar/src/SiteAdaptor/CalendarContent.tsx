@@ -72,10 +72,10 @@ export function CalendarContent({ target, disableSetting }: Props) {
     useLocationChange(() => {
         setPathname(location.pathname)
     })
-    if (isMinimalMode || (target && !pathname?.includes(target))) return null
+    if (isMinimalMode || (target && !pathname.includes(target))) return null
 
     return (
-        <div className={classes.calendar} style={{ marginTop: pathname?.includes('explore') ? 24 : 0 }}>
+        <div className={classes.calendar} style={{ marginTop: pathname.includes('explore') ? 24 : 0 }}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">

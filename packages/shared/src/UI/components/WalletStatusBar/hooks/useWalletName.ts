@@ -26,7 +26,7 @@ export const useWalletName = (
         if (domain) return Sniffings.is_popup_page ? formatDomainName(domain, 12) : domain
         if (isNextIdWallet && expectedPluginId) return resolveNetworkWalletName(expectedPluginId)
         const wallet = wallets.find((x) => isSameAddress(x.address, expectedAccount ?? account))
-        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
+        if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet.name
 
         return providerDescriptor?.name || Utils.formatAddress(account, 4)
     }, [

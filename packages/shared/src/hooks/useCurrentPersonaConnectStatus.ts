@@ -97,7 +97,7 @@ export function useCurrentPersonaConnectStatus(
             const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
-                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
+                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile.identifier) &&
                     x.is_valid,
             )
 

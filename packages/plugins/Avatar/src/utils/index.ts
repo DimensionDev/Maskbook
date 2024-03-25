@@ -102,7 +102,7 @@ async function getAvatarFromNextIDStorage(
     )
 
     if (!avatarId && response.isOk()) return response.value
-    if (response.isOk() && response.value?.avatarId === avatarId) return response.value
+    if (response.isOk() && response.value.avatarId === avatarId) return response.value
     return
 }
 

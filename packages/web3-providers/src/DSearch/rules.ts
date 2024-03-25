@@ -21,7 +21,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         return true
 
                     const symbol = data.symbol
-                    if (symbol === keyword || symbol?.replace(/\s/g, '') === keyword) return true
+                    if (symbol === keyword || symbol.replaceAll(/\s/g, '') === keyword) return true
 
                     const name = data.name
                     if (name === keyword) return true

@@ -287,7 +287,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         done,
     } = useNonFungibleAssetsByCollectionAndOwner(
         collection?.assets?.length ? ''
-        : collection?.source === SourceType.SimpleHash ? collection?.id
+        : collection?.source === SourceType.SimpleHash ? collection.id
         : collection?.address,
         account,
         NetworkPluginID.PLUGIN_EVM,
@@ -300,7 +300,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         next()
     }, [assets_.length])
 
-    const assets = collection?.assets?.length ? collection?.assets : assets_
+    const assets = collection?.assets?.length ? collection.assets : assets_
 
     const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index }) as OrderedERC721Token)
 

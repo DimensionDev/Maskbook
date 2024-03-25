@@ -51,7 +51,7 @@ function createUser(response: TwitterBaseAPI.UserResponse) {
         avatarURL: result.legacy?.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
         bio: result.legacy?.description,
         location: result.legacy?.location,
-        homepage: result.legacy?.entities.url?.urls[0]?.expanded_url,
+        homepage: result.legacy?.entities.url.urls[0]?.expanded_url,
     }
 }
 

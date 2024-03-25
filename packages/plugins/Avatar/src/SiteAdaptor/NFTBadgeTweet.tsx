@@ -17,7 +17,7 @@ export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
         <NFTBadgeTimeline
             width={width}
             height={height}
-            userId={identity?.identifier.userId}
+            userId={identity.identifier.userId}
             avatarId={avatarId}
             siteKey={siteKey}
         />

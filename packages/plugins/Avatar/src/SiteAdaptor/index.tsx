@@ -53,9 +53,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             onClick={() => {
-                                EntryComponentProps.onClick ?
-                                    EntryComponentProps.onClick?.(clickHandler)
-                                :   clickHandler()
+                                EntryComponentProps.onClick ? EntryComponentProps.onClick(clickHandler) : clickHandler()
                                 Telemetry.captureEvent(EventType.Access, EventID.EntryAppNFT_PFP_Open)
                             }}
                             tooltipHint={

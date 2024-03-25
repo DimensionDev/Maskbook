@@ -96,7 +96,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
             chainId,
-            urlcat('/collections/:symbol', { symbol: token?.collection }),
+            urlcat('/collections/:symbol', { symbol: token.collection }),
         )
         if (!collection) return
         return createNFTToken(chainId, token, collection)
@@ -125,7 +125,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                 mint_address: tokenMint,
             }),
             creator:
-                nft?.creators?.length ?
+                nft?.creators.length ?
                     {
                         address: nft.creators[0].address,
                     }
@@ -166,7 +166,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                 address: token.mintAddress,
                 metadata: {
                     chainId,
-                    name: getAssetFullName(token.mintAddress, token.collectionName, token?.title, ''),
+                    name: getAssetFullName(token.mintAddress, token.collectionName, token.title, ''),
                     symbol: '',
                     imageURL: resolveIPFS_URL(token.img),
                     mediaURL: resolveIPFS_URL(token.img),
@@ -181,7 +181,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                 },
                 collection: {
                     chainId,
-                    name: token.collectionName ?? token?.collectionTitle,
+                    name: token.collectionName ?? token.collectionTitle,
                     slug: '',
                     description: '',
                     iconURL: '',
@@ -202,7 +202,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         if (!token) return
         const collection = await fetchFromMagicEden<Collection>(
             chainId,
-            urlcat('/collections/:symbol', { symbol: token?.collection }),
+            urlcat('/collections/:symbol', { symbol: token.collection }),
         )
         if (!collection) return
         return createNFTCollection(collection)

@@ -7,9 +7,7 @@ import { BaseDescriptor } from './Base.js'
 export class ERC721Descriptor extends BaseDescriptor implements TransactionDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {
         const contract = await this.Web3.getNonFungibleTokenContract(address, undefined, { chainId })
-        return contract?.symbol && contract?.symbol.length > 15 ?
-                `${contract?.symbol.slice(0, 12)}...`
-            :   contract?.symbol
+        return contract.symbol && contract.symbol.length > 15 ? `${contract.symbol.slice(0, 12)}...` : contract.symbol
     }
 
     override async compute(context: TransactionContext<ChainId, TransactionParameter>) {
@@ -19,7 +17,7 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
             switch (name) {
                 case 'approve': {
                     const schemaType = await this.Web3.getSchemaType(context.to)
-                    if (parameters?.to === undefined || parameters?.tokenId === undefined || !schemaType) break
+                    if (parameters?.to === undefined || parameters.tokenId === undefined || !schemaType) break
 
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
 
@@ -47,9 +45,9 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                     }
                 }
                 case 'setApprovalForAll': {
-                    if (parameters?.operator === undefined || parameters?.approved === undefined) break
+                    if (parameters?.operator === undefined || parameters.approved === undefined) break
 
-                    const action = parameters?.approved === false ? 'Revoke' : 'Unlock'
+                    const action = parameters.approved === false ? 'Revoke' : 'Unlock'
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
 
                     return {
@@ -63,7 +61,7 @@ export class ERC721Descriptor extends BaseDescriptor implements TransactionDescr
                         }),
                         snackbar: {
                             successfulDescription:
-                                parameters?.approved === false ?
+                                parameters.approved === false ?
                                     i18NextInstance.t('plugin_infra_descriptor_nft_revoke_success', {
                                         symbol,
                                         action,

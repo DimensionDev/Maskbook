@@ -33,7 +33,7 @@ export function FormattedBalance(props: FormattedBalanceProps) {
         return (
             <Fragment>
                 <span className={classes.balance}>{String(formatted)}</span>
-                <span className={classes?.symbol}>{symbol}</span>
+                <span className={classes.symbol}>{symbol}</span>
             </Fragment>
         )
     return <Fragment>{String(formatted)}</Fragment>

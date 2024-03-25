@@ -155,7 +155,7 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
             ))}
 
             <div key="rss3" className={classes.group}>
-                {collectionList?.length > 0 && socialAccounts?.length ?
+                {collectionList.length > 0 && socialAccounts?.length ?
                     <>
                         <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
                         <Divider className={classes.divider} />

@@ -117,7 +117,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         <List>
             <DSearchSettings
                 checked={!pluginsInMinimalMode.map((x) => x.ID).includes(PluginID.Handle)}
-                onSwitch={(event) => onSwitch(PluginID.Handle, event?.target.checked)}
+                onSwitch={(event) => onSwitch(PluginID.Handle, event.target.checked)}
                 setRef={(element: HTMLLIElement | null) => {
                     if (DSearch_KEY === focusPluginID) {
                         targetPluginRef.current = element
@@ -169,7 +169,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                             <Stack direction="row" mt={1.25}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
-                                    {x.entry.features?.map((f, i) => (
+                                    {x.entry.features.map((f, i) => (
                                         <Stack key={i}>
                                             <Typography className={classes.name} fontSize={14}>
                                                 <PluginTransFieldRender field={f.name} pluginID={x.pluginID} />

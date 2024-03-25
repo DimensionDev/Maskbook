@@ -75,7 +75,7 @@ export function ManageWallet({ manageWallets, persona, name, address }: ManageWa
                     </Typography>
                     <Typography variant="caption" className={classes.finger}>
                         {persona?.identifier.rawPublicKey ?
-                            formatPersonaFingerprint(persona?.identifier.rawPublicKey || '')
+                            formatPersonaFingerprint(persona.identifier.rawPublicKey || '')
                         :   <FormattedAddress address={address} size={10} formatter={formatEthereumAddress} />}
                     </Typography>
                 </Stack>

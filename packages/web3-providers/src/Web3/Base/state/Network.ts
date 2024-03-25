@@ -110,13 +110,13 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
         this.assertNetwork(id)
 
         // If remove current network, reset to default network
-        if (id === this.networkID?.getCurrentValue()) {
+        if (id === this.networkID.getCurrentValue()) {
             await this.switchNetwork(this.DEFAULT_NETWORK_ID)
         }
 
         await Promise.all([
             this.networksStorage.setValue(omit(this.networksStorage.value, id)),
-            this.networkID?.getCurrentValue() === id ? await this.networkIDStorage.setValue('') : Promise.resolve(),
+            this.networkID.getCurrentValue() === id ? await this.networkIDStorage.setValue('') : Promise.resolve(),
         ])
     }
 }

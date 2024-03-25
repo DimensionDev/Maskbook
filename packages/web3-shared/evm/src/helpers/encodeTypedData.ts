@@ -46,9 +46,7 @@ const encodeType = (types: Record<string, TypedDataField[]>, primaryType: string
         : a > b ? 1
         : 0,
     )
-    return depSet
-        .map((type) => `${type}(${types[type]?.map(({ name, type }) => `${type} ${name}`).join(',')})`)
-        .join('')
+    return depSet.map((type) => `${type}(${types[type].map(({ name, type }) => `${type} ${name}`).join(',')})`).join('')
 }
 
 // Generate the EIP-712 hash

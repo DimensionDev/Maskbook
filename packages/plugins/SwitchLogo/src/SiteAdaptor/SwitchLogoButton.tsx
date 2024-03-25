@@ -73,7 +73,7 @@ export function SwitchLogoButton() {
         const node = LogoSelector.evaluate()
         if (!node) return
 
-        node?.parentElement?.style.setProperty('position', 'relative')
+        node.parentElement?.style.setProperty('position', 'relative')
 
         if (logoType === SwitchLogoType.Classics && !isMinimalMode) {
             // eslint-disable-next-line @masknet/browser-no-set-html

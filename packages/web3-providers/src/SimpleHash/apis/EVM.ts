@@ -294,7 +294,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const filteredCollections = response.collections
             // Might got bad data responded including id field and other fields empty
             .filter((x) => {
-                if (!x?.id || (x.spam_score !== null && x.spam_score >= SPAM_SCORE)) return false
+                if (!x.id || (x.spam_score !== null && x.spam_score >= SPAM_SCORE)) return false
                 return (
                     isValidChainId(resolveChainId(x.chain)) &&
                     x.top_contracts.length > 0 &&
@@ -403,21 +403,21 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             content: response.transfers.map((x) => {
                 const trade_token =
                     (
-                        !x.sale_details?.payment_token ||
-                        checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token?.address || '')
+                        !x.sale_details.payment_token ||
+                        checkBlurToken(NetworkPluginID.PLUGIN_EVM, chainId, x.sale_details.payment_token.address || '')
                     ) ?
                         EVMChainResolver.nativeCurrency(chainId)
                     :   {
-                            ...x.sale_details?.payment_token,
+                            ...x.sale_details.payment_token,
                             type: TokenType.Fungible,
                             address:
-                                x.sale_details?.payment_token.payment_token_id.includes('native') ?
+                                x.sale_details.payment_token.payment_token_id.includes('native') ?
                                     ZERO_ADDRESS
-                                :   x.sale_details?.payment_token.address ?? '',
+                                :   x.sale_details.payment_token.address ?? '',
                             id:
-                                x.sale_details?.payment_token.payment_token_id.includes('native') ?
+                                x.sale_details.payment_token.payment_token_id.includes('native') ?
                                     ZERO_ADDRESS
-                                :   x.sale_details?.payment_token.address ?? '',
+                                :   x.sale_details.payment_token.address ?? '',
                             chainId,
                             schema: SchemaType.ERC20,
                         }
@@ -434,8 +434,8 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     trade_token,
                     timestamp: new Date(x.timestamp).getTime(),
                     trade_price:
-                        x.sale_details?.total_price ?
-                            leftShift(x.sale_details?.total_price, trade_token.decimals).toNumber()
+                        x.sale_details.total_price ?
+                            leftShift(x.sale_details.total_price, trade_token.decimals).toNumber()
                         :   0,
                     imageURL,
                     contract_address: x.contract_address,
@@ -471,7 +471,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     market_name: NonFungibleMarketplace.OpenSea,
                     volume_24h: openseaStats.volume24h,
                     floor_price: openseaStats.floorPrice,
-                    price_symbol: paymentToken?.symbol,
+                    price_symbol: paymentToken.symbol,
                     sales_24: openseaStats.count24h,
                 }
             :   null,
@@ -482,7 +482,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     market_name: NonFungibleMarketplace.LooksRare,
                     volume_24h: looksrareStats.volume24h,
                     floor_price: looksrareStats.floorPrice,
-                    price_symbol: paymentToken?.symbol,
+                    price_symbol: paymentToken.symbol,
                     sales_24: looksrareStats.count24h,
                 }
             :   null,
@@ -493,9 +493,9 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             dataProvider: SourceType.SimpleHash,
             contracts: [{ chainId, address, pluginID: NetworkPluginID.PLUGIN_EVM }],
             currency: {
-                id: paymentToken?.payment_token_id,
-                symbol: paymentToken?.symbol,
-                name: paymentToken?.symbol,
+                id: paymentToken.payment_token_id,
+                symbol: paymentToken.symbol,
+                name: paymentToken.symbol,
                 chainId,
             },
             coin: {
@@ -553,13 +553,13 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             },
             market: {
                 total_supply: collection.total_quantity,
-                current_price: leftShift(collection.floor_prices[0]?.value, paymentToken?.decimals).toString(),
-                floor_price: leftShift(collection.floor_prices[0]?.value, paymentToken?.decimals).toString(),
+                current_price: leftShift(collection.floor_prices[0]?.value, paymentToken.decimals).toString(),
+                floor_price: leftShift(collection.floor_prices[0]?.value, paymentToken.decimals).toString(),
                 owners_count: collection.distinct_owner_count,
-                volume_24h: tickers?.[0]?.volume_24h,
-                total_24h: tickers?.[0]?.sales_24,
-                price_symbol: paymentToken?.symbol || 'ETH',
-                price_token_address: paymentToken?.address || '',
+                volume_24h: tickers[0]?.volume_24h,
+                total_24h: tickers[0]?.sales_24,
+                price_symbol: paymentToken.symbol || 'ETH',
+                price_token_address: paymentToken.address || '',
             },
             tickers,
         }

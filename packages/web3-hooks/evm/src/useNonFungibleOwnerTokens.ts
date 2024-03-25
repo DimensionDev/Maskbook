@@ -53,7 +53,7 @@ export function useNonFungibleOwnerTokens(
         if (!listOfPairs.length) return
 
         return Promise.all(
-            listOfPairs?.map((x) =>
+            listOfPairs.map((x) =>
                 EVMWeb3.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
                     chainId,
                     account: ownerAccount,
