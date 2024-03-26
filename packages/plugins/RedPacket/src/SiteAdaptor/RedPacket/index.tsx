@@ -425,7 +425,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             </Card>
             {outdated ?
                 null
-            : myProfileId ?
+            : myHandle ?
                 <OperationFooter
                     chainId={payloadChainId}
                     canClaim={canClaim}

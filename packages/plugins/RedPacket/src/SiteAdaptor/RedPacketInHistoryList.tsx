@@ -2,14 +2,16 @@ import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { type RedPacketJSONPayload, FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
 
+const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
     { listItemBackground, listItemBackgroundIcon },
@@ -40,7 +42,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(1.5),
-            background: listItemBackground ?? theme.palette.background.default,
+            background: listItemBackground || DEFAULT_BACKGROUND,
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -139,6 +141,7 @@ interface RedPacketInHistoryListProps {
     history: FireflyRedPacketAPI.RedPacketSentInfo
     onSelect: (payload: RedPacketJSONPayload) => void
 }
+
 export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history } = props
     const {

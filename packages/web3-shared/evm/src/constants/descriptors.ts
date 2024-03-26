@@ -244,6 +244,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         icon: new URL('../assets/conflux.png', import.meta.url).href,
         iconColor: 'rgb(112, 212, 74)',
         averageBlockDelay: 10,
+        backgroundGradient: 'linear-gradient(180deg, rgba(72, 168, 166, 0.15) 0%, rgba(72, 168, 166, 0.05) 100%)',
         isMainnet: true,
     },
     {
