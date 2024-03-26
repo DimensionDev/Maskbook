@@ -519,17 +519,26 @@ export class EVMConnectionReadonlyAPI
 
         const options = this.ConnectionOptions.fill(initial)
         const NATIVE_TOKEN_ADDRESS = getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS')
-        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const entities: Array<[string, string]> = []
 
         if (listOfAddress.some(isNativeTokenAddress)) {
             entities.push([NATIVE_TOKEN_ADDRESS ?? '', await this.getBalance(options.account, options)])
         }
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
+        if (!BALANCE_CHECKER_ADDRESS) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error(
+                    `BALANCE_CHECKER_ADDRESS for chain ${options.chainId} is not provided, do you forget to update packages/web3-constants/evm/ethereum.json ?`,
+                    BALANCE_CHECKER_ADDRESS,
+                )
+            }
+            return Object.fromEntries(entities)
+        }
 
         const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
-            const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS ?? '', options)
+            const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS, options)
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
@@ -551,7 +560,16 @@ export class EVMConnectionReadonlyAPI
 
         const options = this.ConnectionOptions.fill(initial)
         const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
-        const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS ?? '', options)
+        if (!BALANCE_CHECKER_ADDRESS) {
+            if (process.env.NODE_ENV === 'development') {
+                console.error(
+                    `BALANCE_CHECKER_ADDRESS for chain ${options.chainId} is not provided, do you forget to update packages/web3-constants/evm/ethereum.json ?`,
+                    BALANCE_CHECKER_ADDRESS,
+                )
+            }
+            return {}
+        }
+        const contract = this.Contract.getBalanceCheckerContract(BALANCE_CHECKER_ADDRESS, options)
         const result = await contract?.methods.balances([options.account], listOfAddress).call({
             // cannot check the sender's balance in the same contract
             from: undefined,
