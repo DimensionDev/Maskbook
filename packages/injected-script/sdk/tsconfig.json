@@ -13,6 +13,7 @@
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
+    "Crypto.ts",
     "Coinbase.ts",
     "MetaMask.ts",
     "OKX.ts",

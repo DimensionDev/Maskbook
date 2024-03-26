@@ -51,8 +51,12 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
                 createWallet()
                 return
             }
+            // Do not close the dialog for WalletConnect until the wallet gets connected
+            const isNotWalletConnect = provider.type !== ProviderType.WalletConnect
 
-            onClose()
+            if (isNotWalletConnect) {
+                onClose()
+            }
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({
@@ -62,7 +66,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             })
 
             if (connected) onConnect?.()
-            else onClose()
+            else if (isNotWalletConnect) onClose()
         },
         [onConnect, onClose],
     )

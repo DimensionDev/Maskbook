@@ -44,6 +44,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.OneKey]: Composer.from(new MetaMaskLike(ProviderType.OneKey)),
             [ProviderType.Clover]: Composer.from(new MetaMaskLike(ProviderType.Clover)),
             [ProviderType.Zerion]: Composer.from(new MetaMaskLike(ProviderType.Zerion)),
+            [ProviderType.Crypto]: Composer.from(new MetaMaskLike(ProviderType.Crypto)),
         }
     }
     private composers: Record<ProviderType, Composer<ConnectionContext> | null>

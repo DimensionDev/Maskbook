@@ -314,6 +314,7 @@ export enum ProviderType {
     Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     Coinbase = 'Coinbase',
+    Crypto = 'Crypto',
     OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',

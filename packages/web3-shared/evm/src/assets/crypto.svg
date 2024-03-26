@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url('#crypto_svg__clip0_9925_8881')">
+        <path fill="#fff" d="M0 4a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4Z"/>
+        <path fill="#000" fill-rule="evenodd" d="M3.585 7.116v9.768l8.416 4.884 8.414-4.884V7.116L12 2.232 3.585 7.116Z" clip-rule="evenodd"/>
+        <path fill="#fff" fill-rule="evenodd" d="M15.298 6.45H8.686l-.767 3.388h8.176l-.797-3.389Zm-5.439 8.052V12.25L7.9 10.998l-2.216 1.657 3.021 5.282h1.207l1.427-1.336v-.671l-1.48-1.428Z" clip-rule="evenodd"/>
+        <path fill="#fff" fill-rule="evenodd" d="M14.148 10.35H9.866l.722 1.893-.22 2.122H12l1.647-.008-.205-2.114.706-1.893Z" clip-rule="evenodd"/>
+        <path fill="#fff" fill-rule="evenodd" d="M16.107 10.983 14.17 12.25v2.252l-1.48 1.428v.67l1.426 1.322h1.192l3.007-5.268-2.21-1.671Z" clip-rule="evenodd"/>
+    </g>
+    <defs>
+        <clipPath id="crypto_svg__clip0_9925_8881">
+            <rect width="24" height="24" fill="#fff" rx="4"/>
+        </clipPath>
+    </defs>
+</svg>

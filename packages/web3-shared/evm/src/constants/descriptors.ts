@@ -523,13 +523,31 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         name: 'OKX Wallet',
         icon: new URL('../assets/okx.svg', import.meta.url).href,
         enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.Arbitrum, ChainId.Avalanche, ChainId.Optimism, ChainId.Matic],
+            supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
         homeLink: 'https://www.okx.com/web3',
         shortenLink: 'okx.com',
         downloadLink: 'https://www.okx.com/web3',
+        iconFilterColor: 'rgba(0, 0, 0, 0.20)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
+    },
+    {
+        ID: `${PLUGIN_ID}_crypto`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Crypto,
+        name: 'Crypto Wallet',
+        icon: new URL('../assets/crypto.svg', import.meta.url).href,
+        enableRequirements: {
+            supportedChainIds: ChainIdList,
+            supportedEnhanceableSites: EnhanceableSiteList,
+            supportedExtensionSites: [],
+        },
+        homeLink: 'https://crypto.com/',
+        shortenLink: 'crypto.com',
+        downloadLink: 'https://crypto.com/defi-wallet#wallet_extension',
         iconFilterColor: 'rgba(0, 0, 0, 0.20)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
