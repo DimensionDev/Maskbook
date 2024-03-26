@@ -2,6 +2,7 @@ import { BrowserProvider } from './Browser.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
+import { CryptoProvider } from './Crypto.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
 import { OneKeyProvider } from './OneKey.js'
@@ -29,6 +30,7 @@ export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOneKeyProvider = new OneKeyProvider()
 export const injectedOKXProvider = new OKXProvider()
+export const injectedCryptoProvider = new CryptoProvider()
 export const injectedBitGetProvider = new BitGetProvider()
 export const injectedRainbowProvider = new RainbowProvider()
 export const injectedRabbyProvider = new RabbyProvider()
@@ -42,6 +44,7 @@ export const injectedCloverProvider = new CloverProvider()
 const Providers = [
     injectedBitGetProvider,
     injectedCoinbaseProvider,
+    injectedCryptoProvider,
     injectedOneKeyProvider,
     injectedRabbyProvider,
     injectedRainbowProvider,

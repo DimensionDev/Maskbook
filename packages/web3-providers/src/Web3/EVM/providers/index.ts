@@ -22,6 +22,7 @@ import type { BaseHostedStorage } from './BaseHosted.js'
 import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { TrustProvider } from './Trust.js'
 import { TokenPocketProvider } from './TokenPocket.js'
+import { CryptoProvider } from './Crypto.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
@@ -44,6 +45,7 @@ export function createEVMWalletProviders(
             Flags.wc_enabled ? new WalletConnectProvider(context.WalletConnectContext) : new EVMNoneProvider(),
         [ProviderType.Coin98]: new EVM_Coin98Provider(),
         [ProviderType.Coinbase]: new CoinbaseProvider(),
+        [ProviderType.Crypto]: new CryptoProvider(),
         [ProviderType.BitGet]: new BitGetProvider(),
         [ProviderType.OKX]: new OKXProvider(),
         [ProviderType.OneKey]: new OneKeyProvider(),
