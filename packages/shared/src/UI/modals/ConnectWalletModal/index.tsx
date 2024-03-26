@@ -12,6 +12,7 @@ import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 import { Spinner } from './Spinner.js'
 import { Icons } from '@masknet/icons'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -130,7 +131,8 @@ export const ConnectWalletModal = forwardRef<
 
     if (!open) return null
 
-    if (!pluginID || !providerType || !networkType) return null
+    // Do not show loading for WalletConnect
+    if (!pluginID || !providerType || !networkType || providerType === ProviderType.WalletConnect) return null
 
     const providerName = providerDescriptor?.name || '...'
     const { maskColor } = theme.palette
