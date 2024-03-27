@@ -72,8 +72,8 @@
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
-        "X1": ["https://rpc.x1.tech"],
-        "X1_Testnet": ["https://testrpc.x1.tech"]
+        "X1": ["https://rpc.xlayer.tech/"],
+        "X1_Testnet": ["https://testrpc.xlayer.tech/"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
