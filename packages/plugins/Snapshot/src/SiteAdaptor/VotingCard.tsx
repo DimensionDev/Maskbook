@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo, unstable_useCacheRefresh } from 'react'
+import { useContext, useState, useEffect, useMemo, unstable_useCacheRefresh, memo } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { checksumAddress } from '@masknet/web3-shared-evm'
@@ -25,6 +25,12 @@ const useStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.maskColor.publicThirdMain,
                 color: theme.palette.maskColor.publicMain,
             },
+            '&:first-of-type': {
+                marginTop: 0,
+            },
+            '&:last-of-type': {
+                marginTop: 0,
+            },
         },
         choiceButton: {
             backgroundColor: theme.palette.maskColor.publicThirdMain,
@@ -37,26 +43,18 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: `${theme.palette.maskColor.publicMain} !important`,
             color: `${theme.palette.maskColor.white} !important`,
         },
-        buttons: {
-            '& > :first-child': {
-                marginTop: 0,
-            },
-            '& > :last-child': {
-                marginBottom: 0,
-            },
-        },
     }
 })
 
-export function VotingCard() {
+export const VotingCard = memo(function VotingCard() {
     const t = useSnapshotTrans()
     const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const proposal = useProposal(identifier.id)
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: power } = usePower(identifier)
+    const proposal = useProposal(identifier.id)
+    const power = usePower(identifier)
     const choices = proposal.choices
-    const [choices_, setChoices_] = useState<number[]>([])
+    const [selectedChoices, setSelectedChoices] = useState<number[]>([])
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -80,7 +78,7 @@ export function VotingCard() {
                 space: identifier.space,
                 timestamp: Math.floor(Date.now() / 1000),
                 proposal: identifier.id,
-                choice: proposal.type === 'single-choice' ? choices_[0] : choices_,
+                choice: proposal.type === 'single-choice' ? selectedChoices[0] : selectedChoices,
                 metadata: JSON.stringify({}),
             }
             const domain = SNAPSHOT_VOTE_DOMAIN
@@ -109,7 +107,7 @@ export function VotingCard() {
             const body = JSON.stringify({ data, sig, address: checksumAddress(account) })
             return PluginSnapshotRPC.vote(body)
         },
-        [choices_, identifier, account, proposal],
+        [selectedChoices, identifier, account, proposal.type],
         () => {
             setLoading(false)
             setOpen(false)
@@ -127,68 +125,70 @@ export function VotingCard() {
 
     const onClick = (n: number) => {
         if (proposal.type === 'single-choice') {
-            setChoices_((d) => [n])
+            setSelectedChoices([n])
             return
         }
-        if (choices_.includes(n)) setChoices_((d) => d.filter((x) => x !== n))
-        else setChoices_((d) => [...d, n])
+        if (selectedChoices.includes(n)) setSelectedChoices((d) => d.filter((x) => x !== n))
+        else setSelectedChoices((d) => [...d, n])
     }
 
-    const disabled = choices_.length === 0 || !account || !power
+    const disabled = selectedChoices.length === 0 || !account || !power
     const choiceText = useMemo(() => {
         let text = ''
-        for (const i of choices_) {
+        for (const i of selectedChoices) {
             text += choices[i - 1]
-            if (i < choices_.length) text += ','
+            if (i < selectedChoices.length) text += ','
         }
         return text
-    }, [choices_])
-    return account && pluginID === NetworkPluginID.PLUGIN_EVM ?
-            <SnapshotCard title={t.plugin_snapshot_vote_title()}>
-                <Box className={classes.buttons}>
-                    {choices.map((choiceText, i) => (
-                        <Button
-                            variant="roundedContained"
-                            fullWidth
-                            key={i}
-                            onClick={() => onClick(i + 1)}
-                            className={cx([
-                                classes.button,
-                                classes.choiceButton,
-                                ...(choices_.includes(i + 1) ? [classes.buttonActive] : []),
-                            ])}>
-                            <Typography
-                                fontWeight={700}
-                                fontSize={16}
-                                sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                {choiceText}
-                            </Typography>
-                        </Button>
-                    ))}
+    }, [selectedChoices])
 
+    if (!account || pluginID !== NetworkPluginID.PLUGIN_EVM) return
+    return (
+        <SnapshotCard title={t.plugin_snapshot_vote_title()}>
+            <Box>
+                {choices.map((choiceText, i) => (
                     <Button
                         variant="roundedContained"
                         fullWidth
-                        className={cx(classes.button, disabled ? '' : classes.buttonActive)}
-                        disabled={disabled}
-                        onClick={() => setOpen(true)}>
-                        <Typography fontWeight={700} fontSize={16}>
-                            {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
+                        key={i}
+                        onClick={() => onClick(i + 1)}
+                        className={cx([
+                            classes.button,
+                            classes.choiceButton,
+                            ...(selectedChoices.includes(i + 1) ? [classes.buttonActive] : []),
+                        ])}>
+                        <Typography
+                            fontWeight={700}
+                            fontSize={16}
+                            sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {choiceText}
                         </Typography>
                     </Button>
-                </Box>
+                ))}
 
-                <VoteConfirmDialog
-                    open={open}
-                    loading={loading}
-                    onClose={() => setOpen(false)}
-                    choiceText={choiceText}
-                    snapshot={proposal.snapshot}
-                    powerSymbol={proposal.space.symbol}
-                    power={power}
-                    onVoteConfirm={onVoteConfirm}
-                    chainId={proposal.chainId}
-                />
-            </SnapshotCard>
-        :   null
-}
+                <Button
+                    variant="roundedContained"
+                    fullWidth
+                    className={cx(classes.button, disabled ? '' : classes.buttonActive)}
+                    disabled={disabled}
+                    onClick={() => setOpen(true)}>
+                    <Typography fontWeight={700} fontSize={16}>
+                        {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
+                    </Typography>
+                </Button>
+            </Box>
+
+            <VoteConfirmDialog
+                open={open}
+                loading={loading}
+                onClose={() => setOpen(false)}
+                choiceText={choiceText}
+                snapshot={proposal.snapshot}
+                powerSymbol={proposal.space.symbol}
+                power={power}
+                onVoteConfirm={onVoteConfirm}
+                chainId={proposal.chainId}
+            />
+        </SnapshotCard>
+    )
+})
