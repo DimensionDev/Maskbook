@@ -4,11 +4,11 @@ import { MASK_X_DEFAULT_PAGINATION, MASK_X_ROOT_URL } from './constants.js'
 import { BaseMaskX } from '../entry-types.js'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 
-export class MaskX {
-    private static async fetchFromMaskX(pathname: string) {
-        return fetchCachedJSON<BaseMaskX.Response>(urlcat(MASK_X_ROOT_URL, pathname))
-    }
+function fetchFromMaskX(pathname: string) {
+    return fetchCachedJSON<BaseMaskX.Response>(urlcat(MASK_X_ROOT_URL, pathname))
+}
 
+export class MaskX {
     private static getOptions({ size = 20, page = 1 }: BaseMaskX.Options = MASK_X_DEFAULT_PAGINATION) {
         return {
             size,
@@ -51,7 +51,7 @@ export class MaskX {
         platform: BaseMaskX.PlatformType,
         initial: BaseMaskX.Options = { size: 20, page: 1 },
     ): Promise<BaseMaskX.Response> {
-        const response = await this.fetchFromMaskX(
+        const response = await fetchFromMaskX(
             urlcat('/prod/identity', {
                 identity: handle,
                 platform,
@@ -60,12 +60,13 @@ export class MaskX {
         )
         return this.getResponse(response)
     }
+
     static async getIdentitiesFuzzy(
         handle: string,
         platform: BaseMaskX.PlatformType,
         initial: BaseMaskX.Options = { size: 20, page: 1 },
     ): Promise<BaseMaskX.Response> {
-        const response = await this.fetchFromMaskX(
+        const response = await fetchFromMaskX(
             urlcat('/prod/identity/search', {
                 identity: handle,
                 platform,
@@ -74,8 +75,9 @@ export class MaskX {
         )
         return this.getResponse(response)
     }
+
     static async getAllIdentities(initial: BaseMaskX.Options = { size: 20, page: 1 }): Promise<BaseMaskX.Response> {
-        const response = await this.fetchFromMaskX(urlcat('/prod/identity/all', this.getOptions(initial)))
+        const response = await fetchFromMaskX(urlcat('/prod/identity/all', this.getOptions(initial)))
         return this.getResponse(response)
     }
 }

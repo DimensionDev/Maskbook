@@ -16,10 +16,8 @@ function renderPostDialogTo<T>(reason: 'timeline' | 'popup', ls: LiveSelector<T,
 export function injectPostDialogAtTwitter(signal: AbortSignal) {
     renderPostDialogTo('popup', postEditorContentInPopupSelector(), {
         signal,
-        missingReportRule: { name: 'PostDialog popup', rule: 'https://twitter.com/compose/post' },
     })
     renderPostDialogTo('timeline', rootSelector(), {
         signal,
-        missingReportRule: { name: 'PostDialog timeline', rule: 'https://twitter.com/home' },
     })
 }

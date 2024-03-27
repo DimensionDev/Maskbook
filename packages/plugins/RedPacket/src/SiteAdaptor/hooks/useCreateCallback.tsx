@@ -76,7 +76,15 @@ function useCreateParamsCallback(
         const seed = Math.random().toString()
         const tokenType = token!.schema === SchemaType.Native ? 0 : 1
         const tokenAddress = token!.schema === SchemaType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
-        if (!tokenAddress) return null
+        if (!tokenAddress) {
+            if (process.env.NODE_ENV === 'development' && !NATIVE_TOKEN_ADDRESS) {
+                console.error(
+                    'Not native token address for chain %s. Do you forget to configure it in token.json file?',
+                    token!.chainId,
+                )
+            }
+            return null
+        }
 
         const paramsObj: ParamsObjType = {
             publicKey,

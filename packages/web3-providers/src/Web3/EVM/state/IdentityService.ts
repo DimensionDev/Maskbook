@@ -250,8 +250,8 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const userId = identifier?.userId
         if (!userId) return
 
-        const response = await MaskX.MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
-        const results = response.records.filter((x) => {
+        const { records } = await MaskX.MaskX.getIdentitiesExact(userId, BaseMaskX.PlatformType.Twitter)
+        const results = records.filter((x) => {
             if (!isValidAddress(x.web3_addr) || !x.is_verified) return false
 
             try {

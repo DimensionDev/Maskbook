@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => {
                 width: '100%',
                 padding: 0,
             },
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

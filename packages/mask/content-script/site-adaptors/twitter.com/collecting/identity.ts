@@ -45,7 +45,7 @@ function getNickname(nickname?: string) {
 
 function resolveLastRecognizedIdentityInner(
     ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
-    cancel: AbortSignal,
+    signal: AbortSignal,
 ) {
     const assign = async () => {
         await delay(2000)
@@ -78,13 +78,13 @@ function resolveLastRecognizedIdentityInner(
                     attributes: true,
                     attributeFilter: ['src'],
                 },
-                cancel,
+                signal,
             )
     }
 
     assign()
 
-    window.addEventListener('locationchange', assign, { signal: cancel })
+    window.addEventListener('locationchange', assign, { signal })
     createWatcher(searchSelfHandleSelector())
     createWatcher(searchWatcherAvatarSelector())
 }

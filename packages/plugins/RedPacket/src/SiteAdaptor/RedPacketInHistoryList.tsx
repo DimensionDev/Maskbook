@@ -8,7 +8,7 @@ import {
     type RedPacketJSONPayloadFromChain,
 } from '@masknet/web3-providers/types'
 import { formatBalance, minus, type FungibleToken } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, type SchemaType, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography, useMediaQuery, type Theme } from '@mui/material'
 import { intervalToDuration, nextDay } from 'date-fns'
 import { memo, useCallback, useMemo } from 'react'
@@ -19,6 +19,7 @@ import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { dateTimeFormat } from './utils/formatDate.js'
 
+const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
     { listItemBackground, listItemBackgroundIcon },
@@ -49,7 +50,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(1.5),
-            background: listItemBackground ?? theme.palette.background.default,
+            background: listItemBackground || DEFAULT_BACKGROUND,
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -179,6 +180,7 @@ interface RedPacketInHistoryListProps {
     history: RedPacketJSONPayload | RedPacketJSONPayloadFromChain
     onSelect: (payload: RedPacketJSONPayload) => void
 }
+
 export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
     const t = useRedPacketTrans()

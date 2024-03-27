@@ -21,7 +21,6 @@ export const WalletRiskWarningModal = forwardRef<SingletonModalRefCreator<Wallet
         })
 
         if (!open) return null
-
         return <WalletRiskWarning account={account} pluginID={pluginID} open onClose={() => dispatch?.close()} />
     },
 )
