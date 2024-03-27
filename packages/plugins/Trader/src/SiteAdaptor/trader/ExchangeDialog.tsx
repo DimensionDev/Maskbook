@@ -11,6 +11,7 @@ import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { TRADER_WEB3_CONFIG } from '../../config.js'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -71,7 +72,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                 },
             },
             chains: {
-                deny: [324],
+                allow: TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM].supportedChainIds ?? [],
             },
             walletManagement: {
                 signer: getSigner(),

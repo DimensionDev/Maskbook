@@ -14,6 +14,7 @@ export const TRADER_WEB3_CONFIG = {
             ChainId.Fantom,
             ChainId.Astar,
             ChainId.Optimism,
+            ChainId.Base,
         ],
     },
     [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

@@ -45,8 +45,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         disabled: {
-            opacity: 0.5,
-            cursor: 'unset',
+            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
