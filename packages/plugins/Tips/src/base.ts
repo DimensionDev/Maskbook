@@ -36,6 +36,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Scroll,
                     ChainId.Optimism,
                     ChainId.Metis,
+                    ChainId.Sei,
                     ChainId.X1_Testnet,
                 ],
             },
