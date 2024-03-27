@@ -11,15 +11,9 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         padding: theme.spacing(1.5),
         borderRadius: 12,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        border: `1px solid ${theme.palette.maskColor.line}`,
         '&:hover': {
-            boxShadow:
-                theme.palette.mode === 'dark' ?
-                    '0px 0px 20px rgba(255, 255, 255, 0.06)'
-                :   '0px 0px 20px rgba(0, 0, 0, 0.1)',
+            background: theme.palette.maskColor.bg,
         },
         '&:hover .MuiAvatar-root': {
             background: theme.palette.background.paper,
