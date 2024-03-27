@@ -40,8 +40,9 @@ export async function requestUnlockWallet(): Promise<void> {
 // eslint-disable-next-line no-restricted-globals
 let autoLockTimer: ReturnType<typeof setTimeout> | undefined
 
-export async function setAutoLockTimer() {
-    const autoLockDuration = await getAutoLockerDuration()
+export async function setAutoLockTimer(initialTimeout = 0) {
+    if (typeof initialTimeout !== 'number' || Number.isNaN(initialTimeout)) initialTimeout = 0
+    const autoLockDuration = (await getAutoLockerDuration()) - initialTimeout
 
     clearTimeout(autoLockTimer)
 
