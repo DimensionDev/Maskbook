@@ -268,12 +268,12 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const myHandle = me?.identifier?.userId
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
-        const result = await recheckClaimStatus()
-        if (result === false) {
-            setShowRequirements(true)
-            return
-        }
         if (canClaim) {
+            const result = await recheckClaimStatus()
+            if (result === false) {
+                setShowRequirements(true)
+                return
+            }
             hash = await claimCallback()
             if (platform && myProfileId && myHandle && hash) {
                 await FireflyRedPacket.finishClaiming(
