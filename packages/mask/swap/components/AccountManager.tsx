@@ -71,10 +71,14 @@ export const AccountManager = memo<AccountManagerProps>(function AccountManager(
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
 
     const handleDisconnect = useCallback(async () => {
-        onClose()
-        await EVMWeb3.disconnect({
-            providerType,
-        })
+        try {
+            onClose()
+            await EVMWeb3.disconnect({
+                providerType,
+            })
+        } catch {
+            console.error('Failed to disconnect')
+        }
     }, [providerType])
     return (
         <Popover
