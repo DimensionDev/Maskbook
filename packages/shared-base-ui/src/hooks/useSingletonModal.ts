@@ -4,7 +4,7 @@ import type { SingletonModalRefCreator } from '@masknet/shared-base'
 export function useSingletonModal<OpenProps, CloseProps>(
     ref: React.ForwardedRef<SingletonModalRefCreator<OpenProps, CloseProps>>,
     options?: {
-        onOpen?: (props: OpenProps & { close: (props: CloseProps) => void }) => void
+        onOpen?: (props: OpenProps, close: (props: CloseProps) => void) => void
         onClose?: (props: CloseProps) => void
         onAbort?: (error: Error) => void
     },
@@ -24,10 +24,7 @@ export function useSingletonModal<OpenProps, CloseProps>(
                 return openRef.current
             },
             open(props) {
-                optionsRef.current?.onOpen?.({
-                    ...props,
-                    close: this.close,
-                })
+                optionsRef.current?.onOpen?.(props, this.close)
                 dispatchOpen(props)
                 setOpen(true)
             },
