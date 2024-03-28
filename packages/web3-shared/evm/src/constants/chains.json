@@ -716,7 +716,7 @@
         "type": "X1",
         "name": "X1",
         "fullName": "X1",
-        "network": "testnet",
+        "network": "mainnet",
         "shortName": "x1",
         "features": [],
         "nativeCurrency": {
@@ -730,7 +730,7 @@
         "explorers": [
             {
                 "name": "X1 explorer",
-                "url": "https://www.okx.com/explorer/x1",
+                "url": "https://www.okx.com/explorer/xlayer",
                 "standard": "EIP3091"
             }
         ]
@@ -740,8 +740,8 @@
         "type": "X1",
         "name": "X1 Testnet",
         "fullName": "X1 Testnet",
-        "network": "mainnet",
-        "shortName": "x1",
+        "network": "testnet",
+        "shortName": "x1testnet",
         "features": [],
         "nativeCurrency": {
             "chainId": 195,

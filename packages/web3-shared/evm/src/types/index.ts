@@ -301,7 +301,6 @@ export enum NetworkType {
     Scroll = 'Scroll',
     Moonbeam = 'Moonbeam',
     X1 = 'X1',
-    X1_Testnet = 'X1_Testnet',
     CustomNetwork = 'CustomNetwork',
 }
 
