@@ -29,7 +29,7 @@ patchedDependencies:
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
   '@lifi/wallet-management@2.6.0':
-    hash: byrpsuycxtm5kx2c6ithojopmy
+    hash: fzbrvh3qcafhmhte22ph3j2im4
     path: patches/@lifi__wallet-management@2.6.0.patch
   '@lifi/widget@2.10.1':
     hash: gusgdpxsutrsv2sevb23zbpvmi
@@ -6689,7 +6689,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lifi/wallet-management@2.6.0(patch_hash=byrpsuycxtm5kx2c6ithojopmy)(@swc/core@1.3.106)(@types/react@18.2.48)(immer@10.0.2)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.2):
+  /@lifi/wallet-management@2.6.0(patch_hash=fzbrvh3qcafhmhte22ph3j2im4)(@swc/core@1.3.106)(@types/react@18.2.48)(immer@10.0.2)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.2):
     resolution: {integrity: sha512-XyjV5uVRerGcQdnTbU6cjz2z8N/6wUy7rVrNypJ9ILi5QLUh2eyE9OBku3zuTvri1SCvc04L6C1RnecFuNcPrA==}
     dependencies:
       '@coinbase/wallet-sdk': 3.9.2
@@ -6734,7 +6734,7 @@ packages:
     dev: false
     patched: true
 
-  /@lifi/wallet-management@2.6.0(patch_hash=byrpsuycxtm5kx2c6ithojopmy)(@swc/core@1.3.106)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.4):
+  /@lifi/wallet-management@2.6.0(patch_hash=fzbrvh3qcafhmhte22ph3j2im4)(@swc/core@1.3.106)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.4):
     resolution: {integrity: sha512-XyjV5uVRerGcQdnTbU6cjz2z8N/6wUy7rVrNypJ9ILi5QLUh2eyE9OBku3zuTvri1SCvc04L6C1RnecFuNcPrA==}
     dependencies:
       '@coinbase/wallet-sdk': 3.9.2
@@ -6800,7 +6800,7 @@ packages:
       '@ethersproject/experimental': 5.7.0
       '@ethersproject/providers': 5.7.2
       '@lifi/sdk': 2.5.0
-      '@lifi/wallet-management': 2.6.0(patch_hash=byrpsuycxtm5kx2c6ithojopmy)(@swc/core@1.3.106)(@types/react@18.2.48)(immer@10.0.2)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.2)
+      '@lifi/wallet-management': 2.6.0(patch_hash=fzbrvh3qcafhmhte22ph3j2im4)(@swc/core@1.3.106)(@types/react@18.2.48)(immer@10.0.2)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.2)
       '@mui/icons-material': 5.15.12(@mui/material@5.15.12)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/lab': 5.0.0-alpha.167(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.15.12)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/material': 5.15.12(patch_hash=pazpgmj4gmp6yuv75wbb5yvia4)(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -6869,7 +6869,7 @@ packages:
       '@ethersproject/experimental': 5.7.0
       '@ethersproject/providers': 5.7.2
       '@lifi/sdk': 2.5.0
-      '@lifi/wallet-management': 2.6.0(patch_hash=byrpsuycxtm5kx2c6ithojopmy)(@swc/core@1.3.106)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.4)
+      '@lifi/wallet-management': 2.6.0(patch_hash=fzbrvh3qcafhmhte22ph3j2im4)(@swc/core@1.3.106)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.4)
       '@mui/icons-material': 5.15.12(@mui/material@5.15.12)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/lab': 5.0.0-alpha.167(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.15.12)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@mui/material': 5.15.12(patch_hash=pazpgmj4gmp6yuv75wbb5yvia4)(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
