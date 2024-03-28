@@ -8,7 +8,7 @@ import { getUtils, getWeb3Connection } from '@masknet/web3-providers'
 import type { Connection } from '@masknet/web3-providers/types'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
 import { forwardRef, useRef } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 import { Spinner } from './Spinner.js'
 import { Icons } from '@masknet/icons'
@@ -123,11 +123,14 @@ export const ConnectWalletModal = forwardRef<
                 networkType: props.networkType,
                 providerType: props.providerType,
             }
-
-            const connected = await onConnect()
-            if (connected) dispatch?.close(true)
         },
     })
+
+    useAsync(async () => {
+        if (!open || !dispatch) return
+        const connected = await onConnect()
+        if (connected) dispatch.close(true)
+    }, [dispatch, open, onConnect])
 
     if (!open) return null
 
