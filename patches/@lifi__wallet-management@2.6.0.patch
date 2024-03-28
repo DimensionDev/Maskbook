@@ -1,0 +1,547 @@
+diff --git a/cjs/connectors/injectedConnector.js b/cjs/connectors/injectedConnector.js
+index da8347dc2097d71a3145b0b2b0fc5f5112185020..0eafa2de3277cad713d44f831661b87a92f21c50 100644
+--- a/cjs/connectors/injectedConnector.js
++++ b/cjs/connectors/injectedConnector.js
+@@ -6,131 +6,142 @@ const events_1 = require("events");
+ const walletAutomation_1 = require("../walletAutomation");
+ const walletPersistance_1 = require("../walletPersistance");
+ class InjectedConnector extends events_1.EventEmitter {
+-    constructor(constructorArgs, windowConnector = window.ethereum, autoConnect = false) {
+-        super();
+-        this.isActivationInProgress = false;
+-        this.initializeProvider(windowConnector);
+-        this.name = constructorArgs.name;
+-        this.icon = constructorArgs.icon;
+-        this.installed = constructorArgs.installed;
+-    }
+-    initializeProvider(connectorWindowProperty) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        this.windowProvider = connectorWindowProperty;
+-        this.windowProvider?.on('connect', async ({ chainId }) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('disconnect', async (error) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('chainChanged', async (chainId) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('accountsChanged', async (accounts) => {
+-            if (!accounts.length) {
+-                this.account = undefined;
+-                this.emit('walletAccountChanged', this);
+-                return;
+-            }
+-            await this.calcAccountData();
+-        });
+-    }
+-    async autoConnect() {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        if (this.isActivationInProgress) {
+-            return;
+-        }
+-        try {
+-            const selectedAddress = this.windowProvider.selectedAddress;
+-            if (!(0, walletPersistance_1.isWalletDeactivated)({
+-                address: selectedAddress || '',
+-                name: this.name,
+-            })) {
+-                await this.calcAccountData();
+-            }
+-        }
+-        catch (e) {
+-            throw e;
+-        }
+-    }
+-    async connect() {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        if (this.isActivationInProgress) {
+-            return;
+-        }
+-        this.isActivationInProgress = true;
+-        try {
+-            await this.windowProvider?.request({
+-                method: 'eth_requestAccounts',
+-            });
+-            await this.calcAccountData();
+-        }
+-        catch (error) {
+-            this.isActivationInProgress = false;
+-            throw error;
+-        }
+-        this.isActivationInProgress = false;
+-    }
+-    disconnect() {
++  constructor(
++    constructorArgs,
++    windowConnector = window.ethereum,
++    autoConnect = false
++  ) {
++    super();
++    this.isActivationInProgress = false;
++    this.initializeProvider(windowConnector);
++    this.name = constructorArgs.name;
++    this.icon = constructorArgs.icon;
++    this.installed = constructorArgs.installed;
++  }
++  initializeProvider(connectorWindowProperty) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    this.windowProvider = connectorWindowProperty;
++
++    if (typeof this.windowProvider?.on !== "function") return;
++
++    this.windowProvider?.on("connect", async ({ chainId }) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("disconnect", async (error) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("chainChanged", async (chainId) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("accountsChanged", async (accounts) => {
++      if (!accounts.length) {
+         this.account = undefined;
+-        this.isActivationInProgress = false;
+-    }
+-    async switchChain(chainId) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return (0, walletAutomation_1.switchChain)(this.account?.provider, chainId);
+-    }
+-    async addChain(chainId) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return (0, walletAutomation_1.addChain)(this.account?.provider, chainId);
+-    }
+-    async addToken(chainId, token) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return (0, walletAutomation_1.switchChainAndAddToken)(this.account?.provider, chainId, token);
+-    }
+-    async calcAccountData() {
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        const provider = new providers_1.Web3Provider(this.windowProvider, 'any');
+-        const accounts = await provider.listAccounts();
+-        if (!accounts.length) {
+-            return;
+-        }
+-        const signer = provider.getSigner();
+-        this.account = {
+-            chainId: await signer.getChainId(),
+-            address: await signer.getAddress(),
+-            signer,
+-            provider,
+-        };
+-        this.emit('walletAccountChanged', this);
++        this.emit("walletAccountChanged", this);
++        return;
++      }
++      await this.calcAccountData();
++    });
++  }
++  async autoConnect() {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    if (this.isActivationInProgress) {
++      return;
++    }
++    try {
++      const selectedAddress = this.windowProvider.selectedAddress;
++      if (
++        !(0, walletPersistance_1.isWalletDeactivated)({
++          address: selectedAddress || "",
++          name: this.name,
++        })
++      ) {
++        await this.calcAccountData();
++      }
++    } catch (e) {
++      throw e;
++    }
++  }
++  async connect() {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    if (this.isActivationInProgress) {
++      return;
++    }
++    this.isActivationInProgress = true;
++    try {
++      await this.windowProvider?.request({
++        method: "eth_requestAccounts",
++      });
++      await this.calcAccountData();
++    } catch (error) {
++      this.isActivationInProgress = false;
++      throw error;
++    }
++    this.isActivationInProgress = false;
++  }
++  disconnect() {
++    this.account = undefined;
++    this.isActivationInProgress = false;
++  }
++  async switchChain(chainId) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return (0, walletAutomation_1.switchChain)(this.account?.provider, chainId);
++  }
++  async addChain(chainId) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return (0, walletAutomation_1.addChain)(this.account?.provider, chainId);
++  }
++  async addToken(chainId, token) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return (0, walletAutomation_1.switchChainAndAddToken)(
++      this.account?.provider,
++      chainId,
++      token
++    );
++  }
++  async calcAccountData() {
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    const provider = new providers_1.Web3Provider(this.windowProvider, "any");
++    const accounts = await provider.listAccounts();
++    if (!accounts.length) {
++      return;
+     }
++    const signer = provider.getSigner();
++    this.account = {
++      chainId: await signer.getChainId(),
++      address: await signer.getAddress(),
++      signer,
++      provider,
++    };
++    this.emit("walletAccountChanged", this);
++  }
+ }
+ exports.InjectedConnector = InjectedConnector;
+diff --git a/connectors/injectedConnector.js b/connectors/injectedConnector.js
+index 291db15c0816b98d5827b2e9aa998a1cdd2516c2..b5fe73cbc9e566dd37b4af1d411ad55513fb165a 100644
+--- a/connectors/injectedConnector.js
++++ b/connectors/injectedConnector.js
+@@ -1,132 +1,143 @@
+-import { Web3Provider } from '@ethersproject/providers';
+-import { EventEmitter } from 'events';
+-import { addChain, switchChain, switchChainAndAddToken, } from '../walletAutomation';
+-import { isWalletDeactivated } from '../walletPersistance';
++import { Web3Provider } from "@ethersproject/providers";
++import { EventEmitter } from "events";
++import {
++  addChain,
++  switchChain,
++  switchChainAndAddToken,
++} from "../walletAutomation";
++import { isWalletDeactivated } from "../walletPersistance";
+ export class InjectedConnector extends EventEmitter {
+-    constructor(constructorArgs, windowConnector = window.ethereum, autoConnect = false) {
+-        super();
+-        this.isActivationInProgress = false;
+-        this.initializeProvider(windowConnector);
+-        this.name = constructorArgs.name;
+-        this.icon = constructorArgs.icon;
+-        this.installed = constructorArgs.installed;
+-    }
+-    initializeProvider(connectorWindowProperty) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        this.windowProvider = connectorWindowProperty;
+-        this.windowProvider?.on('connect', async ({ chainId }) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('disconnect', async (error) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('chainChanged', async (chainId) => {
+-            await this.calcAccountData();
+-        });
+-        this.windowProvider?.on('accountsChanged', async (accounts) => {
+-            if (!accounts.length) {
+-                this.account = undefined;
+-                this.emit('walletAccountChanged', this);
+-                return;
+-            }
+-            await this.calcAccountData();
+-        });
+-    }
+-    async autoConnect() {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        if (this.isActivationInProgress) {
+-            return;
+-        }
+-        try {
+-            const selectedAddress = this.windowProvider.selectedAddress;
+-            if (!isWalletDeactivated({
+-                address: selectedAddress || '',
+-                name: this.name,
+-            })) {
+-                await this.calcAccountData();
+-            }
+-        }
+-        catch (e) {
+-            throw e;
+-        }
+-    }
+-    async connect() {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        if (this.isActivationInProgress) {
+-            return;
+-        }
+-        this.isActivationInProgress = true;
+-        try {
+-            await this.windowProvider?.request({
+-                method: 'eth_requestAccounts',
+-            });
+-            await this.calcAccountData();
+-        }
+-        catch (error) {
+-            this.isActivationInProgress = false;
+-            throw error;
+-        }
+-        this.isActivationInProgress = false;
+-    }
+-    disconnect() {
++  constructor(
++    constructorArgs,
++    windowConnector = window.ethereum,
++    autoConnect = false
++  ) {
++    super();
++    this.isActivationInProgress = false;
++    this.initializeProvider(windowConnector);
++    this.name = constructorArgs.name;
++    this.icon = constructorArgs.icon;
++    this.installed = constructorArgs.installed;
++  }
++  initializeProvider(connectorWindowProperty) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    this.windowProvider = connectorWindowProperty;
++
++    if (typeof this.windowProvider?.on !== "function") return;
++
++    this.windowProvider?.on("connect", async ({ chainId }) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("disconnect", async (error) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("chainChanged", async (chainId) => {
++      await this.calcAccountData();
++    });
++    this.windowProvider?.on("accountsChanged", async (accounts) => {
++      if (!accounts.length) {
+         this.account = undefined;
+-        this.isActivationInProgress = false;
+-    }
+-    async switchChain(chainId) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return switchChain(this.account?.provider, chainId);
+-    }
+-    async addChain(chainId) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return addChain(this.account?.provider, chainId);
+-    }
+-    async addToken(chainId, token) {
+-        if (window === undefined) {
+-            throw new Error('window is not defined. This should not have happened.');
+-        }
+-        if (!this.account?.provider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        return switchChainAndAddToken(this.account?.provider, chainId, token);
+-    }
+-    async calcAccountData() {
+-        if (!this.windowProvider) {
+-            throw new Error('provider is not defined.');
+-        }
+-        const provider = new Web3Provider(this.windowProvider, 'any');
+-        const accounts = await provider.listAccounts();
+-        if (!accounts.length) {
+-            return;
+-        }
+-        const signer = provider.getSigner();
+-        this.account = {
+-            chainId: await signer.getChainId(),
+-            address: await signer.getAddress(),
+-            signer,
+-            provider,
+-        };
+-        this.emit('walletAccountChanged', this);
++        this.emit("walletAccountChanged", this);
++        return;
++      }
++      await this.calcAccountData();
++    });
++  }
++  async autoConnect() {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    if (this.isActivationInProgress) {
++      return;
++    }
++    try {
++      const selectedAddress = this.windowProvider.selectedAddress;
++      if (
++        !isWalletDeactivated({
++          address: selectedAddress || "",
++          name: this.name,
++        })
++      ) {
++        await this.calcAccountData();
++      }
++    } catch (e) {
++      throw e;
++    }
++  }
++  async connect() {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    if (this.isActivationInProgress) {
++      return;
++    }
++    this.isActivationInProgress = true;
++    try {
++      await this.windowProvider?.request({
++        method: "eth_requestAccounts",
++      });
++      await this.calcAccountData();
++    } catch (error) {
++      this.isActivationInProgress = false;
++      throw error;
++    }
++    this.isActivationInProgress = false;
++  }
++  disconnect() {
++    this.account = undefined;
++    this.isActivationInProgress = false;
++  }
++  async switchChain(chainId) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return switchChain(this.account?.provider, chainId);
++  }
++  async addChain(chainId) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return addChain(this.account?.provider, chainId);
++  }
++  async addToken(chainId, token) {
++    if (window === undefined) {
++      throw new Error("window is not defined. This should not have happened.");
++    }
++    if (!this.account?.provider) {
++      throw new Error("provider is not defined.");
++    }
++    return switchChainAndAddToken(this.account?.provider, chainId, token);
++  }
++  async calcAccountData() {
++    if (!this.windowProvider) {
++      throw new Error("provider is not defined.");
++    }
++    const provider = new Web3Provider(this.windowProvider, "any");
++    const accounts = await provider.listAccounts();
++    if (!accounts.length) {
++      return;
+     }
++    const signer = provider.getSigner();
++    this.account = {
++      chainId: await signer.getChainId(),
++      address: await signer.getAddress(),
++      signer,
++      provider,
++    };
++    this.emit("walletAccountChanged", this);
++  }
+ }

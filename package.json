@@ -148,7 +148,8 @@
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
       "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
-      "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch"
+      "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
+      "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch"
     }
   }
 }
