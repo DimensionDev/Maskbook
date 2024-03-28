@@ -23,6 +23,7 @@ import { LiFiWidget, type WidgetConfig, type WidgetDrawer } from '@lifi/widget'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { Web3Provider } from '@ethersproject/providers'
 import { AccountManager } from '../../components/AccountManager.js'
+import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -106,8 +107,8 @@ export default function SwapPage() {
     const walletName = useMemo(() => {
         if (domain) return domain
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
-        return providerDescriptor?.name || Utils.formatAddress(account, 4)
-    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name, Utils.formatAddress])
+        return Utils.formatAddress(account, 4)
+    }, [account, domain, providerType, wallet?.name, Utils.formatAddress])
 
     const init = useCallback(() => {
         applyMaskColorVars(document.body, Appearance.light)
@@ -139,15 +140,18 @@ export default function SwapPage() {
                 },
             },
             chains: {
-                deny: [324],
+                allow: TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM].supportedChainIds ?? [],
             },
             walletManagement: {
-                signer: getSigner(),
-                switchChain: async (chainId: ChainId) => {
-                    const providerType = Provider?.providerType?.getCurrentValue()
-                    await EVMWeb3.switchChain(chainId, { silent: providerType === ProviderType.MaskWallet })
-                    return getSigner(chainId)
-                },
+                signer: account ? getSigner() : undefined,
+                switchChain:
+                    account ?
+                        async (chainId: ChainId) => {
+                            const providerType = Provider?.providerType?.getCurrentValue()
+                            await EVMWeb3.switchChain(chainId, { silent: providerType === ProviderType.MaskWallet })
+                            return getSigner(chainId)
+                        }
+                    :   undefined,
                 connect: async () => {
                     if (providerType === ProviderType.None) await SelectProviderModal.openAndWaitForClose()
                     return getSigner()
@@ -182,7 +186,11 @@ export default function SwapPage() {
                                 />
                                 <Typography className={classes.walletName}>{walletName}</Typography>
                             </Box>
-                        :   <ActionButton variant="roundedContained" onClick={() => SelectProviderModal.open()}>
+                        :   <ActionButton
+                                variant="roundedContained"
+                                onClick={() =>
+                                    SelectProviderModal.open({ requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM })
+                                }>
                                 {t.connect()}
                             </ActionButton>
                         }
