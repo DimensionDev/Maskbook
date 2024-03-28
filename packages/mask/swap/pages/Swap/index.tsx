@@ -153,7 +153,10 @@ export default function SwapPage() {
                         }
                     :   undefined,
                 connect: async () => {
-                    if (providerType === ProviderType.None) await SelectProviderModal.openAndWaitForClose()
+                    if (providerType === ProviderType.None)
+                        await SelectProviderModal.openAndWaitForClose({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                        })
                     return getSigner()
                 },
                 disconnect: async () => {},
