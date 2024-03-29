@@ -72,10 +72,10 @@ export const AccountManager = memo<AccountManagerProps>(function AccountManager(
 
     const handleDisconnect = useCallback(async () => {
         try {
-            onClose()
             await EVMWeb3.disconnect({
                 providerType,
             })
+            onClose()
         } catch {
             console.error('Failed to disconnect')
         }

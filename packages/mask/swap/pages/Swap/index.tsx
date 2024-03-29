@@ -178,7 +178,7 @@ export default function SwapPage() {
                     </div>
                     <header className={classes.header}>
                         <Icons.Mask width={140} height={40} variant={'light'} />
-                        {account ?
+                        {account || !!anchorEl ?
                             <Box className={classes.connect} onClick={(event) => setAnchorEl(event.currentTarget)}>
                                 <WalletIcon
                                     size={30}
