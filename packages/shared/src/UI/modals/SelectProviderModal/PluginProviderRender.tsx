@@ -270,42 +270,46 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                         ))}
                     </List>
                 </section>
-                <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
-                    {t.not_installed_or_conflict()}
-                </Typography>
-                <section className={classes.section}>
-                    <List className={classes.wallets}>
-                        {unavailableProviders.map((provider) => (
-                            <ShadowRootTooltip
-                                title={getDisabled(provider) ? '' : getTips(provider.type)}
-                                arrow
-                                placement="top"
-                                disableInteractive
-                                key={provider.ID}>
-                                <ListItem
-                                    className={cx(
-                                        classes.walletItem,
-                                        getDisabled(provider) ? classes.disabledWalletItem : '',
-                                    )}
-                                    disabled={getDisabled(provider)}
-                                    onClick={() => {
-                                        if (provider.type === ProviderType.WalletConnect) {
-                                            handleClick(provider, ChainId.Mainnet)
-                                        } else {
-                                            handleClick(provider)
-                                        }
-                                    }}>
-                                    <ProviderItem
-                                        className={classes.providerIcon}
-                                        icon={provider.icon}
-                                        name={provider.name}
-                                        iconFilterColor={provider.iconFilterColor}
-                                    />
-                                </ListItem>
-                            </ShadowRootTooltip>
-                        ))}
-                    </List>
-                </section>
+                {unavailableProviders.length ?
+                    <>
+                        <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
+                            {t.not_installed_or_conflict()}
+                        </Typography>
+                        <section className={classes.section}>
+                            <List className={classes.wallets}>
+                                {unavailableProviders.map((provider) => (
+                                    <ShadowRootTooltip
+                                        title={getDisabled(provider) ? '' : getTips(provider.type)}
+                                        arrow
+                                        placement="top"
+                                        disableInteractive
+                                        key={provider.ID}>
+                                        <ListItem
+                                            className={cx(
+                                                classes.walletItem,
+                                                getDisabled(provider) ? classes.disabledWalletItem : '',
+                                            )}
+                                            disabled={getDisabled(provider)}
+                                            onClick={() => {
+                                                if (provider.type === ProviderType.WalletConnect) {
+                                                    handleClick(provider, ChainId.Mainnet)
+                                                } else {
+                                                    handleClick(provider)
+                                                }
+                                            }}>
+                                            <ProviderItem
+                                                className={classes.providerIcon}
+                                                icon={provider.icon}
+                                                name={provider.name}
+                                                iconFilterColor={provider.iconFilterColor}
+                                            />
+                                        </ListItem>
+                                    </ShadowRootTooltip>
+                                ))}
+                            </List>
+                        </section>
+                    </>
+                :   null}
             </Box>
             {usePortalShadowRoot((container) => (
                 <Dialog

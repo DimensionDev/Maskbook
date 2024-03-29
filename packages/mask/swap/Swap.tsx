@@ -6,7 +6,8 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { queryClient } from '@masknet/shared-base-ui'
 import { queryPersistOptions } from '../shared-ui/index.js'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { PageUIProvider } from '@masknet/shared'
+import { Modals, PageUIProvider } from '@masknet/shared'
+import { noop } from 'lodash-es'
 
 const useTheme = () => MaskLightTheme
 export default function Swap() {
@@ -21,6 +22,7 @@ export default function Swap() {
                     <EVMWeb3ContextProvider>
                         <ThemeProvider theme={MaskLightTheme}>
                             <SwapPage />
+                            <Modals createWallet={noop} />
                         </ThemeProvider>
                     </EVMWeb3ContextProvider>
                 </PopupSnackbarProvider>,

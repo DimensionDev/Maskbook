@@ -480,7 +480,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
@@ -495,7 +495,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://www.coinbase.com/wallet',
         shortenLink: 'coinbase.com',
@@ -510,7 +510,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://tokenpocket.pro/',
         shortenLink: 'tokenpocket.pro',
@@ -613,7 +613,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://web3.bitget.com/',
         shortenLink: 'web3.bitget.com',
@@ -630,7 +630,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://onekey.so/',
         shortenLink: 'onekey.so',
@@ -647,7 +647,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://rabby.io/',
         shortenLink: 'rabby.io',
@@ -664,7 +664,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://rainbow.me/',
         shortenLink: 'rainbow.me',
@@ -681,7 +681,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://trustwallet.com/',
         shortenLink: 'trustwallet.com',
@@ -698,7 +698,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         enableRequirements: {
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
+            supportedExtensionSites: [],
         },
         homeLink: 'https://zerion.io/',
         shortenLink: 'zerion.io',

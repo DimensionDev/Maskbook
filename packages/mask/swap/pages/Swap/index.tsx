@@ -153,7 +153,10 @@ export default function SwapPage() {
                         }
                     :   undefined,
                 connect: async () => {
-                    if (providerType === ProviderType.None) await SelectProviderModal.openAndWaitForClose()
+                    if (providerType === ProviderType.None)
+                        await SelectProviderModal.openAndWaitForClose({
+                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
+                        })
                     return getSigner()
                 },
                 disconnect: async () => {},
@@ -175,7 +178,7 @@ export default function SwapPage() {
                     </div>
                     <header className={classes.header}>
                         <Icons.Mask width={140} height={40} variant={'light'} />
-                        {account ?
+                        {account || !!anchorEl ?
                             <Box className={classes.connect} onClick={(event) => setAnchorEl(event.currentTarget)}>
                                 <WalletIcon
                                     size={30}
