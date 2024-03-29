@@ -117,14 +117,14 @@ export const ConnectWalletModal = forwardRef<
     }, [])
 
     const [open, dispatch] = useSingletonModal(ref, {
-        async onOpen(props, close) {
+        async onOpen(props, dispatch) {
             connectionRef.current = {
                 pluginID: props.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                 networkType: props.networkType,
                 providerType: props.providerType,
             }
             const connected = await onConnect()
-            if (connected) close(true)
+            if (connected) dispatch.close(true)
         },
     })
 
