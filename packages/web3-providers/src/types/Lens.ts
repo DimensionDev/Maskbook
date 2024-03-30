@@ -50,11 +50,9 @@ export namespace LensBaseAPI {
         metadata?: {
             bio: string
             displayName: string
-            picture?: {
-                optimized: {
-                    uri: string
-                }
-            }
+            picture?:
+                | { optimized: { uri: string } | null; raw: { uri: string } }
+                | { image: { optimized: { uri: string } | null; raw: { uri: string } } }
             coverPicture?: {
                 optimized: {
                     uri: string
