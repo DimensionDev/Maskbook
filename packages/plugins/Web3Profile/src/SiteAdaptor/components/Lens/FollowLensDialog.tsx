@@ -18,7 +18,7 @@ import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
-import { getLensterLink } from '../../../utils.js'
+import { getLensterLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
@@ -316,10 +316,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         return
     }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
 
-    const avatar = useMemo(() => {
-        if (!profile?.metadata?.picture?.optimized.uri) return
-        return profile.metadata.picture.optimized.uri
-    }, [profile?.metadata?.picture?.optimized.uri])
+    const avatar = useMemo(() => getProfileAvatar(profile), [profile])
 
     const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
         setCurrentProfile(profile)

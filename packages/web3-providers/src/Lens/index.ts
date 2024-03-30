@@ -32,6 +32,9 @@ const LensProfileQuery = `
                   }
                   ... on NftImage {
                       image {
+                          optimized {
+                              uri
+                          }
                           raw {
                               uri
                           }
