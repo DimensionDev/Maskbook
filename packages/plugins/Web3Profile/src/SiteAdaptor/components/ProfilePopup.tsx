@@ -20,6 +20,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import { getProfileAvatar } from '../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -152,7 +153,8 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 horizontal: 'right',
             }}>
             <List disablePadding className={classes.list}>
-                {profiles?.map((profile) => {
+                {profiles.map((profile) => {
+                    const avatar = getProfileAvatar(profile)
                     return (
                         <ListItemButton
                             className={classes.item}
@@ -162,11 +164,11 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                 onChange(profile)
                             }}>
                             <ListItemIcon>
-                                {profile.metadata?.picture?.optimized.uri ?
+                                {avatar ?
                                     <Image
                                         className={classes.avatar}
                                         size={36}
-                                        src={profile.metadata.picture.optimized.uri}
+                                        src={avatar}
                                         fallback={<Icons.Lens size={36} className={classes.avatar} />}
                                     />
                                 :   <Icons.Lens size={36} className={classes.avatar} />}
