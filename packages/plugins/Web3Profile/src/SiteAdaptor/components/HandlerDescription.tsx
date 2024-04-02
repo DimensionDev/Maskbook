@@ -16,6 +16,7 @@ import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ProfilePopup } from './ProfilePopup.js'
 import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
+import { getProfileAvatar } from '../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -97,17 +98,12 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
         )
     }
 
+    const avatar = getProfileAvatar(currentProfile) || new URL('../assets/Lens.png', import.meta.url).href
+
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
-                <WalletIcon
-                    classes={{ mainIcon: classes.avatar }}
-                    size={36}
-                    mainIcon={
-                        currentProfile.metadata?.picture?.optimized.uri ||
-                        new URL('../assets/Lens.png', import.meta.url).href
-                    }
-                />
+                <WalletIcon classes={{ mainIcon: classes.avatar }} size={36} mainIcon={avatar} />
                 <Box>
                     <Typography className={classes.name}>
                         {currentProfile.metadata?.displayName ?? currentProfile.handle.localName}
