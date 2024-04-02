@@ -29,6 +29,7 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             position: 'relative',
             display: 'flex',
             backgroundColor: 'transparent',
+            backgroundRepeat: 'no-repeat',
             color: theme.palette.common.white,
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -36,11 +37,11 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             marginLeft: 'auto',
             marginRight: 'auto',
             boxSizing: 'border-box',
+            width: 'calc(100% - 32px)',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
-                height: 202,
+                width: 'calc(100% - 20px)',
             },
-            width: 'calc(100% - 32px)',
         },
         fireflyRoot: {
             aspectRatio: '10 / 7',
@@ -69,6 +70,9 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             zIndex: 9,
             inset: 0,
             margin: 'auto',
+            [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
+                width: 'auto',
+            },
         },
         header: {
             display: 'flex',
@@ -374,6 +378,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     <img className={classes.cover} src={cover.url!} />
                 :   null}
                 <img
+                    aria-label="Token"
                     src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}
                 />

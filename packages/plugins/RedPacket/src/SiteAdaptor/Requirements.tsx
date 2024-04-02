@@ -17,6 +17,9 @@ const useStyles = makeStyles()((theme) => ({
         color: MaskColors.dark.text.primary,
         borderRadius: 16,
         padding: theme.spacing(2, 3),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            padding: theme.spacing(1, 1),
+        },
     },
     header: {
         fontSize: 16,
@@ -24,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         paddingBottom: theme.spacing(2),
         borderBottom: `1px solid ${theme.palette.common.white}`,
-
         display: 'flex',
         alignItems: 'center',
     },
