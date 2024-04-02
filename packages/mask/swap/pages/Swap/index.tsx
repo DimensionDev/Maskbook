@@ -124,6 +124,15 @@ export default function SwapPage() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const signer = new Web3Provider(provider, 'any').getSigner()
+
+            /**
+             * Wallet Connect does not support the eth_accounts and eth_chainIds methods,
+             * so we can only manually hack it a bit.
+             */
+            if (providerType === ProviderType.WalletConnect) {
+                signer.getAddress = async () => account
+                signer.getChainId = async () => chainId
+            }
             return signer
         },
         [Provider, chainId, account],
@@ -153,10 +162,13 @@ export default function SwapPage() {
                         }
                     :   undefined,
                 connect: async () => {
-                    if (providerType === ProviderType.None)
-                        await SelectProviderModal.openAndWaitForClose({
+                    if (providerType === ProviderType.None || !account) {
+                        const result = await SelectProviderModal.openAndWaitForClose({
                             requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
                         })
+
+                        if (!result) throw new Error('No wallet is connected.')
+                    }
                     return getSigner()
                 },
                 disconnect: async () => {},
@@ -167,7 +179,7 @@ export default function SwapPage() {
                 overflow: 'auto',
             },
         }
-    }, [theme, providerType, getSigner])
+    }, [theme, providerType, getSigner, account])
 
     return (
         <SharedContextProvider>
