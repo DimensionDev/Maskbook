@@ -168,7 +168,7 @@ export default function Popups() {
     )
 
     useIdleTimer({
-        onAction: !location.hash.includes('/swap') ? Services.Wallet.setAutoLockTimer : noop,
+        onAction: !location.hash.includes('/swap') ? () => Services.Wallet.setAutoLockTimer() : noop,
         throttle: 10000,
     })
     useEffect(() => {
