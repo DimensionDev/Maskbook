@@ -91,7 +91,7 @@ class TickManager {
         this.raf = window.requestAnimationFrame(this.onTick)
 
         this.updateTime()
-        this.propogate()
+        this.propagate()
     }
 
     updateTime() {
@@ -103,7 +103,7 @@ class TickManager {
         this.state.time.stamp = Date.now()
     }
 
-    propogate() {
+    propagate() {
         const { delta, elapsed, stamp } = this.state.time
         const keys = Object.keys(this.stack)
 
