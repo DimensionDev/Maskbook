@@ -8,7 +8,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles<{ isDarkFont?: boolean }>()((theme, { isDarkFont }) => ({
     linkIcon: {
-        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : theme.palette.maskColor.secondaryMain,
+        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : '',
         height: 16,
         width: 16,
     },
@@ -20,7 +20,7 @@ const useStyles = makeStyles<{ isDarkFont?: boolean }>()((theme, { isDarkFont })
         height: 16,
     },
     creator: {
-        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : theme.palette.maskColor.secondaryMain,
+        color: isDarkFont ? theme.palette.maskColor.secondaryMainDark : '',
     },
 }))
 
