@@ -64,7 +64,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
 
     const widgetConfig = useMemo<WidgetConfig>(() => {
         return {
-            integrator: 'Mask Network',
+            integrator: 'MaskNetwork',
             variant: 'expandable',
             theme: {
                 palette: {
