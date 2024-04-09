@@ -12,6 +12,7 @@ import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { TRADER_WEB3_CONFIG } from '../../config.js'
+import { DeleteOutline } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -38,7 +39,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
 
     const widgetRef = useRef<WidgetDrawer>(null)
     const [showActions, setShowActions] = useState(true)
-
+    const [showDelete, setShowDelete] = useState(false)
     const handleBackOrClose = useCallback(() => {
         if (widgetRef.current?.isHome) {
             onClose()
@@ -105,6 +106,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                             className={classes.icon}
                             onClick={() => {
                                 setShowActions(false)
+                                setShowDelete(true)
                                 widgetRef.current?.navigateToTransaction?.()
                             }}
                         />
@@ -117,6 +119,8 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                             }}
                         />
                     </Box>
+                : showDelete ?
+                    <DeleteOutline onClick={widgetRef.current?.deleteTransactions} />
                 :   null
             }>
             <DialogContent

@@ -73,7 +73,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
 
     const handleSwap = useCallback(() => {
         if (disabledSwap) return
-        const url = 'swap.html#/'
+        const url = urlcat('swap.html/#/', { chainId, address: asset?.address })
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, disabledSwap])
 
