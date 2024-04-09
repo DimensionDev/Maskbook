@@ -25,7 +25,7 @@ export interface CopyButtonProps
 }
 
 export interface CopyButtonRef {
-    handleCopy: (ev: MouseEvent<unknown>) => void
+    handleCopy: (ev: MouseEvent) => void
 }
 
 export const CopyButton = memo(
@@ -42,7 +42,7 @@ export const CopyButton = memo(
         const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
         const handleCopy = useCallback(
-            async (ev: MouseEvent<HTMLAnchorElement>) => {
+            async (ev: MouseEvent) => {
                 if (scoped) {
                     ev.stopPropagation()
                     ev.preventDefault()
