@@ -91,7 +91,6 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
-
     const [anchorEl, setAnchorEl] = useState<HTMLElement>()
     const [containerRef, setContainerRef] = useState<HTMLElement>()
     const { pluginID } = useNetworkContext()
@@ -139,7 +138,14 @@ export default function SwapPage() {
     )
 
     const widgetConfig = useMemo<WidgetConfig>(() => {
+        const search = new URLSearchParams(location.hash.replace('#/', ''))
+
+        const toChain = search.get('chainId')
+        const toToken = search.get('address')
+
         return {
+            toChain: toChain ? Number(toChain) : undefined,
+            toToken: toToken ? toToken : undefined,
             integrator: 'Mask Network',
             variant: 'expandable',
             theme: {
@@ -178,6 +184,7 @@ export default function SwapPage() {
                 maxHeight: '100%',
                 overflow: 'auto',
             },
+            maxHeight: 644,
         }
     }, [theme, providerType, getSigner, account])
 
