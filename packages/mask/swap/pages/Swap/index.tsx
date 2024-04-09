@@ -146,7 +146,7 @@ export default function SwapPage() {
         return {
             toChain: toChain ? Number(toChain) : undefined,
             toToken: toToken ? toToken : undefined,
-            integrator: 'Mask Network',
+            integrator: 'MaskNetwork',
             variant: 'expandable',
             theme: {
                 palette: {
