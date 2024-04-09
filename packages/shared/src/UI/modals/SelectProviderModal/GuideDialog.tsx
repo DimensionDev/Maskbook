@@ -81,7 +81,7 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                     <Typography mt={1.5} fontSize={14}>
                         {t.enable_wallet_and_disable_others({ name })}
                     </Typography>
-                    <Stack className={classes.card}>
+                    <Stack className={classes.card} style={{ cursor: 'default' }}>
                         <Stack flexDirection="row" alignItems="center">
                             <img width={30} height={30} src={provider.icon} />
                             <Typography ml={1.5} fontSize={16}>
@@ -91,7 +91,7 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                         <Stack flexDirection="row" mt={3}>
                             <div className={classes.button}>{t.details()}</div>
                             <div className={classes.button}>{t.remove()}</div>
-                            <Switch checked />
+                            <Switch checked style={{ cursor: 'default' }} />
                         </Stack>
                     </Stack>
                 </section>
