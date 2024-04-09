@@ -42,7 +42,7 @@ function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
         const map = {
             WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
         }
-        return map[key] ?? ''
+        return map[key] || ''
     } catch {
         return ''
     }

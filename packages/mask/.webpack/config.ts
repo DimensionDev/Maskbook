@@ -1,26 +1,25 @@
 /* spell-checker: disable */
 import webpack from 'webpack'
-const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
+const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 
-import WebExtensionPlugin from 'webpack-target-webextension'
-import TerserPlugin from 'terser-webpack-plugin'
-import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
-import CopyPlugin from 'copy-webpack-plugin'
-import HTMLPlugin from 'html-webpack-plugin'
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
-import { emitManifestFile } from './plugins/manifest.js'
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
+import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
+import HTMLPlugin from 'html-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import WebExtensionPlugin from 'webpack-target-webextension'
 import { getGitInfo } from './git-info.js'
+import { emitManifestFile } from './plugins/manifest.js'
 
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { join } from 'node:path'
 
-import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
-import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
+import { computeCacheKey, computedBuildFlags, normalizeBuildFlags, type BuildFlags } from './flags.js'
 import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
+import { joinEntryItem, normalizeEntryDescription, type EntryDescription } from './utils.js'
 
 import './clean-hmr.js'
 import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
@@ -42,6 +41,16 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
+
+    let WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC || ''
+    if (WEB3_CONSTANTS_RPC) {
+        try {
+            if (typeof JSON.parse(WEB3_CONSTANTS_RPC) === 'object') {
+                console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
+                WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
+            }
+        } catch (err) {}
+    }
     const baseConfig = {
         name: 'mask',
         // to set a correct base path for source map
@@ -192,8 +201,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new EnvironmentPlugin({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
                 NODE_DEBUG: false,
-                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
-                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
+                /** JSON.stringify twice */
+                WEB3_CONSTANTS_RPC: WEB3_CONSTANTS_RPC,
+                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
             new DefinePlugin({
