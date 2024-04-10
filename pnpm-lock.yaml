@@ -6782,7 +6782,7 @@ packages:
   /@lifi/widget@2.10.1(patch_hash=gusgdpxsutrsv2sevb23zbpvmi)(@swc/core@1.3.106)(@types/react@18.2.48)(immer@10.0.2)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.2):
     resolution: {integrity: sha512-Tn/pq7/fh9aAHnnwuPYYznJ6IN+/5oUKP1qlCc/0iB3lJfeTq23ybkmNEqF90JrGGRkX6zvhs73Cl3vBJskg0w==}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^18.0.0
       react: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-dom: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -6851,7 +6851,7 @@ packages:
   /@lifi/widget@2.10.1(patch_hash=gusgdpxsutrsv2sevb23zbpvmi)(@swc/core@1.3.106)(@types/react@18.2.48)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)(typescript@5.4.2)(zod@3.22.4):
     resolution: {integrity: sha512-Tn/pq7/fh9aAHnnwuPYYznJ6IN+/5oUKP1qlCc/0iB3lJfeTq23ybkmNEqF90JrGGRkX6zvhs73Cl3vBJskg0w==}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^18.0.0
       react: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-dom: ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -7368,7 +7368,7 @@ packages:
     resolution: {integrity: sha512-AsjD6Y1X5A1qndxz8xCcR8LDqv31aiwlgWMPxFAX/kCKiIGKlK65yMeVZ62iQr/6LBz+9hSKLiD1i4TZdAHKcQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -7401,7 +7401,7 @@ packages:
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@mui/material': ^5.0.0
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
       '@mui/material':
@@ -7424,7 +7424,7 @@ packages:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
       '@mui/material': '>=5.15.0'
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -7462,7 +7462,7 @@ packages:
     peerDependencies:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
       react-dom: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -7501,7 +7501,7 @@ packages:
     resolution: {integrity: sha512-cqoSo9sgA5HE+8vZClbLrq9EkyOnYysooepi5eKaKvJ41lReT2c5wOZAeDDM1+xknrMDos+0mT2zr3sZmUiRRA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
       '@types/react':
@@ -7546,7 +7546,7 @@ packages:
     peerDependencies:
       '@emotion/react': ^11.5.0
       '@emotion/styled': ^11.3.0
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
       '@emotion/react':
@@ -7575,7 +7575,7 @@ packages:
   /@mui/types@7.2.13(@types/react@18.2.48):
     resolution: {integrity: sha512-qP9OgacN62s+l8rdDhSFRe05HWtLLJ5TGclC9I1+tQngbssu0m2dmFZs+Px53AcOs9fD7TbYd4gc9AXzVqO/+g==}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -7587,7 +7587,7 @@ packages:
     resolution: {integrity: sha512-8SDGCnO2DY9Yy+5bGzu00NZowSDtuyHP4H8gunhHGQoIlhlY2Z3w64wBzAOLpYw/ZhJNzksDTnS/i8qdJvxuow==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
       '@types/react':
@@ -7904,7 +7904,7 @@ packages:
     resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>= 5'
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
     dev: true
@@ -8248,7 +8248,7 @@ packages:
       react-refresh: '>=0.10.0 <1.0.0'
       sockjs-client: ^1.4.0
       type-fest: '>=0.17.0 <5.0.0'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>=4.43.0 <6.0.0'
       webpack-dev-server: 3.x || 4.x
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
@@ -9363,7 +9363,7 @@ packages:
   /@tanstack/react-query-persist-client@4.36.1(@tanstack/react-query@5.8.7):
     resolution: {integrity: sha512-32I5b9aAu4NCiXZ7Te/KEQLfHbYeTNriVPrKYcvEThnZ9tlW01vLcSoxpUIsMYRsembvJUUAkzYBAiZHLOd6pQ==}
     peerDependencies:
-      '@tanstack/react-query': ^5.8.7
+      '@tanstack/react-query': ^4.36.1
     dependencies:
       '@tanstack/query-persist-client-core': 4.36.1
       '@tanstack/react-query': 5.8.7(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@18.2.0)
@@ -11538,7 +11538,7 @@ packages:
     resolution: {integrity: sha512-wy0mglZpDSiSS0XHrVR+BAdId2+yxPSoJW8fsna3ZpYSlufjvxnP4YbKTCBZnNIcGN4r6ZPXV55X4mYExOfLmw==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
@@ -11548,7 +11548,7 @@ packages:
     resolution: {integrity: sha512-zLHQdI/Qs1UyT5UBdWNqsARasIA+AaF8t+4u2aS2nEpBQh2mWIVb8qAklq0eUENnC5mOItrIB4LiS9xMtph18A==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
@@ -11558,7 +11558,7 @@ packages:
     resolution: {integrity: sha512-lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-cli: 5.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -13939,7 +13939,7 @@ packages:
     resolution: {integrity: sha512-fX2MWpamkW0hZxMEg0+mYnA40LTosOSa5TqZ9GYIBzyJa9C3QUaMPSE2xAi/buNr8u89SfD9wHSQVBzrRa/SOQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.1.0
     dependencies:
       fast-glob: 3.2.12
       glob-parent: 6.0.2
@@ -13990,7 +13990,7 @@ packages:
     resolution: {integrity: sha512-BabizFdC3wBHhbI4kJh0VkQP9GkBfoHPydD0COMce1nJ1kJAB3F2TmJ/I7diULBKtmEWSwEbuN/KDtgnmUUVmw==}
     engines: {node: '>=v14.21.3'}
     peerDependencies:
-      '@types/node': 20.11.9
+      '@types/node': '*'
       cosmiconfig: '>=7'
       ts-node: '>=10'
       typescript: '>=4 || 5'
@@ -15010,7 +15010,7 @@ packages:
     resolution: {integrity: sha512-pJ/NGZTQxK1VDoyy8fLm0UV3ugOanostztLKUmzqYnUIKqyUm2ZkIpon6No0gWlpOSMoSpBWTnzrx1cdsbpuyw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.20.0
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
     dev: true
@@ -16678,7 +16678,7 @@ packages:
     resolution: {integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^4.0.0 || ^5.0.0
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
@@ -17902,7 +17902,7 @@ packages:
     resolution: {integrity: sha512-6YrDKTuqaP/TquFH7h4srYWsZx+x6k6+FbsTm0ziCwGHDP78Unr1r9F/H4+sGmMbX08GQcJ+K64x55b+7VM/jg==}
     engines: {node: '>=10.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.20.0
     dependencies:
       '@types/html-minifier-terser': 6.0.0
       html-minifier-terser: 6.0.2
@@ -19318,7 +19318,7 @@ packages:
     resolution: {integrity: sha512-MG3INjByJ0J4AsNBm7T3hsuxKQqFIiRo/AUqb1q9LRKI5UU6Aar9JHbr9Ivn1TVwfUD9KirRoM/T6u8XlcQPHQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
     peerDependencies:
-      '@types/node': 20.11.9
+      '@types/node': '*'
       ts-node: '>=9.0.0'
     peerDependenciesMeta:
       '@types/node':
@@ -23381,7 +23381,7 @@ packages:
   /react-markdown@8.0.7(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026):
     resolution: {integrity: sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': '>=16'
       react: '>=16 || 0.0.0-experimental-8039e6d0b-20231026'
     peerDependenciesMeta:
       react:
@@ -24871,7 +24871,7 @@ packages:
     resolution: {integrity: sha512-oqXpzDIByKONVY8g1NUPOTQhe0UTU5bWUl32GSkqK2LjJj0HmwTMVKxcUip0RgAYhY1mqgOxjbQM48a0mmeNfA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.72.1
     dependencies:
       abab: 2.0.6
       iconv-lite: 0.6.3
@@ -25503,7 +25503,7 @@ packages:
     resolution: {integrity: sha512-D1p6XXURfSPleZZA/Lipb3A8pZ17fP4NObZvFCDjK/OKljroqDpPmsBdTraWhVBqUNpcWBQY1imWdoPScRlQ7A==}
     peerDependencies:
       '@swc/core': ^1.2.147
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: '>=2'
     dependencies:
       '@swc/core': 1.3.106
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
@@ -25568,7 +25568,7 @@ packages:
       '@swc/core': '*'
       esbuild: '*'
       uglify-js: '*'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.1.0
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -25971,7 +25971,7 @@ packages:
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
-      '@types/node': 20.11.9
+      '@types/node': '*'
       typescript: '>=2.7 || 5'
     peerDependenciesMeta:
       '@swc/core':
@@ -26822,7 +26822,7 @@ packages:
     resolution: {integrity: sha512-1XfIxnUXzyswPAPXo1P3Pdx2mq/pIqZICkWN60Hby0d9Iqb+MEIpqgYVlbflvHdrp2YR/q3jyKWRPJJ100yxaw==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': '>=16.8'
       react: '>=16.8 || 0.0.0-experimental-8039e6d0b-20231026'
     peerDependenciesMeta:
       '@types/react':
@@ -27012,7 +27012,7 @@ packages:
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
-      '@types/node': 20.11.9
+      '@types/node': '>= 14'
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
@@ -27647,7 +27647,7 @@ packages:
     hasBin: true
     peerDependencies:
       '@webpack-cli/generators': '*'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: 5.x.x
       webpack-bundle-analyzer: '*'
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -27678,7 +27678,7 @@ packages:
     resolution: {integrity: sha512-hj5CYrY0bZLB+eTO+x/j67Pkrquiy7kWepMHmUMoPsmcUaeEnQJqFzHJOyxgWlq746/wUuA64p9ta34Kyb01pA==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^4.0.0 || ^5.0.0
     dependencies:
       colorette: 2.0.19
       memfs: 3.4.10
@@ -27692,7 +27692,7 @@ packages:
     engines: {node: '>= 12.13.0'}
     hasBin: true
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^4.37.0 || ^5.0.0
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -27753,7 +27753,7 @@ packages:
     resolution: {integrity: sha512-ip7ljKtjRmXKjuLZLo8jzcQjV3nuVPI1U+AUcx6PGJXC/+7apt20wbSVfOKnXDhHhijzP44qe/1qSgR8C+HgZg==}
     engines: {node: '>=14.17.6'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: ^5.0.0
     dependencies:
       webpack: github.com/Jack-Works/webpack/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.3.106)(webpack-cli@5.1.4)
     dev: true
@@ -28339,7 +28339,7 @@ packages:
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': '>=16.8'
       immer: '>=9.0.6'
       react: '>=16.8 || 0.0.0-experimental-8039e6d0b-20231026'
     peerDependenciesMeta:
@@ -28360,7 +28360,7 @@ packages:
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
-      '@types/react': 18.2.48
+      '@types/react': '>=16.8'
       immer: '>=9.0.6'
       react: '>=16.8 || 0.0.0-experimental-8039e6d0b-20231026'
     peerDependenciesMeta:
