@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CrossIsolationMessages, stopPropagation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, type IconButtonProps } from '@mui/material'
 import { useEffect, useRef } from 'react'
@@ -60,7 +60,12 @@ export function ProfileAvatarBadge({ userId, address, className, ...rest }: Prop
     }, [userId, address])
 
     return (
-        <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>
+        <IconButton
+            disableRipple
+            className={cx(classes.badge, className)}
+            {...rest}
+            onClick={stopPropagation}
+            ref={buttonRef}>
             <Icons.MaskBlue size={16} />
         </IconButton>
     )
