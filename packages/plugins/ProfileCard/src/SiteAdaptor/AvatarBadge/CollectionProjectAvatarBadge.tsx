@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import type { SocialIdentity } from '@masknet/shared-base'
+import { stopPropagation, type SocialIdentity } from '@masknet/shared-base'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import { IconButton, type IconButtonProps } from '@mui/material'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
@@ -51,7 +51,12 @@ export function CollectionProjectAvatarBadge({ address, userId, className, ident
     }, [address, userId, JSON.stringify(identity)])
 
     return (
-        <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>
+        <IconButton
+            disableRipple
+            className={cx(classes.badge, className)}
+            {...rest}
+            onClick={stopPropagation}
+            ref={buttonRef}>
             <Icons.MaskBlue size={16} />
         </IconButton>
     )
