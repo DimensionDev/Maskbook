@@ -15,6 +15,12 @@ import { memo, useCallback, useRef } from 'react'
 const useStyles = makeStyles()((theme) => ({
     root: {
         backgroundColor: alpha(theme.palette.maskColor.white, 0.2),
+        boxShadow:
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+        marginTop: theme.spacing(2),
+        borderRadius: 12,
     },
     popover: {
         padding: theme.spacing(3),

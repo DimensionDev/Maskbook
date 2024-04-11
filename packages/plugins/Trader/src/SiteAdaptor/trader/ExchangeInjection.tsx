@@ -5,19 +5,26 @@ import { ExchangeDialog } from './ExchangeDialog.js'
 
 export function ExchangeInjection() {
     const [open, setOpen] = useState(false)
-
-    const handleClose = useCallback(() => setOpen(false), [])
+    const [address, setAddress] = useState<string>()
+    const [chainId, setChainId] = useState<number>()
+    const handleClose = useCallback(() => {
+        setOpen(false)
+        setAddress(undefined)
+        setChainId(undefined)
+    }, [])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.swapDialogEvent.on(({ open }) => {
+        return CrossIsolationMessages.events.swapDialogEvent.on(({ open, traderProps }) => {
             setOpen(open)
+            setAddress(traderProps?.address)
+            setChainId(traderProps?.chainId)
         })
     }, [])
 
     if (!open) return null
     return (
         <EVMWeb3ContextProvider>
-            <ExchangeDialog open={open} onClose={handleClose} />
+            <ExchangeDialog open={open} onClose={handleClose} toAddress={address} toChainId={chainId} />
         </EVMWeb3ContextProvider>
     )
 }

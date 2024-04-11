@@ -28,9 +28,16 @@ const useStyles = makeStyles()((theme) => ({
 export interface ExchangeDialogProps {
     open: boolean
     onClose: () => void
+    toAddress?: string
+    toChainId?: number
 }
 
-export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog({ open, onClose }) {
+export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog({
+    open,
+    onClose,
+    toChainId,
+    toAddress,
+}) {
     const t = useTraderTrans()
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -64,6 +71,8 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
 
     const widgetConfig = useMemo<WidgetConfig>(() => {
         return {
+            toChain: toChainId,
+            toToken: toAddress,
             integrator: 'MaskNetwork',
             variant: 'expandable',
             theme: {
@@ -90,8 +99,12 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             },
             hiddenUI: [HiddenUI.Header],
             appearance: theme.palette.mode,
+            subTitleSize: 14,
+            progressSize: 16,
+            forceCompact: false,
+            inputTransparent: true,
         }
-    }, [theme, providerType, getSigner])
+    }, [theme, providerType, getSigner, chainId, toAddress, toChainId])
 
     return (
         <InjectedDialog

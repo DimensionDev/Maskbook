@@ -225,9 +225,14 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
     // #region swap
     const { setDialog: setExchangeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
+
     const onExchangeButtonClicked = useCallback(() => {
         setExchangeDialog({
             open: true,
+            traderProps: {
+                address: coin.contract_address,
+                chainId: coin.chainId,
+            },
         })
     }, [])
     // #endregion

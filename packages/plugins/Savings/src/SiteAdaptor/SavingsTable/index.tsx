@@ -72,8 +72,7 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
         CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
-                defaultInputCoin: sETH,
-                defaultOutputCoin: ETH,
+                address: ETH.address,
                 chainId: ChainId.Mainnet,
             },
         })
