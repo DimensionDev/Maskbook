@@ -15,12 +15,12 @@ import {
 
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Background } from '../../components/SwapBackground.js'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, alpha } from '@mui/material'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { LiFiWidget, type WidgetConfig, type WidgetDrawer } from '@lifi/widget'
+import { LiFiWidget, type WidgetConfig } from '@lifi/widget'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { Web3Provider } from '@ethersproject/providers'
 import { AccountManager } from '../../components/AccountManager.js'
@@ -95,7 +95,7 @@ const useStyles = makeStyles()((theme) => {
                 width: 436,
                 marginLeft: 24,
                 padding: theme.spacing(1.5, 2),
-                maxHeight: 644,
+                maxHeight: 'calc(70vh - 32px)',
             },
             "& [id*='widget-scrollable-container']": {
                 maxHeight: 644,
@@ -130,7 +130,6 @@ export default function SwapPage() {
     const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement>()
-    const [containerRef, setContainerRef] = useState<HTMLElement>()
     const { pluginID } = useNetworkContext()
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -151,8 +150,6 @@ export default function SwapPage() {
     const init = useCallback(() => {
         applyMaskColorVars(document.body, Appearance.light)
     }, [])
-
-    const widgetRef = useRef<WidgetDrawer>(null)
 
     const getSigner = useCallback(
         (requiredChainId?: ChainId) => {
@@ -262,16 +259,8 @@ export default function SwapPage() {
                         />
                     </header>
 
-                    <Box
-                        className={classes.container}
-                        ref={(_: HTMLElement) => {
-                            setContainerRef(_)
-                        }}>
-                        <LiFiWidget
-                            integrator="MaskNetwork"
-                            config={{ ...widgetConfig, containerRef }}
-                            ref={widgetRef}
-                        />
+                    <Box className={classes.container}>
+                        <LiFiWidget integrator="MaskNetwork" config={{ ...widgetConfig }} />
                     </Box>
                     <Typography className={classes.powerBy}>
                         {t.powered_by()} <strong>LI.FI</strong>
