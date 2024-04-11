@@ -228,9 +228,8 @@ export interface TokenType {
 export interface SwapDialogEvent {
     open: boolean
     traderProps?: {
-        defaultInputCoin?: TokenType
-        defaultOutputCoin?: TokenType
         chainId?: number
+        address?: string
     }
 }
 

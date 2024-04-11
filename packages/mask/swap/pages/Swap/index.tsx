@@ -12,6 +12,7 @@ import {
     useWeb3State,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
+
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useCallback, useMemo, useRef, useState } from 'react'
@@ -24,6 +25,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { Web3Provider } from '@ethersproject/providers'
 import { AccountManager } from '../../components/AccountManager.js'
 import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
+import { useLocation } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,17 +69,53 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         container: {
-            border: `1px solid ${theme.palette.maskColor.secondaryBottom}`,
-            boxShadow: `0px 4px 30px 0px ${alpha(theme.palette.common.black, 0.1)}`,
-            background: alpha(theme.palette.maskColor.white, 0.1),
-            borderRadius: 12,
+            flex: 1,
+
             padding: theme.spacing(2),
-            minWidth: 392,
-            minHeight: 494,
             maxHeight: '70vh',
             display: 'flex',
             overflow: 'auto',
             position: 'relative',
+            "& > [id*='widget-app-expanded-container']": {
+                justifyContent: 'center',
+            },
+            "& [id*='widget-relative-container']": {
+                border: `1px solid ${theme.palette.maskColor.secondaryBottom}`,
+                boxShadow: `0px 4px 30px 0px ${alpha(theme.palette.common.black, 0.1)}`,
+                background: alpha(theme.palette.maskColor.white, 0.1),
+                borderRadius: 12,
+                minWidth: 360,
+                maxWidth: 416,
+                padding: 0,
+            },
+            "& [id*='widget-route-expanded-container']": {
+                boxShadow: `0px 4px 30px 0px ${alpha(theme.palette.common.black, 0.1)}`,
+                background: alpha(theme.palette.maskColor.white, 0.1),
+                borderRadius: 12,
+                width: 436,
+                marginLeft: 24,
+                padding: theme.spacing(1.5, 2),
+                maxHeight: 644,
+            },
+            "& [id*='widget-scrollable-container']": {
+                maxHeight: 644,
+                overflow: 'auto',
+            },
+            "& [id*='widget-history-container']": {
+                padding: 0,
+            },
+            "& [id*='widget-header-app-bar']": {
+                padding: '0px!important',
+            },
+            "& [id*='widget-header']": {
+                padding: theme.spacing(1.5, 3),
+            },
+            "& [id*='widget-header-flex-container']": {
+                padding: theme.spacing(0, 3, 2),
+            },
+            '& .widget-token-list-item': {
+                padding: 0,
+            },
         },
         powerBy: {
             position: 'fixed',
@@ -97,6 +135,7 @@ export default function SwapPage() {
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
+    const state = useLocation()
     const providerDescriptor = useProviderDescriptor(pluginID)
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
     const wallet = useWallet()
@@ -184,9 +223,8 @@ export default function SwapPage() {
                 maxHeight: '100%',
                 overflow: 'auto',
             },
-            maxHeight: 644,
         }
-    }, [theme, providerType, getSigner, account])
+    }, [theme, providerType, getSigner, account, state])
 
     return (
         <SharedContextProvider>
