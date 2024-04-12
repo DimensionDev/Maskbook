@@ -18,7 +18,7 @@ import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
-import { getFireflyLensProfileLink, getLensterLink, getProfileAvatar } from '../../../utils.js'
+import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
@@ -294,7 +294,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
-        if (isSelf && profile) return t.edit_profile_tips({ profile: profile.handle.localName })
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
             return t.follow_wallet_tips()
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
@@ -358,12 +357,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
-                                    href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
+                                    href={profile?.handle ? getFireflyLensProfileLink(profile.handle.localName) : '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
                                     sx={{ cursor: 'pointer' }}>
-                                    {t.edit_profile_in_lenster()}
+                                    {t.view_profile_in_firefly()}
                                 </Button>
                             :   <>
                                     <EthereumERC20TokenApprovedBoundary
