@@ -116,6 +116,13 @@ const useStyles = makeStyles()((theme) => {
             '& .widget-token-list-item': {
                 padding: 0,
             },
+            "& [id*='widget-settings-list-container']": {
+                maxHeight: 564,
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    display: 'none',
+                },
+            },
         },
         powerBy: {
             position: 'fixed',
