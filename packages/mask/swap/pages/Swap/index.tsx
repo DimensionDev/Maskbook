@@ -70,9 +70,7 @@ const useStyles = makeStyles()((theme) => {
         },
         container: {
             flex: 1,
-
             padding: theme.spacing(2),
-            maxHeight: '70vh',
             display: 'flex',
             overflow: 'auto',
             position: 'relative',
