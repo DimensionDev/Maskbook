@@ -181,6 +181,12 @@ export namespace FireflyRedPacketAPI {
         farcasterMessage?: HexString
     }
 
+    export interface PostOn {
+        platform: PlatformType
+        postId: string
+        handle: string
+    }
+
     export interface ClaimPlatform {
         platformName: PlatformType
         platformId: string
