@@ -18,7 +18,7 @@ import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
-import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
+import { getFireflyLensProfileLink, getLensterLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
@@ -358,7 +358,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
-                                    href={profile?.handle ? getFireflyLensProfileLink(profile.handle.localName) : '#'}
+                                    href={profile?.handle ? getLensterLink(profile.handle.localName) : '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
@@ -423,7 +423,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
                                         sx={{ cursor: 'pointer' }}>
-                                        {t.hey()}
+                                        {t.firefly()}
                                     </Button>
                                 </>
                             }
