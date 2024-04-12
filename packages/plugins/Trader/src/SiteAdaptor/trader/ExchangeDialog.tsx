@@ -105,9 +105,9 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             subTitleSize: 14,
             progressSize: 16,
             forceCompact: false,
-            inputTransparent: mode === 'dim',
+            inputColor: theme.palette.maskColor.bottom,
         }
-    }, [theme, providerType, getSigner, chainId, toAddress, toChainId, mode])
+    }, [theme, providerType, getSigner, chainId, toAddress, toChainId])
 
     return (
         <InjectedDialog
