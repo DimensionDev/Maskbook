@@ -31,7 +31,6 @@
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>
 - eslint-plugin-i: <https://github.com/import-js/eslint-plugin-import/pull/1900/>
 - react-devtools-inline: <https://github.com/facebook/react/pull/27733>
-- @tanstack/query-async-storage-persister: Performance problem <https://github.com/TanStack/query/issues/6489>
 - @lifi/widget@2.10.1: Customized requirements, details can be viewed at the fork repository <https://github.com/DimensionDev/lifi-widget>
 
 ## CSP
