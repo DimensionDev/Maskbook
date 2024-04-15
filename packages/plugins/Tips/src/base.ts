@@ -36,7 +36,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Scroll,
                     ChainId.Optimism,
                     ChainId.Metis,
-                    ChainId.X1_Testnet,
+                    ChainId.XLayer,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
