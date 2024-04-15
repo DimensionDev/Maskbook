@@ -679,7 +679,7 @@
         "type": "XLayer",
         "name": "XLayer",
         "fullName": "XLayer",
-        "network": "testnet",
+        "network": "mainnet",
         "shortName": "xlayer",
         "features": [],
         "nativeCurrency": {
@@ -703,7 +703,7 @@
         "type": "XLayer",
         "name": "XLayer Testnet",
         "fullName": "XLayer Testnet",
-        "network": "mainnet",
+        "network": "testnet",
         "shortName": "xlayer",
         "features": [],
         "nativeCurrency": {
