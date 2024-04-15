@@ -15,7 +15,7 @@
   "dependencies": {
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@tanstack/react-query": "^5.8.7",
+    "@tanstack/react-query": "^5.29.2",
     "@types/use-subscription": "^1.0.0",
     "@types/uuid": "^9.0.3",
     "react-use": "^17.4.0",
