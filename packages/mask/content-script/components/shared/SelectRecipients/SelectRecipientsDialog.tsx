@@ -5,7 +5,7 @@ import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/share
 import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, LoadingBase, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
-import { Fuse } from '@masknet/web3-providers'
+import Fuse from 'fuse.js'
 import {
     Button,
     Checkbox,
@@ -146,7 +146,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
     const results = useMemo(() => {
         if (!keyword) return items
 
-        return Fuse.create(items, {
+        return new Fuse(items, {
             keys: [
                 'identifier.userId',
                 'nickname',

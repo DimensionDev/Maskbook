@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
+import Fuse from 'fuse.js'
 import { useSubscription } from 'use-subscription'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -8,7 +9,6 @@ import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/sh
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
-import { FuseNonFungibleCollection } from '@masknet/web3-providers'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
@@ -142,7 +142,16 @@ export const SelectNonFungibleContractDialog = memo(
             return [...result, ...(initialCollections ?? [])]
         }, [customizedCollections, collections, pluginID, initialCollections])
         const fuse = useMemo(() => {
-            return FuseNonFungibleCollection.create(filteredCollections)
+            return new Fuse(filteredCollections, {
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                    { name: 'address', weight: 1 },
+                ],
+                shouldSort: true,
+                threshold: 0.45,
+                minMatchCharLength: 3,
+            })
         }, [filteredCollections])
         const searchResults = useMemo(() => {
             if (!keyword) return filteredCollections

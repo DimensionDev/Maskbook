@@ -67,9 +67,6 @@ patchedDependencies:
   fortmatic@2.2.1:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
-  fuse.js@6.6.2:
-    hash: b2o4qvyfvxmpo7347sqko6h22a
-    path: patches/fuse.js@6.6.2.patch
   gulp@4.0.2:
     hash: tfijye3fclipdzo6an37r223ay
     path: patches/gulp@4.0.2.patch
@@ -637,6 +634,9 @@ importers:
       file-loader:
         specifier: ^6.2.0
         version: 6.2.0(webpack@5.88.2)
+      fuse.js:
+        specifier: ^7.0.0
+        version: 7.0.0
       guess-calling-code:
         specifier: ^1.1.8
         version: 1.1.8
@@ -2539,8 +2539,8 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
+        specifier: ^7.0.0
+        version: 7.0.0
       immer:
         specifier: ^10.0.2
         version: 10.0.2
@@ -2712,8 +2712,8 @@ importers:
         specifier: ^1.4.3
         version: 1.4.3
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
+        specifier: ^7.0.0
+        version: 7.0.0
       notistack:
         specifier: 2.0.8
         version: 2.0.8(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.15.12)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -3029,8 +3029,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1(patch_hash=tb3oevqnvhntsyfyhi2z6spuea)
       fuse.js:
-        specifier: 6.6.2
-        version: 6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a)
+        specifier: ^7.0.0
+        version: 7.0.0
       graphql-request:
         specifier: ^6.0.0
         version: 6.0.0(graphql@16.8.0)
@@ -17060,11 +17060,10 @@ packages:
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  /fuse.js@6.6.2(patch_hash=b2o4qvyfvxmpo7347sqko6h22a):
-    resolution: {integrity: sha512-cJaJkxCCxC8qIIcPBF9yGxY0W/tVZS3uEISDxhYIdtk8OL93pe+6Zj7LjCqVV4dzbqcriOZ+kQ/NE4RXZHsIGA==}
+  /fuse.js@7.0.0:
+    resolution: {integrity: sha512-14F4hBIxqKvD4Zz/XjDc3y94mNZN6pRv3U13Udo0lNLCWRBUsrMv2xwcF/y/Z5sV6+FQW+/ow68cHpm4sunt8Q==}
     engines: {node: '>=10'}
     dev: false
-    patched: true
 
   /fx-runner@1.3.0:
     resolution: {integrity: sha512-5b37H4GCyhF+Nf8xk9mylXoDq4wb7pbGAXxlCXp/631UTeeZomWSYcEGXumY4wk8g2QAqjPMGdWW+RbNt8PUcA==}
@@ -28466,6 +28465,7 @@ time:
   /eslint-plugin-unused-imports@3.1.0: '2024-02-13T12:27:17.768Z'
   /eslint@8.57.0: '2024-02-23T20:39:43.282Z'
   /file-loader@6.2.0: '2020-10-27T17:10:43.883Z'
+  /fuse.js@7.0.0: '2023-10-25T15:10:54.463Z'
   /immer@10.0.2: '2023-05-09T18:24:24.940Z'
   /qrcode@1.5.3: '2023-04-22T05:26:26.362Z'
   /react-devtools-inline@4.28.5: '2023-10-25T17:20:37.097Z'

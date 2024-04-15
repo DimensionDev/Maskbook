@@ -90,10 +90,6 @@ export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
 // Zerion
 export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
 
-// Fuse
-export { Fuse, FuseCoin } from './Fuse/index.js'
-export { FuseNonFungibleCollection } from './Fuse/apis/NonFungibleCollection.js'
-
 // Smart Pay
 export { SmartPayBundler } from './SmartPay/index.js'
 export { SmartPayFunder } from './SmartPay/index.js'
