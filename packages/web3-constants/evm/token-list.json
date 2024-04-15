@@ -27,7 +27,7 @@
         "Astar": ["https://tokens.r2d2.to/latest/592/tokens.json"],
         "Scroll": ["https://tokens.r2d2.to/latest/534352/tokens.json"],
         "Metis": ["https://tokens.r2d2.to/latest/1088/tokens.json"],
-        "X1": ["https://tokens.r2d2.to/latest/196/tokens.json"],
-        "X1_Testnet": ["https://tokens.r2d2.to/latest/195/tokens.json"]
+        "XLayer": ["https://tokens.r2d2.to/latest/196/tokens.json"],
+        "XLayer_Testnet": ["https://tokens.r2d2.to/latest/195/tokens.json"]
     }
 }

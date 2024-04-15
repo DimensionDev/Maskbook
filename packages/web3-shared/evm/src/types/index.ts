@@ -140,8 +140,8 @@ export enum ChainId {
 
     Wanchain = 888,
 
-    X1 = 196,
-    X1_Testnet = 195,
+    XLayer = 196,
+    XLayer_Testnet = 195,
 
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
@@ -290,8 +290,7 @@ export enum NetworkType {
     Astar = 'Astar',
     Scroll = 'Scroll',
     Moonbeam = 'Moonbeam',
-    X1 = 'X1',
-    X1_Testnet = 'X1_Testnet',
+    XLayer = 'XLayer',
     CustomNetwork = 'CustomNetwork',
 }
 
