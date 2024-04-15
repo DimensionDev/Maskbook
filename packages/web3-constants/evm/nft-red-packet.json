@@ -15,8 +15,8 @@
         "Astar": "0xc3e62b2CC70439C32a381Bfc056aCEd1d7162cef",
         "Scroll": "0x727F8030964CCEC6B0E344399c8d8E2B4C837351",
         "Metis": "0x812463356F58fc8194645A1838ee6C52D8ca2D26",
-        "X1": "0xd81c16d71432d7df04575ffe9fed76f837fea0cc",
-        "X1_Testnet": "0xd81c16d71432d7df04575ffe9fed76f837fea0cc"
+        "XLayer": "0xd81c16d71432d7df04575ffe9fed76f837fea0cc",
+        "XLayer_Testnet": "0xd81c16d71432d7df04575ffe9fed76f837fea0cc"
     },
     "NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT": {
         "Mainnet": 13229711,
@@ -46,7 +46,7 @@
         "Astar": 0,
         "Scroll": 96705,
         "Metis": 1702933,
-        "X1": 0,
-        "X1_Testnet": 7319723
+        "XLayer": 0,
+        "XLayer_Testnet": 7319723
     }
 }
