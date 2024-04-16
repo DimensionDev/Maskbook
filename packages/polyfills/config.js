@@ -20,7 +20,6 @@ const ecmascriptPolyfill = list
     .concat(require.resolve('./runtime/transpiler.js'))
     .map((x) => `import '${x}'\n`)
     .join('')
-console.log(ecmascriptPolyfill)
 export default defineConfig([
     {
         input: 'entry',
