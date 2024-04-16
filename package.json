@@ -91,38 +91,33 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "20.11.9",
-      "@types/react": "18.2.48",
-      "cross-blob": "3.0.1",
-      "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
-      "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
+      "@lifi/widget": "^2.10.1",
       "@protobufjs/inquire": "1.1.0",
+      "@tanstack/react-query": "$@tanstack/react-query",
+      "@types/node": "20.11.9",
+      "@types/react": "$@types/react",
+      "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
+      "react": "$react",
+      "react-dom": "$react-dom",
       "reflect-metadata": "0.1.13",
-      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770",
-      "@tanstack/react-query": "^5.29.2",
-      "@lifi/widget": "^2.10.1"
+      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770"
     },
-    "override comments": {
-      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"
+    "override reason": {
+      "@lifi/widget": "Patching this",
+      "@protobufjs/inquire": "Patching this",
+      "@tanstack/react-query": "Singleton package",
+      "@types/node": "Singleton package",
+      "@types/react": "Singleton package",
+      "react": "Singleton package",
+      "react-dom": "Singleton package",
+      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 manually pin the commit",
+      "reflect-metadata": "Patching this",
+      "webpack@5": "PR: https://github.com/webpack/webpack/pull/18139"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
-      "ignoreMissing": [
-        "react",
-        "react-dom",
-        "@types/node",
-        "@babel/core",
-        "webextension-polyfill",
-        "prop-types",
-        "@mui/material",
-        "typescript"
-      ],
-      "allowedVersions": {
-        "react": "0.0.0-experimental-8039e6d0b-20231026",
-        "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
-        "typescript": "5",
-        "rollup": "3"
-      }
+      "ignoreMissing": [],
+      "allowAny": ["webpack"]
     },
     "patchedDependencies": {
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
