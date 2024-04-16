@@ -20,7 +20,6 @@ function Renderer(
         project: ScamResult
     }>,
 ) {
-    usePluginWrapper(true)
     return <ScamAlert result={props.project} />
 }
 
@@ -53,7 +52,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             }),
             [id?.postID, author?.userId, nickname, links, content],
         )
-        const { data: scamProject, isLoading } = useQuery({
+        const { data: scamProject, isFetching } = useQuery({
             queryKey: ['scam-sniffer', 'check-post', id?.postID, nickname, author?.userId, links, content],
             enabled: isTwitter,
             queryFn: () => {
@@ -64,7 +63,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         const origins = links.map((link) => new URL(link).origin)
         const queries = useQueries({
             queries: origins.map((origin) => ({
-                enabled: !scamProject && !isLoading,
+                enabled: !scamProject && !isFetching,
                 queryKey: ['scam-sniffer', 'check-url', origin],
                 queryFn: async () => {
                     const url = urlcat('https://domain-api.scamsniffer.io/check', {
@@ -72,10 +71,12 @@ const site: Plugin.SiteAdaptor.Definition = {
                         api_key: API_KEY,
                     })
                     const res = await fetchJSON<CheckResult>(url)
+
                     return res
                 },
             })),
         })
+
         const firstHit = first(
             compact(queries.filter((x) => x.isSuccess && x.data.status === 'BLOCKED').map((x) => x.data)),
         )
@@ -90,10 +91,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                 matchType: 'sim',
             } satisfies ScamResult
         }, [firstHit?.host, firstHit?.url, author?.userId, nickname])
-
-        if (!isTwitter) return null
         const project = scamProject || fallbackScamProject
-        if (!project) return null
+
+        usePluginWrapper(!!project)
+
+        if (!project || !isTwitter) return null
 
         return <Renderer project={project} />
     },
