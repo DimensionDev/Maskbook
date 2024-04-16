@@ -72,8 +72,8 @@
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
-        "X1": ["https://rpc.x1.tech"],
-        "X1_Testnet": ["https://testrpc.x1.tech"]
+        "XLayer": ["https://rpc.xlayer.tech"],
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -103,8 +103,8 @@
         "Astar": ["https://rpc.astar.network:8545"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
-        "X1": ["https://rpc.x1.tech"],
-        "X1_Testnet": ["https://testrpc.x1.tech"]
+        "XLayer": ["https://rpc.xlayer.tech"],
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -134,7 +134,7 @@
         "Astar": [0, 0, 0, 0, 0],
         "Scroll": [0, 0, 0, 0, 0],
         "Metis": [0, 0, 0, 0, 0],
-        "X1": [0, 0, 0, 0, 0],
-        "X1_Testnet": [0, 0, 0, 0, 0]
+        "XLayer": [0, 0, 0, 0, 0],
+        "XLayer_Testnet": [0, 0, 0, 0, 0]
     }
 }

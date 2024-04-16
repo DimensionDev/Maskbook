@@ -50,8 +50,7 @@ function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Scroll:
         case NetworkType.Moonbeam:
         case NetworkType.CustomNetwork:
-        case NetworkType.X1:
-        case NetworkType.X1_Testnet:
+        case NetworkType.XLayer:
             return ZRX_NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

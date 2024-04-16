@@ -6,7 +6,7 @@ const lockfilePath = fileURLToPath(new URL('../../pnpm-lock.yaml', import.meta.u
 const lockfile = await readFile(lockfilePath)
 const hash = createHash('sha256')
 hash.update(lockfile)
-const polyfillVersion = 'v0' + hash.digest('hex')
+const polyfillVersion = 'v1_' + hash.digest('hex')
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
 const built = (await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion
