@@ -7,6 +7,7 @@
     "search": "Search",
     "loading_token": "Loading token...",
     "search_no_result": "No results",
+    "coming_soon": "Coming soon",
     "nft_already_added": "The collectible has already been added.",
     "nft_invalid_owner": "The collectible does not belong to you.",
     "nft_max_shares": "The maximum number of NFTs to be sold in NFT lucky drop contract is {{- amount}}.",

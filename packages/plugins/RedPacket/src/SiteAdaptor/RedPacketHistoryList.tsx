@@ -3,6 +3,7 @@ import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { List } from '@mui/material'
 import { memo } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -47,7 +48,13 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelec
 
     if (isPending) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
-    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
+    if (!histories?.length) {
+        return (
+            <EmptyStatus className={classes.placeholder}>
+                {ChainId.XLayer === chainId ? t.coming_soon() : t.search_no_result()}
+            </EmptyStatus>
+        )
+    }
 
     return (
         <div className={classes.root}>
