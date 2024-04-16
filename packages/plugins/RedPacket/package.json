@@ -30,7 +30,7 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
-    "@tanstack/react-query": "^5.8.7",
+    "@tanstack/react-query": "^5.29.2",
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
