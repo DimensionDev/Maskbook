@@ -15,6 +15,12 @@ const { list } = compat({
     modules: ['core-js/stable'],
 })
 
+const ecmascriptPolyfill = list
+    .map((item) => require.resolve(`core-js/modules/${item}.js`))
+    .concat(require.resolve('./runtime/transpiler.js'))
+    .map((x) => `import '${x}'\n`)
+    .join('')
+console.log(ecmascriptPolyfill)
 export default defineConfig([
     {
         input: 'entry',
@@ -39,11 +45,7 @@ globalThis[Symbol.for('mask_init_polyfill')] = true;
         },
         plugins: [
             virtual({
-                entry: list
-                    .map((item) => require.resolve(`core-js/modules/${item}.js`))
-                    .concat(require.resolve('./runtime/transpiler.js'))
-                    .map((x) => `import '${x}'\n`)
-                    .join(''),
+                entry: ecmascriptPolyfill,
             }),
             ...plugins(),
         ],
