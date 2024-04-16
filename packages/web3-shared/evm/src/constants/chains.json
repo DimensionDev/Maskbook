@@ -677,8 +677,8 @@
     {
         "chainId": 196,
         "type": "XLayer",
-        "name": "XLayer",
-        "fullName": "XLayer",
+        "name": "X Layer",
+        "fullName": "X Layer",
         "network": "mainnet",
         "shortName": "xlayer",
         "features": [],
@@ -692,7 +692,7 @@
         "infoURL": "https://www.okx.com/web3",
         "explorers": [
             {
-                "name": "XLayer explorer",
+                "name": "X Layer explorer",
                 "url": "https://www.okx.com/explorer/xlayer",
                 "standard": "EIP3091"
             }
@@ -701,8 +701,8 @@
     {
         "chainId": 195,
         "type": "XLayer",
-        "name": "XLayer Testnet",
-        "fullName": "XLayer Testnet",
+        "name": "X Layer Testnet",
+        "fullName": "X Layer Testnet",
         "network": "testnet",
         "shortName": "xlayer",
         "features": [],
@@ -716,7 +716,7 @@
         "infoURL": "https://www.okx.com/web3",
         "explorers": [
             {
-                "name": "XLayer explorer",
+                "name": "X Layer explorer",
                 "url": "https://www.okx.com/explorer/xlayer-test",
                 "standard": "EIP3091"
             }
