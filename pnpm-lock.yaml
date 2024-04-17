@@ -65,7 +65,7 @@ patchedDependencies:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
   gulp@4.0.2:
-    hash: p7m2eyxdcmanl3mzdfv4qzmmmq
+    hash: p4ow72ftqhxvnyunk2auogmbge
     path: patches/gulp@4.0.2.patch
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
@@ -237,7 +237,7 @@ importers:
         version: 3.1.0(eslint@8.57.0)
       gulp:
         specifier: ^4.0.2
-        version: 4.0.2(patch_hash=p7m2eyxdcmanl3mzdfv4qzmmmq)
+        version: 4.0.2(patch_hash=p4ow72ftqhxvnyunk2auogmbge)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -17547,7 +17547,7 @@ packages:
       - supports-color
     dev: true
 
-  /gulp@4.0.2(patch_hash=p7m2eyxdcmanl3mzdfv4qzmmmq):
+  /gulp@4.0.2(patch_hash=p4ow72ftqhxvnyunk2auogmbge):
     resolution: {integrity: sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==}
     engines: {node: '>= 0.10'}
     hasBin: true
