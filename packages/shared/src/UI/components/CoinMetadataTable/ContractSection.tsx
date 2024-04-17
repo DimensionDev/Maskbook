@@ -1,9 +1,7 @@
-import { noop } from 'lodash-es'
 import { useNetworkDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CopyButton, FormattedAddress, TokenIcon, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
 import { Box, Stack, Typography } from '@mui/material'
 
 interface ContractSectionProps {
@@ -13,6 +11,8 @@ interface ContractSectionProps {
     name: string
     symbol?: string
     iconURL?: string
+    fullAddress?: boolean
+    align?: 'flex-end' | 'flex-start'
 }
 
 export function ContractSection({
@@ -22,12 +22,14 @@ export function ContractSection({
     symbol,
     iconURL,
     pluginID = NetworkPluginID.PLUGIN_EVM,
+    fullAddress,
+    align = 'flex-end',
 }: ContractSectionProps) {
     const Utils = useWeb3Utils(pluginID)
     const chain = useNetworkDescriptor(pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)
 
     return (
-        <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent="flex-end">
+        <Stack direction="row" gap={0.5} display="flex" alignItems="center" justifyContent={align}>
             {chain ?
                 <WalletIcon mainIcon={chain.icon} size={14} />
             : iconURL ?
@@ -35,14 +37,17 @@ export function ContractSection({
             :   <Box width={16} />}
             <Typography
                 variant="body2"
-                component="span"
+                component="a"
                 fontWeight={700}
-                fontSize={14}
-                sx={{
-                    cursor: 'pointer',
-                }}
-                onClick={chainId ? () => openWindow(Utils.explorerResolver.addressLink(chainId, address)) : noop}>
-                <FormattedAddress address={address} size={4} formatter={Utils.formatAddress} />
+                fontSize={fullAddress ? 12 : 14}
+                href={chainId ? Utils.explorerResolver.addressLink(chainId, address) : undefined}
+                target="_blank"
+                sx={{ color: 'text.primary', textDecoration: 'none' }}>
+                <FormattedAddress
+                    address={address}
+                    size={fullAddress ? undefined : 4}
+                    formatter={Utils.formatAddress}
+                />
             </Typography>
             <CopyButton size={16} text={address} scoped={false} />
         </Stack>

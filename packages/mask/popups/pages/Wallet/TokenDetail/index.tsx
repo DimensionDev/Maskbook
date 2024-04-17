@@ -17,9 +17,9 @@ import { Days, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskDarkTheme, MaskLightTheme, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance, useWeb3State } from '@masknet/web3-hooks-base'
 import { TokenType, formatBalance, formatCurrency, leftShift } from '@masknet/web3-shared-base'
-import { SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
-import { memo, useContext, useEffect, useMemo, useState } from 'react'
+import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
@@ -31,31 +31,14 @@ import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
 
-const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
+const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valueAlign }) => {
     return {
-        page: {
-            position: 'relative',
-            height: '100%',
-            overflow: 'auto',
-            // space for action group.
-            paddingBottom: 68,
-            zIndex: 3,
-            '::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        deleteButton: {
-            padding: 0,
-            minWidth: 'auto',
-            width: 'auto',
-        },
         assetValue: {
             fontSize: 24,
             fontWeight: 700,
             textAlign: 'center',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: valueAlign,
         },
         priceChange: {
             fontSize: 16,
@@ -78,12 +61,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
         },
-        actions: {
-            position: 'fixed',
-            bottom: 0,
-            right: 0,
-            left: 0,
-        },
         trending: {
             display: 'flex',
             boxSizing: 'border-box',
@@ -95,6 +72,33 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(2),
             boxShadow: theme.palette.maskColor.bottomBg,
             backdropFilter: 'blur(8px)',
+        },
+    }
+})
+const usePageStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        page: {
+            position: 'relative',
+            height: '100%',
+            overflow: 'auto',
+            // space for action group.
+            paddingBottom: 68,
+            zIndex: 3,
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        deleteButton: {
+            padding: 0,
+            minWidth: 'auto',
+            width: 'auto',
+        },
+        actions: {
+            position: 'fixed',
+            bottom: 0,
+            right: 0,
+            left: 0,
         },
         halo: {
             position: 'relative',
@@ -131,31 +135,14 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const TokenDetail = memo(function TokenDetail() {
-    const { classes, theme } = useStyles()
+const TokenDetailPage = memo(function TokenDetailPage() {
+    const { classes, theme } = usePageStyles()
     const t = useMaskSharedTrans()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isNativeToken = isNativeTokenAddress(address)
     const asset = useAsset(chainId, address, account)
-    const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
-    const [chartRange, setChartRange] = useState(Days.ONE_DAY)
-    const {
-        data: stats = EMPTY_LIST,
-        refetch,
-        isPending: isLoadingStats,
-    } = useCoinTrendingStats(chainId, address, chartRange)
-    const { data: tokenPrice = stats.at(-1)?.[1], isPending: isLoadingPrice } = useTokenPrice(chainId, address)
-    const tokenValue = useMemo(() => {
-        if (asset?.value?.usd) return asset.value.usd
-        if (!asset?.decimals || !tokenPrice || !balance) return 0
-        return leftShift(balance, asset.decimals).times(tokenPrice)
-    }, [balance, asset, tokenPrice])
-
-    const { data: trending, isPending: isLoadingTrending, isError } = useTrending(chainId, address)
-    const priceChange =
-        trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
 
     useTitle(asset ? `${asset.symbol}(${asset.name})` : 'Loading Asset...')
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -194,77 +181,121 @@ const TokenDetail = memo(function TokenDetail() {
     return (
         <div className={classes.halo}>
             <Box className={classes.page}>
-                <Box padding={2}>
-                    <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
-                        {typeof tokenPrice !== 'undefined' ?
-                            <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
-                        :   null}
-                    </ProgressiveText>
-                    <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
-                    <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
-                    {!isLoadingStats && isError ?
-                        <ReloadStatus
-                            onRetry={refetch}
-                            className={classes.trending}
-                            height={DIMENSION.height}
-                            width={DIMENSION.width}
-                        />
-                    : !isLoadingStats && !stats.length ?
-                        <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
-                            {t.not_enough_data_to_present()}
-                        </EmptyStatus>
-                    :   <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />}
-
-                    <Box display="flex" flexDirection="row" justifyContent="space-between">
-                        <Box>
-                            <Typography className={classes.label}>{t.balance()}</Typography>
-                            {asset ?
-                                <Typography component="div" className={classes.value} justifyContent="flex-start">
-                                    <TokenIcon
-                                        className={classes.tokenIcon}
-                                        address={asset.address}
-                                        name={asset.name}
-                                        chainId={asset.chainId}
-                                        logoURL={asset.logoURL}
-                                        size={16}
-                                    />
-                                    <FormattedBalance
-                                        value={balance}
-                                        decimals={asset.decimals}
-                                        significant={6}
-                                        formatter={formatBalance}
-                                    />
-                                </Typography>
-                            :   <Typography component="div" className={classes.value}>
-                                    <Skeleton className={classes.tokenIcon} variant="circular" width={16} height={16} />
-                                    <Skeleton variant="text" width={30} />
-                                </Typography>
-                            }
-                        </Box>
-                        <Box textAlign="right">
-                            <Typography className={classes.label}>{t.value()}</Typography>
-                            <Typography component="div" className={classes.value} justifyContent="flex-end">
-                                <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
-                            </Typography>
-                        </Box>
-                    </Box>
-                </Box>
-                {isLoadingTrending ?
-                    <Box className={classes.info}>
-                        <FungibleCoinMarketTableSkeleton />
-                        <CoinMetadataTableSkeleton />
-                    </Box>
-                :   <Box className={classes.info}>
-                        <FungibleCoinMarketTable trending={trending} />
-                        <CoinMetadataTable trending={trending} />
-                    </Box>
-                }
-                <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
-                    <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
-                </ThemeProvider>
+                <TokenDetailUI address={address} chainId={chainId}>
+                    <ThemeProvider theme={theme.palette.mode === 'light' ? MaskDarkTheme : MaskLightTheme}>
+                        <ActionGroup className={classes.actions} chainId={chainId} address={address} asset={asset} />
+                    </ThemeProvider>
+                </TokenDetailUI>
             </Box>
         </div>
     )
 })
 
-export default TokenDetail
+export interface TokenDetailUIProps extends React.PropsWithChildren<{}> {
+    chainId: ChainId
+    address: string
+    hideChart?: boolean
+    valueAlign?: 'left' | 'center'
+}
+export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIProps) {
+    const { chainId, address, hideChart, valueAlign = 'center' } = props
+
+    const { classes } = useStyles({ valueAlign })
+    const t = useMaskSharedTrans()
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const asset = useAsset(chainId, address, account)
+    const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
+    const [chartRange, setChartRange] = useState(Days.ONE_DAY)
+    const {
+        data: stats = EMPTY_LIST,
+        refetch,
+        isPending: isLoadingStats,
+    } = useCoinTrendingStats(chainId, address, chartRange)
+    const { data: tokenPrice = stats.at(-1)?.[1], isPending: isLoadingPrice } = useTokenPrice(chainId, address)
+    const tokenValue = useMemo(() => {
+        if (asset?.value?.usd) return asset.value.usd
+        if (!asset?.decimals || !tokenPrice || !balance) return 0
+        return leftShift(balance, asset.decimals).times(tokenPrice)
+    }, [balance, asset, tokenPrice])
+
+    const { data: trending, isPending: isLoadingTrending, isError } = useTrending(chainId, address)
+    const priceChange =
+        trending?.market?.price_change_percentage_24h_in_currency || trending?.market?.price_change_24h || 0
+
+    return (
+        <>
+            <Box padding={2}>
+                <ProgressiveText className={classes.assetValue} loading={isLoadingPrice} skeletonWidth={80}>
+                    {typeof tokenPrice !== 'undefined' ?
+                        <FormattedCurrency value={tokenPrice} formatter={formatCurrency} />
+                    :   null}
+                </ProgressiveText>
+                {hideChart ? null : (
+                    <>
+                        <PriceChange className={classes.priceChange} change={priceChange} loading={isLoadingTrending} />
+                        <PriceChartRange days={chartRange} onDaysChange={setChartRange} gap="10px" mt={2} />
+                        {!isLoadingStats && isError ?
+                            <ReloadStatus
+                                onRetry={refetch}
+                                className={classes.trending}
+                                height={DIMENSION.height}
+                                width={DIMENSION.width}
+                            />
+                        : !isLoadingStats && !stats.length ?
+                            <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
+                                {t.not_enough_data_to_present()}
+                            </EmptyStatus>
+                        :   <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />}
+                    </>
+                )}
+
+                <Box display="flex" flexDirection="row" justifyContent="space-between">
+                    <Box>
+                        <Typography className={classes.label}>{t.balance()}</Typography>
+                        {asset ?
+                            <Typography component="div" className={classes.value} justifyContent="flex-start">
+                                <TokenIcon
+                                    className={classes.tokenIcon}
+                                    address={asset.address}
+                                    name={asset.name}
+                                    chainId={asset.chainId}
+                                    logoURL={asset.logoURL}
+                                    size={16}
+                                />
+                                <FormattedBalance
+                                    value={balance}
+                                    decimals={asset.decimals}
+                                    significant={6}
+                                    formatter={formatBalance}
+                                />
+                            </Typography>
+                        :   <Typography component="div" className={classes.value}>
+                                <Skeleton className={classes.tokenIcon} variant="circular" width={16} height={16} />
+                                <Skeleton variant="text" width={30} />
+                            </Typography>
+                        }
+                    </Box>
+                    <Box textAlign="right">
+                        <Typography className={classes.label}>{t.value()}</Typography>
+                        <Typography component="div" className={classes.value} justifyContent="flex-end">
+                            <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
+            {isLoadingTrending ?
+                <Box className={classes.info}>
+                    <FungibleCoinMarketTableSkeleton />
+                    <CoinMetadataTableSkeleton />
+                </Box>
+            :   <Box className={classes.info}>
+                    <FungibleCoinMarketTable trending={trending} />
+                    <CoinMetadataTable trending={trending} />
+                </Box>
+            }
+            {props.children}
+        </>
+    )
+})
+
+export default TokenDetailPage

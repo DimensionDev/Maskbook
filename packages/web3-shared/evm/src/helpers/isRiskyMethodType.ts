@@ -4,6 +4,7 @@ export function isRiskyMethodType(type: EthereumMethodType) {
     return [
         EthereumMethodType.ETH_SIGN,
         EthereumMethodType.PERSONAL_SIGN,
+        EthereumMethodType.WATCH_ASSET,
         EthereumMethodType.ETH_SIGN_TYPED_DATA_OLD_V1,
         EthereumMethodType.ETH_SIGN_TYPED_DATA_OLD_V3,
         EthereumMethodType.ETH_SIGN_TYPED_DATA,

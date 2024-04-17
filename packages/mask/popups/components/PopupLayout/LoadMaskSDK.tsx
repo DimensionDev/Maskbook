@@ -4,7 +4,7 @@ import Services from '#services'
 import { Box, Link } from '@mui/material'
 import { useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { useAsync } from '@react-hookz/web'
+import { useQuery } from '@tanstack/react-query'
 
 export default function MaskSDK() {
     if (!Flags.mask_sdk_enabled) return null
@@ -16,7 +16,10 @@ export default function MaskSDK() {
 }
 
 function MaskSDKLoader() {
-    const [{ result: shouldShow }] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
+    const { data: shouldShow = false } = useQuery({
+        queryFn: () => Services.SiteAdaptor.shouldSuggestConnectInPopup(),
+        queryKey: ['shouldSuggestConnectInPopup()'],
+    })
     const [dismissed, setDismissed] = useState(false)
     if (!shouldShow) return null
     if (dismissed) return null

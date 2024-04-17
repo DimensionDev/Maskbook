@@ -6,6 +6,13 @@
 -32600  Invalid request
 -32601  The method "${method}" does not exist / is not available.
 -32602  Invalid params
+-32602  Invalid address
+-32602  wallet_watchAsset           A symbol is required, but was not found in either the request or contract
+-32602  wallet_watchAsset           Decimals are required, but were not found in either the request or contract
+-32602  wallet_watchAsset           Unable to verify ownership. Possibly because the standard is not supported or the user's currently selected network does not match the chain of the asset in question.
+-32602  wallet_watchAsset           The token address seems invalid
+-32602  wallet_watchAsset           The symbol in the request (${request}) does not match the symbol in the contract (${symbol})
+-32602  wallet_watchAsset           The decimals in the request (${request}) do not match the decimals in the contract (${decimals})
 -32602  wallet_requestPermissions   A permission request must contain at least 1 permission.
 -32602  wallet_requestPermissions   Permission request contains unsupported permission ${permission}.
 -32603  Internal error

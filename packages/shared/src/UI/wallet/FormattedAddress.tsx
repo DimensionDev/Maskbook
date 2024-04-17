@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import { identity } from 'lodash-es'
 
 export interface FormattedAddressProps {
@@ -9,5 +8,5 @@ export interface FormattedAddressProps {
 
 export function FormattedAddress({ address, size, formatter = identity }: FormattedAddressProps) {
     if (!address) return null
-    return <Fragment>{formatter(address, size)}</Fragment>
+    return <>{formatter(address, size)}</>
 }

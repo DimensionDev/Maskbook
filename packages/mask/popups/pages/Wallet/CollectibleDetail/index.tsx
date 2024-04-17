@@ -158,7 +158,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const CollectibleDetail = memo(function CollectibleDetail() {
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
@@ -178,15 +178,6 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
     const availableAsset = asset || stateAsset
 
     const name = availableAsset?.metadata?.name
-    const collectionName = availableAsset?.collection?.name
-    const assetDesc = availableAsset?.metadata?.description
-    const collectionDesc = availableAsset?.collection?.description
-    const floorPrice = useMemo(() => {
-        if (!asset?.collection?.floorPrices) return null
-        return (
-            asset.collection.floorPrices.find((x) => x.marketplace_id === 'opensea') || asset.collection.floorPrices[0]
-        )
-    }, [asset?.collection?.floorPrices])
 
     const { showSnackbar } = usePopupCustomSnackbar()
     const { setExtension } = useContext(PageTitleContext)
@@ -229,9 +220,53 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
         return () => setExtension(undefined)
     }, [classes.iconButton, t, name, account, navigate, showSnackbar])
 
+    return (
+        <article className={classes.page} data-hide-scrollbar>
+            <CollectibleDetailUI
+                stateAsset={stateAsset}
+                onTransfer={() => {
+                    const path = urlcat(PopupRoutes.Contacts, {
+                        tab: TransferTabType.NFT,
+                        'nft:chainId': chainId,
+                        'nft:address': address,
+                        'nft:tokenId': availableAsset?.tokenId,
+                    })
+                    navigate(path)
+                }}
+            />
+        </article>
+    )
+})
+
+export const CollectibleDetailUI = memo(function CollectibleDetailUI({
+    stateAsset,
+    onTransfer,
+}: {
+    stateAsset: Web3Helper.NonFungibleTokenScope<void, NetworkPluginID.PLUGIN_EVM> | undefined
+    onTransfer?(): void
+}) {
+    const { classes, cx } = useStyles()
+    const t = useMaskSharedTrans()
+    const { chainId, address, params } = useTokenParams()
+    const id = params.get('id') || ''
+    const { data: asset, isPending } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, id, { chainId })
+
+    const availableAsset = asset || stateAsset
+
+    const name = availableAsset?.metadata?.name
+    const collectionName = availableAsset?.collection?.name
+    const assetDesc = availableAsset?.metadata?.description
+    const collectionDesc = availableAsset?.collection?.description
+    const floorPrice = useMemo(() => {
+        if (!asset?.collection?.floorPrices) return null
+        return (
+            asset.collection.floorPrices.find((x) => x.marketplace_id === 'opensea') || asset.collection.floorPrices[0]
+        )
+    }, [asset?.collection?.floorPrices])
+
     const lastSale = asset?.priceInToken
     const transferable = useMemo(() => {
-        if (!availableAsset) return false
+        if (!availableAsset || !onTransfer) return false
         if (isLensProfileAddress(availableAsset.address)) return false
         if (availableAsset.metadata?.name && isLensFollower(availableAsset.metadata.name)) return false
         if (availableAsset.collection?.name && isLensCollect(availableAsset.collection.name)) return false
@@ -253,7 +288,7 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
         collectionId: availableAsset?.collection?.id,
     })
     return (
-        <article className={classes.page} data-hide-scrollbar>
+        <>
             {availableAsset ?
                 <AssetPreviewer
                     classes={{ root: classes.image, fallbackImage: classes.fallbackImage }}
@@ -352,21 +387,11 @@ export const CollectibleDetail = memo(function CollectibleDetail() {
                 </>
             :   null}
             {transferable ?
-                <Button
-                    className={classes.sendButton}
-                    onClick={() => {
-                        const path = urlcat(PopupRoutes.Contacts, {
-                            tab: TransferTabType.NFT,
-                            'nft:chainId': chainId,
-                            'nft:address': address,
-                            'nft:tokenId': availableAsset?.tokenId,
-                        })
-                        navigate(path)
-                    }}>
+                <Button className={classes.sendButton} onClick={onTransfer}>
                     <Icons.Send size={16} style={{ marginRight: 4 }} />
                     {t.send()}
                 </Button>
             :   null}
-        </article>
+        </>
     )
 })

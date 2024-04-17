@@ -1,4 +1,3 @@
-import urlcat from 'urlcat'
 import { compact, mapValues, omit } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import {
@@ -25,7 +24,7 @@ import {
     IconButton,
     Typography,
 } from '@mui/material'
-import { useChainContext, useMessages, useWeb3State } from '@masknet/web3-hooks-base'
+import { useChainContext, useMessages, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
 import {
     abiCoder,
     EthereumMethodType,
@@ -36,6 +35,7 @@ import {
     ChainId,
     ErrorEditor,
     type MessageRequest,
+    SchemaType,
 } from '@masknet/web3-shared-evm'
 import { useNavigate } from 'react-router-dom'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -56,10 +56,13 @@ import {
     type EIP4361Message,
     TransactionDescriptorType,
     GasOptionType,
+    TokenType,
 } from '@masknet/web3-shared-base'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useInteractionWalletContext } from './InteractionContext.js'
 import { produce } from 'immer'
+import { WatchTokenRequest } from '../../../components/WatchTokenRequest/index.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -176,6 +179,8 @@ interface InteractionProps {
     currentMessageIndex: number
     setMessageIndex(count: number): void
 }
+
+// TODO: interaction need a refactor: split all different kinds of interactions out.
 const Interaction = memo((props: InteractionProps) => {
     const { currentRequest, totalMessages, currentMessageIndex, setMessageIndex } = props
     const t = useMaskSharedTrans()
@@ -184,10 +189,11 @@ const Interaction = memo((props: InteractionProps) => {
     const [paymentToken, setPaymentToken] = useState('')
     const [, startTransition] = useTransition()
     const requestOrigin = currentRequest.origin
+    const wallet = useWallet()
 
     const { showSnackbar } = usePopupCustomSnackbar()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { Message, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Message, TransactionFormatter, Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const rawMessage = useMemo((): RawSigningMessage => {
         if (!signRequest.includes(currentRequest.request.arguments.method)) return undefined
@@ -278,78 +284,115 @@ const Interaction = memo((props: InteractionProps) => {
         async (paymentToken: string, approveAmount: string, gasConfig: GasConfig | undefined) => {
             try {
                 let params = currentRequest.request.arguments.params
-
-                if (approveAmount) {
-                    if (!transaction.formattedTransaction?._tx.data) return
-
-                    const parameters = abiCoder.decodeParameters(
-                        approveParametersType,
-                        transaction.formattedTransaction._tx.data.slice(10),
-                    )
-
-                    const parametersString = abiCoder
-                        .encodeParameters(approveParametersType, [parameters.spender, web3_utils.toHex(approveAmount)])
-                        .slice(2)
-
-                    const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
-
-                    params = compact(
-                        currentRequest.request.arguments.params.map((x) =>
-                            x === 'latest' ?
-                                chainId !== ChainId.Celo ?
-                                    x
-                                :   undefined
-                            :   {
-                                    ...x,
-                                    data: result,
-                                },
-                        ),
-                    )
-                }
-
-                if (!signRequest.includes(currentRequest.request.arguments.method)) {
-                    params = compact(
-                        params.map((x) => {
-                            if (x === 'latest') {
-                                if (chainId === ChainId.Celo) return
-                                return x
-                            }
-
-                            return {
-                                ...x,
-                                ...(gasConfig ?
-                                    mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
-                                        if (key === 'gasCurrency' || !value) return
-                                        return web3_utils.toHex(value)
-                                    })
-                                :   {}),
-                                gasLimit: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
-                                chainId: web3_utils.toHex(x.chainId),
-                                nonce: web3_utils.toHex(x.nonce),
-                            }
-                        }),
-                    )
-                }
-
-                if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-                    if (params[0].type === '0x0') {
-                        delete params[0].type
-                        delete params[0].gasPrice
+                if (currentRequest.request.arguments.method === EthereumMethodType.WATCH_ASSET) {
+                    const type = params[0].type
+                    const address = params[0].options.address
+                    if (type === 'ERC21') {
+                        // TODO: custom name currently are ignored
+                        await Token?.addToken?.(wallet!.address, {
+                            address,
+                            chainId,
+                            schema: SchemaType.ERC20,
+                            type: TokenType.Fungible,
+                            id: `${chainId}.${address}`,
+                            isCustomToken: true,
+                        })
+                    } else if (type === 'ERC721' || type === 'ERC1155') {
+                        const { tokenId, symbol, name = 'NFT' } = params[0].options
+                        const schema = type === 'ERC21' ? SchemaType.ERC721 : SchemaType.ERC1155
+                        await Token?.addNonFungibleTokens?.(
+                            wallet!.address,
+                            { address, chainId, name, schema, symbol },
+                            [tokenId],
+                        )
+                        await Token?.addToken?.(wallet!.address, {
+                            id: `${chainId}.${address}.${tokenId}`,
+                            chainId,
+                            tokenId,
+                            type: TokenType.NonFungible,
+                            schema,
+                            address,
+                            isCustomToken: true,
+                        })
                     }
+                    // It is "deny" because we don't want it being send to the upstream Ethereum RPC.
+                    await Message?.denyRequest(currentRequest.ID)
+                } else {
+                    if (approveAmount) {
+                        if (!transaction.formattedTransaction?._tx.data) return
+
+                        const parameters = abiCoder.decodeParameters(
+                            approveParametersType,
+                            transaction.formattedTransaction._tx.data.slice(10),
+                        )
+
+                        const parametersString = abiCoder
+                            .encodeParameters(approveParametersType, [
+                                parameters.spender,
+                                web3_utils.toHex(approveAmount),
+                            ])
+                            .slice(2)
+
+                        const result = `${transaction.formattedTransaction._tx.data.slice(0, 10)}${parametersString}`
+
+                        params = compact(
+                            currentRequest.request.arguments.params.map((x) =>
+                                x === 'latest' ?
+                                    chainId !== ChainId.Celo ?
+                                        x
+                                    :   undefined
+                                :   {
+                                        ...x,
+                                        data: result,
+                                    },
+                            ),
+                        )
+                    }
+
+                    if (!signRequest.includes(currentRequest.request.arguments.method)) {
+                        params = compact(
+                            params.map((x) => {
+                                if (x === 'latest') {
+                                    if (chainId === ChainId.Celo) return
+                                    return x
+                                }
+
+                                return {
+                                    ...x,
+                                    ...(gasConfig ?
+                                        mapValues(omit(gasConfig, 'gasOptionType'), (value, key) => {
+                                            if (key === 'gasCurrency' || !value) return
+                                            return web3_utils.toHex(value)
+                                        })
+                                    :   {}),
+                                    gasLimit: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
+                                    chainId: web3_utils.toHex(x.chainId),
+                                    nonce: web3_utils.toHex(x.nonce),
+                                }
+                            }),
+                        )
+                    }
+
+                    if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                        if (params[0].type === '0x0') {
+                            delete params[0].type
+                            delete params[0].gasPrice
+                        }
+                    }
+                    const response = await Message?.approveRequest(currentRequest.ID, {
+                        ...currentRequest.request,
+                        arguments: {
+                            ...currentRequest.request.arguments,
+                            params,
+                        },
+                        options: {
+                            ...currentRequest.request.options,
+                            paymentToken,
+                        },
+                    })
+                    const editor = response ? ErrorEditor.from(null, response) : undefined
+                    if (editor?.presence) throw editor.error
                 }
-                const response = await Message?.approveRequest(currentRequest.ID, {
-                    ...currentRequest.request,
-                    arguments: {
-                        ...currentRequest.request.arguments,
-                        params,
-                    },
-                    options: {
-                        ...currentRequest.request.options,
-                        paymentToken,
-                    },
-                })
-                const editor = response ? ErrorEditor.from(null, response) : undefined
-                if (editor?.presence) throw editor.error
                 if (requestOrigin) await Services.Helper.removePopupWindow()
                 navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
             } catch (error) {
@@ -366,7 +409,15 @@ const Interaction = memo((props: InteractionProps) => {
                 )
             }
         },
-        [chainId, currentRequest, Message, requestOrigin, transaction.formattedTransaction?._tx.data],
+        [
+            chainId,
+            currentRequest,
+            Message,
+            requestOrigin,
+            transaction.formattedTransaction?._tx.data,
+            Token,
+            wallet?.address,
+        ],
     )
 
     const [{ loading: cancelLoading }, handleCancel] = useAsyncFn(async () => {
@@ -498,7 +549,8 @@ const InteractionItem = memo((props: InteractionItemProps) => {
     const isUnlockERC20 = transaction.formattedTransaction?.popup?.spender
     const isUnlockERC721 = transaction.formattedTransaction?.popup?.erc721Spender
     const content =
-        isSignRequest ? <SignRequestInfo message={message} rawMessage={rawMessage} origin={requestOrigin} />
+        transaction.payload.method === EthereumMethodType.WATCH_ASSET ? <WatchTokenRequest transaction={transaction} />
+        : isSignRequest ? <SignRequestInfo message={message} rawMessage={rawMessage} origin={requestOrigin} />
         : isUnlockERC20 ?
             <UnlockERC20Token
                 onConfigChange={setGasConfig}
