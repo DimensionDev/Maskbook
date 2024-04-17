@@ -42,9 +42,6 @@ const config: KnipConfig = {
         'packages/sentry': {
             ignoreDependencies: ['@sentry/browser'],
         },
-        'packages/scripts': {
-            ignoreDependencies: ['ts-node'],
-        },
     },
     ignoreWorkspaces: ['packages/polyfills', 'packages/sandboxed-plugins', 'packages/xcode'],
     ignoreDependencies: ['buffer', 'https-browserify', 'punycode'],

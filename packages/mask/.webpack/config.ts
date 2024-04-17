@@ -123,7 +123,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // Patch old regenerator-runtime
                 {
                     test: /\..?js$/,
-                    loader: require.resolve('./loaders/fix-regenerator-runtime.ts'),
+                    loader: require.resolve('./loaders/fix-regenerator-runtime.js'),
                 },
                 // TypeScript
                 {
@@ -408,7 +408,6 @@ async function addHTMLEntry({
     gun?: boolean
     perf: boolean
 }) {
-    console.log(options.filename)
     let template = await (options.filename === 'popups.html' && !perf ? popupTemplateContent : templateContent)
     if (gun) template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
     if (perf) template = template.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')

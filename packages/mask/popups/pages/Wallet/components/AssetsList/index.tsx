@@ -99,10 +99,10 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    // TODO Temporarily get X1 Testnet balance via rpc
+    // TODO Temporarily get XLayer balance via rpc
     const tryRpc =
         (!asset.balance || isZero(asset.balance)) &&
-        (network?.isCustomized || network?.chainId === ChainId.X1_Testnet) &&
+        (network?.isCustomized || network?.chainId === ChainId.XLayer) &&
         seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,

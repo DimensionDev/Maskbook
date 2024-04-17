@@ -2,7 +2,7 @@
   "name": "@masknet/polyfill",
   "version": "0.0.0",
   "private": true,
-  "sideEffects": false,
+  "sideEffects": ["./runtime/*.js"],
   "type": "module",
   "scripts": {
     "build": "rollup -c"
