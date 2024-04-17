@@ -65,7 +65,7 @@ patchedDependencies:
     hash: tb3oevqnvhntsyfyhi2z6spuea
     path: patches/fortmatic@2.2.1.patch
   gulp@4.0.2:
-    hash: tfijye3fclipdzo6an37r223ay
+    hash: p7m2eyxdcmanl3mzdfv4qzmmmq
     path: patches/gulp@4.0.2.patch
   micromark-util-symbol@1.0.1:
     hash: jkhnsgx77ffpyllfnod5pyn4ue
@@ -237,7 +237,7 @@ importers:
         version: 3.1.0(eslint@8.57.0)
       gulp:
         specifier: ^4.0.2
-        version: 4.0.2(patch_hash=tfijye3fclipdzo6an37r223ay)
+        version: 4.0.2(patch_hash=p7m2eyxdcmanl3mzdfv4qzmmmq)
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -6504,7 +6504,7 @@ packages:
       jest-regex-util: 28.0.2
       jest-util: 28.1.3
       micromatch: 4.0.5
-      pirates: 4.0.5
+      pirates: 4.0.6
       slash: 3.0.0
       write-file-atomic: 4.0.2
     transitivePeerDependencies:
@@ -17547,7 +17547,7 @@ packages:
       - supports-color
     dev: true
 
-  /gulp@4.0.2(patch_hash=tfijye3fclipdzo6an37r223ay):
+  /gulp@4.0.2(patch_hash=p7m2eyxdcmanl3mzdfv4qzmmmq):
     resolution: {integrity: sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==}
     engines: {node: '>= 0.10'}
     hasBin: true
@@ -22712,15 +22712,9 @@ packages:
       thread-stream: 2.2.0
     dev: true
 
-  /pirates@4.0.5:
-    resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
-    engines: {node: '>= 6'}
-    dev: false
-
   /pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
-    dev: true
 
   /pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}

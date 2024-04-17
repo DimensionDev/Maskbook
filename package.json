@@ -126,7 +126,6 @@
     },
     "patchedDependencies": {
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
-      "gulp@4.0.2": "patches/gulp@4.0.2.patch",
       "micromark@3.1.0": "patches/micromark@3.1.0.patch",
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
@@ -147,7 +146,8 @@
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
       "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
       "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
-      "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch"
+      "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
+      "gulp@4.0.2": "patches/gulp@4.0.2.patch"
     }
   }
 }
