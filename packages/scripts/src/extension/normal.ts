@@ -54,8 +54,8 @@ watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network ext
 function webpack(flags: BuildFlagsExtended) {
     const command = [
         JSON.stringify(process.execPath),
-        '--loader',
-        'ts-node/esm/transpile-only',
+        '--import',
+        '@swc-node/register/esm-register',
         'node_modules/webpack/bin/webpack.js',
         flags.mode === 'development' ? 'serve' : undefined,
         '--mode',
