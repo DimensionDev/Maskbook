@@ -87,7 +87,9 @@ export function PossiblePluginSuggestionUISingle(props: {
     const theme = useTheme()
     const onClick = useCallback(() => {
         if (lackHostPermission && define.enableRequirement.host_permissions) {
-            Services.Helper.requestHostPermission(define.enableRequirement.host_permissions)
+            Services.Helper.requestExtensionPermissionFromContentScript({
+                origins: define.enableRequirement.host_permissions,
+            })
         } else {
             Services.Settings.setPluginMinimalModeEnabled(define.ID, false)
         }

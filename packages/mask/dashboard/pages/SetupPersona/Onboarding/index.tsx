@@ -6,7 +6,7 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Trend } from '../../../assets/index.js'
-import { CrossIsolationMessages, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EnhanceableSite, PopupRoutes, userGuideStatus } from '@masknet/shared-base'
 
 import Services from '#services'
 import { delay } from '@masknet/kit'
@@ -15,6 +15,8 @@ import { useSearchParams } from 'react-router-dom'
 import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
+import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -85,12 +87,12 @@ export const Onboarding = memo(function Onboarding() {
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
-        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
-        if (!url) return
+        if (!(await requestPermissionFromExtensionPage(EnhanceableSite.Twitter))) return
+        if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         await delay(300)
         await browser.tabs.create({
             active: true,
-            url,
+            url: TwitterAdaptor.homepage,
         })
         window.close()
     }, [])

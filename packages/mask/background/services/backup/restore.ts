@@ -1,5 +1,4 @@
 import { getBackupSummary, normalizeBackup } from '@masknet/backup-format'
-import { requestHostPermission } from '../helper/request-permission.js'
 import { restoreNormalizedBackup } from './internal_restore.js'
 import { Result } from 'ts-results-es'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
@@ -36,11 +35,5 @@ export async function generateBackupSummary(raw: string) {
 export async function restoreBackup(raw: string) {
     const backupObj: unknown = JSON.parse(raw)
     const backup = await normalizeBackup(backupObj)
-    const granted = await requestHostPermission(backup.settings.grantedHostPermissions)
-
-    if (!granted) return
-
     await restoreNormalizedBackup(backup)
-
-    return
 }

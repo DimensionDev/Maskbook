@@ -1,11 +1,11 @@
 import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
 import { MaskMessages, NextIDAction, type PersonaInformation } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAsyncFn } from 'react-use'
 import { VerifyNextIDModal } from '../UI/modals/index.js'
+import { useCallback } from 'react'
 
 export function useNextIDVerify() {
-    return useAsyncFn(
+    return useCallback(
         async (persona?: PersonaInformation, username?: string, verifiedCallback?: () => void | Promise<void>) => {
             if (!currentNextIDPlatform || !persona || !username) return
 

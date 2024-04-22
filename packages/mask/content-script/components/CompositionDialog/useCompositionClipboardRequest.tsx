@@ -20,7 +20,7 @@ export function useCompositionClipboardRequest(
 
     const onRequestClipboardPermission = useCallback(() => {
         if (!requireClipboardPermission) return
-        Services.Helper.requestExtensionPermission({ permissions: ['clipboardRead'] }).finally(() => {
+        Services.Helper.requestExtensionPermissionFromContentScript({ permissions: ['clipboardRead'] }).finally(() => {
             MaskMessages.events.requestExtensionPermission.sendToAll({ permissions: ['clipboardRead'] })
         })
     }, [requireClipboardPermission])
