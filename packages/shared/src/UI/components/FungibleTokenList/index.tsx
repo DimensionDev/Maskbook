@@ -98,7 +98,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const { Token } = useWeb3State<'all'>(pluginID)
     const Utils = useWeb3Utils(pluginID)
 
-    const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, {
+    const { data: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList(pluginID, {
         chainId,
     })
 
