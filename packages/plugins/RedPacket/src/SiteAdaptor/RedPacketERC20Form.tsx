@@ -89,22 +89,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface RedPacketFormProps {
-    onChange(settings: RedPacketSettings): void
-    onClose: () => void
-    origin?: RedPacketSettings
-    onNext: () => void
     setERC721DialogHeight?: (height: number) => void
     gasOption?: GasConfig
-    onGasOptionChange?: (config: GasConfig) => void
     expectedChainId: ChainId
     isFirefly?: boolean
+    origin?: RedPacketSettings
+    onClose: () => void
+    onNext: () => void
+    onGasOptionChange?: (config: GasConfig) => void
+    onChange(settings: RedPacketSettings): void
+    onChainChange(newChainId: ChainId): void
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
+    const { origin, expectedChainId, isFirefly, gasOption, onChange, onNext, onGasOptionChange, onChainChange } = props
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
-    const { onChange, onNext, origin, gasOption, onGasOptionChange, expectedChainId, isFirefly } = props
     // context
     const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
@@ -127,8 +128,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
         if (!picked) return
+        if (chainId !== picked.chainId) {
+            onChainChange(picked.chainId as ChainId)
+        }
         setToken(picked as FungibleToken<ChainId, SchemaType>)
-    }, [token?.address, chainId])
+    }, [token?.address, chainId, onChainChange])
     // #endregion
 
     // #region packet settings

@@ -47,14 +47,11 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
-        data: historiesData,
+        data: historyData,
         isLoading,
         fetchNextPage,
     } = useRedPacketHistory(account, FireflyRedPacketAPI.ActionType.Send, FireflyRedPacketAPI.SourceType.MaskNetwork)
-    const histories = useMemo(
-        () => historiesData.pages.flatMap((page) => page.data).filter((x) => x.chain_id === chainId),
-        [historiesData, chainId],
-    )
+    const histories = useMemo(() => historyData.pages.flatMap((page) => page.data), [historyData, chainId])
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
