@@ -45,6 +45,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     whitelist?: string[]
     blacklist?: string[]
     tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    selectedChainId?: Web3Helper.ChainIdAll
     selectedTokens?: string[]
     disableSearch?: boolean
 
@@ -82,6 +83,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         onSelect,
         onSearchError,
         FixedSizeListProps,
+        selectedChainId,
         selectedTokens = EMPTY_LIST,
         enableManage = false,
         isHiddenChainIcon = true,
@@ -294,7 +296,11 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
                 return 'external'
             },
-            (address) => selectedTokens.some((x) => isSameAddress(x, address)),
+            (address, tokenChainId) => {
+                if (tokenChainId !== selectedChainId) return false
+                console.log('tokenChainId', tokenChainId)
+                return selectedTokens.some((x) => isSameAddress(x, address))
+            },
             mode,
             async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
@@ -314,6 +320,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             isCustomToken,
         )
     }, [
+        chainId,
         nativeToken?.address,
         selectedTokens,
         mode,
