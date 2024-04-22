@@ -29,7 +29,7 @@ import {
     useCurrentLinkedPersona,
 } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -142,10 +142,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         : 0,
     )
     const [message, setMessage] = useState(origin?.message || '')
-    const currentIdentity = useCurrentVisitingIdentity()
+    const myIdentity = useLastRecognizedIdentity()
     const linkedPersona = useCurrentLinkedPersona()
 
-    const senderName = currentIdentity?.identifier?.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName = myIdentity?.identifier?.userId || linkedPersona?.nickname || 'Unknown User'
 
     // shares
     const [shares, setShares] = useState<number | ''>(origin?.shares || RED_PACKET_DEFAULT_SHARES)
