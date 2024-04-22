@@ -18,6 +18,10 @@ const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
         padding: theme.spacing(0, 2, 0, 2),
     },
+    list: {
+        boxSizing: 'border-box',
+        paddingBottom: theme.spacing(8), // Fill the space for footer of the dialog
+    },
 }))
 
 interface Props {
@@ -63,10 +67,10 @@ export const RedPacketPast = memo(function RedPacketPast({ onSelect, onClose, ta
         <>
             <div className={classes.tabWrapper}>
                 <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
-                    <RedPacketHistoryList onSelect={onSelect} />
+                    <RedPacketHistoryList className={classes.list} onSelect={onSelect} />
                 </TabPanel>
                 <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
-                    <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />
+                    <NftRedPacketHistoryList className={classes.list} onSend={handleSendNftRedpacket} />
                 </TabPanel>
             </div>
             <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
