@@ -7,7 +7,7 @@ import { useChainContext, useNetworkContext, useProviderDescriptor } from '@mask
 import { getUtils, getWeb3Connection } from '@masknet/web3-providers'
 import type { Connection } from '@masknet/web3-providers/types'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
-import { forwardRef, useRef } from 'react'
+import { forwardRef, useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 import { Spinner } from './Spinner.js'
@@ -81,6 +81,8 @@ export const ConnectWalletModal = forwardRef<
     const { setPluginID } = useNetworkContext()
     const { setNetworkType, setProviderType } = useChainContext()
 
+    // Reset connection error
+    const [tick, setTick] = useState(0)
     const [{ loading, error }, onConnect] = useAsyncFn(async () => {
         if (!connectionRef.current) throw new Error('Failed to connect to provider. No connection info provided')
 
@@ -114,10 +116,11 @@ export const ConnectWalletModal = forwardRef<
         }
 
         return true
-    }, [])
+    }, [tick])
 
     const [open, dispatch] = useSingletonModal(ref, {
         async onOpen(props, dispatch) {
+            setTick((v) => v + 1)
             connectionRef.current = {
                 pluginID: props.pluginID ?? NetworkPluginID.PLUGIN_EVM,
                 networkType: props.networkType,
