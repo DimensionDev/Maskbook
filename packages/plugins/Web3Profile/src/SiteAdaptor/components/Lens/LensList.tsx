@@ -48,8 +48,11 @@ const useStyles = makeStyles()((theme) => {
         avatarContainer: {
             width: 30,
             height: 30,
-            borderRadius: '50%',
             position: 'relative',
+        },
+        imageContainer: {
+            borderRadius: '50%',
+            overflow: 'hidden',
         },
         avatar: {
             borderRadius: '50%',
@@ -97,15 +100,23 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
 
     const latestProfile = useSubscription(PersistentStorages.Settings.storage.latestLensProfile.subscription)
 
-    const { data = accounts, isPending } = useQuery({
-        queryKey: ['Lens', 'Popup-List', accounts.map((x) => x.handle).join(''), wallet, latestProfile],
+    const { data: currentProfileId = latestProfile } = useQuery({
+        queryKey: ['lens', 'current-profile', wallet],
+        enabled: !latestProfile,
         queryFn: async () => {
-            if (!accounts.length) return EMPTY_LIST
-            let currentProfileId = latestProfile || (await Lens.queryDefaultProfileByAddress(wallet))?.id
+            const currentProfileId = (await Lens.queryDefaultProfileByAddress(wallet))?.id
             if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
-                currentProfileId = first(profiles)?.id
+                return first(profiles)?.id
             }
+            return currentProfileId
+        },
+    })
+
+    const { data = accounts, isPending } = useQuery({
+        queryKey: ['lens', 'popup-list', currentProfileId, accounts.map((x) => x.handle).join('')],
+        queryFn: async () => {
+            if (!accounts.length) return EMPTY_LIST
 
             const profiles = await Lens.getProfilesByHandles(accounts.map((x) => x.handle))
             if (!currentProfileId)
@@ -167,7 +178,12 @@ const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
         <ListItem className={classes.listItem} key={account.handle}>
             <div className={classes.avatarContainer}>
                 {profileUri.length ?
-                    <Image size={30} classes={{ failed: classes.avatar }} src={profileUri[0]} fallback={lensIcon} />
+                    <Image
+                        size={30}
+                        classes={{ failed: classes.avatar, container: classes.imageContainer }}
+                        src={profileUri[0]}
+                        fallback={lensIcon}
+                    />
                 :   lensIcon}
                 <Icons.DarkLens className={classes.badge} size={12} />
             </div>
