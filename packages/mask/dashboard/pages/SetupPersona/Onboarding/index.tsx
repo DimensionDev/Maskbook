@@ -83,7 +83,7 @@ export const Onboarding = memo(function Onboarding() {
     const { showSnackbar } = useCustomSnackbar()
     const theme = useTheme()
     const isCreate = params.get('isCreate')
-
+    const count = params.get('count')
     const { value: hasPaymentPassword, loading, retry } = useAsyncRetry(Services.Wallet.hasPassword, [])
 
     const onSetupTwitter = useCallback(async () => {
@@ -180,7 +180,7 @@ export const Onboarding = memo(function Onboarding() {
                     }>
                     {t.persona_onboarding_to_twitter()}
                 </PrimaryButton>
-                {!isCreate ?
+                {!isCreate && count && !isZero(count) ?
                     <PrimaryButton
                         loading={loading}
                         disabled={loading}
