@@ -118,7 +118,7 @@ export class ConnectionContext {
                 const params = this.providerType !== ProviderType.Clover ? config : omit(config, 'chainId')
                 this._requestArguments = {
                     method: this.method,
-                    params: [params, 'latest'],
+                    params: [params],
                 }
                 break
             default:
