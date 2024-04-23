@@ -298,7 +298,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             },
             (address, tokenChainId) => {
                 if (tokenChainId !== selectedChainId) return false
-                console.log('tokenChainId', tokenChainId)
                 return selectedTokens.some((x) => isSameAddress(x, address))
             },
             mode,
