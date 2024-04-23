@@ -458,7 +458,7 @@ export namespace TwitterBaseAPI {
         description: string
         url: string
         entities: {
-            url: {
+            url?: {
                 urls: Array<{
                     url: string
                     expanded_url: string
@@ -466,7 +466,7 @@ export namespace TwitterBaseAPI {
                     indices: number[]
                 }>
             }
-            description: {
+            description?: {
                 urls: string[]
             }
         }
