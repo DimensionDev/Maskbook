@@ -279,8 +279,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 return
             }
             hash = await claimCallback()
-            // `hash` could be an `Error` in runtime
-            if (platform && myProfileId && myHandle && typeof hash === 'string') {
+            if (platform && myProfileId && myHandle && hash) {
                 await FireflyRedPacket.finishClaiming(
                     payload.rpid,
                     platform as FireflyRedPacketAPI.PlatformType,
