@@ -104,7 +104,6 @@ export function SelectFungibleTokenDialog({
         () => ({ itemSize: rowSize + 18.5, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
     )
-    console.log('SelectFungibleTokenDialog', 'props', chainId)
     return (
         <InjectedDialog
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
