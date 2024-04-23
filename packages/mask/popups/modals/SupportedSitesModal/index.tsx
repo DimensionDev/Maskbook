@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Switch, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
@@ -54,8 +54,8 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
             networkIdentifier: EnhanceableSite
         }) => {
             if (!hasPermission) {
-                const result = await Services.SiteAdaptor.requestPermissionBySite(networkIdentifier)
-                if (!result) return
+                const granted = await requestPermissionFromExtensionPage(networkIdentifier)
+                if (!granted) return
             }
 
             await Services.Settings.setInjectSwitchSetting(networkIdentifier, !allowInject)

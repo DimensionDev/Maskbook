@@ -1,4 +1,4 @@
-import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
+import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 import { useState, useCallback, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Services from '#services'
@@ -10,6 +10,8 @@ import { Box } from '@mui/system'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -66,12 +68,12 @@ export const SignUp = memo(function SignUp() {
     }, [personaName])
 
     const onSkip = useCallback(async () => {
-        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
-        if (!url) return
+        if (!(await requestPermissionFromExtensionPage(EnhanceableSite.Twitter))) return
+        if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         await delay(300)
         await browser.tabs.create({
             active: true,
-            url,
+            url: TwitterAdaptor.homepage,
         })
         window.close()
     }, [])

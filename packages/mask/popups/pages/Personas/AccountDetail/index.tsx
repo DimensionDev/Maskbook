@@ -11,6 +11,7 @@ import {
     PopupRoutes,
     SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID,
     SignType,
+    currentSetupGuideStatus,
     type EnhanceableSite,
 } from '@masknet/shared-base'
 import { usePopupCustomSnackbar } from '@masknet/theme'
@@ -25,7 +26,7 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
@@ -79,7 +80,7 @@ const AccountDetail = memo(() => {
     const handleDetachProfile = useCallback(async () => {
         try {
             if (!selectedAccount?.identifier) return
-            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
+            currentSetupGuideStatus[selectedAccount.identifier.network].value = ''
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.removeQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
@@ -147,7 +148,7 @@ const AccountDetail = memo(() => {
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
-            await Service.SiteAdaptor.disconnectSite(selectedAccount.identifier.network)
+            currentSetupGuideStatus[selectedAccount.identifier.network].value = ''
             await delay(1000)
 
             // Broadcast updates
@@ -169,6 +170,8 @@ const AccountDetail = memo(() => {
 
     const [, onVerify] = useAsyncFn(async () => {
         if (!selectedAccount?.identifier || !currentPersona?.identifier) return
+        const granted = await requestPermissionFromExtensionPage(selectedAccount.identifier.network as EnhanceableSite)
+        if (!granted) return
         await Service.SiteAdaptor.connectSite(
             currentPersona.identifier,
             selectedAccount.identifier.network,

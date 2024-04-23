@@ -1,12 +1,6 @@
 import { maskSDK_URL, injectUserScriptMV2, evaluateContentScript } from '../../utils/injectScript.js'
-import { requestHostPermission, requestHostPermissionForActiveTab } from '../helper/request-permission.js'
 
-export async function attachMaskSDKToCurrentActivePage(choose: 'once' | 'always' | 'always-all'): Promise<boolean> {
-    if (choose === 'always') {
-        requestHostPermissionForActiveTab()
-    } else if (choose === 'always-all') {
-        requestHostPermission(['<all_urls>'])
-    }
+export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
     if (browser.scripting) {
         const [{ id }] = await browser.tabs.query({ active: true })
         if (!id) return false

@@ -38,6 +38,6 @@ export function useCheckPermissions(permissions: string[]) {
 export function useGrantPermissions(permissions?: string[]) {
     return useAsyncFn(async () => {
         if (!permissions?.length) return
-        return Services.Helper.requestHostPermission(permissions)
+        return Services.Helper.requestExtensionPermissionFromContentScript({ origins: permissions })
     }, [permissions])
 }
