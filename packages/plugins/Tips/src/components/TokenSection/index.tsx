@@ -5,6 +5,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useTip } from '../../contexts/index.js'
 import { GasSettingsBar } from './GasSettingsBar.js'
+import { TargetRuntimeContext } from '../../contexts/TargetRuntimeContext.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -21,6 +22,7 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
     const { token, setToken, amount, setAmount, isAvailableBalance, balance } = useTip()
     const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext()
+    const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({
@@ -30,8 +32,11 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
             selectedTokens: token ? [token.address] : [],
         })
         if (!picked) return
+        if (chainId !== picked.chainId) {
+            setTargetChainId(picked.chainId)
+        }
         setToken(picked)
-    }, [token?.address, pluginID, chainId])
+    }, [token?.address, pluginID, chainId, setTargetChainId])
 
     return (
         <div {...props} className={cx(props.className, classes.container)}>
