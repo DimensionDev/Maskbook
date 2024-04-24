@@ -2,9 +2,8 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import type { SiteAdaptorUI } from '@masknet/types'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier.js'
-import { isMobileFacebook } from '../utils/isMobile.js'
 import { ProfileIdentifier, EnhanceableSite, type ValueRef } from '@masknet/shared-base'
-import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector.js'
+import { searchFacebookAvatarSelector } from '../utils/selector.js'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user.js'
 import { delay } from '@masknet/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -18,7 +17,7 @@ export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.Iden
 }
 
 function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolved>, signal: AbortSignal) {
-    const self = myUsernameLiveSelectorPC.clone().map((x) => getProfileIdentifierAtFacebook(x, false))
+    const self = myUsernameLiveSelector.clone().map((x) => getProfileIdentifierAtFacebook(x, false))
     new MutationObserverWatcher(self)
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
@@ -47,8 +46,6 @@ function resolveCurrentVisitingIdentityInner(
     ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
-
     const assign = async () => {
         await delay(3000)
         const nickname = getNickName()
@@ -86,7 +83,7 @@ function resolveCurrentVisitingIdentityInner(
 
     assign()
 
-    createWatcher(selector)
+    createWatcher(searchFacebookAvatarSelector())
 }
 
 export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider = {
@@ -98,12 +95,9 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
 }
 
 // Try to resolve my identities
-const myUsernameLiveSelectorPC = new LiveSelector()
+const myUsernameLiveSelector = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
         '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )
 
     .filter((x) => x.innerText)
-const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchorElement>(
-    '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
-)

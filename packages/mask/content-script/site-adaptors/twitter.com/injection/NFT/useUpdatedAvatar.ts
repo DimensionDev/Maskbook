@@ -1,9 +1,9 @@
-import type { NextIDAvatarMeta } from '@masknet/plugin-avatar'
-import { searchTwitterAvatarLinkSelector } from '../../utils/selector.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useUpdateEffect } from 'react-use'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
+import { CrossIsolationMessages, type NetworkPluginID } from '@masknet/shared-base'
+import { searchTwitterAvatarLinkSelector } from '../../utils/selector.js'
 
-export function useUpdatedAvatar(showAvatar: boolean, nftAvatar?: NextIDAvatarMeta) {
+export function useUpdatedAvatar(showAvatar: boolean, nftAvatar: AvatarNextID<NetworkPluginID> | null) {
     useUpdateEffect(() => {
         if (!showAvatar) return
 
@@ -11,9 +11,9 @@ export function useUpdatedAvatar(showAvatar: boolean, nftAvatar?: NextIDAvatarMe
         if (!linkParentDom) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftAvatar?.tokenId || !nftAvatar.address || !nftAvatar.pluginId || !nftAvatar.chainId) return
             event.stopPropagation()
             event.preventDefault()
+            if (!nftAvatar?.tokenId || !nftAvatar?.address || !nftAvatar.pluginId || !nftAvatar.chainId) return
             CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,

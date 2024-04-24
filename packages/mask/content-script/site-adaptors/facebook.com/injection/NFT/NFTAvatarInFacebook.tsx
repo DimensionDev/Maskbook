@@ -1,35 +1,24 @@
-import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useAsync, useLocation, useWindowSize } from 'react-use'
-import { max, pickBy } from 'lodash-es'
+import { useLayoutEffect, useMemo, useSyncExternalStore } from 'react'
+import { useWindowSize } from 'react-use'
+import { max } from 'lodash-es'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { useSaveStringStorage, type AvatarMetaDB, type NextIDAvatarMeta } from '@masknet/plugin-avatar'
-import { useNFT, useNFTAvatar, NFTBadge, RSS3_KEY_SITE, useWallet } from '@masknet/plugin-avatar'
-import { searchFacebookAvatarOnMobileSelector, searchFacebookAvatarSelector } from '../../utils/selector.js'
+import { AvatarStore } from '@masknet/web3-providers'
+import { NFTBadge } from '@masknet/plugin-avatar'
+import { searchFacebookAvatarSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
-import { type NFTAvatarEvent, NetworkPluginID, MaskMessages, InMemoryStorages } from '@masknet/shared-base'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
-import { isMobileFacebook } from '../../utils/isMobile.js'
 import { startWatch } from '../../../../utils/startWatch.js'
+import { useSaveAvatarInFacebook } from './useSaveAvatarInFacebook.js'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
-    if (!isMobileFacebook) {
-        startWatch(watcher, signal)
-        attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-            <NFTAvatarInFacebook />,
-        )
-        return
-    }
-
-    // mobile
-    const mobileWatcher = new MutationObserverWatcher(searchFacebookAvatarOnMobileSelector())
-    startWatch(mobileWatcher, signal)
-    attachReactTreeWithContainer(mobileWatcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
+    startWatch(watcher, signal)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
         <NFTAvatarInFacebook />,
     )
+    return
 }
 
 const useStyles = makeStyles()(() => ({
@@ -52,131 +41,31 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const clearStorages = () => {
-    InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue('')
-    InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue('')
-    InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue('')
-}
-
 function NFTAvatarInFacebook() {
     const { classes } = useStyles()
 
-    const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
-    const location = useLocation()
-    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SITE.FACEBOOK)
-    const { account } = useChainContext()
-    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
-    const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
-        storage?.address ?? account,
-        nftAvatar?.address,
-        nftAvatar?.tokenId,
-        nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-        nftAvatar?.chainId,
-    )
+    const savedAvatar = useSaveAvatarInFacebook(identity)
 
-    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
+    const avatar = savedAvatar ?? store.retrieveAvatar(identity.identifier?.userId)
+    const token = store.retrieveToken(identity.identifier?.userId)
 
     const windowSize = useWindowSize()
-    const showAvatar = useMemo(() => {
-        if (isMobileFacebook) {
-            const node = searchFacebookAvatarOnMobileSelector().closest<HTMLDivElement>(1).evaluate()
-
-            if (node) {
-                node.style.position = 'relative'
-            }
-        }
-        return getAvatarId(identity.avatar ?? '') === avatar?.avatarId
-    }, [avatar?.avatarId, identity.avatar, isMobileFacebook])
+    const showAvatar = getAvatarId(identity.avatar ?? '') === avatar?.avatarId
 
     const size = useMemo(() => {
-        const ele =
-            isMobileFacebook ?
-                searchFacebookAvatarOnMobileSelector().evaluate()
-            :   searchFacebookAvatarSelector().evaluate()
-        if (ele) {
-            const style = window.getComputedStyle(ele)
-            return max([148, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])
-        }
-        return 0
-    }, [windowSize, isMobileFacebook, avatar])
-
-    useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) =>
-            setNFTEvent((prev) => {
-                if (!prev) return data
-                return { ...prev, ...pickBy<NFTAvatarEvent>(data, (item) => !!item) }
-            }),
-        )
-    }, [])
-
-    // Because of the mobile upload step, need to use memory storage to store NFTEven
-    useAsync(async () => {
-        const storages = InMemoryStorages.FacebookNFTEventOnMobile.storage
-
-        if (!account) return
-        if (!identity.identifier) return
-        if (NFTEvent?.address && NFTEvent.tokenId && NFTEvent.avatarId) {
-            try {
-                const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
-                    ...NFTEvent,
-                    avatarId: getAvatarId(identity.avatar ?? ''),
-                } as NextIDAvatarMeta)
-                if (!avatarInfo) {
-                    setNFTEvent(undefined)
-                    setAvatar(undefined)
-                    // eslint-disable-next-line no-alert
-                    window.alert('Sorry, failed to save NFT Avatar. Please set again.')
-                    return
-                }
-
-                setAvatar(avatarInfo)
-
-                setNFTEvent(undefined)
-            } catch (error) {
-                setNFTEvent(undefined)
-                setAvatar(undefined)
-                // eslint-disable-next-line no-alert
-                alert((error as any).message)
-                return
-            }
-        } else if (storages.address.value && storages.userId.value && storages.tokenId.value) {
-            try {
-                const avatarInfo = await saveNFTAvatar(storages.userId.value, account, {
-                    userId: storages.userId.value,
-                    tokenId: storages.tokenId.value,
-                    address: storages.address.value,
-                    avatarId: getAvatarId(identity.avatar ?? ''),
-                    chainId: storages.chainId.value,
-                    pluginID: storages.pluginID.value,
-                    schema: storages.schema.value,
-                } as unknown as NextIDAvatarMeta)
-                if (!avatarInfo) {
-                    clearStorages()
-                    setAvatar(undefined)
-                    // eslint-disable-next-line no-alert
-                    alert('Sorry, failed to save NFT Avatar. Please set again.')
-                    return
-                }
-                setAvatar(avatarInfo)
-                clearStorages()
-            } catch (error) {
-                clearStorages()
-                setAvatar(undefined)
-                // eslint-disable-next-line no-alert
-                alert((error as any).message)
-                return
-            }
-        }
-    }, [identity.avatar])
-
-    useEffect(() => setAvatar(nftAvatar), [nftAvatar, location])
+        const ele = searchFacebookAvatarSelector().evaluate()
+        if (!ele) return 0
+        const style = window.getComputedStyle(ele)
+        return max([148, Number.parseInt(style.width.replace('px', '') ?? 0, 10)])
+    }, [windowSize, avatar])
 
     // #region clear white border
     useLayoutEffect(() => {
         const node = searchFacebookAvatarSelector().closest<HTMLDivElement>(3).evaluate()
         if (!node) return
+
         if (showAvatar) {
             node.setAttribute('style', 'padding: 0')
         } else {
@@ -185,13 +74,9 @@ function NFTAvatarInFacebook() {
     })
     // #endregion
 
-    if (!avatar || !size || !showAvatar || loadingWallet || loadingNFTInfo) return null
+    if (!avatar || !token || !size || !showAvatar) return null
 
     return (
-        <NFTBadge
-            nftInfo={nftInfo}
-            size={size}
-            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-        />
+        <NFTBadge token={token} size={size} classes={{ root: classes.root, text: classes.text, icon: classes.icon }} />
     )
 }

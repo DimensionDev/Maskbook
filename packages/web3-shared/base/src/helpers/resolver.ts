@@ -206,7 +206,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
 // https://stackoverflow.com/a/67176726
 const MATCH_IPFS_CID_RAW =
     'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
-const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
+const MATCH_IPFS_DATA_RE = /ipfs\/(data:[\w,/;]+)$/
 const MATCH_IPFS_CID_RE = new RegExp(`(${MATCH_IPFS_CID_RAW})`)
 const MATCH_IPFS_CID_STRICT_RE = new RegExp(`^(?:${MATCH_IPFS_CID_RAW})$`)
 const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW})`)
@@ -244,7 +244,8 @@ export function resolveLocalURL(url: string) {
  * they are exactly the same.
  */
 export function trimQuery(url: string) {
-    return url.replace(/\?.+$/, '')
+    const indexOf = url.indexOf('?')
+    return url.slice(0, Math.max(0, indexOf === -1 ? url.length : indexOf))
 }
 
 export function resolveIPFS_CID(str: string) {

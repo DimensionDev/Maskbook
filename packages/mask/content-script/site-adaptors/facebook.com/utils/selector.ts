@@ -12,10 +12,6 @@ function querySelectorAll<T extends E>(selector: string) {
     return new LiveSelector().querySelectorAll<T>(selector)
 }
 
-export function searchUserIdOnMobileSelector() {
-    return querySelector<HTMLAnchorElement>('div[data-sigil$="profile"] a')
-}
-
 export function searchAvatarSelector() {
     return querySelector<HTMLImageElement>(
         '[role="navigation"] svg g image, [role="main"] [role="link"] [role="img"] image, [role="main"] [role="button"] [role="img"] image',
@@ -28,22 +24,9 @@ export function searchNickNameSelector(userId?: string | null) {
     )
 }
 
-export function searchNickNameSelectorOnMobile() {
-    return querySelector<E>('#cover-name-root h3')
-}
-
-export function bioDescriptionSelectorOnMobile() {
-    return querySelector('#bio div')
-}
-
 export function searchUserIdSelector() {
     return querySelector<HTMLAnchorElement>('div[role="tablist"][data-visualcompletion="ignore-dynamic"] a[role="tab"]')
 }
-
-export function searchUserIdSelectorOnMobile() {
-    return querySelector<HTMLAnchorElement>('#tlFeed div[data-sigil="scroll-area"] a:last-child')
-}
-// #endregion facebook nft avatar
 
 export function searchFacebookAvatarListSelector() {
     return querySelector('[role="dialog"] > div:nth-child(3)  input[type=file] + [role="button"]')
@@ -51,16 +34,8 @@ export function searchFacebookAvatarListSelector() {
         .querySelector('div')
 }
 
-export function searchFacebookAvatarMobileListSelector() {
-    return querySelector('#nuxChoosePhotoButton').closest<E>(6)
-}
-
 export function searchFacebookAvatarSelector() {
     return querySelector('[role="main"] [role="button"] svg[role="img"],[role="main"] [role="link"] svg[role="img"]')
-}
-
-export function searchFacebookAvatarOnMobileSelector() {
-    return querySelector('[data-sigil="timeline-cover"] i[aria-label$="picture"]')
 }
 
 export function searchFaceBookPostAvatarSelector() {
@@ -69,16 +44,8 @@ export function searchFaceBookPostAvatarSelector() {
     )
 }
 
-export function searchFaceBookPostAvatarOnMobileSelector() {
-    return querySelectorAll('[data-gt=\'{"tn":"~"}\']')
-}
-
 export function searchFacebookAvatarOpenFilesSelector() {
     return querySelector('[role="dialog"] input[type=file] ~ div')
-}
-
-export function searchFacebookAvatarOpenFilesOnMobileSelector() {
-    return querySelector<HTMLInputElement>('#nuxChoosePhotoButton ~ input')
 }
 
 export function searchFacebookProfileSettingButtonSelector() {
@@ -117,7 +84,6 @@ export function searchFacebookConfirmAvatarImageSelector() {
 export function inpageAvatarSelector() {
     return querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 }
-// #region
 
 export function toolboxInSidebarSelector() {
     return querySelector<E>('[data-pagelet="LeftRail"] > div > div > :nth-child(2) > ul > li:nth-child(2)')

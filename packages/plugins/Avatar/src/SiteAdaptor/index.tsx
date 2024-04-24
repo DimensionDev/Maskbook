@@ -11,44 +11,52 @@ import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
 
 function clickHandler() {
-    CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+    CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
         open: true,
     })
 }
+
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     GlobalInjection() {
         const { pluginID } = useNetworkContext()
         const { chainId } = useChainContext()
-        const [picking, setPicking] = useState<boolean>()
+        const [picking, setPicking] = useState(false)
         const [open, setOpen] = useState(false)
+
         useEffect(() => {
-            return CrossIsolationMessages.events.avatarSettingDialogEvent.on(({ open, startPicking }) => {
+            return CrossIsolationMessages.events.avatarSettingsDialogEvent.on(({ open, startPicking = false }) => {
                 setOpen(open)
                 setPicking(startPicking)
             })
         }, [])
+
         if (!open) return null
 
         return (
             <Web3ContextProvider network={pluginID} chainId={chainId}>
-                <NFTAvatarDialog startPicking={!!picking} open={open} onClose={() => setOpen(false)} />
+                <NFTAvatarDialog open startPicking={picking} onClose={() => setOpen(false)} />
             </Web3ContextProvider>
         )
     },
     ApplicationEntries: [
         (() => {
-            const name = { fallback: 'NFT PFP' }
+            const field = {
+                fallback: 'NFT PFP',
+            }
+
             const icon = <Icons.NFTAvatar size={36} />
+
             const recommendFeature = {
                 description: <Trans i18nKey="plugin_nft_avatar_recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
             }
+
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
-                            title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
+                            title={<PluginTransFieldRender field={field} pluginID={base.ID} />}
                             icon={icon}
                             recommendFeature={recommendFeature}
                             {...EntryComponentProps}
@@ -64,7 +72,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     )
                 },
                 appBoardSortingDefaultPriority: 3,
-                name,
+                name: field,
                 icon,
                 ApplicationEntryID: base.ID,
                 nextIdRequired: true,

@@ -11,7 +11,7 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileSettingButtonSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
-        <OpenNFTAvatarEditProfileButtonInFaceBook />,
+        <OpenNFTAvatarEditProfileButtonInFacebook />,
     )
 }
 
@@ -42,7 +42,7 @@ export function openNFTAvatarSettingDialog() {
     editDom?.click()
 }
 
-function OpenNFTAvatarEditProfileButtonInFaceBook() {
+function OpenNFTAvatarEditProfileButtonInFacebook() {
     const [style, setStyle] = useState<StyleProps>({ minHeight: 36, fontSize: 15, marginTop: 6 })
 
     const setStyleWithSelector = () => {
@@ -80,7 +80,7 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
                 root: classes.root,
             }}
             onClick={openNFTAvatarSettingDialog}
-            showSetting={false}
+            showSettings={false}
         />
     )
 }

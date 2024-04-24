@@ -99,7 +99,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     }, [props.setOpen])
 
     const onPFPButtonClick = useCallback(() => {
-        CrossIsolationMessages.events.avatarSettingDialogEvent.sendToLocal({
+        CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
             open: true,
             startPicking: true,
         })

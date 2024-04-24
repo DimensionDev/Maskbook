@@ -2,7 +2,6 @@ import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import Services from '#services'
 import { getCurrentIdentifier } from '../../utils.js'
-import { searchUserIdOnMobileSelector } from './selector.js'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -80,22 +79,8 @@ export function getUserID(x: string) {
     const relative = !x.startsWith('https://') && !x.startsWith('http://')
     const url = relative ? new URL(x, location.host) : new URL(x)
 
-    if (url.hostname !== 'www.facebook.com' && url.hostname !== 'm.facebook.com') return null
+    if (url.hostname !== 'www.facebook.com') return null
 
-    // Get the userId from the meta element
-    if (url.hostname === 'm.facebook.com') {
-        const node = searchUserIdOnMobileSelector().evaluate()
-        if (!node) return null
-
-        const href = node.getAttribute('href')
-
-        if (!href) return null
-
-        const match = href.match(/lst=(\w+)/)
-        if (!match) return null
-
-        return match[1]
-    }
     if (url.pathname.endsWith('.php')) {
         if (!url.search) return null
         const search = new URLSearchParams(url.search)

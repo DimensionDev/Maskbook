@@ -6,7 +6,7 @@ import { DOMProxy, type LiveSelector, MutationObserverWatcher } from '@dimension
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { getInjectNodeInfo } from '../../utils/avatar.js'
-import { NFTBadgeTimeline, RSS3_KEY_SITE } from '@masknet/plugin-avatar'
+import { NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { searchInstagramPostAvatarSelector } from '../../utils/selector.js'
 
 const useStyles = makeStyles()(() => ({
@@ -27,14 +27,13 @@ const TimeLineRainbow = memo(
                     zIndex: 2,
                 }}>
                 <NFTBadgeTimeline
+                    classes={{
+                        root: classes.root,
+                    }}
                     userId={userId}
                     avatarId={avatarId}
                     width={width}
                     height={height}
-                    classes={{
-                        root: classes.root,
-                    }}
-                    siteKey={RSS3_KEY_SITE.INSTAGRAM}
                 />
             </div>
         )
@@ -48,15 +47,12 @@ function _(selector: () => LiveSelector<HTMLImageElement>, signal: AbortSignal) 
 
             const run = async () => {
                 const href = (element.parentNode as HTMLAnchorElement | null)?.href
-
                 if (!href) return
 
                 const id = new URL(href).pathname.replaceAll('/', '')
-
                 if (!id) return
 
                 const info = getInjectNodeInfo(element)
-
                 if (!info) return
 
                 const proxy = DOMProxy({
