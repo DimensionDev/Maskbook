@@ -101,6 +101,3 @@ const myUsernameLiveSelectorPC = new LiveSelector()
     )
 
     .filter((x) => x.innerText)
-const myUsernameLiveSelectorMobile = new LiveSelector().querySelector<HTMLAnchorElement>(
-    '#bookmarks_flyout .mSideMenu > div > ul > li:first-child a, #MComposer a',
-)
