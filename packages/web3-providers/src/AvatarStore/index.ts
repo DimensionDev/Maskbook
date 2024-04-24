@@ -34,6 +34,8 @@ class StoreCreator implements Store {
 }
 
 class AvatarStoreProvider extends StoreProvider<Store> implements StoreAPI.Provider<Store> {
+    public store = new StoreCreator(new Map<string, StoreItem | null>())
+
     private getAvatarToken = memoizePromise(
         memoize,
         (userId: string, avatarId?: string, publicKey?: string): Promise<StoreItem | null> => {
@@ -66,9 +68,8 @@ class AvatarStoreProvider extends StoreProvider<Store> implements StoreAPI.Provi
         const result = await this.getAvatarToken(userId, avatarId, publicKey)
 
         this.updateStore((store) => {
-            const items = store?.items ?? new Map<string, StoreItem>()
-            items.set([userId, avatarId, publicKey].join('_'), result)
-            return new StoreCreator(items)
+            store.items.set([userId, avatarId, publicKey].join('_'), result)
+            return new StoreCreator(store.items)
         })
     }
 }
