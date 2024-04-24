@@ -206,7 +206,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
 // https://stackoverflow.com/a/67176726
 const MATCH_IPFS_CID_RAW =
     'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
-const MATCH_IPFS_DATA_RE = /ipfs\/(data:\w+)$/
+const MATCH_IPFS_DATA_RE = /ipfs\/(data:[\w/,;]+)$/
 const MATCH_IPFS_CID_RE = new RegExp(`(${MATCH_IPFS_CID_RAW})`)
 const MATCH_IPFS_CID_STRICT_RE = new RegExp(`^(?:${MATCH_IPFS_CID_RAW})$`)
 const MATCH_IPFS_CID_AT_STARTS_RE = new RegExp(`^https://(?:${MATCH_IPFS_CID_RAW})`)
