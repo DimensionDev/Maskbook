@@ -25,6 +25,20 @@ const useStyles = makeStyles()((theme) => ({
         height: 24,
         cursor: 'pointer',
     },
+    content: {
+        padding: theme.spacing(3, 2),
+        '.routeCard': {
+            padding: theme.spacing(2, 1.5),
+        },
+        '::-webkit-scrollbar': {
+            display: 'none',
+            scrollbarColor: 'unset!important',
+            backgroundColor: 'unset!important',
+        },
+        "& [id*='widget-route-expanded-container']": {
+            width: 284,
+        },
+    },
 }))
 export interface ExchangeDialogProps {
     open: boolean
@@ -140,6 +154,8 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                 :   null
             }>
             <DialogContent
+                className={classes.content}
+                style={{ scrollbarColor: 'initial' }}
                 sx={{ p: 3 }}
                 ref={(_: HTMLElement) => {
                     setContainerRef(_)
