@@ -4,7 +4,7 @@ import { CurrencyType, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { getUtils } from '../../Web3/Router/apis/getUtils.js'
 import { getHub } from '../../Web3/Router/apis/getHub.js'
-import { getWeb3Connection } from '../../Web3/Router/apis/getWeb3Connection.js'
+import { getConnection } from '../../Web3/Router/apis/getConnection.js'
 import type { AvatarNextID, AvatarToken } from '../types.js'
 
 export async function getAvatarToken<T extends NetworkPluginID>(
@@ -15,7 +15,7 @@ export async function getAvatarToken<T extends NetworkPluginID>(
     const { chainId = ChainId.Mainnet, address, tokenId } = avatar
 
     const Utils = getUtils<T>(pluginID)
-    const Connection = getWeb3Connection<T>(pluginID, {
+    const Connection = getConnection<T>(pluginID, {
         account,
         chainId,
     })

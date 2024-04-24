@@ -37,13 +37,13 @@ export function searchProfileEmptySelector() {
     return querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 }
 export function searchProfileTabSelector() {
-    return querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+    return querySelector<E>('[aria-label][role="navigation"] [role="tablist"] [role="tab"][aria-selected="false"]')
 }
 export function searchAppBarBackSelector() {
     return querySelector<E>('[data-testid="app-bar-back"] > div')
 }
 export function searchProfileTabListSelector() {
-    return querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
+    return querySelectorAll('[aria-label][role="navigation"] [role="tablist"][data-testid="ScrollSnap-List"] a')
 }
 export function searchNewTweetButtonSelector() {
     const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')

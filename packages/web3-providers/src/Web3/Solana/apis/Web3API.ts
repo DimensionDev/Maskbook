@@ -16,12 +16,13 @@ export class SolanaWeb3API {
         this.ConnectionOptions = new SolanaConnectionOptionsAPI(this.options)
     }
     private ConnectionOptions
+
     getProviderInstance(initial?: SolanaConnectionOptions) {
         const options = this.ConnectionOptions.fill(initial)
         return (solana.state!.Provider as SolanaProvider).providers[options.providerType]
     }
 
-    getWeb3Connection(initial?: SolanaConnectionOptions): Connection {
+    getConnection(initial?: SolanaConnectionOptions): Connection {
         const options = this.ConnectionOptions.fill(initial)
         return createWeb3SDK(options.chainId)
     }

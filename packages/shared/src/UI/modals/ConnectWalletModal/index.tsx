@@ -4,8 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { getUtils, getWeb3Connection } from '@masknet/web3-providers'
-import type { Connection } from '@masknet/web3-providers/types'
+import { getUtils, getConnection } from '@masknet/web3-providers'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
 import { forwardRef, useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -89,7 +88,7 @@ export const ConnectWalletModal = forwardRef<
         const { pluginID, providerType, networkType } = connectionRef.current
 
         const Utils = getUtils<NetworkPluginID>(pluginID)
-        const Web3 = getWeb3Connection<NetworkPluginID>(pluginID, { providerType }) as Connection<NetworkPluginID>
+        const Web3 = getConnection<NetworkPluginID>(pluginID, { providerType })
         const chainId = Utils.networkResolver.networkChainId(networkType)
         if (!chainId) throw new Error(`Failed to connect to provider. Invalid chainId for network type: ${networkType}`)
 

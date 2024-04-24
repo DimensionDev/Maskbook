@@ -17,7 +17,7 @@ export const IdentityProviderFacebook: SiteAdaptorUI.CollectingCapabilities.Iden
 }
 
 function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolved>, signal: AbortSignal) {
-    const self = myUsernameLiveSelectorPC.clone().map((x) => getProfileIdentifierAtFacebook(x, false))
+    const self = myUsernameLiveSelector.clone().map((x) => getProfileIdentifierAtFacebook(x, false))
     new MutationObserverWatcher(self)
         .addListener('onAdd', (e) => assign(e.value))
         .addListener('onChange', (e) => assign(e.newValue))
@@ -95,7 +95,7 @@ export const CurrentVisitingIdentityProviderFacebook: SiteAdaptorUI.CollectingCa
 }
 
 // Try to resolve my identities
-const myUsernameLiveSelectorPC = new LiveSelector()
+const myUsernameLiveSelector = new LiveSelector()
     .querySelectorAll<HTMLAnchorElement>(
         '[data-pagelet="LeftRail"] > [data-visualcompletion="ignore-dynamic"]:first-child > div:first-child > ul [role="link"]',
     )

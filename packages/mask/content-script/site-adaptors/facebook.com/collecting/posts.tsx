@@ -12,7 +12,7 @@ import { createRefsForCreatePostContext } from '../../../site-adaptor-infra/util
 import { collectNodeText } from '../../../utils/index.js'
 import { startWatch } from '../../../utils/startWatch.js'
 
-const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('[role=article]  [id]  span[dir="auto"]')
+const posts = new LiveSelector().querySelectorAll<HTMLDivElement>('[role=article] [id]  span[dir="auto"]')
 
 export const PostProviderFacebook: SiteAdaptorUI.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),

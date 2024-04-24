@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { getAllPluginsWeb3State, getWeb3Connection } from '@masknet/web3-providers'
+import { getAllPluginsWeb3State, getConnection } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -169,7 +169,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 return
             }
 
-            const connection = getWeb3Connection(provider.providerAdaptorPluginID, { providerType: provider.type })
+            const connection = getConnection(provider.providerAdaptorPluginID, { providerType: provider.type })
             const chainId =
                 expectedChainId ?? provider.type === ProviderType.WalletConnect ?
                     ChainId.Mainnet

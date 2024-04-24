@@ -28,8 +28,8 @@ export { FriendTech } from './FriendTech/index.js'
 export { MaskWalletProviderInstance as MaskWalletProvider } from './Web3/EVM/providers/index.js'
 
 // Web3
+export { getConnection } from './Web3/Router/apis/getConnection.js'
 export { getHub } from './Web3/Router/apis/getHub.js'
-export { getWeb3Connection } from './Web3/Router/apis/getWeb3Connection.js'
 export { getUtils } from './Web3/Router/apis/getUtils.js'
 
 export {

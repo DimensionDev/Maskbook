@@ -8,8 +8,6 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { startWatch } from '../../../utils/startWatch.js'
 
-let composeBox: LiveSelector<Element>
-
 const useStyles = makeStyles()(() => ({
     tooltip: {
         borderRadius: 8,
@@ -28,18 +26,18 @@ function isGroup() {
     return matched[0]
 }
 
-if (isGroup()) {
-    composeBox = new LiveSelector()
-        .querySelector('[id="toolbarLabel"]')
-        .closest(1)
-        .querySelector('div:nth-child(2) > div:nth-child(4)')
-} else {
-    composeBox = new LiveSelector()
-        .querySelectorAll(
-            '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
-        )
-        .at(-2)
-}
+const composeBox: LiveSelector<Element> =
+    isGroup() ?
+        new LiveSelector()
+            .querySelector('[id="toolbarLabel"]')
+            .closest(1)
+            .querySelector('div:nth-child(2) > div:nth-child(4)')
+    :   new LiveSelector()
+            .querySelectorAll(
+                '[role="dialog"] form > div:first-child > div:first-child > div:first-child > div:first-child > div:first-child > div:last-child > div:first-child  > div:last-child > div > div',
+            )
+            .at(-2)
+
 export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)

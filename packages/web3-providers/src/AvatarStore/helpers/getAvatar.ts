@@ -13,7 +13,6 @@ const resolveRSS3Key = createLookupTableResolver<EnhanceableSite, RSS3_KEY_SITE 
         [EnhanceableSite.Twitter]: RSS3_KEY_SITE.TWITTER,
         [EnhanceableSite.Instagram]: RSS3_KEY_SITE.INSTAGRAM,
         [EnhanceableSite.Localhost]: undefined,
-        [EnhanceableSite.App]: undefined,
         [EnhanceableSite.Minds]: undefined,
         [EnhanceableSite.OpenSea]: undefined,
         [EnhanceableSite.Mirror]: undefined,
