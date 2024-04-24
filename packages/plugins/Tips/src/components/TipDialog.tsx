@@ -184,7 +184,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
-                    <NetworkSection />
+                    {currentTab === TokenType.NonFungible ?
+                        <NetworkSection />
+                    :   null}
                     <RecipientSection className={classes.recipient} />
                     <TabPanel value={TokenType.Fungible} className={classes.tabPanel}>
                         <TokenSection className={classes.section} />

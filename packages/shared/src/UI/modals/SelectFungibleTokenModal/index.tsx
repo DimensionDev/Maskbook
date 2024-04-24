@@ -33,6 +33,7 @@ export const SelectFungibleTokenModal = forwardRef<
     const [blacklist, setBlacklist] = useState<string[]>()
     const [tokens, setTokens] = useState<Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [disableSearchBar, setDisableSearchBar] = useState<boolean>()
+    const [selectedChainId, setSelectedChainId] = useState<Web3Helper.ChainIdAll>()
     const [selectedTokens, setSelectedTokens] = useState<string[]>()
 
     const [open, dispatch] = useSingletonModal(ref, {
@@ -46,6 +47,7 @@ export const SelectFungibleTokenModal = forwardRef<
             setBlacklist(props.blacklist)
             setTokens(props.tokens)
             setDisableSearchBar(props.disableNativeToken)
+            setSelectedChainId(props.chainId)
             setSelectedTokens(props.selectedTokens)
         },
     })
@@ -63,6 +65,7 @@ export const SelectFungibleTokenModal = forwardRef<
             blacklist={blacklist}
             tokens={tokens}
             disableSearchBar={disableSearchBar}
+            selectedChainId={selectedChainId}
             selectedTokens={selectedTokens}
             onClose={(token) => dispatch?.close(token)}
             setChainId={setChainId}

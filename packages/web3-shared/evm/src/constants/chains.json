@@ -713,11 +713,11 @@
     },
     {
         "chainId": 196,
-        "type": "X1",
-        "name": "X1",
-        "fullName": "X1",
-        "network": "testnet",
-        "shortName": "x1",
+        "type": "XLayer",
+        "name": "X Layer",
+        "fullName": "X Layer",
+        "network": "mainnet",
+        "shortName": "xlayer",
         "features": [],
         "nativeCurrency": {
             "chainId": 196,
@@ -729,19 +729,19 @@
         "infoURL": "https://www.okx.com/web3",
         "explorers": [
             {
-                "name": "X1 explorer",
-                "url": "https://www.okx.com/explorer/x1",
+                "name": "X Layer explorer",
+                "url": "https://www.okx.com/explorer/xlayer",
                 "standard": "EIP3091"
             }
         ]
     },
     {
         "chainId": 195,
-        "type": "X1",
-        "name": "X1 Testnet",
-        "fullName": "X1 Testnet",
-        "network": "mainnet",
-        "shortName": "x1",
+        "type": "XLayer",
+        "name": "X Layer Testnet",
+        "fullName": "X Layer Testnet",
+        "network": "testnet",
+        "shortName": "xlayer",
         "features": [],
         "nativeCurrency": {
             "chainId": 195,
@@ -753,8 +753,8 @@
         "infoURL": "https://www.okx.com/web3",
         "explorers": [
             {
-                "name": "X1 explorer",
-                "url": "https://www.okx.com/explorer/x1-test",
+                "name": "X Layer explorer",
+                "url": "https://www.okx.com/explorer/xlayer-test",
                 "standard": "EIP3091"
             }
         ]

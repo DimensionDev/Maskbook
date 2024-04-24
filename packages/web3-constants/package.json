@@ -2,9 +2,9 @@
   "name": "@masknet/web3-constants",
   "private": true,
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "start": "ts-node compile-constants.ts"
+    "start": "node --import @swc-node/register/esm-register constants.ts"
   },
   "dependencies": {
     "@masknet/web3-contracts": "workspace:^"

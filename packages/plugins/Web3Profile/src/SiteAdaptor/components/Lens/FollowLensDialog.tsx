@@ -23,6 +23,7 @@ import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
+import { useUpdateFollowingStatus } from '../../hooks/Lens/useUpdateFollowingStatus.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
@@ -113,7 +114,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const wallet = useWallet()
     const [currentProfile, setCurrentProfile] = useState<LensBaseAPI.Profile>()
-    const [isFollowing, setIsFollowing] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
     const { classes } = useStyles({ account: !!wallet })
     const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -145,23 +145,25 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             profile,
             isSelf: isSameAddress(profile.ownedBy.address, account),
             profiles,
-            defaultProfile: defaultProfile ?? first(profiles),
+            defaultProfile: defaultProfile || first(profiles),
         }
     }, [handle, open, account])
 
-    const { profile, defaultProfile, isSelf, profiles } = value ?? {}
+    const { profile, defaultProfile, isSelf, profiles } = value || {}
 
-    const { isPending, isFetching } = useQuery({
-        queryKey: ['lens', 'following-status', currentProfile?.id, value?.profile.id],
+    const currentProfileId = currentProfile?.id
+    const targetProfileId = value?.profile.id
+    const { isPending, data: isFollowing } = useQuery({
+        queryKey: ['lens', 'following-status', currentProfileId, handle, targetProfileId],
         queryFn: async () => {
-            if (!value?.profile.id || !currentProfile) return false
-            const result = await Lens.queryFollowStatus(currentProfile.id, value.profile.id)
-            setIsFollowing(result)
+            if (!targetProfileId || !currentProfile) return false
+            const result = await Lens.queryFollowStatus(currentProfile.id, targetProfileId)
             return result
         },
         refetchOnWindowFocus: false,
         staleTime: 0,
     })
+    const updateFollowingStatus = useUpdateFollowingStatus()
 
     const followModule = useMemo(() => {
         if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
@@ -208,18 +210,16 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         currentProfile?.signless,
         (event: MouseEvent<HTMLElement>) => {
             showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
-            setIsFollowing(true)
+            updateFollowingStatus(currentProfileId, handle, true)
         },
-        () => setIsFollowing(false),
+        () => updateFollowingStatus(currentProfileId, handle, false),
     )
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
         profile?.id,
         currentProfile?.id,
         currentProfile?.signless,
-        (event: MouseEvent<HTMLElement>) => {
-            setIsFollowing(false)
-        },
-        () => setIsFollowing(true),
+        () => updateFollowingStatus(currentProfileId, handle, false),
+        () => updateFollowingStatus(currentProfileId, handle, true),
     )
     // #endregion
 
@@ -398,13 +398,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 variant="roundedContained"
                                                 className={classes.followAction}
                                                 disabled={disabled}
-                                                loading={
-                                                    followLoading ||
-                                                    unfollowLoading ||
-                                                    loading ||
-                                                    isPending ||
-                                                    isFetching
-                                                }
+                                                loading={followLoading || unfollowLoading || loading || isPending}
                                                 onClick={handleClick}
                                                 onMouseOver={() => setIsHovering(true)}
                                                 onMouseOut={() => setIsHovering(false)}>

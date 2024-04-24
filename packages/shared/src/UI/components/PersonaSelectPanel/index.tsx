@@ -72,7 +72,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
-    const [, handleVerifyNextID] = useNextIDVerify()
+    const handleVerifyNextID = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 

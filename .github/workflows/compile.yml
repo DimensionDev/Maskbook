@@ -37,8 +37,7 @@ jobs:
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
-          # Keep consistent between node version in the .node-version file and below.
-          node-version: "21"
+          node-version-file: ".node-version"
           cache: 'pnpm'
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest
@@ -55,6 +54,10 @@ jobs:
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp build-ci
+      # See https://github.com/getsentry/action-release/issues/187
+      - name: Change git configuration
+        shell: bash
+        run: git config --unset-all extensions.worktreeconfig
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/released'

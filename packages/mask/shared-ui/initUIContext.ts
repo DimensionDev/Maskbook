@@ -46,6 +46,7 @@ export function setupUIContext() {
         setCurrentPersonaIdentifier: Services.Settings.setCurrentPersonaIdentifier,
         setPluginMinimalModeEnabled: Services.Settings.setPluginMinimalModeEnabled,
         hasHostPermission: Services.Helper.hasHostPermission,
-        requestHostPermission: Services.Helper.requestHostPermission,
+        requestHostPermission: (origins: readonly string[]) =>
+            Services.Helper.requestExtensionPermissionFromContentScript({ origins: [...origins] }),
     })
 }

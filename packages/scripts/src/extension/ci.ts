@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node --import swc-register-esm
 import { fileURLToPath } from 'url'
 import { series, type TaskFunction } from 'gulp'
 import { buildBaseExtension } from './normal.js'

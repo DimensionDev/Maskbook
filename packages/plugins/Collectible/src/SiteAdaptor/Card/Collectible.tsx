@@ -79,6 +79,7 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
             overflow: 'auto',
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { upperFirst } from 'lodash-es'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, type EnhanceableSite } from '@masknet/shared-base'
 import { Button, Stack } from '@mui/material'
 import { PersonaContext, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import {
@@ -13,8 +13,12 @@ import {
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import { useDashboardTrans } from '../../../locales/index.js'
 import { ActionCard } from '../../../components/ActionCard/index.js'
-import { useConnectSite } from '../../../hooks/useConnectSite.js'
-import { type SiteAdaptor, useSupportedSocialNetworkSites } from '../../../../shared-ui/index.js'
+import {
+    requestPermissionFromExtensionPage,
+    type SiteAdaptor,
+    useSupportedSocialNetworkSites,
+} from '../../../../shared-ui/index.js'
+import Services from '#services'
 
 export function ConnectSocialMedia() {
     const navigate = useNavigate()
@@ -23,11 +27,10 @@ export function ConnectSocialMedia() {
 
     const definedSocialNetworkAdaptors: SiteAdaptor[] = useSupportedSocialNetworkSites()
 
-    const [, connectPersona] = useConnectSite()
-
     const handleConnect = async (networkIdentifier: string) => {
         if (currentPersona) {
-            await connectPersona(currentPersona.identifier, networkIdentifier)
+            if (!(await requestPermissionFromExtensionPage(networkIdentifier as EnhanceableSite))) return
+            await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier)
         }
         navigate(DashboardRoutes.Personas, { replace: true })
     }

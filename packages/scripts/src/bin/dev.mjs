@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url'
 const child = spawnSync(
     process.execPath,
     [
-        '--loader',
-        'ts-node/esm/transpile-only',
+        '--import',
+        '@swc-node/register/esm-register',
         fileURLToPath(import.meta.resolve('./dev.ts')),
         ...process.argv.slice(2),
     ],

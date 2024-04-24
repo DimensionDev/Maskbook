@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, type HTMLProps } from 'react'
 import { useRedPacketTrans } from '../locales/index.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
@@ -35,30 +35,30 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface RedPacketHistoryListProps {
+interface RedPacketHistoryListProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 
-export const RedPacketHistoryList = memo(function RedPacketHistoryList({ onSelect }: RedPacketHistoryListProps) {
+export const RedPacketHistoryList = memo(function RedPacketHistoryList({
+    onSelect,
+    ...rest
+}: RedPacketHistoryListProps) {
     const t = useRedPacketTrans()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
-        data: historiesData,
+        data: historyData,
         isLoading,
         fetchNextPage,
     } = useRedPacketHistory(account, FireflyRedPacketAPI.ActionType.Send, FireflyRedPacketAPI.SourceType.MaskNetwork)
-    const histories = useMemo(
-        () => historiesData.pages.flatMap((page) => page.data).filter((x) => x.chain_id === chainId),
-        [historiesData, chainId],
-    )
+    const histories = useMemo(() => historyData.pages.flatMap((page) => page.data), [historyData, chainId])
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
     if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
 
     return (
-        <div className={classes.root}>
+        <div {...rest} className={cx(classes.root, rest.className)}>
             <List style={{ padding: '16px 0 0' }}>
                 {histories.map((history) => (
                     <RedPacketInHistoryList

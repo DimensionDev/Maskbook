@@ -3,7 +3,7 @@ import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { EMPTY_LIST, type ProfileInformation as Profile, type ProfileInformationFromNextID } from '@masknet/shared-base'
 import { Boundary, makeStyles } from '@masknet/theme'
 import { useLookupAddress } from '@masknet/web3-hooks-base'
-import { Fuse } from '@masknet/web3-providers'
+import Fuse from 'fuse.js'
 import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
@@ -106,7 +106,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
     )
 
     const fuse = useMemo(() => {
-        return Fuse.create(items, {
+        return new Fuse(items, {
             keys: [
                 'identifier.userId',
                 'nickname',

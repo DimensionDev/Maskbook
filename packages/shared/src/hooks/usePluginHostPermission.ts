@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type { Plugin } from '@masknet/plugin-infra'
 import { MaskMessages } from '@masknet/shared-base'
-import { hasHostPermission, requestHostPermission } from '@masknet/plugin-infra/dom/context'
+import { hasHostPermission } from '@masknet/plugin-infra/dom/context'
 
 export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]) {
     const plugins_ = plugins.filter((x) => x.enableRequirement.host_permissions?.length)
@@ -34,11 +34,4 @@ export function useCheckPermissions(permissions: string[]) {
     useEffect(() => MaskMessages.events.hostPermissionChanged.on(asyncResult.retry), [asyncResult.retry])
 
     return asyncResult
-}
-
-export function useGrantPermissions(permissions?: string[]) {
-    return useAsyncFn(async () => {
-        if (!permissions?.length) return
-        return requestHostPermission?.(permissions)
-    }, [permissions])
 }

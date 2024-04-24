@@ -138,7 +138,6 @@ export function TrendingView(props: TrendingViewProps) {
     const t = useTraderTrans()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
-    const isTokenSecurityEnabled = !useIsMinimalMode(PluginID.GoPlusSecurity)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -213,9 +212,13 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
+
+    const isBRC20 = trending?.coin.tags?.includes('BRC-20')
+
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
+        !isBRC20 &&
         !!trending?.coin.contract_address &&
         (!swapExpectedContract?.pluginID || swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion

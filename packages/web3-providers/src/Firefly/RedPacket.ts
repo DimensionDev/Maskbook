@@ -142,6 +142,7 @@ export class FireflyRedPacket {
         rpid: string,
         reactions: FireflyRedPacketAPI.PostReaction[],
         claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
+        postOn: FireflyRedPacketAPI.PostOn[],
         publicKey: string,
     ): Promise<void> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
@@ -151,6 +152,7 @@ export class FireflyRedPacket {
                 publicKey,
                 rpid,
                 postReaction: reactions,
+                postOn,
                 claimPlatform,
             }),
         })
