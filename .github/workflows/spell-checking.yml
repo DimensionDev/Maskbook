@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: "21"
+          node-version-file: ".node-version"
       - name: Check Spell
         if: ${{ github.event.pull_request }}
         run: |
