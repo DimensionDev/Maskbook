@@ -5,9 +5,6 @@ import { createFlowConnection } from '../../Flow/apis/ConnectionOptionsAPI.js'
 import { createSolanaConnection } from '../../Solana/apis/ConnectionOptionsAPI.js'
 import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import { unreachable } from '@masknet/kit'
-import type { EVMConnectionOptions } from '../../EVM/types/index.js'
-import type { FlowConnectionOptions } from '../../Flow/types/index.js'
-import type { SolanaConnectionOptions } from '../../Solana/types/index.js'
 
 export function getWeb3Connection<const T extends NetworkPluginID>(
     pluginID: T,
