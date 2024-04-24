@@ -192,7 +192,7 @@ export class FireflyRedPacket {
         return createPageable(
             data.list.map((v) => ({ ...v, chain_id: Number(v.chain_id) })) as R[],
             createIndicator(indicator),
-            createNextIndicator(indicator, data.cursor?.toString()),
+            data.cursor ? createNextIndicator(indicator, data.cursor.toString()) : undefined,
         )
     }
 

@@ -163,8 +163,8 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
     } = history
     const t = useRedPacketTrans()
 
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chain_id)
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
