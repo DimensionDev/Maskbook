@@ -22,7 +22,6 @@ export interface MaskContentScriptEvents {
     postReplacerHidden: postReplacerHiddenEvent
     profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
-    NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
 }
 

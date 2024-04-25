@@ -95,6 +95,7 @@ function NFTAvatarInFacebookSecondStep() {
             if (!imageURL) return
 
             const avatarId = getAvatarId(imageURL)
+
             if (avatarId) {
                 MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                     userId: '',
