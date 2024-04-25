@@ -25,11 +25,10 @@ export function useSaveAvatarInFacebook(identity: IdentityResolved) {
                 ...NFTEvent,
                 avatarId: getAvatarId(identity.avatar ?? ''),
             } as AvatarNextID<NetworkPluginID>)
+            setNFTEvent(null)
             if (savedAvatar) return savedAvatar
             return
         } catch (error) {
-            return
-        } finally {
             setNFTEvent(null)
             return
         }
