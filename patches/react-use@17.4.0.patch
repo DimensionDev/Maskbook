@@ -1,6 +1,19 @@
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 deleted file mode 100644
 index 9b28df0e8aa4734af2c7006fd077ff17e2281db5..0000000000000000000000000000000000000000
+diff --git a/esm/useAsyncFn.js b/esm/useAsyncFn.js
+index 01d7307bd106229f6d791d0c588589235f404d97..6dd2699c44098e7fdb861c28b5a52c094ee847a8 100644
+--- a/esm/useAsyncFn.js
++++ b/esm/useAsyncFn.js
+@@ -21,7 +21,7 @@ export default function useAsyncFn(fn, deps, initialState) {
+             return value;
+         }, function (error) {
+             isMounted() && callId === lastCallId.current && set({ error: error, loading: false });
+-            return error;
++            throw error;
+         });
+     }, deps);
+     return [state, callback];
 diff --git a/lib/useAsyncFn.js b/lib/useAsyncFn.js
 index e06fd819ccad625d709fa9907e946a9b8bc58543..261f6b084f14ccc84265a2e9b300d1b86150b3b4 100644
 --- a/lib/useAsyncFn.js
