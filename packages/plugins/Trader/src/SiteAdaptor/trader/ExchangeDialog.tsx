@@ -40,6 +40,9 @@ const useStyles = makeStyles()((theme) => ({
         '& .widget-token-list-item': {
             padding: 0,
         },
+        '& .chainCard': {
+            height: 52,
+        },
     },
 }))
 export interface ExchangeDialogProps {
@@ -122,6 +125,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             progressSize: 16,
             forceCompact: false,
             inputColor: theme.palette.maskColor.bottom,
+            maxChainToOrder: 8,
         }
     }, [theme, providerType, getSigner, chainId, toAddress, toChainId])
 
