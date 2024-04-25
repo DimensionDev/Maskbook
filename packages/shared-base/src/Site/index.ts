@@ -12,7 +12,7 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
     [EnhanceableSite.Firefly]:
         process.env.NODE_ENV === 'production' ?
-            /(?:^(?:firefly\.|firefly-staging\.)?mask\.social|\.vercel\.app)$/i
+            /(?:^(?:firefly\.|firefly-staging\.|firefly-canary\.)?mask\.social|\.vercel\.app)$/i
         :   /^localhost:\d+$/,
 }
 
