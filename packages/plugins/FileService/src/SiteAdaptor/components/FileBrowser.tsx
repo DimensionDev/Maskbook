@@ -2,8 +2,7 @@ import { Icons } from '@masknet/icons'
 import { getEnumAsArray } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTextField } from '@masknet/theme'
-import { Tabs as TabsUnstyled, Tab as TabUnstyled, tabClasses as tabUnstyledClasses } from '@mui/base'
-import { Button, styled, Typography } from '@mui/material'
+import { Button, styled, Typography, Tabs as MuiTabs, Tab as MuiTab, tabsClasses, tabClasses } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
@@ -13,15 +12,18 @@ import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
 
-const Tabs = styled(TabsUnstyled)(({ theme }) => ({
+const Tabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',
     gap: theme.spacing(0.5),
+    [`& .${tabsClasses.indicator}`]: {
+        backgroundColor: 'transparent',
+    },
 }))
-const Tab = styled(TabUnstyled)(({ theme }) => ({
+const Tab = styled(MuiTab)(({ theme }) => ({
     height: 34,
     minWidth: 60,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
+    padding: theme.spacing(0, 2),
+    minHeight: 'auto',
     boxSizing: 'border-box',
     color: theme.palette.maskColor.second,
     fontSize: 14,
@@ -33,7 +35,7 @@ const Tab = styled(TabUnstyled)(({ theme }) => ({
     '&:hover': {
         color: theme.palette.maskColor.main,
     },
-    [`&.${tabUnstyledClasses.selected}`]: {
+    [`&.${tabClasses.selected}`]: {
         color: theme.palette.maskColor.main,
         backgroundColor: theme.palette.maskColor.bg,
     },
@@ -224,11 +226,18 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                     <div className={classes.tabs}>
                         <Tabs value={tab} onChange={(_, newTab) => setTab(newTab as ProviderTabs)}>
                             {providers.map((x) => (
-                                <Tab key={x.key} aria-label={x.key} value={x.value}>
-                                    <Typography variant="body2" fontWeight={700}>
-                                        {x.value}
-                                    </Typography>
-                                </Tab>
+                                <Tab
+                                    disableRipple
+                                    disableFocusRipple
+                                    key={x.key}
+                                    aria-label={x.key}
+                                    value={x.value}
+                                    label={
+                                        <Typography variant="body2" fontWeight={700}>
+                                            {x.value}
+                                        </Typography>
+                                    }
+                                />
                             ))}
                         </Tabs>
                     </div>
