@@ -13,7 +13,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { TRADER_WEB3_CONFIG } from '../../config.js'
 import { DeleteOutline } from '@mui/icons-material'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -38,6 +37,9 @@ const useStyles = makeStyles()((theme) => ({
         "& [id*='widget-route-expanded-container']": {
             width: 284,
         },
+        '& .widget-token-list-item': {
+            padding: 0,
+        },
     },
 }))
 export interface ExchangeDialogProps {
@@ -58,7 +60,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { theme, classes } = useStyles()
-    const mode = useSiteThemeMode(theme)
+
     const [containerRef, setContainerRef] = useState<HTMLElement>()
 
     const widgetRef = useRef<WidgetDrawer>(null)
