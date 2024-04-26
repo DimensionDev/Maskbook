@@ -29,7 +29,7 @@ import { noop } from 'lodash-es'
  * If has local key of a profile in the database.
  * @param id Profile Identifier
  */
-export async function hasLocalKeyOf(id: ProfileIdentifier) {
+export async function hasLocalKeyOf(id: ProfileIdentifier): Promise<boolean> {
     let has = false
     await createPersonaDBReadonlyAccess(async (tx) => {
         const result = await getLocalKeyOf(id, tx)
@@ -98,7 +98,10 @@ async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction
 // #endregion
 
 // #region ECDH
-export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIdentifier | PersonaIdentifier) {
+export async function deriveAESByECDH(
+    pub: EC_Public_CryptoKey,
+    of?: ProfileIdentifier | PersonaIdentifier,
+): Promise<Map<ECKeyIdentifier, AESCryptoKey>> {
     // Note: the correct type should be EcKeyAlgorithm but it is missing in worker dts
     const curve = (pub.algorithm as EcKeyImportParams).namedCurve || ''
     const sameCurvePrivateKeys = new Map<ECKeyIdentifier, EC_Private_JsonWebKey>()
@@ -139,7 +142,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
             deriveResult.set(id, derived as AESCryptoKey)
         }),
     )
-    const failed = result.filter((x): x is PromiseRejectedResult => x.status === 'rejected')
+    const failed = result.filter((x) => x.status === 'rejected')
     if (failed.length) {
         console.warn('Failed to ECDH', ...failed.map((x) => x.reason))
     }
@@ -205,7 +208,7 @@ export async function createProfileWithPersona(
 }
 // #endregion
 
-export async function queryPublicKey(author: ProfileIdentifier | null) {
+export async function queryPublicKey(author: ProfileIdentifier | null): Promise<EC_Public_CryptoKey | null> {
     if (!author) return null
     const persona = await queryPersonaByProfileDB(author)
     if (!persona) return null
