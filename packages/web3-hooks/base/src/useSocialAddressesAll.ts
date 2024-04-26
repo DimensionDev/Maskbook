@@ -2,9 +2,7 @@ import { NetworkPluginID, type SocialAddress, type SocialAddressType, type Socia
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useQuery } from '@tanstack/react-query'
 import { useWeb3State } from './useWeb3State.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 type AddressList = Array<SocialAddress<Web3Helper.ChainIdAll>>
 
 /**

@@ -8,10 +8,9 @@ import {
     type PersonaIdentifier,
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useBaseUIRuntime } from '../UI/contexts/index.js'
 
-type T = UseQueryResult
 /**
  * Get verify payload, signature and post content
  */

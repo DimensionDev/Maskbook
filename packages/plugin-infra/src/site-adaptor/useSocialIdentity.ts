@@ -4,9 +4,6 @@ import type { IdentityResolved } from '../types.js'
 import { useQuery } from '@tanstack/react-query'
 import { currentNextIDPlatform } from './context.js'
 import { querySocialIdentity } from '../dom/context.js'
-import type { UseQueryResult } from '@tanstack/react-query'
-
-type T = UseQueryResult
 
 /**
  * Get the social identity of the given identity

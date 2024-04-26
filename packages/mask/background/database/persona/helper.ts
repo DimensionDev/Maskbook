@@ -139,7 +139,7 @@ export async function deriveAESByECDH(pub: EC_Public_CryptoKey, of?: ProfileIden
             deriveResult.set(id, derived as AESCryptoKey)
         }),
     )
-    const failed = result.filter((x): x is PromiseRejectedResult => x.status === 'rejected')
+    const failed = result.filter((x) => x.status === 'rejected')
     if (failed.length) {
         console.warn('Failed to ECDH', ...failed.map((x) => x.reason))
     }

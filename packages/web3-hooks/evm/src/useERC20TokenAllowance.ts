@@ -3,9 +3,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = [UseQueryResult]
 export function useERC20TokenAllowance(
     address?: string,
     spender?: string,

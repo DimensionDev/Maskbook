@@ -1,9 +1,8 @@
 import { BigNumber } from 'bignumber.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: ChainId) {
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     return useQuery({

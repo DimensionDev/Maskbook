@@ -2,9 +2,7 @@ import { type SocialAccount, type SocialAddressType, type SocialIdentity, EMPTY_
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSocialAddressesAll } from './useSocialAddressesAll.js'
 import { useSocialAccountsFrom } from './useSocialAccountsFrom.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 /**
  * Get all social addresses across all networks.
  */
