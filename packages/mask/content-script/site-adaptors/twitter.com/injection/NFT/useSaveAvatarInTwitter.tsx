@@ -10,7 +10,7 @@ import { useAsync } from 'react-use'
 export function useSaveAvatarInTwitter(identity: IdentityResolved) {
     const { account } = useChainContext()
 
-    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onSave = useCallback(async () => {
         if (!account || !identity.identifier) return

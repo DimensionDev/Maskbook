@@ -116,4 +116,4 @@ export { Calendar } from './Calendar/index.js'
 export { NFTSpam } from './NFTSpam/index.js'
 
 // Stores
-export { AvatarStore } from './AvatarStore/index.js'
+export { AvatarStore, getAvatarFromStorage, setAvatarToStorage } from './AvatarStore/index.js'

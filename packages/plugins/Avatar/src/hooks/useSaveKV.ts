@@ -1,20 +1,15 @@
-import { useAsyncFn } from 'react-use'
+import { getEnhanceableSiteType, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3Connection } from '@masknet/web3-hooks-base'
-import {
-    type BindingProof,
-    type ECKeyIdentifier,
-    type NetworkPluginID,
-    getEnhanceableSiteType,
-} from '@masknet/shared-base'
 import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { useSaveAvatar } from './useSaveAvatar.js'
+import { useCallback } from 'react'
 
 export function useSaveKV(pluginID: NetworkPluginID) {
     const Web3 = useWeb3Connection(pluginID)
-    const [, saveAvatar] = useSaveAvatar(pluginID)
+    const saveAvatar = useSaveAvatar(pluginID)
 
-    return useAsyncFn(
-        async (info: AvatarNextID<NetworkPluginID>, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
+    return useCallback(
+        async (info: AvatarNextID<NetworkPluginID>, account: string) => {
             const siteType = getEnhanceableSiteType()
             if (!siteType) return
 

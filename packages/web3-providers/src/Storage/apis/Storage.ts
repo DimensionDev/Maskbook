@@ -11,7 +11,7 @@ export class Web3Storage {
     }
 
     static createFireflyStorage(namespace: string, address: string) {
-        return new FireflyStorage.FireflyStorage(namespace, address || '')
+        return new FireflyStorage.FireflyStorage(namespace, address)
     }
 
     static createRSS3Storage(namespace: string) {

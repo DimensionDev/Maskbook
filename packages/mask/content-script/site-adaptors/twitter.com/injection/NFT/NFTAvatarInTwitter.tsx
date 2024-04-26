@@ -6,7 +6,6 @@ import { useLocation, useWindowSize } from 'react-use'
 import { AvatarStore, Twitter } from '@masknet/web3-providers'
 import { useInjectedCSS } from './useInjectedCSS.js'
 import { useUpdatedAvatar } from './useUpdatedAvatar.js'
-import { useSaveAvatarInTwitter } from './useSaveAvatarInTwitter.js'
 import { searchAvatarMetaSelector, searchAvatarSelector, searchTwitterAvatarSelector } from '../../utils/selector.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 
@@ -89,18 +88,18 @@ export function NFTAvatarInTwitter() {
 
 function useNFTCircleAvatar(size: number) {
     const identity = useCurrentVisitingIdentity()
-    const savedAvatar = useSaveAvatarInTwitter(identity)
 
+    const userId = identity.identifier?.userId || ''
+    const identityAvatarId = Twitter.getAvatarId(identity.avatar)
     const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
-    const avatar =
-        savedAvatar ?? store.retrieveAvatar(identity.identifier?.userId, Twitter.getAvatarId(identity.avatar))
-    const token = store.retrieveToken(identity.identifier?.userId, Twitter.getAvatarId(identity.avatar))
+    const avatar = store.retrieveAvatar(userId, identityAvatarId)
+    const token = store.retrieveToken(userId, identityAvatarId)
 
-    const showAvatar = useMemo(() => {
-        const avatarUrl = searchAvatarSelector().evaluate()?.getAttribute('src')
-        if (!avatarUrl || !avatar?.avatarId) return false
-        return Twitter.getAvatarId(avatarUrl ?? '') === avatar.avatarId
-    }, [avatar?.avatarId, identity.avatar])
+    useEffect(() => {
+        AvatarStore.dispatch(userId, identityAvatarId)
+    }, [userId, identityAvatarId])
+
+    const showAvatar = identityAvatarId === avatar?.avatarId
 
     return {
         showAvatar: Boolean(size && avatar && showAvatar && token),

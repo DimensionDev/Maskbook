@@ -12,7 +12,7 @@ export function useSaveAvatarInFacebook(identity: IdentityResolved) {
     const { account } = useChainContext()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent | null>(null)
-    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onSave = useCallback(async () => {
         if (!account || !identity.identifier) return

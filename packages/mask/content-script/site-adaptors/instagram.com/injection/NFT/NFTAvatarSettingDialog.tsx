@@ -29,7 +29,7 @@ export function NFTAvatarSettingDialog() {
     const { classes } = useStyles()
     const { account } = useChainContext()
     const identity = useCurrentVisitingIdentity()
-    const [, saveNFTAvatar] = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
+    const saveNFTAvatar = useSaveStringStorage(NetworkPluginID.PLUGIN_EVM)
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {

@@ -2,7 +2,7 @@ import { EnhanceableSite, NetworkPluginID, createLookupTableResolver } from '@ma
 import { getAddress } from './getAddress.js'
 import { Web3Storage } from '../../Storage/apis/Storage.js'
 import { RSS3_KEY_SITE, type AvatarNextID } from '../types.js'
-import { getAvatarFromStorage } from './getAvatarFromStorage.js'
+import { getAvatarFromStorage } from './storage.js'
 import { getAvatarFromRSS3 } from './getAvatarFromRSS3.js'
 
 const NFT_AVATAR_METADATA_STORAGE = 'com.maskbook.avatar.metadata.storage'

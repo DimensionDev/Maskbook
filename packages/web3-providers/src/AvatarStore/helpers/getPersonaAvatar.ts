@@ -9,7 +9,7 @@ export async function getPersonaAvatar<T extends NetworkPluginID>(
     siteType: EnhanceableSite,
     userId: string,
     avatarId: string,
-    persona: string,
+    persona?: string,
 ): Promise<AvatarNextID<T> | null> {
     // only twitter is supported
     if (siteType !== EnhanceableSite.Twitter) return null
