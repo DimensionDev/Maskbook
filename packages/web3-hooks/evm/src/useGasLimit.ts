@@ -4,7 +4,6 @@ import { EVMContract, EVMWeb3 } from '@masknet/web3-providers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
-import type { UseQueryResult } from '@tanstack/react-query'
 
 export function useGasLimit(
     schemaType?: SchemaType,

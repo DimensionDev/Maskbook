@@ -3,7 +3,6 @@ import type { HubOptions } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
 export function useNonFungibleRarity<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

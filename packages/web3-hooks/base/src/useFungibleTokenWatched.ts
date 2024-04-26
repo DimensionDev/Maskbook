@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from './useFungibleTokenBalance.js'
 import { useFungibleToken } from './useFungibleToken.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
 export function useFungibleTokenWatched<T extends NetworkPluginID>(pluginID?: T, address_ = '') {
     const [amount, setAmount] = useState('')
