@@ -20,7 +20,7 @@ export async function queryProfileInformation(identifier: ProfileIdentifier): Pr
 }
 
 /** @deprecated */
-export async function hasLocalKey(identifier: ProfileIdentifier): Promise<boolean> {
+export async function hasLocalKey(identifier: ProfileIdentifier) {
     return hasLocalKeyOf(identifier)
 }
 

@@ -55,8 +55,7 @@ export class CryptoScamDB {
             .map((x) => this.getScamWarning(x))
         const result = await Promise.allSettled(requests)
         return result
-            .filter((x) => x.status === 'fulfilled')
-            .map((x) => x.value)
-            .filter((x) => !!x)
+            .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
+            .filter((x): x is ScamWarningAPI.Info => !!x)
     }
 }

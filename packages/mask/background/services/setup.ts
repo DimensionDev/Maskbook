@@ -16,7 +16,7 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 
 const DebugService = Object.create(null)
-export function startServices(): void {
+export function startServices() {
     setup('Crypto', () => import(/* webpackMode: 'eager' */ './crypto/index.js'))
     setup('Identity', () => import(/* webpackMode: 'eager' */ './identity/index.js'))
     setup('Backup', () => import(/* webpackMode: 'eager' */ './backup/index.js'))

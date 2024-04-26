@@ -11,7 +11,7 @@ export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {
     const responses = updateLang === 'en-US' ? fetchEnglishBundle() : fetchTranslatedBundle(lang)
     const results = await Promise.allSettled(responses)
     return results
-        .filter((x) => x.status === 'fulfilled')
+        .filter((x): x is PromiseFulfilledResult<Bundle | null> => x.status === 'fulfilled')
         .map((x) => x.value!)
         .filter(Boolean)
 }
