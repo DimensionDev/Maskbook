@@ -4,7 +4,6 @@ import { useFungibleTokenBalance } from './useFungibleTokenBalance.js'
 import { useFungibleToken } from './useFungibleToken.js'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useFungibleTokenWatched<T extends NetworkPluginID>(pluginID?: T, address_ = '') {
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState(address_)

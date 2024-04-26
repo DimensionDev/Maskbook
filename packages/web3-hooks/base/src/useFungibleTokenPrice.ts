@@ -5,7 +5,6 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 import { useQuery } from '@tanstack/react-query'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useFungibleTokenPrice<T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,
     address?: string,

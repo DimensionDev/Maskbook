@@ -3,9 +3,7 @@ import { CurrencyType } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
 import { pick } from 'lodash-es'
 import { useCurrencyType } from './useCurrencyType.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useFiatCurrencyRate() {
     const fiatCurrencyType = useCurrencyType()
     const currencyType = fiatCurrencyType?.toUpperCase() || CurrencyType.USD

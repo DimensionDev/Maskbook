@@ -3,9 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { useWeb3Hub } from './useWeb3Hub.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useFungibleAsset<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     address?: string,

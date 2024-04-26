@@ -6,7 +6,6 @@ import { type ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useChainContext, useNetworks } from '@masknet/web3-hooks-base'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = [UseQueryResult]
 export function useGasLimit(
     schemaType?: SchemaType,
     contractAddress?: string,

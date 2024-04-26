@@ -4,9 +4,8 @@ import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
-type T = UseQueryResult
 /**
  * Parse RedPacket with post info
  */
