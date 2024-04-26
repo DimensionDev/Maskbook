@@ -57,7 +57,7 @@ jobs:
       # See https://github.com/getsentry/action-release/issues/187
       - name: Change git configuration
         shell: bash
-        run: git config --unset-all extensions.worktreeconfig
+        run: git config --unset-all extensions.worktreeconfig || true
       - name: Create Sentry release
         uses: getsentry/action-release@v1
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/released'
