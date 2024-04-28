@@ -140,7 +140,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^2.8.3",
     "unstated-next": "^1.1.0",
-    "url": "^0.11.3",
     "urlcat": "^3.1.0",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",

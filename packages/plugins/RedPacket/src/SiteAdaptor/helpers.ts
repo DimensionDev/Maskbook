@@ -7,7 +7,7 @@ import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import schemaNtf from '../schema-nft.json'
 import schema from '../schema.json'
 
-export const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
+const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
 export function RedPacketMetadataReader(
     metadata: ReadonlyMap<string, unknown> | undefined,
 ): Result<RedPacketJSONPayload, void> {

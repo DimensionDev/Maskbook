@@ -18,7 +18,6 @@
   "dependencies": {
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
-    "@masknet/plugin-trader": "workspace:^",
     "@masknet/shared": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
