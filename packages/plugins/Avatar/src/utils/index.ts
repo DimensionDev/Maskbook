@@ -102,7 +102,7 @@ async function getAvatarFromNextIDStorage(
     )
 
     if (!avatarId && response.isOk()) return response.value
-    if (response.isOk() && response.value?.avatarId === avatarId) return response.value
+    if (response.isOk() && response.value.avatarId === avatarId) return response.value
     return
 }
 
@@ -128,13 +128,12 @@ export async function getNFTAvatarByUserId(
 ): Promise<NextIDAvatarMeta | undefined> {
     const platform = getSiteType() === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
     if (!platform) return
+
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
     if (persona) {
         const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
-        if (binding) {
-            return getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
-        }
+        if (binding) return getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
     }
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
         const avatar = await getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)

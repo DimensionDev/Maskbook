@@ -181,6 +181,12 @@ export namespace FireflyRedPacketAPI {
         farcasterMessage?: HexString
     }
 
+    export interface PostOn {
+        platform: PlatformType
+        postId: string
+        handle: string
+    }
+
     export interface ClaimPlatform {
         platformName: PlatformType
         platformId: string
@@ -283,9 +289,11 @@ export namespace FireflyRedPacketAPI {
         tid: string
         cover: ThemeSettings
         normal: ThemeSettings
+        /** Redpacket without theme settings preset, current ones are default */
+        is_default?: boolean
     }
 
-    interface Response<T> {
+    export interface Response<T> {
         code: number
         data: T
     }
@@ -305,6 +313,40 @@ export namespace FireflyRedPacketAPI {
     }>
 
     export type ClaimHistoryResponse = Response<RedPacketClaimListInfo>
+
+    export interface ParseOptions {
+        text?: string
+        image?: {
+            imageUrl: string
+        }
+        walletAddress?: string
+        platform?: PlatformType
+        profileId?: string
+    }
+    export interface ParseResult {
+        content: string
+        /** only `text` for now */
+        type: string
+        /** only 1 for now */
+        version: number
+        serializable: true
+        meta: object
+        redpacket: {
+            /** the same as meta */
+            payload: object
+            canClaim: boolean
+            canRefund: boolean
+            canSend: boolean
+            isPasswordValid: boolean
+            isClaimed: boolean
+            isEmpty: boolean
+            isExpired: boolean
+            isRefunded: boolean
+            claimedNumber: number
+            claimedAmount: string
+        }
+    }
+    export type ParseResponse = Response<ParseResult>
 
     export type CheckClaimStrategyStatusOptions = {
         rpid: string

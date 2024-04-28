@@ -33,6 +33,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             overflow: 'auto',
             flexDirection: 'row',
             display: 'flex',
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -41,6 +42,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
             paddingLeft: theme.spacing(1.5),
             paddingRight: theme.spacing(0.25),
+            scrollbarWidth: 'none',
         },
         main: {
             display: 'flex',
@@ -51,6 +53,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             overflow: 'auto',
             // For profile-card footer
             paddingBottom: 48,
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

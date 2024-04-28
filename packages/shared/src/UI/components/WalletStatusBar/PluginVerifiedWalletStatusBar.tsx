@@ -94,7 +94,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
         const pluginIdByDefaultVerifiedWallet =
-            defaultVerifiedWallet ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform) : undefined
+            defaultVerifiedWallet ? resolveNextID_NetworkPluginID(defaultVerifiedWallet.platform) : undefined
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
 

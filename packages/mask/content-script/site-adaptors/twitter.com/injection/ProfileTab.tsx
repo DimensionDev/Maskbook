@@ -1,32 +1,31 @@
-import Color from 'color'
-import { useEffect, useState, useRef } from 'react'
-import { useAsync, useWindowSize } from 'react-use'
-import { useCollectionByTwitterHandler } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import Services from '#services'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { useCollectionByTwitterHandle } from '@masknet/shared'
+import { BooleanPreference, MaskMessages, PluginID, ProfileTabs } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
+import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
+import Color from 'color'
+import { useEffect, useRef, useState } from 'react'
+import { useAsync, useWindowSize } from 'react-use'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 import { untilElementAvailable } from '../../../utils/index.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root.js'
-import type { NonFungibleCollectionResult, FungibleTokenResult } from '@masknet/web3-shared-base'
-import { useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
-import { ProfileTabs, PluginID, MaskMessages, BooleanPreference } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
+import { startWatch } from '../../../utils/startWatch.js'
 import {
+    nextTabListSelector,
     searchAppBarBackSelector,
+    searchNameTag,
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
+    searchProfileTabLoseConnectionPageSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-    searchProfileTabLoseConnectionPageSelector,
-    searchNameTag,
-    isProfilePageLike,
-    nextTabListSelector,
 } from '../utils/selector.js'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
-import Services from '#services'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
-import { startWatch } from '../../../utils/startWatch.js'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration
@@ -201,15 +200,15 @@ function ProfileTabForTokenAndPersona() {
     const [hidden, setHidden] = useState(false)
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
-    const { value: collectionList, loading } = useCollectionByTwitterHandler(currentVisitingUserId)
+    const collectionList = useCollectionByTwitterHandle(currentVisitingUserId)
     const collectionResult = collectionList?.[0]
-    const twitterHandler =
+    const twitterHandle =
         (collectionResult as NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.collection
             ?.socialLinks?.twitter ||
         (collectionResult as FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>)?.socialLinks?.twitter
     const { classes } = useStyles({
         minWidth:
-            currentVisitingUserId && twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase()) ?
+            currentVisitingUserId && twitterHandle?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase()) ?
                 0
             :   56,
     })
@@ -219,12 +218,12 @@ function ProfileTabForTokenAndPersona() {
         })
     }, [])
 
-    return hidden || loading ? null : (
+    return hidden ? null : (
             <ProfileTab
                 title={
                     (
                         currentVisitingUserId &&
-                        twitterHandler?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
+                        twitterHandle?.toLowerCase().endsWith(currentVisitingUserId.toLowerCase())
                     ) ?
                         'More'
                     :   'Web3'
@@ -245,7 +244,7 @@ function ProfileTabForTokenAndPersona() {
 function ProfileTabForDAO() {
     const currentVisitingSocialIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId ?? ''
-    const { value: spaceList, loading } = useSnapshotSpacesByTwitterHandler(currentVisitingUserId)
+    const { data: spaceList, isPending } = useSnapshotSpacesByTwitterHandle(currentVisitingUserId)
 
     const { value: snapshotDisabled } = useAsync(() => {
         return Services.Settings.getPluginMinimalModeEnabled(PluginID.Snapshot)
@@ -259,7 +258,7 @@ function ProfileTabForDAO() {
         })
     }, [])
 
-    return hidden || loading || !spaceList?.length ?
+    return hidden || isPending || !spaceList?.length ?
             null
         :   <ProfileTab
                 title="DAO"
@@ -283,10 +282,6 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
             const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
             startWatch(watcher, {
                 signal,
-                missingReportRule: {
-                    name: 'Last tab in the profile page',
-                    rule: isProfilePageLike,
-                },
                 shadowRootDelegatesFocus: false,
             })
             attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<InjectProfileTab />)
@@ -296,7 +291,6 @@ export function injectProfileTabAtTwitter(signal: AbortSignal) {
 
     startWatch(contentWatcher, {
         signal,
-        missingReportRule: { name: 'ProfileTab', rule: isProfilePageLike },
         shadowRootDelegatesFocus: false,
     })
 }

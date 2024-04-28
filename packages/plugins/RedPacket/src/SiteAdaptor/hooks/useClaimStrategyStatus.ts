@@ -3,10 +3,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { usePlatformType } from './usePlatformType.js'
 
-type T = UseQueryResult
 export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacketNftJSONPayload) {
     const platform = usePlatformType()
     const { pluginID } = useNetworkContext()

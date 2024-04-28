@@ -47,6 +47,7 @@ const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { i
     return {
         dialogContent: {
             padding: 0,
+            scrollbarWidth: 'none',
             '::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -98,7 +99,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId: contextChainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const definition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('claimed', 'sent')
@@ -317,6 +318,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
                 networkTabs={
                     (
+                        currentTab === tabs.collectibles &&
                         step === CreateRedPacketPageStep.NewRedPacketPage &&
                         !openNFTConfirmDialog &&
                         !openSelectNFTDialog &&
@@ -353,12 +355,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     <RedPacketERC20Form
                                         expectedChainId={chainId}
                                         origin={settings}
+                                        gasOption={gasOption}
+                                        isFirefly={isFirefly}
                                         onClose={handleClose}
                                         onNext={onNext}
                                         onChange={_onChange}
-                                        gasOption={gasOption}
                                         onGasOptionChange={handleGasSettingChange}
-                                        isFirefly={isFirefly}
+                                        onChainChange={setChainId}
                                     />
                                 </TabPanel>
                                 <TabPanel

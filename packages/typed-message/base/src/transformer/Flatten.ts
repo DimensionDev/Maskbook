@@ -53,8 +53,8 @@ export function FlattenTypedMessage(message: TypedMessage, context: Transformati
 function isTextWithMetaCanBeMerged(a: Meta | undefined, b: Meta | undefined) {
     if (a === b) return true
     if (a?.size !== 1) return false
-    if (a?.size !== b?.size) return false
-    if (!a?.has(unstable_STYLE_META) || !b.has(unstable_STYLE_META)) return false
+    if (a.size !== b?.size) return false
+    if (!a.has(unstable_STYLE_META) || !b.has(unstable_STYLE_META)) return false
     const a_style = a.get(unstable_STYLE_META)!
     const b_style = b.get(unstable_STYLE_META)!
     return isEqual(a_style, b_style)

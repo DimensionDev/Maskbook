@@ -1,15 +1,15 @@
-import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
-import { share } from '@masknet/plugin-infra/content-script/context'
+import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero, minus, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
-import { Card, Grow, Typography } from '@mui/material'
+import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Card, Grow, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useRedPacketTrans } from '../../locales/index.js'
 import { Requirements } from '../Requirements.js'
@@ -18,7 +18,8 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useQuery } from '@tanstack/react-query'
+import { RequestLoginFooter } from './RequestLoginFooter.js'
+import { useRedPacketCover } from './useRedPacketCover.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -28,19 +29,29 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             position: 'relative',
             display: 'flex',
             backgroundColor: 'transparent',
+            backgroundRepeat: 'no-repeat',
             color: theme.palette.common.white,
             flexDirection: 'column',
             justifyContent: 'space-between',
-            aspectRatio: '10 / 7',
             marginBottom: outdated ? '12px' : 'auto',
             marginLeft: 'auto',
             marginRight: 'auto',
             boxSizing: 'border-box',
+            width: 'calc(100% - 32px)',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
-                height: 202,
+                width: 'calc(100% - 20px)',
             },
-            width: 'calc(100% - 32px)',
+        },
+        fireflyRoot: {
+            aspectRatio: '10 / 7',
+        },
+        maskRoot: {
+            marginTop: 'auto',
+            height: 335,
+            backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
         },
         cover: {
             position: 'absolute',
@@ -59,11 +70,49 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             zIndex: 9,
             inset: 0,
             margin: 'auto',
+            [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
+                width: 'auto',
+            },
         },
         header: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
+        },
+
+        content: {
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+        },
+        bottomContent: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+        },
+        myStatus: {
+            fontSize: 12,
+            fontWeight: 600,
+            lineHeight: 1.8,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                left: 12,
+                bottom: 8,
+            },
+        },
+        from: {
+            fontSize: '14px',
+            color: theme.palette.common.white,
+            alignSelf: 'end',
+            fontWeight: 500,
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+                right: 12,
+                bottom: 8,
+            },
         },
         label: {
             width: 76,
@@ -78,6 +127,23 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             position: 'absolute',
             right: 12,
             top: 12,
+        },
+        words: {
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            color: theme.palette.common.white,
+            fontSize: 24,
+            fontWeight: 700,
+            wordBreak: 'break-all',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                fontSize: 14,
+            },
+        },
+        messageBox: {
+            width: '100%',
         },
         tokenLabel: {
             width: 48,
@@ -105,13 +171,13 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // #region token detailed
     const {
-        value: availability,
+        availability,
         computed: availabilityComputed,
-        retry: revalidateAvailability,
+        checkAvailability,
         claimStrategyStatus,
         recheckClaimStatus,
         checkingClaimStatus,
-    } = useAvailabilityComputed(account ?? payload.contract_address, payload)
+    } = useAvailabilityComputed(account, payload)
 
     // #endregion
 
@@ -123,6 +189,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
+    const platform = source?.toLowerCase() as 'lens' | 'farcaster'
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
@@ -134,7 +201,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
             if (isOnFirefly) {
-                const platform = source?.toLowerCase() as 'lens' | 'farcaster'
                 const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
                 return t.share_on_firefly({
                     context,
@@ -161,7 +227,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     t.share_unclaimed_message_official_account(shareTextOption)
                 :   t.share_unclaimed_message_not_twitter(shareTextOption)
         },
-        [payload, link, claimTxHash, t, network?.name, source, isOnFirefly, handle],
+        [payload, link, claimTxHash, t, network?.name, platform, isOnFirefly, handle],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {
@@ -201,72 +267,118 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
+    const me = useLastRecognizedIdentity()
+    const myProfileId = me?.profileId
+    const myHandle = me?.identifier?.userId
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
-        const result = await recheckClaimStatus()
-        if (result === false) {
-            setShowRequirements(true)
-            return
-        }
         if (canClaim) {
+            const result = await recheckClaimStatus()
+            if (result === false) {
+                setShowRequirements(true)
+                return
+            }
             hash = await claimCallback()
+            if (platform && myProfileId && myHandle && hash) {
+                await FireflyRedPacket.finishClaiming(
+                    payload.rpid,
+                    platform as FireflyRedPacketAPI.PlatformType,
+                    myProfileId,
+                    myHandle,
+                    hash,
+                )
+            }
             checkResult()
         } else if (canRefund) {
             hash = await refundCallback()
         }
         if (typeof hash === 'string') {
-            revalidateAvailability()
+            checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus])
+    }, [
+        canClaim,
+        canRefund,
+        platform,
+        claimCallback,
+        checkResult,
+        recheckClaimStatus,
+        checkAvailability,
+        payload.rpid,
+        myProfileId,
+        myHandle,
+    ])
+
+    const myStatus = useMemo(() => {
+        if (!availability) return ''
+        if (token && listOfStatus.includes(RedPacketStatus.claimed))
+            return t.description_claimed(
+                availability.claimed_amount ?
+                    {
+                        amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
+                        symbol: token.symbol,
+                    }
+                :   { amount: '-', symbol: '-' },
+            )
+        return ''
+    }, [listOfStatus, t, token, availability?.claimed_amount])
+
+    const subtitle = useMemo(() => {
+        if (!availability || !token) return
+
+        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
+            return t.description_refund({
+                balance: formatBalance(availability.balance, token.decimals, { significant: 2 }),
+                symbol: token.symbol ?? '-',
+            })
+        if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
+        if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
+        if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
+        if (!payload.password) return t.description_broken()
+        const i18nParams = {
+            total: formatBalance(payload.total, token.decimals, { significant: 2 }),
+            symbol: token.symbol ?? '-',
+            count: payload.shares.toString() ?? '-',
+        }
+        return payload.shares > 1 ? t.description_failover_other(i18nParams) : t.description_failover_one(i18nParams)
+    }, [availability, canRefund, token, t, payload, listOfStatus])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
 
-    const outdated =
-        listOfStatus.includes(RedPacketStatus.empty) || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
+    const isEmpty = listOfStatus.includes(RedPacketStatus.empty)
+    const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes } = useStyles({ outdated })
+    const { classes, cx } = useStyles({ outdated })
 
-    const { data } = useQuery({
-        enabled: !!availability && !!payload.rpid && !!token?.symbol,
-        queryKey: ['red-packet', 'theme-id', payload.rpid],
-        queryFn: async () => {
-            const name = payload.sender.name
-
-            return FireflyRedPacket.getCoverUrlByRpid(
-                payload.rpid,
-                token?.symbol,
-                token?.decimals,
-                payload.shares,
-                payload.total,
-                [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (
-                    `@${name}`
-                ),
-                payload.sender.message,
-                availability?.balance ?? payload.total,
-                toFixed(minus(payload.shares, availability?.claimed || 0)),
-            )
-        },
-    })
+    // RedPacket created from Mask has no cover settings
+    const cover = useRedPacketCover(payload, availability)
 
     // the red packet can fetch without account
-    if (!availability || !token || !data?.url) return <LoadingStatus minHeight={148} />
+    if (!availability || !token) return <LoadingStatus minHeight={148} />
 
-    const claimedOrEmpty =
-        listOfStatus.includes(RedPacketStatus.claimed) || listOfStatus.includes(RedPacketStatus.empty)
+    const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
     return (
         <>
             <Card
-                className={classes.root}
+                className={cx(classes.root, cover ? classes.fireflyRoot : classes.maskRoot)}
                 component="article"
                 elevation={0}
-                style={{
-                    backgroundImage: `url("${data.url}")`,
-                }}>
-                <img className={classes.cover} src={data.url} />
+                style={
+                    cover ?
+                        {
+                            backgroundSize: 'contain',
+                            backgroundImage: `url(${cover.backgroundImageUrl})`,
+                            backgroundColor: cover.backgroundColor,
+                        }
+                    :   undefined
+                }>
+                {cover ?
+                    <img className={classes.cover} src={cover.url!} />
+                :   null}
                 <img
+                    aria-label="Token"
                     src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
                     className={classes.tokenLabel}
                 />
@@ -284,16 +396,41 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                         </Typography>
                     :   null}
                 </div>
-                <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
-                    <Requirements
-                        showResults={!claimedOrEmpty}
-                        statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
-                        className={classes.requirements}
-                        onClose={() => setShowRequirements(false)}
-                    />
-                </Grow>
+                {cover ?
+                    <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
+                        <Requirements
+                            showResults={!claimedOrEmpty}
+                            statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
+                            className={classes.requirements}
+                            onClose={() => setShowRequirements(false)}
+                        />
+                    </Grow>
+                :   <div className={classes.content}>
+                        <Stack />
+                        <div className={classes.messageBox}>
+                            <Typography className={classes.words} variant="h6">
+                                {payload.sender.message}
+                            </Typography>
+                        </div>
+                        <div className={classes.bottomContent}>
+                            <div>
+                                <Typography variant="body2" className={classes.myStatus}>
+                                    {subtitle}
+                                </Typography>
+                                <Typography className={classes.myStatus} variant="body1">
+                                    {myStatus}
+                                </Typography>
+                            </div>
+                            <Typography className={classes.from} variant="body1">
+                                {t.from({ name: payload.sender.name || '-' })}
+                            </Typography>
+                        </div>
+                    </div>
+                }
             </Card>
-            {outdated ? null : (
+            {outdated ?
+                null
+            : myHandle ?
                 <OperationFooter
                     chainId={payloadChainId}
                     canClaim={canClaim}
@@ -303,7 +440,12 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />
-            )}
+            :   <RequestLoginFooter
+                    onRequest={() => {
+                        requestLogin?.(source)
+                    }}
+                />
+            }
         </>
     )
 })

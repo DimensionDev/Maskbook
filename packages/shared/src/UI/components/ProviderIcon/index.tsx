@@ -40,10 +40,10 @@ export interface ProviderIconProps extends CardProps {
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
 
-export function ProviderIcon({ icon, name, onClick, iconFilterColor, className, ButtonBaseProps }: ProviderIconProps) {
+export function ProviderIcon({ icon, name, iconFilterColor, className, ButtonBaseProps, ...rest }: ProviderIconProps) {
     const { classes, cx } = useStyles()
     return (
-        <Card className={cx(classes.root, className)} elevation={0} onClick={onClick}>
+        <Card className={cx(classes.root, className)} elevation={0} {...rest}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
                 <img
                     src={icon}

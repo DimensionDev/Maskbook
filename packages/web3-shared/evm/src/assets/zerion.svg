@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url('#zerion_svg__clip0_9925_8874')">
+        <path fill="#2962EF" d="M0 4a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4Z"/>
+        <path fill="#fff" d="M5.206 6c-.412 0-.57.508-.225.72l8.634 5.207a.494.494 0 0 0 .65-.119l3.797-4.983c.257-.347-.003-.825-.45-.825H5.206Zm13.57 12c.41 0 .573-.51.228-.723l-8.636-5.206a.488.488 0 0 0-.643.125L5.922 17.18c-.258.346.01.821.457.821h12.396Z"/>
+    </g>
+    <defs>
+        <clipPath id="zerion_svg__clip0_9925_8874">
+            <path fill="#fff" d="M0 0h24v24H0z"/>
+        </clipPath>
+    </defs>
+</svg>

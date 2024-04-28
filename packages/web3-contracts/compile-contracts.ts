@@ -1,10 +1,10 @@
 import { promises as fs } from 'fs'
 import { join } from 'path'
 import { runTypeChain, glob } from 'typechain'
-import { run } from './utils'
+import { shell, awaitChildProcess } from '../scripts/src/utils/index.ts'
 
-const ABIS_PATH = join(__dirname, 'abis')
-const GENERATED_PATH = join(__dirname, 'types')
+const ABIS_PATH = join(import.meta.dirname, 'abis')
+const GENERATED_PATH = join(import.meta.dirname, 'types')
 
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
@@ -36,17 +36,17 @@ async function main() {
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
 
-    run(GENERATED_PATH, 'npx', '-y', '@magic-works/ts-esm-migrate', '.')
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpx @magic-works/ts-esm-migrate .`)
     // format code
-    run(GENERATED_PATH, 'npx', 'prettier', '.', '--write')
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`npx prettier . --write`)
     // rename .ts to .d.ts
     for (const file of await fs.readdir(GENERATED_PATH)) {
         await fs.rename(join(GENERATED_PATH, file), join(GENERATED_PATH, file.replace('.ts', '.d.ts')))
     }
 
     // add to git stage
-    run(ABIS_PATH, 'git', 'add', '.')
-    run(GENERATED_PATH, 'git', 'add', '.')
+    await awaitChildProcess(shell.cwd(ABIS_PATH)`git add .`)
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`git add .`)
 }
 
 main()

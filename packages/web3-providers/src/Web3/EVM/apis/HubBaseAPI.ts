@@ -14,6 +14,9 @@ import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
 export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
 
+    override getGasLimit(chainId: ChainId) {
+        return GasOptions.getGasLimit(chainId)
+    }
     async getGasOptions(chainId: ChainId, initial?: EVMHubOptions) {
         const options = this.HubOptions.fill({
             ...initial,

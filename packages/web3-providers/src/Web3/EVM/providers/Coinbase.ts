@@ -4,7 +4,8 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
-    if (isEthereumInjected('coinbaseWalletExtension')) return Reflect.get(window, 'coinbaseWalletExtension')
+    if (isEthereumInjected('coinbaseWalletExtension'))
+        return Reflect.get(window, 'coinbaseWalletExtension') as unknown as typeof injectedCoinbaseProvider
     if (isInPageEthereumInjected()) return injectedCoinbaseProvider
     // Not available on extension site.
     return injectedCoinbaseProvider

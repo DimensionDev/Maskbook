@@ -27,7 +27,7 @@ export enum WalletAssetTabs {
 }
 
 export type GasSetting = {
-    gas: string
+    gasLimit?: string | undefined
     gasPrice?: string
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
@@ -43,6 +43,11 @@ export type TransactionDetail = {
     computedPayload: Partial<Transaction>
     formattedTransaction?: TransactionDescriptor<ChainId, Transaction, TransactionParameter>
     transactionContext?: TransactionContext<ChainId, TransactionParameter>
+
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+    gasPrice?: string
+    gas?: string
 }
 
 export enum TransferTabType {

@@ -14,6 +14,8 @@ import {
     EnhanceableSite,
 } from '@masknet/shared-base'
 import { queryPersonasDB } from '../../database/persona/web.js'
+import { getPluginDefine } from '@masknet/plugin-infra'
+import { unreachable } from '@masknet/kit'
 
 function create<T>(settings: ValueRefWithReady<T>) {
     async function get() {
@@ -48,6 +50,18 @@ export async function setCurrentPersonaIdentifier(x?: PersonaIdentifier) {
 }
 export async function getPluginMinimalModeEnabled(id: string): Promise<BooleanPreference> {
     return getCurrentPluginMinimalMode(id)
+}
+/**
+ * Return a resolved result of getPluginMinimalModeEnabled.
+ * If getPluginMinimalModeEnabled(id) returns BooleanPreference.Default,
+ * this function will resolve it to true or false based on the plugin default.
+ */
+export async function getPluginMinimalModeEnabledResolved(id: string): Promise<boolean> {
+    const result = getCurrentPluginMinimalMode(id)
+    if (result === BooleanPreference.True) return true
+    if (result === BooleanPreference.False) return false
+    if (result === BooleanPreference.Default) return !!getPluginDefine(id)?.inMinimalModeByDefault
+    unreachable(result)
 }
 export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
     setCurrentPluginMinimalMode(id, enabled ? BooleanPreference.True : BooleanPreference.False)

@@ -33,7 +33,10 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             })
             const { [GasOptionType.SLOW]: slowOption, [GasOptionType.NORMAL]: normalOption } = options ?? {}
 
-            if (EVMChainResolver.isFeatureSupported(context.chainId, 'EIP1559')) {
+            // TODO: this field seems like not documented anywhere. should we just stop changing gasPrice?
+            const legacyTransactionUsed = config.type === '0x0'
+
+            if (!legacyTransactionUsed && EVMChainResolver.isFeatureSupported(context.chainId, 'EIP1559')) {
                 delete config.gasPrice
 
                 if (
@@ -61,9 +64,9 @@ export abstract class BaseTranslator implements Translator<ConnectionContext> {
             console.error(err)
         }
 
-        const overrideMaxFeePerGas = context.requestOptions?.overrides?.maxFeePerGas
-        const overrideMaxPriorityFeePerGas = context.requestOptions?.overrides?.maxPriorityFeePerGas
-        const overrideGasPrice = context.requestOptions?.overrides?.gasPrice
+        const overrideMaxFeePerGas = context.requestOptions.overrides?.maxFeePerGas
+        const overrideMaxPriorityFeePerGas = context.requestOptions.overrides?.maxPriorityFeePerGas
+        const overrideGasPrice = context.requestOptions.overrides?.gasPrice
 
         context.config = {
             ...config,

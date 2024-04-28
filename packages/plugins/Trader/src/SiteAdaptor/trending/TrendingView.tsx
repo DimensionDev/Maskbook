@@ -4,9 +4,9 @@ import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNativeToken, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { ChainId, isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
-import { createFungibleToken, SourceType, TokenType } from '@masknet/web3-shared-base'
+import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import {
@@ -26,7 +26,6 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { TrendingViewContext } from './context.js'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
-import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
 import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
@@ -37,7 +36,6 @@ import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTab } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
 import { useTraderTrans } from '../../locales/index.js'
-import { share } from '@masknet/plugin-infra/content-script/context'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -70,9 +68,9 @@ const useStyles = makeStyles<{
                     minHeight: 374,
                     maxHeight:
                         props.isCollectionProjectPopper ?
-                            props.currentTab === ContentTab.Price ? 450
-                            : props.currentTab === ContentTab.Swap ? 'unset'
-                            : 374
+                            props.currentTab === ContentTab.Price ?
+                                450
+                            :   374
                         :   'unset',
                     overflow: 'hidden',
                     display: 'flex',
@@ -97,9 +95,6 @@ const useStyles = makeStyles<{
             :   {
                     border: 'none',
                 },
-        tradeViewRoot: {
-            maxWidth: '100% !important',
-        },
         priceChartRoot:
             props.isTokenTagPopper ?
                 {
@@ -217,17 +212,20 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     // #region if the coin is a native token or contract address exists
+
+    const isBRC20 = trending?.coin.tags?.includes('BRC-20')
+
     const isSwappable =
         !isMinimalMode &&
         !isNFT &&
+        !isBRC20 &&
         !!trending?.coin.contract_address &&
-        (!swapExpectedContract?.pluginID || swapExpectedContract?.pluginID === NetworkPluginID.PLUGIN_EVM)
+        (!swapExpectedContract?.pluginID || swapExpectedContract.pluginID === NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
     // #region tabs
     const tabs = useMemo(() => {
         const list = [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
-        if (isSwappable) list.push(ContentTab.Swap)
         if (isNFT) list.push(ContentTab.NFTItems)
         return list
     }, [isSwappable, isNFT])
@@ -250,12 +248,6 @@ export function TrendingView(props: TrendingViewProps) {
                 key: ContentTab.Exchange,
                 label: isNFT ? t.plugin_trader_tab_activities() : t.plugin_trader_tab_exchange(),
             },
-            isSwappable ?
-                {
-                    key: ContentTab.Swap,
-                    label: t.plugin_trader_tab_swap(),
-                }
-            :   undefined,
             isNFT ?
                 {
                     key: ContentTab.NFTItems,
@@ -308,6 +300,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const Component = (
         <TrendingViewDeck
+            isSwappable={isSwappable}
             classes={{
                 body: classes.body,
                 content: classes.content,
@@ -360,6 +353,7 @@ export function TrendingView(props: TrendingViewProps) {
                         isTokenTagPopper || isCollectionProjectPopper ? theme.palette.maskColor.bottom : 'transparent',
                     flexGrow: 1,
                     overflow: 'auto',
+                    scrollbarWidth: 'none',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
@@ -372,9 +366,7 @@ export function TrendingView(props: TrendingViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
-                            amount={
-                                currentPriceChange ?? trending?.market?.price_change_percentage_24h_in_currency ?? 0
-                            }
+                            amount={currentPriceChange ?? trending.market?.price_change_percentage_24h_in_currency ?? 0}
                             currency={trending.currency}
                             stats={stats}
                             loading={loadingStats}>
@@ -400,40 +392,6 @@ export function TrendingView(props: TrendingViewProps) {
                         :   <TickersTable tickers={tickers} />}
                     </Box>
                 :   null}
-                {currentTab === ContentTab.Swap && isSwappable ?
-                    <Web3ContextProvider
-                        network={context.pluginID}
-                        chainId={isNativeTokenSymbol(coin.symbol) ? coin.chainId : swapExpectedContract?.chainId}>
-                        <TradeView
-                            classes={{ root: classes.tradeViewRoot }}
-                            TraderProps={{
-                                share,
-                                defaultInputCoin: createFungibleToken(
-                                    result.chainId,
-                                    SchemaType.Native,
-                                    nativeToken?.address ?? '',
-                                    nativeToken?.name ?? '',
-                                    nativeToken?.symbol ?? '',
-                                    nativeToken?.decimals ?? 0,
-                                    isNativeTokenAddress(result.address) ? result.logoURL : undefined,
-                                ),
-                                defaultOutputCoin:
-                                    isNativeTokenAddress(coin.contract_address) ? undefined : (
-                                        createFungibleToken(
-                                            swapExpectedContract?.chainId as ChainId,
-                                            SchemaType.ERC20,
-                                            swapExpectedContract?.address || '',
-                                            coin.name ?? coin.name,
-                                            coin.symbol ?? coin.symbol ?? '',
-                                            coin.decimals ?? 0,
-                                            result.logoURL,
-                                        )
-                                    ),
-                            }}
-                        />
-                    </Web3ContextProvider>
-                :   null}
-
                 {isNFT && currentTab === ContentTab.NFTItems ?
                     <Box className={classes.nftItems}>
                         <NFTList

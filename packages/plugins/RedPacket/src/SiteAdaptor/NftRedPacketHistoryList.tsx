@@ -9,6 +9,7 @@ import { List } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
 import { useRedPacketTrans } from '../locales/index.js'
+import type { HTMLProps } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -26,6 +27,7 @@ const useStyles = makeStyles()((theme) => {
                 width: '100%',
                 padding: 0,
             },
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -40,12 +42,12 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface Props {
+interface Props extends HTMLProps<HTMLDivElement> {
     onSend: (history: NftRedPacketJSONPayload, contract: NonFungibleCollection<ChainId, SchemaType>) => void
 }
 
-export function NftRedPacketHistoryList({ onSend }: Props) {
-    const { classes } = useStyles()
+export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
+    const { classes, cx } = useStyles()
     const t = useRedPacketTrans()
     const sharedI18N = useSharedTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -72,7 +74,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     }
 
     return (
-        <div className={classes.root}>
+        <div {...rest} className={cx(classes.root, rest.className)}>
             <List style={{ padding: '16px 0 0' }}>
                 {histories.map((history) => (
                     <NftRedPacketHistoryItem

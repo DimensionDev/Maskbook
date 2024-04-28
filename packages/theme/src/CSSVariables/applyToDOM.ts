@@ -21,11 +21,12 @@ export function CSSVariableInjectorCSS(scheme: PaletteMode) {
         ':root, :host': result,
         // TODO doesn't work on components that mounted in portal
         '[data-hide-scrollbar]': {
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
         },
-    }
+    } as const
 }
 
 export function applyMaskColorVars(node: HTMLElement, scheme: PaletteMode) {

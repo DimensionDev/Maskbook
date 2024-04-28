@@ -51,7 +51,7 @@ export class NextIDStorage implements StorageAPI.Storage {
             key,
         )
 
-        if (!payload?.isOk()) throw new Error('Invalid payload Error')
+        if (!payload.isOk()) throw new Error('Invalid payload Error')
 
         const signature = await this.signWithPersona?.(SignType.Message, payload.value.signPayload, this.signer, true)
         if (!signature) throw new Error('Failed to sign payload.')

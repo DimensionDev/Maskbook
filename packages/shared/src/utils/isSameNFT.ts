@@ -11,7 +11,7 @@ export function isSameNFT(
     if (!a.contract) return false
     return (
         isSameAddress(a.contract.address, b?.contract?.address) &&
-        a.contract?.chainId === b?.contract?.chainId &&
-        a.tokenId === b?.tokenId
+        a.contract.chainId === b?.contract?.chainId &&
+        a.tokenId === b.tokenId
     )
 }

@@ -19,7 +19,7 @@ export async function getProcessLock(lockName: string) {
 }
 export function isLocked(lockName: string) {
     const lockfilePath = getLockPosition(lockName)
-    const result = Lock.checkSync(__filename, { lockfilePath, stale: 500 })
+    const result = Lock.checkSync(import.meta.filename, { lockfilePath, stale: 500 })
     return result
 }
 

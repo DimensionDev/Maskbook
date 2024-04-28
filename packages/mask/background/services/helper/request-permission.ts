@@ -1,46 +1,32 @@
 import type { Permissions } from 'webextension-polyfill'
+import { waitUntil } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '@masknet/shared-base'
 import { getPermissionRequestURL } from '../../../shared/definitions/routes.js'
-import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 
-export async function requestExtensionPermission(permission: Permissions.Permissions): Promise<boolean> {
+export async function requestExtensionPermissionFromContentScript(
+    permission: Permissions.Permissions,
+): Promise<boolean> {
     if (await browser.permissions.contains(permission)) return true
-    try {
-        return await browser.permissions.request(permission).then(sendNotification)
-    } catch {
-        // which means we're on Firefox or Manifest V3.
-        // Chrome Manifest v2 allows permission request from the background.
-    }
     const popup = await browser.windows.create({
         height: 600,
         width: 400,
         type: 'popup',
         url: getPermissionRequestURL(permission),
     })
-    return new Promise((resolve) => {
+    const promise = new Promise<boolean>((resolve) => {
         browser.windows.onRemoved.addListener(function listener(windowID: number) {
             if (windowID !== popup.id) return
             browser.permissions.contains(permission).then(sendNotification).then(resolve)
             browser.windows.onRemoved.removeListener(listener)
         })
     })
+    waitUntil(promise)
+    return promise
 }
 
 function sendNotification(result: boolean) {
     if (result) MaskMessages.events.hostPermissionChanged.sendToAll()
     return result
-}
-/** @internal */
-export async function requestHostPermissionForActiveTab() {
-    const [{ id, url }] = await browser.tabs.query({ active: true })
-    if (!id || !url) return false
-    return requestHostPermission([new URL(url).origin + '/*'])
-}
-export async function requestHostPermission(origins: readonly string[]) {
-    const currentOrigins = (await browser.permissions.getAll()).origins || []
-    const extra = origins.filter((i) => !currentOrigins.includes(i))
-    if (!extra.length) return true
-    return requestExtensionPermission({ origins: extra })
 }
 
 export function hasHostPermission(origins: readonly string[]) {
@@ -49,11 +35,4 @@ export function hasHostPermission(origins: readonly string[]) {
 
 export function queryExtensionPermission(permission: Permissions.AnyPermissions): Promise<boolean> {
     return browser.permissions.contains(permission)
-}
-
-/** @internal */
-export function requestSiteAdaptorsPermission(defines: readonly SiteAdaptor.Definition[]) {
-    return requestExtensionPermission({
-        origins: defines.map((x) => x.declarativePermissions.origins).flat(),
-    })
 }

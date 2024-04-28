@@ -12,7 +12,7 @@ function getInjectedProvider() {
 
 export class OKXProvider extends EVMInjectedWalletProvider {
     constructor() {
-        super(ProviderType.Coinbase, getInjectedProvider())
+        super(ProviderType.OKX, getInjectedProvider())
     }
 
     override get ready() {

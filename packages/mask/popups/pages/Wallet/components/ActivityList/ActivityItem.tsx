@@ -211,11 +211,11 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
     const { data: txInput, isPending: loadingTxInput } = useQuery({
         // Enable this when chainbase does not support the current chain.
         enabled: !!transaction && !loadingTx && !tx?.input && transaction.type === 'transfer',
-        queryKey: [transaction?.chainId, transaction?.id],
+        queryKey: [transaction.chainId, transaction.id],
         queryFn: async () => {
-            if (!transaction?.chainId || !transaction?.id) return
+            if (!transaction.chainId || !transaction.id) return
             const tx = await EVMWeb3.getTransaction(transaction.id, { chainId: transaction.chainId })
-            return tx?.input
+            return tx.input
         },
     })
 

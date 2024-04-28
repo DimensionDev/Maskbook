@@ -20,23 +20,22 @@ type StorageValue = StorageValueV1 | StorageValueV2 | StorageValueV3
  * @returns
  */
 export function useHiddenAddressConfig(
-    personaPubkey: string | undefined,
+    personaPubkey: string | undefined | null,
     pluginID: PluginID | undefined,
     signWithPersona: WalletAPI.SignWithPersona,
 ) {
     return useQuery({
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
-        enabled: !!personaPubkey,
+        enabled: Boolean(personaPubkey && pluginID),
         queryFn: async () => {
-            if (!pluginID || !personaPubkey) return EMPTY_OBJECT
             const storage = Web3Storage.createNextIDStorage(
-                personaPubkey,
+                personaPubkey!,
                 NextIDPlatform.NextID,
-                personaPubkey,
+                personaPubkey!,
                 signWithPersona,
             )
 
-            const result = await storage.get<StorageValue>(pluginID)
+            const result = await storage.get<StorageValue>(pluginID!)
             if (!result) return EMPTY_OBJECT
 
             // When the tips data is legacy
@@ -51,7 +50,7 @@ export function useHiddenAddressConfig(
 }
 
 export function useHiddenAddressConfigOf(
-    personaPubkey: string | undefined,
+    personaPubkey: string | undefined | null,
     pluginID: PluginID | undefined,
     socialId: string | undefined,
     signWithPersona: WalletAPI.SignWithPersona,

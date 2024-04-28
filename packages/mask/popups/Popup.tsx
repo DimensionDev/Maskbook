@@ -41,15 +41,13 @@ import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { noop } from 'lodash-es'
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { queryClient } from '@masknet/shared-base-ui'
 
 const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
 const Personas = lazy(() => import(/* webpackMode: 'eager' */ './pages/Personas/index.js'))
-const SwapPage = lazy(() => import('./pages/Swap/index.js'))
 const RequestPermissionPage = lazy(() => import('./pages/RequestPermission/index.js'))
-const PermissionAwareRedirect = lazy(() => import('./pages/PermissionAwareRedirect/index.js'))
 const Contacts = lazy(() => import('./pages/Friends/index.js'))
 const Settings = lazy(() => import('./pages/Settings/index.js'))
 
@@ -82,9 +80,8 @@ const PopupRoutes = memo(function PopupRoutes() {
                             <Route path={PopupPaths.Friends + '/*'} element={withSuspense(<Contacts />)} />
                             <Route path={PopupPaths.Settings} element={withSuspense(<Settings />)} />
                         </Route>
-                        <Route path={PopupPaths.Swap} element={<SwapPage />} />
+
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
-                        <Route path={PopupPaths.PermissionAwareRedirect} element={<PermissionAwareRedirect />} />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
                     </Routes>
                     {mainLocation ?
@@ -169,7 +166,7 @@ export default function Popups() {
     )
 
     useIdleTimer({
-        onAction: !location.hash.includes('/swap') ? Services.Wallet.setAutoLockTimer : noop,
+        onAction: !location.hash.includes('/swap') ? () => Services.Wallet.setAutoLockTimer() : noop,
         throttle: 10000,
     })
     useEffect(() => {
@@ -180,9 +177,9 @@ export default function Popups() {
     return (
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
             {/* https://github.com/TanStack/query/issues/5417 */}
-            {/* {process.env.NODE_ENV === 'development' ?
+            {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null} */}
+            :   null}
             {PageUIProvider(
                 usePopupTheme,
                 <PopupSnackbarProvider>

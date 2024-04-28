@@ -101,12 +101,12 @@ export const EditNetwork = memo(function EditNetwork() {
                 className={classes.iconButton}
                 onClick={async () => {
                     if (currentChainId === network?.chainId) {
-                        await EVMWeb3.switchChain?.(ChainId.Mainnet, {
+                        await EVMWeb3.switchChain(ChainId.Mainnet, {
                             providerType: ProviderType.MaskWallet,
                         })
                         setChainId(ChainId.Mainnet)
                     }
-                    await Network?.removeNetwork(id)
+                    await Network.removeNetwork(id)
                     showSnackbar(t.deleted_network_successfully())
                     // Trigger UI update.
                     queryClient.invalidateQueries({ queryKey: QUERY_KEY })

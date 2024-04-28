@@ -1,14 +1,36 @@
 import { validate } from 'uuid'
 import { getDefaultWalletPassword } from '@masknet/shared-base'
 import * as database from './database/index.js'
+import { setAutoLockTimer } from './locker.js'
 
-let inMemoryPassword = ''
+const key = ''
+const atKey = 'at'
+const inMemoryPassword = {
+    ' value': '',
+    get value() {
+        return this[' value']
+    },
+    set value(value) {
+        this[' value'] = value
+        if (!value) browser.storage.session?.clear()
+        else browser.storage.session?.set({ [key]: value, [atKey]: Date.now() })
+    },
+}
+browser.storage.session?.get([key, atKey]).then(async (result) => {
+    if (Date.now() - result[atKey] > (await database.getAutoLockerDuration())) {
+        browser.storage.session.clear()
+        return
+    }
+    setAutoLockTimer(result[atKey])
+    if (!result[key]) return
+    inMemoryPassword[' value'] = result[key]
+})
 
 /** Decrypt the master password and return it. If it fails to decrypt, then return an empty string. */
-export async function INTERNAL_getMasterPassword() {
+async function INTERNAL_getMasterPassword() {
     const hasSafeSecret = await database.hasSafeSecret()
     if (!hasSafeSecret) return database.decryptSecret(getDefaultWalletPassword())
-    return inMemoryPassword ? database.decryptSecret(inMemoryPassword) : ''
+    return inMemoryPassword.value ? database.decryptSecret(inMemoryPassword.value) : ''
 }
 
 /** Decrypt the master password and return it. If it fails to decrypt, then throw an error. */
@@ -20,7 +42,7 @@ export async function INTERNAL_getMasterPasswordRequired() {
 
 function INTERNAL_setPassword(newPassword: string) {
     validatePasswordRequired(newPassword)
-    inMemoryPassword = newPassword
+    inMemoryPassword.value = newPassword
 }
 
 /** Force erase the preexisting password and set a new one. */
@@ -48,7 +70,7 @@ export async function setDefaultPassword() {
 
 /** Clear the verified password in memory forces the user to re-enter the password. */
 export async function clearPassword() {
-    inMemoryPassword = ''
+    inMemoryPassword.value = ''
 }
 
 /** Has set a password (could not be the default one). */
@@ -63,12 +85,12 @@ export async function hasPasswordWithDefaultOne() {
 
 /** Has a verified password in memory. */
 export async function hasVerifiedPassword() {
-    return validatePassword(inMemoryPassword)
+    return validatePassword(inMemoryPassword.value)
 }
 
 /** Verify the given password. if successful, keep it in memory. */
 export async function verifyPassword(unverifiedPassword: string) {
-    if (inMemoryPassword === unverifiedPassword) return true
+    if (inMemoryPassword.value === unverifiedPassword) return true
     const valid = validate(await database.decryptSecret(unverifiedPassword))
     if (!valid) return false
     INTERNAL_setPassword(unverifiedPassword)

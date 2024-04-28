@@ -126,7 +126,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useAsync(async () => {
         if (!progress) return
-        const computed = await TransactionFormatter?.formatTransaction?.(
+        const computed = await TransactionFormatter?.formatTransaction(
             progress.chainId,
             progress.transaction,
             progress.txHash,
@@ -145,7 +145,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                             sx={{ wordBreak: 'break-word' }}
                             className={classes.link}
                             color="inherit"
-                            href={Utils.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
+                            href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
                             tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
@@ -162,19 +162,19 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useAsync(async () => {
         if (!errorInfo) return
-        const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
+        const transaction = errorInfo.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = computed?.snackbar?.failedTitle ?? computed?.title
-        const message = errorInfo?.error.isRecognized ? errorInfo?.error.message : computed?.snackbar?.failedDescription
+        const message = errorInfo.error.isRecognized ? errorInfo.error.message : computed?.snackbar?.failedDescription
 
         if (!title) return
 
         if (
             title === 'Claim your Airdrop' &&
-            (errorInfo?.error.message.includes('Transaction was rejected') ||
-                errorInfo?.error.message.includes('Signature canceled') ||
-                errorInfo?.error.message.includes('User rejected the request') ||
-                errorInfo?.error.message.includes('User rejected transaction'))
+            (errorInfo.error.message.includes('Transaction was rejected') ||
+                errorInfo.error.message.includes('Signature canceled') ||
+                errorInfo.error.message.includes('User rejected the request') ||
+                errorInfo.error.message.includes('User rejected transaction'))
         )
             return
         const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)

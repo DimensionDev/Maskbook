@@ -6,7 +6,6 @@ import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
 import Token from '@masknet/web3-constants/evm/token.json'
-import Trader from '@masknet/web3-constants/evm/trader.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
@@ -43,7 +42,7 @@ function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
         const map = {
             WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
         }
-        return map[key] ?? ''
+        return map[key] || ''
     } catch {
         return ''
     }
@@ -86,11 +85,6 @@ export const getTokenConstants = transformAll(ChainId, Token)
 export const useTokenConstant = transformHook(getTokenConstants)
 export const useTokenConstants = transformAllHook(getTokenConstants)
 
-export const getTraderConstant = transform(ChainId, Trader)
-export const getTraderConstants = transformAll(ChainId, Trader)
-export const useTraderConstant = transformHook(getTraderConstants)
-export const useTraderConstants = transformAllHook(getTraderConstants)
-
 export const getTrendingConstant = transform(ChainId, Trending)
 export const getTrendingConstants = transformAll(ChainId, Trending)
 export const useTrendingConstant = transformHook(getTrendingConstants)
@@ -116,6 +110,7 @@ export const getTokenListConstants = transformAll(ChainId, TokenList)
 export const useTokenListConstant = transformHook(getTokenListConstants)
 export const useTokenListConstants = transformAllHook(getTokenListConstants)
 
+// see https://github.com/DimensionDev/assets/
 export const getTokenAssetBaseURLConstant = transform(ChainId, TokenAssetBaseURL)
 export const getTokenAssetBaseURLConstants = transformAll(ChainId, TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstant = transformHook(getTokenAssetBaseURLConstants)

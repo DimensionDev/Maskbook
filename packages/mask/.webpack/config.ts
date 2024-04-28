@@ -1,26 +1,25 @@
 /* spell-checker: disable */
 import webpack from 'webpack'
-const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
+const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 
-import WebExtensionPlugin from 'webpack-target-webextension'
-import TerserPlugin from 'terser-webpack-plugin'
-import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
-import CopyPlugin from 'copy-webpack-plugin'
-import HTMLPlugin from 'html-webpack-plugin'
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
-import { emitManifestFile } from './plugins/manifest.js'
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
+import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
+import HTMLPlugin from 'html-webpack-plugin'
+import TerserPlugin from 'terser-webpack-plugin'
+import WebExtensionPlugin from 'webpack-target-webextension'
 import { getGitInfo } from './git-info.js'
+import { emitManifestFile } from './plugins/manifest.js'
 
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { join } from 'node:path'
 
-import { type EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
-import { type BuildFlags, normalizeBuildFlags, computedBuildFlags, computeCacheKey } from './flags.js'
+import { computeCacheKey, computedBuildFlags, normalizeBuildFlags, type BuildFlags } from './flags.js'
 import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
+import { joinEntryItem, normalizeEntryDescription, type EntryDescription } from './utils.js'
 
 import './clean-hmr.js'
 import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
@@ -42,6 +41,16 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
+
+    let WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC || ''
+    if (WEB3_CONSTANTS_RPC) {
+        try {
+            if (typeof JSON.parse(WEB3_CONSTANTS_RPC) === 'object') {
+                console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
+                WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
+            }
+        } catch (err) {}
+    }
     const baseConfig = {
         name: 'mask',
         // to set a correct base path for source map
@@ -114,7 +123,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // Patch old regenerator-runtime
                 {
                     test: /\..?js$/,
-                    loader: require.resolve('./loaders/fix-regenerator-runtime.ts'),
+                    loader: require.resolve('./loaders/fix-regenerator-runtime.js'),
                 },
                 // TypeScript
                 {
@@ -152,6 +161,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         },
                     },
                 },
+                {
+                    test: /\.svg$/,
+                    include: /node_modules[\\/]@lifi[\\/]wallet-management/, // Only effective for @lifi/wallet-management
+                    loader: require.resolve('file-loader'),
+                },
                 // compress svg files
                 flags.mode === 'production' ?
                     {
@@ -163,15 +177,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                 pretty: false,
                             },
                         },
-                        dependency(data) {
-                            if (data === '') return false
-                            if (data !== 'url')
-                                throw new TypeError(
-                                    'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
-                                        data,
-                                )
-                            return true
-                        },
+                        exclude: /node_modules/,
+                        dependency: 'url',
                         type: 'asset/resource',
                     }
                 :   null,
@@ -194,8 +201,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new EnvironmentPlugin({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
                 NODE_DEBUG: false,
-                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC ?? '',
-                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN ?? '',
+                /** JSON.stringify twice */
+                WEB3_CONSTANTS_RPC: WEB3_CONSTANTS_RPC,
+                MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
             new DefinePlugin({
@@ -355,6 +363,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
         popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
+        swap: withReactDevTools(join(import.meta.dirname, '../swap/initialization/index.ts')),
         contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(
@@ -367,6 +376,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     baseConfig.plugins.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
+        await addHTMLEntry({ chunks: ['swap'], filename: 'swap.html', perf: flags.profiling }),
         await addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
@@ -389,6 +399,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         return entry
     }
 }
+
 async function addHTMLEntry({
     gun,
     perf,

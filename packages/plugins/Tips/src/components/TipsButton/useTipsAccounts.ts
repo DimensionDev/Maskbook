@@ -9,7 +9,10 @@ import { signWithPersona } from '@masknet/plugin-infra/dom/context'
  * Get Tips accounts, removing the hidden ones,
  * and put the default one at the front.
  */
-export function useTipsAccounts(identity: IdentityResolved | null | undefined, personaPubkey: string | undefined) {
+export function useTipsAccounts(
+    identity: IdentityResolved | null | undefined,
+    personaPubkey: string | undefined | null,
+) {
     const [socialAccounts] = useSocialAccountsAll(identity)
     const userId = identity?.identifier?.userId
     const [hiddenAddresses] = useHiddenAddressConfigOf(personaPubkey, PluginID.Web3Profile, userId, signWithPersona)

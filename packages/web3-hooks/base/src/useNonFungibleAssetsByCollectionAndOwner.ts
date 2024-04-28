@@ -69,7 +69,7 @@ export function useNonFungibleAssetsByCollectionAndOwner<
     }, [])
 
     return {
-        value: assets.filter((x) => (options?.chainId ? x.chainId === options?.chainId : true)),
+        value: assets.filter((x) => (options?.chainId ? x.chainId === options.chainId : true)),
         next,
         loading,
         done,

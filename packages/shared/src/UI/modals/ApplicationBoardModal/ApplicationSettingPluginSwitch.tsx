@@ -11,15 +11,9 @@ const useStyles = makeStyles()((theme) => ({
     listItem: {
         padding: theme.spacing(1.5),
         borderRadius: 12,
-        boxShadow:
-            theme.palette.mode === 'dark' ?
-                '0px 0px 20px rgba(255, 255, 255, 0.12)'
-            :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        border: `1px solid ${theme.palette.maskColor.line}`,
         '&:hover': {
-            boxShadow:
-                theme.palette.mode === 'dark' ?
-                    '0px 0px 20px rgba(255, 255, 255, 0.06)'
-                :   '0px 0px 20px rgba(0, 0, 0, 0.1)',
+            background: theme.palette.maskColor.bg,
         },
         '&:hover .MuiAvatar-root': {
             background: theme.palette.background.paper,
@@ -117,7 +111,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         <List>
             <DSearchSettings
                 checked={!pluginsInMinimalMode.map((x) => x.ID).includes(PluginID.Handle)}
-                onSwitch={(event) => onSwitch(PluginID.Handle, event?.target.checked)}
+                onSwitch={(event) => onSwitch(PluginID.Handle, event.target.checked)}
                 setRef={(element: HTMLLIElement | null) => {
                     if (DSearch_KEY === focusPluginID) {
                         targetPluginRef.current = element
@@ -169,7 +163,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                             <Stack direction="row" mt={1.25}>
                                 <Box className={classes.placeholder} />
                                 <Stack spacing={1.25}>
-                                    {x.entry.features?.map((f, i) => (
+                                    {x.entry.features.map((f, i) => (
                                         <Stack key={i}>
                                             <Typography className={classes.name} fontSize={14}>
                                                 <PluginTransFieldRender field={f.name} pluginID={x.pluginID} />

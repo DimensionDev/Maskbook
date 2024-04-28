@@ -95,7 +95,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const getFungibleTokenItem = <T extends NetworkPluginID>(
     getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
-    isSelected: (address: string) => boolean,
+    isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean,
     mode: TokenListMode,
     addOrRemoveTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
@@ -124,12 +124,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const { pluginID } = useNetworkContext<T>()
         const network = useNetwork(pluginID, chainId)
 
-        const { source, selected } = useMemo(() => {
-            return {
-                source: getSource(address),
-                selected: isSelected(address),
-            }
-        }, [address, getSource, isSelected])
+        const source = useMemo(() => getSource(address), [getSource, address])
+        const selected = useMemo(() => isSelected(address, chainId), [isSelected, address, chainId])
 
         const [{ loading: onAddOrRemoveTokenToLocalLoading }, onAddOrRemoveTokenToLocal] = useAsyncFn(
             async (event: React.MouseEvent<HTMLButtonElement | HTMLElement>, strategy: 'add' | 'remove') => {

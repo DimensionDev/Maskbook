@@ -64,7 +64,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function SwitchLogoButton() {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const current = useLastRecognizedIdentity()
     const logoType = useValueRef(switchLogoSettings[current?.identifier?.userId || ''])
     const isMinimalMode = useIsMinimalMode(PluginID.SwitchLogo)
@@ -73,7 +73,7 @@ export function SwitchLogoButton() {
         const node = LogoSelector.evaluate()
         if (!node) return
 
-        node?.parentElement?.style.setProperty('position', 'relative')
+        node.parentElement?.style.setProperty('position', 'relative')
 
         if (logoType === SwitchLogoType.Classics && !isMinimalMode) {
             // eslint-disable-next-line @masknet/browser-no-set-html
@@ -82,7 +82,7 @@ export function SwitchLogoButton() {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = LetterHTML || defaultXIcon
         }
-    }, [logoType, isMinimalMode])
+    }, [logoType, isMinimalMode, theme.palette.mode])
 
     const onClick = useCallback(() => {
         if (isMinimalMode) return

@@ -17,6 +17,10 @@ const useStyles = makeStyles()((theme) => ({
         color: MaskColors.dark.text.primary,
         borderRadius: 16,
         padding: theme.spacing(2, 3),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            padding: theme.spacing(1, 1),
+            borderRadius: 8,
+        },
     },
     header: {
         fontSize: 16,
@@ -24,9 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         paddingBottom: theme.spacing(2),
         borderBottom: `1px solid ${theme.palette.common.white}`,
-
         display: 'flex',
         alignItems: 'center',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            paddingBottom: theme.spacing(1),
+            fontSize: 15,
+        },
     },
     closeButton: {
         marginLeft: 'auto',
@@ -148,7 +155,7 @@ interface FollowProfileProps {
     platform: FireflyRedPacketAPI.PlatformType
 }
 
-function FollowProfile({ payload, platform }: FollowProfileProps) {
+function FollowProfile({ payload }: FollowProfileProps) {
     const { classes } = useStyles()
     return (
         <span>

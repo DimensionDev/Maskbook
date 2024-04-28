@@ -198,7 +198,7 @@ export default function ChangeOwner() {
     )
     const personaManager = useMemo(
         () => personaManagers?.find((x) => isSameAddress(wallet?.owner, x.address)),
-        [personaManagers, wallet],
+        [personaManagers, wallet?.owner],
     )
 
     const managerAddress = walletManager?.address ?? personaManager?.address
@@ -290,7 +290,11 @@ export default function ChangeOwner() {
                             <Icons.ETH size={24} />
                         : personaManager ?
                             <div className={classes.avatar}>
-                                <PersonaAvatar avatar={personaManager.avatar} size={24} />
+                                <PersonaAvatar
+                                    avatar={personaManager.avatar}
+                                    pubkey={personaManager.identifier.publicKeyAsHex}
+                                    size={24}
+                                />
                             </div>
                         :   null}
                         <div className={classes.walletInfo}>
@@ -345,8 +349,8 @@ export default function ChangeOwner() {
                         <Typography className={classes.label}>{t.gas_fee()}</Typography>
                         <ChainContextProvider chainId={smartPayChainId}>
                             <GasSettingMenu
-                                minimumGas={gas ?? FALLBACK_GAS.toString()}
-                                initConfig={gasConfig}
+                                defaultGasLimit={gas}
+                                defaultGasConfig={gasConfig}
                                 paymentToken={paymentToken}
                                 defaultChainId={chainId}
                                 owner={wallet?.owner}
@@ -389,7 +393,11 @@ export default function ChangeOwner() {
                                 }}>
                                 <Box display="flex" alignItems="center" columnGap={0.5}>
                                     <div className={classes.avatar}>
-                                        <PersonaAvatar avatar={persona.avatar} size={24} />
+                                        <PersonaAvatar
+                                            avatar={persona.avatar}
+                                            pubkey={persona.identifier.publicKeyAsHex}
+                                            size={24}
+                                        />
                                     </div>
 
                                     <Box ml="6px">

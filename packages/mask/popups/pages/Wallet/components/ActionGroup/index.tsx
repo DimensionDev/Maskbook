@@ -3,7 +3,7 @@ import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
@@ -45,8 +45,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         disabled: {
-            opacity: 0.5,
-            cursor: 'unset',
+            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
@@ -74,22 +73,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
 
     const handleSwap = useCallback(() => {
         if (disabledSwap) return
-        const url = urlcat(
-            'popups.html#/',
-            PopupRoutes.Swap,
-            isNativeTokenAddress(asset?.address) ?
-                {
-                    chainId: asset.chainId,
-                }
-            :   {
-                    id: asset?.address,
-                    chainId: asset?.chainId,
-                    name: asset?.name,
-                    symbol: asset?.symbol,
-                    contract_address: asset?.address,
-                    decimals: asset?.decimals,
-                },
-        )
+        const url = urlcat('swap.html/#/', { chainId, address: asset?.address })
         openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
     }, [asset, disabledSwap])
 

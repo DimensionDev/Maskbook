@@ -3,6 +3,7 @@ import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { useContainer } from 'unstated-next'
 import { PopupContext } from './usePopupContext.js'
+import { useDebugValue } from 'react'
 
 export function useGasRatio(paymentToken?: string) {
     const { smartPayChainId } = useContainer(PopupContext)
@@ -17,5 +18,7 @@ export function useGasRatio(paymentToken?: string) {
         },
     })
 
-    return paymentToken && !isNativeTokenAddress(paymentToken) ? smartPayRatio : undefined
+    const value = paymentToken && !isNativeTokenAddress(paymentToken) ? smartPayRatio : undefined
+    useDebugValue(value)
+    return value
 }

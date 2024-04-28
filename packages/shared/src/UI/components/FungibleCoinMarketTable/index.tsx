@@ -23,6 +23,7 @@ const useStyles = makeStyles()({
         borderRadius: 0,
         boxSizing: 'border-box',
         backgroundColor: 'transparent',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

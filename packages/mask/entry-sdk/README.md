@@ -5,11 +5,6 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 - <https://ethereum.github.io/execution-apis/api-documentation/>
 
-## Need revisit
-
-- [ ] TransactionDescriptorType.DEPLOYMENT failed. Open <https://metamask.github.io/test-dapp/> and try TOKEN/NFTs deploy
-- [ ] Sign In With Ethereum (A special extension of personal_sign method?)
-
 ## Read ETH methods
 
 - [x] net_version
@@ -78,7 +73,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 - [x] wallet_getPermissions
 - [x] wallet_requestPermissions
-- [ ] wallet_revokePermissions
+- [ ] wallet_revokePermissions (not in EIP-2255)
 
 ## [EIP-712: Typed structured data hashing and signing](https://eips.ethereum.org/EIPS/eip-712)
 

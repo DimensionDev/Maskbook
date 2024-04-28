@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { TrendingView } from './trending/TrendingView.js'
-import { EVMWeb3ContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
@@ -12,10 +12,9 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { TrendingViewProvider } from './trending/context.js'
-import { TraderDialog } from './trader/TraderDialog.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { enhanceTag } from './cashTag.js'
-import { share } from '@masknet/plugin-infra/content-script/context'
+import { ExchangeInjection } from './trader/ExchangeInjection.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -64,9 +63,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         return (
             <>
                 <TagInspector />
-                <EVMWeb3ContextProvider>
-                    <TraderDialog share={share} />
-                </EVMWeb3ContextProvider>
+                <ExchangeInjection />
             </>
         )
     },

@@ -152,6 +152,7 @@ export function checkbox_no_url() { return new URL("./general/CheckboxNo.svg", i
 export function check_circle_url() { return new URL("./general/CheckCircle.svg", import.meta.url).href }
 export function chevron_up_url() { return new URL("./general/ChevronUp.svg", import.meta.url).href }
 export function china_url() { return new URL("./general/China.svg", import.meta.url).href }
+export function chrome_url() { return new URL("./general/Chrome.svg", import.meta.url).href }
 export function circle_close_url() { return new URL("./general/CircleClose.svg", import.meta.url).href }
 export function circle_loading_url() { return new URL("./general/CircleLoading.svg", import.meta.url).href }
 export function circle_warning_url() { return new URL("./general/CircleWarning.svg", import.meta.url).href }
@@ -164,6 +165,7 @@ export function cloud_backup_2_url() { return new URL("./general/CloudBackup2.sv
 export function cloud_link_url() { return new URL("./general/CloudLink.png", import.meta.url).href }
 export function cny_url() { return new URL("./general/CNY.svg", import.meta.url).href }
 export function collectible_url() { return new URL("./general/Collectible.svg", import.meta.url).href }
+export function colorful_close_url() { return new URL("./general/ColorfulClose.svg", import.meta.url).href }
 export function comeback_url() { return new URL("./general/Comeback.svg", import.meta.url).href }
 export function comment_url() { return new URL("./general/Comment.svg", import.meta.url).href }
 export function connect_url() { return new URL("./general/Connect.svg", import.meta.url).href }
@@ -209,6 +211,7 @@ export function gas_station_url() { return new URL("./general/GasStation.svg", i
 export function gear_dark_url() { return new URL("./general/Gear.dark.svg", import.meta.url).href }
 export function gear_light_url() { return new URL("./general/Gear.light.svg", import.meta.url).href }
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url).href }
+export function gift_url() { return new URL("./general/Gift.svg", import.meta.url).href }
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url).href }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url).href }
 export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url).href }
@@ -300,6 +303,7 @@ export function setting_url() { return new URL("./general/Setting.svg", import.m
 export function settings_url() { return new URL("./general/Settings.svg", import.meta.url).href }
 export function settings_2_url() { return new URL("./general/Settings2.svg", import.meta.url).href }
 export function sharp_mask_url() { return new URL("./general/SharpMask.svg", import.meta.url).href }
+export function shut_down_url() { return new URL("./general/ShutDown.svg", import.meta.url).href }
 export function sign_up_account_url() { return new URL("./general/SignUpAccount.png", import.meta.url).href }
 export function smart_pay_url() { return new URL("./general/SmartPay.svg", import.meta.url).href }
 export function star_url() { return new URL("./general/Star.svg", import.meta.url).href }

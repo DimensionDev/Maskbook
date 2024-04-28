@@ -65,6 +65,7 @@ interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPlug
     tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
     disableSearchBar?: boolean
     disableNativeToken?: boolean
+    selectedChainId?: Web3Helper.Definition[T]['ChainId']
     selectedTokens?: string[]
     onClose(token: Web3Helper.FungibleTokenAll | null): void
     setChainId(chainId: Web3Helper.Definition[T]['ChainId']): void
@@ -79,6 +80,7 @@ export function SelectFungibleTokenDialog({
     tokens,
     whitelist,
     blacklist = EMPTY_LIST,
+    selectedChainId,
     selectedTokens = EMPTY_LIST,
     title,
     enableManage = true,
@@ -137,6 +139,7 @@ export function SelectFungibleTokenDialog({
                             disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                         }
                         disableSearch={disableSearchBar}
+                        selectedChainId={selectedChainId}
                         selectedTokens={selectedTokens}
                         onSelect={onClose}
                         FixedSizeListProps={FixedSizeListProps}

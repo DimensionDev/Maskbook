@@ -71,6 +71,7 @@ export enum ChainId {
 
     // Metis
     Metis = 1088,
+    Metis_Sepolia = 59902,
 
     // Optimism
     Optimism = 10,
@@ -139,8 +140,8 @@ export enum ChainId {
 
     Wanchain = 888,
 
-    X1 = 196,
-    X1_Testnet = 195,
+    XLayer = 196,
+    XLayer_Testnet = 195,
 
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
@@ -299,8 +300,7 @@ export enum NetworkType {
     Astar = 'Astar',
     Scroll = 'Scroll',
     Moonbeam = 'Moonbeam',
-    X1 = 'X1',
-    X1_Testnet = 'X1_Testnet',
+    XLayer = 'XLayer',
     CustomNetwork = 'CustomNetwork',
 }
 
@@ -313,9 +313,17 @@ export enum ProviderType {
     Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     Coinbase = 'Coinbase',
+    Crypto = 'Crypto',
     OKX = 'OKX',
     Opera = 'Opera',
     Clover = 'Clover',
+    BitGet = 'BitGet',
+    OneKey = 'OneKey',
+    Rabby = 'Rabby',
+    Rainbow = 'Rainbow',
+    Trust = 'Trust',
+    TokenPocket = 'TokenPocket',
+    Zerion = 'Zerion',
     CustomEvent = 'CustomEvent',
 }
 
@@ -365,6 +373,10 @@ export interface RequestOptions {
     allowMaskAsGas?: boolean
     providerURL?: string
     gasOptionType?: GasOptionType
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+    gasPrice?: string
+    gas?: string
 }
 
 export interface MessageRequest {
@@ -378,6 +390,7 @@ export interface Transaction {
     from?: string
     to?: string
     value?: string
+    /** gasLimit */
     gas?: string
     gasPrice?: string
     maxPriorityFeePerGas?: string
@@ -385,6 +398,7 @@ export interface Transaction {
     data?: string
     nonce?: number
     chainId?: number
+    type?: '0x0' | '0x1' | '0x2'
 
     // CELO
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee

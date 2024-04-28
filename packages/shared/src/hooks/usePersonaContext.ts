@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
 import { createContainer } from 'unstated-next'
@@ -19,14 +19,16 @@ import { usePersonaProofs } from './usePersonaProofs.js'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'
 import type { PersonaAvatarData } from '../types.js'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type RefetchOptions, type QueryObserverResult } from '@tanstack/react-query'
 
 function usePersonaInformation(
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>,
 ) {
     const { data: personas = EMPTY_LIST, refetch } = useQuery({
-        queryKey: ['@@queryOwnedPersonaInformation(false)'],
+        queryKey: ['@@my-own-persona-info'],
         queryFn: () => queryOwnedPersonaInformation?.(false),
+        refetchOnMount: true,
+        networkMode: 'always',
     })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
 
@@ -131,16 +133,12 @@ function usePersonaContext(initialState?: {
         )
     }, [proofs])
 
-    const refreshAvatar = useCallback(() => {
-        refetchAvatar()
-    }, [refetchAvatar])
-
     return {
         accounts,
         selectedAccount,
         setSelectedAccount,
         avatar,
-        refreshAvatar,
+        refreshAvatar: refetchAvatar as (options?: RefetchOptions) => Promise<QueryObserverResult<string | null>>,
         personas,
         currentPersona,
         selectedPersona,

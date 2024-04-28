@@ -2,19 +2,23 @@ import { delay, getEnumAsArray } from '@masknet/kit'
 import { getRegisteredWeb3Providers, MaskWalletProvider } from '@masknet/web3-providers'
 import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
+import { GuideDialog } from './GuideDialog.js'
 
 const useStyles = makeStyles()((theme) => ({
+    dialog: {
+        width: 600,
+        height: 620,
+    },
     content: {
         padding: theme.spacing(0),
-        scrollbarWidth: 'none',
         minHeight: 430,
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -33,18 +37,12 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
     const t = useSharedTrans()
     const { classes } = useStyles()
+    // Guiding provider
+    const [provider, setProvider] = useState<Web3Helper.ProviderDescriptorAll>()
 
-    const onProviderIconClicked = useCallback(
-        async (
-            network: Web3Helper.NetworkDescriptorAll,
-            provider: Web3Helper.ProviderDescriptorAll,
-            isReady?: boolean,
-            downloadLink?: string,
-        ) => {
-            if (!isReady) {
-                if (downloadLink) openWindow(downloadLink)
-                return
-            }
+    const handleSelect = useCallback(
+        async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
+            setProvider(undefined)
             // Create wallet first if no wallets yet.
             if (
                 provider.type === ProviderType.MaskWallet &&
@@ -53,8 +51,12 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
                 createWallet()
                 return
             }
+            // Do not close the dialog for WalletConnect until the wallet gets connected
+            const isNotWalletConnect = provider.type !== ProviderType.WalletConnect
 
-            onClose()
+            if (isNotWalletConnect) {
+                onClose()
+            }
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({
@@ -64,7 +66,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             })
 
             if (connected) onConnect?.()
-            else onClose()
+            else if (isNotWalletConnect) onClose()
         },
         [onConnect, onClose],
     )
@@ -74,14 +76,33 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
         return getEnumAsArray(NetworkPluginID).flatMap((x) => getRegisteredWeb3Providers(x.value))
     }, [requiredSupportPluginID])
 
+    if (provider) {
+        return (
+            <GuideDialog
+                classes={{ paper: classes.dialog }}
+                open
+                provider={provider}
+                titleBarIconStyle="back"
+                onClose={() => {
+                    setProvider(undefined)
+                }}
+            />
+        )
+    }
+
     return (
-        <InjectedDialog title={t.plugin_wallet_select_provider_dialog_title()} open={open} onClose={onClose}>
+        <InjectedDialog
+            classes={{ paper: classes.dialog }}
+            title={t.plugin_wallet_select_provider_dialog_title()}
+            open={open}
+            onClose={onClose}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
                     providers={providers}
-                    onProviderIconClicked={onProviderIconClicked}
                     requiredSupportChainIds={requiredSupportChainIds}
                     requiredSupportPluginID={requiredSupportPluginID}
+                    onSelect={handleSelect}
+                    onOpenGuide={setProvider}
                 />
             </DialogContent>
         </InjectedDialog>

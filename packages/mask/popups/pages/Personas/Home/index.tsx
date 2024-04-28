@@ -12,6 +12,7 @@ import {
 import { PersonaHomeUI } from './UI.js'
 import Services from '#services'
 import { useSupportSocialNetworks, useHasPassword } from '../../../hooks/index.js'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
 const PersonaHome = memo(() => {
     const navigate = useNavigate()
@@ -45,9 +46,9 @@ const PersonaHome = memo(() => {
 
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
-            if (currentPersona) {
-                await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined, true)
-            }
+            if (!currentPersona) return
+            if (!(await requestPermissionFromExtensionPage(networkIdentifier))) return
+            await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined, true)
         },
         [currentPersona],
     )
@@ -59,7 +60,6 @@ const PersonaHome = memo(() => {
 
     return (
         <PersonaHomeUI
-            hasProofs={!!proofs?.length}
             bindingWallets={bindingWallets}
             accounts={accounts}
             networks={definedSocialNetworks}

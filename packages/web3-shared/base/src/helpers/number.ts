@@ -48,7 +48,7 @@ export function isLessThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
 }
 export { isLessThanOrEqualTo as isLte }
 
-/** a > 0 */
+/** a >= 0 */
 export function isPositive(n: BigNumber.Value) {
     return new BigNumber(n).isPositive()
 }
@@ -121,5 +121,11 @@ export function trimZero(digit: string) {
 }
 
 export function addThousandSeparators(num: string | number) {
-    return num.toString().replaceAll(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+    try {
+        return num.toString().replaceAll(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+    } catch (err) {
+        // Safari doesn't support regexp look behind yet
+        const value = typeof num === 'number' ? num : Number.parseFloat(num)
+        return value.toLocaleString('en-US')
+    }
 }

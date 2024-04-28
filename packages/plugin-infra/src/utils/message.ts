@@ -17,7 +17,7 @@ export let getPluginMessage = <T>(pluginID: string, type?: typeof DOMAIN_RPC): P
 
     const messageCenter = new WebExtensionMessage<T>({ domain })
     const events = messageCenter.events
-    messageCenter.serialization = encoder
+    messageCenter.encoder = encoder
     cache.set(domain, events)
     return events
 }

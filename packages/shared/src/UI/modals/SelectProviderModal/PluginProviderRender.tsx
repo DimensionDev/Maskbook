@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import {
     alpha,
@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
-import { getAllPluginsWeb3State, getUtils, getWeb3Connection } from '@masknet/web3-providers'
+import { getAllPluginsWeb3State, getWeb3Connection } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
@@ -26,9 +26,8 @@ import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
-import { DialogDismissIconUI, ImageIcon, ProviderIcon, useSharedTrans } from '@masknet/shared'
-import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { openWindow } from '@masknet/shared-base-ui'
+import { DialogDismissIconUI, ImageIcon, useSharedTrans } from '@masknet/shared'
+import { ProviderItem } from './ProviderItem.js'
 
 const descriptors: Record<
     NetworkPluginID,
@@ -51,7 +50,7 @@ const useStyles = makeStyles()((theme) => {
         },
         section: {
             flexGrow: 1,
-            marginTop: 21,
+            marginTop: theme.spacing(2),
             counterIncrement: 'steps 1',
             '&:first-of-type': {
                 marginTop: 0,
@@ -61,8 +60,8 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             display: 'grid',
             padding: 0,
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gridGap: '12px 12px',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gridGap: '16px 16px',
             [smallQuery]: {
                 gridAutoRows: '110px',
                 gridTemplateColumns: 'repeat(2, 1fr)',
@@ -70,7 +69,6 @@ const useStyles = makeStyles()((theme) => {
         },
         walletItem: {
             padding: 0,
-            height: 122,
             width: '100%',
             display: 'block',
             '& > div': {
@@ -137,25 +135,21 @@ const useStyles = makeStyles()((theme) => {
 
 interface PluginProviderRenderProps {
     providers: readonly Web3Helper.ProviderDescriptorAll[]
-    onProviderIconClicked: (
-        network: Web3Helper.NetworkDescriptorAll,
-        provider: Web3Helper.ProviderDescriptorAll,
-        isReady?: boolean,
-        downloadLink?: string,
-    ) => void
+    onSelect: (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => void
+    onOpenGuide?(provider: Web3Helper.ProviderDescriptorAll): void
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
 }
 
 export const PluginProviderRender = memo(function PluginProviderRender({
     providers,
-    onProviderIconClicked,
+    onSelect,
+    onOpenGuide,
     requiredSupportChainIds,
     requiredSupportPluginID,
 }: PluginProviderRenderProps) {
-    const { classes, cx } = useStyles()
+    const { classes, theme, cx } = useStyles()
     const t = useSharedTrans()
-    const plugins = useActivatedPluginsSiteAdaptor('any')
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
@@ -169,12 +163,9 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             const target = getAllPluginsWeb3State()[provider.providerAdaptorPluginID]
             // note: unsafe cast, we cannot ensure provider.type is the isReady implementation we intended to call
             const isReady = target?.Provider?.isReady(provider.type as any as never)
-            const downloadLink = getUtils(provider.providerAdaptorPluginID)?.providerResolver.providerDownloadLink(
-                provider.type,
-            )
 
             if (!isReady) {
-                if (downloadLink) openWindow(downloadLink)
+                onOpenGuide?.(provider)
                 return
             }
 
@@ -188,9 +179,9 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
             if (!networkDescriptor) return
 
-            onProviderIconClicked(networkDescriptor, provider, isReady, downloadLink)
+            onSelect(networkDescriptor, provider)
         },
-        [plugins],
+        [onOpenGuide],
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
@@ -216,50 +207,109 @@ export const PluginProviderRender = memo(function PluginProviderRender({
         },
         [requiredSupportChainIds, requiredSupportPluginID],
     )
+    const orderedProviders = useMemo(() => {
+        const siteType = getSiteType()
+        return providers.filter((z) => {
+            if (!siteType) return false
+            return [
+                ...(z.enableRequirements?.supportedEnhanceableSites ?? []),
+                ...(z.enableRequirements?.supportedExtensionSites ?? []),
+            ].includes(siteType)
+        })
+    }, [providers])
+    const [availableProviders, unavailableProviders] = useMemo(() => {
+        const web3State = getAllPluginsWeb3State()
+        const availableProviders: Web3Helper.ProviderDescriptorAll[] = []
+        const unavailableProviders: Web3Helper.ProviderDescriptorAll[] = []
+        orderedProviders.forEach((provider) => {
+            // note: unsafe cast, we cannot ensure provider.type is the isReady implementation we intended to call
+            const isReady = web3State[provider.providerAdaptorPluginID]?.Provider?.isReady(
+                provider.type as any as never,
+            )
+            if (isReady) {
+                availableProviders.push(provider)
+            } else {
+                unavailableProviders.push(provider)
+            }
+        })
+        return [availableProviders, unavailableProviders]
+    }, [orderedProviders])
     return (
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
                     <List className={classes.wallets}>
-                        {providers
-                            .filter((z) => {
-                                const siteType = getSiteType()
-                                if (!siteType) return false
-                                return [
-                                    ...(z.enableRequirements?.supportedEnhanceableSites ?? []),
-                                    ...(z.enableRequirements?.supportedExtensionSites ?? []),
-                                ].includes(siteType)
-                            })
-                            .map((provider) => (
-                                <ShadowRootTooltip
-                                    title={getDisabled(provider) ? '' : getTips(provider.type)}
-                                    arrow
-                                    placement="top"
-                                    key={provider.ID}>
-                                    <ListItem
-                                        className={cx(
-                                            classes.walletItem,
-                                            getDisabled(provider) ? classes.disabledWalletItem : '',
-                                        )}
-                                        disabled={getDisabled(provider)}
-                                        onClick={() => {
-                                            if (provider.type === ProviderType.WalletConnect) {
-                                                handleClick(provider, ChainId.Mainnet)
-                                            } else {
-                                                handleClick(provider)
-                                            }
-                                        }}>
-                                        <ProviderIcon
-                                            className={classes.providerIcon}
-                                            icon={provider.icon}
-                                            name={provider.name}
-                                            iconFilterColor={provider.iconFilterColor}
-                                        />
-                                    </ListItem>
-                                </ShadowRootTooltip>
-                            ))}
+                        {availableProviders.map((provider) => (
+                            <ShadowRootTooltip
+                                title={getDisabled(provider) ? '' : getTips(provider.type)}
+                                arrow
+                                placement="top"
+                                disableInteractive
+                                key={provider.ID}>
+                                <ListItem
+                                    className={cx(
+                                        classes.walletItem,
+                                        getDisabled(provider) ? classes.disabledWalletItem : '',
+                                    )}
+                                    disabled={getDisabled(provider)}
+                                    onClick={() => {
+                                        if (provider.type === ProviderType.WalletConnect) {
+                                            handleClick(provider, ChainId.Mainnet)
+                                        } else {
+                                            handleClick(provider)
+                                        }
+                                    }}>
+                                    <ProviderItem
+                                        className={classes.providerIcon}
+                                        icon={provider.icon}
+                                        name={provider.name}
+                                        iconFilterColor={provider.iconFilterColor}
+                                    />
+                                </ListItem>
+                            </ShadowRootTooltip>
+                        ))}
                     </List>
                 </section>
+                {unavailableProviders.length ?
+                    <>
+                        <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
+                            {t.not_installed_or_conflict()}
+                        </Typography>
+                        <section className={classes.section}>
+                            <List className={classes.wallets}>
+                                {unavailableProviders.map((provider) => (
+                                    <ShadowRootTooltip
+                                        title={getDisabled(provider) ? '' : getTips(provider.type)}
+                                        arrow
+                                        placement="top"
+                                        disableInteractive
+                                        key={provider.ID}>
+                                        <ListItem
+                                            className={cx(
+                                                classes.walletItem,
+                                                getDisabled(provider) ? classes.disabledWalletItem : '',
+                                            )}
+                                            disabled={getDisabled(provider)}
+                                            onClick={() => {
+                                                if (provider.type === ProviderType.WalletConnect) {
+                                                    handleClick(provider, ChainId.Mainnet)
+                                                } else {
+                                                    handleClick(provider)
+                                                }
+                                            }}>
+                                            <ProviderItem
+                                                className={classes.providerIcon}
+                                                icon={provider.icon}
+                                                name={provider.name}
+                                                iconFilterColor={provider.iconFilterColor}
+                                            />
+                                        </ListItem>
+                                    </ShadowRootTooltip>
+                                ))}
+                            </List>
+                        </section>
+                    </>
+                :   null}
             </Box>
             {usePortalShadowRoot((container) => (
                 <Dialog

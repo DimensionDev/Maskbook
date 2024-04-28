@@ -23,7 +23,7 @@ import {
     useSocialAccountsBySettings,
     TokenWithSocialGroupMenu,
     SocialAccountList,
-    useCollectionByTwitterHandler,
+    useCollectionByTwitterHandle,
     addressSorter,
     WalletSettingsEntry,
 } from '@masknet/shared'
@@ -41,7 +41,7 @@ import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandler } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     useCurrentVisitingIdentity,
@@ -295,11 +295,10 @@ function Content(props: ProfileTabContentProps) {
         setMenuOpen(false)
     }
 
-    const { value: collectionList = EMPTY_LIST } = useCollectionByTwitterHandler(
-        profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '',
-    )
+    const collectionList =
+        useCollectionByTwitterHandle(profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '') ?? EMPTY_LIST
 
-    const { value: spaceList = EMPTY_LIST } = useSnapshotSpacesByTwitterHandler(
+    const { data: spaces } = useSnapshotSpacesByTwitterHandle(
         profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
     )
 
@@ -321,7 +320,7 @@ function Content(props: ProfileTabContentProps) {
     const keyword =
         profileTabType === ProfileTabs.WEB3 ? trendingResult?.address || trendingResult?.name : currentVisitingUserId
 
-    const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaceList
+    const searchResults = profileTabType === ProfileTabs.WEB3 ? collectionList : spaces
 
     if (keyword && !isHideInspector)
         return (
@@ -331,7 +330,7 @@ function Content(props: ProfileTabContentProps) {
                     isProfilePage
                     profileTabType={profileTabType}
                     currentSearchResult={trendingResult}
-                    searchResults={searchResults}
+                    searchResults={searchResults || EMPTY_LIST}
                     identity={identity}
                 />
             </div>

@@ -3,7 +3,7 @@ import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { useSupportSocialNetworks } from '../../hooks/index.js'
@@ -19,6 +19,7 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (!currentPersona) return
+            if (!(await requestPermissionFromExtensionPage(networkIdentifier))) return
             await Services.SiteAdaptor.connectSite(currentPersona.identifier, networkIdentifier, undefined)
 
             const eventID = EventMap[networkIdentifier]

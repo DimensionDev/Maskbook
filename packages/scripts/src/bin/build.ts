@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node --import swc-register-esm
 import { spawn } from 'child_process'
 import { promisify } from 'util'
 import { series } from 'gulp'

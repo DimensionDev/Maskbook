@@ -8,15 +8,23 @@
   "files": [
     "index.ts",
     "BaseInjected.ts",
+    "BitGet.ts",
     "Browser.ts",
     "Phantom.ts",
     "Solflare.ts",
     "Coin98.ts",
+    "Crypto.ts",
     "Coinbase.ts",
     "MetaMask.ts",
     "OKX.ts",
+    "OneKey.ts",
+    "Rabby.ts",
+    "Rainbow.ts",
     "Opera.ts",
     "Clover.ts",
+    "Trust.ts",
+    "TokenPocket.ts",
+    "Zerion.ts",
     "utils.ts"
   ],
   "references": [{ "path": "../shared/tsconfig.json" }]

@@ -13,7 +13,6 @@ import { InteractionWalletContext, useInteractionWalletContext } from '../Intera
 
 export const WalletGuard = memo(function WalletGuard() {
     const wallets = useWallets()
-    const outletContext = useOutletContext()
     const location = useLocation()
     const [params] = useSearchParams()
     const { isLocked, isPending } = useWalletLockStatus()

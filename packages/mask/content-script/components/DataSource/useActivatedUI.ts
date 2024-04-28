@@ -17,9 +17,9 @@ async function queryPersonaFromDB(identityResolved: IdentityResolved) {
 
 async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
-    if (!activatedSiteAdaptorUI!.configuration.nextIDConfig?.platform) return
+    if (!activatedSiteAdaptorUI?.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
-        activatedSiteAdaptorUI!.configuration.nextIDConfig.platform,
+        activatedSiteAdaptorUI.configuration.nextIDConfig.platform,
         identityResolved.identifier.userId,
     )
 }
@@ -68,10 +68,15 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         enabled: !!identity,
         queryKey: ['social-identity', identity],
         queryFn: async () => {
-            if (!identity) return null
             try {
-                const bindings = await queryPersonasFromNextID(identity)
+                if (!identity) return null
+
                 const persona = await queryPersonaFromDB(identity)
+                if (!persona) return identity
+
+                const bindings = await queryPersonasFromNextID(identity)
+                if (!bindings) return identity
+
                 const personaBindings =
                     bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? []
                 return {
@@ -94,9 +99,9 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
 export function useSocialIdentityByUserId(userId?: string) {
     const { data: identity } = useQuery({
         queryKey: ['social-identity', 'by-id', userId],
+        enabled: !!userId,
         queryFn: async () => {
-            if (!userId) return
-            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId)
+            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId!)
         },
         networkMode: 'always',
     })

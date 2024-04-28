@@ -26,18 +26,22 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
-    static async getPayloadUrls(
-        from: string,
-        amount?: string,
-        type?: string,
-        symbol?: string,
-        decimals?: number,
-    ): Promise<Array<{ themeId: string; url: string }>> {
+    static async parse(options: FireflyRedPacketAPI.ParseOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/misc/redpacket/parse')
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
+        return data
+    }
+    static async getPayloadUrls(from: string, amount?: string, type?: string, symbol?: string, decimals?: number) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
 
         return data.list.map((theme) => ({
             themeId: theme.tid,
+            backgroundImageUrl: theme.cover.bg_image,
+            backgroundColor: theme.cover.bg_color,
             url: urlcat(SITE_URL, '/api/rp', {
                 'theme-id': theme.tid,
                 usage: 'payload',
@@ -48,6 +52,35 @@ export class FireflyRedPacket {
                 decimals,
             }),
         }))
+    }
+
+    static async getPayloadUrlByThemeId(
+        themeId: string,
+        from: string,
+        amount?: string,
+        type?: string,
+        symbol?: string,
+        decimals?: number,
+    ) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
+            themeId,
+        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+
+        return {
+            themeId,
+            url: urlcat(SITE_URL, '/api/rp', {
+                'theme-id': themeId,
+                usage: 'payload',
+                from,
+                amount,
+                type,
+                symbol,
+                decimals,
+            }),
+            backgroundImageUrl: data.cover.bg_image,
+            backgroundColor: data.cover.bg_color,
+        }
     }
 
     static async getCoverUrlByRpid(
@@ -65,8 +98,13 @@ export class FireflyRedPacket {
             rpid,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        // Just discard default theme, and this RedPacket will be treated as created from Mask
+        if (data.is_default) return null
+
         return {
             themeId: data.tid,
+            backgroundImageUrl: data.normal.bg_image,
+            backgroundColor: data.normal.bg_color,
             url: urlcat(SITE_URL, '/api/rp', {
                 'theme-id': data.tid,
                 usage: 'cover',
@@ -80,25 +118,6 @@ export class FireflyRedPacket {
                 'remaining-shares': remainingShares,
             }),
         }
-    }
-
-    static getPayloadUrlByThemeId(
-        themeId: string,
-        from: string,
-        amount?: string,
-        type?: string,
-        symbol?: string,
-        decimals?: number,
-    ) {
-        return urlcat(SITE_URL, '/api/rp', {
-            'theme-id': themeId,
-            usage: 'payload',
-            from,
-            amount,
-            type,
-            symbol,
-            decimals,
-        })
     }
 
     static async createPublicKey(
@@ -123,6 +142,7 @@ export class FireflyRedPacket {
         rpid: string,
         reactions: FireflyRedPacketAPI.PostReaction[],
         claimPlatform: FireflyRedPacketAPI.ClaimPlatform[],
+        postOn: FireflyRedPacketAPI.PostOn[],
         publicKey: string,
     ): Promise<void> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/updateClaimStrategy')
@@ -132,6 +152,7 @@ export class FireflyRedPacket {
                 publicKey,
                 rpid,
                 postReaction: reactions,
+                postOn,
                 claimPlatform,
             }),
         })
@@ -195,6 +216,25 @@ export class FireflyRedPacket {
         return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),
+        })
+    }
+    static async finishClaiming(
+        rpid: string,
+        platform: FireflyRedPacketAPI.PlatformType,
+        profileId: string,
+        handle: string,
+        txHash: string,
+    ) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
+        return fetchFireflyJSON<FireflyRedPacketAPI.Response<string>>(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                rpid,
+                claimPlatform: platform,
+                claimProfileId: profileId,
+                claimHandle: handle,
+                txHash,
+            }),
         })
     }
 }

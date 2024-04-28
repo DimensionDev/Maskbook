@@ -1198,6 +1198,11 @@ export const China = /*#__PURE__*/ __createIcon('China', [
         u: () => new URL('./general/China.svg', import.meta.url).href,
     },
 ])
+export const Chrome = /*#__PURE__*/ __createIcon('Chrome', [
+    {
+        u: () => new URL('./general/Chrome.svg', import.meta.url).href,
+    },
+])
 export const CircleClose = /*#__PURE__*/ __createIcon('CircleClose', [
     {
         u: () => new URL('./general/CircleClose.svg', import.meta.url).href,
@@ -1373,6 +1378,35 @@ export const Collectible = /*#__PURE__*/ __createIcon(
     ],
     [13, 12],
 )
+export const ColorfulClose = /*#__PURE__*/ __createIcon('ColorfulClose', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Z',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
+    },
+])
 export const Comeback = /*#__PURE__*/ __createIcon('Comeback', [
     {
         j: () =>
@@ -2032,6 +2066,11 @@ export const Gear = /*#__PURE__*/ __createIcon('Gear', [
 export const GearSettings = /*#__PURE__*/ __createIcon('GearSettings', [
     {
         u: () => new URL('./general/GearSettings.svg', import.meta.url).href,
+    },
+])
+export const Gift = /*#__PURE__*/ __createIcon('Gift', [
+    {
+        u: () => new URL('./general/Gift.svg', import.meta.url).href,
     },
 ])
 export const Globe = /*#__PURE__*/ __createIcon('Globe', [
@@ -3198,6 +3237,35 @@ export const SharpMask = /*#__PURE__*/ __createIcon('SharpMask', [
         s: true,
     },
 ])
+export const ShutDown = /*#__PURE__*/ __createIcon(
+    'ShutDown',
+    [
+        {
+            j: () =>
+                /*#__PURE__*/ _jsxs('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    fill: 'none',
+                    viewBox: '0 0 17 16',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M5.585 3.951a.6.6 0 0 1-.08.845A5.222 5.222 0 0 0 3.6 8.833a5.235 5.235 0 0 0 5.233 5.234 5.235 5.235 0 0 0 5.234-5.234c0-1.624-.74-3.076-1.905-4.037a.6.6 0 0 1 .764-.925 6.422 6.422 0 0 1 2.34 4.962 6.436 6.436 0 0 1-6.433 6.434A6.435 6.435 0 0 1 2.4 8.833c0-1.997.912-3.783 2.34-4.962a.6.6 0 0 1 .845.08Z',
+                            clipRule: 'evenodd',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            fill: 'currentColor',
+                            fillRule: 'evenodd',
+                            d: 'M8.833 1.4a.6.6 0 0 1 .6.6v5.334a.6.6 0 0 1-1.2 0V2a.6.6 0 0 1 .6-.6Z',
+                            clipRule: 'evenodd',
+                        }),
+                    ],
+                }),
+            s: true,
+        },
+    ],
+    [17, 16],
+)
 export const SignUpAccount = /*#__PURE__*/ __createIcon('SignUpAccount', [
     {
         u: () => new URL('./general/SignUpAccount.png', import.meta.url).href,

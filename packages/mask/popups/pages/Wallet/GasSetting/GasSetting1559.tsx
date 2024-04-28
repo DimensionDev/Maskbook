@@ -117,7 +117,9 @@ export const GasSetting1559 = memo(() => {
     })
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
-    const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+    const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+        chainId: nativeToken?.chainId,
+    })
 
     // #region Gas options
     const options = useMemo(
@@ -359,7 +361,7 @@ export const GasSetting1559 = memo(() => {
                             <FormattedCurrency
                                 value={formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
-                                    .times(gasLimit ?? 21000)}
+                                    .times(gasLimit)}
                                 formatter={formatCurrency}
                             />
                         </Typography>

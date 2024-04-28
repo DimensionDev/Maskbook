@@ -1,4 +1,4 @@
-import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
+import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
@@ -11,6 +11,8 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { Article } from './Article.js'
+import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -66,9 +68,11 @@ export const Welcome = memo(function Welcome() {
             return
         }
 
-        const url = await Services.SiteAdaptor.setupSite(EnhanceableSite.Twitter, false)
-        if (!url) return
-
+        const granted = await requestPermissionFromExtensionPage(
+            [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
+        )
+        if (!granted) return
+        if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         navigate(DashboardRoutes.SignUpPersona, { replace: true })
     }, [params, allowedToCollect])
 

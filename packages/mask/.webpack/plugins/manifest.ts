@@ -105,7 +105,7 @@ function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlag
 
 // cspell: disable-next-line
 // ID: jkoeaghipilijlahjplgbfiocjhldnap
-// Note: with tihs key you cannot upload it to the extension store
+// Note: with this key you cannot upload it to the extension store
 function fixTheExtensionID(manifest: ManifestV2 | ManifestV3) {
     manifest.key =
         'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoz51rhO1w+wD' +

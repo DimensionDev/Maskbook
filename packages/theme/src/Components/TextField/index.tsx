@@ -121,13 +121,22 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                             ...InputProps.classes,
                         },
                         ...InputProps,
-                        className: cx(classes.input, InputProps?.className),
+                        className: cx(classes.input, InputProps.className),
                     }}
                 />
             :   <InputBase
                     className={classes.field}
                     {...omit(InputProps, 'disableUnderline')}
-                    {...omit(rest, 'margin', 'onKeyDown', 'onKeyUp', 'InputProps', 'inputProps', 'FormHelperTextProps')}
+                    {...omit(
+                        rest,
+                        'margin',
+                        'onKeyDown',
+                        'onKeyUp',
+                        'InputProps',
+                        'inputProps',
+                        'FormHelperTextProps',
+                        'onInvalid',
+                    )}
                 />
             }
         </Box>

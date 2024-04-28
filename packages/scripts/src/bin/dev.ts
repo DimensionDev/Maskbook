@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node --import swc-register-esm
 import { spawn } from 'child_process'
 import { codegenWatch } from '../codegen/index.js'
 import { awaitChildProcess, cleanupWhenExit } from '../utils/index.js'

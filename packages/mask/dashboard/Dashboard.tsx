@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
     CustomSnackbarProvider,
     applyMaskColorVars,
@@ -22,6 +22,7 @@ const GlobalCss = (
     <GlobalStyles
         styles={{
             '[data-hide-scrollbar]': {
+                scrollbarWidth: 'none',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
@@ -67,9 +68,9 @@ export default function Dashboard() {
             <CssBaseline />
             {GlobalCss}
             {/* https://github.com/TanStack/query/issues/5417 */}
-            {/* {process.env.NODE_ENV === 'development' ?
+            {process.env.NODE_ENV === 'development' ?
                 <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null} */}
+            :   null}
             <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
             <Pages />
         </>,

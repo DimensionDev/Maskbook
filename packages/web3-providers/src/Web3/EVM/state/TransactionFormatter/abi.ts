@@ -9,14 +9,8 @@ import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
-import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
-import SwapRouter from '@masknet/web3-contracts/abis/SwapRouter.json'
 import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
-import DODORouteProxy from '@masknet/web3-contracts/abis/DODORouteProxy.json'
 import WETH from '@masknet/web3-contracts/abis/WETH.json'
-import BancorNetwork from '@masknet/web3-contracts/abis/BancorNetwork.json'
-import OpenOceanExchangeV2 from '@masknet/web3-contracts/abis/OpenOceanExchangeV2.json'
-import ZeroXSwap from '@masknet/web3-contracts/abis/ZeroXSwap.json'
 import Lido from '@masknet/web3-contracts/abis/Lido.json'
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
@@ -36,12 +30,6 @@ class ABI {
         this.construct(MaskBox as AbiItem[])
         this.construct(ERC721 as AbiItem[])
         this.construct(ERC20 as AbiItem[])
-        this.construct(RouterV2ABI as AbiItem[]) // uniswap V2 like
-        this.construct(SwapRouter as AbiItem[]) // uniswap V3 like
-        this.construct(DODORouteProxy as AbiItem[]) // dodo swap
-        this.construct(BancorNetwork as AbiItem[]) // bancor swap
-        this.construct(OpenOceanExchangeV2 as AbiItem[]) // openocean swap
-        this.construct(ZeroXSwap as AbiItem[]) // 0x swap
         this.construct(WETH as AbiItem[]) // wrap & unwrap
         this.construct(Lido as AbiItem[]) // lido saving
         this.construct(AaveLendingPool as AbiItem[]) // Aave saving

@@ -72,7 +72,7 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
             message: result ? t.report_spam_success() : t.report_spam_fail(),
         })
     }, [colId, reportSpam, collection?.name])
-    const isSpam = !!collection && collection.spam_score !== null && collection?.spam_score > SPAM_SCORE
+    const isSpam = !!collection && collection.spam_score !== null && collection.spam_score > SPAM_SCORE
 
     return {
         isReporting: state.loading,

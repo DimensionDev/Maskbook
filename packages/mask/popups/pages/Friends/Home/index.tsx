@@ -2,7 +2,7 @@ import { memo, useState, useMemo } from 'react'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { resolveNextIDPlatform } from '@masknet/shared'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { NextIDProof, Fuse } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import { FriendsHomeUI } from './UI.js'
 import {
     useFriendsPaged,
@@ -12,19 +12,19 @@ import {
     useFriendFromList,
 } from '../../../hooks/index.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import Fuse from 'fuse.js'
 
 const FriendsHome = memo(function FriendsHome() {
     const t = useMaskSharedTrans()
     useTitle(t.popups_encrypted_friends())
 
-    const [{ isPending, refetch, records }, { status: fetchRelationStatus }, { data, status, fetchNextPage }] =
-        useFriendsPaged()
+    const [{ isPending, refetch, records }, , { data, fetchNextPage }] = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
     const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
     const fuse = useMemo(() => {
-        return Fuse.create(records, {
+        return new Fuse(records, {
             keys: ['profile.userId'],
             isCaseSensitive: false,
             ignoreLocation: true,
@@ -57,15 +57,14 @@ const FriendsHome = memo(function FriendsHome() {
     })
     const searchResult = useMemo(() => searchResultArray?.pages.flat() ?? EMPTY_LIST, [searchResultArray])
     const searchedList = useFriendsFromSearch(localSearchedList, searchResult, friends, keyword)
+
     return (
         <FriendsHomeUI
             friends={data?.pages ?? EMPTY_LIST}
             loading={
                 isPending ||
                 resolveLoading ||
-                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isLoading) ||
-                status === 'pending' ||
-                fetchRelationStatus === 'pending'
+                (!!keyword && !!type ? searchLoading || isSearchRecordLoading : isLoading)
             }
             setSearchValue={setSearchValue}
             searchValue={searchValue}

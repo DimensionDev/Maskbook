@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 0,
         backgroundColor: 'transparent',
         boxSizing: 'border-box',
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -61,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 16,
         padding: theme.spacing(0, 1.5),
         maxHeight: 446,
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

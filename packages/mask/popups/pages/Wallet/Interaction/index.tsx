@@ -10,6 +10,7 @@ import {
     Suspense,
     useTransition,
     useLayoutEffect,
+    useCallback,
 } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useAsyncFn, useLatest } from 'react-use'
@@ -49,9 +50,16 @@ import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { type ReasonableMessage, parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
+import {
+    type ReasonableMessage,
+    parseEIP4361Message,
+    type EIP4361Message,
+    TransactionDescriptorType,
+    GasOptionType,
+} from '@masknet/web3-shared-base'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useInteractionWalletContext } from './InteractionContext.js'
+import { produce } from 'immer'
 
 const useStyles = makeStyles()((theme) => ({
     left: {
@@ -315,7 +323,7 @@ const Interaction = memo((props: InteractionProps) => {
                                         return web3_utils.toHex(value)
                                     })
                                 :   {}),
-                                gas: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
+                                gasLimit: web3_utils.toHex(new BigNumber(gasConfig?.gas ?? x.gas).toString()),
                                 chainId: web3_utils.toHex(x.chainId),
                                 nonce: web3_utils.toHex(x.nonce),
                             }
@@ -323,6 +331,12 @@ const Interaction = memo((props: InteractionProps) => {
                     )
                 }
 
+                if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                    if (params[0].type === '0x0') {
+                        delete params[0].type
+                        delete params[0].gasPrice
+                    }
+                }
                 const response = await Message?.approveRequest(currentRequest.ID, {
                     ...currentRequest.request,
                     arguments: {
@@ -342,9 +356,12 @@ const Interaction = memo((props: InteractionProps) => {
                 showSnackbar(
                     <Typography textAlign="center" width="275px">
                         {t.popups_wallet_rpc_error()}
+                        <br />
+                        {String((error as any).message)}
                     </Typography>,
                     {
                         variant: 'error',
+                        autoHideDuration: 5000,
                     },
                 )
             }
@@ -398,7 +415,7 @@ const Interaction = memo((props: InteractionProps) => {
         :   null
     return (
         <InteractionItem
-            key={currentMessageIndex}
+            key={currentRequest.ID}
             paymentToken={paymentToken}
             setPaymentToken={setPaymentToken}
             currentRequest={currentRequest}
@@ -435,10 +452,41 @@ const InteractionItem = memo((props: InteractionItemProps) => {
 
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
-    const [expand, setExpand] = useState(false)
+    const [expand, setExpand] = useState(
+        transaction.formattedTransaction?.type === TransactionDescriptorType.DEPLOYMENT,
+    )
 
     const [approvedAmount, setApproveAmount] = useState('')
-    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
+    const { Message } = useWeb3State()
+    const setGasConfig = useCallback(
+        (gasConfig: GasConfig) => {
+            _setGasConfig(gasConfig)
+            Message?.updateMessage(
+                currentRequest.ID,
+                produce(currentRequest, (draft) => {
+                    if (gasConfig.gasOptionType) draft.request.options.gasOptionType = gasConfig.gasOptionType
+                    if (gasConfig.gasOptionType === GasOptionType.CUSTOM) {
+                        draft.request.options.gas = gasConfig.gas
+                        if ('gasPrice' in gasConfig) {
+                            if (gasConfig.gasPrice) draft.request.options.gasPrice = gasConfig.gasPrice
+                        } else {
+                            if (gasConfig.maxFeePerGas) draft.request.options.maxFeePerGas = gasConfig.maxFeePerGas
+                            if (gasConfig.maxPriorityFeePerGas)
+                                draft.request.options.maxPriorityFeePerGas = gasConfig.maxPriorityFeePerGas
+                        }
+                    } else if (gasConfig.gasOptionType) {
+                        // remove them to use new default next time.
+                        delete draft.request.options.gas
+                        delete draft.request.options.gasPrice
+                        delete draft.request.options.maxFeePerGas
+                        delete draft.request.options.maxPriorityFeePerGas
+                    }
+                }),
+            )
+        },
+        [Message],
+    )
 
     const isSignRequest = signRequest.includes(currentRequest.request.arguments.method)
     let isDangerRequest = false
@@ -473,15 +521,6 @@ const InteractionItem = memo((props: InteractionItemProps) => {
                 onPaymentTokenChange={setPaymentToken}
             />
 
-    const ViewFullTransactionDetailsButton =
-        isSignRequest ? null : (
-            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-                <Button variant="text" onClick={() => setExpand(!expand)}>
-                    <Typography className={classes.text}>{t.popups_wallet_view_full_detail_transaction()}</Typography>
-                    <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
-                </Button>
-            </Box>
-        )
     const FullTransactionDetails =
         expand ?
             <Box className={classes.transactionDetail} marginBottom={pager ? 16 : 0}>
@@ -519,6 +558,15 @@ const InteractionItem = memo((props: InteractionItemProps) => {
                 :   null}
             </Box>
         :   null
+    const ViewFullTransactionDetailsButton =
+        isSignRequest || !FullTransactionDetails ? null : (
+            <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+                <Button variant="text" onClick={() => setExpand(!expand)}>
+                    <Typography className={classes.text}>{t.popups_wallet_view_full_detail_transaction()}</Typography>
+                    <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
+                </Button>
+            </Box>
+        )
     const CancelButton = (
         <ActionButton
             loading={cancelRunning}

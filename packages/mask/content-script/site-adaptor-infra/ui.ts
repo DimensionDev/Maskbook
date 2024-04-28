@@ -36,7 +36,7 @@ export let activatedSiteAdaptor_state: Readonly<SiteAdaptorUI.AutonomousState> |
 export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
 
-    console.log('Activating provider', ui_deferred.networkIdentifier)
+    console.log('[Mask] Activating provider', ui_deferred.networkIdentifier)
 
     const injectSwitchSettings = await Services.Settings.getAllInjectSwitchSettings()
     if (!injectSwitchSettings[ui_deferred.networkIdentifier]) return
@@ -56,7 +56,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
 
-    console.log('Provider activated. You can access it by globalThis.ui', ui)
+    console.log('[Mask] Provider activated. globalThis.ui =', ui)
     setDebugObject('ui', ui)
 
     const abort = new AbortController()
@@ -153,6 +153,7 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         getPostIdFromNewPostToast: ui.configuration.nextIDConfig?.getPostIdFromNewPostToast,
         connectPersona,
         postMessage: ui.automation?.nativeCompositionDialog?.attachText,
+        publishPost: ui.automation.endpoint?.publishPost,
         getSearchedKeyword: ui.collecting.getSearchedKeyword,
         getUserIdentity: ui.utils.getUserIdentity,
     })

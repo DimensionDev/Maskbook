@@ -12,13 +12,14 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
     [EnhanceableSite.Firefly]:
         process.env.NODE_ENV === 'production' ?
-            /(?:^(?:firefly\.|firefly-staging\.)?mask\.social|\.vercel\.app)$/i
+            /(?:^(?:firefly\.|firefly-staging\.|firefly-canary\.)?mask\.social|\.vercel\.app)$/i
         :   /^localhost:\d+$/,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Dashboard]: /dashboard\.html/i,
     [ExtensionSite.Popup]: /popups\.html/i,
+    [ExtensionSite.Swap]: /swap\.html/i,
 }
 
 export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)

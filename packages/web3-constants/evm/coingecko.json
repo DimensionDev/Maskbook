@@ -12,7 +12,9 @@
         "Fantom": "fantom",
         "Aurora": "aurora",
         "Astar": "astar",
-        "Boba": "boba"
+        "Boba": "boba",
+        "Metis": "metis-andromeda",
+        "Scroll": "scroll"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -35,6 +37,8 @@
         "Moonriver": "moonriver",
         "Cronos": "crypto-com-chain",
         "BitTorrent": "bittorrent",
-        "Boba": "boba-network"
+        "Boba": "boba-network",
+        "Metis": "metis-token",
+        "Scroll": "ethereum"
     }
 }

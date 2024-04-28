@@ -1,4 +1,3 @@
-/// <reference types="react/canary" />
 import { Flags } from '@masknet/flags'
 import Services from '#services'
 import { Box, Link } from '@mui/material'
@@ -16,8 +15,12 @@ export default function MaskSDK() {
 }
 
 function MaskSDKLoader() {
-    const [shouldShow] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
+    const [{ result: shouldShow }] = useAsync(Services.SiteAdaptor.shouldSuggestConnectInPopup, false)
     const [dismissed, setDismissed] = useState(false)
+    const [{ result: currentTab }] = useAsync(async () => {
+        const tab = await Services.Helper.getActiveTab()
+        return tab?.url ? new URL(tab.url).origin + '/*' : null
+    })
     if (!shouldShow) return null
     if (dismissed) return null
     return (
@@ -27,23 +30,31 @@ function MaskSDKLoader() {
             Connect Mask on this site{' '}
             <Link
                 onClick={async () => {
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('once')
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
                     window.close()
                 }}>
                 once
             </Link>
-            {', '}
-            <Link
-                onClick={async () => {
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always')
-                    window.close()
-                }}>
-                always
-            </Link>
+            {currentTab ?
+                <>
+                    {', '}
+                    <Link
+                        onClick={async () => {
+                            const granted = await browser.permissions.request({ origins: [currentTab] })
+                            if (!granted) return
+                            await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
+                            window.close()
+                        }}>
+                        always
+                    </Link>
+                </>
+            :   null}
             {', or '}
             <Link
                 onClick={async () => {
-                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage('always-all')
+                    const granted = await browser.permissions.request({ origins: ['<all_urls>'] })
+                    if (!granted) return
+                    await Services.SiteAdaptor.attachMaskSDKToCurrentActivePage()
                     window.close()
                 }}>
                 all sites

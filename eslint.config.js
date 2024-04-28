@@ -11,8 +11,7 @@ import ImportPlugin from 'eslint-plugin-i'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
-import { fileURLToPath, pathToFileURL } from 'node:url'
-import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 // this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
 if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
@@ -177,7 +176,26 @@ const avoidMistakeRules = {
     'no-sparse-arrays': 'error', // [,, 1]
     'no-unmodified-loop-condition': 'error', // loop bug
     'no-unreachable-loop': 'error', // loop bug
-    'no-restricted-globals': ['error', 'event', 'name', 'length', 'closed'], // source of bug (those names are too common)
+    'no-restricted-globals': [
+        'error',
+        // source of bug (those names are too common)
+        'error',
+        'event',
+        'name',
+        'length',
+        'closed',
+        // no localStorage & sessionStorage in a web extension
+        {
+            name: 'localStorage',
+            message:
+                "If you're in the background script, localStorage is banned. It will cause Manifest V3 to crash. If you're in the chrome-extension:// pages, localStorage is discouraged. If you're in the content scripts, we can only use localStorage to read websites' data and MUST NOT store our own data.",
+        },
+        {
+            name: 'sessionStorage',
+            message:
+                "If you're in the background script, sessionStorage is banned. It will cause Manifest V3 to crash. If you're in the chrome-extension:// pages, sessionStorage is discouraged. If you're in the content scripts, we can only use sessionStorage to read websites' data and MUST NOT store our own data.",
+        },
+    ],
     'no-template-curly-in-string': 'error', // "${expr}" looks like a bug
     // 'require-atomic-updates': 'error', // await/yield race condition
     'valid-typeof': 'error', // typeof expr === undefined
@@ -434,6 +452,12 @@ const moduleSystemRules = {
                     message: 'Avoid using type unsafe methods.',
                     importNames: ['get'],
                 },
+                {
+                    name: 'react-use',
+                    importNames: ['useLocalStorage'],
+                    message:
+                        "If you're in the chrome-extension:// pages, localStorage is discouraged. If you're in the content scripts, we can only use localStorage to read websites' data and MUST NOT store our own data.",
+                },
             ],
         },
     ],
@@ -512,8 +536,6 @@ const moduleSystemRules = {
         },
     ],
 }
-// TODO: enable rule @typescript-eslint/explicit-module-boundary-types for "./packages/mask/background/services/*"
-// TODO: ban uses of localStorage or sessionStorage
 
 const plugins = {
     'tss-unused-classes': UnusedClassesPlugin,
@@ -572,6 +594,13 @@ export default tseslint.config(
             ...avoidMistakeRules,
             ...codeStyleRules,
             ...moduleSystemRules,
+        },
+    },
+    {
+        files: ['packages/mask/background/**/*.ts'],
+        plugins,
+        rules: {
+            'no-restricted-globals': ['error', 'setTimeout', 'setInterval'],
         },
     },
     {

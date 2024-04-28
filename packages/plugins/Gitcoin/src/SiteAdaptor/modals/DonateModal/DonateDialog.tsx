@@ -214,6 +214,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
                             </ShadowRootTooltip>
                         </Typography>
                         <GiveBackSelect
+                            variant="filled"
                             value={giveBack}
                             className={classes.giveBackSelect}
                             onChange={(e) => {

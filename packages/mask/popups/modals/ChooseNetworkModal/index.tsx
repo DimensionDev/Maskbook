@@ -82,7 +82,11 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
             role="option"
             ref={(element) => {
                 if (!element || !selected) return
-                element.scrollIntoView()
+                if ('scrollIntoViewIfNeeded' in element && typeof element.scrollIntoViewIfNeeded === 'function') {
+                    element.scrollIntoViewIfNeeded(true)
+                } else {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+                }
             }}
             onClick={async () => {
                 await Network?.switchNetwork(network.ID)

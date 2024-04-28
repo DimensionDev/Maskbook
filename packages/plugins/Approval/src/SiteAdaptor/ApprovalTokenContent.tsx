@@ -225,7 +225,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
-                        <TokenIcon address={spender.tokenInfo.address} className={classes.logoIcon} />
+                        <TokenIcon address={spender.tokenInfo.address} chainId={chainId} className={classes.logoIcon} />
                         <Typography className={classes.primaryText}>
                             {spender.tokenInfo.symbol || token?.symbol}
                         </Typography>

@@ -1,8 +1,7 @@
 import { compact } from 'lodash-es'
 import { isSameAddress, type SearchResult, SearchResultType } from '@masknet/web3-shared-base'
 import type { Handler } from './types.js'
-import { Fuse } from '../Fuse/index.js'
-
+import Fuse from 'fuse.js'
 export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, SchemaType>> => [
     {
         rules: [
@@ -21,7 +20,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         return true
 
                     const symbol = data.symbol
-                    if (symbol === keyword || symbol?.replace(/\s/g, '') === keyword) return true
+                    if (symbol === keyword || symbol.replaceAll(/\s/g, '') === keyword) return true
 
                     const name = data.name
                     if (name === keyword) return true
@@ -51,7 +50,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             }),
                     )
 
-                    return Fuse.create(data, {
+                    return new Fuse(data, {
                         keys: [{ name: '__alias', weight: 0.5 }],
                         isCaseSensitive: false,
                         ignoreLocation: true,
@@ -81,7 +80,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         }),
                     )
 
-                    return Fuse.create(data, {
+                    return new Fuse(data, {
                         keys: [
                             { name: 'symbol', weight: 0.5 },
                             { name: '__symbol', weight: 0.4 },
@@ -150,7 +149,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                             }),
                     )
 
-                    return Fuse.create(data, {
+                    return new Fuse(data, {
                         keys: [
                             { name: '__alias', weight: 0.5 },
                             { name: '__name', weight: 0.3 },
@@ -187,7 +186,7 @@ export const getHandlers = <ChainId, SchemaType>(): Array<Handler<ChainId, Schem
                         }),
                     )
 
-                    return Fuse.create(data, {
+                    return new Fuse(data, {
                         keys: [
                             { name: 'name', weight: 0.6 },
                             { name: '__name', weight: 0.4 },

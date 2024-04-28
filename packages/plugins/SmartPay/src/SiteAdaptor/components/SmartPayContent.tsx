@@ -114,6 +114,7 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: 0,
         height: 309,
         overflow: 'scroll',
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },
@@ -396,8 +397,8 @@ export const SmartPayContent = memo(() => {
                 </Box>
                 <List dense className={classes.list}>
                     {assets
-                        ?.filter((asset) => asset.chainId === chainId)
-                        ?.map((token, index) => (
+                        .filter((asset) => asset.chainId === chainId)
+                        .map((token, index) => (
                             <ListItem className={classes.listItem} key={index}>
                                 <Box display="flex" alignItems="center" columnGap="10px">
                                     <Box position="relative" width={40} height={36}>

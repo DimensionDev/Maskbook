@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url('#rainbow_svg__clip0_9925_8880')">
+        <path fill="url(#rainbow_svg__paint0_linear_9925_8880)" d="M20 0H4a4 4 0 0 0-4 4v16a4 4 0 0 0 4 4h16a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4Z"/>
+        <path fill="url(#rainbow_svg__paint1_radial_9925_8880)" d="M4 7.6h1.2c6.186 0 11.2 5.014 11.2 11.2V20h2.4a1.2 1.2 0 0 0 1.2-1.2C20 10.626 13.374 4 5.2 4A1.2 1.2 0 0 0 4 5.2v2.4Z"/>
+        <path fill="url(#rainbow_svg__paint2_linear_9925_8880)" d="M16.8 18.8H20a1.2 1.2 0 0 1-1.2 1.2h-2v-1.2Z"/>
+        <path fill="url(#rainbow_svg__paint3_linear_9925_8880)" d="M5.2 4v3.2H4v-2A1.2 1.2 0 0 1 5.2 4Z"/>
+        <path fill="url(#rainbow_svg__paint4_radial_9925_8880)" d="M4 7.2h1.2c6.406 0 11.6 5.194 11.6 11.6V20h-3.6v-1.2a8 8 0 0 0-8-8H4V7.2Z"/>
+        <path fill="url(#rainbow_svg__paint5_linear_9925_8880)" d="M13.6 18.8h3.2V20h-3.2v-1.2Z"/>
+        <path fill="url(#rainbow_svg__paint6_linear_9925_8880)" d="M4 10.4V7.2h1.2v3.2H4Z"/>
+        <path fill="url(#rainbow_svg__paint7_radial_9925_8880)" d="M4 12.4a1.2 1.2 0 0 0 1.2 1.2 5.2 5.2 0 0 1 5.2 5.2 1.2 1.2 0 0 0 1.2 1.2h2v-1.2a8.4 8.4 0 0 0-8.4-8.4H4v2Z"/>
+        <path fill="url(#rainbow_svg__paint8_radial_9925_8880)" d="M10.4 18.8h3.2V20h-2a1.2 1.2 0 0 1-1.2-1.2Z"/>
+        <path fill="url(#rainbow_svg__paint9_radial_9925_8880)" d="M5.2 13.6A1.2 1.2 0 0 1 4 12.4v-2h1.2v3.2Z"/>
+    </g>
+    <defs>
+        <radialGradient id="rainbow_svg__paint1_radial_9925_8880" cx="0" cy="0" r="1" gradientTransform="rotate(-90 12 6.8) scale(14.8)" gradientUnits="userSpaceOnUse">
+            <stop offset=".77" stop-color="#FF4000"/>
+            <stop offset="1" stop-color="#8754C9"/>
+        </radialGradient>
+        <radialGradient id="rainbow_svg__paint4_radial_9925_8880" cx="0" cy="0" r="1" gradientTransform="rotate(-90 12 6.8) scale(11.6)" gradientUnits="userSpaceOnUse">
+            <stop offset=".724" stop-color="#FFF700"/>
+            <stop offset="1" stop-color="#FF9901"/>
+        </radialGradient>
+        <radialGradient id="rainbow_svg__paint7_radial_9925_8880" cx="0" cy="0" r="1" gradientTransform="rotate(-90 12 6.8) scale(8.4)" gradientUnits="userSpaceOnUse">
+            <stop offset=".595" stop-color="#0AF"/>
+            <stop offset="1" stop-color="#01DA40"/>
+        </radialGradient>
+        <radialGradient id="rainbow_svg__paint8_radial_9925_8880" cx="0" cy="0" r="1" gradientTransform="matrix(3.4 0 0 9.06666 10.2 19.4)" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0AF"/>
+            <stop offset="1" stop-color="#01DA40"/>
+        </radialGradient>
+        <radialGradient id="rainbow_svg__paint9_radial_9925_8880" cx="0" cy="0" r="1" gradientTransform="matrix(0 -3.4 64.474 0 4.6 13.8)" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0AF"/>
+            <stop offset="1" stop-color="#01DA40"/>
+        </radialGradient>
+        <linearGradient id="rainbow_svg__paint0_linear_9925_8880" x1="12" x2="12" y1="0" y2="24" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#174299"/>
+            <stop offset="1" stop-color="#001E59"/>
+        </linearGradient>
+        <linearGradient id="rainbow_svg__paint2_linear_9925_8880" x1="16.6" x2="20" y1="19.4" y2="19.4" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FF4000"/>
+            <stop offset="1" stop-color="#8754C9"/>
+        </linearGradient>
+        <linearGradient id="rainbow_svg__paint3_linear_9925_8880" x1="4.6" x2="4.6" y1="4" y2="7.4" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#8754C9"/>
+            <stop offset="1" stop-color="#FF4000"/>
+        </linearGradient>
+        <linearGradient id="rainbow_svg__paint5_linear_9925_8880" x1="13.6" x2="16.8" y1="19.4" y2="19.4" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF700"/>
+            <stop offset="1" stop-color="#FF9901"/>
+        </linearGradient>
+        <linearGradient id="rainbow_svg__paint6_linear_9925_8880" x1="4.6" x2="4.6" y1="10.4" y2="7.2" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF700"/>
+            <stop offset="1" stop-color="#FF9901"/>
+        </linearGradient>
+        <clipPath id="rainbow_svg__clip0_9925_8880">
+            <path fill="#fff" d="M0 0h24v24H0z"/>
+        </clipPath>
+    </defs>
+</svg>

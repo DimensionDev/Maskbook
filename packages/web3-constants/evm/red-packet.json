@@ -37,8 +37,9 @@
         "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
         "Astar": "0x2cF46Db820e279c5fBF778367D49d9C931D54524",
         "Scroll": "0x16f61cb37169523635B6761f3C946892fb3c18fB",
-        "X1": "0x977baB5f7e2cEd0C91fDA890Ed1DBDfD3Ee9AE81",
-        "X1_Testnet": "0x977baB5f7e2cEd0C91fDA890Ed1DBDfD3Ee9AE81"
+        "Metis": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
+        "XLayer": "0xDb847f1D8099C5b15519ECfd0b0C981d719bccE6",
+        "XLayer_Testnet": "0x977baB5f7e2cEd0C91fDA890Ed1DBDfD3Ee9AE81"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -67,7 +68,8 @@
         "Conflux": 37670572,
         "Astar": 910985,
         "Scroll": 96705,
-        "X1": 0,
-        "X1_Testnet": 7320220
+        "Metis": 1702860,
+        "XLayer": 0,
+        "XLayer_Testnet": 7320220
     }
 }

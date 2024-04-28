@@ -31,6 +31,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
     Avatar,
+    Box,
     Button,
     CardContent,
     IconButton,
@@ -48,7 +49,7 @@ import { CoinIcon } from './CoinIcon.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { TrendingViewContext } from './context.js'
-import { useActivatedPlugins } from '../trader/hooks/useMinimalMaybe.js'
+import { useActivatedPluginSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -88,7 +89,7 @@ const useStyles = makeStyles<{
             overflow: 'hidden',
             fontSize: 18,
             fontWeight: 700,
-            color: theme.palette.maskColor?.dark,
+            color: theme.palette.maskColor.dark,
         },
         symbol: {
             fontWeight: 700,
@@ -111,10 +112,10 @@ const useStyles = makeStyles<{
         rank: {
             display: 'inline-flex',
             padding: theme.spacing(0.25, 0.5),
-            color: theme.palette.maskColor?.white,
+            color: theme.palette.maskColor.white,
             fontWeight: 400,
             fontSize: 10,
-            background: theme.palette.maskColor?.dark,
+            background: theme.palette.maskColor.dark,
             borderRadius: theme.spacing(0.5),
         },
         avatar: {
@@ -123,8 +124,10 @@ const useStyles = makeStyles<{
             fontSize: 10,
             backgroundColor: theme.palette.common.white,
         },
-        buyButton: {
+        buttons: {
             marginLeft: 'auto',
+            display: 'flex',
+            gap: theme.spacing(0.5),
         },
         icon: {
             color: MaskColors.dark.maskColor.dark,
@@ -164,6 +167,7 @@ interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer'
     resultList?: Web3Helper.TokenResultAll[]
     children?: React.ReactNode
     TrendingCardProps?: Partial<TrendingCardProps>
+    isSwappable?: boolean
 }
 
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
@@ -178,6 +182,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         setActive,
         currentTab,
         identity,
+        isSwappable,
     } = props
 
     const { coin, market } = trending
@@ -194,15 +199,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
-    const transakPluginEnabled = useActivatedPlugins('any').some((x) => x.ID === PluginID.Transak)
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
-    const minimalPlugins = useActivatedPlugins()
-    const isTokenSecurityEnable = !isNFT && !minimalPlugins.some((x) => x.ID === PluginID.GoPlusSecurity)
-    const transakIsMinimalMode = minimalPlugins.some((x) => x.ID === PluginID.Transak)
+    const isTokenSecurityEnable = !useIsMinimalMode(PluginID.GoPlusSecurity) && !isNFT
+    const isTransakEnabled = !!useActivatedPluginSiteAdaptor(PluginID.Transak, false)
 
     const { value: tokenSecurity, error } = useTokenSecurity(
         coin.chainId,
@@ -210,7 +213,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
-    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
+    const isBuyable = !isNFT && isTransakEnabled && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
@@ -220,7 +223,21 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     }, [account, coin.symbol])
     // #endregion
 
-    const titleRef = useRef<HTMLElement>(null)
+    // #region swap
+    const { setDialog: setExchangeDialog } = useRemoteControlledDialog(CrossIsolationMessages.events.swapDialogEvent)
+
+    const onExchangeButtonClicked = useCallback(() => {
+        setExchangeDialog({
+            open: true,
+            traderProps: {
+                address: coin.contract_address,
+                chainId: coin.chainId,
+            },
+        })
+    }, [])
+    // #endregion
+
+    const titleRef = useRef<HTMLDivElement>(null)
 
     const coinAddress = coin.address || coin.contract_address
     const coinName = result.name || coin.name
@@ -246,7 +263,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
 
             CrossIsolationMessages.events.profileCardEvent.sendToLocal({
                 open: true,
-                userId: identity?.identifier?.userId,
+                userId: identity.identifier.userId,
                 anchorBounding,
                 anchorEl,
                 address,
@@ -293,7 +310,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
                         <Stack>
-                            <Stack flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
+                            <Stack component="div" flexDirection="row" alignItems="center" gap={0.5} ref={titleRef}>
                                 <Linking LinkProps={{ className: classes.link }} href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
@@ -350,30 +367,40 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     </>
                                 :   null}
-                                <ThemeProvider theme={MaskLightTheme}>
-                                    {isBuyable ?
-                                        <Button
-                                            color="primary"
-                                            className={classes.buyButton}
-                                            size="small"
-                                            startIcon={<Icons.Buy size={16} />}
-                                            variant="contained"
-                                            onClick={onBuyButtonClicked}>
-                                            {t.buy_now()}
-                                        </Button>
-                                    :   null}
-                                    {isNFT && first(coin.home_urls) ?
-                                        <Button
-                                            color="primary"
-                                            className={classes.buyButton}
-                                            size="small"
-                                            endIcon={<Icons.LinkOut size={16} />}
-                                            variant="roundedContained"
-                                            onClick={() => window.open(first(coin.home_urls))}>
-                                            {t.open()}
-                                        </Button>
-                                    :   null}
-                                </ThemeProvider>
+                                <Box className={classes.buttons}>
+                                    <ThemeProvider theme={MaskLightTheme}>
+                                        {isSwappable ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.Swap size={16} />}
+                                                variant="roundedContained"
+                                                onClick={onExchangeButtonClicked}>
+                                                {t.swap()}
+                                            </Button>
+                                        :   null}
+                                        {isBuyable ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.Buy size={16} />}
+                                                variant="roundedContained"
+                                                onClick={onBuyButtonClicked}>
+                                                {t.buy_now()}
+                                            </Button>
+                                        :   null}
+                                        {isNFT && first(coin.home_urls) ?
+                                            <Button
+                                                color="primary"
+                                                size="small"
+                                                endIcon={<Icons.LinkOut size={16} />}
+                                                variant="roundedContained"
+                                                onClick={() => window.open(first(coin.home_urls))}>
+                                                {t.open()}
+                                            </Button>
+                                        :   null}
+                                    </ThemeProvider>
+                                </Box>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between" marginTop={2}>
                                 <Stack direction="row" gap={1} alignItems="center">
@@ -426,7 +453,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         <Stack style={{ height: 48, width: '100%', background: theme.palette.maskColor.bottom }} />
                     :   null}
                 </Paper>
-                {(isCollectionProjectPopper || isTokenTagPopper) && currentTab !== ContentTab.Swap ?
+                {isCollectionProjectPopper || isTokenTagPopper ?
                     <section className={classes.pluginDescriptorWrapper}>
                         <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                     </section>

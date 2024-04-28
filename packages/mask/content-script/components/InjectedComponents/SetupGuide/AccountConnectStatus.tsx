@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
+import { BindingDialog, LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING, type BindingDialogProps } from '@masknet/shared'
 import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
@@ -7,7 +7,6 @@ import { memo } from 'react'
 import { Trans } from 'react-i18next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { BindingDialog, type BindingDialogProps } from './BindingDialog.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 
 const useStyles = makeStyles()((theme) => {

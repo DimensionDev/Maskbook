@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
+import Fuse from 'fuse.js'
 import { useSubscription } from 'use-subscription'
 import { DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -8,7 +9,6 @@ import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/sh
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
-import { FuseNonFungibleCollection } from '@masknet/web3-providers'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         overscrollBehavior: 'contain',
         padding: theme.spacing(2, 2, 7),
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -69,10 +70,19 @@ interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = Netwo
     onSubmit?(
         collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
     ): void
+    initialCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractDialog = memo(
-    ({ open, pluginID, chainId, onClose, onSubmit, schemaType }: SelectNonFungibleContractDialogProps) => {
+    ({
+        open,
+        pluginID,
+        chainId,
+        onClose,
+        onSubmit,
+        schemaType,
+        initialCollections,
+    }: SelectNonFungibleContractDialogProps) => {
         const t = useSharedTrans()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
@@ -116,7 +126,8 @@ export const SelectNonFungibleContractDialog = memo(
 
         const filteredCollections = useMemo(() => {
             const allCollections = [...customizedCollections, ...collections]
-            return pluginID === NetworkPluginID.PLUGIN_EVM ?
+            const result =
+                pluginID === NetworkPluginID.PLUGIN_EVM ?
                     allCollections.filter((x) => {
                         return (
                             x.address &&
@@ -127,9 +138,20 @@ export const SelectNonFungibleContractDialog = memo(
                         )
                     })
                 :   allCollections
-        }, [customizedCollections, collections, pluginID])
+
+            return [...result, ...(initialCollections ?? [])]
+        }, [customizedCollections, collections, pluginID, initialCollections])
         const fuse = useMemo(() => {
-            return FuseNonFungibleCollection.create(filteredCollections)
+            return new Fuse(filteredCollections, {
+                keys: [
+                    { name: 'name', weight: 0.5 },
+                    { name: 'symbol', weight: 0.8 },
+                    { name: 'address', weight: 1 },
+                ],
+                shouldSort: true,
+                threshold: 0.45,
+                minMatchCharLength: 3,
+            })
         }, [filteredCollections])
         const searchResults = useMemo(() => {
             if (!keyword) return filteredCollections

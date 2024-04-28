@@ -14,7 +14,8 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, TokenIcon, useSharedTrans } from '../../../index.js'
+import { FormattedBalance, NetworkIcon, TokenIcon, useSharedTrans } from '../../../index.js'
+import { useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -61,6 +62,15 @@ const useStyles = makeStyles()((theme) => ({
         width: 20,
         height: 20,
         marginRight: '0px !important',
+    },
+    badgeIcon: {
+        width: 10,
+        height: 10,
+        position: 'absolute',
+        right: -3,
+        bottom: -3,
+        border: `1px solid ${theme.palette.common.white}`,
+        borderRadius: '50%',
     },
     selectToken: {
         backgroundColor: theme.palette.maskColor.primary,
@@ -145,6 +155,9 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
     }) => {
         const { classes, cx } = useStyles()
         const t = useSharedTrans()
+        const { pluginID } = useNetworkContext()
+        const networks = useNetworks(pluginID)
+        const network = networks.find((x) => x.chainId === token?.chainId)
         return (
             <InputBase
                 fullWidth
@@ -181,13 +194,22 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                             className={classes.chip}
                                             classes={{ label: classes.chipLabel }}
                                             icon={
-                                                <TokenIcon
-                                                    className={classes.tokenIcon}
-                                                    address={token.address}
-                                                    name={token.name}
-                                                    chainId={token.chainId}
-                                                    logoURL={token.logoURL}
-                                                />
+                                                <Box position="relative">
+                                                    <TokenIcon
+                                                        className={classes.tokenIcon}
+                                                        address={token.address}
+                                                        name={token.name}
+                                                        chainId={token.chainId}
+                                                        logoURL={token.logoURL}
+                                                    />
+                                                    <NetworkIcon
+                                                        pluginID={pluginID}
+                                                        className={classes.badgeIcon}
+                                                        chainId={token.chainId}
+                                                        size={16}
+                                                        network={network}
+                                                    />
+                                                </Box>
                                             }
                                             deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
                                             onDelete={onSelectToken}

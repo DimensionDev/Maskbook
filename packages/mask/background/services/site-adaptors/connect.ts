@@ -2,14 +2,12 @@ import { compact, first, sortBy } from 'lodash-es'
 import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
 import {
-    userGuideStatus,
     type PersonaIdentifier,
     type ProfileIdentifier,
     currentSetupGuideStatus,
     SetupGuideStep,
 } from '@masknet/shared-base'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
-import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
 import type { Tabs } from 'webextension-polyfill'
 
@@ -94,28 +92,13 @@ export async function getSitesWithoutPermission(): Promise<SiteAdaptor.Definitio
     return compact(await Promise.all(promises))
 }
 
-export async function setupSite(network: string, newTab: boolean) {
-    const worker = definedSiteAdaptors.get(network)
-    const home = worker?.homepage
-
-    // request permission from all sites supported.
-    if (!(await requestSiteAdaptorsPermission([...definedSiteAdaptors.values()]))) return
-
-    if (!userGuideStatus[network].value) userGuideStatus[network].value = '1'
-
-    await delay(100)
-    if (!home) return
-    if (!newTab) return home
-
-    browser.tabs.create({ active: true, url: home })
-    return
-}
-
-export async function requestPermissionBySite(network: string) {
-    const worker = definedSiteAdaptors.get(network)
-    if (!worker) return
-    return requestSiteAdaptorsPermission([worker])
-}
+/**
+ * It's caller's responsibility to call browser.permissions.request to get the permissions needed.
+ * @param identifier Persona
+ * @param network Network to connect
+ * @param profile Profile
+ * @param openInNewTab Open in new tab
+ */
 export async function connectSite(
     identifier: PersonaIdentifier,
     network: string,
@@ -124,9 +107,6 @@ export async function connectSite(
 ) {
     const site = definedSiteAdaptors.get(network)
     if (!site) return
-
-    const permissionGranted = await requestSiteAdaptorsPermission([site])
-    if (!permissionGranted) return
 
     const url = site.homepage
     if (!url) return
@@ -152,14 +132,4 @@ export async function connectSite(
         username: profile?.userId,
         tabId: targetTab.id,
     })
-}
-
-export async function disconnectSite(network: string) {
-    const site = definedSiteAdaptors.get(network)
-    if (!site) return
-
-    const permissionGranted = await requestSiteAdaptorsPermission([site])
-    if (!permissionGranted) return
-
-    currentSetupGuideStatus[network].value = ''
 }

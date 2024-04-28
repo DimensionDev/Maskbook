@@ -172,6 +172,7 @@
     "share_on_firefly$farcaster_claimed": "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{{- sender }} ! \n\nClaim on Farcaster: {{- link }}",
     "no_claim_data": "No claims yet for this Lucky Drop",
     "no_claim_history_data": "No Lucky Drops claimed",
-    "no_sent_history_data": "<div>No Lucky Drops posted.</div> <div>Select 🎁 when you compose a post to start your first drop.<div>",
-    "post_on": "Post on"
+    "no_sent_history_data": "<div>No Lucky Drops created.</div> <div>Select 🎁 when you compose a post to start your first drop.<div>",
+    "post_on": "Post on",
+    "connect_to_platform": "Connect to {{ platform }}"
 }

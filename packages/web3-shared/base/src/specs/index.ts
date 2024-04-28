@@ -199,6 +199,9 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     shortName?: string
     network: LiteralUnion<'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
+    minGasLimit?: string
+    maxGasLimit?: string
+    defaultGasLimit?: string
     rpcUrl: string
     iconUrl?: string
     // EIP3091

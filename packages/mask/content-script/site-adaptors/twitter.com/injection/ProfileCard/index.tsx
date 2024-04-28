@@ -1,17 +1,17 @@
-import { CrossIsolationMessages, ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
+import { CrossIsolationMessages, ProfileIdentifier, stopPropagation, type SocialIdentity } from '@masknet/shared-base'
 import { AnchorProvider } from '@masknet/shared-base-ui'
 import { ShadowRootPopper, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
+import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { Fade } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
 import { attachReactTreeWithoutContainer } from '../../../../utils/shadow-root.js'
 import { twitterBase } from '../../base.js'
 import { CARD_HEIGHT, CARD_WIDTH } from './constants.js'
 import { useControlProfileCard } from './useControlProfileCard.js'
-import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     attachReactTreeWithoutContainer('profile-card', <ProfileCardHolder />, signal)
@@ -49,7 +49,7 @@ function ProfileCardHolder() {
     const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
         queryFn: () => Twitter.getUserByScreenName(twitterId),
-        select: useCallback((user: TwitterBaseAPI.User | null) => {
+        select: (user: TwitterBaseAPI.User | null) => {
             if (!user) return null
             return {
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
@@ -58,20 +58,39 @@ function ProfileCardHolder() {
                 bio: user.bio,
                 homepage: user.homepage,
             } as SocialIdentity
-        }, []),
+        },
     })
 
     const { data: resolvedIdentity } = useSocialIdentity(identity)
 
+    const popperOptions = useMemo(() => {
+        return {
+            modifiers: [
+                {
+                    name: 'detect-glitch',
+                    enabled: true,
+                    phase: 'beforeRead',
+                    fn: (options: any) => {
+                        const reference = options.state.rects?.reference
+                        if (!reference) return
+                        if (!reference.height && !reference.width) {
+                            setAnchorEl(null)
+                        }
+                    },
+                },
+            ],
+        }
+    }, [])
+
     return (
         <Fade in={active} easing="linear" timeout={250}>
             <ShadowRootPopper
-                placeholder={undefined}
                 open={!!anchorEl}
                 anchorEl={anchorEl}
                 keepMounted
                 placement={placement}
                 className={classes.root}
+                popperOptions={popperOptions}
                 ref={holderRef}
                 onClick={stopPropagation}>
                 <AnchorProvider anchorEl={anchorEl} anchorBounding={badgeBounding}>
@@ -80,8 +99,4 @@ function ProfileCardHolder() {
             </ShadowRootPopper>
         </Fade>
     )
-}
-
-function stopPropagation(event: React.MouseEvent) {
-    event.stopPropagation()
 }

@@ -2,6 +2,14 @@ import { BrowserProvider } from './Browser.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
 import { OKXProvider } from './OKX.js'
+import { CryptoProvider } from './Crypto.js'
+import { BitGetProvider } from './BitGet.js'
+import { RainbowProvider } from './Rainbow.js'
+import { OneKeyProvider } from './OneKey.js'
+import { RabbyProvider } from './Rabby.js'
+import { TrustProvider } from './Trust.js'
+import { TokenPocketProvider } from './TokenPocket.js'
+import { ZerionProvider } from './Zerion.js'
 import { PhantomProvider } from './Phantom.js'
 import { SolflareProvider } from './Solflare.js'
 import { OperaProvider } from './Opera.js'
@@ -20,14 +28,28 @@ export const injectedSolflareProvider = new SolflareProvider()
 export const injectedBrowserProvider = new BrowserProvider()
 export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
+export const injectedOneKeyProvider = new OneKeyProvider()
 export const injectedOKXProvider = new OKXProvider()
+export const injectedCryptoProvider = new CryptoProvider()
+export const injectedBitGetProvider = new BitGetProvider()
+export const injectedRainbowProvider = new RainbowProvider()
+export const injectedRabbyProvider = new RabbyProvider()
+export const injectedTrustProvider = new TrustProvider()
+export const injectedTokenPocketProvider = new TokenPocketProvider()
+export const injectedZerionProvider = new ZerionProvider()
 export const injectedOperaProvider = new OperaProvider()
 export const injectedCloverProvider = new CloverProvider()
 
 // Please keep this list update to date
 const Providers = [
+    injectedBitGetProvider,
     injectedCoinbaseProvider,
+    injectedCryptoProvider,
+    injectedOneKeyProvider,
+    injectedRabbyProvider,
+    injectedRainbowProvider,
     injectedOKXProvider,
+    injectedZerionProvider,
     injectedOperaProvider,
     injectedCloverProvider,
     injectedBrowserProvider,
@@ -35,6 +57,8 @@ const Providers = [
     injectedCoin98SolanaProvider,
     injectedPhantomProvider,
     injectedMetaMaskProvider,
+    injectedTrustProvider,
+    injectedTokenPocketProvider,
 ]
 
 export function pasteText(text: string) {

@@ -72,7 +72,7 @@ export class TheGraphRedPacket {
             }),
         })
 
-        if (!response?.data?.redPackets?.length) return
+        if (!response.data.redPackets.length) return
         return response.data.redPackets.map(
             (x) =>
                 ({
@@ -133,7 +133,7 @@ export class TheGraphRedPacket {
             }),
         })
 
-        if (!response?.data?.nftredPackets?.length) return
+        if (!response.data.nftredPackets.length) return
         return response.data.nftredPackets.map(
             (x) =>
                 ({

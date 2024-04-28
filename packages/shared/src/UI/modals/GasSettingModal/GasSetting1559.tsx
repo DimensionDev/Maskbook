@@ -95,7 +95,9 @@ export const GasSetting1559 = memo(
             chainId,
         })
 
-        const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
+        const { data: gasOptions, isPending: getGasOptionsLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, {
+            chainId,
+        })
 
         // #region Gas options
         const options = useMemo(
@@ -189,7 +191,7 @@ export const GasSetting1559 = memo(
 
         const handleConfirm = useCallback(
             (data: zod.infer<typeof schema>) => {
-                onConfirm?.({
+                onConfirm({
                     gasLimit: data.gasLimit as any,
                     maxFee: formatGweiToWei(data.maxFeePerGas).toFixed(0),
                     priorityFee: formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0),

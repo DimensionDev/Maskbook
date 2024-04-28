@@ -1,12 +1,15 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, type NetworkType } from '@masknet/web3-shared-evm'
+import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
+import { useCallback } from 'react'
 import { useAvailability } from './useAvailability.js'
 import { useClaimStrategyStatus } from './useClaimStrategyStatus.js'
 import { useSignedMessage } from './useSignedMessage.js'
-import { useCallback } from 'react'
+import { useParseRedPacket } from './useParseRedPacket.js'
 
 /**
  * Fetch the red packet info from the chain
@@ -18,10 +21,18 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         EVMNetworkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
         ChainId.Mainnet
 
-    const asyncResult = useAvailability(payload.rpid, payload.contract_address, payload.contract_version, {
-        account,
-        chainId: parsedChainId,
-    })
+    const { data: availability, refetch: recheckAvailability } = useAvailability(
+        payload.rpid,
+        payload.contract_version,
+        {
+            account,
+            chainId: parsedChainId,
+        },
+    )
+    const parsed = useParseRedPacket(parsedChainId)
+    const checkAvailability = recheckAvailability as (
+        options?: RefetchOptions,
+    ) => Promise<QueryObserverResult<typeof availability>>
 
     const { data: password } = useSignedMessage(account, payload)
     const { data, refetch, isFetching } = useClaimStrategyStatus(payload)
@@ -31,11 +42,10 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         return data?.data?.canClaim
     }, [refetch])
 
-    const availability = asyncResult.value
-
     if (!availability || (!payload.password && !data))
         return {
-            ...asyncResult,
+            availability,
+            checkAvailability,
             payload,
             claimStrategyStatus: null,
             checkingClaimStatus: isFetching,
@@ -44,12 +54,12 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             computed: {
                 canClaim: !!data?.data?.canClaim,
                 canRefund: false,
-                listOfStatus: [] as RedPacketStatus[],
+                listOfStatus: EMPTY_LIST as RedPacketStatus[],
             },
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = availability.claimed_amount !== '0'
+    const isClaimed = parsed?.redpacket.isClaimed || availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
@@ -57,7 +67,8 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     const canClaimByContract = !isExpired && !isEmpty && !isClaimed
     const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
     return {
-        ...asyncResult,
+        availability,
+        checkAvailability,
         claimStrategyStatus: data?.data,
         recheckClaimStatus,
         checkingClaimStatus: isFetching,

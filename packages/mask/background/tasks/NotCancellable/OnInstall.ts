@@ -17,8 +17,8 @@ browser.runtime.onInstalled.addListener(async (detail) => {
         const connect = await import('../../services/site-adaptors/connect.js')
         const groups = await connect.getOriginsWithoutPermission()
         if (groups.length) openWelcome()
-        if ((globalThis as any).localStorage) {
-            const localStorage = (globalThis as any).localStorage
+        const localStorage = (globalThis as any).localStorage
+        if (localStorage) {
             const backupPassword = localStorage.getItem('backupPassword')
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')

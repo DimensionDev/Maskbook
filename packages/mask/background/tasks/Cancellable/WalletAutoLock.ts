@@ -4,4 +4,4 @@ import { setAutoLockTimer } from '../../services/wallet/services/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 // Reset timer
-CrossIsolationMessages.events.walletLockStatusUpdated.on(setAutoLockTimer, { signal })
+CrossIsolationMessages.events.walletLockStatusUpdated.on(() => setAutoLockTimer(), { signal })

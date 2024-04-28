@@ -704,7 +704,7 @@ declare module '@blocto/fcl' {
          */
         code: string
         /**
-         * An object with keys as the contract name deployed and the value as the the cadence string.
+         * An object with keys as the contract name deployed and the value as the cadence string.
          */
         contracts: Contract
         /**

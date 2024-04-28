@@ -34,17 +34,10 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const Hub = useWeb3Hub(pluginID)
     const isNFT = tokenType === TokenType.NonFungible
     const { data } = useQuery({
-        queryKey: ['token-icon', chainId, address, isNFT],
-        enabled: !logoURL,
+        queryKey: ['token-icon', chainId, address],
+        enabled: !logoURL && !isNFT,
         queryFn: async () => {
-            const logoURLs =
-                isNFT ?
-                    (() => {
-                        throw new Error(
-                            "Unreachable: it used to call Hub.getNonFungibleTokenIconURLs, but it's default implementation is throw an error, and not override by any subclass.",
-                        )
-                    })()
-                :   await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
+            const logoURLs = await Hub.getFungibleTokenIconURLs(chainId, address).catch(() => [])
             return first(logoURLs)
         },
     })

@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useChainIdSupport, useGasOptions } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToGwei, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
+import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useMaskSharedTrans } from '../../shared-ui/index.js'
@@ -15,26 +15,19 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: theme.palette.maskColor.bottomBg,
     },
     list: {
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(0.5, 0),
     },
     item: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: theme.spacing(1, 0),
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
-        minHeight: 'unset',
-        minWidth: 134,
-        cursor: 'pointer',
-        '&:first-of-type': {
-            paddingTop: 0,
+        minHeight: 38,
+        '& > p:first-of-type': {
+            marginRight: 12,
         },
         '&:last-of-type': {
-            paddingBottom: 4,
             border: 'unset',
-        },
-        '&.Mui-focusVisible': {
-            backgroundColor: 'transparent',
         },
     },
     optionName: {
@@ -50,15 +43,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function useGasOptionsMenu(
-    minimumGas: string,
-    callback: (config: GasConfig, type?: GasOptionType) => void,
+    gasLimit: string | undefined,
+    callback: (config: GasConfig, type: GasOptionType) => void,
     paymentToken?: string,
 ) {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
-    const { data: gasOptions } = useGasOptions()
-
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
+
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const [customGasConfig, setCustomGasConfig] = useState<GasConfig>()
@@ -66,29 +59,33 @@ export function useGasOptionsMenu(
     const handleClickCustom = useCallback(async () => {
         const result = await GasSettingModal.openAndWaitForClose({
             chainId,
-            config: { gas: minimumGas, paymentToken, ...customGasConfig },
+            config: { gasLimit, paymentToken, ...customGasConfig },
         })
         if (!result) return
 
-        setCustomGasConfig({
-            ...result,
-            gasPrice: result.gasPrice ? formatWeiToGwei(result.gasPrice).toFixed(2) : undefined,
-            maxFeePerGas:
-                (result as EIP1559GasConfig).maxFeePerGas ?
-                    formatWeiToGwei((result as EIP1559GasConfig).maxFeePerGas).toFixed(2)
-                :   '',
-            maxPriorityFeePerGas:
-                (result as EIP1559GasConfig).maxPriorityFeePerGas ?
-                    formatWeiToGwei((result as EIP1559GasConfig).maxPriorityFeePerGas).toFixed(2)
-                :   '',
-        })
-        callback(result)
-    }, [chainId, minimumGas, callback, customGasConfig, paymentToken])
+        if ('maxFeePerGas' in result) {
+            setCustomGasConfig({
+                ...result,
+                gasPrice: result.gasPrice ? formatWeiToGwei(result.gasPrice).toFixed(2) : undefined,
+                maxFeePerGas: result.maxFeePerGas ? formatWeiToGwei(result.maxFeePerGas).toFixed(2) : '',
+                maxPriorityFeePerGas:
+                    result.maxPriorityFeePerGas ? formatWeiToGwei(result.maxPriorityFeePerGas).toFixed(2) : '',
+                gasOptionType: GasOptionType.CUSTOM,
+            })
+        } else {
+            setCustomGasConfig({
+                ...result,
+                gasPrice: formatWeiToGwei(result.gasPrice).toFixed(2),
+                gasOptionType: GasOptionType.CUSTOM,
+            })
+        }
+        callback(result, GasOptionType.CUSTOM)
+    }, [chainId, gasLimit, callback, customGasConfig, paymentToken])
 
     const handleClick = useCallback(
-        (type?: GasOptionType, option?: GasOption) => {
+        (type: GasOptionType, option: GasOption | undefined) => {
             if (!option) return
-            const config =
+            const config: GasConfig =
                 isSupport1559 ?
                     {
                         gasOptionType: type,

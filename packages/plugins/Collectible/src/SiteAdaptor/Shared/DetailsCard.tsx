@@ -75,7 +75,7 @@ export function DetailsCard(props: DetailsCardProps) {
     const Utils = useWeb3Utils()
     const { pluginID } = useNetworkContext()
 
-    const infos: Array<{ title: string; value?: string; link?: boolean; tooltip?: string }> = []
+    const infos: Array<{ title: string; value: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
             title: t.plugin_collectible_mint_address(),
@@ -83,10 +83,9 @@ export function DetailsCard(props: DetailsCardProps) {
             link: true,
         })
     } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-        infos.push(
-            { title: t.plugin_collectible_token_id(), value: Utils.formatTokenId(asset.tokenId, 4) },
-            { title: t.contract(), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true },
-        )
+        if (asset.tokenId)
+            infos.push({ title: t.plugin_collectible_token_id(), value: Utils.formatTokenId(asset.tokenId, 4) })
+        infos.push({ title: t.contract(), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true })
     }
     infos.push(
         { title: t.plugin_collectible_block_chain(), value: Utils.chainResolver.chainFullName(asset.chainId) },

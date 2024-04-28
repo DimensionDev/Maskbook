@@ -51,7 +51,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 if (!nftInfo.permalink) return
                 openWindow(nftInfo.permalink)
             }}>
-            <Link href={nftInfo?.permalink ?? ''} target="_blank" rel="noopener noreferrer">
+            <Link href={nftInfo.permalink ?? ''} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing
                     id="NFTAvatarRing"
                     width={size}

@@ -16,6 +16,8 @@
     }
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
+    "@lifi/widget": "^2.10.1",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-go-plus-security": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
@@ -35,9 +37,6 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@types/json-stable-stringify": "^1.0.34",
-    "@uniswap/sdk-core": "^3.0.1",
-    "@uniswap/v2-sdk": "3.0.0-alpha.2",
-    "@uniswap/v3-sdk": "3.9.0",
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "json-stable-stringify": "^1.0.2",

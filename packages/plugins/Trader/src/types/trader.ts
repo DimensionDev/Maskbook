@@ -13,7 +13,6 @@ export enum ContentTab {
     Market = 'market',
     Price = 'price',
     Exchange = 'exchange',
-    Swap = 'swap',
     NFTItems = 'nft-items',
 }
 

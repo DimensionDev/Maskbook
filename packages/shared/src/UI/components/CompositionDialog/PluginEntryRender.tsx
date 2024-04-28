@@ -14,12 +14,12 @@ import {
     ClickableChip,
     GrantPermissions,
     InjectedDialog,
-    useGrantPermissions,
     usePluginHostPermissionCheck,
     useSharedTrans,
 } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { requestHostPermission } from '@masknet/plugin-infra/dom/context'
 
 const useStyles = makeStyles()((theme) => ({
     sup: {
@@ -112,7 +112,6 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
         cache.set(define, (props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) => {
             const t = useSharedTrans()
             const { classes } = usePermissionDialogStyles()
-            const [, onGrant] = useGrantPermissions(define.enableRequirement.host_permissions)
             return (
                 <InjectedDialog
                     classes={{ paper: classes.root, dialogTitle: classes.dialogTitle }}
@@ -125,7 +124,9 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
                         <GrantPermissions
                             classes={{ action: classes.action }}
                             permissions={define.enableRequirement.host_permissions ?? EMPTY_LIST}
-                            onGrant={onGrant}
+                            onGrant={() =>
+                                requestHostPermission?.(define.enableRequirement.host_permissions ?? EMPTY_LIST)
+                            }
                         />
                     </DialogContent>
                 </InjectedDialog>

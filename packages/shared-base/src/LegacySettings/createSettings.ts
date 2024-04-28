@@ -1,6 +1,6 @@
 import { type Option, None } from 'ts-results-es'
 import { MaskMessages } from '../Messages/index.js'
-import { type ValueRef, ValueRefJSON, ValueRefWithReady, type ValueComparer } from '../helpers/index.js'
+import { type ValueRef, ValueRefWithReady, type ValueComparer } from '../helpers/index.js'
 
 let getValue: (key: string) => Promise<Option<any>> = async () => {
     return None
@@ -46,13 +46,6 @@ function setupValueRef<T>(settings: ValueRef<T>, key: string) {
             value: newVal,
         })
     })
-    return settings
-}
-
-/** @deprecated */
-export function createNSSettingsJSON<T extends object>(ns: string, key: string, value: T): ValueRefJSON<T> {
-    const settings = new ValueRefJSON(value)
-    setupValueRef(settings, `${ns}+${key}`)
     return settings
 }
 

@@ -7,16 +7,18 @@ import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.j
 
 const { signal } = hmr(import.meta.webpackHot)
 if (typeof browser.scripting?.registerContentScripts === 'function') {
-    await unregisterExistingScripts()
-    await browser.scripting.registerContentScripts([
-        ...prepareMainWorldScript(['<all_urls>'], maskSDK_URL),
-        ...prepareMainWorldScript(
-            Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),
-            injectedScriptURL,
-        ),
-        ...(await prepareContentScript(['<all_urls>'])),
-    ])
-
+    ;(async () => {
+        await unregisterExistingScripts()
+        await browser.scripting.registerContentScripts([
+            ...prepareMainWorldScript('sdk', ['<all_urls>'], maskSDK_URL),
+            ...prepareMainWorldScript(
+                'script',
+                Array.from(definedSiteAdaptors.values(), (x) => x.declarativePermissions.origins).flat(),
+                injectedScriptURL,
+            ),
+            ...(await prepareContentScript(['<all_urls>'])),
+        ])
+    })()
     signal.addEventListener('abort', unregisterExistingScripts)
 }
 
@@ -24,10 +26,10 @@ async function unregisterExistingScripts() {
     await browser.scripting.unregisterContentScripts().catch(noop)
 }
 
-function prepareMainWorldScript(matches: string[], url: string): Scripting.RegisteredContentScript[] {
+function prepareMainWorldScript(name: string, matches: string[], url: string): Scripting.RegisteredContentScript[] {
     if (Sniffings.is_firefox) return []
     const result: Scripting.RegisteredContentScript = {
-        id: 'injected',
+        id: 'injected_' + name,
         allFrames: true,
         js: [url],
         persistAcrossSessions: false,

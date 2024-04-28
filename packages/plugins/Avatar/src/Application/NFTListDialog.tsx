@@ -1,5 +1,5 @@
 import { compact, uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
@@ -26,7 +26,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
@@ -54,18 +54,12 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         padding: 0,
         backgroundColor: theme.palette.maskColor.bottom,
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             display: 'none',
         },
         overflow: 'hidden',
         display: 'flex',
-    },
-    addButton: {
-        cursor: 'pointer',
-        fontWeight: 700,
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.primary,
     },
     noWallet: {
         display: 'flex',
@@ -79,7 +73,12 @@ const useStyles = makeStyles()((theme) => ({
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
-export function NFTListDialog() {
+
+export interface NFTListDialogRef {
+    handleAddCollectibles: () => void
+}
+
+export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) => {
     const t = useAvatarTrans()
     const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
@@ -168,6 +167,7 @@ export function NFTListDialog() {
                 return { ...token, ...asset } as AllChainsNonFungibleToken
             }),
         )
+
         setPendingTokenCount((count) => Math.max(count - tokenIds.length, 0))
         const tokens = compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)))
         if (!tokens.length) return
@@ -175,6 +175,14 @@ export function NFTListDialog() {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
     }, [pluginID, assetChainId, targetAccount])
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            handleAddCollectibles,
+        }),
+        [handleAddCollectibles],
+    )
 
     useEffect(() => {
         setSelectedPluginId(pluginID)
@@ -218,47 +226,6 @@ export function NFTListDialog() {
             </DialogContent>
 
             <DialogActions className={classes.actions} disableSpacing>
-                <Stack
-                    sx={{
-                        display: 'flex',
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        padding: '8px 16px',
-                        justifyContent: 'space-between',
-                    }}>
-                    {selectedPluginId === NetworkPluginID.PLUGIN_EVM ?
-                        <Button
-                            variant="text"
-                            size="small"
-                            className={classes.addButton}
-                            disableRipple
-                            onClick={handleAddCollectibles}>
-                            {t.add_collectible()}
-                        </Button>
-                    :   <div />}
-
-                    <Stack sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Typography
-                            style={{ paddingRight: 4 }}
-                            variant="body1"
-                            fontSize={14}
-                            color={(theme) => theme.palette.maskColor.second}
-                            fontWeight="bold">
-                            {t.powered_by()}
-                        </Typography>
-                        <Typography
-                            style={{ paddingRight: 4 }}
-                            variant="body1"
-                            fontSize={14}
-                            fontWeight="bold"
-                            color={(theme) => theme.palette.maskColor.main}>
-                            Simplehash
-                        </Typography>
-                        <Icons.SimpleHash />
-                    </Stack>
-                </Stack>
-
                 <PluginVerifiedWalletStatusBar
                     openPopupWindow={() =>
                         openPopupWindow(PopupRoutes.Personas, {
@@ -288,4 +255,4 @@ export function NFTListDialog() {
             </DialogActions>
         </>
     )
-}
+})

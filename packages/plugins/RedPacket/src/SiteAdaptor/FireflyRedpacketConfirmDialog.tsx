@@ -161,7 +161,13 @@ export function FireflyRedpacketConfirmDialog({
         )
     }, [currentAccount, settings.total, settings.token])
 
-    const { state, currentIndex, prev, next } = useStateList<{ themeId: string; url: string } | undefined>(urls)
+    const { state, currentIndex, prev, next } = useStateList<
+        | {
+              themeId: string
+              url: string
+          }
+        | undefined
+    >(urls)
 
     const isFirst = currentIndex === 0
     const isLatest = urls?.length && currentIndex === urls.length - 1
@@ -197,7 +203,7 @@ export function FireflyRedpacketConfirmDialog({
     }, [state?.url])
 
     const { value, loading } = useAsync(async () => {
-        if (!state) return
+        if (!state?.themeId) return
         const postReactions = fireflySettings?.requirements.filter(
             (x) => x !== RequirementType.Follow && x !== RequirementType.NFTHolder,
         )
@@ -258,7 +264,7 @@ export function FireflyRedpacketConfirmDialog({
             publicKey: await FireflyRedPacket.createPublicKey(state.themeId, currentAccount, payload),
             claimRequirements: payload,
         }
-    }, [state, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId, currentAccount])
+    }, [state?.themeId, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId, currentAccount])
 
     const { createRedpacket, isCreating } = useCreateFTRedpacketCallback(
         value?.publicKey ?? '',
@@ -323,7 +329,12 @@ export function FireflyRedpacketConfirmDialog({
                     </Box>
                     <Box className={classes.item}>
                         <Typography className={classes.title}>{t.amount()}</Typography>
-                        <Typography className={classes.title} display="flex" alignItems="center" columnGap={0.5}>
+                        <Typography
+                            className={classes.title}
+                            display="flex"
+                            alignItems="center"
+                            columnGap={0.5}
+                            component="div">
                             <FormattedBalance
                                 value={settings.total}
                                 decimals={settings.token?.decimals}

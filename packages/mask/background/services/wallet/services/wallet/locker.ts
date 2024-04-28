@@ -1,9 +1,4 @@
-import {
-    CrossIsolationMessages,
-    LockStatus,
-    PopupRoutes,
-    currentMaskWalletLockStatusSettings,
-} from '@masknet/shared-base'
+import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
 import { getAutoLockerDuration } from './database/locker.js'
 import * as password from './password.js'
 import { openPopupWindow } from '../../../helper/popup-opener.js'
@@ -14,7 +9,6 @@ export async function isLocked() {
 
 export async function lockWallet() {
     password.clearPassword()
-    currentMaskWalletLockStatusSettings.value = LockStatus.LOCKED
     CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(true)
 }
 
@@ -22,7 +16,6 @@ export async function unlockWallet(unverifiedPassword: string) {
     if (!isLocked()) return true
     try {
         await password.verifyPasswordRequired(unverifiedPassword)
-        currentMaskWalletLockStatusSettings.value = LockStatus.UNLOCK
         CrossIsolationMessages.events.walletLockStatusUpdated.sendToAll(false)
         await setAutoLockTimer()
         return true
@@ -42,16 +35,19 @@ export async function requestUnlockWallet(): Promise<void> {
     })
 }
 
+// This setTimeout is ok because if the background worker is killed,
+// it's the same effect as lockWallet is called.
+// eslint-disable-next-line no-restricted-globals
 let autoLockTimer: ReturnType<typeof setTimeout> | undefined
 
-export async function setAutoLockTimer() {
-    const autoLockDuration = await getAutoLockerDuration()
+export async function setAutoLockTimer(initialTimeout = 0) {
+    if (typeof initialTimeout !== 'number' || Number.isNaN(initialTimeout)) initialTimeout = 0
+    const autoLockDuration = (await getAutoLockerDuration()) - initialTimeout
 
     clearTimeout(autoLockTimer)
 
     if (autoLockDuration <= 0) return
 
-    autoLockTimer = setTimeout(async () => {
-        await lockWallet()
-    }, autoLockDuration)
+    // eslint-disable-next-line no-restricted-globals
+    autoLockTimer = setTimeout(lockWallet, autoLockDuration)
 }

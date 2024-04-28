@@ -10,6 +10,6 @@ export function calculateHash(input: string) {
 
 export function generateContactAvatarColor(input: string, theme: 'light' | 'dark') {
     const hash = calculateHash(input)
-    const values = [Math.abs(hash), theme === 'dark' ? '78%' : '98%', theme === 'dark' ? '50%' : '70%']
+    const values = [Math.abs(hash), theme === 'dark' ? '78%' : '98%', theme === 'dark' ? '50%' : '70%', '0.5']
     return `hsl(${values.join(', ')})`
 }

@@ -16,11 +16,12 @@ export class ChainResolver<ChainId, SchemaType, NetworkType> {
      * Guess chain id by name, it's not perfectly accurate
      */
     chainId(name: string) {
+        if (!name) return
         return this.descriptors().find((x) =>
             [x.name, x.type as string, x.fullName, x.shortName]
                 .map((x) => x?.toLowerCase())
                 .filter(Boolean)
-                .includes(name?.toLowerCase()),
+                .includes(name.toLowerCase()),
         )?.chainId
     }
     chainName(chainId: ChainId) {
@@ -33,13 +34,22 @@ export class ChainResolver<ChainId, SchemaType, NetworkType> {
         return this.getDescriptor(chainId)?.color ?? 'rgb(138, 138, 138)'
     }
     networkType(chainId: ChainId) {
-        return this.getDescriptorRequired(chainId)?.type
+        return this.getDescriptorRequired(chainId).type
     }
     explorerUrl(chainId: ChainId) {
-        return this.getDescriptorRequired(chainId)?.explorerUrl
+        return this.getDescriptorRequired(chainId).explorerUrl
     }
     nativeCurrency(chainId: ChainId) {
-        return this.getDescriptorRequired(chainId)?.nativeCurrency
+        return this.getDescriptorRequired(chainId).nativeCurrency
+    }
+    defaultGasLimit(chainId: ChainId) {
+        return this.getDescriptorRequired(chainId)?.defaultGasLimit
+    }
+    minGasLimit(chainId: ChainId) {
+        return this.getDescriptorRequired(chainId)?.minGasLimit
+    }
+    maxGasLimit(chainId: ChainId) {
+        return this.getDescriptorRequired(chainId)?.maxGasLimit
     }
     isValidChainId(chainId: ChainId, testnet = false) {
         return this.getDescriptor(chainId)?.network === 'mainnet' || testnet

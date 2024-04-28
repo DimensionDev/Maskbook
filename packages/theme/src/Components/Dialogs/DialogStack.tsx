@@ -40,7 +40,7 @@ DialogHierarchyContext.displayName = 'DialogHierarchyContext'
  *     return <TrackDialogHierarchy>
  *         <button onClick={() => setOpen(true)}></button>
  *         <Dialog open={open} {...extraProps}>
- *             You MUST hide Close button and and BackButton based on the value of `shouldReplaceExitWithBack`
+ *             You MUST hide Close button and BackButton based on the value of `shouldReplaceExitWithBack`
  *         </Dialog>
  *     </TrackDialogHierarchy>
  * }

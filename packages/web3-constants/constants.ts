@@ -1,6 +1,6 @@
-import { promises as fs } from 'fs'
-import { resolve, join } from 'path'
-import { run } from '@masknet/web3-contracts/utils'
+import { promises as fs } from 'node:fs'
+import { resolve, join } from 'node:path'
+import { shell, awaitChildProcess } from '../scripts/src/utils/index.ts'
 
 type Primitive = string | number | boolean
 
@@ -55,7 +55,7 @@ async function processConstants(
     }
 
     // Run the prettier tool after processing
-    run(undefined, 'npx', 'prettier', '--write', folderPath)
+    await awaitChildProcess(shell`npx prettier --write ${folderPath}`)
 }
 
 // Action to compress constants

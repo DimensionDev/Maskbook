@@ -213,9 +213,9 @@ export function SelectGasSettingsToolbarUI({
         if (!settings?.transaction) return
 
         setGasConfigCallback(
-            (settings?.transaction as Transaction).maxFeePerGas!,
-            (settings?.transaction as Transaction).maxPriorityFeePerGas!,
-            (settings?.transaction as Transaction).gasPrice!,
+            (settings.transaction as Transaction).maxFeePerGas!,
+            (settings.transaction as Transaction).maxPriorityFeePerGas!,
+            (settings.transaction as Transaction).gasPrice!,
         )
     }, [chainId, gasOption, setGasConfigCallback, onOpenCustomSetting])
 
@@ -318,7 +318,7 @@ export function SelectGasSettingsToolbarUI({
         if (!currencyToken || !currencyTokenPrice) return '$0'
 
         return formatCurrency(
-            new BigNumber(formatBalance(gasFee, currencyToken?.decimals)).times(currencyTokenPrice),
+            new BigNumber(formatBalance(gasFee, currencyToken.decimals)).times(currencyTokenPrice),
             'USD',
             { onlyRemainTwoOrZeroDecimal: true },
         )

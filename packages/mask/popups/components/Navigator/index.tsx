@@ -1,4 +1,3 @@
-/// <reference types="react/canary" />
 import { memo } from 'react'
 import { NavLink, type LinkProps } from 'react-router-dom'
 import { BottomNavigationAction, Box, type BoxProps } from '@mui/material'

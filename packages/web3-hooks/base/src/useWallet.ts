@@ -13,6 +13,6 @@ export function useWallet() {
     const wallets = useWallets()
 
     return useMemo(() => {
-        return account ? wallets.find((x) => isSameAddress?.(x.address, account)) ?? null : null
+        return account ? wallets.find((x) => isSameAddress(x.address, account)) ?? null : null
     }, [account, wallets])
 }

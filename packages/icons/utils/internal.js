@@ -60,6 +60,15 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             // To align icon center.
             fontSize: 0,
         }
+        // background image can't be correctly resolved on Firefly in ShadowDOM.
+        // This is a workaround.
+        // https://mask.atlassian.net/browse/FW-564
+        if (iconStyle.backgroundImage && navigator.userAgent.includes('Firefox')) {
+            iconProps.style = {
+                ...iconProps.style,
+                backgroundImage: iconStyle.backgroundImage,
+            }
+        }
         if (hasClickHandler) {
             iconProps['aria-hidden'] = false
             iconProps['role'] = 'button'

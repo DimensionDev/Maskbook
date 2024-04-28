@@ -1,4 +1,4 @@
-/// <reference path="./blocto-fcl.d.ts" />
+/// <reference path="./blocto-fcl.d.ts" preserve="true" />
 /// <reference types="@masknet/global-types/webpack" />
 
 import type { MutateOptions, BlockObject, TransactionObject, QueryOptions, BlockHeaderObject } from '@blocto/fcl'

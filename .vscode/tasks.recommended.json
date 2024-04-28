@@ -26,7 +26,7 @@
         },
         {
             "type": "npm",
-            "script": "start",
+            "script": "start:mv3",
             "isBackground": true,
             "group": "build",
             "label": "Develop main extension",

@@ -323,6 +323,7 @@ function setEditorPreference() {
 }
 function getLocalStorage<T = string>(key: string, defaultValue?: T | undefined): T | undefined {
     try {
+        // eslint-disable-next-line no-restricted-globals
         const item = localStorage.getItem(key)
         if (item === null) return defaultValue
         return JSON.parse(item)
@@ -332,11 +333,13 @@ function getLocalStorage<T = string>(key: string, defaultValue?: T | undefined):
 }
 function setLocalStorage(key: string, value: string) {
     try {
+        // eslint-disable-next-line no-restricted-globals
         localStorage.setItem(key, value)
     } catch {}
 }
 function removeLocalStorage(key: string) {
     try {
+        // eslint-disable-next-line no-restricted-globals
         localStorage.removeItem(key)
     } catch {}
 }

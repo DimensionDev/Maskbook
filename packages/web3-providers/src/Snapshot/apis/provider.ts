@@ -71,7 +71,7 @@ export class Snapshot {
 
             return {
                 ...proposal,
-                strategyName: validStrategy?.params.symbol ?? strategyName ?? proposal.space?.name,
+                strategyName: validStrategy?.params.symbol ?? strategyName ?? proposal.space.name,
                 choicesWithScore,
             }
         })

@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TransactionPreviewProps {
-    transaction?: TransactionDetail
+    transaction: TransactionDetail
     paymentToken?: string
     onConfigChange: (config: GasConfig) => void
     onPaymentTokenChange: (paymentToken: string) => void
@@ -88,7 +88,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const contacts = useContacts()
     const Utils = useWeb3Utils()
     const { title, to, tokenAddress, amount } = useMemo(() => {
-        const type = transaction?.formattedTransaction?.type
+        const type = transaction.formattedTransaction?.type
 
         if (!type) return {}
 
@@ -113,6 +113,10 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 }
 
             case TransactionDescriptorType.DEPLOYMENT:
+                console.log(transaction)
+                return {
+                    title: t.wallet_transfer_deploy(),
+                }
             case TransactionDescriptorType.RETRY:
             case TransactionDescriptorType.CANCEL:
                 throw new Error('Method not implemented.')
@@ -121,7 +125,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         }
     }, [transaction])
 
-    const tokenId = transaction?.formattedTransaction?.popup?.tokenId
+    const tokenId = transaction.formattedTransaction?.popup?.tokenId
 
     const { data: metadata } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
@@ -145,13 +149,14 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         :   '0'
 
     const initConfig = useMemo(() => {
-        if (!transaction?.computedPayload) return
         if (isSupport1559) {
             if (transaction.computedPayload.maxFeePerGas && transaction.computedPayload.maxPriorityFeePerGas)
                 return {
+                    gas: transaction.gas || transaction.computedPayload.gas,
                     gasOptionType: transaction.gasOptionType,
-                    maxFeePerGas: transaction.computedPayload.maxFeePerGas,
-                    maxPriorityFeePerGas: transaction.computedPayload.maxPriorityFeePerGas,
+                    maxFeePerGas: transaction.maxFeePerGas || transaction.computedPayload.maxFeePerGas,
+                    maxPriorityFeePerGas:
+                        transaction.maxPriorityFeePerGas || transaction.computedPayload.maxPriorityFeePerGas,
                 }
             return
         }
@@ -159,18 +164,17 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
         if (!transaction.computedPayload.gasPrice) return
 
         return {
-            gasPrice: transaction.computedPayload.gasPrice,
+            gas: transaction.gas || transaction.computedPayload.gas,
+            gasPrice: transaction.gasPrice || transaction.computedPayload.gasPrice,
             gasOptionType: transaction.gasOptionType,
         }
-    }, [transaction?.computedPayload, transaction?.gasOptionType, isSupport1559])
+    }, [transaction.computedPayload, transaction.gasOptionType, isSupport1559])
 
     const receiver = useMemo(() => {
         if (domain) return Utils.formatDomainName(domain)
         const target = contacts.find((x) => isSameAddress(x.address, to))
         return target?.name
     }, [domain, to, contacts])
-
-    if (!transaction) return
 
     return (
         <Box>
@@ -181,12 +185,14 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                         <Typography className={classes.title}>{receiver}</Typography>
                     :   null}
                 </Box>
-                <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
-                    <Typography className={classes.addressTitle}>{t.to()}:</Typography>
-                    <Typography fontSize={11} fontWeight={700} lineHeight="16px">
-                        {to}
-                    </Typography>
-                </Box>
+                {to ?
+                    <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
+                        <Typography className={classes.addressTitle}>{t.to()}:</Typography>
+                        <Typography fontSize={11} fontWeight={700} lineHeight="16px">
+                            {to}
+                        </Typography>
+                    </Box>
+                :   null}
             </Box>
 
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
@@ -228,17 +234,15 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             </Box>
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
                 <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
-                {transaction.computedPayload.gas && !!initConfig ?
-                    <GasSettingMenu
-                        minimumGas={transaction.computedPayload.gas}
-                        initConfig={initConfig}
-                        onChange={onConfigChange}
-                        paymentToken={paymentToken}
-                        allowMaskAsGas={transaction.allowMaskAsGas}
-                        owner={transaction.owner}
-                        onPaymentTokenChange={onPaymentTokenChange}
-                    />
-                :   null}
+                <GasSettingMenu
+                    defaultGasLimit={transaction.computedPayload.gas}
+                    defaultGasConfig={initConfig}
+                    onChange={onConfigChange}
+                    paymentToken={paymentToken}
+                    allowMaskAsGas={transaction.allowMaskAsGas}
+                    owner={transaction.owner}
+                    onPaymentTokenChange={onPaymentTokenChange}
+                />
             </Box>
         </Box>
     )
