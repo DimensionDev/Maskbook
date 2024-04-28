@@ -133,7 +133,7 @@ function resolveCurrentVisitingIdentityInner(
 
         const handle = user.screenName
         const ownerHandle = ownerRef.value.identifier?.userId
-        const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
+        const isOwner = !!ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase()
         const avatar = user.avatarURL
         const bio = user.bio
         const homepage = user.homepage

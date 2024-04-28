@@ -47,7 +47,7 @@ class AvatarStoreProvider extends StoreProvider<Store> implements StoreAPI.Provi
                 if (!address) return null
 
                 const avatar =
-                    siteType === EnhanceableSite.Twitter && avatarId && publicKey ?
+                    siteType === EnhanceableSite.Twitter && avatarId ?
                         await getPersonaAvatar(siteType, userId, avatarId, publicKey)
                     :   await getAvatar(siteType, userId)
                 if (!avatar) return null
@@ -75,3 +75,4 @@ class AvatarStoreProvider extends StoreProvider<Store> implements StoreAPI.Provi
 }
 
 export const AvatarStore = new AvatarStoreProvider()
+export { getAvatarFromStorage, setAvatarToStorage } from './helpers/storage.js'

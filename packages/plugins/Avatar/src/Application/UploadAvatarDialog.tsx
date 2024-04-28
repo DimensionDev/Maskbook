@@ -47,8 +47,7 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
         const media = await Twitter.uploadMedia(blob)
         const data = await Twitter.updateProfileImage(userId, media.media_id_string)
         if (!data) return
-        const avatarId = Twitter.getAvatarId(data?.imageUrl ?? '')
-        return { ...data, avatarId }
+        return { ...data, avatarId: media.media_id_string }
     } catch (err) {
         return
     }
@@ -68,7 +67,7 @@ export function UploadAvatarDialog() {
     const [disabled, setDisabled] = useState(false)
     const { currentPersona } = usePersonaConnectStatus()
     const identity = useLastRecognizedIdentity()
-    const [, saveAvatar] = useSave(currentPluginID)
+    const saveAvatar = useSave(currentPluginID)
     const navigate = useNavigate()
 
     const onSave = useCallback(async () => {

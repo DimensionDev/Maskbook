@@ -41,7 +41,7 @@ export async function getAvatarFromNextID<T extends NetworkPluginID>(
     siteType: EnhanceableSite,
     userId: string,
     avatarId: string,
-    persona: string,
+    persona?: string,
 ): Promise<AvatarNextID<T> | undefined> {
     const platform = siteType === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
     if (!platform) return
@@ -49,7 +49,7 @@ export async function getAvatarFromNextID<T extends NetworkPluginID>(
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
     if (persona) {
-        const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
+        const binding = bindings.find((x) => x.persona.toLowerCase() === persona.toLowerCase())
         if (binding) return getAvatarFromNextIDStorage<T>(platform, userId, avatarId, binding.persona)
     }
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
