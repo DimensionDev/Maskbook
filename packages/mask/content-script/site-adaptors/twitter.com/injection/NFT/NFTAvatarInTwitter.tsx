@@ -99,10 +99,10 @@ function useNFTCircleAvatar(size: number) {
         AvatarStore.dispatch(userId, identityAvatarId)
     }, [userId, identityAvatarId])
 
-    const showAvatar = identityAvatarId === avatar?.avatarId
+    const showAvatar = avatar?.avatarId ? identityAvatarId === avatar.avatarId : false
 
     return {
-        showAvatar: Boolean(size && avatar && showAvatar && token),
+        showAvatar: Boolean(size && showAvatar && token),
         avatar,
         token,
     }
