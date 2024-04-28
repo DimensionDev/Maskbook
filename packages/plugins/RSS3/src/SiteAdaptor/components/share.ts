@@ -210,18 +210,3 @@ export function formatTimestamp(timestamp: string): string {
     const mins = Math.floor(distance / ONE_MIN)
     return plural(mins, 'min')
 }
-
-/**
- * @deprecated
- */
-export function transformPlanetResource(markdown: string, base: string) {
-    return markdown
-        .replaceAll(/(<img [^>]*)\bsrc=("|')([^"']*)\2([^>]*>)/gi, (match, before, quotation, url, after) => {
-            if (url.match(/^https?:\/\//)) return match
-            return `${before}src=${quotation}https://thumbor.rss3.dev/unsafe/${base}/${url}${quotation}${after}`
-        })
-        .replaceAll(/(!\[.*?])\((.*?)\)/g, (match, head, url) => {
-            if (url.match(/^https?:\/\//)) return match
-            return `${head}(https://thumbor.rss3.dev/unsafe/${base}/${url})`
-        })
-}

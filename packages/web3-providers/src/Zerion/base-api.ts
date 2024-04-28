@@ -9,10 +9,8 @@ import {
     SocketRequestType,
     type SocketResponseBody,
     type ZerionAssetResponseBody,
-    type ZerionCoinResponseBody,
     type ZerionTransactionResponseBody,
     type ZerionNonFungibleTokenResponseBody,
-    type ZerionNonFungibleTokenInfoBody,
     type ZerionGasResponseBody,
 } from './types.js'
 import { delay } from '@masknet/kit'
@@ -99,23 +97,6 @@ export async function getAssetsList(address: string, scope: string) {
     )) as ZerionAssetResponseBody
 }
 
-export async function getCoinsByKeyword(keyword: string) {
-    return (await subscribeFromZerion(
-        {
-            namespace: SocketRequestNameSpace.Assets,
-            socket: createSocket(SocketRequestNameSpace.Assets),
-        },
-        {
-            scope: ['info'],
-            payload: {
-                search_query: keyword,
-                offset: 0,
-                limit: 100,
-            },
-        },
-    )) as ZerionCoinResponseBody
-}
-
 export async function getTransactionList(address: string, scope: string, page?: number, size = 30) {
     return (await subscribeFromZerion(
         {
@@ -173,20 +154,6 @@ export async function getNonFungibleAssets(address: string, page?: number, size 
         delay(5_000),
     ])
 }
-
-export async function getNonFungibleInfo(address: string, tokenId: string) {
-    return (await subscribeFromZerion(
-        { namespace: SocketRequestNameSpace.Assets, socket: createSocket(SocketRequestNameSpace.Assets) },
-        {
-            scope: ['nft-info'],
-            payload: {
-                asset_code: `${address}:${tokenId}`,
-                currency: 'eth',
-            },
-        },
-    )) as ZerionNonFungibleTokenInfoBody
-}
-
 export async function getGasOptions(chainId: ChainId) {
     const response = (await subscribeFromZerion(
         {

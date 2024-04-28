@@ -46,7 +46,7 @@
     "@types/react-dom": "^18.2.18",
     "@typescript/lib-dom": "npm:@types/web@^0.0.143",
     "i18next": "^23.2.11",
-    "knip": "^2.33.3",
+    "knip": "^5.11.0",
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-8039e6d0b-20231026",
     "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
