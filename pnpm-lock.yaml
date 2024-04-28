@@ -697,6 +697,9 @@ importers:
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
+      url:
+        specifier: ^0.11.3
+        version: 0.11.3
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -26402,6 +26405,13 @@ packages:
     resolution: {integrity: sha512-3AChu4NiXquPfeckE5R5cGdiHCMWJx1dwCWOmWIL4KHAziJNOFIYJlpGFeKDvwLPHovZRCxK3cYlwzqI9Vp+Gg==}
     dev: false
 
+  /url@0.11.3:
+    resolution: {integrity: sha512-6hxOLGfZASQK/cijlZnZJTq8OXAkt/3YGfQX45vvMYXpZoo8NdWZcY73K108Jf759lS1Bv/8wXnHDTSz17dSRw==}
+    dependencies:
+      punycode: 1.4.1
+      qs: 6.11.2
+    dev: false
+
   /urlcat@3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e):
     resolution: {integrity: sha512-qY6b94/aGMIHh70EEQ/4hfR2LUGZ+fPQNp64cf7yRX9kAp4XG2tx7LgYUU1Qkh17bFylME0u4n3lOezonougPw==}
     dependencies:
@@ -28206,4 +28216,5 @@ time:
   /ts-results-es@4.0.0: '2023-08-08T10:13:15.427Z'
   /typescript-eslint@7.1.1: '2024-03-04T17:18:57.715Z'
   /typescript@5.5.0-beta: '2024-04-25T19:03:19.484Z'
+  /url@0.11.3: '2023-09-14T22:38:37.401Z'
   /web3-utils@1.10.2: '2023-08-28T12:56:10.815Z'
