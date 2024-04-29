@@ -108,7 +108,11 @@ export const SocialAccountList = memo(function SocialAccountList({
                 ...farcasterAccounts.map(FireflyFarcasterToNextIdFarcaster),
                 ...nextIdBindings,
             ],
-            (x) => `${x.platform}.${x.identity}`,
+            (x) => {
+                const identity = x.platform === NextIDPlatform.LENS ? x.identity.replace('.lens', '') : x.identity
+
+                return `${x.platform}.${identity}`
+            },
         )
         const priorities = [NextIDPlatform.ENS, NextIDPlatform.Farcaster, NextIDPlatform.LENS]
         return merged.sort((a, z) => {
