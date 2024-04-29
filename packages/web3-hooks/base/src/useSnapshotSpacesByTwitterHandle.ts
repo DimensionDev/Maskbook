@@ -1,7 +1,6 @@
 import { SnapshotSearch } from '@masknet/web3-providers'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useSnapshotSpacesByTwitterHandle(handle: string) {
     return useQuery({
         queryKey: ['snapshot-spaces', 'by-twitter-handle', handle],

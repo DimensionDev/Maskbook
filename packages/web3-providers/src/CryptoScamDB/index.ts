@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import type { ScalableBloomFilter } from 'bloom-filters'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import type { ScamWarningAPI } from '../entry-types.js'
+import { isNonNull } from '@masknet/kit'
 
 const BASE_URL = 'https://scam.mask.r2d2.to/cryptoscam-db'
 
@@ -55,7 +56,8 @@ export class CryptoScamDB {
             .map((x) => this.getScamWarning(x))
         const result = await Promise.allSettled(requests)
         return result
-            .map((x) => (x.status === 'fulfilled' ? x.value : undefined))
-            .filter((x): x is ScamWarningAPI.Info => !!x)
+            .filter((x) => x.status === 'fulfilled')
+            .map((x) => x.value)
+            .filter(isNonNull)
     }
 }

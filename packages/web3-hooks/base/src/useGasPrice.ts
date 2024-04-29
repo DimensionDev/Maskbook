@@ -4,9 +4,7 @@ import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { useWeb3Connection } from './useWeb3Connection.js'
 import { useGasOption } from './useGasOption.js'
 import { useQuery } from '@tanstack/react-query'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useGasPrice<T extends NetworkPluginID = NetworkPluginID>(pluginID: T, options: ConnectionOptions<T>) {
     const Web3 = useWeb3Connection(pluginID, options)
     const gasOption = useGasOption(pluginID, GasOptionType.NORMAL, options)

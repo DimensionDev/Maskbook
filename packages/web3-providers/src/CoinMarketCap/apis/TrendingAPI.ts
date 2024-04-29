@@ -9,7 +9,7 @@ import { getCommunityLink, isMirroredKeyword } from '../../Trending/helpers.js'
 import type { TrendingAPI } from '../../entry-types.js'
 
 // #regin get quote info
-export async function getQuotesInfo(id: string, currency: string) {
+async function getQuotesInfo(id: string, currency: string) {
     const params = new URLSearchParams()
     params.append('id', id)
     params.append('convert', currency)
@@ -30,7 +30,7 @@ export async function getQuotesInfo(id: string, currency: string) {
 // #endregion
 
 // #region get coin info
-export async function getCoinInfo(id: string) {
+async function getCoinInfo(id: string) {
     const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
     params.append('id', id)
 
@@ -50,7 +50,7 @@ export async function getCoinInfo(id: string) {
 
 // #region latest market pairs
 
-export async function getLatestMarketPairs(id: string, currency: string) {
+async function getLatestMarketPairs(id: string, currency: string) {
     const params = new URLSearchParams(
         'aux=num_market_pairs,market_url,price_quote,effective_liquidity,market_score,market_reputation&limit=40&sort=cmc_rank&start=1',
     )

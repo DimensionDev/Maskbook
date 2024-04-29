@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.1",
     "@types/gulp": "^4.0.13",
-    "@types/node": "20.11.9",
+    "@types/node": "20.12.7",
     "@types/proper-lockfile": "^4.1.2",
     "@types/yargs": "^17.0.24",
     "gulp-cli": "^2.3.0",

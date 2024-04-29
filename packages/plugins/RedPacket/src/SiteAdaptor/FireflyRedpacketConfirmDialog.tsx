@@ -126,7 +126,7 @@ export function FireflyRedpacketConfirmDialog({
     onCreated,
     onClose,
 }: FireflyRedpacketConfirmDialogProps) {
-    const { currentFarcasterProfile, currentLensProfile } = fireflyContext || {}
+    const { currentFarcasterProfile, currentLensProfile, currentTwitterProfile } = fireflyContext || {}
     const t = useRedPacketTrans()
     const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: ensName } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account, true)
@@ -137,9 +137,8 @@ export function FireflyRedpacketConfirmDialog({
         true,
     )
     const { classes, theme } = useStyles()
-    const [currentAccount, setCurrentAccount] = useState(
-        currentLensProfile?.handle || currentFarcasterProfile?.handle || ensName || account,
-    )
+    const snsHandle = currentLensProfile?.handle || currentFarcasterProfile?.handle || currentTwitterProfile?.handle
+    const [currentAccount, setCurrentAccount] = useState(snsHandle || ensName || account)
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -173,7 +172,7 @@ export function FireflyRedpacketConfirmDialog({
     const isLatest = urls?.length && currentIndex === urls.length - 1
 
     const accounts = useMemo(() => {
-        const { currentFarcasterProfile, currentLensProfile } = fireflyContext
+        const { currentFarcasterProfile, currentLensProfile, currentTwitterProfile } = fireflyContext
         return uniqBy(
             compact([
                 currentLensProfile ?
@@ -184,6 +183,9 @@ export function FireflyRedpacketConfirmDialog({
                 :   undefined,
                 currentLensProfile?.ownedBy ?
                     { icon: <Icons.MaskWallet size={24} />, displayName: lensOwnerENS || currentLensProfile.address }
+                :   undefined,
+                currentTwitterProfile ?
+                    { icon: <Icons.TwitterXRound size={24} />, displayName: currentTwitterProfile.handle }
                 :   undefined,
                 currentFarcasterProfile?.ownedBy ?
                     {
@@ -226,6 +228,12 @@ export function FireflyRedpacketConfirmDialog({
                                         profileId: currentFarcasterProfile.profileId,
                                     }
                                 :   undefined,
+                                currentTwitterProfile ?
+                                    {
+                                        platform: FireflyRedPacketAPI.PlatformType.twitter,
+                                        profileId: currentTwitterProfile.profileId,
+                                    }
+                                :   undefined,
                             ]),
                         }
                     :   undefined,
@@ -264,7 +272,15 @@ export function FireflyRedpacketConfirmDialog({
             publicKey: await FireflyRedPacket.createPublicKey(state.themeId, currentAccount, payload),
             claimRequirements: payload,
         }
-    }, [state?.themeId, currentLensProfile, currentFarcasterProfile, fireflySettings, chainId, currentAccount])
+    }, [
+        state?.themeId,
+        currentLensProfile,
+        currentFarcasterProfile,
+        currentTwitterProfile,
+        fireflySettings,
+        chainId,
+        currentAccount,
+    ])
 
     const { createRedpacket, isCreating } = useCreateFTRedpacketCallback(
         value?.publicKey ?? '',

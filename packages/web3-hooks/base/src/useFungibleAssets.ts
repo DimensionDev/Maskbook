@@ -19,9 +19,7 @@ import { useWeb3Hub } from './useWeb3Hub.js'
 import { useWeb3Utils } from './useWeb3Utils.js'
 import { useWeb3State } from './useWeb3State.js'
 import { useNetworks } from './useNetworks.js'
-import type { UseQueryResult } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
