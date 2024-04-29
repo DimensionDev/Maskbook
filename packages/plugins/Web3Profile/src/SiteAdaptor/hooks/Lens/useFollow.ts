@@ -137,7 +137,12 @@ export function useFollow(
                                 throw new Error('Failed to follow')
                             }
                         }
-                    } catch {
+                    } catch (error) {
+                        if (error instanceof Error)
+                            showSingletonSnackbar(error.message, {
+                                processing: false,
+                                variant: 'error',
+                            })
                         broadcastAction(cloneEvent)
                     }
                 } else {

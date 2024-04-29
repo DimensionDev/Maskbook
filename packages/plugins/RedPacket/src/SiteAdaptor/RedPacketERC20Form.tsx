@@ -182,10 +182,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
     useUpdateEffect(() => {
-        setToken(EVMChainResolver.nativeCurrency(chainId))
-    }, [chainId])
-
-    useUpdateEffect(() => {
         setRawAmount('')
     }, [token])
 

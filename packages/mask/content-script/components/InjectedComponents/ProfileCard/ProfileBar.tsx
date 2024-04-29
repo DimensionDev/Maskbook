@@ -157,12 +157,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         },
                     }}
                 />
-                <AvatarDecoration
-                    className={classes.avatarDecoration}
-                    clipPathId={avatarClipPathId}
-                    userId={identity.identifier?.userId}
-                    size={40}
-                />
+                <AvatarDecoration className={classes.avatarDecoration} userId={identity.identifier?.userId} size={40} />
             </div>
             <Box className={classes.description}>
                 <Typography className={classes.nickname} title={identity.nickname}>

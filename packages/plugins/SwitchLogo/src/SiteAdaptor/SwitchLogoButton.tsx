@@ -73,8 +73,9 @@ export function SwitchLogoButton() {
         const node = LogoSelector.evaluate()
         if (!node) return
 
-        node.parentElement?.style.setProperty('position', 'relative')
-
+        if (node.parentElement?.style.position !== 'relative') {
+            node.parentElement?.style.setProperty('position', 'relative')
+        }
         if (logoType === SwitchLogoType.Classics && !isMinimalMode) {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = BlueBirdHTML
@@ -82,7 +83,7 @@ export function SwitchLogoButton() {
             // eslint-disable-next-line @masknet/browser-no-set-html
             node.innerHTML = LetterHTML || defaultXIcon
         }
-    }, [logoType, isMinimalMode, theme.palette.mode])
+    }, [logoType, isMinimalMode, theme.palette.mode, theme.palette.primary.main])
 
     const onClick = useCallback(() => {
         if (isMinimalMode) return

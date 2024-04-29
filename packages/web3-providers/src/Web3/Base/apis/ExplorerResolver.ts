@@ -81,6 +81,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
     nonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
         const explorerUrl = this.getExplorerURL(chainId)
         if (!explorerUrl.url) return
+
         return urlcat(explorerUrl.url, this.options.nonFungibleTokenPathname, {
             address,
             tokenId,

@@ -175,7 +175,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                             </ListItemIcon>
                             <ListItemText
                                 classes={{ primary: classes.primary, root: classes.listItemText }}
-                                primary={profile.metadata?.displayName}
+                                primary={profile.metadata?.displayName ?? profile.handle?.localName}
                                 secondary={
                                     <div className={classes.second}>
                                         <Typography component="div" className={classes.address}>

@@ -8,9 +8,8 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { querySelectorAll } from '../../utils/selector.js'
 
 function getTwitterId(ele: HTMLElement) {
-    const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
-    if (!profileLink) return
-    return profileLink.getAttribute('href')?.slice(1)
+    const profileLink = ele.querySelector<HTMLAnchorElement>('a[role="link"]')
+    return profileLink?.getAttribute('href')?.slice(1)
 }
 
 function inpageAvatarSelector() {

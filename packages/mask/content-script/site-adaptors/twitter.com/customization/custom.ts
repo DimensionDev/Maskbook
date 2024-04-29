@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { produce, setAutoFreeze } from 'immer'
 import { type Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { fromRGB, shade, toRGB } from '@masknet/plugin-infra/content-script'
-import { isMobileTwitter } from '../utils/isMobile.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 
 export function useThemeTwitterVariant(baseTheme: Theme) {
@@ -25,7 +24,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 dark: toRGB(shade(primaryColorRGB, -10)),
                 contrastText: toRGB(primaryContrastColorRGB),
             }
-            theme.shape.borderRadius = isMobileTwitter ? 0 : 15
+            theme.shape.borderRadius = 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
 

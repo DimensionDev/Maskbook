@@ -4,12 +4,10 @@ import { makeStyles } from '@masknet/theme'
 import { NFTAvatar, toPNG } from '@masknet/plugin-avatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import type { SelectTokenInfo } from '@masknet/plugin-avatar'
-import { MaskMessages, NetworkPluginID, InMemoryStorages } from '@masknet/shared-base'
+import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     searchFacebookAvatarListSelector,
-    searchFacebookAvatarMobileListSelector,
-    searchFacebookAvatarOpenFilesOnMobileSelector,
     searchFacebookAvatarOpenFilesSelector,
     searchFacebookConfirmAvatarImageSelector,
     searchFacebookSaveAvatarButtonSelector,
@@ -18,36 +16,29 @@ import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/rend
 import { startWatch } from '../../../../utils/startWatch.js'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
-import { isMobileFacebook } from '../../utils/isMobile.js'
 
-export async function injectProfileNFTAvatarInFaceBook(signal: AbortSignal) {
-    if (!isMobileFacebook) {
-        // The first step in setting an avatar
-        const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
-        startWatch(watcher, signal)
-        attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-            <NFTAvatarInFacebookFirstStep />,
-        )
-
-        // The second step in setting an avatar
-        const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
-            (node, key, proxy) => {
-                const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
-                root.render(<NFTAvatarInFacebookSecondStep />)
-                return () => root.destroy()
-            },
-        )
-
-        startWatch(saveButtonWatcher, signal)
-    }
-    const watcher = new MutationObserverWatcher(searchFacebookAvatarMobileListSelector())
+export async function injectProfileNFTAvatarInFacebook(signal: AbortSignal) {
+    // The first step in setting an avatar
+    const watcher = new MutationObserverWatcher(searchFacebookAvatarListSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <NFTAvatarListInFaceBookMobile />,
+        <NFTAvatarInFacebookFirstStep />,
     )
+
+    // The second step in setting an avatar
+    const saveButtonWatcher = new MutationObserverWatcher(searchFacebookSaveAvatarButtonSelector()).useForeach(
+        (node, key, proxy) => {
+            const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
+            root.render(<NFTAvatarInFacebookSecondStep />)
+            return () => root.destroy()
+        },
+    )
+
+    startWatch(saveButtonWatcher, signal)
 }
 
 const useStyles = makeStyles()({
+    // eslint-disable-next-line tss-unused-classes/unused-classes
     root: {
         padding: '8px 0',
         margin: '0 16px',
@@ -67,10 +58,11 @@ function NFTAvatarInFacebookFirstStep() {
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
+            if (!identity.identifier) return
             if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
+
             const image = await toPNG(info.token.metadata.imageURL)
             if (!image) return
-            if (!identity.identifier) return
 
             await changeImageToActiveElements(image)
 
@@ -94,6 +86,7 @@ function NFTAvatarInFacebookSecondStep() {
     useEffect(() => {
         const save = searchFacebookSaveAvatarButtonSelector().evaluate().at(0)
         if (!save) return
+
         const handler = () => {
             const image = searchFacebookConfirmAvatarImageSelector().evaluate()
             if (!image) return
@@ -102,6 +95,7 @@ function NFTAvatarInFacebookSecondStep() {
             if (!imageURL) return
 
             const avatarId = getAvatarId(imageURL)
+
             if (avatarId) {
                 MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                     userId: '',
@@ -117,56 +111,4 @@ function NFTAvatarInFacebookSecondStep() {
         return () => save.removeEventListener('click', handler)
     }, [])
     return null
-}
-
-async function changeImageToActiveElementsOnMobile(image: File | Blob): Promise<void> {
-    const imageBuffer = await image.arrayBuffer()
-
-    const input = searchFacebookAvatarOpenFilesOnMobileSelector().evaluate()
-
-    if (input) {
-        input.style.visibility = 'unset'
-        input.focus()
-        hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer), true)
-        input.style.visibility = 'hidden'
-
-        const file = new File([image], 'avatar.png', { type: 'image/png', lastModified: Date.now() })
-        const container = new DataTransfer()
-        container.items.add(file)
-        input.files = container.files
-    }
-}
-
-const useMobileStyles = makeStyles()({
-    root: {
-        backgroundColor: '#ffffff',
-    },
-})
-
-function NFTAvatarListInFaceBookMobile() {
-    const { classes } = useMobileStyles()
-    const identity = useCurrentVisitingIdentity()
-
-    const onChange = useCallback(
-        async (info: SelectTokenInfo) => {
-            if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
-            const image = await toPNG(info.token.metadata.imageURL)
-            if (!image) return
-
-            await changeImageToActiveElementsOnMobile(image)
-
-            identity.identifier &&
-                InMemoryStorages.FacebookNFTEventOnMobile.storage.userId.setValue(identity.identifier.userId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.address.setValue(info.token.contract?.address)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.tokenId.setValue(info.token.tokenId)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.pluginID.setValue(
-                info.pluginID ?? NetworkPluginID.PLUGIN_EVM,
-            )
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.chainId.setValue(info.token.chainId ?? ChainId.Mainnet)
-            InMemoryStorages.FacebookNFTEventOnMobile.storage.schema.setValue(info.token.schema ?? SchemaType.ERC721)
-        },
-        [identity],
-    )
-
-    return <NFTAvatar onChange={onChange} classes={{ root: classes.root }} />
 }

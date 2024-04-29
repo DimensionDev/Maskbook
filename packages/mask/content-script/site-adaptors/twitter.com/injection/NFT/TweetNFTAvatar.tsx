@@ -16,7 +16,6 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const userId = getUserId(ele)
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
@@ -24,13 +23,14 @@ function _(main: () => LiveSelector<HTMLElement>, signal: AbortSignal) {
                     afterShadowRootInit: Flags.shadowRootInit,
                 })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
+
                 const root = attachReactTreeWithContainer(proxy.afterShadow, { untilVisible: true, signal })
                 root.render(
                     <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 2 }}>
                         <MiniAvatarBorder
                             size={info.width}
                             screenName={
-                                userId ||
+                                getUserId(ele) ||
                                 activatedSiteAdaptorUI!.collecting.identityProvider?.recognized.value.identifier
                                     ?.userId ||
                                 ''

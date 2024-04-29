@@ -1,3 +1,4 @@
+import { first } from 'lodash-es'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
 import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { delay } from '@masknet/kit'
@@ -5,10 +6,8 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import type { SiteAdaptorUI } from '@masknet/types'
 import { Twitter } from '@masknet/web3-providers'
-import { first } from 'lodash-es'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { twitterBase } from '../base.js'
-import { isMobileTwitter } from '../utils/isMobile.js'
 import {
     searchSelfAvatarSelector,
     searchSelfHandleSelector,
@@ -134,7 +133,7 @@ function resolveCurrentVisitingIdentityInner(
 
         const handle = user.screenName
         const ownerHandle = ownerRef.value.identifier?.userId
-        const isOwner = !!(ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase())
+        const isOwner = !!ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase()
         const avatar = user.avatarURL
         const bio = user.bio
         const homepage = user.homepage
@@ -176,7 +175,6 @@ export const IdentityProviderTwitter: SiteAdaptorUI.CollectingCapabilities.Ident
     recognized: creator.EmptyIdentityResolveProviderState(),
     start(cancel) {
         resolveLastRecognizedIdentityInner(this.recognized, cancel)
-        if (isMobileTwitter) resolveLastRecognizedIdentityMobileInner(this.recognized, cancel)
     },
 }
 

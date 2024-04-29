@@ -1,9 +1,8 @@
 import urlcat from 'urlcat'
-import { getHeaders } from './getTokens.js'
-import { Duration, staleCached } from '../../helpers/fetchCached.js'
-import { Expiration } from '../../helpers/fetchSquashed.js'
-import { fetchCachedJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
+import { staleCached } from '../../helpers/fetchCached.js'
+import { fetchJSON } from '../../helpers/fetchJSON.js'
+import { getHeaders } from './getTokens.js'
 
 function createUser(response: TwitterBaseAPI.UserShowResponse): TwitterBaseAPI.User {
     return {
@@ -31,10 +30,7 @@ async function createRequest(screenName: string) {
 
 export async function getUserByScreenNameShow(screenName: string): Promise<TwitterBaseAPI.User | null> {
     const request = await createRequest(screenName)
-    const response = await fetchCachedJSON<TwitterBaseAPI.UserShowResponse>(request, undefined, {
-        cacheDuration: Duration.ONE_DAY,
-        squashExpiration: Expiration.ONE_SECOND,
-    })
+    const response = await fetchJSON<TwitterBaseAPI.UserShowResponse>(request, undefined)
     return createUser(response)
 }
 

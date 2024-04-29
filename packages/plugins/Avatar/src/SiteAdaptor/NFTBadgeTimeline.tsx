@@ -1,17 +1,13 @@
-import { useEffect, useState } from 'react'
-import { type AvatarMetaDB } from '../types.js'
+import { useEffect, useSyncExternalStore } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { AvatarStore } from '@masknet/web3-providers'
 import { RainbowBox } from './RainbowBox.js'
-import type { RSS3_KEY_SITE } from '../constants.js'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useCheckPersonaNFTAvatar } from '../index.js'
-import { MaskMessages } from '@masknet/shared-base'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
     width: number
     height: number
-    siteKey: RSS3_KEY_SITE
 }
 
 const useStyles = makeStyles()(() => ({
@@ -21,35 +17,15 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId, width, height, siteKey } = props
-    const { loading, value: _avatar } = useCheckPersonaNFTAvatar(userId, avatarId, '', siteKey)
-
-    const [avatar, setAvatar] = useState<AvatarMetaDB>()
-    const [avatarId_, setAvatarId_] = useState(avatarId)
+    const { userId, avatarId, width, height } = props
     const { classes } = useStyles(undefined, { props })
-
-    const onUpdate = (data: AvatarMetaDB) => {
-        if (!data.address || !data.tokenId) {
-            setAvatar(undefined)
-            return
-        }
-        setAvatar(data)
-        setAvatarId_(data.avatarId)
-    }
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
 
     useEffect(() => {
-        setAvatarId_(avatarId)
-    }, [avatarId])
+        AvatarStore.dispatch(userId, avatarId)
+    }, [userId, avatarId])
 
-    useEffect(() => {
-        setAvatar(_avatar)
-    }, [_avatar])
+    if (!store.retrieveAvatar(userId, avatarId)) return null
 
-    useEffect(() => MaskMessages.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
-
-    if (!avatar || !avatarId || avatar.avatarId !== avatarId_) return null
-
-    return loading ?
-            <LoadingBase size={width} />
-        :   <RainbowBox width={width} height={height} radius={'100%'} classes={{ root: classes.root }} />
+    return <RainbowBox width={width} height={height} radius={'100%'} classes={{ root: classes.root }} />
 }

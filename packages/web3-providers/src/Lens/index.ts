@@ -364,7 +364,7 @@ export class Lens {
             followModule = `followModule: { profileFollowModule: { profileId: "${options.followModule.profileFollowModule.profileId}" } }`
         }
 
-        const { data } = (await options.fetcher(LENS_ROOT_API, {
+        const { data, errors } = (await options.fetcher(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -386,8 +386,11 @@ export class Lens {
                     }
                 `,
             }),
-        })) as { data: { follow: LensBaseAPI.Broadcast } }
-
+        })) as { data: { follow: LensBaseAPI.Broadcast }; errors?: Array<{ message: string }> }
+        if (errors?.length) {
+            const message = first(errors)?.message
+            throw new Error(message || 'Something went wrong')
+        }
         return data.follow
     }
 
