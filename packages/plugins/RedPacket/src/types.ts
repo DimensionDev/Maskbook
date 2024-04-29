@@ -30,6 +30,7 @@ export type FireflySocialProfile = {
 export interface FireflyContext {
     currentLensProfile?: FireflySocialProfile | null
     currentFarcasterProfile?: FireflySocialProfile | null
+    currentTwitterProfile?: FireflySocialProfile | null
 }
 
 export enum FireflyAccountSource {
