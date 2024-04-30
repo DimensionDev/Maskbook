@@ -204,6 +204,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 /** JSON.stringify twice */
                 WEB3_CONSTANTS_RPC: WEB3_CONSTANTS_RPC,
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
+                MASK_SENTRY: process.env.MASK_SENTRY || JSON.stringify('disabled'),
+                MASK_MIXPANEL: process.env.MASK_MIXPANEL || JSON.stringify('disabled'),
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
             new DefinePlugin({
