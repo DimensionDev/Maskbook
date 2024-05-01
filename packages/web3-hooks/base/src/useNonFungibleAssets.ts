@@ -7,9 +7,7 @@ import { useBlockedNonFungibleTokens } from './useBlockedNonFungibleTokens.js'
 import { useChainContext } from './useContext.js'
 import { useNetworkDescriptors } from './useNetworkDescriptors.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
-import type { UseInfiniteQueryResult, InfiniteData } from '@tanstack/react-query'
 
-type T = [UseInfiniteQueryResult, InfiniteData<never>]
 /**
  * Blocked tokens would be filtered out
  */

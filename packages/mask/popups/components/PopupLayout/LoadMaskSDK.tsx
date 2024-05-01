@@ -1,4 +1,3 @@
-/// <reference types="react/canary" />
 import { Flags } from '@masknet/flags'
 import Services from '#services'
 import { Box, Link } from '@mui/material'

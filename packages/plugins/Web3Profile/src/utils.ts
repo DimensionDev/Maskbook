@@ -1,8 +1,8 @@
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import urlcat from 'urlcat'
 
-export function getLensterLink(handle: string) {
-    return urlcat('https://hey.xyz/u/:handle', { handle })
+export function getFireflyLensProfileLink(handle: string) {
+    return urlcat('https://firefly.mask.social/profile/:handle?source=lens', { handle })
 }
 
 export function getProfileAvatar(profile: LensBaseAPI.Profile | undefined) {

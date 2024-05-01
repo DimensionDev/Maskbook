@@ -1,23 +1,17 @@
 import { useCallback, useState } from 'react'
 import { useMount } from 'react-use'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
-import {
-    toPNG,
-    NFTAvatar,
-    type NextIDAvatarMeta,
-    type SelectTokenInfo,
-    useSaveStringStorage,
-} from '@masknet/plugin-avatar'
-import { getAvatarId } from '../../utils/user.js'
+import { toPNG, NFTAvatar, type SelectTokenInfo, useSaveStringStorage } from '@masknet/plugin-avatar'
 import { InjectedDialog, SelectProviderModal } from '@masknet/shared'
 import { Button, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Instagram } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-
 import { MaskMessages, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { AvatarNextID } from '@masknet/web3-providers/types'
+import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { getAvatarId } from '../../utils/user.js'
 
 const useStyles = makeStyles()(() => ({
     root: {},
@@ -42,8 +36,10 @@ export function NFTAvatarSettingDialog() {
             try {
                 if (!info.token.metadata?.imageURL || !info.token.contract?.address) return
                 if (!identity.identifier) return
+
                 const image = await toPNG(info.token.metadata.imageURL)
                 if (!image || !account) return
+
                 const { profile_pic_url_hd } = await Instagram.uploadUserAvatar(image, identity.identifier.userId)
                 const avatarId = getAvatarId(profile_pic_url_hd)
                 const avatarInfo = await saveNFTAvatar(identity.identifier.userId, account, {
@@ -54,11 +50,9 @@ export function NFTAvatarSettingDialog() {
                     chainId: (info.token.chainId ?? ChainId.Mainnet) as ChainId,
                     schema: (info.token.schema ?? SchemaType.ERC721) as SchemaType,
                     pluginId: info.pluginID,
-                } as NextIDAvatarMeta)
+                } as AvatarNextID<NetworkPluginID.PLUGIN_EVM>)
 
                 if (!avatarInfo) {
-                    // eslint-disable-next-line no-alert
-                    alert('Sorry, failed to save NFT Avatar. Please set again.')
                     setOpen(false)
                     return
                 }
@@ -68,11 +62,8 @@ export function NFTAvatarSettingDialog() {
 
                 setOpen(false)
             } catch (error) {
-                if (error instanceof Error) {
-                    // eslint-disable-next-line no-alert
-                    alert(error.message)
-                    return
-                }
+                // eslint-disable-next-line no-alert
+                if (error instanceof Error) alert(error.message)
             }
         },
         [identity, account, saveNFTAvatar],

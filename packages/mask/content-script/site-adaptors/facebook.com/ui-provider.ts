@@ -26,7 +26,7 @@ import { createTaskStartSetupGuideDefault } from '../../site-adaptor-infra/defau
 import { useThemeFacebookVariant } from './customization/custom.js'
 import { activatedSiteAdaptor_state } from '../../site-adaptor-infra/index.js'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar.js'
-import { injectProfileNFTAvatarInFaceBook } from './injection/NFT/ProfileNFTAvatar.js'
+import { injectProfileNFTAvatarInFacebook } from './injection/NFT/ProfileNFTAvatar.js'
 import { injectNFTAvatarInFacebook } from './injection/NFT/NFTAvatarInFacebook.js'
 import { injectUserNFTAvatarAtFacebook } from './injection/NFT/NFTAvatarInTimeline.js'
 import {
@@ -196,7 +196,7 @@ const facebookUI: SiteAdaptorUI.Definition = {
             ),
         },
         userAvatar: injectUserNFTAvatarAtFacebook,
-        enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInFacebook,
         profileAvatar: injectNFTAvatarInFacebook,
         profileCover: injectFacebookProfileCover,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,

@@ -1,9 +1,8 @@
 import urlcat from 'urlcat'
-import { getHeaders } from './getTokens.js'
-import { fetchGlobal } from '../../helpers/fetchGlobal.js'
-import { Expiration } from '../../helpers/fetchSquashed.js'
-import { Duration, staleCached } from '../../helpers/fetchCached.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
+import { staleCached } from '../../helpers/fetchCached.js'
+import { fetchGlobal } from '../../helpers/fetchGlobal.js'
+import { getHeaders } from './getTokens.js'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
@@ -59,10 +58,7 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
     const request = await createRequest(screenName)
     if (!request) return null
 
-    const response = await fetchGlobal(request, undefined, {
-        cacheDuration: Duration.ONE_DAY,
-        squashExpiration: Expiration.ONE_SECOND,
-    })
+    const response = await fetchGlobal(request, undefined)
     if (response.ok) {
         const json: TwitterBaseAPI.UserResponse = await response.json()
         return createUser(json)

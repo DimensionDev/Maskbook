@@ -3,12 +3,6 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import type { TrendingAPI } from '../entry-types.js'
 
-// the size of coins to recommend when users search a keyword
-export const COIN_RECOMMENDATION_SIZE = 10
-
-// all coins stay after the valid top rank will be ignored.
-export const VALID_TOP_RANK = 5000
-
 export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency[]> = {
     [SourceType.CoinGecko]: [
         {

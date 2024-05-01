@@ -3,7 +3,8 @@ import type { KnipConfig } from 'knip'
 
 // https://github.com/webpro/knip
 const config: KnipConfig = {
-    ignore: ['**/*.d.ts', '**/locales/index.ts', '.storybook/**', 'stories/**'],
+    ignore: ['**/*.d.ts', '**/locales/index.ts'],
+    vite: false,
     webpack: false,
     workspaces: {
         '.': {
@@ -18,6 +19,7 @@ const config: KnipConfig = {
                 'background/initialization/mv3-entry.ts',
                 'dashboard/initialization/index.ts',
                 'popups/initialization/index.ts',
+                'swap/initialization/index.ts',
                 'content-script/index.ts',
                 'web-workers/wallet.ts',
                 'devtools/content-script/index.ts',

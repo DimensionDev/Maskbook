@@ -1,4 +1,4 @@
-/// <reference path="./extended.d.ts" />
+/// <reference path="./extended.d.ts" preserve="true" />
 
 // Some re-exports
 

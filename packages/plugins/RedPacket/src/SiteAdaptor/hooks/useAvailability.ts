@@ -4,9 +4,8 @@ import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPac
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useRedPacketContract } from './useRedPacketContract.js'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
-type T = UseQueryResult
 export function useAvailability(
     id: string,
     version: number,

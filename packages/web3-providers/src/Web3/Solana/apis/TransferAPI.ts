@@ -13,7 +13,7 @@ export class SolanaTransferAPI {
     private Web3
     private ConnectionOptions
     private async attachRecentBlockHash(transaction: SolanaWeb3.Transaction, initial?: SolanaConnectionOptions) {
-        const connection = this.Web3.getWeb3Connection(initial)
+        const connection = this.Web3.getConnection(initial)
         const blockHash = await connection.getRecentBlockhash()
         transaction.recentBlockhash = blockHash.blockhash
         return transaction
@@ -25,10 +25,7 @@ export class SolanaTransferAPI {
 
     private async sendTransaction(transaction: SolanaWeb3.Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(
-            this.Web3.getWeb3Connection(initial),
-            signedTransaction.serialize(),
-        )
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signedTransaction.serialize())
     }
 
     async transferSol(recipient: string, amount: string, initial?: SolanaConnectionOptions) {
@@ -61,7 +58,7 @@ export class SolanaTransferAPI {
         const recipientPubkey = new SolanaWeb3.PublicKey(recipient)
         const mintPubkey = new SolanaWeb3.PublicKey(address)
         const signTransaction = this.signTransaction.bind(this)
-        const connection = this.Web3.getWeb3Connection(options)
+        const connection = this.Web3.getConnection(options)
         const formatTokenAccount = await getOrCreateAssociatedTokenAccount(
             connection,
             payerPubkey,

@@ -3,12 +3,11 @@ import { useWallet } from '@masknet/web3-hooks-base'
 import { EVMWeb3, RedPacket, TheGraphRedPacket } from '@masknet/web3-providers'
 import type { NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { getNftRedPacketConstants, type ChainId } from '@masknet/web3-shared-evm'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { RedPacketRPC } from '../../messages.js'
 
 const CREATE_RED_PACKET_METHOD_ID = '0x29e744bf'
 
-type T = UseQueryResult
 export function useNftRedPacketHistory(address: string, chainId: ChainId) {
     const wallet = useWallet()
     const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT, RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(chainId)

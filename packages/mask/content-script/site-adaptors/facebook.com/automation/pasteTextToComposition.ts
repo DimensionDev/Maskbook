@@ -3,7 +3,6 @@ import type { SiteAdaptorUI } from '@masknet/types'
 import { inputText, pasteText } from '@masknet/injected-script'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 import { MaskMessages } from '@masknet/shared-base'
-import { isMobileFacebook } from '../utils/isMobile.js'
 
 /**
  * Access: https://(www|m).facebook.com/
@@ -23,9 +22,8 @@ export async function pasteTextToCompositionFacebook(
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
         // cspell:disable-next-line
-        isMobileFacebook ? 'form textarea' : 'div[role=presentation] .notranslate[role=textbox]',
+        'div[role=presentation] .notranslate[role=textbox]',
     )
-    if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
 
     // Select element with fb customize background image.
     const activatedCustom = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
@@ -53,10 +51,6 @@ export async function pasteTextToCompositionFacebook(
         if ('value' in document.activeElement!) inputText(text)
         else pasteText(text)
         await delay(200)
-        if (isMobileFacebook) {
-            const e = document.querySelector<HTMLDivElement | HTMLTextAreaElement>('.mentions-placeholder')
-            if (e) e.style.display = 'none'
-        }
         // Prevent Custom Paste failed, this will cause service not available to user.
         if (!element.innerText.includes(text) || ('value' in element && !element.value.includes(text)))
             copyFailed('Not detected')

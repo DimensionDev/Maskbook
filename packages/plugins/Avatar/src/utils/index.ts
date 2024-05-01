@@ -1,35 +1,16 @@
-import { first, isNull } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
 import {
     attemptUntil,
     fetchImageViaDOM,
     fetchImageViaHTTP,
-    isLocaleResource,
     resolveCrossOriginURL,
     resolveResourceURL,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, type NextIDPersonaBindings, NextIDPlatform, getSiteType } from '@masknet/shared-base'
-import { NextIDProof, NextIDStorageProvider } from '@masknet/web3-providers'
-import type { NextIDAvatarMeta } from '../types.js'
-import { PLUGIN_ID } from '../constants.js'
-import { fetchBlob } from '@masknet/web3-providers/helpers'
-
-export async function getImage(image: string): Promise<string> {
-    const blob = await fetchBlob(image)
-    return (await blobToBase64(blob)) as string
-}
-
-function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(blob)
-    })
-}
 
 async function fetchImage(url: string) {
     const resolvedURL = resolveCrossOriginURL(url)
     if (!resolvedURL) return fetchImageViaHTTP(url)
+
     return attemptUntil(
         [
             async () => fetchImageViaHTTP(url),
@@ -40,28 +21,32 @@ async function fetchImage(url: string) {
     )
 }
 
-export async function toPNG(image: string) {
-    const isBase64 = isLocaleResource(image)
-    const resolvedURL = resolveResourceURL(image)
-    const imageData = await fetchImage(resolvedURL || image)
+export async function toPNG(url: string) {
+    const resolvedURL = resolveResourceURL(url) || url
+
+    const imageData = await fetchImage(resolvedURL)
+    if (imageData) return imageData
+
     return new Promise<Blob | null>((resolve, reject) => {
-        const img = new Image()
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
-        if (isNull(ctx)) throw new Error('Canvas was not supported')
-        img.addEventListener('load', () => {
-            ;[canvas.width, canvas.height] = [img.width, img.height]
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        if (!ctx) throw new Error('Canvas was not supported')
+
+        const image = new Image()
+
+        image.addEventListener('load', () => {
+            canvas.width = image.width
+            canvas.height = image.height
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
             canvas.toBlob((blob) => {
                 resolve(blob)
             }, 'image/png')
         })
-        img.addEventListener('error', () => {
+        image.addEventListener('error', () => {
             reject(new Error('Could not load image'))
         })
-        img.setAttribute('CrossOrigin', 'Anonymous')
-        if (!isBase64 && imageData) img.src = URL.createObjectURL(imageData)
-        else img.src = image
+        image.setAttribute('CrossOrigin', 'Anonymous')
+        image.src = url
     })
 }
 
@@ -86,58 +71,4 @@ export function formatTokenId(symbol: string, tokenId: string) {
 export function formatAddress(address: string, size = 0) {
     if (size === 0 || size >= 20) return address
     return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
-}
-
-async function getAvatarFromNextIDStorage(
-    persona: string,
-    platform: NextIDPlatform,
-    userId: string,
-    avatarId?: string,
-) {
-    const response = await NextIDStorageProvider.getByIdentity<NextIDAvatarMeta>(
-        persona,
-        platform,
-        userId.toLowerCase(),
-        PLUGIN_ID,
-    )
-
-    if (!avatarId && response.isOk()) return response.value
-    if (response.isOk() && response.value.avatarId === avatarId) return response.value
-    return
-}
-
-/**
- * find latest used persona binding
- */
-
-export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId?: string): number => {
-    if (!userId) return 0
-
-    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
-    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
-
-    if (!p_a || !p_b) return 0
-    if (p_a.last_checked_at > p_b.last_checked_at) return -1
-    return 1
-}
-
-export async function getNFTAvatarByUserId(
-    userId: string,
-    avatarId: string,
-    persona: string,
-): Promise<NextIDAvatarMeta | undefined> {
-    const platform = getSiteType() === EnhanceableSite.Twitter ? NextIDPlatform.Twitter : undefined
-    if (!platform) return
-
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-
-    if (persona) {
-        const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
-        if (binding) return getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
-    }
-    for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
-        const avatar = await getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
-        if (avatar) return avatar
-    }
-    return
 }

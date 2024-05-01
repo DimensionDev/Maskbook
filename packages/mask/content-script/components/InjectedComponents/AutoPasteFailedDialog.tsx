@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { format as formatDateTime } from 'date-fns'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -22,10 +21,11 @@ import { useMatchXS } from '@masknet/shared-base-ui'
 import { DraggableDiv } from '../shared/DraggableDiv.js'
 import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
+import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 interface AutoPasteFailedDialogProps {
-    onClose: () => void
     data: AutoPasteFailedEvent
+    onClose: () => void
 }
 const useStyles = makeStyles()((theme) => ({
     title: { marginLeft: theme.spacing(1) },

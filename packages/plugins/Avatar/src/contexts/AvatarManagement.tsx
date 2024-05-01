@@ -20,7 +20,7 @@ import {
 } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
+import { PFP_TYPE, type SelectTokenInfo } from '../types.js'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
 import { queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'

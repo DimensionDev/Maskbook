@@ -37,13 +37,13 @@ export function searchProfileEmptySelector() {
     return querySelector<E>('[data-testid="primaryColumn"] [data-testid="emptyState"]')
 }
 export function searchProfileTabSelector() {
-    return querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+    return querySelector<E>('[aria-label][role="navigation"] [role="tablist"] [role="tab"][aria-selected="false"]')
 }
 export function searchAppBarBackSelector() {
     return querySelector<E>('[data-testid="app-bar-back"] > div')
 }
 export function searchProfileTabListSelector() {
-    return querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
+    return querySelectorAll('[aria-label][role="navigation"] [role="tablist"][data-testid="ScrollSnap-List"] a')
 }
 export function searchNewTweetButtonSelector() {
     const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
@@ -150,13 +150,6 @@ export function bioPageUserNickNameSelector() {
         .querySelector<HTMLDivElement>('div[dir]')
 }
 
-export function isProfilePageLike() {
-    // starts with exclude
-    if (location.pathname.match(/^\/(home|explore|notifications|messages|i\/|settings|compose|search)/)) return false
-    // ends with exclude
-    if (location.pathname.match(/\/(topics|recommended|not_interested|lists)$/)) return false
-    return !!location.pathname.match(/^\/[\dA-Za-z]+\/?$/)
-}
 export function bioPageUserIDSelector(selector: () => LiveSelector<HTMLSpanElement, true>) {
     return selector().map((x) => (x.parentElement?.nextElementSibling as HTMLElement)?.innerText?.replace('@', ''))
 }
@@ -293,11 +286,6 @@ export function searchTwitterAvatarLinkSelector() {
 export function searchTwitterAvatarSelector() {
     return querySelector<E>('a[href$="/photo"]').querySelector('img').closest<E>(1)
 }
-
-export function searchTwitterAvatarNormalSelector() {
-    return querySelector<E>('a[href$="/photo"]')
-}
-
 // #endregion
 
 export function searchTweetAvatarSelector() {

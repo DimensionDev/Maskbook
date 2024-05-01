@@ -1,8 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
-import { IconButton, Typography } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { memo } from 'react'
-import { isMobileFacebook } from '../../site-adaptors/facebook.com/utils/isMobile.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
 
@@ -21,19 +20,7 @@ interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconBut
 
 const useStyles = makeStyles()((theme) => ({
     button: {
-        // TODO: is it correct? (what about twitter?)
-        padding: isMobileFacebook ? 0 : 'var(--icon-padding, 10px)',
-    },
-    text: {
-        color: theme.palette.grey[300],
-        marginLeft: theme.spacing(1),
-    },
-    wrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        width: '100%',
-        padding: '8px 10px',
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        padding: 'var(--icon-padding, 10px)',
     },
 }))
 
@@ -84,15 +71,6 @@ export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHi
     const { onHintButtonClicked, size, ...others } = props
     const { classes } = useStyles(undefined, { props })
     const t = useMaskSharedTrans()
-
-    if (isMobileFacebook)
-        return (
-            <div className={classes.wrapper} onClick={onHintButtonClicked}>
-                <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
-                <Typography className={classes.text}>{t.post_modal_hint__button()}</Typography>
-            </div>
-        )
-
     return (
         <div className={classes.buttonTransform}>
             <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />

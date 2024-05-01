@@ -13,7 +13,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { TRADER_WEB3_CONFIG } from '../../config.js'
 import { DeleteOutline } from '@mui/icons-material'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -24,6 +23,26 @@ const useStyles = makeStyles()((theme) => ({
         width: 24,
         height: 24,
         cursor: 'pointer',
+    },
+    content: {
+        padding: theme.spacing(3, 2),
+        '.routeCard': {
+            padding: theme.spacing(2, 1.5),
+        },
+        '::-webkit-scrollbar': {
+            display: 'none',
+            scrollbarColor: 'unset!important',
+            backgroundColor: 'unset!important',
+        },
+        "& [id*='widget-route-expanded-container']": {
+            width: 284,
+        },
+        '& .widget-token-list-item': {
+            padding: 0,
+        },
+        '& .chainCard': {
+            height: 52,
+        },
     },
 }))
 export interface ExchangeDialogProps {
@@ -44,7 +63,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
     const { Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { providerType, chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { theme, classes } = useStyles()
-    const mode = useSiteThemeMode(theme)
+
     const [containerRef, setContainerRef] = useState<HTMLElement>()
 
     const widgetRef = useRef<WidgetDrawer>(null)
@@ -106,6 +125,7 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
             progressSize: 16,
             forceCompact: false,
             inputColor: theme.palette.maskColor.bottom,
+            maxChainToOrder: 8,
         }
     }, [theme, providerType, getSigner, chainId, toAddress, toChainId])
 
@@ -140,6 +160,8 @@ export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(
                 :   null
             }>
             <DialogContent
+                className={classes.content}
+                style={{ scrollbarColor: 'initial' }}
                 sx={{ p: 3 }}
                 ref={(_: HTMLElement) => {
                     setContainerRef(_)

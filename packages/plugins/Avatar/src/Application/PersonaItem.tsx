@@ -1,15 +1,13 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useSyncExternalStore } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
 import type { BindingProof } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType } from '@masknet/web3-shared-base'
-import { Twitter } from '@masknet/web3-providers'
+import { AvatarStore, Twitter } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { NFTAvatar } from './NFTAvatar.js'
 import { NFTInfo } from './NFTInfo.js'
-import { RSS3_KEY_SITE } from '../constants.js'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useAvatarTrans } from '../locales/index.js'
 
@@ -33,8 +31,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PersonaItemProps {
-    owner?: boolean
-    avatar: string
+    isOwner?: boolean
+    avatarUrl?: string
     userId: string
     nickname?: string
     proof?: BindingProof
@@ -43,64 +41,60 @@ interface PersonaItemProps {
 }
 
 export const PersonaItem = memo(function PersonaItem(props: PersonaItemProps) {
-    const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
+    const { userId, onSelect, isOwner = false, proof, avatarUrl, nickname = '', persona = '' } = props
     const t = useAvatarTrans()
     const { classes } = useStyles()
 
-    const { value: nftAvatar, loading } = usePersonaNFTAvatar(
-        userId,
-        Twitter.getAvatarId(avatar) ?? '',
-        persona,
-        RSS3_KEY_SITE.TWITTER,
-    )
+    const store = useSyncExternalStore(AvatarStore.subscribe, AvatarStore.getSnapshot)
+    const avatar = store.retrieveAvatar(userId, Twitter.getAvatarId(avatarUrl), persona)
 
     const handleSelect = useCallback(() => {
         if (!proof || !onSelect) return
-        if (!nftAvatar) return onSelect(proof)
+        if (!avatar) return onSelect(proof)
         const tokenDetailed: AllChainsNonFungibleToken = {
-            tokenId: nftAvatar.tokenId,
+            tokenId: avatar.tokenId,
             contract: {
-                chainId: nftAvatar.chainId ?? ChainId.Mainnet,
+                chainId: avatar.chainId ?? ChainId.Mainnet,
                 name: '',
                 symbol: '',
-                address: nftAvatar.address,
+                address: avatar.address,
                 schema: SchemaType.ERC721,
                 owner: '',
             },
             metadata: {
-                chainId: nftAvatar.chainId ?? ChainId.Mainnet,
+                chainId: avatar.chainId ?? ChainId.Mainnet,
                 name: '',
                 symbol: '',
             },
-            id: nftAvatar.address,
-            chainId: nftAvatar.chainId ?? ChainId.Mainnet,
+            id: avatar.address,
+            chainId: avatar.chainId ?? ChainId.Mainnet,
             type: TokenType.NonFungible,
             schema: SchemaType.ERC721,
-            address: nftAvatar.address,
+            address: avatar.address,
         }
         onSelect(proof, tokenDetailed)
-    }, [nftAvatar, proof, onSelect])
+    }, [avatar, proof, onSelect])
 
-    const inactive = !owner || !proof
+    const inactive = !isOwner || !proof
 
     return (
         <ListItemButton className={classes.root} onClick={handleSelect} disabled={inactive}>
             <NFTAvatar
-                owner={owner}
-                avatar={avatar || nftAvatar?.imageUrl}
-                hasBorder={!!nftAvatar}
+                isOwner={isOwner}
+                avatar={avatarUrl || avatar?.imageUrl}
+                hasBorder={!!avatar}
                 platform={proof?.platform}
             />
             <Box className={classes.userInfo}>
                 <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                    {nickname || nftAvatar?.nickname}
+                    {nickname || avatar?.nickname}
                 </Typography>
                 <Typography variant="body1" color="textSecondary" fontSize={12}>
                     @{userId}
                 </Typography>
             </Box>
 
-            <NFTInfo loading={loading} tooltip={inactive ? t.inactive_persona_tooltip() : ''} isNFT={!!nftAvatar} />
+            <NFTInfo tooltip={inactive ? t.inactive_persona_tooltip() : ''} isNFT={!!avatar} />
 
             <Icons.RightArrow sx={{ color: (theme) => theme.palette.maskColor.borderSecondary, marginLeft: '8px' }} />
         </ListItemButton>

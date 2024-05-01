@@ -162,7 +162,7 @@ export function SearchableList<T extends {}>({
                             dataSet: readyToRenderData,
                             onSelect,
                         }}
-                        itemKey={(index, data) => getItemKey(index, data)}
+                        itemKey={getItemKey}
                         itemCount={readyToRenderData.length}
                         {...rest}>
                         {itemRender}

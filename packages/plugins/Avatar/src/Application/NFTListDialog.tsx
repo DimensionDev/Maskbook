@@ -30,7 +30,7 @@ import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/mate
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
-import { useAvatarManagement } from '../contexts/index.js'
+import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 import { useAvatarTrans } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
@@ -92,12 +92,11 @@ export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) =
     const { account, chainId, setChainId, setAccount } = useChainContext()
     const [assetChainId, setAssetChainId] = useState<ChainId>()
     const wallets = useWallets()
-    const [selectedPluginId, setSelectedPluginId] = useState(pluginID ?? NetworkPluginID.PLUGIN_EVM)
-    const [selectedToken, setSelectedToken] = useState<Web3Helper.NonFungibleTokenAll | undefined>(tokenInfo)
+    const [selectedPluginId, setSelectedPluginId] = useState(pluginID)
+    const [selectedToken, setSelectedToken] = useState(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
 
     useEffect(() => setSelectedToken(undefined), [chainId])
 
@@ -188,10 +187,6 @@ export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) =
         setSelectedPluginId(pluginID)
     }, [pluginID])
 
-    const walletItems = proofs.sort((a, z) => {
-        return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
-    })
-
     useUpdateEffect(() => {
         if (account) setTargetAccount(account)
     }, [account])
@@ -199,6 +194,11 @@ export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) =
     useUpdateEffect(() => {
         if (originAccount) setAccount(originAccount)
     }, [originAccount])
+
+    const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
+    const walletItems = proofs.sort((a, z) => {
+        return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
+    })
 
     return (
         <>

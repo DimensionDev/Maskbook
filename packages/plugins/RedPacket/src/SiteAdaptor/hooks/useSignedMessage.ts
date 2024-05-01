@@ -2,11 +2,10 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import { type RedPacketJSONPayload, type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { signMessage } from '@masknet/web3-shared-evm'
-import { useQuery, type UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { RedPacketRPC } from '../../messages.js'
 import { usePlatformType } from './usePlatformType.js'
 
-type T = UseQueryResult
 export function useSignedMessage(
     account: string,
     payload: RedPacketJSONPayload | RedPacketNftJSONPayload = {} as RedPacketJSONPayload,

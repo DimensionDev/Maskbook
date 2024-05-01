@@ -7,6 +7,5 @@
     "start": "node --import @swc-node/register/esm-register constants.ts"
   },
   "dependencies": {
-    "@masknet/web3-contracts": "workspace:^"
   }
 }
