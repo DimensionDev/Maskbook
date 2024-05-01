@@ -7,11 +7,11 @@ import type { CommonOptions, EventID, EventType, ExceptionID, ExceptionType } fr
  * A proxy class for all telemetry providers.
  */
 export class TelemetryAPI {
-    private Sentry = new SentryAPI(env)
-    private Mixpanel = new MixpanelAPI(env)
+    private Sentry = process.env.MASK_SENTRY === 'enabled' ? new SentryAPI(env) : null
+    private Mixpanel = process.env.MASK_MIXPANEL === 'enabled' ? new MixpanelAPI(env) : null
 
     captureEvent(eventType: EventType, eventID: EventID, options?: CommonOptions) {
-        this.Mixpanel.captureEvent({
+        this.Mixpanel?.captureEvent({
             eventType,
             eventID,
             ...options,
@@ -24,7 +24,7 @@ export class TelemetryAPI {
         error: Error,
         options?: CommonOptions,
     ): void {
-        this.Sentry.captureException({
+        this.Sentry?.captureException({
             exceptionType,
             exceptionID,
             error,
