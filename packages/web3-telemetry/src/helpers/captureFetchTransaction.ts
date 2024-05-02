@@ -53,6 +53,7 @@ export async function captureFetchTransaction(
     if (process.env.NODE_ENV === 'development') return
     if (!Flags.sentry_enabled) return
     if (!Flags.sentry_fetch_transaction_enabled) return
+    if (typeof Sentry === 'undefined') return
     if (isIgnoredRequest(request)) return
 
     const requestHeaders = getHeaders(request.clone())
