@@ -1,8 +1,25 @@
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 deleted file mode 100644
 index 9b28df0e8aa4734af2c7006fd077ff17e2281db5..0000000000000000000000000000000000000000
+diff --git a/esm/useAsync.js b/esm/useAsync.js
+index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..95a7cb8cc6833790a5aef21a64ee0c5d299723cf 100644
+--- a/esm/useAsync.js
++++ b/esm/useAsync.js
+@@ -6,7 +6,11 @@ export default function useAsync(fn, deps) {
+         loading: true,
+     }), state = _a[0], callback = _a[1];
+     useEffect(function () {
+-        callback();
++        try {
++            callback();
++        } catch (e) {
++            // Do nothing
++        }
+     }, [callback]);
+     return state;
+ }
 diff --git a/esm/useAsyncFn.js b/esm/useAsyncFn.js
-index 01d7307bd106229f6d791d0c588589235f404d97..872d4eea890cff495ced6fae8a91963d182164ee 100644
+index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc0d02bca4 100644
 --- a/esm/useAsyncFn.js
 +++ b/esm/useAsyncFn.js
 @@ -13,15 +13,16 @@ export default function useAsyncFn(fn, deps, initialState) {
@@ -26,8 +43,25 @@ index 01d7307bd106229f6d791d0c588589235f404d97..872d4eea890cff495ced6fae8a91963d
          });
      }, deps);
      return [state, callback];
+diff --git a/lib/useAsync.js b/lib/useAsync.js
+index 7f189a49dea552b5b10d7380b982bfe84299a7a2..4d9d33acaad290b54a9ef6e7df0afdba56484972 100644
+--- a/lib/useAsync.js
++++ b/lib/useAsync.js
+@@ -9,7 +9,11 @@ function useAsync(fn, deps) {
+         loading: true,
+     }), state = _a[0], callback = _a[1];
+     react_1.useEffect(function () {
+-        callback();
++        try {
++            callback();
++        } catch (e) {
++            // Do nothing
++        }
+     }, [callback]);
+     return state;
+ }
 diff --git a/lib/useAsyncFn.js b/lib/useAsyncFn.js
-index e06fd819ccad625d709fa9907e946a9b8bc58543..e79a2214916f5319687b532c5366a70ae4dff6d9 100644
+index e06fd819ccad625d709fa9907e946a9b8bc58543..6950e84a32ca630ec159834a87b4e21a36f4ef97 100644
 --- a/lib/useAsyncFn.js
 +++ b/lib/useAsyncFn.js
 @@ -15,15 +15,16 @@ function useAsyncFn(fn, deps, initialState) {
