@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     menu: {
         borderRadius: 16,
-        padding: theme.spacing(0, 1.5),
+        margin: theme.spacing(0, 1.5),
         maxHeight: 446,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
@@ -69,6 +69,11 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.maskColor.bottom,
         boxShadow: theme.palette.maskColor.bottomBg,
         backdropFilter: 'blur(8px)',
+    },
+    item: {
+        '& > *': {
+            padding: theme.spacing(0, 1.5),
+        },
     },
     list: {
         padding: 0,
@@ -127,6 +132,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                 horizontal: 'right',
             },
             classes: { paper: classes.menu, list: classes.list },
+            MenuListProps: { classes: { root: classes.item } },
         },
     )
 

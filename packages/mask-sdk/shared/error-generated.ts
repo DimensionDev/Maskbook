@@ -20,8 +20,13 @@ export enum ErrorMessages {
     json_rpc_version_not_supported = "JSON-RPC version not supported",
     invalid_request = "Invalid request",
     the_method_eth_subscribe_is_only_available_on_the_mainnet = "The method \"eth_subscribe\" is only available on the mainnet.",
+    invalid_address = "Invalid address",
     invalid_params = "Invalid params",
     wallet_request_permissions_a_permission_request_must_contain_at_least_1_permission = "A permission request must contain at least 1 permission.",
+    wallet_watch_asset_a_symbol_is_required_but_was_not_found_in_either_the_request_or_contract = "A symbol is required, but was not found in either the request or contract",
+    wallet_watch_asset_decimals_are_required_but_were_not_found_in_either_the_request_or_contract = "Decimals are required, but were not found in either the request or contract",
+    wallet_watch_asset_the_token_address_seems_invalid = "The token address seems invalid",
+    wallet_watch_asset_unable_to_verify_ownership_possibly_because_the_standard_is_not_supported_or_the_users_currently_selected_network_does_not_match_the_chain_of_the_asset_in_question = "Unable to verify ownership. Possibly because the standard is not supported or the user's currently selected network does not match the chain of the asset in question.",
     internal_error = "Internal error",
     parse_error = "Parse error",
     user_rejected_the_request = "User rejected the request",
@@ -41,8 +46,13 @@ const codeMap = {
     "JSON-RPC version not supported": -32006,
     "Invalid request": -32600,
     "The method \"eth_subscribe\" is only available on the mainnet.": -32601,
+    "Invalid address": -32602,
     "Invalid params": -32602,
     "A permission request must contain at least 1 permission.": -32602,
+    "A symbol is required, but was not found in either the request or contract": -32602,
+    "Decimals are required, but were not found in either the request or contract": -32602,
+    "The token address seems invalid": -32602,
+    "Unable to verify ownership. Possibly because the standard is not supported or the user's currently selected network does not match the chain of the asset in question.": -32602,
     "Internal error": -32603,
     "Parse error": -32700,
     "User rejected the request": 4001,
@@ -83,6 +93,9 @@ export const err = {
     the_method_eth_subscribe_is_only_available_on_the_mainnet(options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32601, "The method \"eth_subscribe\" is only available on the mainnet.", options)
     },
+    invalid_address(options: MaskEthereumProviderRpcErrorOptions = {}) {
+        return new MaskEthereumProviderRpcError(-32602, "Invalid address", options)
+    },
     invalid_params(options: MaskEthereumProviderRpcErrorOptions = {}) {
         return new MaskEthereumProviderRpcError(-32602, "Invalid params", options)
     },
@@ -92,6 +105,26 @@ export const err = {
         },
         permission_request_contains_unsupported_permission_permission({ permission }: Record<"permission", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
             return new MaskEthereumProviderRpcError(-32602, `Permission request contains unsupported permission ${permission}.`, options)
+        },
+    },
+    wallet_watchAsset: {
+        a_symbol_is_required_but_was_not_found_in_either_the_request_or_contract(options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, "A symbol is required, but was not found in either the request or contract", options)
+        },
+        decimals_are_required_but_were_not_found_in_either_the_request_or_contract(options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, "Decimals are required, but were not found in either the request or contract", options)
+        },
+        the_decimals_in_the_request_request_do_not_match_the_decimals_in_the_contract_decimals({ request, decimals }: Record<"request" | "decimals", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, `The decimals in the request (${request}) do not match the decimals in the contract (${decimals})`, options)
+        },
+        the_symbol_in_the_request_request_does_not_match_the_symbol_in_the_contract_symbol({ request, symbol }: Record<"request" | "symbol", string>,options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, `The symbol in the request (${request}) does not match the symbol in the contract (${symbol})`, options)
+        },
+        the_token_address_seems_invalid(options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, "The token address seems invalid", options)
+        },
+        unable_to_verify_ownership_possibly_because_the_standard_is_not_supported_or_the_users_currently_selected_network_does_not_match_the_chain_of_the_asset_in_question(options: MaskEthereumProviderRpcErrorOptions = {}) {
+            return new MaskEthereumProviderRpcError(-32602, "Unable to verify ownership. Possibly because the standard is not supported or the user's currently selected network does not match the chain of the asset in question.", options)
         },
     },
     internal_error(options: MaskEthereumProviderRpcErrorOptions = {}) {

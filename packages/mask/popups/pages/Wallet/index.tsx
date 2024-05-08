@@ -8,7 +8,7 @@ import { NetworkManagement } from './NetworkManagement/index.js'
 import SelectWallet from './SelectWallet/index.js'
 import { WalletAssets } from './components/WalletAssets/index.js'
 
-import TokenDetail from './TokenDetail/index.js'
+import TokenDetailPage from './TokenDetail/index.js'
 import { TransactionDetail } from './TransactionDetail/index.js'
 import { CollectibleDetail } from './CollectibleDetail/index.js'
 import { WalletGuard } from './WalletGuard/index.js'
@@ -69,7 +69,7 @@ export default function Wallet() {
                         </Route>
                         <Route path="*" element={<NoWalletGuard />}>
                             <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                            <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetail />} />
+                            <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetailPage />} />
                             <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
                             <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
                             <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
