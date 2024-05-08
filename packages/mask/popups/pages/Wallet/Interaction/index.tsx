@@ -373,6 +373,10 @@ const Interaction = memo((props: InteractionProps) => {
                         )
                     }
 
+                    if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) {
+                        if (typeof params[1] === 'object') params[1] = JSON.stringify(params[1])
+                    }
+
                     if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
                         if (params[0].type === '0x0') {
                             delete params[0].type

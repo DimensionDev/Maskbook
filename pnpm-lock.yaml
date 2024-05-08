@@ -625,6 +625,9 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
+      eip-712:
+        specifier: ^1.0.0
+        version: 1.0.0
       elliptic:
         specifier: ^6.5.4
         version: 6.5.4
@@ -6120,6 +6123,13 @@ packages:
   /@fastify/deepmerge@1.3.0:
     resolution: {integrity: sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==}
     dev: true
+
+  /@findeth/abi@0.3.1:
+    resolution: {integrity: sha512-T9HUVEjEgM0MzVLY4gs52ffz5AlHeC3CSGFcEzL4ojKMVzMxa3na1GW/XCmunrhnWP2cDh4fE2MhqLxA0CHqTw==}
+    engines: {node: '>=10'}
+    dependencies:
+      keccak: 3.0.3
+    dev: false
 
   /@floating-ui/core@1.6.0:
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
@@ -15104,6 +15114,15 @@ packages:
 
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
+
+  /eip-712@1.0.0:
+    resolution: {integrity: sha512-zVWGCUJQErhTpBH0mfYurP+t7wNdRizBq7PMAFj8M1Hq4/4QvKE7+FfXVcs7kL6b2ypbCnMgsimJQR1B2AfHpg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@findeth/abi': 0.3.1
+      '@noble/hashes': 1.3.2
+      superstruct: 0.15.5
+    dev: false
 
   /electron-fetch@1.7.4:
     resolution: {integrity: sha512-+fBLXEy4CJWQ5bz8dyaeSG1hD6JJ15kBZyj3eh24pIVrd3hLM47H/umffrdQfS6GZ0falF0g9JT9f3Rs6AVUhw==}
@@ -25146,6 +25165,10 @@ packages:
     resolution: {integrity: sha512-nPewA6m9mR3d6k7WkZ8N8zpTWfenFH3q9pA2PkuiZxINr9DKB2+40wEQf0ixn8VaGuJ78AB6iWOtStI+/4FKZQ==}
     dev: false
 
+  /superstruct@0.15.5:
+    resolution: {integrity: sha512-4AOeU+P5UuE/4nOUkmcQdW5y7i9ndt1cQd/3iUe+LTz3RxESf/W/5lg4B74HbDMMv8PHnPnGCQFH45kBcrQYoQ==}
+    dev: false
+
   /superstruct@1.0.3:
     resolution: {integrity: sha512-8iTn3oSS8nRGn+C2pgXSKPI3jmpm6FExNazNpjvqS6ZUJQCej3PUXEKM8NjHBOs54ExM+LPW/FBRhymrdcCiSg==}
     engines: {node: '>=14.0.0'}
@@ -28154,3 +28177,4 @@ packages:
 
 time:
   /@types/web@0.0.143: '2024-04-15T04:20:47.209Z'
+  /eip-712@1.0.0: '2022-02-10T16:20:31.172Z'
