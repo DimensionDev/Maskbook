@@ -4,6 +4,7 @@ import { Box, Link } from '@mui/material'
 import { useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { useQuery } from '@tanstack/react-query'
+import { useAsync } from 'react-use'
 
 export default function MaskSDK() {
     if (!Flags.mask_sdk_enabled) return null
@@ -20,7 +21,7 @@ function MaskSDKLoader() {
         queryKey: ['shouldSuggestConnectInPopup()'],
     })
     const [dismissed, setDismissed] = useState(false)
-    const [{ result: currentTab }] = useAsync(async () => {
+    const { value: currentTab } = useAsync(async () => {
         const tab = await Services.Helper.getActiveTab()
         return tab?.url ? new URL(tab.url).origin + '/*' : null
     })
