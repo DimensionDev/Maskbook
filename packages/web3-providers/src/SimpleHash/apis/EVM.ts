@@ -102,7 +102,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const path = urlcat('/api/v0/nfts/owners/:chain/:contract_address', {
             chain,
             contract_address: address,
-            cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+            cursor: indicator?.id || undefined,
             limit: size,
         })
         const response = await fetchFromSimpleHash<{ next_cursor: string; owners: SimpleHash.Owner[] }>(path)
