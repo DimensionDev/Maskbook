@@ -173,4 +173,12 @@ export namespace SimpleHash {
         first_acquired_date: string
         last_acquired_date: string
     }
+
+    export interface TopCollector {
+        owner_address: string
+        owner_ens_name: string | null
+        owner_image: string
+        distinct_nfts_owned: number
+        total_copies_owned: number
+    }
 }
