@@ -113,6 +113,28 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
+    async getTopCollectorsByContract(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},
+    ) {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
+        const path = urlcat('/api/v0/nfts/top_collectors/:chain/:contract_address', {
+            chain,
+            contract_address: address,
+            cursor: indicator?.id || undefined,
+            limit: size,
+            include_owner_image: '1',
+        })
+        const response = await fetchFromSimpleHash<{ next_cursor: string; top_collectors: SimpleHash.TopCollector[] }>(
+            path,
+        )
+        return createPageable(
+            response.top_collectors,
+            indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+    }
+
     async getCollectionOverview(chainId: ChainId, id: string): Promise<NonFungibleCollectionOverview | undefined> {
         // SimpleHash collection id is not address
         if (isValidAddress(id)) return
