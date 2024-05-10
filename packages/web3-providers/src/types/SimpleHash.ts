@@ -164,4 +164,13 @@ export namespace SimpleHash {
         wallet_address: string
         contracts: Array<{ contract_address: string; token_ids: string[] }>
     }
+
+    export interface Owner {
+        nft_id: string
+        owner_address: string
+        token_id: string
+        quantity: number
+        first_acquired_date: string
+        last_acquired_date: string
+    }
 }
