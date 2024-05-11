@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/webextension-polyfill": "^0.10.7",
     "clipboard-polyfill": "^3.0.3",
-    "core-js": "3.36.0",
+    "core-js": "3.37.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
@@ -19,7 +19,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-virtual": "^3.0.2",
     "@types/node": "20.12.7",
-    "core-js-compat": "3.36.0",
+    "core-js-compat": "3.37.0",
     "regenerator-runtime": "^0.14.0",
     "rollup": "^3.28.1",
     "rollup-plugin-swc3": "^0.10.1",
