@@ -1,6 +1,7 @@
 import { MaskEthereumProviderRpcError, fromMessage, ErrorCode } from '@masknet/sdk'
 import type { Result } from 'ts-results-es'
 import z, { type ZodError } from 'zod'
+import { getMessage } from 'eip-712'
 
 export const requestSchema = z.object({
     method: z.string().nonempty(),
@@ -197,18 +198,40 @@ export const methodValidate = {
     eth_signTypedData_v4: {
         args: z.tuple([
             _.address,
-            z
-                .object({
-                    types: z
-                        .object({
-                            EIP712Domain: z.array(z.unknown()),
-                        })
-                        .describe('types'),
-                    domain: z.object({}).passthrough(),
-                    primaryType: z.string(),
-                    message: z.object({}).passthrough(),
-                })
-                .describe('TypedData'),
+            z.preprocess(
+                (arg) => (typeof arg === 'string' ? JSON.parse(arg) : arg),
+                z
+                    .object({
+                        types: z
+                            .object({
+                                EIP712Domain: z.array(z.unknown()),
+                            })
+                            .catchall(
+                                z.array(
+                                    z.object({
+                                        type: z.string(),
+                                        name: z.string(),
+                                    }),
+                                ),
+                            )
+                            .describe('types'),
+                        domain: z.object({}).passthrough(),
+                        primaryType: z.string(),
+                        message: z.object({}).passthrough(),
+                    })
+                    .refine(
+                        (val) => {
+                            try {
+                                getMessage(val as any)
+                                return true
+                            } catch {
+                                return false
+                            }
+                        },
+                        { message: 'Typed data does not match JSON schema' },
+                    )
+                    .describe('TypedData'),
+            ),
         ]),
         return: _.hex,
     },

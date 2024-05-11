@@ -8,6 +8,7 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { TypedMessageTextRender } from '../../../../typed-message/react/src/Renderer/Core/Text.js'
 import { Alert } from '@masknet/shared'
 import { RenderFragmentsContext, type RenderFragmentsContextType } from '@masknet/typed-message-react'
+import { RenderEIP712 } from './eip712.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -58,6 +59,7 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
     const { classes, cx } = useStyles()
 
     const isEIP4361 = typeof message === 'object' && message.type === 'eip4361'
+    const isEIP712 = typeof rawMessage === 'object'
 
     let EIP4361Message
     let TextMessage
@@ -104,14 +106,25 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
                 </Box>
             :   null}
             {EIP4361Message}
-            <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
-            <Typography className={classes.sourceText} component={isEIP4361 ? 'details' : 'p'}>
-                {TextMessage}
-            </Typography>
+            {typeof TextMessage === 'string' ?
+                <>
+                    <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
+                    <Typography className={classes.sourceText} component={isEIP4361 ? 'details' : 'p'}>
+                        {TextMessage}
+                    </Typography>
+                </>
+            :   undefined}
+            {isEIP712 ?
+                <RenderEIP712
+                    data={rawMessage as any}
+                    title={<Typography className={classes.messageTitle}>Typed data</Typography>}
+                    messageTitle={<Typography className={classes.messageTitle}>Message</Typography>}
+                />
+            :   undefined}
             {rawMessage && message !== rawMessage ?
                 <>
                     <Typography className={classes.messageTitle}>{t.popups_wallet_sign_raw_message()}</Typography>
-                    <Typography className={classes.sourceText} component={isEIP4361 ? 'details' : 'p'}>
+                    <Typography className={classes.sourceText} component={isEIP4361 || isEIP712 ? 'details' : 'p'}>
                         {typeof rawMessage === 'string' ? rawMessage : JSON.stringify(rawMessage, null, 2)}
                     </Typography>
                 </>
@@ -119,6 +132,7 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
         </main>
     )
 })
+SignRequestInfo.displayName = 'SignRequestInfo'
 
 interface EIP4361RenderProps {
     message: ParsedEIP4361Message

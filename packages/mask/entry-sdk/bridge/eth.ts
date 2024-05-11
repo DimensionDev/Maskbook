@@ -109,6 +109,21 @@ const methods: Methods = {
         if (wallets.length) return wallets
         return err.user_rejected_the_request()
     },
+    async eth_signTypedData_v4(requestedAddress, typedData) {
+        await Services.Wallet.requestUnlockWallet()
+        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
+        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
+        return providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            account: requestedAddress,
+            silent: false,
+            readonly: false,
+        }).request({
+            method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
+            params: [requestedAddress, typedData],
+        })
+    },
     async personal_sign(challenge, requestedAddress) {
         // check challenge is 0x hex
         await Services.Wallet.requestUnlockWallet()
@@ -308,7 +323,12 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
             paramsArr.length = paramsSchema.items.length
         }
         const paramsValidated = paramsSchema.safeParse(paramsArr)
-        if (!paramsValidated.success) return { e: fromZodError(paramsValidated.error) }
+        if (!paramsValidated.success) {
+            if (process.env.NODE_ENV === 'development') {
+                console.debug('[Mask Wallet] Failed', request, 'received params', paramsArr)
+            }
+            return { e: fromZodError(paramsValidated.error) }
+        }
 
         if (process.env.NODE_ENV === 'development') {
             console.debug('[Mask Wallet]', request, paramsValidated.data)

@@ -954,7 +954,7 @@
     "popups_wallet_request_source": "Request Source",
     "popups_wallet_request_source_insecure": "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request.",
     "popups_wallet_sign_message": "Signing Messsage (Text)",
-    "popups_wallet_sign_raw_message": "Signing Message (Hex)",
+    "popups_wallet_sign_raw_message": "Signing Message (Raw)",
     "popups_wallet_sign_in_message": "Sign-in Request",
     "popups_wallet_sign_in_message_invalid_eip4361": "This message contains a invalid EIP-4361 message. It is better to reject this request.",
     "popups_wallet_sign_in_message_domain": "Domain",
