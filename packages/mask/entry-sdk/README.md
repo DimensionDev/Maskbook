@@ -8,7 +8,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 ## Readonly ETH methods
 
 - [x] eth_accounts
-- [ ] eth_blobBaseFee
+- eth_blobBaseFee: not supported by infura
 - [x] eth_blockNumber
 - [x] eth_call
 - [x] eth_chainId

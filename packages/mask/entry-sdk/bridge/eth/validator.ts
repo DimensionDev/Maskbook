@@ -195,6 +195,7 @@ export const methodValidate = {
     eth_getEncryptionPublicKey: { args: z.tuple([_.address]), return: z.never() },
     eth_requestAccounts: { args: z.tuple([]), return: _.address.array() },
     eth_accounts: { args: z.tuple([]), return: _.address.array() },
+    eth_blobBaseFee: { args: z.tuple([]), return: _.unpadded_hex },
     eth_signTypedData_v4: {
         args: z.tuple([
             _.address,
