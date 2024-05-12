@@ -3,8 +3,8 @@ import { join, isAbsolute } from 'node:path'
 
 export enum ManifestFile {
     ChromiumMV2 = 'chromium-mv2',
-    ChromiumBetaMV2 = 'chromium-beta-mv2',
     ChromiumMV3 = 'chromium-mv3',
+    ChromiumBetaMV3 = 'chromium-beta-mv3',
     FirefoxMV2 = 'firefox-mv2',
     FirefoxMV3 = 'firefox-mv3',
     SafariMV3 = 'safari-mv3',
@@ -39,7 +39,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         channel = 'stable',
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
-        manifestFile = ManifestFile.ChromiumMV2,
+        manifestFile = ManifestFile.ChromiumMV3,
     } = flags
     let {
         hmr = mode === 'development',
@@ -50,6 +50,12 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
     } = flags
     if (!isAbsolute(outputPath)) outputPath = join(import.meta.dirname, '../../../', outputPath)
 
+    if (manifestFile === ManifestFile.FirefoxMV3) {
+        // TODO: Firefox MV3 blocked by website's CSP
+        hmr = false
+        // TODO: "devtools_page" in manifest.json causes all Promises in browser.* hang
+        devtools = false
+    }
     if (mode === 'production' || profiling) hmr = false
     if (!hmr) reactRefresh = false
 

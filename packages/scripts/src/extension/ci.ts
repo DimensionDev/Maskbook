@@ -15,7 +15,7 @@ export const ciBuild: TaskFunction = series(
     zipTo('MaskNetwork.chromium.zip', ManifestFile.ChromiumMV2),
     zipTo('MaskNetwork.firefox.zip', ManifestFile.FirefoxMV2, true),
     zipTo('MaskNetwork.firefox-mv3.zip', ManifestFile.FirefoxMV3, true),
-    zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV2),
+    zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV3),
     zipTo('MaskNetwork.chromium-mv3.zip', ManifestFile.ChromiumMV3),
 )
 export const buildChrome: TaskFunction = series(
@@ -33,7 +33,7 @@ function zipTo(
 ): TaskFunction {
     const f: TaskFunction = async () => {
         await copyFile(new URL(`manifest-${withManifestFile}.json`, BUILD_PATH), new URL('manifest.json', BUILD_PATH))
-        if (!reproducible && withManifestFile === ManifestFile.ChromiumBetaMV2) {
+        if (!reproducible && withManifestFile === ManifestFile.ChromiumBetaMV3) {
             await copyFile(new URL('build-info-beta.json', BUILD_PATH), new URL('build-info.json', BUILD_PATH))
         }
         const { cmd } = await import('web-ext')

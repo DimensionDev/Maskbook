@@ -53,7 +53,7 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
     )
 
     const manifestFlags: Record<NormalizedFlags['manifestFile'], ManifestPresets> = {
-        'chromium-beta-mv2': [{ ...flags, channel: 'beta' }, mv2Base],
+        'chromium-beta-mv3': [{ ...flags, channel: 'beta' }, mv3Base],
         'chromium-mv2': [flags, mv2Base],
         'chromium-mv3': [flags, mv3Base],
         'firefox-mv2': [flags, mv2Base, (manifest: ManifestV2) => manifest.permissions!.push('tabs')],
@@ -62,10 +62,23 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
             mv3Base,
             (manifest: ManifestV3) => {
                 manifest.host_permissions = (manifest as any).optional_host_permissions
+                delete (manifest as any).optional_host_permissions
                 manifest.background = { page: 'background.html' }
+                manifest.web_accessible_resources?.forEach(
+                    (x) => typeof x === 'object' && delete (x as any).use_dynamic_url,
+                )
+                delete manifest.key
             },
         ],
-        'safari-mv3': [flags, mv3Base],
+        'safari-mv3': [
+            flags,
+            mv3Base,
+            (manifest: ManifestV3) => {
+                manifest.host_permissions = (manifest as any).optional_host_permissions
+                delete (manifest as any).optional_host_permissions
+                delete manifest.key
+            },
+        ],
     }
     const manifest = new Map<NormalizedFlags['manifestFile'], ManifestV2 | ManifestV3>()
     for (const fileName in manifestFlags) {

@@ -15,7 +15,7 @@
     "start": "dev",
     "start:mv2": "dev --manifest 2",
     "start:mv3": "dev --manifest 3",
-    "start:fx": "dev --manifest firefox-mv2",
+    "start:fx": "dev --manifest firefox-mv3",
     "codegen": "gulp codegen-watch",
     "build": "build",
     "build:mv3": "build --manifest 3",

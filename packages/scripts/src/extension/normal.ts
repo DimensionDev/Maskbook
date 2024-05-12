@@ -25,7 +25,7 @@ export function buildExtensionFlag(name: string, args: BuildFlagsExtended): Task
     return f
 }
 export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', {
-    manifestFile: ManifestFile.ChromiumMV2,
+    manifestFile: ManifestFile.ChromiumMV3,
     channel: 'stable',
     mode: 'production',
 })
@@ -40,7 +40,7 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     if (typeof f === 'function')
         return awaitChildProcess(
             webpack({
-                manifestFile: ManifestFile.ChromiumMV2,
+                manifestFile: ManifestFile.ChromiumMV3,
                 channel: 'stable',
                 mode: 'development',
             }),

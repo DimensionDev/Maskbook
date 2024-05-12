@@ -1,3 +1,4 @@
+import { Sniffings } from '@masknet/shared-base'
 import { maskSDK_URL, injectUserScriptMV2, evaluateContentScript } from '../../utils/injectScript.js'
 
 export async function attachMaskSDKToCurrentActivePage(): Promise<boolean> {
@@ -17,12 +18,14 @@ async function attachMaskSDK2() {
     })
 }
 async function attachMaskSDK3(id: number) {
-    const [{ error }] = await browser.scripting.executeScript({
+    // TODO: Firefox MV3
+    const target = {
         target: { tabId: id },
         files: [maskSDK_URL],
-        // @ts-expect-error Chrome API
-        world: 'MAIN',
-    })
+        world: 'MAIN' as any,
+    }
+    if (Sniffings.is_firefox) delete target.world
+    const [{ error }] = await browser.scripting.executeScript(target)
     if (error) throw error
 }
 export async function developmentMaskSDKReload(): Promise<void> {

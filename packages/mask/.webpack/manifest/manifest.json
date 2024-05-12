@@ -5,7 +5,6 @@
     "permissions": ["storage", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications", "clipboardRead"],
     "background": { "page": "background.html" },
-    "options_ui": { "page": "dashboard.html", "open_in_tab": true },
     "icons": {
         "16": "assets/16x16.png",
         "48": "assets/48x48.png",

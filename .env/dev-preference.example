@@ -39,7 +39,7 @@
 # Use Chromium Manifest V3 as default development target.
 
 ; manifest=chromium-mv2
-; manifest=chromium-beta-mv2
+; manifest=chromium-beta-mv3
 ; manifest=chromium-mv3
 ; manifest=firefox-mv2
 ; manifest=firefox-mv3

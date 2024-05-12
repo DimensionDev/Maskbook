@@ -6,7 +6,6 @@
     "optional_permissions": ["notifications", "clipboardRead"],
     "optional_host_permissions": ["<all_urls>"],
     "background": { "service_worker": "/manifest-v3.entry.js" },
-    "options_ui": { "page": "dashboard.html", "open_in_tab": true },
     "icons": {
         "16": "assets/16x16.png",
         "48": "assets/48x48.png",
@@ -31,5 +30,10 @@
     "content_security_policy": {
         "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; trusted-types default dompurify mask;"
     },
-    "minimum_chrome_version": "102"
+    "minimum_chrome_version": "102",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "{0e57e2ae-3e13-4d5d-9243-6159219852a6}"
+        }
+    }
 }

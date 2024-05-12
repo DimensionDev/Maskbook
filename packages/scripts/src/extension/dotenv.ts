@@ -30,7 +30,7 @@ export function parseManifest(manifest: '2' | '3' | 2 | 3 | undefined | Manifest
     if (manifest === 2 || manifest === '2') return ManifestFile.ChromiumMV2
     if (manifest === 3 || manifest === '3') return ManifestFile.ChromiumMV3
     if (typeof manifest === 'string') return manifest
-    return ManifestFile.ChromiumMV2
+    return ManifestFile.ChromiumMV3
 }
 function parseBoolean(val: string | undefined) {
     if (val === undefined) return undefined

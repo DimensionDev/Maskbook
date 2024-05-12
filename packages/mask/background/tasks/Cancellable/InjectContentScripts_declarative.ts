@@ -38,6 +38,7 @@ function prepareMainWorldScript(name: string, matches: string[], url: string): S
         runAt: 'document_start',
         matches,
     }
+    if (Sniffings.is_firefox) delete (result as any).world
     return [result]
 }
 
@@ -62,6 +63,10 @@ async function prepareContentScript(matches: string[]): Promise<Scripting.Regist
         runAt: 'document_idle',
         matches,
     }
-    if (globalThis.navigator?.userAgent.includes('Firefox')) return [xrayScript, content]
+    if (Sniffings.is_firefox) {
+        delete (xrayScript as any).world
+        delete (content as any).world
+        return [xrayScript, content]
+    }
     return [content]
 }

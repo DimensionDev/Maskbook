@@ -1,3 +1,4 @@
+import { Sniffings } from '@masknet/shared-base'
 import { memoize } from 'lodash-es'
 
 export const injectedScriptURL = '/js/injected-script.js'
@@ -12,11 +13,13 @@ export async function evaluateContentScript(tabId: number | undefined, frameId?:
             tabId = activeTab[0].id
         }
         if (!tabId) return
-        await browser.scripting.executeScript({
+        const script = {
             target: { tabId, frameIds: frameId ? [frameId] : undefined },
             files: await fetchInjectContentScriptList(),
-            world: 'ISOLATED',
-        })
+            world: 'ISOLATED' as any,
+        }
+        if (Sniffings.is_firefox) delete script.world
+        await browser.scripting.executeScript(script)
     } else {
         for (const script of await fetchInjectContentScriptList()) {
             await browser.tabs.executeScript(tabId, {
