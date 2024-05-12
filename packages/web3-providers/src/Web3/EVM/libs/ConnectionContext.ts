@@ -114,7 +114,7 @@ export class ConnectionContext {
                     params: [this._requestArguments.params[0], config],
                 }
                 break
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
+            case EthereumMethodType.eth_sendTransaction:
                 const params = this.providerType !== ProviderType.Clover ? config : omit(config, 'chainId')
                 this._requestArguments = {
                     method: this.method,

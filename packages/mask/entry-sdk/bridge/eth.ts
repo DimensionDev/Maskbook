@@ -13,11 +13,11 @@ import { isValidChecksumAddress } from '@ethereumjs/util'
 
 const PassthroughMethods = [
     ...readonlyMethodType,
-    EthereumMethodType.ETH_GET_FILTER_CHANGES,
-    EthereumMethodType.ETH_GET_FILTER_LOGS,
-    EthereumMethodType.ETH_NEW_BLOCK_FILTER,
-    EthereumMethodType.ETH_NEW_FILTER,
-    EthereumMethodType.ETH_UNINSTALL_FILTER,
+    EthereumMethodType.eth_getFilterChanges,
+    EthereumMethodType.eth_getFilterLogs,
+    EthereumMethodType.eth_newBlockFilter,
+    EthereumMethodType.eth_newFilter,
+    EthereumMethodType.eth_uninstallFilter,
 ]
 type PassthroughMethods = (typeof PassthroughMethods)[number]
 const passthroughMethods: Record<PassthroughMethods, (...params: any[]) => Promise<any>> = {} as any
@@ -120,7 +120,7 @@ const methods: Methods = {
             silent: false,
             readonly: false,
         }).request({
-            method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
+            method: EthereumMethodType.eth_signTypedData_v4,
             params: [requestedAddress, typedData],
         })
     },
@@ -136,7 +136,7 @@ const methods: Methods = {
             silent: false,
             readonly: false,
         }).request({
-            method: EthereumMethodType.PERSONAL_SIGN,
+            method: EthereumMethodType.personal_sign,
             params: [challenge, requestedAddress],
         })
     },
@@ -154,7 +154,7 @@ const methods: Methods = {
             readonly: false,
         })
         return p.request({
-            method: EthereumMethodType.ETH_SEND_TRANSACTION,
+            method: EthereumMethodType.eth_sendTransaction,
             params: [options],
         })
     },
@@ -165,7 +165,7 @@ const methods: Methods = {
             readonly: false,
         })
         return p.request({
-            method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+            method: EthereumMethodType.eth_sendRawTransaction,
             params: [transaction] as any,
         })
     },
@@ -287,7 +287,7 @@ const methods: Methods = {
             readonly: false,
         })
         p.request({
-            method: EthereumMethodType.WATCH_ASSET,
+            method: EthereumMethodType.wallet_watchAsset,
             params: [{ type, options: { address, decimals, image, symbol, tokenId } }],
         }).catch(() => {})
         return true

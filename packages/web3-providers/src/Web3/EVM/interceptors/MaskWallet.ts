@@ -16,10 +16,10 @@ export class MaskWallet implements Middleware<ConnectionContext> {
         const provider = MaskWalletProviderInstance
 
         switch (context.request.method) {
-            case EthereumMethodType.ETH_CHAIN_ID:
+            case EthereumMethodType.eth_chainId:
                 context.write(web3_utils.toHex(provider.hostedChainId))
                 break
-            case EthereumMethodType.ETH_ACCOUNTS:
+            case EthereumMethodType.eth_accounts:
                 context.write([provider.hostedAccount])
                 break
             case EthereumMethodType.MASK_WALLETS:

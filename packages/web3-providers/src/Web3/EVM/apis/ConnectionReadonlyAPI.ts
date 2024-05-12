@@ -201,7 +201,7 @@ export class EVMConnectionReadonlyAPI
     async getGasPrice(initial?: EVMConnectionOptions): Promise<string> {
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_GAS_PRICE,
+                method: EthereumMethodType.eth_gasPrice,
                 params: [],
             },
             initial,
@@ -628,7 +628,7 @@ export class EVMConnectionReadonlyAPI
         const options = this.ConnectionOptions.fill(initial)
         const accounts = await this.Request.request<string[]>(
             {
-                method: EthereumMethodType.ETH_ACCOUNTS,
+                method: EthereumMethodType.eth_accounts,
                 params: [],
             },
             options,
@@ -640,7 +640,7 @@ export class EVMConnectionReadonlyAPI
         const options = this.ConnectionOptions.fill(initial)
         const chainId = await this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_CHAIN_ID,
+                method: EthereumMethodType.eth_chainId,
                 params: [],
             },
             options,
@@ -651,7 +651,7 @@ export class EVMConnectionReadonlyAPI
     getBlock(noOrId: number | string, initial?: EVMConnectionOptions) {
         return this.Request.request<Block>(
             {
-                method: EthereumMethodType.ETH_GET_BLOCK_BY_NUMBER,
+                method: EthereumMethodType.eth_getBlockByNumber,
                 params: [web3_utils.toHex(noOrId), false],
             },
             initial,
@@ -661,7 +661,7 @@ export class EVMConnectionReadonlyAPI
     getBlockNumber(initial?: EVMConnectionOptions) {
         return this.Request.request<number>(
             {
-                method: EthereumMethodType.ETH_BLOCK_NUMBER,
+                method: EthereumMethodType.eth_blockNumber,
                 params: [],
             },
             initial,
@@ -678,7 +678,7 @@ export class EVMConnectionReadonlyAPI
     getBalance(address: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_GET_BALANCE,
+                method: EthereumMethodType.eth_getBalance,
                 params: [address, 'latest'],
             },
             initial,
@@ -688,7 +688,7 @@ export class EVMConnectionReadonlyAPI
     getCode(address: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_GET_CODE,
+                method: EthereumMethodType.eth_getCode,
                 params: [address, 'latest'],
             },
             initial,
@@ -698,7 +698,7 @@ export class EVMConnectionReadonlyAPI
     async getTransaction(hash: string, initial?: EVMConnectionOptions) {
         return this.Request.request<TransactionDetailed>(
             {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_BY_HASH,
+                method: EthereumMethodType.eth_getTransactionByHash,
                 params: [hash],
             },
             initial,
@@ -710,7 +710,7 @@ export class EVMConnectionReadonlyAPI
             const options = this.ConnectionOptions.fill(initial)
             return await this.Request.request<string>(
                 {
-                    method: EthereumMethodType.ETH_ESTIMATE_GAS,
+                    method: EthereumMethodType.eth_estimateGas,
                     params: [
                         new AccountTransaction({
                             from: options.account,
@@ -729,7 +729,7 @@ export class EVMConnectionReadonlyAPI
     getTransactionReceipt(hash: string, initial?: EVMConnectionOptions) {
         return this.Request.request<TransactionReceipt>(
             {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                method: EthereumMethodType.eth_getTransactionReceipt,
                 params: [hash],
             },
             initial,
@@ -744,7 +744,7 @@ export class EVMConnectionReadonlyAPI
     async getTransactionNonce(address: string, initial?: EVMConnectionOptions) {
         const nonce = await this.Request.request<number | string>(
             {
-                method: EthereumMethodType.ETH_GET_TRANSACTION_COUNT,
+                method: EthereumMethodType.eth_getTransactionCount,
                 params: [address, 'latest'],
             },
             initial,
@@ -800,7 +800,7 @@ export class EVMConnectionReadonlyAPI
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_CALL,
+                method: EthereumMethodType.eth_call,
                 params: [new AccountTransaction(transaction).fill(options.overrides), 'latest'],
             },
             options,
@@ -814,7 +814,7 @@ export class EVMConnectionReadonlyAPI
     sendSignedTransaction(signature: string, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
+                method: EthereumMethodType.eth_sendRawTransaction,
                 params: [signature],
             },
             initial,

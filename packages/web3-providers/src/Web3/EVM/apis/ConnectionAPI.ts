@@ -241,7 +241,7 @@ export class ConnectionAPI
             case 'message':
                 return this.Request.request<string>(
                     {
-                        method: EthereumMethodType.PERSONAL_SIGN,
+                        method: EthereumMethodType.personal_sign,
                         params: [message, options.account, ''].filter((x) => typeof x !== 'undefined'),
                     },
                     options,
@@ -249,7 +249,7 @@ export class ConnectionAPI
             case 'typedData':
                 return this.Request.request<string>(
                     {
-                        method: EthereumMethodType.ETH_SIGN_TYPED_DATA,
+                        method: EthereumMethodType.eth_signTypedData_v4,
                         params: [options.account, message],
                     },
                     options,
@@ -262,7 +262,7 @@ export class ConnectionAPI
     override async signTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SIGN_TRANSACTION,
+                method: EthereumMethodType.eth_signTransaction,
                 params: [transaction],
             },
             initial,
@@ -276,7 +276,7 @@ export class ConnectionAPI
     override supportedChainIds(initial?: EVMConnectionOptions) {
         return this.Request.request<ChainId[]>(
             {
-                method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
+                method: EthereumMethodType.eth_supportedChainIds,
                 params: [],
             },
             initial,
@@ -287,7 +287,7 @@ export class ConnectionAPI
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_CALL_USER_OPERATION,
+                method: EthereumMethodType.eth_callUserOperation,
                 params: [
                     owner,
                     {
@@ -304,7 +304,7 @@ export class ConnectionAPI
         const options = this.ConnectionOptions.fill(initial)
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SEND_USER_OPERATION,
+                method: EthereumMethodType.eth_sendUserOperation,
                 params: [
                     owner,
                     {
@@ -330,7 +330,7 @@ export class ConnectionAPI
 
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SEND_TRANSACTION,
+                method: EthereumMethodType.eth_sendTransaction,
                 params: [
                     {
                         ...tx,
@@ -355,7 +355,7 @@ export class ConnectionAPI
 
         return this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SEND_TRANSACTION,
+                method: EthereumMethodType.eth_sendTransaction,
                 params: [
                     {
                         ...tx,
@@ -418,7 +418,7 @@ export class ConnectionAPI
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
         const hash = await this.Request.request<string>(
             {
-                method: EthereumMethodType.ETH_SEND_TRANSACTION,
+                method: EthereumMethodType.eth_sendTransaction,
                 params: [new AccountTransaction(transaction).fill(options.overrides)],
             },
             options,

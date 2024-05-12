@@ -48,7 +48,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
         try {
             await this.request({
-                method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+                method: EthereumMethodType.wallet_switchEthereumChain,
                 params: [
                     {
                         chainId: web3_utils.toHex(chainId),
@@ -62,12 +62,12 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
             // Unrecognized chain ID "xxx". Try adding the chain using wallet_addEthereumChain first.
             if (
                 typeof errorMessage === 'string' &&
-                (errorMessage.includes(EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN) ||
+                (errorMessage.includes(EthereumMethodType.wallet_addEthereumChain) ||
                     errorMessage.includes('addEthereumChain') ||
                     errorMessage.includes('configured for connector'))
             ) {
                 await this.request<void>({
-                    method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
+                    method: EthereumMethodType.wallet_addEthereumChain,
                     params: [
                         {
                             chainId: web3_utils.toHex(chainId),
@@ -87,7 +87,7 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
         await delay(1000)
 
         const actualChainId = await this.request<string>({
-            method: EthereumMethodType.ETH_CHAIN_ID,
+            method: EthereumMethodType.eth_chainId,
             params: [],
         })
 
@@ -108,11 +108,11 @@ export abstract class BaseEVMWalletProvider implements EVMWalletProvider {
 
     async connect(expectedChainId: ChainId, address?: string): Promise<Account<ChainId>> {
         const accounts = await this.request<string[]>({
-            method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
+            method: EthereumMethodType.eth_requestAccounts,
             params: [],
         })
         const chainId = await this.request<string>({
-            method: EthereumMethodType.ETH_CHAIN_ID,
+            method: EthereumMethodType.eth_chainId,
             params: [],
         })
 

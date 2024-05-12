@@ -4,7 +4,7 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 export class Fortmatic implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         switch (context.request.method) {
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.personal_sign:
                 context.requestArguments = {
                     ...context.requestArguments,
                     params: [...context.requestArguments.params.slice(0, 2), ''],

@@ -35,7 +35,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
         :   new Signer(owner || from!, signWithWallet)
 
     switch (payload.method) {
-        case EthereumMethodType.ETH_SEND_TRANSACTION:
+        case EthereumMethodType.eth_sendTransaction:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
             if (!signableConfig) throw new Error('No transaction to be sent.')
 
@@ -59,22 +59,22 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to send transaction.').error
             }
-        case EthereumMethodType.ETH_SIGN:
-        case EthereumMethodType.PERSONAL_SIGN:
+        case EthereumMethodType.eth_sign:
+        case EthereumMethodType.personal_sign:
             try {
                 if (!signableMessage) throw new Error('No message to be signed.')
                 return createJsonRpcResponse(pid, await signer.signMessage(signableMessage))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign message.').error
             }
-        case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+        case EthereumMethodType.eth_signTypedData_v4:
             try {
                 if (!signableMessage) throw new Error('No typed data to be signed.')
                 return createJsonRpcResponse(pid, await signer.signTypedData(signableMessage))
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to sign typed data.').error
             }
-        case EthereumMethodType.ETH_SIGN_TRANSACTION:
+        case EthereumMethodType.eth_signTransaction:
             try {
                 if (!signableConfig) throw new Error('No transaction to be signed.')
                 return createJsonRpcResponse(pid, await signer.signTransaction(signableConfig))
@@ -89,8 +89,7 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to deploy.').error
             }
-        case EthereumMethodType.ETH_DECRYPT:
-        case EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY:
+        case EthereumMethodType.eth_getEncryptionPublicKey:
             throw new Error('Method not implemented.')
         default:
             try {

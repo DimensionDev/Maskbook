@@ -12,12 +12,12 @@ export class TransactionWatcher implements Middleware<ConnectionContext> {
             [
                 EthereumMethodType.MASK_DEPLOY,
                 EthereumMethodType.MASK_FUND,
-                EthereumMethodType.ETH_SEND_TRANSACTION,
-                EthereumMethodType.ETH_SEND_USER_OPERATION,
+                EthereumMethodType.eth_sendTransaction,
+                EthereumMethodType.eth_sendUserOperation,
             ].includes(context.method)
         const failedToEstimateTransaction =
             (context.error as RecognizableError | null)?.isRecognized &&
-            context.method === EthereumMethodType.ETH_ESTIMATE_GAS
+            context.method === EthereumMethodType.eth_estimateGas
 
         if (failedToSendTransaction || failedToEstimateTransaction) {
             await evm.state?.TransactionWatcher?.notifyError(context.error!, context.request)

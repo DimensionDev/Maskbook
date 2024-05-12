@@ -23,7 +23,7 @@ export class OperaProvider extends EVMInjectedWalletProvider {
         if (!isValidChainId(chainId)) throw new Error('Invalid chain id.')
 
         await this.request({
-            method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+            method: EthereumMethodType.wallet_switchEthereumChain,
             params: [
                 {
                     chainId: web3_utils.toHex(chainId),

@@ -44,11 +44,11 @@ export class PayloadEditor {
     get from(): string | undefined {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.ETH_SIGN:
+            case EthereumMethodType.eth_sign:
                 return first(params)
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.personal_sign:
                 return params?.[1]
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            case EthereumMethodType.eth_signTypedData_v4:
                 return first(params)
             default:
                 const config = this.config
@@ -89,7 +89,7 @@ export class PayloadEditor {
     get chainDescriptor() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN:
+            case EthereumMethodType.wallet_addEthereumChain:
                 const [descriptor] = params as [EIP3085Descriptor]
                 return descriptor
             default:
@@ -100,10 +100,10 @@ export class PayloadEditor {
     private getRawConfig() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.ETH_CALL:
-            case EthereumMethodType.ETH_ESTIMATE_GAS:
-            case EthereumMethodType.ETH_SIGN_TRANSACTION:
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
+            case EthereumMethodType.eth_call:
+            case EthereumMethodType.eth_estimateGas:
+            case EthereumMethodType.eth_signTransaction:
+            case EthereumMethodType.eth_sendTransaction:
                 return (params as [Transaction])[0]
             case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 return (params as [string, Transaction])[1]
@@ -177,8 +177,8 @@ export class PayloadEditor {
     get userOperation() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.ETH_CALL_USER_OPERATION:
-            case EthereumMethodType.ETH_SEND_USER_OPERATION:
+            case EthereumMethodType.eth_callUserOperation:
+            case EthereumMethodType.eth_sendUserOperation:
                 const [_, userOperation] = params as [string, UserOperation]
                 return userOperation
             default:
@@ -199,11 +199,11 @@ export class PayloadEditor {
     get signableMessage() {
         const { method, params } = this.payload
         switch (method) {
-            case EthereumMethodType.ETH_SIGN:
+            case EthereumMethodType.eth_sign:
                 return (params as [string, string])[1]
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.personal_sign:
                 return (params as [string, string])[0]
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            case EthereumMethodType.eth_signTypedData_v4:
                 return (params as [string, string])[1]
             default:
                 return

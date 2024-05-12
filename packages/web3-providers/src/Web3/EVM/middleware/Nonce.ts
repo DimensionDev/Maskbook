@@ -42,7 +42,7 @@ class NonceAPI implements Middleware<ConnectionContext> {
             !context.owner &&
             context.account &&
             context.providerType === ProviderType.MaskWallet &&
-            context.method === EthereumMethodType.ETH_SEND_TRANSACTION
+            context.method === EthereumMethodType.eth_sendTransaction
         ) {
             context.requestArguments = {
                 method: context.method,
@@ -59,7 +59,7 @@ class NonceAPI implements Middleware<ConnectionContext> {
 
         await next() // send transaction
 
-        if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+        if (context.method !== EthereumMethodType.eth_sendTransaction) return
 
         try {
             const message = context.error?.message ?? ''

@@ -21,7 +21,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
 
         try {
             switch (context.method) {
-                case EthereumMethodType.ETH_SEND_TRANSACTION:
+                case EthereumMethodType.eth_sendTransaction:
                     const tx = context.result as string
                     if (!tx || !context.config) return
                     const account = context.config.from ?? context.account
@@ -38,7 +38,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                         draftedAt,
                     })
                     break
-                case EthereumMethodType.ETH_SEND_USER_OPERATION:
+                case EthereumMethodType.eth_sendUserOperation:
                     if (!context.userOperation || typeof context.result !== 'string') return
                     const transaction = UserTransaction.UserTransaction.toTransaction(
                         context.chainId,
@@ -49,7 +49,7 @@ export class RecentTransaction implements Middleware<ConnectionContext> {
                         draftedAt,
                     })
                     break
-                case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                case EthereumMethodType.eth_getTransactionReceipt:
                     const receipt = context.result as TransactionReceipt | null
                     const status = getTransactionStatusType(receipt)
                     if (!receipt?.transactionHash || status === TransactionStatusType.NOT_DEPEND) return

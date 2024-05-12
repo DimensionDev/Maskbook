@@ -5,7 +5,7 @@ export async function fetchChainId(url: string, init?: RequestInit) {
     const { result } = await fetchJsonRpcResponse(
         url,
         createJsonRpcPayload(0, {
-            method: EthereumMethodType.ETH_CHAIN_ID,
+            method: EthereumMethodType.eth_chainId,
             params: [],
         }),
         init,
