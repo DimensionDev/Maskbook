@@ -140,6 +140,9 @@ const methods: Methods = {
             params: [challenge, requestedAddress],
         })
     },
+    async personal_ecRecover(message, signature) {
+        return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)
+    },
     async eth_sendTransaction(options) {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))

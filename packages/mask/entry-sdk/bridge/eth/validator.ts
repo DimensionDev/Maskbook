@@ -236,6 +236,7 @@ export const methodValidate = {
         return: _.hex,
     },
     personal_sign: { args: z.tuple([_.hexAllowCap.describe('Challenge'), _.address]), return: _.hex },
+    personal_ecRecover: { args: z.tuple([z.string(), _.hex]), return: _.hex },
     eth_sendTransaction: {
         args: z.tuple([
             // ! not same as _.transaction
