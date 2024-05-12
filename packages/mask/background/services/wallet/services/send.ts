@@ -89,8 +89,6 @@ export async function send(payload: JsonRpcPayload, options?: TransactionOptions
             } catch (error) {
                 throw ErrorEditor.from(error, null, 'Failed to deploy.').error
             }
-        case EthereumMethodType.eth_getEncryptionPublicKey:
-            throw new Error('Method not implemented.')
         default:
             try {
                 const result = await EVMRequestReadonly.request(
