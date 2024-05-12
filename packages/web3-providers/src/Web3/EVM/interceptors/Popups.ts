@@ -120,7 +120,7 @@ export class Popups implements Middleware<ConnectionContext> {
             const MaskProvider = MaskWalletProviderInstance
             const currentChainId = MaskProvider.subscription.chainId.getCurrentValue()
 
-            if (context.method === EthereumMethodType.ETH_SEND_TRANSACTION && currentChainId !== context.chainId) {
+            if (context.method === EthereumMethodType.eth_sendTransaction && currentChainId !== context.chainId) {
                 await MaskProvider.switchChain(context.chainId)
 
                 // if send risky requests to a custom network, the providerURL must be provided.

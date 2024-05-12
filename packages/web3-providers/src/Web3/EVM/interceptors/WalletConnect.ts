@@ -5,7 +5,7 @@ import type { ConnectionContext } from '../libs/ConnectionContext.js'
 export class WalletConnect implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         switch (context.request.method) {
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.personal_sign:
                 context.requestArguments = {
                     ...context.requestArguments,
                     params: [...context.requestArguments.params.slice(0, 2), ''],
@@ -18,7 +18,7 @@ export class WalletConnect implements Middleware<ConnectionContext> {
         await next()
 
         switch (context.request.method) {
-            case EthereumMethodType.ETH_CHAIN_ID:
+            case EthereumMethodType.eth_chainId:
                 if (typeof context.result === 'number') {
                     context.result = web3_utils.toHex(context.result)
                 }

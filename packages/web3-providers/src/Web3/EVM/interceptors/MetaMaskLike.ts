@@ -15,13 +15,13 @@ export class MetaMaskLike implements Middleware<ConnectionContext> {
         }
 
         switch (context.request.method) {
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.personal_sign:
                 context.requestArguments = {
                     ...context.requestArguments,
                     params: [...context.requestArguments.params.slice(0, 2), ''],
                 }
                 break
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
+            case EthereumMethodType.eth_sendTransaction:
                 const currentChainId = await this.Web3.getChainId()
                 if (currentChainId !== context.chainId) {
                     await this.Web3.connect({

@@ -192,77 +192,71 @@ export interface GasOption {
 }
 
 // https://ethereum.github.io/execution-apis/api-documentation/
+// if it's readonly, also add it in packages/web3-shared/evm/src/helpers/isReadonlyMethodType.ts
+// if it's risky, also add it in packages/web3-shared/evm/src/helpers/isRiskyMethodType.ts
 export enum EthereumMethodType {
     // Core methods
-    ETH_ACCOUNTS = 'eth_accounts',
-    ETH_BLOB_BASE_FEE = 'eth_blobBaseFee',
-    ETH_BLOCK_NUMBER = 'eth_blockNumber',
-    ETH_CALL = 'eth_call',
-    ETH_CHAIN_ID = 'eth_chainId',
-    ETH_DECRYPT = 'eth_decrypt',
-    ETH_ESTIMATE_GAS = 'eth_estimateGas',
-    ETH_FEE_HISTORY = 'eth_feeHistory',
-    ETH_GAS_PRICE = 'eth_gasPrice',
-    ETH_GET_BALANCE = 'eth_getBalance',
-    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
-    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
-    ETH_GET_BLOCK_RECEIPTS = 'eth_getBlockReceipts',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH = 'eth_getBlockTransactionCountByHash',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER = 'eth_getBlockTransactionCountByNumber',
-    ETH_GET_CODE = 'eth_getCode',
-    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
-    ETH_GET_LOGS = 'eth_getLogs',
-    ETH_GET_PROOF = 'eth_getProof',
-    ETH_GET_STORAGE_AT = 'eth_getStorageAt',
-    ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX = 'eth_getTransactionByBlockHashAndIndex',
-    ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX = 'eth_getTransactionByBlockNumberAndIndex',
-    ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
-    ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
-    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
-    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
-    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
-    ETH_SIGN = 'eth_sign',
-    ETH_SIGN_TRANSACTION = 'eth_signTransaction',
-    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v4',
-    ETH_SIGN_TYPED_DATA_OLD_V1 = 'eth_signTypedData',
-    ETH_SIGN_TYPED_DATA_OLD_V3 = 'eth_signTypedData_v3',
-    ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds', // ??
-    ETH_SYNCING = 'eth_syncing',
-    PERSONAL_SIGN = 'personal_sign',
+    eth_accounts = 'eth_accounts',
+    eth_blobBaseFee = 'eth_blobBaseFee',
+    eth_blockNumber = 'eth_blockNumber',
+    eth_call = 'eth_call',
+    eth_chainId = 'eth_chainId',
+    eth_decrypt = 'eth_decrypt',
+    eth_estimateGas = 'eth_estimateGas',
+    eth_feeHistory = 'eth_feeHistory',
+    eth_gasPrice = 'eth_gasPrice',
+    eth_getBalance = 'eth_getBalance',
+    eth_getBlockByHash = 'eth_getBlockByHash',
+    eth_getBlockByNumber = 'eth_getBlockByNumber',
+    eth_getBlockReceipts = 'eth_getBlockReceipts',
+    eth_getBlockTransactionCountByHash = 'eth_getBlockTransactionCountByHash',
+    eth_getBlockTransactionCountByNumber = 'eth_getBlockTransactionCountByNumber',
+    eth_getCode = 'eth_getCode',
+    eth_getLogs = 'eth_getLogs',
+    eth_getProof = 'eth_getProof',
+    eth_getStorageAt = 'eth_getStorageAt',
+    eth_getTransactionByBlockHashAndIndex = 'eth_getTransactionByBlockHashAndIndex',
+    eth_getTransactionByBlockNumberAndIndex = 'eth_getTransactionByBlockNumberAndIndex',
+    eth_getTransactionByHash = 'eth_getTransactionByHash',
+    eth_getTransactionCount = 'eth_getTransactionCount',
+    eth_getTransactionReceipt = 'eth_getTransactionReceipt',
+    eth_getUncleCountByBlockHash = 'eth_getUncleCountByBlockHash',
+    eth_getUncleCountByBlockNumber = 'eth_getUncleCountByBlockNumber',
+    eth_sendRawTransaction = 'eth_sendRawTransaction',
+    eth_sendTransaction = 'eth_sendTransaction',
+    eth_sign = 'eth_sign',
+    eth_signTransaction = 'eth_signTransaction',
+    eth_signTypedData_v4 = 'eth_signTypedData_v4',
+    eth_supportedChainIds = 'eth_supportedChainIds', // ??
+    eth_syncing = 'eth_syncing',
+    personal_sign = 'personal_sign',
     // Filters
-    ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
-    ETH_GET_FILTER_LOGS = 'eth_getFilterLogs',
-    ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
-    ETH_NEW_FILTER = 'eth_newFilter',
-    ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
-    ETH_UNINSTALL_FILTER = 'eth_uninstallFilter',
+    eth_getFilterChanges = 'eth_getFilterChanges',
+    eth_getFilterLogs = 'eth_getFilterLogs',
+    eth_newBlockFilter = 'eth_newBlockFilter',
+    eth_newFilter = 'eth_newFilter',
+    eth_newPendingTransactionFilter = 'eth_newPendingTransactionFilter',
+    eth_uninstallFilter = 'eth_uninstallFilter',
 
     // https://eips.ethereum.org/EIPS/eip-747
-    WATCH_ASSET = 'wallet_watchAsset',
-    WATCH_ASSET_LEGACY = 'metamask_watchAsset',
-
-    // https://eips.ethereum.org/EIPS/eip-758
-    ETH_SUBSCRIBE = 'eth_subscribe',
-    ETH_UNSUBSCRIBE = 'eth_unsubscribe',
+    wallet_watchAsset = 'wallet_watchAsset',
 
     // https://eips.ethereum.org/EIPS/eip-1102
-    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
+    eth_requestAccounts = 'eth_requestAccounts',
 
     // https://eips.ethereum.org/EIPS/eip-1474
-    NET_VERSION = 'net_version',
+    net_version = 'net_version',
 
     // https://eips.ethereum.org/EIPS/eip-3085
-    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+    wallet_addEthereumChain = 'wallet_addEthereumChain',
 
     // https://eips.ethereum.org/EIPS/eip-3326
-    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    wallet_switchEthereumChain = 'wallet_switchEthereumChain',
 
     // https://eips.ethereum.org/EIPS/eip-4337
-    ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
-    ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
-    ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
+    eth_callUserOperation = 'eth_callUserOperation',
+    eth_sendUserOperation = 'eth_sendUserOperation',
+    eth_supportedEntryPoints = 'eth_supportedEntryPoints',
 
     // Mask Network
     MASK_ADD_WALLET = 'MASK_ADD_WALLET',

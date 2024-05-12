@@ -64,11 +64,11 @@ export abstract class EVMInjectedWalletProvider extends BaseEVMWalletProvider {
 
         const provider = this.createWeb3Provider()
         const accounts = await provider.request<string[]>({
-            method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
+            method: EthereumMethodType.eth_requestAccounts,
             params: [],
         })
         const chainId = await provider.request<string>({
-            method: EthereumMethodType.ETH_CHAIN_ID,
+            method: EthereumMethodType.eth_chainId,
             params: [],
         })
         return {

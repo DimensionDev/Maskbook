@@ -128,60 +128,60 @@ export class ContractWallet implements Middleware<ConnectionContext> {
         }
 
         switch (context.request.method) {
-            case EthereumMethodType.ETH_CHAIN_ID:
+            case EthereumMethodType.eth_chainId:
                 context.write(provider?.hostedChainId ? web3_utils.toHex(provider?.hostedChainId) : undefined)
                 break
-            case EthereumMethodType.ETH_ACCOUNTS:
+            case EthereumMethodType.eth_accounts:
                 if (isValidAddress(provider?.hostedAccount)) {
                     context.write([provider.hostedAccount])
                 } else {
                     context.abort(new Error('Please connect a wallet.'))
                 }
                 break
-            case EthereumMethodType.ETH_GET_TRANSACTION_COUNT:
+            case EthereumMethodType.eth_getTransactionCount:
                 try {
                     context.write(await this.getNonce(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SEND_TRANSACTION:
+            case EthereumMethodType.eth_sendTransaction:
                 try {
                     context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SEND_USER_OPERATION:
+            case EthereumMethodType.eth_sendUserOperation:
                 try {
                     context.write(await this.send(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS:
+            case EthereumMethodType.eth_supportedChainIds:
                 try {
                     context.write([await this.bundler.getSupportedChainId()])
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS:
+            case EthereumMethodType.eth_supportedEntryPoints:
                 try {
                     context.write(await this.bundler.getSupportedEntryPoints(context.chainId))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_ESTIMATE_GAS:
+            case EthereumMethodType.eth_estimateGas:
                 try {
                     context.write(await this.estimate(context))
                 } catch (error) {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SIGN:
-            case EthereumMethodType.PERSONAL_SIGN:
+            case EthereumMethodType.eth_sign:
+            case EthereumMethodType.personal_sign:
                 try {
                     if (!context.message) throw new Error('Invalid message.')
                     context.write(await this.getSigner(context).signMessage(context.message))
@@ -189,7 +189,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+            case EthereumMethodType.eth_signTypedData_v4:
                 try {
                     if (!context.message) throw new Error('Invalid typed data.')
                     context.write(await this.getSigner(context).signTypedData(context.message))
@@ -197,7 +197,7 @@ export class ContractWallet implements Middleware<ConnectionContext> {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.ETH_SIGN_TRANSACTION:
+            case EthereumMethodType.eth_signTransaction:
                 try {
                     if (!context.config) throw new Error('Invalid transaction.')
                     context.write(await this.getSigner(context).signTransaction(context.config))
@@ -221,10 +221,10 @@ export class ContractWallet implements Middleware<ConnectionContext> {
                     context.abort(error)
                 }
                 break
-            case EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN:
+            case EthereumMethodType.wallet_switchEthereumChain:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
-            case EthereumMethodType.ETH_SEND_RAW_TRANSACTION:
+            case EthereumMethodType.eth_sendRawTransaction:
                 context.abort(new Error('Not supported by contract wallet.'))
                 break
             default:

@@ -82,11 +82,11 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
 
     override async connect(): Promise<Account<ChainId>> {
         const accounts = await this.request<string[]>({
-            method: EthereumMethodType.ETH_REQUEST_ACCOUNTS,
+            method: EthereumMethodType.eth_requestAccounts,
             params: [],
         })
         const chainId = await this.request<string>({
-            method: EthereumMethodType.ETH_CHAIN_ID,
+            method: EthereumMethodType.eth_chainId,
             params: [],
         })
 

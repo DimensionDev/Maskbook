@@ -48,7 +48,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         const request = this.resolveRequest(request_, updates)
 
         const { method, chainId, config } = PayloadEditor.fromMethod(request.arguments.method, request.arguments.params)
-        if (method !== EthereumMethodType.ETH_SEND_TRANSACTION) return request
+        if (method !== EthereumMethodType.eth_sendTransaction) return request
 
         // recheck the nonce and update it if needed before sending with the transaction
         if (config.from && typeof config.nonce !== 'undefined') {

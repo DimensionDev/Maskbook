@@ -113,9 +113,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const signRequest = [
-    EthereumMethodType.ETH_SIGN,
-    EthereumMethodType.ETH_SIGN_TYPED_DATA,
-    EthereumMethodType.PERSONAL_SIGN,
+    EthereumMethodType.eth_sign,
+    EthereumMethodType.eth_signTypedData_v4,
+    EthereumMethodType.personal_sign,
 ]
 
 const approveParametersType = [
@@ -199,26 +199,15 @@ const Interaction = memo((props: InteractionProps) => {
         if (!signRequest.includes(currentRequest.request.arguments.method)) return undefined
         const { method, params } = currentRequest.request.arguments
 
-        if (method === EthereumMethodType.ETH_SIGN_TYPED_DATA) {
+        if (method === EthereumMethodType.eth_signTypedData_v4) {
             if (typeof params[1] === 'object') return params[1]
             return undefined
         }
-        if (method === EthereumMethodType.PERSONAL_SIGN) {
+        if (method === EthereumMethodType.personal_sign) {
             if (typeof params[0] === 'string') return params[0]
             return undefined
         }
-
-        // https://medium.com/metamask/scaling-web3-with-signtypeddata-91d6efc8b290
-        if (method === EthereumMethodType.ETH_SIGN_TYPED_DATA_OLD_V1) {
-            if (typeof params[0] === 'object') return params[0]
-            return undefined
-        }
-        // https://medium.com/metamask/eip712-is-coming-what-to-expect-and-how-to-use-it-bb92fd1a7a26
-        if (method === EthereumMethodType.ETH_SIGN_TYPED_DATA_OLD_V3) {
-            if (typeof params[1] === 'object') return params[0]
-            return undefined
-        }
-        if (method === EthereumMethodType.ETH_SIGN) {
+        if (method === EthereumMethodType.eth_sign) {
             if (typeof params[1] === 'string') return params[1]
             return undefined
         }
@@ -265,11 +254,9 @@ const Interaction = memo((props: InteractionProps) => {
         getInteractingWallet: {
             const req = currentRequest.request.arguments
             if (!req) break getInteractingWallet
-            if (req.method === EthereumMethodType.ETH_DECRYPT) interactingWallet = req.params[1]
-            if (req.method === EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY) interactingWallet = req.params[0]
-            if (req.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) interactingWallet = req.params[0]
-            if (req.method === EthereumMethodType.PERSONAL_SIGN) interactingWallet = req.params[1]
-            if (req.method === EthereumMethodType.ETH_SEND_TRANSACTION) interactingWallet = req.params[0]?.from
+            if (req.method === EthereumMethodType.eth_signTypedData_v4) interactingWallet = req.params[0]
+            if (req.method === EthereumMethodType.personal_sign) interactingWallet = req.params[1]
+            if (req.method === EthereumMethodType.eth_sendTransaction) interactingWallet = req.params[0]?.from
 
             interactingWallet = String(interactingWallet)
             if (interactingWallet && !interactingWallet.startsWith('0x')) interactingWallet = undefined
@@ -284,7 +271,7 @@ const Interaction = memo((props: InteractionProps) => {
         async (paymentToken: string, approveAmount: string, gasConfig: GasConfig | undefined) => {
             try {
                 let params = currentRequest.request.arguments.params
-                if (currentRequest.request.arguments.method === EthereumMethodType.WATCH_ASSET) {
+                if (currentRequest.request.arguments.method === EthereumMethodType.wallet_watchAsset) {
                     const type = params[0].type
                     const address = params[0].options.address
                     if (type === 'ERC21') {
@@ -373,11 +360,11 @@ const Interaction = memo((props: InteractionProps) => {
                         )
                     }
 
-                    if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) {
+                    if (currentRequest.request.arguments.method === EthereumMethodType.eth_signTypedData_v4) {
                         if (typeof params[1] === 'object') params[1] = JSON.stringify(params[1])
                     }
 
-                    if (currentRequest.request.arguments.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+                    if (currentRequest.request.arguments.method === EthereumMethodType.eth_sendTransaction) {
                         if (params[0].type === '0x0') {
                             delete params[0].type
                             delete params[0].gasPrice
@@ -553,7 +540,8 @@ const InteractionItem = memo((props: InteractionItemProps) => {
     const isUnlockERC20 = transaction.formattedTransaction?.popup?.spender
     const isUnlockERC721 = transaction.formattedTransaction?.popup?.erc721Spender
     const content =
-        transaction.payload.method === EthereumMethodType.WATCH_ASSET ? <WatchTokenRequest transaction={transaction} />
+        transaction.payload.method === EthereumMethodType.wallet_watchAsset ?
+            <WatchTokenRequest transaction={transaction} />
         : isSignRequest ? <SignRequestInfo message={message} rawMessage={rawMessage} origin={requestOrigin} />
         : isUnlockERC20 ?
             <UnlockERC20Token

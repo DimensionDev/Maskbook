@@ -18,9 +18,9 @@ export class EIP155Editor {
         return {
             accounts: [],
             methods: [
-                EthereumMethodType.ETH_SIGN,
-                EthereumMethodType.ETH_SEND_TRANSACTION,
-                EthereumMethodType.PERSONAL_SIGN,
+                EthereumMethodType.eth_sign,
+                EthereumMethodType.eth_sendTransaction,
+                EthereumMethodType.personal_sign,
             ],
             chains: [this.eip155ChainId],
             events: ['chainChanged', 'accountsChanged', 'disconnect', 'connect'],
