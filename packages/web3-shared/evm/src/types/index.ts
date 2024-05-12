@@ -212,7 +212,6 @@ export enum EthereumMethodType {
     eth_getBlockTransactionCountByHash = 'eth_getBlockTransactionCountByHash',
     eth_getBlockTransactionCountByNumber = 'eth_getBlockTransactionCountByNumber',
     eth_getCode = 'eth_getCode',
-    eth_getEncryptionPublicKey = 'eth_getEncryptionPublicKey',
     eth_getLogs = 'eth_getLogs',
     eth_getProof = 'eth_getProof',
     eth_getStorageAt = 'eth_getStorageAt',

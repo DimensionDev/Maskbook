@@ -6,7 +6,6 @@ export function isRiskyMethodType(type: EthereumMethodType) {
         EthereumMethodType.personal_sign,
         EthereumMethodType.wallet_watchAsset,
         EthereumMethodType.eth_signTypedData_v4,
-        EthereumMethodType.eth_getEncryptionPublicKey,
         EthereumMethodType.eth_sendTransaction,
         EthereumMethodType.eth_signTransaction,
         EthereumMethodType.MASK_REPLACE_TRANSACTION,

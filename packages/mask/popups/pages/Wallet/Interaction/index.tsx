@@ -254,7 +254,6 @@ const Interaction = memo((props: InteractionProps) => {
         getInteractingWallet: {
             const req = currentRequest.request.arguments
             if (!req) break getInteractingWallet
-            if (req.method === EthereumMethodType.eth_getEncryptionPublicKey) interactingWallet = req.params[0]
             if (req.method === EthereumMethodType.eth_signTypedData_v4) interactingWallet = req.params[0]
             if (req.method === EthereumMethodType.personal_sign) interactingWallet = req.params[1]
             if (req.method === EthereumMethodType.eth_sendTransaction) interactingWallet = req.params[0]?.from
