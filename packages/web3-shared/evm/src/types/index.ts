@@ -191,83 +191,93 @@ export interface GasOption {
     suggestedMaxPriorityFeePerGas: string
 }
 
-// Learn more for a full list of supported JSON RPC methods
-// https://eth.wiki/json-rpc/API#json-rpc-methods
+// https://ethereum.github.io/execution-apis/api-documentation/
 export enum EthereumMethodType {
-    WATCH_ASSET = 'wallet_watchAsset',
-    WATCH_ASSET_LEGACY = 'metamask_watchAsset',
-    PERSONAL_SIGN = 'personal_sign',
-    // https://eips.ethereum.org/EIPS/eip-3085
-    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
-    // https://eips.ethereum.org/EIPS/eip-3326
-    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
-    ETH_CHAIN_ID = 'eth_chainId',
+    // Core methods
     ETH_ACCOUNTS = 'eth_accounts',
     ETH_BLOB_BASE_FEE = 'eth_blobBaseFee',
-    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
-    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
-    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
-    ETH_GET_CODE = 'eth_getCode',
-    ETH_GAS_PRICE = 'eth_gasPrice',
-    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
-    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
     ETH_BLOCK_NUMBER = 'eth_blockNumber',
+    ETH_CALL = 'eth_call',
+    ETH_CHAIN_ID = 'eth_chainId',
+    ETH_DECRYPT = 'eth_decrypt',
+    ETH_ESTIMATE_GAS = 'eth_estimateGas',
+    ETH_FEE_HISTORY = 'eth_feeHistory',
+    ETH_GAS_PRICE = 'eth_gasPrice',
     ETH_GET_BALANCE = 'eth_getBalance',
+    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
+    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
+    ETH_GET_BLOCK_RECEIPTS = 'eth_getBlockReceipts',
+    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH = 'eth_getBlockTransactionCountByHash',
+    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER = 'eth_getBlockTransactionCountByNumber',
+    ETH_GET_CODE = 'eth_getCode',
+    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+    ETH_GET_LOGS = 'eth_getLogs',
+    ETH_GET_PROOF = 'eth_getProof',
+    ETH_GET_STORAGE_AT = 'eth_getStorageAt',
+    ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX = 'eth_getTransactionByBlockHashAndIndex',
+    ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX = 'eth_getTransactionByBlockNumberAndIndex',
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
-    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
+    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
+    ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
+    ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
+    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
+    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
+    ETH_SIGN = 'eth_sign',
+    ETH_SIGN_TRANSACTION = 'eth_signTransaction',
+    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v4',
+    ETH_SIGN_TYPED_DATA_OLD_V1 = 'eth_signTypedData',
+    ETH_SIGN_TYPED_DATA_OLD_V3 = 'eth_signTypedData_v3',
+    ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds', // ??
+    ETH_SYNCING = 'eth_syncing',
+    PERSONAL_SIGN = 'personal_sign',
+    // Filters
     ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
     ETH_GET_FILTER_LOGS = 'eth_getFilterLogs',
     ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
     ETH_NEW_FILTER = 'eth_newFilter',
     ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
     ETH_UNINSTALL_FILTER = 'eth_uninstallFilter',
-    ETH_ESTIMATE_GAS = 'eth_estimateGas',
-    ETH_CALL = 'eth_call',
-    ETH_SIGN = 'eth_sign',
-    ETH_DECRYPT = 'eth_decrypt',
-    ETH_SIGN_TYPED_DATA_OLD_V1 = 'eth_signTypedData',
-    ETH_SIGN_TYPED_DATA_OLD_V3 = 'eth_signTypedData_v3',
-    ETH_SIGN_TYPED_DATA = 'eth_signTypedData_v4',
-    ETH_SIGN_TRANSACTION = 'eth_signTransaction',
-    ETH_GET_LOGS = 'eth_getLogs',
-    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
-    ETH_FEE_HISTORY = 'eth_feeHistory',
-    ETH_GET_BLOCK_RECEIPTS = 'eth_getBlockReceipts',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH = 'eth_getBlockTransactionCountByHash',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER = 'eth_getBlockTransactionCountByNumber',
-    ETH_GET_PROOF = 'eth_getProof',
-    ETH_GET_STORAGE_AT = 'eth_getStorageAt',
-    ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX = 'eth_getTransactionByBlockHashAndIndex',
-    ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX = 'eth_getTransactionByBlockNumberAndIndex',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
-    ETH_SYNCING = 'eth_syncing',
+
+    // https://eips.ethereum.org/EIPS/eip-747
+    WATCH_ASSET = 'wallet_watchAsset',
+    WATCH_ASSET_LEGACY = 'metamask_watchAsset',
+
+    // https://eips.ethereum.org/EIPS/eip-758
     ETH_SUBSCRIBE = 'eth_subscribe',
     ETH_UNSUBSCRIBE = 'eth_unsubscribe',
 
-    // EIP-4337
-    ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
+    // https://eips.ethereum.org/EIPS/eip-1102
+    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
+
+    // https://eips.ethereum.org/EIPS/eip-1474
+    NET_VERSION = 'net_version',
+
+    // https://eips.ethereum.org/EIPS/eip-3085
+    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
+
+    // https://eips.ethereum.org/EIPS/eip-3326
+    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+
+    // https://eips.ethereum.org/EIPS/eip-4337
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
-    ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
+    ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
+
+    // Mask Network
+    MASK_ADD_WALLET = 'MASK_ADD_WALLET',
     MASK_DEPLOY = 'mask_deploy',
     MASK_FUND = 'mask_fund',
-
-    // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
-    MASK_WALLETS = 'MASK_WALLETS',
-    MASK_ADD_WALLET = 'MASK_ADD_WALLET',
-    MASK_UPDATE_WALLET = 'MASK_UPDATE_WALLET',
-    MASK_RENAME_WALLET = 'MASK_RENAME_WALLET',
     MASK_REMOVE_WALLET = 'MASK_REMOVE_WALLET',
-    MASK_UPDATE_WALLETS = 'MASK_UPDATE_WALLETS',
     MASK_REMOVE_WALLETS = 'MASK_REMOVE_WALLETS',
-    MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
+    MASK_RENAME_WALLET = 'MASK_RENAME_WALLET',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-
-    NET_VERSION = 'net_version',
+    MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
+    MASK_UPDATE_WALLET = 'MASK_UPDATE_WALLET',
+    MASK_UPDATE_WALLETS = 'MASK_UPDATE_WALLETS',
+    MASK_WALLETS = 'MASK_WALLETS',
 }
 
 export enum TransactionEventType {
