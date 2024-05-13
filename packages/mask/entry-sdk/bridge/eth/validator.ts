@@ -190,9 +190,9 @@ export const methodValidate = {
         return: z.boolean(),
     },
     // deprecated
-    eth_decrypt: { args: z.tuple([z.string().describe('EncryptedMessage'), _.address]), return: z.never() },
+    // eth_decrypt: { args: z.tuple([z.string().describe('EncryptedMessage'), _.address]), return: z.never() },
     // deprecated
-    eth_getEncryptionPublicKey: { args: z.tuple([_.address]), return: z.never() },
+    // eth_getEncryptionPublicKey: { args: z.tuple([_.address]), return: z.never() },
     eth_requestAccounts: { args: z.tuple([]), return: _.address.array() },
     eth_accounts: { args: z.tuple([]), return: _.address.array() },
     eth_blobBaseFee: { args: z.tuple([]), return: _.unpadded_hex },
@@ -259,11 +259,11 @@ export const methodValidate = {
         ]),
         return: _.transaction_hash,
     },
-    web3_clientVersion: { args: z.tuple([]), return: z.string() },
+    // web3_clientVersion: { args: z.tuple([]), return: z.string() },
     eth_blockNumber: { args: z.tuple([]), return: _.unpadded_hex },
     eth_call: { args: z.tuple([_.transaction, _.block.nullish()]), return: _.hex },
     eth_chainId: { args: z.tuple([]), return: _.chainId },
-    eth_coinbase: { args: z.tuple([]), return: _.address },
+    // eth_coinbase: { args: z.tuple([]), return: _.address },
     eth_estimateGas: { args: z.tuple([_.transaction, _.block_number_or_tag.nullish()]), return: _.unpadded_hex },
     eth_feeHistory: {
         args: z.tuple([
@@ -326,7 +326,7 @@ type returns = {
 }
 
 export type Methods = {
-    [K in keyof typeof methodValidate]?: (
+    [K in keyof typeof methodValidate]: (
         ...params: z.infer<(typeof methodValidate)[K]['args']>
     ) => Promise<returns[K] | Result<returns[K], any> | MaskEthereumProviderRpcError>
 }

@@ -18,7 +18,7 @@ const PassthroughMethods = [
     EthereumMethodType.eth_newBlockFilter,
     EthereumMethodType.eth_newFilter,
     EthereumMethodType.eth_uninstallFilter,
-]
+] as const
 type PassthroughMethods = (typeof PassthroughMethods)[number]
 const passthroughMethods: Record<PassthroughMethods, (...params: any[]) => Promise<any>> = {} as any
 for (const method of PassthroughMethods) {
@@ -92,12 +92,20 @@ function getInteractiveClient(): Promise<InteractiveClient> {
 const methods: Methods = {
     ...passthroughMethods,
 
+    async eth_accounts() {
+        return Services.Wallet.sdk_eth_accounts(location.origin)
+    },
+    async eth_call(...params) {
+        if (params[0].chainId) {
+            const chainId = await Services.Wallet.sdk_eth_chainId()
+            if (params[0].chainId !== '0x' + chainId.toString(16))
+                return err.the_provider_is_disconnected_from_the_specified_chain()
+        }
+        return passthroughMethods.eth_call(params) as Promise<string>
+    },
     async eth_chainId() {
         const chainId = await Services.Wallet.sdk_eth_chainId()
         return '0x' + chainId.toString(16)
-    },
-    async eth_accounts() {
-        return Services.Wallet.sdk_eth_accounts(location.origin)
     },
     async eth_requestAccounts() {
         await Services.Wallet.requestUnlockWallet()
@@ -109,39 +117,16 @@ const methods: Methods = {
         if (wallets.length) return wallets
         return err.user_rejected_the_request()
     },
-    async eth_signTypedData_v4(requestedAddress, typedData) {
-        await Services.Wallet.requestUnlockWallet()
-        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
-            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
-        return providers.EVMWeb3.getWeb3Provider({
+    async eth_sendRawTransaction(transaction) {
+        const p = providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
-            account: requestedAddress,
             silent: false,
             readonly: false,
-        }).request({
-            method: EthereumMethodType.eth_signTypedData_v4,
-            params: [requestedAddress, typedData],
         })
-    },
-    async personal_sign(challenge, requestedAddress) {
-        // check challenge is 0x hex
-        await Services.Wallet.requestUnlockWallet()
-        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
-        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
-            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
-        return providers.EVMWeb3.getWeb3Provider({
-            providerType: ProviderType.MaskWallet,
-            account: requestedAddress,
-            silent: false,
-            readonly: false,
-        }).request({
-            method: EthereumMethodType.personal_sign,
-            params: [challenge, requestedAddress],
+        return p.request({
+            method: EthereumMethodType.eth_sendRawTransaction,
+            params: [transaction] as any,
         })
-    },
-    async personal_ecRecover(message, signature) {
-        return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)
     },
     async eth_sendTransaction(options) {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
@@ -158,15 +143,19 @@ const methods: Methods = {
             params: [options],
         })
     },
-    async eth_sendRawTransaction(transaction) {
-        const p = providers.EVMWeb3.getWeb3Provider({
+    async eth_signTypedData_v4(requestedAddress, typedData) {
+        await Services.Wallet.requestUnlockWallet()
+        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
+        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
+        return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
+            account: requestedAddress,
             silent: false,
             readonly: false,
-        })
-        return p.request({
-            method: EthereumMethodType.eth_sendRawTransaction,
-            params: [transaction] as any,
+        }).request({
+            method: EthereumMethodType.eth_signTypedData_v4,
+            params: [requestedAddress, typedData],
         })
     },
     async eth_subscribe(...params) {
@@ -178,8 +167,8 @@ const methods: Methods = {
     async eth_unsubscribe(...params) {
         return (await getInteractiveClient()).eth_unsubscribe!(...params)
     },
-    // https://eips.ethereum.org/EIPS/eip-2255
-    wallet_getPermissions() {
+    wallet_addEthereumChain: null!,
+    async wallet_getPermissions() {
         return Services.Wallet.sdk_EIP2255_wallet_getPermissions(location.origin)
     },
     async wallet_requestPermissions(request) {
@@ -196,14 +185,8 @@ const methods: Methods = {
             request as EIP2255PermissionRequest,
         )
     },
-    async eth_call(...params) {
-        if (params[0].chainId) {
-            const chainId = await Services.Wallet.sdk_eth_chainId()
-            if (params[0].chainId !== '0x' + chainId.toString(16))
-                return err.the_provider_is_disconnected_from_the_specified_chain()
-        }
-        return passthroughMethods.eth_call(params) as Promise<string>
-    },
+    wallet_revokePermissions: null!,
+    wallet_switchEthereumChain: null!,
     async wallet_watchAsset({ type, options: { address, decimals, image, symbol, tokenId } }) {
         // TODO: throw error if chainId is unknown (https://eips.ethereum.org/EIPS/eip-747#erc1046-type)
         if (!isValidChecksumAddress(address)) return err.invalid_address()
@@ -291,6 +274,25 @@ const methods: Methods = {
             params: [{ type, options: { address, decimals, image, symbol, tokenId } }],
         }).catch(() => {})
         return true
+    },
+    async personal_sign(challenge, requestedAddress) {
+        // check challenge is 0x hex
+        await Services.Wallet.requestUnlockWallet()
+        const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
+        if (!wallets.some((addr) => isSameAddress(addr, requestedAddress)))
+            return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
+        return providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            account: requestedAddress,
+            silent: false,
+            readonly: false,
+        }).request({
+            method: EthereumMethodType.personal_sign,
+            params: [challenge, requestedAddress],
+        })
+    },
+    async personal_ecRecover(message, signature) {
+        return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)
     },
 }
 
