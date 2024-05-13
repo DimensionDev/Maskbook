@@ -1,10 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { Fragment, memo, useEffect } from 'react'
+import { Fragment, memo } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Link, Typography } from '@mui/material'
-import { isSameAddress, type EIP4361Message, type ParsedEIP4361Message } from '@masknet/web3-shared-base'
+import type { EIP4361Message, ParsedEIP4361Message } from '@masknet/web3-shared-base'
 import { useInteractionWalletContext } from '../../pages/Wallet/Interaction/InteractionContext.js'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 import { TypedMessageTextRender } from '../../../../typed-message/react/src/Renderer/Core/Text.js'
 import { Alert } from '@masknet/shared'
 import { RenderFragmentsContext, type RenderFragmentsContextType } from '@masknet/typed-message-react'
@@ -168,12 +167,8 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
-    const { interactionWallet, setInteractionWallet } = useInteractionWalletContext()
-    useEffect(() => {
-        if (!isValidAddress(address)) return
-        if (isSameAddress(address, interactionWallet)) return
-        setInteractionWallet(address)
-    }, [interactionWallet, address])
+    const { useInteractionWallet } = useInteractionWalletContext()
+    useInteractionWallet(address)
 
     // TODO: show warning for non https request
     const invalidDomain = invalidFields.includes('domain')
