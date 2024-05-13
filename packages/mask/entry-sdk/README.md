@@ -13,7 +13,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 - [x] eth_call
 - [x] eth_chainId
 - eth_coinbase: not supported by infura
-- [ ] eth_createAccessList: not in MetaMask
+- eth_createAccessList: not in MetaMask
 - [x] eth_estimateGas
 - [x] eth_feeHistory
 - [x] eth_gasPrice
@@ -34,7 +34,7 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 - [x] eth_getTransactionReceipt
 - [x] eth_getUncleCountByBlockHash
 - [x] eth_getUncleCountByBlockNumber
-- [ ] eth_maxPriorityFeePerGas: not in MetaMask but in their docs <https://docs.metamask.io/wallet/reference/eth_maxpriorityfeepergas/>
+- [x] eth_maxPriorityFeePerGas
 - [x] eth_syncing
 
 ### Filters
@@ -50,12 +50,12 @@ The list is built from what [MetaMask supported](https://docs.metamask.io/wallet
 
 This section excludes PoW era methods and methods listed in <https://ethereum.github.io/execution-apis/api-documentation/>.
 
-- [ ] eth_protocolVersion
-- [ ] net_listening
-- [ ] net_peerCount
+- eth_protocolVersion: not in MetaMask
+- net_listening: not in MetaMask
+- net_peerCount: not in MetaMask
 - [x] net_version
-- [ ] web3_clientVersion
-- [ ] web3_sha3
+- web3_clientVersion: not in MetaMask
+- web3_sha3: not in MetaMask
 
 ### [EIP-758: Subscriptions and filters for completed transactions](https://eips.ethereum.org/EIPS/eip-758)
 

@@ -1,9 +1,8 @@
 import { EthereumMethodType } from '../types/index.js'
 
 export const readonlyMethodType = [
-    EthereumMethodType.net_version,
-    EthereumMethodType.eth_blockNumber,
     EthereumMethodType.eth_blobBaseFee,
+    EthereumMethodType.eth_blockNumber,
     EthereumMethodType.eth_call,
     EthereumMethodType.eth_estimateGas,
     EthereumMethodType.eth_feeHistory,
@@ -15,7 +14,7 @@ export const readonlyMethodType = [
     EthereumMethodType.eth_getBlockTransactionCountByHash,
     EthereumMethodType.eth_getBlockTransactionCountByNumber,
     EthereumMethodType.eth_getCode,
-    EthereumMethodType.eth_getFilterChanges,
+    EthereumMethodType.eth_getFilterChanges, // is it really readonly?
     EthereumMethodType.eth_getLogs,
     EthereumMethodType.eth_getProof,
     EthereumMethodType.eth_getStorageAt,
@@ -26,8 +25,10 @@ export const readonlyMethodType = [
     EthereumMethodType.eth_getTransactionReceipt,
     EthereumMethodType.eth_getUncleCountByBlockHash,
     EthereumMethodType.eth_getUncleCountByBlockNumber,
-    EthereumMethodType.eth_newPendingTransactionFilter,
+    EthereumMethodType.eth_maxPriorityFeePerGas,
+    EthereumMethodType.eth_newPendingTransactionFilter, // is it really readonly?
     EthereumMethodType.eth_syncing,
+    EthereumMethodType.net_version,
 ] as const
 Object.freeze(readonlyMethodType)
 export function isReadonlyMethodType(type: EthereumMethodType) {

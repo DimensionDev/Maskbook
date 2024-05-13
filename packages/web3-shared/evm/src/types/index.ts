@@ -222,12 +222,13 @@ export enum EthereumMethodType {
     eth_getTransactionReceipt = 'eth_getTransactionReceipt',
     eth_getUncleCountByBlockHash = 'eth_getUncleCountByBlockHash',
     eth_getUncleCountByBlockNumber = 'eth_getUncleCountByBlockNumber',
+    eth_maxPriorityFeePerGas = 'eth_maxPriorityFeePerGas',
     eth_sendRawTransaction = 'eth_sendRawTransaction',
     eth_sendTransaction = 'eth_sendTransaction',
     eth_sign = 'eth_sign',
     eth_signTransaction = 'eth_signTransaction',
     eth_signTypedData_v4 = 'eth_signTypedData_v4',
-    eth_supportedChainIds = 'eth_supportedChainIds', // ??
+    eth_supportedChainIds = 'eth_supportedChainIds', // unknown EIP
     eth_syncing = 'eth_syncing',
     personal_sign = 'personal_sign',
     // Filters
