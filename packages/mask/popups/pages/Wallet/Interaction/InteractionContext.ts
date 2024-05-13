@@ -1,5 +1,6 @@
 import { useWallet } from '@masknet/web3-hooks-base'
-import { useState } from 'react'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'
 
 /**
@@ -10,7 +11,19 @@ export const { Provider: InteractionWalletContext, useContainer: useInteractionW
     function () {
         const wallet = useWallet()
         const [interactionWallet, setInteractionWallet] = useState<string | undefined>()
-        return { interactionWallet: interactionWallet || wallet?.address, setInteractionWallet }
+
+        function useInteractionWallet(currentInteractingWallet: string | undefined) {
+            useEffect(() => {
+                if (currentInteractingWallet === interactionWallet) return
+                if (!isValidAddress(currentInteractingWallet)) return
+                setInteractionWallet(currentInteractingWallet)
+            }, [currentInteractingWallet, setInteractionWallet])
+        }
+
+        return {
+            interactionWallet: interactionWallet || wallet?.address,
+            useInteractionWallet,
+        }
     },
 )
-InteractionWalletContext.displayName = 'InteractionContext'
+InteractionWalletContext.displayName = 'InteractionWalletContext'

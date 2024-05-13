@@ -111,7 +111,7 @@ const methods: Methods = {
         await Services.Wallet.requestUnlockWallet()
         let wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
-        const request = await methods.wallet_requestPermissions!({ eth_accounts: {} })
+        const request = await methods.wallet_requestPermissions({ eth_accounts: {} })
         if (request instanceof Err) return request
         wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (wallets.length) return wallets
@@ -125,10 +125,11 @@ const methods: Methods = {
         })
         return p.request({
             method: EthereumMethodType.eth_sendRawTransaction,
-            params: [transaction] as any,
+            params: [transaction],
         })
     },
     async eth_sendTransaction(options) {
+        await Services.Wallet.requestUnlockWallet()
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
@@ -304,7 +305,7 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
 
         // validate method
         const { method: _method, params } = requestValidate.data
-        if (!(_method in methods)) {
+        if (!(methods as any)[_method]) {
             return {
                 e: err.the_method_method_does_not_exist_is_not_available({ method: _method }),
             }
