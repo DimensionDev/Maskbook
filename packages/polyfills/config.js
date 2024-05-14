@@ -16,8 +16,8 @@ const { list } = compat({
 })
 
 const ecmascriptPolyfill = list
-    .map((item) => require.resolve(`core-js/modules/${item}.js`))
-    .concat(require.resolve('./runtime/transpiler.js'))
+    .map((item) => `core-js/modules/${item}.js`)
+    .concat('./runtime/transpiler.js')
     .map((x) => `import '${x}'\n`)
     .join('')
 export default defineConfig([
