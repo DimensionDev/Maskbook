@@ -5,8 +5,7 @@ import virtual from '@rollup/plugin-virtual'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'rollup'
-import { swc } from 'rollup-plugin-swc3'
-import { terser } from 'rollup-plugin-terser'
+import { swc, minify } from 'rollup-plugin-swc3'
 
 const require = createRequire(import.meta.url)
 const compat = require('core-js-compat/compat')
@@ -31,11 +30,11 @@ export default defineConfig([
 /**
  * @license
  * This file includes the following runtime/polyfills.
+ * core-js:
+${list.map((x) => ` *     ${x}`).join('\n')}
  * regenerator-runtime
  * tslib
  * reflect-metadata
- * core-js:
-${list.map((x) => ` *     ${x}`).join('\n')}
  */
 if (!globalThis[Symbol.for('mask_init_polyfill')]) {
 globalThis[Symbol.for('mask_init_polyfill')] = true;
@@ -77,7 +76,7 @@ function plugins() {
             tsconfig: './tsconfig.json',
             jsc: { target: 'es2022' },
         }),
-        terser({ mangle: false }),
+        minify({ mangle: false, compress: false }),
         wrapperPlugin(),
     ]
 }
