@@ -116,7 +116,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getTopCollectorsByContract(
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},
-    ) {
+    ): Promise<Pageable<SimpleHash.TopCollector>> {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         const path = urlcat('/api/v0/nfts/top_collectors/:chain/:contract_address', {
             chain,
@@ -161,7 +161,10 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
+    async getAssets(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId, PageIndicator> = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
