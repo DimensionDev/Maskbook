@@ -9,14 +9,13 @@ export default defineConfig({
         file: 'dist/sentry.js',
         format: 'umd',
         name: 'Sentry',
+        intro: 'var window = globalThis;',
     },
     plugins: [
         nodeResolve(),
         replace({
             __SENTRY_BROWSER_BUNDLE__: true,
             __SENTRY_TRACING__: false,
-            window: 'globalThis',
-            'typeof window': '"object"',
             preventAssignment: true,
         }),
         // minify({ mangle: false, compress: false }),
