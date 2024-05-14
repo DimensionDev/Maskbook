@@ -1,5 +1,4 @@
 /// <reference types="@masknet/global-types/env" />
-import '@sentry/tracing'
 import {
     type UserOptions,
     type DeviceOptions,

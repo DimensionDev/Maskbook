@@ -1,18 +1,23 @@
-import node from '@rollup/plugin-node-resolve'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import image from '@rollup/plugin-image'
-import swc from 'rollup-plugin-swc3'
+import { swc, minify } from 'rollup-plugin-swc3'
+import { defineConfig } from 'rollup'
 
-export default {
+export default defineConfig({
     input: 'main/index.ts',
     output: {
         file: 'dist/mask-sdk.js',
         format: 'iife',
     },
     plugins: [
-        node(),
-        swc({
-            tsconfig: '../../tsconfig.json',
-        }),
+        //
+        nodeResolve(),
+        swc({ tsconfig: '../../tsconfig.json' }),
+        minify({ mangle: false, compress: false }),
         image(),
     ],
-}
+    onLog(level, log, handler) {
+        if (log.code === 'CIRCULAR_DEPENDENCY') return
+        handler(level, log)
+    },
+})

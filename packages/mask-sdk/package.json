@@ -20,10 +20,10 @@
     "gen-msg": "node ./gen-message.mjs"
   },
   "devDependencies": {
-    "@rollup/plugin-image": "^3.0.2",
-    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-image": "^3.0.3",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "async-call-rpc": "^6.4.0",
-    "rollup": "^3.28.1",
-    "rollup-plugin-swc3": "^0.10.1"
+    "rollup": "^4.17.2",
+    "rollup-plugin-swc3": "^0.11.2"
   }
 }

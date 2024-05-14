@@ -440,6 +440,7 @@ const moduleSystemRules = {
         'error',
         {
             paths: [
+                { name: '@sentry/browser', message: 'Use Sentry.* global object instead.', allowTypeImports: true },
                 { name: 'idb/with-async-ittr-cjs', message: 'Please use idb/with-async-ittr instead.' },
                 { name: 'async-call-rpc', message: 'Please use async-call-rpc/full instead.', allowTypeImports: true },
                 { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },

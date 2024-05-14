@@ -121,7 +121,7 @@
         "react": "0.0.0-experimental-8039e6d0b-20231026",
         "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
         "typescript": "5",
-        "rollup": "3"
+        "rollup": "4"
       }
     },
     "patchedDependencies": {

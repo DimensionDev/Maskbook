@@ -33,8 +33,7 @@
   "dependencies": {
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@sentry/browser": "^7.66.0",
-    "@sentry/tracing": "^7.66.0",
+    "@sentry/browser": "^8.0.0",
     "urlcat": "^3.1.0",
     "uuid": "^9.0.0"
   },

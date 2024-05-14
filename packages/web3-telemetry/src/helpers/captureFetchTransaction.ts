@@ -61,12 +61,8 @@ export async function captureFetchTransaction(
     const requestBody = await getBody(request.clone())
     const responseBody = await getBody(response?.clone())
 
-    const transaction = Sentry.startTransaction({
-        name: request.url,
-    })
-    const span = transaction.startChild({
-        op: 'task',
-        tags: {
+    Sentry.withScope((scope) => {
+        scope.setTags({
             source: new URL(request.url).host,
             method: request.method.toUpperCase(),
             url: request.url,
@@ -74,29 +70,36 @@ export async function captureFetchTransaction(
             response_redirected: response?.redirected,
             status_code: response?.status,
             status_text: response?.statusText,
-        },
-        data: {
-            request_headers: requestHeaders,
-            request_body: requestBody,
-            response_headers: responseHeaders,
-            response_body: responseBody,
-            response_type: response?.type,
-            response_code: response?.status,
-            response_status: response?.statusText,
-            response_redirected: response?.redirected,
-        },
-        status: options?.status,
-        startTimestamp: options?.startAt,
-        endTimestamp: options?.endAt,
-        description: [
-            `Failed to fetch: ${request.url}`,
-            `  with Request Headers: ${requestHeaders}`,
-            `  with Request Body: ${requestBody}`,
-            `  with Response Headers: ${responseHeaders}`,
-            `  with Response Body: ${responseBody}`,
-        ].join('\n'),
+        })
+        const span = Sentry.startInactiveSpan({
+            name:
+                request.url +
+                [
+                    `Failed to fetch: ${request.url}`,
+                    `  with Request Headers: ${requestHeaders}`,
+                    `  with Request Body: ${requestBody}`,
+                    `  with Response Headers: ${responseHeaders}`,
+                    `  with Response Body: ${responseBody}`,
+                ].join('\n'),
+            op: 'task',
+            forceTransaction: true,
+            // @ts-expect-error undocumented api
+            startTimestamp: options?.startAt,
+            attributes: {
+                request_headers: requestHeaders,
+                request_body: requestBody,
+                response_headers: responseHeaders,
+                response_body: responseBody,
+                response_type: response?.type,
+                response_code: response?.status,
+                response_status: response?.statusText,
+                response_redirected: response?.redirected,
+            },
+        })
+        options?.status &&
+            span.setStatus({
+                code: options.status === 'succeed' ? 1 : 2,
+            })
+        span.end(options?.endAt)
     })
-
-    span.finish()
-    transaction.finish()
 }

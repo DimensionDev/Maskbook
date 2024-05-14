@@ -1,6 +1,5 @@
 /// <reference types="@masknet/global-types/env" />
-import '@sentry/tracing'
-import { Breadcrumbs, type Event, GlobalHandlers } from '@sentry/browser'
+import type { Event } from '@sentry/browser'
 import { Flags } from '@masknet/flags'
 import { getSiteType, getAgentType, getExtensionId, TelemetryID } from '@masknet/shared-base'
 import type { BuildInfoFile } from '@masknet/flags'
@@ -65,9 +64,9 @@ export class SentryAPI extends TelemetryProvider {
             defaultIntegrations: false,
             integrations: [
                 // global error and unhandledrejection event
-                new GlobalHandlers(),
+                Sentry.globalHandlersIntegration(),
                 // global fetch error
-                new Breadcrumbs({
+                Sentry.breadcrumbsIntegration({
                     console: false,
                     dom: false,
                     xhr: false,
@@ -176,7 +175,7 @@ export class SentryAPI extends TelemetryProvider {
         if (process.env.NODE_ENV === 'development') {
             console.log(`[LOG EXCEPTION]: ${JSON.stringify(this.createException(options))}`)
         } else {
-            Sentry.captureException(options.error, this.createException(options))
+            Sentry.captureException(options.error, options)
         }
     }
 }
