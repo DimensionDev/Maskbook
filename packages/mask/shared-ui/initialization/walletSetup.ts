@@ -4,6 +4,7 @@ import { allPersonas } from '../initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
 import * as shared from /* webpackDefer: true */ '@masknet/shared'
 import { defer, delay } from '@masknet/kit'
+import { openPopupWindow } from '../utils/openPopup.js'
 
 await initWallet({
     signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
@@ -33,7 +34,7 @@ await initWallet({
         },
     },
     MessageContext: {
-        openPopupWindow: Services.Helper.openPopupWindow,
+        openPopupWindow,
         send: Services.Wallet.send,
         hasPaymentPassword: Services.Wallet.hasPassword,
     },

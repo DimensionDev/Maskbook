@@ -2587,9 +2587,6 @@ importers:
       dompurify:
         specifier: ^3.0.5
         version: 3.0.5
-      history:
-        specifier: ^5.3.0
-        version: 5.3.0
       i18next-browser-languagedetector:
         specifier: ^7.1.0
         version: 7.1.0
@@ -17164,12 +17161,6 @@ packages:
 
   /highlight-words-core@1.2.2:
     resolution: {integrity: sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==}
-    dev: false
-
-  /history@5.3.0:
-    resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
-    dependencies:
-      '@babel/runtime': 7.22.6
     dev: false
 
   /hmac-drbg@1.0.1:
