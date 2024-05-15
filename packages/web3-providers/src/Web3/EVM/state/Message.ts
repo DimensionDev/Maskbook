@@ -84,7 +84,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
             const fromState =
                 route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
 
-            if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
+            if (Sniffings.is_popup_page) {
                 PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
             } else {
                 // open the popups window and wait for approval from the user.

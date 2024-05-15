@@ -39,7 +39,6 @@ import {
 } from './modals/modals.js'
 import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
-import { noop } from 'lodash-es'
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
@@ -166,11 +165,10 @@ export default function Popups() {
     )
 
     useIdleTimer({
-        onAction: !location.hash.includes('/swap') ? () => Services.Wallet.setAutoLockTimer() : noop,
+        onAction: () => Services.Wallet.setAutoLockTimer(),
         throttle: 10000,
     })
     useEffect(() => {
-        if (location.hash.includes('/swap')) return
         return MaskMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
     }, [])
 
