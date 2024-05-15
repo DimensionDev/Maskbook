@@ -12,16 +12,16 @@ const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
     buildBaseExtension,
-    zipTo('MaskNetwork.chromium.zip', ManifestFile.ChromiumMV2),
-    zipTo('MaskNetwork.firefox.zip', ManifestFile.FirefoxMV2, true),
-    zipTo('MaskNetwork.firefox-mv3.zip', ManifestFile.FirefoxMV3, true),
-    zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV3),
+    zipTo('MaskNetwork.chromium-mv2.zip', ManifestFile.ChromiumMV2),
     zipTo('MaskNetwork.chromium-mv3.zip', ManifestFile.ChromiumMV3),
+    zipTo('MaskNetwork.chromium-beta.zip', ManifestFile.ChromiumBetaMV3),
+    zipTo('MaskNetwork.firefox-mv2.zip', ManifestFile.FirefoxMV2, true),
+    zipTo('MaskNetwork.firefox-mv3.zip', ManifestFile.FirefoxMV3, true),
 )
 export const buildChrome: TaskFunction = series(
     codegen,
     buildBaseExtension,
-    zipTo('MaskNetwork.chromium.zip', ManifestFile.ChromiumMV2),
+    zipTo('MaskNetwork.chromium-mv2.zip', ManifestFile.ChromiumMV3),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 task(buildChrome, 'build-chrome', 'Build the extension for Chrome only')
