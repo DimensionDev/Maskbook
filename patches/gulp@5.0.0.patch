@@ -1,0 +1,36 @@
+diff --git a/bin/swc-gulp.js b/bin/swc-gulp.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..a14351c2a7743af318d7efab246099c142bf3813
+--- /dev/null
++++ b/bin/swc-gulp.js
+@@ -0,0 +1,17 @@
++#!/usr/bin/env node
++
++const { spawnSync } = require('child_process');
++const { join } = require('path');
++const child = spawnSync(
++  process.execPath,
++  [
++    '--import',
++    '@swc-node/register/esm-register',
++    join(__dirname, './gulp.js'),
++    ...process.argv.slice(2),
++  ],
++  {
++    stdio: 'inherit',
++  }
++);
++if (child.status) process.exit(child.status);
+diff --git a/package.json b/package.json
+index be5477ddf77fc32ebce569347c38ac322dbda6e7..c27a348e4c84f08865c91ece656b41145440064b 100644
+--- a/package.json
++++ b/package.json
+@@ -27,7 +27,7 @@
+     "bin"
+   ],
+   "bin": {
+-    "gulp": "./bin/gulp.js"
++    "gulp": "./bin/swc-gulp.js"
+   },
+   "scripts": {
+     "lint": "eslint .",
