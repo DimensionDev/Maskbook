@@ -137,7 +137,7 @@ jobs:
             registry: true
       - name: Get cache date
         id: get-date
-        run: echo "date::$(/bin/date -u "+%Y%m%d")" >> $GITHUB_STATE
+        run: echo "{date}::{$(/bin/date -u "+%Y%m%d")}" >> $GITHUB_STATE
         shell: bash
       - name: Restore ESLint cache
         uses: actions/cache@v4
