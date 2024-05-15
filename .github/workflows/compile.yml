@@ -75,11 +75,11 @@ jobs:
           sourcemaps: ./build
           version_prefix: mask-
           ignore_missing: true
-      - name: Upload `MaskNetwork.chromium.zip`
+      - name: Upload `MaskNetwork.chromium-mv2.zip`
         uses: actions/upload-artifact@v3
         with:
-          name: MaskNetwork.chromium.zip
-          path: masknetwork.chromium.zip
+          name: MaskNetwork.chromium-mv2.zip
+          path: masknetwork.chromium-mv2.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.chromium-beta.zip`
         uses: actions/upload-artifact@v3
@@ -93,11 +93,11 @@ jobs:
           name: MaskNetwork.chromium-mv3.zip
           path: masknetwork.chromium-mv3.zip
           if-no-files-found: error
-      - name: Upload `MaskNetwork.firefox.zip`
+      - name: Upload `MaskNetwork.firefox-mv2.zip`
         uses: actions/upload-artifact@v3
         with:
-          name: MaskNetwork.firefox.zip
-          path: masknetwork.firefox.zip
+          name: MaskNetwork.firefox-mv2.zip
+          path: masknetwork.firefox-mv2.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.firefox-mv3.zip`
         uses: actions/upload-artifact@v3
