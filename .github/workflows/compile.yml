@@ -29,15 +29,15 @@ jobs:
     steps:
       - name: Get cache date
         id: get-date
-        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        run: echo "date::$(/bin/date -u "+%Y%m%d")" >> $GITHUB_STATE
         shell: bash
       # note: required by sentry
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           filter: blob:none
-      - uses: pnpm/action-setup@v2
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".node-version"
           cache: 'pnpm'
@@ -46,7 +46,7 @@ jobs:
         with:
             registry: true
       - name: Restore Webpack cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: packages/mask/node_modules/.cache/
           key: extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
@@ -76,31 +76,31 @@ jobs:
           version_prefix: mask-
           ignore_missing: true
       - name: Upload `MaskNetwork.chromium-mv2.zip`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaskNetwork.chromium-mv2.zip
           path: masknetwork.chromium-mv2.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.chromium-beta.zip`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaskNetwork.chromium-beta.zip
           path: masknetwork.chromium-beta.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.chromium-mv3.zip`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaskNetwork.chromium-mv3.zip
           path: masknetwork.chromium-mv3.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.firefox-mv2.zip`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaskNetwork.firefox-mv2.zip
           path: masknetwork.firefox-mv2.zip
           if-no-files-found: error
       - name: Upload `MaskNetwork.firefox-mv3.zip`
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MaskNetwork.firefox-mv3.zip
           path: masknetwork.firefox-mv3.zip

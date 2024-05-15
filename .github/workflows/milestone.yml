@@ -8,7 +8,7 @@ on:
       - synchronize
       - milestoned
       - demilestoned
-    branchs:
+    branches:
       - 'develop'
       - 'release/*'
       - 'hotfix/*'
