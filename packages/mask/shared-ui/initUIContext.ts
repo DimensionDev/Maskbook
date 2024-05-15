@@ -7,6 +7,7 @@ import {
 import Services from '#services'
 import { __setUIContext__ } from '@masknet/plugin-infra/content-script'
 import type { Subscription } from 'use-subscription'
+import { openPopupWindow } from './utils/openPopup.js'
 
 export const allPersonas: Subscription<PersonaInformation[]> = createSubscriptionFromAsync(
     () => Services.Identity.queryOwnedPersonaInformation(true),
@@ -38,7 +39,7 @@ export function setupUIContext() {
         fetchJSON: Services.Helper.fetchJSON,
         queryPersonaByProfile: Services.Identity.queryPersonaByProfile,
         openDashboard: Services.Helper.openDashboard,
-        openPopupWindow: Services.Helper.openPopupWindow,
+        openPopupWindow,
         signWithPersona: (a, b, c, d) => Services.Identity.signWithPersona(a, b, c, location.origin, d),
         hasPaymentPassword: Services.Wallet.hasPassword,
         createPersona: () => Services.Helper.openDashboard(DashboardRoutes.SignUpPersona),

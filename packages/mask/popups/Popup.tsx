@@ -1,19 +1,12 @@
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths, PopupsHistory } from '@masknet/shared-base'
+import { MaskMessages, PopupModalRoutes, PopupRoutes as PopupPaths } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import {
-    unstable_HistoryRouter as HistoryRouter,
-    Navigate,
-    Route,
-    Routes,
-    useLocation,
-    type HistoryRouterProps,
-} from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -59,10 +52,6 @@ const PopupRoutes = memo(function PopupRoutes() {
     const location = useLocation()
     const mainLocation = location.state?.mainLocation as Location | undefined
 
-    useEffect(() => {
-        document.getElementById('app-spinner')?.remove()
-    }, [])
-
     return (
         <Suspense
             fallback={
@@ -72,6 +61,7 @@ const PopupRoutes = memo(function PopupRoutes() {
             }>
             <PersonaContext.Provider initialState={personaInitialState}>
                 <UserContext.Provider>
+                    <RouterListener />
                     <Routes location={mainLocation || location}>
                         <Route path="/" element={<PopupLayout />}>
                             <Route path={PopupPaths.Personas + '/*'} element={withSuspense(<Personas />)} />
@@ -168,9 +158,6 @@ export default function Popups() {
         onAction: () => Services.Wallet.setAutoLockTimer(),
         throttle: 10000,
     })
-    useEffect(() => {
-        return MaskMessages.events.popupRouteUpdated.on((url) => PopupsHistory.replace(url))
-    }, [])
 
     return (
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
@@ -184,10 +171,10 @@ export default function Popups() {
                     <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
                         <PopupContext.Provider>
                             <PageTitleContext.Provider value={titleContext}>
-                                <HistoryRouter history={PopupsHistory as unknown as HistoryRouterProps['history']}>
+                                <HashRouter>
                                     <PopupRoutes />
                                     <Modals />
-                                </HistoryRouter>
+                                </HashRouter>
                             </PageTitleContext.Provider>
                         </PopupContext.Provider>
                     </EVMWeb3ContextProvider>
@@ -196,4 +183,15 @@ export default function Popups() {
             )}
         </PersistQueryClientProvider>
     )
+}
+function RouterListener() {
+    const navigate = useNavigate()
+    useEffect(() => {
+        return MaskMessages.events.popupRouteUpdated.on((url) => navigate(url, { replace: true }))
+    }, [])
+
+    useEffect(() => {
+        document.getElementById('app-spinner')?.remove()
+    }, [])
+    return null
 }

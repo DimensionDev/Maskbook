@@ -1,7 +1,6 @@
 import { omitBy } from 'lodash-es'
-import urlcat from 'urlcat'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { EMPTY_OBJECT, PopupRoutes, PopupsHistory, Sniffings, type StorageItem } from '@masknet/shared-base'
+import { EMPTY_OBJECT, PopupRoutes, Sniffings, type StorageItem } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
@@ -85,7 +84,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
                 route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
 
             if (Sniffings.is_popup_page) {
-                PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
+                await this.context.openPopupWindow(route, fromState as any)
             } else {
                 // open the popups window and wait for approval from the user.
                 await this.context.openPopupWindow(route, {
