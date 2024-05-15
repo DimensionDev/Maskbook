@@ -6,7 +6,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import { HashRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -49,8 +49,7 @@ const personaInitialState = {
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
 const PopupRoutes = memo(function PopupRoutes() {
-    const location = useLocation()
-    const mainLocation = location.state?.mainLocation as Location | undefined
+    const [searchParams] = useSearchParams()
 
     return (
         <Suspense
@@ -62,7 +61,7 @@ const PopupRoutes = memo(function PopupRoutes() {
             <PersonaContext.Provider initialState={personaInitialState}>
                 <UserContext.Provider>
                     <RouterListener />
-                    <Routes location={mainLocation || location}>
+                    <Routes>
                         <Route path="/" element={<PopupLayout />}>
                             <Route path={PopupPaths.Personas + '/*'} element={withSuspense(<Personas />)} />
                             <Route path={PopupPaths.Wallet + '/*'} element={withSuspense(<Wallet />)} />
@@ -73,8 +72,8 @@ const PopupRoutes = memo(function PopupRoutes() {
                         <Route path={PopupPaths.RequestPermission} element={<RequestPermissionPage />} />
                         <Route path="*" element={<Navigate replace to={PopupPaths.Personas} />} />
                     </Routes>
-                    {mainLocation ?
-                        <Routes>
+                    {searchParams.get('modal') ?
+                        <Routes location={searchParams.get('modal') || ''}>
                             <Route
                                 path={PopupModalRoutes.verifyBackupPassword}
                                 element={wrapModal(<VerifyBackupPasswordModal />)}
