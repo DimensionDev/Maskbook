@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Get cache date
         id: get-date
-        run: echo "{date}::{$(/bin/date -u "+%Y%m%d")}" >> $GITHUB_STATE
+        run: echo "date=$(/bin/date -u "+%Y%m%d")" >> $GITHUB_STATE
         shell: bash
       # note: required by sentry
       - uses: actions/checkout@v4
