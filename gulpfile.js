@@ -1,1 +1,1 @@
-export * from './packages/scripts/src/index.js'
+export * from './packages/scripts/src/index.ts'
