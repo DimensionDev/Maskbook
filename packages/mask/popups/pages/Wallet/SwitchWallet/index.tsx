@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
+import { DashboardRoutes, ECKeyIdentifier, NetworkPluginID, PopupRoutes, type Wallet } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworks, useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -58,7 +58,11 @@ const SwitchWallet = memo(function SwitchWallet() {
             await browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL(
-                    `/dashboard.html#/create-mask-wallet/${hasPaymentPassword ? 'mnemonic' : 'form'}`,
+                    `/dashboard.html#${
+                        hasPaymentPassword ?
+                            DashboardRoutes.CreateMaskWalletMnemonic
+                        :   DashboardRoutes.CreateMaskWalletForm
+                    }`,
                 ),
             })
         } else {
@@ -69,7 +73,7 @@ const SwitchWallet = memo(function SwitchWallet() {
     const handleImport = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/recovery'),
+            url: browser.runtime.getURL('/dashboard.html#' + DashboardRoutes.RecoveryMaskWallet),
         })
     }, [])
 

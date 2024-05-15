@@ -22,7 +22,7 @@ import { PreviewDialog } from './PreviewDialog.js'
 import { Icons } from '@masknet/icons'
 import { useAsync } from 'react-use'
 
-export const MnemonicRevealForm = memo(() => {
+export const Component = memo(function MnemonicRevealForm() {
     const createPersona = useCreatePersonaV2()
 
     const t = useDashboardTrans()

@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Onboarding = memo(function Onboarding() {
+export const Component = memo(function Onboarding() {
     const t = useDashboardTrans()
     const { classes } = useStyles()
 

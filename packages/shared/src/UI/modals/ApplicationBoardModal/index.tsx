@@ -13,7 +13,7 @@ import type { PersonaPerSiteConnectStatus } from '../../../types.js'
 import { ApplicationBoardSettingsDialog } from './ApplicationSettingsDialog.js'
 
 export interface ApplicationBoardModalOpenProps {
-    openDashboard: (route?: DashboardRoutes, search?: string) => void
+    openDashboard: (route: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite: EnhanceableSite
     allPersonas: PersonaInformation[]
@@ -29,7 +29,7 @@ export interface ApplicationBoardModalOpenProps {
 
 export const ApplicationBoardModal = forwardRef<SingletonModalRefCreator<ApplicationBoardModalOpenProps>>(
     (props, ref) => {
-        const [openDashboard, setOpenDashboard] = useState<(route?: DashboardRoutes, search?: string) => void>()
+        const [openDashboard, setOpenDashboard] = useState<(route: DashboardRoutes, search?: string) => void>()
         const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
             useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
         const [currentSite, setCurrentSite] = useState<EnhanceableSite>()

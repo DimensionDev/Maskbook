@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const LocalBackup = memo(function LocalBackup() {
+export const Component = memo(function LocalBackup() {
     const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()

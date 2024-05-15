@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { TermsAgreedContext } from '../hooks/useTermsAgreed.js'
@@ -24,10 +24,12 @@ function TermsGuardInner({ children }: PropsWithChildren<{}>) {
     return <>{children}</>
 }
 
-export function TermsGuard({ children }: PropsWithChildren<{}>) {
+export function TermsGuard() {
     return (
         <TermsAgreedContext.Provider>
-            <TermsGuardInner>{children}</TermsGuardInner>
+            <TermsGuardInner>
+                <Outlet />
+            </TermsGuardInner>
         </TermsAgreedContext.Provider>
     )
 }

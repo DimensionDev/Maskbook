@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const QUERY_KEY = ['system', 'wallet', 'networks']
-export const EditNetwork = memo(function EditNetwork() {
+export default memo(function EditNetwork() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()

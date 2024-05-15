@@ -1,28 +1,22 @@
-import { Routes, Route, useMatch } from 'react-router-dom'
-import { lazy } from 'react'
+import { type RouteObject } from 'react-router-dom'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { useMatch } from 'react-router-dom'
 import { ResetWalletContext } from './context.js'
 import { SetupFrame } from '../../components/SetupFrame/index.js'
 
-const CreateWalletForm = lazy(() => import(/* webpackMode: 'eager' */ './CreateWalletForm/index.js'))
-const CreateMnemonic = lazy(() => import(/* webpackMode: 'eager' */ './CreateMnemonic/index.js'))
-const OnBoarding = lazy(() => import(/* webpackMode: 'eager' */ './Onboarding/index.js'))
-const OnRecovery = lazy(() => import(/* webpackMode: 'eager' */ './Recovery/index.js'))
-const AddDeriveWallet = lazy(() => import(/* webpackMode: 'eager' */ './AddDeriveWallet/index.js'))
-
 const r = relativeRouteOf(DashboardRoutes.CreateMaskWallet)
-export default function CreateWallet() {
+export const walletRoutes: RouteObject[] = [
+    { path: r(DashboardRoutes.CreateMaskWalletForm), lazy: () => import('./CreateWalletForm/index.js') },
+    { path: r(DashboardRoutes.CreateMaskWalletMnemonic), lazy: () => import('./CreateMnemonic/index.js') },
+    { path: r(DashboardRoutes.SignUpMaskWalletOnboarding), lazy: () => import('./Onboarding/index.js') },
+    { path: r(DashboardRoutes.RecoveryMaskWallet), lazy: () => import('./Recovery/index.js') },
+    { path: r(DashboardRoutes.AddDeriveWallet), lazy: () => import('./AddDeriveWallet/index.js') },
+]
+
+export function WalletFrame() {
     return (
-        <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpMaskWalletOnboarding)}>
-            <ResetWalletContext.Provider>
-                <Routes>
-                    <Route path={r(DashboardRoutes.CreateMaskWalletForm)} element={<CreateWalletForm />} />
-                    <Route path={r(DashboardRoutes.CreateMaskWalletMnemonic)} element={<CreateMnemonic />} />
-                    <Route path={r(DashboardRoutes.SignUpMaskWalletOnboarding)} element={<OnBoarding />} />
-                    <Route path={r(DashboardRoutes.RecoveryMaskWallet)} element={<OnRecovery />} />
-                    <Route path={r(DashboardRoutes.AddDeriveWallet)} element={<AddDeriveWallet />} />
-                </Routes>
-            </ResetWalletContext.Provider>
-        </SetupFrame>
+        <ResetWalletContext.Provider>
+            <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpMaskWalletOnboarding)} />
+        </ResetWalletContext.Provider>
     )
 }

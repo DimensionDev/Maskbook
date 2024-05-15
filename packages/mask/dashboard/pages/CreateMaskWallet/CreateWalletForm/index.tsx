@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const CreateWalletForm = memo(function CreateWalletForm() {
+export const Component = memo(function CreateWalletForm() {
     const t = useDashboardTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
@@ -165,5 +165,3 @@ const CreateWalletForm = memo(function CreateWalletForm() {
         </div>
     )
 })
-
-export default CreateWalletForm

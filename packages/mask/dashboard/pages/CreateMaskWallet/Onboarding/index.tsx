@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Onboarding = memo(function Onboarding() {
+export const Component = memo(function Onboarding() {
     const t = useDashboardTrans()
     const { classes } = useStyles()
     const [params] = useSearchParams()
@@ -134,5 +134,3 @@ const Onboarding = memo(function Onboarding() {
         </>
     )
 })
-
-export default Onboarding

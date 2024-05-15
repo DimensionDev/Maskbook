@@ -49,7 +49,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Welcome = memo(function Welcome() {
+export const Component = memo(function Welcome() {
     const [, setAgreed] = TermsAgreedContext.useContainer()
     const [allowedToCollect, setAllowedToCollect] = useState(true)
     const [params] = useSearchParams()

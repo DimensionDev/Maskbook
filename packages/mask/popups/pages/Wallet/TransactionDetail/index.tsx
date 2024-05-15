@@ -142,7 +142,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TransactionDetail = memo(function TransactionDetail() {
+export default memo(function TransactionDetail() {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()

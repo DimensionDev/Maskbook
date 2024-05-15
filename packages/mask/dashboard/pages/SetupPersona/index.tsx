@@ -1,29 +1,18 @@
-import { Route, Routes, useMatch } from 'react-router-dom'
-import { SetupFrame } from '../../components/SetupFrame/index.js'
+import { useMatch, type RouteObject } from 'react-router-dom'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { Welcome } from './Welcome/index.js'
-import { SignUp } from './SignUp/index.js'
-import { SignUpMnemonic } from './Mnemonic/index.js'
-import { Onboarding } from './Onboarding/index.js'
-import { Recovery } from './Recovery/index.js'
-import { LocalBackup } from './LocalBackup/index.js'
-import { CloudBackup } from './CloudBackup/index.js'
-import { CloudBackupPreview } from './CloudBackupPreview/index.js'
+import { SetupFrame } from '../../components/SetupFrame/index.js'
 
 const r = relativeRouteOf(DashboardRoutes.Setup)
-export default function SetupPersona() {
-    return (
-        <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpPersonaOnboarding)}>
-            <Routes>
-                <Route path={r(DashboardRoutes.Welcome)} element={<Welcome />} />
-                <Route path={r(DashboardRoutes.SignUpPersona)} element={<SignUp />} />
-                <Route path={r(DashboardRoutes.RecoveryPersona)} element={<Recovery />} />
-                <Route path={r(DashboardRoutes.SignUpPersonaMnemonic)} element={<SignUpMnemonic />} />
-                <Route path={r(DashboardRoutes.SignUpPersonaOnboarding)} element={<Onboarding />} />
-                <Route path={r(DashboardRoutes.LocalBackup)} element={<LocalBackup />} />
-                <Route path={r(DashboardRoutes.CloudBackup)} element={<CloudBackup />} />
-                <Route path={r(DashboardRoutes.CloudBackupPreview)} element={<CloudBackupPreview />} />
-            </Routes>
-        </SetupFrame>
-    )
+export const personaRoutes: RouteObject[] = [
+    { path: r(DashboardRoutes.Welcome), lazy: () => import('./Welcome/index.js') },
+    { path: r(DashboardRoutes.SignUpPersona), lazy: () => import('./SignUp/index.js') },
+    { path: r(DashboardRoutes.RecoveryPersona), lazy: () => import('./Recovery/index.js') },
+    { path: r(DashboardRoutes.SignUpPersonaMnemonic), lazy: () => import('./Mnemonic/index.js') },
+    { path: r(DashboardRoutes.SignUpPersonaOnboarding), lazy: () => import('./Onboarding/index.js') },
+    { path: r(DashboardRoutes.LocalBackup), lazy: () => import('./LocalBackup/index.js') },
+    { path: r(DashboardRoutes.CloudBackup), lazy: () => import('./CloudBackup/index.js') },
+    { path: r(DashboardRoutes.CloudBackupPreview), lazy: () => import('./CloudBackupPreview/index.js') },
+]
+export function PersonaFrame() {
+    return <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpPersonaOnboarding)} />
 }

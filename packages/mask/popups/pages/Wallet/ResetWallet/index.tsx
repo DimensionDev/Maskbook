@@ -6,6 +6,7 @@ import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -84,7 +85,7 @@ const ResetWallet = memo(function ResetWallet() {
         // We don't reset existed wallets until recovery
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet/form?reset=true'),
+            url: browser.runtime.getURL(`/dashboard.html#/${DashboardRoutes.CreateMaskWalletForm}?reset=true`),
         })
 
         await Services.Helper.removePopupWindow()

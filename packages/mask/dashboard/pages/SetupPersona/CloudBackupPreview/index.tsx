@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const CloudBackupPreview = memo(function CloudBackupPreview() {
+export const Component = memo(function CloudBackupPreview() {
     const t = useDashboardTrans()
 
     const { classes, theme, cx } = useStyles()

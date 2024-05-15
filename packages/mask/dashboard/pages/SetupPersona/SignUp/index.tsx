@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SignUp = memo(function SignUp() {
+export const Component = memo(function SignUp() {
     const t = useDashboardTrans()
     const navigate = useNavigate()
 

@@ -10,7 +10,6 @@ export enum DashboardRoutes {
     CloudBackupPreview = '/setup/cloud-backup-preview',
     SignUp = '/sign-up',
     SignIn = '/sign-in',
-    PrivacyPolicy = '/privacy-policy',
     Personas = '/personas',
     CreateMaskWallet = '/create-mask-wallet',
     CreateMaskWalletForm = '/create-mask-wallet/form',

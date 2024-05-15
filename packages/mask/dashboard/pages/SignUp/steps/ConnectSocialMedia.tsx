@@ -20,7 +20,7 @@ import {
 } from '../../../../shared-ui/index.js'
 import Services from '#services'
 
-export function ConnectSocialMedia() {
+export function Component() {
     const navigate = useNavigate()
     const t = useDashboardTrans()
     const { currentPersona } = PersonaContext.useContainer()

@@ -34,7 +34,7 @@ export interface __UIContext__ {
     fetchJSON(input: RequestInfo | URL, init?: RequestInit): Promise<unknown>
     queryPersonaByProfile: (id: ProfileIdentifier) => Promise<PersonaInformation | undefined>
     /** Open Dashboard with a new window */
-    openDashboard(route?: DashboardRoutes, search?: string): Promise<void>
+    openDashboard(route: DashboardRoutes, search?: string): Promise<void>
     /** Open popup window */
     openPopupWindow<T extends PopupRoutes>(
         route: T,

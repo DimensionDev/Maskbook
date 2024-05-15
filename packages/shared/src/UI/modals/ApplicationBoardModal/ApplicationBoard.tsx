@@ -80,7 +80,7 @@ const useStyles = makeStyles<{
 })
 
 interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => void
+    openDashboard?: (route: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
     lastRecognized?: IdentityResolved
@@ -302,7 +302,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
 interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
-    openDashboard?: (route?: DashboardRoutes, search?: string) => void
+    openDashboard?: (route: DashboardRoutes, search?: string) => void
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus
     personaPerSiteConnectStatusLoading: boolean

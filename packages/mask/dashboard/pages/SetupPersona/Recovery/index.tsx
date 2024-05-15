@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Recovery = memo(function Recovery() {
+export const Component = memo(function Recovery() {
     const t = useDashboardTrans()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
