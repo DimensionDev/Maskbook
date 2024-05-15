@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const AddDeriveWallet = memo(function AddDeriveWallet() {
+export const Component = memo(function AddDeriveWallet() {
     const t = useDashboardTrans()
     const { cx, classes } = useStyles()
     const navigate = useNavigate()
@@ -247,5 +247,3 @@ const AddDeriveWallet = memo(function AddDeriveWallet() {
         </>
     )
 })
-
-export default AddDeriveWallet

@@ -1,11 +1,12 @@
-import { memo, useState, type PropsWithChildren } from 'react'
+import { lazy, memo, Suspense, useState, type PropsWithChildren } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import Spline from '@splinetool/react-spline'
 import { Welcome } from '../../assets/index.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Outlet } from 'react-router-dom'
 
-interface SetupFrameProps extends PropsWithChildren {
+const Spline = lazy(() => import('@splinetool/react-spline'))
+interface SetupFrameProps {
     hiddenSpline?: boolean
 }
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, hiddenSpline }) {
+export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ hiddenSpline }) {
     const { classes, theme } = useStyles()
     const [loading, setLoading] = useState(true)
 
@@ -51,7 +52,9 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                     <Icons.MaskSquare width={168} height={48} />
                 </header>
 
-                <Box sx={{ paddingTop: 4.5, flex: 1, display: 'flex', flexDirection: 'column' }}>{children}</Box>
+                <Box sx={{ paddingTop: 4.5, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Outlet />
+                </Box>
             </Box>
             <Box className={classes.sidebar} position="relative">
                 {!hiddenSpline ?
@@ -70,7 +73,9 @@ export const SetupFrame = memo<SetupFrameProps>(function SetupFrame({ children, 
                             </Typography>
                         </Box>
 
-                        <Spline scene={Welcome} onLoad={() => setLoading(false)} />
+                        <Suspense>
+                            <Spline scene={Welcome} onLoad={() => setLoading(false)} />
+                        </Suspense>
                     </div>
                 :   null}
                 {loading && !hiddenSpline ?

@@ -176,7 +176,7 @@ async function pollResult(address: string) {
     return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
 }
 
-const CreateMnemonic = memo(function CreateMnemonic() {
+export const Component = memo(function CreateMnemonic() {
     const location = useLocation()
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -457,5 +457,3 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
         </>
     )
 })
-
-export default CreateMnemonic

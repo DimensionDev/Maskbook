@@ -1,28 +1,19 @@
-import { lazy, Suspense } from 'react'
-import { Route, Routes, HashRouter } from 'react-router-dom'
+import { createHashRouter, RouterProvider, type RouteObject } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { TermsGuard } from './TermsGuard.js'
-import { Modals } from '../modals/index.js'
+import { PersonaFrame, personaRoutes } from './SetupPersona/index.js'
+import { SignUpFrame, signUpRoutes } from './SignUp/index.js'
+import { WalletFrame, walletRoutes } from './CreateMaskWallet/index.js'
 
-const SetupPersona = lazy(() => import(/* webpackMode: 'eager' */ './SetupPersona/index.js'))
-const SignUp = lazy(() => import(/* webpackMode: 'eager' */ './SignUp/index.js'))
-const PrivacyPolicy = lazy(() => import(/* webpackMode: 'eager' */ './PrivacyPolicy/index.js'))
-const CreateWallet = lazy(() => import(/* webpackMode: 'eager' */ './CreateMaskWallet/index.js'))
+const routes: RouteObject[] = [
+    { path: DashboardRoutes.Setup, element: <PersonaFrame />, children: personaRoutes },
+    { path: DashboardRoutes.SignUp, element: <SignUpFrame />, children: signUpRoutes },
+    { path: DashboardRoutes.CreateMaskWallet, element: <WalletFrame />, children: walletRoutes },
+]
+const root = createHashRouter([{ element: <TermsGuard />, children: routes }], {
+    future: { v7_normalizeFormMethod: true },
+})
 
 export function Pages() {
-    return (
-        <Suspense fallback={null}>
-            <HashRouter>
-                <TermsGuard>
-                    <Routes>
-                        <Route path={`${DashboardRoutes.Setup}/*`} element={<SetupPersona />} />
-                        <Route path={`${DashboardRoutes.SignUp}/*`} element={<SignUp />} />
-                        <Route path={DashboardRoutes.PrivacyPolicy} element={<PrivacyPolicy />} />
-                        <Route path={`${DashboardRoutes.CreateMaskWallet}/*`} element={<CreateWallet />} />
-                    </Routes>
-                </TermsGuard>
-                <Modals />
-            </HashRouter>
-        </Suspense>
-    )
+    return <RouterProvider router={root} fallbackElement={null} future={{ v7_startTransition: true }} />
 }

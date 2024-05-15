@@ -85,7 +85,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const SignUpMnemonic = memo(function SignUpMnemonic() {
+export const Component = memo(function SignUpMnemonic() {
     const ref = useRef(null)
 
     const navigate = useNavigate()

@@ -27,7 +27,7 @@ const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
 export function useCurrentPersonaConnectStatus(
     personas: readonly PersonaInformation[],
     currentPersonaIdentifier?: ECKeyIdentifier,
-    openDashboard?: (route?: DashboardRoutes, search?: string) => void,
+    openDashboard?: (route: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {
     const t = useSharedTrans()

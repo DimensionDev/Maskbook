@@ -3,14 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { RestorableScrollContext } from '@masknet/shared'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { EditNetwork } from './EditNetwork/index.js'
 import { NetworkManagement } from './NetworkManagement/index.js'
-import SelectWallet from './SelectWallet/index.js'
-import { WalletAssets } from './components/WalletAssets/index.js'
-
-import TokenDetailPage from './TokenDetail/index.js'
-import { TransactionDetail } from './TransactionDetail/index.js'
-import { CollectibleDetail } from './CollectibleDetail/index.js'
 import { WalletGuard } from './WalletGuard/index.js'
 import { NoWalletGuard } from './NoWalletGuard/index.js'
 import { DeriveStateContext } from './CreateWallet/context.js'
@@ -19,16 +12,22 @@ const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
 const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
 const DeriveWallet = lazy(() => import('./CreateWallet/Derive.js'))
 const AddToken = lazy(() => import('./AddToken/index.js'))
-const GasSetting = lazy(() => import(/* webpackMode: 'eager' */ './GasSetting/index.js'))
-const Transfer = lazy(() => import(/* webpackMode: 'eager' */ './Transfer/index.js'))
-const ContactList = lazy(() => import(/* webpackMode: 'eager' */ './ContactList/index.js'))
-const ContractInteraction = lazy(() => import(/* webpackMode: 'eager' */ './Interaction/page.js'))
+const GasSetting = lazy(() => import('./GasSetting/index.js'))
+const Transfer = lazy(() => import('./Transfer/index.js'))
+const ContactList = lazy(() => import('./ContactList/index.js'))
+const ContractInteraction = lazy(() => import('./Interaction/page.js'))
 const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
 const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
-const Receive = lazy(() => import(/* webpackMode: 'eager' */ './Receive/index.js'))
+const Receive = lazy(() => import('./Receive/index.js'))
 const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
 const ConnectedSites = lazy(() => import('./ConnectedSites/index.js'))
+const WalletAssets = lazy(() => import('./components/WalletAssets/index.js'))
+const EditNetwork = lazy(() => import('./EditNetwork/index.js'))
+const SelectWallet = lazy(() => import('./SelectWallet/index.js'))
+const TokenDetailPage = lazy(() => import('./TokenDetail/index.js'))
+const TransactionDetail = lazy(() => import('./TransactionDetail/index.js'))
+const CollectibleDetail = lazy(() => import('./CollectibleDetail/index.js'))
 
 const r = relativeRouteOf(PopupRoutes.Wallet)
 

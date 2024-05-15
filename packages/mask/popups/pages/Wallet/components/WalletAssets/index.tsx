@@ -91,7 +91,7 @@ const StyledTabList = styled(TabList)`
     }
 `
 
-export const WalletAssets = memo(function WalletAssets() {
+export default memo(function WalletAssets() {
     const navigate = useNavigate()
     const { chainId } = useChainContext()
     const wallet = useWallet()

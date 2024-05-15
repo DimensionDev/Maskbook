@@ -11,7 +11,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
 
-export function PersonaRecovery() {
+export function Component() {
     const t = useDashboardTrans()
     const navigate = useNavigate()
 

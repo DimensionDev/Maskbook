@@ -45,7 +45,7 @@ interface ApplicationBoardProps {
     open: boolean
     onClose: () => void
 
-    openDashboard?: (route?: DashboardRoutes, search?: string) => void
+    openDashboard?: (route: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
     allPersonas: PersonaInformation[]

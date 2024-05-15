@@ -83,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Recovery = memo(function Recovery() {
+export const Component = memo(function Recovery() {
     const t = useDashboardTrans()
     const location = useLocation()
     const { cx, classes } = useStyles()
@@ -272,5 +272,3 @@ const Recovery = memo(function Recovery() {
         </>
     )
 })
-
-export default Recovery

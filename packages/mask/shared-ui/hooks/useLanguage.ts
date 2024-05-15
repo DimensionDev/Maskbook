@@ -10,6 +10,5 @@ export function useLanguage() {
         networkMode: 'always',
     })
     useEffect(() => MaskMessages.events.languageSettings.on(() => refetch()), [refetch])
-    console.log(data)
     return data
 }
