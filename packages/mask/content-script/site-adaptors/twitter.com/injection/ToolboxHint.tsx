@@ -13,7 +13,9 @@ const SideBarNativeItemPaddingRef = new ValueRef('11px')
 
 function toolboxInSidebarSelector() {
     // Organization account don't have a [data-testid=AppTabBar_More_Menu] in page. see MF-3866
-    return querySelector<HTMLElement>('[role="banner"] nav[role="navigation"] > div[data-testid=AppTabBar_More_Menu]')
+    return querySelector<HTMLElement>(
+        '[role="banner"] nav[role="navigation"] > button[data-testid=AppTabBar_More_Menu]',
+    )
 }
 
 export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'wallet' | 'application') {
