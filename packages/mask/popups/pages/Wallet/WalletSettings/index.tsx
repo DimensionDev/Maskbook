@@ -30,7 +30,7 @@ function getPathIndex(path?: string) {
     if (!rawIndex) return
     return Number.parseInt(rawIndex, 10)
 }
-const WalletSettings = memo(() => {
+export const Component = memo(function WalletSettings() {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
@@ -144,5 +144,3 @@ const WalletSettings = memo(() => {
         </div>
     )
 })
-
-export default WalletSettings

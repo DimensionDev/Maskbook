@@ -72,7 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ResetWallet = memo(function ResetWallet() {
+export const Component = memo(function ResetWallet() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -131,5 +131,3 @@ const ResetWallet = memo(function ResetWallet() {
         </Box>
     )
 })
-
-export default ResetWallet

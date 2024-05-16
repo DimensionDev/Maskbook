@@ -92,7 +92,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ConnectWalletPage = memo(function ConnectWalletPage() {
+export const Component = memo(function ConnectWalletPage() {
     const t = useMaskSharedTrans()
 
     const { classes } = useStyles()
@@ -316,5 +316,3 @@ const ConnectWalletPage = memo(function ConnectWalletPage() {
         </Box>
     )
 })
-
-export default ConnectWalletPage

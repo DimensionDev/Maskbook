@@ -1,9 +1,10 @@
-import { memo, useMemo, type PropsWithChildren, lazy, Suspense } from 'react'
+import { memo, lazy, Suspense } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { GlobalStyles, Paper } from '@mui/material'
 import { Navigator } from '../Navigator/index.js'
+import { HasNavigatorContext } from '../../hooks/useHasNavigator.js'
 
 const GlobalCss = (
     <GlobalStyles
@@ -66,20 +67,19 @@ const PATTERNS = [
 
 const LoadMaskSDK = lazy(() => import('./LoadMaskSDK.js'))
 
-export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChildren<{}>) {
+export const PopupLayout = memo(function PopupLayout() {
     const { classes } = useStyles()
 
     const location = useLocation()
     const matched = PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
-    const outletContext = useMemo(() => ({ hasNavigator: matched }), [matched])
 
     return (
-        <>
+        <HasNavigatorContext.Provider value={matched}>
             {GlobalCss}
             <Paper elevation={0} sx={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <div className={classes.container} data-hide-scrollbar>
                     <div className={classes.body} data-hide-scrollbar>
-                        {children ?? <Outlet context={outletContext} />}
+                        <Outlet />
                     </div>
                     <Suspense fallback={null}>
                         {matched ?
@@ -91,6 +91,6 @@ export const PopupLayout = memo(function PopupLayout({ children }: PropsWithChil
                     :   null}
                 </div>
             </Paper>
-        </>
+        </HasNavigatorContext.Provider>
     )
 })

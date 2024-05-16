@@ -28,7 +28,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-const GasSetting = memo(() => {
+export const Component = memo(function GasSetting() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -45,5 +45,3 @@ const GasSetting = memo(() => {
         </main>
     )
 })
-
-export default GasSetting

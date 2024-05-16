@@ -14,7 +14,7 @@ import Services from '#services'
 import { useSupportSocialNetworks, useHasPassword } from '../../../hooks/index.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 
-const PersonaHome = memo(() => {
+export const Component = memo(function PersonaHome() {
     const navigate = useNavigate()
     const { avatar, currentPersona, setSelectedAccount, personas, accounts, proofs } = PersonaContext.useContainer()
 
@@ -76,6 +76,3 @@ const PersonaHome = memo(() => {
         />
     )
 })
-PersonaHome.displayName = 'PersonaHome'
-
-export default PersonaHome

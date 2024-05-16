@@ -5,11 +5,12 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
 import { forwardRef, memo, useCallback, useMemo } from 'react'
-import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { WalletAssetTabs } from '../../type.js'
+import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -70,7 +71,7 @@ interface Props {
 export const WalletCollections = memo<Props>(
     forwardRef<HTMLDivElement, Props>(function WalletCollections({ onAddToken, scrollTargetRef }, ref) {
         const t = useMaskSharedTrans()
-        const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+        const hasNavigator = useHasNavigator()
         const { classes } = useStyles({ hasNav: hasNavigator })
         const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
         const [, setParams] = useSearchParams()

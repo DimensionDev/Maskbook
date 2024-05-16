@@ -135,7 +135,7 @@ const usePageStyles = makeStyles()((theme) => {
     }
 })
 
-const TokenDetailPage = memo(function TokenDetailPage() {
+export const Component = memo(function TokenDetailPage() {
     const { classes, theme } = usePageStyles()
     const t = useMaskSharedTrans()
     const { chainId, address } = useTokenParams()
@@ -297,5 +297,3 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
         </>
     )
 })
-
-export default TokenDetailPage

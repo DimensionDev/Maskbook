@@ -157,7 +157,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default memo(function CollectibleDetail() {
+export const Component = memo(function CollectibleDetail() {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
     const navigate = useNavigate()

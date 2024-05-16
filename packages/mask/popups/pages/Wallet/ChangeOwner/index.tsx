@@ -170,7 +170,8 @@ interface ManagerAccount {
 
 const FALLBACK_GAS = 50000
 
-export default function ChangeOwner() {
+export { ChangeOwner as Component }
+export function ChangeOwner() {
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()

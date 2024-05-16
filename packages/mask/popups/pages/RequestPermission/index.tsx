@@ -15,7 +15,8 @@ function canRequestDynamically(x: string): x is Manifest.OptionalPermission {
     return (CanRequestDynamically as string[]).includes(x)
 }
 
-export default function RequestPermissionPage() {
+export { RequestPermissionPage as Component }
+export function RequestPermissionPage() {
     const location = useLocation()
     const params = new URLSearchParams(location.search)
     const origins = params.getAll('origins')

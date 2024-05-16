@@ -82,7 +82,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export default memo(function WalletConnect() {
+export const Component = memo(function WalletConnect() {
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()

@@ -11,7 +11,7 @@ import { useMaskSharedTrans, usePersonasFromDB } from '../../../../shared-ui/ind
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 
-const PersonaSignRequest = memo(() => {
+export const Component = memo(function PersonaSignRequest() {
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -122,5 +122,3 @@ const PersonaSignRequest = memo(() => {
         </Box>
     )
 })
-
-export default PersonaSignRequest

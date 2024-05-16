@@ -78,7 +78,7 @@ async function pollResult(address: string) {
     return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
 }
 
-const DeriveWallet = memo(function DeriveWallet() {
+export const Component = memo(function DeriveWallet() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
@@ -161,5 +161,3 @@ const DeriveWallet = memo(function DeriveWallet() {
         </div>
     )
 })
-
-export default DeriveWallet
