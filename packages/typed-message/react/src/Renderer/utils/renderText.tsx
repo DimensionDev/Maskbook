@@ -29,7 +29,11 @@ export const RenderLinkFragment = memo(function RenderLink(
         HashLink = Text,
     } = context
     const sharedProps = { style, children, suggestedPostImage }
-    if (category === 'cash') return <CashLink {...sharedProps} />
+
+    if (category === 'cash') {
+        if (/^\$\d+/.test(children)) return <Text {...sharedProps} />
+        return <CashLink {...sharedProps} />
+    }
     if (category === 'hash') return <HashLink {...sharedProps} />
     if (category === 'user') return <AtLink {...sharedProps} />
     return <Link {...sharedProps} href={href} />
