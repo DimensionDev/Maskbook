@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useMemo, memo, type PropsWithChildren } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
-import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
+import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings, PopupRoutes } from '@masknet/shared-base'
 import { MaskWalletProvider } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -78,7 +78,7 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
     const location = useLocation()
-    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes('/wallet')
+    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes(PopupRoutes.Wallet)
     const account =
         controlled ? props.account : _account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount)
     const chainId =
