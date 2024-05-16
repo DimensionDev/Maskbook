@@ -348,12 +348,11 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     )
 }
 
-function ContactList() {
+export { ContactList as Component }
+export function ContactList() {
     return (
         <ContactsContext.Provider>
             <ContactListUI />
         </ContactsContext.Provider>
     )
 }
-
-export default ContactList

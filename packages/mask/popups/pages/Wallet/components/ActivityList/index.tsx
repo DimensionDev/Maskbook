@@ -6,12 +6,13 @@ import { type ChainId, type Transaction as EvmTransaction, type SchemaType } fro
 import { List } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
 
 export const ActivityList = memo(function ActivityList() {
     const t = useMaskSharedTrans()
-    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const [{ transactions, localeTxes }, { isPending, isFetching, fetchNextPage }] = useTransactions()

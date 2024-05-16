@@ -1,23 +1,25 @@
-import { lazy, memo, useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { useMount } from 'react-use'
-import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
+import { Navigate, Outlet, useNavigate, useSearchParams, type RouteObject } from 'react-router-dom'
 import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
 
-const Home = lazy(() => import(/* webpackMode: 'eager' */ './Home/index.js'))
-const Logout = lazy(() => import('./Logout/index.js'))
-const PersonaSignRequest = lazy(() => import(/* webpackMode: 'eager' */ './PersonaSignRequest/index.js'))
-const AccountDetail = lazy(() => import(/* webpackMode: 'eager' */ './AccountDetail/index.js'))
-const ConnectWallet = lazy(() => import(/* webpackMode: 'eager' */ './ConnectWallet/index.js'))
-const WalletConnect = lazy(() => import(/* webpackMode: 'eager' */ './WalletConnect/index.js'))
-const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
-const PersonaAvatarSetting = lazy(() => import('./PersonaAvatarSetting/index.js'))
-
 const r = relativeRouteOf(PopupRoutes.Personas)
+export const personaRoute: RouteObject[] = [
+    { index: true, lazy: () => import('./Home/index.js') },
+    { path: r(PopupRoutes.Logout), lazy: () => import('./Logout/index.js') },
+    { path: r(PopupRoutes.PersonaSignRequest), lazy: () => import('./PersonaSignRequest/index.js') },
+    { path: r(PopupRoutes.AccountDetail), lazy: () => import('./AccountDetail/index.js') },
+    { path: r(PopupRoutes.ConnectWallet), lazy: () => import('./ConnectWallet/index.js') },
+    { path: r(PopupRoutes.WalletConnect), lazy: () => import('./WalletConnect/index.js') },
+    { path: r(PopupRoutes.ExportPrivateKey), lazy: () => import('./ExportPrivateKey/index.js') },
+    { path: r(PopupRoutes.PersonaAvatarSetting), lazy: () => import('./PersonaAvatarSetting/index.js') },
+    { path: '*', element: <Navigate replace to={PopupRoutes.Personas} /> },
+]
 
-const Persona = memo(() => {
+export const PersonaFrame = memo(function PersonaFrame() {
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
 
@@ -44,19 +46,7 @@ const Persona = memo(() => {
     return (
         <EVMWeb3ContextProvider>
             <PersonaHeader />
-            <Routes>
-                <Route path={r(PopupRoutes.Logout)} element={<Logout />} />
-                <Route path={r(PopupRoutes.PersonaSignRequest)} element={<PersonaSignRequest />} />
-                <Route path={r(PopupRoutes.AccountDetail)} element={<AccountDetail />} />
-                <Route path={r(PopupRoutes.ConnectWallet)} element={<ConnectWallet />} />
-                <Route path={r(PopupRoutes.WalletConnect)} element={<WalletConnect />} />
-                <Route path={r(PopupRoutes.ExportPrivateKey)} element={<ExportPrivateKey />} />
-                <Route path={r(PopupRoutes.PersonaAvatarSetting)} element={<PersonaAvatarSetting />} />
-                <Route path="*" element={<Home />} />
-            </Routes>
+            <Outlet />
         </EVMWeb3ContextProvider>
     )
 })
-Persona.displayName = 'Persona'
-
-export default Persona

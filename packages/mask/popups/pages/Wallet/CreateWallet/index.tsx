@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const CreateWallet = memo(function CreateWallet() {
+export const Component = memo(function CreateWallet() {
     const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
@@ -129,5 +129,3 @@ const CreateWallet = memo(function CreateWallet() {
         </div>
     )
 })
-
-export default CreateWallet

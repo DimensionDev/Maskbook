@@ -287,7 +287,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     )
 })
 
-export default function PersonaAvatarPage() {
+export { PersonaAvatarPage as Component }
+function PersonaAvatarPage() {
     return (
         <EVMWeb3ContextProvider>
             <PersonaAvatarSetting />

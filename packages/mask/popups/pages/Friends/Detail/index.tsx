@@ -8,7 +8,7 @@ import { useQueryClient, useMutation, type InfiniteData } from '@tanstack/react-
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { type Friend } from '../../../hooks/index.js'
 
-export const FriendsDetail = memo(function FriendsDetail() {
+export const Component = memo(function FriendsDetail() {
     const location = useLocation()
     const t = useMaskSharedTrans()
     const { showSnackbar } = usePopupCustomSnackbar()

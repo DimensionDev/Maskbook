@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ExportPrivateKey = memo(function ExportPrivateKey() {
+export const Component = memo(function ExportPrivateKey() {
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
@@ -179,5 +179,3 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         </TabContext>
     )
 })
-
-export default ExportPrivateKey

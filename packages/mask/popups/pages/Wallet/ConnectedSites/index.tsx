@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const ConnectedSites = memo(function ConnectedSites() {
+export const Component = memo(function ConnectedSites() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     useTitle(t.popups_wallet_connected_sites())
@@ -45,5 +45,3 @@ const ConnectedSites = memo(function ConnectedSites() {
         </Box>
     )
 })
-
-export default ConnectedSites
