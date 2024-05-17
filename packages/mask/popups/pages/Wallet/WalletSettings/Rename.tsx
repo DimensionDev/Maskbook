@@ -3,7 +3,7 @@ import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
-import { WalletRenameModal } from '../../../modals/modals.js'
+import { WalletRenameModal } from '../../../modals/modal-controls.js'
 
 export function Rename() {
     const t = useMaskSharedTrans()

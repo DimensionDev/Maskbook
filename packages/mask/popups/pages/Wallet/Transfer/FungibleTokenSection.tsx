@@ -30,7 +30,7 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams, PopupContext } from '../../../hooks/index.js'
-import { ChooseTokenModal } from '../../../modals/modals.js'
+import { ChooseTokenModal } from '../../../modals/modal-controls.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
 
 const useStyles = makeStyles()((theme) => ({

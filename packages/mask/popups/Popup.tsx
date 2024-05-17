@@ -1,46 +1,18 @@
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { MaskMessages, PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
+import { MaskMessages, PopupRoutes } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { Suspense, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import {
-    createHashRouter,
-    Navigate,
-    Outlet,
-    Route,
-    RouterProvider,
-    Routes,
-    useNavigate,
-    useSearchParams,
-} from 'react-router-dom'
+import { createHashRouter, Navigate, Outlet, RouterProvider, useNavigate, useSearchParams } from 'react-router-dom'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
-import { wrapModal } from './components/index.js'
 import { PopupContext, PageTitleContext } from './hooks/index.js'
-import { ConnectProviderModal } from './modals/ConnectProvider/index.js'
-import { SelectProviderModal } from './modals/SelectProviderModal/index.js'
-import {
-    ChooseCurrencyModal,
-    ChooseNetworkModal,
-    ConnectSocialAccountModal,
-    PersonaRenameModal,
-    PersonaSettingModal,
-    SetBackupPasswordModal,
-    SwitchPersonaModal,
-    VerifyBackupPasswordModal,
-    WalletGroupModal,
-    SelectLanguageModal,
-    SelectAppearanceModal,
-    SupportedSitesModal,
-    ChangeBackupPasswordModal,
-} from './modals/modals.js'
 import { Modals } from './modals/index.js'
-import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
@@ -60,26 +32,7 @@ const pending = (
         <LoadingPlaceholder />
     </Box>
 )
-const routedModals = (
-    <>
-        <Route path={PopupModalRoutes.verifyBackupPassword} element={wrapModal(<VerifyBackupPasswordModal />)} />
-        <Route path={PopupModalRoutes.SetBackupPassword} element={wrapModal(<SetBackupPasswordModal />)} />
-        <Route path={PopupModalRoutes.PersonaRename} element={wrapModal(<PersonaRenameModal />)} />
-        <Route path={PopupModalRoutes.PersonaSettings} element={wrapModal(<PersonaSettingModal />)} />
-        <Route path={PopupModalRoutes.SwitchPersona} element={wrapModal(<SwitchPersonaModal />)} />
-        <Route path={PopupModalRoutes.ChooseCurrency} element={wrapModal(<ChooseCurrencyModal />)} />
-        <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />
-        <Route path={PopupModalRoutes.SwitchWallet} element={wrapModal(<SwitchWallet />)} />
-        <Route path={PopupModalRoutes.ConnectSocialAccount} element={wrapModal(<ConnectSocialAccountModal />)} />
-        <Route path={PopupModalRoutes.SelectProvider} element={wrapModal(<SelectProviderModal />)} />
-        <Route path={PopupModalRoutes.ConnectProvider} element={wrapModal(<ConnectProviderModal />)} />
-        <Route path={PopupModalRoutes.WalletAccount} element={wrapModal(<WalletGroupModal />)} />
-        <Route path={PopupModalRoutes.SelectLanguage} element={wrapModal(<SelectLanguageModal />)} />
-        <Route path={PopupModalRoutes.SelectAppearance} element={wrapModal(<SelectAppearanceModal />)} />
-        <Route path={PopupModalRoutes.SupportedSitesModal} element={wrapModal(<SupportedSitesModal />)} />
-        <Route path={PopupModalRoutes.ChangeBackupPassword} element={wrapModal(<ChangeBackupPasswordModal />)} />
-    </>
-)
+const RoutedModals = lazy(() => import('./modals/modals.js'))
 const PopupShell = memo(function PopupShell() {
     const [searchParams] = useSearchParams()
     const modal = searchParams.get('modal')
@@ -100,9 +53,11 @@ const PopupShell = memo(function PopupShell() {
                     <Outlet />
                 </Suspense>
                 <Modals />
-                {modal ?
-                    <Routes location={modal}>{routedModals}</Routes>
-                :   null}
+                <Suspense>
+                    {modal ?
+                        <RoutedModals path={modal} />
+                    :   null}
+                </Suspense>
             </UserContext.Provider>
         </PersonaContext.Provider>
     )

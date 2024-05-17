@@ -7,7 +7,7 @@ import { formatWeiToGwei, type GasConfig, type GasOption } from '@masknet/web3-s
 import { MenuItem, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useMaskSharedTrans } from '../../shared-ui/index.js'
-import { GasSettingModal } from '../modals/modals.js'
+import { GasSettingModal } from '../modals/modal-controls.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
