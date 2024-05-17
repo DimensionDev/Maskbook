@@ -11,6 +11,7 @@ function isIgnoredRequest(request: Request) {
         'https://pbs.twimg.com',
         'https://abs.twimg.com',
         'https://twitter.com',
+        'https://x.com',
         // source code
         'https://maskbook.pages.dev',
         // KV

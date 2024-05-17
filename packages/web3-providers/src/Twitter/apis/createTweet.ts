@@ -3,6 +3,7 @@ import * as Parser from /* webpackDefer: true */ 'twitter-text'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
+import { twitterDomainMigrate } from '@masknet/shared-base'
 
 const features = {
     freedom_of_speech_not_reach_fetch_enabled: true,
@@ -60,7 +61,7 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         : 'CreateTweet'
     const queryId = queryIdMap[operationName]
     const response = await fetchJSON<TwitterBaseAPI.CreateTweetResponse>(
-        `https://twitter.com/i/api/graphql/${queryId}/${operationName}`,
+        twitterDomainMigrate(`https://x.com/i/api/graphql/${queryId}/${operationName}`),
         {
             headers: getHeaders({
                 'content-type': 'application/json; charset=utf-8',

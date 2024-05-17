@@ -163,6 +163,11 @@ export class PostIVIdentifier extends Identifier {
         network = String(network)
         postIV = String(postIV)
 
+        if (network === 'x.com') {
+            network = 'twitter.com'
+            console.warn('[@masknet/shared-base] For compatibility, x.com is converted to twitter.com')
+        }
+
         const networkCache = (PostIVIdentifier.#cache[network] ??= {})
         // return the cache to keep the object identity
         // eslint-disable-next-line no-constructor-return
@@ -267,6 +272,11 @@ export class ProfileIdentifier extends Identifier {
     private constructor(network: string, userID: string) {
         network = String(network).toLowerCase()
         userID = String(userID)
+
+        if (network === 'x.com') {
+            network = 'twitter.com'
+            console.warn('[@masknet/shared-base] For compatibility, x.com is converted to twitter.com')
+        }
 
         if (network === 'localhost' && userID === '$unknown') {
             throw new TypeError('[@masknet/base] Use null instead.')

@@ -1,4 +1,5 @@
 import Services from '#services'
+import { isDomainOrSubdomainOf } from '@masknet/shared-base'
 
 import.meta.webpackHot?.accept()
 
@@ -38,8 +39,10 @@ const extensionOrigin = (() => {
 
 function fetchingTwitterResource(target: URL) {
     return (
-        location.origin.endsWith('twitter.com') &&
-        (target.origin.endsWith('twitter.com') || target.origin.endsWith('twimg.com'))
+        (isDomainOrSubdomainOf(location.href, 'twitter.com') || isDomainOrSubdomainOf(location.href, 'x.com')) &&
+        (isDomainOrSubdomainOf(target.href, 'twitter.com') ||
+            isDomainOrSubdomainOf(target.href, 'x.com') ||
+            isDomainOrSubdomainOf(target.href, 'twimg.com'))
     )
 }
 

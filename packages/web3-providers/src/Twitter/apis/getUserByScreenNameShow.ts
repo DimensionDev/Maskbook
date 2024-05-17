@@ -3,6 +3,7 @@ import type { TwitterBaseAPI } from '../../entry-types.js'
 import { staleCached } from '../../helpers/fetchCached.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { getHeaders } from './getTokens.js'
+import { twitterDomainMigrate } from '@masknet/shared-base'
 
 function createUser(response: TwitterBaseAPI.UserShowResponse): TwitterBaseAPI.User {
     return {
@@ -19,7 +20,7 @@ function createUser(response: TwitterBaseAPI.UserShowResponse): TwitterBaseAPI.U
 }
 
 async function createRequest(screenName: string) {
-    const url = urlcat('https://api.twitter.com/1.1/users/show.json', {
+    const url = urlcat(twitterDomainMigrate('https://api.x.com/1.1/users/show.json'), {
         screen_name: screenName,
     })
     return new Request(url, {

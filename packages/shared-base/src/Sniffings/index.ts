@@ -1,20 +1,22 @@
-enum SiteHost {
-    Twitter = 'twitter.com',
-    Facebook = 'facebook.com',
-}
+import { isDomainOrSubdomainOf } from '../helpers/domain-test.js'
 
-const navigator_ = process.env.NODE_ENV === 'test' ? null : navigator
-const location_ = process.env.NODE_ENV === 'test' ? null : location
+const navigator_: Navigator | undefined = globalThis.navigator as any
+const location_: Location | undefined = globalThis.location as any
 
 const isChromium = navigator_?.userAgent.includes('Chrome') || navigator_?.userAgent.includes('Chromium')
+const extensionProtocol = location_?.protocol.includes('extension')
 
 export const Sniffings = {
-    is_dashboard_page: location_?.protocol.includes('extension') && location_.href.includes('dashboard.html'),
-    is_popup_page: location_?.protocol.includes('extension') && location_.href.includes('popups.html'),
-    is_swap_page: location_?.protocol.includes('extension') && location_.href.includes('swap.html'),
+    is_dashboard_page: extensionProtocol && location_?.href.includes('dashboard.html'),
+    is_popup_page: extensionProtocol && location_?.href.includes('popups.html'),
+    is_swap_page: extensionProtocol && location_?.href.includes('swap.html'),
 
-    is_twitter_page: location_?.href.includes(SiteHost.Twitter),
-    is_facebook_page: location_?.href.includes(SiteHost.Facebook),
+    is_twitter_page:
+        location_ ?
+            isDomainOrSubdomainOf(location_.href, 'twitter.com') || isDomainOrSubdomainOf(location_.href, 'x.com')
+        :   false,
+
+    is_facebook_page: location_ ? isDomainOrSubdomainOf(location_?.href, 'facebook.com') : false,
 
     is_opera: navigator_?.userAgent.includes('OPR/'),
     is_edge: navigator_?.userAgent.includes('Edg'),

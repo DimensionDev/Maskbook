@@ -1,5 +1,5 @@
 import { uniq, uniqBy } from 'lodash-es'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, twitterDomainMigrate } from '@masknet/shared-base'
 import { attemptUntil, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, getTokenConstant, isNativeTokenSymbol } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -46,7 +46,9 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
 
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
         const twitter_url =
-            info.links.twitter_screen_name ? `https://twitter.com/${info.links.twitter_screen_name}` : ''
+            info.links.twitter_screen_name ?
+                twitterDomainMigrate(`https://x.com/${info.links.twitter_screen_name}`)
+            :   ''
         const facebook_url = info.links.facebook_username ? `https://facebook.com/${info.links.facebook_username}` : ''
         const telegram_url =
             info.links.telegram_channel_identifier ? `https://t.me/${info.links.telegram_channel_identifier}` : ''
