@@ -71,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
 const brands: Record<string, ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
     'https://twitter.com/realMaskNetwork': <TwitterIcon />,
+    'https://x.com/realMaskNetwork': <TwitterIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
     'https://discord.gg/4SVXvj7': <Icons.Discord />,
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,

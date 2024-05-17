@@ -219,7 +219,10 @@ function collectLinks(
     if (!tweetNode) return
     if (cancel?.aborted) return
     const links = [...tweetNode.querySelectorAll('a')].filter((x) => x.rel)
-    const seen = new Set<string>(['https://help.twitter.com/using-twitter/how-to-tweet#source-labels'])
+    const seen = new Set([
+        'https://help.twitter.com/using-twitter/how-to-tweet#source-labels',
+        'https://help.x.com/en/using-x/how-to-post#source-labels',
+    ])
     for (const x of links) {
         if (seen.has(x.href)) continue
         seen.add(x.href)

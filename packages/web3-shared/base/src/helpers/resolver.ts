@@ -1,5 +1,11 @@
 import urlcat from 'urlcat'
-import { NetworkPluginID, createLookupTableResolver, NextIDPlatform, SocialAddressType } from '@masknet/shared-base'
+import {
+    NetworkPluginID,
+    createLookupTableResolver,
+    NextIDPlatform,
+    SocialAddressType,
+    twitterDomainMigrate,
+} from '@masknet/shared-base'
 import { CurrencyType, SourceType } from '../specs/index.js'
 import { memoize } from 'lodash-es'
 
@@ -177,7 +183,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.Keybase:
             return `https://keybase.io/${name}`
         case NextIDPlatform.Twitter:
-            return `https://twitter.com/${identifier}`
+            return twitterDomainMigrate(`https://x.com/${identifier}`)
         case NextIDPlatform.ENS:
             return `https://app.ens.domains/name/${identifier}`
         case NextIDPlatform.RSS3:

@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { type PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { type PostIdentifier, ProfileIdentifier, twitterDomainMigrate } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import type { SiteAdaptor } from '@masknet/types'
 import { createSiteAdaptorSpecializedPostContext } from '../../site-adaptor-infra/utils/create-post-context.js'
@@ -10,13 +10,13 @@ import { getUserIdentity, usernameValidator } from './utils/user.js'
 
 function getPostURL(post: PostIdentifier): URL | null {
     if (!(post.identifier instanceof ProfileIdentifier)) return null
-    return new URL(`https://twitter.com/${post.identifier.userId}/status/${post.postId}`)
+    return new URL(twitterDomainMigrate(`https://x.com/${post.identifier.userId}/status/${post.postId}`))
 }
 function getProfileURL(profile: ProfileIdentifier): URL | null {
-    return new URL(`https://twitter.com/${profile.userId}`)
+    return new URL(twitterDomainMigrate(`https://x.com/${profile.userId}`))
 }
 function getShareURL(text: string): URL | null {
-    return new URL(urlcat('https://twitter.com/intent/tweet', { text }))
+    return new URL(urlcat(twitterDomainMigrate('https://x.com/intent/tweet'), { text }))
 }
 export const twitterShared: SiteAdaptor.Shared & SiteAdaptor.Base = {
     ...twitterBase,

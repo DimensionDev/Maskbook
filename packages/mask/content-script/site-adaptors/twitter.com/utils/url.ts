@@ -1,7 +1,7 @@
 import { regexMatch } from '../../../utils/regexMatch.js'
 
 // more about twitter photo url formatting:
-// https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
+// https://developer.x.com/en/docs/tweets/data-dictionary/overview/entities-object#photo_format
 export function canonifyImgUrl(url: string) {
     const parsed = new URL(url)
     if (parsed.hostname !== 'pbs.twimg.com') return url
