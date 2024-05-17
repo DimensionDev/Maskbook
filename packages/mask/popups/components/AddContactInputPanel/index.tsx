@@ -9,7 +9,7 @@ import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/
 import { memo, useCallback, useMemo } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ContactsContext } from '../../hooks/index.js'
-import { AddContactModal } from '../../modals/modals.js'
+import { AddContactModal } from '../../modals/modal-controls.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
