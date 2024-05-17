@@ -10,6 +10,7 @@ import {
     createNextIndicator,
     NetworkPluginID,
     type Days,
+    twitterDomainMigrate,
 } from '@masknet/shared-base'
 import {
     SourceType,
@@ -530,7 +531,10 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 community_urls: [
                     {
                         type: 'twitter',
-                        link: collection.twitter_username ? `https://twitter.com/${collection.twitter_username}` : null,
+                        link:
+                            collection.twitter_username ?
+                                twitterDomainMigrate(`https://x.com/${collection.twitter_username}`)
+                            :   null,
                     },
                     {
                         type: 'facebook',

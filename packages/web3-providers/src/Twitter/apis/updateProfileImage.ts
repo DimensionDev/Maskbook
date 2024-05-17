@@ -2,6 +2,7 @@ import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { getHeaders } from './getTokens.js'
+import { twitterDomainMigrate } from '@masknet/shared-base'
 
 export async function updateProfileImage(
     screenName: string,
@@ -13,7 +14,7 @@ export async function updateProfileImage(
         name: string
         screen_name: string
     }>(
-        urlcat('https://twitter.com/i/api/1.1/account/update_profile_image.json', {
+        urlcat(twitterDomainMigrate('https://x.com/i/api/1.1/account/update_profile_image.json'), {
             media_id: media_id_str,
             skip_status: 1,
             return_user: true,
@@ -21,7 +22,7 @@ export async function updateProfileImage(
         {
             method: 'POST',
             headers: getHeaders({
-                referer: `https://twitter.com/${screenName}`,
+                referer: twitterDomainMigrate(`https://x.com/${screenName}`),
             }),
             credentials: 'include',
         },

@@ -1,6 +1,6 @@
 # Social Network Adaptors of Mask Network
 
-To support a new network, you can refer our adaptor for [Facebook](./facebook.com) and [Twitter](./twitter.com).
+To support a new network, you can refer our adaptor for [Facebook](./facebook.com) and [X (Twitter)](./twitter.com).
 
 You should follow the structure as following:
 

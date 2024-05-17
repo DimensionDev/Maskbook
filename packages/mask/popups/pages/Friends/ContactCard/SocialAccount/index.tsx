@@ -3,7 +3,7 @@ import { Box, Link } from '@mui/material'
 import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { type EnhanceableSite } from '@masknet/shared-base'
+import { twitterDomainMigrate, type EnhanceableSite } from '@masknet/shared-base'
 
 interface SocialAccountProps {
     avatar?: string
@@ -54,7 +54,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
                     underline="none"
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`https://${site}/${userId}`}
+                    href={twitterDomainMigrate(`https://${site}/${userId}`)}
                     className={classes.iconBlack}>
                     <Icons.LinkOut size={16} />
                 </Link>

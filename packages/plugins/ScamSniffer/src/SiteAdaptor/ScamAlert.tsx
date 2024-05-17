@@ -8,6 +8,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
 import { useScamSnifferTrans } from '../locales/i18n_generated.js'
+import { twitterDomainMigrate } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -76,7 +77,7 @@ function ScamAlert({ result }: { result: ScamResult }) {
     }, [])
 
     const openTwitter = () => {
-        const link = urlcat('https://twitter.com', '/:username', { username: result.twitterUsername })
+        const link = twitterDomainMigrate(urlcat('https://x.com', '/:username', { username: result.twitterUsername }))
         openWindow(link)
     }
 

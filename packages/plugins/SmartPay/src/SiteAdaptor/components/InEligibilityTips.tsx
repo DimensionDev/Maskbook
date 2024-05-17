@@ -43,13 +43,7 @@ export const InEligibilityTips = memo(() => {
             <Typography className={classes.description}>
                 <SmartPayTrans.eligibility_description
                     components={{
-                        Link: (
-                            <Link
-                                href="https://twitter.com/realMaskNetwork"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                            />
-                        ),
+                        Link: <Link href="https://x.com/realMaskNetwork" rel="noopener noreferrer" target="_blank" />,
                         Discord: (
                             <Link href="https://discord.com/invite/4SVXvj7" rel="noopener noreferrer" target="_blank" />
                         ),

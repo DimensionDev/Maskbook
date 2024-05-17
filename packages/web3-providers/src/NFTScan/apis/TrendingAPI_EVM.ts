@@ -7,7 +7,7 @@ import {
     type NonFungibleCollectionOverview,
     type NonFungibleTokenActivity,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, isDomainOrSubdomainOf, NetworkPluginID, twitterDomainMigrate } from '@masknet/shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScanV2, createNonFungibleAsset } from '../helpers/EVM.js'
@@ -174,9 +174,12 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                         type: 'twitter',
                         link:
                             collection.twitter &&
-                            (collection.twitter.startsWith('https://twitter.com/') ?
+                            ((
+                                isDomainOrSubdomainOf(collection.twitter, 'twitter.com') ||
+                                isDomainOrSubdomainOf(collection.twitter, 'x.com')
+                            ) ?
                                 collection.twitter
-                            :   `https://twitter.com/${collection.twitter}`),
+                            :   twitterDomainMigrate(`https://x.com/${collection.twitter}`)),
                     },
                     {
                         type: 'facebook',

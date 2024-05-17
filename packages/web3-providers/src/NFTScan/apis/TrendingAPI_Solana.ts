@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { type NonFungibleCollectionOverview, SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { isDomainOrSubdomainOf, NetworkPluginID, twitterDomainMigrate } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-solana'
 import type { Response } from '../types/index.js'
 import { resolveNFTScanHostName } from '../helpers/utils.js'
@@ -90,9 +90,12 @@ class NFTScanTrendingAPI_Solana implements TrendingAPI.Provider<ChainId> {
                         type: 'twitter',
                         link:
                             collection.twitter &&
-                            (collection.twitter.startsWith('https://twitter.com/') ?
+                            ((
+                                isDomainOrSubdomainOf(collection.twitter, 'twitter.com') ||
+                                isDomainOrSubdomainOf(collection.twitter, 'x.com')
+                            ) ?
                                 collection.twitter
-                            :   `https://twitter.com/${collection.twitter}`),
+                            :   twitterDomainMigrate(`https://x.com/${collection.twitter}`)),
                     },
                     {
                         type: 'facebook',

@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, LoadingStatus, ReloadStatus, SocialIcon } from '@masknet/shared'
-import { NetworkPluginID, purify } from '@masknet/shared-base'
+import { NetworkPluginID, purify, twitterDomainMigrate } from '@masknet/shared-base'
 import { makeStyles, ShadowRootIsolation } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
@@ -148,7 +148,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const isSupportedTenant = intersection(grant.tenants, SUPPORTED_TENANTS).length > 0
 
     // Use handle_1 as Gitcoin does
-    const twitterProfile = grant.twitter_handle_1 ? `https://twitter.com/${grant.twitter_handle_1}` : null
+    const twitterProfile =
+        grant.twitter_handle_1 ? twitterDomainMigrate(`https://x.com/${grant.twitter_handle_1}`) : null
 
     const ChainIcon = TenantToChainIconMap[tenant]
     return (

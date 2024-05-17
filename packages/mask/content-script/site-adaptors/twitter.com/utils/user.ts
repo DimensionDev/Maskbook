@@ -4,7 +4,7 @@ import { Twitter } from '@masknet/web3-providers'
 import { twitterBase } from '../base.js'
 
 /**
- * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
+ * @link https://help.x.com/en/managing-your-account/twitter-username-rules
  */
 export function usernameValidator(name: string) {
     for (const v of [/(twitter|admin)/i, /.{16,}/, /\W/]) {

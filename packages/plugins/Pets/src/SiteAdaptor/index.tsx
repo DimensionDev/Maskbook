@@ -6,7 +6,7 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
-import { PluginID } from '@masknet/shared-base'
+import { PluginID, twitterDomainMigrate } from '@masknet/shared-base'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -41,7 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 description: <Trans i18nKey="plugin_pets_description" ns={PluginID.Pets} />,
                 name,
-                tutorialLink: 'https://twitter.com/NonFFriend',
+                tutorialLink: twitterDomainMigrate('https://x.com/NonFFriend'),
                 iconFilterColor,
                 category: 'dapp',
             }

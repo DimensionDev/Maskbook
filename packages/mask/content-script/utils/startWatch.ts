@@ -6,12 +6,12 @@ import { Flags } from '@masknet/flags'
  * ```ts
  * startWatch(new MutationObserverWatcher(ls), {
  *    signal,
- *    missingReportRule: new URL('https://twitter.com/'),
+ *    missingReportRule: new URL('https://x.com/'),
  *    name: 'twitter-home-page',
  * })
  * ```
  *
- * This will be reported only when the current page is https://twitter.com/ and no matches is found.
+ * This will be reported only when the current page is https://x.com/ and no matches is found.
  */
 export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, options: WatchOptions): T
 export function startWatch<T extends MutationObserverWatcher<any, any, any, any>>(watcher: T, options: AbortSignal): T

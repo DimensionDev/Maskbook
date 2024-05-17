@@ -408,7 +408,9 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                     if (!resultTwitterHandle) return false
                     const handle = twitterHandle.toLowerCase()
                     return (
-                        [handle, `https://twitter.com/${handle}`].includes(resultTwitterHandle.toLowerCase()) &&
+                        [handle, `https://twitter.com/${handle}`, `https://x.com/${handle}`].includes(
+                            resultTwitterHandle.toLowerCase(),
+                        ) &&
                         ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                     )
                 })
