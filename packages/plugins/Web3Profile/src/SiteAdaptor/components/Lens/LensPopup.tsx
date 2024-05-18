@@ -37,7 +37,7 @@ export const LensPopup = memo(() => {
     const [lens, setLens] = useState<FireflyConfigAPI.LensAccount[]>([])
     const active = useControlLensPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
-    const anchorElRef = useRef<HTMLElement | null>()
+    const anchorElRef = useRef<HTMLElement | null>(undefined)
 
     useEffect(() => {
         const unsubscribeOpen = emitter.on('open', async ({ lensAccounts, popupAnchorEl }) => {

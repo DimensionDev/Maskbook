@@ -25,7 +25,7 @@ export const FarcasterPopup = memo(() => {
     const [accounts, setAccounts] = useState<FireflyConfigAPI.FarcasterProfile[]>([])
     const active = useControlFarcasterPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
-    const anchorElRef = useRef<HTMLElement | null>()
+    const anchorElRef = useRef<HTMLElement | null>(undefined)
 
     useEffect(() => {
         const unsubscribeOpen = emitter.on('open-farcaster', async ({ accounts, popupAnchorEl }) => {

@@ -42,14 +42,14 @@
     "@mui/system": "5.15.12",
     "@tanstack/react-query": "^5.29.2",
     "@types/masknet__global-types": "workspace:^",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta",
     "@typescript/lib-dom": "npm:@types/web@^0.0.143",
     "i18next": "^23.2.11",
     "knip": "^5.11.0",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-8039e6d0b-20231026",
-    "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
+    "react": "0.0.0-experimental-26f2496093-20240514",
+    "react-dom": "0.0.0-experimental-26f2496093-20240514",
     "react-i18next": "^13.0.2",
     "ses": "1.5.0",
     "ts-results-es": "^4.0.0"
@@ -58,7 +58,7 @@
     "@changesets/cli": "^2.26.2",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
-    "@magic-works/i18n-codegen": "^0.5.0",
+    "@magic-works/i18n-codegen": "^0.6.0",
     "@masknet/cli": "workspace:^",
     "@masknet/config": "workspace:^",
     "@masknet/eslint-plugin": "^0.2.0",
@@ -92,10 +92,13 @@
   "pnpm": {
     "overrides": {
       "@lifi/widget": "^2.10.1",
+      "@lifi/wallet-management": "2.6.0",
       "@protobufjs/inquire": "1.1.0",
+      "@splinetool/runtime": "0.9.342",
       "@tanstack/react-query": "^5.29.2",
       "@types/node": "20.12.7",
       "@types/react": "$@types/react",
+      "@types/react-dom": "$@types/react-dom",
       "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
       "react": "$react",
       "react-dom": "$react-dom",
@@ -104,9 +107,12 @@
     },
     "override reason": {
       "@lifi/widget": "Patching this",
+      "@lifi/wallet-management": "Patching this",
       "@protobufjs/inquire": "Patching this",
+      "@splinetool/runtime": "Patching this",
       "@types/node": "Singleton package",
       "@types/react": "Singleton package",
+      "@types/react-dom": "Singleton package",
       "react": "Singleton package",
       "react-dom": "Singleton package",
       "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 manually pin the commit",
@@ -116,13 +122,16 @@
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
       "ignoreMissing": [],
-      "allowAny": ["webpack"],
+      "allowAny": [
+        "webpack",
+        "react",
+        "react-dom",
+        "@types/react"
+      ],
       "allowedVersions": {}
     },
     "patchedDependencies": {
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
-      "micromark@3.1.0": "patches/micromark@3.1.0.patch",
-      "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
@@ -136,14 +145,14 @@
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
-      "react-devtools-inline@4.28.5": "patches/react-devtools-inline@4.28.5.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
       "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
       "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
       "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
       "react-use@17.4.0": "patches/react-use@17.4.0.patch",
-      "gulp@5.0.0": "patches/gulp@5.0.0.patch"
+      "gulp@5.0.0": "patches/gulp@5.0.0.patch",
+      "react-devtools-inline@5.2.0": "patches/react-devtools-inline@5.2.0.patch"
     }
   }
 }

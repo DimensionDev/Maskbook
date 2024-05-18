@@ -8,7 +8,7 @@ interface ElementAnchorProps extends StackProps {
 
 export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children, ...rest }) => {
     const elementRef = useRef<HTMLDivElement>(null)
-    const intersection = useIntersectionObserver(elementRef, {
+    const intersection = useIntersectionObserver(elementRef.current, {
         rootMargin: '200px',
     })
 

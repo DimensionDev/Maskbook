@@ -32,7 +32,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, type JSX } from 'react'
 import { Trans } from 'react-i18next'
 import { formatTokenBalance } from '../../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'

@@ -8,14 +8,14 @@ function useScrollState() {
 export const RestorableScrollContext = createContainer(useScrollState)
 RestorableScrollContext.Provider.displayName = 'RestorableScrollProvider'
 
-interface Props {
+interface Props<T> {
     scrollKey: string
-    targetRef?: RefObject<HTMLElement>
+    targetRef?: RefObject<HTMLElement | null>
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<T & { ref: RefObject<HTMLElement | null> | undefined }>
 }
 
-export const RestorableScroll = memo(function RestorableScroll({ scrollKey, targetRef, children }: Props) {
+export const RestorableScroll = memo(function RestorableScroll<T>({ scrollKey, targetRef, children }: Props<T>) {
     const containerRef = useRef<HTMLElement>(null)
     const mapRef = RestorableScrollContext.useContainer()
 

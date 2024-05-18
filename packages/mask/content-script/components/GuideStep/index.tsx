@@ -1,4 +1,4 @@
-import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect } from 'react'
+import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect, type RefObject } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
@@ -94,7 +94,7 @@ const NextButton = styled(ActionButton)({
 interface GuideStepProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<{ ref: RefObject<HTMLElement | undefined> }>
     total: number
     step: number
     tip: string
@@ -105,7 +105,7 @@ interface GuideStepProps {
 export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
-    const childrenRef = useRef<HTMLElement>()
+    const childrenRef = useRef<HTMLElement>(undefined)
     const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()
     const [bottomAvailable, setBottomAvailable] = useState(true)
     const { networkIdentifier } = activatedSiteAdaptorUI!

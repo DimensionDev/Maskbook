@@ -10,20 +10,20 @@ import {
 } from 'react'
 
 interface Options {
-    boundaryRef: RefObject<HTMLElement>
+    boundaryRef: RefObject<HTMLElement | null>
 }
 
 const BoundaryContext = createContext<Options>({
     boundaryRef: { current: null },
 })
 
-interface BoundaryProps {
+interface BoundaryProps<T> {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<T & { ref: RefObject<HTMLElement | null> }>
 }
 
-export const Boundary = memo(({ children }: BoundaryProps) => {
+export const Boundary = memo(function <T>({ children }: BoundaryProps<T>) {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (

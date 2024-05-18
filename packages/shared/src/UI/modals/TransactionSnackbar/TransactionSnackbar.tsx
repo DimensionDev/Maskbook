@@ -34,7 +34,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const t = useSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { showSnackbar: showPopupSnackbar, closeSnackbar: closePopupSnackbar } = usePopupCustomSnackbar()
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
 
     const { chainId } = useChainContext()
     const [errorInfo, setErrorInfo] = useState<

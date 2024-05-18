@@ -86,7 +86,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             alias: (() => {
                 const alias: Record<string, string> = {
                     // conflict with SES
-                    'error-polyfill': require.resolve('./package-overrides/null.mjs'),
+                    'error-polyfill$': require.resolve('./package-overrides/null.mjs'),
                 }
                 if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
                 if (flags.devtools) {

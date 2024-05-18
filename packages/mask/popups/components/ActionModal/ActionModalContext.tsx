@@ -11,7 +11,7 @@ function useModal() {
     const openModal = useCallback(() => setOpen(true), [])
 
     const navigate = useNavigate()
-    const timerRef = useRef<ReturnType<typeof setTimeout>>()
+    const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
     const leavingScreen = theme.transitions.duration.leavingScreen
     const closeModal = useCallback(() => {
         setOpen(false)

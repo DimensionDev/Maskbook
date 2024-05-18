@@ -172,7 +172,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
     const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
-    const innerElementRef = useRef<HTMLDivElement>()
+    const innerElementRef = useRef<HTMLDivElement>(undefined)
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
@@ -199,11 +199,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
+        const childProps: any = child.props
         const extra = {
-            'aria-controls': getPanelId(context, child.props.value),
-            id: getTabId(context, child.props.value),
-            selected: child.props.value === context.value,
-            className: child.props.className,
+            'aria-controls': getPanelId(context, childProps.value),
+            id: getTabId(context, childProps.value),
+            selected: childProps.value === context.value,
+            className: childProps.className,
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)
@@ -211,7 +212,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                     setFirstTabId(value)
                 }
             },
-            disabled: child.props.disabled,
+            disabled: childProps.disabled,
         }
 
         if (child.type !== Tab) return child
@@ -227,8 +228,8 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         }
         const C = tabMapping[variant]
         return (
-            <C value={child.props.value} {...extra}>
-                {child.props.label}
+            <C value={childProps.value} {...extra}>
+                {childProps.label}
             </C>
         )
     })

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Skeleton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { memo, useEffect, useRef, useState, useTransition } from 'react'
+import { memo, useEffect, useRef, useState, useTransition, type JSX } from 'react'
 import { range } from 'lodash-es'
 import { useIntersection } from 'react-use'
 
@@ -53,10 +53,10 @@ interface SnapshotCardProps {
 export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps) {
     const { title, children, lazy } = props
     const { classes } = useStyles()
-    const ref = useRef(null)
+    const ref = useRef<HTMLElement>(null)
     const [seen, setSeen] = useState(!lazy)
     const [isPending, setTransition] = useTransition()
-    const ob = useIntersection(ref, {})
+    const ob = useIntersection(ref as any, {})
     useEffect(() => {
         if (ob?.isIntersecting) {
             setTransition(() => setSeen(true))
@@ -64,7 +64,7 @@ export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps)
     }, [ob?.isIntersecting])
 
     return (
-        <Card className={classes.root} variant="outlined" ref={ref}>
+        <Card className={classes.root} variant="outlined" ref={ref as any}>
             <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />
             {isPending ? range(6).map((i) => <Skeleton key={i} animation="wave" height={30} sx={{ m: 1 }} />) : null}
             {seen ?

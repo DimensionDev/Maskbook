@@ -1,5 +1,5 @@
 import { isArray, sum } from 'lodash-es'
-import { useState, useMemo, useEffect, cloneElement } from 'react'
+import { useState, useMemo, useEffect, cloneElement, type JSX } from 'react'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

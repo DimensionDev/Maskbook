@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, type JSX } from 'react'
 import { useMount } from 'react-use'
 import { IconButton } from '@mui/material'
 import { Icons } from '@masknet/icons'
