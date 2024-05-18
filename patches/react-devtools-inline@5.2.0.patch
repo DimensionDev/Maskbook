@@ -1,0 +1,12 @@
+diff --git a/dist/backend.js b/dist/backend.js
+index d710b0a5539e368ddb1dace48efbcffdfe91436d..5b5cd65b33fc38dd73303622917b76d03943d802 100644
+--- a/dist/backend.js
++++ b/dist/backend.js
+@@ -12414,6 +12414,7 @@ function attach(hook, rendererID, renderer, global) {
+     updateComponentFilters
+   };
+ }
++if (sessionStorageGetItem("React::DevTools::reloadAndProfile") === "true") globalThis.__REACT_DEVTOOLS_ATTACH__ = attach;
+ ;// CONCATENATED MODULE: ../react-devtools-shared/src/backend/console.js
+ /**
+  * Copyright (c) Meta Platforms, Inc. and affiliates.

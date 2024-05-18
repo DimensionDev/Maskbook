@@ -1,5 +1,5 @@
 import { ObservableMap } from '@masknet/shared-base'
-import { StrictMode, useEffect, useState } from 'react'
+import { StrictMode, useEffect, useState, type JSX } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
 

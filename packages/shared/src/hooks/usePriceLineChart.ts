@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material'
 import { first, last } from 'lodash-es'
 
 export function usePriceLineChart(
-    svgRef: RefObject<SVGSVGElement>,
+    svgRef: RefObject<SVGSVGElement | null>,
     data: Array<{
         date: Date
         value: number

@@ -9,6 +9,7 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
 import { PersistentStorages } from '@masknet/shared-base'
+import type { JSX } from 'react'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,

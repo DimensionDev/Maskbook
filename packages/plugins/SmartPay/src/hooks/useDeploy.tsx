@@ -30,7 +30,7 @@ export function useDeploy(
     nonce?: number,
     onSuccess?: () => void,
 ) {
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
     const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()

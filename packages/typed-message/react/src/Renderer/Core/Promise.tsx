@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { memo, Suspense, useEffect, useState } from 'react'
+import { memo, Suspense, useEffect, useState, type JSX } from 'react'
 import type { TypedMessage, TypedMessagePromise } from '@masknet/typed-message'
 import { TypedMessageRenderInline } from '../Entry.js'
 import { useTransformedValue } from '../utils/TransformContext.js'

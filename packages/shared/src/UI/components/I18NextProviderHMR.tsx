@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, type JSX } from 'react'
 import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 'react-i18next'
 import { i18NextInstance } from '@masknet/shared-base'
 

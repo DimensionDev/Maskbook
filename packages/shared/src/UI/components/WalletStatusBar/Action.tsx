@@ -8,7 +8,7 @@ interface ActionProps extends PropsWithChildren<{}> {
 }
 
 export const Action = memo<ActionProps>(function Action({ children, openSelectWalletDialog }) {
-    const ref = useRef<HTMLDivElement>()
+    const ref = useRef<HTMLDivElement>(undefined)
     const t = useSharedTrans()
 
     return (

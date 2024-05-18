@@ -101,7 +101,7 @@ export interface CollectionListProps
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
     emptyText?: ReactNode
-    scrollElementRef?: RefObject<HTMLElement>
+    scrollElementRef?: RefObject<HTMLElement | null>
     from?: 'web3Profile' | 'profileCard'
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void

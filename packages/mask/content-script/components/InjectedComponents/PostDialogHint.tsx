@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton } from '@mui/material'
-import { memo } from 'react'
+import { memo, type JSX } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
 

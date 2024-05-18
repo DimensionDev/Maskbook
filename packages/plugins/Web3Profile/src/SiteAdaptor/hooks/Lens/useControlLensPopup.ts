@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { emitter } from '../../emitter.js'
 
 const LEAVE_DURATION = 500
-export function useControlLensPopup(holderRef: RefObject<HTMLDivElement>) {
+export function useControlLensPopup(holderRef: RefObject<HTMLDivElement | null>) {
     const hoverRef = useRef(false)
-    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>()
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
     const [active, setActive] = useState(false)
 

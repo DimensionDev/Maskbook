@@ -35,7 +35,11 @@ export function TypedMessageRenderInline(props: RenderProps) {
     const Render = Registry(message.type)?.component || TypedMessageUnknownRender
     if (isDebug) {
         return (
-            <span data-kind={message.type} ref={(ref) => ref && Object.assign(ref, { message })}>
+            <span
+                data-kind={message.type}
+                ref={(ref) => {
+                    ref && Object.assign(ref, { message })
+                }}>
                 <Render {...message} />
             </span>
         )

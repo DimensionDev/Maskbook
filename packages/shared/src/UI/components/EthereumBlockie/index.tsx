@@ -23,8 +23,8 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
     const { address, name } = props
     const { classes } = useStyles(undefined, { props })
     const [blockie, setBlockie] = useState('')
-    const ref = useRef(null)
-    const ob = useIntersection(ref, {})
+    const ref = useRef<HTMLElement>(null)
+    const ob = useIntersection(ref as any, {})
     useEffect(() => {
         if (ob?.isIntersecting && !blockie) {
             setBlockie(generateBlockie(address))
@@ -32,7 +32,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
     }, [ob?.isIntersecting, address, !blockie])
 
     return (
-        <Avatar className={classes.icon} src={blockie} ref={ref}>
+        <Avatar className={classes.icon} src={blockie} ref={ref as any}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )

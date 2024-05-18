@@ -330,7 +330,7 @@ function InjectProfileTab() {
     const web3TabRef = useRef<HTMLDivElement>(null)
     const { classes } = useStyles({ minWidth: 56 })
     const windowSize = useWindowSize()
-    const timeoutRef = useRef<any>()
+    const timeoutRef = useRef<any>(undefined)
     const [isClick, setIsClick] = useState(false)
 
     function onMouseEnter() {

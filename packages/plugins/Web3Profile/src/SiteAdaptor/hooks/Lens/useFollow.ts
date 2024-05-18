@@ -29,7 +29,7 @@ export function useFollow(
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
     const lensHub = useContract<LensHub>(chainId, LENS_HUB_PROXY_CONTRACT_ADDRESS, LensHubABI as AbiItem[])
 
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
 
     const showSingletonSnackbar = useCallback(

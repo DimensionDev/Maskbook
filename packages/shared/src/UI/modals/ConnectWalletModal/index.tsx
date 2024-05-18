@@ -70,7 +70,7 @@ export const ConnectWalletModal = forwardRef<
         pluginID: NetworkPluginID
         networkType: Web3Helper.NetworkTypeAll
         providerType: Web3Helper.ProviderTypeAll
-    }>()
+    }>(undefined)
     const { pluginID, providerType, networkType } = connectionRef.current ?? {}
 
     const providerDescriptor = useProviderDescriptor(pluginID, providerType)

@@ -34,16 +34,17 @@ export const ButtonGroupTabList = forwardRef<HTMLDivElement, ButtonGroupTabListP
 
     const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) return child
+        const childProps: any = child.props
         const extra = {
-            'aria-controls': getPanelId(context, child.props.value),
-            id: getTabId(context, child.props.value),
-            selected: child.props.value === context.value,
+            'aria-controls': getPanelId(context, childProps.value),
+            id: getTabId(context, childProps.value),
+            selected: childProps.value === context.value,
             onChange: props.onChange,
         }
         if (child.type === Tab) {
             return (
-                <ButtonTab value={child.props.value} {...extra}>
-                    {child.props.label}
+                <ButtonTab value={childProps.value} {...extra}>
+                    {childProps.label}
                 </ButtonTab>
             )
         }
