@@ -12,7 +12,7 @@ export { ciBuild, buildChrome, extensionWatch } from './extension/index.js'
 export { buildCloudflare } from './cloudflare/index.js'
 
 // Tools
-export { clean, help, createPackageInteractive, syncDevelop, changesetRelease } from './commands/index.js'
+export { clean, createPackageInteractive, syncDevelop, changesetRelease } from './commands/index.js'
 export { syncLanguages } from './locale-kit-next/index.js'
 export { reorderSpellcheck } from './spellcheck/index.js'
 
