@@ -554,9 +554,9 @@ importers:
       '@sinonjs/text-encoding':
         specifier: ^0.7.2
         version: 0.7.2
-      '@splinetool/react-spline':
-        specifier: 2.2.6
-        version: 2.2.6(@splinetool/runtime@0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady))(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
+      '@splinetool/runtime':
+        specifier: 0.9.342
+        version: 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
       '@tanstack/query-async-storage-persister':
         specifier: ^5.29.1
         version: 5.29.1
@@ -5580,13 +5580,6 @@ packages:
 
   '@solana/web3.js@1.78.4':
     resolution: {integrity: sha512-up5VG1dK+GPhykmuMIozJZBbVqpm77vbOG6/r5dS7NBGZonwHfTLdBbsYc3rjmaQ4DpCXUa3tUc4RZHRORvZrw==}
-
-  '@splinetool/react-spline@2.2.6':
-    resolution: {integrity: sha512-y9L2VEbnC6FNZZu8XMmWM9YTTTWal6kJVfP05Amf0QqDNzCSumKsJxZyGUODvuCmiAvy0PfIfEsiVKnSxvhsDw==}
-    peerDependencies:
-      '@splinetool/runtime': 0.9.342
-      react: 0.0.0-experimental-26f2496093-20240514
-      react-dom: 0.0.0-experimental-26f2496093-20240514
 
   '@splinetool/runtime@0.9.342':
     resolution: {integrity: sha512-umHOjVbg+7UYPtRLGNAQwwviz631SermH8WzQlGUBpPq1XDwTCcvz1kdNvQvA1NNan+AqnDEUspGhnc4nSp1rg==}
@@ -12348,9 +12341,6 @@ packages:
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-26f2496093-20240514
 
-  react-merge-refs@2.0.2:
-    resolution: {integrity: sha512-V5BGTwGa2r+/t0A/BZMS6L7VPXY0CU8xtAhkT3XUoI1WJJhhtvulvoiZkJ5Jt9YAW23m4xFWmhQ+C5HwjtTFhQ==}
-
   react-native-fetch-api@3.0.0:
     resolution: {integrity: sha512-g2rtqPjdroaboDKTsJCTlcmtw54E25OjyaunUP0anOZn4Fuo2IKs8BVfe02zVggA/UysbmfSnRJIqtNkAgggNA==}
 
@@ -18530,14 +18520,6 @@ snapshots:
       - bufferutil
       - encoding
       - utf-8-validate
-
-  '@splinetool/react-spline@2.2.6(@splinetool/runtime@0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady))(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)':
-    dependencies:
-      '@splinetool/runtime': 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
-      lodash.debounce: 4.0.8
-      react: 0.0.0-experimental-26f2496093-20240514
-      react-dom: 0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514)
-      react-merge-refs: 2.0.2
 
   '@splinetool/runtime@0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)':
     dependencies:
@@ -27553,8 +27535,6 @@ snapshots:
       vfile: 6.0.1
     transitivePeerDependencies:
       - supports-color
-
-  react-merge-refs@2.0.2: {}
 
   react-native-fetch-api@3.0.0:
     dependencies:

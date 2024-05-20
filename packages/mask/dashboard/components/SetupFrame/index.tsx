@@ -5,7 +5,7 @@ import { Welcome } from '../../assets/index.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Outlet } from 'react-router-dom'
 
-const Spline = lazy(() => import('@splinetool/react-spline'))
+const Spline = lazy(() => import('./spline.js'))
 interface SetupFrameProps {
     hiddenSpline?: boolean
 }
