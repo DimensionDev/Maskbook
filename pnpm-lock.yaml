@@ -74,6 +74,9 @@ patchedDependencies:
   react-devtools-inline@5.2.0:
     hash: ouypr4mnytp76aehafnkq5jwma
     path: patches/react-devtools-inline@5.2.0.patch
+  react-qrcode-logo@2.10.0:
+    hash: bzi3mzqlz5yveqmh5d7hmhoteq
+    path: patches/react-qrcode-logo@2.10.0.patch
   react-use@17.4.0:
     hash: hl7dr6rjk7dvc67mgwhhnozk2u
     path: patches/react-use@17.4.0.patch
@@ -663,8 +666,8 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-qrcode-logo:
-        specifier: ^2.9.0
-        version: 2.9.0(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
+        specifier: ^2.10.0
+        version: 2.10.0(patch_hash=bzi3mzqlz5yveqmh5d7hmhoteq)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-router-dom:
         specifier: ^6.23.1
         version: 6.23.1(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
@@ -2513,8 +2516,8 @@ importers:
         specifier: ^9.0.1
         version: 9.0.1(react@0.0.0-experimental-26f2496093-20240514)(types-react@19.0.0-beta.1)
       react-qrcode-logo:
-        specifier: ^2.9.0
-        version: 2.9.0(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
+        specifier: ^2.10.0
+        version: 2.10.0(patch_hash=bzi3mzqlz5yveqmh5d7hmhoteq)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-router-dom:
         specifier: ^6.23.1
         version: 6.23.1(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
@@ -12344,8 +12347,8 @@ packages:
   react-native-fetch-api@3.0.0:
     resolution: {integrity: sha512-g2rtqPjdroaboDKTsJCTlcmtw54E25OjyaunUP0anOZn4Fuo2IKs8BVfe02zVggA/UysbmfSnRJIqtNkAgggNA==}
 
-  react-qrcode-logo@2.9.0:
-    resolution: {integrity: sha512-x9uctB/8kuQ+x7p4V/BRv6qbQV4xYopLcitBuQT3925U/zVFb3bbDUsUZsi7hEKuAX/wRsfhs331FhlPSYCO9Q==}
+  react-qrcode-logo@2.10.0:
+    resolution: {integrity: sha512-Q1+jLtcyDl5rLR29YdkXVLzYk62p3+541x00HxURVBQhs6SqFyEZZVhvkU/VQ082ytXa3GdCmGWMLK5z0Vhe7g==}
     peerDependencies:
       react: 0.0.0-experimental-26f2496093-20240514
       react-dom: 0.0.0-experimental-26f2496093-20240514
@@ -27540,7 +27543,7 @@ snapshots:
     dependencies:
       p-defer: 3.0.0
 
-  react-qrcode-logo@2.9.0(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514):
+  react-qrcode-logo@2.10.0(patch_hash=bzi3mzqlz5yveqmh5d7hmhoteq)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514):
     dependencies:
       lodash.isequal: 4.5.0
       qrcode-generator: 1.4.4
