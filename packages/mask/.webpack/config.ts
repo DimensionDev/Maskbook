@@ -10,6 +10,7 @@ import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import WebExtensionPlugin from 'webpack-target-webextension'
+import ReactCompiler from 'react-compiler-webpack'
 import { getGitInfo } from './git-info.js'
 import { emitManifestFile } from './plugins/manifest.js'
 
@@ -39,7 +40,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const nonWebpackJSFiles = join(flags.outputPath, './js')
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
-
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
 
     let WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC || ''
@@ -127,39 +127,48 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 },
                 // TypeScript
                 {
-                    test: /\.tsx?$/,
+                    test: /\.[mc]?[jt]sx?$/i,
                     parser: { worker: ['OnDemandWorker', '...'] },
-                    // Compile all ts files in the workspace
                     include: join(import.meta.dirname, '../../'),
-                    loader: require.resolve('swc-loader'),
-                    options: {
-                        sourceMaps: !!computedFlags.sourceMapKind,
-                        // https://swc.rs/docs/configuring-swc/
-                        jsc: {
-                            preserveAllComments: true,
-                            parser: {
-                                syntax: 'typescript',
-                                dynamicImport: true,
-                                tsx: true,
-                            },
-                            target: 'es2022',
-                            externalHelpers: true,
-                            transform: {
-                                react: {
-                                    runtime: 'automatic',
-                                    development: !productionLike,
-                                    refresh: flags.reactRefresh && {
-                                        refreshReg: '$RefreshReg$',
-                                        refreshSig: '$RefreshSig$',
-                                        emitFullSignatures: true,
+                    use: [
+                        {
+                            loader: require.resolve('swc-loader'),
+                            options: {
+                                // https://swc.rs/docs/configuring-swc/
+                                jsc: {
+                                    preserveAllComments: true,
+                                    parser: {
+                                        syntax: 'typescript',
+                                        dynamicImport: true,
+                                        tsx: true,
                                     },
+                                    target: 'es2022',
+                                    externalHelpers: true,
+                                    transform: {
+                                        react: {
+                                            runtime: 'automatic',
+                                            refresh: flags.reactRefresh && {
+                                                refreshReg: '$RefreshReg$',
+                                                refreshSig: '$RefreshSig$',
+                                                emitFullSignatures: true,
+                                            },
+                                        },
+                                    },
+                                    experimental: { keepImportAttributes: true },
                                 },
-                            },
-                            experimental: {
-                                keepImportAssertions: true,
-                            },
+                            } as import('@swc/core').Options,
                         },
-                    },
+                        flags.reactCompiler ?
+                            {
+                                loader: ReactCompiler.reactCompilerLoader,
+                                options: ReactCompiler.defineReactCompilerLoaderOption({
+                                    babelTransFormOpt: { sourceMaps: !!computedFlags.sourceMapKind },
+                                    compilationMode: flags.reactCompiler === true ? 'infer' : flags.reactCompiler,
+                                    sources: (x) => x.endsWith('.tsx') || !!x.match(/use[A-Z]/),
+                                }),
+                            }
+                        :   undefined!,
+                    ].filter(Boolean),
                 },
                 {
                     test: /\.svg$/,
