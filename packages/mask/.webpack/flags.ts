@@ -21,6 +21,8 @@ export interface BuildFlags {
     hmr?: boolean
     /** @default true in development and hmr is true */
     reactRefresh?: boolean
+    /** @default false */
+    reactCompiler?: boolean | 'infer' | 'annotation' | 'all'
     outputPath?: string
     /** @default true */
     devtools?: boolean
@@ -40,6 +42,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtoolsEditorURI = 'vscode://file/{path}:{line}',
         sourceMapHideFrameworks = true,
         manifestFile = ManifestFile.ChromiumMV3,
+        reactCompiler = false,
     } = flags
     let {
         hmr = mode === 'development',
@@ -65,6 +68,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         outputPath,
         // Runtime
         manifestFile,
+        reactCompiler,
         // DX
         hmr,
         reactRefresh,
