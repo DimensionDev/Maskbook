@@ -72,7 +72,7 @@ patchedDependencies:
     hash: 6vuobocvlr75qsdjpncf327liq
     path: patches/gulp@5.0.0.patch
   react-devtools-inline@5.2.0:
-    hash: ouypr4mnytp76aehafnkq5jwma
+    hash: hll3vpoco5ydaw7tv7wrwoczze
     path: patches/react-devtools-inline@5.2.0.patch
   react-qrcode-logo@2.10.0:
     hash: bzi3mzqlz5yveqmh5d7hmhoteq
@@ -749,7 +749,7 @@ importers:
         version: 0.1.1(babel-plugin-react-compiler@0.0.0-experimental-592953e-20240517)
       react-devtools-inline:
         specifier: 5.2.0
-        version: 5.2.0(patch_hash=ouypr4mnytp76aehafnkq5jwma)
+        version: 5.2.0(patch_hash=hll3vpoco5ydaw7tv7wrwoczze)
       react-refresh:
         specifier: ^0.14.2
         version: 0.14.2
@@ -27624,7 +27624,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-devtools-inline@5.2.0(patch_hash=ouypr4mnytp76aehafnkq5jwma):
+  react-devtools-inline@5.2.0(patch_hash=hll3vpoco5ydaw7tv7wrwoczze):
     dependencies:
       source-map-js: 0.6.2
       sourcemap-codec: 1.4.8

@@ -134,30 +134,12 @@ export async function startReactDevTools(signal: AbortSignal) {
             }, 100)
         }
     }
-    function viewElementSourceFunction(id: number) {
-        const rendererID = store.getRendererIDForElement(id)
-        if (rendererID !== null) {
-            bridge.send('viewElementSource', { id, rendererID })
-            setTimeout(() => {
-                __eval`
-                    if (window.$type !== null) {
-                        if ($type?.prototype?.isReactComponent) {
-                            // inspect Component.render, not constructor
-                            inspect($type.prototype.render);
-                        } else {
-                            // inspect Functional Component
-                            inspect($type);
-                        }
-                    }
-                `
-            }, 100)
-        }
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    function viewElementSourceFunction(source: any, symbolicalSource: any) {
+        const { sourceURL, line, column } = symbolicalSource ? symbolicalSource : source
+
+        ;(browser.devtools.panels as any).openResource(sourceURL, line - 1, column - 1)
     }
-    const viewUrlSourceFunction =
-        'openResource' in browser.devtools.panels ?
-            (url: string, line: number, col: number) => (browser.devtools.panels as any).openResource(url, line, col)
-        :   undefined
-    // fetchFileWithCaching, hookNamesModuleLoaderFunction: we skip this because we don't minify our files
 
     // Note: since we manually passed bridge and wall, the first argument is unused in the implementation
     const ReactDevTools: ComponentType<Partial<DevtoolsProps>> = initialize(null!, { bridge, store })
@@ -208,9 +190,7 @@ export async function startReactDevTools(signal: AbortSignal) {
                 browserTheme={browser.devtools.panels.themeName === 'dark' ? 'dark' : 'light'}
                 componentsPortalContainer={componentRef}
                 profilerPortalContainer={profilerRef}
-                // Note: we're not providing this ability because without source map it is useless.
-                //       and the default result (not minified) is good enough.
-                // hookNamesModuleLoaderFunction={() => import('react-devtools-inline/hookNames' as any)}
+                hookNamesModuleLoaderFunction={() => import('react-devtools-inline/hookNames' as any)}
                 showTabBar={false}
                 // Note: since this function is used to fetch the JS file and parse it,
                 // we don't need to care about the network cost because it's all local.
@@ -218,9 +198,9 @@ export async function startReactDevTools(signal: AbortSignal) {
                 fetchFileWithCaching={(url) => fetch(url).then((x) => x.text())}
                 enabledInspectedElementContextMenu
                 viewAttributeSourceFunction={viewAttributeSourceFunction}
+                canViewElementSourceFunction={() => isChromium}
                 viewElementSourceFunction={viewElementSourceFunction}
                 overrideTab={tab}
-                viewUrlSourceFunction={viewUrlSourceFunction}
             />
         )
     }

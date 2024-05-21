@@ -348,7 +348,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             webassemblyModuleFilename: 'assets/[hash].wasm',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
-            devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]',
+            devtoolModuleFilenameTemplate:
+                productionLike ?
+                    'webpack://[namespace]/[resource-path]'
+                :   join(import.meta.dirname, '../../../[resource-path]'),
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',
