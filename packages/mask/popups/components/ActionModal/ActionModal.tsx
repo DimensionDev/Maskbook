@@ -58,7 +58,7 @@ interface ActionModalProps extends ActionModalBaseProps {
     header: string
     action?: ReactNode
     onClose?(): void
-    headerClass?: string
+    headerClassName?: string
 }
 
 export const ActionModal = memo(function ActionModal({
@@ -67,7 +67,7 @@ export const ActionModal = memo(function ActionModal({
     children,
     action = null,
     onClose,
-    headerClass,
+    headerClassName,
     ...rest
 }: ActionModalProps) {
     const { classes, cx } = useStyles()
@@ -88,7 +88,7 @@ export const ActionModal = memo(function ActionModal({
                 <Icons.Close size={24} onClick={closeModal} />
             </Button>
             {header ?
-                <header className={cx(classes.header, headerClass)}>{header}</header>
+                <header className={cx(classes.header, headerClassName)}>{header}</header>
             :   null}
             <div className={classes.content}>{children}</div>
             {action}

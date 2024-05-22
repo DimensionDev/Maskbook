@@ -39,7 +39,7 @@ export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdateP
     const { closeModal } = useActionModal()
 
     const handleAgree = useCallback(async () => {
-        const granted = browser.permissions.request({ origins })
+        const granted = await browser.permissions.request({ origins })
         if (!granted) return
         closeModal()
     }, [origins])
@@ -55,7 +55,7 @@ export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdateP
     return (
         <ActionModal
             header={t.popups_update_authorization_title()}
-            headerClass={classes.header}
+            headerClassName={classes.header}
             action={action}
             {...props}>
             <Typography className={classes.text}>{t.popups_authorization_list()}</Typography>
