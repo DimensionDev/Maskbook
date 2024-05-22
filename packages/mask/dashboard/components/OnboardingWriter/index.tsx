@@ -16,12 +16,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface OnboardingWriterProps {
+interface OnboardingWriterProps extends withClasses<'typed' | 'endTyping'> {
     words: JSX.Element[]
 }
 
-export function OnboardingWriter({ words }: OnboardingWriterProps) {
-    const { classes, cx } = useStyles()
+export function OnboardingWriter({ words, ...props }: OnboardingWriterProps) {
+    const { classes, cx } = useStyles(undefined, { props })
 
     const [index, setIndex] = useState(0)
 

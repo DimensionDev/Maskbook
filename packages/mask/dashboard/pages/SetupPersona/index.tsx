@@ -5,6 +5,8 @@ import { SetupFrame } from '../../components/SetupFrame/index.js'
 const r = relativeRouteOf(DashboardRoutes.Setup)
 export const personaRoutes: RouteObject[] = [
     { path: r(DashboardRoutes.Welcome), lazy: () => import('./Welcome/index.js') },
+    { path: r(DashboardRoutes.Permissions), lazy: () => import('./Permissions/index.js') },
+    { path: r(DashboardRoutes.PermissionsOnboarding), lazy: () => import('./PermissionOnboarding/index.js') },
     { path: r(DashboardRoutes.SignUpPersona), lazy: () => import('./SignUp/index.js') },
     { path: r(DashboardRoutes.RecoveryPersona), lazy: () => import('./Recovery/index.js') },
     { path: r(DashboardRoutes.SignUpPersonaMnemonic), lazy: () => import('./Mnemonic/index.js') },
@@ -14,5 +16,7 @@ export const personaRoutes: RouteObject[] = [
     { path: r(DashboardRoutes.CloudBackupPreview), lazy: () => import('./CloudBackupPreview/index.js') },
 ]
 export function PersonaFrame() {
-    return <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpPersonaOnboarding)} />
+    const matchPersonaOnboarding = useMatch(DashboardRoutes.SignUpPersonaOnboarding)
+    const matchPermissionOnboarding = useMatch(DashboardRoutes.PermissionsOnboarding)
+    return <SetupFrame hiddenSpline={!!matchPersonaOnboarding || !!matchPermissionOnboarding} />
 }

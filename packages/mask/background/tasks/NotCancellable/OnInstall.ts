@@ -2,11 +2,11 @@
 import type { DashboardRoutes } from '@masknet/shared-base'
 import * as base from /* webpackDefer: true */ '@masknet/shared-base'
 
-type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
+type DashboardRoutes_Permission = DashboardRoutes.Permissions extends `${infer T}` ? T : never
 function openWelcome() {
-    const welcome: DashboardRoutes_Welcome = '/setup/welcome'
+    const permissions: DashboardRoutes_Permission = '/setup/permissions'
     browser.tabs.create({
-        url: browser.runtime.getURL(`dashboard.html#${welcome}`),
+        url: browser.runtime.getURL(`dashboard.html#${permissions}`),
     })
 }
 

@@ -29,6 +29,7 @@ import {
     SelectAppearanceModal,
     SupportedSitesModal,
     ChangeBackupPasswordModal,
+    UpdatePermissionModal,
 } from './modals/modals.js'
 import { Modals } from './modals/index.js'
 import SwitchWallet from './pages/Wallet/SwitchWallet/index.js'
@@ -89,6 +90,10 @@ const PopupRoutes = memo(function PopupRoutes() {
                                 element={wrapModal(<PersonaSettingModal />)}
                             />
                             <Route path={PopupModalRoutes.SwitchPersona} element={wrapModal(<SwitchPersonaModal />)} />
+                            <Route
+                                path={PopupModalRoutes.UpdatePermissions}
+                                element={wrapModal(<UpdatePermissionModal />)}
+                            />
                             <Route
                                 path={PopupModalRoutes.ChooseCurrency}
                                 element={wrapModal(<ChooseCurrencyModal />)}

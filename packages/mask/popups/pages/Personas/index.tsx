@@ -1,10 +1,11 @@
 import { lazy, memo, useEffect } from 'react'
-import { useMount } from 'react-use'
+import { useAsync, useMount } from 'react-use'
 import { Route, Routes, useNavigate, useSearchParams } from 'react-router-dom'
 import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { PersonaHeader } from './components/PersonaHeader/index.js'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { useModalNavigate } from '../../components/index.js'
+import Services from '#services'
 
 const Home = lazy(() => import(/* webpackMode: 'eager' */ './Home/index.js'))
 const Logout = lazy(() => import('./Logout/index.js'))
@@ -42,6 +43,13 @@ const Persona = memo(() => {
             modalNavigate(PopupModalRoutes.ConnectProvider, { providerType })
         }
     }, [params])
+
+    useAsync(async () => {
+        const groups = await Services.SiteAdaptor.getOriginsWithoutPermission()
+        const origins = groups.flatMap((x) => x.origins)
+        if (origins.some((x) => x === 'https://mobile.x.com/*' || x === 'https://x.com/*'))
+            modalNavigate(PopupModalRoutes.UpdatePermissions)
+    }, [])
 
     return (
         <EVMWeb3ContextProvider>
