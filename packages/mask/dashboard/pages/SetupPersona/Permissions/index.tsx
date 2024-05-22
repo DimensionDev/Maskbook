@@ -12,7 +12,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
-import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,7 +81,7 @@ export const Component = memo(function Permission() {
     const { classes } = useStyles()
     const navigate = useNavigate()
 
-    const { value: sites = [] } = useAsync(() => {
+    const { value: sites = EMPTY_LIST } = useAsync(() => {
         return Services.SiteAdaptor.getSitesWithoutPermission()
     }, [])
 

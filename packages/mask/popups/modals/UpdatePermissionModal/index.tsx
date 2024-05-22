@@ -5,6 +5,7 @@ import { useAsync } from 'react-use'
 import Services from '#services'
 import { Box, Typography } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdatePermissionModal(props) {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
-    const { value: origins = [] } = useAsync(async () => {
+    const { value: origins = EMPTY_LIST } = useAsync(async () => {
         const result = await Services.SiteAdaptor.getOriginsWithoutPermission()
         return result.flatMap((x) => x.origins)
     }, [])
