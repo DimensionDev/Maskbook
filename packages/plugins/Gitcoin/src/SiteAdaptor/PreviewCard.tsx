@@ -285,6 +285,6 @@ function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
         return __html
     }, [__html])
     // this is safe because purify has been called
-    // eslint-disable-next-line react/no-danger
+    // eslint-disable-next-line react/dom/no-dangerously-set-innerhtml
     return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html: safeHTML }} />
 }

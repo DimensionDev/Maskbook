@@ -187,35 +187,33 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                         {!disableToken ?
                             <Box display="flex" alignItems="center" columnGap="12px">
                                 {token ?
-                                    <>
-                                        <Chip
-                                            size="small"
-                                            onClick={onSelectToken}
-                                            className={classes.chip}
-                                            classes={{ label: classes.chipLabel }}
-                                            icon={
-                                                <Box position="relative">
-                                                    <TokenIcon
-                                                        className={classes.tokenIcon}
-                                                        address={token.address}
-                                                        name={token.name}
-                                                        chainId={token.chainId}
-                                                        logoURL={token.logoURL}
-                                                    />
-                                                    <NetworkIcon
-                                                        pluginID={pluginID}
-                                                        className={classes.badgeIcon}
-                                                        chainId={token.chainId}
-                                                        size={16}
-                                                        network={network}
-                                                    />
-                                                </Box>
-                                            }
-                                            deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
-                                            onDelete={onSelectToken}
-                                            label={token.symbol}
-                                        />
-                                    </>
+                                    <Chip
+                                        size="small"
+                                        onClick={onSelectToken}
+                                        className={classes.chip}
+                                        classes={{ label: classes.chipLabel }}
+                                        icon={
+                                            <Box position="relative">
+                                                <TokenIcon
+                                                    className={classes.tokenIcon}
+                                                    address={token.address}
+                                                    name={token.name}
+                                                    chainId={token.chainId}
+                                                    logoURL={token.logoURL}
+                                                />
+                                                <NetworkIcon
+                                                    pluginID={pluginID}
+                                                    className={classes.badgeIcon}
+                                                    chainId={token.chainId}
+                                                    size={16}
+                                                    network={network}
+                                                />
+                                            </Box>
+                                        }
+                                        deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
+                                        onDelete={onSelectToken}
+                                        label={token.symbol}
+                                    />
                                 :   <Box className={classes.selectToken} onClick={onSelectToken}>
                                         {t.select_a_token()}
                                         <Icons.ArrowDrop size={16} />

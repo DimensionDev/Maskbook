@@ -25,14 +25,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function QRCode({ text, options = {}, canvasProps }: QRProps) {
+export function QRCode({ text, options, canvasProps }: QRProps) {
     const ref = useRef<HTMLCanvasElement | null>(null)
     const [error, setError] = useState(false)
     const { classes } = useStyles()
     useEffect(() => {
         if (!ref.current || error) return
 
-        qr.toCanvas(ref.current, text, options, (err) => {
+        qr.toCanvas(ref.current, text, options || {}, (err) => {
             if (!err) return
             setError(true)
             throw err

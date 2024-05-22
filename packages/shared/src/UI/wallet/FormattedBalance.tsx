@@ -1,7 +1,7 @@
-import { Fragment } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { isZero, isLessThan, type FormatBalanceOptions } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
+import { identity } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     balance: {
@@ -19,22 +19,29 @@ export interface FormattedBalanceProps extends withClasses<'balance' | 'symbol'>
 }
 
 export function FormattedBalance(props: FormattedBalanceProps) {
-    const { value, decimals, significant, symbol, minimumBalance, formatter = (value) => value } = props
+    const {
+        value,
+        decimals,
+        significant,
+        symbol,
+        minimumBalance,
+        formatter = identity as NonNullable<FormattedBalanceProps['formatter']>,
+    } = props
     const valueInt = new BigNumber(value ?? '0').toFixed(0)
     let formatted = formatter(valueInt, decimals, { significant })
     if (minimumBalance && !isZero(formatted) && isLessThan(valueInt, minimumBalance)) {
         // it's a BigNumber so it's ok
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
-        formatted = '<' + formatter(minimumBalance, decimals, { significant }).toString()
+
+        formatted = '<' + formatter(minimumBalance, decimals, { significant })
     }
     const { classes } = useStyles(undefined, { props })
 
     if (symbol)
         return (
-            <Fragment>
+            <>
                 <span className={classes.balance}>{String(formatted)}</span>
                 <span className={classes.symbol}>{symbol}</span>
-            </Fragment>
+            </>
         )
-    return <Fragment>{String(formatted)}</Fragment>
+    return <>{String(formatted)}</>
 }

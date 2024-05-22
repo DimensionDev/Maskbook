@@ -7,7 +7,7 @@ import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, Fragment, useMemo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
 
@@ -137,7 +137,7 @@ function NFTList({ nfts }: NFTListProps) {
             {queries.map((query, index) => {
                 const { data } = query
                 const nft = nfts[index]
-                if (!data) return <>{nft.collectionName}</>
+                if (!data) return <Fragment key={nft.chainId + nft.contractAddress}>{nft.collectionName}</Fragment>
                 const url = Utils.explorerResolver.addressLink(nft.chainId, nft.contractAddress)
                 const name = nft.collectionName || data.name || data.symbol
                 return (

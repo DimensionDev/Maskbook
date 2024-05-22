@@ -9,6 +9,7 @@ function ModelView({ source, ...rest }: ModelViewProps) {
 
     return (
         <div {...rest}>
+            {/* eslint-disable-next-line react/dom/no-missing-iframe-sandbox */}
             <iframe src={source} />
         </div>
     )

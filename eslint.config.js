@@ -1,23 +1,15 @@
 // cSpell:disable
 // @ts-check
+import { fixupPluginRules } from '@eslint/compat'
 import tseslint from 'typescript-eslint'
-
 import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
-import ReactPlugin from 'eslint-plugin-react'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-i'
+import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
-
-import { pathToFileURL } from 'node:url'
-
-// this is a patch to https://github.com/typescript-eslint/typescript-eslint/issues/3811
-if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) {
-    // cspell: disable-next-line
-    process.env.TSESTREE_SINGLE_RUN = 'true'
-}
 
 const deferPackages = [
     'wallet.ts',
@@ -59,8 +51,13 @@ const avoidMistakeRules = {
         },
     ], // disable a rule requires a reason
     /// React bad practice
-    'react/no-invalid-html-attribute': 'warn',
-    'react/void-dom-elements-no-children': 'error', // <img>children</img>
+    // 'react/no-children-count': 'error',
+    'react/no-children-for-each': 'error',
+    // 'react/no-children-map': 'error',
+    // 'react/no-children-only': 'error',
+    // 'react/no-children-prop': 'error',
+    'react/no-children-to-array': 'error',
+    // 'react/no-clone-element': 'error',
     /// TypeScript bad practice
     '@typescript-eslint/ban-types': [
         'error',
@@ -118,10 +115,12 @@ const avoidMistakeRules = {
     // Security
     'no-script-url': 'error', // javascript:
     // 'unicorn/require-post-message-target-origin': 'warn', // postMessage(data, 'origin')
-    // 'react/iframe-missing-sandbox': 'warn', // <iframe sandbox="..." />
-    'react/jsx-no-script-url': 'error', // javascript:
-    'react/no-danger': 'error', // dangerouslySetInnerHTML
-    'react/no-danger-with-children': 'error', // dangerouslySetInnerHTML + children
+    'react/dom/no-dangerously-set-innerhtml': 'error', // dangerouslySetInnerHTML
+    'react/dom/no-dangerously-set-innerhtml-with-children': 'error', // dangerouslySetInnerHTML + children
+    'react/dom/no-missing-iframe-sandbox': 'error', // <iframe sandbox="..." />
+    'react/dom/no-script-url': 'error', // javascript:
+    'react/dom/no-unsafe-iframe-sandbox': 'error', // <iframe sandbox="..." />
+    'react/dom/no-unsafe-target-blank': 'error',
     '@typescript-eslint/no-implied-eval': 'error', // setTimeout('code')
     '@masknet/browser-no-set-html': 'error', // .innerHTML =
     // '@masknet/string-no-data-url': 'error', // data:...
@@ -137,7 +136,6 @@ const avoidMistakeRules = {
     'no-label-var': 'warn', // name collision
     'no-plusplus': 'warn', // ++i? i++?
     'no-sequences': 'warn', // (a, b)
-    // 'react/no-unescaped-entities': 'warn', // <div> >1 </div>
     '@typescript-eslint/no-confusing-non-null-assertion': 'error', // a! == b
 
     // Problematic language features
@@ -146,7 +144,7 @@ const avoidMistakeRules = {
     'unicorn/require-array-join-separator': 'warn', // Array.join(_required_)
     // This rule breaks BigNumber class which has different .toFixed() default value.
     // 'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
-    'react/button-has-type': 'error', // default type is "submit" which refresh the page
+    'react/dom/no-missing-button-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
     '@masknet/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
@@ -158,7 +156,7 @@ const avoidMistakeRules = {
     '@typescript-eslint/prefer-enum-initializers': 'warn', // add a new item in the middle is an API breaking change.
     /// Little-known language features
     'no-constructor-return': 'error', // constructor() { return expr }
-    'react/no-namespace': 'error', // <svg:rect> react does not support
+    'react/dom/no-namespace': 'error', // <svg:rect> react does not support
     '@typescript-eslint/no-unsafe-declaration-merging': 'error',
     '@typescript-eslint/no-mixed-enums': 'error', // enum { a = 1, b = "b" }
     '@typescript-eslint/prefer-literal-enum-member': 'error', // enum { a = outsideVar }
@@ -200,9 +198,11 @@ const avoidMistakeRules = {
     // 'require-atomic-updates': 'error', // await/yield race condition
     'valid-typeof': 'error', // typeof expr === undefined
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
-    'react/jsx-no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
-    'react/jsx-no-leaked-render': 'error', // <div>{0 && <Something />}</div> will render "0"!
-    'react/no-unstable-nested-components': 'error', // rerender bugs
+    'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
+    'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
+    'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} />
+    'react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
+    'react/no-nested-components': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks
     '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
@@ -210,10 +210,12 @@ const avoidMistakeRules = {
     '@masknet/string-no-locale-case': 'error', // in non-i18n cases use locale-aware string methods are wrong
 
     // Performance
-    'react/jsx-key': ['warn', { checkFragmentShorthand: true, checkKeyMustBeforeSpread: true, warnOnDuplicates: true }], // key={data.key}
-    'react/jsx-no-constructed-context-values': 'warn', // <Provider value={{}}> (should be cached!)
-    // 'react/no-array-index-key': 'warn', // no key={index}
-    // 'react/no-object-type-as-default-prop': 'warn', // function Component({ items = [] })
+    'react/no-missing-key': 'warn',
+    'react/no-unstable-context-value': 'warn',
+    'react/no-unstable-default-props': 'warn',
+    // 'react/hooks-extra/ensure-use-callback-has-non-empty-deps': 'warn',
+    // 'react/hooks-extra/ensure-use-memo-has-non-empty-deps': 'warn',
+    'react/hooks-extra/prefer-use-state-lazy-initialization': 'warn',
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
 const codeStyleRules = {
@@ -223,8 +225,7 @@ const codeStyleRules = {
     'no-prototype-builtins': 'error', // bans `obj.hasOwnProperty()` etc
     'no-var': 'error', // var x
     'unicorn/no-new-buffer': 'error', // NodeJS
-    'react/no-deprecated': 'error',
-    'react/no-find-dom-node': 'error',
+    'react/no-class-component': 'error',
     // Let's wait for https://github.com/typescript-eslint/typescript-eslint/issues/6572
     // '@typescript-eslint/no-namespace': 'error', // namespace T {}
     '@typescript-eslint/prefer-namespace-keyword': 'error', // but if you really need to, don't use `module T {}`
@@ -243,7 +244,7 @@ const codeStyleRules = {
     'no-useless-concat': 'warn', // "a" + "b"
     'no-useless-escape': 'warn', // "hol\a"
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
-    // 'react/jsx-no-useless-fragment': 'warn', // <><TheOnlyChild /></>
+    'react/no-useless-fragment': 'warn',
     'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
     'unicorn/no-empty-file': 'warn',
     'unicorn/no-useless-fallback-in-spread': 'warn', // {...(foo || {})}
@@ -280,6 +281,7 @@ const codeStyleRules = {
     'prefer-object-has-own': 'warn',
     // 'prefer-object-spread': 'warn', // { ... } than Object.assign
     // 'prefer-rest-params': 'warn',
+
     'unicorn/no-document-cookie': 'error', // even if you have to do so, use CookieJar
     'unicorn/prefer-keyboard-event-key': 'warn',
     'unicorn/prefer-add-event-listener': 'warn',
@@ -326,7 +328,7 @@ const codeStyleRules = {
     // Better debug
     // 'prefer-promise-reject-errors': 'warn', // Promise.reject(need_error)
     'symbol-description': 'warn', // Symbol(desc)
-    // 'react/display-name': ['warn', { checkContextObjects: true }], // .displayName = '...'
+    // 'react/no-missing-component-display-name': 'warn',
     'unicorn/catch-error-name': ['warn', { ignore: ['^err$'] }], // catch (err)
     // 'unicorn/custom-error-definition': 'warn', // correctly extends the native error
     // 'unicorn/error-message': 'warn', // error must have a message
@@ -334,7 +336,6 @@ const codeStyleRules = {
     // '@typescript-eslint/no-throw-literal': 'warn', // no throw 'string'
 
     // API design
-    // 'react/prefer-read-only-props': 'error',
     // '@typescript-eslint/no-extraneous-class': 'error', // no class with only static members
     // '@typescript-eslint/prefer-readonly': 'error',
     // '@typescript-eslint/prefer-readonly-parameter-types': 'error',
@@ -360,19 +361,9 @@ const codeStyleRules = {
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
     // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
-    'react/function-component-definition': [
-        'warn',
-        {
-            namedComponents: 'function-declaration',
-            unnamedComponents: ['function-expression', 'arrow-function'],
-        },
-    ],
-    'react/jsx-boolean-value': ['error', 'never'],
-    // 'react/jsx-boolean-value': ['error', 'never', { always: ['value'] }],
-    // 'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
-    // 'react/jsx-fragments': ['warn', 'syntax'],
-    // 'react/no-children-prop': 'warn',
-    'react/self-closing-comp': 'warn',
+    // 'react/naming-convention/use-state': 'warn',
+    'react/prefer-shorthand-boolean': 'warn',
+    'react/prefer-shorthand-fragment': 'warn',
     '@typescript-eslint/prefer-as-const': 'warn',
 
     // Consistency
@@ -408,10 +399,8 @@ const codeStyleRules = {
     // Naming convension
     // 'func-name-matching': 'warn',
     // 'new-cap': 'warn',
-    // 'react/boolean-prop-naming': 'warn',
-    // 'react/hook-use-state': ['warn', { allowDestructuredState: true }],
-    // 'react/jsx-handler-names': 'warn',
-    // 'react/jsx-pascal-case': 'warn',
+    // 'react/naming-convention/component-name': ['warn', { rule: 'PascalCase' }],
+    // 'react/naming-convention/file-name': ['warn', { rule: 'PascalCase' }],
 
     // Bad practice
     'no-ex-assign': 'warn', // reassign err in catch
@@ -546,8 +535,8 @@ const plugins = {
     '@typescript-eslint': tseslint.plugin,
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
-    'react-hooks': ReactHooksPlugin,
-    '@tanstack/query': ReactQueryPlugin,
+    'react-hooks': fixupPluginRules(ReactHooksPlugin),
+    '@tanstack/query': fixupPluginRules(ReactQueryPlugin),
 }
 export default tseslint.config(
     {

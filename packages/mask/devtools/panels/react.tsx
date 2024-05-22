@@ -160,10 +160,12 @@ export async function startReactDevTools(signal: AbortSignal) {
     let needsToSyncElementSelection = false
 
     function Host() {
-        const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(
+        const [componentRef, setComponentRef] = useState<HTMLElement | undefined>(() =>
             getMountPoint(componentsWindow, signal),
         )
-        const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(getMountPoint(profilerWindow, signal))
+        const [profilerRef, setProfilerRef] = useState<HTMLElement | undefined>(() =>
+            getMountPoint(profilerWindow, signal),
+        )
         const [tab, setTab] = useState<TabID | undefined>(undefined)
         useEffect(() => {
             function onComponent(window: Window) {

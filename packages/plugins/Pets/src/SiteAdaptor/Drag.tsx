@@ -24,7 +24,7 @@ interface DraggableProps {
 
 // TODO: rewrite to function components
 // TODO: use library like react-dnd instead.
-// eslint-disable-next-line @masknet/jsx-no-class-component
+// eslint-disable-next-line @masknet/jsx-no-class-component, react/no-class-component
 class Draggable extends PureComponent<PropsWithChildren<DraggableProps>> {
     ref = createRef<HTMLDivElement>()
     mouseMoveFuc = this.onMouseMove.bind(this)

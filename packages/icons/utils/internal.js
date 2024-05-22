@@ -14,7 +14,6 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
  */
 export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
-        /* eslint-disable */
         let { size = 24, variant, color, sx, height, width, ...rest } = props
 
         const hasClickHandler = rest.onClick

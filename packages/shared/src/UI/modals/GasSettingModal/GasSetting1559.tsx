@@ -83,6 +83,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+// eslint-disable-next-line react/no-useless-fragment
+const emptyRender = () => <></>
 export const GasSetting1559 = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const t = useSharedTrans()
@@ -248,7 +250,7 @@ export const GasSetting1559 = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
+                    <Controller control={control} render={emptyRender} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_fee_settings_max_priority_fee()}
                         <Typography component="span" className={classes.unit}>
@@ -268,7 +270,7 @@ export const GasSetting1559 = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller control={control} render={({ field }) => <></>} name="maxPriorityFeePerGas" />
+                    <Controller control={control} render={emptyRender} name="maxPriorityFeePerGas" />
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_fee_settings_max_fee()}
                         <Typography component="span" className={classes.unit}>
@@ -288,7 +290,7 @@ export const GasSetting1559 = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller control={control} render={({ field }) => <></>} name="maxFeePerGas" />
+                    <Controller control={control} render={emptyRender} name="maxFeePerGas" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}
