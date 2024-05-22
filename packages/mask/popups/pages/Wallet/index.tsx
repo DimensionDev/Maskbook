@@ -13,7 +13,7 @@ export const walletRoutes: RouteObject[] = [
         element: <WalletGuard />,
         children: [
             { index: true, lazy: () => import('./components/WalletAssets/index.js') },
-            { path: r(PopupRoutes.WalletUnlock), element: <></> },
+            { path: r(PopupRoutes.WalletUnlock), element: null },
             { path: r(PopupRoutes.WalletSettings), lazy: () => import('./WalletSettings/index.js') },
             { path: r(PopupRoutes.CreateWallet), lazy: () => import('./CreateWallet/index.js') },
             { path: r(PopupRoutes.DeriveWallet), lazy: () => import('./CreateWallet/Derive.js') },

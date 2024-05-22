@@ -10,14 +10,15 @@
     { "path": "./packages/mask-sdk/public-api/tsconfig.json" },
     // Tests
     // @masknet/scripts: insert-here 1
-    { "path": "./packages/base/tsconfig.tests.json" },
-    { "path": "./packages/backup-format/tsconfig.tests.json" },
-    { "path": "./packages/encryption/tsconfig.tests.json" },
+    { "path": "./packages/base/tests/tsconfig.json" },
+    { "path": "./packages/backup-format/tests/tsconfig.json" },
+    { "path": "./packages/encryption/tests/tsconfig.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
-    { "path": "./packages/shared-base/tsconfig.tests.json" },
-    { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },
-    { "path": "./packages/web3-shared/base/tsconfig.tests.json" },
-    { "path": "./packages/web3-providers/tsconfig.tests.json" },
+    { "path": "./packages/shared-base/tests/tsconfig.json" },
+    { "path": "./packages/web3-shared/base/tests/tsconfig.json" },
+    { "path": "./packages/web3-shared/evm/tests/tsconfig.json" },
+    { "path": "./packages/web3-providers/tests/tsconfig.json" },
+    { "path": "./packages/web3-telemetry/tests/tsconfig.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins/tsconfig.json" }
   ],

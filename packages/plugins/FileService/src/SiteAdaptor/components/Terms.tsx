@@ -100,8 +100,22 @@ export function Terms() {
                 <Typography variant="body2" className={classes.footNote}>
                     <FileServiceTrans.foot_note
                         components={{
-                            terms: <Link target="_blank" className={classes.link} href={TERMS_URL} />,
-                            policy: <Link target="_blank" className={classes.link} href={POLICY_URL} />,
+                            terms: (
+                                <Link
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    className={classes.link}
+                                    href={TERMS_URL}
+                                />
+                            ),
+                            policy: (
+                                <Link
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    className={classes.link}
+                                    href={POLICY_URL}
+                                />
+                            ),
                         }}
                     />
                 </Typography>

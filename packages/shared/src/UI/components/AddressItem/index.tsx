@@ -36,9 +36,10 @@ export interface AddressItemProps {
     isMenu?: boolean
 }
 
+const defaultTypography = { fontSize: '14px', fontWeight: 700 }
 export function AddressItem({
     socialAccount,
-    TypographyProps = { fontSize: '14px', fontWeight: 700 },
+    TypographyProps = defaultTypography,
     linkIconClassName,
     disableLinkIcon,
     onClick,

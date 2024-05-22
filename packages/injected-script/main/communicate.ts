@@ -50,6 +50,6 @@ document.addEventListener(CustomEventId, (e) => {
 
         default:
             const neverEvent: never = type
-            $.ConsoleError('[@masknet/injected-script]', neverEvent, 'not handled')
+            $.console_error('[@masknet/injected-script]', neverEvent, 'not handled')
     }
 })

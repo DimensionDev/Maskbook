@@ -25,6 +25,8 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     noUpdateEffect?: boolean
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
+const check = <CheckIcon />
+const fail = <ErrorIcon />
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const { classes, cx } = useStyles()
     const {
@@ -38,8 +40,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         failedOnClick,
         onComplete,
         noUpdateEffect,
-        completeIcon = <CheckIcon />,
-        failIcon = <ErrorIcon />,
+        completeIcon = check,
+        failIcon = fail,
         waitingIcon = circle,
         failedButtonStyle,
         ...b

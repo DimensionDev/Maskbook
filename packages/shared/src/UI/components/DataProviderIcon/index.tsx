@@ -18,6 +18,6 @@ export function DataProviderIcon(props: DataProviderIconProps) {
         case SourceType.UniswapInfo:
             return <Icons.Uniswap size={size} />
         default:
-            return <></>
+            return null
     }
 }

@@ -157,30 +157,28 @@ export const TypedMessageEditor = memo(
             )
         }
         return (
-            <>
-                <InputBase
-                    inputRef={setInputRef}
-                    startAdornment={
-                        value.meta ?
-                            <div className={classes.badge}>
-                                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
-                            </div>
-                        :   null
-                    }
-                    readOnly={readonly}
-                    classes={{
-                        root: classes.root,
-                        input: classes.textarea,
-                    }}
-                    className={cx(classes.input, value.meta ? classes.badgeInput : undefined)}
-                    value={value.content}
-                    onChange={setAsText}
-                    fullWidth
-                    multiline
-                    placeholder={t.post_dialog__placeholder()}
-                    rows={value.meta ? 11 : 13}
-                />
-            </>
+            <InputBase
+                inputRef={setInputRef}
+                startAdornment={
+                    value.meta ?
+                        <div className={classes.badge}>
+                            <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                        </div>
+                    :   null
+                }
+                readOnly={readonly}
+                classes={{
+                    root: classes.root,
+                    input: classes.textarea,
+                }}
+                className={cx(classes.input, value.meta ? classes.badgeInput : undefined)}
+                value={value.content}
+                onChange={setAsText}
+                fullWidth
+                multiline
+                placeholder={t.post_dialog__placeholder()}
+                rows={value.meta ? 11 : 13}
+            />
         )
     }),
 )

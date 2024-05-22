@@ -90,48 +90,46 @@ export function About() {
     const { classes } = useStyles()
     const t = useDashboardTrans()
     return (
-        <>
-            <section className={classes.wrapper}>
-                <header className={classes.header}>
-                    <MaskIcon />
-                    <Box pt="12px">
-                        <MaskTitleIcon />
-                    </Box>
-                    <Version className={classes.version} />
-                </header>
-                <main className={classes.main}>
-                    <Typography component="p" variant="inherit">
-                        {t.about_dialog_description()}
-                    </Typography>
-                    <section className={classes.getInTouch}>
-                        <Typography variant="inherit">{t.about_dialog_touch()}</Typography>
-                        <div className={classes.brands}>
-                            {Object.keys(brands).map((href, key) => (
-                                <IconButton key={key} className={classes.icon} target="_blank" size="small" href={href}>
-                                    {brands[href]}
-                                </IconButton>
-                            ))}
-                        </div>
-                    </section>
-                </main>
-                <footer className={classes.footer}>
-                    <Typography component="p" variant="inherit">
-                        <span>{t.about_dialog_feedback()}</span>
-                        <Link classes={{ root: classes.link }} href={`mailto:${links.MASK_EMAIL}`}>
-                            {links.MASK_EMAIL}
-                        </Link>
-                    </Typography>
-                    <Typography component="p" variant="inherit">
-                        <span>{t.about_dialog_source_code()}</span>
-                        <Link classes={{ root: classes.link }} href={links.MASK_GITHUB}>
-                            {links.MASK_GITHUB}
-                        </Link>
-                    </Typography>
-                    <Typography component="p" variant="inherit">
-                        {t.about_dialog_license()} GNU AGPL 3.0
-                    </Typography>
-                </footer>
-            </section>
-        </>
+        <section className={classes.wrapper}>
+            <header className={classes.header}>
+                <MaskIcon />
+                <Box pt="12px">
+                    <MaskTitleIcon />
+                </Box>
+                <Version className={classes.version} />
+            </header>
+            <main className={classes.main}>
+                <Typography component="p" variant="inherit">
+                    {t.about_dialog_description()}
+                </Typography>
+                <section className={classes.getInTouch}>
+                    <Typography variant="inherit">{t.about_dialog_touch()}</Typography>
+                    <div className={classes.brands}>
+                        {Object.keys(brands).map((href, key) => (
+                            <IconButton key={key} className={classes.icon} target="_blank" size="small" href={href}>
+                                {brands[href]}
+                            </IconButton>
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <footer className={classes.footer}>
+                <Typography component="p" variant="inherit">
+                    <span>{t.about_dialog_feedback()}</span>
+                    <Link classes={{ root: classes.link }} href={`mailto:${links.MASK_EMAIL}`}>
+                        {links.MASK_EMAIL}
+                    </Link>
+                </Typography>
+                <Typography component="p" variant="inherit">
+                    <span>{t.about_dialog_source_code()}</span>
+                    <Link classes={{ root: classes.link }} href={links.MASK_GITHUB}>
+                        {links.MASK_GITHUB}
+                    </Link>
+                </Typography>
+                <Typography component="p" variant="inherit">
+                    {t.about_dialog_license()} GNU AGPL 3.0
+                </Typography>
+            </footer>
+        </section>
     )
 }

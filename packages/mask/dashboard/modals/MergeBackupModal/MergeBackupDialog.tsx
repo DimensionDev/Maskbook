@@ -104,7 +104,6 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         if (!contentLength || !reader) return
         let received = 0
         const chunks: number[] = []
-        // eslint-disable-next-line no-constant-condition
         while (true) {
             const { done, value } = await reader.read()
 

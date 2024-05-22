@@ -84,6 +84,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+// eslint-disable-next-line react/no-useless-fragment
+const emptyRender = () => <></>
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
         const { classes } = useStyles()
@@ -214,7 +216,7 @@ export const Prior1559GasSetting = memo(
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
-                    <Controller control={control} render={({ field }) => <></>} name="gasLimit" />
+                    <Controller control={control} render={emptyRender} name="gasLimit" />
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_price()}
                         <Typography component="span" className={classes.price}>
@@ -231,7 +233,7 @@ export const Prior1559GasSetting = memo(
                             />
                         </Typography>
                     </Typography>
-                    <Controller control={control} render={({ field }) => <></>} name="gasPrice" />
+                    <Controller control={control} render={emptyRender} name="gasPrice" />
                 </form>
                 <ActionButton
                     loading={getGasOptionsLoading}

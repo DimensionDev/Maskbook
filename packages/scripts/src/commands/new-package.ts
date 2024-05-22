@@ -147,7 +147,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     } else {
         await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
             content
-                .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
+                .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tests/tsconfig.json" },`)
                 .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src/tsconfig.json"],\n      ${INSERT_HERE} 2`),
         )
         await changeFile(resolve(packagePath, 'README.md'), () => `# ${npmName}\n`)
