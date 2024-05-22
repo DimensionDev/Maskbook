@@ -98,7 +98,7 @@ const avoidMistakeRules = {
     // '@masknet/no-builtin-base64': 'warn', // Note: it fixes to Node's Buffer
     /// type safety
     // '@typescript-eslint/method-signature-style': 'warn', // method signature is bivariant
-    // '@typescript-eslint/no-non-null-asserted-optional-chain': 'error', // bans foo?.bar!
+    '@typescript-eslint/no-non-null-asserted-optional-chain': 'error', // bans foo?.bar!
     // '@typescript-eslint/no-unsafe-argument': 'error', // bans call(any)
     // '@typescript-eslint/no-unsafe-assignment': 'error', // bans a = any
     // '@typescript-eslint/no-unsafe-call': 'error', // bans any()

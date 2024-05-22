@@ -105,8 +105,8 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
 
     const contracts = trending?.contracts?.filter((x) => x.chainId) ?? [
         {
-            chainId: trending?.coin.chainId!,
-            address: trending?.coin.contract_address!,
+            chainId: trending?.coin.chainId,
+            address: trending?.coin.contract_address,
             pluginID: NetworkPluginID.PLUGIN_EVM,
         },
     ]
@@ -117,8 +117,8 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                 key={x.chainId}
                 pluginID={x.pluginID}
                 chainId={x.chainId!}
-                address={x.address}
-                name={x.address}
+                address={x.address || ''}
+                name={x.address || ''}
             />
         )),
         {

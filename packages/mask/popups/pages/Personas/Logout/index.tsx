@@ -242,7 +242,7 @@ const LogoutUI = memo<LogoutUIProps>(
                         <PersonaAvatar
                             size={30}
                             avatar={currentPersona?.avatar}
-                            pubkey={currentPersona?.identifier.publicKeyAsHex!}
+                            pubkey={currentPersona?.identifier.publicKeyAsHex || ''}
                         />
                         <Box>
                             <Typography fontWeight={700}>{currentPersona?.nickname}</Typography>

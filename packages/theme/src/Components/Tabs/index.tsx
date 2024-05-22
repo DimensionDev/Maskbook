@@ -165,7 +165,7 @@ const tabMapping: {
  *      </TabContext>
  *  )
  */
-export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, ref) => {
+export const MaskTabList = forwardRef<HTMLDivElement | undefined, MaskTabListProps>((props, ref) => {
     const context = useTabContext()
     const classes = props.classes
 
@@ -181,7 +181,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const { onChange, variant = 'base', hideArrowButton, ...rest } = props
 
-    useImperativeHandle(ref, () => innerElementRef?.current!)
+    useImperativeHandle(ref, () => innerElementRef.current)
 
     // #region hide tab should up to first when chick
     useEffect(() => {

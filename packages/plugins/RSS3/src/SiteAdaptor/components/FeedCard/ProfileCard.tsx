@@ -99,7 +99,7 @@ export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
                 <RSS3Trans.profile
                     values={{
                         user,
-                        platform: metadata?.platform!,
+                        platform: metadata?.platform || '',
                         context: metadata?.action,
                     }}
                     components={{

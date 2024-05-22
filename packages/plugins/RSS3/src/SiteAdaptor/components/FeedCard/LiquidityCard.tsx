@@ -105,7 +105,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
                                 values={{
                                     user,
                                     platform: feed.platform!,
-                                    context: metadata?.action!,
+                                    context: metadata?.action,
                                 }}
                                 components={{
                                     user: <Label title={action.address_from} />,

@@ -63,7 +63,7 @@ export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFe
                 <RSS3Trans.collectible_approval
                     values={{
                         user,
-                        collection: metadata?.collection!,
+                        collection: metadata ? metadata.collection : '',
                         contract: formatEthereumAddress(action.address_to!, 4),
                         context: metadata?.action,
                     }}

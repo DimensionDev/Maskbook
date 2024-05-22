@@ -228,7 +228,9 @@ export function NFTList({
             <List className={cx(classes.list, className)} {...rest}>
                 {tokens.map((token) => {
                     const selected =
-                        selectedPairs ? includes(selectedPairs, [token.contract?.address!, token.tokenId]) : false
+                        selectedPairs ?
+                            includes(selectedPairs, [token.contract?.address, token.tokenId] as NFTKeyPair)
+                        :   false
                     const inactive = selectedPairs ? selectedPairs.length > 0 && !selected : false
                     const disabled = selectable ? !isRadio && reachedLimit && !selected : false
                     return (

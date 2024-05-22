@@ -32,7 +32,7 @@ export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsM
                 onClose={() => dispatch?.close()}
                 {...props_}
                 type={props_?.type ?? CardType.UnknownIn}
-                feed={props_?.feed!}
+                feed={props_!.feed}
             />
         </ScopedDomainsContainer.Provider>
     )

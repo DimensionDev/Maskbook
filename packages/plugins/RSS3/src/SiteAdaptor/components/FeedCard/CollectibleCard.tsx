@@ -244,7 +244,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                                     : costMetadata ? 'claim_cost'
                                     : 'claim',
                                 cost_value: formatValue(costMetadata),
-                                cost_symbol: costMetadata?.symbol!,
+                                cost_symbol: costMetadata ? costMetadata.symbol : '',
                             }}
                             components={{
                                 user: <Label />,
