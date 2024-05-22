@@ -54,7 +54,6 @@
     "about_dialog_feedback": "フィードバック： ",
     "about_dialog_touch": "お問い合わせ",
     "about_dialog_description": "Mask Networkは、新しいオープンなインターネットへのポータルです。Maskは、ソーシャルネットワーク上で暗号化された投稿を送ることができます。暗号化されたRedPacketの送信、暗号通貨の購入、ファイルサービスなど、より多くの機能を提供しています。",
-    "setup_page_title": "Mask Networkへようこそ",
     "setup_page_description": "SNS上の投稿とチャットを暗号化し、友達のみが復号化できます。",
     "setup_page_create_account_title": "イベントを作成",
     "setup_page_create_account_subtitle": "アカウントとデータのローカルストレージ",

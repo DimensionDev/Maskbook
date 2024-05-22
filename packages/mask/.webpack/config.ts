@@ -147,16 +147,14 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                     transform: {
                                         react: {
                                             runtime: 'automatic',
-                                            refresh: flags.reactRefresh && {
-                                                refreshReg: '$RefreshReg$',
-                                                refreshSig: '$RefreshSig$',
-                                                emitFullSignatures: true,
-                                            },
+                                            // react 19 not using file names in _jsxDEV
+                                            development: false,
+                                            refresh: flags.reactRefresh,
                                         },
                                     },
                                     experimental: { keepImportAttributes: true },
                                 },
-                            } as import('@swc/core').Options,
+                            } satisfies import('@swc/core').Options,
                         },
                         flags.reactCompiler ?
                             {

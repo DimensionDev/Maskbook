@@ -87,13 +87,15 @@ export interface ComputedFlags {
 }
 
 export function computedBuildFlags(
-    flags: Pick<Required<BuildFlags>, 'mode' | 'sourceMapPreference' | 'profiling' | 'manifestFile'>,
+    flags: Pick<Required<BuildFlags>, 'mode' | 'sourceMapPreference' | 'profiling' | 'manifestFile' | 'devtools'>,
 ): ComputedFlags {
     let sourceMapKind: Configuration['devtool'] = false
     if (flags.mode === 'production') sourceMapKind = 'source-map'
 
     if (flags.sourceMapPreference) {
-        if (flags.manifestFile.includes('3')) sourceMapKind = 'inline-cheap-source-map'
+        // React 19 requires a precise source map to make "Open in Editor" feature work
+        if (flags.devtools) sourceMapKind = 'source-map'
+        else if (flags.manifestFile.includes('3')) sourceMapKind = 'inline-cheap-source-map'
         else sourceMapKind = 'eval-cheap-source-map'
 
         if (flags.mode === 'production') sourceMapKind = 'source-map'
