@@ -3,13 +3,9 @@ import { I18nextProvider, initReactI18next, type I18nextProviderProps } from 're
 import { i18NextInstance } from '@masknet/shared-base'
 
 initReactI18next.init(i18NextInstance)
-export const I18NextProviderHMR = process.env.NODE_ENV === 'development' ? I18NextProvider_dev : I18nextProvider
+export const I18NextProviderHMR = process.env.NODE_ENV === 'development' ? I18NextProviderDev : I18nextProvider
 
-function I18NextProvider_dev({
-    i18n,
-    defaultNS,
-    children,
-}: React.PropsWithChildren<I18nextProviderProps>): JSX.Element {
+function I18NextProviderDev({ i18n, defaultNS, children }: React.PropsWithChildren<I18nextProviderProps>): JSX.Element {
     const [ns, setNS] = useState(defaultNS)
 
     useEffect(() => {

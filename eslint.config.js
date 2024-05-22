@@ -361,7 +361,6 @@ const codeStyleRules = {
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
     // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
-    // 'react/naming-convention/use-state': 'warn',
     'react/prefer-shorthand-boolean': 'warn',
     'react/prefer-shorthand-fragment': 'warn',
     '@typescript-eslint/prefer-as-const': 'warn',
@@ -399,7 +398,7 @@ const codeStyleRules = {
     // Naming convension
     // 'func-name-matching': 'warn',
     // 'new-cap': 'warn',
-    // 'react/naming-convention/component-name': ['warn', { rule: 'PascalCase' }],
+    'react/naming-convention/component-name': ['warn', { rule: 'PascalCase' }],
     // 'react/naming-convention/file-name': ['warn', { rule: 'PascalCase' }],
 
     // Bad practice
@@ -527,6 +526,7 @@ const moduleSystemRules = {
     ],
 }
 
+/** @type {any} */
 const plugins = {
     'tss-unused-classes': UnusedClassesPlugin,
     react: ReactPlugin,
@@ -580,11 +580,11 @@ export default tseslint.config(
         linterOptions: {
             reportUnusedDisableDirectives: true,
         },
-        rules: {
+        rules: /** @type {any} */ ({
             ...avoidMistakeRules,
             ...codeStyleRules,
             ...moduleSystemRules,
-        },
+        }),
     },
     {
         files: ['packages/mask/background/**/*.ts'],

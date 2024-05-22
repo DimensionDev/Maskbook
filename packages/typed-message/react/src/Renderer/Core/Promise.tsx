@@ -10,7 +10,7 @@ export const TypedMessagePromiseRender = memo(
             const { promise, alt } = props
             return (
                 <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
-                    <Await_new promise={promise} />
+                    <AwaitNew promise={promise} />
                 </Suspense>
             )
         }
@@ -29,18 +29,18 @@ export const TypedMessagePromiseRender = memo(
 
             return (
                 <Suspense fallback={alt ? <TypedMessageRenderInline message={alt} /> : null}>
-                    <Await_old promise={promise} />
+                    <AwaitOld promise={promise} />
                 </Suspense>
             )
         },
 )
 
-function Await_new({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {
+function AwaitNew({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {
     const resolved = Reflect.get(React, 'use')(promise)
     const transformedValue = useTransformedValue(resolved)
     return <TypedMessageRenderInline message={transformedValue} />
 }
 
-function Await_old({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {
+function AwaitOld({ promise }: { promise: Promise<TypedMessage> }): JSX.Element {
     throw promise
 }
