@@ -12,7 +12,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
-import { DashboardRoutes, EMPTY_LIST, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => ({
@@ -90,7 +90,6 @@ export const Component = memo(function Permission() {
             [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
         )
         if (!granted) return
-        if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         navigate(DashboardRoutes.PermissionsOnboarding, { replace: true })
     }, [])
 
