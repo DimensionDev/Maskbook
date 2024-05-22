@@ -1,6 +1,8 @@
 export enum DashboardRoutes {
     Setup = '/setup',
     Welcome = '/setup/welcome',
+    Permissions = '/setup/permissions',
+    PermissionsOnboarding = '/setup/permissions/onboarding',
     SignUpPersona = '/setup/sign-up',
     RecoveryPersona = '/setup/recovery',
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
@@ -27,6 +29,7 @@ export enum PopupModalRoutes {
     SelectProvider = '/modal/select-provider',
     ConnectProvider = '/modal/connect-provider',
     SwitchPersona = '/modal/switch-persona',
+    UpdatePermissions = '/modal/update-permission',
     PersonaSettings = '/modal/persona-setting',
     PersonaRename = '/modal/persona-rename',
     SetBackupPassword = '/modal/set-backup-password',
