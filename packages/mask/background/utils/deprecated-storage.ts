@@ -18,7 +18,7 @@ class MutexStorage<T> {
         if (!this.locked) this.tasks.shift()?.()
     }
     public async getStorage(key: string) {
-        return new Promise<T | undefined>(async (resolve, reject) => {
+        return new Promise<T | undefined>((resolve, reject) => {
             const callback = (e: unknown, storage?: T) => {
                 if (e) reject(e)
                 else resolve(storage)
@@ -43,7 +43,7 @@ class MutexStorage<T> {
         })
     }
     public async setStorage(key: string, value: T) {
-        return new Promise<void>(async (resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             const callback = (e: unknown) => {
                 if (e) reject(e)
                 else resolve()

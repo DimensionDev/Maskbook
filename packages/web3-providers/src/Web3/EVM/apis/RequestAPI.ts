@@ -22,7 +22,7 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
     // Hijack RPC requests and process them with koa like middleware
     override get request() {
         return <T>(requestArguments: RequestArguments, initial?: EVMConnectionOptions) => {
-            return new Promise<T>(async (resolve, reject) => {
+            return (async () => {
                 const options = this.ConnectionOptions.fill(initial)
                 const context = createContext(requestArguments, options)
 
@@ -80,10 +80,12 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                 } catch (error) {
                     context.abort(error)
                 } finally {
-                    if (context.error) reject(context.error)
-                    else resolve(context.result as T)
+                    // eslint-disable-next-line no-unsafe-finally
+                    if (context.error) throw context.error
+                    // eslint-disable-next-line no-unsafe-finally
+                    else return context.result as T
                 }
-            })
+            })()
         }
     }
 

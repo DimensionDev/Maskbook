@@ -7,7 +7,7 @@ export class R2D2GetterSetter<T> {
 
     async get(key: string) {
         try {
-            return fetchSquashedJSON<T>(
+            return await fetchSquashedJSON<T>(
                 urlcat(KV_ROOT_URL, 'api/:name', {
                     name: `${this.prefix}_${key}`,
                 }),

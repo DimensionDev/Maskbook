@@ -410,11 +410,11 @@ const codeStyleRules = {
     // '@typescript-eslint/default-param-last': 'warn', // (a, b = 1, c)
     // '@typescript-eslint/no-dynamic-delete': 'error', // this usually means you should use Map/Set
     /// Async functions / Promise bad practice
-    // 'no-async-promise-executor': 'error', // new Promise(async (resolve) => )
-    // 'no-promise-executor-return': 'error', // new Promise(() => result)
+    'no-async-promise-executor': 'error', // new Promise(async (resolve) => )
+    'no-promise-executor-return': 'error', // new Promise(() => result)
     // '@typescript-eslint/no-floating-promises': 'warn', // unhandled promises
     // '@typescript-eslint/promise-function-async': 'warn', // avoid Zalgo
-    // '@typescript-eslint/return-await': 'warn', // return await expr
+    '@typescript-eslint/return-await': 'warn', // return await expr
 
     // No unused
     'no-unused-labels': 'warn',

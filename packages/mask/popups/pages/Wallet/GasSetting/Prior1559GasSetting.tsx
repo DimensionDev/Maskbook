@@ -152,7 +152,7 @@ export const Prior1559GasSetting = memo(() => {
                 value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return EVMWeb3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0
+                return await (EVMWeb3.estimateTransaction?.(value.formatterTransaction._tx) ?? 0)
             } catch {
                 return 0
             }

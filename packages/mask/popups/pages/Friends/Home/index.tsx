@@ -47,7 +47,7 @@ export const Component = memo(function FriendsHome() {
         initialPageParam: undefined as any,
         queryFn: async ({ pageParam }) => {
             if (!type) return EMPTY_LIST
-            return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
+            return NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
         },
         enabled: !!keyword && !!type,
         getNextPageParam: (lastPage, allPages) => {
