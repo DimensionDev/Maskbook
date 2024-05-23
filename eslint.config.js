@@ -51,10 +51,10 @@ const avoidMistakeRules = {
         },
     ], // disable a rule requires a reason
     /// React bad practice
-    // 'react/no-children-count': 'error',
+    'react/no-children-count': 'error',
     'react/no-children-for-each': 'error',
     // 'react/no-children-map': 'error',
-    // 'react/no-children-only': 'error',
+    'react/no-children-only': 'error',
     // 'react/no-children-prop': 'error',
     'react/no-children-to-array': 'error',
     // 'react/no-clone-element': 'error',

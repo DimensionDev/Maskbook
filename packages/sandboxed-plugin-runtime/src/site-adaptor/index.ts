@@ -6,7 +6,6 @@ import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dep
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { encoder } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
-import { Children } from 'react'
 
 export interface SiteAdaptorHostHooks extends BasicHostHooks {
     attachCompositionMetadata(pluginID: string, metaID: string, meta: unknown): void
@@ -59,9 +58,6 @@ export class SiteAdaptorPluginHost extends SandboxedPluginHost<SiteAdaptorHostHo
                 if (!('text' in data))
                     throw new TypeError('registerMetadataBadgeRender must return an object with text.')
                 const { text, tooltip } = data
-                // assert
-                Children.only(text)
-                tooltip && Children.only(tooltip)
                 return { text, tooltip }
             },
         }
@@ -92,8 +88,6 @@ export class SiteAdaptorPluginHost extends SandboxedPluginHost<SiteAdaptorHostHo
                 MetadataBadgeRender.set(metaID, render)
             },
             registerCompositionEntry: (label: unknown, dialog: unknown) => {
-                Children.only(label)
-                // label asserted before, dialog leave it to runtime error
                 instance.CompositionEntry = { label: label as any, dialog: dialog as any }
             },
         })
