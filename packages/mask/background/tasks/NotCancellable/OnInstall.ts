@@ -2,8 +2,16 @@
 import type { DashboardRoutes } from '@masknet/shared-base'
 import * as base from /* webpackDefer: true */ '@masknet/shared-base'
 
-type DashboardRoutes_Permission = DashboardRoutes.Permissions extends `${infer T}` ? T : never
+type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
 function openWelcome() {
+    const welcome: DashboardRoutes_Welcome = '/setup/welcome'
+    browser.tabs.create({
+        url: browser.runtime.getURL(`dashboard.html#${welcome}`),
+    })
+}
+
+type DashboardRoutes_Permission = DashboardRoutes.Permissions extends `${infer T}` ? T : never
+function openPermission() {
     const permissions: DashboardRoutes_Permission = '/setup/permissions'
     browser.tabs.create({
         url: browser.runtime.getURL(`dashboard.html#${permissions}`),
@@ -16,7 +24,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
     } else if (detail.reason === 'update') {
         const connect = await import('../../services/site-adaptors/connect.js')
         const groups = await connect.getOriginsWithoutPermission()
-        if (groups.length) openWelcome()
+        if (groups.length) openPermission()
         const localStorage = (globalThis as any).localStorage
         if (localStorage) {
             const backupPassword = localStorage.getItem('backupPassword')
