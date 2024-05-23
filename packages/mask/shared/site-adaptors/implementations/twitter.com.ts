@@ -1,7 +1,7 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 import type { SiteAdaptor } from '../types.js'
 
-const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*', 'https://mobile.x.com/*', 'https://x.com/*']
+const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*', 'https://www.x.com/*', 'https://x.com/*']
 export const TwitterAdaptor: SiteAdaptor.Definition = {
     name: 'X',
     networkIdentifier: EnhanceableSite.Twitter,
