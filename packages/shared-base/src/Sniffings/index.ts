@@ -3,8 +3,8 @@ enum SiteHost {
     Facebook = 'facebook.com',
 }
 
-const navigator_ = process.env.NODE_ENV === 'test' ? null : navigator
-const location_ = process.env.NODE_ENV === 'test' ? null : location
+const navigator_ = typeof navigator === 'undefined' ? null : navigator
+const location_ = typeof location === 'undefined' ? null : location
 
 const isChromium = navigator_?.userAgent.includes('Chrome') || navigator_?.userAgent.includes('Chromium')
 
