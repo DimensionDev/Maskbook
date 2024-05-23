@@ -139,7 +139,16 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
     }
 
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
+    async getAssets(
+        account: string,
+        {
+            chainId = ChainId.Mainnet,
+            indicator,
+            contractAddress = '',
+        }: BaseHubOptions<ChainId> & {
+            contractAddress?: string
+        } = {},
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!account || !isValidChainId(chainId) || !chain) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -147,7 +156,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const path = urlcat('/api/v0/nfts/owners', {
             chains: chain,
             wallet_addresses: account,
-            contract_addresses: '',
+            contract_addresses: contractAddress,
             cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
         })
 
