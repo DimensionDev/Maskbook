@@ -38,7 +38,7 @@ export function useSignedMessage(
             } catch {}
             if (version <= 3) return password
             if (password) return signMessage(account, password).signature
-            if (!profile) return ''
+            if (!profile || !account) return ''
             return FireflyRedPacket.createClaimSignature({
                 rpid,
                 profile,
