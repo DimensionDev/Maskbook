@@ -48,7 +48,7 @@ const Persona = memo(() => {
         const groups = await Services.SiteAdaptor.getOriginsWithoutPermission()
         const origins = groups.flatMap((x) => x.origins)
 
-        if (origins.every((x) => x === 'https://www.x.com/*' || x === 'https://x.com/*')) {
+        if (origins.length && origins.every((x) => x === 'https://www.x.com/*' || x === 'https://x.com/*')) {
             modalNavigate(PopupModalRoutes.UpdatePermissions)
         }
     }, [])
