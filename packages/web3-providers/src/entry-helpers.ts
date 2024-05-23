@@ -20,4 +20,3 @@ export * from './helpers/createWeb3ProviderFromURL.js'
 
 export * as trending from './Trending/helpers.js'
 export * as chainbase from './Chainbase/helpers.js'
-export * as simplehash from './SimpleHash/helpers.js'
