@@ -6,8 +6,9 @@ import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
 import { parallel, series, type TaskFunction } from 'gulp'
 import { buildSentry } from '../projects/sentry.js'
-import type { BuildFlagsExtended } from './flags.js'
+import type { BuildFlags, BuildFlagsExtended } from './flags.js'
 import { ManifestFile } from '../../../mask/.webpack/flags.js'
+import { applyDotEnv } from './dotenv.js'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     const f = () => awaitChildProcess(webpack(args))
@@ -37,14 +38,15 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     watchInjectedScript()
     watchMaskSDK()
     buildSentry()
-    if (typeof f === 'function')
-        return awaitChildProcess(
-            webpack({
-                manifestFile: ManifestFile.ChromiumMV3,
-                channel: 'stable',
-                mode: 'development',
-            }),
-        )
+    if (typeof f === 'function') {
+        const flags: BuildFlags = {
+            manifestFile: ManifestFile.ChromiumMV3,
+            channel: 'stable',
+            mode: 'development',
+        }
+        applyDotEnv(flags)
+        return awaitChildProcess(webpack(flags))
+    }
     return awaitChildProcess(webpack(f))
 }
 watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network extension', {

@@ -12,7 +12,7 @@ import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
-import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modals.js'
+import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modal-controls.js'
 import { ContactType } from '../type.js'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; hasError?: boolean }>()(
@@ -348,12 +348,11 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
     )
 }
 
-function ContactList() {
+export { ContactList as Component }
+export function ContactList() {
     return (
         <ContactsContext.Provider>
             <ContactListUI />
         </ContactsContext.Provider>
     )
 }
-
-export default ContactList

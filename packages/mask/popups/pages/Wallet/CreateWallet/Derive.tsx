@@ -16,7 +16,7 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
-import { WalletRenameModal } from '../../../modals/modals.js'
+import { WalletRenameModal } from '../../../modals/modal-controls.js'
 import { DeriveStateContext } from './context.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -78,7 +78,7 @@ async function pollResult(address: string) {
     return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
 }
 
-const DeriveWallet = memo(function DeriveWallet() {
+export const Component = memo(function DeriveWallet() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
@@ -161,5 +161,3 @@ const DeriveWallet = memo(function DeriveWallet() {
         </div>
     )
 })
-
-export default DeriveWallet

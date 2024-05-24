@@ -30,7 +30,7 @@ export function useDeploy(
     nonce?: number,
     onSuccess?: () => void,
 ) {
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
     const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
@@ -71,7 +71,7 @@ export function useDeploy(
                 return
 
             const hasPassword = await hasPaymentPassword()
-            if (!hasPassword) return openPopupWindow(PopupRoutes.SetPaymentPassword, {})
+            if (!hasPassword) return await openPopupWindow(PopupRoutes.SetPaymentPassword, {})
 
             if (contractAccount.funded && !contractAccount.deployed) {
                 const hash = await EVMWeb3.deploy?.(signAccount.address, signAccount.identifier, options)

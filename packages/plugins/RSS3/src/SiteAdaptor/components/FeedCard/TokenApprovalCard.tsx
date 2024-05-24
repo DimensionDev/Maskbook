@@ -67,7 +67,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
 
     const user = useAddressLabel(owner.address)
 
-    const amount = isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!
+    const amount = isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display ?? '0'
 
     return (
         <CardFrame type={CardType.TokenApproval} feed={feed} {...rest}>
@@ -77,8 +77,8 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                         values={{
                             user,
                             amount,
-                            symbol: metadata!.symbol!,
-                            context: metadata!.action,
+                            symbol: metadata?.symbol || '',
+                            context: metadata?.action,
                         }}
                         components={{
                             bold: <Label />,
@@ -87,10 +87,10 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                 :   <RSS3Trans.token_approval
                         values={{
                             user,
-                            amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
-                            symbol: metadata!.symbol!,
+                            amount,
+                            symbol: metadata?.symbol || '',
                             contract: formatEthereumAddress(action.address_to!, 4),
-                            context: metadata!.action,
+                            context: metadata?.action,
                         }}
                         components={{
                             bold: <Label />,

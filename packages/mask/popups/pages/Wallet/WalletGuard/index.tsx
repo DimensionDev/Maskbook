@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Navigate, Outlet, useLocation, useOutletContext, useSearchParams } from 'react-router-dom'
+import { Navigate, Outlet, useLocation, useSearchParams } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ChainContextProvider, useWallets } from '@masknet/web3-hooks-base'
 import Unlock from '../Unlock/index.js'
@@ -51,12 +51,11 @@ export const WalletGuard = memo(function WalletGuard() {
 })
 
 function WalletGuardContent() {
-    const outletContext = useOutletContext()
     const { interactionWallet } = useInteractionWalletContext()
     return (
         <ChainContextProvider account={interactionWallet}>
             <WalletHeader />
-            <Outlet context={outletContext} />
+            <Outlet />
         </ChainContextProvider>
     )
 }

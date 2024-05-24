@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { JSX, ReactNode } from 'react'
 import type { SecurityAPI } from '../entry-types.js'
 
 export interface GoPlusSpender {

@@ -1,7 +1,7 @@
 import { Button, type ButtonProps, styled } from '@mui/material'
-import { forwardRef } from 'react'
+import { forwardRef, type ComponentType } from 'react'
 
-const BaseTabWrap = styled(Button, {
+const BaseTabWrap: ComponentType<ButtonProps & { activated: boolean }> = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
 })<{ activated?: boolean }>(({ theme, activated }) => ({
     flex: 1,

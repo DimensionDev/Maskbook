@@ -31,7 +31,7 @@ import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
 
-const AccountDetail = memo(() => {
+export const Component = memo(() => {
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const theme = useTheme()
@@ -240,5 +240,4 @@ const AccountDetail = memo(() => {
         />
     )
 })
-
-export default AccountDetail
+Component.displayName = 'AccountDetail'

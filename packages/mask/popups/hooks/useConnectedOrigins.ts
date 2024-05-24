@@ -6,7 +6,7 @@ export function useConnectedOrigins() {
     const wallet = useWallet()
     return useQuery({
         queryKey: ['wallet-granted-origins', wallet?.address],
-        queryFn: async () => await Services.Wallet.getAllConnectedOrigins(wallet!.address, 'any'),
+        queryFn: async () => Services.Wallet.getAllConnectedOrigins(wallet!.address, 'any'),
         enabled: !!wallet?.address,
         networkMode: 'always',
     })

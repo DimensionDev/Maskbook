@@ -12,8 +12,8 @@ import {
     type Transaction as EvmTransaction,
     decodeFunctionParams,
 } from '@masknet/web3-shared-evm'
-import { GasSettingModal } from '../../modals/modals.js'
 import { ReplaceType, type GasSetting } from './type.js'
+import { GasSettingModal } from '../../modals/modal-controls.js'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 

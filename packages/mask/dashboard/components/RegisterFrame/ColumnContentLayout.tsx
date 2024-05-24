@@ -1,4 +1,4 @@
-import { memo, type ComponentType } from 'react'
+import { memo, type ComponentType, type JSX } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'

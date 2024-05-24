@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Logout = memo(() => {
+export const Component = memo(function Logout() {
     const t = useMaskSharedTrans()
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
@@ -242,7 +242,7 @@ const LogoutUI = memo<LogoutUIProps>(
                         <PersonaAvatar
                             size={30}
                             avatar={currentPersona?.avatar}
-                            pubkey={currentPersona?.identifier.publicKeyAsHex!}
+                            pubkey={currentPersona?.identifier.publicKeyAsHex || ''}
                         />
                         <Box>
                             <Typography fontWeight={700}>{currentPersona?.nickname}</Typography>
@@ -324,5 +324,3 @@ const LogoutUI = memo<LogoutUIProps>(
         )
     },
 )
-
-export default Logout

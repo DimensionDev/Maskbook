@@ -8,12 +8,13 @@ import { isNativeTokenAddress, ChainId, type SchemaType } from '@masknet/web3-sh
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { formatTokenBalance } from '../../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
+import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -91,7 +92,7 @@ interface AssetItemProps extends ListItemProps {
 }
 
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
-    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const hasNavigator = useHasNavigator()
     const { classes, cx } = useStyles({ hasNav: hasNavigator })
     const t = useMaskSharedTrans()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -179,7 +180,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
 })
 
 export const AssetsList = memo(function AssetsList() {
-    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const [assets, { isPending }] = useWalletAssets()

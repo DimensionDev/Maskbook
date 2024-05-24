@@ -23,7 +23,7 @@ import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
-import { ConfirmModal } from '../../../modals/modals.js'
+import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { ActionGroup } from '../components/index.js'
 import { useAsset } from '../hooks/index.js'
 import { DIMENSION, TrendingChart } from './TrendingChart.js'
@@ -135,7 +135,7 @@ const usePageStyles = makeStyles()((theme) => {
     }
 })
 
-const TokenDetailPage = memo(function TokenDetailPage() {
+export const Component = memo(function TokenDetailPage() {
     const { classes, theme } = usePageStyles()
     const t = useMaskSharedTrans()
     const { chainId, address } = useTokenParams()
@@ -297,5 +297,3 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
         </>
     )
 })
-
-export default TokenDetailPage

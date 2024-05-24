@@ -15,6 +15,7 @@ import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-es'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
+// eslint-disable-next-line react/naming-convention/component-name
 export async function GUN_queryPostKey_version40(
     iv: Uint8Array,
     whoAmI: string,

@@ -25,7 +25,7 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
         try {
             const isEIP1559 = EVMChainResolver.isFeatureSupported(options.chainId, 'EIP1559')
             if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.MetaSwap.getGasOptions(options.chainId)
-            if (chainId === ChainId.Aurora) return GasOptions.getGasOptions(options.chainId)
+            if (chainId === ChainId.Aurora) return await GasOptions.getGasOptions(options.chainId)
             if (chainId === ChainId.Astar) return await AstarGas.AstarGas.getGasOptions()
             return await DeBank.DeBankGasOption.getGasOptions(options.chainId)
         } catch (error) {

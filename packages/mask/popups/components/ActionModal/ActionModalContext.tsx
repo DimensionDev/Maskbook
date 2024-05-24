@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material'
 import { useCallback, useRef, useState } from 'react'
-import { useNavigate, useLocation, type NavigateOptions } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import type { PopupModalRoutes } from '@masknet/shared-base'
 import { createContainer } from 'unstated-next'
 import urlcat from 'urlcat'
@@ -11,7 +11,7 @@ function useModal() {
     const openModal = useCallback(() => setOpen(true), [])
 
     const navigate = useNavigate()
-    const timerRef = useRef<ReturnType<typeof setTimeout>>()
+    const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
     const leavingScreen = theme.transitions.duration.leavingScreen
     const closeModal = useCallback(() => {
         setOpen(false)
@@ -39,22 +39,19 @@ export function useActionModal() {
 }
 
 /**
- * To open a modal, should navigate with setting state `{ mainLocation: location }`
+ * Open a modal
  */
 export function useModalNavigate() {
     const location = useLocation()
-    const navigate = useNavigate()
+    const [, setSearchParams] = useSearchParams()
     const openModal = useCallback(
-        (path: PopupModalRoutes, params?: Record<string, any>, options?: NavigateOptions) => {
-            navigate(urlcat(path, params ?? {}), {
-                ...options,
-                state: {
-                    ...options?.state,
-                    mainLocation: location.state?.mainLocation ?? location,
-                },
+        (path: PopupModalRoutes, params?: Record<string, any>) => {
+            setSearchParams((prev) => {
+                prev.set('modal', urlcat(path, params || {}))
+                return prev
             })
         },
-        [location, navigate],
+        [location, setSearchParams],
     )
     return openModal
 }

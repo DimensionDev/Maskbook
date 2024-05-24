@@ -81,7 +81,7 @@ export const UploadDropArea = memo(
                 onSelectFile(files[0])
             }
         }
-        const handleFilesRef = useRef<(file: File[] | FileList | null) => void>()
+        const handleFilesRef = useRef<(file: File[] | FileList | null) => void>(undefined)
         handleFilesRef.current = handleFiles
 
         const selectFile = useCallback(() => {

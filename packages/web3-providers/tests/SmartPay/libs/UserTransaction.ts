@@ -3,20 +3,24 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { UserTransaction } from '../../../src/SmartPay/libs/UserTransaction.js'
 
 describe('UserTransaction', async () => {
-    const userTransaction = new UserTransaction(ChainId.Matic, '0x0000000000000000000000000000000000000000', {
-        sender: '0x0000000000000000000000000000000000000000',
-        nonce: 0,
-        initCode: '0x',
-        callData: '0x',
-        callGas: '0',
-        verificationGas: '100000',
-        preVerificationGas: '100000',
-        maxFeePerGas: '100000',
-        maxPriorityFeePerGas: '100000',
-        paymaster: '0x0000000000000000000000000000000000000000',
-        paymasterData: '0x',
-        signature: '0x',
-    })
+    const userTransaction = UserTransaction.fromUserOperation(
+        ChainId.Matic,
+        '0x0000000000000000000000000000000000000000',
+        {
+            sender: '0x0000000000000000000000000000000000000000',
+            nonce: 0,
+            initCode: '0x',
+            callData: '0x',
+            callGas: '0',
+            verificationGas: '100000',
+            preVerificationGas: '100000',
+            maxFeePerGas: '100000',
+            maxPriorityFeePerGas: '100000',
+            paymaster: '0x0000000000000000000000000000000000000000',
+            paymasterData: '0x',
+            signature: '0x',
+        },
+    )
 
     test('hasPaymaster', () => {
         expect(userTransaction.hasPaymaster).toBe(false)

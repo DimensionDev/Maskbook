@@ -1,80 +1,61 @@
-import { Suspense, lazy } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Suspense } from 'react'
+import { Navigate, Outlet, type RouteObject } from 'react-router-dom'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { RestorableScrollContext } from '@masknet/shared'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { NetworkManagement } from './NetworkManagement/index.js'
 import { WalletGuard } from './WalletGuard/index.js'
 import { NoWalletGuard } from './NoWalletGuard/index.js'
 import { DeriveStateContext } from './CreateWallet/context.js'
 
-const WalletSettings = lazy(() => import('./WalletSettings/index.js'))
-const CreateWallet = lazy(() => import('./CreateWallet/index.js'))
-const DeriveWallet = lazy(() => import('./CreateWallet/Derive.js'))
-const AddToken = lazy(() => import('./AddToken/index.js'))
-const GasSetting = lazy(() => import('./GasSetting/index.js'))
-const Transfer = lazy(() => import('./Transfer/index.js'))
-const ContactList = lazy(() => import('./ContactList/index.js'))
-const ContractInteraction = lazy(() => import('./Interaction/page.js'))
-const ResetWallet = lazy(() => import('./ResetWallet/index.js'))
-const SetPaymentPassword = lazy(() => import('./SetPaymentPassword/index.js'))
-const ChangeOwner = lazy(() => import('./ChangeOwner/index.js'))
-const Receive = lazy(() => import('./Receive/index.js'))
-const ExportPrivateKey = lazy(() => import('./ExportPrivateKey/index.js'))
-const ConnectedSites = lazy(() => import('./ConnectedSites/index.js'))
-const WalletAssets = lazy(() => import('./components/WalletAssets/index.js'))
-const EditNetwork = lazy(() => import('./EditNetwork/index.js'))
-const SelectWallet = lazy(() => import('./SelectWallet/index.js'))
-const TokenDetailPage = lazy(() => import('./TokenDetail/index.js'))
-const TransactionDetail = lazy(() => import('./TransactionDetail/index.js'))
-const CollectibleDetail = lazy(() => import('./CollectibleDetail/index.js'))
-
 const r = relativeRouteOf(PopupRoutes.Wallet)
-
-export default function Wallet() {
+export const walletRoutes: RouteObject[] = [
+    {
+        element: <WalletGuard />,
+        children: [
+            { index: true, lazy: () => import('./components/WalletAssets/index.js') },
+            { path: r(PopupRoutes.WalletUnlock), element: null },
+            { path: r(PopupRoutes.WalletSettings), lazy: () => import('./WalletSettings/index.js') },
+            { path: r(PopupRoutes.CreateWallet), lazy: () => import('./CreateWallet/index.js') },
+            { path: r(PopupRoutes.DeriveWallet), lazy: () => import('./CreateWallet/Derive.js') },
+            {
+                path: r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes),
+                lazy: () => import('./ContactList/index.js'),
+            },
+            {
+                path: r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes),
+                lazy: () => import('./AddToken/index.js'),
+            },
+            { path: r(PopupRoutes.GasSetting), lazy: () => import('./GasSetting/index.js') },
+            { path: r(PopupRoutes.Transfer), lazy: () => import('./Transfer/index.js') },
+            { path: r(PopupRoutes.ContractInteraction), lazy: () => import('./Interaction/page.js') },
+            { path: r(PopupRoutes.SelectWallet), lazy: () => import('./SelectWallet/index.js') },
+            { path: r(PopupRoutes.ChangeOwner), lazy: () => import('./ChangeOwner/index.js') },
+            { path: r(PopupRoutes.NetworkManagement), lazy: () => import('./NetworkManagement/index.js') },
+            { path: r(PopupRoutes.AddNetwork), lazy: () => import('./EditNetwork/index.js') },
+            { path: r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes), lazy: () => import('./EditNetwork/index.js') },
+            { path: r(PopupRoutes.Receive), lazy: () => import('./Receive/index.js') },
+            { path: r(PopupRoutes.ExportWalletPrivateKey), lazy: () => import('./ExportPrivateKey/index.js') },
+            { path: r(PopupRoutes.ConnectedSites), lazy: () => import('./ConnectedSites/index.js') },
+        ],
+    },
+    {
+        element: <NoWalletGuard />,
+        children: [
+            { path: r(PopupRoutes.SetPaymentPassword), lazy: () => import('./SetPaymentPassword/index.js') },
+            { path: r(PopupRoutes.TokenDetail), lazy: () => import('./TokenDetail/index.js') },
+            { path: r(PopupRoutes.TransactionDetail), lazy: () => import('./TransactionDetail/index.js') },
+            { path: r(PopupRoutes.CollectibleDetail), lazy: () => import('./CollectibleDetail/index.js') },
+            { path: r(PopupRoutes.ResetWallet), lazy: () => import('./ResetWallet/index.js') },
+            { path: '*', element: <Navigate to={PopupRoutes.Wallet} /> },
+        ],
+    },
+]
+export function WalletFrame() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <RestorableScrollContext.Provider>
                 <DeriveStateContext.Provider>
-                    <Routes>
-                        <Route path="/" element={<WalletGuard />}>
-                            <Route index element={<WalletAssets />} />
-                            <Route path={r(PopupRoutes.WalletUnlock)} element={<></>} />
-                            <Route path={r(PopupRoutes.WalletSettings)} element={<WalletSettings />} />
-                            <Route path={r(PopupRoutes.CreateWallet)} element={<CreateWallet />} />
-                            <Route path={r(PopupRoutes.DeriveWallet)} element={<DeriveWallet />} />
-                            <Route
-                                path={r(`${PopupRoutes.Contacts}/:address?` as PopupRoutes)}
-                                element={<ContactList />}
-                            />
-                            <Route
-                                path={r(`${PopupRoutes.AddToken}/:chainId/:assetType` as PopupRoutes)}
-                                element={<AddToken />}
-                            />
-                            <Route path={r(PopupRoutes.GasSetting)} element={<GasSetting />} />
-                            <Route path={r(PopupRoutes.Transfer)} element={<Transfer />} />
-                            <Route path={r(PopupRoutes.ContractInteraction)} element={<ContractInteraction />} />
-                            <Route path={r(PopupRoutes.SelectWallet)} element={<SelectWallet />} />
-                            <Route path={r(PopupRoutes.ChangeOwner)} element={<ChangeOwner />} />
-                            <Route path={r(PopupRoutes.NetworkManagement)} element={<NetworkManagement />} />
-                            <Route path={r(PopupRoutes.AddNetwork)} element={<EditNetwork />} />
-                            <Route
-                                path={r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes)}
-                                element={<EditNetwork />}
-                            />
-                            <Route path={r(PopupRoutes.Receive)} element={<Receive />} />
-                            <Route path={r(PopupRoutes.ExportWalletPrivateKey)} element={<ExportPrivateKey />} />
-                            <Route path={r(PopupRoutes.ConnectedSites)} element={<ConnectedSites />} />
-                        </Route>
-                        <Route path="*" element={<NoWalletGuard />}>
-                            <Route path={r(PopupRoutes.SetPaymentPassword)} element={<SetPaymentPassword />} />
-                            <Route path={r(PopupRoutes.TokenDetail)} element={<TokenDetailPage />} />
-                            <Route path={r(PopupRoutes.TransactionDetail)} element={<TransactionDetail />} />
-                            <Route path={r(PopupRoutes.CollectibleDetail)} element={<CollectibleDetail />} />
-                            <Route path={r(PopupRoutes.ResetWallet)} element={<ResetWallet />} />
-                            <Route path="*" element={<Navigate to={PopupRoutes.Wallet} />} />
-                        </Route>
-                    </Routes>
+                    <Outlet />
                 </DeriveStateContext.Provider>
             </RestorableScrollContext.Provider>
         </Suspense>

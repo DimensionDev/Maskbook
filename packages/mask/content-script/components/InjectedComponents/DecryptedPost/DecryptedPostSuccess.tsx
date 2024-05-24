@@ -14,7 +14,7 @@ import {
     type ProfileInformationFromNextID,
 } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
-import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
+import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
@@ -67,7 +67,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
                 headerActions={useAuthorDifferentMessage(author, postedBy, props.children)}
                 message={message}
             />
-            <DecryptedUI_PluginRendererWithSuggestion message={message} metadata={message.meta} />
+            <DecryptedUIPluginRendererWithSuggestion message={message} metadata={message.meta} />
         </>
     )
 })

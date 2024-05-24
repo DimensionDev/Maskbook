@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, type JSX } from 'react'
 import { createRoot } from 'react-dom/client'
 import { DisableShadowRootContext } from '@masknet/theme'
 
@@ -16,15 +16,12 @@ function getContainer(container?: HTMLElement) {
     }
     return container
 }
-function Root(jsx: JSX.Element) {
-    return (
-        <StrictMode>
-            <DisableShadowRootContext.Provider value>{jsx}</DisableShadowRootContext.Provider>
-        </StrictMode>
-    )
-}
 export function createNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
     cleanup()
     const container = getContainer(dom)
-    return createRoot(container).render(Root(jsx))
+    return createRoot(container).render(
+        <StrictMode>
+            <DisableShadowRootContext.Provider value>{jsx}</DisableShadowRootContext.Provider>
+        </StrictMode>,
+    )
 }

@@ -34,7 +34,7 @@ export function DraggableDiv({
     return (
         <div className={classes.root}>
             <Draggable
-                nodeRef={ref}
+                nodeRef={ref as any}
                 bounds="parent"
                 cancel="p, h1, input, button, address"
                 handle="nav"

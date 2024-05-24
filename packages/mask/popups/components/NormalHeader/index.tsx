@@ -1,9 +1,10 @@
 import { memo, useCallback, useContext, type ReactNode } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { PageTitleContext } from '../../hooks/index.js'
+import { useHasNavigator } from '../../hooks/useHasNavigator.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -63,7 +64,7 @@ export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props)
     const showTitle = title !== undefined
 
     const handleBack = useCallback(() => navigate(-1), [])
-    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const hasNavigator = useHasNavigator()
 
     const leftAction =
         hasNavigator ? null

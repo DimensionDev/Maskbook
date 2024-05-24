@@ -40,15 +40,7 @@ export function useNativeTransferCallback(expectedChainId?: ChainId) {
             }
 
             // send transaction and wait for hash
-            return new Promise<string>(async (resolve, reject) => {
-                try {
-                    const transactionHash = await EVMWeb3.sendTransaction(config)
-
-                    resolve(transactionHash)
-                } catch (error) {
-                    reject(error)
-                }
-            })
+            return EVMWeb3.sendTransaction(config)
         },
         [account, chainId],
     )

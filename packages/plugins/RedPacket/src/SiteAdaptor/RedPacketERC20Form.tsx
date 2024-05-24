@@ -166,7 +166,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
 
     // amount
-    const [rawAmount, setRawAmount] = useState(
+    const [rawAmount, setRawAmount] = useState(() =>
         !origin ? ''
         : origin.isRandom ? formatBalance(origin.total, origin.token?.decimals ?? 0)
         : formatBalance(new BigNumber(origin.total ?? '0').div(origin.shares ?? 1), origin.token?.decimals ?? 0),

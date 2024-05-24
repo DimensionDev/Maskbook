@@ -76,8 +76,8 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
                 <RSS3Trans.token_staking
                     values={{
                         user,
-                        symbol: metadata?.token?.symbol!,
-                        context: metadata?.action!,
+                        symbol: metadata?.token?.symbol || '',
+                        context: metadata?.action,
                     }}
                     components={{
                         bold: <Label />,

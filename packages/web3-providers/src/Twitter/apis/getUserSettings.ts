@@ -11,7 +11,7 @@ export async function getUserSettings() {
     const store = await getObjectStore(STORE_NAME)
     const query = store.get(KEY_NAME)
 
-    return new Promise<TwitterBaseAPI.UserSettings | undefined>(async (resolve, reject) => {
+    return new Promise<TwitterBaseAPI.UserSettings | undefined>((resolve, reject) => {
         query.addEventListener('success', (event) => {
             if (!event.target) reject('Failed to get user settings.')
 

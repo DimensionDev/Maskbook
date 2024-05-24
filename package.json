@@ -1,10 +1,10 @@
 {
   "name": "mask-network",
   "type": "module",
-  "packageManager": "pnpm@8.7.6",
+  "packageManager": "pnpm@9.1.1",
   "engines": {
     "node": ">=20.11.1",
-    "pnpm": ">=8.6.0",
+    "pnpm": ">=9.1.1",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
@@ -42,14 +42,14 @@
     "@mui/system": "5.15.12",
     "@tanstack/react-query": "^5.29.2",
     "@types/masknet__global-types": "workspace:^",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta",
     "@typescript/lib-dom": "npm:@types/web@^0.0.143",
     "i18next": "^23.2.11",
     "knip": "^5.11.0",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-8039e6d0b-20231026",
-    "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
+    "react": "0.0.0-experimental-26f2496093-20240514",
+    "react-dom": "0.0.0-experimental-26f2496093-20240514",
     "react-i18next": "^13.0.2",
     "ses": "1.5.0",
     "ts-results-es": "^4.0.0"
@@ -58,26 +58,28 @@
     "@changesets/cli": "^2.26.2",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
-    "@magic-works/i18n-codegen": "^0.5.0",
+    "@eslint-react/eslint-plugin": "^1.5.13-next.1",
+    "@eslint/compat": "^1.0.1",
+    "@magic-works/i18n-codegen": "^0.6.0",
     "@masknet/cli": "workspace:^",
     "@masknet/config": "workspace:^",
-    "@masknet/eslint-plugin": "^0.2.0",
+    "@masknet/eslint-plugin": "^0.3.0",
     "@nice-labs/git-rev": "^3.5.1",
     "@swc-node/register": "^1.9.0",
     "@swc/core": "1.3.106",
-    "@tanstack/eslint-plugin-query": "^5.28.11",
+    "@tanstack/eslint-plugin-query": "^5.35.6",
     "@types/lodash-es": "^4.17.9",
     "@vitest/ui": "^0.34.3",
     "cross-fetch": "^4.0.0",
     "cspell": "^7.2.0",
-    "eslint": "8.57.0",
+    "eslint": "9.3.0",
+    "eslint-formatter-junit": "^8.40.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-i": "^2.29.1",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tss-unused-classes": "^1.0.2",
-    "eslint-plugin-unicorn": "^51.0.1",
-    "eslint-plugin-unused-imports": "^3.1.0",
+    "eslint-plugin-unicorn": "^53.0.0",
+    "eslint-plugin-unused-imports": "^3.2.0",
     "gulp": "^5.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
@@ -85,49 +87,55 @@
     "prettier": "^3.1.0",
     "svgo": "^3.0.2",
     "typescript": "5.5.0-beta",
-    "typescript-eslint": "^7.1.1",
+    "typescript-eslint": "^7.10.0",
     "vite": "^4.5.0",
     "vitest": "^0.34.6"
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "20.12.7",
-      "@types/react": "18.2.48",
-      "cross-blob": "3.0.1",
-      "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
-      "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934",
+      "@lifi/widget": "^2.10.1",
+      "@lifi/wallet-management": "2.6.0",
       "@protobufjs/inquire": "1.1.0",
-      "reflect-metadata": "0.1.13",
-      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770",
+      "@splinetool/runtime": "0.9.342",
       "@tanstack/react-query": "^5.29.2",
-      "@lifi/widget": "^2.10.1"
+      "@types/node": "20.12.7",
+      "@types/react": "$@types/react",
+      "@types/react-dom": "$@types/react-dom",
+      "glob-stream": "7.0.0",
+      "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
+      "react": "$react",
+      "react-dom": "$react-dom",
+      "reflect-metadata": "0.1.13",
+      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770"
     },
-    "override comments": {
-      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"
+    "override reason": {
+      "@lifi/widget": "Patching this",
+      "@lifi/wallet-management": "Patching this",
+      "@protobufjs/inquire": "Patching this",
+      "@splinetool/runtime": "Patching this",
+      "@types/node": "Singleton package",
+      "@types/react": "Singleton package",
+      "@types/react-dom": "Singleton package",
+      "glob-stream": "https://github.com/gulpjs/gulp/issues/2795",
+      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 manually pin the commit",
+      "react": "Singleton package",
+      "react-dom": "Singleton package",
+      "reflect-metadata": "Patching this",
+      "webpack@5": "PR: https://github.com/webpack/webpack/pull/18139"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
-      "ignoreMissing": [
+      "ignoreMissing": [],
+      "allowAny": [
+        "webpack",
         "react",
         "react-dom",
-        "@types/node",
-        "@babel/core",
-        "webextension-polyfill",
-        "prop-types",
-        "@mui/material",
-        "typescript"
+        "@types/react"
       ],
-      "allowedVersions": {
-        "react": "0.0.0-experimental-8039e6d0b-20231026",
-        "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
-        "typescript": "5",
-        "rollup": "4"
-      }
+      "allowedVersions": {}
     },
     "patchedDependencies": {
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
-      "micromark@3.1.0": "patches/micromark@3.1.0.patch",
-      "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "@types/react-avatar-editor@13.0.0": "patches/@types__react-avatar-editor@13.0.0.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
@@ -141,14 +149,15 @@
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
-      "react-devtools-inline@4.28.5": "patches/react-devtools-inline@4.28.5.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
       "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
       "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
       "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
       "react-use@17.4.0": "patches/react-use@17.4.0.patch",
-      "gulp@5.0.0": "patches/gulp@5.0.0.patch"
+      "gulp@5.0.0": "patches/gulp@5.0.0.patch",
+      "react-devtools-inline@5.2.0": "patches/react-devtools-inline@5.2.0.patch",
+      "react-qrcode-logo@2.10.0": "patches/react-qrcode-logo@2.10.0.patch"
     }
   }
 }

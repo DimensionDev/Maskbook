@@ -21,7 +21,7 @@ export function useTransactionCallback<T>(
             await method.call(config)
         }
 
-        return new Promise<string>(async (resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             method
                 .send(gasExpectedConfig)
                 .once(TransactionEventType.CONFIRMATION, (_, receipt) => {

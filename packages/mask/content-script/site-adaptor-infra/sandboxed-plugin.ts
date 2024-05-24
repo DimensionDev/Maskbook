@@ -1,4 +1,4 @@
-import { Children, createElement } from 'react'
+import { createElement } from 'react'
 import { type SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
 import { Flags } from '@masknet/flags'
 import { type Plugin, registerPlugin } from '@masknet/plugin-infra'
@@ -80,7 +80,7 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
         get CompositionDialogEntry() {
             if (!instance?.CompositionEntry) return undefined
             return {
-                label: Children.only(instance.CompositionEntry.label),
+                label: instance.CompositionEntry.label,
                 dialog({ onClose, open }: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) {
                     if (open) return createElement(instance!.CompositionEntry!.dialog as any, { onClose, open })
                     return null

@@ -145,7 +145,7 @@ export function formatTransactions(
             timestamp: transaction.time_at * 1000,
             from,
             to,
-            status: normalizeTxStatus(transaction.tx?.status!),
+            status: normalizeTxStatus(transaction.tx?.status ?? 0),
             assets: compact([
                 ...transaction.sends.map((asset) => toTxAsset(asset, chainId, token_dict, SEND)),
                 ...transaction.receives.map((asset) => toTxAsset(asset, chainId, token_dict, RECEIVE)),

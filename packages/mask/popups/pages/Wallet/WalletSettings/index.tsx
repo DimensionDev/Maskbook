@@ -12,7 +12,7 @@ import { Trans } from 'react-i18next'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
-import { WalletRemoveModal } from '../../../modals/modals.js'
+import { WalletRemoveModal } from '../../../modals/modal-controls.js'
 import { AutoLock } from './AutoLock.js'
 import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
@@ -30,7 +30,7 @@ function getPathIndex(path?: string) {
     if (!rawIndex) return
     return Number.parseInt(rawIndex, 10)
 }
-const WalletSettings = memo(() => {
+export const Component = memo(function WalletSettings() {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
@@ -144,5 +144,3 @@ const WalletSettings = memo(() => {
         </div>
     )
 })
-
-export default WalletSettings

@@ -14,7 +14,7 @@ import {
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import Fuse from 'fuse.js'
 
-const FriendsHome = memo(function FriendsHome() {
+export const Component = memo(function FriendsHome() {
     const t = useMaskSharedTrans()
     useTitle(t.popups_encrypted_friends())
 
@@ -47,7 +47,7 @@ const FriendsHome = memo(function FriendsHome() {
         initialPageParam: undefined as any,
         queryFn: async ({ pageParam }) => {
             if (!type) return EMPTY_LIST
-            return await NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
+            return NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
         },
         enabled: !!keyword && !!type,
         getNextPageParam: (lastPage, allPages) => {
@@ -75,5 +75,3 @@ const FriendsHome = memo(function FriendsHome() {
         />
     )
 })
-
-export default FriendsHome

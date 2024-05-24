@@ -158,7 +158,7 @@ export function SelectGasSettingsToolbarUI({
     classes: externalClasses,
     onChange,
     onOpenCustomSetting,
-    MenuProps = {},
+    MenuProps,
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
@@ -267,19 +267,19 @@ export function SelectGasSettingsToolbarUI({
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right',
-                ...MenuProps.anchorOrigin,
+                ...MenuProps?.anchorOrigin,
             },
             transformOrigin: {
                 vertical: 'top',
                 horizontal: 'right',
-                ...MenuProps.transformOrigin,
+                ...MenuProps?.transformOrigin,
             },
             PaperProps: {
-                ...MenuProps.PaperProps,
+                ...MenuProps?.PaperProps,
                 style: {
                     background: theme.palette.maskColor.bottom,
                     transform: 'translateY(8px)',
-                    ...MenuProps.PaperProps?.style,
+                    ...MenuProps?.PaperProps?.style,
                 },
             },
         },

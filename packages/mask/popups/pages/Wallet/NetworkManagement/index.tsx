@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const NetworkManagement = memo(function NetworkManagement() {
+export const Component = memo(function NetworkManagement() {
     const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()

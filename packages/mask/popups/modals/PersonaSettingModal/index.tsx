@@ -69,7 +69,7 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 <Box className={classes.right}>
                     <PersonaAvatar
                         avatar={avatar}
-                        pubkey={currentPersona?.identifier.publicKeyAsHex!}
+                        pubkey={currentPersona?.identifier.publicKeyAsHex || ''}
                         size={48}
                         classes={{ root: classes.avatar }}
                     />

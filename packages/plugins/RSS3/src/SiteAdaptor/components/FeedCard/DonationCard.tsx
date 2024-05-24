@@ -158,7 +158,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
                 />
             </Typography>
             {availableActions.length > 1 ?
-                <Slider className={classes.content} onUpdate={setIndex}>
+                <Slider count={availableActions.length} className={classes.content} onUpdate={setIndex}>
                     {availableActions.map((action, index) => (
                         <CardBody key={index} metadata={action.metadata!} />
                     ))}

@@ -12,7 +12,7 @@ import { ShowPrivateKeyModal } from './ShowPrivateKeyModal/index.js'
 import { GasSettingModal } from './GasSettingModal/index.js'
 import { ChooseTokenModal } from './ChooseToken/index.js'
 
-import * as modals from './modals.js'
+import * as modals from './modal-controls.js'
 import { ConfirmDialog, ConfirmDialogComponent } from '@masknet/shared'
 
 export const Modals = memo(function Modals() {

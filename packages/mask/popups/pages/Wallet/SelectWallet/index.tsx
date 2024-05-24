@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const SelectWallet = memo(function SelectWallet() {
+export const Component = memo(function SelectWallet() {
     const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
@@ -215,5 +215,3 @@ const SelectWallet = memo(function SelectWallet() {
         </Box>
     )
 })
-
-export default SelectWallet

@@ -1,6 +1,6 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
-import { useMemo, Suspense } from 'react'
+import { useMemo, Suspense, type JSX } from 'react'
 import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'

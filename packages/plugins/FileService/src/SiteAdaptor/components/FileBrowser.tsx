@@ -12,7 +12,7 @@ import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
 
-const Tabs = styled(MuiTabs)(({ theme }) => ({
+const Tabs: typeof MuiTabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',
     gap: theme.spacing(0.5),
     [`& .${tabsClasses.indicator}`]: {

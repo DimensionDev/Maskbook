@@ -52,7 +52,6 @@ export function PageInspector() {
                                 }
                             :   { horizontal: 'right', vertical: 'top' },
                         key,
-                        action: <></>,
                     },
                 )
             }),

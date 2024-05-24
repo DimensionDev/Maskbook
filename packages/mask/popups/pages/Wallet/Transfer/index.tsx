@@ -95,7 +95,7 @@ const Transfer = memo(function Transfer() {
     )
 })
 
-const TransferPage = memo(function TransferPage() {
+export const Component = memo(function TransferPage() {
     const [params] = useSearchParams()
     const defaultAddress = params.get('recipient') || ''
     const defaultName = params.get('recipientName') || ''
@@ -116,5 +116,3 @@ const TransferPage = memo(function TransferPage() {
         </ContactsContext.Provider>
     )
 })
-
-export default TransferPage

@@ -18,6 +18,7 @@ import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
 import type { CompositionType } from './entry-content-script.js'
+import type { JSX } from 'react'
 
 export declare namespace Plugin {
     /**

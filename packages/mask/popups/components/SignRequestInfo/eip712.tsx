@@ -115,7 +115,7 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
             return (
                 <ol className={classes.list}>
                     {data.map((field, index) => (
-                        // eslint-disable-next-line react/jsx-key
+                        // eslint-disable-next-line react/no-missing-key
                         <li>{renderField(field, type, schema)}</li>
                     ))}
                 </ol>
@@ -137,7 +137,7 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
             return (
                 <ul className={classes.object}>
                     {define.map((field) => (
-                        // eslint-disable-next-line react/jsx-key
+                        // eslint-disable-next-line react/no-missing-key
                         <li>
                             <Tooltip title={field.type}>
                                 <span>

@@ -4,7 +4,7 @@ import { Box, ListItem, Typography } from '@mui/material'
 import { millisecondsToMinutes, millisecondsToHours } from 'date-fns'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
-import { WalletAutoLockSettingModal } from '../../../modals/modals.js'
+import { WalletAutoLockSettingModal } from '../../../modals/modal-controls.js'
 import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
 
 export function AutoLock() {

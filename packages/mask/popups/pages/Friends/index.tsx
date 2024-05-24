@@ -1,15 +1,19 @@
-import { lazy, memo, Suspense, useEffect } from 'react'
-import { Route, Routes, useSearchParams, useMatch } from 'react-router-dom'
+import { memo, Suspense, useEffect } from 'react'
+import { useSearchParams, useMatch, type RouteObject, Navigate, Outlet } from 'react-router-dom'
 import { PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { useModalNavigate, NormalHeader } from '../../components/index.js'
-import { FriendsDetail } from './Detail/index.js'
 import { RestorableScrollContext } from '@masknet/shared'
 
-const Home = lazy(() => import(/* webpackPreload: true */ './Home/index.js'))
 const r = relativeRouteOf(PopupRoutes.Friends)
 
-const Contacts = memo(function Contacts() {
+export const contactsRoutes: RouteObject[] = [
+    { index: true, lazy: () => import('./Home/index.js') },
+    { path: `${r(PopupRoutes.FriendsDetail)}/:id?`, lazy: () => import('./Detail/index.js') },
+    { path: '*', element: <Navigate to={PopupRoutes.Contacts} /> },
+]
+
+export const ContactsFrame = memo(function Contacts() {
     const modalNavigate = useModalNavigate()
     const [params] = useSearchParams()
     const matchDetail = useMatch(`${PopupRoutes.FriendsDetail}/:id`)
@@ -25,13 +29,8 @@ const Contacts = memo(function Contacts() {
         <Suspense fallback={<LoadingPlaceholder />}>
             {matchDetail ? null : <NormalHeader />}
             <RestorableScrollContext.Provider>
-                <Routes>
-                    <Route path="*" element={<Home />} />
-                    <Route path={`${r(PopupRoutes.FriendsDetail)}/:id?`} element={<FriendsDetail />} />
-                </Routes>
+                <Outlet />
             </RestorableScrollContext.Provider>
         </Suspense>
     )
 })
-
-export default Contacts

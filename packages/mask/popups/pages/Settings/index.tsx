@@ -99,7 +99,7 @@ const FAQ_LINK =
     'realmasknetwork.notion.site/realmasknetwork/Mask-Network-2-0-Setting-Up-Features-The-Broader-Ecosystem-e4b3e24182e045a58bdb5549c0daea82'
 const HOME_LINK = 'Mask.io'
 
-const Settings = memo(function Settings() {
+export const Component = memo(function SettingsPage() {
     const theme = useTheme()
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
@@ -394,5 +394,3 @@ const Settings = memo(function Settings() {
         </>
     )
 })
-
-export default Settings
