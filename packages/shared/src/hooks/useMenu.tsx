@@ -1,13 +1,4 @@
-import {
-    type SyntheticEvent,
-    cloneElement,
-    isValidElement,
-    useCallback,
-    useState,
-    createElement,
-    type JSX,
-    type Ref,
-} from 'react'
+import { type SyntheticEvent, useCallback, useState, type JSX, type Ref, Fragment } from 'react'
 import { useUpdate } from 'react-use'
 import { Menu, type MenuProps } from '@mui/material'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
@@ -56,27 +47,22 @@ export function useMenuConfig(
         setAnchorEl(null)
     }
     const update = useUpdate()
+    const C = useShadowRoot ? ShadowRootMenu : Menu
     return [
-        createElement(
-            useShadowRoot ? ShadowRootMenu : Menu,
-            {
-                ...menuProps,
-                PaperProps: menuProps.PaperProps,
-                classes: { paper: classes.menu, ...menuProps.classes },
-                MenuListProps: menuProps.MenuListProps,
-                open,
-                anchorEl,
-                ref,
-                onClose: close,
-                onClick: close,
-                anchorOrigin: menuProps.anchorOrigin,
-                transformOrigin: menuProps.transformOrigin,
-                disableScrollLock: true,
-            },
-            elements.map((element, key) =>
-                isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
-            ),
-        ),
+        // eslint-disable-next-line react/no-missing-key
+        <C
+            {...menuProps}
+            classes={{ paper: classes.menu, ...menuProps.classes }}
+            open={open}
+            anchorEl={anchorEl}
+            ref={ref}
+            onClose={close}
+            onClick={close}
+            disableScrollLock>
+            {elements.map((element, key) => (
+                <Fragment key={key}>{element}</Fragment>
+            ))}
+        </C>,
         useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
             let element: HTMLElement
             if (anchorElOrEvent instanceof HTMLElement) {

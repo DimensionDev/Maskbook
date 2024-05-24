@@ -1,4 +1,4 @@
-import { createContext, createElement, useContext } from 'react'
+import { createContext, useContext } from 'react'
 import { type Subscription, useSubscription } from 'use-subscription'
 import type { Some } from 'ts-results-es'
 import type { LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
@@ -113,7 +113,7 @@ PostInfoContext.displayName = 'PostInfoContext'
 
 /** @deprecated use <PostInfoContext.Provider value={post}> */
 export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo }>) {
-    return createElement(PostInfoContext.Provider, { value: props.post, children: props.children })
+    return <PostInfoContext.Provider value={props.post}>{props.children}</PostInfoContext.Provider>
 }
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
