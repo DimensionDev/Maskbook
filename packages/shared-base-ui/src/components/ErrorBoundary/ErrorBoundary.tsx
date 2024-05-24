@@ -3,6 +3,7 @@ import type { CrashUIProps } from './CrashUI.js'
 import * as CrashUI from /* webpackDefer: true */ './CrashUI.js'
 import type { ErrorBoundaryError } from './context.js'
 
+// eslint-disable-next-line react/no-class-component
 export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     static getDerivedStateFromError(error: unknown) {
         return { error }

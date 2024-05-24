@@ -6,6 +6,7 @@ import {
     useState,
     type MutableRefObject,
     createElement,
+    type JSX,
 } from 'react'
 import { useUpdate } from 'react-use'
 import { Menu, type MenuProps } from '@mui/material'

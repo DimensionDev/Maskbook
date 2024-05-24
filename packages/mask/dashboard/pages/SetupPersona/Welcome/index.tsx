@@ -115,6 +115,7 @@ export const Component = memo(function Welcome() {
                                 <a
                                     className={classes.link}
                                     target="_blank"
+                                    rel="noreferrer noopener"
                                     href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
                                 />
                             ),
@@ -122,6 +123,7 @@ export const Component = memo(function Welcome() {
                                 <a
                                     className={classes.link}
                                     target="_blank"
+                                    rel="noreferrer noopener"
                                     href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
                                 />
                             ),

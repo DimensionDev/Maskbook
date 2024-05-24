@@ -140,6 +140,7 @@ export const Component = memo(function Permission() {
                                 <a
                                     className={classes.link}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
                                 />
                             ),
@@ -147,6 +148,7 @@ export const Component = memo(function Permission() {
                                 <a
                                     className={classes.link}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
                                 />
                             ),

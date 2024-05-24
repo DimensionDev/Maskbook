@@ -54,7 +54,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
         const type = event.#type
         if (!CapturingEvents.has(type)) {
-            $.ConsoleError("[@masknet/injected-script] Trying to send event didn't captured.")
+            $.console_error("[@masknet/injected-script] Trying to send event didn't captured.")
             return true
         }
 
@@ -172,7 +172,7 @@ export class __Event extends $unsafe.NewObject implements Event {
         SetTarget: {
             const structIndex = event.#path.indexOf(struct)
             if (structIndex === -1) {
-                $.ConsoleError('[@masknet/injected-script] Assert failed: struct must appears in the event.#path.')
+                $.console_error('[@masknet/injected-script] Assert failed: struct must appears in the event.#path.')
                 event.#target = struct.invocationTarget
                 break SetTarget
             }
@@ -296,6 +296,7 @@ export class __Event extends $unsafe.NewObject implements Event {
             slotInClosedTree,
         })
     }
+    // eslint-disable-next-line react/naming-convention/component-name
     static EventTarget_GetParent(target: EventTarget, event: __Event) {
         // Document:
         // A document's get the parent algorithm, given an event, returns null if event's type attribute value is "load" or document does not have a browsing context; otherwise the document's relevant global object.

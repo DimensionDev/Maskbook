@@ -43,7 +43,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         return uniqBy(profileItems.concat(NextIDItems, selected), ({ linkedPersona }) => linkedPersona?.rawPublicKey)
     }, [NextIDItems, selected, items.recipients, myUserId])
 
-    const { value = EMPTY_LIST } = useContacts(currentIdentity?.identifier.network!)
+    const { value = EMPTY_LIST } = useContacts(currentIdentity?.identifier.network)
 
     useEffect(() => {
         if (!open) return

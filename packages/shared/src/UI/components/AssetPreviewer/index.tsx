@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../Image/index.js'
+import type { JSX } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

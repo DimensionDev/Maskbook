@@ -4,6 +4,7 @@ import { Banner } from '../../../components/Welcomes/Banner.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
+import type { JSX } from 'react'
 
 export function injectBannerAtMinds(signal: AbortSignal) {
     injectBanner(postEditorInTimelineSelector(), signal, <MindsBannerTimeline />)

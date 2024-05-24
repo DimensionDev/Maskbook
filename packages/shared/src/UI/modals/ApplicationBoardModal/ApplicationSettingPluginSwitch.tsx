@@ -88,7 +88,7 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
             .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
     }, [plugins])
 
-    const targetPluginRef = useRef<HTMLLIElement | null>()
+    const targetPluginRef = useRef<HTMLLIElement | null>(undefined)
     const noAvailablePlugins = availablePlugins.length === 0
 
     useEffect(() => {

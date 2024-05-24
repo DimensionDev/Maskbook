@@ -38,7 +38,7 @@ export function useClaimAirdrop(
 
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
 
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)

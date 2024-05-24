@@ -70,6 +70,7 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                         <CloseIcon />
                     </IconButton>
                     {transakURL ?
+                        // eslint-disable-next-line react/dom/no-missing-iframe-sandbox
                         <iframe className={classes.frame} src={transakURL} />
                     :   null}
                 </DialogContent>

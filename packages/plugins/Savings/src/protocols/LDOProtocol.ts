@@ -29,7 +29,7 @@ export class LidoProtocol implements SavingsProtocol {
 
     async getApr(chainId: ChainId, web3: Web3) {
         try {
-            return LidoAPI.getStEthAPR()
+            return await LidoAPI.getStEthAPR()
         } catch {
             // the default APR is 5.30%
             return '5.30'
@@ -78,7 +78,7 @@ export class LidoProtocol implements SavingsProtocol {
                 getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
                 LidoABI as AbiItem[],
             )
-            return contract?.methods
+            contract?.methods
                 .submit(getLidoConstant(chainId, 'LIDO_REFERRAL_ADDRESS') || ZERO_ADDRESS)
                 .send({
                     from: account,

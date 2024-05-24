@@ -24,6 +24,12 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.hmr ??= parseBoolean(parsed.hmr)
     flags.devtools ??= parseBoolean(parsed.devtools)
     flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
+    const compiler = parseBooleanOrString(parsed.reactCompiler)
+    if (typeof compiler === 'string') {
+        if (compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')
+            throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
+    }
+    flags.reactCompiler ??= compiler
     flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
 }
 export function parseManifest(manifest: '2' | '3' | 2 | 3 | undefined | ManifestFile) {

@@ -39,7 +39,7 @@ export function useERC721TokenTransferCallback(address?: string, expectedChainId
             }
 
             // send transaction and wait for hash
-            return new Promise<string>(async (resolve, reject) => {
+            return new Promise<string>((resolve, reject) => {
                 contract.methods
                     .transferFrom(account, recipient, tokenId)
                     .send(config as NonPayableTx)

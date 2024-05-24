@@ -8,6 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import external from 'rehype-external-links'
 
 const useStyles = makeStyles()((theme) => ({
     markdown: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface MarkdownProps extends Options {
     defaultStyle?: boolean
+    children: string
 }
 
 export const Markdown = memo<MarkdownProps>(function Markdown({ children, className, defaultStyle = true, ...props }) {
@@ -47,9 +49,8 @@ export const Markdown = memo<MarkdownProps>(function Markdown({ children, classN
         <ReactMarkdown
             className={cx(defaultStyle ? classes.markdown : undefined, className)}
             remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-            rehypePlugins={[rehypeRaw]}
-            transformImageUri={(src) => resolveIPFS_URL(src)!}
-            linkTarget="_blank"
+            rehypePlugins={[rehypeRaw, external]}
+            urlTransform={(src) => resolveIPFS_URL(src)!}
             {...props}>
             {markdown}
         </ReactMarkdown>

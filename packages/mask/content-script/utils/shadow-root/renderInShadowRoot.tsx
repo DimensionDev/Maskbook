@@ -25,11 +25,7 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
 export function setupReactShadowRootEnvironment() {
     const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, SiteUIProvider)
     // Inject variable for Portals
-    attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(
-        <>
-            <CSSVariableInjector />
-        </>,
-    )
+    attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
 
 export const attachReactTreeWithContainer = attachReactTreeToMountedRoot_noHost(ShadowRootAttachPointRoot)

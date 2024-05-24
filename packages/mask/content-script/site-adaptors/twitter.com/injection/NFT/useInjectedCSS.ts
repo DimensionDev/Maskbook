@@ -3,8 +3,8 @@ import { useEffect, useRef } from 'react'
 import { searchTwitterAvatarLinkSelector } from '../../utils/selector.js'
 
 export function useInjectedCSS(showAvatar: boolean, updatedAvatar: boolean) {
-    const rainbowElement = useRef<Element | null>()
-    const borderElement = useRef<Element | null>()
+    const rainbowElement = useRef<Element | null>(null)
+    const borderElement = useRef<Element | null>(null)
     useEffect(() => {
         if (!showAvatar || !updatedAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
@@ -22,14 +22,14 @@ export function useInjectedCSS(showAvatar: boolean, updatedAvatar: boolean) {
                 const style = document.createElement('style')
                 style.innerText = `
                 ${rainbowBorderKeyFrames.styles}
-                
+
                 .rainbowBorder {
                     animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
                     box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
                     transition: none;
                     border: 0 solid #00f8ff;
                 }
-            
+
             `
 
                 rainbowElement.current = linkDom.firstElementChild.nextElementSibling

@@ -165,7 +165,7 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({})
     const ref = useRef<HTMLLIElement | null>(null)
-    const entry = useIntersectionObserver(ref, {})
+    const entry = useIntersectionObserver(ref.current, {})
     const [isViewed, setIsViewed] = useState(false)
 
     useEffect(() => {

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Interaction } from './interaction.js'
 
-const InteractionPage = memo(() => {
+export const Component = memo(function InteractionPage() {
     const navigate = useNavigate()
     const messages = useMessages()
     const [messageIndex, setMessageIndex] = useState(0)
@@ -42,6 +42,3 @@ const InteractionPage = memo(() => {
         </Suspense>
     )
 })
-InteractionPage.displayName = 'InteractionPage'
-
-export default InteractionPage

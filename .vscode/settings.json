@@ -1,5 +1,4 @@
 {
-    "eslint.experimental.useFlatConfig": true,
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.preferences.importModuleSpecifierEnding": "js",
     "js/ts.implicitProjectConfig.module": "NodeNext",

@@ -250,11 +250,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                     {isImagePost ?
                         null
                     : rest.verbose && metadata?.body ?
-                        <Markdown
-                            className={mdClasses.markdown}
-                            defaultStyle={false}
-                            transformLinkUri={transformUri}
-                            transformImageUri={transformUri}>
+                        <Markdown className={mdClasses.markdown} defaultStyle={false} urlTransform={transformUri}>
                             {metadata.body}
                         </Markdown>
                     :   <Typography className={classes.content}>

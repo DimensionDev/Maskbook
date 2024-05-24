@@ -8,7 +8,7 @@ import { fixOverPosition } from './utils.js'
 
 // TODO chart morph transform
 export function useLineChart(
-    svgRef: RefObject<SVGSVGElement>,
+    svgRef: RefObject<SVGSVGElement | null>,
     data: Array<{
         date: Date
         value: number

@@ -30,6 +30,6 @@ export function SourceProviderIcon(props: SourceProviderIconProps) {
         case SourceType.SimpleHash:
             return <Icons.SimpleHash size={size} />
         default:
-            return <></>
+            return null
     }
 }

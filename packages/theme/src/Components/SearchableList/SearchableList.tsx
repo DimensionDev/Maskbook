@@ -54,14 +54,14 @@ export function SearchableList<T extends {}>({
     disableSearch,
     searchKey,
     itemRender,
-    FixedSizeListProps = {},
+    FixedSizeListProps,
     SearchFieldProps,
     ...props
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const theme = useTheme()
     const { classes, cx } = useStyles(undefined, { props })
-    const { height = 300, itemSize, ...rest } = FixedSizeListProps
+    const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
     // #region create searched data

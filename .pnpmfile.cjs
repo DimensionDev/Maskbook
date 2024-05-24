@@ -11,13 +11,13 @@ approvedList.set('webpack', [
     'Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770',
 ])
 
+approvedList.set('@types/react', ['npm:types-react@beta'])
+approvedList.set('@types/react-dom', ['npm:types-react-dom@beta'])
+
 // glob -> jackspeak -> @isaacs/cliui -> ...
 approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
 approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
 approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])
-
-// knip -> @pnpm/* -> ...
-approvedList.set('ramda', 'npm:@pnpm/ramda@0.28.1')
 
 // @magic-works/i18n-codegen -> i18next-translation-parser
 // https://github.com/i18next/i18next-translation-parser/issues/11

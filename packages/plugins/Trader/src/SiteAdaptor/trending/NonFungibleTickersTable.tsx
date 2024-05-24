@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react'
+import { useRef, useContext, type JSX } from 'react'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import {
     Table,

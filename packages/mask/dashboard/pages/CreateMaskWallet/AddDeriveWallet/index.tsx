@@ -129,7 +129,7 @@ export const Component = memo(function AddDeriveWallet() {
         networkMode: 'always',
         queryFn: async () => {
             if (!mnemonic) return EMPTY_LIST
-            return await Services.Wallet.getDerivableAccounts(mnemonic, page)
+            return Services.Wallet.getDerivableAccounts(mnemonic, page)
         },
     })
 

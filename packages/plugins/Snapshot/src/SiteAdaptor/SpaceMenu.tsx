@@ -75,7 +75,7 @@ interface SpaceMenuProps {
     options: Array<DAOResult<ChainId.Mainnet>>
     currentOption?: DAOResult<ChainId.Mainnet>
     onSelect(index: number): void
-    containerRef: RefObject<HTMLElement>
+    containerRef: RefObject<HTMLElement | null>
     spaceMenuOpen: boolean
     setSpaceMenuOpen: (a: boolean) => void
     disablePortal?: boolean

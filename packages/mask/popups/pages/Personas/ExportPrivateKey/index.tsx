@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 
-const ExportPrivateKey = memo(function ExportPrivateKey() {
+export const Component = memo(function ExportPrivateKey() {
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()
@@ -75,5 +75,3 @@ const ExportPrivateKey = memo(function ExportPrivateKey() {
         </Box>
     )
 })
-
-export default ExportPrivateKey

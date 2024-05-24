@@ -96,7 +96,7 @@ enum TabType {
     Collectibles = 'Collectibles',
 }
 
-const AddToken = memo(function AddToken() {
+export const Component = memo(function AddToken() {
     const t = useMaskSharedTrans()
 
     const blackList = useBlockedFungibleTokens()
@@ -200,5 +200,3 @@ const AddToken = memo(function AddToken() {
         </TabContext>
     )
 })
-
-export default AddToken

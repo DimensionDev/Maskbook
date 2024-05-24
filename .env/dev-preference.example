@@ -32,11 +32,11 @@
 
 ### Preferred Manifest Version
 
-; manifest=2
-# (default) Use Chromium Manifest V2 as default development target.
-
 ; manifest=3
-# Use Chromium Manifest V3 as default development target.
+# (default) Use Chromium Manifest V3 as default development target.
+
+; manifest=2
+# Use Chromium Manifest V2 as default development target.
 
 ; manifest=chromium-mv2
 ; manifest=chromium-beta-mv3
@@ -70,3 +70,16 @@
 
 # devtoolsEditorURI=...
 # Any URI that can open the editor you used.
+
+### React compiler
+
+; reactCompiler=false
+# (default) Not enabling react compiler.
+
+; reactCompiler=true
+# Enable react compiler.
+
+; reactCompiler=infer
+; reactCompiler=annotation
+; reactCompiler=all
+# Enable react compiler with specific mode.

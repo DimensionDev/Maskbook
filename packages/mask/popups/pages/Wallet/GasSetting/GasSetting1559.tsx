@@ -162,7 +162,7 @@ export const GasSetting1559 = memo(() => {
                 value.formatterTransaction?.type === TransactionDescriptorType.INTERACTION)
         ) {
             try {
-                return EVMWeb3.estimateTransaction?.({
+                return await EVMWeb3.estimateTransaction?.({
                     data: value.formatterTransaction._tx.data,
                     from: value.formatterTransaction._tx.from,
                     to: value.formatterTransaction._tx.to,

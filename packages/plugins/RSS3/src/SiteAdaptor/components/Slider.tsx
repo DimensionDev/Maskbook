@@ -38,14 +38,14 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
 
 interface Props extends HTMLProps<HTMLDivElement> {
     onUpdate?(index: number): void
+    count: number
 }
 
-export function Slider({ children, className, onUpdate, ...rest }: Props) {
+export function Slider({ children, className, onUpdate, count, ...rest }: Props) {
     const containerRef = useRef<HTMLDivElement>(null)
     const { classes, cx } = useStyles()
     const [index, setIndex] = useState(0)
 
-    const count = Children.count(children)
     const [style, setStyle] = useState<CSSProperties>({})
     useLayoutEffect(() => {
         if (!containerRef.current) return

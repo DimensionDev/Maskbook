@@ -18,7 +18,7 @@ import {
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { joinsABTest } from '@masknet/web3-telemetry/helpers'
-
+import type { JSX } from 'react'
 interface ConsoleContentProps {
     onClose?: () => void
 }

@@ -10,6 +10,7 @@ import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import WebExtensionPlugin from 'webpack-target-webextension'
+import ReactCompiler from 'react-compiler-webpack'
 import { getGitInfo } from './git-info.js'
 import { emitManifestFile } from './plugins/manifest.js'
 
@@ -39,7 +40,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
 
     const nonWebpackJSFiles = join(flags.outputPath, './js')
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
-
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
 
     let WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC || ''
@@ -86,7 +86,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             alias: (() => {
                 const alias: Record<string, string> = {
                     // conflict with SES
-                    'error-polyfill': require.resolve('./package-overrides/null.mjs'),
+                    'error-polyfill$': require.resolve('./package-overrides/null.mjs'),
                 }
                 if (computedFlags.reactProductionProfiling) alias['react-dom$'] = require.resolve('react-dom/profiling')
                 if (flags.devtools) {
@@ -127,39 +127,46 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 },
                 // TypeScript
                 {
-                    test: /\.tsx?$/,
+                    test: /\.[mc]?[jt]sx?$/i,
                     parser: { worker: ['OnDemandWorker', '...'] },
-                    // Compile all ts files in the workspace
                     include: join(import.meta.dirname, '../../'),
-                    loader: require.resolve('swc-loader'),
-                    options: {
-                        sourceMaps: !!computedFlags.sourceMapKind,
-                        // https://swc.rs/docs/configuring-swc/
-                        jsc: {
-                            preserveAllComments: true,
-                            parser: {
-                                syntax: 'typescript',
-                                dynamicImport: true,
-                                tsx: true,
-                            },
-                            target: 'es2022',
-                            externalHelpers: true,
-                            transform: {
-                                react: {
-                                    runtime: 'automatic',
-                                    development: !productionLike,
-                                    refresh: flags.reactRefresh && {
-                                        refreshReg: '$RefreshReg$',
-                                        refreshSig: '$RefreshSig$',
-                                        emitFullSignatures: true,
+                    use: [
+                        {
+                            loader: require.resolve('swc-loader'),
+                            options: {
+                                // https://swc.rs/docs/configuring-swc/
+                                jsc: {
+                                    preserveAllComments: true,
+                                    parser: {
+                                        syntax: 'typescript',
+                                        dynamicImport: true,
+                                        tsx: true,
                                     },
+                                    target: 'es2022',
+                                    externalHelpers: true,
+                                    transform: {
+                                        react: {
+                                            runtime: 'automatic',
+                                            // react 19 not using file names in _jsxDEV
+                                            development: false,
+                                            refresh: flags.reactRefresh,
+                                        },
+                                    },
+                                    experimental: { keepImportAttributes: true },
                                 },
-                            },
-                            experimental: {
-                                keepImportAssertions: true,
-                            },
+                            } satisfies import('@swc/core').Options,
                         },
-                    },
+                        flags.reactCompiler ?
+                            {
+                                loader: ReactCompiler.reactCompilerLoader,
+                                options: ReactCompiler.defineReactCompilerLoaderOption({
+                                    babelTransFormOpt: { sourceMaps: !!computedFlags.sourceMapKind },
+                                    compilationMode: flags.reactCompiler === true ? 'infer' : flags.reactCompiler,
+                                    sources: (x) => x.endsWith('.tsx') || !!x.match(/use[A-Z]/),
+                                }),
+                            }
+                        :   undefined!,
+                    ].filter(Boolean),
                 },
                 {
                     test: /\.svg$/,
@@ -339,7 +346,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             webassemblyModuleFilename: 'assets/[hash].wasm',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
-            devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]',
+            devtoolModuleFilenameTemplate:
+                productionLike ?
+                    'webpack://[namespace]/[resource-path]'
+                :   join(import.meta.dirname, '../../../[resource-path]'),
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',

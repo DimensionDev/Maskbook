@@ -16,7 +16,7 @@ import { Box, Link, Typography, useTheme } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { Trans } from 'react-i18next'
-import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
@@ -24,6 +24,7 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useHasNavigator } from '../../../hooks/useHasNavigator.js'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -172,9 +173,9 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
     )
 })
 
-const SetPaymentPassword = memo(function SetPaymentPassword() {
+export const Component = memo(function SetPaymentPassword() {
     const t = useMaskSharedTrans()
-    const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
+    const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -304,6 +305,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                         <a
                                             className={classes.strong}
                                             target="_blank"
+                                            rel="noreferrer noopener"
                                             href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
                                         />
                                     ),
@@ -311,6 +313,7 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
                                         <a
                                             className={classes.strong}
                                             target="_blank"
+                                            rel="noreferrer noopener"
                                             href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
                                         />
                                     ),
@@ -352,4 +355,3 @@ const SetPaymentPassword = memo(function SetPaymentPassword() {
         </Box>
     )
 })
-export default SetPaymentPassword

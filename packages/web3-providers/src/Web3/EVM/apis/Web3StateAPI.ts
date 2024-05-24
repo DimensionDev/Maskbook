@@ -87,7 +87,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         TransactionFormatter: () => new TransactionFormatter.EVMTransactionFormatter(),
         TransactionWatcher: () =>
             new TransactionWatcher.EVMTransactionWatcher({
-                chainId: state.Provider?.chainId!,
+                chainId: state.Provider!.chainId!,
                 transactions: state.Transaction!.transactions!,
             }),
     })

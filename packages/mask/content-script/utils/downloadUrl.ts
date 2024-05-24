@@ -6,7 +6,7 @@ import Services from '#services'
 export async function downloadUrl(url: string) {
     try {
         if (url.startsWith(browser.runtime.getURL(''))) {
-            return Services.Helper.fetchBlob(url)
+            return await Services.Helper.fetchBlob(url)
         }
     } catch {}
     const res = await fetch(url)

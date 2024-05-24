@@ -112,7 +112,7 @@ const useStyles = makeStyles()((theme) => {
 const avatarProps: AvatarProps = {
     sx: { fontSize: 26 },
 }
-export default memo(function Receive() {
+export const Component = memo(function Receive() {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

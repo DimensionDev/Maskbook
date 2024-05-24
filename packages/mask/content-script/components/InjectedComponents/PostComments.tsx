@@ -25,16 +25,14 @@ type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps
 function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     const { classes } = useStyle(undefined, { props: props.ChipProps || {} })
     return (
-        <>
-            <Chip
-                data-testid="comment_field"
-                icon={<Lock />}
-                label={props.children}
-                color="secondary"
-                {...props.ChipProps}
-                classes={{ root: classes.root, label: classes.label }}
-            />
-        </>
+        <Chip
+            data-testid="comment_field"
+            icon={<Lock />}
+            label={props.children}
+            color="secondary"
+            {...props.ChipProps}
+            classes={{ root: classes.root, label: classes.label }}
+        />
     )
 }
 export interface PostCommentProps {

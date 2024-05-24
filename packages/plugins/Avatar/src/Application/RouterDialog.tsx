@@ -24,7 +24,7 @@ const useStyles = makeStyles()({
 
 export function RouterDialog(props: InjectedDialogProps) {
     const { classes } = useStyles()
-    const nftListRef = useRef<NFTListDialogRef>()
+    const nftListRef = useRef<NFTListDialogRef>(undefined)
     const t = useAvatarTrans()
     const { pathname } = useLocation()
     const navigate = useNavigate()

@@ -30,20 +30,16 @@ export function useERC20TokenTransferCallback(
 
             if (isGreaterThan(amount, balance)) return
 
+            const gas = await contract.methods.transfer(recipient, amount).estimateGas({
+                from: account,
+            })
             // send transaction and wait for hash
-            return new Promise<string>(async (resolve, reject) => {
+            return new Promise<string>((resolve, reject) => {
                 contract.methods
                     .transfer(recipient, amount)
                     .send({
                         from: account,
-                        gas: await contract.methods
-                            .transfer(recipient, amount)
-                            .estimateGas({
-                                from: account,
-                            })
-                            .catch((error) => {
-                                throw error
-                            }),
+                        gas,
                         ...gasConfig,
                     })
                     .on(TransactionEventType.CONFIRMATION, (_, receipt) => {

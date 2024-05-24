@@ -142,7 +142,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default memo(function TransactionDetail() {
+export const Component = memo(function TransactionDetail() {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
@@ -211,7 +211,7 @@ export default memo(function TransactionDetail() {
         [SUCCEED]: t.transaction_success(),
         [NOT_DEPEND]: t.transaction_pending(),
     }
-    const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status!
+    const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status
     const statusPending = status === undefined && loadingTx
     const isOut = isSameAddress(transaction.from, account)
     const link = transactionId ? EVMExplorerResolver.transactionLink(chainId!, transactionId) : undefined
@@ -240,11 +240,11 @@ export default memo(function TransactionDetail() {
                     </Typography>
                     <ProgressiveText
                         component="div"
-                        className={cx(classes.status, StatusClassesMap[status])}
+                        className={cx(classes.status, StatusClassesMap[status!])}
                         loading={statusPending}
                         skeletonWidth={90}>
-                        {StatusIconMap[status]}
-                        {StatusLabelMap[status]}
+                        {StatusIconMap[status!]}
+                        {StatusLabelMap[status!]}
                     </ProgressiveText>
                 </Box>
                 {transactionId ?

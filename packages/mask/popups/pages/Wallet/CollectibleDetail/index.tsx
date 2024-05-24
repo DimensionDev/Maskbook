@@ -19,7 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
-import { ConfirmModal } from '../../../modals/modals.js'
+import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -157,7 +157,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export default memo(function CollectibleDetail() {
+export const Component = memo(function CollectibleDetail() {
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
     const navigate = useNavigate()

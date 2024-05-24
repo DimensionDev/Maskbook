@@ -8,7 +8,7 @@ import type { RedPacketJSONPayloadFromChain } from './types.js'
 import { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
 import type { RedPacketBaseAPI } from '../entry-types.js'
 
-const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')?.inputs!
+const creationSuccessTopicInputs = REDPACKET_ABI.find((x) => x.name === 'CreationSuccess')!.inputs!
 
 class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     async getHistories(

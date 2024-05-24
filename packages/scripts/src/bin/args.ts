@@ -23,6 +23,16 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
+        .option('reactCompiler', {
+            type: 'string',
+            coerce(arg) {
+                if (arg === 'true') return true
+                if (arg === 'false') return false
+                if (arg === 'infer' || arg === 'annotation' || arg === 'all') return arg
+                throw new TypeError(`Invalid value "${arg}" for reactCompiler`)
+            },
+            description: 'Enable react compiler',
+        })
         .options('devtools', { type: 'boolean', description: 'Enable devtools' })
         .options('devtoolsEditorURI', { type: 'string', description: 'Editor URI to be used in React Devtools.' })
         .options('sourceMap', {
@@ -55,6 +65,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         progress: opts.progress,
         hmr: opts.hmr,
         reactRefresh: opts.reactRefresh,
+        reactCompiler: opts.reactCompiler,
         devtools: opts.devtools,
         devtoolsEditorURI: opts.devtoolsEditorURI,
         sourceMapPreference: opts.sourceMap,

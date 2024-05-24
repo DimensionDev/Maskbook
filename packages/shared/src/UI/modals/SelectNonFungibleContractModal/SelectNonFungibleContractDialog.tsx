@@ -102,7 +102,7 @@ export const SelectNonFungibleContractDialog = memo(
 
         const { Token } = useWeb3State(pluginID)
         const account = useAccount().toLowerCase()
-        const customizedCollectionMap = useSubscription(Token?.nonFungibleCollectionMap! ?? EMPTY_ENTRY)
+        const customizedCollectionMap = useSubscription(Token?.nonFungibleCollectionMap ?? EMPTY_ENTRY)
         // Convert StorageCollection to NonFungibleCollection
         const customizedCollections = useMemo((): Array<
             NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>

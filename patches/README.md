@@ -30,11 +30,10 @@
 - @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>
 - eslint-plugin-i: <https://github.com/import-js/eslint-plugin-import/pull/1900/>
-- react-devtools-inline: <https://github.com/facebook/react/pull/27733>
+- react-devtools-inline: <https://github.com/facebook/react/pull/27733> and <https://github.com/facebook/react/pull/29199>
 - @lifi/widget@2.10.1: Customized requirements, details can be viewed at the fork repository <https://github.com/DimensionDev/lifi-widget>
-- micromark-util-symbol: TODO: why?
-- micromark: TODO: why?
 - react-use: <https://github.com/streamich/react-use/issues/1923>
+- react-qrcode-logo: <https://github.com/gcoro/react-qrcode-logo/issues/55>
 
 ## CSP
 

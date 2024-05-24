@@ -8,6 +8,7 @@ import React, {
     useRef,
     useState,
     type ReactElement,
+    type RefObject,
 } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -82,7 +83,7 @@ const useStyles = makeStyles()((theme) => ({
 interface GuideStepProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<{ ref: RefObject<HTMLElement | null> }>
     step: number
     totalStep: number
     arrow?: boolean

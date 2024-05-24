@@ -37,20 +37,18 @@ const site: Plugin.SiteAdaptor.Definition = {
                     }, [])
 
                     return (
-                        <>
-                            <ApplicationEntry
-                                {...EntryComponentProps}
-                                title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
-                                icon={icon}
-                                onClick={() =>
-                                    EntryComponentProps.onClick ?
-                                        EntryComponentProps.onClick()
-                                    :   CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
-                                            open: true,
-                                        })
-                                }
-                            />
-                        </>
+                        <ApplicationEntry
+                            {...EntryComponentProps}
+                            title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
+                            icon={icon}
+                            onClick={() =>
+                                EntryComponentProps.onClick ?
+                                    EntryComponentProps.onClick()
+                                :   CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
+                                        open: true,
+                                    })
+                            }
+                        />
                     )
                 },
                 ApplicationEntryID: base.ID,

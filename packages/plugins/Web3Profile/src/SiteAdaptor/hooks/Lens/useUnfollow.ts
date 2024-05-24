@@ -26,7 +26,7 @@ export function useUnfollow(
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
 
-    const snackbarKeyRef = useRef<SnackbarKey>()
+    const snackbarKeyRef = useRef<SnackbarKey>(undefined)
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
 
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
