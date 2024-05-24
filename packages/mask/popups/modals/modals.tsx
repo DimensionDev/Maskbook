@@ -17,6 +17,7 @@ import { VerifyBackupPasswordModal } from './VerifyBackupPasswordModal/index.js'
 import { WalletGroupModal } from './WalletGroupModal/index.js'
 import SwitchWallet from '../pages/Wallet/SwitchWallet/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
+import { UpdatePermissionModal } from './UpdatePermissionModal/index.js'
 
 export default function RoutedModals(props: { path: string }) {
     return (
@@ -25,6 +26,7 @@ export default function RoutedModals(props: { path: string }) {
             <Route path={PopupModalRoutes.SetBackupPassword} element={wrapModal(<SetBackupPasswordModal />)} />
             <Route path={PopupModalRoutes.PersonaRename} element={wrapModal(<PersonaRenameModal />)} />
             <Route path={PopupModalRoutes.PersonaSettings} element={wrapModal(<PersonaSettingModal />)} />
+            <Route path={PopupModalRoutes.UpdatePermissions} element={wrapModal(<UpdatePermissionModal />)} />
             <Route path={PopupModalRoutes.SwitchPersona} element={wrapModal(<SwitchPersonaModal />)} />
             <Route path={PopupModalRoutes.ChooseCurrency} element={wrapModal(<ChooseCurrencyModal />)} />
             <Route path={PopupModalRoutes.ChooseNetwork} element={wrapModal(<ChooseNetworkModal />)} />

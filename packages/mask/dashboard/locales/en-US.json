@@ -437,6 +437,7 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} local SmartPay wallets have been detected and successfully recovered.",
     "welcome_request_to_collect": "Allow us to collect your usage information to help us make improvements.",
     "welcome_to_use_mask_network": "Welcome to use Mask Network",
+    "update_authorization_title": "Update X.com Authorization",
     "create_step": "Step {{step}}/{{totalSteps}}",
     "persona_create_title": "Create New Mask Identity",
     "persona_create_tips": "Create your persona to get started",
@@ -495,7 +496,7 @@
     "persona_phrase_copy_description": "The mnemonic has been copied, please keep it in a safe place.",
     "persona_phrase_create_tips": "Never share 12-word secret recovery phrase with anyone!",
     "persona_phrase_create_check_tips": "I wrote down the words in the correct order",
-    "persona_onboarding_to_twitter": "Experience in Twitter",
+    "persona_onboarding_to_twitter": "Experience in X",
     "persona_onboarding_set_payment_password": "Set Payment Password",
     "persona_onboarding_pin_tips": "Pin Mask Network to the toolbar for easier access:",
     "persona_onboarding_creating_identity": "Creating your ",
@@ -514,5 +515,6 @@
     "local_backup": "Local Backup",
     "incorrect_verification_code": "Invalid verification code.",
     "wallet_set_payment_password_successfully": "Set payment password successfully.",
-    "wallet_open_mask_wallet": "Open Mask Wallet"
+    "wallet_open_mask_wallet": "Open Mask Wallet",
+    "permission_onboarding": "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
 }
