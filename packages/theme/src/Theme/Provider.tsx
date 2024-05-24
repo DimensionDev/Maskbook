@@ -16,7 +16,7 @@ export function MaskThemeProvider(props: MaskThemeProvider) {
     const MaskIconPalette = useRef(useMaskIconPalette).current(theme)
 
     return compose(
-        (jsx) => <MaskIconPaletteContext.Provider value={MaskIconPalette}>{jsx}</MaskIconPaletteContext.Provider>,
+        (jsx) => <MaskIconPaletteContext value={MaskIconPalette}>{jsx}</MaskIconPaletteContext>,
         (children) => ThemeProvider({ theme, children }),
         (jsx) => (
             <CustomSnackbarProvider

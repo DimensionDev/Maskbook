@@ -6,10 +6,9 @@ import {
     userPinExtension,
     type PersonaIdentifier,
 } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useValueRef, createContainer } from '@masknet/shared-base-ui'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
-import { createContainer } from 'unstated-next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useSetupGuideStatus } from '../../GuideStep/useSetupGuideStatus.js'

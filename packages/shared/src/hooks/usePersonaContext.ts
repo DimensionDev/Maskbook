@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { compareDesc, isBefore } from 'date-fns'
 import { unionWith, uniqBy } from 'lodash-es'
-import { createContainer } from 'unstated-next'
+import { createContainer, useValueRefReactQuery } from '@masknet/shared-base-ui'
 import {
     type ECKeyIdentifier,
     EMPTY_LIST,
@@ -14,7 +14,6 @@ import {
     NextIDPlatform,
     type ProfileAccount,
 } from '@masknet/shared-base'
-import { useValueRefReactQuery } from '@masknet/shared-base-ui'
 import { usePersonaProofs } from './usePersonaProofs.js'
 import { Web3Storage } from '@masknet/web3-providers'
 import { PERSONA_AVATAR_DB_NAMESPACE } from '../constants.js'

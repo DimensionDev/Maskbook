@@ -6,7 +6,7 @@ import { isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { produce, type Draft } from 'immer'
 import { sum } from 'lodash-es'
 import { memo, useMemo, useState, type PropsWithChildren } from 'react'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
 
 function useCollections(defaultCollectionId?: string) {
@@ -73,5 +73,5 @@ export const CollectionsProvider = memo<PropsWithChildren<CollectionsProviderPro
     defaultCollectionId,
     children,
 }) {
-    return <CollectionsContext.Provider initialState={defaultCollectionId}>{children}</CollectionsContext.Provider>
+    return <CollectionsContext initialState={defaultCollectionId}>{children}</CollectionsContext>
 })

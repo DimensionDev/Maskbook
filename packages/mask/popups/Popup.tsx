@@ -47,8 +47,8 @@ const PopupShell = memo(function PopupShell() {
     }, [])
 
     return (
-        <PersonaContext.Provider initialState={personaInitialState}>
-            <UserContext.Provider>
+        <PersonaContext initialState={personaInitialState}>
+            <UserContext>
                 <Suspense fallback={pending}>
                     <Outlet />
                 </Suspense>
@@ -58,8 +58,8 @@ const PopupShell = memo(function PopupShell() {
                         <RoutedModals path={modal} />
                     :   null}
                 </Suspense>
-            </UserContext.Provider>
-        </PersonaContext.Provider>
+            </UserContext>
+        </PersonaContext>
     )
 })
 
@@ -106,15 +106,15 @@ export default function Popups() {
                 usePopupTheme,
                 <PopupSnackbarProvider>
                     <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
-                        <PopupContext.Provider>
-                            <PageTitleContext.Provider value={titleContext}>
+                        <PopupContext>
+                            <PageTitleContext value={titleContext}>
                                 <RouterProvider
                                     router={router}
                                     fallbackElement={pending}
                                     future={{ v7_startTransition: true }}
                                 />
-                            </PageTitleContext.Provider>
-                        </PopupContext.Provider>
+                            </PageTitleContext>
+                        </PopupContext>
                     </EVMWeb3ContextProvider>
                 </PopupSnackbarProvider>,
                 null,

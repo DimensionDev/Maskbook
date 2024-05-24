@@ -9,9 +9,9 @@ export const SmartPayDialog = memo(() => {
 
     return (
         <MemoryRouter initialEntries={entries} initialIndex={1}>
-            <SmartPayContext.Provider>
+            <SmartPayContext>
                 <RouterDialog />
-            </SmartPayContext.Provider>
+            </SmartPayContext>
         </MemoryRouter>
     )
 })

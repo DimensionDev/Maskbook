@@ -30,18 +30,18 @@ export function TypedMessageRenderContext(props: TypedMessageRenderContextProps)
     }, [props.metadataRender, props.renderFragments])
 
     return (
-        <TextResizeContext.Provider value={props.textResizer ?? true}>
+        <TextResizeContext value={props.textResizer ?? true}>
             {/* basic render fragments provider: Text, Link, Image and Metadata */}
-            <RenderFragmentsContext.Provider value={Provider}>
+            <RenderFragmentsContext value={Provider}>
                 {/* transformer pipeline */}
-                <TransformerProvider.Provider value={transformerFunction}>
+                <TransformerProvider value={transformerFunction}>
                     {/* transformation context */}
-                    <TransformationContextProvider.Provider value={props.context || emptyTransformationContext}>
+                    <TransformationContextProvider value={props.context || emptyTransformationContext}>
                         {/* components provider */}
-                        <RegistryContext.Provider value={registry}>{props.children}</RegistryContext.Provider>
-                    </TransformationContextProvider.Provider>
-                </TransformerProvider.Provider>
-            </RenderFragmentsContext.Provider>
-        </TextResizeContext.Provider>
+                        <RegistryContext value={registry}>{props.children}</RegistryContext>
+                    </TransformationContextProvider>
+                </TransformerProvider>
+            </RenderFragmentsContext>
+        </TextResizeContext>
     )
 }

@@ -186,27 +186,27 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
             <Typography className={classes.messageTitle}>{t.popups_wallet_signature_request_message()}</Typography>
             <Typography className={classes.sourceText}>
                 {statement ?
-                    <RenderFragmentsContext.Provider value={TextFragmentRender}>
+                    <RenderFragmentsContext value={TextFragmentRender}>
                         <TypedMessageTextRender content={statement} serializable type="text" version={1} />
-                    </RenderFragmentsContext.Provider>
+                    </RenderFragmentsContext>
                 :   null}
             </Typography>
         </Fragment>,
         <Fragment key="uri">
             <Typography className={classes.messageTitle}>URI</Typography>
             <Typography className={classes.sourceText}>
-                <RenderFragmentsContext.Provider value={TextFragmentRender}>
+                <RenderFragmentsContext value={TextFragmentRender}>
                     <TypedMessageTextRender content={uri} serializable type="text" version={1} />
-                </RenderFragmentsContext.Provider>
+                </RenderFragmentsContext>
             </Typography>
         </Fragment>,
         resources?.length ?
             <Fragment key="resources">
                 <Typography className={classes.messageTitle}>{t.popups_wallet_sign_in_message_resource()}</Typography>
                 <Typography className={classes.sourceText}>
-                    <RenderFragmentsContext.Provider value={TextFragmentRender}>
+                    <RenderFragmentsContext value={TextFragmentRender}>
                         <TypedMessageTextRender content={resources.join('\n')} serializable type="text" version={1} />
-                    </RenderFragmentsContext.Provider>
+                    </RenderFragmentsContext>
                 </Typography>
             </Fragment>
         :   null,

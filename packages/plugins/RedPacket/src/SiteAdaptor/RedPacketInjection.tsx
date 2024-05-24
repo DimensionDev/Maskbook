@@ -32,9 +32,9 @@ export function RedPacketInjection() {
     if (!open) return null
     return (
         <EVMWeb3ContextProvider>
-            <CompositionTypeContext.Provider value={compositionType}>
+            <CompositionTypeContext value={compositionType}>
                 <RedPacketDialog open onClose={handleClose} source={source} fireflyContext={fireflyContext} />
-            </CompositionTypeContext.Provider>
+            </CompositionTypeContext>
         </EVMWeb3ContextProvider>
     )
 }

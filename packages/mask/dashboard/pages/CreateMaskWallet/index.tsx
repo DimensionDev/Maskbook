@@ -15,8 +15,8 @@ export const walletRoutes: RouteObject[] = [
 
 export function WalletFrame() {
     return (
-        <ResetWalletContext.Provider>
+        <ResetWalletContext>
             <SetupFrame hiddenSpline={!!useMatch(DashboardRoutes.SignUpMaskWalletOnboarding)} />
-        </ResetWalletContext.Provider>
+        </ResetWalletContext>
     )
 }

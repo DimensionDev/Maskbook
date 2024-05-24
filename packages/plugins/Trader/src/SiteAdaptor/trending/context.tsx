@@ -33,5 +33,5 @@ export function TrendingViewProvider({
         }),
         [isTokenTagPopper, isCollectionProjectPopper, isProfilePage, isPreciseSearch],
     )
-    return <TrendingViewContext.Provider value={context}>{children}</TrendingViewContext.Provider>
+    return <TrendingViewContext value={context}>{children}</TrendingViewContext>
 }

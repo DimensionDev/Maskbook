@@ -7,7 +7,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, use, useCallback, useMemo, useState } from 'react'
 import type { UseFormSetError } from 'react-hook-form'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsync } from 'react-use'
@@ -259,15 +259,9 @@ export const Component = memo(function Recovery() {
                         </div>
                     </TabContext>
                 </div>
-                <RecoveryContext.Consumer>
-                    {({ SubmitOutlet }) => {
-                        return (
-                            <SetupFrameController>
-                                <div className={classes.buttonGroup}>{SubmitOutlet}</div>
-                            </SetupFrameController>
-                        )
-                    }}
-                </RecoveryContext.Consumer>
+                <SetupFrameController>
+                    <div className={classes.buttonGroup}>{use(RecoveryContext).SubmitOutlet}</div>
+                </SetupFrameController>
             </RecoveryProvider>
         </>
     )

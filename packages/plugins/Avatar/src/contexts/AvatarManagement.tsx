@@ -122,7 +122,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
         }
     }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, data, account, isPending])
 
-    return <AvatarManagementContext.Provider value={contextValue}>{children}</AvatarManagementContext.Provider>
+    return <AvatarManagementContext value={contextValue}>{children}</AvatarManagementContext>
 })
 
 AvatarManagementProvider.displayName = 'AvatarManagementProvider'

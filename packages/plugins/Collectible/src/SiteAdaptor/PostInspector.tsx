@@ -18,7 +18,7 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <ThemeProvider theme={MaskLightTheme}>
-            <Context.Provider
+            <Context
                 initialState={{
                     parentPluginID: pluginID,
                     pluginID: token.pluginID,
@@ -29,7 +29,7 @@ export function PostInspector(props: PostInspectorProps) {
                 <Web3ContextProvider network={token.pluginID} chainId={token.chainId}>
                     <Collectible />
                 </Web3ContextProvider>
-            </Context.Provider>
+            </Context>
         </ThemeProvider>
     )
 }

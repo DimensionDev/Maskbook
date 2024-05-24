@@ -12,9 +12,9 @@ export function PostInspector(props: PostInspectorProps) {
     const identifier = getProposalIdentifier(props.url)
 
     return (
-        <SnapshotContext.Provider value={identifier}>
+        <SnapshotContext value={identifier}>
             <Component />
-        </SnapshotContext.Provider>
+        </SnapshotContext>
     )
 }
 function Component() {

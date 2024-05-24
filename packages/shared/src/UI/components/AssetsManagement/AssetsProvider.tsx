@@ -244,7 +244,7 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             assetsMapRef: listingAssetsMapRef,
         }
     }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden, isEmpty])
-    return <AssetsContext.Provider value={contextValue}>{children}</AssetsContext.Provider>
+    return <AssetsContext value={contextValue}>{children}</AssetsContext>
 })
 
 export function useUserAssets() {

@@ -36,7 +36,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
         [address, tokenId, domain, JSON.stringify(nextIdBindings)],
     )
 
-    return <ENSContext.Provider value={context}>{children}</ENSContext.Provider>
+    return <ENSContext value={context}>{children}</ENSContext>
 }
 
 export interface SearchResultInspectorProps {

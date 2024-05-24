@@ -27,7 +27,6 @@
     "bignumber.js": "9.1.2",
     "ethereum-blockies": "^0.1.1",
     "react-use": "^17.4.0",
-    "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.0"
   }
 }

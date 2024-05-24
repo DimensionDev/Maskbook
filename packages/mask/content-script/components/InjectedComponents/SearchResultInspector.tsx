@@ -123,7 +123,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     return (
         <div>
-            <ScopedDomainsContainer.Provider>
+            <ScopedDomainsContainer>
                 <div className={classes.contentWrapper}>
                     <div>{contentComponent}</div>
                     {tabs.length ?
@@ -141,7 +141,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                 {tabContentComponent ?
                     <div className={classes.tabContent}>{tabContentComponent}</div>
                 :   null}
-            </ScopedDomainsContainer.Provider>
+            </ScopedDomainsContainer>
         </div>
     )
 }

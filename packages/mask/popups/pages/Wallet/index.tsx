@@ -53,11 +53,11 @@ export const walletRoutes: RouteObject[] = [
 export function WalletFrame() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
-            <RestorableScrollContext.Provider>
-                <DeriveStateContext.Provider>
+            <RestorableScrollContext>
+                <DeriveStateContext>
                     <Outlet />
-                </DeriveStateContext.Provider>
-            </RestorableScrollContext.Provider>
+                </DeriveStateContext>
+            </RestorableScrollContext>
         </Suspense>
     )
 }

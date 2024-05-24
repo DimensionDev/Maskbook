@@ -4,7 +4,7 @@ import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Button, Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, use, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
@@ -195,15 +195,9 @@ export const Component = memo(function Recovery() {
                         </div>
                     </TabContext>
                 </div>
-                <RecoveryContext.Consumer>
-                    {({ SubmitOutlet }) => {
-                        return (
-                            <SetupFrameController>
-                                <div className={classes.buttonGroup}>{SubmitOutlet}</div>
-                            </SetupFrameController>
-                        )
-                    }}
-                </RecoveryContext.Consumer>
+                <SetupFrameController>
+                    <div className={classes.buttonGroup}>{use(RecoveryContext).SubmitOutlet}</div>
+                </SetupFrameController>
             </RecoveryProvider>
         </>
     )

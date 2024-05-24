@@ -111,8 +111,8 @@ export const Component = memo(function TransferPage() {
         [defaultAddress, defaultName, defaultChainId],
     )
     return (
-        <ContactsContext.Provider initialState={initialState}>
+        <ContactsContext initialState={initialState}>
             <Transfer />
-        </ContactsContext.Provider>
+        </ContactsContext>
     )
 })

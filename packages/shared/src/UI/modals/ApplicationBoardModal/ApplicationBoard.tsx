@@ -100,7 +100,7 @@ export function ApplicationBoardContent({
     classes,
 }: ApplicationBoardContentProps) {
     return (
-        <PersonaContext.Provider initialState={{ queryOwnedPersonaInformation }}>
+        <PersonaContext initialState={{ queryOwnedPersonaInformation }}>
             <ApplicationEntryStatusProvider
                 openDashboard={openDashboard}
                 lastRecognized={lastRecognized}
@@ -115,7 +115,7 @@ export function ApplicationBoardContent({
                     }}
                 />
             </ApplicationEntryStatusProvider>
-        </PersonaContext.Provider>
+        </PersonaContext>
     )
 }
 
@@ -351,5 +351,5 @@ function ApplicationEntryStatusProvider({
             personaConnectStatus.verified,
         ],
     )
-    return <ApplicationEntryStatusContext.Provider value={Context}>{children}</ApplicationEntryStatusContext.Provider>
+    return <ApplicationEntryStatusContext value={Context}>{children}</ApplicationEntryStatusContext>
 }

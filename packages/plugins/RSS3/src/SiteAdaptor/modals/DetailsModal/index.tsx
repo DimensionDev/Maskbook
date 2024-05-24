@@ -26,7 +26,7 @@ export function FeedDetailsModal({ ref }: SingletonModalProps<FeedDetailsModalOp
 
     if (!open) return null
     return (
-        <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
+        <ScopedDomainsContainer initialState={scopedDomainsMap}>
             <FeedDetailsDialog
                 open
                 onClose={() => dispatch?.close()}
@@ -34,7 +34,7 @@ export function FeedDetailsModal({ ref }: SingletonModalProps<FeedDetailsModalOp
                 type={props_?.type ?? CardType.UnknownIn}
                 feed={props_!.feed}
             />
-        </ScopedDomainsContainer.Provider>
+        </ScopedDomainsContainer>
     )
 }
 

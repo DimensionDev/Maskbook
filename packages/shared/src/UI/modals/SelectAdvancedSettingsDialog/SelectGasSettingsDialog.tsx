@@ -82,14 +82,14 @@ export function SelectGasSettingsDialog({
             onClose={() => onClose(settings)}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>
-                <SettingsContext.Provider initialState={initialState}>
+                <SettingsContext initialState={initialState}>
                     <SettingsBoard
                         disableGasLimit={disableGasLimit}
                         disableGasPrice={disableGasPrice}
                         disableSlippageTolerance={disableSlippageTolerance}
                         onChange={setSettings}
                     />
-                </SettingsContext.Provider>
+                </SettingsContext>
             </DialogContent>
         </InjectedDialog>
     )

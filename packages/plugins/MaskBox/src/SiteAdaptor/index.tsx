@@ -76,8 +76,8 @@ function Renderer(
     if (shouldNotRender) return null
 
     return (
-        <Context.Provider initialState={{ boxId, hashRoot }}>
+        <Context initialState={{ boxId, hashRoot }}>
             <PreviewCard />
-        </Context.Provider>
+        </Context>
     )
 }

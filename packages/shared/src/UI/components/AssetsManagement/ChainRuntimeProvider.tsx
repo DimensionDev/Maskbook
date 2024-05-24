@@ -77,7 +77,7 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
         [pluginID, account, defaultChainId, currentChainId, networks],
     )
 
-    return <ChainRuntimeContext.Provider value={value}>{children}</ChainRuntimeContext.Provider>
+    return <ChainRuntimeContext value={value}>{children}</ChainRuntimeContext>
 })
 
 export function useChainRuntime() {

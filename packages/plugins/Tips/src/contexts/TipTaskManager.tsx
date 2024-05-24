@@ -46,13 +46,13 @@ export function TipTaskManager({ children }: PropsWithChildren) {
                 const tipsAccount = task.accounts.find((x) => isSameAddress(x.address, task.recipient))
                 const pluginID = tipsAccount?.pluginID ?? task.accounts[0].pluginID
                 return (
-                    <TargetRuntimeContext.Provider key={task.id} initialState={pluginID}>
+                    <TargetRuntimeContext key={task.id} initialState={pluginID}>
                         <ChainRuntime>
                             <TipTaskProvider task={task}>
                                 <TipDialog open onClose={() => removeTask(task)} />
                             </TipTaskProvider>
                         </ChainRuntime>
-                    </TargetRuntimeContext.Provider>
+                    </TargetRuntimeContext>
                 )
             })}
             {children}

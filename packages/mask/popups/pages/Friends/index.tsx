@@ -28,9 +28,9 @@ export const ContactsFrame = memo(function Contacts() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             {matchDetail ? null : <NormalHeader />}
-            <RestorableScrollContext.Provider>
+            <RestorableScrollContext>
                 <Outlet />
-            </RestorableScrollContext.Provider>
+            </RestorableScrollContext>
         </Suspense>
     )
 })

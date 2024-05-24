@@ -52,7 +52,7 @@ export function DialogInspector() {
 
     return (
         <Web3ContextProvider network={pluginID} chainId={chainId}>
-            <Context.Provider
+            <Context
                 initialState={{
                     parentPluginID,
                     pluginID,
@@ -63,7 +63,7 @@ export function DialogInspector() {
                     origin: originType,
                 }}>
                 <CardDialog key={`${tokenAddress}.${tokenId}`} open={open} setOpen={setOpen} />
-            </Context.Provider>
+            </Context>
         </Web3ContextProvider>
     )
 }

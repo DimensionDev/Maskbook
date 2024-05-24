@@ -5,7 +5,7 @@ import { isSameAddress, type Contact } from '@masknet/web3-shared-base'
 import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@masknet/web3-shared-evm'
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 import { useMaskSharedTrans } from '../../shared-ui/index.js'
 
 interface ContextOptions {

@@ -1,6 +1,6 @@
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { useCallback, useState } from 'react'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 
 const KEY = 'dashboard/terms-agreed'
 function useTermsAgreed() {

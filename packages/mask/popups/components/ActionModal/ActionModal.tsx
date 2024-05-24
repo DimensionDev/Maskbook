@@ -97,5 +97,5 @@ export const ActionModal = memo(function ActionModal({
 })
 
 export function wrapModal(modal: ReactNode) {
-    return <ActionModalContainer.Provider>{modal}</ActionModalContainer.Provider>
+    return <ActionModalContainer>{modal}</ActionModalContainer>
 }

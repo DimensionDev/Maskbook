@@ -113,7 +113,7 @@ PostInfoContext.displayName = 'PostInfoContext'
 
 /** @deprecated use <PostInfoContext.Provider value={post}> */
 export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo }>) {
-    return <PostInfoContext.Provider value={props.post}>{props.children}</PostInfoContext.Provider>
+    return <PostInfoContext value={props.post}>{props.children}</PostInfoContext>
 }
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed

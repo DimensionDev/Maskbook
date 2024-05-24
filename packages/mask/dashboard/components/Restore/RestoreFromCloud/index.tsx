@@ -120,8 +120,8 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
 
 export const RestoreFromCloud = memo(function RestoreFromCloud() {
     return (
-        <RestoreContext.Provider>
+        <RestoreContext>
             <RestoreFromCloudInner />
-        </RestoreContext.Provider>
+        </RestoreContext>
     )
 })

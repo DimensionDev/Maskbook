@@ -692,9 +692,6 @@ importers:
       tss-react:
         specifier: ^4.9.0
         version: 4.9.0(@emotion/react@11.11.1(react@0.0.0-experimental-26f2496093-20240514)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-26f2496093-20240514)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       url:
         specifier: ^0.11.3
         version: 0.11.3
@@ -1143,9 +1140,6 @@ importers:
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-26f2496093-20240514)
@@ -1564,9 +1558,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(patch_hash=hl7dr6rjk7dvc67mgwhhnozk2u)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
@@ -1942,9 +1933,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(patch_hash=hl7dr6rjk7dvc67mgwhhnozk2u)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
 
   packages/plugins/Snapshot:
     dependencies:
@@ -2071,9 +2059,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(patch_hash=hl7dr6rjk7dvc67mgwhhnozk2u)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-26f2496093-20240514)
@@ -2545,9 +2530,6 @@ importers:
       remark-gfm:
         specifier: ^4.0.0
         version: 4.0.0
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-26f2496093-20240514)
@@ -2845,9 +2827,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(patch_hash=hl7dr6rjk7dvc67mgwhhnozk2u)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
-      unstated-next:
-        specifier: ^1.1.0
-        version: 1.1.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-26f2496093-20240514)
@@ -14235,9 +14214,6 @@ packages:
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
-
-  unstated-next@1.1.0:
-    resolution: {integrity: sha512-AAn47ZncPvgBGOvMcn8tSRxsrqwf2VdAPxLASTuLJvZt4rhKfDvUkmYZLGfclImSfTVMv7tF4ynaVxin0JjDCA==}
 
   unstorage@1.10.1:
     resolution: {integrity: sha512-rWQvLRfZNBpF+x8D3/gda5nUCQL2PgXy2jNG4U7/Rc9BGEv9+CAJd0YyGCROUBKs9v49Hg8huw3aih5Bf5TAVw==}
@@ -30164,8 +30140,6 @@ snapshots:
   universalify@2.0.0: {}
 
   unpipe@1.0.0: {}
-
-  unstated-next@1.1.0: {}
 
   unstorage@1.10.1(idb-keyval@6.2.1):
     dependencies:

@@ -202,7 +202,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
 
     return (
         <EVMWeb3ContextProvider chainId={ChainId.Mainnet}>
-            <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
+            <ScopedDomainsContainer initialState={scopedDomainsMap}>
                 <div className={classes.root}>
                     <div className={classes.header}>
                         <ProfileCardTitle
@@ -252,7 +252,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                         <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
                     </div>
                 </div>
-            </ScopedDomainsContainer.Provider>
+            </ScopedDomainsContainer>
         </EVMWeb3ContextProvider>
     )
 })

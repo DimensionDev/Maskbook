@@ -173,8 +173,8 @@ const CloudBackupInner = memo(function CloudBackupInner() {
 
 export const Component = memo(function CloudBackup() {
     return (
-        <CloudBackupFormContext.Provider>
+        <CloudBackupFormContext>
             <CloudBackupInner />
-        </CloudBackupFormContext.Provider>
+        </CloudBackupFormContext>
     )
 })

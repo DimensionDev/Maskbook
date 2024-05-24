@@ -27,9 +27,9 @@ export const Boundary = memo(function <T>({ children }: BoundaryProps<T>) {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (
-        <BoundaryContext.Provider value={contextValue}>
+        <BoundaryContext value={contextValue}>
             {cloneElement(children, { ...children.props, ref: boundaryRef })}
-        </BoundaryContext.Provider>
+        </BoundaryContext>
     )
 })
 

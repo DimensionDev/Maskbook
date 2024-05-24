@@ -53,9 +53,9 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             } catch {}
             const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
             root.render(
-                <PostInfoContext.Provider value={current}>
+                <PostInfoContext value={current}>
                     <CommentBoxUI {...{ ...current, dom: meta.realCurrent }} />
-                </PostInfoContext.Provider>,
+                </PostInfoContext>,
             )
             return root.destroy
         })

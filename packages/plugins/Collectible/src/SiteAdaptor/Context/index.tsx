@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import {
     useNonFungibleAsset,

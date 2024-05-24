@@ -2,7 +2,7 @@ import { useTheme } from '@mui/material'
 import { useCallback, useRef, useState } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import type { PopupModalRoutes } from '@masknet/shared-base'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 import urlcat from 'urlcat'
 
 function useModal() {

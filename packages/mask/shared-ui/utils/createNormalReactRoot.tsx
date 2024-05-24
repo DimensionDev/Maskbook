@@ -21,7 +21,7 @@ export function createNormalReactRoot(jsx: JSX.Element, dom?: HTMLElement) {
     const container = getContainer(dom)
     return createRoot(container).render(
         <StrictMode>
-            <DisableShadowRootContext.Provider value>{jsx}</DisableShadowRootContext.Provider>
+            <DisableShadowRootContext value>{jsx}</DisableShadowRootContext>
         </StrictMode>,
     )
 }

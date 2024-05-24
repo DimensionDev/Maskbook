@@ -52,7 +52,7 @@ export function NetworkContextProvider({
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const networkPluginID = pluginID || initialNetwork
     const context = useMemo(() => ({ pluginID: networkPluginID, setPluginID }), [networkPluginID])
-    return <NetworkContext.Provider value={context}>{children}</NetworkContext.Provider>
+    return <NetworkContext value={context}>{children}</NetworkContext>
 }
 
 /**
@@ -102,7 +102,7 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
         [account, chainId, providerType, networkType],
     )
 
-    return <ChainContext.Provider value={context}>{props.children}</ChainContext.Provider>
+    return <ChainContext value={context}>{props.children}</ChainContext>
 })
 
 /**
@@ -168,9 +168,9 @@ export function RootWeb3ContextProvider({ enforceEVM, children }: PropsWithChild
     }, [pluginIDs, enforceEVM])
 
     return (
-        <ReadonlyNetworkContext.Provider value={contextValue}>
+        <ReadonlyNetworkContext value={contextValue}>
             <Web3ContextProvider network={contextValue}>{children}</Web3ContextProvider>
-        </ReadonlyNetworkContext.Provider>
+        </ReadonlyNetworkContext>
     )
 }
 

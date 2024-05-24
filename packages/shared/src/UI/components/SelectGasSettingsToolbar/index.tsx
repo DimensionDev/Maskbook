@@ -140,9 +140,9 @@ export const SelectGasSettingsToolbar = memo(function SelectGasSettingsToolbar(p
     const { chainId } = useChainContext({ chainId: props.chainId })
 
     return (
-        <SettingsContext.Provider initialState={{ pluginID, chainId }}>
+        <SettingsContext initialState={{ pluginID, chainId }}>
             <SelectGasSettingsToolbarUI {...props} />
-        </SettingsContext.Provider>
+        </SettingsContext>
     )
 })
 

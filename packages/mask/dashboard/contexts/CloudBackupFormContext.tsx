@@ -1,4 +1,4 @@
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 import { useDashboardTrans } from '../locales/i18n_generated.js'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

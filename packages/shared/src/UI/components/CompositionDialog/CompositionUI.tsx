@@ -124,7 +124,7 @@ export function CompositionDialogUI(props: CompositionProps) {
         props.onSubmit(Editor.current.value).finally(reset)
     }, [props.onSubmit])
     return (
-        <CompositionContext.Provider value={context}>
+        <CompositionContext value={context}>
             <div className={classes.root}>
                 <div className={classes.editorWrapper}>
                     <TypedMessageEditor
@@ -163,6 +163,6 @@ export function CompositionDialogUI(props: CompositionProps) {
                     </LoadingButton>
                 </div>
             </DialogActions>
-        </CompositionContext.Provider>
+        </CompositionContext>
     )
 }

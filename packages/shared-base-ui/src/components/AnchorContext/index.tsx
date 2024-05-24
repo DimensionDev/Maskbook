@@ -15,7 +15,7 @@ interface Props {
 }
 export function AnchorProvider({ anchorEl, anchorBounding, children }: PropsWithChildren<Props>) {
     const contextValue = useMemo(() => ({ anchorEl, anchorBounding }), [anchorEl, anchorBounding])
-    return <AnchorContext.Provider value={contextValue}>{children}</AnchorContext.Provider>
+    return <AnchorContext value={contextValue}>{children}</AnchorContext>
 }
 
 export function useAnchor() {

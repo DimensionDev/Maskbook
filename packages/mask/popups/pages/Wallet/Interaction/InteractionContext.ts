@@ -1,7 +1,7 @@
 import { useWallet } from '@masknet/web3-hooks-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useEffect, useState } from 'react'
-import { createContainer } from 'unstated-next'
+import { createContainer } from '@masknet/shared-base-ui'
 
 /**
  * This context is used to allow different Wallet to be used (rather that the "selected" wallet in the main UI)

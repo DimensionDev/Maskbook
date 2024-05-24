@@ -86,7 +86,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
     }, [address, name, EVMUtils.formatDomainName, EVMUtils.formatAddress, feed.owner])
 
     return (
-        <FeedOwnerContext.Provider value={feedOwner}>
+        <FeedOwnerContext value={feedOwner}>
             <InjectedDialog
                 classes={{
                     paper: classes.detailsDialog,
@@ -118,6 +118,6 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                     </div>
                 </DialogContent>
             </InjectedDialog>
-        </FeedOwnerContext.Provider>
+        </FeedOwnerContext>
     )
 }

@@ -41,7 +41,7 @@ export const RecoveryProvider = memo<PropsWithChildren>(function RecoveryProvide
         [outlet],
     )
 
-    return <RecoveryContext.Provider value={contextValue}>{children}</RecoveryContext.Provider>
+    return <RecoveryContext value={contextValue}>{children}</RecoveryContext>
 })
 
 export function usePersonaRecovery() {

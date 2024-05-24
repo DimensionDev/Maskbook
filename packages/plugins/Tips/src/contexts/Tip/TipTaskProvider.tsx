@@ -200,7 +200,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         setTargetPluginID(pid)
     }, [recipient?.pluginID])
 
-    return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
+    return <TipContext value={contextValue}>{children}</TipContext>
 })
 
 TipTaskProvider.displayName = 'TipTaskProvider'

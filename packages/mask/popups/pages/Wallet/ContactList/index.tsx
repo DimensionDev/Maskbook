@@ -351,8 +351,8 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 export { ContactList as Component }
 export function ContactList() {
     return (
-        <ContactsContext.Provider>
+        <ContactsContext>
             <ContactListUI />
-        </ContactsContext.Provider>
+        </ContactsContext>
     )
 }

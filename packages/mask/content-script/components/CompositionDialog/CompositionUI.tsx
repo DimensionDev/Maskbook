@@ -208,7 +208,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
             .finally(reset)
     }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
-        <CompositionContext.Provider value={context}>
+        <CompositionContext value={context}>
             <div className={classes.root}>
                 <div className={classes.editorWrapper}>
                     <TypedMessageEditor
@@ -299,7 +299,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                     </LoadingButton>
                 </div>
             </DialogActions>
-        </CompositionContext.Provider>
+        </CompositionContext>
     )
 }
 

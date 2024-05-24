@@ -94,9 +94,9 @@ export const SetupGuide = memo(function SetupGuide({ persona }: SetupGuideProps)
 
     return (
         <div className={classes.root}>
-            <SetupGuideContext.Provider initialState={persona}>
+            <SetupGuideContext initialState={persona}>
                 <SetupGuideUI />
-            </SetupGuideContext.Provider>
+            </SetupGuideContext>
         </div>
     )
 })

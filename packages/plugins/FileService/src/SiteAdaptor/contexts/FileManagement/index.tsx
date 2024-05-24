@@ -173,7 +173,7 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
         }
     }, [files, recentFiles, uploadStateMap, uploadingFiles, attachToPost, refetchFiles, uploadFile])
 
-    return <FileManagementContext.Provider value={contextValue}>{children}</FileManagementContext.Provider>
+    return <FileManagementContext value={contextValue}>{children}</FileManagementContext>
 })
 
 FileManagementProvider.displayName = 'FileManagementProvider'

@@ -74,7 +74,7 @@ export const PopupLayout = memo(function PopupLayout() {
     const matched = PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
 
     return (
-        <HasNavigatorContext.Provider value={matched}>
+        <HasNavigatorContext value={matched}>
             {GlobalCss}
             <Paper elevation={0} sx={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <div className={classes.container} data-hide-scrollbar>
@@ -91,6 +91,6 @@ export const PopupLayout = memo(function PopupLayout() {
                     :   null}
                 </div>
             </Paper>
-        </HasNavigatorContext.Provider>
+        </HasNavigatorContext>
     )
 })

@@ -63,7 +63,7 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
 
     const TrackDialogHierarchy = (useRef<useDialogStackActorReturn['TrackDialogHierarchy']>(null!).current ??=
         function TrackDialogHierarchy({ children }) {
-            return <DialogHierarchyContext.Provider value={selfID}>{children}</DialogHierarchyContext.Provider>
+            return <DialogHierarchyContext value={selfID}>{children}</DialogHierarchyContext>
         })
 
     const returnVal: useDialogStackActorReturn = {
@@ -150,7 +150,7 @@ export function DialogStackingProvider(props: DialogStackingProviderProps) {
             },
         }
     }, [stack, hierarchy, props.hasGlobalBackdrop])
-    return <DialogStackingContext.Provider value={context}>{props.children}</DialogStackingContext.Provider>
+    return <DialogStackingContext value={context}>{props.children}</DialogStackingContext>
 }
 
 export function useDialogStacking() {

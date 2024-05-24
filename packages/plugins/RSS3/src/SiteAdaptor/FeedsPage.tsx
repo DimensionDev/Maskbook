@@ -71,7 +71,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
     }
 
     return (
-        <FeedOwnerContext.Provider value={feedOwner}>
+        <FeedOwnerContext value={feedOwner}>
             {/* padding for profile card footer */}
             <Box paddingBottom="48px">
                 {feeds?.map((feed, index) => <FeedCard key={index} className={classes.feedCard} feed={feed} />)}
@@ -81,6 +81,6 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
                     :   null}
                 </ElementAnchor>
             </Box>
-        </FeedOwnerContext.Provider>
+        </FeedOwnerContext>
     )
 })

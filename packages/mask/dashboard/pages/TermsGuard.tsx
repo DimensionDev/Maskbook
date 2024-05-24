@@ -26,10 +26,10 @@ function TermsGuardInner({ children }: PropsWithChildren) {
 
 export function TermsGuard() {
     return (
-        <TermsAgreedContext.Provider>
+        <TermsAgreedContext>
             <TermsGuardInner>
                 <Outlet />
             </TermsGuardInner>
-        </TermsAgreedContext.Provider>
+        </TermsAgreedContext>
     )
 }

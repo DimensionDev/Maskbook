@@ -36,7 +36,6 @@
     "color": "^4.2.3",
     "date-fns": "^2.30.0",
     "react-use": "^17.4.0",
-    "unstated-next": "^1.1.0",
     "urlcat": "^3.1.0",
     "web3-utils": "1.10.2"
   }
