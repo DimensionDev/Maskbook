@@ -1,5 +1,6 @@
 import { Card, CardContent, type CardProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import type { PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -19,8 +20,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface CollectibleCardProps extends withClasses<'root' | 'content'> {
-    children: React.ReactNode
+interface CollectibleCardProps extends withClasses<'root' | 'content'>, PropsWithChildren {
     CardProps?: Partial<CardProps>
 }
 

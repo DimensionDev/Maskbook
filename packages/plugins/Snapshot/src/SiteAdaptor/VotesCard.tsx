@@ -181,12 +181,12 @@ function Content() {
     )
 }
 
-function Loading(props: React.PropsWithChildren<{}>) {
+function Loading(props: React.PropsWithChildren) {
     const t = useSnapshotTrans()
     return <LoadingCard title={t.plugin_snapshot_votes_title()}>{props.children}</LoadingCard>
 }
 
-function Fail(props: React.PropsWithChildren<{}>) {
+function Fail(props: React.PropsWithChildren) {
     const t = useSnapshotTrans()
     const retry = unstable_useCacheRefresh()
     return (

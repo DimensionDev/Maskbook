@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
 import type { PluginID } from '@masknet/shared-base'
@@ -18,9 +18,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PluginEnableBoundaryProps extends withClasses<'root'> {
+interface PluginEnableBoundaryProps extends withClasses<'root'>, PropsWithChildren {
     pluginID: PluginID
-    children: React.ReactNode
 }
 
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {

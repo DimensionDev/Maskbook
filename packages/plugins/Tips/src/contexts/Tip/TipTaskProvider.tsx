@@ -26,7 +26,7 @@ import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 
-interface Props extends PropsWithChildren<{}> {
+interface Props extends PropsWithChildren {
     task: TipTask
 }
 

@@ -191,7 +191,7 @@ export const Component = memo(function TokenDetailPage() {
     )
 })
 
-export interface TokenDetailUIProps extends React.PropsWithChildren<{}> {
+export interface TokenDetailUIProps extends React.PropsWithChildren {
     chainId: ChainId
     address: string
     hideChart?: boolean

@@ -19,7 +19,7 @@ export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode,
     )
 }
 
-interface MaskUIRootProps extends React.PropsWithChildren<{}> {
+interface MaskUIRootProps extends React.PropsWithChildren {
     useTheme(): Theme
     fallback?: React.ReactNode
 }

@@ -4,7 +4,7 @@ import { compose } from '@masknet/shared-base'
 import { CustomSnackbarProvider } from '../Components/index.js'
 import { useRef } from 'react'
 
-export interface MaskThemeProvider extends React.PropsWithChildren<{}> {
+export interface MaskThemeProvider extends React.PropsWithChildren {
     useTheme(): Theme
     useMaskIconPalette(theme: Theme): MaskIconPalette
     CustomSnackbarOffsetY?: number

@@ -301,7 +301,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 ApplicationEntryStatusContext.displayName = 'ApplicationEntryStatusContext'
 
-interface ApplicationEntryStatusProviderProps extends PropsWithChildren<{}> {
+interface ApplicationEntryStatusProviderProps extends PropsWithChildren {
     openDashboard?: (route: DashboardRoutes, search?: string) => void
     lastRecognized?: IdentityResolved
     applicationCurrentStatus?: PersonaPerSiteConnectStatus

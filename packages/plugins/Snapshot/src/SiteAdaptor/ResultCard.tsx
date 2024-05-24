@@ -186,7 +186,7 @@ function Content() {
     )
 }
 
-function Loading(props: React.PropsWithChildren<{}>) {
+function Loading(props: React.PropsWithChildren) {
     const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
@@ -198,7 +198,7 @@ function Loading(props: React.PropsWithChildren<{}>) {
     )
 }
 
-function Fail(props: React.PropsWithChildren<{}>) {
+function Fail(props: React.PropsWithChildren) {
     const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const retry = unstable_useCacheRefresh()

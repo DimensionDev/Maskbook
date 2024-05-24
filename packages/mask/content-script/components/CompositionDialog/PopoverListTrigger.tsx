@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PopoverListTriggerProp extends PropsWithChildren<{}> {
+interface PopoverListTriggerProp extends PropsWithChildren {
     anchorEl: HTMLElement | null
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void

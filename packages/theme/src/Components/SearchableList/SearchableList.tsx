@@ -46,7 +46,7 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'sea
  *      />
  * )
  */
-export function SearchableList<T extends {}>({
+export function SearchableList<T extends object>({
     itemKey,
     data,
     onSelect,

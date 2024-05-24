@@ -17,7 +17,7 @@ const BaseUIContext = createContext<ContextOptions>({
 })
 BaseUIContext.displayName = 'BaseUIContext'
 
-export function BaseSharedUIProvider({ children }: PropsWithChildren<{}>) {
+export function BaseSharedUIProvider({ children }: PropsWithChildren) {
     const site = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
 

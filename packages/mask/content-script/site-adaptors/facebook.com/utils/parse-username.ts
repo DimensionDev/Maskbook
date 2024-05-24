@@ -1,5 +1,4 @@
-import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
+import type { PostIdentifier } from '@masknet/shared-base'
 
 const HOST_NAME = 'https://www.facebook.com'
 
@@ -27,15 +26,4 @@ export function getPostUrlAtFacebook(post: PostIdentifier) {
     if (!isValidFacebookUsername(userId)) return HOST_NAME
     if (Number.parseFloat(userId)) return `${HOST_NAME}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${HOST_NAME}/${userId}/posts/${postId}`
-}
-/**
- * Normalize profile url
- */
-export function getProfilePageUrlAtFacebook(user: ProfileIdentifier) {
-    if (user.network !== 'facebook.com') throw new Error('Wrong origin')
-
-    const username = user.userId
-    if (!isValidFacebookUsername(username)) throw new TypeError(i18n.t('service_username_invalid'))
-    if (Number.parseFloat(username)) return `${HOST_NAME}/profile.php?id=${username}`
-    return `${HOST_NAME}/${username}`
 }

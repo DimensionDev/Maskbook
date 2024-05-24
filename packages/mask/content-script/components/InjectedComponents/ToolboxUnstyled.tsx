@@ -45,7 +45,7 @@ const useStyles = makeStyles()(() => ({
 }))
 
 interface ToolboxHintProps {
-    Container?: React.ComponentType<React.PropsWithChildren<{}>>
+    Container?: React.ComponentType<React.PropsWithChildren>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
     ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>
     ListItemIcon?: React.ComponentType<Pick<ListItemIconProps, 'children'>>

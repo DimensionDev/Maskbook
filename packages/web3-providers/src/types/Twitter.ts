@@ -249,7 +249,7 @@ export namespace TwitterBaseAPI {
                 result: {
                     id: string
                     rest_id: string
-                    affiliates_highlighted_label: {}
+                    affiliates_highlighted_label: any
                     /** Only web API provides */
                     has_nft_avatar?: boolean
                     legacy?: {
@@ -310,7 +310,7 @@ export namespace TwitterBaseAPI {
                     super_follow_eligible?: boolean
                     super_followed_by?: boolean
                     super_following?: boolean
-                    legacy_extended_profile?: {}
+                    legacy_extended_profile?: any
                     is_profile_translatable?: boolean
                 }
             }
@@ -350,7 +350,7 @@ export namespace TwitterBaseAPI {
                                     __typename: 'User'
                                     id: string
                                     rest_id: string
-                                    affiliates_highlighted_label: {}
+                                    affiliates_highlighted_label: any
                                     has_graduated_access: boolean
                                     is_blue_verified: boolean
                                     profile_image_shape: 'Circle'

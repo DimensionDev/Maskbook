@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { useContext } from 'react'
+import { useContext, type PropsWithChildren } from 'react'
 import { format as formatDateTime } from 'date-fns'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
@@ -14,9 +14,8 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
 import { useSnapshotTrans } from '../locales/index.js'
 
-interface InfoFieldProps extends withClasses<'field'> {
+interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
     title: string
-    children: React.ReactNode
 }
 
 const useStyles = makeStyles()((theme) => {

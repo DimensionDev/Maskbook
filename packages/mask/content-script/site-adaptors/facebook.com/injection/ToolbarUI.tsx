@@ -42,7 +42,7 @@ export function ToolboxAtFacebook(props: {
     hasSpecificLeftRailStartBar: boolean
 }) {
     const ListItemIcon = useMemo(() => {
-        return ({ children }: React.PropsWithChildren<{}>) => (
+        return ({ children }: React.PropsWithChildren) => (
             <Icon
                 data-testid="abc"
                 hasTopNavBar={props.hasTopNavBar}

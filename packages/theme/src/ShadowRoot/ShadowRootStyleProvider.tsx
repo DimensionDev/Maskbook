@@ -4,7 +4,7 @@ import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import { StyleSheet } from './ShadowRootStyleSheet.js'
 import { PreventShadowRootEventPropagationListContext, stopPropagation, StyleSheetsContext } from './Contexts.js'
 
-interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {
+interface ShadowRootStyleProviderProps extends React.PropsWithChildren {
     shadow: ShadowRoot
     preventPropagation: boolean
 }

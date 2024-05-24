@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material'
 import { useSharedTrans } from '../../../locales/index.js'
 import { Sniffings } from '@masknet/shared-base'
 
-interface ActionProps extends PropsWithChildren<{}> {
+interface ActionProps extends PropsWithChildren {
     openSelectWalletDialog: () => void
 }
 

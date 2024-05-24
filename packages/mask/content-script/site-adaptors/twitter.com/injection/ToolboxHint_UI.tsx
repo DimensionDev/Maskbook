@@ -47,7 +47,7 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     const themeSettings = useThemeSettings()
     const buttonStyle = ButtonStyle[themeSettings.size]
     const Typography = useMemo(() => {
-        return ({ children }: React.PropsWithChildren<{}>) => (
+        return ({ children }: React.PropsWithChildren) => (
             <Text fontSize={buttonStyle.iconSize} marginLeft={textMarginLeft ?? '20px'}>
                 {children}
             </Text>

@@ -16,7 +16,7 @@ export function SiteUIProvider(children: React.ReactNode) {
     )
 }
 
-function MaskUIRoot({ children }: React.PropsWithChildren<{}>) {
+function MaskUIRoot({ children }: React.PropsWithChildren) {
     return (
         <DialogStackingProvider hasGlobalBackdrop={false}>
             <QueryClientProvider client={queryClient}>

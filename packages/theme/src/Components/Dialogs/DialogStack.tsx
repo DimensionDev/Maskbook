@@ -92,10 +92,10 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
 export interface useDialogStackActorReturn {
     shouldReplaceExitWithBack: boolean
     extraProps: DialogProps
-    TrackDialogHierarchy: React.ComponentType<React.PropsWithChildren<{}>>
+    TrackDialogHierarchy: React.ComponentType<React.PropsWithChildren>
 }
 
-export interface DialogStackingProviderProps extends React.PropsWithChildren<{}> {
+export interface DialogStackingProviderProps extends React.PropsWithChildren {
     hasGlobalBackdrop?: boolean
 }
 

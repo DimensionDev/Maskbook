@@ -23,6 +23,6 @@ export namespace FungibleTokenAPI {
             options?: BaseHubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
         /** Get fungible token stats. */
-        getStats?: (address: string, options?: BaseHubOptions<ChainId, Indicator>) => Promise<{} | undefined>
+        getStats?: (address: string, options?: BaseHubOptions<ChainId, Indicator>) => Promise<any>
     }
 }

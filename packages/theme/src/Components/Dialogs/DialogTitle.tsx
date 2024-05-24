@@ -1,14 +1,13 @@
 import { DialogTitle, IconButton, Typography, Box, styled } from '@mui/material'
 import { Close, ArrowBack } from '@mui/icons-material'
-import { memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 
 const Title = styled(DialogTitle)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     padding: `${theme.spacing(1)} ${theme.spacing(3)}`,
 }))
-export interface MaskDialogTitleProps {
-    children: string
+export interface MaskDialogTitleProps extends PropsWithChildren {
     onBack?(): void
     onClose?(): void
 }

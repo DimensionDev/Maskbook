@@ -4,7 +4,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { TermsAgreedContext } from '../hooks/useTermsAgreed.js'
 
-function TermsGuardInner({ children }: PropsWithChildren<{}>) {
+function TermsGuardInner({ children }: PropsWithChildren) {
     const navigate = useNavigate()
     const [agreed] = TermsAgreedContext.useContainer()
     const { pathname, search } = useLocation()

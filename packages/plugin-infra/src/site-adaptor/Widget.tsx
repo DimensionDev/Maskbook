@@ -1,5 +1,5 @@
 import type React from 'react'
-import { createElement, Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { PluginID } from '@masknet/shared-base'
 import { useActivatedPluginsSiteAdaptor } from '../manager/site-adaptor.js'
 import type { Plugin } from '../types.js'
@@ -20,6 +20,6 @@ export function Widget<Name extends keyof Plugin.SiteAdaptor.WidgetRegistry>(
         return null
     }, [plugins])
 
-    if (!WidgetComponent) return createElement(Fragment, { children: fallback })
-    return createElement(WidgetComponent, rest)
+    if (!WidgetComponent) return <>{fallback}</>
+    return <WidgetComponent {...rest} />
 }

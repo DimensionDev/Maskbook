@@ -6,7 +6,6 @@ import type {
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
-    ProfileIdentifier,
     ProfileInformation,
 } from '@masknet/shared-base'
 import type { PaletteMode, Theme } from '@mui/material'
@@ -131,7 +130,6 @@ export namespace SiteAdaptorUI {
             nativeCompositionDialog?: NativeCompositionDialog
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox
-            redirect?: Redirect
             endpoint?: Endpoint
         }
         export interface NativeCompositionDialog {
@@ -157,15 +155,14 @@ export namespace SiteAdaptorUI {
             target?: EncryptionTargetType
         }
         export interface MaskCompositionDialog {
-            open?(content: SerializableTypedMessages, options?: MaskCompositionDialogOpenOptions): void
+            open?(
+                content: SerializableTypedMessages,
+                failedMessage: string,
+                options?: MaskCompositionDialogOpenOptions,
+            ): void
         }
         export interface NativeCommentBox {
             attachText?(text: string, post: PostInfo, dom: HTMLElement | null, cover?: boolean): void
-        }
-        export interface Redirect {
-            gotoProfilePage?(profile: ProfileIdentifier): void
-            gotoPostPage?(post: PostIdentifier): void
-            gotoNewsFeed?(): void
         }
         export interface Endpoint {
             publishPost?(mediaObjects: Array<string | Blob>, options?: PublishPostOptions): Promise<string>

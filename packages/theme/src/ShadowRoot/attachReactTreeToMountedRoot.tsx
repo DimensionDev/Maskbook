@@ -84,7 +84,7 @@ function attachReactTreeToMountedRoot(
             render(jsx)
         },
     }
-    function AttachPointComponent({ children: jsx }: React.PropsWithChildren<{}>) {
+    function AttachPointComponent({ children: jsx }: React.PropsWithChildren) {
         return ShadowRootStyleProvider({ preventPropagation: true, shadow, children: wrapJSX ? wrapJSX(jsx) : jsx })
     }
 }

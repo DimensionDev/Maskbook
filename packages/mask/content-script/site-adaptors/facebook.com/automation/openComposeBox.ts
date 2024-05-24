@@ -1,6 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages, type CompositionDialogEvent } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, type SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@masknet/kit'
 
@@ -43,6 +42,7 @@ function nativeComposeDialogCloseButtonSelector() {
 
 export async function taskOpenComposeBoxFacebook(
     content: string | SerializableTypedMessages,
+    failedMessage: string,
     options?: CompositionDialogEvent['options'],
 ) {
     await waitDocumentReadyState('interactive')
@@ -59,7 +59,7 @@ export async function taskOpenComposeBoxFacebook(
     const composeIndicator = nativeComposeDialogIndicatorSelector().evaluate()
     if (!composeIndicator) {
         // eslint-disable-next-line no-alert
-        alert(i18n.t('automation_request_click_post_button'))
+        alert(failedMessage)
         return
     }
 

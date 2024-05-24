@@ -40,7 +40,7 @@ TargetRuntimeContext.Provider.displayName = 'TargetRuntimeContextProvider'
 /**
  * A Tips scoped chain runtime, which controls Web3ContextProvider value
  */
-export function ChainRuntime({ children }: PropsWithChildren<{}>) {
+export function ChainRuntime({ children }: PropsWithChildren) {
     const { targetPluginID, targetChainId } = TargetRuntimeContext.useContainer()
     const account = useAccount(targetPluginID)
 

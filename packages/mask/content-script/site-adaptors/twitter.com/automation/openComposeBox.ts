@@ -3,6 +3,7 @@ import { makeTypedMessageText, type SerializableTypedMessages } from '@masknet/t
 
 export function openComposeBoxTwitter(
     content: string | SerializableTypedMessages,
+    failedMessage: string,
     options?: CompositionDialogEvent['options'],
 ) {
     CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

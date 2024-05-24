@@ -3,7 +3,7 @@ import { Typography, Link as MaterialLink } from '@mui/material'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 
-export const Container = memo(function Container(props: PropsWithChildren<{}>) {
+export const Container = memo(function Container(props: PropsWithChildren) {
     return (
         <Typography color="textPrimary" fontSize="inherit">
             {props.children}

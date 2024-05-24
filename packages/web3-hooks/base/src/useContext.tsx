@@ -127,7 +127,7 @@ export function Web3ContextProvider<T extends NetworkPluginID = NetworkPluginID>
  * @param props
  * @returns
  */
-export function RevokeChainContextProvider({ children }: PropsWithChildren<{}>) {
+export function RevokeChainContextProvider({ children }: PropsWithChildren) {
     const account = useAccount()
     const chainId = useChainId()
     const providerType = useProviderType()
@@ -147,7 +147,7 @@ export function RevokeChainContextProvider({ children }: PropsWithChildren<{}>) 
  * @param props
  * @returns
  */
-export function EVMWeb3ContextProvider(props: PropsWithChildren<{}> & ChainContextGetter<NetworkPluginID.PLUGIN_EVM>) {
+export function EVMWeb3ContextProvider(props: PropsWithChildren & ChainContextGetter<NetworkPluginID.PLUGIN_EVM>) {
     return <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} {...props} />
 }
 

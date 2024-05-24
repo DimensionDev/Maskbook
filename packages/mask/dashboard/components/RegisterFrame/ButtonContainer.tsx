@@ -14,7 +14,7 @@ const ButtonContainerUI = styled(Stack)(({ theme }) => ({
     },
 }))
 
-interface ButtonGroupProps extends PropsWithChildren<{}> {}
+interface ButtonGroupProps extends PropsWithChildren {}
 
 export function ButtonContainer({ children }: ButtonGroupProps) {
     return (

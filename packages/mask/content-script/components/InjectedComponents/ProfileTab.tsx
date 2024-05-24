@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { MaskMessages, ProfileTabs, Sniffings } from '@masknet/shared-base'
 import { useMatchXS, useLocationChange } from '@masknet/shared-base-ui'
 
-interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren<{}> {
+interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'>, PropsWithChildren {
     clear(): void
     reset(): void
     // Required! This component don't have it own style.

@@ -220,15 +220,15 @@ export namespace Plugin.SiteAdaptor {
 
     export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<SiteAdaptorContext> {
         /** This UI will be rendered for each post found. */
-        PostInspector?: InjectUI<{}>
+        PostInspector?: InjectUI
         /** This UI will be rendered for action of each post found. */
-        PostActions?: InjectUI<{}>
+        PostActions?: InjectUI
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{
             message: TypedMessage
         }>
         /** This UI will be rendered into the global scope of the site. */
-        GlobalInjection?: InjectUI<{}>
+        GlobalInjection?: InjectUI
         /** This UI will be rendered under the Search result of the site */
         SearchResultInspector?: SearchResultInspector
         /** This UI will be rendered under the Search result of the site. */
@@ -610,7 +610,7 @@ export namespace Plugin.SiteAdaptor {
         /**
          * The injected UI
          */
-        children: InjectUI<{}>
+        children: InjectUI
     }
 
     export interface ProfileTab {
@@ -725,12 +725,12 @@ export namespace Plugin.SiteAdaptor {
         label: I18NStringField | string
 
         UI?: {
-            Widget: InjectUI<{}>
+            Widget: InjectUI
         }
     }
 
     export interface WidgetRegistry {
-        example: {}
+        example: any
     }
 }
 
@@ -879,7 +879,7 @@ export namespace Plugin.Worker {
 export namespace Plugin.GeneralUI {
     export interface Definition {
         /** This UI will be injected into the global scope of the target page. */
-        GlobalInjection?: InjectUI<{}>
+        GlobalInjection?: InjectUI
         /**
          * Render metadata in many different environments.
          *
@@ -975,7 +975,7 @@ export namespace Plugin {
      * - InjectUIReact: Optimized for React component.
      * - InjectUIRaw: The fallback choice if a React component doesn't apply here.
      */
-    export type InjectUI<Props> = InjectUIRaw<Props> | InjectUIReact<Props>
+    export type InjectUI<Props = Record<string, never>> = InjectUIRaw<Props> | InjectUIReact<Props>
     /**
      *
      * @example

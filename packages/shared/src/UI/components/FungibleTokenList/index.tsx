@@ -63,7 +63,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     mode?: TokenListMode
 }
 
-const useStyles = makeStyles<{}>()(() => ({
+const useStyles = makeStyles()({
     channel: {
         width: '100%',
     },
@@ -73,7 +73,7 @@ const useStyles = makeStyles<{}>()(() => ({
         left: 0,
         right: 0,
     },
-}))
+})
 
 export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
     const {
@@ -92,7 +92,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     } = props
 
     const t = useSharedTrans()
-    const { classes } = useStyles({}, { props })
+    const { classes } = useStyles()
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
@@ -368,7 +368,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}
                 itemKey="address"
-                classes={{ listBox: classes.listBox, searchInput: classes.searchInput }}
                 itemRender={itemRender}
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}

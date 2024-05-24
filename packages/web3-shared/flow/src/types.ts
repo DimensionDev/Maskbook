@@ -48,7 +48,7 @@ export enum TransactionStatusCode {
 }
 
 export type Web3 = typeof import('@blocto/fcl')
-export type Web3Provider = {}
+export type Web3Provider = Record<string, never>
 export type Signature = string
 export type GasOption = never
 export type Block = BlockObject

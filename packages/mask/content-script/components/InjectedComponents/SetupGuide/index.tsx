@@ -37,9 +37,11 @@ function SetupGuideUI() {
             content += t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' })
         }
 
-        activatedSiteAdaptorUI!.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: EncryptionTargetType.Public,
-        })
+        activatedSiteAdaptorUI!.automation.maskCompositionDialog?.open?.(
+            makeTypedMessageText(content),
+            t.automation_request_click_post_button(),
+            { target: EncryptionTargetType.Public },
+        )
     }, [t])
 
     const onPinClose = useCallback(() => {

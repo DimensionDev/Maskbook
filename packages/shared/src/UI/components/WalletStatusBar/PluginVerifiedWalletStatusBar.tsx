@@ -61,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
+interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren {
     verifiedWallets: BindingProof[]
     className?: string
     expectedAddress: string

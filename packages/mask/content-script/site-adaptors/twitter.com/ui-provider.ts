@@ -11,8 +11,6 @@ import { InitAutonomousStateProfiles } from '../../site-adaptor-infra/defaults/s
 import { openComposeBoxTwitter } from './automation/openComposeBox.js'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition.js'
 import { pasteImageToCompositionTwitter } from './automation/pasteImageToComposition.js'
-import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage.js'
-import { gotoProfilePageTwitter } from './automation/gotoProfilePage.js'
 import { publishPostTwitter } from './automation/publishPost.js'
 import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity.js'
 import { ThemeSettingsProviderTwitter } from './collecting/theme.js'
@@ -146,10 +144,6 @@ const twitterUI: SiteAdaptorUI.Definition = {
             attachText: pasteTextToCompositionTwitter,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionTwitter,
-        },
-        redirect: {
-            gotoNewsFeed: gotoNewsFeedPageTwitter,
-            gotoProfilePage: gotoProfilePageTwitter,
         },
         endpoint: {
             publishPost: publishPostTwitter,

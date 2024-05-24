@@ -115,7 +115,7 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
                         textColor="primary"
                         variant="fullWidth"
                         value={tabIndex}
-                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
+                        onChange={(ev, newValue: number) => setTabIndex(newValue)}
                         TabIndicatorProps={{
                             style: {
                                 display: 'none',

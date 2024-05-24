@@ -63,8 +63,6 @@ const avoidMistakeRules = {
         'error',
         {
             types: {
-                // {} is widely used in React.PropsWithChildren<{}>. Unban this until we find better alternatives
-                '{}': false,
                 FC: {
                     message:
                         "To declare a component, you don't have to use FC to annotate it. To type something that accepts/is a React Component, use ComponentType<T>.",

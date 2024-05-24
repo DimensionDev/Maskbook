@@ -5,7 +5,6 @@ import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { stateCreator } from '../../site-adaptor-infra/utils.js'
 import { facebookBase } from './base.js'
 import { facebookShared } from './shared.js'
-import { getProfilePageUrlAtFacebook } from './utils/parse-username.js'
 import { taskOpenComposeBoxFacebook } from './automation/openComposeBox.js'
 import { pasteTextToCompositionFacebook } from './automation/pasteTextToComposition.js'
 import { CurrentVisitingIdentityProviderFacebook, IdentityProviderFacebook } from './collecting/identity.js'
@@ -115,23 +114,6 @@ const facebookUI: SiteAdaptorUI.Definition = {
     ...facebookBase,
     ...facebookShared,
     automation: {
-        redirect: {
-            gotoProfilePage(profile) {
-                // there is no PWA way on Facebook desktop.
-                // mobile not tested
-                location.assign(getProfilePageUrlAtFacebook(profile))
-            },
-            gotoNewsFeed() {
-                const homeLink = document.querySelector<HTMLAnchorElement>(
-                    [
-                        '[data-click="bluebar_logo"] a[href]',
-                        '#feed_jewel a[href]', // mobile
-                    ].join(','),
-                )
-                if (homeLink) homeLink.click()
-                else if (location.pathname !== '/') location.assign('/')
-            },
-        },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },
         nativeCompositionDialog: {
             attachText: pasteTextToCompositionFacebook,

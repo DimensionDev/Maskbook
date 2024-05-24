@@ -15,7 +15,7 @@ import { TypedMessageRenderRegistry } from './registry.js'
 import { Container, Link } from './Components/Text.js'
 import { TypedMessageTransformers } from './transformer.js'
 
-interface TypedMessageRenderContextProps extends React.PropsWithChildren<{}> {
+interface TypedMessageRenderContextProps extends React.PropsWithChildren {
     context?: TransformationContext
     metadataRender?: React.ComponentType<MetadataRenderProps>
     renderFragments?: RenderFragmentsContextType

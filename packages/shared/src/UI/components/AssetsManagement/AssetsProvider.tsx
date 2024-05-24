@@ -54,7 +54,7 @@ const CHUNK_SIZE = 8
 type LoaderIteratorMap = Map<string, AsyncGenerator<Web3Helper.NonFungibleAssetAll[] | undefined, void>>
 const getAssetsTotal = (map: Record<string, AssetsState>) => sum(Object.values(map).map((x) => x.assets.length))
 
-interface Props extends PropsWithChildren<{}> {
+interface Props extends PropsWithChildren {
     /** blocked ids in format of `${chainid}.${address}.${tokenId}` */
     blockedIds?: string[]
 }

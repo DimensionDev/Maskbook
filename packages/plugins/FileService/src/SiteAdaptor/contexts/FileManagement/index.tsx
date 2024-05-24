@@ -60,7 +60,7 @@ function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
     })
 }
 
-interface Props extends PropsWithChildren<{}> {
+interface Props extends PropsWithChildren {
     // The file management could be opened via different ways
     compositionType: CompositionType
 }

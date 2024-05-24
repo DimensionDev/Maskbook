@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import type { PropsWithChildren } from 'react'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
@@ -20,11 +21,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface SnapshotTabProps {
-    children: React.ReactNode
-}
-
-export function SnapshotTab(props: SnapshotTabProps) {
+export function SnapshotTab(props: PropsWithChildren) {
     const { classes } = useStyles()
     return (
         <Card className={classes.root} elevation={0}>

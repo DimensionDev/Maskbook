@@ -1,15 +1,14 @@
 /* eslint-disable tss-unused-classes/unused-classes */
 import { Icons } from '@masknet/icons'
-import { memo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { makeStyles } from '../../UIHelper/index.js'
 import { alpha, Typography } from '@mui/material'
 
 type TagVariant = 'info' | 'success' | 'warning' | 'error'
 
-export interface TagProps extends withClasses<'icon' | 'root'> {
+export interface TagProps extends withClasses<'icon' | 'root'>, PropsWithChildren {
     variant?: TagVariant
     iconMapping?: Partial<Record<TagVariant, React.ReactNode>>
-    children: React.ReactNode
 }
 
 const defaultIconMapping = {

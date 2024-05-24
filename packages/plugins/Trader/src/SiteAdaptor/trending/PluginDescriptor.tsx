@@ -12,7 +12,7 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-interface PluginHeaderProps extends React.PropsWithChildren<{}> {
+interface PluginHeaderProps extends React.PropsWithChildren {
     isCollectionProjectPopper?: boolean
     isProfilePage?: boolean
     isTokenTagPopper?: boolean

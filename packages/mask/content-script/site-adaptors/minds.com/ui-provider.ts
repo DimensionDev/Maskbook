@@ -8,8 +8,6 @@ import { injectPageInspectorDefault } from '../../site-adaptor-infra/defaults/in
 import { createTaskStartSetupGuideDefault } from '../../site-adaptor-infra/defaults/inject/StartSetupGuide.js'
 import { InitAutonomousStateProfiles } from '../../site-adaptor-infra/defaults/state/InitProfiles.js'
 import { pasteImageToCompositionMinds } from './automation/AttachImageToComposition.js'
-import { gotoNewsFeedPageMinds } from './automation/gotoNewsFeedPage.js'
-import { gotoProfilePageMinds } from './automation/gotoProfilePage.js'
 import { openComposeBoxMinds } from './automation/openComposeBox.js'
 import { pasteTextToCompositionMinds } from './automation/pasteTextToComposition.js'
 import { mindsBase } from './base.js'
@@ -131,10 +129,6 @@ const mindsUI: SiteAdaptorUI.Definition = {
             attachText: pasteTextToCompositionMinds,
             // TODO: make a better way to detect
             attachImage: pasteImageToCompositionMinds(),
-        },
-        redirect: {
-            gotoNewsFeed: gotoNewsFeedPageMinds,
-            gotoProfilePage: gotoProfilePageMinds,
         },
     },
     collecting: {

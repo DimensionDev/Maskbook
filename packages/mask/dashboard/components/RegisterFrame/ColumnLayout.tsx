@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
+interface ColumnLayoutProps extends React.PropsWithChildren {
     haveFooter?: boolean
 }
 

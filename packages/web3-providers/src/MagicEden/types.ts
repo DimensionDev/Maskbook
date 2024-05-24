@@ -153,7 +153,7 @@ export interface MagicEdenNFT {
     /** address */
     updateAuthority: string
     primarySaleHappened: boolean
-    onChainCollection: {}
+    onChainCollection: any
     isTradeable: boolean
     tokenDelegateValid: boolean
     rarity: Rarity
