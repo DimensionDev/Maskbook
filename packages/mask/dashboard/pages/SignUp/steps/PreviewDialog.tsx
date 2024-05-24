@@ -3,7 +3,7 @@ import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme } from '@masknet/t
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
-import { type ForwardedRef, forwardRef, useMemo, useRef, useState } from 'react'
+import { type RefAttributes, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
 import { WatermarkURL } from '../../../assets/index.js'
@@ -108,8 +108,8 @@ export function PreviewDialog(props: PreviewDialogProps) {
     )
 }
 
-const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRef<any>) => {
-    const { personaName, id, privateKey, words, height } = props
+function ComponentToPrint(props: PreviewDialogProps & RefAttributes<unknown>) {
+    const { personaName, id, privateKey, words, height, ref } = props
     const { classes } = useStyles()
     const t = useDashboardTrans()
 
@@ -179,4 +179,4 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
             </Box>
         </Box>
     )
-})
+}

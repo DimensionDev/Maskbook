@@ -1,5 +1,5 @@
 import { compact, uniqBy } from 'lodash-es'
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
+import { useCallback, useEffect, useImperativeHandle, useState, type RefAttributes } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
@@ -78,7 +78,7 @@ export interface NFTListDialogRef {
     handleAddCollectibles: () => void
 }
 
-export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) => {
+export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
     const t = useAvatarTrans()
     const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
@@ -255,4 +255,4 @@ export const NFTListDialog = forwardRef<NFTListDialogRef | undefined>((_, ref) =
             </DialogActions>
         </>
     )
-})
+}

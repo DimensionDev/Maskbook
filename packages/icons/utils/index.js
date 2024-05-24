@@ -13,18 +13,18 @@ export function createIcon(name, svg, viewBox, defaultSize) {
     const [width, height] = defaultSize || []
     if (width === height && typeof width === 'number') throw new Error('Only define this when the icon is not a square')
 
-    let Icon
+    /** @type {import('react').ComponentType<import('@mui/material').SvgIconProps>} */ let Icon
     if (typeof svg === 'function') {
-        Icon = ({ sx, ...props }, ref) => {
+        Icon = ({ sx, ref, ...props }) => {
             const style = defaultSize ? { width, height, ...sx } : sx
             return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: style }, svg(useTheme()))
         }
     } else {
-        Icon = ({ sx, ...props }, ref) => {
+        Icon = ({ sx, ref, ...props }) => {
             const style = defaultSize ? { width, height, ...sx } : sx
             return React.createElement(SvgIcon, { viewBox, ...props, ref, sx: style }, svg)
         }
     }
     Icon.displayName = `Icon (${name})`
-    return React.memo(React.forwardRef(Icon))
+    return /** @type {any} */ (React.memo(Icon))
 }

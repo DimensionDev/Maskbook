@@ -1,9 +1,9 @@
-import { forwardRef, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { alpha } from '@mui/system'
 import { buttonClasses } from '@mui/material/Button'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
@@ -145,7 +145,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 }
 
 export type AddContactModalOpenProps = Omit<AddContactModalProps, 'open' | 'setAddress' | 'setName'>
-export const AddContactModal = forwardRef<SingletonModalRefCreator<AddContactModalOpenProps, boolean>>((_, ref) => {
+export function AddContactModal({ ref }: SingletonModalProps<AddContactModalOpenProps, boolean>) {
     const [props, setProps] = useState<AddContactModalOpenProps>({
         title: '',
         address: '',
@@ -171,4 +171,4 @@ export const AddContactModal = forwardRef<SingletonModalRefCreator<AddContactMod
             onConfirm={() => dispatch?.close(true)}
         />
     )
-})
+}

@@ -1,5 +1,5 @@
 import { compact, range } from 'lodash-es'
-import { memo, useCallback, useRef, type RefObject, type ReactNode, useMemo } from 'react'
+import { memo, useCallback, useRef, type ReactNode, useMemo, type Ref } from 'react'
 import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
 import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
@@ -101,7 +101,7 @@ export interface CollectionListProps
     /** Pending user customized assets, used to render loading skeletons */
     pendingAdditionalAssetCount?: number
     emptyText?: ReactNode
-    scrollElementRef?: RefObject<HTMLElement | null>
+    scrollElementRef?: Ref<HTMLElement | null>
     from?: 'web3Profile' | 'profileCard'
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void

@@ -1,10 +1,10 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { type SingletonModalRefCreator, type Wallet } from '@masknet/shared-base'
+import { type SingletonModalProps, type Wallet } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EVMWeb3 } from '@masknet/web3-providers'
@@ -102,7 +102,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
 
 export type WalletRenameModalOpenProps = Omit<WalletRenameDrawerProps, 'open'>
 
-export const WalletRenameModal = forwardRef<SingletonModalRefCreator<WalletRenameModalOpenProps, boolean>>((_, ref) => {
+export function WalletRenameModal({ ref }: SingletonModalProps<WalletRenameModalOpenProps, boolean>) {
     const [props, setProps] = useState<WalletRenameModalOpenProps>({
         title: '',
         wallet: undefined,
@@ -114,4 +114,4 @@ export const WalletRenameModal = forwardRef<SingletonModalRefCreator<WalletRenam
         },
     })
     return <WalletRenameDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
-})
+}

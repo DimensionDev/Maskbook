@@ -1,6 +1,6 @@
-import type { SingletonModalRefCreator, BackupAccountType } from '@masknet/shared-base'
+import type { BackupAccountType, SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { BackupPreviewDialog } from './BackupPreviewDialog.js'
 
 export interface BackupPreviewModalOpenProps {
@@ -11,7 +11,7 @@ export interface BackupPreviewModalOpenProps {
     abstract?: string
 }
 
-export const BackupPreviewModal = forwardRef<SingletonModalRefCreator<BackupPreviewModalOpenProps>>((props, ref) => {
+export function BackupPreviewModal({ ref }: SingletonModalProps<BackupPreviewModalOpenProps>) {
     const [isOverwrite, setIsOverwrite] = useState(false)
     const [code, setCode] = useState('')
     const [type, setType] = useState<BackupAccountType>()
@@ -47,4 +47,4 @@ export const BackupPreviewModal = forwardRef<SingletonModalRefCreator<BackupPrev
             abstract={abstract}
         />
     )
-})
+}

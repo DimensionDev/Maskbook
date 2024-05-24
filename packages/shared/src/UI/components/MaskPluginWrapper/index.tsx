@@ -1,18 +1,18 @@
-import { Suspense, type ReactNode, useMemo, forwardRef, useImperativeHandle, useState, type JSX } from 'react'
+import { Suspense, type ReactNode, useMemo, useImperativeHandle, useState, type JSX } from 'react'
 import { Typography, Link } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskLightTheme } from '@masknet/theme'
 import { Box } from '@mui/system'
 import {
     usePluginTransField,
     PluginTransFieldRender,
-    type PluginWrapperComponent,
     type Plugin,
     type PluginWrapperMethods,
+    type PluginWrapperComponentProps,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { useSharedTrans } from '../../../index.js'
 
-interface PluginWrapperProps extends React.PropsWithChildren<{}> {
+interface PluginWrapperProps extends React.PropsWithChildren {
     open?: boolean
     title: JSX.Element | string
     width?: number
@@ -160,36 +160,34 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     return <Suspense children={inner} />
 }
 
-export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> = forwardRef(
-    (props, ref) => {
-        const { ID, name, publisher, wrapperProps } = props.definition
-        const t = usePluginTransField()
-        const [width, setWidth] = useState<undefined | number>(undefined)
-        const [open, setOpen] = useState<boolean>(false)
-        const [title, setTitle] = useState<string | undefined>(undefined)
+export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Plugin.SiteAdaptor.Definition>) {
+    const { ID, name, publisher, wrapperProps } = props.definition
+    const t = usePluginTransField()
+    const [width, setWidth] = useState<undefined | number>(undefined)
+    const [open, setOpen] = useState<boolean>(false)
+    const [title, setTitle] = useState<string | undefined>(undefined)
 
-        const refItem = useMemo((): PluginWrapperMethods => {
-            return {
-                setWidth,
-                setWrap: setOpen,
-                setWrapperName: setTitle,
-            }
-        }, [])
+    const refItem = useMemo((): PluginWrapperMethods => {
+        return {
+            setWidth,
+            setWrap: setOpen,
+            setWrapperName: setTitle,
+        }
+    }, [])
 
-        useImperativeHandle(ref, () => refItem, [refItem])
+    useImperativeHandle(props.ref, () => refItem, [refItem])
 
-        return (
-            <MaskPostExtraInfoWrapper
-                ID={props.definition.ID}
-                wrapperProps={wrapperProps}
-                open={open}
-                title={title || t(ID, name)}
-                width={width}
-                publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
-                publisherLink={publisher?.link}
-                children={props.children}
-                lackHostPermission={props.lackHostPermission}
-            />
-        )
-    },
-)
+    return (
+        <MaskPostExtraInfoWrapper
+            ID={props.definition.ID}
+            wrapperProps={wrapperProps}
+            open={open}
+            title={title || t(ID, name)}
+            width={width}
+            publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
+            publisherLink={publisher?.link}
+            children={props.children}
+            lackHostPermission={props.lackHostPermission}
+        />
+    )
+}

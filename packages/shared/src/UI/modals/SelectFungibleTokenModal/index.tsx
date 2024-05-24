@@ -1,5 +1,5 @@
-import { forwardRef, useState } from 'react'
-import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useState } from 'react'
+import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
@@ -21,9 +21,9 @@ export interface SelectFungibleTokenModalOpenProps {
 
 export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
-export const SelectFungibleTokenModal = forwardRef<
-    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
->((props, ref) => {
+export function SelectFungibleTokenModal({
+    ref,
+}: SingletonModalProps<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>) {
     const [enableManage, setEnableManage] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -71,4 +71,4 @@ export const SelectFungibleTokenModal = forwardRef<
             setChainId={setChainId}
         />
     )
-})
+}

@@ -1,9 +1,9 @@
-import { memo, useEffect, useRef, useState, type JSX } from 'react'
+import { memo, useEffect, useRef, useState, type ComponentType, type JSX } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
 import {
     PluginWrapperMethodsContext,
-    type PluginWrapperComponent,
+    type PluginWrapperComponentProps,
     type PluginWrapperMethods,
 } from './usePluginWrapper.js'
 import { usePluginTransField } from './useTrans.js'
@@ -16,7 +16,7 @@ type Raw<T> = Plugin.InjectUIRaw<T>
 export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared.Definition, PropsType extends object>(
     usePlugins: () => readonly PluginDefinition[],
     pickInjectorHook: (plugin: PluginDefinition) => undefined | Inject<PropsType>,
-    PluginWrapperComponent?: PluginWrapperComponent<PluginDefinition> | undefined,
+    PluginWrapperComponent?: ComponentType<PluginWrapperComponentProps<PluginDefinition>> | undefined,
     rootElement?: 'div' | 'span' | (() => HTMLDivElement | HTMLSpanElement),
 ) {
     function usePluginWrapperProvider(element: JSX.Element | null, plugin: PluginDefinition) {

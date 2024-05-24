@@ -1,11 +1,9 @@
-import type { PersonaInformation, SingletonModalRefCreator } from '@masknet/shared-base'
-import { forwardRef, useState } from 'react'
+import type { PersonaInformation, SingletonModalProps } from '@masknet/shared-base'
+import { useState } from 'react'
 import { VerifyNextIDDialog, type VerifyNextIDDialogCloseProps, type VerifyNextIDDialogProps } from './index.js'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 
-export const VerifyNextIDModal = forwardRef<
-    SingletonModalRefCreator<VerifyNextIDDialogProps, VerifyNextIDDialogCloseProps>
->(function VerifyNextIDModal(props, ref) {
+export function VerifyNextIDModal({ ref }: SingletonModalProps<VerifyNextIDDialogProps, VerifyNextIDDialogCloseProps>) {
     const [personaInfo, setPersonaInfo] = useState<PersonaInformation>()
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -23,4 +21,4 @@ export const VerifyNextIDModal = forwardRef<
             }}
         />
     )
-})
+}

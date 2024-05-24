@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState, forwardRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Application } from '@splinetool/runtime'
-import ParentSize from './ParentSize.js'
 
 export interface SplineProps {
     scene: string
     onLoad?: (e: Application) => void
 }
 
-const Spline = forwardRef<HTMLDivElement, SplineProps>(({ scene, onLoad }, ref) => {
+export default function Spline({ scene, onLoad }: SplineProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [isLoading, setIsLoading] = useState(true)
 
@@ -31,11 +30,5 @@ const Spline = forwardRef<HTMLDivElement, SplineProps>(({ scene, onLoad }, ref) 
         }
     }, [scene])
 
-    return (
-        <ParentSize ref={ref}>
-            {() => <canvas ref={canvasRef} style={{ display: isLoading ? 'none' : 'block' }} />}
-        </ParentSize>
-    )
-})
-
-export default Spline
+    return <canvas ref={canvasRef} style={{ display: isLoading ? 'none' : 'block' }} />
+}

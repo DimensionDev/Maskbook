@@ -1,6 +1,6 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import type { InjectedDialogProps } from '@masknet/shared'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { RenameDialog } from './RenameDialog.js'
 
@@ -13,25 +13,23 @@ export interface RenameModalOpenProps extends Omit<InjectedDialogProps, 'title' 
 
 export type RenameModalCloseProps = string | void
 
-export const RenameModal = forwardRef<SingletonModalRefCreator<RenameModalOpenProps, RenameModalCloseProps>>(
-    (props, ref) => {
-        const [props_, setProps_] = useState<RenameModalOpenProps>()
+export function RenameModal({ ref }: SingletonModalProps<RenameModalOpenProps, RenameModalCloseProps>) {
+    const [props_, setProps_] = useState<RenameModalOpenProps>()
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setProps_(props)
-            },
-        })
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setProps_(props)
+        },
+    })
 
-        if (!open) return null
-        return (
-            <RenameDialog
-                open
-                onSubmit={(name) => dispatch?.close(name)}
-                onClose={() => dispatch?.close()}
-                {...props_}
-                currentName={props_?.currentName ?? ''}
-            />
-        )
-    },
-)
+    if (!open) return null
+    return (
+        <RenameDialog
+            open
+            onSubmit={(name) => dispatch?.close(name)}
+            onClose={() => dispatch?.close()}
+            {...props_}
+            currentName={props_?.currentName ?? ''}
+        />
+    )
+}

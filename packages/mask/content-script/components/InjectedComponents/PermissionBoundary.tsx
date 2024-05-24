@@ -1,22 +1,13 @@
-import {
-    forwardRef,
-    memo,
-    type PropsWithChildren,
-    type ReactNode,
-    useImperativeHandle,
-    useMemo,
-    useRef,
-    useState,
-} from 'react'
+import { memo, type PropsWithChildren, type ReactNode, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
-import type { PluginWrapperComponent, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
+import type { PluginWrapperComponentProps, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraPluginWrapper, useSharedTrans } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, useTheme } from '@mui/material'
 import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
 
-interface PermissionBoundaryProps extends PropsWithChildren<{}> {
+interface PermissionBoundaryProps extends PropsWithChildren {
     permissions: string[]
     fallback?:
         | ReactNode
@@ -38,58 +29,60 @@ const PermissionBoundary = memo<PermissionBoundaryProps>(function PermissionBoun
     return <>{children}</>
 })
 
-export const MaskPostExtraPluginWrapperWithPermission: PluginWrapperComponent<Plugin.SiteAdaptor.Definition> =
-    forwardRef((props, ref) => {
-        const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
-        const theme = useTheme()
-        const t = useSharedTrans()
-        const [open, setOpen] = useState<boolean>(false)
+export function MaskPostExtraPluginWrapperWithPermission({
+    ref,
+    ...props
+}: PluginWrapperComponentProps<Plugin.SiteAdaptor.Definition>) {
+    const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
+    const theme = useTheme()
+    const t = useSharedTrans()
+    const [open, setOpen] = useState<boolean>(false)
 
-        const refItem = useMemo((): PluginWrapperMethods => {
-            return {
-                setWidth: (width) => wrapperMethodsRef.current?.setWidth(width),
-                setWrap: (open) => {
-                    setOpen(open)
-                    wrapperMethodsRef.current?.setWrap(open)
-                },
-                setWrapperName: (name) => wrapperMethodsRef.current?.setWrapperName(name),
-            }
-        }, [])
+    const refItem = useMemo((): PluginWrapperMethods => {
+        return {
+            setWidth: (width) => wrapperMethodsRef.current?.setWidth(width),
+            setWrap: (open) => {
+                setOpen(open)
+                wrapperMethodsRef.current?.setWrap(open)
+            },
+            setWrapperName: (name) => wrapperMethodsRef.current?.setWrapperName(name),
+        }
+    }, [])
 
-        useImperativeHandle(ref, () => refItem, [refItem])
+    useImperativeHandle(ref, () => refItem, [refItem])
 
-        return (
-            <PermissionBoundary
-                permissions={props.definition.enableRequirement.host_permissions ?? EMPTY_LIST}
-                fallback={
-                    open ?
-                        <PossiblePluginSuggestionUISingle
-                            lackHostPermission
-                            define={props.definition}
-                            wrapperProps={props.definition.wrapperProps}
-                            content={
-                                <Typography
-                                    color={theme.palette.maskColor.publicMain}
-                                    fontSize={14}
-                                    marginBottom={3.25}
-                                    textAlign="left"
-                                    component="div"
-                                    px="18px">
-                                    {t.authorization_descriptions()}
-                                    <Typography component="div">
-                                        {props.definition.enableRequirement.host_permissions?.join(',')}
-                                    </Typography>
+    return (
+        <PermissionBoundary
+            permissions={props.definition.enableRequirement.host_permissions ?? EMPTY_LIST}
+            fallback={
+                open ?
+                    <PossiblePluginSuggestionUISingle
+                        lackHostPermission
+                        define={props.definition}
+                        wrapperProps={props.definition.wrapperProps}
+                        content={
+                            <Typography
+                                color={theme.palette.maskColor.publicMain}
+                                fontSize={14}
+                                marginBottom={3.25}
+                                textAlign="left"
+                                component="div"
+                                px="18px">
+                                {t.authorization_descriptions()}
+                                <Typography component="div">
+                                    {props.definition.enableRequirement.host_permissions?.join(',')}
                                 </Typography>
-                            }
-                        />
-                    :   undefined
-                }>
-                <MaskPostExtraPluginWrapper
-                    {...props}
-                    ref={(methods) => {
-                        if (methods) wrapperMethodsRef.current = methods
-                    }}
-                />
-            </PermissionBoundary>
-        )
-    })
+                            </Typography>
+                        }
+                    />
+                :   undefined
+            }>
+            <MaskPostExtraPluginWrapper
+                {...props}
+                ref={(methods) => {
+                    if (methods) wrapperMethodsRef.current = methods
+                }}
+            />
+        </PermissionBoundary>
+    )
+}

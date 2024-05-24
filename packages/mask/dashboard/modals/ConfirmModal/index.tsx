@@ -1,10 +1,10 @@
 import { InjectedDialog, useSharedTrans } from '@masknet/shared'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { type ActionButtonProps, makeStyles, ActionButton } from '@masknet/theme'
 import { DialogContent, Typography, type DialogProps, Box } from '@mui/material'
 import { noop } from 'lodash-es'
-import { forwardRef, memo, useState, type ReactNode } from 'react'
+import { memo, useState, type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -92,7 +92,7 @@ const Dialog = memo<ConfirmDialogProps>(
     },
 )
 export type ConfirmDialogOpenProps = Omit<ConfirmDialogProps, 'open'>
-export const ConfirmDialog = forwardRef<SingletonModalRefCreator<ConfirmDialogOpenProps, boolean>>((_, ref) => {
+export function ConfirmDialog({ ref }: SingletonModalProps<ConfirmDialogOpenProps, boolean>) {
     const [props, setProps] = useState<ConfirmDialogOpenProps>({
         title: '',
         message: '',
@@ -105,4 +105,4 @@ export const ConfirmDialog = forwardRef<SingletonModalRefCreator<ConfirmDialogOp
         },
     })
     return <Dialog open={open} {...props} onClose={() => dispatch?.close(false)} onConfirm={props.onConfirm} />
-})
+}

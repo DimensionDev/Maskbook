@@ -1,5 +1,5 @@
-import { forwardRef, useState } from 'react'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { useState } from 'react'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { type InjectedDialogProps } from '@masknet/shared'
 import { ConfirmDialog } from './ConfirmDialog.js'
@@ -13,25 +13,23 @@ export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title'
 
 export type ConfirmModalCloseProps = boolean
 
-export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmModalOpenProps, ConfirmModalCloseProps>>(
-    (props, ref) => {
-        const [props_, setProps_] = useState<ConfirmModalOpenProps>()
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setProps_(props)
-            },
-        })
+export function ConfirmModal({ ref }: SingletonModalProps<ConfirmModalOpenProps, ConfirmModalCloseProps>) {
+    const [props_, setProps_] = useState<ConfirmModalOpenProps>()
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setProps_(props)
+        },
+    })
 
-        if (!open) return null
+    if (!open) return null
 
-        return (
-            <ConfirmDialog
-                open
-                onSubmit={() => dispatch?.close(true)}
-                onClose={() => dispatch?.close(false)}
-                {...props_}
-                message={props_?.message}
-            />
-        )
-    },
-)
+    return (
+        <ConfirmDialog
+            open
+            onSubmit={() => dispatch?.close(true)}
+            onClose={() => dispatch?.close(false)}
+            {...props_}
+            message={props_?.message}
+        />
+    )
+}

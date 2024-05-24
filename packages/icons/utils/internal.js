@@ -13,8 +13,8 @@ import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
  * @returns {React.ComponentType<import('./internal').GeneratedIconProps>}
  */
 export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
-    function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
-        let { size = 24, variant, color, sx, height, width, ...rest } = props
+    function Icon(/** @type {import('./internal').GeneratedIconProps} */ props) {
+        let { size = 24, variant, color, sx, height, width, ref, ...rest } = props
 
         const hasClickHandler = rest.onClick
 
@@ -80,7 +80,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
         return React.createElement(Box, iconProps)
     }
     Icon.displayName = name
-    return React.memo(React.forwardRef(Icon))
+    return React.memo(Icon)
 }
 
 function useDefaultPalette() {

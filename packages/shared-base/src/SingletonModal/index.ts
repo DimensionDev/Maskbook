@@ -1,7 +1,7 @@
 import { defer, delay, type DeferTuple } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 
-export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
+export type SingletonModalRef<OpenProps = void, CloseProps = void> = (
     onOpen: (props: OpenProps) => void,
     onClose: (props: CloseProps) => void,
     onAbort: (error: Error) => void,
@@ -12,14 +12,14 @@ export type SingletonModalRefCreator<OpenProps = void, CloseProps = void> = (
     abort?: (error: Error) => void
 }
 
-export interface SingletonModalProps {
-    children: React.ReactNode
+export interface SingletonModalProps<OpenProps = void, CloseProps = void> {
+    ref: React.Ref<SingletonModalRef<OpenProps, CloseProps>>
 }
 
 export class SingletonModal<
     OpenProps = void,
     CloseProps = void,
-    T extends SingletonModalRefCreator<OpenProps, CloseProps> = SingletonModalRefCreator<OpenProps, CloseProps>,
+    T extends SingletonModalRef<OpenProps, CloseProps> = SingletonModalRef<OpenProps, CloseProps>,
 > {
     constructor() {
         this.open = this.open.bind(this)

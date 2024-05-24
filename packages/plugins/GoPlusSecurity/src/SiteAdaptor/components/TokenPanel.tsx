@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import { Link, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { Icons } from '@masknet/icons'
@@ -8,6 +7,7 @@ import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { useGoPlusLabsTrans } from '../../locales/index.js'
+import type { RefAttributes } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -32,18 +32,18 @@ const useStyles = makeStyles()((theme) => ({
 
 const DEFAULT_PLACEHOLDER = '--'
 
-interface TokenPanelProps {
+interface TokenPanelProps extends RefAttributes<HTMLDivElement> {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenMarketCap?: number
 }
 
-export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
+export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelProps) {
     const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 
     return (
-        <Stack className={classes.card} spacing={2}>
+        <Stack ref={ref} className={classes.card} spacing={2}>
             <Stack height={128} justifyContent="space-between" flex={1}>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
@@ -132,4 +132,4 @@ export const TokenPanel = forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPa
             </Stack>
         </Stack>
     )
-})
+}

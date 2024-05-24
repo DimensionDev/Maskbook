@@ -1,9 +1,9 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
-import { PopupRoutes, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { PopupRoutes, type SingletonModalProps } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { PasswordField } from '../../components/PasswordField/index.js'
@@ -81,34 +81,32 @@ export type ShowPrivateKeyModalOpenProps = Omit<
     'open' | 'password' | 'setPassword' | 'error' | 'setError'
 >
 
-export const ShowPrivateKeyModal = forwardRef<SingletonModalRefCreator<ShowPrivateKeyModalOpenProps, boolean>>(
-    (_, ref) => {
-        const [props, setProps] = useState<ShowPrivateKeyModalOpenProps>({
-            title: '',
-        })
+export function ShowPrivateKeyModal({ ref }: SingletonModalProps<ShowPrivateKeyModalOpenProps, boolean>) {
+    const [props, setProps] = useState<ShowPrivateKeyModalOpenProps>({
+        title: '',
+    })
 
-        const [error, setError] = useState('')
-        const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [password, setPassword] = useState('')
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(p) {
-                setProps(p)
-            },
-        })
-        return (
-            <ShowPrivateKeyDrawer
-                error={error}
-                setError={setError}
-                password={password}
-                setPassword={setPassword}
-                open={open}
-                {...props}
-                onClose={() => {
-                    setError('')
-                    setPassword('')
-                    dispatch?.close(false)
-                }}
-            />
-        )
-    },
-)
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(p) {
+            setProps(p)
+        },
+    })
+    return (
+        <ShowPrivateKeyDrawer
+            error={error}
+            setError={setError}
+            password={password}
+            setPassword={setPassword}
+            open={open}
+            {...props}
+            onClose={() => {
+                setError('')
+                setPassword('')
+                dispatch?.close(false)
+            }}
+        />
+    )
+}

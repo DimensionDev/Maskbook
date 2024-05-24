@@ -1,8 +1,8 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { millisecondsToMinutes, minutesToMilliseconds, hoursToMilliseconds } from 'date-fns'
 import { Box, Typography, useTheme } from '@mui/material'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalProps } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import Services from '#services'
@@ -141,9 +141,7 @@ function WalletAutoLockSettingDrawer(props: BottomDrawerProps) {
 
 export type WalletAutoLockSettingModalOpenProps = Omit<BottomDrawerProps, 'open'>
 
-export const WalletAutoLockSettingModal = forwardRef<
-    SingletonModalRefCreator<WalletAutoLockSettingModalOpenProps, boolean>
->((_, ref) => {
+export function WalletAutoLockSettingModal({ ref }: SingletonModalProps<WalletAutoLockSettingModalOpenProps, boolean>) {
     const [props, setProps] = useState<WalletAutoLockSettingModalOpenProps>({
         title: '',
     })
@@ -157,4 +155,4 @@ export const WalletAutoLockSettingModal = forwardRef<
     if (!open) return null
 
     return <WalletAutoLockSettingDrawer open={open} {...props} onClose={() => dispatch?.close(false)} />
-})
+}

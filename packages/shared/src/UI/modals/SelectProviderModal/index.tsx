@@ -1,6 +1,6 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, SingletonModalRefCreator } from '@masknet/shared-base'
+import type { NetworkPluginID, SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { SelectProvider } from './SelectProvider.js'
 
@@ -11,14 +11,12 @@ export type SelectProviderModalOpenProps = {
 
 export type SelectProviderModalCloseProps = boolean
 
-interface SelectProviderModalProps {
+interface SelectProviderModalProps
+    extends SingletonModalProps<SelectProviderModalOpenProps, SelectProviderModalCloseProps> {
     createWallet(): void
 }
 
-export const SelectProviderModal = forwardRef<
-    SingletonModalRefCreator<SelectProviderModalOpenProps, SelectProviderModalCloseProps>,
-    SelectProviderModalProps
->((props, ref) => {
+export function SelectProviderModal({ createWallet, ref }: SelectProviderModalProps) {
     const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID>()
     const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[]>()
 
@@ -37,11 +35,11 @@ export const SelectProviderModal = forwardRef<
     return (
         <SelectProvider
             open
-            createWallet={props.createWallet}
+            createWallet={createWallet}
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
             onConnect={() => dispatch?.close(true)}
             onClose={() => dispatch?.close(false)}
         />
     )
-})
+}

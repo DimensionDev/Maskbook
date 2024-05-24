@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
-import { forwardRef, memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, type RefAttributes } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
@@ -63,67 +63,65 @@ function useAdditionalAssets() {
     return additionalAssets
 }
 
-interface Props {
+interface Props extends RefAttributes<unknown> {
     onAddToken: (assetTab: WalletAssetTabs) => void
     scrollTargetRef: CollectionListProps['scrollElementRef']
 }
 
-export const WalletCollections = memo<Props>(
-    forwardRef<HTMLDivElement, Props>(function WalletCollections({ onAddToken, scrollTargetRef }, ref) {
-        const t = useMaskSharedTrans()
-        const hasNavigator = useHasNavigator()
-        const { classes } = useStyles({ hasNav: hasNavigator })
-        const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
-        const [, setParams] = useSearchParams()
-        const additionalAssets = useAdditionalAssets()
-        const navigate = useNavigate()
-        const handleItemClick = useCallback(
-            (asset: Web3Helper.NonFungibleTokenAll) => {
-                const path = urlcat(PopupRoutes.CollectibleDetail, {
-                    chainId: asset.chainId,
-                    address: asset.address,
-                    id: asset.tokenId,
-                })
-                navigate(path, { state: { asset } })
-            },
-            [navigate],
-        )
-        const handleCollectionChange = useCallback(
-            (id: string | undefined) => {
-                const SEARCH_KEY = 'collectionId'
-                setParams(
-                    (params) => {
-                        if (!id) params.delete(SEARCH_KEY)
-                        else params.set(SEARCH_KEY, id)
-                        return params.toString()
-                    },
-                    { replace: true },
-                )
-            },
-            [setParams],
-        )
+export const WalletCollections = memo(function WalletCollections({ onAddToken, scrollTargetRef, ref }: Props) {
+    const t = useMaskSharedTrans()
+    const hasNavigator = useHasNavigator()
+    const { classes } = useStyles({ hasNav: hasNavigator })
+    const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
+    const [, setParams] = useSearchParams()
+    const additionalAssets = useAdditionalAssets()
+    const navigate = useNavigate()
+    const handleItemClick = useCallback(
+        (asset: Web3Helper.NonFungibleTokenAll) => {
+            const path = urlcat(PopupRoutes.CollectibleDetail, {
+                chainId: asset.chainId,
+                address: asset.address,
+                id: asset.tokenId,
+            })
+            navigate(path, { state: { asset } })
+        },
+        [navigate],
+    )
+    const handleCollectionChange = useCallback(
+        (id: string | undefined) => {
+            const SEARCH_KEY = 'collectionId'
+            setParams(
+                (params) => {
+                    if (!id) params.delete(SEARCH_KEY)
+                    else params.set(SEARCH_KEY, id)
+                    return params.toString()
+                },
+                { replace: true },
+            )
+        },
+        [setParams],
+    )
 
-        const collectiblesEmptyText = (
-            <>
-                <Typography component="div">{t.do_not_see_your_nft()}</Typography>
-                <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
-                    {t.import_nft()}
-                </Typography>
-            </>
-        )
-        return (
-            <CollectionList
-                ref={ref}
-                classes={{ grid: classes.grid }}
-                gridProps={gridProps}
-                disableSidebar
-                disableWindowScroll
-                scrollElementRef={scrollTargetRef}
-                emptyText={collectiblesEmptyText}
-                additionalAssets={additionalAssets}
-                onItemClick={handleItemClick}
-                onCollectionChange={handleCollectionChange}
-            />
-        )
-    }),
-)
+    const collectiblesEmptyText = (
+        <>
+            <Typography component="div">{t.do_not_see_your_nft()}</Typography>
+            <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
+                {t.import_nft()}
+            </Typography>
+        </>
+    )
+    return (
+        <CollectionList
+            ref={ref}
+            classes={{ grid: classes.grid }}
+            gridProps={gridProps}
+            disableSidebar
+            disableWindowScroll
+            scrollElementRef={scrollTargetRef}
+            emptyText={collectiblesEmptyText}
+            additionalAssets={additionalAssets}
+            onItemClick={handleItemClick}
+            onCollectionChange={handleCollectionChange}
+        />
+    )
+})

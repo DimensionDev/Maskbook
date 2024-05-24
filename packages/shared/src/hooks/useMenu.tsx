@@ -4,9 +4,9 @@ import {
     isValidElement,
     useCallback,
     useState,
-    type MutableRefObject,
     createElement,
     type JSX,
+    type Ref,
 } from 'react'
 import { useUpdate } from 'react-use'
 import { Menu, type MenuProps } from '@mui/material'
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
 export function useMenuConfig(
     elements: Array<JSX.Element | null>,
     config: MenuConfigOptions,
-    ref?: MutableRefObject<HTMLDivElement | null>,
+    ref?: Ref<HTMLDivElement | null>,
 ): [
     menu: React.ReactNode,
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,

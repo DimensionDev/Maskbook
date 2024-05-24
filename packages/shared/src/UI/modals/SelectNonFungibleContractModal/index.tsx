@@ -1,6 +1,6 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type SingletonModalRefCreator, NetworkPluginID } from '@masknet/shared-base'
+import { type SingletonModalProps, NetworkPluginID } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { SchemaType } from '@masknet/web3-shared-evm'
@@ -17,9 +17,7 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     collections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
-export const SelectNonFungibleContractModal = forwardRef<
-    SingletonModalRefCreator<SelectNonFungibleContractModalOpenProps>
->((props, ref) => {
+export function SelectNonFungibleContractModal({ ref }: SingletonModalProps<SelectNonFungibleContractModalOpenProps>) {
     const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [schemaType, setSchemaType] = useState<SchemaType>()
@@ -53,4 +51,4 @@ export const SelectNonFungibleContractModal = forwardRef<
             initialCollections={collections}
         />
     )
-})
+}

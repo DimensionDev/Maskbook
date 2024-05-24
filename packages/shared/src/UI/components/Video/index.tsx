@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
 import { Skeleton, type SkeletonProps } from '@mui/lab'
 import { fetchBlob } from '@masknet/web3-providers/helpers'
@@ -14,7 +14,7 @@ export interface VideoProps {
     SkeletonProps?: Partial<SkeletonProps>
 }
 
-export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outgoingRef) {
+export function Video(props: VideoProps) {
     const { src, component = 'video', VideoProps, SkeletonProps } = props
     const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -39,4 +39,4 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
             :   null}
         </video>
     )
-})
+}

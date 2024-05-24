@@ -1,14 +1,13 @@
-import { forwardRef } from 'react'
-import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { TransactionSnackbar } from './TransactionSnackbar.js'
 
-interface TransactionSnackbarProps {
+interface TransactionSnackbarProps extends SingletonModalProps {
     pluginID: NetworkPluginID
 }
 
-export const TransactionSnackbarModal = forwardRef<SingletonModalRefCreator, TransactionSnackbarProps>((props, ref) => {
+export function TransactionSnackbarModal({ ref, pluginID }: TransactionSnackbarProps) {
     useSingletonModal(ref)
 
-    return <TransactionSnackbar pluginID={props.pluginID} />
-})
+    return <TransactionSnackbar pluginID={pluginID} />
+}

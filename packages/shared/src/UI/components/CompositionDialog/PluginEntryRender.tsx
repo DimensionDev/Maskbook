@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
+import { useCallback, useState, useRef, memo, useImperativeHandle, useMemo, type Ref, type RefAttributes } from 'react'
 import { Trans } from 'react-i18next'
 import { Result } from 'ts-results-es'
 import {
@@ -35,60 +35,56 @@ const useStyles = makeStyles()((theme) => ({
 export interface PluginEntryRenderRef {
     openPlugin(id: string, pluginProps?: any): void
 }
-export const PluginEntryRender = memo(
-    forwardRef<
-        PluginEntryRenderRef,
-        {
-            readonly: boolean
-            isOpenFromApplicationBoard: boolean
-        }
-    >((props, ref) => {
-        const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
-        const pluginField = usePluginTransField()
-        const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
-            // TODO: support priority order
-            if (plugin.ID === PluginID.RedPacket) return -1
-            return 1
-        })
-        const lackPermission = usePluginHostPermissionCheck(plugins)
-        const result = plugins.map((plugin) =>
-            Result.wrap(() => {
-                const entry = plugin.CompositionDialogEntry
-                const unstable = plugin.enableRequirement.target !== 'stable'
-                const ID = plugin.ID
-                if (!entry) return null
-                const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
-                if (lackPermission?.has(ID)) {
-                    return (
-                        <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
-                            <DialogEntry
-                                label={entry.label}
-                                {...extra}
-                                dialog={getPluginEntryDisabledDialog(plugin)}
-                                ref={trackPluginRef(ID)}
-                                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-                            />
-                        </ErrorBoundary>
-                    )
-                }
+interface PluginEntryRenderProps extends RefAttributes<PluginEntryRenderRef> {
+    readonly: boolean
+    isOpenFromApplicationBoard: boolean
+}
+export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
+    const [trackPluginRef] = useSetPluginEntryRenderRef(props.ref)
+    const pluginField = usePluginTransField()
+    const plugins = [...useActivatedPluginsSiteAdaptor('any')].sort((plugin) => {
+        // TODO: support priority order
+        if (plugin.ID === PluginID.RedPacket) return -1
+        return 1
+    })
+    const lackPermission = usePluginHostPermissionCheck(plugins)
+    const result = plugins.map((plugin) =>
+        Result.wrap(() => {
+            const entry = plugin.CompositionDialogEntry
+            const unstable = plugin.enableRequirement.target !== 'stable'
+            const ID = plugin.ID
+            if (!entry) return null
+            const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
+            if (lackPermission?.has(ID)) {
                 return (
                     <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
-                        {'onClick' in entry ?
-                            <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
-                        :   <DialogEntry
-                                {...entry}
-                                {...extra}
-                                ref={trackPluginRef(ID)}
-                                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
-                            />
-                        }
+                        <DialogEntry
+                            label={entry.label}
+                            {...extra}
+                            dialog={getPluginEntryDisabledDialog(plugin)}
+                            ref={trackPluginRef(ID)}
+                            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                        />
                     </ErrorBoundary>
                 )
-            }).unwrapOr(null),
-        )
-        return <>{result}</>
-    }),
-)
+            }
+            return (
+                <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
+                    {'onClick' in entry ?
+                        <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
+                    :   <DialogEntry
+                            {...entry}
+                            {...extra}
+                            ref={trackPluginRef(ID)}
+                            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                        />
+                    }
+                </ErrorBoundary>
+            )
+        }).unwrapOr(null),
+    )
+    return <>{result}</>
+})
 
 const usePermissionDialogStyles = makeStyles()((theme) => ({
     root: {
@@ -136,7 +132,7 @@ function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
     return cache.get(define)!
 }
 
-function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef>) {
+function useSetPluginEntryRenderRef(ref: Ref<PluginEntryRenderRef> | undefined) {
     const pluginRefs = useRef<Record<string, PluginRef | undefined | null>>({})
     const refItem: PluginEntryRenderRef = useMemo(
         () => ({
@@ -157,98 +153,94 @@ function useSetPluginEntryRenderRef(ref: React.ForwardedRef<PluginEntryRenderRef
     }
     return [trackPluginRef]
 }
-function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: (props: any) => void) {
+function useSetPluginRef(ref: Ref<PluginRef> | undefined, onClick: (props: any) => void) {
     const refItem = useMemo(() => ({ open: onClick }), [onClick])
     useImperativeHandle(ref, () => refItem, [refItem])
 }
 
-type PluginRef = {
+interface PluginRef {
     open(props: any): void
 }
-type ExtraPluginProps = {
+interface ExtraPluginProps extends RefAttributes<PluginRef> {
     unstable: boolean
     id: string
     readonly: boolean
     isOpenFromApplicationBoard?: boolean
 }
-const CustomEntry = memo(
-    forwardRef<PluginRef, Plugin.SiteAdaptor.CompositionDialogEntryCustom & ExtraPluginProps>((props, ref) => {
-        const { classes } = useStyles()
-        const { id, label, onClick, unstable } = props
-        useSetPluginRef(ref, onClick)
-        const { type, getMetadata } = useCompositionContext()
-        return (
-            <ClickableChip
-                classes={{
-                    root: classes.clickRoot,
-                }}
-                label={
-                    <>
-                        <PluginTransFieldRender field={label} pluginID={id} />
-                        {unstable ?
-                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        :   null}
-                    </>
-                }
-                onClick={() => {
-                    const metadata = getMetadata()
-                    onClick?.({ compositionType: type, metadata })
-                }}
-                disabled={props.readonly}
-            />
-        )
-    }),
-)
-
-const DialogEntry = memo(
-    forwardRef<PluginRef, Plugin.SiteAdaptor.CompositionDialogEntryDialog & ExtraPluginProps>((props, ref) => {
-        const { classes } = useStyles()
-        const { dialog: Dialog, id, label, unstable, keepMounted, isOpenFromApplicationBoard } = props
-        const [dialogProps, setDialogProps] = useState({})
-        const [open, setOpen] = useState(false)
-        const opener = useCallback((props: any = {}) => {
-            setDialogProps(props)
-            setOpen(true)
-        }, [])
-        const close = useCallback(() => {
-            setOpen(false)
-        }, [])
-
-        useSetPluginRef(ref, opener)
-        const chip = (
-            <ClickableChip
-                classes={{
-                    root: classes.clickRoot,
-                }}
-                label={
-                    <>
-                        <PluginTransFieldRender field={label} pluginID={id} />
-                        {unstable ?
-                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
-                        :   null}
-                    </>
-                }
-                disabled={props.readonly}
-                onClick={opener}
-            />
-        )
-        if (keepMounted || open)
-            return (
+const CustomEntry = memo((props: Plugin.SiteAdaptor.CompositionDialogEntryCustom & ExtraPluginProps) => {
+    const { classes } = useStyles()
+    const { id, label, onClick, unstable, ref } = props
+    useSetPluginRef(ref, onClick)
+    const { type, getMetadata } = useCompositionContext()
+    return (
+        <ClickableChip
+            classes={{
+                root: classes.clickRoot,
+            }}
+            label={
                 <>
-                    {chip}
-                    <span style={{ display: 'none' }}>
-                        {/* Dialog should use portals to render. */}
-                        <Dialog
-                            open={open}
-                            onClose={close}
-                            isOpenFromApplicationBoard={isOpenFromApplicationBoard}
-                            {...dialogProps}
-                        />
-                    </span>
+                    <PluginTransFieldRender field={label} pluginID={id} />
+                    {unstable ?
+                        <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                    :   null}
                 </>
-            )
-        return chip
-    }),
-)
+            }
+            onClick={() => {
+                const metadata = getMetadata()
+                onClick?.({ compositionType: type, metadata })
+            }}
+            disabled={props.readonly}
+        />
+    )
+})
+
+const DialogEntry = memo((props: Plugin.SiteAdaptor.CompositionDialogEntryDialog & ExtraPluginProps) => {
+    const { classes } = useStyles()
+    const { dialog: Dialog, id, label, unstable, keepMounted, isOpenFromApplicationBoard, ref } = props
+    const [dialogProps, setDialogProps] = useState({})
+    const [open, setOpen] = useState(false)
+    const opener = useCallback((props: any = {}) => {
+        setDialogProps(props)
+        setOpen(true)
+    }, [])
+    const close = useCallback(() => {
+        setOpen(false)
+    }, [])
+
+    useSetPluginRef(ref, opener)
+    const chip = (
+        <ClickableChip
+            classes={{
+                root: classes.clickRoot,
+            }}
+            label={
+                <>
+                    <PluginTransFieldRender field={label} pluginID={id} />
+                    {unstable ?
+                        <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                    :   null}
+                </>
+            }
+            disabled={props.readonly}
+            onClick={opener}
+        />
+    )
+    if (keepMounted || open)
+        return (
+            <>
+                {chip}
+                <span style={{ display: 'none' }}>
+                    {/* Dialog should use portals to render. */}
+                    <Dialog
+                        open={open}
+                        onClose={close}
+                        isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                        {...dialogProps}
+                    />
+                </span>
+            </>
+        )
+    return chip
+})
 
 DialogEntry.displayName = 'DialogEntry'
