@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Radio, radioClasses, type RadioProps } from '@mui/material'
-import { forwardRef, memo } from 'react'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -21,18 +21,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const StyledRadio = memo(
-    forwardRef<{}, RadioProps>((props, ref) => {
-        const { classes } = useStyles()
-        return (
-            <Radio
-                {...props}
-                classes={{ root: classes.root }}
-                inputRef={ref}
-                checkedIcon={<Icons.RadioButtonChecked size={20} />}
-                icon={<Icons.RadioButtonUnChecked size={20} />}
-                disableRipple
-            />
-        )
-    }),
-)
+export const StyledRadio = memo((props: RadioProps) => {
+    const { classes } = useStyles()
+    return (
+        <Radio
+            {...props}
+            classes={{ root: classes.root }}
+            checkedIcon={<Icons.RadioButtonChecked size={20} />}
+            icon={<Icons.RadioButtonUnChecked size={20} />}
+            disableRipple
+        />
+    )
+})

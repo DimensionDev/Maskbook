@@ -1,5 +1,5 @@
-import { forwardRef, useState } from 'react'
-import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { useState } from 'react'
+import { NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -19,9 +19,9 @@ export type AddCollectiblesModalCloseProps =
     | [contract: NonFungibleTokenContract<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>, tokenIds: string[]]
     | undefined
 
-export const AddCollectiblesModal = forwardRef<
-    SingletonModalRefCreator<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>
->((props, ref) => {
+export function AddCollectiblesModal({
+    ref,
+}: SingletonModalProps<AddCollectiblesModalOpenProps, AddCollectiblesModalCloseProps>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [account, setAccount] = useState<string>()
@@ -44,4 +44,4 @@ export const AddCollectiblesModal = forwardRef<
             chainId={chainId}
         />
     )
-})
+}

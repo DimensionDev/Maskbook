@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef, useMemo } from 'react'
+import { type RefAttributes, useMemo } from 'react'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -7,7 +7,7 @@ import { MaskWallet, PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
 
-interface ComponentToPrintProps {
+interface ComponentToPrintProps extends RefAttributes<unknown> {
     personaName: string
     words: string[]
     privateKey: string
@@ -76,8 +76,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: ForwardedRef<any>) => {
-    const { words, privateKey, personaName, publicKey } = props
+export function ComponentToPrint(props: ComponentToPrintProps) {
+    const { words, privateKey, personaName, publicKey, ref } = props
     const t = useDashboardTrans()
     const { classes } = useStyles()
 
@@ -118,4 +118,4 @@ export const ComponentToPrint = forwardRef((props: ComponentToPrintProps, ref: F
             </Typography>
         </Box>
     )
-})
+}

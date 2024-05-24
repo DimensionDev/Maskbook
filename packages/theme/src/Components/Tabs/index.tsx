@@ -10,16 +10,16 @@ import {
 } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab'
 import {
-    forwardRef,
     Children,
     isValidElement,
     useState,
     useRef,
     useEffect,
     useImperativeHandle,
-    type ForwardRefExoticComponent,
     useMemo,
     useCallback,
+    type Ref,
+    type ComponentType,
 } from 'react'
 import { BaseTab } from './BaseTab.js'
 import { FlexibleTab } from './FlexibleTab.js'
@@ -31,12 +31,13 @@ type MaskTabVariant = 'base' | 'flexible' | 'round'
 const defaultTabSize = 38
 
 export interface MaskTabListProps
-    extends Omit<ButtonGroupProps, 'variant' | 'onChange' | 'classes'>,
+    extends Omit<ButtonGroupProps, 'variant' | 'onChange' | 'classes' | 'ref'>,
         withClasses<keyof ButtonGroupClasses | 'arrowButton'> {
     onChange(event: object, value: string): void
     'aria-label'?: string
     variant?: MaskTabVariant
     hideArrowButton?: boolean
+    ref?: Ref<HTMLDivElement | undefined> | undefined
 }
 
 const ArrowButtonWrap = styled(Button)(({ theme }) => ({
@@ -137,7 +138,7 @@ const FlexButtonGroupWrap = styled(ButtonGroup, {
 }))
 
 const tabMapping: {
-    [key in MaskTabVariant]: ForwardRefExoticComponent<any>
+    [key in MaskTabVariant]: ComponentType<any>
 } = {
     flexible: FlexibleTab,
     round: RoundTab,
@@ -165,7 +166,7 @@ const tabMapping: {
  *      </TabContext>
  *  )
  */
-export const MaskTabList = forwardRef<HTMLDivElement | undefined, MaskTabListProps>((props, ref) => {
+export function MaskTabList(props: MaskTabListProps) {
     const context = useTabContext()
     const classes = props.classes
 
@@ -179,7 +180,7 @@ export const MaskTabList = forwardRef<HTMLDivElement | undefined, MaskTabListPro
 
     if (context === null) throw new TypeError('No TabContext provided')
 
-    const { onChange, variant = 'base', hideArrowButton, ...rest } = props
+    const { onChange, variant = 'base', hideArrowButton, ref, ...rest } = props
 
     useImperativeHandle(ref, () => innerElementRef.current)
 
@@ -304,6 +305,6 @@ export const MaskTabList = forwardRef<HTMLDivElement | undefined, MaskTabListPro
             {children}
         </ButtonGroupWrap>
     )
-})
+}
 
 MaskTabList.displayName = 'MaskTabList'

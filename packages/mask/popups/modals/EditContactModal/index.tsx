@@ -1,10 +1,10 @@
-import { forwardRef, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ActionButton, MaskTextField, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { buttonClasses } from '@mui/material/Button'
 import { alpha } from '@mui/system'
 import { Box, Typography } from '@mui/material'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -165,7 +165,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
 }
 
 export type EditContactModalOpenProps = Omit<EditContactModalProps, 'open' | 'setName'>
-export const EditContactModal = forwardRef<SingletonModalRefCreator<EditContactModalOpenProps, boolean>>((_, ref) => {
+export function EditContactModal({ ref }: SingletonModalProps<EditContactModalOpenProps, boolean>) {
     const [props, setProps] = useState<EditContactModalOpenProps>({
         title: '',
         address: '',
@@ -189,4 +189,4 @@ export const EditContactModal = forwardRef<SingletonModalRefCreator<EditContactM
             onConfirm={() => dispatch?.close(true)}
         />
     )
-})
+}

@@ -1,7 +1,7 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography, type DialogProps, DialogContent, Box } from '@mui/material'
-import { forwardRef, useState, type ReactNode, memo } from 'react'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { useState, type ReactNode, memo } from 'react'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 
@@ -108,26 +108,19 @@ const Dialog = memo(function Dialog({
 
 export type ConfirmDialogOpenProps = Omit<ConfirmDialogProps, 'open' | 'onConfirm'>
 
-export const ConfirmDialogComponent = forwardRef<SingletonModalRefCreator<ConfirmDialogOpenProps, boolean>>(
-    function ConfirmDialog(_, ref) {
-        const [props, setProps] = useState<ConfirmDialogOpenProps>({
-            title: '',
-            message: '',
-        })
+export function ConfirmDialogComponent({ ref }: SingletonModalProps<ConfirmDialogOpenProps, boolean>) {
+    const [props, setProps] = useState<ConfirmDialogOpenProps>({
+        title: '',
+        message: '',
+    })
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(p) {
-                setProps(p)
-            },
-        })
-        if (!open) return null
-        return (
-            <Dialog
-                open={open}
-                {...props}
-                onClose={() => dispatch?.close(false)}
-                onConfirm={() => dispatch?.close(true)}
-            />
-        )
-    },
-)
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(p) {
+            setProps(p)
+        },
+    })
+    if (!open) return null
+    return (
+        <Dialog open={open} {...props} onClose={() => dispatch?.close(false)} onConfirm={() => dispatch?.close(true)} />
+    )
+}

@@ -1,8 +1,8 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 
@@ -40,7 +40,7 @@ function ConfirmDrawer({ message, buttonLabel, onConfirm, ...rest }: ConfirmModa
 }
 
 export type ConfirmModalOpenProps = Omit<ConfirmModalProps, 'open'>
-export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmModalOpenProps, boolean>>((_, ref) => {
+export function ConfirmModal({ ref }: SingletonModalProps<ConfirmModalOpenProps, boolean>) {
     const [props, setProps] = useState<ConfirmModalOpenProps>({
         title: '',
         message: '',
@@ -59,4 +59,4 @@ export const ConfirmModal = forwardRef<SingletonModalRefCreator<ConfirmModalOpen
             onConfirm={() => dispatch?.close(true)}
         />
     )
-})
+}

@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button, TextField, type FilledTextFieldProps, Typography } from '@mui/material'
 import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag, useSharedTrans } from '../../../index.js'
@@ -10,10 +10,7 @@ export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'varia
     onCodeChange: (code: string) => void
 }
 
-export const PhoneNumberField = forwardRef<HTMLDivElement, PhoneNumberFieldProps>(function PhoneNumberField(
-    { code, onCodeChange, ...rest },
-    ref,
-) {
+export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFieldProps) {
     const t = useSharedTrans()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -27,7 +24,6 @@ export const PhoneNumberField = forwardRef<HTMLDivElement, PhoneNumberFieldProps
     return (
         <>
             <TextField
-                ref={ref}
                 placeholder={t.mobile_number()}
                 type="tel"
                 {...rest}
@@ -57,4 +53,4 @@ export const PhoneNumberField = forwardRef<HTMLDivElement, PhoneNumberFieldProps
             />
         </>
     )
-})
+}

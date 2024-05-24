@@ -1,10 +1,10 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import type {
     DashboardRoutes,
     EnhanceableSite,
     PersonaInformation,
     PluginID,
-    SingletonModalRefCreator,
+    SingletonModalProps,
 } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -27,58 +27,56 @@ export interface ApplicationBoardModalOpenProps {
     focusPluginID?: PluginID
 }
 
-export const ApplicationBoardModal = forwardRef<SingletonModalRefCreator<ApplicationBoardModalOpenProps>>(
-    (props, ref) => {
-        const [openDashboard, setOpenDashboard] = useState<(route: DashboardRoutes, search?: string) => void>()
-        const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
-            useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
-        const [currentSite, setCurrentSite] = useState<EnhanceableSite>()
-        const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
-        const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
-        const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()
-        const [personaPerSiteConnectStatusLoading, setPersonaPerSiteConnectStatusLoading] = useState(false)
-        const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
-            useState<(id: string, checked: boolean) => Promise<void>>()
-        const [quickMode, setQuickMode] = useState(false)
-        const [tab, setTab] = useState<ApplicationSettingTabs>()
-        const [focusPluginID, setFocusPluginID] = useState<PluginID>()
+export function ApplicationBoardModal({ ref }: SingletonModalProps<ApplicationBoardModalOpenProps>) {
+    const [openDashboard, setOpenDashboard] = useState<(route: DashboardRoutes, search?: string) => void>()
+    const [queryOwnedPersonaInformation, setQueryOwnedPersonaInformation] =
+        useState<(initializedOnly: boolean) => Promise<PersonaInformation[]>>()
+    const [currentSite, setCurrentSite] = useState<EnhanceableSite>()
+    const [allPersonas, setAllPersonas] = useState<PersonaInformation[]>()
+    const [lastRecognized, setLastRecognized] = useState<IdentityResolved>()
+    const [applicationCurrentStatus, setApplicationCurrentStatus] = useState<PersonaPerSiteConnectStatus>()
+    const [personaPerSiteConnectStatusLoading, setPersonaPerSiteConnectStatusLoading] = useState(false)
+    const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
+        useState<(id: string, checked: boolean) => Promise<void>>()
+    const [quickMode, setQuickMode] = useState(false)
+    const [tab, setTab] = useState<ApplicationSettingTabs>()
+    const [focusPluginID, setFocusPluginID] = useState<PluginID>()
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(props) {
-                setOpenDashboard(() => props.openDashboard)
-                setQueryOwnedPersonaInformation(() => props.queryOwnedPersonaInformation)
-                setCurrentSite(props.currentSite)
-                setAllPersonas(props.allPersonas)
-                setLastRecognized(props.lastRecognized)
-                setApplicationCurrentStatus(props.applicationCurrentStatus)
-                setPersonaPerSiteConnectStatusLoading(props.personaPerSiteConnectStatusLoading)
-                setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
-                setQuickMode(props.quickMode ?? false)
-                setTab(props.tab ?? ApplicationSettingTabs.pluginSwitch)
-                setFocusPluginID(props.focusPluginID)
-            },
-        })
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(props) {
+            setOpenDashboard(() => props.openDashboard)
+            setQueryOwnedPersonaInformation(() => props.queryOwnedPersonaInformation)
+            setCurrentSite(props.currentSite)
+            setAllPersonas(props.allPersonas)
+            setLastRecognized(props.lastRecognized)
+            setApplicationCurrentStatus(props.applicationCurrentStatus)
+            setPersonaPerSiteConnectStatusLoading(props.personaPerSiteConnectStatusLoading)
+            setSetPluginMinimalModeEnabled(() => props.setPluginMinimalModeEnabled)
+            setQuickMode(props.quickMode ?? false)
+            setTab(props.tab ?? ApplicationSettingTabs.pluginSwitch)
+            setFocusPluginID(props.focusPluginID)
+        },
+    })
 
-        if (!open) return null
-        return (
-            <ApplicationBoard
-                open
-                allPersonas={allPersonas ?? []}
-                lastRecognized={lastRecognized}
-                currentSite={currentSite}
-                applicationCurrentStatus={applicationCurrentStatus}
-                queryOwnedPersonaInformation={queryOwnedPersonaInformation}
-                personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
-                openDashboard={openDashboard}
-                setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
-                onClose={() => dispatch?.close()}
-                quickMode={quickMode}
-                focusPluginID={focusPluginID}
-                tab={tab}
-            />
-        )
-    },
-)
+    if (!open) return null
+    return (
+        <ApplicationBoard
+            open
+            allPersonas={allPersonas ?? []}
+            lastRecognized={lastRecognized}
+            currentSite={currentSite}
+            applicationCurrentStatus={applicationCurrentStatus}
+            queryOwnedPersonaInformation={queryOwnedPersonaInformation}
+            personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}
+            openDashboard={openDashboard}
+            setPluginMinimalModeEnabled={setPluginMinimalModeEnabled}
+            onClose={() => dispatch?.close()}
+            quickMode={quickMode}
+            focusPluginID={focusPluginID}
+            tab={tab}
+        />
+    )
+}
 
 export interface ApplicationBoardSettingsModalOpenProps {
     focusPluginID?: PluginID
@@ -86,9 +84,7 @@ export interface ApplicationBoardSettingsModalOpenProps {
     tab?: ApplicationSettingTabs
 }
 
-export const ApplicationBoardSettingsModal = forwardRef<
-    SingletonModalRefCreator<ApplicationBoardSettingsModalOpenProps>
->((props, ref) => {
+export function ApplicationBoardSettingsModal({ ref }: SingletonModalProps<ApplicationBoardSettingsModalOpenProps>) {
     const [setPluginMinimalModeEnabled, setSetPluginMinimalModeEnabled] =
         useState<(id: string, checked: boolean) => Promise<void>>()
     const [focusPluginID, setFocusPluginID] = useState<PluginID>()
@@ -111,4 +107,4 @@ export const ApplicationBoardSettingsModal = forwardRef<
             tab={tab}
         />
     )
-})
+}

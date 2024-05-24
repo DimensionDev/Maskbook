@@ -7,7 +7,7 @@ import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
-import { forwardRef, Fragment, useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
 
@@ -175,10 +175,7 @@ function FollowProfile({ payload }: FollowProfileProps) {
     )
 }
 
-export const Requirements = forwardRef<HTMLDivElement, Props>(function Requirements(
-    { onClose, statusList, showResults = true, ...props }: Props,
-    ref,
-) {
+export function Requirements({ onClose, statusList, showResults = true, ...props }: Props) {
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const postLink = usePostLink()
@@ -276,7 +273,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
         })
     }, [statusList, platform, showResults])
     return (
-        <Box {...props} className={cx(classes.box, props.className)} ref={ref}>
+        <Box {...props} className={cx(classes.box, props.className)}>
             <Typography variant="h2" className={classes.header}>
                 {t.requirements()}
                 <IconButton
@@ -290,4 +287,4 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
             <List className={classes.list}>{requirements}</List>
         </Box>
     )
-})
+}

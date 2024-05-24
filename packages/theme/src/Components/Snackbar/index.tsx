@@ -1,4 +1,4 @@
-import { forwardRef, useRef, memo, useCallback } from 'react'
+import { useRef, memo, useCallback } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
@@ -186,7 +186,7 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
     }
 })
 
-export interface CustomSnackbarContentProps {
+interface CustomSnackbarContentProps {
     id: SnackbarKey
     title: SnackbarMessage
     message?: string | React.ReactNode
@@ -205,7 +205,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
     info: <InfoIcon color="inherit" />,
 }
 
-export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
+function CustomSnackbarContent(props: CustomSnackbarContentProps) {
     const { classes, cx } = useStyles({ offsetY: props.offsetY }, { props })
     const snackbar = useSnackbar()
     const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
@@ -222,7 +222,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
         renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
     }
     return (
-        <SnackbarContent ref={ref} className={cx(classes.content, classes[props.variant!])}>
+        <SnackbarContent className={cx(classes.content, classes[props.variant!])}>
             {variantIcon ?
                 <div className={classes.icon}>{variantIcon}</div>
             :   null}
@@ -239,7 +239,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
             <div className={classes.action}>{renderedAction}</div>
         </SnackbarContent>
     )
-})
+}
 
 export const CustomSnackbarProvider = memo<
     SnackbarProviderProps & {
@@ -259,7 +259,6 @@ export const CustomSnackbarProvider = memo<
             disableWindowBlurListener
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
-            // this is a false positive, SnackbarProvider won't use it like it is a component.
             content={(key, title) => (
                 <CustomSnackbarContent id={key} variant={rest.variant ?? 'default'} title={title} offsetY={offsetY} />
             )}

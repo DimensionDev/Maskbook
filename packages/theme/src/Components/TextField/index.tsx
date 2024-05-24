@@ -1,4 +1,3 @@
-import { type ForwardedRef, forwardRef } from 'react'
 import { omit } from 'lodash-es'
 import type { BoxProps } from '@mui/system'
 import {
@@ -88,7 +87,7 @@ export interface MaskTextFieldProps extends Exclude<StandardTextFieldProps, 'var
     wrapperProps?: BoxProps
 }
 
-export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
+export function MaskTextField(props: MaskTextFieldProps) {
     const { label, sx, required = false, className, wrapperProps, helperText, ...rest } = props
     const InputProps = (props.InputProps as InputProps) ?? {}
     const { classes, cx } = useStyles()
@@ -107,7 +106,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
             {label && typeof label !== 'string' ? label : null}
             {Sniffings.is_dashboard_page ?
                 <TextField
-                    ref={ref}
                     {...rest}
                     classes={{ root: classes.field }}
                     variant="standard"
@@ -141,6 +139,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
             }
         </Box>
     )
-})
+}
 
 MaskTextField.displayName = 'MaskTextField'

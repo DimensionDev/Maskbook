@@ -1,4 +1,4 @@
-import { forwardRef, type ForwardedRef, useMemo } from 'react'
+import { useMemo, type RefAttributes } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -9,7 +9,7 @@ import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 
-interface ComponentToPrintProps {
+interface ComponentToPrintProps extends RefAttributes<unknown> {
     words: string[]
     address: string
 }
@@ -83,10 +83,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const ComponentToPrint = forwardRef(function ComponentToPrint(
-    props: ComponentToPrintProps,
-    ref: ForwardedRef<any>,
-) {
+export function ComponentToPrint(props: ComponentToPrintProps) {
     const { words, address } = props
     const t = useDashboardTrans()
     const { classes } = useStyles()
@@ -96,7 +93,7 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
     }, [words.join(',')])
 
     return (
-        <Box className={classes.container} ref={ref}>
+        <Box className={classes.container} ref={props.ref}>
             <Box className={classes.card}>
                 <Box flex={1}>
                     <Typography className={classes.publicKeyTitle}>
@@ -124,4 +121,4 @@ export const ComponentToPrint = forwardRef(function ComponentToPrint(
             </Typography>
         </Box>
     )
-})
+}

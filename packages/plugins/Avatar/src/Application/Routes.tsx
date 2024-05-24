@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { NFTListDialog, type NFTListDialogRef } from './NFTListDialog.js'
 import { PersonaPage } from './PersonaPage.js'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
-import { forwardRef } from 'react'
+import { type RefAttributes } from 'react'
 
 export enum RoutePaths {
     Personas = '/personas',
@@ -11,7 +11,7 @@ export enum RoutePaths {
     Exit = '/exit',
 }
 
-export const AvatarRoutes = forwardRef<NFTListDialogRef | undefined>((_, ref) => {
+export function AvatarRoutes({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
     return (
         <Routes>
             <Route path={RoutePaths.Personas} element={<PersonaPage />} />
@@ -23,4 +23,4 @@ export const AvatarRoutes = forwardRef<NFTListDialogRef | undefined>((_, ref) =>
             <Route path="*" element={<Navigate replace to={RoutePaths.Personas} />} />
         </Routes>
     )
-})
+}

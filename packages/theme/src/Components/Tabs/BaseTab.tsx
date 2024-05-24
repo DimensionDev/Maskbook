@@ -1,5 +1,5 @@
 import { Button, type ButtonProps, styled } from '@mui/material'
-import { forwardRef, type ComponentType } from 'react'
+import { type ComponentType } from 'react'
 
 const BaseTabWrap: ComponentType<ButtonProps & { activated: boolean }> = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
@@ -35,7 +35,7 @@ interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onCh
     onChange?(event: object, value: string): void
 }
 
-export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
+export function BaseTab(props: ButtonTabProps) {
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
@@ -47,7 +47,6 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
     return (
         <BaseTabWrap
             activated={activated}
-            ref={ref}
             role="tab"
             {...props}
             disableElevation
@@ -57,4 +56,4 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
             onChange={undefined}
         />
     )
-})
+}

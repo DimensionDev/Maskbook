@@ -1,4 +1,4 @@
-import { forwardRef, type HTMLProps, memo } from 'react'
+import { type HTMLProps, memo } from 'react'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography, useForkRef } from '@mui/material'
@@ -69,73 +69,72 @@ interface CollectibleItemProps
         SelectableProps {}
 
 // TODO lazy render in big list.
-export const CollectibleItem = memo(
-    forwardRef<HTMLDivElement, CollectibleItemProps>(function CollectibleItem(props: CollectibleItemProps, ref) {
-        const {
-            provider,
-            asset,
-            pluginID,
-            checked,
-            inactive,
-            selectable,
-            multiple,
-            value,
-            onChange,
-            className,
-            showNetworkIcon,
-            disableLink,
-            ...rest
-        } = props
-        const { classes, cx } = useStyles()
-        const Utils = useWeb3Utils()
+export const CollectibleItem = memo(function CollectibleItem(props: CollectibleItemProps) {
+    const {
+        provider,
+        asset,
+        pluginID,
+        checked,
+        inactive,
+        selectable,
+        multiple,
+        value,
+        onChange,
+        className,
+        showNetworkIcon,
+        disableLink,
+        ref,
+        ...rest
+    } = props
+    const { classes, cx } = useStyles()
+    const Utils = useWeb3Utils()
 
-        const uiTokenId = Utils.formatTokenId(asset.tokenId, 4)
+    const uiTokenId = Utils.formatTokenId(asset.tokenId, 4)
 
-        const SelectableButton = selectable && multiple ? Checkbox : Radio
-        const scrollIntoViewRef = (node: HTMLDivElement) => {
-            if (!checked || multiple || !node) return
-            node.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-        }
-        const forkedRef = useForkRef(ref, scrollIntoViewRef)
+    const SelectableButton = selectable && multiple ? Checkbox : Radio
+    const scrollIntoViewRef = (node: HTMLDivElement) => {
+        if (!checked || multiple || !node) return
+        node.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }
+    const forkedRef = useForkRef(ref, scrollIntoViewRef)
 
-        return (
-            <div
-                className={cx(classes.card, className, {
-                    [classes.inactive]: inactive,
-                    [classes.selectable]: selectable,
-                })}
-                onClick={() => {
-                    if (selectable) {
-                        onChange?.({
-                            checked: !checked,
-                            value: value!,
-                        })
-                    }
-                }}
-                {...rest}
-                ref={forkedRef}>
-                <CollectibleCard
-                    className={classes.collectibleCard}
-                    asset={asset}
-                    provider={provider}
-                    pluginID={pluginID}
-                    showNetworkIcon={showNetworkIcon}
-                    disableLink={disableLink || selectable}
-                />
-                {asset.metadata?.name || uiTokenId ?
-                    <div className={classes.description}>
-                        <Typography className={classes.name} color="textPrimary" variant="body2">
-                            {asset.metadata?.name || uiTokenId}
-                        </Typography>
-                    </div>
-                :   null}
-                {checked ?
-                    <SelectableButton className={classes.select} value={value} checked />
-                :   null}
-            </div>
-        )
-    }),
-)
+    return (
+        <div
+            className={cx(classes.card, className, {
+                [classes.inactive]: inactive,
+                [classes.selectable]: selectable,
+            })}
+            onClick={() => {
+                if (selectable) {
+                    onChange?.({
+                        checked: !checked,
+                        value: value!,
+                    })
+                }
+            }}
+            {...rest}
+            ref={forkedRef}>
+            <CollectibleCard
+                className={classes.collectibleCard}
+                asset={asset}
+                provider={provider}
+                pluginID={pluginID}
+                showNetworkIcon={showNetworkIcon}
+                disableLink={disableLink || selectable}
+            />
+            {asset.metadata?.name || uiTokenId ?
+                <div className={classes.description}>
+                    <Typography className={classes.name} color="textPrimary" variant="body2">
+                        {asset.metadata?.name || uiTokenId}
+                    </Typography>
+                </div>
+            :   null}
+            {checked ?
+                <SelectableButton className={classes.select} value={value} checked />
+            :   null}
+        </div>
+    )
+})
 
 export function CollectibleItemSkeleton(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()

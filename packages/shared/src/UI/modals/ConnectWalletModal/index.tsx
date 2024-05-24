@@ -1,12 +1,12 @@
 import { WalletIcon, useSharedTrans } from '@masknet/shared'
-import { NetworkPluginID, getSiteType, pluginIDsSettings, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { NetworkPluginID, getSiteType, pluginIDsSettings, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
 import { getUtils, getConnection } from '@masknet/web3-providers'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
-import { forwardRef, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 import { Spinner } from './Spinner.js'
@@ -61,9 +61,9 @@ export interface ConnectWalletModalOpenProps {
 
 export type ConnectWalletModalCloseProps = boolean
 
-export const ConnectWalletModal = forwardRef<
-    SingletonModalRefCreator<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>
->((props, ref) => {
+export function ConnectWalletModal({
+    ref,
+}: SingletonModalProps<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>) {
     const t = useSharedTrans()
 
     const connectionRef = useRef<{
@@ -193,4 +193,4 @@ export const ConnectWalletModal = forwardRef<
             </DialogContent>
         </InjectedDialog>
     )
-})
+}

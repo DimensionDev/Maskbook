@@ -1,5 +1,4 @@
 import { Button, type ButtonProps, styled } from '@mui/material'
-import { forwardRef } from 'react'
 
 const RoundTabWrap = styled(Button, {
     shouldForwardProp: (prop) => prop !== 'activated',
@@ -29,7 +28,7 @@ interface ButtonTabProps extends React.PropsWithChildren<Omit<ButtonProps, 'onCh
     onChange?(event: object, value: string): void
 }
 
-export const RoundTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref) => {
+export function RoundTab(props: ButtonTabProps) {
     const activated = !!props.selected
     const { onChange, onClick, value } = props
 
@@ -41,7 +40,6 @@ export const RoundTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, re
     return (
         <RoundTabWrap
             activated={activated}
-            ref={ref}
             role="tab"
             {...props}
             disableElevation
@@ -51,4 +49,4 @@ export const RoundTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, re
             onChange={undefined}
         />
     )
-})
+}

@@ -1,4 +1,4 @@
-import { PopupRoutes, type SingletonModalRefCreator, type Wallet } from '@masknet/shared-base'
+import { PopupRoutes, type SingletonModalProps, type Wallet } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton } from '@masknet/theme'
 import { useWallets } from '@masknet/web3-hooks-base'
@@ -6,7 +6,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography, useTheme } from '@mui/material'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
@@ -112,7 +112,7 @@ export type WalletRemoveModalOpenProps = Omit<
     'open' | 'password' | 'setPassword' | 'error' | 'setError'
 >
 
-export const WalletRemoveModal = forwardRef<SingletonModalRefCreator<WalletRemoveModalOpenProps, boolean>>((_, ref) => {
+export function WalletRemoveModal({ ref }: SingletonModalProps<WalletRemoveModalOpenProps, boolean>) {
     const [props, setProps] = useState<WalletRemoveModalOpenProps>({
         title: '',
         wallet: undefined,
@@ -141,4 +141,4 @@ export const WalletRemoveModal = forwardRef<SingletonModalRefCreator<WalletRemov
             }}
         />
     )
-})
+}

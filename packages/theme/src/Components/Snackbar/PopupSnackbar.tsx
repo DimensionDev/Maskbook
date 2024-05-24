@@ -1,4 +1,4 @@
-import { memo, useRef, forwardRef, useCallback } from 'react'
+import { memo, useRef, useCallback } from 'react'
 import { Typography, alpha, collapseClasses } from '@mui/material'
 import {
     SnackbarProvider,
@@ -87,22 +87,20 @@ interface PopupSnackbarContentProps {
     variant?: VariantType
 }
 
-const PopupSnackbarContent = forwardRef<HTMLDivElement, PopupSnackbarContentProps>(
-    ({ id, title, message, variant }, ref) => {
-        const { classes, cx } = useStyles()
+function PopupSnackbarContent({ id, title, message, variant }: PopupSnackbarContentProps) {
+    const { classes, cx } = useStyles()
 
-        return (
-            <SnackbarContent key={id} className={cx(classes.content, classes[variant!])} ref={ref}>
-                <Typography className={classes.title} component="div">
-                    {title}
-                </Typography>
-                {typeof message === 'string' ?
-                    <Typography className={classes.message}>{message}</Typography>
-                :   message}
-            </SnackbarContent>
-        )
-    },
-)
+    return (
+        <SnackbarContent key={id} className={cx(classes.content, classes[variant!])}>
+            <Typography className={classes.title} component="div">
+                {title}
+            </Typography>
+            {typeof message === 'string' ?
+                <Typography className={classes.message}>{message}</Typography>
+            :   message}
+        </SnackbarContent>
+    )
+}
 
 export function usePopupCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()

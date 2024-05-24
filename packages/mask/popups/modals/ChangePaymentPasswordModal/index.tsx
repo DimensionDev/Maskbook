@@ -1,8 +1,8 @@
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
@@ -153,51 +153,49 @@ export type ChangePaymentPasswordOpenProps = Omit<
     | 'setOriginalPasswordWrong'
 >
 
-export const ChangePaymentPasswordModal = forwardRef<SingletonModalRefCreator<ChangePaymentPasswordOpenProps, boolean>>(
-    (_, ref) => {
-        const [props, setProps] = useState<ChangePaymentPasswordOpenProps>({
-            title: '',
-        })
+export function ChangePaymentPasswordModal({ ref }: SingletonModalProps<ChangePaymentPasswordOpenProps, boolean>) {
+    const [props, setProps] = useState<ChangePaymentPasswordOpenProps>({
+        title: '',
+    })
 
-        const [oldPassword, setOldPassword] = useState('')
-        const [newPassword, setNewPassword] = useState('')
-        const [confirmNewPassword, setConfirmNewPassword] = useState('')
+    const [oldPassword, setOldPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-        const [passwordNotMatch, setPasswordNotMatch] = useState('')
-        const [passwordTooShort, setPasswordTooShort] = useState('')
-        const [originalPasswordWrong, setOriginalPasswordWrong] = useState('')
+    const [passwordNotMatch, setPasswordNotMatch] = useState('')
+    const [passwordTooShort, setPasswordTooShort] = useState('')
+    const [originalPasswordWrong, setOriginalPasswordWrong] = useState('')
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(p) {
-                setProps(p)
-            },
-        })
-        return (
-            <ChangePaymentPasswordDrawer
-                open={open}
-                oldPassword={oldPassword}
-                newPassword={newPassword}
-                confirmNewPassword={confirmNewPassword}
-                passwordNotMatch={passwordNotMatch}
-                passwordTooShort={passwordTooShort}
-                originalPasswordWrong={originalPasswordWrong}
-                setOldPassword={setOldPassword}
-                setNewPassword={setNewPassword}
-                setConfirmNewPassword={setConfirmNewPassword}
-                setPasswordNotMatch={setPasswordNotMatch}
-                setPasswordTooShort={setPasswordTooShort}
-                setOriginalPasswordWrong={setOriginalPasswordWrong}
-                {...props}
-                onClose={() => {
-                    setOldPassword('')
-                    setNewPassword('')
-                    setConfirmNewPassword('')
-                    setPasswordNotMatch('')
-                    setPasswordTooShort('')
-                    setOriginalPasswordWrong('')
-                    dispatch?.close(false)
-                }}
-            />
-        )
-    },
-)
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(p) {
+            setProps(p)
+        },
+    })
+    return (
+        <ChangePaymentPasswordDrawer
+            open={open}
+            oldPassword={oldPassword}
+            newPassword={newPassword}
+            confirmNewPassword={confirmNewPassword}
+            passwordNotMatch={passwordNotMatch}
+            passwordTooShort={passwordTooShort}
+            originalPasswordWrong={originalPasswordWrong}
+            setOldPassword={setOldPassword}
+            setNewPassword={setNewPassword}
+            setConfirmNewPassword={setConfirmNewPassword}
+            setPasswordNotMatch={setPasswordNotMatch}
+            setPasswordTooShort={setPasswordTooShort}
+            setOriginalPasswordWrong={setOriginalPasswordWrong}
+            {...props}
+            onClose={() => {
+                setOldPassword('')
+                setNewPassword('')
+                setConfirmNewPassword('')
+                setPasswordNotMatch('')
+                setPasswordTooShort('')
+                setOriginalPasswordWrong('')
+                dispatch?.close(false)
+            }}
+        />
+    )
+}

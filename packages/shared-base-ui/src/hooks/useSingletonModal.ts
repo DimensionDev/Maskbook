@@ -1,15 +1,15 @@
-import { useCallback, useImperativeHandle, useRef, useState } from 'react'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import { useCallback, useImperativeHandle, useRef, useState, type Ref } from 'react'
+import type { SingletonModalRef } from '@masknet/shared-base'
 
 export function useSingletonModal<OpenProps, CloseProps>(
-    ref: React.ForwardedRef<SingletonModalRefCreator<OpenProps, CloseProps>>,
+    ref: Ref<SingletonModalRef<OpenProps, CloseProps>> | undefined,
     options?: {
-        onOpen?: (props: OpenProps, dispatch: ReturnType<SingletonModalRefCreator<OpenProps, CloseProps>>) => void
-        onClose?: (props: CloseProps, dispatch: ReturnType<SingletonModalRefCreator<OpenProps, CloseProps>>) => void
-        onAbort?: (error: Error, dispatch: ReturnType<SingletonModalRefCreator<OpenProps, CloseProps>>) => void
+        onOpen?: (props: OpenProps, dispatch: ReturnType<SingletonModalRef<OpenProps, CloseProps>>) => void
+        onClose?: (props: CloseProps, dispatch: ReturnType<SingletonModalRef<OpenProps, CloseProps>>) => void
+        onAbort?: (error: Error, dispatch: ReturnType<SingletonModalRef<OpenProps, CloseProps>>) => void
     },
 ) {
-    type T = SingletonModalRefCreator<OpenProps, CloseProps>
+    type T = SingletonModalRef<OpenProps, CloseProps>
 
     const [open, setOpen] = useState(false)
     const dispatchRef = useRef<ReturnType<T>>(undefined)

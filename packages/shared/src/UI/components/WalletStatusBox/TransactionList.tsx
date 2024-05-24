@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import { format } from 'date-fns'
@@ -173,24 +173,17 @@ interface Props extends ListProps {
     onClear?(tx: RecentTransactionComputed<Web3Helper.ChainIdAll, Web3Helper.TransactionAll>): void
 }
 
-export const TransactionList = forwardRef<HTMLUListElement, Props>(
-    ({ className, transactions, onClear = noop, ...rest }, ref) => {
-        const { classes, cx } = useStyles()
-        const { chainId } = useChainContext()
-        if (!transactions.length) return null
-        return (
-            <List className={cx(classes.list, className)} {...rest} ref={ref}>
-                {transactions.map((tx) => (
-                    <ListItem key={tx.id} className={classes.listItem}>
-                        <Transaction
-                            className={classes.transaction}
-                            transaction={tx}
-                            chainId={chainId}
-                            onClear={onClear}
-                        />
-                    </ListItem>
-                ))}
-            </List>
-        )
-    },
-)
+export function TransactionList({ className, transactions, onClear = noop, ...rest }: Props) {
+    const { classes, cx } = useStyles()
+    const { chainId } = useChainContext()
+    if (!transactions.length) return null
+    return (
+        <List className={cx(classes.list, className)} {...rest}>
+            {transactions.map((tx) => (
+                <ListItem key={tx.id} className={classes.listItem}>
+                    <Transaction className={classes.transaction} transaction={tx} chainId={chainId} onClear={onClear} />
+                </ListItem>
+            ))}
+        </List>
+    )
+}

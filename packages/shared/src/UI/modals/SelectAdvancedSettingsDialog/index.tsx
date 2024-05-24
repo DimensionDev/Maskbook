@@ -1,6 +1,6 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { SelectGasSettingsDialog, type SelectGasSettings } from './SelectGasSettingsDialog.js'
 
@@ -18,9 +18,9 @@ export interface SelectGasSettingsModalCloseProps {
     settings?: SelectGasSettings | null
 }
 
-export const SelectGasSettingsModal = forwardRef<
-    SingletonModalRefCreator<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>
->((props, ref) => {
+export function SelectGasSettingsModal({
+    ref,
+}: SingletonModalProps<SelectGasSettingsModalOpenProps, SelectGasSettingsModalCloseProps>) {
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [slippageTolerance, setSlippageTolerance] = useState<number>()
@@ -58,4 +58,4 @@ export const SelectGasSettingsModal = forwardRef<
             disableGasLimit={disableGasLimit}
         />
     )
-})
+}

@@ -1,7 +1,7 @@
-import { forwardRef, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GasSettingDialog } from './GasSettingDialog.js'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import { type ChainId, type GasConfig } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { BottomDrawer } from '../../components/index.js'
@@ -18,9 +18,7 @@ export type GasSettingModalCloseProps = GasConfig | undefined
 
 const initGasSetting: GasSetting = {}
 
-export const GasSettingModal = forwardRef<
-    SingletonModalRefCreator<GasSettingModalOpenProps, GasSettingModalCloseProps>
->(function GasSettingModal(_, ref) {
+export function GasSettingModal({ ref }: SingletonModalProps<GasSettingModalOpenProps, GasSettingModalCloseProps>) {
     const t = useMaskSharedTrans()
     const [chainId, setChainId] = useState<ChainId | undefined>()
     const [replaceType, setReplaceType] = useState<ReplaceType>()
@@ -57,4 +55,4 @@ export const GasSettingModal = forwardRef<
             />
         </BottomDrawer>
     )
-})
+}

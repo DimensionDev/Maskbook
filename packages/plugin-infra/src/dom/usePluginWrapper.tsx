@@ -1,16 +1,13 @@
-import { createContext, useEffect, useContext, type ForwardRefExoticComponent, type RefAttributes } from 'react'
+import { createContext, useEffect, useContext, type PropsWithChildren, type RefAttributes } from 'react'
 import { noop } from 'lodash-es'
 import type { Plugin } from '../types.js'
 
-export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.Shared.Definition> =
-    ForwardRefExoticComponent<
-        React.PropsWithChildren<
-            RefAttributes<PluginWrapperMethods> & {
-                definition: T
-                lackHostPermission?: boolean
-            }
-        >
-    >
+export interface PluginWrapperComponentProps<T extends Plugin.Shared.Definition = Plugin.Shared.Definition>
+    extends PropsWithChildren,
+        RefAttributes<PluginWrapperMethods> {
+    definition: T
+    lackHostPermission?: boolean
+}
 
 const emptyPluginWrapperMethods = {
     setWrap: noop,

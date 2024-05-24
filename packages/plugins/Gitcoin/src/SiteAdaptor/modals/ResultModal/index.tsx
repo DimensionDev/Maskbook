@@ -1,6 +1,6 @@
-import { forwardRef, useState, type PropsWithChildren } from 'react'
+import { useState, type PropsWithChildren } from 'react'
 import type { InjectedDialogProps } from '@masknet/shared'
-import type { SingletonModalRefCreator } from '@masknet/shared-base'
+import type { SingletonModalProps } from '@masknet/shared-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ export interface ResultModalOpenProps extends Omit<PropsWithChildren<InjectedDia
     onShare?(): void
 }
 
-export const ResultModal = forwardRef<SingletonModalRefCreator<ResultModalOpenProps>>((props, ref) => {
+export function ResultModal({ ref }: SingletonModalProps<ResultModalOpenProps>) {
     const [props_, setProps_] = useState<ResultModalOpenProps>()
 
     const [open, dispatch] = useSingletonModal(ref, {
@@ -32,4 +32,4 @@ export const ResultModal = forwardRef<SingletonModalRefCreator<ResultModalOpenPr
             uiAmount={props_?.uiAmount || ''}
         />
     )
-})
+}

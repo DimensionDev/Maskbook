@@ -1,6 +1,6 @@
-import type { SingletonModalRefCreator, BackupAccountType } from '@masknet/shared-base'
+import type { BackupAccountType, SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { MergeBackupDialog } from './MergeBackupDialog.js'
 
 export interface MergeBackupModalOpenProps {
@@ -13,7 +13,7 @@ export interface MergeBackupModalOpenProps {
     type: BackupAccountType
 }
 
-export const MergeBackupModal = forwardRef<SingletonModalRefCreator<MergeBackupModalOpenProps>>((props, ref) => {
+export function MergeBackupModal({ ref }: SingletonModalProps<MergeBackupModalOpenProps>) {
     const [downloadLink, setDownloadLink] = useState('')
     const [code, setCode] = useState('')
     const [type, setType] = useState<BackupAccountType>()
@@ -54,4 +54,4 @@ export const MergeBackupModal = forwardRef<SingletonModalRefCreator<MergeBackupM
             uploadedAt={uploadedAt}
         />
     )
-})
+}

@@ -1,10 +1,10 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { alpha } from '@mui/system'
 import { Typography } from '@mui/material'
 import { buttonClasses } from '@mui/material/Button'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -97,26 +97,24 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
 }
 
 export type DeleteContactModalOpenProps = Omit<DeleteContactModalProps, 'open'>
-export const DeleteContactModal = forwardRef<SingletonModalRefCreator<DeleteContactModalOpenProps, boolean>>(
-    (_, ref) => {
-        const [props, setProps] = useState<DeleteContactModalOpenProps>({
-            title: '',
-            address: '',
-            name: '',
-        })
+export function DeleteContactModal({ ref }: SingletonModalProps<DeleteContactModalOpenProps, boolean>) {
+    const [props, setProps] = useState<DeleteContactModalOpenProps>({
+        title: '',
+        address: '',
+        name: '',
+    })
 
-        const [open, dispatch] = useSingletonModal(ref, {
-            onOpen(p) {
-                setProps(p)
-            },
-        })
-        return (
-            <DeleteContactDrawer
-                open={open}
-                {...props}
-                onClose={() => dispatch?.close(false)}
-                onConfirm={() => dispatch?.close(true)}
-            />
-        )
-    },
-)
+    const [open, dispatch] = useSingletonModal(ref, {
+        onOpen(p) {
+            setProps(p)
+        },
+    })
+    return (
+        <DeleteContactDrawer
+            open={open}
+            {...props}
+            onClose={() => dispatch?.close(false)}
+            onConfirm={() => dispatch?.close(true)}
+        />
+    )
+}
