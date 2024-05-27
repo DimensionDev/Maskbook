@@ -56,7 +56,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
             address: asset.contract.deployed_by,
         },
         owner: {
-            address: asset.owners?.[0].owner_address,
+            address: asset.owners?.[0]?.owner_address,
         },
         priceInToken:
             asset.last_sale ?
