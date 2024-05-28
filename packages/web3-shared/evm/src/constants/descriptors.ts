@@ -339,6 +339,39 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: false,
         averageBlockDelay: 10,
     },
+    {
+        ID: `${PLUGIN_ID}_zora`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Zora,
+        type: NetworkType.Zora,
+        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
+        iconColor: '#000', // TODO
+        name: 'Zora',
+        isMainnet: true,
+        averageBlockDelay: 10,
+    },
+    {
+        ID: `${PLUGIN_ID}_zksync-era`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.ZkSyncEra,
+        type: NetworkType.ZkSyncEra,
+        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
+        iconColor: '#000', // TODO
+        name: 'zKSync Era Mainnet',
+        isMainnet: true,
+        averageBlockDelay: 10,
+    },
+    {
+        ID: `${PLUGIN_ID}_linea`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Linea,
+        type: NetworkType.Linea,
+        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
+        iconColor: '#000', // TODO
+        name: 'Linea',
+        isMainnet: true,
+        averageBlockDelay: 10,
+    },
 ]
 
 export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {

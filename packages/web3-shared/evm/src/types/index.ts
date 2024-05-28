@@ -148,6 +148,12 @@ export enum ChainId {
 
     // For any chains not supported yet.
     Invalid = 0,
+
+    Zora = 7777777,
+
+    ZkSyncEra = 324,
+
+    Linea = 59144,
 }
 
 export enum AddressType {
@@ -302,6 +308,9 @@ export enum NetworkType {
     Moonbeam = 'Moonbeam',
     XLayer = 'XLayer',
     CustomNetwork = 'CustomNetwork',
+    Zora = 'Zora',
+    ZkSyncEra = 'ZkSyncEra',
+    Linea = 'Linea',
 }
 
 export enum ProviderType {
