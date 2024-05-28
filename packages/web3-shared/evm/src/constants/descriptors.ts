@@ -344,8 +344,8 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Zora,
         type: NetworkType.Zora,
-        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
-        iconColor: '#000', // TODO
+        icon: new URL('../assets/zora.png', import.meta.url).href,
+        iconColor: '#3059AE',
         name: 'Zora',
         isMainnet: true,
         averageBlockDelay: 10,
@@ -355,8 +355,8 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.ZkSyncEra,
         type: NetworkType.ZkSyncEra,
-        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
-        iconColor: '#000', // TODO
+        icon: new URL('../assets/zksync-era.svg', import.meta.url).href,
+        iconColor: '#1c5EFF',
         name: 'zKSync Era Mainnet',
         isMainnet: true,
         averageBlockDelay: 10,
@@ -366,8 +366,8 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Linea,
         type: NetworkType.Linea,
-        icon: new URL('../assets/metis.svg', import.meta.url).href, // TODO
-        iconColor: '#000', // TODO
+        icon: new URL('../assets/linea.svg', import.meta.url).href,
+        iconColor: '#61DFFF',
         name: 'Linea',
         isMainnet: true,
         averageBlockDelay: 10,
