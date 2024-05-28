@@ -33,7 +33,6 @@
 - react-devtools-inline: <https://github.com/facebook/react/pull/27733> and <https://github.com/facebook/react/pull/29199>
 - @lifi/widget@2.10.1: Customized requirements, details can be viewed at the fork repository <https://github.com/DimensionDev/lifi-widget>
 - react-use: <https://github.com/streamich/react-use/issues/1923>
-- react-qrcode-logo: <https://github.com/gcoro/react-qrcode-logo/issues/55>
 
 ## CSP
 
