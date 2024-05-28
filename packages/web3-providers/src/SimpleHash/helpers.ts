@@ -165,6 +165,12 @@ export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(
             return ChainId.Scroll
         case 'celo':
             return ChainId.Celo
+        case 'zora':
+            return ChainId.Zora
+        case 'zksync-era':
+            return ChainId.ZkSyncEra
+        case 'linea':
+            return ChainId.Linea
         default:
             return undefined
     }
@@ -182,6 +188,9 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
         [ChainId.Base]: 'base',
         [ChainId.Scroll]: 'scroll',
         [ChainId.Celo]: 'celo',
+        [ChainId.Zora]: 'zora',
+        [ChainId.ZkSyncEra]: 'zksync-era',
+        [ChainId.Linea]: 'linea',
     },
     [NetworkPluginID.PLUGIN_SOLANA]: {
         [SolanaChainId.Mainnet]: 'solana',
