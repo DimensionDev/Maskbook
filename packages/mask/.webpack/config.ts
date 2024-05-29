@@ -300,7 +300,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             // cannot use false, in some cases there are more than 1 runtime in the single page and cause bug.
             runtimeChunk: {
                 name: (entry: { name: string }) => {
-                    return entry.name === 'backgroundWorker' ? 'mv3' : 'runtime'
+                    return entry.name === 'backgroundWorker' ? false : 'runtime'
                 },
             },
             splitChunks:
