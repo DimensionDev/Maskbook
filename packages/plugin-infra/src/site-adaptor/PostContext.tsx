@@ -89,6 +89,9 @@ export interface PostContext extends PostContextAuthor {
     readonly decryptComment: ValueRef<null | ((commentEncrypted: string) => Promise<string | null>)>
     // #endregion
     // #region Post payload discovered in the rawMessage
+    /**
+     * Caution & TODO: Payload in postMetadataImages won't be reflected in this currently.
+     */
     readonly hasMaskPayload: Subscription<boolean>
     readonly postIVIdentifier: Subscription<PostIVIdentifier | null>
     /**
