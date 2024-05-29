@@ -196,9 +196,13 @@ export const Component = memo(function Recovery() {
                     </TabContext>
                 </div>
                 <SetupFrameController>
-                    <div className={classes.buttonGroup}>{use(RecoveryContext).SubmitOutlet}</div>
+                    <Outlet />
                 </SetupFrameController>
             </RecoveryProvider>
         </>
     )
 })
+function Outlet() {
+    const { classes } = useStyles()
+    return <div className={classes.buttonGroup}>{use(RecoveryContext).SubmitOutlet}</div>
+}

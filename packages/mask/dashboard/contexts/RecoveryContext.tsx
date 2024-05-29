@@ -12,7 +12,7 @@ import {
 
 interface ContextOptions {
     SubmitOutlet: ReactNode
-    fillSubmitOutlet(outlet: ReactNode): () => void
+    fillSubmitOutlet(outlet: ReactNode): void
 }
 
 export const RecoveryContext = createContext<ContextOptions>({
