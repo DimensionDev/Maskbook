@@ -3,7 +3,6 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
 import { Trans } from 'react-i18next'
 
-// eslint-disable-next-line react/no-class-component
 export class LoadingFailCard extends Component<
     PropsWithChildren<{
         title: string
