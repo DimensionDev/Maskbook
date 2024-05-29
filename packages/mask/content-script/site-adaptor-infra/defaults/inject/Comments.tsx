@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
+import { type PostInfo, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { ValueRef } from '@masknet/shared-base'
@@ -36,9 +36,9 @@ export function injectPostCommentsDefault<T extends string>(
                 const needZipF = needZip || (() => undefined)
                 const root = attachReactTreeWithContainer(meta.afterShadow, { signal })
                 root.render(
-                    <PostInfoProvider post={current}>
+                    <PostInfoContext value={current}>
                         <PostCommentDefault needZip={needZipF} comment={commentRef} />
-                    </PostInfoProvider>,
+                    </PostInfoContext>,
                 )
                 return {
                     onNodeMutation() {

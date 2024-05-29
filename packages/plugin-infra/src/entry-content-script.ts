@@ -17,7 +17,6 @@ export {
     type PostContextActions,
     type PostInfo,
     PostInfoContext,
-    PostInfoProvider,
     usePostInfoDetails,
     type CompositionType,
     CompositionContext,

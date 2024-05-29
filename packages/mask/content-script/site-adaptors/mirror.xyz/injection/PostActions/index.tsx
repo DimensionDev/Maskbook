@@ -3,7 +3,7 @@ import { Plugin } from '@masknet/plugin-infra'
 import {
     createInjectHooksRenderer,
     type PostInfo,
-    PostInfoProvider,
+    PostInfoContext,
     useActivatedPluginsSiteAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
@@ -50,9 +50,9 @@ function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
             <EVMWeb3ContextProvider>
-                <PostInfoProvider post={postInfo}>
+                <PostInfoContext value={postInfo}>
                     <PostActions />
-                </PostInfoProvider>
+                </PostInfoContext>
             </EVMWeb3ContextProvider>
         )
         if (postInfo.actionsElement) {

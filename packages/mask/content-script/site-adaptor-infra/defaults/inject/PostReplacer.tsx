@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
+import { PostInfoContext, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { PostReplacer, type PostReplacerProps } from '../../../components/InjectedComponents/PostReplacer.js'
 
@@ -25,13 +25,13 @@ export function injectPostReplacer({ zipPost, unzipPost }: InjectPostReplacerCon
             untilVisible: true,
             signal,
         }).render(
-            <PostInfoProvider post={current}>
+            <PostInfoContext value={current}>
                 <PostReplacerDefault
                     zipPost={() => zipPost(current.rootElement)}
                     unZipPost={() => unzipPost(current.rootElement)}
                     {...current}
                 />
-            </PostInfoProvider>,
+            </PostInfoContext>,
         )
     }
 }

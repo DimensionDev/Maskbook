@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es'
-import { PostInfoProvider, type PostInfo } from '@masknet/plugin-infra/content-script'
+import { PostInfoContext, type PostInfo } from '@masknet/plugin-infra/content-script'
 import { PostActions } from '../../../components/InjectedComponents/PostActions.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 
@@ -17,9 +17,9 @@ export function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         if (postInfo.actionsElement) {
             const jsx = (
-                <PostInfoProvider post={postInfo}>
+                <PostInfoContext value={postInfo}>
                     <PostActions />
-                </PostInfoProvider>
+                </PostInfoContext>
             )
             const root = attachReactTreeWithContainer(postInfo.actionsElement.afterShadow, {
                 tag: createRootElement,

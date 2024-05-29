@@ -114,10 +114,6 @@ export type PostInfo = PostContext
 export const PostInfoContext = createContext<PostContext | null>(null)
 PostInfoContext.displayName = 'PostInfoContext'
 
-/** @deprecated use <PostInfoContext.Provider value={post}> */
-export function PostInfoProvider(props: React.PropsWithChildren<{ post: PostInfo }>) {
-    return <PostInfoContext value={props.post}>{props.children}</PostInfoContext>
-}
 export const usePostInfoDetails: {
     // Change to use* when https://github.com/microsoft/TypeScript/issues/44643 fixed
     [key in keyof PostInfo]: () => PostInfo[key] extends ValueRef<infer T> ? T
