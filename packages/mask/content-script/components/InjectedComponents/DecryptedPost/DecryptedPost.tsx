@@ -157,7 +157,12 @@ export function DecryptPost(props: DecryptPostProps) {
         return () => signal.abort()
     }, [deconstructedPayload, postBy, postMetadataImages.join(','), whoAmI, mentionedLinks.join(',')])
 
-    if (!deconstructedPayload && progress.every((x) => x.progress.internal)) return null
+    if (
+        !deconstructedPayload &&
+        !progress.some((x) => x.progress.type === 'success') &&
+        progress.every((x) => x.progress.internal)
+    )
+        return null
     return (
         <>
             {uniqWith(progress, (a, b) => isProgressEqual(a.progress, b.progress))

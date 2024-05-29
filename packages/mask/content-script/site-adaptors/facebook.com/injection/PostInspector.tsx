@@ -1,15 +1,8 @@
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
-import { Flags } from '@masknet/flags'
+import { getOrAttachShadowRoot } from '@masknet/shared-base-ui'
 
-const map = new WeakMap<HTMLElement, ShadowRoot>()
-function getShadowRoot(node: HTMLElement) {
-    if (map.has(node)) return map.get(node)!
-    const dom = node.attachShadow(Flags.shadowRootInit)
-    map.set(node, dom)
-    return dom
-}
 export function injectPostInspectorFacebook(signal: AbortSignal, current: PostInfo) {
     clickSeeMore(current.rootElement.current?.parentElement)
     return injectPostInspectorDefault({
@@ -17,7 +10,7 @@ export function injectPostInspectorFacebook(signal: AbortSignal, current: PostIn
             zipEncryptedPostContent(node)
             zipPostLinkPreview(node)
         },
-        injectionPoint: (post) => getShadowRoot(post.suggestedInjectionPoint),
+        injectionPoint: (post) => getOrAttachShadowRoot(post.suggestedInjectionPoint),
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {

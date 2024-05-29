@@ -2,9 +2,17 @@
 import { TwitterDecoder } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
+import { getOrAttachShadowRoot } from '@masknet/shared-base-ui'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({
+        injectionPoint(postInfo) {
+            if (postInfo.rootElement.realCurrent!.dataset.testid === 'tweetPhoto') {
+                const root = postInfo.rootElement.realCurrent!.closest('div[aria-labelledby]') as HTMLDivElement
+                return getOrAttachShadowRoot(root)
+            }
+            return postInfo.rootElement.afterShadow
+        },
         zipPost(node) {
             if (node.destroyed) return
             const contentContainer = node.current.parentElement

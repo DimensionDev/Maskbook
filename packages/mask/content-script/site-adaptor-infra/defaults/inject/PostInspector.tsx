@@ -10,7 +10,7 @@ export function injectPostInspectorDefault(
     props?: Pick<PostInspectorProps, 'slotPosition'>,
 ) {
     const PostInspectorDefault = memo(function PostInspectorDefault(props: { zipPost(): void }) {
-        return <PostInspector {...props} />
+        return <PostInspector slotPosition="after" {...props} />
     })
 
     const { zipPost, injectionPoint } = config
