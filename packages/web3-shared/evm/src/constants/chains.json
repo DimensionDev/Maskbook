@@ -1304,5 +1304,77 @@
                 "url": "https://explorer.emerald.oasis.dev/"
             }
         ]
+    },
+    {
+        "chainId": 7777777,
+        "name": "Zora",
+        "type": "Zora",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://explorer.zora.energy",
+        "shortName": "emerald",
+        "explorers": [
+            {
+                "name": "Zora",
+                "url": "https://explorer.zora.energy"
+            }
+        ]
+    },
+    {
+        "chainId": 324,
+        "name": "ZkSyncEra",
+        "type": "ZkSyncEra",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://explorer.zksync.io",
+        "shortName": "emerald",
+        "explorers": [
+          {
+              "name": "ZkSyncEra",
+              "url": "https://explorer.zksync.io"
+          }
+        ]
+    },
+    {
+        "chainId": 59144,
+        "name": "Linea",
+        "type": "Linea",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://linea.build",
+        "shortName": "emerald",
+        "explorers": [
+          {
+              "name": "Linea",
+              "url": "https://explorer.linea.build"
+          }
+        ]
     }
 ]
