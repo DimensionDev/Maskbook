@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WEB3_CONSTANTS_RPC: ${{ secrets.WEB3_CONSTANTS_RPC }}
-      MASK_SENTRY_DSN: ${{ secrets.MASK_SENTRY_DSN }}
+      MASK_SENTRY_DSN: https://9da9e7dcc47cd0b229067760202b13e5@sentry.firefly.land/9
       MASK_SENTRY: ${{ secrets.MASK_SENTRY }}
       MASK_MIXPANEL: ${{ secrets.MASK_MIXPANEL }}
     steps:
