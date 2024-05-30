@@ -55,8 +55,6 @@ export namespace WalletAPI {
                 storedKeyInfo?: api.IStoredKeyInfo
             },
         ): Promise<string>
-        /** Connect origin to Mask wallet  */
-        sdk_grantEIP2255Permission(id: string, grantedWalletAddress: Set<string> | string[]): Promise<void>
 
         /** Select a Mask Wallet account */
         selectMaskWalletAccount(

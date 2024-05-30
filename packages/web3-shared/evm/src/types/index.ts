@@ -242,6 +242,10 @@ export enum EthereumMethodType {
     // https://eips.ethereum.org/EIPS/eip-747
     wallet_watchAsset = 'wallet_watchAsset',
 
+    // https://eips.ethereum.org/EIPS/eip-2255
+    wallet_getPermissions = 'wallet_getPermissions',
+    wallet_requestPermissions = 'wallet_requestPermissions',
+
     // https://eips.ethereum.org/EIPS/eip-1102
     eth_requestAccounts = 'eth_requestAccounts',
 

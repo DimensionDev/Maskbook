@@ -7,7 +7,6 @@ import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import urlcat from 'urlcat'
-import { useSearchParams } from 'react-router-dom'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,14 +57,11 @@ interface Props {
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose }) {
     const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
-    const [params] = useSearchParams()
-    const external_request = params.get('external_request')
     const [, handleChoose] = useAsyncFn(
         async (route: DashboardRoutes) => {
             const hasPassword = await Services.Wallet.hasPassword()
             const url = urlcat(hasPassword ? route : DashboardRoutes.CreateMaskWalletForm, {
                 recover: route === DashboardRoutes.RecoveryMaskWallet && !hasPassword ? true : undefined,
-                external_request,
             })
             await browser.tabs.create({
                 active: true,
@@ -73,7 +69,7 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
             })
             onChoose?.(route)
         },
-        [onChoose, external_request],
+        [onChoose],
     )
 
     return (

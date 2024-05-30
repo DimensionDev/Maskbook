@@ -113,6 +113,13 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
         })
     }
 
+    async approveRequestWithResult(id: string, result: Response): Promise<void> {
+        await this.updateMessage(id, {
+            response: result,
+            state: MessageStateType.APPROVED,
+        })
+    }
+
     async denyRequest(id: string): Promise<void> {
         await this.updateMessage(id, {
             state: MessageStateType.DENIED,

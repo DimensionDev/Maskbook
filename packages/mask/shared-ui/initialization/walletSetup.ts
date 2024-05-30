@@ -49,7 +49,6 @@ await initWallet({
         removeWallet: Services.Wallet.removeWallet,
         renameWallet: Services.Wallet.renameWallet,
         addWallet: Services.Wallet.addWallet,
-        sdk_grantEIP2255Permission: Services.Wallet.sdk_grantEIP2255Permission,
         selectMaskWalletAccount: Services.Wallet.selectMaskAccount,
         disconnectAllWalletsFromOrigin: Services.Wallet.disconnectAllWalletsFromOrigin,
     },

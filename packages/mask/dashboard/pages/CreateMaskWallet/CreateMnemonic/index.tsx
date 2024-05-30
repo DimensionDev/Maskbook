@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { toBlob } from 'html-to-image'
@@ -185,8 +185,6 @@ export const Component = memo(function CreateMnemonic() {
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
     const { classes, cx } = useStyles()
-    const [params] = useSearchParams()
-    const external_request = params.get('external_request')
     const { words, refreshCallback, puzzleWordList, answerCallback, puzzleAnswer, verifyAnswerCallback, isMatched } =
         useMnemonicWordsPuzzle()
 
@@ -195,13 +193,13 @@ export const Component = memo(function CreateMnemonic() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(urlcat(DashboardRoutes.RecoveryMaskWallet, { external_request }), {
+        navigate(urlcat(DashboardRoutes.RecoveryMaskWallet, {}), {
             state: {
                 password: location.state?.password,
                 isReset: location.state?.isReset,
             },
         })
-    }, [location.state?.password, location.state?.isReset, external_request])
+    }, [location.state?.password, location.state?.isReset])
 
     const { value: hasPassword, loading: loadingHasPassword } = useAsync(Services.Wallet.hasPassword, [])
 
@@ -226,8 +224,8 @@ export const Component = memo(function CreateMnemonic() {
         })
         await Services.Wallet.resolveMaskAccount([{ address }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletCreate)
-        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
-    }, [walletName, words, location.state?.isReset, location.state?.password, external_request])
+        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
+    }, [walletName, words, location.state?.isReset, location.state?.password])
 
     const step = useMemo(() => String((verified ? 3 : 2) - (hasPassword ? 1 : 0)), [verified, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'

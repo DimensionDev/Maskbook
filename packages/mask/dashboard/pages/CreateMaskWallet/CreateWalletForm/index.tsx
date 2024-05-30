@@ -66,7 +66,6 @@ export const Component = memo(function CreateWalletForm() {
     const params = new URLSearchParams(location.search)
     const isReset = params.get('reset')
     const isRecover = params.get('recover')
-    const external_request = params.get('external_request')
 
     const schema = useMemo(() => {
         const passwordRule = zod
@@ -100,9 +99,7 @@ export const Component = memo(function CreateWalletForm() {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic, {
-                external_request,
-            }),
+            urlcat(isRecover ? DashboardRoutes.RecoveryMaskWallet : DashboardRoutes.CreateMaskWalletMnemonic, {}),
             data.password ?
                 {
                     state: { password: data.password, isReset },

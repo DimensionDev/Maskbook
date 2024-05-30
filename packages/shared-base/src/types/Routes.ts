@@ -89,7 +89,6 @@ export interface PopupRoutesParamsMap {
     [PopupRoutes.SelectWallet]: {
         chainId?: number
         address?: string
-        external_request?: string
         source?: string
     }
     [PopupRoutes.Personas]: {
@@ -103,7 +102,6 @@ export interface PopupRoutesParamsMap {
     }
     [PopupRoutes.Wallet]: {
         isCreating?: boolean
-        external_request?: string
         // Unlock
         close_after_unlock?: boolean
         from?: string | null

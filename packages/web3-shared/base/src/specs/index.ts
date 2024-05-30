@@ -1033,6 +1033,8 @@ export interface MessageState<Request, Response> {
     applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
     approveRequest(id: string, updates?: Request): Promise<Response | void>
+    /** Approves and resolve a request without sending them to the network. */
+    approveRequestWithResult(id: string, result: Response): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
     /** Rejects all requests. */
