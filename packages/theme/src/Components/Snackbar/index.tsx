@@ -1,4 +1,4 @@
-import { useRef, memo, useCallback } from 'react'
+import { useRef, memo, useCallback, type RefAttributes } from 'react'
 import { keyframes } from 'tss-react'
 import {
     SnackbarProvider,
@@ -186,7 +186,7 @@ const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offset
     }
 })
 
-interface CustomSnackbarContentProps {
+interface CustomSnackbarContentProps extends RefAttributes<HTMLDivElement> {
     id: SnackbarKey
     title: SnackbarMessage
     message?: string | React.ReactNode
@@ -222,7 +222,7 @@ function CustomSnackbarContent(props: CustomSnackbarContentProps) {
         renderedAction = typeof props.action === 'function' ? props.action(props.id) : props.action
     }
     return (
-        <SnackbarContent className={cx(classes.content, classes[props.variant!])}>
+        <SnackbarContent ref={props.ref} className={cx(classes.content, classes[props.variant!])}>
             {variantIcon ?
                 <div className={classes.icon}>{variantIcon}</div>
             :   null}

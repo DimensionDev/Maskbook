@@ -1,4 +1,4 @@
-import { memo, useRef, useCallback } from 'react'
+import { memo, useRef, useCallback, type RefAttributes } from 'react'
 import { Typography, alpha, collapseClasses } from '@mui/material'
 import {
     SnackbarProvider,
@@ -80,18 +80,18 @@ export const PopupSnackbarProvider = memo<SnackbarProviderProps>(function PopupS
     )
 })
 
-interface PopupSnackbarContentProps {
+interface PopupSnackbarContentProps extends RefAttributes<HTMLDivElement> {
     id: SnackbarKey
     title: SnackbarMessage
     message?: string | React.ReactNode
     variant?: VariantType
 }
 
-function PopupSnackbarContent({ id, title, message, variant }: PopupSnackbarContentProps) {
+function PopupSnackbarContent({ id, title, message, variant, ref }: PopupSnackbarContentProps) {
     const { classes, cx } = useStyles()
 
     return (
-        <SnackbarContent key={id} className={cx(classes.content, classes[variant!])}>
+        <SnackbarContent ref={ref} key={id} className={cx(classes.content, classes[variant!])}>
             <Typography className={classes.title} component="div">
                 {title}
             </Typography>
