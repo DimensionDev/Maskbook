@@ -437,6 +437,7 @@
     "recovery_smart_pay_wallet_description_other": "crwdns19439:0{{count}}crwdne19439:0",
     "welcome_request_to_collect": "crwdns19511:0crwdne19511:0",
     "welcome_to_use_mask_network": "crwdns20473:0crwdne20473:0",
+    "update_authorization_title": "crwdns26490:0crwdne26490:0",
     "create_step": "crwdns21539:0{{step}}crwdnd21539:0{{totalSteps}}crwdne21539:0",
     "persona_create_title": "crwdns20477:0crwdne20477:0",
     "persona_create_tips": "crwdns20479:0crwdne20479:0",
@@ -514,5 +515,6 @@
     "local_backup": "crwdns21665:0crwdne21665:0",
     "incorrect_verification_code": "crwdns21667:0crwdne21667:0",
     "wallet_set_payment_password_successfully": "crwdns22115:0crwdne22115:0",
-    "wallet_open_mask_wallet": "crwdns22117:0crwdne22117:0"
+    "wallet_open_mask_wallet": "crwdns22117:0crwdne22117:0",
+    "permission_onboarding": "crwdns26492:0crwdne26492:0"
 }
