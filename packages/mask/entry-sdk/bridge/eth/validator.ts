@@ -68,14 +68,7 @@ namespace _ {
             maxPriorityFeePerGas: unpadded_hex.nullish(),
             maxFeePerGas: unpadded_hex.nullish(),
             maxFeePerBlobGas: unpadded_hex.nullish(),
-            accessList: z
-                .object({
-                    address,
-                    storageKeys: z.string().array(),
-                })
-                .strict()
-                .array()
-                .nullish(),
+            accessList: z.object({ address, storageKeys: z.string().array() }).strict().array().nullish(),
             blobVersionedHashes: z.string().array().nullish(),
             blobs: z.string().array().nullish(),
             chainId,
@@ -94,13 +87,7 @@ namespace _ {
             parentCapability: z.string().optional(),
             id: z.string().optional(),
             invoker: z.string(),
-            caveats: z.array(
-                z.object({
-                    type: z.string(),
-                    value: z.unknown(),
-                    name: z.string().optional(),
-                }),
-            ),
+            caveats: z.array(z.object({ type: z.string(), value: z.unknown(), name: z.string().optional() })),
         }),
     )
     export const fee_history_result = z.any()
@@ -113,157 +100,11 @@ namespace _ {
 }
 // No error message interpolation support until https://github.com/colinhacks/zod/issues/3048
 export const methodValidate = {
-    net_version: { args: z.tuple([]), return: z.string() },
-    eth_subscribe: {
-        args: z.tuple([
-            z.enum(['newHeads', 'logs', 'newPendingTransactions', 'syncing']).describe('subscriptionType'),
-            z
-                .object({
-                    address: _.address.or(_.address.array()).nullish(),
-                    topics: z.string().array(),
-                })
-                .strict()
-                .nullish()
-                .describe('filterOptions'),
-        ]),
-        return: _.subscription_id,
-    },
-    eth_unsubscribe: { args: z.tuple([_.subscription_id]), return: z.boolean() },
-    wallet_addEthereumChain: {
-        args: z.tuple([
-            z
-                .object({
-                    chainId: _.chainId,
-                    blockExplorerUrls: z.array(_.httpsURL).nullish(),
-                    chainName: z.string().nonempty().optional(),
-                    iconUrls: z.array(_.httpsURL).nullish(),
-                    nativeCurrency: z
-                        .object({
-                            decimals: _.decimal,
-                            name: z.string().nonempty(),
-                            symbol: _.symbol,
-                        })
-                        .strict()
-                        .optional(),
-                    rpcUrls: z.array(_.httpsURL).nonempty().nullish(),
-                })
-                .strict()
-                .describe('EIP3085_AddEthereumChainParameter'),
-        ]),
-        return: z.null(),
-    },
-    wallet_switchEthereumChain: {
-        args: z.tuple([z.object({ chainId: _.chainId }).strict().describe('SwitchEthereumChainParameter')]),
-        return: z.null(),
-    },
-    wallet_requestPermissions: {
-        args: z.tuple([z.object({}).passthrough().describe('requestPermissionsObject')]),
-        return: z
-            .object({
-                parentCapability: z.string(),
-                date: z.number().nullish().optional(),
-            })
-            .describe('PermissionRequest')
-            .array(),
-    },
-    wallet_revokePermissions: {
-        args: z.tuple([z.object({}).passthrough().describe('revokePermissionObject')]),
-        return: z.null(),
-    },
-    wallet_getPermissions: { args: z.tuple([]), return: _.EIP2255_PermissionList },
-    wallet_watchAsset: {
-        args: z.tuple([
-            z.object({
-                type: z.enum(['ERC20', 'ERC721', 'ERC1155']),
-                options: z
-                    .object({
-                        address: _.address,
-                        symbol: _.symbol.nullish(),
-                        decimals: _.decimal.nullish(),
-                        image: z.string().url().nullish(),
-                        tokenId: z.string().nonempty().nullish(),
-                    })
-                    .strict()
-                    .describe('options'),
-            }),
-        ]),
-        return: z.boolean(),
-    },
-    // deprecated
-    // eth_decrypt: { args: z.tuple([z.string().describe('EncryptedMessage'), _.address]), return: z.never() },
-    // deprecated
-    // eth_getEncryptionPublicKey: { args: z.tuple([_.address]), return: z.never() },
-    eth_requestAccounts: { args: z.tuple([]), return: _.address.array() },
     eth_accounts: { args: z.tuple([]), return: _.address.array() },
     eth_blobBaseFee: { args: z.tuple([]), return: _.unpadded_hex },
-    eth_signTypedData_v4: {
-        args: z.tuple([
-            _.address,
-            z.preprocess(
-                (arg) => (typeof arg === 'string' ? JSON.parse(arg) : arg),
-                z
-                    .object({
-                        types: z
-                            .object({
-                                EIP712Domain: z.array(z.unknown()),
-                            })
-                            .catchall(
-                                z.array(
-                                    z.object({
-                                        type: z.string(),
-                                        name: z.string(),
-                                    }),
-                                ),
-                            )
-                            .describe('types'),
-                        domain: z.object({}).passthrough(),
-                        primaryType: z.string(),
-                        message: z.object({}).passthrough(),
-                    })
-                    .refine(
-                        (val) => {
-                            try {
-                                getMessage(val as any)
-                                return true
-                            } catch {
-                                return false
-                            }
-                        },
-                        { message: 'Typed data does not match JSON schema' },
-                    )
-                    .describe('TypedData'),
-            ),
-        ]),
-        return: _.hex,
-    },
-    personal_sign: { args: z.tuple([_.hexAllowCap.describe('Challenge'), _.address]), return: _.hex },
-    personal_ecRecover: { args: z.tuple([z.string(), _.hex]), return: _.hex },
-    eth_sendTransaction: {
-        args: z.tuple([
-            // ! not same as _.transaction
-            z
-                .object({
-                    to: _.address.nullish().optional(),
-                    from: _.address,
-                    gas: _.unpadded_hex.nullish().optional(),
-                    value: _.unpadded_hex.nullish().optional(),
-                    data: _.hex.nullish().optional(),
-                    gasLimit: _.unpadded_hex.nullish().optional(),
-                    gasPrice: _.unpadded_hex.nullish().optional(),
-                    maxPriorityFeePerGas: _.unpadded_hex.nullish().optional(),
-                    maxFeePerGas: _.unpadded_hex.nullish().optional(),
-                    type: _.hex.nullish().optional(),
-                })
-                .strict()
-                .describe('Transaction'),
-        ]),
-        return: _.transaction_hash,
-    },
-    // web3_clientVersion: { args: z.tuple([]), return: z.string() },
     eth_blockNumber: { args: z.tuple([]), return: _.unpadded_hex },
     eth_call: { args: z.tuple([_.transaction, _.block.nullish()]), return: _.hex },
     eth_chainId: { args: z.tuple([]), return: _.chainId },
-    // eth_coinbase: { args: z.tuple([]), return: _.address },
     eth_estimateGas: { args: z.tuple([_.transaction, _.block_number_or_tag.nullish()]), return: _.unpadded_hex },
     eth_feeHistory: {
         args: z.tuple([
@@ -316,9 +157,129 @@ export const methodValidate = {
     eth_newBlockFilter: { args: z.tuple([]), return: _.filter_identifier },
     eth_newFilter: { args: z.tuple([_.filter]), return: _.filter_identifier },
     eth_newPendingTransactionFilter: { args: z.tuple([]), return: _.filter_identifier },
+    eth_requestAccounts: { args: z.tuple([]), return: _.address.array() },
+    eth_sendTransaction: {
+        args: z.tuple([
+            /* ! not same as _.transaction */ z
+                .object({
+                    to: _.address.nullish().optional(),
+                    from: _.address,
+                    gas: _.unpadded_hex.nullish().optional(),
+                    value: _.unpadded_hex.nullish().optional(),
+                    data: _.hex.nullish().optional(),
+                    gasLimit: _.unpadded_hex.nullish().optional(),
+                    gasPrice: _.unpadded_hex.nullish().optional(),
+                    maxPriorityFeePerGas: _.unpadded_hex.nullish().optional(),
+                    maxFeePerGas: _.unpadded_hex.nullish().optional(),
+                    type: _.hex.nullish().optional(),
+                })
+                .strict()
+                .describe('Transaction'),
+        ]),
+        return: _.transaction_hash,
+    },
     eth_sendRawTransaction: { args: z.tuple([_.hex.describe('Transaction')]), return: _.transaction_hash },
+    eth_signTypedData_v4: {
+        args: z.tuple([
+            _.address,
+            z.preprocess(
+                (arg) => (typeof arg === 'string' ? JSON.parse(arg) : arg),
+                z
+                    .object({
+                        types: z
+                            .object({ EIP712Domain: z.array(z.unknown()) })
+                            .catchall(z.array(z.object({ type: z.string(), name: z.string() })))
+                            .describe('types'),
+                        domain: z.object({}).passthrough(),
+                        primaryType: z.string(),
+                        message: z.object({}).passthrough(),
+                    })
+                    .refine(
+                        (val) => {
+                            try {
+                                getMessage(val as any)
+                                return true
+                            } catch {
+                                return false
+                            }
+                        },
+                        { message: 'Typed data does not match JSON schema' },
+                    )
+                    .describe('TypedData'),
+            ),
+        ]),
+        return: _.hex,
+    },
+    eth_subscribe: {
+        args: z.tuple([
+            z.enum(['newHeads', 'logs', 'newPendingTransactions', 'syncing']).describe('subscriptionType'),
+            z
+                .object({ address: _.address.or(_.address.array()).nullish(), topics: z.string().array() })
+                .strict()
+                .nullish()
+                .describe('filterOptions'),
+        ]),
+        return: _.subscription_id,
+    },
     eth_syncing: { args: z.tuple([]), return: _.syncing_status },
     eth_uninstallFilter: { args: z.tuple([_.filter_identifier]), return: z.boolean() },
+    eth_unsubscribe: { args: z.tuple([_.subscription_id]), return: z.boolean() },
+    personal_ecRecover: { args: z.tuple([z.string(), _.hex]), return: _.hex },
+    personal_sign: { args: z.tuple([_.hexAllowCap.describe('Challenge'), _.address]), return: _.hex },
+    wallet_addEthereumChain: {
+        args: z.tuple([
+            z
+                .object({
+                    chainId: _.chainId,
+                    blockExplorerUrls: z.array(_.httpsURL).nullish(),
+                    chainName: z.string().nonempty().optional(),
+                    iconUrls: z.array(_.httpsURL).nullish(),
+                    nativeCurrency: z
+                        .object({ decimals: _.decimal, name: z.string().nonempty(), symbol: _.symbol })
+                        .strict()
+                        .optional(),
+                    rpcUrls: z.array(_.httpsURL).nonempty().nullish(),
+                })
+                .strict()
+                .describe('EIP3085_AddEthereumChainParameter'),
+        ]),
+        return: z.null(),
+    },
+    wallet_getPermissions: { args: z.tuple([]), return: _.EIP2255_PermissionList },
+    wallet_requestPermissions: {
+        args: z.tuple([z.object({}).passthrough().describe('requestPermissionsObject')]),
+        return: z
+            .object({ parentCapability: z.string(), date: z.number().nullish().optional() })
+            .describe('PermissionRequest')
+            .array(),
+    },
+    wallet_revokePermissions: {
+        args: z.tuple([z.object({}).passthrough().describe('revokePermissionObject')]),
+        return: z.null(),
+    },
+    wallet_switchEthereumChain: {
+        args: z.tuple([z.object({ chainId: _.chainId }).strict().describe('SwitchEthereumChainParameter')]),
+        return: z.null(),
+    },
+    wallet_watchAsset: {
+        args: z.tuple([
+            z.object({
+                type: z.enum(['ERC20', 'ERC721', 'ERC1155']),
+                options: z
+                    .object({
+                        address: _.address,
+                        symbol: _.symbol.nullish(),
+                        decimals: _.decimal.nullish(),
+                        image: z.string().url().nullish(),
+                        tokenId: z.string().nonempty().nullish(),
+                    })
+                    .strict()
+                    .describe('options'),
+            }),
+        ]),
+        return: z.boolean(),
+    },
+    net_version: { args: z.tuple([]), return: z.string() },
 }
 
 type returns = {
