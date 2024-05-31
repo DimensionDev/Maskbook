@@ -1,1 +1,21 @@
-{}
+{
+    "setup_smart_pay_title": "SmartPayを使用する前に確認してください:",
+    "setup_smart_pay_one": "<strong>あなたのスマートコントラクトウォレットは、今のところPolygon Networkにのみデプロイされています。 同じアドレスで他のチェーンで資金を受け取らないでください。 </strong> 今後、より多くのチェーンを対応する予定です。",
+    "setup_smart_pay_two": "ラッキードロップやチップなどMask NetworkのdAppsでの無料ガス体験。",
+    "setup_smart_pay_three": "プライベートキーと Json ファイルは、SmartPay でのみ使用できます。",
+    "scan_address_to_payment": "アドレスをスキャンして支払いを受け取る",
+    "remain_mask_tips": "MASKトークンはガス料金の支払いに使用できます。",
+    "remain_times_tips_one": "上記のTwitterアカウントは、SmartPayウォレットを作成するまでに {{count}} 時間がかかります。",
+    "remain_times_tips_other": "上記のTwitterアカウントは、SmartPayウォレットを作成するまでに {{count}} 時間がかかります。",
+    "personas": "ペルソナ",
+    "receive": "受取",
+    "timeout": "タイムアウト",
+    "transaction_submitted": "トランザクションを送信しました",
+    "transaction_rejected": "トランザクションが拒否されました。",
+    "user_cancelled_the_transaction": "ユーザーがプロセスをキャンセルしました。",
+    "network_error": "ネットワークエラー",
+    "wallets": "ウォレット",
+    "waiting_for_user_signature": "ユーザー署名を待っています",
+    "what_is_smart_pay": "SmartPayとは",
+    "what_is_smart_pay_title": "SmartPayとは?"
+}
