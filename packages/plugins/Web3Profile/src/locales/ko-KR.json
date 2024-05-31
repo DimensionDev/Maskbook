@@ -9,8 +9,6 @@
     "NFTs": "NFTs",
     "web3_profile": "웹3 프로필",
     "EVM_wallet": "EVM 월렛",
-    "edit_profile_in_lenster": "Lenster에서 프로필을 편집합니다.",
-    "edit_profile_tips": "{{- profile}} 의 소유자는 현재 연결되고 있는 월렛입니다. lenster.xyz에서 프로필을 편집하세요.",
     "Solana_wallet": "Solana 월렛",
     "Flow_wallet": "Flow 월렛",
     "network_error": "네트워크 오류입니다. 다시 시도하세요.",
