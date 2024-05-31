@@ -42,5 +42,12 @@
     "save_file_title$failed": "ファイルを保存できませんでした",
     "save_file_message$success": "{{name}} を Web3 ファイルサービスに保存しました。",
     "save_file_message$failed": "ファイルの保存に失敗しました。もう一度お試しください。",
-    "delete_file_title$success": "正常に削除されました"
+    "delete_file_title$success": "正常に削除されました",
+    "delete_file_title$failed": "削除に失敗しました",
+    "delete_file_message$success": "ファイル {{name}} を削除しました。",
+    "delete_file_message$failed": "削除できませんでした、もう一度お試しください",
+    "upload_tips": "アップロードするファイルを選択するには、「ファイルを参照」ボタンをクリックしてください。",
+    "file_chip_single": "添付ファイル: {{name}} ({{size}})",
+    "file_chip_multiple": "{count} ファイル選択中",
+    "size": "サイズ"
 }

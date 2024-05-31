@@ -17,6 +17,7 @@
     "snackbar_done": "完成",
     "added_by_user": "由用户添加",
     "all": "所有",
+    "no_data": "暂无数据",
     "retry": "重试",
     "gwei": "Gwei",
     "import": "导入",
@@ -175,6 +176,10 @@
     "account_icon_tooltips_only$facebook": "数据来源于 Facebook 个人资料 。",
     "account_icon_tooltips$next_id": "数据来源于 NEXT.ID 。",
     "account_icon_tooltips_only$next_id": "数据来源于 NEXT.ID 。",
+    "account_icon_merged_tooltip$normal": "数据源获取自 ",
+    "account_icon_merged_tooltip$twitter": "数据来源于 Twitter 个人资料和 ",
+    "account_icon_merged_tooltip$facebook": "数据来源于 Facebook 个人资料和 ",
+    "account_icon_merged_tooltip$next_id": "数据来源于 NEXT.ID 和 ",
     "wallet_status_button_copy_address": "复制地址",
     "copy_success_of_wallet_addr": "复制钱包地址成功！",
     "persona_boundary_create_persona": "创建身份",
@@ -340,5 +345,11 @@
     "reset": "重置",
     "editor": "编辑器",
     "typed_message_text_alert": "当前只支持输入消息文本。",
-    "share_to_social_networks": "分享到社交网络"
+    "share_to_social_networks": "分享到社交网络",
+    "report_nft": "报告 NFT Scam 合约吗？",
+    "confirm_to_report_nft": "您确认举报{{name}}? 批准后，这个 NFT 会被标记为垃圾。",
+    "spam": "垃圾",
+    "report_spam": "举报垃圾",
+    "report_spam_success": "举报成功。",
+    "report_spam_fail": "举报失败。"
 }
