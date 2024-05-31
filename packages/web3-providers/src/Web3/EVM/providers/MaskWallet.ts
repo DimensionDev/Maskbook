@@ -166,16 +166,11 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
             identifier?: ECKeyIdentifier
         },
         silent?: boolean,
-        externalRequestID?: string | null,
     ) {
         if (getExtensionSiteType() === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)
-
-                if (externalRequestID) {
-                    await this.context.sdk_grantEIP2255Permission(externalRequestID, [address])
-                }
 
                 return {
                     account: address,
@@ -188,11 +183,6 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 chainId: this.hostedChainId,
             }
         }
-
-        if (externalRequestID)
-            throw new TypeError(
-                'externalRequestID is not expected in MaskWalletProvider.connect() when the page is not popup page.',
-            )
 
         const account = first(await this.context.selectMaskWalletAccount(chainId, address, location.origin))
         if (!account) throw new Error(`Failed to connect to ${EVMChainResolver.chainFullName(chainId)}`)

@@ -39,12 +39,7 @@ export const Component = memo(function SelectWallet() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
-    const external_request_id = params.get('external_request')
     const source = params.get('source')
-    const { value: external_request } = useAsync(async () => {
-        if (!external_request_id) return null
-        return Services.Wallet.sdk_getEIP2255PermissionRequestDetail(external_request_id)
-    }, [external_request_id])
     const chainIdSearched = params.get('chainId')
     const isVerifyWalletFlow = params.get('verifyWallet')
     const isSettingNFTAvatarFlow = params.get('setNFTAvatar')
@@ -77,12 +72,6 @@ export const Component = memo(function SelectWallet() {
         if (isVerifyWalletFlow) {
             navigate(-1)
         } else {
-            if (external_request_id && external_request) {
-                // reject a request does not revoke the permission already granted.
-                // MetaMask has this behavior, we should follow them.
-                await Services.Wallet.sdk_denyEIP2255Permission(external_request_id)
-                return Services.Helper.removePopupWindow()
-            }
             // TODO Open the popup via a RPC request, and reject the request
             const rejected = await Promise.allSettled([
                 Promise.reject({
@@ -92,13 +81,9 @@ export const Component = memo(function SelectWallet() {
             await Services.Wallet.resolveMaskAccount(rejected[0])
             await Services.Helper.removePopupWindow()
         }
-    }, [isVerifyWalletFlow, external_request_id, external_request])
+    }, [isVerifyWalletFlow])
 
     const handleConfirm = useCallback(async () => {
-        if (external_request_id && external_request) {
-            await Services.Wallet.sdk_grantEIP2255Permission(external_request_id, [selected])
-            return Services.Helper.removePopupWindow()
-        }
         if (isVerifyWalletFlow || isSettingNFTAvatarFlow) {
             await EVMWeb3.connect({
                 account: selected,
@@ -117,8 +102,7 @@ export const Component = memo(function SelectWallet() {
 
         const wallet = wallets.find((x) => isSameAddress(x.address, selected))
 
-        if (wallet && source && !external_request_id)
-            await Services.Wallet.internalWalletConnect(wallet.address, source)
+        if (wallet && source) await Services.Wallet.internalWalletConnect(wallet.address, source)
 
         await Services.Wallet.resolveMaskAccount([
             wallet?.owner ?
@@ -143,8 +127,6 @@ export const Component = memo(function SelectWallet() {
         return Services.Helper.removePopupWindow()
     }, [
         source,
-        external_request,
-        external_request_id,
         isVerifyWalletFlow,
         selected,
         chainId,
@@ -155,7 +137,7 @@ export const Component = memo(function SelectWallet() {
         Network,
     ])
 
-    useTitle(external_request ? 'Connecting External Site' : t.popups_select_wallet())
+    useTitle(t.popups_select_wallet())
 
     if (!chainIdValid)
         return (
@@ -166,13 +148,6 @@ export const Component = memo(function SelectWallet() {
 
     return (
         <Box overflow="auto" data-hide-scrollbar>
-            {external_request ?
-                <Box textAlign="center" paddingX={2}>
-                    Connecting: <i>{external_request.origin}</i>
-                    <br />
-                    Please make sure the connected site is not a fraud.
-                </Box>
-            :   null}
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {

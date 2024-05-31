@@ -1203,5 +1203,12 @@
     "hide_collectible": "Hide {{-name}}",
     "hide_collectible_description": "Confirm to hide {{- name}}? You can redisplay it by re-adding this NFT at any time.",
     "add_new_address_to_an_existing_group": "Add new address to an existing group",
-    "or_create_a_new_wallet_group": "Or create a new wallet group"
+    "or_create_a_new_wallet_group": "Or create a new wallet group",
+    "wallet_sdk_connect_title": "Connect with Mask Wallet",
+    "wallet_sdk_connect_subtitle": "Select the wallet(s) to use on this site. You should not connect to website you don't trust.",
+    "wallet_sdk_connect_warning_title": "The web site can",
+    "wallet_sdk_connect_warning_1": "See your address",
+    "wallet_sdk_connect_warning_2": "See your account balance and history",
+    "wallet_sdk_connect_warning_3": "See your Tokens and NFTs",
+    "wallet_sdk_connect_warning_4": "Suggest to send transactions and sign messages"
 }

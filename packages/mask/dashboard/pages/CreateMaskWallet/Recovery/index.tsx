@@ -9,7 +9,7 @@ import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, use, useCallback, useMemo, useState } from 'react'
 import type { UseFormSetError } from 'react-hook-form'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
@@ -91,8 +91,6 @@ export const Component = memo(function Recovery() {
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
-    const [params] = useSearchParams()
-    const external_request = params.get('external_request')
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
 
@@ -111,7 +109,7 @@ export const Component = memo(function Recovery() {
                 const mnemonic = values.join(' ')
                 await Services.Wallet.getDerivableAccounts(mnemonic, 0, 1)
 
-                navigate(urlcat(DashboardRoutes.AddDeriveWallet, { external_request }), {
+                navigate(urlcat(DashboardRoutes.AddDeriveWallet, {}), {
                     replace: false,
                     state: {
                         mnemonic,
@@ -127,7 +125,7 @@ export const Component = memo(function Recovery() {
                 )
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password, external_request],
+        [t, navigate, location.state?.isReset, location.state?.password],
     )
 
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -146,7 +144,7 @@ export const Component = memo(function Recovery() {
                     silent: true,
                 })
                 Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
-                navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
+                navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message
                 onError('privateKey', {
@@ -155,7 +153,7 @@ export const Component = memo(function Recovery() {
                 })
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password, newWalletName, external_request],
+        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const onRestore = useCallback(
@@ -182,7 +180,7 @@ export const Component = memo(function Recovery() {
                 })
                 await Services.Wallet.resolveMaskAccount([{ address }])
                 Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
-                navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
+                navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
             } catch (error) {
                 const errorMsg = (error as Error).message
                 // Todo: SDK should return 'Incorrect Keystore Password.' when keystore pwd is wrong.
@@ -193,18 +191,18 @@ export const Component = memo(function Recovery() {
                 )
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password, newWalletName, external_request],
+        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const handleRecovery = useCallback(() => {
-        navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { external_request }), {
+        navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, {}), {
             state: {
                 password: location.state?.password,
                 isReset: location.state?.isReset,
             },
             replace: true,
         })
-    }, [location.state?.password, location.state?.isReset, external_request])
+    }, [location.state?.password, location.state?.isReset])
 
     const { value: hasPassword, loading: loadingHasPassword } = useAsync(Services.Wallet.hasPassword, [])
 

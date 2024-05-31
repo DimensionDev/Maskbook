@@ -2,7 +2,7 @@ import { first, sortBy, uniq } from 'lodash-es'
 import urlcat from 'urlcat'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { delay } from '@masknet/kit'
@@ -83,8 +83,6 @@ export const Component = memo(function AddDeriveWallet() {
         password: string
         isReset: boolean
     }
-    const [params] = useSearchParams()
-    const external_request = params.get('external_request')
 
     const { mnemonic, password, isReset } = state
     // Avoid leaking mnemonic to react-query
@@ -179,8 +177,8 @@ export const Component = memo(function AddDeriveWallet() {
         await Services.Wallet.resolveMaskAccount([{ address: firstWallet }])
         Telemetry.captureEvent(EventType.Access, EventID.EntryPopupWalletImport)
         await delay(300) // Wait for warming up above. 300ms is the closed duration after testing.
-        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, { external_request }), { replace: true })
-    }, [mnemonic, wallets.length, isReset, password, mergedIndexes, external_request])
+        navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
+    }, [mnemonic, wallets.length, isReset, password, mergedIndexes])
 
     const onCheck = useCallback(async (checked: boolean, pathIndex: number) => {
         setPathIndexes((list) => {
@@ -190,8 +188,8 @@ export const Component = memo(function AddDeriveWallet() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, { external_request }))
-    }, [navigate, external_request])
+        navigate(urlcat(DashboardRoutes.CreateMaskWalletMnemonic, {}))
+    }, [navigate])
 
     const disabled = confirmLoading || isPending || !mergedIndexes.length
 

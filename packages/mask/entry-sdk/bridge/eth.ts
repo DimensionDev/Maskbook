@@ -1,6 +1,6 @@
 import { readonlyMethodType, EthereumMethodType, ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import Services from '#services'
-import { type EIP2255PermissionRequest, MaskEthereumProviderRpcError, err } from '@masknet/sdk'
+import { MaskEthereumProviderRpcError, err } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
@@ -176,15 +176,21 @@ const methods: Methods = {
         if (Object.keys(request).length === 0)
             throw err.wallet_requestPermissions.a_permission_request_must_contain_at_least_1_permission()
         for (const key in request) {
-            if (typeof key !== 'string' || typeof request[key] !== 'object' || request[key] === null)
+            if (key !== 'eth_accounts' || typeof request[key] !== 'object' || request[key] === null)
                 throw err.wallet_requestPermissions.permission_request_contains_unsupported_permission_permission({
                     permission: key,
                 })
         }
-        return Services.Wallet.sdk_EIP2255_wallet_requestPermissions(
-            location.origin,
-            request as EIP2255PermissionRequest,
-        )
+
+        const p = providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            silent: false,
+            readonly: false,
+        })
+        return p.request({
+            method: EthereumMethodType.wallet_requestPermissions,
+            params: [request],
+        })
     },
     wallet_revokePermissions: null!,
     wallet_switchEthereumChain: null!,

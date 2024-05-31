@@ -17,6 +17,7 @@ import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { WalletAssetTabs } from '../type.js'
 import urlcat from 'urlcat'
+import { PermissionRequest } from './PermissionRequest.js'
 
 const useStyles = makeStyles()({
     left: {
@@ -50,6 +51,7 @@ export const Interaction = memo((props: InteractionProps) => {
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const [isDangerRequest, setIsDanger] = useState(false)
+    const [confirmDisabled, setConfirmDisabled] = useState(false)
     const [dangerDialogOpen, setDangerDialogOpen] = useState(false)
     const [confirmVerb, setConfirmVerb] = useState(t.confirm())
     const confirmAction = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
@@ -98,7 +100,7 @@ export const Interaction = memo((props: InteractionProps) => {
     const ConfirmButton = (
         <ActionButton
             loading={confirmLoading}
-            disabled={actionRunning}
+            disabled={actionRunning || confirmDisabled}
             sx={isDangerRequest ? { background: (theme) => theme.palette.maskColor.danger } : undefined}
             onClick={() => {
                 if (isDangerRequest && !dangerDialogOpen) return setDangerDialogOpen(true)
@@ -115,6 +117,7 @@ export const Interaction = memo((props: InteractionProps) => {
                 <InteractionItem
                     paymentToken={props.paymentToken}
                     setPaymentToken={props.setPaymentToken}
+                    setConfirmDisabled={setConfirmDisabled}
                     currentRequest={currentRequest}
                     setConfirmVerb={setConfirmVerb}
                     setIsDanger={setIsDanger}
@@ -139,6 +142,7 @@ export interface InteractionItemProps {
     setIsDanger(isDanger: boolean): void
     setConfirmVerb(verb: string): void
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void
+    setConfirmDisabled(disabled: boolean): void
 
     // transaction only
     paymentToken: string
@@ -148,6 +152,8 @@ const InteractionItem = memo((props: InteractionItemProps) => {
     switch (props.currentRequest.request.arguments.method) {
         case EthereumMethodType.wallet_watchAsset:
             return <WatchTokenRequest {...props} />
+        case EthereumMethodType.wallet_requestPermissions:
+            return <PermissionRequest {...props} />
         case EthereumMethodType.eth_sign:
         case EthereumMethodType.eth_signTypedData_v4:
         case EthereumMethodType.personal_sign:
