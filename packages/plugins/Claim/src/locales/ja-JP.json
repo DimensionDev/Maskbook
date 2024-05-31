@@ -1,1 +1,9 @@
-{}
+{
+    "__plugin_name": "受取る",
+    "airdrop": "エアドロップ",
+    "claim": "受取る",
+    "claimable": "受取可能",
+    "tips": "チップ",
+    "share": "シェア",
+    "share_text": "私はMask Network の拡張機能で {{amount}} {{symbol}} エアドロップを獲得しました。\n @realMaskNetworkをフォローして、獲得資格があるかどうか確認してください。\n Install https://mask.io to explore more airdrop activities."
+}
