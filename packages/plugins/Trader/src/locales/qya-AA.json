@@ -12,6 +12,7 @@
     "swap_failed": "crwdns20793:0crwdne20793:0",
     "swap_failed_description": "crwdns20795:0crwdne20795:0",
     "swap": "crwdns20797:0crwdne20797:0",
+    "bridge": "crwdns26672:0crwdne26672:0",
     "congratulations": "crwdns20799:0crwdne20799:0",
     "swap_successfully_description": "crwdns20801:0{{input}}crwdnd20801:0{{output}}crwdne20801:0",
     "plugin_wallet_snackbar_wait_for_confirming": "crwdns20803:0crwdne20803:0",
