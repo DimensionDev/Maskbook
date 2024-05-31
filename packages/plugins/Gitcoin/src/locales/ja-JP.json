@@ -26,5 +26,9 @@
     "grant_status$closed": "終了",
     "total_raised": "総発生 <bold>{{amount}}</bold>",
     "admin": "<bold>{{admin}}</bold> によって",
-    "give_back_to_match_pool": "Gitcoinのマッチングプールに戻る"
+    "give_back_to_match_pool": "Gitcoinのマッチングプールに戻る",
+    "total_contribution": "総貢献度",
+    "give_back_tooltip": "Gitcoin Match Poolに貢献しましょう! 資金は現在と将来のグラントラウンドに使用されます。 選択した金額は、助成金の寄付金額の上に追加されます。",
+    "donate_successfully": "あなたは {{- uiAmount}} {{symbol}} を寄付しました。",
+    "donate_dialog_title": "寄付チェックアウト"
 }
