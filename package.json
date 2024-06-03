@@ -84,7 +84,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
     "msw": "^1.2.1",
-    "prettier": "^3.1.0",
+    "prettier": "^3.3.0",
     "svgo": "^3.0.2",
     "typescript": "5.5.0-beta",
     "typescript-eslint": "^7.10.0",

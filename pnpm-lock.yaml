@@ -255,8 +255,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(encoding@0.1.13)(typescript@5.5.0-beta)
       prettier:
-        specifier: ^3.1.0
-        version: 3.1.0
+        specifier: ^3.3.0
+        version: 3.3.0
       svgo:
         specifier: ^3.0.2
         version: 3.0.2
@@ -12323,8 +12323,8 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.1.0:
-    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
+  prettier@3.3.0:
+    resolution: {integrity: sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -28040,7 +28040,7 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.1.0: {}
+  prettier@3.3.0: {}
 
   pretty-error@4.0.0:
     dependencies:

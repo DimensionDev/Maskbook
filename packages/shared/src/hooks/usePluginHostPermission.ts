@@ -11,11 +11,10 @@ export function usePluginHostPermissionCheck(plugins: Plugin.Shared.Definition[]
         const lackPermission = new Set<string>()
 
         await Promise.allSettled(
-            plugins_.map(
-                (plugin) =>
-                    hasHostPermission?.(plugin.enableRequirement.host_permissions!).then(
-                        (result) => !result && lackPermission.add(plugin.ID),
-                    ),
+            plugins_.map((plugin) =>
+                hasHostPermission?.(plugin.enableRequirement.host_permissions!).then(
+                    (result) => !result && lackPermission.add(plugin.ID),
+                ),
             ),
         )
         return lackPermission
