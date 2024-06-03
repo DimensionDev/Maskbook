@@ -141,12 +141,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress || nativeToken?.address)
     const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, { chainId })
 
-    const tokenValueUSD =
-        amount && tokenPrice ?
-            leftShift(amount, token?.decimals)
-                .times(tokenPrice)
-                .toString()
-        :   '0'
+    const tokenValueUSD = amount && tokenPrice ? leftShift(amount, token?.decimals).times(tokenPrice).toString() : '0'
 
     const initConfig = useMemo(() => {
         if (isSupport1559) {
