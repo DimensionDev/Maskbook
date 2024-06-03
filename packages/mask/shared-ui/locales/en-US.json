@@ -1210,5 +1210,7 @@
     "wallet_sdk_connect_warning_1": "See your address",
     "wallet_sdk_connect_warning_2": "See your account balance and history",
     "wallet_sdk_connect_warning_3": "See your Tokens and NFTs",
-    "wallet_sdk_connect_warning_4": "Suggest to send transactions and sign messages"
+    "wallet_sdk_connect_warning_4": "Suggest to send transactions and sign messages",
+    "wallet_sdk_switch_chain_title": "Allow this site to switch the network?",
+    "wallet_sdk_switch_chain_error": "Cannot switch to a unknown network."
 }

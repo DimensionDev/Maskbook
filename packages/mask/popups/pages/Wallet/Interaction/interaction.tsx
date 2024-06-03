@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { WalletAssetTabs } from '../type.js'
 import urlcat from 'urlcat'
 import { PermissionRequest } from './PermissionRequest.js'
+import { SwitchChainRequest } from './SwitchChainRequest.js'
 
 const useStyles = makeStyles()({
     left: {
@@ -110,6 +111,7 @@ export const Interaction = memo((props: InteractionProps) => {
             {confirmVerb}
         </ActionButton>
     )
+    const InteractionItem = getInteractionComponent(props.currentRequest.request.arguments.method)
 
     return (
         <Box flex={1} display="flex" flexDirection="column">
@@ -148,21 +150,22 @@ export interface InteractionItemProps {
     paymentToken: string
     setPaymentToken: (paymentToken: string) => void
 }
-const InteractionItem = memo((props: InteractionItemProps) => {
-    switch (props.currentRequest.request.arguments.method) {
+function getInteractionComponent(type: EthereumMethodType) {
+    switch (type) {
         case EthereumMethodType.wallet_watchAsset:
-            return <WatchTokenRequest {...props} />
+            return WatchTokenRequest
         case EthereumMethodType.wallet_requestPermissions:
-            return <PermissionRequest {...props} />
+            return PermissionRequest
+        case EthereumMethodType.wallet_switchEthereumChain:
+            return SwitchChainRequest
         case EthereumMethodType.eth_sign:
         case EthereumMethodType.eth_signTypedData_v4:
         case EthereumMethodType.personal_sign:
-            return <WalletSignRequest {...props} />
+            return WalletSignRequest
         default:
-            return <TransactionRequest {...props} />
+            return TransactionRequest
     }
-})
-InteractionItem.displayName = 'InteractionItem'
+}
 
 const Pager = memo((props: InteractionProps) => {
     const { currentMessageIndex, currentRequest, setMessageIndex, totalMessages } = props

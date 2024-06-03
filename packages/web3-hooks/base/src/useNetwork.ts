@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useDebugValue, useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EMPTY_STRING, type NetworkPluginID } from '@masknet/shared-base'
@@ -13,8 +13,10 @@ export function useNetwork<T extends NetworkPluginID = NetworkPluginID>(
     const networks = useNetworks(pluginID)
     const networkID = useSubscription(Network?.networkID ?? EMPTY_STRING)
 
-    return useMemo(() => {
+    const network = useMemo(() => {
         if (chainId) return networks.find((x) => x.chainId === chainId)
         return networks.find((x) => x.ID === networkID)
     }, [chainId, networkID, networks])
+    useDebugValue(network)
+    return network
 }

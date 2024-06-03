@@ -32,10 +32,15 @@ namespace _ {
     const block_number = unpadded_hex.describe('block_number')
     export const block = z.union([block_tag, block_number, block_hash]).describe('Block')
     export const block_number_or_tag = z.union([block_tag, block_number]).describe('Block')
-    export const chainId = z
-        .string()
-        .regex(/^0x([1-9a-f]+[\da-f]*|0)$/g)
-        .refine((val) => Number.parseInt(val.slice(2), 16) <= Number.MAX_SAFE_INTEGER)
+    export const chainId = z.preprocess(
+        // number to string is not defined in the spec
+        (x) => (typeof x === 'number' || typeof x === 'bigint' ? '0x' + x.toString(16) : x),
+        z
+            .string()
+            .regex(/^0x([1-9a-f]+[\da-f]*|0)$/g)
+            .refine((val) => Number.parseInt(val.slice(2), 16) <= Number.MAX_SAFE_INTEGER),
+    )
+
     export const decimal = z.number().min(0).max(36)
     export const filter = z
         .object({
