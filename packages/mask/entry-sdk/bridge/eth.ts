@@ -193,7 +193,19 @@ const methods: Methods = {
         })
     },
     wallet_revokePermissions: null!,
-    wallet_switchEthereumChain: null!,
+    async wallet_switchEthereumChain(request) {
+        const p = providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+            silent: false,
+            readonly: false,
+        })
+        const current = await Services.Wallet.sdk_eth_chainId()
+        if (current === Number.parseInt(request.chainId, 16)) return null
+        return p.request({
+            method: EthereumMethodType.wallet_switchEthereumChain,
+            params: [request],
+        })
+    },
     async wallet_watchAsset({ type, options: { address, decimals, image, symbol, tokenId } }) {
         // TODO: throw error if chainId is unknown (https://eips.ethereum.org/EIPS/eip-747#erc1046-type)
         if (!isValidChecksumAddress(address)) return err.invalid_address()
@@ -319,7 +331,7 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
 
         // assert argument & return value validator exists
         if (!(_method in methodValidate)) {
-            console.error(`Missing schema for method ${_method}`)
+            console.error(`[Mask wallet] Missing schema for method ${_method}`)
             return { e: err.internal_error() }
         }
         const method = _method as keyof Methods
@@ -337,13 +349,18 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
         const paramsValidated = paramsSchema.safeParse(paramsArr)
         if (!paramsValidated.success) {
             if (process.env.NODE_ENV === 'development') {
-                console.debug('[Mask Wallet] Failed', request, 'received params', paramsArr)
+                console.debug(
+                    '[Mask Wallet] The request failed to pass the validation',
+                    request,
+                    'received params',
+                    paramsArr,
+                )
             }
             return { e: fromZodError(paramsValidated.error) }
         }
 
         if (process.env.NODE_ENV === 'development') {
-            console.debug('[Mask Wallet]', request, paramsValidated.data)
+            console.debug('[Mask Wallet] Received raw request', request, 'after validation', paramsValidated.data)
         }
         // call the method
         const fn: (...args: any[]) => any = Reflect.get(methods, method)!
@@ -357,16 +374,19 @@ export async function eth_request(request: unknown): Promise<{ e?: MaskEthereumP
             if (error instanceof MaskEthereumProviderRpcError) return { e: error }
             if (error.message === 'User rejected the message.') return { e: err.user_rejected_the_request() }
 
-            console.error(error)
-            throw new Error('internal error')
+            console.error('[Mask wallet] Internal error when handling request', requestValidate.data, error)
+            return { e: err.internal_error() }
         }
 
         // validate return value
         const returnSchema = methodValidate[method].return
         const resultValidate = returnSchema.safeParse(result)
         if (!resultValidate.success) {
-            console.error('Mask wallet returns invalid result', result)
-            return { e: fromZodError(resultValidate.error) }
+            console.debug('[Mask wallet] Return value invalid', result)
+            throw fromZodError(resultValidate.error)
+        }
+        if (process.env.NODE_ENV === 'development') {
+            console.debug('[Mask wallet] Request success', requestValidate.data, resultValidate.data)
         }
         return { d: resultValidate.data }
     } catch (error) {

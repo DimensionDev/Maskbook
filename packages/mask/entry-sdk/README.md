@@ -66,7 +66,7 @@ This section excludes PoW era methods and methods listed in <https://ethereum.gi
 
 - [x] wallet_watchAsset ([EIP-747](https://eips.ethereum.org/EIPS/eip-747))
 - [ ] wallet_addEthereumChain ([EIP-3085](https://eips.ethereum.org/EIPS/eip-3085))
-- [ ] wallet_switchEthereumChain ([EIP-3326](https://eips.ethereum.org/EIPS/eip-3326))
+- [x] wallet_switchEthereumChain ([EIP-3326](https://eips.ethereum.org/EIPS/eip-3326))
 
 ### [EIP-1102: Opt-in account exposure](https://eips.ethereum.org/EIPS/eip-1102)
 
