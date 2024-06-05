@@ -118,12 +118,9 @@ const methods: Methods = {
         return err.user_rejected_the_request()
     },
     async eth_sendRawTransaction(transaction) {
-        const p = providers.EVMWeb3.getWeb3Provider({
+        return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
-            silent: false,
-            readonly: false,
-        })
-        return p.request({
+        }).request({
             method: EthereumMethodType.eth_sendRawTransaction,
             params: [transaction],
         })
@@ -133,13 +130,10 @@ const methods: Methods = {
         const wallets = await Services.Wallet.sdk_getGrantedWallets(location.origin)
         if (!wallets.some((addr) => isSameAddress(addr, options.from)))
             return err.the_requested_account_and_or_method_has_not_been_authorized_by_the_user()
-        const p = providers.EVMWeb3.getWeb3Provider({
+        return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             account: options.from,
-            silent: false,
-            readonly: false,
-        })
-        return p.request({
+        }).request({
             method: EthereumMethodType.eth_sendTransaction,
             params: [options],
         })
@@ -152,8 +146,6 @@ const methods: Methods = {
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             account: requestedAddress,
-            silent: false,
-            readonly: false,
         }).request({
             method: EthereumMethodType.eth_signTypedData_v4,
             params: [requestedAddress, typedData],
@@ -168,7 +160,25 @@ const methods: Methods = {
     async eth_unsubscribe(...params) {
         return (await getInteractiveClient()).eth_unsubscribe!(...params)
     },
-    wallet_addEthereumChain: null!,
+    wallet_addEthereumChain:
+        process.env.NODE_ENV === 'development' ?
+            async (request) => {
+                // TODO: The wallet must reject the request if the chainId does not match the value of the eth_chainId method for any of the RPC urls.
+                // TODO: The wallet MUST reject the request if the iconUrls field is provided, and any of the URLs are not valid URLs or do not point to a valid image.
+                // TODO: The wallet MUST NOT allow the same chainId to be added multiple times.
+                // TODO: make sure that: Only use the submitted chain ID to sign transactions, never a chain ID received from an RPC endpoint.
+                // TODO: Verify that the specified chain ID matches the return value of eth_chainId from the endpoint, as described above.
+                // TODO: Clearly inform the user which RPC URL is being used to communicate with a chain at any given moment, and inform the user of the risks of using multiple RPC endpoints to interact with the same chain.
+                // TODO： The wallet should maintain a list of known chains, and verify requests to add chains against that list.
+                return providers.EVMWeb3.getWeb3Provider({
+                    providerType: ProviderType.MaskWallet,
+                }).request({
+                    method: EthereumMethodType.wallet_addEthereumChain,
+                    params: [request],
+                })
+            }
+            // Note: We have not figure out the security concern of this method, therefore hide it in the production.
+        :   null!,
     async wallet_getPermissions() {
         return Services.Wallet.sdk_EIP2255_wallet_getPermissions(location.origin)
     },
@@ -182,26 +192,20 @@ const methods: Methods = {
                 })
         }
 
-        const p = providers.EVMWeb3.getWeb3Provider({
+        return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
-            silent: false,
-            readonly: false,
-        })
-        return p.request({
+        }).request({
             method: EthereumMethodType.wallet_requestPermissions,
             params: [request],
         })
     },
     wallet_revokePermissions: null!,
     async wallet_switchEthereumChain(request) {
-        const p = providers.EVMWeb3.getWeb3Provider({
-            providerType: ProviderType.MaskWallet,
-            silent: false,
-            readonly: false,
-        })
         const current = await Services.Wallet.sdk_eth_chainId()
         if (current === Number.parseInt(request.chainId, 16)) return null
-        return p.request({
+        return providers.EVMWeb3.getWeb3Provider({
+            providerType: ProviderType.MaskWallet,
+        }).request({
             method: EthereumMethodType.wallet_switchEthereumChain,
             params: [request],
         })
@@ -283,15 +287,14 @@ const methods: Methods = {
                 return err.wallet_watchAsset.unable_to_verify_ownership_possibly_because_the_standard_is_not_supported_or_the_users_currently_selected_network_does_not_match_the_chain_of_the_asset_in_question()
             }
         }
-        const p = providers.EVMWeb3.getWeb3Provider({
+        providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
-            silent: false,
-            readonly: false,
         })
-        p.request({
-            method: EthereumMethodType.wallet_watchAsset,
-            params: [{ type, options: { address, decimals, image, symbol, tokenId } }],
-        }).catch(() => {})
+            .request({
+                method: EthereumMethodType.wallet_watchAsset,
+                params: [{ type, options: { address, decimals, image, symbol, tokenId } }],
+            })
+            .catch(() => {})
         return true
     },
     async personal_sign(challenge, requestedAddress) {
@@ -303,8 +306,6 @@ const methods: Methods = {
         return providers.EVMWeb3.getWeb3Provider({
             providerType: ProviderType.MaskWallet,
             account: requestedAddress,
-            silent: false,
-            readonly: false,
         }).request({
             method: EthereumMethodType.personal_sign,
             params: [challenge, requestedAddress],

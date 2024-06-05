@@ -243,7 +243,8 @@ export const methodValidate = {
                         .object({ decimals: _.decimal, name: z.string().nonempty(), symbol: _.symbol })
                         .strict()
                         .optional(),
-                    rpcUrls: z.array(_.httpsURL).nonempty().nullish(),
+                    // TODO: support websocket urls in the future
+                    rpcUrls: z.array(_.httpsURL).nonempty(),
                 })
                 .strict()
                 .describe('EIP3085_AddEthereumChainParameter'),

@@ -19,6 +19,7 @@ import { WalletAssetTabs } from '../type.js'
 import urlcat from 'urlcat'
 import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
+import { AddChainRequest } from './AddChainRequest.js'
 
 const useStyles = makeStyles()({
     left: {
@@ -156,6 +157,8 @@ function getInteractionComponent(type: EthereumMethodType) {
             return WatchTokenRequest
         case EthereumMethodType.wallet_requestPermissions:
             return PermissionRequest
+        case EthereumMethodType.wallet_addEthereumChain:
+            return AddChainRequest
         case EthereumMethodType.wallet_switchEthereumChain:
             return SwitchChainRequest
         case EthereumMethodType.eth_sign:
