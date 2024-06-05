@@ -6,7 +6,15 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import { createHashRouter, Navigate, Outlet, RouterProvider, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+    createHashRouter,
+    Navigate,
+    Outlet,
+    RouterProvider,
+    useNavigate,
+    useSearchParams,
+    useRouteError,
+} from 'react-router-dom'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
@@ -20,6 +28,7 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
 import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
+import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -66,6 +75,7 @@ const PopupShell = memo(function PopupShell() {
 const router = createHashRouter([
     {
         element: <PopupShell />,
+        errorElement: <ErrorPageBoundary />,
         children: [
             {
                 element: <PopupLayout />,
@@ -121,4 +131,9 @@ export default function Popups() {
             )}
         </PersistQueryClientProvider>
     )
+}
+
+function ErrorPageBoundary() {
+    const error = useRouteError()
+    return <ErrorBoundaryUIOfError error={error} hasError />
 }

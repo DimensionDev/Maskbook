@@ -1,10 +1,14 @@
 import { useTimeoutFn } from 'react-use'
 import { useMemo, useState } from 'react'
-import { Box, Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
+import { Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useBuildInfoMarkdown, type ErrorBoundaryError } from './context.js'
 import { useSharedBaseTrans } from '../../locales/index.js'
+import { makeStyles } from '@masknet/theme'
 
+const useStyles = makeStyles()({
+    message: { flex: 1 },
+})
 export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError> {
     /** Type of the Error */
     type: string
@@ -19,6 +23,7 @@ export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const context = useBuildInfoMarkdown()
     const t = useSharedBaseTrans()
+    const { classes } = useStyles()
 
     const [showStack, setShowStack] = useState(false)
 
@@ -53,7 +58,7 @@ Error stack:
     }, [reportBody, reportTitle])
     return (
         <Root>
-            <Alert severity="error" variant="outlined">
+            <Alert severity="error" variant="outlined" classes={{ message: classes.message }}>
                 <AlertTitle>{t.error_boundary_crash_title({ subject })}</AlertTitle>
                 <ErrorTitle>
                     {error.type}: {error.message}
@@ -65,12 +70,13 @@ Error stack:
                     <Button href={githubLink} color="primary" target="_blank">
                         {t.error_boundary_report_github()}
                     </Button>
-                    <Box sx={{ flex: 1 }} />
-                    <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
-                        {showStack ?
-                            <ExpandMore />
-                        :   <ExpandLess />}
-                    </IconButton>
+                    <IconButtonContainer>
+                        <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>
+                            {showStack ?
+                                <ExpandMore />
+                            :   <ExpandLess />}
+                        </IconButton>
+                    </IconButtonContainer>
                 </ActionArea>
                 {showStack ?
                     <ErrorStack>
@@ -88,7 +94,7 @@ const Root = styled('div')`
     flex: 1;
     width: 100%;
     contain: paint;
-    margin-top: 16px;
+    padding: 8px;
 `
 
 const ErrorTitle = styled('div')`
@@ -99,10 +105,20 @@ const ErrorTitle = styled('div')`
 const ErrorStack = styled('div')`
     user-select: text;
     overflow-x: auto;
-    height: 300px;
+    margin-top: 16px;
 `
 
 const ActionArea = styled('div')`
     display: flex;
     gap: 8px;
+    @media screen and (max-width: 500px) {
+        flex-direction: column;
+        gap: 8px;
+    }
+`
+
+const IconButtonContainer = styled('div')`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `

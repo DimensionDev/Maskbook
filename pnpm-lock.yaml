@@ -2613,6 +2613,9 @@ importers:
       '@masknet/shared-base':
         specifier: workspace:^
         version: link:../shared-base
+      '@masknet/theme':
+        specifier: workspace:^
+        version: link:../theme
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@0.0.0-experimental-26f2496093-20240514)

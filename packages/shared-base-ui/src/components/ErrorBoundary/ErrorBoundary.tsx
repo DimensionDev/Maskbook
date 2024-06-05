@@ -5,39 +5,45 @@ import type { ErrorBoundaryError } from './context.js'
 
 export class ErrorBoundary extends Component<Partial<CrashUIProps>> {
     static getDerivedStateFromError(error: unknown) {
-        return { error }
+        return { error, hasError: true }
     }
-    override state: {
-        error: Error | null
-    } = { error: null }
+    override state: { error: unknown; hasError: boolean } = { error: null, hasError: false }
     override render() {
-        if (!this.state.error) return <>{this.props.children}</>
+        if (!this.state.hasError) return <>{this.props.children}</>
         return (
             <CrashUI.CrashUI
                 subject="Mask"
-                onRetry={() => this.setState({ error: null })}
+                onRetry={() => this.setState({ error: null, hasError: false })}
                 {...this.props}
-                {...this.normalizedError}
+                {...normalizeError(this.state.error)}
             />
         )
     }
-    private get normalizedError(): ErrorBoundaryError {
-        let stack = '<stack not available>'
-        let type = 'UnknownError'
-        let message = 'unknown error'
-        if (!this.state.error) return { stack, type, message }
-        try {
-            stack = String(this.state.error.stack!) || '<stack not available>'
-            stack = stack.replaceAll(/webpack-internal:.+node_modules\//g, 'npm:')
-            // remove webpack-internal:///
-            stack = stack.replaceAll(/webpack-internal:\/{3}/g, '')
-        } catch {}
-        try {
-            type = String(this.state.error.name) || '<type not available>'
-        } catch {}
-        try {
-            message = String(this.state.error.message) || '<message not available>'
-        } catch {}
-        return { stack, type, message }
-    }
+}
+
+function normalizeError(error: unknown): ErrorBoundaryError {
+    let stack = '<stack not available>'
+    let type = 'UnknownError'
+    let message = 'unknown error'
+    if (!error) return { stack, type, message }
+    try {
+        stack = String((error as any).stack) || '<stack not available>'
+        stack = stack.replaceAll(/webpack-internal:.+node_modules\//g, 'npm:')
+        // remove webpack-internal:///
+        stack = stack.replaceAll(/webpack-internal:\/{3}/g, '')
+        // cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap
+        stack = stack.replaceAll('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap', '')
+    } catch {}
+    try {
+        type = String((error as any).name) || '<type not available>'
+    } catch {}
+    try {
+        message = String((error as any).message) || '<message not available>'
+    } catch {}
+    return { stack, type, message }
+}
+
+export function ErrorBoundaryUIOfError(props: Partial<CrashUIProps> & { error: unknown; hasError: boolean }) {
+    if (!props.hasError) return null
+    return <CrashUI.CrashUI subject="Mask" onRetry={() => {}} {...normalizeError(props.error)} />
 }
