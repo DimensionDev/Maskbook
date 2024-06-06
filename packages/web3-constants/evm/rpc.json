@@ -104,7 +104,7 @@
         "Astar": ["https://rpc.astar.network:8545"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
-        "Sei": ["https://evm-rpc-arctic-1.sei-apis.com"],
+        "Sei": ["https://evm-rpc.sei-apis.com"],
         "XLayer": ["https://rpc.xlayer.tech"],
         "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },

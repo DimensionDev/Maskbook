@@ -108,12 +108,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
 
-    const chainIdList: ChainId[] = useMemo(() => {
+    const chainIds: ChainId[] = useMemo(() => {
         if (currentTab === tabs.tokens)
             return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
         return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
     }, [currentTab === tabs.tokens, definition?.enableRequirement.web3])
-    const chainId = chainIdList.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    if (process.env.NODE_ENV === 'development' && chainIds.includes(contextChainId)) {
+        console.error(`${contextChainId} is not in supportedChainIds list, will fallback to mainnet`)
+    }
 
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
@@ -326,7 +329,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
-                                chains={chainIdList}
+                                chains={chainIds}
                                 hideArrowButton={currentTab === tabs.collectibles}
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
                                 classes={{ arrowButton: classes.arrowButton }}

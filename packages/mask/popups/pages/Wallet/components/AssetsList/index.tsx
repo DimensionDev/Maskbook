@@ -90,6 +90,7 @@ interface AssetItemProps extends ListItemProps {
     onItemClick(asset: Asset): void
 }
 
+const UNSUPPORTED_CHAINS = [ChainId.XLayer, ChainId.Sei]
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
     const { hasNavigator } = useOutletContext() as { hasNavigator: boolean }
     const { classes, cx } = useStyles({ hasNav: hasNavigator })
@@ -99,10 +100,10 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    // TODO Temporarily get XLayer balance via rpc
+    // TODO Temporarily get XLayer and Sei balance via rpc
     const tryRpc =
         (!asset.balance || isZero(asset.balance)) &&
-        (network?.isCustomized || network?.chainId === ChainId.XLayer) &&
+        (network?.isCustomized || UNSUPPORTED_CHAINS.includes(network?.chainId!)) &&
         seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,

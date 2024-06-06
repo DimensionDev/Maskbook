@@ -39,6 +39,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Scroll,
                     ChainId.Metis,
                     ChainId.XLayer,
+                    ChainId.Sei,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },
