@@ -160,7 +160,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "devtools-ignore-webpack-plugin": "^0.1.1",
     "html-webpack-plugin": "^5.5.3",
-    "react-compiler-webpack": "^0.1.1",
+    "react-compiler-webpack": "^0.1.2",
     "react-devtools-inline": "5.2.0",
     "react-refresh": "^0.14.2",
     "rimraf": "^5.0.1",
