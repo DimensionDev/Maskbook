@@ -72,6 +72,7 @@
         "Astar": ["https://astar.api.onfinality.io/public"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
+        "Sei": ["https://evm-rpc.sei-apis.com"],
         "XLayer": ["https://rpc.xlayer.tech"],
         "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
@@ -103,6 +104,7 @@
         "Astar": ["https://rpc.astar.network:8545"],
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
+        "Sei": ["https://evm-rpc.sei-apis.com"],
         "XLayer": ["https://rpc.xlayer.tech"],
         "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
@@ -134,6 +136,7 @@
         "Astar": [0, 0, 0, 0, 0],
         "Scroll": [0, 0, 0, 0, 0],
         "Metis": [0, 0, 0, 0, 0],
+        "Sei": [0, 0, 0, 0, 0],
         "XLayer": [0, 0, 0, 0, 0],
         "XLayer_Testnet": [0, 0, 0, 0, 0]
     }

@@ -73,6 +73,9 @@ export enum ChainId {
     Metis = 1088,
     Metis_Sepolia = 59902,
 
+    // Sei
+    Sei = 1329,
+
     // Optimism
     Optimism = 10,
     Optimism_Kovan = 69,
@@ -301,6 +304,7 @@ export enum NetworkType {
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',
+    Sei = 'Sei',
     Optimism = 'Optimism',
     Conflux = 'Conflux',
     Astar = 'Astar',
