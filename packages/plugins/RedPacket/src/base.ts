@@ -4,7 +4,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants.js'
 import { languages } from './locales/languages.js'
 
-export const base: Plugin.Shared.Definition = {
+export const base = {
     ID: RedPacketPluginID,
     name: { fallback: 'Lucky Drop' },
     description: {
@@ -50,4 +50,4 @@ export const base: Plugin.Shared.Definition = {
         metadataKeys: new Set([RedPacketMetaKey, RedPacketNftMetaKey]),
     },
     i18n: languages,
-}
+} satisfies Plugin.Shared.Definition
