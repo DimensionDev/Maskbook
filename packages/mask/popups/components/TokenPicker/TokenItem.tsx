@@ -1,9 +1,13 @@
 import { Icons } from '@masknet/icons'
 import { NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { isZero, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
+import { type ReasonableNetwork } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import {
     Box,
     Link,
@@ -11,15 +15,12 @@ import {
     ListItemIcon,
     ListItemText,
     Typography,
-    type ListItemProps,
     useForkRef,
+    type ListItemProps,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { formatTokenBalance } from '../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useEverSeen } from '@masknet/shared-base-ui'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { formatTokenBalance } from '../../../shared/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -108,7 +109,8 @@ export const TokenItem = memo(function TokenItem({
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    const tryRpc = (!asset.balance || isZero(asset.balance)) && network?.isCustomized && seen
+    const supportedByDebank = CHAIN_ID_TO_DEBANK_CHAIN_MAP[asset.chainId]
+    const tryRpc = !supportedByDebank && seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
