@@ -55,7 +55,7 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
-    if (!histories?.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
+    if (!histories.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
 
     return (
         <div {...rest} className={cx(classes.root, rest.className)}>

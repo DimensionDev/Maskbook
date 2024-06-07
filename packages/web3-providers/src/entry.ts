@@ -74,7 +74,7 @@ export { R2D2TokenList } from './R2D2/index.js'
 export { ENS } from './ENS/index.js'
 
 // Debank
-export { DeBankHistory } from './DeBank/index.js'
+export { DeBankHistory, CHAIN_ID_TO_DEBANK_CHAIN_MAP } from './DeBank/index.js'
 
 // NFTScan
 export {

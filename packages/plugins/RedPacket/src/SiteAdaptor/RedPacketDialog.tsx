@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo, useState, Suspense } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import {
     ApplicationBoardModal,
@@ -15,7 +15,6 @@ import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import {
-    useActivatedPluginSiteAdaptor,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSiteThemeMode,
@@ -40,6 +39,7 @@ import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
+import { base } from '../base.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -100,7 +100,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: contextChainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const definition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('claimed', 'sent')
     const theme = useTheme()
@@ -108,12 +107,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
 
-    const chainIdList: ChainId[] = useMemo(() => {
-        if (currentTab === tabs.tokens)
-            return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
+    const chainIds: ChainId[] = useMemo(() => {
+        if (currentTab === tabs.tokens) return base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
         return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
-    }, [currentTab === tabs.tokens, definition?.enableRequirement.web3])
-    const chainId = chainIdList.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    }, [currentTab === tabs.tokens])
+    const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    if (process.env.NODE_ENV === 'development' && !chainIds.includes(contextChainId)) {
+        console.error(`${contextChainId} is not in supportedChainIds list, will fallback to mainnet`)
+    }
 
     // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
@@ -326,7 +327,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
-                                chains={chainIdList}
+                                chains={chainIds}
                                 hideArrowButton={currentTab === tabs.collectibles}
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
                                 classes={{ arrowButton: classes.arrowButton }}

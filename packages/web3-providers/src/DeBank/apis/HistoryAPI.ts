@@ -5,7 +5,7 @@ import { type Transaction } from '@masknet/web3-shared-base'
 import { ChainId, getDeBankConstants, type SchemaType } from '@masknet/web3-shared-evm'
 import { formatTransactions, resolveDeBankAssetIdReversed } from '../helpers.js'
 import type { HistoryRecord } from '../types.js'
-import { CHIAN_ID_TO_DEBANK_CHAIN_MAP, DEBANK_OPEN_API } from '../constants.js'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP, DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 import type { HistoryAPI, BaseHubOptions } from '../../entry-types.js'
 import { evm } from '../../Manager/registry.js'
@@ -17,7 +17,7 @@ class DeBankHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
         const networks = evm.state?.Network?.networks?.getCurrentValue()
         // Fallback to commonly used chains
         if (!networks) return PRESET_CHAIN_IDS
-        const RUNTIME_CHAIN_IDS = networks.map((x) => CHIAN_ID_TO_DEBANK_CHAIN_MAP[x.chainId])
+        const RUNTIME_CHAIN_IDS = networks.map((x) => CHAIN_ID_TO_DEBANK_CHAIN_MAP[x.chainId])
         return compact(uniq([...RUNTIME_CHAIN_IDS, PRESET_CHAIN_IDS])).join(',')
     }
     async getTransactions(

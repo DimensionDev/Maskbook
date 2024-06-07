@@ -61,7 +61,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
  *
  * Rabby use this map as well.
  */
-export const CHIAN_ID_TO_DEBANK_CHAIN_MAP: Record<number, DebankChains> = {
+export const CHAIN_ID_TO_DEBANK_CHAIN_MAP: Record<number, DebankChains> = {
     1: 'eth',
     10: 'op',
     19: 'sgb',
