@@ -1162,6 +1162,30 @@
         ]
     },
     {
+        "chainId": 1329,
+        "name": "Sei",
+        "type": "Sei",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 1329,
+            "name": "Sei",
+            "symbol": "SEI",
+            "decimals": 18,
+            "logoURL": "https://dzyb4dm7r8k8w.cloudfront.net/prod/logos/0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE/logo.png"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://www.sei.io/",
+        "shortName": "Sei",
+        "explorers": [
+            {
+                "name": "SeiTrace",
+                "url": "https://seitrace.com/"
+            }
+        ]
+    },
+    {
         "chainId": 1284,
         "name": "Moonbeam",
         "type": "Moonbeam",

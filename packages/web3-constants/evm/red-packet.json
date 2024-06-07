@@ -38,6 +38,7 @@
         "Astar": "0x2cF46Db820e279c5fBF778367D49d9C931D54524",
         "Scroll": "0x16f61cb37169523635B6761f3C946892fb3c18fB",
         "Metis": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
+        "Sei": "0xB349AC5E5C037C2ecb2AE9fCDc8F122b5f384620",
         "XLayer": "0xDb847f1D8099C5b15519ECfd0b0C981d719bccE6",
         "XLayer_Testnet": "0x977baB5f7e2cEd0C91fDA890Ed1DBDfD3Ee9AE81"
     },
@@ -69,6 +70,7 @@
         "Astar": 910985,
         "Scroll": 96705,
         "Metis": 1702860,
+        "Sei": 81152032,
         "XLayer": 0,
         "XLayer_Testnet": 7320220
     }

@@ -7,12 +7,12 @@ import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants.
 import type { NFTInfo, RawTokenInfo, TokenSpender } from './types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI } from '../entry-types.js'
-import { CHIAN_ID_TO_DEBANK_CHAIN_MAP } from '../DeBank/constants.js'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '../DeBank/constants.js'
 
 class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
-        const debankChainId = CHIAN_ID_TO_DEBANK_CHAIN_MAP[chainId]
+        const debankChainId = CHAIN_ID_TO_DEBANK_CHAIN_MAP[chainId]
 
         if (!debankChainId || !account || !isValidChainId(chainId)) return []
         const rawData = await fetchJSON<{ contracts: NFTInfo[] }>(
@@ -60,7 +60,7 @@ class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
-        const debankChainId = CHIAN_ID_TO_DEBANK_CHAIN_MAP[chainId]
+        const debankChainId = CHAIN_ID_TO_DEBANK_CHAIN_MAP[chainId]
 
         if (!debankChainId || !account || !isValidChainId(chainId)) return []
 

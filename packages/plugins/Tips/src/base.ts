@@ -37,6 +37,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Optimism,
                     ChainId.Metis,
                     ChainId.XLayer,
+                    ChainId.Sei,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

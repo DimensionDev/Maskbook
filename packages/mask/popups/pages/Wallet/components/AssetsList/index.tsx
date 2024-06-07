@@ -3,7 +3,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useFungibleTokenBalance, useNetworks, useWallet } from '@masknet/web3-hooks-base'
-import { formatCurrency, isGte, isLessThan, isZero, type FungibleAsset } from '@masknet/web3-shared-base'
+import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
@@ -14,6 +14,7 @@ import { formatTokenBalance } from '../../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -99,11 +100,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    // TODO Temporarily get XLayer balance via rpc
-    const tryRpc =
-        (!asset.balance || isZero(asset.balance)) &&
-        (network?.isCustomized || network?.chainId === ChainId.XLayer) &&
-        seen
+    const tryRpc = !CHAIN_ID_TO_DEBANK_CHAIN_MAP[network?.chainId!] && seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
