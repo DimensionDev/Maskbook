@@ -2,13 +2,17 @@ import { v4 as uuid } from 'uuid'
 import type { Subscription } from 'use-subscription'
 import {
     MessageStateType,
+    type DenyRequestOptions,
     type ReasonableMessage,
     type TransferableMessage,
     type MessageState as Web3MessageState,
 } from '@masknet/web3-shared-base'
 import { type StorageItem, mapSubscription } from '@masknet/shared-base'
+import { produce } from 'immer'
 
-export abstract class MessageState<Request, Response> implements Web3MessageState<Request, Response> {
+export abstract class MessageState<Request extends object, Response extends object>
+    implements Web3MessageState<Request, Response>
+{
     public messages: Subscription<Array<ReasonableMessage<Request, Response>>>
 
     constructor(private storage: StorageItem<Record<string, ReasonableMessage<Request, Response>>>) {
@@ -53,7 +57,9 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
         })
     }
 
-    async applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>> {
+    private async applyRequest(
+        message: TransferableMessage<Request, Response>,
+    ): Promise<ReasonableMessage<Request, Response>> {
         await this.validateMessage(message)
 
         const ID = uuid()
@@ -66,16 +72,15 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
             updatedAt: now,
         }
 
-        await this.storage.setValue(
-            Object.fromEntries([
-                ...Object.entries(this.storage.value).filter(
-                    // remove those resolved messages
-                    ([_, message]) => message.state === MessageStateType.NOT_DEPEND,
-                ),
-                [ID, message_],
-            ]),
-        )
-
+        const nextMessages = produce(this.storage.value, (draft: typeof this.storage.value) => {
+            for (const key in draft) {
+                if (draft[key].state !== MessageStateType.NOT_DEPEND) {
+                    delete draft[key]
+                }
+            }
+            draft[ID] = message_
+        })
+        await this.storage.setValue(nextMessages)
         return message_
     }
 
@@ -89,29 +94,17 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
     }
 
     async updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void> {
-        const message = this.assertMessage(id)
+        this.assertMessage(id)
 
-        await this.storage.setValue({
-            ...this.storage.value,
-            [id]: {
-                ...message,
-                ...updates,
-                updatedAt: new Date(),
-            },
-        })
+        await this.storage.setValue(
+            produce(this.storage.value, (draft) => {
+                Object.assign(draft[id], updates)
+                draft[id].updatedAt = new Date()
+            }),
+        )
     }
 
-    async approveRequest(id: string, updates?: Request): Promise<Response | void> {
-        const message = this.assertMessage(id)
-
-        await this.updateMessage(id, {
-            request: {
-                ...message.request,
-                ...updates,
-            },
-            state: MessageStateType.APPROVED,
-        })
-    }
+    abstract approveRequest(id: string, updates?: Request): Promise<Response | void>
 
     async approveRequestWithResult(id: string, result: Response): Promise<void> {
         await this.updateMessage(id, {
@@ -126,17 +119,18 @@ export abstract class MessageState<Request, Response> implements Web3MessageStat
         })
     }
 
-    async denyAllRequests(): Promise<void> {
-        await this.storage.setValue(
-            Object.fromEntries(
-                Object.entries(this.storage.value).map(([id, message]) => [
-                    id,
-                    {
-                        ...message,
-                        state: message.state === MessageStateType.NOT_DEPEND ? MessageStateType.DENIED : message.state,
-                    },
-                ]),
-            ),
-        )
+    async denyRequests({ keepChainUnrelated, keepNonceUnrelated }: DenyRequestOptions): Promise<void> {
+        const messages = produce(this.storage.value, (draft: typeof this.storage.value) => {
+            for (const key in draft) {
+                if (draft[key].state === MessageStateType.NOT_DEPEND) {
+                    if (keepChainUnrelated && this.isChainUnrelated(draft[key])) continue
+                    if (keepNonceUnrelated && this.isNonceUnrelated(draft[key])) continue
+                    draft[key].state = MessageStateType.DENIED
+                }
+            }
+        })
+        await this.storage.setValue(messages)
     }
+    protected abstract isChainUnrelated(message: ReasonableMessage<Request, Response>): boolean
+    protected abstract isNonceUnrelated(message: ReasonableMessage<Request, Response>): boolean
 }
