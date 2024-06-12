@@ -25,8 +25,8 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
     }
 
     // requests can be kept when chain changed
-    protected override isChainUnrelated(message: ReasonableMessage<MessageRequest, JsonRpcResponse>): boolean {
-        const method = message.request.arguments.method
+    protected override isChainUnrelated(message: MessageRequest): boolean {
+        const method = message.arguments.method
         return [
             // Note: do not add sign methods. For safety, we limit them as chain-specific to prevent attacks like
             // signing on a testnet and replaying on the mainnet.
@@ -36,8 +36,8 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         ].includes(method)
     }
     // requests can be kept when nonce changed (a transaction sent)
-    protected override isNonceUnrelated(message: ReasonableMessage<MessageRequest, JsonRpcResponse>): boolean {
-        const method = message.request.arguments.method
+    protected override isNonceUnrelated(message: MessageRequest): boolean {
+        const method = message.arguments.method
         return [
             EthereumMethodType.eth_sign,
             EthereumMethodType.eth_signTypedData_v4,
@@ -119,7 +119,10 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         })
 
         // deny all requests after approving one
-        await this.denyRequests({ keepChainUnrelated: true, keepNonceUnrelated: false })
+        await this.denyRequests({
+            keepChainUnrelated: this.isChainUnrelated(request),
+            keepNonceUnrelated: this.isNonceUnrelated(request),
+        })
 
         return response
     }

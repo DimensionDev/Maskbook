@@ -123,14 +123,14 @@ export abstract class MessageState<Request extends object, Response extends obje
         const messages = produce(this.storage.value, (draft: typeof this.storage.value) => {
             for (const key in draft) {
                 if (draft[key].state === MessageStateType.NOT_DEPEND) {
-                    if (keepChainUnrelated && this.isChainUnrelated(draft[key])) continue
-                    if (keepNonceUnrelated && this.isNonceUnrelated(draft[key])) continue
+                    if (keepChainUnrelated && this.isChainUnrelated(draft[key].request)) continue
+                    if (keepNonceUnrelated && this.isNonceUnrelated(draft[key].request)) continue
                     draft[key].state = MessageStateType.DENIED
                 }
             }
         })
         await this.storage.setValue(messages)
     }
-    protected abstract isChainUnrelated(message: ReasonableMessage<Request, Response>): boolean
-    protected abstract isNonceUnrelated(message: ReasonableMessage<Request, Response>): boolean
+    protected abstract isChainUnrelated(message: Request): boolean
+    protected abstract isNonceUnrelated(message: Request): boolean
 }
