@@ -5,7 +5,7 @@ export {
     removePopupWindow,
     openDashboard,
     queryCurrentActiveTab,
-    queryCurrentPopupWindowId,
+    hasPopupWindowOpened,
 } from './popup-opener.js'
 export {
     queryExtensionPermission,
