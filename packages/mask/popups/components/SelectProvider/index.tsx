@@ -72,8 +72,7 @@ export const SelectProvider = memo(function SelectProvider() {
                     return
                 }
             } else {
-                const currentPopupWindowId = await Services.Helper.queryCurrentPopupWindowId()
-                if (currentPopupWindowId) {
+                if (await Services.Helper.hasPopupWindowOpened()) {
                     modalNavigate(PopupModalRoutes.ConnectProvider, { providerType })
                     return
                 }

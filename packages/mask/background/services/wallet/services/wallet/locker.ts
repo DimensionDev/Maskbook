@@ -1,7 +1,7 @@
 import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
 import { getAutoLockerDuration } from './database/locker.js'
 import * as password from './password.js'
-import { openPopupWindow } from '../../../helper/popup-opener.js'
+import { hasPopupWindowOpened, openPopupWindow } from '../../../helper/popup-opener.js'
 
 export async function isLocked() {
     return (await password.hasPassword()) && !(await password.hasVerifiedPassword())
@@ -25,14 +25,20 @@ export async function unlockWallet(unverifiedPassword: string) {
     }
 }
 
+let pendingRequest: Promise<void> | undefined
 export async function requestUnlockWallet(): Promise<void> {
     if (!(await isLocked())) return
-    await openPopupWindow(PopupRoutes.WalletUnlock, {})
-    return new Promise((resolve) => {
-        CrossIsolationMessages.events.walletLockStatusUpdated.on((locked) => {
-            if (!locked) resolve()
+
+    if (!(await hasPopupWindowOpened())) await openPopupWindow(PopupRoutes.WalletUnlock, {})
+    pendingRequest ??= new Promise((resolve) => {
+        const removeListener = CrossIsolationMessages.events.walletLockStatusUpdated.on((locked) => {
+            if (locked) return
+            resolve()
+            removeListener()
+            pendingRequest = undefined
         })
     })
+    return pendingRequest
 }
 
 // This setTimeout is ok because if the background worker is killed,
