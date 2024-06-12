@@ -344,7 +344,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Zora,
         type: NetworkType.Zora,
-        icon: new URL('../assets/zora.png', import.meta.url).href,
+        icon: new URL('../assets/zora.svg', import.meta.url).href,
         iconColor: '#3059AE',
         name: 'Zora',
         isMainnet: true,
