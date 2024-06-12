@@ -1024,11 +1024,9 @@ export interface TokenState<ChainId, SchemaType> {
 
 export interface MessageState<Request, Response> {
     /** All unresolved requests. */
-    messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
+    messages: Subscription<Array<ReasonableMessage<Request, Response>>>
     /** Updates a request. */
     updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
-    /** Applies a request. */
-    applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Applies a request and waits for confirmation from the user. */
     applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
     /** Approves a request. */
@@ -1037,8 +1035,16 @@ export interface MessageState<Request, Response> {
     approveRequestWithResult(id: string, result: Response): Promise<void>
     /** Rejects a request. */
     denyRequest(id: string): Promise<void>
-    /** Rejects all requests. */
-    denyAllRequests(): Promise<void>
+    /** Rejects requests. */
+    denyRequests(options: DenyRequestOptions): Promise<void>
+}
+
+/** If you set both value */
+export interface DenyRequestOptions {
+    /** Set to true if you want to keep all requests that not related to a specific chain. e.g. `wallet_requestPermissions` or `personal_sign` */
+    keepChainUnrelated: boolean
+    /** Set to true if you want to keep all requests that not related to the current nonce (basically means all transactions) */
+    keepNonceUnrelated: boolean
 }
 
 export interface TransactionState<ChainId, Transaction> {

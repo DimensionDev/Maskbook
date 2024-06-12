@@ -69,10 +69,10 @@ export const Interaction = memo((props: InteractionProps) => {
         try {
             await confirmAction.current(isLastRequest)
 
-            // packages/web3-providers/src/Web3/EVM/state/Message.ts denies all requests after approving one
-            // TODO: requests that is not a transaction should not be denied
-            if (currentRequest.origin) await Services.Helper.removePopupWindow()
-            else navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
+            if (!Message!.messages.getCurrentValue().length) {
+                if (currentRequest.origin) await Services.Helper.removePopupWindow()
+                else navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
+            }
         } catch (error) {
             showSnackbar(
                 <Typography textAlign="center" width="275px">
@@ -177,7 +177,7 @@ const Pager = memo((props: InteractionProps) => {
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const [{ loading: cancelAllLoading }, handleCancelAllRequest] = useAsyncFn(async () => {
-        await Message!.denyAllRequests()
+        await Message!.denyRequests({ keepChainUnrelated: false, keepNonceUnrelated: false })
         if (currentRequest.origin) await Services.Helper.removePopupWindow()
         else navigate(PopupRoutes.Wallet, { replace: true })
     }, [Message, currentRequest.origin])

@@ -24,26 +24,36 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         super(storage)
     }
 
-    protected resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {
-        return {
-            arguments:
-                updates?.arguments ?
-                    {
-                        ...request.arguments,
-                        ...updates.arguments,
-                    }
-                :   request.arguments,
-            options:
-                updates?.options ?
-                    {
-                        ...request.options,
-                        ...updates.options,
-                    }
-                :   request.options,
-        }
+    // requests can be kept when chain changed
+    protected override isChainUnrelated(message: MessageRequest): boolean {
+        const method = message.arguments.method
+        return [
+            // Note: do not add sign methods. For safety, we limit them as chain-specific to prevent attacks like
+            // signing on a testnet and replaying on the mainnet.
+            EthereumMethodType.wallet_watchAsset,
+            EthereumMethodType.wallet_requestPermissions,
+            EthereumMethodType.wallet_addEthereumChain,
+        ].includes(method)
+    }
+    // requests can be kept when nonce changed (a transaction sent)
+    protected override isNonceUnrelated(message: MessageRequest): boolean {
+        const method = message.arguments.method
+        return [
+            EthereumMethodType.eth_sign,
+            EthereumMethodType.eth_signTypedData_v4,
+            EthereumMethodType.personal_sign,
+            EthereumMethodType.wallet_addEthereumChain,
+            EthereumMethodType.wallet_watchAsset,
+            EthereumMethodType.wallet_requestPermissions,
+        ].includes(method)
+    }
+    private resolveRequest(request: MessageRequest, updates?: MessageRequest): MessageRequest {
+        const args = updates?.arguments ? { ...request.arguments, ...updates.arguments } : request.arguments
+        const options = updates?.options ? { ...request.options, ...updates.options } : request.options
+        return { arguments: args, options }
     }
 
-    protected async updateRequest(request_: MessageRequest, updates?: MessageRequest): Promise<MessageRequest> {
+    private async updateRequest(request_: MessageRequest, updates?: MessageRequest): Promise<MessageRequest> {
         const request = this.resolveRequest(request_, updates)
 
         const { method, chainId, config } = PayloadEditor.fromMethod(request.arguments.method, request.arguments.params)
@@ -56,12 +66,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
             })
 
             if (nonce > config.nonce) {
-                request.arguments.params = [
-                    {
-                        ...config,
-                        nonce,
-                    },
-                ]
+                request.arguments.params = [{ ...config, nonce }]
             }
         }
 
@@ -96,7 +101,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         return super.waitForApprovingRequest(id)
     }
 
-    override async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
+    async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
         const { request: request_ } = this.assertMessage(id)
 
         const request = await this.updateRequest(request_, updates)
@@ -114,7 +119,10 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         })
 
         // deny all requests after approving one
-        await this.denyAllRequests()
+        await this.denyRequests({
+            keepChainUnrelated: this.isChainUnrelated(request),
+            keepNonceUnrelated: this.isNonceUnrelated(request),
+        })
 
         return response
     }
