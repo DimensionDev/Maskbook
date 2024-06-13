@@ -367,6 +367,8 @@ export interface NonFungibleTokenMetadata<ChainId> {
     projectURL?: string
     /** source type */
     source?: SourceType
+    /** Poap Event Id */
+    eventId?: number
 }
 
 export interface SocialLinks {

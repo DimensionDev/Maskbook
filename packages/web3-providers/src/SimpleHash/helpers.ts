@@ -89,6 +89,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
             ),
             blurhash: asset.previews.blurhash,
             mediaURL: asset.image_url || asset.previews.image_large_url,
+            eventId: asset.extra_metadata?.event_id,
         },
         contract: {
             chainId,
