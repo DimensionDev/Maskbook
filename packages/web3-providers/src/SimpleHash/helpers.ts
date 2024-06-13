@@ -99,6 +99,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
             symbol: asset.contract.symbol,
         },
         collection: {
+            id: asset.collection.collection_id,
             chainId,
             name: asset.collection.name || '',
             slug: asset.contract.name,
