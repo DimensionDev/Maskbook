@@ -113,6 +113,20 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
+    async getPoapEvent(eventId: number, { indicator, size = 20 }: Omit<BaseHubOptions<ChainId>, 'chainId'> = {}) {
+        const path = urlcat('/api/v0/nfts/poap_event/:event_id', {
+            cursor: indicator?.id || undefined,
+            limit: size,
+            event_id: eventId,
+        })
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
+        return createPageable(
+            response.nfts,
+            indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+    }
+
     async getTopCollectorsByContract(
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},

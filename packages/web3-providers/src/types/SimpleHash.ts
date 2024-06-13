@@ -101,6 +101,7 @@ export namespace SimpleHash {
                 value: string
                 display_type: string | null
             }>
+            event_id?: number
         }
     }
 
