@@ -173,7 +173,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             }),
         )
 
-        const response = await Message?.approveRequest(request.ID, {
+        const response = await Message!.approveAndSendRequest(request.ID, {
             arguments: {
                 ...request.request.arguments,
                 params,

@@ -59,7 +59,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
             })
         }
         // It is "deny" because we don't want send it to the upstream RPC.
-        await Message!.denyRequest(request.ID)
+        await Message!.rejectRequest(request.ID)
     })
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

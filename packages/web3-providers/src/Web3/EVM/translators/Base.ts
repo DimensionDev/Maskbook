@@ -9,7 +9,7 @@ import { EVMChainResolver } from '../apis/ResolverAPI.js'
 export abstract class BaseTranslator implements Translator<ConnectionContext> {
     async encode(context: ConnectionContext) {
         const config = context.config
-        if (!config || PayloadEditor.fromPayload(context.request).readonly) return
+        if (!config || !PayloadEditor.fromPayload(context.request).gasConsuming) return
 
         // #region polyfill transaction config
         try {

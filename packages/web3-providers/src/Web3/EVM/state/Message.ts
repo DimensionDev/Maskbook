@@ -79,7 +79,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         const { request } = this.assertMessage(id)
 
         if (request.options.silent) {
-            await this.approveRequest(id)
+            await this.approveAndSendRequest(id)
         } else {
             // TODO: make this for Mask Wallet only
             const hasPassword = await this.context.hasPaymentPassword()
@@ -101,7 +101,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         return super.waitForApprovingRequest(id)
     }
 
-    async approveRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
+    async approveAndSendRequest(id: string, updates?: MessageRequest): Promise<JsonRpcResponse | void> {
         const { request: request_ } = this.assertMessage(id)
 
         const request = await this.updateRequest(request_, updates)
@@ -119,7 +119,7 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
         })
 
         // deny all requests after approving one
-        await this.denyRequests({
+        await this.rejectRequests({
             keepChainUnrelated: this.isChainUnrelated(request),
             keepNonceUnrelated: this.isNonceUnrelated(request),
         })

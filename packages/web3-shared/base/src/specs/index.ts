@@ -1027,16 +1027,18 @@ export interface MessageState<Request, Response> {
     messages: Subscription<Array<ReasonableMessage<Request, Response>>>
     /** Updates a request. */
     updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
-    /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
-    /** Approves a request. */
-    approveRequest(id: string, updates?: Request): Promise<Response | void>
-    /** Approves and resolve a request without sending them to the network. */
+    /** Create a request and waits for approval from the user. */
+    createRequestAndWaitForApproval(
+        message: TransferableMessage<Request, Response>,
+    ): Promise<ReasonableMessage<Request, Response>>
+    /** Approve a request and send it to the network (usually transactions). */
+    approveAndSendRequest(id: string, updates?: Request): Promise<Response | void>
+    /** Approve and resolve a request with the given result. */
     approveRequestWithResult(id: string, result: Response): Promise<void>
-    /** Rejects a request. */
-    denyRequest(id: string): Promise<void>
-    /** Rejects requests. */
-    denyRequests(options: DenyRequestOptions): Promise<void>
+    /** Reject a request. */
+    rejectRequest(id: string): Promise<void>
+    /** Reject requests. */
+    rejectRequests(options: DenyRequestOptions): Promise<void>
 }
 
 /** If you set both value */
