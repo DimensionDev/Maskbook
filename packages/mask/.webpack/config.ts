@@ -41,16 +41,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const polyfillFolder = join(nonWebpackJSFiles, './polyfill')
 
     const pnpmPatches = readdir(patchesDir).then((files) => files.map((x) => join(patchesDir, x)))
-
-    let WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC || ''
-    if (WEB3_CONSTANTS_RPC) {
-        try {
-            if (typeof JSON.parse(WEB3_CONSTANTS_RPC) === 'object') {
-                console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
-                WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
-            }
-        } catch (err) {}
-    }
     const baseConfig = {
         name: 'mask',
         // to set a correct base path for source map
@@ -201,11 +191,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new EnvironmentPlugin({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
                 NODE_DEBUG: false,
-                /** JSON.stringify twice */
-                WEB3_CONSTANTS_RPC: WEB3_CONSTANTS_RPC,
+                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC || '',
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
-                MASK_SENTRY: process.env.MASK_SENTRY || JSON.stringify('disabled'),
-                MASK_MIXPANEL: process.env.MASK_MIXPANEL || JSON.stringify('disabled'),
+                MASK_SENTRY: process.env.MASK_SENTRY || 'disabled',
+                MASK_MIXPANEL: process.env.MASK_MIXPANEL || 'disabled',
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
             new DefinePlugin({
