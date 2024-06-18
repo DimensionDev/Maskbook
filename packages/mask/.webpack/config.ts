@@ -191,7 +191,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new EnvironmentPlugin({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
                 NODE_DEBUG: false,
-                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC || '',
+                WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC || '{}',
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
                 MASK_SENTRY: process.env.MASK_SENTRY || 'disabled',
                 MASK_MIXPANEL: process.env.MASK_MIXPANEL || 'disabled',
