@@ -123,12 +123,12 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[]; count?: number }>(
             path,
         )
-        const pageable = createPageable(
+        return createPageable(
             response.nfts,
             indicator,
             response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+            response.count,
         )
-        return { ...pageable, count: response.count }
     }
 
     async getTopCollectorsByContract(
