@@ -11,6 +11,8 @@ export interface Pageable<Item, Indicator = unknown> {
     nextIndicator?: Indicator
     /** items data */
     data: Item[]
+    /** items total */
+    total?: number
 }
 
 export interface PageIndicator {
@@ -51,7 +53,8 @@ export function createPageable<Item, Indicator = PageIndicator>(
     data: Item[],
     indicator: Indicator,
     nextIndicator?: Indicator,
-) {
+    total?: number,
+): Pageable<Item, Indicator> {
     // with next page
     if (typeof nextIndicator !== 'undefined') {
         return {
@@ -59,6 +62,7 @@ export function createPageable<Item, Indicator = PageIndicator>(
             data,
             indicator,
             nextIndicator,
+            total,
         }
     }
     // without next page
@@ -66,6 +70,7 @@ export function createPageable<Item, Indicator = PageIndicator>(
         __type__: $Pageable,
         data,
         indicator,
+        total,
     }
 }
 

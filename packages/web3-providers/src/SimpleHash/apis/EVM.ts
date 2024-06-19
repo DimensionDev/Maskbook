@@ -118,12 +118,16 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             cursor: indicator?.id || undefined,
             limit: size,
             event_id: eventId,
+            count: 1,
         })
-        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[]; count?: number }>(
+            path,
+        )
         return createPageable(
             response.nfts,
             indicator,
             response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+            response.count,
         )
     }
 
