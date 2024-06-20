@@ -1,4 +1,4 @@
-import type { IDBPTransaction } from 'idb/with-async-ittr'
+import type { IDBPTransaction } from 'idb'
 import type { Plugin, IndexableTaggedUnion } from '@masknet/plugin-infra'
 import { createPluginDBAccess, type PluginDatabase, pluginDataHasValidKeyPath, toStore } from './base.js'
 

@@ -25,7 +25,6 @@
 
 ## Other problems
 
-- web3: <https://github.com/web3/web3.js/pull/5274> crashes
 - @chainsafe/as-sha256: currently we cannot load WebAssembly modules in the content script. compiled into JS by <https://github.com/WebAssembly/binaryen/tree/main>.
 - @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>

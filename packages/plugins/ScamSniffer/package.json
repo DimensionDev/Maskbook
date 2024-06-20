@@ -24,7 +24,7 @@
     "@masknet/typed-message": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@scamsniffer/detector": "0.0.21",
-    "react-use": "^17.4.0",
+    "react-use": "^17.5.0",
     "urlcat": "^3.1.0"
   }
 }

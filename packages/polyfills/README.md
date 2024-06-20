@@ -25,7 +25,3 @@ Those features are not easy to polyfill.
 ## Web APIs and Intl APIs
 
 Check and polyfill before using.
-
-### Using polyfill
-
-- navigator.clipboard (with `ClipboardItem`) (Firefox not supported: <https://caniuse.com/mdn-api_clipboarditem>)

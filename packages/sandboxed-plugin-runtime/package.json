@@ -20,13 +20,13 @@
     }
   },
   "dependencies": {
-    "@masknet/compartment": "^0.4.2",
+    "@masknet/compartment": "^0.6.0",
     "@masknet/icons": "workspace:^",
-    "@masknet/membrane": "^0.1.5",
+    "@masknet/membrane": "^0.2.0",
     "@masknet/shared-base": "workspace:^",
     "@masknet/theme": "workspace:^",
     "@masknet/typed-message": "workspace:^",
     "@masknet/web-endowments": "^0.1.1",
-    "async-call-rpc": "^6.4.0"
+    "async-call-rpc": "^6.4.2"
   }
 }

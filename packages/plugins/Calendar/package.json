@@ -24,6 +24,6 @@
         "@masknet/theme": "workspace:^",
         "@masknet/web3-providers": "workspace:^",
         "@masknet/web3-shared-base": "workspace:^",
-        "date-fns": "^2.30.0"
+        "date-fns": "^3.6.0"
     }
 }

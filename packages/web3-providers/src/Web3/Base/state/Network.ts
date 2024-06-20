@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '../../../Manager/index.js'
@@ -70,7 +69,7 @@ export abstract class NetworkState<ChainId, SchemaType, NetworkType>
         const valid = await this.validateNetwork(network)
         if (!valid) throw new Error('Not a valid network.')
 
-        const ID = uuid()
+        const ID = crypto.randomUUID()
         const now = new Date()
 
         await this.networksStorage.setValue({

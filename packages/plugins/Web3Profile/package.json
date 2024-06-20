@@ -29,9 +29,9 @@
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-shared-evm": "workspace:^",
         "@servie/events": "^3.0.0",
-        "@types/use-subscription": "^1.0.0",
-        "date-fns": "^2.30.0",
-        "react-use": "^17.4.0",
+        "@types/use-subscription": "^1.0.2",
+        "date-fns": "^3.6.0",
+        "react-use": "^17.5.0",
         "urlcat": "^3.1.0",
         "use-subscription": "^1.8.0",
         "web3-utils": "1.10.2"

@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { type ChainId, ProviderType, type RequestArguments, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { BaseEVMWalletProvider } from './Base.js'
 import { safeUnreachable } from '@masknet/kit'
@@ -46,7 +45,7 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     }
 
     override async request<T>(requestArguments: RequestArguments): Promise<T> {
-        const id = uuid()
+        const id = crypto.randomUUID()
         const event = new CustomEvent('mask_custom_event_provider_request', {
             detail: {
                 id,

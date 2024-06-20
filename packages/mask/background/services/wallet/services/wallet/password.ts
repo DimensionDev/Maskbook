@@ -1,4 +1,4 @@
-import { validate } from 'uuid'
+import { string } from 'zod'
 import { getDefaultWalletPassword } from '@masknet/shared-base'
 import * as database from './database/index.js'
 import { setAutoLockTimer } from './locker.js'
@@ -91,8 +91,8 @@ export async function hasVerifiedPassword() {
 /** Verify the given password. if successful, keep it in memory. */
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword.value === unverifiedPassword) return true
-    const valid = validate(await database.decryptSecret(unverifiedPassword))
-    if (!valid) return false
+    const valid = string().uuid().safeParse(await database.decryptSecret(unverifiedPassword))
+    if (!valid.success) return false
     INTERNAL_setPassword(unverifiedPassword)
     return true
 }

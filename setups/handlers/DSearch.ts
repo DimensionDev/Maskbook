@@ -1,33 +1,32 @@
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 
 const baseURL = 'https://dsearch.mask.r2d2.to'
 const rss3BaseURL = 'https://pregod.rss3.dev/v1/profiles'
 
 /* cspell:disable */
 export const DSearchHandlers = [
-    rest.get(`${baseURL}/fungible-tokens/specific-list.json`, (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
+    http.get(`${baseURL}/fungible-tokens/specific-list.json`, () => {
+        return HttpResponse.json(
+            [
                 {
                     pluginID: 'com.mask.evm',
                     name: 'eth1',
                     symbol: 'eth',
                     type: 'FungibleToken',
                 },
-            ]),
+            ],
+            { status: 200 },
         )
     }),
-    rest.get(`${baseURL}/non-fungible-tokens/specific-list.json`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([]))
+    http.get(`${baseURL}/non-fungible-tokens/specific-list.json`, () => {
+        return HttpResponse.json([], { status: 200 })
     }),
-    rest.get(`${baseURL}/non-fungible-collections/specific-list.json`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([]))
+    http.get(`${baseURL}/non-fungible-collections/specific-list.json`, () => {
+        return HttpResponse.json([], { status: 200 })
     }),
-    rest.get(`${baseURL}/fungible-tokens/coingecko.json`, (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
+    http.get(`${baseURL}/fungible-tokens/coingecko.json`, () => {
+        return HttpResponse.json(
+            [
                 {
                     pluginID: 'com.mask.evm',
                     name: 'ethInCoinGecko',
@@ -40,13 +39,13 @@ export const DSearchHandlers = [
                     symbol: 'fuzzy',
                     type: 'FungibleToken',
                 },
-            ]),
+            ],
+            { status: 200 },
         )
     }),
-    rest.get(`${baseURL}/fungible-tokens/coinmarketcap.json`, (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
+    http.get(`${baseURL}/fungible-tokens/coinmarketcap.json`, () => {
+        return HttpResponse.json(
+            [
                 {
                     pluginID: 'com.mask.evm',
                     name: 'ethInCMC',
@@ -59,16 +58,16 @@ export const DSearchHandlers = [
                     symbol: 'thefuzzy',
                     type: 'FungibleToken',
                 },
-            ]),
+            ],
+            { status: 200 },
         )
     }),
-    rest.get(`${baseURL}/non-fungible-tokens/nftscan.json`, (req, res, ctx) => {
-        return res(ctx.status(200), ctx.json([]))
+    http.get(`${baseURL}/non-fungible-tokens/nftscan.json`, () => {
+        return HttpResponse.json([], { status: 200 })
     }),
-    rest.get(`${baseURL}/non-fungible-collections/nftscan.json`, (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
+    http.get(`${baseURL}/non-fungible-collections/nftscan.json`, () => {
+        return HttpResponse.json(
+            [
                 {
                     pluginID: 'com.mask.evm',
                     address: '0x4e1f41613c9084fdb9e34e11fae9412427480e56',
@@ -151,14 +150,14 @@ export const DSearchHandlers = [
                     },
                     type: 'NonFungibleCollection',
                 },
-            ]),
+            ],
+            { status: 200 },
         )
     }),
 
-    rest.get(`${rss3BaseURL}/sujiyan.lens`, (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json({
+    http.get(`${rss3BaseURL}/sujiyan.lens`, () => {
+        return HttpResponse.json(
+            {
                 total: 6,
                 result: [
                     {
@@ -229,7 +228,8 @@ export const DSearchHandlers = [
                         profile_uri: ['https://ipfs.io/ipfs/QmeYWaMUekPthkMnb5FMkiPLBTfu1PLkQFvZM3a7oftzNu'],
                     },
                 ],
-            }),
+            },
+            { status: 200 },
         )
     }),
 ]

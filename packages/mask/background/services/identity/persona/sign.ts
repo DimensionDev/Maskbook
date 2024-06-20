@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { timeout } from '@masknet/kit'
 import { Signer } from '@masknet/web3-providers'
 import {
@@ -24,7 +23,7 @@ export async function signWithPersona(
 ): Promise<string> {
     const getIdentifier = async () => {
         if (!identifier || !silent) {
-            const requestID = uuid()
+            const requestID = crypto.randomUUID()
             await openPopupWindow(PopupRoutes.PersonaSignRequest, {
                 message: JSON.stringify(message),
                 requestID,

@@ -1,11 +1,11 @@
 import { memo, useMemo } from 'react'
-import { v4 as uuid } from 'uuid'
 
 interface Props {
     handle: string
     size?: number | string
     className?: string
 }
+const uuid = () => crypto.randomUUID()
 export const LensAvatar = memo<Props>(({ handle, size, className }) => {
     const id1 = useMemo(uuid, [])
     const id2 = useMemo(uuid, [])

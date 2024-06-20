@@ -15,15 +15,15 @@
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
-    "@types/tinycolor2": "^1.4.3",
+    "@types/tinycolor2": "^1.4.6",
     "fuse.js": "^7.0.0",
     "notistack": "2.0.8",
-    "react-use": "^17.4.0",
-    "react-window": "^1.8.9",
+    "react-use": "^17.5.0",
+    "react-window": "^1.8.10",
     "tinycolor2": "^1.6.0",
-    "tss-react": "^4.9.0"
+    "tss-react": "^4.9.10"
   },
   "devDependencies": {
-    "@types/react-window": "^1.8.5"
+    "@types/react-window": "^1.8.8"
   }
 }

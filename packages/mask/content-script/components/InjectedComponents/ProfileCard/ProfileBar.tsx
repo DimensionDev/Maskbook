@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { Icons } from '@masknet/icons'
 import { AddressItem, CopyButton, Image, TokenWithSocialGroupMenu, useCollectionByTwitterHandle } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
@@ -123,7 +122,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
 }) {
     const { classes, theme, cx } = useStyles()
     const t = useMaskSharedTrans()
-    const { current: avatarClipPathId } = useRef<string>(uuid())
+    const { current: avatarClipPathId } = useRef<string>(crypto.randomUUID())
     const { anchorEl, anchorBounding } = useAnchor()
 
     const collectionList = useCollectionByTwitterHandle(identity.identifier?.userId)

@@ -2,7 +2,9 @@
   "name": "@masknet/polyfill",
   "version": "0.0.0",
   "private": true,
-  "sideEffects": ["./runtime/*.js"],
+  "sideEffects": [
+    "./runtime/*.js"
+  ],
   "type": "module",
   "scripts": {
     "start": "rollup -w -c ./config.js",
@@ -10,19 +12,18 @@
   },
   "dependencies": {
     "@types/webextension-polyfill": "^0.10.7",
-    "clipboard-polyfill": "^3.0.3",
-    "core-js": "3.37.0",
-    "tslib": "^2.6.2"
+    "core-js": "3.37.1",
+    "tslib": "^2.6.3"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-virtual": "^3.0.2",
-    "@types/node": "20.12.7",
-    "core-js-compat": "3.37.0",
-    "regenerator-runtime": "^0.14.0",
-    "rollup": "^4.17.2",
+    "@types/node": "20.14.6",
+    "core-js-compat": "3.37.1",
+    "regenerator-runtime": "^0.14.1",
+    "rollup": "^4.18.0",
     "rollup-plugin-swc3": "^0.11.2"
   }
 }

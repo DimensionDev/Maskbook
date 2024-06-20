@@ -59,7 +59,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v4
-      - run: npx prettier@3.3.0 --write .
+      - run: npx prettier@3.3.2 --write .
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: prettier'

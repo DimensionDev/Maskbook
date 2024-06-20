@@ -16,7 +16,7 @@
     }
   },
   "dependencies": {
-    "@json2csv/plainjs": "^7.0.1",
+    "@json2csv/plainjs": "^7.0.6",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
@@ -28,11 +28,11 @@
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@react-hookz/web": "^23.1.0",
-    "@types/color": "^3.0.3",
+    "@react-hookz/web": "^24.0.4",
+    "@types/color": "^3.0.6",
     "color": "^4.2.3",
-    "date-fns": "^2.30.0",
-    "react-use": "^17.4.0",
+    "date-fns": "^3.6.0",
+    "react-use": "^17.5.0",
     "urlcat": "^3.1.0"
   }
 }
