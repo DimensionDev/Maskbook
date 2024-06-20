@@ -1025,6 +1025,7 @@
     "popups_settings_not_set": "未設定",
     "popups_update_authorization_title": "X.com 認証の更新",
     "popups_authorization_list": "認証リスト",
+    "popups_authorization_tips": "Twitterは現在、新しいドメイン名x.comを使用しているため、マスクネットワークは、x.comで作業を続けるためにユーザーに新しい承認を与える必要があります。",
     "nft_wallet_label": "ウォレット",
     "plugin_profile_no_wallets": "ここにウォレットを接続してください。<br/>このセクションは暗号化された友達に表示されます。<br/>表示内容には、デジタルアート、寄付、バッジ<br/>その他チェーンに関する公開情報が含まれます。",
     "nft_input_address_label": "コントラクトアドレスを入力してください。",
@@ -1202,5 +1203,8 @@
     "hide_collectible": "{{-name}} を非表示",
     "hide_collectible_description": "{{- name}}を非表示にしますか？このNFTをいつでも再追加することで再表示できます。",
     "add_new_address_to_an_existing_group": "既存のグループに新しいアドレスを追加",
-    "or_create_a_new_wallet_group": "または新しいウォレットグループを作成"
+    "or_create_a_new_wallet_group": "または新しいウォレットグループを作成",
+    "wallet_sdk_connect_title": "マスクウォレットと接続",
+    "wallet_sdk_connect_subtitle": "このサイトで使用するウォレットを選択してください。信頼しないウェブサイトに接続しないでください。",
+    "wallet_sdk_connect_warning_title": "ウェブサイトはできます。"
 }
