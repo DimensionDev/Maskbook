@@ -41,7 +41,7 @@ export function WalletSignRequest(props: InteractionItemProps) {
             }
         }
 
-        const response = await Message!.approveRequest(id, {
+        const response = await Message!.approveAndSendRequest(id, {
             arguments: {
                 method: request.method,
                 params,

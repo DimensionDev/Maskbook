@@ -30,38 +30,24 @@ export abstract class MessageState<Request extends object, Response extends obje
         return message
     }
 
-    protected async validateMessage(message: TransferableMessage<Request, Response>) {
-        return true
-    }
-
-    protected async waitForApprovingRequest(id: string): Promise<ReasonableMessage<Request, Response>> {
+    protected waitForApprovingRequest(id: string): Promise<ReasonableMessage<Request, Response>> {
         return new Promise((resolve, reject) => {
             const observe = () => {
-                const message = this.storage.value[id]
-
-                if (message) {
-                    // not a state to be resolved
-                    if (message.state === MessageStateType.NOT_DEPEND) return
-
-                    if (message.state === MessageStateType.APPROVED) resolve(message)
-                    else reject(new Error('User rejected the message.'))
-                } else {
-                    reject(new Error('Invalid request ID'))
-                }
-
+                const message = this.assertMessage(id)
+                // not a state to be resolved
+                if (message.state === MessageStateType.NOT_DEPEND) return
+                if (message.state === MessageStateType.APPROVED) resolve(message)
+                else reject(new Error('User rejected the message.'))
                 unsubscribe()
             }
-
             const unsubscribe = this.storage.subscription.subscribe(observe)
             observe()
         })
     }
 
-    private async applyRequest(
+    private async createRequest(
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>> {
-        await this.validateMessage(message)
-
         const ID = uuid()
         const now = new Date()
         const message_ = {
@@ -80,14 +66,15 @@ export abstract class MessageState<Request extends object, Response extends obje
             }
             draft[ID] = message_
         })
+        console.log(nextMessages)
         await this.storage.setValue(nextMessages)
         return message_
     }
 
-    async applyAndWaitResponse(
+    async createRequestAndWaitForApproval(
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>> {
-        const { ID } = await this.applyRequest(message)
+        const { ID } = await this.createRequest(message)
         const reasonableMessage = await this.waitForApprovingRequest(ID)
         if (!reasonableMessage.response) throw new Error('Invalid response')
         return reasonableMessage
@@ -104,7 +91,7 @@ export abstract class MessageState<Request extends object, Response extends obje
         )
     }
 
-    abstract approveRequest(id: string, updates?: Request): Promise<Response | void>
+    abstract approveAndSendRequest(id: string, updates?: Request): Promise<Response | void>
 
     async approveRequestWithResult(id: string, result: Response): Promise<void> {
         await this.updateMessage(id, {
@@ -113,13 +100,13 @@ export abstract class MessageState<Request extends object, Response extends obje
         })
     }
 
-    async denyRequest(id: string): Promise<void> {
+    async rejectRequest(id: string): Promise<void> {
         await this.updateMessage(id, {
             state: MessageStateType.DENIED,
         })
     }
 
-    async denyRequests({ keepChainUnrelated, keepNonceUnrelated }: DenyRequestOptions): Promise<void> {
+    async rejectRequests({ keepChainUnrelated, keepNonceUnrelated }: DenyRequestOptions): Promise<void> {
         const messages = produce(this.storage.value, (draft: typeof this.storage.value) => {
             for (const key in draft) {
                 if (draft[key].state === MessageStateType.NOT_DEPEND) {

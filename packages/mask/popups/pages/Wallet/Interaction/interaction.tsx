@@ -59,7 +59,7 @@ export const Interaction = memo((props: InteractionProps) => {
     const confirmAction = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
 
     const [{ loading: cancelLoading }, onCancel] = useAsyncFn(async () => {
-        await Message!.denyRequest(currentRequest.ID)
+        await Message!.rejectRequest(currentRequest.ID)
         if (currentRequest.origin) await Services.Helper.removePopupWindow()
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [currentRequest.ID, Message, currentRequest.origin])
@@ -177,7 +177,7 @@ const Pager = memo((props: InteractionProps) => {
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const [{ loading: cancelAllLoading }, handleCancelAllRequest] = useAsyncFn(async () => {
-        await Message!.denyRequests({ keepChainUnrelated: false, keepNonceUnrelated: false })
+        await Message!.rejectRequests({ keepChainUnrelated: false, keepNonceUnrelated: false })
         if (currentRequest.origin) await Services.Helper.removePopupWindow()
         else navigate(PopupRoutes.Wallet, { replace: true })
     }, [Message, currentRequest.origin])

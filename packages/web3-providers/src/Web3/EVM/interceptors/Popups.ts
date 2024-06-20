@@ -159,7 +159,7 @@ export class Popups implements Middleware<ConnectionContext> {
                     },
                 },
             }
-            const { request: updates, response } = await evm.state.Message.applyAndWaitResponse(request)
+            const { request: updates, response } = await evm.state.Message.createRequestAndWaitForApproval(request)
 
             context.config = {
                 ...context.config,

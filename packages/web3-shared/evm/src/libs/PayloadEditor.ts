@@ -17,8 +17,9 @@ import {
     EthereumMethodType,
 } from '../types/index.js'
 import { abiCoder } from '../helpers/abiCoder.js'
-import { isReadonlyMethodType } from '../helpers/isReadonlyMethodType.js'
-import { isRiskyMethodType } from '../helpers/isRiskyMethodType.js'
+import { readonlyMethodType } from '../helpers/isReadonlyMethodType.js'
+import { riskyMethodType } from '../helpers/isRiskyMethodType.js'
+import { gasConsumingMethodType } from '../helpers/isGasConsumingMethodType.js'
 
 type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
@@ -35,10 +36,6 @@ export class PayloadEditor {
 
     get method() {
         return this.payload.method
-    }
-
-    get params() {
-        return this.payload.params ?? []
     }
 
     get from(): string | undefined {
@@ -231,11 +228,15 @@ export class PayloadEditor {
     }
 
     get risky() {
-        return isRiskyMethodType(this.payload.method as EthereumMethodType)
+        return (riskyMethodType as readonly string[]).includes(this.payload.method)
     }
 
     get readonly() {
-        return isReadonlyMethodType(this.payload.method as EthereumMethodType)
+        return (readonlyMethodType as readonly string[]).includes(this.payload.method)
+    }
+
+    get gasConsuming() {
+        return (gasConsumingMethodType as readonly string[]).includes(this.payload.method)
     }
 
     fill() {
