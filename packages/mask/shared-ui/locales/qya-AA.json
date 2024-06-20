@@ -1210,5 +1210,7 @@
     "wallet_sdk_connect_warning_1": "crwdns26558:0crwdne26558:0",
     "wallet_sdk_connect_warning_2": "crwdns26560:0crwdne26560:0",
     "wallet_sdk_connect_warning_3": "crwdns26562:0crwdne26562:0",
-    "wallet_sdk_connect_warning_4": "crwdns26564:0crwdne26564:0"
+    "wallet_sdk_connect_warning_4": "crwdns26564:0crwdne26564:0",
+    "wallet_sdk_switch_chain_title": "crwdns26750:0crwdne26750:0",
+    "wallet_sdk_switch_chain_error": "crwdns26752:0crwdne26752:0"
 }

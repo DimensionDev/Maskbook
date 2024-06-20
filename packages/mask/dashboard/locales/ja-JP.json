@@ -437,6 +437,7 @@
     "recovery_smart_pay_wallet_description_other": "{{count}} ローカル SmartPay ウォレットが検出され、正常に復元されました。",
     "welcome_request_to_collect": "お客様の利用情報を収集し、改善に役立てます。",
     "welcome_to_use_mask_network": "Mask Networkへようこそ",
+    "update_authorization_title": "X.com 認証の更新",
     "create_step": "ステップ {{step}}/{{totalSteps}}",
     "persona_create_title": "新規Mask IDを作成",
     "persona_create_tips": "あなたのペルソナを作成して始めましょう",
@@ -514,5 +515,6 @@
     "local_backup": "ローカルバックアップ",
     "incorrect_verification_code": "認証コードが無効です。",
     "wallet_set_payment_password_successfully": "支払いパスワードを正常に設定しました",
-    "wallet_open_mask_wallet": "Maskウォレットを開く"
+    "wallet_open_mask_wallet": "Maskウォレットを開く",
+    "permission_onboarding": "Xウェブサイトの認証アップデートが完了しました。これでマスクネットワークの全ての機能を通常通りお楽しみいただけます。今後ともよろしくお願いいたします！"
 }

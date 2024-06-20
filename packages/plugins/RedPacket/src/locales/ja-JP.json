@@ -120,5 +120,14 @@
     "select_all": "全て選ぶ",
     "retry": "再試行",
     "go_wrong": "問題が発生しました.",
-    "no_enough_gas_fees": "ガス料金が足りません"
+    "no_enough_gas_fees": "ガス料金が足りません",
+    "share_on_firefly$lens": "🤑 このラッキードロップをチェック  🧧💰✨ 送信者 @{{- sender }} .\n\nFireflyモバイルアプリまたは http://firefly.mask.social !のラッキードロップでフォロワーとエンゲージメントを増やしましょう！\n\nLensで獲得： {{- link }}",
+    "share_on_firefly$farcaster": "🤑 このラッキードロップをチェック  🧧💰✨ 送信者 @{{- sender }} .\n\nFireflyモバイルアプリまたは http://firefly.mask.social !のラッキードロップでフォロワーとエンゲージメントを増やしましょう！\n\nFarcasterで獲得： {{- link }}",
+    "share_on_firefly$lens_claimed": "https://firefly.mask.social に @{{- 送信者}} ! 🤑 からラッキードロップ 🧧💰✨が届きました。\n\nLensで獲得: {{- link }}",
+    "share_on_firefly$farcaster_claimed": "https://firefly.mask.social に @{{- 送信者}} ! 🤑 からラッキードロップ 🧧💰✨が届きました。\n\nFarcasterで獲得: {{- link }}",
+    "no_claim_data": "このラッキードロップの請求はまだありません。",
+    "no_claim_history_data": "獲得したラッキードロップはありません。",
+    "no_sent_history_data": "<div>ラッキードロップは作成されていません。</div> <div>最初のドロップを開始するためにポストを作成するときに🎁 を選択します。<div>",
+    "post_on": "投稿先:",
+    "connect_to_platform": "{{ platform}} に接続"
 }
