@@ -24,7 +24,7 @@
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "prepare": "husky",
     "svgo": "svgo packages/icons/*/*.svg",
-    "test": "vitest",
+    "test": "vitest --pool=forks",
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "npx gulp clean"
   },
