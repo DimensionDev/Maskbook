@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "../dist/background.tsbuildinfo",
     // MV3 = WebWorker, MV2 = DOM
     // but we cannot build the same code in two env
-    "lib": ["ES2022", "WebWorker", "DOM.Iterable"]
+    "lib": ["ESNext", "WebWorker", "DOM.Iterable"]
   },
   "include": ["./"],
   "references": [

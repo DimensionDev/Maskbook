@@ -14,7 +14,7 @@
 ## Targeting ES Syntax and APIs
 
 - Syntax: ES2022
-- Library: ES2022 (with [core-js](https://github.com/zloirock/core-js)).
+- Library: ESNext (with [core-js](https://github.com/zloirock/core-js)).
 
 ### Caution
 

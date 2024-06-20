@@ -23,7 +23,6 @@ import {
     queryTestPublicKey,
 } from './keys.js'
 import { exportCryptoKeyToJWK } from '../src/utils/crypto.js'
-import { defer } from '@masknet/kit'
 import { None } from 'ts-results-es'
 
 const publicTarget: EncryptOptions['target'] = {
@@ -39,7 +38,7 @@ const example: EncryptOptions = {
     network: 'localhost',
 }
 function createSetPostKeyCache() {
-    const [setPostKeyCacheSuccess, resolve, reject] = defer()
+    const { promise: setPostKeyCacheSuccess, resolve, reject } = Promise.withResolvers()
     return {
         async setPostKeyCache(key: AESCryptoKey) {
             // the key must can be extracted
