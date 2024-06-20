@@ -1,3 +1,7 @@
+diff --git a/dist/cjs/fortmatic.js b/dist/cjs/fortmatic.cjs
+similarity index 100%
+rename from dist/cjs/fortmatic.js
+rename to dist/cjs/fortmatic.cjs
 diff --git a/dist/cjs/src/core/fm-payload-transport.d.ts b/dist/cjs/src/core/fm-payload-transport.d.ts
 index 5a8ddb844fc45f42570980e88089c1bf2ebf6691..ed9eb4fe13faeaeef82e9d8941533ff8b69d9fcb 100644
 --- a/dist/cjs/src/core/fm-payload-transport.d.ts
@@ -175,10 +179,6 @@ index f0ed19c7065db7c5e65b0f22a88bbf36059ff278..c34800039768167736f3d45b96e9272e
  export declare const JSON_RPC_VERSION = "2.0";
  /**
   * Build a valid JSON RPC payload for emitting to the Ethereum node or Fortmatic
-diff --git a/dist/fortmatic.js b/dist/fortmatic.cjs
-similarity index 100%
-rename from dist/fortmatic.js
-rename to dist/fortmatic.cjs
 diff --git a/package.json b/package.json
 index 70fc2b9252138b2bc36447313d5ed28d2ec2e110..c56f462bbd386a24b85a3a71bc7d042cb44fe211 100644
 --- a/package.json

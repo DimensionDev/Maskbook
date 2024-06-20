@@ -63,7 +63,7 @@ patchedDependencies:
     hash: zgide6rxzjqivhxxv36ouq6c4y
     path: patches/eslint-plugin-i@2.29.1.patch
   fortmatic@2.4.0:
-    hash: t36xvk4i5sye5h7ic4ieomhgrq
+    hash: tlk6cnwltokwhdaixd62dypmxe
     path: patches/fortmatic@2.4.0.patch
   react-devtools-inline@5.2.0:
     hash: hll3vpoco5ydaw7tv7wrwoczze
@@ -2928,7 +2928,7 @@ importers:
         version: 3.6.0
       fortmatic:
         specifier: ^2.4.0
-        version: 2.4.0(patch_hash=t36xvk4i5sye5h7ic4ieomhgrq)
+        version: 2.4.0(patch_hash=tlk6cnwltokwhdaixd62dypmxe)
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -24624,7 +24624,7 @@ snapshots:
     dependencies:
       fetch-blob: 3.2.0
 
-  fortmatic@2.4.0(patch_hash=t36xvk4i5sye5h7ic4ieomhgrq): {}
+  fortmatic@2.4.0(patch_hash=tlk6cnwltokwhdaixd62dypmxe): {}
 
   forwarded@0.2.0: {}
 
