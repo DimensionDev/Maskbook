@@ -46,6 +46,7 @@
     "plugin_collectible_auto_cancel_tip": "あなたのリスティングは自動的にこの時間で終了します。キャンセルする必要はありません！",
     "plugin_collectible_schedule_future_date": "今後のスケジュールを設定。",
     "plugin_collectible_buyer_address": "購入者のアドレス",
+    "plugin_collectible_buyer_address_placeholder": "買い手のアドレスを入力する。",
     "plugin_collectible_schedule_for_a_future_time": "今後のスケジュール設定",
     "plugin_collectible_schedule_for_a_future_time_helper": "このリストは、将来のデータでのみ購入できるようにスケジュールすることができます。",
     "plugin_collectible_privacy": "プライバシー",
