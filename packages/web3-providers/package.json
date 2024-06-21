@@ -82,7 +82,7 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.5",
     "@types/bs58": "^4.0.4",
-    "@types/socket.io-client": "^3.0.0",
+    "@types/socket.io-client": "^1.4.36",
     "@types/twitter-text": "^3.1.10",
     "@types/use-subscription": "^1.0.2"
   }

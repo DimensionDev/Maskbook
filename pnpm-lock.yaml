@@ -65,6 +65,9 @@ patchedDependencies:
   fortmatic@2.4.0:
     hash: tlk6cnwltokwhdaixd62dypmxe
     path: patches/fortmatic@2.4.0.patch
+  gulp@5.0.0:
+    hash: kpbffqss4lfpjq2whxrkmmmh54
+    path: patches/gulp@5.0.0.patch
   react-devtools-inline@5.2.0:
     hash: hll3vpoco5ydaw7tv7wrwoczze
     path: patches/react-devtools-inline@5.2.0.patch
@@ -174,8 +177,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       '@magic-works/i18n-codegen':
-        specifier: ^0.6.0
-        version: 0.6.0(typescript@5.5.2)
+        specifier: ^0.6.1
+        version: 0.6.1(typescript@5.5.2)
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
@@ -235,7 +238,7 @@ importers:
         version: 4.0.0(eslint@9.5.0)
       gulp:
         specifier: ^5.0.0
-        version: 5.0.0
+        version: 5.0.0(patch_hash=kpbffqss4lfpjq2whxrkmmmh54)
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -340,8 +343,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       gun:
-        specifier: 0.2020.1240
-        version: 0.2020.1240(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+        specifier: 0.2020.1234
+        version: 0.2020.1234(bufferutil@4.0.7)(utf-8-validate@5.0.10)
 
   packages/icons: {}
 
@@ -2976,8 +2979,8 @@ importers:
         specifier: ^4.0.4
         version: 4.0.4
       '@types/socket.io-client':
-        specifier: ^3.0.0
-        version: 3.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+        specifier: ^1.4.36
+        version: 1.4.36
       '@types/twitter-text':
         specifier: ^3.1.10
         version: 3.1.10
@@ -4812,8 +4815,8 @@ packages:
   '@locker/near-membrane-shared@0.13.1':
     resolution: {integrity: sha512-xUVT0H9Xp1ITQiO3bZwcrSoS0gL94ePmBzE6Pse3bpX/JFxmGV1/rCAiK0GTkQ7A5mBTNzSpVVmvotEapr7xtQ==}
 
-  '@magic-works/i18n-codegen@0.6.0':
-    resolution: {integrity: sha512-VbWxhM1Z4dVPjD5QgeoWiqFYpvk/CM0NcxusipitJZsnEFqf8RaLAwltb6XEQhKvmNCGFZ1EUlS/VJ3Hw94j3g==}
+  '@magic-works/i18n-codegen@0.6.1':
+    resolution: {integrity: sha512-RVvmAKv7avaoppZhnasCDuTKYg0DClieP5bVdALDMBGyyL2gNRYMABJfr3+y6MzyQ91Zbzy4oFtEmUOCscwAEw==}
     hasBin: true
     peerDependencies:
       typescript: ^5.4
@@ -6477,9 +6480,8 @@ packages:
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
-  '@types/socket.io-client@3.0.0':
-    resolution: {integrity: sha512-s+IPvFoEIjKA3RdJz/Z2dGR4gLgysKi8owcnrVwNjgvc01Lk68LJDDsG2GRqegFITcxmvCMYM7bhMpwEMlHmDg==}
-    deprecated: This is a stub types definition. socket.io-client provides its own type definitions, so you do not need this installed.
+  '@types/socket.io-client@1.4.36':
+    resolution: {integrity: sha512-ZJWjtFBeBy1kRSYpVbeGYTElf6BqPQUkXDlHHD4k/42byCN5Rh027f4yARHCink9sKAkbtGZXEAmR0ZCnc2/Ag==}
 
   '@types/sockjs@0.3.36':
     resolution: {integrity: sha512-MK9V6NzAS1+Ud7JV9lJLFqW85VbC9dq3LmwZCuBe4wBDgKC0Kj/jd8Xl+nSviU+Qc3+m7umHHyHg//2KSa0a0Q==}
@@ -6992,6 +6994,9 @@ packages:
       safe-compare:
         optional: true
 
+  addressparser@0.3.2:
+    resolution: {integrity: sha512-fDlslCJpojuY1cnb7tY7COAriA7cdSzDiWyrWNdFn7Cjd+jrEgZavqkOgD/wg+eH765YPnQjqlS88OL/Q0Qtkg==}
+
   adm-zip@0.5.9:
     resolution: {integrity: sha512-s+3fXLkeeLjZ2kLjCBwQufpI5fuN+kIGBxu6530nVQZGVol0d7Y/M88/xw9HGGUcJjKf8LutN3VPRUBq6N7Ajg==}
     engines: {node: '>=6.0'}
@@ -7499,10 +7504,6 @@ packages:
 
   brace-expansion@2.0.1:
     resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
-
-  braces@3.0.2:
-    resolution: {integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==}
-    engines: {node: '>=8'}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -8842,6 +8843,15 @@ packages:
   elliptic@6.5.5:
     resolution: {integrity: sha512-7EjbcmUm17NQFu4Pmgmq2olYMj8nwMnpcddByChSUjArp8F5DQWcIcpriwO4ZToLNAJig0yiyjswfyGNje/ixw==}
 
+  emailjs-base64@1.1.4:
+    resolution: {integrity: sha512-4h0xp1jgVTnIQBHxSJWXWanNnmuc5o+k4aHEpcLXSToN8asjB5qbXAexs7+PEsUKcEyBteNYsSvXUndYT2CGGA==}
+
+  emailjs-mime-codec@2.0.9:
+    resolution: {integrity: sha512-7qJo4pFGcKlWh/kCeNjmcgj34YoJWY0ekZXEHYtluWg4MVBnXqGM4CRMtZQkfYwitOhUgaKN5EQktJddi/YIDQ==}
+
+  emailjs@2.2.0:
+    resolution: {integrity: sha512-J9HNx13GA5DnJma10YxsSqYCErTyB0KoVflTddPTyKlEVHM0MckZXn/zDqovdacwWkHCxqC9AKVY8GMPaGvaGQ==}
+
   emittery@0.10.2:
     resolution: {integrity: sha512-aITqOwnLanpHLNXZJENbOgjUBeHocD+xsSJmNrjovKBW5HbSpW3d1pEls7GFQPUWXiwG9+0P4GtHfEqC/4M0Iw==}
     engines: {node: '>=12'}
@@ -9468,10 +9478,6 @@ packages:
   file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
 
-  fill-range@7.0.1:
-    resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
-    engines: {node: '>=8'}
-
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
@@ -9893,8 +9899,8 @@ packages:
     resolution: {integrity: sha512-V2FaKiOhpR3DRXZuYdRLn/qiY0yI5XmqbTKrYbdemJ+xOh2d2MOweI/XFgMzd/9+1twdvMwllnZbWZNJ+BOm4A==}
     engines: {node: '>= 10.13.0'}
 
-  gun@0.2020.1240:
-    resolution: {integrity: sha512-uhnyadZTywn0HHgBjS2DePqpcdwLeVm6nFeSZZBPJRltm9O8MjFPyltaxk2PBKS+O8wSZac9qlbCIriJDgQQog==}
+  gun@0.2020.1234:
+    resolution: {integrity: sha512-RqlGDDze1U7gdRZCHx8VMBi0dzyJL4C6jQHwOuFjH9aldGcCQPN0HyVaKVn6jNHgS1AAbTBod4KCfMRXda+eZg==}
     engines: {node: '>=0.8.4'}
 
   h3@1.8.2:
@@ -12683,6 +12689,9 @@ packages:
   radix3@1.1.0:
     resolution: {integrity: sha512-pNsHDxbGORSvuSScqNJ+3Km6QAVqk8CfsCBIEoDgpqLrkD2f3QM4I7d1ozJJ172OmIcoUcerZaNWqtLkRXTV3A==}
 
+  ramda@0.26.1:
+    resolution: {integrity: sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==}
+
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
 
@@ -13898,6 +13907,10 @@ packages:
 
   text-encoding-utf-8@1.0.2:
     resolution: {integrity: sha512-8bw4MY9WjdsD2aMtO0OzOCY3pXGYNx2d2FfHRVUKkiCPDWjKuOlhLVASS+pD7VkLTVjW268LYJHwsnPFlBpbAg==}
+
+  text-encoding@0.7.0:
+    resolution: {integrity: sha512-oJQ3f1hrOnbRLOcwKz0Liq2IcrvDeZRHXhd9RgLrsT+DjWY/nty1Hi7v3dtkaEYbPYe0mUoOfzRrMwfXXwgPUA==}
+    deprecated: no longer maintained
 
   text-extensions@2.4.0:
     resolution: {integrity: sha512-te/NtwBwfiNRLf9Ijqx3T0nlqZiQ2XrrtBvu+cLL8ZRrGkO0NHTug8MYFKyoSrv/sHTaSKfilUkizV6XhxMJ3g==}
@@ -18105,9 +18118,9 @@ snapshots:
 
   '@locker/near-membrane-shared@0.13.1': {}
 
-  '@magic-works/i18n-codegen@0.6.0(typescript@5.5.2)':
+  '@magic-works/i18n-codegen@0.6.1(typescript@5.5.2)':
     dependencies:
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       i18next-translation-parser: 1.0.1
       typescript: 5.5.2
       yargs: 17.7.2
@@ -20081,13 +20094,7 @@ snapshots:
       '@types/node': 20.14.6
       '@types/send': 0.17.4
 
-  '@types/socket.io-client@3.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)':
-    dependencies:
-      socket.io-client: 2.4.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - utf-8-validate
+  '@types/socket.io-client@1.4.36': {}
 
   '@types/sockjs@0.3.36':
     dependencies:
@@ -21270,6 +21277,9 @@ snapshots:
     optionalDependencies:
       node-fetch: 3.3.2
 
+  addressparser@0.3.2:
+    optional: true
+
   adm-zip@0.5.9: {}
 
   aes-js@3.0.0: {}
@@ -21862,10 +21872,6 @@ snapshots:
     dependencies:
       balanced-match: 1.0.2
 
-  braces@3.0.2:
-    dependencies:
-      fill-range: 7.0.1
-
   braces@3.0.3:
     dependencies:
       fill-range: 7.1.1
@@ -22155,7 +22161,7 @@ snapshots:
   chokidar@3.5.3:
     dependencies:
       anymatch: 3.1.3
-      braces: 3.0.2
+      braces: 3.0.3
       glob-parent: 5.1.2
       is-binary-path: 2.1.0
       is-glob: 4.0.3
@@ -22167,7 +22173,7 @@ snapshots:
   chokidar@3.6.0:
     dependencies:
       anymatch: 3.1.3
-      braces: 3.0.2
+      braces: 3.0.3
       glob-parent: 5.1.2
       is-binary-path: 2.1.0
       is-glob: 4.0.3
@@ -23429,6 +23435,22 @@ snapshots:
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
 
+  emailjs-base64@1.1.4:
+    optional: true
+
+  emailjs-mime-codec@2.0.9:
+    dependencies:
+      emailjs-base64: 1.1.4
+      ramda: 0.26.1
+      text-encoding: 0.7.0
+    optional: true
+
+  emailjs@2.2.0:
+    dependencies:
+      addressparser: 0.3.2
+      emailjs-mime-codec: 2.0.9
+    optional: true
+
   emittery@0.10.2: {}
 
   emoji-regex@10.3.0: {}
@@ -24490,10 +24512,6 @@ snapshots:
 
   file-uri-to-path@1.0.0: {}
 
-  fill-range@7.0.1:
-    dependencies:
-      to-regex-range: 5.0.1
-
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
@@ -24801,7 +24819,7 @@ snapshots:
   glob-watcher@6.0.0:
     dependencies:
       async-done: 2.0.0
-      chokidar: 3.5.3
+      chokidar: 3.6.0
 
   glob@10.4.1:
     dependencies:
@@ -25001,7 +25019,7 @@ snapshots:
       v8flags: 4.0.1
       yargs: 16.2.0
 
-  gulp@5.0.0:
+  gulp@5.0.0(patch_hash=kpbffqss4lfpjq2whxrkmmmh54):
     dependencies:
       glob-watcher: 6.0.0
       gulp-cli: 3.0.0
@@ -25012,11 +25030,13 @@ snapshots:
     dependencies:
       glogg: 2.2.0
 
-  gun@0.2020.1240(bufferutil@4.0.7)(utf-8-validate@5.0.10):
+  gun@0.2020.1234(bufferutil@4.0.7)(utf-8-validate@5.0.10):
     dependencies:
       ws: 7.5.9(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     optionalDependencies:
       '@peculiar/webcrypto': 1.2.3
+      emailjs: 2.2.0
+      text-encoding: 0.7.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -26432,7 +26452,7 @@ snapshots:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 8.17.1(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -27309,7 +27329,7 @@ snapshots:
 
   micromatch@4.0.5:
     dependencies:
-      braces: 3.0.2
+      braces: 3.0.3
       picomatch: 2.3.1
 
   micromatch@4.0.7:
@@ -28380,6 +28400,9 @@ snapshots:
 
   radix3@1.1.0: {}
 
+  ramda@0.26.1:
+    optional: true
+
   randombytes@2.1.0:
     dependencies:
       safe-buffer: 5.2.1
@@ -28962,7 +28985,7 @@ snapshots:
       '@babel/runtime': 7.24.0
       eventemitter3: 4.0.7
       uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      ws: 8.17.1(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     optionalDependencies:
       bufferutil: 4.0.7
       utf-8-validate: 5.0.10
@@ -29819,6 +29842,9 @@ snapshots:
 
   text-encoding-utf-8@1.0.2: {}
 
+  text-encoding@0.7.0:
+    optional: true
+
   text-extensions@2.4.0: {}
 
   text-table@0.2.0: {}
@@ -30385,7 +30411,7 @@ snapshots:
   unstorage@1.10.1(idb-keyval@6.2.1):
     dependencies:
       anymatch: 3.1.3
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       destr: 2.0.2
       h3: 1.8.2
       ioredis: 5.3.2
