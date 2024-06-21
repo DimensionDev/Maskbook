@@ -10209,9 +10209,6 @@ packages:
   i18next-translation-parser@1.0.1:
     resolution: {integrity: sha512-SdB8Z8Hlx73aymNz+70+zddBdZvZ/4ACs8WteQy+e+kRM4qe714zAylN+D1gzl75iyhj0IqPllrSmRlZXCQCvg==}
 
-  i18next@23.10.0:
-    resolution: {integrity: sha512-/TgHOqsa7/9abUKJjdPeydoyDc0oTi/7u9F8lMSj6ufg4cbC1Oj3f/Jja7zj7WRIhEQKB7Q4eN6y68I9RDxxGQ==}
-
   i18next@23.11.5:
     resolution: {integrity: sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==}
 
@@ -12750,19 +12747,6 @@ packages:
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: 0.0.0-experimental-26f2496093-20240514
-
-  react-i18next@13.5.0:
-    resolution: {integrity: sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==}
-    peerDependencies:
-      i18next: '>= 23.2.3'
-      react: 0.0.0-experimental-26f2496093-20240514
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
 
   react-i18next@14.1.2:
     resolution: {integrity: sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==}
@@ -18056,14 +18040,14 @@ snapshots:
       '@tanstack/react-query': 5.29.2(react@0.0.0-experimental-26f2496093-20240514)
       '@tanstack/react-virtual': 3.1.3(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       big.js: 6.2.1
-      i18next: 23.10.0
+      i18next: 23.11.5
       i18next-browser-languagedetector: 7.1.0
       microdiff: 1.3.2
       mitt: 3.0.1
       react: 0.0.0-experimental-26f2496093-20240514
       react-dom: 0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514)
       react-hook-form: 7.52.0(react@0.0.0-experimental-26f2496093-20240514)
-      react-i18next: 13.5.0(i18next@23.10.0)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
+      react-i18next: 14.1.2(i18next@23.11.5)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-intersection-observer: 9.8.1(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-router-dom: 6.23.1(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514)
       react-timer-hook: 3.0.7(react@0.0.0-experimental-26f2496093-20240514)
@@ -25415,10 +25399,6 @@ snapshots:
     dependencies:
       html-parse-stringify2: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c
 
-  i18next@23.10.0:
-    dependencies:
-      '@babel/runtime': 7.24.0
-
   i18next@23.11.5:
     dependencies:
       '@babel/runtime': 7.24.0
@@ -28481,15 +28461,6 @@ snapshots:
   react-hook-form@7.52.0(react@0.0.0-experimental-26f2496093-20240514):
     dependencies:
       react: 0.0.0-experimental-26f2496093-20240514
-
-  react-i18next@13.5.0(i18next@23.10.0)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514):
-    dependencies:
-      '@babel/runtime': 7.24.0
-      html-parse-stringify: 3.0.1
-      i18next: 23.10.0
-      react: 0.0.0-experimental-26f2496093-20240514
-    optionalDependencies:
-      react-dom: 0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514)
 
   react-i18next@14.1.2(i18next@23.11.5)(react-dom@0.0.0-experimental-26f2496093-20240514(react@0.0.0-experimental-26f2496093-20240514))(react@0.0.0-experimental-26f2496093-20240514):
     dependencies:
