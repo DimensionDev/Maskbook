@@ -189,7 +189,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
-    const platform = source?.toLowerCase() as 'lens' | 'farcaster'
+    const platform = source?.toLowerCase() as 'lens' | 'farcaster' | 'twitter'
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
@@ -201,7 +201,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
             if (isOnFirefly) {
-                const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
+                const context = hasClaimed ? (`${platform}_claimed` as const) : platform
                 return t.share_on_firefly({
                     context,
                     sender: handle ?? '',
@@ -435,6 +435,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     chainId={payloadChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
+                    canShare={platform !== 'twitter'}
                     isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}
                     onShare={handleShare}
