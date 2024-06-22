@@ -30,6 +30,7 @@ interface OperationFooterProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
+    canShare?: boolean
     /** Is claiming or checking claim status */
     isClaiming: boolean
     isRefunding: boolean
@@ -40,6 +41,7 @@ export function OperationFooter({
     chainId,
     canClaim,
     canRefund,
+    canShare = true,
     isClaiming,
     isRefunding,
     onShare,
@@ -97,7 +99,7 @@ export function OperationFooter({
     return (
         <Box style={{ flex: 1, padding: 12 }}>
             <Box className={classes.footer}>
-                {canRefund ? null : (
+                {canRefund || !canShare ? null : (
                     <ActionButton
                         fullWidth
                         variant="roundedDark"
