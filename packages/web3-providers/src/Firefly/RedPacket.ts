@@ -6,6 +6,7 @@ import {
     type PageIndicator,
     getSiteType,
     EnhanceableSite,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
@@ -179,6 +180,9 @@ export class FireflyRedPacket {
         platform: FireflyRedPacketAPI.SourceType,
         indicator?: PageIndicator,
     ): Promise<Pageable<R, PageIndicator>> {
+        if (!from) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,
