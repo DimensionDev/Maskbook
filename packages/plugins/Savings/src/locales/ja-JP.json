@@ -1,1 +1,9 @@
-{}
+{
+    "plugin_savings_amount": "量",
+    "plugin_savings_deposit": "入金",
+    "plugin_savings_swap_token": "{{token}} をスワップ",
+    "plugin_savings_withdraw_token": "{{token}} を引き出し",
+    "plugin_savings_withdraw": "出金",
+    "plugin_savings_process_deposit": "入金処理中",
+    "plugin_savings_process_withdraw": "引き出し処理中"
+}
