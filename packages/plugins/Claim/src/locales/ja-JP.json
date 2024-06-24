@@ -5,5 +5,16 @@
     "claimable": "受取可能",
     "tips": "チップ",
     "share": "シェア",
-    "share_text": "私はMask Network の拡張機能で {{amount}} {{symbol}} エアドロップを獲得しました。\n @realMaskNetworkをフォローして、獲得資格があるかどうか確認してください。\n Install https://mask.io to explore more airdrop activities."
+    "share_text": "私はMask Network の拡張機能で {{amount}} {{symbol}} エアドロップを獲得しました。\n @realMaskNetworkをフォローして、獲得資格があるかどうか確認してください。\n Install https://mask.io to explore more airdrop activities.",
+    "airdrop_alert": "エアドロップに参加するには、トランザクションコストをカバーするために、指定されたネットワーク上のウォレットに十分なネイティブトークンが必要です。",
+    "connect_wallet_airdrop_tips": "ウォレットに接続してください",
+    "congratulations": "おめでとうございます！",
+    "claim_successfully_tips": "{{amount}} ${{symbol}} を正常に請求しました。",
+    "eligible_to_claim": "請求可能",
+    "expired": "期限切れ",
+    "no_activities_tips": "アクティブティーはありません。",
+    "unclaimed_token_title": "{{symbol}} が未請求：",
+    "locked_token_title": "{{symbol}} がロックされています:",
+    "unlock_time": "ロック解除時間 {{-time}}",
+    "claim_tips": "エアドロップを受け取る"
 }
