@@ -34,5 +34,12 @@
     "plugin_trader_view_on_etherscan": "Etherscan で表示",
     "plugin_trader_safety_alert_title": "トークン安全の警告",
     "plugin_trader_safety_alert": "既存のトークンの偽バージョンや、トークンを持たないプロジェクトを代表すると主張するトークンを作成することも含め、誰でもイーサリアム上であらゆるERC20トークンを作成し、名前を付けることができます。Etherscan と同様に、このサイトはトークンの完全性とは無関係にすべての ERC20 トークンの分析を自動的に追跡します。ERC20 トークンを利用する前に、ご自身で調査してください。",
-    "plugin_trader_total_supply": "総供給量"
+    "plugin_trader_total_supply": "総供給量",
+    "plugin_trader_circulating_supply": "流通供給量",
+    "plugin_trader_accept": "同意する",
+    "plugin_trader_volume_24": "24時間取引",
+    "plugin_trader_market_cap": "時価総額",
+    "plugin_trader_risk_warning_short": "リスク警告",
+    "plugin_trader_risk_warning": "スワップトークンコントラクトのリスクを確認",
+    "plugin_trader_make_risk_trade": "とにかくスワップ"
 }
