@@ -1206,5 +1206,6 @@
     "or_create_a_new_wallet_group": "または新しいウォレットグループを作成",
     "wallet_sdk_connect_title": "マスクウォレットと接続",
     "wallet_sdk_connect_subtitle": "このサイトで使用するウォレットを選択してください。信頼しないウェブサイトに接続しないでください。",
-    "wallet_sdk_connect_warning_title": "ウェブサイトはできます。"
+    "wallet_sdk_connect_warning_title": "ウェブサイトはできます。",
+    "wallet_sdk_connect_warning_1": "アドレスを確認してください"
 }
