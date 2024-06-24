@@ -1,1 +1,7 @@
-{}
+{
+    "plugin_snapshot_vote_confirm_dialog_choice": "本当に 「{{ choiceText }}」 に投票しますか？",
+    "plugin_snapshot_vote_confirm_dialog_warning": "この操作は元に戻せません",
+    "plugin_snapshot_current_result_title": "現在の結果",
+    "plugin_snapshot_download_report": "レポートをダウンロードする",
+    "loading": "読み込み中"
+}
