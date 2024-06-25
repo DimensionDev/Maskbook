@@ -16,5 +16,14 @@
     "unclaimed_token_title": "{{symbol}} が未請求：",
     "locked_token_title": "{{symbol}} がロックされています:",
     "unlock_time": "ロック解除時間 {{-time}}",
-    "claim_tips": "エアドロップを受け取る"
+    "claim_tips": "エアドロップを受け取る",
+    "cancel_claim_tips": "あなたのウォレットは取引をキャンセルしました。",
+    "airdrop_title": "Maskコミュニティ ${{symbol}} プレゼント",
+    "airdrop_in_progress_time_tips": "受け取りは以下の期間までとなります： <strong> {{days}} 日  {{hours}} 時\n{{minutes}} 分 </strong>",
+    "no_account_tips": "あなたが${{symbol}}を要求する資格があるかどうかを確認するためにウォレットに接続してください。",
+    "start_time_tips": "開始時刻 {{time}}",
+    "end_time_tips": "<strong>{{time}}</strong> に終了",
+    "no_eligible_tips": "申し訳ありませんが、このキャンペーンで $ARB を請求する資格がありません。",
+    "claimed_tips": "あなたは {{amount}} {{symbol}} を請求しました.",
+    "wallet_connect_tips": "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。"
 }
