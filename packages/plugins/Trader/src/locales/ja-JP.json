@@ -94,5 +94,11 @@
     "plugin_trader_confirm_slippage_tolerance": "スリッページの許容範囲",
     "plugin_trader_confirm_tx_cost": "(${{usd}})",
     "plugin_trader_confirm_minimum_received": "最少受取り額:",
-    "plugin_trader_gas_setting_medium": "中間"
+    "plugin_trader_gas_setting_medium": "中間",
+    "open": "オープン",
+    "settings": "設定",
+    "powered_by": "以下により提供されています",
+    "available_balance": "利用可能な残高",
+    "wallet_balance": "バランス",
+    "edit": "編集"
 }
