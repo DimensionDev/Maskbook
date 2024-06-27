@@ -37,7 +37,7 @@
     "@ethereumjs/util": "^8.0.5",
     "@ethersproject/providers": "^5.7.2",
     "@hookform/resolvers": "^3.1.1",
-    "@lifi/widget": "^2.10.1",
+    "@lifi/widget": "^3.0.0",
     "@masknet/backup-format": "workspace:^",
     "@masknet/encryption": "workspace:^",
     "@masknet/flags": "workspace:^",
