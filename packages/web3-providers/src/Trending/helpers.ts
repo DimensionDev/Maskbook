@@ -10,7 +10,7 @@ export function isMirroredKeyword(symbol: string) {
 
 export function getCommunityLink(links: string[]): TrendingAPI.CommunityUrls {
     return links.map((x) => {
-        if (x.includes('twitter')) return { type: 'twitter', link: x }
+        if (x.includes('twitter') || x.includes('x.com')) return { type: 'twitter', link: x }
         if (x.includes('t.me')) return { type: 'telegram', link: x }
         if (x.includes('facebook')) return { type: 'facebook', link: x }
         if (x.includes('discord')) return { type: 'discord', link: x }
