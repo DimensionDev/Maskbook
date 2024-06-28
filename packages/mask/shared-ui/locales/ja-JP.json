@@ -1206,5 +1206,11 @@
     "or_create_a_new_wallet_group": "または新しいウォレットグループを作成",
     "wallet_sdk_connect_title": "マスクウォレットと接続",
     "wallet_sdk_connect_subtitle": "このサイトで使用するウォレットを選択してください。信頼しないウェブサイトに接続しないでください。",
-    "wallet_sdk_connect_warning_title": "ウェブサイトはできます。"
+    "wallet_sdk_connect_warning_title": "ウェブサイトはできます。",
+    "wallet_sdk_connect_warning_1": "アドレスを確認する",
+    "wallet_sdk_connect_warning_2": "アカウントの残高と履歴を確認する",
+    "wallet_sdk_connect_warning_3": "トークンとNFTを確認する",
+    "wallet_sdk_connect_warning_4": "トランザクションとサインメッセージの送信を薦めします",
+    "wallet_sdk_switch_chain_title": "このサイトがネットワークを切り替えることを許可しますか？",
+    "wallet_sdk_switch_chain_error": "不明なネットワークに切り替えることはできません。"
 }
