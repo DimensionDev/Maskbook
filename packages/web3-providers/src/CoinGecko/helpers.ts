@@ -6,7 +6,7 @@ import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 export const resolveCoinGeckoChainId = createLookupTableResolver<string, Web3Helper.ChainIdAll | undefined>(
     {
         ethereum: ChainId.Mainnet,
-        'binance-smart-chain': ChainId.BSCT,
+        'binance-smart-chain': ChainId.BSC,
         'polygon-pos': ChainId.Matic,
         solana: ChainIdSolana.Mainnet,
         astar: ChainId.Astar,

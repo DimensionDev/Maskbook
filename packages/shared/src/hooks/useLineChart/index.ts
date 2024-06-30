@@ -1,9 +1,8 @@
-import * as d3 from 'd3'
-import { useEffect, type RefObject } from 'react'
-import stringify from 'json-stable-stringify'
-import type { Dimension } from '../useDimension.js'
-import { format } from 'date-fns'
 import { alpha, useTheme } from '@mui/material'
+import * as d3 from 'd3'
+import { format } from 'date-fns'
+import { useEffect, type RefObject } from 'react'
+import type { Dimension } from '../useDimension.js'
 import { fixOverPosition } from './utils.js'
 
 // TODO chart morph transform
@@ -244,5 +243,5 @@ export function useLineChart(
         })
 
         d3.select(svgRef.current).on('mouseleave', hide)
-    }, [svgRef.current, data.length, stringify(dimension), tickFormat, formatTooltip])
+    }, [svgRef.current, data, dimension, tickFormat, formatTooltip])
 }

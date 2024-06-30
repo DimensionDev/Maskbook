@@ -194,7 +194,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.transfer_pausable === '0',
         titleKey: 'risk_no_code_transfer_pausable_title',
-        messageKey: 'risk_no_code_transfer_pausable_title',
+        messageKey: 'risk_no_code_transfer_pausable_body',
         shouldHide: isUnset('transfer_pausable'),
     },
     {

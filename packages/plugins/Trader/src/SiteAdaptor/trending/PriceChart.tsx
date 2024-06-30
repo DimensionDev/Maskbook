@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { Stack, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -53,28 +53,29 @@ export function PriceChart(props: PriceChartProps) {
     const { classes } = useStyles(props, { props })
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
+    const { stats, loading, currency, coin, children } = props
 
     useDimension(svgRef, DEFAULT_DIMENSION)
 
-    usePriceLineChart(
-        svgRef,
-        props.stats.map(([date, price]) => ({
+    const data = useMemo(() => {
+        return stats.map(([date, price]) => ({
             date: new Date(date),
             value: price,
-        })),
-        DEFAULT_DIMENSION,
-        'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD' },
-    )
+        }))
+    }, [stats])
+
+    usePriceLineChart(svgRef, data, DEFAULT_DIMENSION, 'x-trader-price-line-chart', {
+        sign: currency.name ?? 'USD',
+    })
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading && props.stats.length ?
+            {loading && stats.length ?
                 <LoadingBase className={classes.progress} color="primary" size={15} />
             :   null}
 
             <Stack gap={2}>
-                {props.stats.length ?
+                {stats.length ?
                     <svg
                         className={classes.svg}
                         ref={svgRef}
@@ -83,14 +84,14 @@ export function PriceChart(props: PriceChartProps) {
                         viewBox={`0 0 ${DEFAULT_DIMENSION.width} ${DEFAULT_DIMENSION.height}`}
                         preserveAspectRatio="xMidYMid meet"
                         onClick={() => {
-                            props.stats.length && openWindow(props.coin?.platform_url)
+                            stats.length && openWindow(coin?.platform_url)
                         }}
                     />
                 :   <Typography className={classes.placeholder} align="center" color="textSecondary">
                         {t.plugin_trader_no_data()}
                     </Typography>
                 }
-                {props.children}
+                {children}
             </Stack>
         </div>
     )
