@@ -1,5 +1,7 @@
 {
     "type": "module",
+    "name": "vitest-setup",
+    "private": true,
     "sideEffects": ["./index.ts"],
     "dependencies": {
         "msw": "2.3.1",
