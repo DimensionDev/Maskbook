@@ -282,7 +282,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             minimize: productionLike,
             minimizer: [
                 new TerserPlugin({
-                    minify: TerserPlugin.swcMinify,
+                    // minify: TerserPlugin.swcMinify,
+                    exclude: ['polyfill'],
                     // https://swc.rs/docs/config-js-minify
                     terserOptions: {
                         compress: {
