@@ -119,6 +119,9 @@ export async function startReactDevTools(signal: AbortSignal) {
         supportsProfiling: true,
         supportsTimeline: isChromium,
         supportsTraceUpdates: true,
+        // Note: new options
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         supportsInspectMatchingDOMElement: true,
         supportsClickToInspect: true,
     })

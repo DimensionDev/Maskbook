@@ -68,6 +68,9 @@ patchedDependencies:
   gulp@5.0.0:
     hash: kpbffqss4lfpjq2whxrkmmmh54
     path: patches/gulp@5.0.0.patch
+  react-devtools-inline@5.3.0:
+    hash: jy5l47kz5zhgguiggeursqr63y
+    path: patches/react-devtools-inline@5.3.0.patch
   react-use@17.5.0:
     hash: tokvlmgj4xqkhjmndck4f7nw3q
     path: patches/react-use@17.5.0.patch
@@ -734,7 +737,7 @@ importers:
         version: 0.1.2(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)
       react-devtools-inline:
         specifier: 5.3.0
-        version: 5.3.0
+        version: 5.3.0(patch_hash=jy5l47kz5zhgguiggeursqr63y)
       react-refresh:
         specifier: ^0.14.2
         version: 0.14.2
@@ -3788,6 +3791,9 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
+    peerDependenciesMeta:
+      '@types/webextension-polyfill':
+        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -5056,9 +5062,6 @@ packages:
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
-    peerDependenciesMeta:
-      webpack:
-        optional: true
 
   '@nice-labs/git-rev@3.5.1':
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
@@ -12592,7 +12595,7 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       '@swc/core': '>=1.2.165'
-      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0 || 4
+      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
 
   rollup-preserve-directives@1.1.1:
     resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==}
@@ -15789,9 +15792,10 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.3
+    optionalDependencies:
+      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.3.2)':
     dependencies:
@@ -18094,7 +18098,7 @@ snapshots:
     optional: true
 
   '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.6(@swc/helpers@0.5.11))(webpack-cli@5.1.4))':
-    optionalDependencies:
+    dependencies:
       webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.6(@swc/helpers@0.5.11))(webpack-cli@5.1.4)
 
   '@nice-labs/git-rev@3.5.1': {}
@@ -27646,7 +27650,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-devtools-inline@5.3.0:
+  react-devtools-inline@5.3.0(patch_hash=jy5l47kz5zhgguiggeursqr63y):
     dependencies:
       source-map-js: 0.6.2
       sourcemap-codec: 1.4.8
