@@ -73,7 +73,7 @@
     "socket.io-client": "2.4.0",
     "twitter-text": "^3.1.0",
     "urlcat": "^3.1.0",
-    "web3-core": "1.10.2",
+    "web3-core": "4.5.0",
     "web3-core-helpers": "1.10.3",
     "web3-eth": "1.10.2",
     "web3-utils": "1.10.2",
