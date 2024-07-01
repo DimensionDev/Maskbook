@@ -1,6 +1,11 @@
 /// <reference path="../../../polyfills/types/dom.d.ts" />
 import { attachListener } from './utils.js'
 
+Object.assign(globalThis, {
+    __IS_CHROME__: true,
+    __IS_FIREFOX__: false,
+    __IS_EDGE__: false,
+})
 function init() {
     const controller = new AbortController()
 
