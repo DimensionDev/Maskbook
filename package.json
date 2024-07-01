@@ -3,7 +3,7 @@
   "type": "module",
   "packageManager": "pnpm@9.4.0",
   "engines": {
-    "node": ">=20.11.1",
+    "node": ">=22.2.0",
     "pnpm": ">=9.1.1",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
@@ -70,7 +70,6 @@
     "@tanstack/eslint-plugin-query": "^5.49.1",
     "@types/lodash-es": "^4.17.12",
     "@vitest/ui": "^1.6.0",
-    "cross-fetch": "^4.0.0",
     "cspell": "^8.9.1",
     "eslint": "9.6.0",
     "eslint-formatter-junit": "^8.40.0",
@@ -83,7 +82,6 @@
     "gulp": "^5.0.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
-    "msw": "^2.3.1",
     "prettier": "^3.3.2",
     "svgo": "^3.3.2",
     "typescript": "5.5.2",

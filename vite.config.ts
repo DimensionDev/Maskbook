@@ -28,6 +28,6 @@ export default defineConfig({
             '@masknet/plugin-infra': resolve('./packages/plugin-infra/src/entry.ts'),
             '@masknet/theme': resolve('./packages/theme/src/index.ts'),
         },
-        setupFiles: ['./setups/index.ts', './packages/encryption/test-setup.js'],
+        setupFiles: ['./packages/vitest-setup/index.ts', './packages/encryption/test-setup.js'],
     },
 })

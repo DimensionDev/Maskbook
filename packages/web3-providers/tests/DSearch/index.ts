@@ -7,15 +7,16 @@ describe('DSearch test', () => {
     it('should return from specific list only', async () => {
         const result = await DSearch.search('eth')
 
-        expect(result.length).toBe(1)
-        expect(result[0]).toStrictEqual({
-            name: 'eth1',
-            symbol: 'eth',
-            rank: undefined,
-            type: 'FungibleToken',
-            pluginID: 'com.mask.evm',
-            alias: undefined,
-        })
+        expect(result).toStrictEqual([
+            {
+                name: 'eth1',
+                symbol: 'eth',
+                rank: undefined,
+                type: 'FungibleToken',
+                pluginID: 'com.mask.evm',
+                alias: undefined,
+            },
+        ])
     })
 
     it('should return by name', async () => {
