@@ -91,7 +91,9 @@ export async function hasVerifiedPassword() {
 /** Verify the given password. if successful, keep it in memory. */
 export async function verifyPassword(unverifiedPassword: string) {
     if (inMemoryPassword.value === unverifiedPassword) return true
-    const valid = string().uuid().safeParse(await database.decryptSecret(unverifiedPassword))
+    const valid = string()
+        .uuid()
+        .safeParse(await database.decryptSecret(unverifiedPassword))
     if (!valid.success) return false
     INTERNAL_setPassword(unverifiedPassword)
     return true
