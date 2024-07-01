@@ -63,29 +63,27 @@
     "bn.js": "^4.12.0",
     "bs58": "^5.0.0",
     "buffer": "^6.0.3",
-    "date-fns": "^2.30.0",
-    "fortmatic": "^2.2.1",
+    "date-fns": "^3.6.0",
+    "fortmatic": "^2.4.0",
     "fuse.js": "^7.0.0",
-    "graphql-request": "^6.0.0",
-    "immer": "^10.0.2",
-    "lru-cache": "^10.0.0",
+    "graphql-request": "^7.0.1",
+    "immer": "^10.1.1",
+    "lru-cache": "^10.3.0",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "twitter-text": "^3.1.0",
     "urlcat": "^3.1.0",
-    "uuid": "^9.0.0",
-    "web3-core": "1.10.2",
-    "web3-core-helpers": "1.10.2",
+    "web3-core": "1.10.4",
+    "web3-core-helpers": "1.10.3",
     "web3-eth": "1.10.2",
     "web3-utils": "1.10.2",
-    "zod": "^3.22.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/bn.js": "^4.11.6",
-    "@types/bs58": "^4.0.1",
+    "@types/bn.js": "^5.1.5",
+    "@types/bs58": "^4.0.4",
     "@types/socket.io-client": "^1.4.36",
-    "@types/twitter-text": "^3.1.7",
-    "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.3"
+    "@types/twitter-text": "^3.1.10",
+    "@types/use-subscription": "^1.0.2"
   }
 }

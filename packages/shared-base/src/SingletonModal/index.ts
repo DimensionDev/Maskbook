@@ -1,4 +1,4 @@
-import { defer, delay, type DeferTuple } from '@masknet/kit'
+import { delay } from '@masknet/kit'
 import { Emitter } from '@servie/events'
 
 export type SingletonModalRef<OpenProps = void, CloseProps = void> = (
@@ -132,7 +132,7 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
     private opened = false
     private tasks: Array<{
         props: OpenProps
-        defer?: DeferTuple<CloseProps, Error>
+        defer?: PromiseWithResolvers<CloseProps>
     }> = []
 
     constructor() {
@@ -171,12 +171,12 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
     override openAndWaitForClose(props: OpenProps) {
         if (!this.opened) return super.openAndWaitForClose(props)
 
-        const d = defer<CloseProps, Error>()
+        const d = Promise.withResolvers<CloseProps>()
         this.tasks.push({
             props,
             defer: d,
         })
-        return d[0]
+        return d.promise
     }
 
     private async cleanup() {
@@ -188,7 +188,7 @@ export class SingletonModalQueued<OpenProps = void, CloseProps = void> extends S
 
         this.open(props)
         if (!defer) return
-        this.onClose = (props) => defer[1](props)
-        this.onAbort = (error) => defer[2](error)
+        this.onClose = (props) => defer.resolve(props)
+        this.onAbort = (error) => defer.reject(error)
     }
 }

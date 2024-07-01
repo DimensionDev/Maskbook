@@ -9,6 +9,7 @@ import { buildSentry } from '../projects/sentry.js'
 import type { BuildFlags, BuildFlagsExtended } from './flags.js'
 import { ManifestFile } from '../../../mask/.webpack/flags.js'
 import { applyDotEnv } from './dotenv.js'
+import { fileURLToPath } from 'url'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     const f = () => awaitChildProcess(webpack(args))
@@ -58,7 +59,7 @@ function webpack(flags: BuildFlagsExtended) {
         JSON.stringify(process.execPath),
         '--import',
         '@swc-node/register/esm-register',
-        'node_modules/webpack/bin/webpack.js',
+        fileURLToPath(import.meta.resolve('./init.js')),
         flags.mode === 'development' ? 'serve' : undefined,
         '--mode',
         flags.mode === 'development' ? 'development' : 'production',

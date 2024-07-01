@@ -196,6 +196,7 @@ const avoidMistakeRules = {
     // 'require-atomic-updates': 'error', // await/yield race condition
     'valid-typeof': 'error', // typeof expr === undefined
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
+    'unicorn/no-negation-in-equality-check': 'error', // !foo === bar
     'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
     'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} />
@@ -426,8 +427,8 @@ const moduleSystemRules = {
         'error',
         {
             paths: [
+                { name: 'uuid', message: 'Use crypto.randomUUID() instead.' },
                 { name: '@sentry/browser', message: 'Use Sentry.* global object instead.', allowTypeImports: true },
-                { name: 'idb/with-async-ittr-cjs', message: 'Please use idb/with-async-ittr instead.' },
                 { name: 'async-call-rpc', message: 'Please use async-call-rpc/full instead.', allowTypeImports: true },
                 { name: '@masknet/typed-message/base', message: 'Please use @masknet/typed-message instead.' },
                 {
@@ -534,7 +535,7 @@ const plugins = {
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': fixupPluginRules(ReactHooksPlugin),
-    '@tanstack/query': fixupPluginRules(ReactQueryPlugin),
+    '@tanstack/query': ReactQueryPlugin,
 }
 export default tseslint.config(
     {

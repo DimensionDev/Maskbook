@@ -1,5 +1,4 @@
 import type { KVStorageBackend } from './types.js'
-import { defer } from '@masknet/kit'
 
 export interface ProxiedKVStorageBackend extends KVStorageBackend {
     replaceBackend(backend: KVStorageBackend): void
@@ -7,7 +6,7 @@ export interface ProxiedKVStorageBackend extends KVStorageBackend {
 
 export function createProxyKVStorageBackend(): ProxiedKVStorageBackend {
     let target: KVStorageBackend
-    let [promise, resolve, reject] = defer<void>()
+    let { promise, resolve, reject } = Promise.withResolvers<void>()
 
     return {
         get beforeAutoSync() {
@@ -24,7 +23,7 @@ export function createProxyKVStorageBackend(): ProxiedKVStorageBackend {
             // resolve old one
             backend.beforeAutoSync.then(resolve, reject)
             // setup new one
-            ;[promise, resolve, reject] = defer()
+            ;({ promise, resolve, reject } = Promise.withResolvers<void>())
             backend.beforeAutoSync.then(resolve, reject)
         },
     }

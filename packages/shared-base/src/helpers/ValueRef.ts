@@ -1,6 +1,5 @@
 // All imports must be deferred. This file loads in the very early stage.
 
-import * as kit /* webpackDefer: true */ from '@masknet/kit'
 // false positive. we're not using lodash.get
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import * as lodash /* webpackDefer: true */ from 'lodash-es'
@@ -42,7 +41,7 @@ export class ValueRefWithReady<T> extends ValueRef<T> {
     constructor(value?: T | undefined, isEqual: ValueComparer<T> = defaultComparer) {
         // this is unsafe. we assigned T | undefined to T
         super(value!, isEqual)
-        const [promise, resolve] = kit.defer<void>()
+        const { promise, resolve } = Promise.withResolvers<void>()
         this.readyPromise = promise.then(() => this.value)
         this.nowReady = resolve
     }

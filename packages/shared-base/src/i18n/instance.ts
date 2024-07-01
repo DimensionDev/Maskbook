@@ -3,7 +3,8 @@ import i18n from 'i18next'
 import Detector from 'i18next-browser-languagedetector'
 import { debounce, type DebouncedFunc } from 'lodash-es'
 
-export const i18NextInstance = i18n.default || i18n
+export { default as i18NextInstance } from 'i18next'
+
 if (process.env.NODE_ENV === 'development') {
     if (Reflect.get(globalThis, '__mask_shared_base__')) {
         throw new Error('@masknet/shared-base initialized twice. Please check your code.')
@@ -12,8 +13,8 @@ if (process.env.NODE_ENV === 'development') {
     Reflect.defineProperty(globalThis, '__mask_shared_base__', { value: true })
 }
 
-if (!i18NextInstance.isInitialized) {
-    i18NextInstance.use(Detector.default || Detector).init({
+if (!i18n.isInitialized) {
+    i18n.use(Detector).init({
         keySeparator: false,
         interpolation: { escapeValue: true },
         contextSeparator: '$',
@@ -37,7 +38,7 @@ if (!i18NextInstance.isInitialized) {
 }
 export function updateLanguage(next: LanguageOptions) {
     if (next === LanguageOptions.__auto__) {
-        const result: string[] = i18NextInstance.services.languageDetector.detect()
+        const result: string[] = i18n.services.languageDetector.detect()
         i18n.changeLanguage(result[0] || LanguageOptions.enUS)
     } else {
         i18n.changeLanguage(next)
@@ -57,9 +58,9 @@ export function queryRemoteI18NBundle(
 ) {
     const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
     const update = (updater[cache] ??= debounce(async () => {
-        const result = await updater(i18NextInstance.language)
+        const result = await updater(i18n.language)
         for (const [ns, lang, json] of result) {
-            const next = { ...i18NextInstance.getResourceBundle(lang, ns) }
+            const next = { ...i18n.getResourceBundle(lang, ns) }
             for (const key in json) {
                 const value = json[key]
                 if (typeof value !== 'string') continue
@@ -69,12 +70,12 @@ export function queryRemoteI18NBundle(
                     next[key] = value
                 }
             }
-            i18NextInstance.addResourceBundle(lang, ns, next, true, true)
+            i18n.addResourceBundle(lang, ns, next, true, true)
         }
     }, 1500))
     update()
-    i18NextInstance.on('languageChanged', update)
-    return () => i18NextInstance.off('languageChanged', update)
+    i18n.on('languageChanged', update)
+    return () => i18n.off('languageChanged', update)
 }
 
 export type { TOptions as TranslateOptions } from 'i18next'

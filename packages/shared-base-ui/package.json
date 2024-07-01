@@ -16,12 +16,10 @@
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/theme": "workspace:^",
-    "@tanstack/react-query": "^5.29.2",
-    "@types/use-subscription": "^1.0.0",
-    "@types/uuid": "^9.0.3",
-    "react-use": "^17.4.0",
-    "use-subscription": "^1.8.0",
-    "uuid": "^9.0.0",
-    "urlcat": "^3.1.0"
+    "@tanstack/react-query": "^5.49.2",
+    "@types/use-subscription": "^1.0.2",
+    "react-use": "^17.5.0",
+    "urlcat": "^3.1.0",
+    "use-subscription": "^1.8.0"
   }
 }

@@ -3,7 +3,7 @@ import { initWallet } from '@masknet/web3-providers'
 import { allPersonas } from '../initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
 import * as shared from /* webpackDefer: true */ '@masknet/shared'
-import { defer, delay } from '@masknet/kit'
+import { delay } from '@masknet/kit'
 import { openPopupWindow } from '../utils/openPopup.js'
 
 await initWallet({
@@ -11,7 +11,7 @@ await initWallet({
     WalletConnectContext: {
         openWalletConnectDialog: async (uri: string) => {
             if (Sniffings.is_popup_page) {
-                const [promise, resolve, reject] = defer<boolean>()
+                const { promise, resolve, reject } = Promise.withResolvers<boolean>()
                 const callback = ({ open }: { open: boolean }) => (!open ? resolve(true) : undefined)
 
                 delay(5000).then(() => reject(new Error('timeout')))

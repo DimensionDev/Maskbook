@@ -16,12 +16,12 @@
     "@masknet/shared-base": "workspace:^",
     "@servie/events": "^3.0.0",
     "bignumber.js": "9.1.2",
-    "date-fns": "^2.30.0",
-    "urlcat": "^3.1.0",
+    "date-fns": "^3.6.0",
     "millify": "^6.1.0",
-    "web3-core-helpers": "1.10.2"
+    "urlcat": "^3.1.0",
+    "web3-core-helpers": "1.10.3"
   },
   "devDependencies": {
-    "@types/use-subscription": "^1.0.0"
+    "@types/use-subscription": "^1.0.2"
   }
 }

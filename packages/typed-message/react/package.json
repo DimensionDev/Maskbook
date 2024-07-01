@@ -16,11 +16,11 @@
   },
   "dependencies": {
     "@masknet/typed-message": "workspace:^",
-    "immer": "^10.0.2",
+    "immer": "^10.1.1",
     "z-schema": "^6.0.1"
   },
   "peerDependencies": {
-    "react": "^18"
+    "react": "*"
   },
   "files": [
     "src",

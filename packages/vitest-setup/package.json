@@ -1,0 +1,8 @@
+{
+    "type": "module",
+    "sideEffects": ["./index.ts"],
+    "dependencies": {
+        "msw": "2.3.1",
+        "core-js": "3.37.1"
+    }
+}

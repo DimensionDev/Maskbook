@@ -12,8 +12,8 @@
 ## ESM-CJS compatibility
 
 - gulp: cannot be used with swc-node.
-- @types/react-avatar-editor: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63075>
 - web3: <https://github.com/web3/web3.js/issues/5543>
+- @types/react-avatar-editor: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63075>
 - @project-serum/sol-wallet-adapter: <https://github.com/project-serum/sol-wallet-adapter/issues/53>
 - @types/react-highlight-words: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63096>
 - urlcat: <https://github.com/balazsbotond/urlcat/issues/248>
@@ -25,7 +25,6 @@
 
 ## Other problems
 
-- web3: <https://github.com/web3/web3.js/pull/5274> crashes
 - @chainsafe/as-sha256: currently we cannot load WebAssembly modules in the content script. compiled into JS by <https://github.com/WebAssembly/binaryen/tree/main>.
 - @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>

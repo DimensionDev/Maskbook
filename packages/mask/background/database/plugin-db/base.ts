@@ -1,4 +1,4 @@
-import { openDB, type DBSchema } from 'idb/with-async-ittr'
+import { openDB, type DBSchema } from 'idb'
 import { createDBAccess } from '../utils/openDB.js'
 
 type InStore = {

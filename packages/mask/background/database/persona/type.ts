@@ -1,5 +1,5 @@
 import type { IDBPSafeTransaction } from '../utils/openDB.js'
-import type { DBSchema } from 'idb/with-async-ittr'
+import type { DBSchema } from 'idb'
 import type {
     PersonaIdentifier,
     AESJsonWebKey,

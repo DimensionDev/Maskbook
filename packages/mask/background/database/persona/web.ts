@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash-es'
-import { openDB } from 'idb/with-async-ittr'
+import { openDB } from 'idb'
 import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import {
     type AESJsonWebKey,

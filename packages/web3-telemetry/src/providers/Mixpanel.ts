@@ -1,5 +1,4 @@
 import { isUndefined, omitBy } from 'lodash-es'
-import { v4 as uuid } from 'uuid'
 import { Flags, type BuildInfoFile } from '@masknet/flags'
 import { TelemetryID } from '@masknet/shared-base'
 import { TelemetryProvider } from './Base.js'
@@ -22,7 +21,7 @@ export class MixpanelAPI extends TelemetryProvider {
 
                     time: Date.now(),
                     distinct_id: TelemetryID.value,
-                    $insert_id: uuid(),
+                    $insert_id: crypto.randomUUID(),
 
                     chain_id: options.network?.chainId,
                     plugin_id: options.network?.pluginID,

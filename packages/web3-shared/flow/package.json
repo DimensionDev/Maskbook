@@ -16,6 +16,6 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "react-use": "^17.4.0"
+    "react-use": "^17.5.0"
   }
 }

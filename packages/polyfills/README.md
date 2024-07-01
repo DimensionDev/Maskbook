@@ -14,7 +14,7 @@
 ## Targeting ES Syntax and APIs
 
 - Syntax: ES2022
-- Library: ES2022 (with [core-js](https://github.com/zloirock/core-js)).
+- Library: ESNext (with [core-js](https://github.com/zloirock/core-js)).
 
 ### Caution
 
@@ -25,7 +25,3 @@ Those features are not easy to polyfill.
 ## Web APIs and Intl APIs
 
 Check and polyfill before using.
-
-### Using polyfill
-
-- navigator.clipboard (with `ClipboardItem`) (Firefox not supported: <https://caniuse.com/mdn-api_clipboarditem>)

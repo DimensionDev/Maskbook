@@ -1,11 +1,11 @@
 diff --git a/package.json b/package.json
-index 5a7cf406ed67a964e206339d254042848183b20d..0fab644b43092ea6494e99d0b2bc00a5489f8f44 100644
+index ea68005b27dce217207ee10bb52096363438c996..017bf488c1a250eef6ea73d46f8cfe2692e922ff 100644
 --- a/package.json
 +++ b/package.json
 @@ -1,6 +1,7 @@
  {
      "name": "@types/react-avatar-editor",
-     "version": "13.0.0",
+     "version": "13.0.2",
 +    "type": "module",
      "description": "TypeScript definitions for react-avatar-editor",
      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-avatar-editor",

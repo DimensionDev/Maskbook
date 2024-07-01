@@ -1,8 +1,8 @@
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 deleted file mode 100644
-index 9b28df0e8aa4734af2c7006fd077ff17e2281db5..0000000000000000000000000000000000000000
+index 51ec13dfbed4b67c9c8a245b7f4774f989422658..0000000000000000000000000000000000000000
 diff --git a/esm/useAsync.js b/esm/useAsync.js
-index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..95a7cb8cc6833790a5aef21a64ee0c5d299723cf 100644
+index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..901d7bf1aa5c794d3bc12c41aaea2208052271b5 100644
 --- a/esm/useAsync.js
 +++ b/esm/useAsync.js
 @@ -6,7 +6,11 @@ export default function useAsync(fn, deps) {
@@ -12,14 +12,14 @@ index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..95a7cb8cc6833790a5aef21a64ee0c5d
 -        callback();
 +        try {
 +            callback();
-+        } catch (e) {
-+            // Do nothing
++        } catch (error) {
++            // do nothing
 +        }
      }, [callback]);
      return state;
  }
 diff --git a/esm/useAsyncFn.js b/esm/useAsyncFn.js
-index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc0d02bca4 100644
+index 01d7307bd106229f6d791d0c588589235f404d97..599b7371c29ea53dfd9c831f5db61eb9dfd60f13 100644
 --- a/esm/useAsyncFn.js
 +++ b/esm/useAsyncFn.js
 @@ -13,15 +13,16 @@ export default function useAsyncFn(fn, deps, initialState) {
@@ -30,8 +30,8 @@ index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc
 -            set(function (prevState) { return (__assign(__assign({}, prevState), { loading: true })); });
 -        }
 +        set(function (prevState) {
-+          if (prevState.loading) return prevState
-+          return (__assign(__assign({}, prevState), { loading: true })); 
++            if (prevState.loading) return prevState
++            return (__assign(__assign({}, prevState), { loading: true })); 
 +        });
          return fn.apply(void 0, args).then(function (value) {
              isMounted() && callId === lastCallId.current && set({ value: value, loading: false });
@@ -44,7 +44,7 @@ index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc
      }, deps);
      return [state, callback];
 diff --git a/lib/useAsync.js b/lib/useAsync.js
-index 7f189a49dea552b5b10d7380b982bfe84299a7a2..4d9d33acaad290b54a9ef6e7df0afdba56484972 100644
+index 7f189a49dea552b5b10d7380b982bfe84299a7a2..7d25371b7500006490d2a1f7d414b1eb33307318 100644
 --- a/lib/useAsync.js
 +++ b/lib/useAsync.js
 @@ -9,7 +9,11 @@ function useAsync(fn, deps) {
@@ -54,14 +54,14 @@ index 7f189a49dea552b5b10d7380b982bfe84299a7a2..4d9d33acaad290b54a9ef6e7df0afdba
 -        callback();
 +        try {
 +            callback();
-+        } catch (e) {
-+            // Do nothing
++        } catch (error) {
++            // do nothing
 +        }
      }, [callback]);
      return state;
  }
 diff --git a/lib/useAsyncFn.js b/lib/useAsyncFn.js
-index e06fd819ccad625d709fa9907e946a9b8bc58543..6950e84a32ca630ec159834a87b4e21a36f4ef97 100644
+index e06fd819ccad625d709fa9907e946a9b8bc58543..929e55304b8aef35572046533306a6c35c75a81a 100644
 --- a/lib/useAsyncFn.js
 +++ b/lib/useAsyncFn.js
 @@ -15,15 +15,16 @@ function useAsyncFn(fn, deps, initialState) {
@@ -72,8 +72,8 @@ index e06fd819ccad625d709fa9907e946a9b8bc58543..6950e84a32ca630ec159834a87b4e21a
 -            set(function (prevState) { return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); });
 -        }
 +        set(function (prevState) {
-+          if (prevState.loading) return prevState
-+          return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); 
++            if (prevState.loading) return prevState
++            return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); 
 +        });
          return fn.apply(void 0, args).then(function (value) {
              isMounted() && callId === lastCallId.current && set({ value: value, loading: false });

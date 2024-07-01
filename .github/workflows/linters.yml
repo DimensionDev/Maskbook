@@ -59,7 +59,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v4
-      - run: npx prettier@3.3.0 --write .
+      - run: npx prettier@3.3.2 --write .
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: prettier'
@@ -89,7 +89,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "21"
+          node-version-file: ".node-version"
           cache: "pnpm"
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest
@@ -106,7 +106,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "21"
+          node-version-file: ".node-version"
           cache: "pnpm"
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest
@@ -129,7 +129,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "21"
+          node-version-file: ".node-version"
           cache: "pnpm"
       - name: Authenticate NPM
         uses: DimensionDev/github-token-action@latest

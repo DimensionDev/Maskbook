@@ -1,5 +1,4 @@
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
-import { defer } from '@masknet/kit'
 
 export interface BuildInfoFile {
     readonly BUILD_DATE?: string | undefined
@@ -31,8 +30,8 @@ export async function getBuildInfo(): Promise<BuildInfoFile> {
 export let env: BuildInfoFile = {
     channel: 'stable',
 }
-const [_promise, resolve] = defer<void>()
-export const buildInfoReadyPromise = _promise
+const { promise, resolve } = Promise.withResolvers<void>()
+export const buildInfoReadyPromise = promise
 export async function setupBuildInfo(): Promise<void> {
     return setupBuildInfoManually(await getBuildInfo())
 }

@@ -1,4 +1,4 @@
-import { type DBSchema, openDB } from 'idb/with-async-ittr'
+import { type DBSchema, openDB } from 'idb'
 import { createDBAccess } from '../../../database/utils/openDB.js'
 import type { LegacyWalletRecordInDatabase, UnconfirmedRequestChunkRecordInDatabase } from './types.js'
 

@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import type { Subscription } from 'use-subscription'
 import {
     MessageStateType,
@@ -48,7 +47,7 @@ export abstract class MessageState<Request extends object, Response extends obje
     private async createRequest(
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>> {
-        const ID = uuid()
+        const ID = crypto.randomUUID()
         const now = new Date()
         const message_ = {
             ...message,

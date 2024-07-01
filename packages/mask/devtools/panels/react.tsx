@@ -119,7 +119,11 @@ export async function startReactDevTools(signal: AbortSignal) {
         supportsProfiling: true,
         supportsTimeline: isChromium,
         supportsTraceUpdates: true,
-        supportsNativeInspection: true,
+        // Note: new options
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        supportsInspectMatchingDOMElement: true,
+        supportsClickToInspect: true,
     })
     if (!isProfiling && profilingData!) store.profilerStore.profilingData = profilingData
 

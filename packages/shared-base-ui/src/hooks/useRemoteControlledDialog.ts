@@ -1,6 +1,5 @@
 import type { PluginMessageEmitterItem } from '@masknet/shared-base'
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { v4 as uuid } from 'uuid'
 
 export interface RemoteControlledDialogEvent {
     open: boolean
@@ -14,6 +13,7 @@ interface Result<T> {
     setDialog: (ev: T) => void
 }
 
+const uuid = () => crypto.randomUUID()
 /**
  * Use a dialog state controlled by remote
  */

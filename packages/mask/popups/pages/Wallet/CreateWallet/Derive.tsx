@@ -1,6 +1,6 @@
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { defer, timeout } from '@masknet/kit'
+import { timeout } from '@masknet/kit'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useWallet, useWeb3State } from '@masknet/web3-hooks-base'
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
 async function pollResult(address: string) {
     const subscription = MaskWalletProvider.subscription.wallets
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
-    const [promise, resolve] = defer()
+    const { promise, resolve } = Promise.withResolvers()
     const unsubscribe = subscription.subscribe(() => {
         if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
     })

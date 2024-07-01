@@ -6,7 +6,7 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { openDB } from 'idb/with-async-ittr'
+import { openDB } from 'idb'
 import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
 import type { PostRecord, PostDB, PostReadOnlyTransaction, PostReadWriteTransaction } from './type.js'

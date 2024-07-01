@@ -4,7 +4,7 @@
     "rootDir": "./",
     "outDir": "../dist/entry-sdk/",
     "tsBuildInfoFile": "../dist/entry-sdk.tsbuildinfo",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
   "include": ["./"],
   "references": [

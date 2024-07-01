@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Calendar } from '@masknet/web3-providers'
-import { startOfMonth, endOfMonth } from 'date-fns'
+import { startOfMonth, endOfMonth, addDays } from 'date-fns'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { UseQueryResult } from '@tanstack/react-query'
-import { addDays } from 'date-fns/esm'
 
 export function useNewsList(date: Date): UseQueryResult<any> {
     const startTime = startOfMonth(date).getTime() / 1000

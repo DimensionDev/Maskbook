@@ -17,20 +17,20 @@
     },
     "dependencies": {
         "@masknet/icons": "workspace:^",
-        "@masknet/theme": "workspace:^",
-        "@masknet/web3-hooks-evm": "workspace:^",
-        "@masknet/web3-hooks-base": "workspace:^",
-        "@masknet/web3-shared-evm": "workspace:^",
-        "@masknet/shared-base-ui": "workspace:^",
         "@masknet/plugin-infra": "workspace:^",
         "@masknet/shared": "workspace:^",
         "@masknet/shared-base": "workspace:^",
+        "@masknet/shared-base-ui": "workspace:^",
+        "@masknet/theme": "workspace:^",
         "@masknet/web3-contracts": "workspace:^",
-        "@masknet/web3-shared-base": "workspace:^",
+        "@masknet/web3-hooks-base": "workspace:^",
+        "@masknet/web3-hooks-evm": "workspace:^",
         "@masknet/web3-providers": "workspace:^",
-        "web3-utils": "1.10.2",
-        "date-fns": "^2.30.0",
-        "react-use": "^17.4.0",
-        "merkletreejs": "^0.3.10"
+        "@masknet/web3-shared-base": "workspace:^",
+        "@masknet/web3-shared-evm": "workspace:^",
+        "date-fns": "^3.6.0",
+        "merkletreejs": "^0.3.11",
+        "react-use": "^17.5.0",
+        "web3-utils": "1.10.2"
     }
 }

@@ -11,7 +11,7 @@ import type {
     IDBPIndex,
     IDBPCursorWithValue,
     IDBPCursor,
-} from 'idb/with-async-ittr'
+} from 'idb'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {

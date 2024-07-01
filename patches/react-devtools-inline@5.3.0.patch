@@ -1,8 +1,8 @@
 diff --git a/dist/backend.js b/dist/backend.js
-index d710b0a5539e368ddb1dace48efbcffdfe91436d..5b5cd65b33fc38dd73303622917b76d03943d802 100644
+index c0c1a8eeb0e37f48b8e9bdee134b7b50e09fc7a4..64dfb2b8275758a97cfaa10f30e2b19f157bf8f9 100644
 --- a/dist/backend.js
 +++ b/dist/backend.js
-@@ -12414,6 +12414,7 @@ function attach(hook, rendererID, renderer, global) {
+@@ -13529,6 +13529,7 @@ function attach(hook, rendererID, renderer, global) {
      updateComponentFilters
    };
  }
@@ -11,10 +11,10 @@ index d710b0a5539e368ddb1dace48efbcffdfe91436d..5b5cd65b33fc38dd73303622917b76d0
  /**
   * Copyright (c) Meta Platforms, Inc. and affiliates.
 diff --git a/dist/frontend.js b/dist/frontend.js
-index 0f3546c887617dc61971eb4715016e5357bcf9e1..702c32367871a5fb05b9d97713bfd2f9d4d37945 100644
+index 4a78c2bceb90200e911785fbf29990a8d1af08e7..5501edffc83916cc987049a21eaa5868881fcb97 100644
 --- a/dist/frontend.js
 +++ b/dist/frontend.js
-@@ -32937,7 +32937,7 @@ columnNumber) {
+@@ -33206,7 +33206,7 @@ columnNumber) {
      if (resourceLine.includes(SOURCE_MAP_ANNOTATION_PREFIX)) {
        const sourceMapAnnotationStartIndex = resourceLine.indexOf(SOURCE_MAP_ANNOTATION_PREFIX);
        const sourceMapURL = resourceLine.slice(sourceMapAnnotationStartIndex + SOURCE_MAP_ANNOTATION_PREFIX.length, resourceLine.length);

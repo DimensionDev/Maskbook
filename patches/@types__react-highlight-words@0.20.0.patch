@@ -1,12 +1,12 @@
 diff --git a/package.json b/package.json
-index b222f2c196ce862cb3de71f5c9fadfa71fa752a9..80615c6a27e315e77def1a92e3dcb9c298d8b1b0 100644
+index c18b58974fd578cb03b735005d964870f9a54cd9..3527ab196aae2eef2469e0bcba12afe60df6f28d 100644
 --- a/package.json
 +++ b/package.json
-@@ -4,6 +4,7 @@
+@@ -1,6 +1,7 @@
+ {
+     "name": "@types/react-highlight-words",
+     "version": "0.20.0",
++    "type": "module",
      "description": "TypeScript definitions for react-highlight-words",
      "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-highlight-words",
      "license": "MIT",
-+    "type": "module",
-     "contributors": [
-         {
-             "name": "Mohamed Hegazy",

@@ -4,7 +4,7 @@ import { useAsync, useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { toBlob } from 'html-to-image'
 import { Icons } from '@masknet/icons'
-import { defer, timeout } from '@masknet/kit'
+import { timeout } from '@masknet/kit'
 import { CopyButton } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -169,7 +169,7 @@ const useStyles = makeStyles()((theme) => ({
 async function pollResult(address: string) {
     const subscription = MaskWalletProvider.subscription.wallets
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
-    const [promise, resolve] = defer()
+    const { promise, resolve } = Promise.withResolvers()
     const unsubscribe = subscription.subscribe(() => {
         if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
     })

@@ -1,3 +1,13 @@
+diff --git a/bin/gulp.js b/bin/gulp.js
+index f4b80cc41c688105989296a0731729a171b27ac0..168717d5afce46eeefa118dd9aa6ef9a8f455ded 100755
+--- a/bin/gulp.js
++++ b/bin/gulp.js
+@@ -1,3 +1,3 @@
+ #!/usr/bin/env node
+-
+-require('gulp-cli')();
++const cli = require('gulp-cli');
++cli();
 diff --git a/bin/swc-gulp.js b/bin/swc-gulp.js
 new file mode 100644
 index 0000000000000000000000000000000000000000..a14351c2a7743af318d7efab246099c142bf3813
