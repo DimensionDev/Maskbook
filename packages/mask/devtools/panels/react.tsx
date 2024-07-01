@@ -119,7 +119,8 @@ export async function startReactDevTools(signal: AbortSignal) {
         supportsProfiling: true,
         supportsTimeline: isChromium,
         supportsTraceUpdates: true,
-        supportsNativeInspection: true,
+        supportsInspectMatchingDOMElement: true,
+        supportsClickToInspect: true,
     })
     if (!isProfiling && profilingData!) store.profilerStore.profilingData = profilingData
 

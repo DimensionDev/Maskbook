@@ -20,7 +20,7 @@
     "z-schema": "^6.0.1"
   },
   "peerDependencies": {
-    "react": "0.0.0-experimental-26f2496093-20240514"
+    "react": "*"
   },
   "files": [
     "src",

@@ -159,7 +159,7 @@
     "devtools-ignore-webpack-plugin": "^0.1.2",
     "html-webpack-plugin": "^5.6.0",
     "react-compiler-webpack": "^0.1.2",
-    "react-devtools-inline": "5.2.0",
+    "react-devtools-inline": "5.3.0",
     "react-refresh": "^0.14.2",
     "rimraf": "^5.0.7",
     "source-map-loader": "^5.0.0",

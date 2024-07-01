@@ -48,8 +48,8 @@
     "i18next": "^23.11.5",
     "knip": "^5.23.2",
     "lodash-es": "^4.17.21",
-    "react": "0.0.0-experimental-26f2496093-20240514",
-    "react-dom": "0.0.0-experimental-26f2496093-20240514",
+    "react": "0.0.0-experimental-58af67a8f8-20240628",
+    "react-dom": "0.0.0-experimental-58af67a8f8-20240628",
     "react-i18next": "^14.1.2",
     "ses": "1.5.0",
     "ts-results-es": "^4.2.0"
@@ -153,8 +153,7 @@
       "@mui/base@5.0.0-beta.40": "patches/@mui__base@5.0.0-beta.40.patch",
       "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
       "react-use@17.5.0": "patches/react-use@17.5.0.patch",
-      "gulp@5.0.0": "patches/gulp@5.0.0.patch",
-      "react-devtools-inline@5.2.0": "patches/react-devtools-inline@5.2.0.patch"
+      "gulp@5.0.0": "patches/gulp@5.0.0.patch"
     }
   }
 }
