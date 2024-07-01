@@ -1,10 +1,9 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import { defineConfig } from 'rollup'
-import { minify } from 'rollup-plugin-swc3'
 
 export default defineConfig({
-    input: 'node_modules/@sentry/browser/esm/index.js',
+    input: 'node_modules/@sentry/browser/build/npm/esm/index.js',
     output: {
         file: 'dist/sentry.js',
         format: 'umd',
@@ -18,7 +17,6 @@ export default defineConfig({
             __SENTRY_TRACING__: false,
             preventAssignment: true,
         }),
-        // minify({ mangle: false, compress: false }),
     ],
     onLog(level, log, handler) {
         if (log.code === 'CIRCULAR_DEPENDENCY') return

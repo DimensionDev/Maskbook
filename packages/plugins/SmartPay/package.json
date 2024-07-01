@@ -28,7 +28,7 @@
         "@masknet/web3-shared-base": "workspace:^",
         "@masknet/web3-shared-evm": "workspace:^",
         "date-fns": "^3.6.0",
-        "react-router-dom": "^6.23.1",
+        "react-router-dom": "^6.24.0",
         "react-use": "^17.5.0"
     }
 }

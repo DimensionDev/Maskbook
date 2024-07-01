@@ -68,7 +68,7 @@
     "fuse.js": "^7.0.0",
     "graphql-request": "^7.0.1",
     "immer": "^10.1.1",
-    "lru-cache": "^10.2.2",
+    "lru-cache": "^10.3.0",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "twitter-text": "^3.1.0",
