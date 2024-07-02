@@ -143,7 +143,6 @@
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
-      "@chainsafe/as-sha256@0.3.1": "patches/@chainsafe__as-sha256@0.3.1.patch",
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.20": "patches/@mui__material@5.15.20.patch",

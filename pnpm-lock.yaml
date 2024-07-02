@@ -26,9 +26,6 @@ patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1':
     hash: subw5upjv36ceix3wmw66isn6u
     path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
-  '@chainsafe/as-sha256@0.3.1':
-    hash: 4kkjukh2xlhntgm37imygbirga
-    path: patches/@chainsafe__as-sha256@0.3.1.patch
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
@@ -360,8 +357,8 @@ importers:
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)
       '@ethereumjs/util':
-        specifier: ^8.0.5
-        version: 8.0.5
+        specifier: ^9.0.3
+        version: 9.0.3
       '@ethersproject/providers':
         specifier: ^5.7.2
         version: 5.7.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -3446,20 +3443,11 @@ packages:
     engines: {node: '>=12'}
     deprecated: new projects have been created to replace the IDX runtime, see https://blog.ceramic.network/the-next-architecture-for-building-web3-data-applications/
 
-  '@chainsafe/as-sha256@0.3.1':
-    resolution: {integrity: sha512-hldFFYuf49ed7DAakWVXSJODuq3pzJEguD8tQ7h+sGkM18vja+OFoJI9krnGmgzyuZC2ETX0NOIcCTy31v2Mtg==}
-
   '@chainsafe/is-ip@2.0.1':
     resolution: {integrity: sha512-nqSJ8u2a1Rv9FYbyI8qpDhTYujaKEyLknNrTejLYoSWmdeg+2WB7R6BZqPZYfrJzDxVi3rl6ZQuoaEvpKRZWgQ==}
 
   '@chainsafe/netmask@2.0.0':
     resolution: {integrity: sha512-I3Z+6SWUoaljh3TBzCnCxjlUyN8tA+NAk5L6m9IxvCf1BENQTePzPMis97CoN/iMW1St3WN+AWCCRp+TTBRiDg==}
-
-  '@chainsafe/persistent-merkle-tree@0.4.2':
-    resolution: {integrity: sha512-lLO3ihKPngXLTus/L7WHKaw9PnNJWizlOF1H9NNzHP6Xvh82vzg9F2bzkXhYIFshMZ2gTCEz8tq6STe7r5NDfQ==}
-
-  '@chainsafe/ssz@0.9.4':
-    resolution: {integrity: sha512-77Qtg2N1ayqs4Bg/wvnWfg5Bta7iy7IRh8XqXh7oNMeP2HBbBwx8m6yTpA8p0EHItWPEBkgZd5S5/LSlp3GXuQ==}
 
   '@changesets/apply-release-plan@7.0.3':
     resolution: {integrity: sha512-klL6LCdmfbEe9oyfLxnidIf/stFXmrbFO/3gT5LU5pcyoZytzJe4gWpTBx3BPmyNPl16dZ1xrkcW7b98e3tYkA==}
@@ -4207,6 +4195,11 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  '@ethereumjs/rlp@5.0.2':
+    resolution: {integrity: sha512-DziebCdg4JpGlEqEdGgXmjqcFoJi+JGulUXwEjsZGAscAQ7MyD/7LE/GVCP29vEQxKc7AAwjT3A2ywHp2xfoCA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   '@ethereumjs/tx@3.3.2':
     resolution: {integrity: sha512-6AaJhwg4ucmwTvw/1qLaZUX5miWrwZ4nLOUsKyb/HtzS3BMw/CasKhdi1ims9mBKeK9sOJCH4qGKOBGyJCeeog==}
 
@@ -4214,13 +4207,13 @@ packages:
     resolution: {integrity: sha512-1nc6VO4jtFd172BbSnTnDQVr9IYBFl1y4xPzZdtkrkKIncBCkdbgfdRV+MiTkJYAtTxvV12GRZLqBFT1PNK6Yw==}
     engines: {node: '>=14'}
 
-  '@ethereumjs/util@8.0.5':
-    resolution: {integrity: sha512-259rXKK3b3D8HRVdRmlOEi6QFvwxdt304hhrEAmpZhsj7ufXEOTIc9JRZPMnXatKjECokdLNBcDOFBeBSzAIaw==}
-    engines: {node: '>=14'}
-
   '@ethereumjs/util@8.1.0':
     resolution: {integrity: sha512-zQ0IqbdX8FZ9aw11vP+dZkKDkS+kgIvQPHnSAXzP9pLu+Rfu3D3XEeLbicvoXJTYnhZiPmsZUxgdzXwNKxRPbA==}
     engines: {node: '>=14'}
+
+  '@ethereumjs/util@9.0.3':
+    resolution: {integrity: sha512-PmwzWDflky+7jlZIFqiGsBPap12tk9zK5SVH9YW2OEnDN7OEhCjUOMzbOqwuClrbkSIkM2ERivd7sXZ48Rh/vg==}
+    engines: {node: '>=18'}
 
   '@ethersproject/abi@5.4.0':
     resolution: {integrity: sha512-9gU2H+/yK1j2eVMdzm6xvHSnMxk8waIHQGYCZg5uvAyH0rsAzxkModzBSpbAkAuhKFEovC2S9hM4nPuLym8IZw==}
@@ -5169,6 +5162,9 @@ packages:
   '@noble/curves@1.2.0':
     resolution: {integrity: sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==}
 
+  '@noble/curves@1.4.0':
+    resolution: {integrity: sha512-p+4cb332SFCrReJkCYe8Xzm0OWi4Jji5jVdIZRL/PmacmDkFNw6MrrV+gGpiPxLHbV+zKFRywUWbaseT+tZRXg==}
+
   '@noble/ed25519@1.7.3':
     resolution: {integrity: sha512-iR8GBkDt0Q3GyaVcIu7mSsVIqnFbkbRzGLWlvhwunacoLwt4J3swfKhfaM6rN6WY+TBGoYT1GtT1mIh2/jGbRQ==}
 
@@ -5181,6 +5177,10 @@ packages:
 
   '@noble/hashes@1.3.2':
     resolution: {integrity: sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==}
+    engines: {node: '>= 16'}
+
+  '@noble/hashes@1.4.0':
+    resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
     engines: {node: '>= 16'}
 
   '@noble/secp256k1@1.7.1':
@@ -5632,6 +5632,9 @@ packages:
   '@scure/base@1.1.5':
     resolution: {integrity: sha512-Brj9FiG2W1MRQSTB212YVPRrcbjkv48FoZi/u4l/zds/ieRrqsh7aUf6CLwkAq61oKXr/ZlTzlY66gLIj3TFTQ==}
 
+  '@scure/base@1.1.7':
+    resolution: {integrity: sha512-PPNYBslrLNNUQ/Yad37MHYsNQtK67EhWb6WtSvNLLPo7SdVZgkUjD6Dg+5On7zNwmskf8OX7I7Nx5oN+MIWE0g==}
+
   '@scure/bip32@1.1.5':
     resolution: {integrity: sha512-XyNh1rB0SkEqd3tXcXMi+Xe1fvg+kUIcoRIEujP1Jgv7DqW2r9lg3Ah0NkFaCs9sTkQAQA8kw7xiRXzENi9Rtw==}
 
@@ -5641,11 +5644,17 @@ packages:
   '@scure/bip32@1.3.2':
     resolution: {integrity: sha512-N1ZhksgwD3OBlwTv3R6KFEcPojl/W4ElJOeCZdi+vuI5QmTFwLq3OFf2zd2ROpKvxFdgZ6hUpb0dx9bVNEwYCA==}
 
+  '@scure/bip32@1.4.0':
+    resolution: {integrity: sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==}
+
   '@scure/bip39@1.1.1':
     resolution: {integrity: sha512-t+wDck2rVkh65Hmv280fYdVdY25J9YeEUIgn2LG1WM6gxFkGzcksoDiUkWVpVp3Oex9xGC68JU2dSbUfwZ2jPg==}
 
   '@scure/bip39@1.2.1':
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
+
+  '@scure/bip39@1.3.0':
+    resolution: {integrity: sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==}
 
   '@sentry-internal/browser-utils@8.13.0':
     resolution: {integrity: sha512-lqq8BYbbs9KTlDuyB5NjdZB6P/llqQs32KUgaCQ/k5DFB4Zf56+BFHXObnMHxwx375X1uixtnEphagWZa+nsLQ==}
@@ -7639,10 +7648,6 @@ packages:
   capability@0.2.5:
     resolution: {integrity: sha512-rsJZYVCgXd08sPqwmaIqjAd5SUTfonV0z/gDJ8D6cN8wQphky1kkAYEqQ+hmDxTw7UihvBfjUVUSY+DBEe44jg==}
 
-  case@1.6.3:
-    resolution: {integrity: sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==}
-    engines: {node: '>= 0.8.0'}
-
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
 
@@ -9164,6 +9169,9 @@ packages:
 
   ethereum-cryptography@2.1.2:
     resolution: {integrity: sha512-Z5Ba0T0ImZ8fqXrJbpHcbpAvIswRte2wGNR/KePnu8GbbvgJ47lMxT/ZZPG6i9Jaht4azPDop4HaM00J0J59ug==}
+
+  ethereum-cryptography@2.2.0:
+    resolution: {integrity: sha512-hsm9JhfytIf8QME/3B7j4bc8V+VdTU+Vas1aJlvIS96ffoNAosudXvGoEvWmc7QZYdkC8mrMJz9r0fcbw7GyCA==}
 
   ethereumjs-util@7.1.5:
     resolution: {integrity: sha512-SDl5kKrQAudFBUe5OJM9Ac6WmMyYmXX/6sTmLZ3ffG2eY6ZIGBes3pEDxNN6V72WyOw4CPD5RomKdsa8DAAwLg==}
@@ -15683,23 +15691,11 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@chainsafe/as-sha256@0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga)': {}
-
   '@chainsafe/is-ip@2.0.1': {}
 
   '@chainsafe/netmask@2.0.0':
     dependencies:
       '@chainsafe/is-ip': 2.0.1
-
-  '@chainsafe/persistent-merkle-tree@0.4.2':
-    dependencies:
-      '@chainsafe/as-sha256': 0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga)
-
-  '@chainsafe/ssz@0.9.4':
-    dependencies:
-      '@chainsafe/as-sha256': 0.3.1(patch_hash=4kkjukh2xlhntgm37imygbirga)
-      '@chainsafe/persistent-merkle-tree': 0.4.2
-      case: 1.6.3
 
   '@changesets/apply-release-plan@7.0.3':
     dependencies:
@@ -16697,6 +16693,8 @@ snapshots:
 
   '@ethereumjs/rlp@4.0.1': {}
 
+  '@ethereumjs/rlp@5.0.2': {}
+
   '@ethereumjs/tx@3.3.2':
     dependencies:
       '@ethereumjs/common': 2.6.5
@@ -16709,17 +16707,16 @@ snapshots:
       '@ethereumjs/util': 8.1.0
       ethereum-cryptography: 2.1.2
 
-  '@ethereumjs/util@8.0.5':
-    dependencies:
-      '@chainsafe/ssz': 0.9.4
-      '@ethereumjs/rlp': 4.0.1
-      ethereum-cryptography: 1.2.0
-
   '@ethereumjs/util@8.1.0':
     dependencies:
       '@ethereumjs/rlp': 4.0.1
       ethereum-cryptography: 2.1.2
       micro-ftch: 0.3.1
+
+  '@ethereumjs/util@9.0.3':
+    dependencies:
+      '@ethereumjs/rlp': 5.0.2
+      ethereum-cryptography: 2.2.0
 
   '@ethersproject/abi@5.4.0':
     dependencies:
@@ -17836,7 +17833,7 @@ snapshots:
 
   '@metamask/eth-sig-util@5.0.2':
     dependencies:
-      '@ethereumjs/util': 8.0.5
+      '@ethereumjs/util': 8.1.0
       bn.js: 4.12.0
       ethereum-cryptography: 1.2.0
       ethjs-util: 0.1.6
@@ -18399,6 +18396,10 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.3.2
 
+  '@noble/curves@1.4.0':
+    dependencies:
+      '@noble/hashes': 1.4.0
+
   '@noble/ed25519@1.7.3': {}
 
   '@noble/hashes@1.2.0': {}
@@ -18406,6 +18407,8 @@ snapshots:
   '@noble/hashes@1.3.1': {}
 
   '@noble/hashes@1.3.2': {}
+
+  '@noble/hashes@1.4.0': {}
 
   '@noble/secp256k1@1.7.1': {}
 
@@ -18860,6 +18863,8 @@ snapshots:
 
   '@scure/base@1.1.5': {}
 
+  '@scure/base@1.1.7': {}
+
   '@scure/bip32@1.1.5':
     dependencies:
       '@noble/hashes': 1.2.0
@@ -18878,6 +18883,12 @@ snapshots:
       '@noble/hashes': 1.3.2
       '@scure/base': 1.1.5
 
+  '@scure/bip32@1.4.0':
+    dependencies:
+      '@noble/curves': 1.4.0
+      '@noble/hashes': 1.4.0
+      '@scure/base': 1.1.7
+
   '@scure/bip39@1.1.1':
     dependencies:
       '@noble/hashes': 1.2.0
@@ -18887,6 +18898,11 @@ snapshots:
     dependencies:
       '@noble/hashes': 1.3.2
       '@scure/base': 1.1.5
+
+  '@scure/bip39@1.3.0':
+    dependencies:
+      '@noble/hashes': 1.4.0
+      '@scure/base': 1.1.7
 
   '@sentry-internal/browser-utils@8.13.0':
     dependencies:
@@ -22004,8 +22020,6 @@ snapshots:
 
   capability@0.2.5: {}
 
-  case@1.6.3: {}
-
   caseless@0.12.0: {}
 
   cborg@1.10.1: {}
@@ -23966,6 +23980,13 @@ snapshots:
       '@noble/hashes': 1.3.1
       '@scure/bip32': 1.3.1
       '@scure/bip39': 1.2.1
+
+  ethereum-cryptography@2.2.0:
+    dependencies:
+      '@noble/curves': 1.4.0
+      '@noble/hashes': 1.4.0
+      '@scure/bip32': 1.4.0
+      '@scure/bip39': 1.3.0
 
   ethereumjs-util@7.1.5:
     dependencies:

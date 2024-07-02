@@ -1,7 +1,7 @@
 import * as bip39 from 'bip39'
 import { first, last, omit } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { toBuffer } from '@ethereumjs/util'
+import { toBytes } from '@ethereumjs/util'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { Signer } from '@masknet/web3-providers'
 import { ImportSource, type SignType, type Wallet } from '@masknet/shared-base'
@@ -250,7 +250,7 @@ export async function resetAllWallets() {
 }
 
 export async function signWithWallet<T>(type: SignType, message: T, address: string) {
-    return Signer.sign(type, toBuffer(`0x${await exportPrivateKey(address)}`), message)
+    return Signer.sign(type, Buffer.from(toBytes(`0x${await exportPrivateKey(address)}`)), message)
 }
 
 export async function exportMnemonicWords(address: string, unverifiedPassword?: string) {

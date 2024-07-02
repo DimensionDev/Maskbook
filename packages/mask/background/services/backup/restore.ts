@@ -3,7 +3,7 @@ import { restoreNormalizedBackup } from './internal_restore.js'
 import { Result } from 'ts-results-es'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import { compact, sum } from 'lodash-es'
-import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
+import { bytesToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { fromBase64URL } from '@masknet/shared-base'
 
 export async function generateBackupSummary(raw: string) {
@@ -16,7 +16,7 @@ export async function generateBackupSummary(raw: string) {
             if (x.privateKey.isNone()) return
             const privateKey = x.privateKey.unwrap()
             if (!privateKey.d) return
-            const address = bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d)))))
+            const address = bytesToHex(publicToAddress(privateToPublic(fromBase64URL(privateKey.d))))
 
             return address
         })

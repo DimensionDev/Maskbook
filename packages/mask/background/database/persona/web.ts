@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash-es'
 import { openDB } from 'idb'
-import { bufferToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
+import { bytesToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import {
     type AESJsonWebKey,
     convertIdentifierMapToRawMap,
@@ -332,7 +332,7 @@ export async function createOrUpdatePersonaDB(
                 ...record,
                 address:
                     record.privateKey?.d ?
-                        bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(record.privateKey.d)))))
+                        bytesToHex(publicToAddress(privateToPublic(fromBase64URL(record.privateKey.d))))
                     :   undefined,
                 createdAt: record.createdAt ?? new Date(),
                 updatedAt: record.updatedAt ?? new Date(),
@@ -719,9 +719,7 @@ function personaRecordOutDB(x: PersonaRecordDB): PersonaRecord {
     const obj: PersonaRecord = {
         ...x,
         address:
-            x.privateKey?.d ?
-                bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(x.privateKey.d)))))
-            :   undefined,
+            x.privateKey?.d ? bytesToHex(publicToAddress(privateToPublic(fromBase64URL(x.privateKey.d)))) : undefined,
         identifier,
         publicHexKey: identifier.publicKeyAsHex,
         linkedProfiles: convertRawMapToIdentifierMap(x.linkedProfiles, ProfileIdentifier),

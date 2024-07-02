@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@ethereumjs/util": "^8.0.5",
+    "@ethereumjs/util": "^9.0.3",
     "@ethersproject/providers": "^5.7.2",
     "@hookform/resolvers": "^3.6.0",
     "@lifi/widget": "^2.10.1",
