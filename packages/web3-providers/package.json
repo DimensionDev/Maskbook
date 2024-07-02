@@ -34,7 +34,6 @@
   "dependencies": {
     "@bonfida/spl-name-service": "^0.1.50",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
@@ -69,6 +68,7 @@
     "graphql-request": "^7.0.1",
     "immer": "^10.1.1",
     "lru-cache": "^10.3.0",
+    "metamask-extension-provider": "^4.0.1",
     "rss3-next": "^0.6.17",
     "socket.io-client": "2.4.0",
     "twitter-text": "^3.1.0",

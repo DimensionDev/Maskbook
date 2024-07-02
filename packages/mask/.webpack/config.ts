@@ -218,7 +218,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             new DefinePlugin({
                 'process.browser': 'true',
                 'process.version': JSON.stringify('v20.0.0'),
-                // MetaMaskInpageProvider => extension-port-stream => readable-stream depends on stdin and stdout
+                // https://github.com/MetaMask/extension-provider/issues/48
+                // MetaMaskInpageProvider
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
             }),

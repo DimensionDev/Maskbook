@@ -1,13 +1,14 @@
 import { isInPageEthereumInjected, isEthereumInjected } from '@masknet/shared-base'
 import { injectedMetaMaskProvider } from '@masknet/injected-script'
-import createMetaMaskProvider, { type MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
+import createMetaMaskProvider from 'metamask-extension-provider'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { EVMInjectedWalletProvider } from './BaseInjected.js'
 
 function getInjectedProvider() {
     if (isEthereumInjected()) return Reflect.get(window, 'ethereum')
     if (isInPageEthereumInjected()) return injectedMetaMaskProvider
-    return createMetaMaskProvider()
+    // Note: ESM & CommonJS interop
+    return (createMetaMaskProvider.default || createMetaMaskProvider)()
 }
 
 export class MetaMaskProvider extends EVMInjectedWalletProvider {
@@ -24,7 +25,7 @@ export class MetaMaskProvider extends EVMInjectedWalletProvider {
     override get ready() {
         if (isEthereumInjected()) return true
         if (isInPageEthereumInjected()) return super.ready
-        const isConnected = (this.bridge as unknown as MetaMaskInpageProvider).isConnected()
+        const isConnected = (this.bridge as ReturnType<typeof getInjectedProvider>).isConnected()
         return isConnected
     }
 

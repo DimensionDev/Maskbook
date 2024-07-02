@@ -2842,9 +2842,6 @@ importers:
       '@dimensiondev/mask-wallet-core':
         specifier: 0.1.0-20211013082857-eb62e5f
         version: 0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)
-      '@dimensiondev/metamask-extension-provider':
-        specifier: ^3.0.6-20221105074301-8806fca
-        version: 3.0.6-20221105074301-8806fca
       '@masknet/flags':
         specifier: workspace:^
         version: link:../flags
@@ -2947,6 +2944,9 @@ importers:
       lru-cache:
         specifier: ^10.3.0
         version: 10.3.0
+      metamask-extension-provider:
+        specifier: ^4.0.1
+        version: 4.0.1
       rss3-next:
         specifier: ^0.6.17
         version: 0.6.17(patch_hash=db27yqpr4wdtpwfyvaxcqd4jpi)(bufferutil@4.0.7)(typescript@5.5.2)(utf-8-validate@5.0.10)
@@ -3814,9 +3814,6 @@ packages:
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
     peerDependencies:
       protobufjs: '>= 6.10 < 7'
-
-  '@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca':
-    resolution: {integrity: sha512-h9ktFcAIN2zVUB/NuQuhv3OoK11ynenScw048GIkxtg7Ol+4w+W4qnWIMErXPzVyep8d7hjt6kngt+sQHNgsYQ==, tarball: https://npm.pkg.github.com/download/@DimensionDev/metamask-extension-provider/3.0.6-20221105074301-8806fca/918f38662fdf7f473b2b934eb6b4c6193b73fd03}
 
   '@discoveryjs/json-ext@0.5.7':
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
@@ -8547,9 +8544,6 @@ packages:
     resolution: {integrity: sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
 
-  detect-browser@3.0.1:
-    resolution: {integrity: sha512-L6b76EfUxnoxGHM5Vz7nrshQPIbOHtitDWpGufrp5srQdJrEYi1xpUVZeFbfssWAJvUWo/iDIVlz8hOP4Z8OCw==}
-
   detect-browser@5.2.0:
     resolution: {integrity: sha512-tr7XntDAu50BVENgQfajMLzacmSe34D+qZc4zjnniz0ZVuw/TZcLcyxHQjYpJTM36sGEkZZlYLnIM1hH7alTMA==}
 
@@ -9243,11 +9237,12 @@ packages:
   extendable-error@0.1.7:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==}
 
-  extension-port-stream@1.0.0:
-    resolution: {integrity: sha512-FsFr64yr6ituPdaGP6Io5recGFWVjJoDYt7asz2AvPkYqGN9c923nmEtyHH+413066bjGcQZaF8w5wn9HbNXiQ==}
-
   extension-port-stream@2.0.1:
     resolution: {integrity: sha512-ltrv4Dh/979I04+D4Te6TFygfRSOc5EBzzlHRldWMS8v73V80qWluxH88hqF0qyUsBXTb8NmzlmSipcre6a+rg==}
+    engines: {node: '>=12.0.0'}
+
+  extension-port-stream@3.0.0:
+    resolution: {integrity: sha512-an2S5quJMiy5bnZKEf6AkfH/7r8CzHvhchU40gxN+OM6HPhe7Z9T1FUychcf2M9PpPOO0Hf7BAEfJkw2TDIBDw==}
     engines: {node: '>=12.0.0'}
 
   external-editor@3.1.0:
@@ -11373,6 +11368,10 @@ packages:
   merkletreejs@0.3.11:
     resolution: {integrity: sha512-LJKTl4iVNTndhL+3Uz/tfkjD0klIWsHlUzgtuNnNrsf7bAlXR30m+xYB7lHr5Z/l6e/yAIsr26Dabx6Buo4VGQ==}
     engines: {node: '>= 7.6.0'}
+
+  metamask-extension-provider@4.0.1:
+    resolution: {integrity: sha512-jxD/hUIYr46Av+CUNPgM7VsUYYQYBp8sWtYFxAO5MMT9e+fBIxPlkVtCI42o4098BB8RQ5KetM6GBVvov+d8vA==}
+    engines: {npm: '>=9'}
 
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
@@ -16242,12 +16241,6 @@ snapshots:
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
       protobufjs: 7.2.3
-
-  '@dimensiondev/metamask-extension-provider@3.0.6-20221105074301-8806fca':
-    dependencies:
-      '@metamask/inpage-provider': 8.1.0
-      detect-browser: 3.0.1
-      extension-port-stream: 1.0.0
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -23031,8 +23024,6 @@ snapshots:
 
   destroy@1.2.0: {}
 
-  detect-browser@3.0.1: {}
-
   detect-browser@5.2.0: {}
 
   detect-browser@5.3.0: {}
@@ -24173,14 +24164,14 @@ snapshots:
 
   extendable-error@0.1.7: {}
 
-  extension-port-stream@1.0.0:
-    dependencies:
-      readable-stream: 2.3.8
-      util: 0.11.1
-
   extension-port-stream@2.0.1:
     dependencies:
       webextension-polyfill-ts: 0.22.0
+
+  extension-port-stream@3.0.0:
+    dependencies:
+      readable-stream: 3.6.2
+      webextension-polyfill: 0.12.0
 
   external-editor@3.1.0:
     dependencies:
@@ -26827,6 +26818,12 @@ snapshots:
       crypto-js: 4.2.0
       treeify: 1.1.0
       web3-utils: 1.10.2
+
+  metamask-extension-provider@4.0.1:
+    dependencies:
+      '@metamask/inpage-provider': 8.1.0
+      detect-browser: 5.3.0
+      extension-port-stream: 3.0.0
 
   methods@1.1.2: {}
 
