@@ -104,7 +104,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 stream: require.resolve('stream-browserify'),
                 crypto: require.resolve('crypto-browserify'),
                 zlib: require.resolve('zlib-browserify'),
-                'text-encoding': require.resolve('@sinonjs/text-encoding'),
             },
             conditionNames: ['mask-src', '...'],
         },
@@ -201,8 +200,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     },
                 }),
             new ProvidePlugin({
-                // Polyfill for Node global "Buffer" variable
+                // Widely used Node.js global variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
+                // same as https://github.com/MetaMask/extension-provider/issues/48
                 'process.nextTick': require.resolve('next-tick'),
             }),
             new EnvironmentPlugin({

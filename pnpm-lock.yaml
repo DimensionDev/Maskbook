@@ -545,9 +545,6 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
-      '@sinonjs/text-encoding':
-        specifier: ^0.7.2
-        version: 0.7.2
       '@splinetool/runtime':
         specifier: 0.9.342
         version: 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
@@ -5706,9 +5703,6 @@ packages:
 
   '@sinonjs/fake-timers@9.1.2':
     resolution: {integrity: sha512-BPS4ynJW/o92PUR4wgriz2Ud5gpST5vz6GQfMixEDK0Z8ZCUv2M7SkBLykH56T++Xs+8ln9zTGbOvNGIe02/jw==}
-
-  '@sinonjs/text-encoding@0.7.2':
-    resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
 
   '@snyk/github-codeowners@1.1.0':
     resolution: {integrity: sha512-lGFf08pbkEac0NYgVf4hdANpAgApRjNByLXB+WBip3qj1iendOIyAwP2GKkKbQMNVy2r1xxDf0ssfWscoiC+Vw==}
@@ -18947,8 +18941,6 @@ snapshots:
   '@sinonjs/fake-timers@9.1.2':
     dependencies:
       '@sinonjs/commons': 1.8.6
-
-  '@sinonjs/text-encoding@0.7.2': {}
 
   '@snyk/github-codeowners@1.1.0':
     dependencies:
