@@ -280,9 +280,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     return (
         <>
             <div className={classes.field}>
-                <div className={classes.option}>
+                <label className={classes.option} onClick={() => setRandom(1)}>
                     <div className={classes.checkIconWrapper}>
-                        <RadioIndicator onClick={() => setRandom(1)} checked={!!isRandom} size={20} />
+                        <RadioIndicator checked={!!isRandom} size={20} />
                     </div>
                     <Typography
                         color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
@@ -290,10 +290,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         fontWeight={isRandom ? 700 : 400}>
                         {t.random_amount()}
                     </Typography>
-                </div>
-                <div className={classes.option}>
+                </label>
+                <label className={classes.option} onClick={() => setRandom(0)}>
                     <div className={classes.checkIconWrapper}>
-                        <RadioIndicator onClick={() => setRandom(0)} checked={!isRandom} size={20} />
+                        <RadioIndicator checked={!isRandom} size={20} />
                     </div>
                     <Typography
                         color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
@@ -301,7 +301,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         fontWeight={!isRandom ? 700 : 400}>
                         {t.identical_amount()}
                     </Typography>
-                </div>
+                </label>
             </div>
             <div className={classes.field}>
                 <MaskTextField
