@@ -24,7 +24,7 @@ export function useTransactionCallback<T>(
         return new Promise<string>((resolve, reject) => {
             method
                 .send(gasExpectedConfig)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                .once(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                     resolve(receipt.transactionHash)
                 })
                 .once(TransactionEventType.ERROR, (error) => {

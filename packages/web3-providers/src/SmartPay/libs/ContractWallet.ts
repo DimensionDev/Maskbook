@@ -11,6 +11,7 @@ import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
+import type { AbiFunctionFragment } from 'web3-types'
 
 export class ContractWallet {
     private web3 = new Web3()
@@ -57,7 +58,7 @@ export class ContractWallet {
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
 
-        return abiCoder.encodeFunctionCall(abi as AbiItem, [
+        return abiCoder.encodeFunctionCall(abi as AbiFunctionFragment, [
             this.entryPoint,
             this.owner,
             PAYMENT_TOKEN_ADDRESS,

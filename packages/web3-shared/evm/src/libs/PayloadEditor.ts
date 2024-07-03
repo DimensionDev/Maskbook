@@ -1,7 +1,6 @@
 import { first, isUndefined, omitBy } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import type { AbiItem } from 'web3-utils'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
 import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
 import { isValidChainId } from '../helpers/isValidChainId.js'
@@ -25,7 +24,7 @@ type Options = Pick<TransactionOptions, 'account' | 'chainId'>
 
 export class PayloadEditor {
     constructor(
-        private payload: JsonRpcPayload,
+        private payload: JsonRpcRequest,
         private options?: Options,
     ) {}
 
@@ -42,11 +41,11 @@ export class PayloadEditor {
         const { method, params } = this.payload
         switch (method) {
             case EthereumMethodType.eth_sign:
-                return first(params)
+                return first(params) as any
             case EthereumMethodType.personal_sign:
-                return params?.[1]
+                return params?.[1] as any
             case EthereumMethodType.eth_signTypedData_v4:
-                return first(params)
+                return first(params) as any
             default:
                 const config = this.config
                 return config.from
@@ -116,10 +115,10 @@ export class PayloadEditor {
                     from: owner,
                     to: getSmartPayConstant(chainId, 'CREATE2_FACTORY_CONTRACT_ADDRESS'),
                     chainId,
-                    data: abiCoder.encodeFunctionCall(
-                        CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')! as AbiItem,
-                        ['0x', web3_utils.toHex(0)],
-                    ),
+                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'deploy')!, [
+                        '0x',
+                        web3_utils.toHex(0),
+                    ]),
                 }
             }
             case EthereumMethodType.MASK_FUND: {
@@ -135,7 +134,7 @@ export class PayloadEditor {
                     // it's a not-exist address, use the zero address as a placeholder
                     to: ZERO_ADDRESS,
                     chainId,
-                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')! as AbiItem, [
+                    data: abiCoder.encodeFunctionCall(CREATE2_FACTORY_ABI.find((x) => x.name === 'fund')!, [
                         ownerAddress,
                         web3_utils.toHex(nonce),
                     ]),
@@ -257,15 +256,19 @@ export class PayloadEditor {
         return PayloadEditor.from(0, method, params, options)
     }
 
-    static fromPayload(payload: JsonRpcPayload, options?: Options) {
+    static fromPayload(payload: JsonRpcRequest, options?: Options) {
         return new PayloadEditor(payload, options)
     }
 }
 
-function parseHexNumberString(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? web3_utils.hexToNumberString(hex ?? '0x0') : undefined
+function parseHexNumberString(hex: string | number | bigint | undefined): string | undefined {
+    if (hex === undefined) return undefined
+    if (typeof hex === 'number' || typeof hex === 'bigint') return hex.toString()
+    return web3_utils.hexToNumberString(hex)
 }
 
-function parseHexNumber(hex: string | number | undefined) {
-    return typeof hex !== 'undefined' ? (web3_utils.hexToNumber(hex) as number) : undefined
+function parseHexNumber(hex: string | number | bigint | undefined): number | undefined {
+    if (hex === undefined) return undefined
+    if (typeof hex === 'number' || typeof hex === 'bigint') return Number(hex)
+    return Number(web3_utils.hexToNumber(hex))
 }

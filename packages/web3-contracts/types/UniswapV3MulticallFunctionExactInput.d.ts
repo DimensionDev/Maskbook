@@ -21,22 +21,10 @@ export interface EventOptions {
     topics?: string[]
 }
 
-export interface MaskBoxQualification extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): MaskBoxQualification
-    clone(): MaskBoxQualification
-    methods: {
-        is_qualified(
-            account: string,
-            proof: string | number[],
-        ): NonPayableTransactionObject<{
-            qualified: boolean
-            error_msg: string
-            0: boolean
-            1: string
-        }>
-
-        version(): NonPayableTransactionObject<string>
-    }
+export interface UniswapV3MulticallFunctionExactInput extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): UniswapV3MulticallFunctionExactInput
+    clone(): UniswapV3MulticallFunctionExactInput
+    methods: {}
     events: {
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }

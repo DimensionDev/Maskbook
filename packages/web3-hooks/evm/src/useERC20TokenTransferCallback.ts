@@ -42,7 +42,7 @@ export function useERC20TokenTransferCallback(
                         gas,
                         ...gasConfig,
                     })
-                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    .on(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                         resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {

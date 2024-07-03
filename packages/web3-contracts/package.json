@@ -9,8 +9,10 @@
   "dependencies": {
     "@typechain/web3-v1": "^6.0.7",
     "typechain": "^8.3.2",
-    "web3-core": "1.10.4",
-    "web3-eth-contract": "1.10.2"
+    "web3-core": "4.5.0",
+    "web3-types": "1.7.0",
+    "web3-eth": "4.8.0",
+    "web3-eth-contract": "4.5.0"
   },
   "devDependencies": {
     "bn.js": "^4.12.0"

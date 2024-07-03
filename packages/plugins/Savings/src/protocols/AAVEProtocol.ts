@@ -181,7 +181,7 @@ export class AAVEProtocol implements SavingsProtocol {
                     gas: gasEstimate.toNumber(),
                 })
                 .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                .once(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                     resolve(receipt.transactionHash)
                 })
         })
@@ -228,7 +228,7 @@ export class AAVEProtocol implements SavingsProtocol {
                     gas: gasEstimate.toNumber(),
                 })
                 .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                .once(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                     resolve(receipt.transactionHash)
                 })
         })

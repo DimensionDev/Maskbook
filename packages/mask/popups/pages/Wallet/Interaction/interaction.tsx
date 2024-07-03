@@ -1,7 +1,7 @@
 import { type ReasonableMessage } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type MessageRequest } from '@masknet/web3-shared-evm'
 import React, { memo, startTransition, useCallback, useRef, useState } from 'react'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcResponse } from 'web3-types'
 import { WatchTokenRequest } from './WatchTokenRequest.js'
 import { WalletSignRequest } from './WalletSignRequest.js'
 import { TransactionRequest } from './TransactionRequest.js'

@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { decodeEvents } from '../../src/helpers/decodeEvents.js'
-import type { AbiItem } from 'web3-utils'
-import { type Log } from 'web3-core'
+import type { Log } from 'web3-types'
 
 describe('decodeEvents', () => {
     it('should return expected result for RedPacket events log', () => {
@@ -17,7 +16,7 @@ describe('decodeEvents', () => {
             transactionHash: '0x9a9e084717d1f63be9d552ffe4f1edbcad2ade10c064b72c1872b67856dfd278',
             transactionIndex: 0x58,
         }
-        const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
+        const eventParams = decodeEvents(REDPACKET_ABI, [log]) as unknown as {
             CreationSuccess: {
                 returnValues: {
                     id: string

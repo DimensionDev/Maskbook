@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
 import { mapKeys, sortBy } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
@@ -133,10 +132,10 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
             if (!tx.input) return []
             try {
                 const decodedInputParam = decodeFunctionParams(
-                    NFT_REDPACKET_ABI as AbiItem[],
+                    NFT_REDPACKET_ABI,
                     tx.input,
                     'create_red_packet',
-                ) as CreateNFTRedpacketParam
+                ) as unknown as CreateNFTRedpacketParam
 
                 const redpacketPayload: NftRedPacketJSONPayload = {
                     contract_address: tx.to,
@@ -178,10 +177,10 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         return transactions.flatMap((tx) => {
             try {
                 const decodedInputParam = decodeFunctionParams(
-                    REDPACKET_ABI as AbiItem[],
+                    REDPACKET_ABI,
                     tx.input ?? '',
                     'create_red_packet',
-                )
+                ) as any
 
                 const redpacketPayload: RedPacketJSONPayloadFromChain = {
                     contract_address: tx.to,

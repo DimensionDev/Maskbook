@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { Emitter } from '@servie/events'
 import type {
     ECKeyIdentifier,
@@ -876,7 +876,7 @@ export interface RecognizableError extends Error {
 
 export interface WatchEvents<ChainId, Transaction> {
     /** Emit when error occur */
-    error: [RecognizableError, JsonRpcPayload]
+    error: [RecognizableError, JsonRpcRequest]
     /** Emit when the watched transaction status updated. */
     progress: [ChainId, string, TransactionStatusType, Transaction | undefined]
 }
@@ -1104,7 +1104,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Notify error */
-    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
+    notifyError: (error: Error, request: JsonRpcRequest) => Promise<void>
     /** Notify transaction status */
     notifyTransaction: (
         chainId: ChainId,

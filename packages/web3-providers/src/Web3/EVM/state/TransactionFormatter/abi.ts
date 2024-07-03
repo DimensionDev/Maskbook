@@ -19,6 +19,7 @@ import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
 import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
 import Airdrop from '@masknet/web3-contracts/abis/AirdropV2.json'
+import type { AbiFunctionFragment } from 'web3-types'
 
 class ABI {
     private abis: Map<string, TransactionMethodABI[]> = new Map()
@@ -46,8 +47,9 @@ class ABI {
         return this.abis.get(signature)
     }
     construct(abi: AbiItem[]) {
-        abi.forEach((x) => {
-            if (x.type !== 'function') return
+        abi.forEach((_x) => {
+            if (_x.type !== 'function') return
+            const x = _x as AbiFunctionFragment
             if (x.stateMutability === 'pure' || x.stateMutability === 'view') return
             const { name, inputs = [] } = x
             if (!name) return

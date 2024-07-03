@@ -1,14 +1,9 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import type { TransactionConfig } from 'web3-core'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { EthereumMethodType, type RequestArguments } from '../types/index.js'
 
 export class RequestID {
-    /**
-     * @deprecated Don't new RequestID()
-     * Use RequestID.from(requestArguments) stead.
-     */
-    constructor(
+    private constructor(
         private url: string,
         private requestArguments: RequestArguments,
     ) {}
@@ -17,45 +12,45 @@ export class RequestID {
         const { method, params } = this.requestArguments
         switch (method) {
             case EthereumMethodType.eth_getCode: {
-                const [address, tag = 'latest'] = params as [string, string]
+                const [address, tag = 'latest'] = params
                 return web3_utils.sha3([this.url, method, address, tag].join(','))
             }
             case EthereumMethodType.eth_blockNumber: {
                 return web3_utils.sha3([this.url, method].join(','))
             }
             case EthereumMethodType.eth_getBlockByNumber: {
-                const [number, full] = params as [string, boolean]
+                const [number, full] = params
                 return web3_utils.sha3([this.url, method, number, full].join(','))
             }
             case EthereumMethodType.eth_getBlockByHash: {
-                const [hash] = params as [string]
+                const [hash] = params
                 return web3_utils.sha3([this.url, method, hash].join(','))
             }
             case EthereumMethodType.eth_gasPrice: {
                 return web3_utils.sha3([this.url, method].join(','))
             }
             case EthereumMethodType.eth_getBalance: {
-                const [account, tag = 'latest'] = params as [string, string]
+                const [account, tag = 'latest'] = params
                 return web3_utils.sha3([this.url, method, account, tag].join(','))
             }
             case EthereumMethodType.eth_getTransactionCount: {
-                const [account, tag = 'latest'] = params as [string, string]
+                const [account, tag = 'latest'] = params
                 return web3_utils.sha3([this.url, method, account, tag].join(','))
             }
             case EthereumMethodType.eth_call: {
-                const [config, tag = 'latest'] = params as [TransactionConfig, string]
+                const [config, tag = 'latest'] = params
                 return web3_utils.sha3([this.url, method, JSON.stringify(config), tag].join(','))
             }
             case EthereumMethodType.eth_estimateGas: {
-                const [config, tag = 'latest'] = params as [TransactionConfig, string]
+                const [config, tag = 'latest'] = params
                 return web3_utils.sha3([this.url, method, JSON.stringify(config), tag].join(','))
             }
             case EthereumMethodType.eth_getTransactionReceipt: {
-                const [hash] = params as [string]
+                const [hash] = params
                 return web3_utils.sha3([this.url, method, hash].join(','))
             }
             case EthereumMethodType.eth_getTransactionByHash:
-                const [hash] = params as [string]
+                const [hash] = params
                 return web3_utils.sha3([this.url, method, hash].join(','))
             default:
                 return
@@ -66,7 +61,7 @@ export class RequestID {
         return new RequestID(url, requestArguments)
     }
 
-    static fromPayload(url: string, payload: JsonRpcPayload) {
+    static fromPayload(url: string, payload: JsonRpcRequest) {
         return new RequestID(url, {
             method: payload.method as EthereumMethodType,
             params: payload.params ?? [],

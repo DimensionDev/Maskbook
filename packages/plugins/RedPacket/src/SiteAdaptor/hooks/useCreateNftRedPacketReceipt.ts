@@ -1,5 +1,4 @@
 import { useAsyncRetry } from 'react-use'
-import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, useNftRedPacketConstants, decodeEvents } from '@masknet/web3-shared-evm'
 import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
@@ -19,7 +18,7 @@ export function useCreateNftRedPacketReceipt(txid: string, expectedChainId: Chai
         const log = receipt.logs.find((log) => isSameAddress(log.address, RED_PACKET_NFT_ADDRESS))
         if (!log) return null
 
-        const eventParams = decodeEvents(NFT_REDPACKET_ABI as AbiItem[], [log]) as unknown as {
+        const eventParams = decodeEvents(NFT_REDPACKET_ABI, [log]) as unknown as {
             CreationSuccess: {
                 returnValues: {
                     id: string

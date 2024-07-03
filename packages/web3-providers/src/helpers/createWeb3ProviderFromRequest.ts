@@ -1,6 +1,7 @@
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
 import {
     createJsonRpcResponse,
+    createJsonRpcResponseError,
     type EthereumMethodType,
     type RequestArguments,
     type Web3Provider,
@@ -24,7 +25,7 @@ export function createWeb3ProviderFromRequest(
         },
         // some pkg (eth-rpc) needs this method
         sendAsync: async (
-            payload: JsonRpcPayload,
+            payload: JsonRpcRequest,
             callback: (error: Error | null, response?: JsonRpcResponse) => void,
         ) => {
             try {
@@ -32,11 +33,11 @@ export function createWeb3ProviderFromRequest(
                     method: payload.method as EthereumMethodType,
                     params: payload.params ?? [],
                 })
-                callback(null, createJsonRpcResponse(payload.id as number, result))
-                return createJsonRpcResponse(payload.id as number, result)
+                callback(null, createJsonRpcResponse(payload.id, result))
+                return createJsonRpcResponse(payload.id, result)
             } catch (error) {
                 if (error instanceof Error) callback(error)
-                return createJsonRpcResponse(payload.id as number, undefined, error as Error)
+                return createJsonRpcResponseError(payload.id, error)
             }
         },
     }

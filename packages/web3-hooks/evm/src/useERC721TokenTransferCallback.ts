@@ -43,7 +43,7 @@ export function useERC721TokenTransferCallback(address?: string, expectedChainId
                 contract.methods
                     .transferFrom(account, recipient, tokenId)
                     .send(config as NonPayableTx)
-                    .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    .on(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                         resolve(receipt.transactionHash)
                     })
                     .on(TransactionEventType.ERROR, (error) => {

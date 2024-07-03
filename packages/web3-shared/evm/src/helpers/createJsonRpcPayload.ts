@@ -1,7 +1,7 @@
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { RequestArguments } from '../types/index.js'
 
-export function createJsonRpcPayload(id: number, requestArguments: RequestArguments): JsonRpcPayload {
+export function createJsonRpcPayload(id: number, requestArguments: RequestArguments): JsonRpcRequest {
     return {
         jsonrpc: '2.0',
         id,

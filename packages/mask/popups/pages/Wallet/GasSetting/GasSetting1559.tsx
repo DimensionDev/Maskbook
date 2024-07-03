@@ -266,7 +266,7 @@ export const GasSetting1559 = memo(() => {
             const config = value.payload.params!.map((param) =>
                 param === 'latest' ? param : (
                     {
-                        ...param,
+                        ...(param as object),
                         gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
                         maxPriorityFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed(0)),
                         maxFeePerGas: web3_utils.toHex(formatGweiToWei(data.maxFeePerGas).toFixed(0)),

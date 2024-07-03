@@ -10,6 +10,7 @@ import { maskSDK } from '../index.js'
 import { sample } from 'lodash-es'
 import { AsyncCall, JSONEncoder } from 'async-call-rpc/full'
 import { isValidChecksumAddress } from '@ethereumjs/util'
+import * as web3_eth_accounts from /* webpackDefer: true */ 'web3-eth-accounts'
 
 const PassthroughMethods = [
     ...readonlyMethodType,
@@ -312,7 +313,7 @@ const methods: Methods = {
         })
     },
     async personal_ecRecover(message, signature) {
-        return providers.EVMWeb3.getWeb3().eth.accounts.recover(message, signature)
+        return web3_eth_accounts.recover(message, signature)
     },
 }
 

@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import type { AsyncFnReturn } from 'react-use/lib/useAsync.js'
-import type { EventLog, TransactionReceipt } from 'web3-core'
+import type { EventLog, TransactionReceipt } from 'web3-types'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { decodeEvents, ContractTransaction, type GasConfig, isValidAddress } from '@masknet/web3-shared-evm'

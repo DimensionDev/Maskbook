@@ -4,6 +4,7 @@ import { ErrorEditor, isMaskOnlyMethodType, type Middleware } from '@masknet/web
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
+import type { JsonRpcResponseWithResult } from 'web3-types'
 
 class CustomNetworkAPI implements Middleware<ConnectionContext> {
     private get networks() {
@@ -39,7 +40,7 @@ class CustomNetworkAPI implements Middleware<ConnectionContext> {
             if (editor.presence) {
                 context.abort(editor.error)
             } else {
-                context.write(response.result)
+                context.write((response as JsonRpcResponseWithResult).result)
             }
         } catch (error) {
             context.abort(error)
