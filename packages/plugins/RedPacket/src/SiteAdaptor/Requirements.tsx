@@ -239,7 +239,7 @@ export const Requirements = forwardRef<HTMLDivElement, Props>(function Requireme
                                         flexGrow: 0,
                                         textTransform: 'capitalize',
                                     }}>
-                                    {condition.key}
+                                    {condition.key === 'repost' ? t.repost({ context: platform }) : condition.key}
                                 </Typography>
                                 <Link href={link} className={classes.link} target="_blank">
                                     <Icons.LinkOut size={16} className={classes.linkIcon} />
