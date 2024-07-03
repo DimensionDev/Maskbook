@@ -1,5 +1,4 @@
 import { mapKeys } from 'lodash-es'
-import type { BigNumber } from 'bignumber.js'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
@@ -55,12 +54,12 @@ export async function modifyTransaction(
 
 // The Debank transaction history api does not return the input data,
 //  so can not do the decoding within its scope.
-export function parseReceiverFromERC20TransferInput(input?: Bytes | undefined) {
+export function parseReceiverFromERC20TransferInput(input?: Bytes | undefined): string {
     if (!input) return ''
     try {
         if (typeof input !== 'string') input = web3_utils.toHex(input)
         const decodedInputParams = decodeFunctionParams(ERC20_ABI, input, 'transfer')
-        return decodedInputParams[0] as string
+        return String(decodedInputParams[0])
     } catch {
         return ''
     }
@@ -73,7 +72,7 @@ export function parseAmountFromERC20ApproveInput(input?: Bytes | undefined) {
     try {
         if (typeof input !== 'string') input = web3_utils.toHex(input)
         const decodedInputParam = decodeFunctionParams(ERC20_ABI, input, 'approve')
-        const result = (decodedInputParam[1] as BigNumber).toString()
+        const result = (decodedInputParam[1] as bigint).toString()
         return MaxUint256 === result ? 'Infinite' : result
     } catch {
         return

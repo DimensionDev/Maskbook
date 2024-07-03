@@ -42,6 +42,6 @@ describe('encode & decode function data', () => {
         const result = decodeFunctionParams(ERC20, DATA, 'approve')
 
         expect(result._spender).toBe('0x8ba1f109551bD432803012645Ac136ddd64DBA72')
-        expect(result._value).toBe('0')
+        expect(result._value).toBe(0n)
     })
 })
