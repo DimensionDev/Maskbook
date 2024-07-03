@@ -1,6 +1,5 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
-import type { BigNumber } from 'bignumber.js'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
