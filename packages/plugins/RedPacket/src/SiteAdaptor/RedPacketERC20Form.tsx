@@ -15,7 +15,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import {
     FungibleTokenInput,
     PluginWalletStatusBar,
@@ -125,7 +125,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
             chainId,
-            pluginID: NetworkPluginID.PLUGIN_EVM,
+            runtime: NetworkPluginID.PLUGIN_EVM,
+            pluginID: PluginID.RedPacket,
         })
         if (!picked) return
         if (chainId !== picked.chainId) {
