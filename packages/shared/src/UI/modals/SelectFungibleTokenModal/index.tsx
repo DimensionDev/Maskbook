@@ -1,13 +1,14 @@
-import { forwardRef, useState } from 'react'
-import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type NetworkPluginID, type PluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
+import { forwardRef, useState } from 'react'
 import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
 
 export interface SelectFungibleTokenModalOpenProps {
     enableManage?: boolean
-    pluginID?: NetworkPluginID
+    networkPluginID?: NetworkPluginID
+    pluginID?: PluginID
     chainId?: Web3Helper.ChainIdAll
     keyword?: string
     whitelist?: string[]
@@ -25,7 +26,8 @@ export const SelectFungibleTokenModal = forwardRef<
     SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
 >((props, ref) => {
     const [enableManage, setEnableManage] = useState<boolean>()
-    const [pluginID, setPluginID] = useState<NetworkPluginID>()
+    const [networkPluginID, setNetworkPluginID] = useState<NetworkPluginID>()
+    const [pluginID, setPluginID] = useState<PluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [keyword, setKeyword] = useState<string>()
     const [whitelist, setWhitelist] = useState<string[]>()
@@ -39,6 +41,7 @@ export const SelectFungibleTokenModal = forwardRef<
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setEnableManage(props.enableManage)
+            setNetworkPluginID(props.networkPluginID)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
             setKeyword(props.keyword)
@@ -57,6 +60,7 @@ export const SelectFungibleTokenModal = forwardRef<
         <SelectFungibleTokenDialog
             open
             enableManage={enableManage}
+            networkPluginID={networkPluginID}
             pluginID={pluginID}
             chainId={chainId}
             keyword={keyword}

@@ -1,16 +1,17 @@
-import { useState, useMemo } from 'react'
-import { DialogContent, type Theme, useMediaQuery, inputClasses } from '@mui/material'
-import { useNetworkContext, useNativeTokenAddress, useNetworks } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, type PluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useNativeTokenAddress, useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { TokenListMode } from '../../components/FungibleTokenList/type.js'
-import { useSharedTrans } from '../../../locales/index.js'
-import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { DialogContent, inputClasses, type Theme, useMediaQuery } from '@mui/material'
+import { useMemo, useState } from 'react'
+import { useSharedTrans } from '../../../locales/index.js'
+import { TokenListMode } from '../../components/FungibleTokenList/type.js'
+import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
+import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 
 interface StyleProps {
     compact: boolean
@@ -56,7 +57,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
 interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
     enableManage?: boolean
-    pluginID?: T
+    networkPluginID?: T
+    pluginID?: PluginID
     chainId?: Web3Helper.Definition[T]['ChainId']
     keyword?: string
     whitelist?: string[]
@@ -73,6 +75,7 @@ interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPlug
 
 export function SelectFungibleTokenDialog({
     open,
+    networkPluginID,
     pluginID,
     chainId,
     disableSearchBar,
@@ -91,10 +94,18 @@ export function SelectFungibleTokenDialog({
     const { networkIdentifier } = useBaseUIRuntime()
     const [mode, setMode] = useState(TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
-    const { pluginID: currentPluginID } = useNetworkContext(pluginID)
+    const { pluginID: currentPluginID } = useNetworkContext(networkPluginID)
     const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+    const plugin = useActivatedPluginSiteAdaptor(pluginID, 'any')
+
+    const networks = useMemo(() => {
+        if (!plugin || !networkPluginID) return allNetworks
+        const supportedChainIds = plugin.enableRequirement.web3?.[networkPluginID]?.supportedChainIds
+        if (!supportedChainIds) return allNetworks
+        return allNetworks.filter((x) => supportedChainIds.includes(x.chainId))
+    }, [plugin, allNetworks])
 
     const rowSize = useRowSize()
 
@@ -124,7 +135,7 @@ export function SelectFungibleTokenDialog({
                         hideAllButton
                         chainId={chainId}
                         onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                        networks={allNetworks}
+                        networks={networks}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                     />
                     <FungibleTokenList

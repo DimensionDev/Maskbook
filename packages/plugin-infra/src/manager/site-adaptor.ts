@@ -68,9 +68,10 @@ useActivatedPluginsSiteAdaptor.visibility = {
 
 // this should never be used for a normal plugin
 const TRUE = new ValueRef(true)
-export function useIsMinimalMode(pluginID: string) {
+const FALSE = new ValueRef(false)
+export function useIsMinimalMode(pluginID: string | undefined) {
     assertLocation()
-    return useValueRef(minimalModeSub[pluginID] || TRUE)
+    return useValueRef(pluginID ? minimalModeSub[pluginID] || TRUE : FALSE)
 }
 
 export async function checkIsMinimalMode(pluginID: string) {
@@ -86,10 +87,11 @@ export async function checkIsMinimalMode(pluginID: string) {
  * @param visibility Should invisible plugin included?
  * @returns
  */
-export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
+export function useActivatedPluginSiteAdaptor(pluginID: string | undefined, minimalModeEqualsTo: 'any' | boolean) {
     const plugins = useActivatedPluginsSiteAdaptor(minimalModeEqualsTo)
     const minimalMode = useIsMinimalMode(pluginID)
 
+    if (!pluginID) return undefined
     const result = plugins.find((x) => x.ID === pluginID)
     if (!result) return undefined
     if (minimalModeEqualsTo === 'any') return result

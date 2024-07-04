@@ -99,7 +99,7 @@ export const DonateDialog = memo(({ grant, ...rest }: DonateDialogProps) => {
     // #region select token dialog
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({
-            pluginID: NetworkPluginID.PLUGIN_EVM,
+            networkPluginID: NetworkPluginID.PLUGIN_EVM,
             chainId,
             whitelist: TOKEN_LIST,
             disableNativeToken: false,

@@ -253,8 +253,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ) {
             return (
                 <Icons.History
-                    style={{ cursor: account ? undefined : 'disabled' }}
-                    disabled
+                    style={{ cursor: account ? undefined : 'not-allowed' }}
+                    disabled={!account}
                     onClick={() => {
                         if (!account) return
                         setShowHistory((history) => !history)
