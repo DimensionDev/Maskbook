@@ -7,7 +7,7 @@ import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
 
 export interface SelectFungibleTokenModalOpenProps {
     enableManage?: boolean
-    runtime?: NetworkPluginID
+    networkPluginID?: NetworkPluginID
     pluginID?: PluginID
     chainId?: Web3Helper.ChainIdAll
     keyword?: string
@@ -26,7 +26,7 @@ export const SelectFungibleTokenModal = forwardRef<
     SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
 >((props, ref) => {
     const [enableManage, setEnableManage] = useState<boolean>()
-    const [runtime, setRuntime] = useState<NetworkPluginID>()
+    const [networkPluginID, setNetworkPluginID] = useState<NetworkPluginID>()
     const [pluginID, setPluginID] = useState<PluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [keyword, setKeyword] = useState<string>()
@@ -41,7 +41,7 @@ export const SelectFungibleTokenModal = forwardRef<
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setEnableManage(props.enableManage)
-            setRuntime(props.runtime)
+            setNetworkPluginID(props.networkPluginID)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
             setKeyword(props.keyword)
@@ -60,7 +60,7 @@ export const SelectFungibleTokenModal = forwardRef<
         <SelectFungibleTokenDialog
             open
             enableManage={enableManage}
-            runtime={runtime}
+            networkPluginID={networkPluginID}
             pluginID={pluginID}
             chainId={chainId}
             keyword={keyword}

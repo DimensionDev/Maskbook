@@ -26,7 +26,7 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
 
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({
-            runtime: pluginID,
+            networkPluginID: pluginID,
             chainId,
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],

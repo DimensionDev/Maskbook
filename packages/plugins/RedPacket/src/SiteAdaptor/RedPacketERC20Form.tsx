@@ -125,7 +125,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             disableNativeToken: false,
             selectedTokens: token ? [token.address] : [],
             chainId,
-            runtime: NetworkPluginID.PLUGIN_EVM,
+            networkPluginID: NetworkPluginID.PLUGIN_EVM,
             pluginID: PluginID.RedPacket,
         })
         if (!picked) return
