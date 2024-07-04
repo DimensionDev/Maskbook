@@ -251,7 +251,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             !showHistory &&
             !showDetails
         ) {
-            return <Icons.History onClick={() => setShowHistory((history) => !history)} />
+            return (
+                <Icons.History
+                    style={{ cursor: account ? undefined : 'disabled' }}
+                    disabled
+                    onClick={() => {
+                        if (!account) return
+                        setShowHistory((history) => !history)
+                    }}
+                />
+            )
         }
 
         if (step === CreateRedPacketPageStep.ClaimRequirementsPage) {
