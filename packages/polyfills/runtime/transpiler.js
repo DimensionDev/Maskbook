@@ -29,9 +29,6 @@ define({
         __metadata(key, value) {
             return ReflectMetadata.metadata(key, value)
         },
-        __decorate(decorators, target, key, desc) {
-            return ReflectMetadata.decorate(decorators, target, key, desc)
-        },
     }),
 
     // reflect-metadata
