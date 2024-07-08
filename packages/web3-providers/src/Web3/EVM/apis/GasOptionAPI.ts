@@ -29,11 +29,7 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
         while (index < GasOptionAPI.HISTORICAL_BLOCKS) {
             blocks.push({
                 number: blockNumber + index,
-                // https://github.com/web3/web3.js/issues/7135
-                baseFeePerGas:
-                    typeof result.baseFeePerGas === 'bigint' ?
-                        Number(result.baseFeePerGas)
-                    :   Number.parseInt(nth(result.baseFeePerGas as string[], index) ?? '0', 16),
+                baseFeePerGas: Number(result.baseFeePerGas),
                 gasUsedRatio: nth(result.gasUsedRatio, index) || 0,
                 priorityFeePerGas: nth(result.reward, index)?.map(Number) ?? Array.from<number>({ length: 3 }).fill(0),
             })
