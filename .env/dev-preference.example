@@ -1,6 +1,14 @@
 # Copy and rename this file to dev-preference
 # This dot file will NOT be used in CI or production build.
 
+### Experimental CSP
+
+; csp=false
+# (default) Not enabling strict CSP.
+
+; csp=true
+# Enable strict CSP.
+
 ### SourceMap
 
 ; sourceMap=true

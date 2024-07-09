@@ -31,6 +31,7 @@ export function applyDotEnv(flags: BuildFlags) {
     }
     flags.reactCompiler ??= compiler
     flags.lavamoat ??= parseBoolean(parsed.lavamoat)
+    flags.csp ??= parseBoolean(parsed.csp)
     flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
 }
 export function parseManifest(manifest: '2' | '3' | 2 | 3 | undefined | ManifestFile) {

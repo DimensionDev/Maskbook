@@ -8,8 +8,45 @@ import { join } from 'node:path'
 
 const cloneDeep = <T>(x: T): T => JSON.parse(JSON.stringify(x))
 
+const CSPKeyword = ['none', 'self', 'unsafe-inline']
 export function emitManifestFile(flags: NormalizedFlags, computedFlags: ComputedFlags) {
-    const manifest = prepareAllManifest(flags, computedFlags)
+    const data = parseJSONc(
+        readFileSync(new URL('../../../../security/content-security-policy.json', import.meta.url), 'utf-8'),
+    )
+    const cspContent = {
+        mv2: Array.from(data['@mv2']).join('; ') + '; ',
+        mv2dev: Array.from(data['@mv2dev']).join('; ') + '; ',
+        mv3: Array.from(data['@mv3']).join('; ') + '; ',
+    }
+    if (flags.csp && flags.mode === 'development') {
+        let csp = ''
+        for (const key in data) {
+            if (key.startsWith('@')) continue
+            const val = data[key]
+            csp += `${key} `
+            if (CSPKeyword.includes(val)) csp += `'${val}'`
+            else if (Array.isArray(val)) {
+                csp += val
+                    .map((val) => {
+                        if (val.startsWith('@dev-only:')) {
+                            if (flags.mode === 'development') val = val.slice('@dev-only:'.length)
+                            else return ''
+                        }
+                        if (CSPKeyword.includes(val)) return `'${val}'`
+                        return val
+                    })
+                    .filter(Boolean)
+                    .join(' ')
+            } else csp += val
+            csp += '; '
+        }
+        csp.trim()
+        cspContent.mv2 += csp
+        cspContent.mv2dev += csp
+        cspContent.mv3 += csp
+    }
+
+    const manifest = prepareAllManifest(flags, computedFlags, cspContent)
     const plugins = []
     for (const [fileName, fileContent] of manifest) {
         plugins.push(
@@ -43,10 +80,16 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
 type ManifestV2 = Manifest.WebExtensionManifest & { manifest_version: 2; key?: string }
 type ManifestV3 = Manifest.WebExtensionManifest & { manifest_version: 3; key?: string }
 type ModifyAcceptFlags = Pick<NormalizedFlags, 'mode' | 'channel' | 'devtools' | 'hmr'>
+type CSP = {
+    mv2: string
+    mv2dev: string
+    mv3: string
+}
 type ManifestPresets =
     | [flags: ModifyAcceptFlags, base: ManifestV2, modify?: (manifest: ManifestV2) => void]
     | [flags: ModifyAcceptFlags, base: ManifestV3, modify?: (manifest: ManifestV3) => void]
-function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags) {
+
+function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags, csp: CSP) {
     const mv2Base: ManifestV2 = parseJSONc(readFileSync(new URL('../manifest/manifest.json', import.meta.url), 'utf-8'))
     const mv3Base: ManifestV3 = parseJSONc(
         readFileSync(new URL('../manifest/manifest-mv3.json', import.meta.url), 'utf-8'),
@@ -85,14 +128,19 @@ function prepareAllManifest(flags: NormalizedFlags, computedFlags: ComputedFlags
         if (!Object.hasOwn(manifestFlags, fileName)) continue
         const [flags, base, modify]: ManifestPresets = (manifestFlags as any)[fileName]
         const fileContent = cloneDeep(base)
-        editManifest(fileContent, cloneDeep(flags), cloneDeep(computedFlags))
+        editManifest(fileContent, cloneDeep(flags), cloneDeep(computedFlags), csp)
         modify?.(fileContent as any)
         manifest.set(fileName as any, fileContent)
     }
     return manifest
 }
 
-function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlags, computedFlags: ComputedFlags) {
+function editManifest(
+    manifest: ManifestV2 | ManifestV3,
+    flags: ModifyAcceptFlags,
+    computedFlags: ComputedFlags,
+    csp: CSP,
+) {
     if (flags.mode === 'development') manifest.name += ' (dev)'
     else if (flags.channel === 'beta') manifest.name += ' (beta)'
     else if (flags.channel === 'insider') manifest.name += ' (insider)'
@@ -104,15 +152,14 @@ function editManifest(manifest: ManifestV2 | ManifestV3, flags: ModifyAcceptFlag
     manifest.version = topPackageJSON.version
 
     if (manifest.manifest_version === 2) {
-        if (String(computedFlags.sourceMapKind).includes('eval')) {
-            manifest.content_security_policy = `script-src 'self' 'unsafe-eval'; object-src 'self'; require-trusted-types-for 'script'; trusted-types default dompurify webpack mask`
-        }
+        if (String(computedFlags.sourceMapKind).includes('eval')) manifest.content_security_policy = csp.mv2dev
+        else manifest.content_security_policy = csp.mv2
 
         if (flags.hmr) {
             ;(manifest.web_accessible_resources as string[]).push('*.json', '*.js')
         }
     } else {
-        // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/
+        manifest.content_security_policy = { extension_pages: csp.mv3 }
     }
 }
 
