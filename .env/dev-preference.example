@@ -71,7 +71,7 @@
 # devtoolsEditorURI=...
 # Any URI that can open the editor you used.
 
-### React compiler
+### Experimental React compiler
 
 ; reactCompiler=false
 # (default) Not enabling react compiler.
@@ -83,3 +83,11 @@
 ; reactCompiler=annotation
 ; reactCompiler=all
 # Enable react compiler with specific mode.
+
+### Experimental LavaMoat
+
+; lavamoat=false
+# (default) Not enabling LavaMoat.
+
+; lavamoat=true
+# Enable LavaMoat.

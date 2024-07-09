@@ -30,6 +30,7 @@ export function applyDotEnv(flags: BuildFlags) {
             throw new TypeError(`Invalid reactCompiler value "${compiler}" in env file`)
     }
     flags.reactCompiler ??= compiler
+    flags.lavamoat ??= parseBoolean(parsed.lavamoat)
     flags.sourceMapHideFrameworks ??= parseBoolean(parsed.sourceMapHideFrameworks)
 }
 export function parseManifest(manifest: '2' | '3' | 2 | 3 | undefined | ManifestFile) {
