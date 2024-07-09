@@ -23,6 +23,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
+        .options('lavamoat', { type: 'boolean', description: 'Enable LavaMoat.' })
         .option('reactCompiler', {
             type: 'string',
             coerce(arg) {
