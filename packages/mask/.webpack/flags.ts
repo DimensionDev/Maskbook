@@ -25,6 +25,8 @@ export interface BuildFlags {
     reactCompiler?: boolean | 'infer' | 'annotation' | 'all'
     /** @default false */
     lavamoat?: boolean
+    /** @default false */
+    csp?: boolean
     outputPath?: string
     /** @default true */
     devtools?: boolean
@@ -46,6 +48,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         manifestFile = ManifestFile.ChromiumMV3,
         reactCompiler = false,
         lavamoat = false,
+        csp = false,
     } = flags
     let {
         hmr = mode === 'development',
@@ -72,6 +75,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         // Runtime
         manifestFile,
         reactCompiler,
+        csp,
         lavamoat,
         // DX
         hmr,

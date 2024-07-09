@@ -27,9 +27,6 @@
             "use_dynamic_url": false
         }
     ],
-    "content_security_policy": {
-        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; trusted-types default dompurify mask;"
-    },
     "minimum_chrome_version": "102",
     "browser_specific_settings": {
         "gecko": {
