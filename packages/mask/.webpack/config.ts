@@ -241,7 +241,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         from: '*.js',
                         to: polyfillFolder,
                     },
-                    { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
+                    {
+                        from:
+                            productionLike ?
+                                require.resolve('webextension-polyfill/dist/browser-polyfill.min.js')
+                            :   require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
+                        to: polyfillFolder,
+                    },
                     {
                         from:
                             productionLike ?
@@ -283,8 +289,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             minimize: productionLike,
             minimizer: [
                 new TerserPlugin({
-                    // minify: TerserPlugin.swcMinify,
-                    exclude: ['polyfill'],
+                    minify: TerserPlugin.swcMinify,
+                    exclude: /polyfill/,
                     // https://swc.rs/docs/config-js-minify
                     terserOptions: {
                         compress: {
