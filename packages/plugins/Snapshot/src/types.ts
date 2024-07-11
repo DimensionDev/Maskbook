@@ -126,3 +126,8 @@ export enum ContentTabs {
     Pending = 'Pending',
     Closed = 'Closed',
 }
+export interface ScoreResponse {
+    result: {
+        scores: Array<Record<string, number>>
+    }
+}
