@@ -28,7 +28,6 @@ export enum ProviderType {
     None = 'None',
     Phantom = 'Phantom',
     Solflare = 'Solflare',
-    Sollet = 'Sollet',
     Coin98 = 'Coin98',
 }
 

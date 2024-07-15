@@ -32,7 +32,6 @@
     }
   },
   "dependencies": {
-    "@bonfida/spl-name-service": "^0.1.50",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
     "@masknet/flags": "workspace:^",
@@ -49,13 +48,11 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@metamask/eth-sig-util": "^5.0.2",
-    "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
-    "@metaplex/js": "^4.11.7",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",
-    "@solana/web3.js": "^1.75.0",
+    "@solana/web3.js": "^1.91.2",
     "@walletconnect/sign-client": "^2.10.5",
     "@walletconnect/utils": "^2.10.5",
     "bignumber.js": "9.1.2",

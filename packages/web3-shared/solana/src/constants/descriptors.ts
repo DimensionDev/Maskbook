@@ -1,4 +1,4 @@
-import { EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSiteList, NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
     createFungibleToken,
@@ -174,21 +174,6 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
             supportedChainIds: ChainIdList,
             supportedEnhanceableSites: [],
             supportedExtensionSites: [],
-        },
-    },
-    {
-        ID: `${PLUGIN_ID}_sollet`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Sollet,
-        name: 'Sollet',
-        icon: new URL('../assets/sollet.png', import.meta.url).href,
-        homeLink: 'https://www.sollet.io/',
-        shortenLink: 'sollet.io',
-        downloadLink: 'https://www.sollet.io/',
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: [],
-            supportedExtensionSites: ExtensionSiteList,
         },
     },
 ]
