@@ -76,18 +76,19 @@ function Main<T>(props: { data: T; UI: Inject<any> }) {
 }
 function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     const [ref, setRef] = useState<HTMLDivElement | null>()
-    const [f, setF] = useState<(props: T) => void>()
+    const propsCallback = useRef<(props: T) => void>(undefined)
     const cancel = useRef<AbortController>(undefined)
 
     useEffect(() => {
         if (!ref) return
         const sig = (cancel.current = new AbortController())
-        setF(UI.init(sig.signal, ref))
+        propsCallback.current = UI.init(sig.signal, ref)
+        propsCallback.current(data)
         return () => sig.abort()
     }, [ref, UI.init])
     useEffect(() => {
-        f?.(data)
-    }, [f, data])
+        propsCallback.current?.(data)
+    }, [data])
 
     return <div ref={setRef} />
 }

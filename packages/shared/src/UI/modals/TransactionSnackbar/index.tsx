@@ -1,6 +1,6 @@
 import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { TransactionSnackbar } from './TransactionSnackbar.js'
+import { useTransactionSnackbar } from './TransactionSnackbar.js'
 
 interface TransactionSnackbarProps extends SingletonModalProps {
     pluginID: NetworkPluginID
@@ -8,6 +8,6 @@ interface TransactionSnackbarProps extends SingletonModalProps {
 
 export function TransactionSnackbarModal({ ref, pluginID }: TransactionSnackbarProps) {
     useSingletonModal(ref)
-
-    return <TransactionSnackbar pluginID={pluginID} />
+    useTransactionSnackbar(pluginID)
+    return null
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Application } from '@splinetool/runtime'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 export interface SplineProps {
     scene: string
@@ -10,8 +11,8 @@ export default function Spline({ scene, onLoad }: SplineProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const [isLoading, setIsLoading] = useState(true)
 
+    useRenderPhraseCallbackOnDepsChange(() => setIsLoading(true), [scene])
     useEffect(() => {
-        setIsLoading(true)
         let disposed = false
         let speApp: Application
         if (canvasRef.current) {

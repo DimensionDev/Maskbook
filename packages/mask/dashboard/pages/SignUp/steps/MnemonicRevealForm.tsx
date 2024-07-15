@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui/material'
 import { Refresh as RefreshIcon, Print as PrintIcon } from '@mui/icons-material'
@@ -74,14 +74,6 @@ export const Component = memo(function MnemonicRevealForm() {
         })
     }
 
-    useEffect(() => {
-        // handle refresh words
-        if (!id) return
-
-        setId(null)
-        Services.Identity.deletePersona(id, 'delete even with private')
-    }, [words])
-
     useAsync(async () => {
         // handle refresh page after create
         const personas = await Services.Identity.queryOwnedPersonaInformation(true)
@@ -114,7 +106,13 @@ export const Component = memo(function MnemonicRevealForm() {
                             <Button
                                 variant="text"
                                 startIcon={<RefreshIcon color="primary" style={{ fill: '#1C68F3' }} />}
-                                onClick={refreshCallback}>
+                                onClick={() => {
+                                    refreshCallback()
+                                    if (id) {
+                                        setId(null)
+                                        Services.Identity.deletePersona(id, 'delete even with private')
+                                    }
+                                }}>
                                 {t.refresh()}
                             </Button>
                         </Stack>

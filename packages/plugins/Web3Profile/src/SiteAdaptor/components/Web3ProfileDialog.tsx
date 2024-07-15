@@ -1,5 +1,5 @@
 import { isEqual, isEqualWith, range, sortBy, uniq, uniqBy } from 'lodash-es'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { DialogActions, DialogContent } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -11,6 +11,7 @@ import { openPopupWindow, queryPersonaAvatar, signWithPersona } from '@masknet/p
 import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -86,7 +87,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     )
 
     const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)
     }, [unlistedAddressConfig])
     const isClean = useMemo(() => {

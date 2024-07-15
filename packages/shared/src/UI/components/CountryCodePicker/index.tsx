@@ -1,11 +1,11 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
-import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react'
+import { memo, useDeferredValue, useMemo, useState } from 'react'
 
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
 import { EmptyStatus, useSharedTrans } from '../../../index.js'
-import { COUNTRIES } from '@masknet/shared-base-ui'
+import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,7 +84,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
         return filtered.map((x) => x.item)
     }, [deferredQuery])
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         setQuery(undefined)
     }, [open])
 

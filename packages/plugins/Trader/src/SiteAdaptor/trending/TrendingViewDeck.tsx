@@ -191,7 +191,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const { isCollectionProjectPopper, isTokenTagPopper, isPreciseSearch, isProfilePage } =
         useContext(TrendingViewContext)
     const { anchorEl, anchorBounding } = useAnchor()
-    const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>()
+    const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
     const t = useTraderTrans()
     const theme = useTheme()
@@ -280,20 +280,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     })
 
     useEffect(() => {
-        if (timer) clearTimeout(timer)
+        if (timer.current) clearTimeout(timer.current)
 
         if (isCollectionProjectPopper || isTokenTagPopper) {
-            const timer = setTimeout(() => {
+            timer.current = setTimeout(() => {
                 Telemetry.captureEvent(
                     EventType.Access,
                     isNFT ? EventID.EntryTimelineHoverNftDuration : EventID.EntryTimelineHoverTokenDuration,
                 )
             }, 1000)
-            setTimer(timer)
         }
         return () => {
-            if (timer) clearTimeout(timer)
-            setTimer(undefined)
+            if (timer) clearTimeout(timer.current)
+            timer.current = undefined
         }
     }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, isNFT])
 

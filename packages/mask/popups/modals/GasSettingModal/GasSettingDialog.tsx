@@ -30,10 +30,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -210,7 +211,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         )
     }, [gasPrice, gasLimit, maxFeePerGas, maxPriorityFeePerGas, isSupport1559, onClose, config])
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         if (!open || !gasOptions || config.gasPrice || (config.maxFeePerGas && config.maxPriorityFeePerGas)) return
         // Set default value
         if (!isSupport1559) {

@@ -14,11 +14,10 @@ function I18NextProviderDev({ i18n, defaultNS, children }: React.PropsWithChildr
         return () => globalThis.removeEventListener('MASK_I18N_HMR', f)
     }, [])
     // Force trigger a re-render to apply HMR
-    if (ns === 'HMR') defaultNS = Math.random() + ''
-
-    useEffect(() => {
-        if (ns === 'HMR') setNS('')
-    }, [ns])
+    if (ns === 'HMR') {
+        defaultNS = Math.random() + ''
+        setNS('')
+    }
     return (
         <I18nextProvider i18n={i18n} defaultNS={defaultNS}>
             {children}
