@@ -1,6 +1,0 @@
-{
-    "__plugin_name": "Safety Warning",
-    "__plugin_description": "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets.",
-    "warning_description_one": "This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.",
-    "warning_description_other": "These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams."
-}
