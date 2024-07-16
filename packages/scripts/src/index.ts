@@ -8,7 +8,6 @@ export {
     typescript,
     typescriptWatch,
 } from './codegen/index.js'
-export { ciBuild, buildChrome, extensionWatch } from './extension/index.js'
 export { buildCloudflare } from './cloudflare/index.js'
 
 // Tools
