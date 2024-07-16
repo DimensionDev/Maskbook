@@ -1,6 +1,0 @@
-{
-    "__plugin_name": "安全警告",
-    "__plugin_description": "检测用户发布的加密网站是否有风险或恶意。帮助您保护数字资产。",
-    "warning_description_one": "此域存在Mask Network警告列表中，可能包括恶意条目、钓鱼或诈骗。",
-    "warning_description_other": "这些域存在Mask Network警告列表中，可能包括恶意条目、钓鱼或诈骗。"
-}

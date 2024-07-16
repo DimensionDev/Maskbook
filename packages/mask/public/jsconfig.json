@@ -1,7 +1,0 @@
-{
-    "compilerOptions": {
-        "lib": ["ES2022", "DOM"],
-        "target": "ES2022"
-    },
-    "include": ["./"]
-}

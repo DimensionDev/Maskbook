@@ -3,7 +3,6 @@ import type { IsomorphicEncoder } from 'async-call-rpc'
 import type { Encoder } from '@dimensiondev/holoflows-kit'
 import { Err, None, Ok, Some } from 'ts-results-es'
 import * as BN from 'bignumber.js'
-import { MaskEthereumProviderRpcError } from '@masknet/sdk'
 
 import { blob, builtin, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '@masknet/base'
@@ -26,22 +25,6 @@ function setup() {
     addClass('Some', Some)
 
     addClass('BigNumber', BigNumber)
-
-    registerEncodableClass(
-        'MaskEthereumProviderRpcError',
-        (x) => x instanceof MaskEthereumProviderRpcError,
-        (e: MaskEthereumProviderRpcError) => ({
-            cause: e.cause,
-            message: e.message,
-            code: e.code,
-            data: e.data,
-        }),
-        (o) => {
-            const e = new MaskEthereumProviderRpcError(o.code, o.message, { cause: o.cause, data: o.data })
-            e.stack = ''
-            return e
-        },
-    )
 
     typeson.register({
         Identifier: [
