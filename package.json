@@ -125,7 +125,6 @@
       }
     },
     "patchedDependencies": {
-      "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
       "micromark@3.1.0": "patches/micromark@3.1.0.patch",
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
