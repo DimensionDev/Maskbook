@@ -4,7 +4,6 @@ import {
     formatEthereumAddress,
     type ChainId,
     type SchemaType,
-    isNativeTokenAddress,
     formatTokenId,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
@@ -16,7 +15,7 @@ import {
     ApplicationBoardModal,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
@@ -160,7 +159,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList, senderName, gasOption } = props
-    const wallet = useWallet()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!
@@ -235,17 +233,15 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         align="right"
                         className={cx(classes.account, classes.bold, classes.text)}>
                         {formatEthereumAddress(account, 4)}
-                        {isNativeTokenAddress(wallet?.address) ? null : (
-                            <Link
-                                color="textPrimary"
-                                className={classes.link}
-                                href={EVMExplorerResolver.addressLink(chainId, account)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={stop}>
-                                <LaunchIcon fontSize="small" />
-                            </Link>
-                        )}
+                        <Link
+                            color="textPrimary"
+                            className={classes.link}
+                            href={EVMExplorerResolver.addressLink(chainId, account)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={stop}>
+                            <LaunchIcon fontSize="small" />
+                        </Link>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>

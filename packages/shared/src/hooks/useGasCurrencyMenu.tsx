@@ -1,14 +1,12 @@
-import { compact, noop, pick } from 'lodash-es'
-import { useCallback, useState } from 'react'
-import { Button, MenuItem, Typography, alpha } from '@mui/material'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, RadioIndicator } from '@masknet/theme'
-import { formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken } from '@masknet/web3-hooks-base'
-import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
-import { useSmartPayConstants } from '@masknet/web3-shared-evm'
+import { useNativeToken } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { alpha, MenuItem, Typography } from '@mui/material'
+import { compact, pick } from 'lodash-es'
+import { useCallback, useState } from 'react'
+import { TokenIcon } from '../index.js'
 import { useMenuConfig } from './useMenu.js'
-import { TokenIcon, useSharedTrans } from '../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -45,17 +43,9 @@ export function useGasCurrencyMenu(
     selectedAddress?: string,
     handleUnlock?: () => void,
 ) {
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
-    const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')
     const { data: nativeToken } = useNativeToken(pluginId)
-    const maskAddress = useMaskTokenAddress(pluginId)
-    const { data: maskToken } = useFungibleToken(pluginId, maskAddress)
-
-    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
-    const { data: allowance = '0' } = useERC20TokenAllowance(maskAddress, PAYMASTER_MASK_CONTRACT_ADDRESS)
-    const availableBalanceTooLow = isLessThan(formatBalance(allowance, maskToken?.decimals), 0.1)
 
     const handleChange = useCallback(
         (address: string) => {
@@ -80,27 +70,6 @@ export function useGasCurrencyMenu(
                         checked={isSameAddress(selected, nativeToken.address)}
                         className={classes.radio}
                     />
-                </MenuItem>
-            :   null,
-            maskToken ?
-                <MenuItem
-                    className={classes.item}
-                    disableRipple
-                    onClick={!availableBalanceTooLow ? () => handleChange(maskToken.address) : noop}>
-                    <Typography className={classes.token} component="div">
-                        <TokenIcon {...pick(maskToken, 'chainId', 'address', 'symbol')} size={30} />
-                        {maskToken.symbol}
-                    </Typography>
-                    {availableBalanceTooLow ?
-                        <Button variant="roundedContained" onClick={handleUnlock} size="small">
-                            {sharedI18N.unlock()}
-                        </Button>
-                    :   <RadioIndicator
-                            size={20}
-                            className={classes.radio}
-                            checked={isSameAddress(selected, maskAddress)}
-                        />
-                    }
                 </MenuItem>
             :   null,
         ]),

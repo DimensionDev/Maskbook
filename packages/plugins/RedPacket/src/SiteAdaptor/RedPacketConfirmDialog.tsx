@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { type GasConfig, type ChainId } from '@masknet/web3-shared-evm'
 import { type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { Grid, Link, Paper, Typography } from '@mui/material'
@@ -9,7 +8,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { PluginWalletStatusBar, ChainBoundary, SelectGasSettingsToolbar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings } from './hooks/useCreateCallback.js'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -88,8 +87,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     } = useCreateFTRedpacketCallback(publicKey, privateKey, settings, gasOption, onCreated, onClose)
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const wallet = useWallet()
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     return (
         <>
@@ -183,7 +180,6 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     <SelectGasSettingsToolbar
                         nativeToken={nativeTokenDetailed}
                         nativeTokenPrice={nativeTokenPrice}
-                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                         gasConfig={gasOption}
                         gasLimit={Number.parseInt(gas ?? '0', 10)}
                         onChange={onGasOptionChange}

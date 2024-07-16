@@ -5,8 +5,6 @@
     // Only list top-level projects here
     { "path": "./packages/polyfills/tsconfig.json" },
     { "path": "./packages/injected-script/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/public-api/tsconfig.json" },
     // Tests
     // @masknet/scripts: insert-here 1
     { "path": "./packages/base/tsconfig.tests.json" },

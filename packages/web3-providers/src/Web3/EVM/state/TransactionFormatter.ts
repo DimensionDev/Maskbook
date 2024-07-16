@@ -21,14 +21,12 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
 import { BaseDescriptor } from './TransactionFormatter/descriptors/Base.js'
 import { GitcoinDescriptor } from './TransactionFormatter/descriptors/Gitcoin.js'
-import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox.js'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
 import { SavingsDescriptor } from './TransactionFormatter/descriptors/Savings.js'
 import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.js'
 import { LensDescriptor } from './TransactionFormatter/descriptors/Lens.js'
-import { AirdropDescriptor } from './TransactionFormatter/descriptors/Airdrop.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
@@ -36,11 +34,9 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
-            new AirdropDescriptor(),
             new LensDescriptor(),
             new SavingsDescriptor(),
             new GitcoinDescriptor(),
-            new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
             new SmartPayDescriptor(),
             new ERC20Descriptor(),

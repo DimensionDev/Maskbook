@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -8,9 +7,8 @@ import {
     useMaskTokenAddress,
     useNativeTokenBalance,
 } from '@masknet/web3-hooks-base'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
-import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
+import { isGreaterThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     type GasConfig,
@@ -37,22 +35,11 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         chainId,
     })
 
-    // #region paymaster ratio
-    const { value: currencyRatio, loading } = useAsync(async () => {
-        const chainId = await SmartPayBundler.getSupportedChainId()
-        const depositPaymaster = new DepositPaymaster(chainId)
-        const ratio = await depositPaymaster.getRatio()
-
-        return ratio
-    }, [])
-    // #endregion
-
     const gasFee = useMemo(() => {
         if (!gasOption?.gas || pluginID !== NetworkPluginID.PLUGIN_EVM) return ZERO
         const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasOption.gas)
         if (!gasOption.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency)) return result
-        if (!currencyRatio) return ZERO
-        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
+        return ZERO
     }, [gasOption, chainId, pluginID])
 
     const isGasFeeGreaterThanOneETH = useMemo(() => {
@@ -89,6 +76,6 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         isGasFeeGreaterThanOneETH,
         gasFee,
         balance,
-        isPending: isLoadingMaskBalance || isLoadingTokenBalance || loading,
+        isPending: isLoadingMaskBalance || isLoadingTokenBalance,
     }
 }

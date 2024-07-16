@@ -25,8 +25,6 @@ export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 export { FriendTech } from './FriendTech/index.js'
 
-export { MaskWalletProviderInstance as MaskWalletProvider } from './Web3/EVM/providers/index.js'
-
 // Web3
 export { getConnection } from './Web3/Router/apis/getConnection.js'
 export { getHub } from './Web3/Router/apis/getHub.js'
@@ -48,12 +46,6 @@ export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'
 export { EVMRequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export { EVMHub } from './Web3/EVM/apis/HubAPI.js'
 export { EVMUtils } from './Web3/EVM/apis/Utils.js'
-
-// Smart Pay
-export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
-export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
-export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
-export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 // NextID
 export { NextIDProof, NextIDStorageProvider } from './NextID/index.js'
@@ -90,17 +82,8 @@ export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
 // Zerion
 export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
 
-// Smart Pay
-export { SmartPayBundler } from './SmartPay/index.js'
-export { SmartPayFunder } from './SmartPay/index.js'
-export { SmartPayOwner } from './SmartPay/apis/OwnerAPI.js'
-export { SmartPayAccount } from './SmartPay/apis/AbstractAccountAPI.js'
-
 // RSS3
 export { RSS3 } from './RSS3/index.js'
-
-// Airdrop
-export { Airdrop } from './Airdrop/index.js'
 
 // Firefly
 

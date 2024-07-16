@@ -1,39 +1,39 @@
-import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { BigNumber } from 'bignumber.js'
-import { omit } from 'lodash-es'
-import { makeStyles, ActionButton, MaskTextField, RadioIndicator } from '@masknet/theme'
-import { Box, InputBase, Typography, useTheme } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import {
+    ChainBoundary,
+    EthereumERC20TokenApprovedBoundary,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    SelectFungibleTokenModal,
+    SelectGasSettingsToolbar,
+    TokenValue,
+    useAvailableBalance,
+    useCurrentLinkedPersona,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
+import { NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles, MaskTextField, RadioIndicator } from '@masknet/theme'
+import { useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
+import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
+import {
+    formatBalance,
     type FungibleToken,
     isGreaterThan,
     isZero,
     multipliedBy,
     rightShift,
-    formatBalance,
     ZERO,
 } from '@masknet/web3-shared-base'
 import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { useTransactionValue } from '@masknet/web3-hooks-evm'
-import { NetworkPluginID, PluginID } from '@masknet/shared-base'
-import {
-    FungibleTokenInput,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    EthereumERC20TokenApprovedBoundary,
-    SelectGasSettingsToolbar,
-    useAvailableBalance,
-    TokenValue,
-    WalletConnectedBoundary,
-    SelectFungibleTokenModal,
-    useCurrentLinkedPersona,
-} from '@masknet/shared'
-import { Icons } from '@masknet/icons'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
+import { Box, InputBase, Typography, useTheme } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { omit } from 'lodash-es'
+import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
+import { useRedPacketTrans } from '../locales/index.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
 
@@ -107,11 +107,9 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { classes } = useStyles()
     const theme = useTheme()
     // context
-    const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     // #region select token
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
@@ -372,7 +370,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     <SelectGasSettingsToolbar
                         nativeToken={nativeTokenDetailed}
                         nativeTokenPrice={nativeTokenPrice}
-                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                         gasConfig={gasOption}
                         gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
                         onChange={onGasOptionChange}

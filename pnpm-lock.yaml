@@ -1438,8 +1438,6 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
 
-  packages/xcode: {}
-
 packages:
 
   /@aashutoshrathi/word-wrap@1.2.6:
