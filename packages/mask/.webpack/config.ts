@@ -354,7 +354,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
         popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
-        swap: withReactDevTools(join(import.meta.dirname, '../swap/initialization/index.ts')),
         contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv2-entry.ts')),
         backgroundWorker: normalizeEntryDescription(
@@ -367,7 +366,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     baseConfig.plugins.push(
         await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
         await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
-        await addHTMLEntry({ chunks: ['swap'], filename: 'swap.html', perf: flags.profiling }),
         await addHTMLEntry({
             chunks: ['contentScript'],
             filename: 'generated__content__script.html',
