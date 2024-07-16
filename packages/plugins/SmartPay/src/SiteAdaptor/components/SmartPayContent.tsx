@@ -489,15 +489,7 @@ export const SmartPayContent = memo(() => {
                     onClick={handleLuckDropClick}>
                     {t.lucky_drop()}
                 </ActionButton>
-                <ActionButton
-                    loading={openSwapLoading}
-                    variant="roundedContained"
-                    startIcon={<Icons.SwapColorful />}
-                    fullWidth
-                    size="small"
-                    onClick={handleSwapClick}>
-                    {t.swap()}
-                </ActionButton>
+
                 <ActionButton
                     loading={openSendLoading}
                     variant="roundedContained"
