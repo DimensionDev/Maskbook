@@ -259,7 +259,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                             productionLike ?
                                 require.resolve('webextension-polyfill/dist/browser-polyfill.min.js')
                             :   require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
-                        to: polyfillFolder,
+                        to: join(polyfillFolder, 'browser-polyfill.js'),
                     },
                     {
                         from:
