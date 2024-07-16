@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: "calc(50% - 16px)",
+            width: 'calc(50% - 16px)',
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
@@ -43,9 +43,6 @@ const useStyles = makeStyles()((theme) => {
             '&:active': {
                 transform: 'scale(0.97)',
             },
-        },
-        disabled: {
-            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
