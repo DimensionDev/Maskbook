@@ -1,6 +1,11 @@
 import { initialize, activate, createBridge, type Bridge } from 'react-devtools-inline/backend.js'
 import { DevtoolsMessage, GLOBAL_ID_KEY, createReactDevToolsWall } from '../shared.js'
 
+Object.assign(globalThis, {
+    __IS_CHROME__: true,
+    __IS_FIREFOX__: false,
+    __IS_EDGE__: false,
+})
 initialize(globalThis as typeof window)
 if (process.env.NODE_ENV === 'development') {
     // @ts-expect-error conditionally import

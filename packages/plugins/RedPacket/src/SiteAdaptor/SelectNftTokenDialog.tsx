@@ -1,5 +1,4 @@
-import { useCallback, useState, useEffect } from 'react'
-import { useUpdate } from 'react-use'
+import { useCallback, useState } from 'react'
 import { findLastIndex, uniq } from 'lodash-es'
 import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
@@ -13,6 +12,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -259,18 +259,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setSelectAll(!selectAll)
     }, [selectAll, tokenDetailedOwnerList])
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         setSearchTokenListInput('')
         setTokenDetailedSelectedList(existTokenDetailedList)
         setSearched(false)
     }, [contract])
-
-    useEffect(() => {
-        setTokenIdFilterList(EMPTY_LIST)
-    }, [tokenIdListInput])
-
-    const update = useUpdate()
-    useEffect(update, [tokenDetailedOwnerList])
 
     const selectToken = useCallback(
         (token: OrderedERC721Token, findToken: OrderedERC721Token | undefined, shiftKey: boolean, index: number) => {
@@ -336,10 +329,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setSearched(true)
         setLoadingToken(false)
     }, [contract, searchTokenListInput, chainId, account])
-
-    useEffect(() => {
-        setSearched(false)
-    }, [searchTokenListInput])
     // #endregion
 
     const onFilter = useCallback(() => {
@@ -364,7 +353,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             value={searchTokenListInput}
                             placeholder="Input Token ID"
                             className={classes.textField}
-                            onChange={(e) => setSearchTokenListInput(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTokenListInput(e.target.value)
+                                setSearched(false)
+                            }}
                         />
 
                         <Button disabled={!searchTokenListInput} className={classes.searchButton} onClick={onSearch}>
@@ -438,11 +430,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
                         placeholder={t.nft_search_placeholder()}
                         className={classes.textField}
-                        onChange={(e) =>
-                            tokenDetailedOwnerList.length === 0 ?
+                        onChange={(e) => {
+                            if (tokenDetailedOwnerList.length === 0) {
                                 setSearchTokenListInput(e.target.value)
-                            :   setTokenIdListInput(e.target.value)
-                        }
+                                setSearched(false)
+                            } else {
+                                setTokenIdListInput(e.target.value)
+                                setTokenIdFilterList(EMPTY_LIST)
+                            }
+                        }}
                     />
 
                     <Button

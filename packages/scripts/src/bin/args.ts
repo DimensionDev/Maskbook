@@ -23,6 +23,8 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
+        .options('csp', { type: 'boolean', description: 'Enable strict contentScript.' })
+        .options('lavamoat', { type: 'boolean', description: 'Enable LavaMoat.' })
         .option('reactCompiler', {
             type: 'string',
             coerce(arg) {
@@ -66,6 +68,8 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         hmr: opts.hmr,
         reactRefresh: opts.reactRefresh,
         reactCompiler: opts.reactCompiler,
+        lavamoat: opts.lavamoat,
+        csp: opts.csp,
         devtools: opts.devtools,
         devtoolsEditorURI: opts.devtoolsEditorURI,
         sourceMapPreference: opts.sourceMap,

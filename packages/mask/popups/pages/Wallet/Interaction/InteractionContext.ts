@@ -1,7 +1,7 @@
 import { useWallet } from '@masknet/web3-hooks-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useEffect, useState } from 'react'
-import { createContainer } from '@masknet/shared-base-ui'
+import { useState } from 'react'
+import { createContainer, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 /**
  * This context is used to allow different Wallet to be used (rather that the "selected" wallet in the main UI)
@@ -13,11 +13,10 @@ export const { Provider: InteractionWalletContext, useContainer: useInteractionW
         const [interactionWallet, setInteractionWallet] = useState<string | undefined>()
 
         function useInteractionWallet(currentInteractingWallet: string | undefined) {
-            useEffect(() => {
-                if (currentInteractingWallet === interactionWallet) return
+            useRenderPhraseCallbackOnDepsChange(() => {
                 if (!isValidAddress(currentInteractingWallet)) return
-                setInteractionWallet(currentInteractingWallet)
-            }, [currentInteractingWallet, setInteractionWallet])
+                Promise.resolve().then(() => setInteractionWallet(currentInteractingWallet))
+            }, [currentInteractingWallet])
         }
 
         return {

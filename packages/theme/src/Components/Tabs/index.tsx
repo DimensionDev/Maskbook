@@ -14,7 +14,6 @@ import {
     isValidElement,
     useState,
     useRef,
-    useEffect,
     useImperativeHandle,
     useMemo,
     useCallback,
@@ -185,17 +184,18 @@ export function MaskTabList(props: MaskTabListProps) {
     useImperativeHandle(ref, () => innerElementRef.current)
 
     // #region hide tab should up to first when chick
-    useEffect(() => {
-        if (!innerElementRef?.current) return
-
-        const current = innerElementRef.current
-        setIsTabsOverflow(current.scrollWidth >= current.clientWidth + defaultTabSize)
-    }, [innerElementRef?.current, width])
     const innerRef = useCallback((element: HTMLDivElement | null) => {
         if (!element) return
         setIsTabsOverflow(element.scrollWidth >= element.clientWidth + defaultTabSize)
         innerElementRef.current = element
     }, [])
+    {
+        const [oldWidth, setOldWidth] = useState(width)
+        if (oldWidth !== width) {
+            setOldWidth(width)
+            innerRef(innerElementRef.current || null)
+        }
+    }
     // #endregion
 
     const children = Children.map(props.children, (child) => {

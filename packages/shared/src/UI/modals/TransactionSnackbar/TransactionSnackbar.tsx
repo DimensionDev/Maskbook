@@ -16,6 +16,7 @@ import { TransactionStatusType, type RecognizableError } from '@masknet/web3-sha
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedTrans } from '../../../index.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()({
     link: {
@@ -25,11 +26,7 @@ const useStyles = makeStyles()({
     },
 })
 
-interface TransactionSnackbarProps<T extends NetworkPluginID> {
-    pluginID: T
-}
-
-export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: TransactionSnackbarProps<T>) {
+export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const { classes } = useStyles()
     const t = useSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
@@ -45,10 +42,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         | undefined
     >()
     const [progress, setProgress] = useState<{
-        chainId: Web3Helper.Definition[T]['ChainId']
+        chainId: Web3Helper.Definition[NetworkPluginID]['ChainId']
         status: TransactionStatusType
         txHash: string
-        transaction: Web3Helper.Definition[T]['Transaction']
+        transaction: Web3Helper.Definition[NetworkPluginID]['Transaction']
     }>()
     const Utils = useWeb3Utils(pluginID)
     const { TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
@@ -78,7 +75,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         }
     }, [TransactionWatcher, pluginID])
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         setProgress(undefined)
         setErrorInfo(undefined)
     }, [chainId])
@@ -162,7 +159,9 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useAsync(async () => {
         if (!errorInfo) return
-        const transaction = errorInfo.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
+        const transaction = errorInfo.request?.params?.[0] as
+            | Web3Helper.Definition[NetworkPluginID]['Transaction']
+            | undefined
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = computed?.snackbar?.failedTitle ?? computed?.title
         const message = errorInfo.error.isRecognized ? errorInfo.error.message : computed?.snackbar?.failedDescription
@@ -185,6 +184,4 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         })
         setErrorInfo(undefined)
     }, [JSON.stringify(errorInfo), chainId])
-
-    return null
 }

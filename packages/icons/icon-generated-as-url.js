@@ -37,7 +37,6 @@ export function git_hub_url() { return new URL("./brands/GitHub.svg", import.met
 export function git_hub_gray_url() { return new URL("./brands/GitHubGray.svg", import.meta.url).href }
 export function gnosis_url() { return new URL("./brands/Gnosis.svg", import.meta.url).href }
 export function instagram_url() { return new URL("./brands/Instagram.svg", import.meta.url).href }
-export function instagram_colored_url() { return new URL("./brands/InstagramColored.svg", import.meta.url).href }
 export function instagram_round_colored_url() { return new URL("./brands/InstagramRoundColored.svg", import.meta.url).href }
 export function instagram_round_gray_url() { return new URL("./brands/InstagramRoundGray.svg", import.meta.url).href }
 export function ipfs_url() { return new URL("./brands/IPFS.svg", import.meta.url).href }
@@ -64,7 +63,6 @@ export function mask_wallet_url() { return new URL("./brands/MaskWallet.png", im
 export function medium_url() { return new URL("./brands/Medium.svg", import.meta.url).href }
 export function medium_gray_url() { return new URL("./brands/MediumGray.svg", import.meta.url).href }
 export function meta_mask_url() { return new URL("./brands/MetaMask.svg", import.meta.url).href }
-export function minds_url() { return new URL("./brands/Minds.svg", import.meta.url).href }
 export function minds_round_url() { return new URL("./brands/MindsRound.svg", import.meta.url).href }
 export function mini_mask_dark_url() { return new URL("./brands/MiniMask.dark.svg", import.meta.url).href }
 export function mini_mask_light_url() { return new URL("./brands/MiniMask.light.svg", import.meta.url).href }

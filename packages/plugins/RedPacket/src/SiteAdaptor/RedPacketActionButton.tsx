@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState, useContext } from 'react'
+import { memo, useCallback, useState, useContext } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -131,9 +131,8 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) await refundCallback()
     }, [redpacketStatus, shareCallback, refundCallback])
 
-    useEffect(() => {
-        if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
-    }, [refunded])
+    if (refunded && updatedStatus !== FireflyRedPacketAPI.RedPacketStatus.Refund)
+        setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
 
     return (
         <ActionButton

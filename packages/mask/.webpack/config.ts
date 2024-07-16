@@ -13,6 +13,8 @@ import WebExtensionPlugin from 'webpack-target-webextension'
 import ReactCompiler from 'react-compiler-webpack'
 import { getGitInfo } from './git-info.js'
 import { emitManifestFile } from './plugins/manifest.js'
+// @ts-expect-error
+import LavaMoat from '@lavamoat/webpack'
 
 import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
@@ -191,6 +193,17 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             ],
         },
         plugins: [
+            !productionLike && flags.lavamoat ?
+                new LavaMoat({
+                    policyLocation: join(import.meta.dirname, '../../../lavamoat/mask.json'),
+                    generatePolicy: true,
+                    emitPolicySnapshot: true,
+                    readableResourceIds: true,
+                    lockdown: false, // we lockdown on our own
+                    runChecks: true,
+                    diagnosticsVerbosity: 1,
+                })
+            :   undefined,
             new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
             flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
@@ -241,7 +254,13 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         from: '*.js',
                         to: polyfillFolder,
                     },
-                    { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
+                    {
+                        from:
+                            productionLike ?
+                                require.resolve('webextension-polyfill/dist/browser-polyfill.min.js')
+                            :   require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
+                        to: polyfillFolder,
+                    },
                     {
                         from:
                             productionLike ?
@@ -283,8 +302,8 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             minimize: productionLike,
             minimizer: [
                 new TerserPlugin({
-                    // minify: TerserPlugin.swcMinify,
-                    exclude: ['polyfill'],
+                    minify: TerserPlugin.swcMinify,
+                    exclude: /polyfill/,
                     // https://swc.rs/docs/config-js-minify
                     terserOptions: {
                         compress: {

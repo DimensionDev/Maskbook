@@ -6,6 +6,7 @@ import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
+// @ts-expect-error
 import ImportPlugin from 'eslint-plugin-i'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
@@ -214,6 +215,7 @@ const avoidMistakeRules = {
     'react/no-unstable-default-props': 'warn',
     // 'react/hooks-extra/ensure-use-callback-has-non-empty-deps': 'warn',
     // 'react/hooks-extra/ensure-use-memo-has-non-empty-deps': 'warn',
+    'react/hooks-extra/no-direct-set-state-in-use-effect': 'error',
     'react/hooks-extra/prefer-use-state-lazy-initialization': 'warn',
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
@@ -534,6 +536,7 @@ const plugins = {
     '@typescript-eslint': tseslint.plugin,
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
+    // @ts-expect-error
     'react-hooks': fixupPluginRules(ReactHooksPlugin),
     '@tanstack/query': ReactQueryPlugin,
 }
@@ -570,6 +573,7 @@ export default tseslint.config(
                 ecmaVersion: 'latest',
                 EXPERIMENTAL_useProjectService: true,
                 // projectService: true,
+                // @ts-expect-error
                 tsconfigRootDir: import.meta.dirname,
                 warnOnUnsupportedTypeScriptVersion: false,
                 allowAutomaticSingleRunInference: true,

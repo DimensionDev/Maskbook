@@ -74,7 +74,6 @@
     "nft_add_button_label": "Add",
     "plugin_avatar_input_token_address": "Input Contract Address",
     "plugin_avatar_input_token_id": "Token ID",
-    "wallets_add_collectible": "Add Collectible",
     "add_collectible": "Add collectible",
     "nft_add_dialog_title": "Add Collectible",
     "no_collection$empty": "No {{collection}} found.",

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 export function useRowSize() {
     const [rowSize, setRowSize] = useState(54)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         try {
             const fontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
             setRowSize(fontSize * 4)

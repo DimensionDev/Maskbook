@@ -1,5 +1,5 @@
 import { startCase } from 'lodash-es'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { List, ListItem, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
@@ -168,9 +168,7 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     const entry = useIntersectionObserver(ref.current, {})
     const [isViewed, setIsViewed] = useState(false)
 
-    useEffect(() => {
-        if (entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)
-    }, [entry?.isIntersecting])
+    if (!isViewed && entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)
 
     return (
         <ListItem

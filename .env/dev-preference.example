@@ -1,6 +1,14 @@
 # Copy and rename this file to dev-preference
 # This dot file will NOT be used in CI or production build.
 
+### Experimental CSP
+
+; csp=false
+# (default) Not enabling strict CSP.
+
+; csp=true
+# Enable strict CSP.
+
 ### SourceMap
 
 ; sourceMap=true
@@ -71,7 +79,7 @@
 # devtoolsEditorURI=...
 # Any URI that can open the editor you used.
 
-### React compiler
+### Experimental React compiler
 
 ; reactCompiler=false
 # (default) Not enabling react compiler.
@@ -83,3 +91,11 @@
 ; reactCompiler=annotation
 ; reactCompiler=all
 # Enable react compiler with specific mode.
+
+### Experimental LavaMoat
+
+; lavamoat=false
+# (default) Not enabling LavaMoat.
+
+; lavamoat=true
+# Enable LavaMoat.
