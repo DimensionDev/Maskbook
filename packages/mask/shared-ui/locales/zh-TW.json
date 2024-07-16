@@ -107,7 +107,6 @@
     "wallet_transfer_error_amount_absence": "輸入一個金額",
     "wallet_transfer_error_address_absence": "輸入接收人地址",
     "wallet_transfer_error_invalid_address": "錯誤的接收人地址",
-    "wallet_transfer_error_no_address_has_been_set_name": "接收者地址無效",
     "wallet_transfer_error_no_support_ens": "ENS網路不被支持",
     "wallet_transfer_error_gas_price_absence": "輸入礦工費",
     "wallet_transfer_error_gas_limit_absence": "輸入礦工費上限",

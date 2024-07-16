@@ -55,6 +55,7 @@ function parseText(
         if (frag.category === 'normal' && !frag.content.match(/^https?:\/\//gi)) frag.content = 'http://' + frag.content
         return (
             <RenderLinkFragment
+                key={string}
                 style={style}
                 category={frag.category}
                 href={frag.content}

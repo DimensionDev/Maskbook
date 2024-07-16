@@ -16,7 +16,7 @@ import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useLayoutEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
@@ -27,6 +27,7 @@ import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
 import { useSharedTrans } from '../../../locales/index.js'
 import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -76,7 +77,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { personas = EMPTY_LIST, isPending, error, refetch } = useConnectedPersonas()
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         if (!currentPersonaIdentifier) {
             setSelectedPersona(personas[0])
             return

@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useAsync, useBoolean, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Typography, alpha } from '@mui/material'
@@ -8,7 +8,7 @@ import { useCurrentPersonaInformation, useLastRecognizedIdentity } from '@maskne
 import { queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
 import { CopyButton, ImageIcon, PersonaAction, WalletDescription } from '@masknet/shared'
 import { NetworkPluginID, formatPersonaFingerprint } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor, useProviderDescriptor, useWallets } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, SmartPayOwner, EVMWeb3 } from '@masknet/web3-providers'
@@ -176,7 +176,7 @@ export function Deploy({ open }: { open: boolean }) {
         setAnchorEl(null)
     }, [])
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         if (manager) return
         if (personaManagers?.length) {
             const firstPersona = first(personaManagers)
@@ -187,8 +187,6 @@ export function Deploy({ open }: { open: boolean }) {
                 address: firstPersona?.address,
                 identifier: firstPersona?.identifier,
             })
-
-            return
         } else if (walletManagers) {
             const firstWallet = first(walletManagers)
             setManager({
@@ -196,7 +194,6 @@ export function Deploy({ open }: { open: boolean }) {
                 name: firstWallet?.name,
                 address: firstWallet?.address,
             })
-            return
         }
     }, [personaManagers, walletManagers, manager])
 

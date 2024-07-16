@@ -275,10 +275,10 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
     const isBalanceInsufficient = costAmount.gt(paymentTokenBalance)
 
-    useEffect(() => {
+    {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
         if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
-    }, [paymentTokenAddress, boxInfo?.payments.map((x) => x.token.address).join(',')])
+    }
     // #endregion
 
     // #region transactions

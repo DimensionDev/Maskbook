@@ -1,5 +1,5 @@
 import { compact, uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useImperativeHandle, useState, type RefAttributes } from 'react'
+import { useCallback, useImperativeHandle, useState, type RefAttributes } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
@@ -35,6 +35,7 @@ import { useAvatarTrans } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -98,7 +99,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
 
-    useEffect(() => setSelectedToken(undefined), [chainId])
+    useRenderPhraseCallbackOnDepsChange(() => setSelectedToken(undefined), [chainId])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginID: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
@@ -182,10 +183,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
         }),
         [handleAddCollectibles],
     )
-
-    useEffect(() => {
-        setSelectedPluginId(pluginID)
-    }, [pluginID])
+    useRenderPhraseCallbackOnDepsChange(() => setSelectedPluginId(pluginID), [pluginID])
 
     useUpdateEffect(() => {
         if (account) setTargetAccount(account)

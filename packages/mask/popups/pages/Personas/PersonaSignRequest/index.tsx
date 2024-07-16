@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box } from '@mui/material'
@@ -10,6 +10,7 @@ import Services from '#services'
 import { useMaskSharedTrans, usePersonasFromDB } from '../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 export const Component = memo(function PersonaSignRequest() {
     const t = useMaskSharedTrans()
@@ -23,7 +24,7 @@ export const Component = memo(function PersonaSignRequest() {
 
     const source = params.get('source') || undefined
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         if (!personas.length) return
         const messageInURL = params.get('message')
         const requestIDInURL = params.get('requestID')
@@ -31,7 +32,7 @@ export const Component = memo(function PersonaSignRequest() {
         const selectedPersona = personas.find((x) => x.identifier.toText() === identifierInURL) ?? personas[0]
 
         if (!messageInURL || !requestIDInURL || !selectedPersona) {
-            navigate(PopupRoutes.Wallet, { replace: true })
+            Promise.resolve().then(() => navigate(PopupRoutes.Wallet, { replace: true }))
         } else {
             setSelected(selectedPersona)
             setMessage(messageInURL)

@@ -1,14 +1,4 @@
-import {
-    type Dispatch,
-    memo,
-    type SetStateAction,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-    type PropsWithChildren,
-} from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useNonFungibleTokenContract, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
@@ -25,6 +15,7 @@ import { useTokenTip } from './useTokenTip.js'
 import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 interface Props extends PropsWithChildren {
     task: TipTask
@@ -41,20 +32,9 @@ function useRecipients(pluginID: NetworkPluginID, tipsAccounts: Array<SocialAcco
     return recipients
 }
 
-function useDirtyDetection(deps: any[]): [boolean, Dispatch<SetStateAction<boolean>>] {
-    const [isDirty, setIsDirty] = useState(false)
-    const { account } = useChainContext()
-
-    useEffect(() => {
-        setIsDirty(true)
-    }, [account, ...deps])
-
-    return [isDirty, setIsDirty]
-}
-
 export const TipTaskProvider = memo(({ children, task }: Props) => {
     const { targetPluginID, setTargetPluginID } = TargetRuntimeContext.useContainer()
-    const { chainId: targetChainId } = useChainContext()
+    const { chainId: targetChainId, account } = useChainContext()
 
     const [gasOption, setGasOption] = useState<GasConfig>()
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
@@ -120,7 +100,10 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
     )
 
     const sendTipTuple = tipType === TokenType.Fungible ? tokenTipTuple : nftTipTuple
-    const [isDirty, setIsDirty] = useDirtyDetection([tipType, recipientAddress, targetChainId, amount, token])
+    const [isDirty, setIsDirty] = useState(false)
+    useRenderPhraseCallbackOnDepsChange(() => {
+        setIsDirty(true)
+    }, [account, tipType, recipientAddress, targetChainId, amount, token])
     const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
     const recipient = recipients.find((x) => isSameAddress(x.address, recipientAddress))

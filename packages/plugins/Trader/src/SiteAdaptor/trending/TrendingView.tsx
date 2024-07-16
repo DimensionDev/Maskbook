@@ -4,21 +4,13 @@ import { TabContext } from '@mui/lab'
 import { Box, useTheme } from '@mui/system'
 import { Stack, Tab, ThemeProvider } from '@mui/material'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { SourceType, TokenType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
-import {
-    EMPTY_LIST,
-    PluginID,
-    NetworkPluginID,
-    getSiteType,
-    type SocialIdentity,
-    pluginIDsSettings,
-    Days,
-} from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, Days } from '@masknet/shared-base'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -141,19 +133,11 @@ export function TrendingView(props: TrendingViewProps) {
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
-        chainId: result.chainId ?? chainId,
-    })
-
-    const site = getSiteType()
-    const pluginIDs = useValueRef(pluginIDsSettings)
-    const context = { pluginID: site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM }
-
     // #region merge trending
     const { value: { trending } = {}, loading: loadingTrending, error } = useTrendingById(result, result.address)
     // #endregion
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         if (currentResult) setResult(currentResult)
     }, [currentResult])
 

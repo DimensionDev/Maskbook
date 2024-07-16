@@ -296,7 +296,6 @@ export class __Event extends $unsafe.NewObject implements Event {
             slotInClosedTree,
         })
     }
-    // eslint-disable-next-line react/naming-convention/component-name
     static EventTarget_GetParent(target: EventTarget, event: __Event) {
         // Document:
         // A document's get the parent algorithm, given an event, returns null if event's type attribute value is "load" or document does not have a browsing context; otherwise the document's relevant global object.

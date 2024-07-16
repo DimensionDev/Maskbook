@@ -229,11 +229,6 @@ export const Instagram = /*#__PURE__*/ __createIcon('Instagram', [
         u: () => new URL('./brands/Instagram.svg', import.meta.url).href,
     },
 ])
-export const InstagramColored = /*#__PURE__*/ __createIcon('InstagramColored', [
-    {
-        u: () => new URL('./brands/InstagramColored.svg', import.meta.url).href,
-    },
-])
 export const InstagramRoundColored = /*#__PURE__*/ __createIcon('InstagramRoundColored', [
     {
         u: () => new URL('./brands/InstagramRoundColored.svg', import.meta.url).href,
@@ -361,11 +356,6 @@ export const MediumGray = /*#__PURE__*/ __createIcon('MediumGray', [
 export const MetaMask = /*#__PURE__*/ __createIcon('MetaMask', [
     {
         u: () => new URL('./brands/MetaMask.svg', import.meta.url).href,
-    },
-])
-export const Minds = /*#__PURE__*/ __createIcon('Minds', [
-    {
-        u: () => new URL('./brands/Minds.svg', import.meta.url).href,
     },
 ])
 export const MindsRound = /*#__PURE__*/ __createIcon('MindsRound', [

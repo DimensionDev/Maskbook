@@ -41,6 +41,7 @@
         "https://chainbase-proxy.r2d2.to",
         "https://ens-reverse-lookup.r2d2.to",
         "https://debank-proxy.r2d2.to",
+        "https://simplehash-proxy.r2d2.to",
         // !!! if they don't have a whitelist, our CSP will be bypassed
         "https://cors-next.r2d2.to/",
 
@@ -48,7 +49,7 @@
 
         // dev url for backup.mask.io
         "@dev-only:https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api/v1/risk_warning/confirm",
-        "https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com/health",
+        "https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com/healthz",
         "https://9rh2q3tdqj.execute-api.ap-east-1.amazonaws.com/handle",
         "https://uldpla73li.execute-api.ap-east-1.amazonaws.com/Prod/whitelist",
         "https://uldpla73li.execute-api.ap-east-1.amazonaws.com/Prod/operation",
@@ -78,6 +79,7 @@
 
         "https://api-v2.lens.dev/",
         "https://api.thegraph.com",
+        "https://mainnet.infura.io",
         "https://polygon-mainnet.infura.io",
         "https://solana-mainnet.phantom.app",
         "https://api.testnet.solana.com",

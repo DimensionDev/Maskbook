@@ -4,7 +4,7 @@ import { ClickAwayListener, Fade } from '@mui/material'
 import type { SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { AnchorProvider } from '@masknet/shared-base-ui'
+import { AnchorProvider, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages.js'
 
 interface TrendingPopperProps {
@@ -60,7 +60,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
 
     // close popper if location was changed
     const location = useLocation()
-    useEffect(() => setActive(false), [location.state?.key, location.href])
+    useRenderPhraseCallbackOnDepsChange(() => setActive(false), [location.state?.key, location.href])
 
     const badgeBoundingBottom = badgeBounding?.bottom ?? 0
     const badgeBoundingLeft = badgeBounding?.left ?? 0

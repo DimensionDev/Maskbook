@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Box, Typography, List, ListItem, Skeleton } from '@mui/material'
 import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
@@ -41,6 +41,7 @@ import { SmartPayBundler } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -316,55 +317,47 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     const maxSelectShares = Math.min(RED_PACKET_MAX_SHARES, balance)
 
-    const clearToken = useCallback(() => {
-        setExistTokenDetailedList(EMPTY_LIST)
-        setAllTokenDetailedList(EMPTY_LIST)
-        setOpenNFTConfirmDialog(false)
-    }, [])
+    useRenderPhraseCallbackOnDepsChange(() => {
+        if (!selectOption) setSelectOption(NFTSelectOption.Partial)
+    }, [tokenDetailedOwnerList.map((x) => x.address).join(','), selectOption])
 
-    const clearContract = useCallback(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         setCollection(undefined)
-    }, [])
-
-    useEffect(() => {
-        if (!selectOption) {
-            setSelectOption(NFTSelectOption.Partial)
-        }
-    }, [tokenDetailedOwnerList, selectOption])
-
-    useEffect(() => {
-        clearContract()
     }, [account])
 
-    useEffect(() => {
-        clearToken()
+    useRenderPhraseCallbackOnDepsChange(() => {
+        setExistTokenDetailedList(EMPTY_LIST)
+        setAllTokenDetailedList(EMPTY_LIST)
         setSelectOption(undefined)
-        setOpenSelectNFTDialog(false)
+        Promise.resolve(() => {
+            setOpenNFTConfirmDialog(false)
+            setOpenSelectNFTDialog(false)
+        })
     }, [collection, account])
 
-    useEffect(() => {
-        setOpenSelectNFTDialog(false)
-        clearContract()
+    useRenderPhraseCallbackOnDepsChange(() => {
+        setCollection(undefined)
+        Promise.resolve(() => {
+            setOpenSelectNFTDialog(false)
+        })
     }, [chainId])
 
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
-    const validationMessage = useMemo(() => {
+    const validationMessage = (() => {
         if (!balance) return t.erc721_insufficient_balance()
         if (tokenDetailedList.length === 0) return t.select_a_token()
         return ''
-    }, [tokenDetailedList.length, balance, t, isGasSufficient])
+    })()
 
-    const gasValidationMessage = useMemo(() => {
-        if (!isGasSufficient) {
-            return t.no_enough_gas_fees()
-        }
+    const gasValidationMessage = (() => {
+        if (!isGasSufficient) return t.no_enough_gas_fees()
         if (isGasFeeGreaterThanOneETH) return t.erc721_create_lucky_drop()
         return ''
-    }, [isGasSufficient, isGasFeeGreaterThanOneETH])
+    })()
 
-    useEffect(() => {
-        setIsNFTRedPacketLoaded?.(balance > 0)
+    useRenderPhraseCallbackOnDepsChange(() => {
+        Promise.resolve().then(() => setIsNFTRedPacketLoaded?.(balance > 0))
     }, [balance > 0])
 
     const handleClose = useCallback(() => setOpenSelectNFTDialog(false), [])

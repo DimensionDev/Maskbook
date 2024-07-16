@@ -16,9 +16,7 @@ export function DialogInspector() {
     const [originType, setOriginType] = useState<string>()
     const chainIdValid = useChainIdValid(pluginID, chainId)
 
-    useEffect(() => {
-        if (!chainIdValid) setOpen(false)
-    }, [chainIdValid])
+    if (open && !chainIdValid) setOpen(false)
 
     useEffect(
         () =>

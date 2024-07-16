@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo, unstable_useCacheRefresh } from 'react'
+import { useContext, useState, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { checksumAddress } from '@masknet/web3-shared-evm'
@@ -15,6 +15,7 @@ import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages.js'
 import { useSnapshotTrans } from '../locales/index.js'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -121,9 +122,7 @@ export function VotingCard() {
         messageText(t.plugin_snapshot_vote_failed()),
     )
 
-    useEffect(() => {
-        setOpen(false)
-    }, [account, power, setOpen])
+    useRenderPhraseCallbackOnDepsChange(() => setOpen(false), [account, power])
 
     const onClick = (n: number) => {
         if (proposal.type === 'single-choice') {
