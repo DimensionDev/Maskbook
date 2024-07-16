@@ -72,7 +72,6 @@
     "nft_add_button_label": "添加",
     "plugin_avatar_input_token_address": "输入合约地址",
     "plugin_avatar_input_token_id": "Token ID",
-    "wallets_add_collectible": "添加 NFT",
     "add_collectible": "添加 NFT",
     "nft_add_dialog_title": "添加 NFT",
     "no_collection$empty": "未找到 {{collection}} 。",

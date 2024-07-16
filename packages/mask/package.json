@@ -134,7 +134,6 @@
     "react-idle-timer": "^5.7.2",
     "react-qrcode-logo": "^3.0.0",
     "react-router-dom": "^6.24.0",
-    "react-to-print": "^2.15.1",
     "react-use": "^17.5.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^2.8.3",

@@ -74,7 +74,6 @@
     "nft_add_button_label": "追加",
     "plugin_avatar_input_token_address": "コントラクトアドレスを入力",
     "plugin_avatar_input_token_id": "トークンID",
-    "wallets_add_collectible": "コレクションを追加",
     "add_collectible": "コレクションを追加",
     "nft_add_dialog_title": "コレクションを追加",
     "no_collection$empty": "{{collection}} が見つかりません。",
