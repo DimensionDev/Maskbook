@@ -79,6 +79,7 @@
 
         "https://api-v2.lens.dev/",
         "https://api.thegraph.com",
+        "https://mainnet.infura.io",
         "https://polygon-mainnet.infura.io",
         "https://solana-mainnet.phantom.app",
         "https://api.testnet.solana.com",

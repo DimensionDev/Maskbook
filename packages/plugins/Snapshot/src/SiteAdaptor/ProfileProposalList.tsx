@@ -168,7 +168,7 @@ function ProfileProposalListItem(props: ProfileProposalProps) {
     const entry = useIntersectionObserver(ref.current, {})
     const [isViewed, setIsViewed] = useState(false)
 
-    if (entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)
+    if (!isViewed && entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)
 
     return (
         <ListItem

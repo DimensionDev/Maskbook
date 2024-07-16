@@ -25,7 +25,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
     const [blockie, setBlockie] = useState('')
     const ref = useRef<HTMLElement>(null)
     const ob = useIntersection(ref as any, {})
-    if (ob?.isIntersecting && !blockie) {
+    if (!blockie && ob?.isIntersecting) {
         setBlockie(generateBlockie(address))
     }
 

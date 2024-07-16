@@ -131,7 +131,8 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) await refundCallback()
     }, [redpacketStatus, shareCallback, refundCallback])
 
-    if (refunded) setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+    if (refunded && updatedStatus !== FireflyRedPacketAPI.RedPacketStatus.Refund)
+        setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
 
     return (
         <ActionButton

@@ -6,7 +6,7 @@ export function useEverSeen<E = HTMLDivElement>(): [boolean, RefObject<E | null>
     const [seen, setSeen] = useState(false)
     const nullRef = useRef<E>(null)
     const entry = useIntersection((seen ? nullRef : ref) as RefObject<HTMLElement>, {})
-    if (entry?.isIntersecting) setSeen(true)
+    if (!seen && entry?.isIntersecting) setSeen(true)
 
     return [seen, ref]
 }

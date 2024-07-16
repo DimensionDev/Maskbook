@@ -23,9 +23,7 @@ export function useTabs<T extends string>(defaultTab: T, ...possibleTabs: T[]) {
     possibleTabs.forEach((t) => (tabRecords[t] = t))
 
     const isCurrentTabAvailable = [defaultTab, ...possibleTabs].includes(currentTab)
-    if (!isCurrentTabAvailable) {
-        setTab(defaultTab)
-    }
+    if (!isCurrentTabAvailable) setTab(defaultTab)
 
     const onChange = useCallback((event: unknown, value: any) => {
         startTransition(() => setTab(value))
