@@ -10,7 +10,6 @@
     // Tests
     // @masknet/scripts: insert-here 1
     { "path": "./packages/base/tsconfig.tests.json" },
-    { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
@@ -62,7 +61,6 @@
       // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
       // which is unwanted. We need to take care of this.
 
-      "@masknet/backup-format": ["./packages/backup-format/src/index.ts"],
       "@masknet/base": ["./packages/base/src/index.ts"],
       "@masknet/encryption": ["./packages/encryption/src/index.ts"],
       "@masknet/flags": ["./packages/flags/src/index.ts"],
