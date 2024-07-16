@@ -129,7 +129,6 @@
       "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
-      "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
       "fortmatic@2.2.1": "patches/fortmatic@2.2.1.patch",
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
@@ -139,9 +138,7 @@
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
-      "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
       "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
-      "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
       "react-use@17.4.0": "patches/react-use@17.4.0.patch"
     }
