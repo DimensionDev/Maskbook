@@ -9,16 +9,12 @@ import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
-import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
 import WETH from '@masknet/web3-contracts/abis/WETH.json'
-import Lido from '@masknet/web3-contracts/abis/Lido.json'
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
-import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
 import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
 import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
 import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
-import Airdrop from '@masknet/web3-contracts/abis/AirdropV2.json'
 
 class ABI {
     private abis: Map<string, TransactionMethodABI[]> = new Map()
@@ -27,18 +23,14 @@ class ABI {
         this.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
         this.construct(NftRedPacket as AbiItem[])
         this.construct(HappyRedPacketV4 as AbiItem[])
-        this.construct(MaskBox as AbiItem[])
         this.construct(ERC721 as AbiItem[])
         this.construct(ERC20 as AbiItem[])
         this.construct(WETH as AbiItem[]) // wrap & unwrap
-        this.construct(Lido as AbiItem[]) // lido saving
         this.construct(AaveLendingPool as AbiItem[]) // Aave saving
-        this.construct(SmartPayEntryPoint as AbiItem[]) // smart pay entrypoint
         this.construct(WalletContract as AbiItem[]) // Contract Wallet
         this.construct(Create2Factory as AbiItem[]) // Create2Factory
         this.construct(LensHub as AbiItem[])
         this.construct(LensFollowNFT as AbiItem[])
-        this.construct(Airdrop as AbiItem[])
     }
 
     read(signature?: string) {
