@@ -11,9 +11,6 @@ export enum NetworkPluginID {
  * All integrated Plugin IDs
  */
 export enum PluginID {
-    EVM = 'com.mask.evm',
-    Flow = 'com.mask.flow',
-    Solana = 'com.mask.solana',
     Approval = 'com.maskbook.approval',
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',
