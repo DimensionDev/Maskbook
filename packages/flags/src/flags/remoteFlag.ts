@@ -39,7 +39,6 @@ export function createRemoteFlag<T extends object>(
         const parsedCache = tryParse(_.response)
         // we don't retry if the response is invalid
         if (!parsedCache || typeof parsedCache !== 'object') return
-        console.log({ ...flags })
         Object.assign(flags, parsedCache)
     }
     return [flagProxy, fetch] as const
