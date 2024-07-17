@@ -1,16 +1,8 @@
 // https://github.com/TanStack/query/discussions/6446
-import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { simpleEncoder } from '@masknet/shared-base'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import type { PersistQueryClientOptions, PersistedClient } from '@tanstack/react-query-persist-client'
 import { produce } from 'immer'
-
-try {
-    isEnvironment(Environment.ExtensionProtocol) &&
-        // Leave it for a few releases (added in Nov 28 2023)
-        // eslint-disable-next-line no-restricted-globals
-        localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE')
-} catch {}
 
 const cache = new Map<string, unknown>()
 export function setInitData(key: string, value: unknown) {

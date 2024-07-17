@@ -3,13 +3,14 @@ import './register.js'
 import { Emitter } from '@servie/events'
 import type { Plugin } from '@masknet/plugin-infra'
 import {
-    type BooleanPreference,
+    BooleanPreference,
     MaskMessages,
     createI18NBundle,
     i18NextInstance,
     InMemoryStorages,
     PersistentStorages,
 } from '@masknet/shared-base'
+import { Flags } from '@masknet/flags'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
@@ -30,6 +31,14 @@ export function createPluginHost<Definition, Context>(
         isEnabled: getPluginMinimalModeEnabled,
         events: new Emitter(),
     }
+    const disabled: Plugin.__Host.EnabledStatusReporter = {
+        isEnabled: (id) => {
+            const result = Flags.globalDisabledPlugins.includes(id)
+            if (result) return BooleanPreference.False
+            return BooleanPreference.True
+        },
+        events: new Emitter(),
+    }
     const permission: Plugin.__Host.PermissionReporter = {
         hasPermission,
         events: new Emitter(),
@@ -42,6 +51,7 @@ export function createPluginHost<Definition, Context>(
 
     return {
         signal,
+        disabled,
         minimalMode,
         addI18NResource(plugin, resource) {
             createI18NBundle(plugin, resource)(i18NextInstance)

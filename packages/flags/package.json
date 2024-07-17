@@ -1,24 +1,25 @@
 {
-    "name": "@masknet/flags",
-    "version": "0.0.0",
-    "private": true,
-    "sideEffects": false,
-    "type": "module",
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "mask-src": "./src/index.ts",
-        "default": "./dist/index.js"
-      },
-      "./build-info": {
-        "types": "./dist/flags/buildInfo.d.ts",
-        "mask-src": "./src/flags/buildInfo.ts",
-        "default": "./dist/flags/buildInfo.js"
-      }
+  "name": "@masknet/flags",
+  "version": "0.0.0",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
     },
-    "types": "./dist/index.d.ts",
-    "dependencies": {
-      "urlcat": "^3.1.0",
-      "@dimensiondev/holoflows-kit": "0.9.0-20240322092738-f9180f3"
+    "./build-info": {
+      "types": "./dist/flags/buildInfo.d.ts",
+      "mask-src": "./src/flags/buildInfo.ts",
+      "default": "./dist/flags/buildInfo.js"
     }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@dimensiondev/holoflows-kit": "0.9.0-20240322092738-f9180f3",
+    "urlcat": "^3.1.0",
+    "zod": "^3.23.8"
   }
+}

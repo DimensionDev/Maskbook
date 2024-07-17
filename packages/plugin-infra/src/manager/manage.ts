@@ -114,7 +114,7 @@ export function createManager<
             if (!define) return false
 
             if (extraCheck && !extraCheck(id)) return false
-            return true
+            return (await _host.disabled.isEnabled(id)) === BooleanPreference.True
         }
     }
 

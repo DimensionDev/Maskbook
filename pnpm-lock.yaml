@@ -330,6 +330,9 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
 
   packages/gun-utils:
     dependencies:
