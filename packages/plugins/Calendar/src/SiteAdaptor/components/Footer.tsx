@@ -95,7 +95,6 @@ export function Footer({ provider, disableSetting }: FooterProps) {
                     <Typography className={classes.calendarText}>{t.title()}</Typography>
                 </div>
                 <div className={classes.poweredByWrap}>
-                    <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>
                     {providerMap[provider]}
                     {disableSetting ? null : (
                         <IconButton
