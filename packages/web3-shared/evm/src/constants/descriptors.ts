@@ -351,6 +351,18 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: false,
         averageBlockDelay: 10,
     },
+    {
+        ID: `${PLUGIN_ID}_zora`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Zora,
+        type: NetworkType.Zora,
+        icon: new URL('../assets/zora.png', import.meta.url).href,
+        iconColor: 'rgb(36, 150, 238)',
+        name: 'Zora',
+        // Won't list in network list
+        isMainnet: false,
+        averageBlockDelay: 10,
+    },
 ]
 
 export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {

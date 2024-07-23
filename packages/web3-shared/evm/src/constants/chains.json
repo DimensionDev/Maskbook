@@ -1328,5 +1328,29 @@
                 "url": "https://explorer.emerald.oasis.dev/"
             }
         ]
+    },
+    {
+        "chainId": 7777777,
+        "name": "Zora",
+        "type": "Zora",
+        "network": "mainnet",
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 42262,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "https://zora.co/",
+        "shortName": "Zora",
+        "explorers": [
+            {
+                "name": "Zora Superscan",
+                "url": "https://zora.superscan.network/"
+            }
+        ]
     }
 ]

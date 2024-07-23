@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { CHAIN_DESCRIPTORS, ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { noop, sortBy } from 'lodash-es'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
@@ -34,6 +34,7 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
 })
 
 // https://docs.simplehash.com/reference/chains
+// sync `resolveChainId` and `ChainNameMap` in `web3-providers/src/SimpleHash/helpers.ts`
 const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_EVM]: [
         ChainId.Mainnet,
@@ -46,6 +47,7 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
         ChainId.xDai,
         ChainId.Celo,
         ChainId.Scroll,
+        ChainId.Zora,
     ],
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
     [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
@@ -68,6 +70,11 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
         const networks = allNetworks.filter(
             (x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId),
         )
+        // hard-coded for Zora
+        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+            const zora = CHAIN_DESCRIPTORS.find((x) => x.chainId === ChainId.Zora)
+            if (zora) networks.push(zora as ReasonableNetwork<ChainId, SchemaType, NetworkType>)
+        }
         return sortBy(networks, (x) => supported.indexOf(x.chainId))
     }, [allNetworks, pluginID])
 
