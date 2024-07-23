@@ -33,7 +33,7 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
     networks: EMPTY_LIST,
 })
 
-//  https://docs.simplehash.com/reference/chains
+// https://docs.simplehash.com/reference/chains
 const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
     [NetworkPluginID.PLUGIN_EVM]: [
         ChainId.Mainnet,
@@ -44,6 +44,7 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
         ChainId.Optimism,
         ChainId.Avalanche,
         ChainId.xDai,
+        ChainId.Celo,
         ChainId.Scroll,
     ],
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
@@ -64,10 +65,10 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
 
     const networks = useMemo(() => {
         const supported = SimpleHashSupportedChains[pluginID]
-        return sortBy(
-            allNetworks.filter((x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId)),
-            (x) => supported.indexOf(x.chainId),
+        const networks = allNetworks.filter(
+            (x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId),
         )
+        return sortBy(networks, (x) => supported.indexOf(x.chainId))
     }, [allNetworks, pluginID])
 
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)

@@ -195,7 +195,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         iconColor: 'rgb(53, 208, 127)',
         averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(251, 204, 92, 0.15) 0%, rgba(251, 204, 92, 0.05) 100%)',
-        isMainnet: false,
+        isMainnet: true,
     },
     {
         ID: `${PLUGIN_ID}_scroll`,
