@@ -1,9 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { IconButton, Typography } from '@mui/material'
-import { type ReactNode } from 'react'
+import { Typography } from '@mui/material'
 import { useCalendarTrans } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,20 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: '12px',
         width: '100%',
-    },
-    poweredByWrap: {
-        display: 'flex',
-        gap: '4px',
-        alignItems: 'center',
-    },
-    poweredBy: {
-        display: 'flex',
-        color: theme.palette.maskColor.second,
-        fontSize: '14px',
-        fontWeight: 700,
-        lineHeight: '18px',
-        alignItems: 'center',
-        whiteSpace: 'nowrap',
     },
     calender: {
         display: 'flex',
@@ -58,53 +41,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FooterProps {
-    provider: string
-    disableSetting?: boolean
-}
-
-export function Footer({ provider, disableSetting }: FooterProps) {
+export function Footer() {
     const { classes } = useStyles()
     const t = useCalendarTrans()
-    const providerMap: Record<string, ReactNode> = {
-        news: (
-            <>
-                <Typography className={classes.providerName}>CoinCarp</Typography>
-                <Icons.CoinCarp size={24} />
-            </>
-        ),
-        event: (
-            <>
-                <Typography className={classes.providerName}>LINK3</Typography>
-                <Icons.Link3 size={24} />
-            </>
-        ),
-        nfts: (
-            <>
-                <Typography className={classes.providerName}>NFTGO</Typography>
-                <Icons.NFTGo size={24} />
-            </>
-        ),
-    }
-    const openApplicationBoardDialog = useOpenApplicationSettings()
     return (
         <div className={classes.container}>
             <div className={classes.lineWrap}>
                 <div className={classes.calender}>
                     <Icons.Calendar size={24} />
                     <Typography className={classes.calendarText}>{t.title()}</Typography>
-                </div>
-                <div className={classes.poweredByWrap}>
-                    {providerMap[provider]}
-                    {disableSetting ? null : (
-                        <IconButton
-                            sx={{ width: '16px', height: '16px' }}
-                            onClick={() =>
-                                openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
-                            }>
-                            <Icons.Gear size={16} />
-                        </IconButton>
-                    )}
                 </div>
             </div>
         </div>
