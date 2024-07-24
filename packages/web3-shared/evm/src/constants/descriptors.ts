@@ -195,7 +195,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         iconColor: 'rgb(53, 208, 127)',
         averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(251, 204, 92, 0.15) 0%, rgba(251, 204, 92, 0.05) 100%)',
-        isMainnet: false,
+        isMainnet: true,
     },
     {
         ID: `${PLUGIN_ID}_scroll`,
@@ -348,6 +348,18 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         icon: new URL('../assets/xlayer.png', import.meta.url).href,
         iconColor: 'rgb(255, 255, 255)',
         name: 'X Layer Testnet',
+        isMainnet: false,
+        averageBlockDelay: 10,
+    },
+    {
+        ID: `${PLUGIN_ID}_zora`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Zora,
+        type: NetworkType.Zora,
+        icon: new URL('../assets/zora.png', import.meta.url).href,
+        iconColor: 'rgb(36, 150, 238)',
+        name: 'Zora',
+        // Won't list in network list
         isMainnet: false,
         averageBlockDelay: 10,
     },

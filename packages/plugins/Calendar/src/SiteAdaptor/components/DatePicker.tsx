@@ -90,9 +90,9 @@ export function DatePicker({ selectedDate, setSelectedDate, open, setOpen, curre
     const startingDayOfWeek = monthStart.getDay()
     const daysInMonth = endOfMonth(currentDate).getDate()
     const daysInPrevMonth = endOfMonth(addMonths(currentDate, -1)).getDate()
-    const { data: eventList } = useEventList(monthStart)
-    const { data: newsList } = useNewsList(monthStart)
-    const { data: nftList } = useNFTList(monthStart)
+    const { data: eventList } = useEventList(monthStart, currentTab === 'event')
+    const { data: newsList } = useNewsList(monthStart, currentTab === 'news')
+    const { data: nftList } = useNFTList(monthStart, currentTab === 'nfts')
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':

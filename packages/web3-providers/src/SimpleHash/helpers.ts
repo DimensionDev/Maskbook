@@ -140,7 +140,7 @@ export function createNonFungibleCollection(
     }
 }
 
-export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(function resolveChainId(
+export const resolveChainId: (chain: string) => ChainId | undefined = memoize(function resolveChainId(
     chain: string,
 ): ChainId | undefined {
     // Some of the `chainResolver.chainId()` results do not match.
@@ -165,6 +165,10 @@ export const resolveChainId: (chainId: string) => ChainId | undefined = memoize(
             return ChainId.Scroll
         case 'celo':
             return ChainId.Celo
+        case 'zora':
+            return ChainId.Zora
+        case 'fantom':
+            return ChainId.Fantom
         default:
             return undefined
     }
@@ -181,7 +185,8 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
         [ChainId.xDai]: 'gnosis',
         [ChainId.Base]: 'base',
         [ChainId.Scroll]: 'scroll',
-        [ChainId.Celo]: 'celo',
+        [ChainId.Zora]: 'zora',
+        [ChainId.Fantom]: 'fantom',
     },
     [NetworkPluginID.PLUGIN_SOLANA]: {
         [SolanaChainId.Mainnet]: 'solana',
