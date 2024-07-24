@@ -185,7 +185,6 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
         [ChainId.xDai]: 'gnosis',
         [ChainId.Base]: 'base',
         [ChainId.Scroll]: 'scroll',
-        [ChainId.Celo]: 'celo',
         [ChainId.Zora]: 'zora',
         [ChainId.Fantom]: 'fantom',
     },
