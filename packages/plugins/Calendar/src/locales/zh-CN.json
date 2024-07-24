@@ -6,9 +6,9 @@
     "price": "价格",
     "date": "日期",
     "loading": "加载中",
-    "powered_by": "技术支持",
+    "powered_by": "",
     "news": "新闻",
-    "event": "事件",
+    "event": "活动",
     "nfts": "NFTs",
     "content_end": "内容已全部加载",
     "expired": "已过期"

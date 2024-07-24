@@ -27,8 +27,6 @@
     "about_dialog_touch": "聯繫我們",
     "about_dialog_description": "Mask Network 引領您探索更新更開放的互聯網。Mask Network允許您在社交網路上發送加密的貼文。同時我們提供了更多功能，例如發送加密紅包，購買加密貨幣，加密文件服務等。",
     "create_account_persona_successfully": "創建成功",
-    "sign_in_account_identity_title": "恢復您的身分",
-    "sign_in_account_tab_identity": "身份",
     "sign_in_account_private_key_placeholder": "請輸入你的私鑰",
     "sign_in_account_private_key_error": "私钥不正确",
     "sign_in_account_cloud_backup_send_email_success": "驗證碼已發往 {{type}}. 請查看 {{type}}.",

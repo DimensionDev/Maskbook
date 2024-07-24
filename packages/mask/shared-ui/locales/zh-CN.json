@@ -38,7 +38,7 @@
     "sign": "签名",
     "load_failed": "加载失败",
     "web3_profile_card_name": "Web3 名片",
-    "powered_by": "技术支持：",
+    "powered_by": "",
     "powered_by_whom": "由 <span>{{whom}} 提供支持</span>",
     "reload": "重新加载",
     "rename": "重命名",

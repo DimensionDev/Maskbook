@@ -31,7 +31,7 @@
     "download_image_error": "下载图片错误",
     "connect_wallet": "请连接您的钱包!",
     "background_title": "NFT 背景",
-    "powered_by": "技术支持：",
+    "powered_by": "",
     "loading": "加载中...",
     "no_wallet_message": "未检测到有效的钱包。请先连接钱包或验证钱包。",
     "inactive_persona_tooltip": "非当前帐户。请切换到此帐户以设置 NFT 头像。",
