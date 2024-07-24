@@ -21,10 +21,6 @@ const config: KnipConfig = {
             ignore: ['main/debugger.ts'],
             entry: ['main/index.ts'],
         },
-        'packages/mask-sdk': {
-            ignore: ['public-api'],
-            entry: ['main/index.ts'],
-        },
         'packages/sentry': {
             ignoreDependencies: ['@sentry/browser'],
         },

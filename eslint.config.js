@@ -465,24 +465,6 @@ const moduleSystemRules = {
         'error',
         {
             zones: [
-                {
-                    target: './packages/mask/background/**',
-                    from: './packages/mask/shared-ui/',
-                    message: 'Background cannot import Ui specific code.',
-                },
-                {
-                    target: './packages/mask/!(background)/**',
-                    from: './packages/mask/background/',
-                    message: 'Use Services.* instead.',
-                },
-                {
-                    target: './packages/mask/',
-                    from: [
-                        './packages/plugin-infra/src/dom/context.ts',
-                        './packages/plugin-infra/src/site-adaptor/context.ts',
-                    ],
-                    message: 'Use Services.* instead.',
-                },
                 // ideally shared folder should also bans import plugin context
                 // but that requires a lot of context passing. we leave it as a legacy escape path.
                 {
@@ -570,7 +552,6 @@ export default tseslint.config(
             '**/languages.ts',
             'packages/contracts',
             'packages/scripts',
-            'packages/mask/.webpack',
         ],
     },
     {
@@ -594,13 +575,6 @@ export default tseslint.config(
             ...avoidMistakeRules,
             ...codeStyleRules,
             ...moduleSystemRules,
-        },
-    },
-    {
-        files: ['packages/mask/background/**/*.ts'],
-        plugins,
-        rules: {
-            'no-restricted-globals': ['error', 'setTimeout', 'setInterval'],
         },
     },
     {
