@@ -1,9 +1,6 @@
 import { filter, flatten, pick, uniq, values } from 'lodash-es'
-import Aave from '@masknet/web3-constants/evm/aave.json'
-import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
-import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
 
@@ -19,8 +16,6 @@ const collect = <T extends Record<string, Record<string, string | number>>>(
 }
 
 const domainAddressMap: Record<string, string[]> = {
-    'aave.com': collect(Aave, ['AAVE_LENDING_POOL_ADDRESSES_PROVIDER_CONTRACT_ADDRESS']),
-    'www.artblocks.io': collect(ArtBlocks, ['GEN_ART_721_MINTER']),
     'gitcoin.co': collect(Gitcoin as Pick<typeof Gitcoin, 'GITCOIN_ETH_ADDRESS' | 'BULK_CHECKOUT_ADDRESS'>, [
         'GITCOIN_ETH_ADDRESS',
         'BULK_CHECKOUT_ADDRESS',
@@ -34,7 +29,6 @@ const domainAddressMap: Record<string, string[]> = {
             'HAPPY_RED_PACKET_ADDRESS_V4',
         ]),
         ...collect(NftRedPacket, ['RED_PACKET_NFT_ADDRESS']),
-        ...collect(MaskBox, ['MASK_BOX_CONTRACT_ADDRESS']),
     ],
 }
 

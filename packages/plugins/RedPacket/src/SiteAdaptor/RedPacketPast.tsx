@@ -1,5 +1,5 @@
 import { useCurrentVisitingIdentity } from '@masknet/plugin-infra/content-script'
-import { ApplicationBoardModal, PluginWalletStatusBar, useCurrentLinkedPersona } from '@masknet/shared'
+import { PluginWalletStatusBar, useCurrentLinkedPersona } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { type NftRedPacketJSONPayload, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
@@ -57,7 +57,6 @@ export const RedPacketPast = memo(function RedPacketPast({ onSelect, onClose, ta
                 },
                 compositionType,
             )
-            ApplicationBoardModal.close()
             onClose?.()
         },
         [senderName, compositionType],

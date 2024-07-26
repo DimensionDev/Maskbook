@@ -1,31 +1,27 @@
-import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
-import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
-import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
-import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
-import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
-import Token from '@masknet/web3-constants/evm/token.json'
-import RPC from '@masknet/web3-constants/evm/rpc.json'
-import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
-import TokenList from '@masknet/web3-constants/evm/token-list.json'
-import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
-import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
+import DeBank from '@masknet/web3-constants/evm/debank.json'
 import ENS from '@masknet/web3-constants/evm/ens.json'
-import Arb from '@masknet/web3-constants/evm/arb.json'
-import SpaceId from '@masknet/web3-constants/evm/space-id.json'
+import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
+import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
 import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
 import Lens from '@masknet/web3-constants/evm/lens.json'
+import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
+import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
+import RPC from '@masknet/web3-constants/evm/rpc.json'
+import SpaceId from '@masknet/web3-constants/evm/space-id.json'
+import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
+import TokenList from '@masknet/web3-constants/evm/token-list.json'
+import Token from '@masknet/web3-constants/evm/token.json'
 
-import {
-    transformAllHook,
-    transformHook,
-    transformAll,
-    transform,
-    transformAllFromJSON,
-    transformFromJSON,
-} from '@masknet/web3-shared-base'
 import { getEnumAsArray } from '@masknet/kit'
+import {
+    transform,
+    transformAll,
+    transformAllFromJSON,
+    transformAllHook,
+    transformFromJSON,
+    transformHook,
+} from '@masknet/web3-shared-base'
 import { ChainId } from '../types/index.js'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -55,16 +51,6 @@ export const getCoinGeckoConstant = transform(ChainId, CoinGecko)
 export const getCoinGeckoConstants = transformAll(ChainId, CoinGecko)
 export const useCoinGeckoConstant = transformHook(getCoinGeckoConstants)
 export const useCoinGeckoConstants = transformAllHook(getCoinGeckoConstants)
-
-export const getGitcoinConstant = transform(ChainId, Gitcoin)
-export const getGitcoinConstants = transformAll(ChainId, Gitcoin)
-export const useGitcoinConstant = transformHook(getGitcoinConstants)
-export const useGitcoinConstants = transformAllHook(getGitcoinConstants)
-
-export const getOpenOceanConstant = transform(ChainId, OpenOcean)
-export const getOpenOceanConstants = transformAll(ChainId, OpenOcean)
-export const useOpenOceanConstant = transformHook(getOpenOceanConstants)
-export const useOpenOceanConstants = transformAllHook(getOpenOceanConstants)
 
 export const getRedPacketConstant = transform(ChainId, RedPacket)
 export const getRedPacketConstants = transformAll(ChainId, RedPacket)
@@ -97,18 +83,12 @@ export const getTokenAssetBaseURLConstants = transformAll(ChainId, TokenAssetBas
 export const useTokenAssetBaseURLConstant = transformHook(getTokenAssetBaseURLConstants)
 export const useTokenAssetBaseURLConstants = transformAllHook(getTokenAssetBaseURLConstants)
 
-export const getArtBlocksConstant = transform(ChainId, ArtBlocks)
-export const getArtBlocksConstants = transformAll(ChainId, ArtBlocks)
-export const useArtBlocksConstant = transformHook(getArtBlocksConstants)
-export const useArtBlocksConstants = transformAllHook(getArtBlocksConstants)
-
 export const getNftRedPacketConstant = transform(ChainId, NftRedPacket)
 export const getNftRedPacketConstants = transformAll(ChainId, NftRedPacket)
 export const useNftRedPacketConstant = transformHook(getNftRedPacketConstants)
 export const useNftRedPacketConstants = transformAllHook(getNftRedPacketConstants)
 
 export const getENSConstants = transformAll(ChainId, ENS)
-export const getArbConstants = transformAll(ChainId, Arb)
 export const getSpaceIdConstants = transformAll(ChainId, SpaceId)
 export const getLensProfileConstants = transformAll(ChainId, LensProfile)
 

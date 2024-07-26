@@ -3712,36 +3712,6 @@ export const WebBlack = /*#__PURE__*/ __createIcon('WebBlack', [
         u: () => new URL('./general/WebBlack.light.svg', import.meta.url).href,
     },
 ])
-export const MenuPersonas = /*#__PURE__*/ __createIcon('MenuPersonas', [
-    {
-        u: () => new URL('./menus/MenuPersonas.png', import.meta.url).href,
-    },
-])
-export const MenuPersonasActive = /*#__PURE__*/ __createIcon('MenuPersonasActive', [
-    {
-        u: () => new URL('./menus/MenuPersonasActive.png', import.meta.url).href,
-    },
-])
-export const MenuSettings = /*#__PURE__*/ __createIcon('MenuSettings', [
-    {
-        u: () => new URL('./menus/MenuSettings.png', import.meta.url).href,
-    },
-])
-export const MenuSettingsActive = /*#__PURE__*/ __createIcon('MenuSettingsActive', [
-    {
-        u: () => new URL('./menus/MenuSettingsActive.png', import.meta.url).href,
-    },
-])
-export const MenuWallets = /*#__PURE__*/ __createIcon('MenuWallets', [
-    {
-        u: () => new URL('./menus/MenuWallets.png', import.meta.url).href,
-    },
-])
-export const MenuWalletsActive = /*#__PURE__*/ __createIcon('MenuWalletsActive', [
-    {
-        u: () => new URL('./menus/MenuWalletsActive.png', import.meta.url).href,
-    },
-])
 export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
     {
         j: () =>
@@ -3792,11 +3762,6 @@ export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
     },
 ])
-export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
-    {
-        u: () => new URL('./plugins/MaskBox.svg', import.meta.url).href,
-    },
-])
 export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
     {
         u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
@@ -3805,11 +3770,6 @@ export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
 export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
     {
         u: () => new URL('./plugins/ScamSniffer.svg', import.meta.url).href,
-    },
-])
-export const SecurityChecker = /*#__PURE__*/ __createIcon('SecurityChecker', [
-    {
-        u: () => new URL('./plugins/SecurityChecker.svg', import.meta.url).href,
     },
 ])
 export const SettingInfo = /*#__PURE__*/ __createIcon('SettingInfo', [
@@ -3880,86 +3840,6 @@ export const JP = /*#__PURE__*/ __createIcon('JP', [
 export const KR = /*#__PURE__*/ __createIcon('KR', [
     {
         u: () => new URL('./settings/KR.svg', import.meta.url).href,
-    },
-])
-export const SettingsAppearance = /*#__PURE__*/ __createIcon('SettingsAppearance', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsAppearance.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsAppearance.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsBackup = /*#__PURE__*/ __createIcon('SettingsBackup', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsBackup.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsBackup.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsEmail = /*#__PURE__*/ __createIcon('SettingsEmail', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsEmail.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsEmail.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsLanguage = /*#__PURE__*/ __createIcon('SettingsLanguage', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsLanguage.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsLanguage.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsPassword = /*#__PURE__*/ __createIcon('SettingsPassword', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsPassword.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsPassword.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsPhone = /*#__PURE__*/ __createIcon('SettingsPhone', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsPhone.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsPhone.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsRestore = /*#__PURE__*/ __createIcon('SettingsRestore', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsRestore.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsRestore.light.svg', import.meta.url).href,
-    },
-])
-export const SettingsSync = /*#__PURE__*/ __createIcon('SettingsSync', [
-    {
-        c: ['dark'],
-        u: () => new URL('./settings/SettingsSync.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./settings/SettingsSync.light.svg', import.meta.url).href,
     },
 ])
 export const UK = /*#__PURE__*/ __createIcon('UK', [
