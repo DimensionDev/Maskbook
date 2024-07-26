@@ -4,7 +4,6 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainIdList,
     getArbConstants,
-    getCryptoPunksConstants,
     getENSConstants,
     getLensProfileConstants,
     getRedPacketConstants,
@@ -109,9 +108,4 @@ export function isSpaceIdContractAddress(contract_address: string) {
 
 export function isXnsContractAddress(address: string) {
     return isENSContractAddress(address) || isArbContractAddress(address) || isSpaceIdContractAddress(address)
-}
-
-export function isCryptoPunksContractAddress(contract_address: string) {
-    const { CRYPTOPUNKS_CONTRACT_ADDRESS } = getCryptoPunksConstants()
-    return isSameAddress(contract_address, CRYPTOPUNKS_CONTRACT_ADDRESS)
 }

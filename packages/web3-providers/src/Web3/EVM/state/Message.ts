@@ -1,7 +1,6 @@
 import { omitBy } from 'lodash-es'
-import urlcat from 'urlcat'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { EMPTY_OBJECT, PopupRoutes, PopupsHistory, Sniffings, type StorageItem } from '@masknet/shared-base'
+import { PopupRoutes, type StorageItem } from '@masknet/shared-base'
 import { MessageStateType, type ReasonableMessage } from '@masknet/web3-shared-base'
 import {
     createJsonRpcPayload,
@@ -81,17 +80,10 @@ export class EVMMessage extends MessageState<MessageRequest, MessageResponse> {
             const hasPassword = await this.context.hasPaymentPassword()
             const route = !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ContractInteraction
 
-            const fromState =
-                route !== PopupRoutes.ContractInteraction ? { from: PopupRoutes.ContractInteraction } : EMPTY_OBJECT
-
-            if (Sniffings.is_popup_page && !location.hash.includes('/swap')) {
-                PopupsHistory.push(urlcat(PopupRoutes.Wallet, fromState))
-            } else {
-                // open the popups window and wait for approval from the user.
-                await this.context.openPopupWindow(route, {
-                    source: location.origin,
-                })
-            }
+            // open the popups window and wait for approval from the user.
+            await this.context.openPopupWindow(route, {
+                source: location.origin,
+            })
         }
 
         return super.waitForApprovingRequest(id)

@@ -50,9 +50,6 @@ export { NextIDProof, NextIDStorageProvider } from './NextID/index.js'
 // Web3Bio
 export { Web3Bio } from './Web3Bio/index.js'
 
-// GoPlusLabs
-export { GoPlusLabs } from './GoPlusLabs/index.js'
-
 // CoinGecko
 export { CoinGeckoTrending } from './CoinGecko/index.js'
 
