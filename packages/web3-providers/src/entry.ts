@@ -43,9 +43,6 @@ export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 // NextID
 export { NextIDProof, NextIDStorageProvider } from './NextID/index.js'
 
-// Web3Bio
-export { Web3Bio } from './Web3Bio/index.js'
-
 // R2D2
 export { R2D2TokenList } from './R2D2/index.js'
 

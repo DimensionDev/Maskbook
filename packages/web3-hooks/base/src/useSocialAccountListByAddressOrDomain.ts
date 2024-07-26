@@ -1,4 +1,4 @@
-import { Web3Bio, NextIDProof } from '@masknet/web3-providers'
+import { NextIDProof } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
@@ -17,7 +17,6 @@ export function useSocialAccountListByAddressOrDomain(
             [
                 async () => (domain ? await NextIDProof.queryProfilesByDomain(domain) : EMPTY_LIST),
                 async () => (address ? await NextIDProof.queryProfilesByAddress(address) : EMPTY_LIST),
-                async () => (address ? await Web3Bio.queryProfilesByAddress(address) : EMPTY_LIST),
             ],
             undefined,
             (result) => !result?.length,
