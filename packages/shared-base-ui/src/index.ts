@@ -5,5 +5,3 @@ export * from './hooks/index.js'
 export * from './utils/index.js'
 
 export { addShareBaseI18N, languages } from './locales/languages.js'
-
-export { default as COUNTRIES } from './country-data.json'

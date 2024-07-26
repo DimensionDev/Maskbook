@@ -1,4 +1,4 @@
-import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, type PluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, type PluginID } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -43,7 +43,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
         },
     },
     search: {
-        backgroundColor: Sniffings.is_dashboard_page ? 'transparent !important' : theme.palette.maskColor.input,
+        backgroundColor: theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
         [`&.${inputClasses.focused}`]: {
             background: theme.palette.maskColor.bottom,
@@ -117,7 +117,7 @@ export function SelectFungibleTokenDialog({
     )
     return (
         <InjectedDialog
-            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
+            titleBarIconStyle="back"
             open={open}
             onClose={() => {
                 mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)

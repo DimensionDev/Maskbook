@@ -1,10 +1,8 @@
-import { compose, getSiteType, NetworkPluginID, pluginIDsSettings, Sniffings } from '@masknet/shared-base'
+import { compose, getSiteType, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { isUndefined, omitBy } from 'lodash-es'
 import { createContext, memo, useContext, useMemo, useState, type PropsWithChildren } from 'react'
-import { useLocation } from 'react-use'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useProviderType } from './useProviderType.js'
@@ -72,14 +70,9 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
-    const location = useLocation()
-    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes('/wallet')
     const account = controlled ? props.account : _account ?? props.account ?? globalAccount
     const chainId = controlled ? props.chainId : _chainId ?? props.chainId ?? globalChainId
-    const providerType =
-        controlled ?
-            props.providerType
-        :   _providerType ?? props.providerType ?? (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
+    const providerType = controlled ? props.providerType : _providerType ?? props.providerType ?? globalProviderType
 
     const context = useMemo(
         () => ({

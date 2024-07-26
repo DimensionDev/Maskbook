@@ -16,12 +16,6 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
         :   /^localhost:\d+$/,
 }
 
-const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
-    [ExtensionSite.Dashboard]: /dashboard\.html/i,
-    [ExtensionSite.Popup]: /popups\.html/i,
-    [ExtensionSite.Swap]: /swap\.html/i,
-}
-
 export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)
 export const ExtensionSiteList = getEnumAsArray(ExtensionSite).map((x) => x.value)
 
@@ -34,18 +28,8 @@ export function getEnhanceableSiteType() {
     return
 }
 
-export function getExtensionSiteType() {
-    if (!location.protocol.includes('extension')) return
-    const target = location.pathname
-    for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
-        if (target.match(regexp)) return type as ExtensionSite
-        continue
-    }
-    return
-}
-
 export function getSiteType() {
-    return getEnhanceableSiteType() ?? getExtensionSiteType()
+    return getEnhanceableSiteType()
 }
 
 export function getAgentType() {
@@ -54,14 +38,6 @@ export function getAgentType() {
     if (Sniffings.is_firefox) return 'firefox'
     if (Sniffings.is_chromium) return 'chromium'
     return 'unknown'
-}
-
-export function isEnhanceableSiteType() {
-    return !!getEnhanceableSiteType()
-}
-
-export function isExtensionSiteType() {
-    return !!getExtensionSiteType()
 }
 
 /**
@@ -78,7 +54,7 @@ export function isEthereumInjected(name = 'ethereum') {
  * @returns
  */
 export function isInPageEthereumInjected() {
-    return !isExtensionSiteType() && !Sniffings.is_firefox
+    return !Sniffings.is_firefox
 }
 
 export function getExtensionId(): string | undefined {

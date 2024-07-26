@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
@@ -166,11 +166,7 @@ export const SelectNonFungibleContractDialog = memo(
         )
 
         return (
-            <InjectedDialog
-                titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
-                open={open}
-                onClose={onClose}
-                title={t.select_collection()}>
+            <InjectedDialog titleBarIconStyle="back" open={open} onClose={onClose} title={t.select_collection()}>
                 <DialogContent classes={{ root: classes.content }}>
                     <Box px={2}>
                         <MaskTextField

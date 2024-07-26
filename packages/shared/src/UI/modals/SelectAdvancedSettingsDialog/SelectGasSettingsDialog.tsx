@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
@@ -78,7 +78,7 @@ export function SelectGasSettingsDialog({
                 paper: classes.root,
             }}
             open={open}
-            titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
+            titleBarIconStyle="back"
             onClose={() => onClose(settings)}
             title={title ?? t.gas_settings_title()}>
             <DialogContent classes={{ root: classes.content }}>

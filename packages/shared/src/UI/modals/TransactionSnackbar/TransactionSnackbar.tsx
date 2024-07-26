@@ -11,7 +11,7 @@ import {
     useCustomSnackbar,
     usePopupCustomSnackbar,
 } from '@masknet/theme'
-import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -109,16 +109,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
-            if (snackbarKeyRef.current !== undefined)
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current =
-                Sniffings.is_popup_page ? showPopupSnackbar(title, options) : showSnackbar(title, options)
+            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
+            snackbarKeyRef.current = showSnackbar(title, options)
             return () => {
-                Sniffings.is_popup_page ?
-                    closePopupSnackbar(snackbarKeyRef.current)
-                :   closeSnackbar(snackbarKeyRef.current)
+                closeSnackbar(snackbarKeyRef.current)
             }
         },
         [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],

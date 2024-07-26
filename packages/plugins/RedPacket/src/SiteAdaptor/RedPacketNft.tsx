@@ -29,7 +29,7 @@ import {
 import { TokenType } from '@masknet/web3-shared-base'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID, CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -228,17 +228,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     // #region on share
     const postLink = usePostLink()
     const shareText = useMemo(() => {
-        const isOnTwitter = Sniffings.is_twitter_page
-        const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
             network: network?.name || '',
             account_promote: t.account_promote({
-                context:
-                    isOnTwitter ? 'twitter'
-                    : isOnFacebook ? 'facebook'
-                    : 'default',
+                context: 'default',
             }),
             interpolation: { escapeValue: false },
         } as const
@@ -284,17 +279,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
         if (availability.claimed_id === '0') return
 
-        const isOnTwitter = Sniffings.is_twitter_page
-        const isOnFacebook = Sniffings.is_facebook_page
         const options = {
             sender: payload.senderName,
             payload: postLink.toString(),
             network: network?.name || '',
             account_promote: t.account_promote({
-                context:
-                    isOnTwitter ? 'twitter'
-                    : isOnFacebook ? 'facebook'
-                    : 'default',
+                context: 'default',
             }),
             interpolation: { escapeValue: false },
         } as const

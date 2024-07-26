@@ -1,21 +1,8 @@
-enum SiteHost {
-    Twitter = 'twitter.com',
-    Facebook = 'facebook.com',
-}
-
 const navigator_ = typeof navigator === 'undefined' ? null : navigator
-const location_ = typeof location === 'undefined' ? null : location
 
 const isChromium = navigator_?.userAgent.includes('Chrome') || navigator_?.userAgent.includes('Chromium')
 
 export const Sniffings = {
-    is_dashboard_page: location_?.protocol.includes('extension') && location_.href.includes('dashboard.html'),
-    is_popup_page: location_?.protocol.includes('extension') && location_.href.includes('popups.html'),
-    is_swap_page: location_?.protocol.includes('extension') && location_.href.includes('swap.html'),
-
-    is_twitter_page: location_?.href.includes(SiteHost.Twitter),
-    is_facebook_page: location_?.href.includes(SiteHost.Facebook),
-
     is_opera: navigator_?.userAgent.includes('OPR/'),
     is_edge: navigator_?.userAgent.includes('Edg'),
     is_firefox: navigator_?.userAgent.includes('Firefox'),

@@ -1,28 +1,24 @@
-import { compact, uniqBy } from 'lodash-es'
 import {
-    EMPTY_LIST,
     NetworkPluginID,
     NextIDPlatform,
     PluginID,
     SocialAddressType,
     createLookupTableResolver,
-    type BindingProof,
     type SocialAddress,
     type SocialIdentity,
-    Sniffings,
 } from '@masknet/shared-base'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { IdentityServiceState } from '../../Base/state/IdentityService.js'
-import { BaseMaskX } from '../../../entry-types.js'
+import { compact, uniqBy } from 'lodash-es'
 import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
+import { BaseMaskX } from '../../../entry-types.js'
 import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
 import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
-import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
+import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
-import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
+import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
@@ -55,28 +51,6 @@ function getCrossBellHandles(nickname: string, bio: string) {
     return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())
-}
-
-function getNextIDPlatform() {
-    if (Sniffings.is_twitter_page) return NextIDPlatform.Twitter
-    return
-}
-
-async function getWalletAddressesFromNextID({ identifier, publicKey }: SocialIdentity): Promise<BindingProof[]> {
-    if (!identifier?.userId) return EMPTY_LIST
-
-    const platform = getNextIDPlatform()
-    if (!platform) return EMPTY_LIST
-
-    const latestActivatedBinding = await NextIDProof.NextIDProof.queryLatestBindingByPlatform(
-        platform,
-        identifier.userId,
-        publicKey,
-    )
-    if (!latestActivatedBinding) return EMPTY_LIST
-    return latestActivatedBinding.proofs.filter(
-        (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
-    )
 }
 
 const resolveMaskXAddressType = createLookupTableResolver<BaseMaskX.SourceType, SocialAddressType>(
@@ -150,30 +124,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
         if (!response.isOk() || !response.value.ownerAddress) return
         return this.createSocialAddress(SocialAddressType.Mask, response.value.ownerAddress)
-    }
-
-    /** Read a social address from NextID. */
-    private async getSocialAddressesFromNextID(identity: SocialIdentity) {
-        try {
-            const listOfAddress = await getWalletAddressesFromNextID(identity)
-            return compact(
-                listOfAddress.map((x) =>
-                    this.createSocialAddress(
-                        SocialAddressType.NEXT_ID,
-                        x.identity,
-                        '',
-                        undefined,
-                        x.latest_checked_at,
-                        x.created_at,
-                    ),
-                ),
-            )
-        } catch (err) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error('Failed to get social address from Next.ID', err)
-            }
-            return []
-        }
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
@@ -279,21 +229,18 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
-        const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromARBID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromCrossbell(identity),
-            socialAddressFromNextID,
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),
         ])
         const mergedIdentities = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
         const identities = uniqBy(mergedIdentities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-        const identitiesFromNextID = await socialAddressFromNextID
 
         const handle = identity.identifier?.userId
         if (!handle) return []
@@ -310,17 +257,15 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         )
         const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
 
-        const result = identities
-            .filter((x) => {
-                const address = x.address.toLowerCase()
-                if (trustedAddresses.includes(address)) return true
-                if (x.type === SocialAddressType.Address) {
-                    const handles = verifiedHandleMap.get(address) || []
-                    return handles.length ? handles.includes(handle) : true
-                }
-                return false
-            })
-            .concat(identitiesFromNextID)
+        const result = identities.filter((x) => {
+            const address = x.address.toLowerCase()
+            if (trustedAddresses.includes(address)) return true
+            if (x.type === SocialAddressType.Address) {
+                const handles = verifiedHandleMap.get(address) || []
+                return handles.length ? handles.includes(handle) : true
+            }
+            return false
+        })
         return result
     }
 }

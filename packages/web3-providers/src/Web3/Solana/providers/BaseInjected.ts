@@ -1,4 +1,4 @@
-import { isExtensionSiteType, type Account } from '@masknet/shared-base'
+import { type Account } from '@masknet/shared-base'
 import type { InjectedWalletBridge } from '@masknet/injected-script'
 import { ChainId, type ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
 import { BaseSolanaWalletProvider } from './Base.js'
@@ -12,8 +12,7 @@ export abstract class SolanaInjectedWalletProvider extends BaseSolanaWalletProvi
     }
 
     get readyPromise() {
-        if (!isExtensionSiteType()) return this.bridge.untilAvailable()
-        return Promise.reject(new Error('Not available on extension site.'))
+        return this.bridge.untilAvailable()
     }
 
     setup() {

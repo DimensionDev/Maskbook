@@ -1,6 +1,5 @@
 import { Button, Link, Typography, useTheme, ThemeProvider } from '@mui/material'
-import { MaskColors, MaskLightTheme, getMaskColor, makeStyles } from '@masknet/theme'
-import { Sniffings } from '@masknet/shared-base'
+import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
     useNetworkDescriptor,
@@ -36,9 +35,7 @@ const useStyles = makeStyles<{
         padding: theme.spacing(0, 1.5),
         marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
         display: 'flex',
-        background:
-            contentBackground ??
-            (Sniffings.is_dashboard_page ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+        background: contentBackground ?? theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
         height: disableChange ? 60 : 82,
@@ -52,13 +49,13 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         fontWeight: 700,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !Sniffings.is_dashboard_page ? theme.palette.maskColor.dark : textColor,
+        color: theme.palette.maskColor.dark,
         paddingTop: 2,
         lineHeight: '18px',
     },
@@ -93,10 +90,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: Sniffings.is_dashboard_page ? textColor : theme.palette.maskColor?.dark,
+        color: theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -152,12 +149,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     return (
         <>
-            <section
-                className={cx(
-                    classes.statusBox,
-                    classes.currentAccount,
-                    Sniffings.is_dashboard_page ? classes.dashboardBackground : '',
-                )}>
+            <section className={cx(classes.statusBox, classes.currentAccount)}>
                 <WalletIcon
                     size={30}
                     badgeSize={12}
