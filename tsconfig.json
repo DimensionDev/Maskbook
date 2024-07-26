@@ -74,11 +74,6 @@
       "@masknet/plugin-infra": ["./packages/plugin-infra/src/entry.ts"],
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
       "@masknet/public-api": ["./packages/public-api/src/index.ts"],
-      "@masknet/sandboxed-plugin-runtime": ["./packages/sandboxed-plugin-runtime/src/runtime/export.ts"],
-      "@masknet/sandboxed-plugin-runtime/background": ["./packages/sandboxed-plugin-runtime/src/background/index.ts"],
-      "@masknet/sandboxed-plugin-runtime/site-adaptor": [
-        "./packages/sandboxed-plugin-runtime/src/site-adaptor/index.ts"
-      ],
       "@masknet/shared": ["./packages/shared/src/index.ts"],
       "@masknet/shared-base": ["./packages/shared-base/src/index.ts"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src/index.ts"],
