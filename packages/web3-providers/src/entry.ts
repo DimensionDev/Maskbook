@@ -21,9 +21,6 @@ export { Lens } from './Lens/index.js'
 export { RedPacket } from './RedPacket/index.js'
 export { TheGraphRedPacket } from './TheGraph/index.js'
 export { SimpleHashEVM, SimpleHashSolana, SPAM_SCORE } from './SimpleHash/index.js'
-export { SnapshotSearch } from './Snapshot/index.js'
-export { Snapshot } from './Snapshot/index.js'
-export { FriendTech } from './FriendTech/index.js'
 
 // Web3
 export { getConnection } from './Web3/Router/apis/getConnection.js'

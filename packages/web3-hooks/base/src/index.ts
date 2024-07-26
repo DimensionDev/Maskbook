@@ -81,7 +81,6 @@ export * from './useWeb3Utils.js'
 export * from './useWeb3Connection.js'
 export * from './useWeb3Hub.js'
 export * from './useWeb3State.js'
-export * from './useSnapshotSpacesByTwitterHandle.js'
 export * from './useIterator.js'
 export * from './useMountReport.js'
 

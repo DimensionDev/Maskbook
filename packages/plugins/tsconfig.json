@@ -1,8 +1,4 @@
 {
   "extends": "../../tsconfig.leaf.json",
-  "references": [
-    { "path": "./Calendar/tsconfig.json" },
-    { "path": "./RedPacket/tsconfig.json" },
-    { "path": "./Snapshot/tsconfig.json" }
-  ]
+  "references": [{ "path": "./Calendar/tsconfig.json" }, { "path": "./RedPacket/tsconfig.json" }]
 }

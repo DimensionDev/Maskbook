@@ -69,14 +69,6 @@ export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
     {
         u: () => new URL('./brands/CyberConnect.svg', import.meta.url).href,
     },
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/CyberConnect.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/CyberConnect.light.svg', import.meta.url).href,
-    },
 ])
 export const Danger = /*#__PURE__*/ __createIcon('Danger', [
     {
@@ -3750,16 +3742,6 @@ export const MenuWalletsActive = /*#__PURE__*/ __createIcon('MenuWalletsActive',
         u: () => new URL('./menus/MenuWalletsActive.png', import.meta.url).href,
     },
 ])
-export const Approval = /*#__PURE__*/ __createIcon('Approval', [
-    {
-        u: () => new URL('./plugins/Approval.svg', import.meta.url).href,
-    },
-])
-export const ArtBlocks = /*#__PURE__*/ __createIcon('ArtBlocks', [
-    {
-        u: () => new URL('./plugins/ArtBlocks.png', import.meta.url).href,
-    },
-])
 export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
     {
         j: () =>
@@ -3790,11 +3772,6 @@ export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
         u: () => new URL('./plugins/Collectibles.svg', import.meta.url).href,
     },
 ])
-export const CrossBridge = /*#__PURE__*/ __createIcon('CrossBridge', [
-    {
-        u: () => new URL('./plugins/CrossBridge.png', import.meta.url).href,
-    },
-])
 export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSearch', [
     {
         u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url).href,
@@ -3810,46 +3787,6 @@ export const ENSCover = /*#__PURE__*/ __createIcon('ENSCover', [
         u: () => new URL('./plugins/ENSCover.svg', import.meta.url).href,
     },
 ])
-export const FileService = /*#__PURE__*/ __createIcon('FileService', [
-    {
-        u: () => new URL('./plugins/FileService.svg', import.meta.url).href,
-    },
-])
-export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
-    {
-        u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
-    },
-])
-export const FriendTech = /*#__PURE__*/ __createIcon('FriendTech', [
-    {
-        u: () => new URL('./plugins/FriendTech.svg', import.meta.url).href,
-    },
-])
-export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/Gitcoin.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/Gitcoin.light.svg', import.meta.url).href,
-    },
-])
-export const GoodGhosting = /*#__PURE__*/ __createIcon('GoodGhosting', [
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/GoodGhosting.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/GoodGhosting.light.svg', import.meta.url).href,
-    },
-])
-export const Markets = /*#__PURE__*/ __createIcon('Markets', [
-    {
-        u: () => new URL('./plugins/Markets.png', import.meta.url).href,
-    },
-])
 export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
     {
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
@@ -3863,16 +3800,6 @@ export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
 export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
     {
         u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
-    },
-])
-export const PoolTogether = /*#__PURE__*/ __createIcon('PoolTogether', [
-    {
-        u: () => new URL('./plugins/PoolTogether.png', import.meta.url).href,
-    },
-])
-export const Savings = /*#__PURE__*/ __createIcon('Savings', [
-    {
-        u: () => new URL('./plugins/Savings.svg', import.meta.url).href,
     },
 ])
 export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
@@ -3900,29 +3827,9 @@ export const Shared = /*#__PURE__*/ __createIcon('shared', [
         u: () => new URL('./plugins/shared.svg', import.meta.url).href,
     },
 ])
-export const Snapshot = /*#__PURE__*/ __createIcon('Snapshot', [
-    {
-        u: () => new URL('./plugins/Snapshot.svg', import.meta.url).href,
-    },
-])
 export const SpaceId = /*#__PURE__*/ __createIcon('SpaceId', [
     {
         u: () => new URL('./plugins/SpaceId.svg', import.meta.url).href,
-    },
-])
-export const TipCoin = /*#__PURE__*/ __createIcon('TipCoin', [
-    {
-        u: () => new URL('./plugins/TipCoin.svg', import.meta.url).href,
-    },
-])
-export const Transak = /*#__PURE__*/ __createIcon('Transak', [
-    {
-        u: () => new URL('./plugins/Transak.png', import.meta.url).href,
-    },
-])
-export const Unstoppable = /*#__PURE__*/ __createIcon('Unstoppable', [
-    {
-        u: () => new URL('./plugins/Unstoppable.svg', import.meta.url).href,
     },
 ])
 export const Valuables = /*#__PURE__*/ __createIcon('Valuables', [
