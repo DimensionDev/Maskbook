@@ -1,5 +1,4 @@
 import { SingletonModal } from '@masknet/shared-base'
-import type { VerifyNextIDDialogCloseProps, VerifyNextIDDialogProps } from '../components/VerifyNextIDDialog/index.js'
 import type { ConfirmDialogOpenProps } from './ConfirmDialog/index.js'
 import type { ConfirmModalCloseProps, ConfirmModalOpenProps } from './ConfirmModal/index.js'
 import type { ConnectWalletModalCloseProps, ConnectWalletModalOpenProps } from './ConnectWalletModal/index.js'
@@ -37,4 +36,3 @@ export const SelectFungibleTokenModal = new SingletonModal<
     SelectFungibleTokenModalOpenProps,
     SelectFungibleTokenModalCloseProps
 >()
-export const VerifyNextIDModal = new SingletonModal<VerifyNextIDDialogProps, VerifyNextIDDialogCloseProps>()

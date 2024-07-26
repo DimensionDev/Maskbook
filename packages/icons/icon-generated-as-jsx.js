@@ -3727,11 +3727,6 @@ export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
         s: true,
     },
 ])
-export const Bit = /*#__PURE__*/ __createIcon('Bit', [
-    {
-        u: () => new URL('./plugins/Bit.svg', import.meta.url).href,
-    },
-])
 export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
     {
         u: () => new URL('./plugins/Calendar.svg', import.meta.url).href,
@@ -3740,11 +3735,6 @@ export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
 export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
     {
         u: () => new URL('./plugins/Collectibles.svg', import.meta.url).href,
-    },
-])
-export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSearch', [
-    {
-        u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url).href,
     },
 ])
 export const ENS = /*#__PURE__*/ __createIcon('ENS', [
@@ -3767,11 +3757,6 @@ export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
         u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
     },
 ])
-export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
-    {
-        u: () => new URL('./plugins/ScamSniffer.svg', import.meta.url).href,
-    },
-])
 export const SettingInfo = /*#__PURE__*/ __createIcon('SettingInfo', [
     {
         c: ['dark'],
@@ -3790,26 +3775,6 @@ export const Shared = /*#__PURE__*/ __createIcon('shared', [
 export const SpaceId = /*#__PURE__*/ __createIcon('SpaceId', [
     {
         u: () => new URL('./plugins/SpaceId.svg', import.meta.url).href,
-    },
-])
-export const Valuables = /*#__PURE__*/ __createIcon('Valuables', [
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/Valuables.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/Valuables.light.svg', import.meta.url).href,
-    },
-])
-export const Web3Profile = /*#__PURE__*/ __createIcon('Web3Profile', [
-    {
-        u: () => new URL('./plugins/Web3Profile.svg', import.meta.url).href,
-    },
-])
-export const Web3ProfileCard = /*#__PURE__*/ __createIcon('Web3ProfileCard', [
-    {
-        u: () => new URL('./plugins/Web3ProfileCard.svg', import.meta.url).href,
     },
 ])
 export const CN = /*#__PURE__*/ __createIcon('CN', [

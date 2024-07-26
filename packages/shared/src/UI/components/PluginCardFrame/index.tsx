@@ -18,10 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         color: theme.palette.maskColor.main,
     },
-    web3Icon: {
-        marginRight: 6,
-        marginTop: 2,
-    },
     item1: {
         color: theme.palette.maskColor.secondaryDark,
         fontSize: '14px',
@@ -52,9 +48,9 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
 
     const PluginName = (
         <Stack className={classes.title} direction="row">
-            {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
+            {icon}
             <Typography fontSize={16} fontWeight={700} color={theme.palette.maskColor.main}>
-                {title ?? t.plugin_card_frame_default_title()}
+                {title}
             </Typography>
         </Stack>
     )
