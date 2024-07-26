@@ -69,14 +69,6 @@ export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
     {
         u: () => new URL('./brands/CyberConnect.svg', import.meta.url).href,
     },
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/CyberConnect.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/CyberConnect.light.svg', import.meta.url).href,
-    },
 ])
 export const Danger = /*#__PURE__*/ __createIcon('Danger', [
     {
@@ -3750,16 +3742,6 @@ export const MenuWalletsActive = /*#__PURE__*/ __createIcon('MenuWalletsActive',
         u: () => new URL('./menus/MenuWalletsActive.png', import.meta.url).href,
     },
 ])
-export const Approval = /*#__PURE__*/ __createIcon('Approval', [
-    {
-        u: () => new URL('./plugins/Approval.svg', import.meta.url).href,
-    },
-])
-export const ArtBlocks = /*#__PURE__*/ __createIcon('ArtBlocks', [
-    {
-        u: () => new URL('./plugins/ArtBlocks.png', import.meta.url).href,
-    },
-])
 export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
     {
         j: () =>
@@ -3790,11 +3772,6 @@ export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
         u: () => new URL('./plugins/Collectibles.svg', import.meta.url).href,
     },
 ])
-export const CrossBridge = /*#__PURE__*/ __createIcon('CrossBridge', [
-    {
-        u: () => new URL('./plugins/CrossBridge.png', import.meta.url).href,
-    },
-])
 export const DecentralizedSearch = /*#__PURE__*/ __createIcon('DecentralizedSearch', [
     {
         u: () => new URL('./plugins/DecentralizedSearch.svg', import.meta.url).href,
@@ -3810,46 +3787,6 @@ export const ENSCover = /*#__PURE__*/ __createIcon('ENSCover', [
         u: () => new URL('./plugins/ENSCover.svg', import.meta.url).href,
     },
 ])
-export const FileService = /*#__PURE__*/ __createIcon('FileService', [
-    {
-        u: () => new URL('./plugins/FileService.svg', import.meta.url).href,
-    },
-])
-export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
-    {
-        u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
-    },
-])
-export const FriendTech = /*#__PURE__*/ __createIcon('FriendTech', [
-    {
-        u: () => new URL('./plugins/FriendTech.svg', import.meta.url).href,
-    },
-])
-export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/Gitcoin.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/Gitcoin.light.svg', import.meta.url).href,
-    },
-])
-export const GoodGhosting = /*#__PURE__*/ __createIcon('GoodGhosting', [
-    {
-        c: ['dark'],
-        u: () => new URL('./plugins/GoodGhosting.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./plugins/GoodGhosting.light.svg', import.meta.url).href,
-    },
-])
-export const Markets = /*#__PURE__*/ __createIcon('Markets', [
-    {
-        u: () => new URL('./plugins/Markets.png', import.meta.url).href,
-    },
-])
 export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
     {
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
@@ -3863,16 +3800,6 @@ export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
 export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
     {
         u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,
-    },
-])
-export const PoolTogether = /*#__PURE__*/ __createIcon('PoolTogether', [
-    {
-        u: () => new URL('./plugins/PoolTogether.png', import.meta.url).href,
-    },
-])
-export const Savings = /*#__PURE__*/ __createIcon('Savings', [
-    {
-        u: () => new URL('./plugins/Savings.svg', import.meta.url).href,
     },
 ])
 export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
@@ -3900,29 +3827,9 @@ export const Shared = /*#__PURE__*/ __createIcon('shared', [
         u: () => new URL('./plugins/shared.svg', import.meta.url).href,
     },
 ])
-export const Snapshot = /*#__PURE__*/ __createIcon('Snapshot', [
-    {
-        u: () => new URL('./plugins/Snapshot.svg', import.meta.url).href,
-    },
-])
 export const SpaceId = /*#__PURE__*/ __createIcon('SpaceId', [
     {
         u: () => new URL('./plugins/SpaceId.svg', import.meta.url).href,
-    },
-])
-export const TipCoin = /*#__PURE__*/ __createIcon('TipCoin', [
-    {
-        u: () => new URL('./plugins/TipCoin.svg', import.meta.url).href,
-    },
-])
-export const Transak = /*#__PURE__*/ __createIcon('Transak', [
-    {
-        u: () => new URL('./plugins/Transak.png', import.meta.url).href,
-    },
-])
-export const Unstoppable = /*#__PURE__*/ __createIcon('Unstoppable', [
-    {
-        u: () => new URL('./plugins/Unstoppable.svg', import.meta.url).href,
     },
 ])
 export const Valuables = /*#__PURE__*/ __createIcon('Valuables', [
@@ -3943,210 +3850,6 @@ export const Web3Profile = /*#__PURE__*/ __createIcon('Web3Profile', [
 export const Web3ProfileCard = /*#__PURE__*/ __createIcon('Web3ProfileCard', [
     {
         u: () => new URL('./plugins/Web3ProfileCard.svg', import.meta.url).href,
-    },
-])
-export const AchievementBurn = /*#__PURE__*/ __createIcon('AchievementBurn', [
-    {
-        u: () => new URL('./rss3/AchievementBurn.svg', import.meta.url).href,
-    },
-])
-export const AchievementReceive = /*#__PURE__*/ __createIcon('AchievementReceive', [
-    {
-        u: () => new URL('./rss3/AchievementReceive.svg', import.meta.url).href,
-    },
-])
-export const ApprovalApprove = /*#__PURE__*/ __createIcon('ApprovalApprove', [
-    {
-        u: () => new URL('./rss3/ApprovalApprove.svg', import.meta.url).href,
-    },
-])
-export const CollectibleApprove = /*#__PURE__*/ __createIcon('CollectibleApprove', [
-    {
-        u: () => new URL('./rss3/CollectibleApprove.svg', import.meta.url).href,
-    },
-])
-export const CollectibleBurn = /*#__PURE__*/ __createIcon('CollectibleBurn', [
-    {
-        u: () => new URL('./rss3/CollectibleBurn.svg', import.meta.url).href,
-    },
-])
-export const CollectibleIn = /*#__PURE__*/ __createIcon('CollectibleIn', [
-    {
-        u: () => new URL('./rss3/CollectibleIn.svg', import.meta.url).href,
-    },
-])
-export const CollectibleMint = /*#__PURE__*/ __createIcon('CollectibleMint', [
-    {
-        u: () => new URL('./rss3/CollectibleMint.svg', import.meta.url).href,
-    },
-])
-export const CollectibleOut = /*#__PURE__*/ __createIcon('CollectibleOut', [
-    {
-        u: () => new URL('./rss3/CollectibleOut.svg', import.meta.url).href,
-    },
-])
-export const DonationDonate = /*#__PURE__*/ __createIcon('DonationDonate', [
-    {
-        u: () => new URL('./rss3/DonationDonate.svg', import.meta.url).href,
-    },
-])
-export const DonationLaunch = /*#__PURE__*/ __createIcon('DonationLaunch', [
-    {
-        u: () => new URL('./rss3/DonationLaunch.svg', import.meta.url).href,
-    },
-])
-export const Follow = /*#__PURE__*/ __createIcon('Follow', [
-    {
-        u: () => new URL('./rss3/Follow.svg', import.meta.url).href,
-    },
-])
-export const GovernancePropose = /*#__PURE__*/ __createIcon('GovernancePropose', [
-    {
-        u: () => new URL('./rss3/GovernancePropose.svg', import.meta.url).href,
-    },
-])
-export const GovernanceVote = /*#__PURE__*/ __createIcon('GovernanceVote', [
-    {
-        u: () => new URL('./rss3/GovernanceVote.svg', import.meta.url).href,
-    },
-])
-export const NoteBurn = /*#__PURE__*/ __createIcon('NoteBurn', [
-    {
-        u: () => new URL('./rss3/NoteBurn.svg', import.meta.url).href,
-    },
-])
-export const NoteCreate = /*#__PURE__*/ __createIcon('NoteCreate', [
-    {
-        u: () => new URL('./rss3/NoteCreate.svg', import.meta.url).href,
-    },
-])
-export const NoteEdit = /*#__PURE__*/ __createIcon('NoteEdit', [
-    {
-        u: () => new URL('./rss3/NoteEdit.svg', import.meta.url).href,
-    },
-])
-export const NoteLink = /*#__PURE__*/ __createIcon('NoteLink', [
-    {
-        u: () => new URL('./rss3/NoteLink.svg', import.meta.url).href,
-    },
-])
-export const NoteMint = /*#__PURE__*/ __createIcon('NoteMint', [
-    {
-        u: () => new URL('./rss3/NoteMint.svg', import.meta.url).href,
-    },
-])
-export const ProfileBurn = /*#__PURE__*/ __createIcon('ProfileBurn', [
-    {
-        u: () => new URL('./rss3/ProfileBurn.svg', import.meta.url).href,
-    },
-])
-export const ProfileCreate = /*#__PURE__*/ __createIcon('ProfileCreate', [
-    {
-        u: () => new URL('./rss3/ProfileCreate.svg', import.meta.url).href,
-    },
-])
-export const ProfileLink = /*#__PURE__*/ __createIcon('ProfileLink', [
-    {
-        u: () => new URL('./rss3/ProfileLink.svg', import.meta.url).href,
-    },
-])
-export const ProfileProxy = /*#__PURE__*/ __createIcon('ProfileProxy', [
-    {
-        u: () => new URL('./rss3/ProfileProxy.svg', import.meta.url).href,
-    },
-])
-export const ProfileUpdate = /*#__PURE__*/ __createIcon('ProfileUpdate', [
-    {
-        u: () => new URL('./rss3/ProfileUpdate.svg', import.meta.url).href,
-    },
-])
-export const RSS3Link = /*#__PURE__*/ __createIcon(
-    'RSS3Link',
-    [
-        {
-            j: () =>
-                /*#__PURE__*/ _jsx('svg', {
-                    xmlns: 'http://www.w3.org/2000/svg',
-                    fill: 'none',
-                    viewBox: '0 0 9 2',
-                    children: /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        d: 'M.848 1.872a.83.83 0 0 1-.608-.256A.879.879 0 0 1 0 .992C0 .747.08.544.24.384A.83.83 0 0 1 .848.128a.83.83 0 0 1 .608.256.8.8 0 0 1 .256.608.85.85 0 0 1-.256.624.83.83 0 0 1-.608.256Zm3.391 0a.83.83 0 0 1-.608-.256.879.879 0 0 1-.24-.624c0-.245.08-.448.24-.608a.83.83 0 0 1 .608-.256.83.83 0 0 1 .608.256.8.8 0 0 1 .256.608.85.85 0 0 1-.256.624.83.83 0 0 1-.608.256Zm3.391 0a.83.83 0 0 1-.609-.256.879.879 0 0 1-.24-.624c0-.245.08-.448.24-.608A.83.83 0 0 1 7.63.128a.83.83 0 0 1 .608.256.8.8 0 0 1 .256.608.85.85 0 0 1-.256.624.83.83 0 0 1-.608.256Z',
-                    }),
-                }),
-            s: true,
-        },
-    ],
-    [9, 2],
-)
-export const TokenBridge = /*#__PURE__*/ __createIcon('TokenBridge', [
-    {
-        u: () => new URL('./rss3/TokenBridge.svg', import.meta.url).href,
-    },
-])
-export const TokenBurn = /*#__PURE__*/ __createIcon('TokenBurn', [
-    {
-        u: () => new URL('./rss3/TokenBurn.svg', import.meta.url).href,
-    },
-])
-export const TokenIn = /*#__PURE__*/ __createIcon('TokenIn', [
-    {
-        u: () => new URL('./rss3/TokenIn.svg', import.meta.url).href,
-    },
-])
-export const TokenLiquidity = /*#__PURE__*/ __createIcon('TokenLiquidity', [
-    {
-        u: () => new URL('./rss3/TokenLiquidity.svg', import.meta.url).href,
-    },
-])
-export const TokenMint = /*#__PURE__*/ __createIcon('TokenMint', [
-    {
-        u: () => new URL('./rss3/TokenMint.svg', import.meta.url).href,
-    },
-])
-export const TokenOut = /*#__PURE__*/ __createIcon('TokenOut', [
-    {
-        u: () => new URL('./rss3/TokenOut.svg', import.meta.url).href,
-    },
-])
-export const TokenStake = /*#__PURE__*/ __createIcon('TokenStake', [
-    {
-        u: () => new URL('./rss3/TokenStake.svg', import.meta.url).href,
-    },
-])
-export const TokenSwap = /*#__PURE__*/ __createIcon('TokenSwap', [
-    {
-        u: () => new URL('./rss3/TokenSwap.svg', import.meta.url).href,
-    },
-])
-export const TokenUnstake = /*#__PURE__*/ __createIcon('TokenUnstake', [
-    {
-        u: () => new URL('./rss3/TokenUnstake.svg', import.meta.url).href,
-    },
-])
-export const Unfollow = /*#__PURE__*/ __createIcon('Unfollow', [
-    {
-        u: () => new URL('./rss3/Unfollow.svg', import.meta.url).href,
-    },
-])
-export const UnknownBurn = /*#__PURE__*/ __createIcon('UnknownBurn', [
-    {
-        u: () => new URL('./rss3/UnknownBurn.svg', import.meta.url).href,
-    },
-])
-export const UnknownCancel = /*#__PURE__*/ __createIcon('UnknownCancel', [
-    {
-        u: () => new URL('./rss3/UnknownCancel.svg', import.meta.url).href,
-    },
-])
-export const UnknownIn = /*#__PURE__*/ __createIcon('UnknownIn', [
-    {
-        u: () => new URL('./rss3/UnknownIn.svg', import.meta.url).href,
-    },
-])
-export const UnknownOut = /*#__PURE__*/ __createIcon('UnknownOut', [
-    {
-        u: () => new URL('./rss3/UnknownOut.svg', import.meta.url).href,
     },
 ])
 export const CN = /*#__PURE__*/ __createIcon('CN', [

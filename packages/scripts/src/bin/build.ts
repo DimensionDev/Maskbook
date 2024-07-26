@@ -4,7 +4,6 @@ import { promisify } from 'util'
 import { series } from 'gulp'
 import { codegen } from '../codegen/index.js'
 import { awaitChildProcess, awaitTask } from '../utils/index.js'
-import { buildExtensionFlag } from '../extension/index.js'
 import { extensionArgsParser } from './args.js'
 
 await promisify(codegen)()
@@ -15,7 +14,4 @@ if (process.argv[2] === '--' || process.argv[2] === '\\--') {
         shell: true,
     })
     process.exit(await awaitChildProcess(child))
-} else {
-    const task = series(buildExtensionFlag('build', extensionArgsParser('production')))
-    await awaitTask(task)
 }

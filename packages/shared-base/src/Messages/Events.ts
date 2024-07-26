@@ -73,21 +73,6 @@ export interface Web3ProfileDialogEvent {
     open: boolean
 }
 
-export interface CheckSecurityConfirmationDialogEvent {
-    open: boolean
-}
-
-export type CheckSecurityDialogEvent =
-    | {
-          open: true
-          searchHidden: boolean
-          tokenAddress?: string
-          chainId?: number
-      }
-    | {
-          open: false
-      }
-
 export interface ApplicationDialogEvent {
     open: boolean
     pluginID: string
@@ -230,10 +215,6 @@ export interface SwapDialogEvent {
         chainId?: number
         address?: string
     }
-}
-
-export interface SwitchLogoDialogEvent {
-    open: boolean
 }
 
 export interface WalletSettingsDialogEvent {

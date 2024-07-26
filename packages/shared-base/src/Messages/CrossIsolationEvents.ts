@@ -1,9 +1,7 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type {
-    CheckSecurityConfirmationDialogEvent,
     CompositionDialogEvent,
     Web3ProfileDialogEvent,
-    CheckSecurityDialogEvent,
     ApplicationDialogEvent,
     HideSearchResultInspectorEvent,
     SwapDialogEvent,
@@ -20,7 +18,6 @@ import type {
     RequestsUpdatedEvent,
     WalletLockStatusUpdatedEvent,
     PopupWalletConnectEvent,
-    SwitchLogoDialogEvent,
     PasswordStatusUpdatedEvent,
 } from './Events.js'
 
@@ -46,8 +43,6 @@ export interface CrossIsolationEvents {
     compositionDialogEvent: CompositionDialogEvent
     web3ProfileDialogEvent: Web3ProfileDialogEvent
     hideSearchResultInspectorEvent: HideSearchResultInspectorEvent
-    checkSecurityDialogEvent: CheckSecurityDialogEvent
-    checkSecurityConfirmationDialogEvent: CheckSecurityConfirmationDialogEvent
     applicationDialogEvent: ApplicationDialogEvent
     personaBindFinished: PersonaBindFinishEvent
     swapDialogEvent: SwapDialogEvent
@@ -66,7 +61,6 @@ export interface CrossIsolationEvents {
     walletLockStatusUpdated: WalletLockStatusUpdatedEvent
     passwordStatusUpdated: PasswordStatusUpdatedEvent
     walletLockTimeUpdated: void
-    switchLogoDialogUpdated: SwitchLogoDialogEvent
 }
 
 export type PluginMessageEmitter<T> = { readonly [key in keyof T]: PluginMessageEmitterItem<T[key]> }

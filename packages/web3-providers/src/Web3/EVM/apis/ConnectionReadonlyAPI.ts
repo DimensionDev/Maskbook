@@ -22,7 +22,6 @@ import {
     getTransactionStatusType,
     parseStringOrBytes32,
     createERC20Token,
-    isCryptoPunksContractAddress,
     getEthereumConstant,
     getTokenConstant,
     createAccount,
@@ -305,12 +304,6 @@ export class EVMConnectionReadonlyAPI
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) return ''
-
-        // CRYPTOPUNKS
-        if (isCryptoPunksContractAddress(address)) {
-            const cryptoPunksContract = this.Contract.getCryptoPunksContract(address, options)
-            return (await cryptoPunksContract?.methods.punkIndexToAddress(tokenId).call()) ?? ''
-        }
 
         // ERC721
         const contract = this.Contract.getERC721Contract(address, options)

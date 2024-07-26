@@ -4,14 +4,10 @@
     { "path": "./tsconfig.npm.json" },
     // Only list top-level projects here
     { "path": "./packages/polyfills/tsconfig.json" },
-    { "path": "./packages/mask/tsconfig.json" },
     { "path": "./packages/injected-script/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/main/tsconfig.json" },
-    { "path": "./packages/mask-sdk/public-api/tsconfig.json" },
     // Tests
     // @masknet/scripts: insert-here 1
     { "path": "./packages/base/tsconfig.tests.json" },
-    { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
@@ -63,7 +59,6 @@
       // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
       // which is unwanted. We need to take care of this.
 
-      "@masknet/backup-format": ["./packages/backup-format/src/index.ts"],
       "@masknet/base": ["./packages/base/src/index.ts"],
       "@masknet/encryption": ["./packages/encryption/src/index.ts"],
       "@masknet/flags": ["./packages/flags/src/index.ts"],
@@ -107,37 +102,6 @@
       // @masknet/scripts: insert-here
 
       // Plugins
-      "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src/index.ts"],
-      "@masknet/plugin-file-service": ["./packages/plugins/FileService/src/index.ts"],
-      "@masknet/plugin-rss3": ["./packages/plugins/RSS3/src/index.ts"],
-      "@masknet/plugin-template": ["./packages/plugins/template/src/index.ts"],
-      "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src/index.ts"],
-      "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src/index.ts"],
-      "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src/index.ts"],
-      "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src/index.ts"],
-      "@masknet/plugin-handle": ["./packages/plugins/Handle/src/index.ts"],
-      "@masknet/plugin-approval": ["./packages/plugins/Approval/src/index.ts"],
-      "@masknet/plugin-scam-warning": ["./packages/plugins/ScamWarning/src/index.ts"],
-      "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src/index.ts"],
-      "@masknet/plugin-avatar": ["./packages/plugins/Avatar/src/index.ts"],
-      "@masknet/plugin-redpacket": ["./packages/plugins/RedPacket/src/index.ts"],
-      "@masknet/plugin-maskbox": ["./packages/plugins/MaskBox/src/index.ts"],
-      "@masknet/plugin-smart-pay": ["./packages/plugins/SmartPay/src/index.ts"],
-      "@masknet/plugin-transak": ["./packages/plugins/Transak/src/index.ts"],
-      "@masknet/plugin-vcent": ["./packages/plugins/VCent/src/index.ts"],
-      "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src/index.ts"],
-      "@masknet/plugin-claim": ["./packages/plugins/Claim/src/index.ts"],
-      "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src/index.ts"],
-      "@masknet/plugin-pets": ["./packages/plugins/Pets/src/index.ts"],
-      "@masknet/plugin-tips": ["./packages/plugins/Tips/src/index.ts"],
-      "@masknet/plugin-nextid": ["./packages/plugins/NextID/src/index.ts"],
-      "@masknet/plugin-trader": ["./packages/plugins/Trader/src/index.ts"],
-      "@masknet/plugin-profilecard": ["./packages/plugins/ProfileCard/src/index.ts"],
-      "@masknet/plugin-savings": ["./packages/plugins/Savings/src/index.ts"],
-      "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src/index.ts"],
-      "@masknet/plugin-friend-tech": ["./packages/plugins/FriendTech/src/tsconfig.json"],
-      // @masknet/scripts: insert-here 3
-      "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src/index.ts"],
       "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src/index.ts"]
     }
   },

@@ -15,7 +15,6 @@ import { CloverProvider } from './Clover.js'
 import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { ZerionProvider } from './Zerion.js'
-import { MaskWalletProvider, setMaskWalletProviderInstance } from './MaskWallet.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
@@ -29,7 +28,6 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
     createWeb3Provider(options?: WalletAPI.ProviderOptions<ChainId>): Web3Provider
 }
 
-export { MaskWalletProviderInstance } from './MaskWallet.js'
 export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
 export function createEVMWalletProviders(
     context: WalletAPI.IOContext,
@@ -38,9 +36,9 @@ export function createEVMWalletProviders(
 ) {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.MaskWallet]: new MaskWalletProvider(context.MaskWalletContext, hostStorage, eip4337Storage),
         [ProviderType.Browser]: new BrowserProvider(),
         [ProviderType.MetaMask]: new MetaMaskProvider(),
+        [ProviderType.MaskWallet]: new MetaMaskProvider(),
         [ProviderType.WalletConnect]:
             Flags.wc_enabled ? new WalletConnectProvider(context.WalletConnectContext) : new EVMNoneProvider(),
         [ProviderType.Coin98]: new EVM_Coin98Provider(),
@@ -60,6 +58,5 @@ export function createEVMWalletProviders(
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     } satisfies Record<ProviderType, EVMWalletProvider>
     EVMWalletProviders = p
-    setMaskWalletProviderInstance(p[ProviderType.MaskWallet])
     return p
 }

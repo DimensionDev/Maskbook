@@ -1,7 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { PluginTransFieldRender, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
@@ -96,16 +96,9 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
         targetPluginRef.current.scrollIntoView()
     }, [focusPluginID, noAvailablePlugins])
 
-    const onSwitch = useCallback(
-        async (id: string, checked: boolean) => {
-            if (id === PluginID.GoPlusSecurity && checked === false) {
-                CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
-            } else {
-                await setPluginMinimalModeEnabled?.(id, !checked)
-            }
-        },
-        [setPluginMinimalModeEnabled],
-    )
+    const onSwitch = async (id: string, checked: boolean) => {
+        await setPluginMinimalModeEnabled?.(id, !checked)
+    }
 
     return (
         <List>

@@ -30,15 +30,12 @@ import {
     useChainContext,
     useNativeToken,
     useNativeTokenPrice,
-    useWallet,
     useNonFungibleAssetsByCollectionAndOwner,
     useEnvironmentContext,
 } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import { useAsync } from 'react-use'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
@@ -253,10 +250,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
-    const wallet = useWallet()
     const { data: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const linkedPersona = useCurrentLinkedPersona()
@@ -487,7 +482,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             className={classes.toolbar}
                             nativeToken={nativeTokenDetailed}
                             nativeTokenPrice={nativeTokenPrice}
-                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                             gasConfig={gasOption}
                             gasLimit={Number.parseInt(gasLimit, 10)}
                             onChange={onGasOptionChange}

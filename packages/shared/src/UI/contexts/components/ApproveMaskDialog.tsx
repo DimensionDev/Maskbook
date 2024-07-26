@@ -7,7 +7,6 @@ import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import { toFixed } from '@masknet/web3-shared-base'
-import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
 import { useSharedTrans } from '../../../index.js'
 
@@ -52,12 +51,11 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
 
     const maskAddress = Utils.getMaskTokenAddress(chainId)
     const { data: maskToken } = useFungibleToken(pluginID, maskAddress)
-    const { PAYMASTER_MASK_CONTRACT_ADDRESS } = useSmartPayConstants(chainId)
 
     const [{ type: approveStateType }, transactionState, approveCallback] = useERC20TokenApproveCallback(
         maskAddress ?? '',
         maskToken ? toFixed(new BigNumber(amount).shiftedBy(maskToken.decimals ?? 0).integerValue()) : '',
-        PAYMASTER_MASK_CONTRACT_ADDRESS ?? '',
+        '',
         noop,
         chainId,
     )

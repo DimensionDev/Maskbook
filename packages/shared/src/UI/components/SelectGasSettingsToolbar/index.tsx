@@ -1,45 +1,35 @@
-import { useEffect, useState, useMemo, useCallback, memo } from 'react'
-import { useAsync } from 'react-use'
-import { BigNumber } from 'bignumber.js'
+import { Icons } from '@masknet/icons'
 import {
-    useMenuConfig,
-    FormattedBalance,
-    useSharedTrans,
     ApproveMaskDialog,
+    FormattedBalance,
     SelectGasSettingsModal,
+    useMenuConfig,
+    useSharedTrans,
 } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import {
-    GasOptionType,
-    isZero,
-    formatBalance,
-    formatCurrency,
-    isSameAddress,
-    ZERO,
-    toFixed,
-} from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    type ChainId,
-    formatWeiToEther,
-    type GasConfig,
-    GasEditor,
-    formatGas,
-    type Transaction,
-} from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box, Grid, type MenuProps } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
-    useNetworkContext,
     useFungibleToken,
     useFungibleTokenPrice,
+    useNetworkContext,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
-import { SettingsContext } from '../SettingsBoard/Context.js'
+import { formatBalance, formatCurrency, GasOptionType, isSameAddress, isZero, ZERO } from '@masknet/web3-shared-base'
+import {
+    type ChainId,
+    formatGas,
+    formatWeiToEther,
+    type GasConfig,
+    GasEditor,
+    type Transaction,
+} from '@masknet/web3-shared-evm'
+import { Box, Grid, MenuItem, type MenuProps, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
+import { SettingsContext } from '../SettingsBoard/Context.js'
 
 export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
     extends withClasses<'label'> {
@@ -230,14 +220,6 @@ export function SelectGasSettingsToolbarUI({
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
-    const { value: currencyRatio } = useAsync(async () => {
-        const chainId = await SmartPayBundler.getSupportedChainId()
-        const depositPaymaster = new DepositPaymaster(chainId)
-        const ratio = await depositPaymaster.getRatio()
-
-        return ratio
-    }, [])
-
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
             .reverse()
@@ -303,9 +285,8 @@ export function SelectGasSettingsToolbarUI({
         if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
             return result
         }
-        if (!currencyRatio) return ZERO
-        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
-    }, [gasLimit, gasOption, currencyRatio, currentGasCurrency, nativeToken])
+        return ZERO
+    }, [gasLimit, gasOption, currentGasCurrency, nativeToken])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '$0'

@@ -1,9 +1,8 @@
 import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { first, omit } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
@@ -15,7 +14,6 @@ import {
     useProviderDescriptor,
     useDefaultChainId,
     useRecentTransactions,
-    useWallets,
     useAccount,
     useChainId,
     useWeb3Utils,
@@ -78,10 +76,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const account = useAccount()
         const globalChainId = useChainId()
         const { chainId } = useChainContext()
-        const allWallets = useWallets()
         const { pluginID: currentPluginID } = useNetworkContext()
-        const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
-        const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))
@@ -168,7 +163,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         onChangeWallet={onChangeWallet ? onChangeWallet : () => SelectProviderModal.open()}
                         selected={isSameAddress(descriptionProps.address, account)}
                         onSelect={onSelect}
-                        expectedChainId={isSmartPay ? smartPaySupportChainId : globalChainId}
+                        expectedChainId={globalChainId}
                     />
                 :   <MenuItem key="connect">
                         <Button

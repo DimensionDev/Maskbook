@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
+import { Image, useReportSpam } from '@masknet/shared'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
@@ -68,9 +68,6 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                     <ShadowRootTooltip title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
-                :   null}
-                {isSpam ?
-                    <NFTSpamBadge />
                 :   null}
             </Box>
             <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
