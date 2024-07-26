@@ -1,4 +1,4 @@
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 
 export function getNetworkPluginID() {
@@ -18,5 +18,5 @@ export function getDefaultNetworkType() {
 }
 
 export function getDefaultProviderType() {
-    return Sniffings.is_popup_page ? ProviderType.MaskWallet : ProviderType.None
+    return ProviderType.None
 }

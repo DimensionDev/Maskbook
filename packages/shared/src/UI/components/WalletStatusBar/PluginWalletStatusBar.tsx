@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useCallback, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     useNetworkContext,
     useProviderDescriptor,
@@ -14,7 +14,7 @@ import {
     RevokeChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
@@ -25,8 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor:
-            Sniffings.is_dashboard_page ? MaskColorVar.mainBackground : alpha(theme.palette.maskColor.bottom, 0.8),
+        backgroundColor: alpha(theme.palette.maskColor.bottom, 0.8),
         boxShadow:
             theme.palette.mode === 'dark' ?
                 '0px 0px 20px rgba(255, 255, 255, 0.12)'

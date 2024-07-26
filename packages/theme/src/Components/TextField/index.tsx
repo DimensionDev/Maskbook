@@ -4,15 +4,12 @@ import type { BoxProps } from '@mui/system'
 import {
     Box,
     formHelperTextClasses,
-    TextField,
     type StandardTextFieldProps,
     type InputProps,
     Typography,
     InputBase,
     inputBaseClasses,
-    alpha,
 } from '@mui/material'
-import { Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '../../UIHelper/makeStyles.js'
 import { MaskColorVar, getMaskColor } from '../../CSSVariables/vars.js'
 
@@ -66,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
             borderColor: MaskColorVar.redMain.alpha(0.8),
         },
         [`&.${formHelperTextClasses.focused}`]: {
-            borderColor: Sniffings.is_dashboard_page ? alpha(theme.palette.maskColor.primary, 0.5) : 'transparent',
+            borderColor: 'transparent',
         },
     },
     inputDisabled: {
@@ -75,12 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputFocused: {
         background: 'transparent',
-        ...(Sniffings.is_dashboard_page ?
-            {
-                outline: `2px solid ${alpha(theme.palette.maskColor.primary, 0.2)}`,
-                borderColor: alpha(theme.palette.maskColor.primary, 0.5),
-            }
-        :   { boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}` }),
+        boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))
 
@@ -105,40 +97,20 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 </Typography>
             :   null}
             {label && typeof label !== 'string' ? label : null}
-            {Sniffings.is_dashboard_page ?
-                <TextField
-                    ref={ref}
-                    {...rest}
-                    classes={{ root: classes.field }}
-                    variant="standard"
-                    required={required}
-                    helperText={helperText}
-                    InputProps={{
-                        disableUnderline: true,
-                        classes: {
-                            disabled: classes.inputDisabled,
-                            focused: classes.inputFocused,
-                            ...InputProps.classes,
-                        },
-                        ...InputProps,
-                        className: cx(classes.input, InputProps.className),
-                    }}
-                />
-            :   <InputBase
-                    className={classes.field}
-                    {...omit(InputProps, 'disableUnderline')}
-                    {...omit(
-                        rest,
-                        'margin',
-                        'onKeyDown',
-                        'onKeyUp',
-                        'InputProps',
-                        'inputProps',
-                        'FormHelperTextProps',
-                        'onInvalid',
-                    )}
-                />
-            }
+            <InputBase
+                className={classes.field}
+                {...omit(InputProps, 'disableUnderline')}
+                {...omit(
+                    rest,
+                    'margin',
+                    'onKeyDown',
+                    'onKeyUp',
+                    'InputProps',
+                    'inputProps',
+                    'FormHelperTextProps',
+                    'onInvalid',
+                )}
+            />
         </Box>
     )
 })

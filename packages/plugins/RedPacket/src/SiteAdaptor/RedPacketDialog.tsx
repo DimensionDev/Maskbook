@@ -4,13 +4,7 @@ import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import {
-    ApplicationBoardModal,
-    InjectedDialog,
-    NetworkTab,
-    useCurrentLinkedPersona,
-    LoadingStatus,
-} from '@masknet/shared'
+import { InjectedDialog, NetworkTab, useCurrentLinkedPersona, LoadingStatus } from '@masknet/shared'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -179,7 +173,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 publicKey,
             })
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
-            ApplicationBoardModal.close()
             handleClose()
         },
         [senderName, handleClose, compositionType],

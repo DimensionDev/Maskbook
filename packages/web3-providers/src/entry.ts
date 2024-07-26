@@ -10,12 +10,8 @@ export { evm } from './Manager/registry.js'
 
 export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
-export { Minds } from './Minds/index.js'
 export { Instagram } from './Instagram/index.js'
-export { DSearch } from './DSearch/index.js'
 export { CoinMarketCap } from './CoinMarketCap/index.js'
-export { Mirror } from './Mirror/index.js'
-export { CryptoScamDB } from './CryptoScamDB/index.js'
 export { Multicall } from './Multicall/index.js'
 export { Lens } from './Lens/index.js'
 export { RedPacket } from './RedPacket/index.js'
@@ -46,12 +42,6 @@ export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
 // NextID
 export { NextIDProof, NextIDStorageProvider } from './NextID/index.js'
-
-// Web3Bio
-export { Web3Bio } from './Web3Bio/index.js'
-
-// CoinGecko
-export { CoinGeckoTrending } from './CoinGecko/index.js'
 
 // R2D2
 export { R2D2TokenList } from './R2D2/index.js'

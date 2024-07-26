@@ -10,7 +10,6 @@ import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
 import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
 import WETH from '@masknet/web3-contracts/abis/WETH.json'
-import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
 import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
 import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
 import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
@@ -26,7 +25,6 @@ class ABI {
         this.construct(ERC721 as AbiItem[])
         this.construct(ERC20 as AbiItem[])
         this.construct(WETH as AbiItem[]) // wrap & unwrap
-        this.construct(AaveLendingPool as AbiItem[]) // Aave saving
         this.construct(WalletContract as AbiItem[]) // Contract Wallet
         this.construct(Create2Factory as AbiItem[]) // Create2Factory
         this.construct(LensHub as AbiItem[])

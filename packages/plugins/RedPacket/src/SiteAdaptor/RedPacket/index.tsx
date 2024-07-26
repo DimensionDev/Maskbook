@@ -1,10 +1,10 @@
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, parseColor } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
@@ -187,47 +187,22 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const postLink = usePostLink()
 
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
-    const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
     const platform = source?.toLowerCase() as 'lens' | 'farcaster' | 'twitter'
-    const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
 
-    // TODO payload.chainId is undefined on production mode
-    const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
-
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
-            if (isOnFirefly) {
-                const context = hasClaimed ? (`${platform}_claimed` as const) : platform
-                return t.share_on_firefly({
-                    context,
-                    sender: handle ?? '',
-                    link: link!,
-                })
-            }
-            const isOnTwitter = Sniffings.is_twitter_page
-            const isOnFacebook = Sniffings.is_facebook_page
-            const shareTextOption = {
-                sender: payload.sender.name,
-                payload: link!,
-                network: network?.name ?? 'Mainnet',
-                account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
-                interpolation: { escapeValue: false },
-            }
-            if (hasClaimed) {
-                return isOnTwitter || isOnFacebook ?
-                        t.share_message_official_account(shareTextOption)
-                    :   t.share_message_not_twitter(shareTextOption)
-            }
-
-            return isOnTwitter || isOnFacebook ?
-                    t.share_unclaimed_message_official_account(shareTextOption)
-                :   t.share_unclaimed_message_not_twitter(shareTextOption)
+            const context = hasClaimed ? (`${platform}_claimed` as const) : platform
+            return t.share_on_firefly({
+                context,
+                sender: handle ?? '',
+                link: link!,
+            })
         },
-        [payload, link, claimTxHash, t, network?.name, platform, isOnFirefly, handle],
+        [link, t, platform, handle],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {

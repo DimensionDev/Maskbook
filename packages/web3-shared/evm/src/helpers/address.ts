@@ -3,7 +3,6 @@ import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     ChainIdList,
-    getArbConstants,
     getENSConstants,
     getLensProfileConstants,
     getRedPacketConstants,
@@ -96,16 +95,11 @@ export function isLensProfileAddress(address: string) {
     return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
 }
 
-const { ARB_CONTRACT_ADDRESS } = getArbConstants(ChainId.Arbitrum)
-export function isArbContractAddress(contract_address: string) {
-    return isSameAddress(contract_address, ARB_CONTRACT_ADDRESS)
-}
-
 const { SID_CONTRACT_ADDRESS } = getSpaceIdConstants(ChainId.BSC)
 export function isSpaceIdContractAddress(contract_address: string) {
     return isSameAddress(contract_address, SID_CONTRACT_ADDRESS)
 }
 
 export function isXnsContractAddress(address: string) {
-    return isENSContractAddress(address) || isArbContractAddress(address) || isSpaceIdContractAddress(address)
+    return isENSContractAddress(address) || isSpaceIdContractAddress(address)
 }

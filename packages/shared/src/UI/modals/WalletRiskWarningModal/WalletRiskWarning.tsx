@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedTrans } from '@masknet/shared'
-import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 
@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {
-        borderRadius: Sniffings.is_dashboard_page ? 9999 : undefined,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             marginBottom: theme.spacing(2),
         },

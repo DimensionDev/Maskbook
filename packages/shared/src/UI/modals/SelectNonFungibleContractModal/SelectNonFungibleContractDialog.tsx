@@ -1,22 +1,21 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { compact } from 'lodash-es'
-import Fuse from 'fuse.js'
-import { useSubscription } from 'use-subscription'
-import { DialogContent, List, Stack, Typography } from '@mui/material'
-import { Box } from '@mui/system'
 import { Icons } from '@masknet/icons'
-import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
-import { ContractItem } from './ContractItem.js'
+import { DialogContent, List } from '@mui/material'
+import { Box } from '@mui/system'
+import Fuse from 'fuse.js'
+import { compact } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useSubscription } from 'use-subscription'
 import { useSharedTrans } from '../../../locales/index.js'
-import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
-import { AddCollectiblesModal } from '../modals.js'
+import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
+import { ContractItem } from './ContractItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -158,16 +157,6 @@ export const SelectNonFungibleContractDialog = memo(
             return fuse.search(keyword).map((x) => x.item)
         }, [fuse, keyword, filteredCollections])
 
-        const handleAddCollectibles = useCallback(async () => {
-            const results = await AddCollectiblesModal.openAndWaitForClose({
-                pluginID,
-                chainId,
-            })
-            if (!results) return
-            const [contract, tokenIds] = results
-            await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
-        }, [account, pluginID, chainId])
-
         const handleSelectCollection = useCallback(
             (collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => {
                 onSubmit?.(collection)
@@ -177,11 +166,7 @@ export const SelectNonFungibleContractDialog = memo(
         )
 
         return (
-            <InjectedDialog
-                titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
-                open={open}
-                onClose={onClose}
-                title={t.select_collection()}>
+            <InjectedDialog titleBarIconStyle="back" open={open} onClose={onClose} title={t.select_collection()}>
                 <DialogContent classes={{ root: classes.content }}>
                     <Box px={2}>
                         <MaskTextField
@@ -216,17 +201,6 @@ export const SelectNonFungibleContractDialog = memo(
                             ))}
                         </List>
                     }
-
-                    <Stack
-                        className={classes.toolbar}
-                        direction="row"
-                        justifyContent="center"
-                        onClick={handleAddCollectibles}>
-                        <Icons.Avatar size={24} />
-                        <Typography ml={2} fontWeight={700}>
-                            {t.add_collectibles()}
-                        </Typography>
-                    </Stack>
                 </DialogContent>
             </InjectedDialog>
         )

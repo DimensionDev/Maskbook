@@ -1,9 +1,9 @@
-import { v4 as uuid } from 'uuid'
-import { type ChainId, ProviderType, type RequestArguments, EthereumMethodType } from '@masknet/web3-shared-evm'
-import { BaseEVMWalletProvider } from './Base.js'
 import { safeUnreachable } from '@masknet/kit'
-import { EnhanceableSite, type Account, getSiteType } from '@masknet/shared-base'
+import { type Account } from '@masknet/shared-base'
+import { type ChainId, EthereumMethodType, ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
+import { v4 as uuid } from 'uuid'
+import { BaseEVMWalletProvider } from './Base.js'
 
 export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     constructor() {
@@ -11,8 +11,6 @@ export class EVMCustomEventProvider extends BaseEVMWalletProvider {
     }
 
     setup() {
-        if (getSiteType() !== EnhanceableSite.Firefly) return
-
         // @ts-expect-error TODO: define the custom event
         document.addEventListener(
             'mask_custom_event_provider_event',

@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
+import { forwardRef, useCallback, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { noop } from 'lodash-es'
 import { format } from 'date-fns'
@@ -6,13 +6,7 @@ import { Icons } from '@masknet/icons'
 import { useChainContext, useWeb3Utils, useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import {
-    isSameAddress,
-    type RecentTransactionComputed,
-    TransactionStatusType,
-    type Transaction,
-} from '@masknet/web3-shared-base'
-import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
+import { type RecentTransactionComputed, TransactionStatusType, type Transaction } from '@masknet/web3-shared-base'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
 import { useSharedTrans } from '../../../index.js'
 
@@ -107,8 +101,6 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
         onClear(tx)
     }, [onClear, tx])
 
-    const domainOrAddress = useMemo(() => getContractOwnerDomain(address), [address])
-
     const [txStatus, setTxStatus] = useState(tx.status)
 
     useEffect(() => {
@@ -139,9 +131,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             </Grid>
             <Grid item className={classes.cell} flexGrow={1} md={4} justifyContent="right">
                 <Typography variant="body1" className={classes.linkText}>
-                    {address && isSameAddress(domainOrAddress, address) ?
-                        Utils.formatAddress(address, 4)
-                    :   domainOrAddress || address}
+                    {Utils.formatAddress(address, 4)}
                 </Typography>
                 <Link
                     className={classes.link}

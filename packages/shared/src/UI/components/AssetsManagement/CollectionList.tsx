@@ -1,7 +1,7 @@
 import { compact, range } from 'lodash-es'
 import { memo, useCallback, useRef, type RefObject, type ReactNode, useMemo } from 'react'
 import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
-import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
@@ -79,15 +79,6 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
     }
 })
 
-function getTopOffset() {
-    if (Sniffings.is_twitter_page) {
-        // 53, height of the sticky bar of Twitter,
-        // 96, height of the header of web3 tab
-        return 53 + 96
-    }
-    // TODO Other sites
-    return 0
-}
 export interface CollectionListProps
     extends BoxProps,
         Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'>,
@@ -154,9 +145,8 @@ export const CollectionList = memo(function CollectionList({
         } else {
             const rect = containerRef.current?.getBoundingClientRect()
             if (!rect) return
-            const offset = getTopOffset()
-            if (Math.abs(rect.top - offset) < 50) return
-            const top = rect.top + window.scrollY - offset
+            if (Math.abs(rect.top) < 50) return
+            const top = rect.top + window.scrollY
             window.scroll({ top, behavior: 'smooth' })
         }
     }, [disableWindowScroll])

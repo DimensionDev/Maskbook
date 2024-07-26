@@ -10,7 +10,6 @@ export * from './useBlockNumber.js'
 export * from './useBlockTimestamp.js'
 export * from './useBlockedFungibleTokens.js'
 export * from './useBlockedNonFungibleTokens.js'
-export * from './useBlockie.js'
 export * from './useChainColor.js'
 // Only for internal usage
 // export * from './useChainContext.js'

@@ -16,7 +16,6 @@ overrides:
   reflect-metadata: 0.1.13
   webpack@5: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
   '@tanstack/react-query': ^5.29.2
-  '@lifi/widget': ^2.10.1
 
 patchedDependencies:
   '@chainsafe/as-sha256@0.3.1':
@@ -519,35 +518,6 @@ importers:
 
   packages/public-api: {}
 
-  packages/sandboxed-plugin-runtime:
-    dependencies:
-      '@masknet/compartment':
-        specifier: ^0.4.2
-        version: 0.4.2
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../icons
-      '@masknet/membrane':
-        specifier: ^0.1.5
-        version: 0.1.5
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../shared-base
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../theme
-      '@masknet/typed-message':
-        specifier: workspace:^
-        version: link:../typed-message/base
-      '@masknet/web-endowments':
-        specifier: ^0.1.1
-        version: 0.1.1
-      async-call-rpc:
-        specifier: ^6.4.0
-        version: 6.4.0
-
-  packages/sandboxed-plugins: {}
-
   packages/scripts:
     dependencies:
       '@masknet/static-module-record-swc':
@@ -602,22 +572,6 @@ importers:
       web-ext:
         specifier: ^7.6.2
         version: 7.6.2
-
-  packages/sentry:
-    dependencies:
-      '@sentry/browser':
-        specifier: 7.66.0
-        version: 7.66.0
-    devDependencies:
-      '@rollup/plugin-node-resolve':
-        specifier: ^15.2.1
-        version: 15.2.1(rollup@3.28.1)
-      '@rollup/plugin-replace':
-        specifier: ^5.0.2
-        version: 5.0.2(rollup@3.28.1)
-      rollup:
-        specifier: ^3.28.1
-        version: 3.28.1
 
   packages/shared:
     dependencies:
@@ -1023,18 +977,12 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@0.0.0-experimental-8039e6d0b-20231026)
-      '@types/ethereum-blockies':
-        specifier: ^0.1.0
-        version: 0.1.0
       '@types/use-subscription':
         specifier: ^1.0.0
         version: 1.0.0
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2
-      ethereum-blockies:
-        specifier: ^0.1.1
-        version: 0.1.1
       react-use:
         specifier: ^17.4.0
         version: 17.4.0(patch_hash=hl7dr6rjk7dvc67mgwhhnozk2u)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -3435,30 +3383,6 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@locker/near-membrane-base@0.11.10:
-    resolution: {integrity: sha512-KWcB6iWAUU6sgQs/R85hPxUrtC0A0O0++ePGwtgfl+hyov+AbOG3VnVfGfybMv4BSUvKf0GtMg/4oKI0b9AlHw==}
-    dependencies:
-      '@locker/near-membrane-shared': 0.11.10
-    dev: false
-
-  /@locker/near-membrane-dom@0.11.10:
-    resolution: {integrity: sha512-/tzD9WFRaSpZVBuIpOl3ISFNFBoheq5YVSN5WfQUC0FBRN3mkR32+bGA95OuDyy93MzGgPgVSMKXD7d21+32VQ==}
-    dependencies:
-      '@locker/near-membrane-base': 0.11.10
-      '@locker/near-membrane-shared': 0.11.10
-      '@locker/near-membrane-shared-dom': 0.11.10
-    dev: false
-
-  /@locker/near-membrane-shared-dom@0.11.10:
-    resolution: {integrity: sha512-+RbtGeitKWLPbD2doS2HxuoXbjkjaia8yWKAk/lDXkqeU74QtmLjJrVHY7Rs/MDiBGM2RFsc3VYPe5t0rmrxtA==}
-    dependencies:
-      '@locker/near-membrane-shared': 0.11.10
-    dev: false
-
-  /@locker/near-membrane-shared@0.11.10:
-    resolution: {integrity: sha512-+wPlUCaGJ/9rzRSugOi1FpoV5uwFKgkpmFFgKCdEhf6C6YQD234dvlYPZ1U+sCBUBFU84eaUEgxrC3UnHEsu/A==}
-    dev: false
-
   /@magic-works/i18n-codegen@0.5.0(typescript@5.5.0-beta):
     resolution: {integrity: sha512-AeJG2cAYXn848PXIiXTpPJofus4hGxvhkaZ/+/yOHzFkD90YqL0TX44GcgxQeMp0Hwvt1YkFm/YJmpiHN7laSg==}
     hasBin: true
@@ -3494,10 +3418,6 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@masknet/compartment@0.4.2:
-    resolution: {integrity: sha512-zY9NPar8BhdWcOlZbZaWn5RwXQuPzEHkb5c5Ibijm+Mix4LaDMy6DQLt06NIwoCPFra4Jz4dqiLVsQJ0YtZTWQ==}
-    dev: false
-
   /@masknet/eslint-plugin@0.2.0(eslint@8.57.0):
     resolution: {integrity: sha512-tpYFKDk6lYZHZUGluyVCR2yH55I6/dqmF2nBzIabvoW6xr9fEsZOefB9a4UfONobCXHlQ0hvk1jU5wHMKffKBA==}
     engines: {node: '>= 18'}
@@ -3509,13 +3429,6 @@ packages:
 
   /@masknet/kit@0.3.0:
     resolution: {integrity: sha512-/7kJ/i0R5QXU1VMjY//vCkH2tnBhw5ffDTECT8zh40WfSedema0K4XriYrVa5IAI1VwHJMMqqCcRPnqCJ7nZZA==}
-    dev: false
-
-  /@masknet/membrane@0.1.5:
-    resolution: {integrity: sha512-DunCKuIQ37Y1qP7ik9qsxhoIHXCPYDTziwEL92xDjYjy8mfgBvCKYr/GOy+hQmM3tMwbylfwsZASNXDIEAcM0w==}
-    dependencies:
-      '@locker/near-membrane-base': 0.11.10
-      '@locker/near-membrane-dom': 0.11.10
     dev: false
 
   /@masknet/secp256k1-webcrypto@1.0.0:
@@ -3544,10 +3457,6 @@ packages:
       meow: 10.1.5
     optionalDependencies:
       '@napi-rs/image': 1.4.1
-    dev: false
-
-  /@masknet/web-endowments@0.1.1:
-    resolution: {integrity: sha512-lPrITorE+myeCzmG2PVXtghJN34e3q1zdsUCw20OuKwZh2aj2+swLVGlXo64d8hbxovO0nypX1X2CyIBSMwTyw==}
     dev: false
 
   /@mdn/browser-compat-data@5.2.42:
@@ -5473,10 +5382,6 @@ packages:
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
-
-  /@types/ethereum-blockies@0.1.0:
-    resolution: {integrity: sha512-yQgqv9dqnFm9pHmCPUBPGu4NRIGSD/hihO+BwcuzxaxmMX3juD97vRvwUB3uY/MUBQ+7pWvUWDPYSAcZ1dIQDA==}
-    dev: false
 
   /@types/expect@1.20.4:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
@@ -9790,10 +9695,6 @@ packages:
     resolution: {integrity: sha512-Z3ymjopaoft7JDoxZcEb3pwdGh7yiYMhOwm2doUt6ASXlMavpNlK6Cre0+IMl2VSGyEU9rkiperQhp5iRxn5Pg==}
     dependencies:
       fast-safe-stringify: 2.1.1
-    dev: false
-
-  /ethereum-blockies@0.1.1:
-    resolution: {integrity: sha512-ED+noMZ6z7RrzzhvrQna1L30C27MX+ZsdB5c/d5vygXtHjEyAQjQS2TgCYhPxs+z3U+u2YQsL9PiRkNl1f+ugg==}
     dev: false
 
   /ethereum-bloom-filters@1.0.10:

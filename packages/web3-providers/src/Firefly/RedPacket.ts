@@ -2,18 +2,15 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    EMPTY_LIST,
     type Pageable,
     type PageIndicator,
-    getSiteType,
-    EnhanceableSite,
-    EMPTY_LIST,
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
 import { FireflyRedPacketAPI } from '../entry-types.js'
 
-const siteType = getSiteType()
-const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
+const SITE_URL = location.origin
 const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {

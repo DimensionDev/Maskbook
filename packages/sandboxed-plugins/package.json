@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "name": "@masknet/sandboxed-plugins-root",
-  "type": "module",
-  "sideEffects": false,
-  "dependencies": {},
-  "devDependencies": {}
-}

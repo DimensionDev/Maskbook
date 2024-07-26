@@ -1,7 +1,7 @@
 import { Children, cloneElement, useCallback, useRef } from 'react'
 import { omit } from 'lodash-es'
 /* eslint-disable tss-unused-classes/unused-classes */
-import { EnhanceableSite, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
+import { EnhanceableSite, CrossIsolationMessages } from '@masknet/shared-base'
 import { ErrorBoundary, useValueRef } from '@masknet/shared-base-ui'
 import { type Cx, makeStyles, useDialogStackActor, usePortalShadowRoot } from '@masknet/theme'
 import {
@@ -31,7 +31,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gridTemplateColumns: '50px auto 50px',
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.modalTitleBg : undefined,
     },
 
     dialogTitleEndingContent: {
@@ -53,14 +52,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         `,
     },
     dialogContent: {
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottom : undefined,
+        background: undefined,
         overscrollBehavior: 'contain',
     },
-    dialogActions: {
-        background: Sniffings.is_dashboard_page ? theme.palette.maskColor.secondaryBottom : undefined,
-        boxShadow: Sniffings.is_dashboard_page ? theme.palette.maskColor.bottomBg : undefined,
-        backdropFilter: Sniffings.is_dashboard_page ? 'blur(8px)' : undefined,
-    },
+    dialogActions: {},
     dialogGap: {
         gridArea: 'gap',
     },
@@ -241,11 +236,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={
-                                        (
-                                            titleBarIconStyle !== 'close' &&
-                                            shouldReplaceExitWithBack &&
-                                            !Sniffings.is_dashboard_page
-                                        ) ?
+                                        titleBarIconStyle !== 'close' && shouldReplaceExitWithBack ?
                                             'back'
                                         :   titleBarIconStyle
                                     }

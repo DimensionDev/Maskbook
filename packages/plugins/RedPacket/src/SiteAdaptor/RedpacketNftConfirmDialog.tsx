@@ -7,13 +7,7 @@ import {
     formatTokenId,
     type GasConfig,
 } from '@masknet/web3-shared-evm'
-import {
-    AssetPreviewer,
-    PluginWalletStatusBar,
-    ChainBoundary,
-    WalletConnectedBoundary,
-    ApplicationBoardModal,
-} from '@masknet/shared'
+import { AssetPreviewer, PluginWalletStatusBar, ChainBoundary, WalletConnectedBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -213,7 +207,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 },
                 compositionType,
             )
-            ApplicationBoardModal.close()
         },
         [duration, message, senderName, contract, privateKey, transactionId, compositionType],
     )

@@ -1,7 +1,7 @@
 import { delay, getEnumAsArray } from '@masknet/kit'
 import { getRegisteredWeb3Providers } from '@masknet/web3-providers'
 import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
-import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -63,7 +63,6 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
         [onConnect, onClose],
     )
     const providers = useMemo(() => {
-        if (Sniffings.is_dashboard_page) return getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
         if (requiredSupportPluginID) return getRegisteredWeb3Providers(requiredSupportPluginID)
         return getEnumAsArray(NetworkPluginID).flatMap((x) => getRegisteredWeb3Providers(x.value))
     }, [requiredSupportPluginID])

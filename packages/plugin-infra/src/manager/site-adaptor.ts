@@ -1,6 +1,6 @@
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRef, ValueRefWithReady, Sniffings } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRef, ValueRefWithReady } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -36,7 +36,6 @@ const ActivatedPluginsSiteAdaptorFalse = new ValueRefWithReady<Plugin.SiteAdapto
 }
 
 export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | boolean) {
-    assertLocation()
     return useValueRef(
         minimalModeEqualsTo === 'any' ? ActivatedPluginsSiteAdaptorAny
         : minimalModeEqualsTo === true ? ActivatedPluginsSiteAdaptorTrue
@@ -45,23 +44,14 @@ export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | bool
     )
 }
 
-function assertLocation() {
-    if (Sniffings.is_popup_page || Sniffings.is_dashboard_page) {
-        throw new Error('This hook should not be called in popup or dashboard.')
-    }
-}
-
 useActivatedPluginsSiteAdaptor.visibility = {
     useMinimalMode: () => {
-        assertLocation()
         return useValueRef(ActivatedPluginsSiteAdaptorTrue)
     },
     useNotMinimalMode: () => {
-        assertLocation()
         return useValueRef(ActivatedPluginsSiteAdaptorFalse)
     },
     useAnyMode: () => {
-        assertLocation()
         return useValueRef(ActivatedPluginsSiteAdaptorAny)
     },
 }
@@ -70,12 +60,10 @@ useActivatedPluginsSiteAdaptor.visibility = {
 const TRUE = new ValueRef(true)
 const FALSE = new ValueRef(false)
 export function useIsMinimalMode(pluginID: string | undefined) {
-    assertLocation()
     return useValueRef(pluginID ? minimalModeSub[pluginID] || TRUE : FALSE)
 }
 
 export async function checkIsMinimalMode(pluginID: string) {
-    assertLocation()
     const sub = minimalModeSub[pluginID]
     if (!sub) return true
     await sub.readyPromise
