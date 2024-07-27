@@ -1,52 +1,44 @@
-import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
+import Aave from '@masknet/web3-constants/evm/aave.json'
+import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
+import Arb from '@masknet/web3-constants/evm/arb.json'
+import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
+import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json'
+import DeBank from '@masknet/web3-constants/evm/debank.json'
+import ENS from '@masknet/web3-constants/evm/ens.json'
+import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
+import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
-import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
-import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
+import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
+import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
+import Lens from '@masknet/web3-constants/evm/lens.json'
+import Lido from '@masknet/web3-constants/evm/lido.json'
+import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
+import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
+import Pet from '@masknet/web3-constants/evm/pet.json'
+import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
+import BUILTIN_RPC from '@masknet/web3-constants/evm/rpc.json'
+import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
+import SpaceId from '@masknet/web3-constants/evm/space-id.json'
+import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
+import TokenList from '@masknet/web3-constants/evm/token-list.json'
 import Token from '@masknet/web3-constants/evm/token.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
-import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
-import RPC from '@masknet/web3-constants/evm/rpc.json'
-import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
-import TokenList from '@masknet/web3-constants/evm/token-list.json'
-import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
-import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
-import Aave from '@masknet/web3-constants/evm/aave.json'
-import Lido from '@masknet/web3-constants/evm/lido.json'
-import Pet from '@masknet/web3-constants/evm/pet.json'
-import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
-import ENS from '@masknet/web3-constants/evm/ens.json'
-import Arb from '@masknet/web3-constants/evm/arb.json'
-import SpaceId from '@masknet/web3-constants/evm/space-id.json'
-import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
-import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
-import Lens from '@masknet/web3-constants/evm/lens.json'
-import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json'
-import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
 
-import {
-    transformAllHook,
-    transformHook,
-    transformAll,
-    transform,
-    transformAllFromJSON,
-    transformFromJSON,
-} from '@masknet/web3-shared-base'
 import { getEnumAsArray } from '@masknet/kit'
+import { transform, transformAll, transformAllHook, transformHook } from '@masknet/web3-shared-base'
 import { ChainId } from '../types/index.js'
 
-function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
+function getRPC() {
     try {
-        const map = {
-            WEB3_CONSTANTS_RPC: process.env.WEB3_CONSTANTS_RPC,
-        }
-        return map[key] || ''
+        return JSON.parse(process.env.WEB3_CONSTANTS_RPC!) as typeof BUILTIN_RPC
     } catch {
-        return ''
+        return BUILTIN_RPC
     }
 }
+
+const RPC = getRPC()
 
 export const ChainIdList = getEnumAsArray(ChainId).map((x) => x.value)
 
@@ -95,8 +87,8 @@ export const getMaskBoxConstants = transformAll(ChainId, MaskBox)
 export const useMaskBoxConstant = transformHook(getMaskBoxConstants)
 export const useMaskBoxConstants = transformAllHook(getMaskBoxConstants)
 
-export const getRPCConstants = transformAllFromJSON(ChainId, getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
-export const getRPCConstant = transformFromJSON(ChainId, getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
+export const getRPCConstant = transform(ChainId, RPC)
+export const getRPCConstants = transformAll(ChainId, RPC)
 export const useRPCConstant = transformHook(getRPCConstants)
 export const useRPCConstants = transformAllHook(getRPCConstants)
 
