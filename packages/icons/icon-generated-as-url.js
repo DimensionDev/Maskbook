@@ -103,7 +103,6 @@ export function x_2_y_2_url() { return new URL("./brands/X2Y2.svg", import.meta.
 export function x_log_dark_url() { return new URL("./brands/XLog.dark.svg", import.meta.url).href }
 export function x_log_url() { return new URL("./brands/XLog.svg", import.meta.url).href }
 export function you_tube_url() { return new URL("./brands/YouTube.svg", import.meta.url).href }
-export function you_tube_gray_url() { return new URL("./brands/YouTubeGray.svg", import.meta.url).href }
 export function zerion_url() { return new URL("./brands/Zerion.svg", import.meta.url).href }
 export function zero_x_dark_url() { return new URL("./brands/ZeroX.dark.svg", import.meta.url).href }
 export function zero_x_url() { return new URL("./brands/ZeroX.svg", import.meta.url).href }

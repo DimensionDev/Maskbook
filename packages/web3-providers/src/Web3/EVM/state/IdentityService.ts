@@ -7,23 +7,18 @@ import {
     type SocialAddress,
     type SocialIdentity,
 } from '@masknet/shared-base'
-import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { compact, uniqBy } from 'lodash-es'
-import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
 import { BaseMaskX } from '../../../entry-types.js'
 import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
 import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
 import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
-import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
-import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
-const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi
-const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
@@ -37,18 +32,8 @@ function getLensNames(nickname: string, bio: string, homepage: string) {
     return [...names, homepageNames].filter(Boolean) as string[]
 }
 
-function getARBIDNames(userId: string, nickname: string, bio: string) {
-    return [userId.match(ARBID_RE), nickname.match(ARBID_RE), bio.match(ARBID_RE)].flatMap((result) => result ?? [])
-}
-
 function getSIDNames(userId: string, nickname: string, bio: string) {
     return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
-        .flatMap((result) => result || [])
-        .map((x) => x.toLowerCase())
-}
-
-function getCrossBellHandles(nickname: string, bio: string) {
-    return [nickname.match(CROSSBELL_HANDLE_RE), bio.match(CROSSBELL_HANDLE_RE)]
         .flatMap((result) => result || [])
         .map((x) => x.toLowerCase())
 }
@@ -95,21 +80,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return
     }
 
-    /** Read a social address from bio when it contains a csb handle. */
-    private async getSocialAddressFromCrossbell({ nickname = '', bio = '' }: SocialIdentity) {
-        const handles = getCrossBellHandles(nickname, bio)
-        if (!handles.length) return
-
-        const allSettled = await Promise.allSettled(
-            handles.map(async (handle) => {
-                const info = await RSS3.RSS3.getNameInfo(handle)
-                if (!info?.crossbell) return
-                return this.createSocialAddress(SocialAddressType.Crossbell, info.address, info.crossbell)
-            }),
-        )
-        return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
     /** Read a social address from avatar NextID storage. */
     private async getSocialAddressFromAvatarNextID({ identifier, publicKey }: SocialIdentity) {
         const userId = identifier?.userId
@@ -138,40 +108,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
                 return [
                     this.createSocialAddress(SocialAddressType.ENS, address, name),
                     this.createSocialAddress(SocialAddressType.Address, address, name),
-                ]
-            }),
-        )
-        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
-    private async getSocialAddressFromARBID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
-        const names = getARBIDNames(identifier?.userId ?? '', nickname, bio)
-        if (!names.length) return
-
-        const allSettled = await Promise.allSettled(
-            names.map(async (name) => {
-                const address = await ARBID.ARBID.lookup(name)
-                if (!address) return
-                return [
-                    this.createSocialAddress(SocialAddressType.ARBID, address, name, ChainId.Arbitrum),
-                    this.createSocialAddress(SocialAddressType.Address, address, name, ChainId.Arbitrum),
-                ]
-            }),
-        )
-        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
-    private async getSocialAddressFromSpaceID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
-        const names = getSIDNames(identifier?.userId ?? '', nickname, bio)
-        if (!names.length) return
-
-        const allSettled = await Promise.allSettled(
-            names.map(async (name) => {
-                const address = await SpaceID.SpaceID.lookup(name)
-                if (!address) return
-                return [
-                    this.createSocialAddress(SocialAddressType.SPACE_ID, address, name, ChainId.BSC),
-                    this.createSocialAddress(SocialAddressType.Address, address, name, ChainId.BSC),
                 ]
             }),
         )
@@ -231,10 +167,7 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromENS(identity),
-            this.getSocialAddressFromSpaceID(identity),
-            this.getSocialAddressFromARBID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
-            this.getSocialAddressFromCrossbell(identity),
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),
         ])
