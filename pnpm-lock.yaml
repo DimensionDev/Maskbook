@@ -1792,6 +1792,9 @@ importers:
       bignumber.js:
         specifier: 9.1.2
         version: 9.1.2
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
