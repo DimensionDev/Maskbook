@@ -1,15 +1,22 @@
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMessages } from '@masknet/web3-hooks-base'
-import { memo, useState, Suspense, useEffect } from 'react'
+import { memo, useState, Suspense, useEffect, use, useDeferredValue } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { Interaction } from './interaction.js'
 
 export const Component = memo(function InteractionPage() {
     const navigate = useNavigate()
-    const messages = useMessages()
+    // if the last message is removed (by either approved or denied) and we're closing the window because the queue is empty,
+    // we'll try to hold it for about 200ms so we can make sure there is no subsequent requests.
+    // we still need to show the last message, so we're using useDeferredValue here.
+    const messages = useDeferredValue(useMessages())
     const [messageIndex, setMessageIndex] = useState(0)
     const currentRequest = messages.at(messageIndex)
+
+    const [pendingAction, setPendingAction] = useState<undefined | Promise<void>>()
+    pendingAction && use(pendingAction)
+
     {
         const [prevLength, setPrev] = useState(messages.length)
         prevLength !== messages.length && setPrev(messages.length)
@@ -38,6 +45,7 @@ export const Component = memo(function InteractionPage() {
                 totalMessages={messages.length}
                 currentMessageIndex={messageIndex}
                 setMessageIndex={setMessageIndex}
+                setPendingAction={setPendingAction}
             />
         </Suspense>
     )

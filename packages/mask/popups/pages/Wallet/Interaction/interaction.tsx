@@ -15,11 +15,10 @@ import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import Services from '#services'
 import { useNavigate } from 'react-router-dom'
-import { WalletAssetTabs } from '../type.js'
-import urlcat from 'urlcat'
 import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
 import { AddChainRequest } from './AddChainRequest.js'
+import { delay } from '@masknet/kit'
 
 const useStyles = makeStyles()({
     left: {
@@ -43,6 +42,8 @@ interface InteractionProps {
 
     paymentToken: string
     setPaymentToken: (paymentToken: string) => void
+
+    setPendingAction: (pendingAction: undefined | Promise<void>) => void
 }
 
 export const Interaction = memo((props: InteractionProps) => {
@@ -57,22 +58,40 @@ export const Interaction = memo((props: InteractionProps) => {
     const [dangerDialogOpen, setDangerDialogOpen] = useState(false)
     const [confirmVerb, setConfirmVerb] = useState(t.confirm())
     const confirmAction = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
+    const hasOrigin = !!currentRequest.origin
+
+    const onRequestCountMightChanged = useCallback(() => {
+        // if there are still requests, do nothing here to let it show
+        const hasImmediateRequest = Message!.messages.getCurrentValue().length
+        if (hasImmediateRequest) return
+
+        // in case some websites send requests sequentially, we can avoid remove the current window and create a new one
+        const futureRequest = new Promise<void>((resolve) => {
+            const undo = Message!.messages.subscribe(() => Message!.messages.getCurrentValue().length && resolve())
+            delay(300).then(resolve).then(undo)
+        }).then(async () => {
+            // if there are new requests 300ms later, we do nothing and stop the Suspense
+            const hasSequentialRequest = Message!.messages.getCurrentValue().length
+            if (hasSequentialRequest) return
+
+            if (hasOrigin) await Services.Helper.removePopupWindow()
+            else navigate(PopupRoutes.Wallet, { replace: true })
+        })
+
+        startTransition(() => props.setPendingAction(futureRequest))
+        return futureRequest.finally(() => props.setPendingAction(undefined))
+    }, [Message, hasOrigin, navigate, props.setPendingAction])
 
     const [{ loading: cancelLoading }, onCancel] = useAsyncFn(async () => {
         await Message!.rejectRequest(currentRequest.ID)
-        if (currentRequest.origin) await Services.Helper.removePopupWindow()
-        navigate(PopupRoutes.Wallet, { replace: true })
-    }, [currentRequest.ID, Message, currentRequest.origin])
+        await onRequestCountMightChanged()
+    }, [currentRequest.ID, Message, onRequestCountMightChanged])
 
     const isLastRequest = props.totalMessages === 1
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         try {
             await confirmAction.current(isLastRequest)
-
-            if (!Message!.messages.getCurrentValue().length) {
-                if (currentRequest.origin) await Services.Helper.removePopupWindow()
-                else navigate(urlcat(PopupRoutes.Wallet, { tab: WalletAssetTabs.Activity }), { replace: true })
-            }
+            await onRequestCountMightChanged()
         } catch (error) {
             showSnackbar(
                 <Typography textAlign="center" width="275px">
@@ -83,7 +102,7 @@ export const Interaction = memo((props: InteractionProps) => {
                 { variant: 'error', autoHideDuration: 5000 },
             )
         }
-    }, [confirmAction.current, isLastRequest])
+    }, [isLastRequest, onRequestCountMightChanged, showSnackbar, t])
 
     const actionRunning = confirmLoading || cancelLoading
     const CancelButton = (

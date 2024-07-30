@@ -44,6 +44,7 @@ export abstract class MessageState<Request extends object, Response extends obje
         })
     }
 
+    private requestLock = Promise.resolve()
     private async createRequest(
         message: TransferableMessage<Request, Response>,
     ): Promise<ReasonableMessage<Request, Response>> {
@@ -57,16 +58,18 @@ export abstract class MessageState<Request extends object, Response extends obje
             updatedAt: now,
         }
 
-        const nextMessages = produce(this.storage.value, (draft: typeof this.storage.value) => {
-            for (const key in draft) {
-                if (draft[key].state !== MessageStateType.NOT_DEPEND) {
-                    delete draft[key]
+        this.requestLock = this.requestLock.then(() => {
+            const nextMessages = produce(this.storage.value, (draft: typeof this.storage.value) => {
+                for (const key in draft) {
+                    if (draft[key].state !== MessageStateType.NOT_DEPEND) {
+                        delete draft[key]
+                    }
                 }
-            }
-            draft[ID] = message_
+                draft[ID] = message_
+            })
+            return this.storage.setValue(nextMessages)
         })
-        console.log(nextMessages)
-        await this.storage.setValue(nextMessages)
+        await this.requestLock
         return message_
     }
 
