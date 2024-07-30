@@ -84,7 +84,7 @@ export const DSearchHandlers = [
                         symbol: 'TERRAFORMS',
                         chain: 1,
                         socialLinks: {
-                            website: 'http://mathcastles.xyz',
+                            website: 'https://mathcastles.xyz',
                             email: null,
                             twitter: 'mathcastles',
                             discord: 'https://discord.gg/mathcastles',
