@@ -8,7 +8,7 @@ export class Lido {
         return apr.toString()
     }
 
-    static async getLidoWatingTime(amount: string) {
+    static async getLidoWaitingTime(amount: string) {
         const result = await fetchJSON<{
             requestInfo: {
                 finalizationAt: string

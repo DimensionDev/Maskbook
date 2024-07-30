@@ -67,7 +67,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
         queryKey: ['savings', 'lido', 'time', amount],
         queryFn: async () => {
             if (!amount) return
-            return Lido.getLidoWatingTime(amount)
+            return Lido.getLidoWaitingTime(amount)
         },
     })
 
@@ -132,9 +132,9 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                 </Box>
                 {time ?
                     <Box className={classes.row}>
-                        <Typography className={classes.title}>{t.wating_time()}</Typography>
+                        <Typography className={classes.title}>{t.waiting_time()}</Typography>
                         <Typography className={classes.value}>
-                            {t.wating_time_value({
+                            {t.waiting_time_value({
                                 value: add(differenceInDays(new Date(time), new Date()), 1).toString(),
                             })}
                         </Typography>
