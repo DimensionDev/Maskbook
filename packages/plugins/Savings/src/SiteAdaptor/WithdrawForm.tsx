@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query'
 import { EVMChainResolver, EVMWeb3, Lido } from '@masknet/web3-providers'
 import { differenceInDays } from 'date-fns'
 import type { SavingsProtocol } from '../types.js'
-import { formatAmount } from '@masknet/web3-shared-evm'
+import { type ChainId, formatAmount } from '@masknet/web3-shared-evm'
 import { add } from 'lodash-es'
 import { useAsyncFn } from 'react-use'
 import { share } from '@masknet/plugin-infra/content-script/context'
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface WithdrawFormDialogProps {
     onClose?: () => void
-    chainId: number
+    chainId: ChainId
     protocol: SavingsProtocol
 }
 
