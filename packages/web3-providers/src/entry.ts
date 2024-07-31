@@ -8,10 +8,7 @@ export {
 } from './Manager/index.js'
 export { evm } from './Manager/registry.js'
 
-export { Lido } from './Lido/index.js'
 export { Twitter } from './Twitter/index.js'
-export { Instagram } from './Instagram/index.js'
-export { CoinMarketCap } from './CoinMarketCap/index.js'
 export { Multicall } from './Multicall/index.js'
 export { Lens } from './Lens/index.js'
 export { RedPacket } from './RedPacket/index.js'
@@ -81,6 +78,3 @@ export { Calendar } from './Calendar/index.js'
 
 // NFT Spam
 export { NFTSpam } from './NFTSpam/index.js'
-
-// Stores
-export { AvatarStore, getAvatarFromStorage, setAvatarToStorage } from './AvatarStore/index.js'

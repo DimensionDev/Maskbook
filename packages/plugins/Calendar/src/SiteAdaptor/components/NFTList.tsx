@@ -111,7 +111,7 @@ interface NFTListProps {
     list: Record<string, any[]>
     isLoading: boolean
     empty: boolean
-    dateString: string
+    date: Date
 }
 
 const socialIcons: Record<string, ReactNode> = {
@@ -125,24 +125,24 @@ const sortPlat = (_: any, b: { type: string }) => {
     else return 0
 }
 
-export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
+export function NFTList({ list, isLoading, empty, date }: NFTListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
-            if (new Date(key) >= new Date(dateString)) {
+            if (new Date(key) >= date) {
                 listAfterDate.push(key)
             }
         }
         return listAfterDate
-    }, [list, dateString])
+    }, [list, date])
 
     const listRef = useCallback((el: HTMLDivElement | null) => {
         el?.scrollTo({ top: 0 })
     }, [])
     return (
-        <div className={classes.container} ref={listRef} key={dateString}>
+        <div className={classes.container} ref={listRef} key={date.toISOString()}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ?
                     <div className={cx(classes.empty, classes.eventTitle)}>

@@ -63,7 +63,6 @@
       "@masknet/encryption": ["./packages/encryption/src/index.ts"],
       "@masknet/flags": ["./packages/flags/src/index.ts"],
       "@masknet/flags/build-info": ["./packages/flags/src/flags/buildInfo.ts"],
-      "@masknet/gun-utils": ["./packages/gun-utils/src/index.ts"],
       "@masknet/injected-script": ["./packages/injected-script/sdk/index.ts"],
       "@masknet/sdk": ["./packages/mask-sdk/server/index.ts"],
       "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],

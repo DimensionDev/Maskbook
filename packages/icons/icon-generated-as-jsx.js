@@ -550,11 +550,6 @@ export const YouTube = /*#__PURE__*/ __createIcon('YouTube', [
         u: () => new URL('./brands/YouTube.svg', import.meta.url).href,
     },
 ])
-export const YouTubeGray = /*#__PURE__*/ __createIcon('YouTubeGray', [
-    {
-        u: () => new URL('./brands/YouTubeGray.svg', import.meta.url).href,
-    },
-])
 export const Zerion = /*#__PURE__*/ __createIcon('Zerion', [
     {
         u: () => new URL('./brands/Zerion.svg', import.meta.url).href,

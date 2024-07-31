@@ -1,7 +1,5 @@
 import { safeUnreachable } from '@masknet/kit'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { EMPTY_OBJECT, PluginID } from '@masknet/shared-base'
-import { useLocationChange } from '@masknet/shared-base-ui'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
@@ -38,15 +36,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
-    target?: string
-}
-
-export function CalendarContent({ target }: Props) {
+export function CalendarContent() {
     const t = useCalendarTrans()
     const { classes } = useStyles()
-    const [pathname, setPathname] = useState(location.pathname)
-    const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
@@ -69,15 +61,9 @@ export function CalendarContent({ target }: Props) {
                 return null
         }
     }, [currentTab, newsList, eventList, nftList])
-    const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
-
-    useLocationChange(() => {
-        setPathname(location.pathname)
-    })
-    if (isMinimalMode || (target && !pathname.includes(target))) return null
 
     return (
-        <div className={classes.calendar} style={{ marginTop: pathname.includes('explore') ? 24 : 0 }}>
+        <div className={classes.calendar}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
@@ -99,7 +85,7 @@ export function CalendarContent({ target }: Props) {
                         list={newsList}
                         isLoading={newsLoading}
                         empty={!Object.keys(newsList).length}
-                        dateString={dateString}
+                        date={selectedDate}
                     />
                 </TabPanel>
                 <TabPanel value={tabs.event} className={classes.tabPanel}>
@@ -107,7 +93,7 @@ export function CalendarContent({ target }: Props) {
                         list={eventList}
                         isLoading={eventLoading}
                         empty={!Object.keys(eventList).length}
-                        dateString={dateString}
+                        date={selectedDate}
                     />
                 </TabPanel>
                 <TabPanel value={tabs.nfts} className={classes.tabPanel}>
@@ -115,7 +101,7 @@ export function CalendarContent({ target }: Props) {
                         list={nftList}
                         isLoading={nftLoading}
                         empty={!Object.keys(newsList).length}
-                        dateString={dateString}
+                        date={selectedDate}
                     />
                 </TabPanel>
                 <Footer />

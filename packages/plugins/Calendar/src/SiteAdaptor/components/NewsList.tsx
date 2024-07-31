@@ -106,27 +106,27 @@ interface NewsListProps {
     list: Record<string, any[]>
     isLoading: boolean
     empty: boolean
-    dateString: string
+    date: Date
 }
 
-export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
+export function NewsList({ list, isLoading, empty, date }: NewsListProps) {
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
     const futureNewsList = useMemo(() => {
         const newsList: string[] = []
         for (const key in list) {
-            if (new Date(key) >= new Date(dateString)) {
+            if (new Date(key) >= date) {
                 newsList.push(key)
             }
         }
         return newsList
-    }, [list, dateString])
+    }, [list, date])
     const listRef = useCallback((el: HTMLDivElement | null) => {
         el?.scrollTo({ top: 0 })
     }, [])
 
     return (
-        <div className={classes.container} ref={listRef} key={dateString}>
+        <div className={classes.container} ref={listRef} key={date.toISOString()}>
             <div className={classes.paddingWrap}>
                 {isLoading && !list?.length ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
