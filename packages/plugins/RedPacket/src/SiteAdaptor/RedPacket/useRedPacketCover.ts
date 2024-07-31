@@ -15,6 +15,8 @@ export function useRedPacketCover(payload: RedPacketJSONPayload, availability: A
             if (!token || !availability) return null
             const name = payload.sender.name
 
+            // Once a redpacket is refunded, its balance will be 0, that's not the remaining amount
+            const remainingAmount = toFixed(minus(payload.total, availability.claimed_amount))
             return FireflyRedPacket.getCoverUrlByRpid(
                 payload.rpid,
                 token.symbol,
@@ -25,7 +27,7 @@ export function useRedPacketCover(payload: RedPacketJSONPayload, availability: A
                     `@${name}`
                 ),
                 payload.sender.message,
-                availability.balance ?? payload.total,
+                remainingAmount,
                 toFixed(minus(payload.shares, availability.claimed || 0)),
             )
         },
