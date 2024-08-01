@@ -7,9 +7,9 @@ import { TabContext, TabPanel } from '@mui/lab'
 import {
     Web3ContextProvider,
     useFungibleTokens,
-    RevokeChainContextProvider,
     ChainContextProvider,
     useChainContext,
+    RevokeChainContextProvider,
 } from '@masknet/web3-hooks-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -20,11 +20,12 @@ import type { AaveProtocolDataProvider } from '@masknet/web3-contracts/types/Aav
 import AaveProtocolDataProviderABI from '@masknet/web3-contracts/abis/AaveProtocolDataProvider.json'
 import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
-import { SavingsFormDialog } from './SavingsForm.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
-import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
 import { useSavingsTrans } from '../locales/index.js'
+import { WithdrawFormDialog } from './WithdrawForm.js'
+import { SavingsFormDialog } from './SavingsForm.js'
+import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -65,6 +66,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const t = useSavingsTrans()
     const { classes } = useStyles()
 
+    const [withdrawDialogOpen, setWithDrawDialogOpen] = useState(false)
+    const [depositDialogOpen, setDepositDialogOpen] = useState(false)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
@@ -148,7 +151,10 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         loadingProtocols={loadingProtocols}
                                         tab={TabType.Deposit}
                                         protocols={protocols}
-                                        setSelectedProtocol={setSelectedProtocol}
+                                        onDeposit={(protocol: SavingsProtocol) => {
+                                            setDepositDialogOpen(true)
+                                            setSelectedProtocol(protocol)
+                                        }}
                                     />
                                 </TabPanel>
                                 <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.withdraw}>
@@ -156,7 +162,10 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                                         loadingProtocols={loadingProtocols}
                                         tab={TabType.Withdraw}
                                         protocols={protocols}
-                                        setSelectedProtocol={setSelectedProtocol}
+                                        onWithdraw={(protocol: SavingsProtocol) => {
+                                            setWithDrawDialogOpen(true)
+                                            setSelectedProtocol(protocol)
+                                        }}
                                     />
                                 </TabPanel>
                             </div>
@@ -168,13 +177,26 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     </InjectedDialog>
                 </TabContext>
             </ChainContextProvider>
-            {selectedProtocol ?
+            {selectedProtocol && withdrawDialogOpen ?
+                <WithdrawFormDialog
+                    protocol={selectedProtocol}
+                    onClose={() => {
+                        setSelectedProtocol(null)
+                        setWithDrawDialogOpen(false)
+                    }}
+                    chainId={chainId}
+                />
+            :   null}
+            {selectedProtocol && depositDialogOpen ?
                 <RevokeChainContextProvider>
                     <SavingsFormDialog
                         tab={currentTab}
                         chainId={chainId}
                         protocol={selectedProtocol}
-                        onClose={() => setSelectedProtocol(null)}
+                        onClose={() => {
+                            setSelectedProtocol(null)
+                            setDepositDialogOpen(false)
+                        }}
                     />
                 </RevokeChainContextProvider>
             :   null}

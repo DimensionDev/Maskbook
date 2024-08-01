@@ -29,6 +29,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "bignumber.js": "9.1.2",
     "react-use": "^17.4.0",
-    "web3-utils": "1.10.2"
+    "web3-utils": "1.10.2",
+    "date-fns": "^3.6.0"
   }
 }

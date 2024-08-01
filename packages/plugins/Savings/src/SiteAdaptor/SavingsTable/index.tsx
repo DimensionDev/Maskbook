@@ -1,13 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Grid, Typography, useTheme } from '@mui/material'
 import { useCallback } from 'react'
-import { LDO_PAIRS } from '../../constants.js'
 import { TabType, type SavingsProtocol } from '../../types.js'
 import { SavingsRow } from './SavingsRow.js'
 import { useSavingsTrans } from '../../locales/index.js'
+import { LidoProtocol } from '../../protocols/LDOProtocol.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -59,23 +57,19 @@ interface SavingsTableProps {
     tab: TabType
     loadingProtocols: boolean
     protocols: SavingsProtocol[]
-    setSelectedProtocol(protocol: SavingsProtocol): void
+    onWithdraw?: (protocol: SavingsProtocol) => void
+    onDeposit?: (protocol: SavingsProtocol) => void
 }
 
-export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProtocols }: SavingsTableProps) {
+export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onDeposit }: SavingsTableProps) {
     const t = useSavingsTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 
     const handleWithdraw = useCallback((protocol: SavingsProtocol) => {
-        const [ETH, sETH] = LDO_PAIRS[0]
-        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
-            open: true,
-            traderProps: {
-                address: ETH.address,
-                chainId: ChainId.Mainnet,
-            },
-        })
+        if (protocol instanceof LidoProtocol) {
+            onWithdraw?.(protocol)
+        }
     }, [])
 
     const isDeposit = tab === TabType.Deposit
@@ -112,7 +106,7 @@ export function SavingsTable({ tab, protocols, setSelectedProtocol, loadingProto
                             protocol={protocol}
                             isDeposit={isDeposit}
                             onWithdraw={handleWithdraw}
-                            onDeposit={setSelectedProtocol}
+                            onDeposit={onDeposit}
                         />
                     ))}
                 </div>
