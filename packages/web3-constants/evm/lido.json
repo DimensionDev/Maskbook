@@ -3,6 +3,9 @@
         "Mainnet": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
         "Gorli": "0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F"
     },
+    "LIDO_WITHDRAW_ADDRESS": {
+        "Mainnet": "0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1"
+    },
     "LIDO_REFERRAL_ADDRESS": {
         "Mainnet": "0x934b510d4c9103e6a87aef13b816fb080286d649",
         "Ropsten": "0x934b510d4c9103e6a87aef13b816fb080286d649",
