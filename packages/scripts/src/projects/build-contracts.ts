@@ -8,7 +8,6 @@ const GENERATED_PATH = join(import.meta.dirname, '../../../web3-contracts/types/
 
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
-    file.includes('types.d.') && console.log(content)
     for (const [pattern, value] of pairs) {
         // only replace once.
         // eslint-disable-next-line unicorn/prefer-string-replace-all
