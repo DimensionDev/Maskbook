@@ -1,10 +1,11 @@
 import { promises as fs } from 'fs'
 import { join } from 'path'
-import { runTypeChain, glob } from 'typechain'
-import { shell, awaitChildProcess } from '../scripts/src/utils/index.ts'
+import { task } from '../utils/task.js'
+import { awaitChildProcess } from '../utils/awaitChildProcess.js'
+import { shell } from '../utils/run.js'
 
-const ABIS_PATH = join(import.meta.dirname, 'abis')
-const GENERATED_PATH = join(import.meta.dirname, 'types')
+const ABIS_PATH = join(import.meta.dirname, '../../../web3-contracts/abis/')
+const GENERATED_PATH = join(import.meta.dirname, '../../../web3-contracts/types/')
 
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
@@ -16,8 +17,9 @@ async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     await fs.writeFile(file, content, 'utf-8')
 }
 
-async function main() {
+export async function buildContracts() {
     const cwd = process.cwd()
+    const { glob, runTypeChain } = await import('typechain')
     // find all files matching the glob
     const allFiles = glob(cwd, ['./abis/*.json'])
 
@@ -48,5 +50,4 @@ async function main() {
     await awaitChildProcess(shell.cwd(ABIS_PATH)`git add .`)
     await awaitChildProcess(shell.cwd(GENERATED_PATH)`git add .`)
 }
-
-main()
+task(buildContracts, 'build-contracts', 'Build .d.ts files from ABI files')

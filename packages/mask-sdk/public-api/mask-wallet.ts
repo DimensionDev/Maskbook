@@ -276,7 +276,7 @@ export declare namespace Ethereum {
     export interface ProviderObject extends EIP1193Provider, ExperimentalProvider, EthereumEventEmitter {}
 
     /** Extra APIs that only can be used with Mask Network is defined here. */
-    export interface ExperimentalProvider {}
+    export type ExperimentalProvider = Record<never, never>
     export interface EthereumEventMap {
         message: CustomEvent<ProviderMessage | EthSubscription>
         // connect: CustomEvent<ProviderConnectInfo>

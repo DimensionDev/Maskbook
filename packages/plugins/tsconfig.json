@@ -6,7 +6,7 @@
     { "path": "./Avatar/tsconfig.json" },
     { "path": "./Calendar/tsconfig.json" },
     { "path": "./Claim/tsconfig.json" },
-    { "path": "./Collectible/tsconfig.json" },
+    { "path": "./Collectible/src/tsconfig.json" },
     { "path": "./CrossChainBridge/tsconfig.json" },
     { "path": "./CyberConnect/tsconfig.json" },
     { "path": "./Debugger/tsconfig.json" },

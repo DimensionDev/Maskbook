@@ -1,0 +1,17 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist",
+    "tsBuildInfoFile": "../dist/.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [
+    { "path": "../../../plugin-infra/tsconfig.json" },
+    { "path": "../../../shared-base/tsconfig.json" },
+    { "path": "../../../web3-shared/base/tsconfig.json" },
+    { "path": "../../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../../web3-shared/solana/src/tsconfig.json" },
+    { "path": "../../../shared/tsconfig.json" }
+  ]
+}

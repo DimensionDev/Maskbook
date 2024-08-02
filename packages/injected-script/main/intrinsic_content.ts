@@ -25,7 +25,7 @@ export const setPrototypeOf: <const T extends object>(o: T, proto: object | null
 export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, create, freeze } = Object
 export const { deleteProperty } = Reflect
 export const apply: <Args extends readonly unknown[], This, Return>(
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     f: ((this: This, ...args: Args) => Return) | Function,
     thisArg: This,
     args: Readonly<Args> | IArguments,

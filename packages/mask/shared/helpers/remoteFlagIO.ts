@@ -3,7 +3,7 @@ import { delay } from '@masknet/kit'
 
 export const extensionRemoteFlagIO: RemoteFlagIO = {
     async getCache(url) {
-        const { response, time } = (await browser.storage.local.get('remote-flag'))['remote-flag']
+        const { response, time } = (await browser.storage.local.get('remote-flag'))['remote-flag'] || {}
         if (!response) return null
         return { response, time }
     },

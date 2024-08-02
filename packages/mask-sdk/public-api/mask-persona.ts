@@ -1,1 +1,1 @@
-export interface Persona {}
+export type Persona = never
