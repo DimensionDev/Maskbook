@@ -11,7 +11,7 @@ RestorableScrollContext.Provider.displayName = 'RestorableScrollProvider'
 interface Props<T> {
     scrollKey: string
     targetRef?: RefObject<HTMLElement | null>
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types
     children: ReactElement<T & { ref: RefObject<HTMLElement | null> | undefined }>
 }
 

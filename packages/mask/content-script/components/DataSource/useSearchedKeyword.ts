@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 
+function getKeyword() {
+    if (!activatedSiteAdaptorUI?.collecting?.getSearchedKeyword) return
+    return activatedSiteAdaptorUI!.collecting.getSearchedKeyword()
+}
 export function useSearchedKeyword() {
-    const [keyword, setKeyword] = useState('')
+    const [keyword, setKeyword] = useState(getKeyword)
 
     useEffect(() => {
-        const onLocationChange = () => {
-            if (!activatedSiteAdaptorUI?.collecting?.getSearchedKeyword) return
-            const kw = activatedSiteAdaptorUI!.collecting.getSearchedKeyword()
-            setKeyword(kw)
+        function onLocationChange() {
+            setKeyword(getKeyword())
         }
-        onLocationChange()
         window.addEventListener('locationchange', onLocationChange)
-        return () => {
-            window.removeEventListener('locationchange', onLocationChange)
-        }
+        return () => window.removeEventListener('locationchange', onLocationChange)
     }, [])
     return keyword
 }

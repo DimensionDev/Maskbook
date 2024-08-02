@@ -1,6 +1,8 @@
 import { promises as fs } from 'node:fs'
 import { resolve, join } from 'node:path'
-import { shell, awaitChildProcess } from '../scripts/src/utils/index.ts'
+import { awaitChildProcess } from '../utils/awaitChildProcess.js'
+import { shell } from '../utils/run.js'
+import { task } from '../utils/task.js'
 
 type Primitive = string | number | boolean
 
@@ -128,22 +130,22 @@ const SOLANA_KEYS = ['Mainnet', 'Testnet', 'Devnet']
 const FLOW_KEYS = ['Mainnet', 'Testnet']
 
 // Main function to parse command line arguments and perform actions
-async function main() {
+export async function buildConstants() {
     const args = process.argv.slice(2)
+    const evm = join(import.meta.dirname, '../../../web3-constants/evm/')
+    const solana = join(import.meta.dirname, '../../../web3-constants/solana')
+    const flow = join(import.meta.dirname, '../../../web3-constants/flow')
 
     if (args.includes('--compress')) {
-        await processConstants(join(__dirname, 'evm'), EVM_KEYS, compressAction)
-        await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, compressAction)
-        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, compressAction)
+        await processConstants(evm, EVM_KEYS, compressAction)
+        await processConstants(solana, SOLANA_KEYS, compressAction)
+        await processConstants(flow, FLOW_KEYS, compressAction)
     }
 
     if (args.includes('--complete')) {
-        await processConstants(join(__dirname, 'evm'), EVM_KEYS, completeAction)
-        await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, completeAction)
-        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, completeAction)
+        await processConstants(evm, EVM_KEYS, completeAction)
+        await processConstants(solana, SOLANA_KEYS, completeAction)
+        await processConstants(flow, FLOW_KEYS, completeAction)
     }
 }
-
-if (process.env.NODE_ENV !== 'test') {
-    main()
-}
+task(buildConstants, 'build-constants', 'Build Web3 constants')

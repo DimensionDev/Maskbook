@@ -3,7 +3,12 @@ import { shell } from './run.js'
 import { awaitChildProcess } from './awaitChildProcess.js'
 import { cleanupWhenExit } from './exit.js'
 
-export function task(f: TaskFunction, name: string, description: string, flags?: TaskFunction['flags']): TaskFunction {
+export function task<T extends TaskFunction>(
+    f: T,
+    name: string,
+    description: string,
+    flags?: TaskFunction['flags'],
+): T {
     f.displayName = name
     f.description = description
     f.flags = flags

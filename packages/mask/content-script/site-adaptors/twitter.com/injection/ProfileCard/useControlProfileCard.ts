@@ -40,12 +40,13 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
         setActive(true)
         setPlacement(placement)
     }, [])
+
+    if (!holderRef.current) hideProfileCard()
+
     useEffect(() => {
         const holder = holderRef.current
-        if (!holder) {
-            hideProfileCard()
-            return
-        }
+        if (!holder) return
+
         const enter = () => {
             hoverRef.current = true
             closeTimerRef.current && clearTimeout(closeTimerRef.current)
@@ -83,9 +84,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
             hideProfileCard(true)
         }
         document.body.addEventListener('click', onClick)
-        return () => {
-            document.body.removeEventListener('click', onClick)
-        }
+        return () => document.body.removeEventListener('click', onClick)
     }, [])
 
     return { placement, active }

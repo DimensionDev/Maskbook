@@ -1,6 +1,5 @@
 // cSpell:disable
 // @ts-check
-import { fixupPluginRules } from '@eslint/compat'
 import tseslint from 'typescript-eslint'
 import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
@@ -10,7 +9,7 @@ import ReactHooksPlugin from 'eslint-plugin-react-hooks'
 import ImportPlugin from 'eslint-plugin-i'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
-import * as ReactQueryPlugin from '@tanstack/eslint-plugin-query'
+import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
 
 const deferPackages = [
     'wallet.ts',
@@ -60,7 +59,7 @@ const avoidMistakeRules = {
     'react/no-children-to-array': 'error',
     // 'react/no-clone-element': 'error',
     /// TypeScript bad practice
-    '@typescript-eslint/ban-types': [
+    '@typescript-eslint/no-restricted-types': [
         'error',
         {
             types: {
@@ -85,11 +84,13 @@ const avoidMistakeRules = {
                     fixWith: 'React.ReactNode',
                 },
             },
-            extendDefaults: true,
         },
     ],
+    '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
     // '@typescript-eslint/no-invalid-void-type': 'warn', // Disallow void type outside of generic or return types
     '@typescript-eslint/no-misused-new': 'error', // wrong 'new ()' or 'constructor()' signatures
+    '@typescript-eslint/no-unsafe-function-type': 'error',
+    '@typescript-eslint/no-wrapper-object-types': 'error',
     /// Unicode support
     'no-misleading-character-class': 'error', // RegEx
     // 'require-unicode-regexp': 'error', // RegEx modern RegEx with Unicode support
@@ -151,7 +152,7 @@ const avoidMistakeRules = {
     'no-new-wrappers': 'error', // wrapper objects are bad
     'no-unsafe-finally': 'error', // finally { return expr }
     'unicorn/no-thenable': 'error', // export function then()
-    '@typescript-eslint/no-loss-of-precision': 'error', // 5123000000000000000000000000001 is 5123000000000000000000000000000 actually
+    'no-loss-of-precision': 'error', // 5123000000000000000000000000001 is 5123000000000000000000000000000 actually
     '@typescript-eslint/prefer-enum-initializers': 'warn', // add a new item in the middle is an API breaking change.
     /// Little-known language features
     'no-constructor-return': 'error', // constructor() { return expr }
@@ -334,7 +335,7 @@ const codeStyleRules = {
     // 'unicorn/custom-error-definition': 'warn', // correctly extends the native error
     // 'unicorn/error-message': 'warn', // error must have a message
     // 'unicorn/prefer-type-error': 'warn', // prefer TypeError
-    // '@typescript-eslint/no-throw-literal': 'warn', // no throw 'string'
+    // '@typescript-eslint/only-throw-error': 'warn', // no throw 'string'
 
     // API design
     // '@typescript-eslint/no-extraneous-class': 'error', // no class with only static members
@@ -536,8 +537,7 @@ const plugins = {
     '@typescript-eslint': tseslint.plugin,
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
-    // @ts-expect-error
-    'react-hooks': fixupPluginRules(ReactHooksPlugin),
+    'react-hooks': ReactHooksPlugin,
     '@tanstack/query': ReactQueryPlugin,
 }
 export default tseslint.config(
@@ -571,8 +571,7 @@ export default tseslint.config(
             parser: tseslint.parser,
             parserOptions: {
                 ecmaVersion: 'latest',
-                EXPERIMENTAL_useProjectService: true,
-                // projectService: true,
+                projectService: true,
                 // @ts-expect-error
                 tsconfigRootDir: import.meta.dirname,
                 warnOnUnsupportedTypeScriptVersion: false,

@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.leaf.json",
+  "compilerOptions": {
+    "rootDir": "./"
+  },
+  "include": ["./"],
+  "references": []
+}

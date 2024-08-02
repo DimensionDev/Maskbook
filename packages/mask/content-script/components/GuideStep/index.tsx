@@ -93,7 +93,7 @@ const NextButton = styled(ActionButton)({
 
 interface GuideStepProps {
     // cloneElement is used.
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types
     children: ReactElement<{ ref: RefObject<HTMLElement | undefined> }>
     total: number
     step: number

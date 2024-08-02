@@ -161,7 +161,7 @@ export function TrendingView(props: TrendingViewProps) {
         [trending?.market],
     )
 
-    useEffect(() => {
+    useRenderPhraseCallbackOnDepsChange(() => {
         onPriceDaysControlChange(Days.ONE_DAY)
     }, [trending?.market])
 

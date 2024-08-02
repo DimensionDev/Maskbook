@@ -51,13 +51,13 @@ export function NFTAvatarInTwitter() {
     useInjectedCSS(showAvatar, updatedAvatar)
     useUpdatedAvatar(showAvatar, avatar)
 
-    const handlerWatcher = () => {
-        const avatarUrl = searchAvatarSelector().evaluate()?.getAttribute('src')
-        if (!avatarUrl || !avatar?.avatarId) return
-        setUpdatedAvatar(!!avatar?.avatarId && Twitter.getAvatarId(avatarUrl ?? '') === avatar.avatarId)
-    }
     useEffect(() => {
         const abortController = new AbortController()
+        const handlerWatcher = () => {
+            const avatarUrl = searchAvatarSelector().evaluate()?.getAttribute('src')
+            if (!avatarUrl || !avatar?.avatarId) return
+            setUpdatedAvatar(!!avatar?.avatarId && Twitter.getAvatarId(avatarUrl ?? '') === avatar.avatarId)
+        }
         new MutationObserverWatcher(searchAvatarMetaSelector())
             .addListener('onAdd', handlerWatcher)
             .addListener('onChange', handlerWatcher)
@@ -71,7 +71,7 @@ export function NFTAvatarInTwitter() {
                 abortController.signal,
             )
         return () => abortController.abort()
-    }, [handlerWatcher])
+    }, [avatar])
     if (!showAvatar) return null
 
     return (

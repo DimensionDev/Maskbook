@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { isValidAddress } from '../../src/helpers/address.js'
+import { isValidAddress } from '../src/helpers/address.js'
 
 describe('Solana address utilities', () => {
     test.each<[address: string, strict: boolean | undefined, result: boolean]>([

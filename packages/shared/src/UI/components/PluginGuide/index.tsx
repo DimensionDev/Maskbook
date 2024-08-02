@@ -1,15 +1,6 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
-import React, {
-    cloneElement,
-    createContext,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-    type ReactElement,
-    type RefObject,
-} from 'react'
+import { cloneElement, createContext, useLayoutEffect, useState, type ReactElement, type Ref } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -82,8 +73,8 @@ const useStyles = makeStyles()((theme) => ({
 
 interface GuideStepProps {
     // cloneElement is used.
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement<{ ref: RefObject<HTMLElement | null> }>
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types
+    children: ReactElement<{ ref: Ref<HTMLElement | null> }>
     step: number
     totalStep: number
     arrow?: boolean
@@ -106,7 +97,7 @@ export function PluginGuide({
     onNext,
 }: GuideStepProps) {
     const { classes, cx } = useStyles()
-    const childrenRef = useRef<HTMLElement>(null)
+    const [childrenRef, setChildrenRef] = useState<HTMLElement | null>(null)
 
     const [clientRect, setClientRect] = useState<any>({})
     const [bottomAvailable, setBottomAvailable] = useState(true)
@@ -119,11 +110,11 @@ export function PluginGuide({
         document.documentElement.style.paddingLeft = 'calc(100vw - 100%)'
     }, [stepVisible])
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (finished) return
 
         const updateClientRect = () => {
-            const cr = childrenRef.current?.getBoundingClientRect()
+            const cr = childrenRef?.getBoundingClientRect()
 
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
@@ -135,23 +126,19 @@ export function PluginGuide({
                 }
             }
         }
-
         updateClientRect()
 
         window.addEventListener('resize', updateClientRect)
-
-        return () => {
-            window.removeEventListener('resize', updateClientRect)
-        }
-    }, [childrenRef.current, finished])
+        return () => window.removeEventListener('resize', updateClientRect)
+    }, [childrenRef, finished])
 
     return (
         <>
-            {cloneElement(children, { ref: childrenRef })}
+            {cloneElement(children, { ref: (ref: any) => setChildrenRef(ref) })}
             {usePortalShadowRoot((container) => {
                 if (!stepVisible) return null
                 return (
-                    <Portal container={container}>
+                    <Portal container={container} ref={() => {}}>
                         <div
                             className={classes.mask}
                             onClick={(e) => {
