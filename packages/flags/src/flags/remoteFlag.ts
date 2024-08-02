@@ -1,21 +1,15 @@
 import urlcat from 'urlcat'
 import { env } from './buildInfo.js'
+import { FlagPatchSpec } from './flag-spec.js'
 
 export interface IO {
-    refetch(url: string): Promise<void>
-    getCache(url: string): Promise<null | { response: string; time: number }>
+    refetch(url: string, signal?: AbortSignal): Promise<string>
+    getCache(url: string, signal?: AbortSignal): Promise<null | { response: string; time: number }>
 }
 export function createRemoteFlag<T extends object>(
     defaultFlags: T,
-): readonly [T, (io: IO, signal?: AbortSignal, url?: string) => void] {
-    // eslint-disable-next-line no-restricted-globals
-    if (typeof localStorage === 'object') {
-        // keep for a few releases, added in Nov 29 2023
-        // eslint-disable-next-line no-restricted-globals
-        localStorage.removeItem('mask-last-fetch-result')
-    }
+): readonly [T, (io: IO, signal?: AbortSignal, url?: string) => Promise<void>] {
     const flags = Object.assign(Object.create(null), defaultFlags)
-    const original = { ...flags }
     const flagProxy = new Proxy(flags, {
         set() {
             throw new TypeError('remote flag is readonly')
@@ -37,20 +31,15 @@ export function createRemoteFlag<T extends object>(
             NODE_ENV: process.env.NODE_ENV,
         })
 
-        let _ = await io.getCache(url)
+        let _ = await io.getCache(url, signal)
         if (!_ || isOutdated(_.time)) {
-            await io.refetch(url)
-            _ = await io.getCache(url)
+            _ = { response: await io.refetch(url, signal), time: Date.now() }
         }
         if (!_) return
         const parsedCache = tryParse(_.response)
         // we don't retry if the response is invalid
         if (!parsedCache || typeof parsedCache !== 'object') return
-        for (const key in parsedCache) {
-            if (key in original && typeof original[key] === typeof parsedCache[key]) {
-                flags[key] = parsedCache[key]
-            }
-        }
+        Object.assign(flags, parsedCache)
     }
     return [flagProxy, fetch] as const
 }
@@ -60,7 +49,7 @@ function isOutdated(cacheTime: number) {
 }
 function tryParse(x: string) {
     try {
-        return JSON.parse(x)
+        return FlagPatchSpec.parse(JSON.parse(x)) as Record<string, any>
     } catch {
         return null
     }

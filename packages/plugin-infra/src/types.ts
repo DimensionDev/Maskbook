@@ -1045,6 +1045,10 @@ export namespace Plugin.__Host {
          * If it is in the minimal mode, it will be omitted in some cases.
          */
         minimalMode: EnabledStatusReporter
+        /**
+         * Control if the plugin is disabled or not.
+         */
+        disabled: EnabledStatusReporter
 
         addI18NResource(pluginID: string, resources: Shared.I18NResource): void
 

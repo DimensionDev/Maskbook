@@ -153,6 +153,8 @@ export enum ChainId {
     /** BitTorrent Chain Mainnet */
     BitTorrent = 199,
 
+    Zora = 7777777,
+
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -319,6 +321,7 @@ export enum NetworkType {
     Scroll = 'Scroll',
     Moonbeam = 'Moonbeam',
     XLayer = 'XLayer',
+    Zora = 'Zora',
     CustomNetwork = 'CustomNetwork',
 }
 

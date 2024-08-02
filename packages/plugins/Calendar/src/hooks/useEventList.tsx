@@ -4,10 +4,11 @@ import { startOfMonth, endOfMonth, addDays } from 'date-fns'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-export function useNewsList(date: Date): UseQueryResult<any> {
+export function useNewsList(date: Date, enabled = true): UseQueryResult<any> {
     const startTime = startOfMonth(date).getTime() / 1000
     const endTime = Math.floor(addDays(date, 45).getTime() / 1000)
     return useQuery({
+        enabled,
         queryKey: ['newsList', startTime, endTime],
         queryFn: async () => Calendar.getNewsList(startTime, endTime),
         select(data) {
@@ -23,10 +24,11 @@ export function useNewsList(date: Date): UseQueryResult<any> {
     })
 }
 
-export function useEventList(date: Date) {
+export function useEventList(date: Date, enabled = true) {
     const startTime = startOfMonth(date).getTime() / 1000
     const endTime = Math.floor(addDays(date, 45).getTime() / 1000)
     return useQuery<any>({
+        enabled,
         queryKey: ['eventList', startTime, endTime],
         queryFn: async () => Calendar.getEventList(startTime, endTime),
         select(data) {
@@ -42,10 +44,11 @@ export function useEventList(date: Date) {
     })
 }
 
-export function useNFTList(date: Date) {
+export function useNFTList(date: Date, enabled = true) {
     const startTime = startOfMonth(date).getTime() / 1000
     const endTime = Math.floor(endOfMonth(date).getTime() / 1000)
     return useQuery<any>({
+        enabled,
         queryKey: ['nftList', startTime, endTime],
         queryFn: async () => Calendar.getNFTList(startTime, endTime),
         select(data) {

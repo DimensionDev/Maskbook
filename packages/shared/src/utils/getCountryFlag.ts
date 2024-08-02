@@ -1,1 +1,2 @@
-export const getCountryFlag = (code: string) => `http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`
+export const getCountryFlag = (code: string) =>
+    `https://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`

@@ -52,36 +52,6 @@ export function transform<ChainId extends number, T extends Constants>(
     ) => (getAllConstants(chainId)[key] ?? fallback) as R
 }
 
-export function transformAllFromJSON<ChainId extends number, T extends Constants>(
-    chainIdEnum: ChainIdEnum<ChainId>,
-    json: string,
-    fallbackConstants: T,
-    environment: Record<string, string> = {},
-) {
-    if (!json) return transformAll(chainIdEnum, fallbackConstants, environment)
-    try {
-        const constants = JSON.parse(json) as T
-        return transformAll(chainIdEnum, constants, environment)
-    } catch {
-        return transformAll(chainIdEnum, fallbackConstants, environment)
-    }
-}
-
-export function transformFromJSON<ChainId extends number, T extends Constants>(
-    chainIdEnum: ChainIdEnum<ChainId>,
-    json: string,
-    fallbackConstants: T,
-    environment: Record<string, string> = {},
-) {
-    if (!json) return transform(chainIdEnum, fallbackConstants, environment)
-    try {
-        const constants = JSON.parse(json) as T
-        return transform(chainIdEnum, constants, environment)
-    } catch {
-        return transform(chainIdEnum, fallbackConstants, environment)
-    }
-}
-
 export function transformAllHook<ChainId extends number, T>(getConstants: (chainId: ChainId) => Partial<T>) {
     return function useConstants(chainId: ChainId = 1 as ChainId) {
         return useMemo(() => getConstants(chainId), [chainId])

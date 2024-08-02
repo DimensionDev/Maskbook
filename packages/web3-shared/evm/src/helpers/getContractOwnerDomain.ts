@@ -25,7 +25,7 @@ const domainAddressMap: Record<string, string[]> = {
         'GITCOIN_ETH_ADDRESS',
         'BULK_CHECKOUT_ADDRESS',
     ]),
-    'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
+    'lido.fi': collect(Lido, ['LIDO_stETH_ADDRESS', 'LIDO_WITHDRAW_ADDRESS', 'LIDO_REFERRAL_ADDRESS']),
     'mask.io': [
         ...collect(RedPacket, [
             'HAPPY_RED_PACKET_ADDRESS_V1',

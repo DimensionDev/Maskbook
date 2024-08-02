@@ -51,9 +51,12 @@ export function CalendarContent({ target, disableSetting }: Props) {
     const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const { data: eventList = EMPTY_OBJECT, isPending: eventLoading } = useEventList(selectedDate)
-    const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate)
-    const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate)
+    const { data: eventList = EMPTY_OBJECT, isPending: eventLoading } = useEventList(
+        selectedDate,
+        currentTab === 'event',
+    )
+    const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate, currentTab === 'news')
+    const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate, currentTab === 'nfts')
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':

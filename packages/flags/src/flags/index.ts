@@ -1,5 +1,6 @@
 import { env } from './buildInfo.js'
 import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
+import type { FlagSpec } from './flag-spec.js'
 
 const isTest = process.env.NODE_ENV === 'test'
 const isDev = process.env.NODE_ENV === 'development'
@@ -7,7 +8,7 @@ const isProd = process.env.NODE_ENV === 'production'
 const isInsider = env.channel === 'insider' || isDev
 const isBeta = isInsider || env.channel === 'beta'
 
-export const flags = {
+export const flags: FlagSpec = {
     mask_sdk_enabled: isBeta,
     support_testnet_switch: isBeta,
 
@@ -54,10 +55,8 @@ export const flags = {
     wc_project_id: '8f1769933420afe8873860925fcca14f',
     wc_mode: isProd ? 'error' : 'debug',
     wc_enabled: process.env.NODE_ENV !== 'test',
-} as const
+
+    globalDisabledPlugins: [],
+}
 
 Object.freeze(flags.shadowRootInit)
-
-if (process.env.NODE_ENV === 'development') {
-    console.debug('[mask] flags:', flags)
-}

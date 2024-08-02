@@ -259,7 +259,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                             productionLike ?
                                 require.resolve('webextension-polyfill/dist/browser-polyfill.min.js')
                             :   require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
-                        to: polyfillFolder,
+                        to: join(polyfillFolder, 'browser-polyfill.js'),
                     },
                     {
                         from:
@@ -363,7 +363,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             path: flags.outputPath,
             filename: 'entry/[name].js',
             chunkFilename: productionLike ? 'bundled/[id].js' : 'bundled/chunk-[name].js',
-            assetModuleFilename: 'assets/[hash][ext][query]',
+            assetModuleFilename: productionLike ? 'assets/[hash][ext][query]' : 'assets/[name]-[hash][ext][query]',
             webassemblyModuleFilename: 'assets/[hash].wasm',
             hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
             hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
