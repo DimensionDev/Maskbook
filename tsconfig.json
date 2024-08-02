@@ -17,8 +17,10 @@
     { "path": "./packages/shared-base/tests/tsconfig.json" },
     { "path": "./packages/web3-shared/base/tests/tsconfig.json" },
     { "path": "./packages/web3-shared/evm/tests/tsconfig.json" },
+    { "path": "./packages/web3-shared/solana/tests/tsconfig.json" },
     { "path": "./packages/web3-providers/tests/tsconfig.json" },
     { "path": "./packages/web3-telemetry/tests/tsconfig.json" },
+    { "path": "./packages/plugins/Collectible/tests/tsconfig.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins/tsconfig.json" }
   ],

@@ -114,7 +114,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         setNonFungibleTokenAddress('')
     }, [])
 
-    useEffect(reset, [targetChainId])
+    useRenderPhraseCallbackOnDepsChange(reset, [targetChainId])
 
     const wrappedSendTip = useCallback(() => {
         setIsDirty(false)

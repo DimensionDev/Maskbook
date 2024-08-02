@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "start": "node --import @swc-node/register/esm-register constants.ts"
+    "start": "npx gulp build-constants"
   },
   "dependencies": {
   }

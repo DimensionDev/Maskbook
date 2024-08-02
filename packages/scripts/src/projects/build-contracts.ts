@@ -1,12 +1,14 @@
 import { promises as fs } from 'fs'
 import { join } from 'path'
-import { runTypeChain, glob } from 'typechain'
-import { shell, awaitChildProcess } from '../scripts/src/utils/index.ts'
+import { task } from '../utils/task.js'
+import { awaitChildProcess } from '../utils/awaitChildProcess.js'
+import { shell } from '../utils/run.js'
 
-const GENERATED_PATH = join(import.meta.dirname, 'types')
+const GENERATED_PATH = join(import.meta.dirname, '../../../web3-contracts/types/')
 
 async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     let content = await fs.readFile(file, 'utf-8')
+    file.includes('types.d.') && console.log(content)
     for (const [pattern, value] of pairs) {
         // only replace once.
         // eslint-disable-next-line unicorn/prefer-string-replace-all
@@ -15,8 +17,9 @@ async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
     await fs.writeFile(file, content, 'utf-8')
 }
 
-async function main() {
-    const cwd = process.cwd()
+export async function buildContracts() {
+    const cwd = join(GENERATED_PATH, '../')
+    const { glob, runTypeChain } = await import('typechain')
     // find all files matching the glob
     const allFiles = glob(cwd, ['./abis/*.json'])
 
@@ -43,10 +46,9 @@ async function main() {
         }
         await replaceFileAll(currentFile, [
             ['web3-core/types', 'web3-types'],
-            ['web3-core', 'web3-types'],
+            ["import type { EventLog } from 'web3-core'", "import type { EventLog } from 'web3-types'"],
         ])
         if (file === 'types.ts') {
-            // import type { EventLog, PromiEvent, TransactionReceipt } from 'web3-types'
             await replaceFileAll(currentFile, [
                 [
                     "import type { EventLog, PromiEvent, TransactionReceipt } from 'web3-types'",
@@ -58,10 +60,5 @@ async function main() {
         if (file.endsWith('.d.ts')) continue
         await fs.rename(join(GENERATED_PATH, file), join(GENERATED_PATH, file.replace('.ts', '.d.ts')))
     }
-
-    // add to git stage
-    // await awaitChildProcess(shell.cwd(ABIS_PATH)`git add .`)
-    // await awaitChildProcess(shell.cwd(GENERATED_PATH)`git add .`)
 }
-
-main()
+task(buildContracts, 'build-contracts', 'Build .d.ts files from ABI files')

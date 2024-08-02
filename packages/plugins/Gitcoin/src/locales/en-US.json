@@ -11,6 +11,7 @@
     "share": "Share",
     "last_updated": "Last update:",
     "by": "By",
+    "view": "View",
     "view_on": "View on Gitcoin",
     "amount": "Amount",
     "loading": "Loading",
@@ -30,5 +31,13 @@
     "total_contribution": "Your Total Contribution",
     "give_back_tooltip": "Contribute towards the Gitcoin Match Pool! Funds are used for current and future Grant rounds. The selected amount will be added on top of your grant contributions.",
     "donate_successfully": "You have donated {{- uiAmount}} {{symbol}} successfully.",
-    "donate_dialog_title": "Donate Checkout"
+    "donate_dialog_title": "Donate Checkout",
+    "created_on": "Created on: {{created}}",
+    "funding_received": "funding received",
+    "contributions": "contributions",
+    "unique_contributors": "unique contributors",
+    "rounds": "Rounds",
+    "project_details": "Project details",
+    "past_rounds": "Past rounds",
+    "about": "Abount"
 }

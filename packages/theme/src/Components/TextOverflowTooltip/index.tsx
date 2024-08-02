@@ -6,7 +6,7 @@ import { useDetectOverflow } from '../../hooks/index.js'
 interface TextOverflowTooltipProps<T> extends TooltipProps {
     as?: typeof MuiTooltip | typeof ShadowRootTooltip
     // cloneElement is used.
-    // eslint-disable-next-line @typescript-eslint/ban-types
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types
     children: ReactElement<T & { ref: (ref: HTMLDivElement | null) => void }>
 }
 

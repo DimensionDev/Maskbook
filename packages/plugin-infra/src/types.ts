@@ -135,14 +135,14 @@ export namespace Plugin.Shared {
          */
         contribution?: Contribution
         /** Declare ability this plugin supported. */
-        ability?: Ability
+        ability?: never
     }
 
     /**
      * This part is shared between Site Adaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred<Context extends SharedContext = SharedContext> extends Definition, Utilities {
+    export interface DefinitionDeferred<Context extends SharedContext = SharedContext> extends Definition {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -151,8 +151,6 @@ export namespace Plugin.Shared {
          */
         init?(signal: AbortSignal, context: Context): void | Promise<void>
     }
-
-    export interface Utilities {}
 
     /** The publisher of the plugin */
     export interface Publisher {
@@ -211,7 +209,6 @@ export namespace Plugin.Shared {
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
     }
-    export interface Ability {}
 }
 
 /** This part runs in the Site Adaptor */

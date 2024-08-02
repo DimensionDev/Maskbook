@@ -34,6 +34,7 @@ export function firefly_light_url() { return new URL("./brands/Firefly.light.svg
 export function flow_url() { return new URL("./brands/Flow.svg", import.meta.url).href }
 export function gem_url() { return new URL("./brands/Gem.svg", import.meta.url).href }
 export function git_hub_url() { return new URL("./brands/GitHub.svg", import.meta.url).href }
+export function github_dark_url() { return new URL("./brands/GithubDark.svg", import.meta.url).href }
 export function git_hub_gray_url() { return new URL("./brands/GitHubGray.svg", import.meta.url).href }
 export function gnosis_url() { return new URL("./brands/Gnosis.svg", import.meta.url).href }
 export function instagram_url() { return new URL("./brands/Instagram.svg", import.meta.url).href }
@@ -140,6 +141,7 @@ export function bordered_success_url() { return new URL("./general/BorderedSucce
 export function busy_wallet_nav_url() { return new URL("./general/BusyWalletNav.svg", import.meta.url).href }
 export function buy_url() { return new URL("./general/Buy.svg", import.meta.url).href }
 export function cached_url() { return new URL("./general/Cached.svg", import.meta.url).href }
+export function calendar_dark_url() { return new URL("./general/CalendarDark.svg", import.meta.url).href }
 export function candle_url() { return new URL("./general/candle.svg", import.meta.url).href }
 export function card_url() { return new URL("./general/Card.svg", import.meta.url).href }
 export function check_url() { return new URL("./general/Check.svg", import.meta.url).href }
@@ -210,6 +212,7 @@ export function gear_dark_url() { return new URL("./general/Gear.dark.svg", impo
 export function gear_light_url() { return new URL("./general/Gear.light.svg", import.meta.url).href }
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url).href }
 export function gift_url() { return new URL("./general/Gift.svg", import.meta.url).href }
+export function global_url() { return new URL("./general/Global.svg", import.meta.url).href }
 export function globe_url() { return new URL("./general/Globe.svg", import.meta.url).href }
 export function gray_masks_url() { return new URL("./general/GrayMasks.svg", import.meta.url).href }
 export function hamburger_menu_url() { return new URL("./general/HamburgerMenu.svg", import.meta.url).href }

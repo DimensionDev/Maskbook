@@ -67,7 +67,7 @@ export function FolderTabPanel({ className, ...rest }: TabPanelProps) {
 }
 
 // this is a subtype of ReactElement
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-restricted-types
 type TabPanelReactElement = ReactElement<TabPanelProps, ComponentType<TabPanelProps>>
 
 interface FolderTabsProps extends Pick<HTMLProps<HTMLDivElement>, 'defaultValue' | 'children'> {}

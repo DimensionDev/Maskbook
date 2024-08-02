@@ -4,11 +4,10 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "start": "node --import @swc-node/register/esm-register compile-contracts.ts"
+    "start": "npx gulp build-contracts"
   },
   "dependencies": {
     "@typechain/web3-v1": "^6.0.7",
-    "typechain": "^8.3.2",
     "web3-core": "4.5.0",
     "web3-types": "1.7.0",
     "web3-eth": "4.8.0",

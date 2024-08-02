@@ -93,7 +93,7 @@ export interface UserOptions {
     account?: string
 }
 
-export interface DeviceOptions {}
+export type DeviceOptions = Record<never, never>
 
 export interface CommonOptions {
     user?: UserOptions
