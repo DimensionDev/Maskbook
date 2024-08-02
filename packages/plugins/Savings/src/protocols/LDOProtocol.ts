@@ -191,7 +191,7 @@ export class LidoProtocol implements SavingsProtocol {
                     gas,
                 })
                 .once(TransactionEventType.ERROR, reject)
-                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                .once(TransactionEventType.CONFIRMATION, ({ receipt }) => {
                     resolve(receipt.transactionHash)
                 })
         })
