@@ -1,52 +1,192 @@
-import urlcat from 'urlcat'
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
-import { GITCOIN_API_GRANTS_V1, type TenantTypes } from '../constants.js'
+import { GITCOIN_API_GRANTS_V1 } from '../constants.js'
+import { first } from 'lodash-es'
 
-interface AdminProfile {
-    id: number
-    url: string
-    handle: string
-    keywords?: string[]
-    position?: number
-    avatar_url: string
-    github_url?: string
-    total_earned?: number
-    organizations?: unknown
+const projectQuery = `
+  query ($alloVersion: [String!]!, $projectId: String!) {
+    projects(
+      first: 100
+      filter: {
+        tags: { equalTo: $alloVersion }
+        not: { tags: { contains: "program" } }
+        id: { equalTo: $projectId }
+      }
+    ) {
+      id
+      chainId
+      metadata
+      metadataCid
+      name
+      nodeId
+      projectNumber
+      registryAddress
+      tags
+      nonce
+      anchorAddress
+      projectType
+      roles(first: 1000) {
+        address
+        role
+        createdAtBlock
+      }
+    }
+  }
+`
+
+const applicationsQuery = `
+query getApprovedApplicationsByProjectIds($projectIds: [String!]!) {
+    applications(
+      first: 1000
+      filter: { projectId: { in: $projectIds }, status: { equalTo: APPROVED } }
+    ) {
+      id
+      projectId
+      chainId
+      roundId
+      status
+      metadataCid
+      metadata
+      totalDonationsCount
+      totalAmountDonatedInUsd
+      uniqueDonorsCount
+      round {
+        applicationsStartTime
+        applicationsEndTime
+        donationsStartTime
+        donationsEndTime
+        roundMetadata
+        project {
+          name
+        }
+        strategyName
+      }
+    }
+  }
+`
+
+const legacyProjectIdsQuery = `
+  query ($projectId: String!) {
+    legacyProjects(first: 1, filter: { v2ProjectId: { equalTo: $projectId } }) {
+      v1ProjectId
+    }
+  }
+`
+
+export enum CredentialsType {
+    Github = 'github',
+    Twitter = 'twitter',
 }
 
-export interface GitcoinGrant {
-    url: string
-    active: boolean
-    title: string
-    slug: string
-    description: string
-    description_rich: string
-    reference_url: string
-    logo_url: string
-    logo: string
-    last_update_natural: string
-    verified: boolean
-    admin_address: string
-    amount_received: string
-    token_address: string
-    token_symbol: string
-    contract_address: string
-    metadata: unknown
-    network: string
-    required_gas_price: string
-    admin_profile: AdminProfile
-    team_members: AdminProfile[]
-    twitter_handle_1?: string
-    twitter_handle_2?: string
-    tenants: TenantTypes[]
+export interface Round {
+    donationsEndTime: string
+    donationsStartTime: string
+    applicationsStartTime: string
+    applicationsEndTime: string
+    project: {
+        name: string
+    }
+    roundMetadata: {
+        name: string
+    }
+    strategyName: string
 }
 
-export async function fetchGrant(id: string) {
-    if (!/\d+/.test(id)) return
+export interface GrantApplication {
+    totalAmountDonatedInUsd: number
+    totalDonationsCount: number
+    uniqueDonorsCount: number
+    metadata: {
+        application: {
+            project: {
+                title: string
+                bannerImg: string
+                website: string
+                createdAt: number
+                projectGithub: string
+                projectTwitter: string
+                userGithub: string
+                description: string
+            }
+        }
+    }
+    round: Round
+}
 
-    const { grants } = await fetchCachedJSON<{
-        grants: GitcoinGrant
-        status: number
-    }>(urlcat(GITCOIN_API_GRANTS_V1, { id }))
-    return grants
+export interface GrantProject {
+    name: string
+    metadata: {
+        title: string
+        bannerImg: string
+        website: string
+        createdAt: number
+        projectGithub: string
+        projectTwitter: string
+        userGithub: string
+        description: string
+    }
+}
+
+export async function fetchLegacyProjectIds(id: string) {
+    const legacyProjectIds = await fetchCachedJSON<{ data: { legacyProjects: Array<{ v1ProjectId: string }> } }>(
+        GITCOIN_API_GRANTS_V1,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: legacyProjectIdsQuery,
+                variables: {
+                    projectId: id,
+                },
+            }),
+        },
+    )
+
+    return legacyProjectIds.data.legacyProjects.map((x) => x.v1ProjectId)
+}
+
+export async function fetchProjectById(id: string) {
+    if (!/0x[\dA-Fa-f]{64}/.test(id)) throw new Error('Invalid project id')
+    const projects = await fetchCachedJSON<{ data: { projects: GrantProject[] } }>(GITCOIN_API_GRANTS_V1, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            query: projectQuery,
+            variables: {
+                alloVersion: 'allo-v2',
+                projectId: id,
+            },
+        }),
+    })
+
+    return first(projects.data.projects)
+}
+
+export async function fetchApplications(id: string) {
+    if (!/0x[\dA-Fa-f]{64}/.test(id)) throw new Error('Invalid project id')
+
+    const legacyProjectIds = await fetchLegacyProjectIds(id)
+
+    const { data } = await fetchCachedJSON<{
+        data: {
+            applications: GrantApplication[]
+        }
+    }>(GITCOIN_API_GRANTS_V1, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            operationName: 'getApprovedApplicationsByProjectIds',
+            query: applicationsQuery,
+            variables: {
+                projectIds: [id, ...legacyProjectIds],
+            },
+        }),
+    })
+
+    return data
 }
