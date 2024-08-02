@@ -18,7 +18,7 @@ async function replaceFileAll(file: string, pairs: Array<[string, string]>) {
 }
 
 export async function buildContracts() {
-    const cwd = process.cwd()
+    const cwd = join(GENERATED_PATH, '../')
     const { glob, runTypeChain } = await import('typechain')
     // find all files matching the glob
     const allFiles = glob(cwd, ['./abis/*.json'])
