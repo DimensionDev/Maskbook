@@ -192,7 +192,7 @@ export function PreviewCard(props: PreviewCardProps) {
         }, 0)
         .toFixed()
 
-    const totalUniqueDonars = applications.applications
+    const totalUniqueDonors = applications.applications
         .reduce((acc, application) => {
             return acc + application.uniqueDonorsCount
         }, 0)
@@ -202,7 +202,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
     const stats = [
         {
-            title: t.funding_recived(),
+            title: t.funding_received(),
             value: `$${totalFundingReceived}`,
         },
         {
@@ -211,7 +211,7 @@ export function PreviewCard(props: PreviewCardProps) {
         },
         {
             title: t.unique_contributors(),
-            value: totalUniqueDonars,
+            value: totalUniqueDonors,
         },
         {
             title: t.rounds(),
@@ -274,7 +274,7 @@ export function PreviewCard(props: PreviewCardProps) {
 
                     <TabPanel value={tabs.detail}>
                         <Box>
-                            <Typography className={classes.subtitle}>{t.abount()}</Typography>
+                            <Typography className={classes.subtitle}>{t.about()}</Typography>
                             <Markdown defaultStyle={false} className={classes.markdown}>
                                 {project.metadata.description}
                             </Markdown>
@@ -298,8 +298,11 @@ function RoundItem({ round }: { round: Round }) {
 
     const roundType =
         (
+            /* cspell:disable-next-line */
             round.strategyName === 'allov1.Direct' ||
+            /* cspell:disable-next-line */
             round.strategyName === 'allov2.DirectGrantsSimpleStrategy' ||
+            /* cspell:disable-next-line */
             round.strategyName === 'allov2.DirectGrantsLiteStrategy'
         ) ?
             'Direct grants'

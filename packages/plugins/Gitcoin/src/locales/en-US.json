@@ -33,11 +33,11 @@
     "donate_successfully": "You have donated {{- uiAmount}} {{symbol}} successfully.",
     "donate_dialog_title": "Donate Checkout",
     "created_on": "Created on: {{created}}",
-    "funding_recived": "funding received",
+    "funding_received": "funding received",
     "contributions": "contributions",
     "unique_contributors": "unique contributors",
     "rounds": "Rounds",
     "project_details": "Project details",
     "past_rounds": "Past rounds",
-    "abount": "Abount"
+    "about": "Abount"
 }
