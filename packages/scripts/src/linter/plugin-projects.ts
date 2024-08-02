@@ -25,22 +25,24 @@ export async function fixPluginsTSConfig() {
         throw new Error(`failed to read tsconfig ${file}`)
     }
 
-    const plugins = (
+    config.references = (
         await Promise.all(
             (await readdir(folder, { withFileTypes: true }))
                 .filter((x) => x.isDirectory())
                 // Note: if there was a plugin but removed, git won't remove the empty directory, so we check if it has a package.json in it.
                 .map(async (folder) => {
-                    const pkg = join(folder.path, folder.name, 'package.json')
-                    const has = await exists(pkg)
-                    return has ? folder : null!
+                    const pkg = join(folder.parentPath, folder.name)
+                    const root = join(pkg, 'tsconfig.json')
+                    const src = join(pkg, 'src', 'tsconfig.json')
+                    if (await exists(root)) return './' + folder.name + '/tsconfig.json'
+                    if (await exists(src)) return './' + folder.name + '/src/tsconfig.json'
+                    return null!
                 }),
         )
     )
         .filter(Boolean)
-        .map((x) => x.name)
         .sort()
-    config.references = plugins.map((name) => ({ path: `./${name}/tsconfig.json` }))
+        .map((path) => ({ path }))
     return writeFile(file, await prettier(JSON.stringify(config), 'json', 2), 'utf-8')
 }
 
