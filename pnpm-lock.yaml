@@ -14293,6 +14293,10 @@ packages:
       '@babel/runtime': 7.21.0
     dev: false
 
+  /date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+    dev: false
+
   /debounce@1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
     dev: true
@@ -26995,6 +26999,7 @@ time:
   /@types/web@0.0.143: '2024-04-15T04:20:47.209Z'
   /core-js-compat@3.37.0: '2024-04-16T19:50:53.630Z'
   /core-js@3.37.0: '2024-04-16T19:50:45.014Z'
+  /date-fns@3.6.0: '2024-03-18T01:32:48.324Z'
   /eip-712@1.0.0: '2022-02-10T16:20:31.172Z'
   /gulp-cli@3.0.0: '2024-03-24T20:10:16.688Z'
   /gulp@5.0.0: '2024-03-29T02:57:54.156Z'
