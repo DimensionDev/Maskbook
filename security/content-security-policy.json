@@ -42,6 +42,11 @@
         "https://ens-reverse-lookup.r2d2.to",
         "https://debank-proxy.r2d2.to",
         "https://simplehash-proxy.r2d2.to",
+        "https://dsearch.mask.r2d2.to/",
+        "https://twitter-handler-proxy.r2d2.to",
+        "https://nftscan-proxy.r2d2.to",
+        "https://alchemy-proxy.r2d2.to",
+        "https://opensea-proxy.r2d2.to",
         // !!! if they don't have a whitelist, our CSP will be bypassed
         "https://cors-next.r2d2.to/",
 
@@ -55,6 +60,7 @@
         "https://uldpla73li.execute-api.ap-east-1.amazonaws.com/Prod/operation",
         "https://uldpla73li.execute-api.ap-east-1.amazonaws.com/Prod/verify",
         "https://arql3twjl4.execute-api.us-east-1.amazonaws.com/prod/records",
+        "https://a8fq5hs9nk.execute-api.us-east-1.amazonaws.com",
 
         "https://maskbook.pages.dev",
         "https://kv-service.nextnext.id/v1/kv",
@@ -74,6 +80,13 @@
         "https://relation-service-tiger.next.id/",
 
         "https://nftapi.firefly.land/",
+        "https://store.firefly.land",
+        "https://mask-network-dev.firefly.land",
+        "https://api.firefly.land",
+
+        "https://api.dimension.im",
+
+        "https://prod-api.kosetto.com",
 
         "https://t.co",
 

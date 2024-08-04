@@ -7,7 +7,7 @@ export function useControlLensPopup(holderRef: RefObject<HTMLDivElement | null>)
     const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
     const [active, setActive] = useState(false)
-    if (!holderRef.current) setActive(false)
+    if (!holderRef.current && active) setActive(false)
 
     useEffect(() => {
         const holder = holderRef.current
