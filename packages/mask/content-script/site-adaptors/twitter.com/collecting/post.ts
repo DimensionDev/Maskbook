@@ -31,15 +31,7 @@ import {
 } from '../utils/selector.js'
 import { IdentityProviderTwitter } from './identity.js'
 
-function getPostActionsNode(postNode: HTMLElement | null) {
-    if (!postNode) return null
-    return postNode.closest('[data-testid="tweet"]')?.querySelector<HTMLElement>(
-        // query for the share button button which has a popup menu
-        '[role="group"]:last-child > div:has([aria-haspopup="menu"]):last-child',
-    )
-}
-
-const getParentTweetNode = (node: HTMLElement) => {
+function getParentTweetNode(node: HTMLElement) {
     return node.closest<HTMLElement>('[data-testid="tweet"]')
 }
 
@@ -93,6 +85,7 @@ function registerPostCollectorInner(
     new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
+            console.log(tweetNode)
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) return
             const refs = createRefsForCreatePostContext()
             const info = twitterShared.utils.createPostContext({
