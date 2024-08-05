@@ -140,7 +140,7 @@ interface PreviewCardProps {
 export function PreviewCard(props: PreviewCardProps) {
     const t = useGitcoinTrans()
     const { classes } = useStyles()
-    const { data, isLoading: loading, error, refetch } = useProject(props.grantId)
+    const { value: data, loading, error, retry: refetch } = useProject(props.grantId)
 
     const [currentTab, onChange, tabs] = useTabs('detail', 'pastRounds')
 
