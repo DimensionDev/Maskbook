@@ -17,6 +17,3 @@ export * from './helpers/createWeb3FromURL.js'
 export * from './helpers/createWeb3FromProvider.js'
 export * from './helpers/createWeb3ProviderFromRequest.js'
 export * from './helpers/createWeb3ProviderFromURL.js'
-
-export * as trending from './Trending/helpers.js'
-export * as chainbase from './Chainbase/helpers.js'
