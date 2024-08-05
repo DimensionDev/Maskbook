@@ -85,7 +85,6 @@ function registerPostCollectorInner(
     new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
             const tweetNode = getTweetNode(node)
-            console.log(tweetNode)
             if (!tweetNode || shouldSkipDecrypt(node, tweetNode)) return
             const refs = createRefsForCreatePostContext()
             const info = twitterShared.utils.createPostContext({
