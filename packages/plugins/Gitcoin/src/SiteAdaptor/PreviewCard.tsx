@@ -1,20 +1,14 @@
-import { BigNumber } from 'bignumber.js'
-import { intersection } from 'lodash-es'
-import urlcat from 'urlcat'
-import { useMemo } from 'react'
-import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'
-import { Icons } from '@masknet/icons'
-import { ChainBoundary, LoadingStatus, ReloadStatus, SocialIcon } from '@masknet/shared'
-import { NetworkPluginID, purify, twitterDomainMigrate } from '@masknet/shared-base'
-import { makeStyles, ShadowRootIsolation } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { alpha, Box, Button, Card, Link, Stack, Typography } from '@mui/material'
-import { GitcoinTrans, useGitcoinTrans } from '../locales/i18n_generated.js'
-import { SUPPORTED_TENANTS, TenantToChainIconMap } from '../constants.js'
-import { grantDetailStyle } from './gitcoin-grant-detail-style.js'
-import { useGrant } from './hooks/useGrant.js'
-import { DonateModal } from './modals/modals.js'
+import { LoadingStatus, Markdown, ReloadStatus } from '@masknet/shared'
+import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { useGitcoinTrans } from '../locales/i18n_generated.js'
 
+import { useProject } from './hooks/useProject.js'
+import { Box, Link, Tab, Typography } from '@mui/material'
+import { getIPFSImageUrl } from './utils/getIPFSImageUrl.js'
+import { Icons } from '@masknet/icons'
+import { format, isBefore } from 'date-fns'
+import { TabContext, TabPanel } from '@mui/lab'
+import type { Round } from '../apis/index.js'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
@@ -22,269 +16,322 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
+
+        scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'row',
-        flexGrow: 1,
-    },
-    metas: {
-        display: 'flex',
-        marginTop: theme.spacing(1),
-    },
-    admin: {
-        marginLeft: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    link: {
-        marginLeft: theme.spacing(1),
-        color: theme.palette.maskColor.main,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    main: {
-        padding: theme.spacing(2, 2, 0),
-        boxSizing: 'border-box',
-        marginTop: theme.spacing(2.5),
-        borderRadius: 12,
-        minHeight: 366,
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    article: {
-        borderRadius: '12px 12px 0 0',
-        height: '100%',
-        boxSizing: 'border-box',
-        overflow: 'auto',
-        overscrollBehavior: 'contain',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    network: {
-        marginRight: theme.spacing(1.5),
     },
     title: {
-        lineHeight: '22px',
-        fontWeight: 'bold',
-        fontSize: 18,
-        flexGrow: 1,
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        marginRight: theme.spacing(2),
-    },
-    bold: {
-        fontWeight: 'bold',
-        color: theme.palette.maskColor.dark,
-    },
-    banner: {
-        textAlign: 'center',
-        img: {
-            width: '100%',
-            maxWidth: '100%',
-            maxHeight: 176,
-            objectFit: 'contain',
-            borderRadius: theme.spacing(1.5),
-        },
-    },
-    description: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-word',
-        tabSize: 4,
-        img: {
-            maxWidth: '100%',
-        },
-    },
-    data: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    meta: {
-        fontSize: 10,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        display: 'flex',
-        alignItems: 'center',
+        color: theme.palette.maskColor.main,
+        fontSize: 24,
+        fontWeight: 700,
+        lineHeight: '120%',
     },
     button: {
-        width: '100%',
+        height: '34px',
+    },
+    banner: {
+        borderRadius: 8,
+        margin: theme.spacing(1, 0),
+    },
+    links: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        rowGap: 12,
+    },
+    linkItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        color: theme.palette.maskColor.main,
+    },
+    link: {
+        color: theme.palette.maskColor.main,
+    },
+    stats: {
+        margin: theme.spacing(1.5, 0),
+        padding: theme.spacing(1.5),
+        display: 'flex',
+        gap: 12,
+        background: theme.palette.maskColor.white,
+        borderRadius: 8,
+        justifyContent: 'space-between',
+    },
+    statsItem: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 8,
+    },
+    statsValue: {
+        fontSize: 24,
+        fontWeight: 700,
+        lineHeight: '120%',
+        color: theme.palette.maskColor.main,
+    },
+    statsTitle: {
+        color: theme.palette.maskColor.second,
+        fontSize: 14,
+        lineHeight: '18px',
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 700,
+        lineHeight: '22px',
+        color: theme.palette.maskColor.main,
+    },
+    rounds: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+    },
+    round: {
+        borderRadius: 12,
+        border: `1px solid ${theme.palette.maskColor.bottom}`,
+        padding: theme.spacing(1.5),
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 12,
+    },
+    roundName: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
+    roundStatus: {
+        padding: theme.spacing(0.75, 1.5),
+        borderRadius: 8,
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+        lineHeight: '18px',
+    },
+    markdown: {
+        color: 'inherit',
+        fontSize: 'inherit',
+        fontFamily: 'sans-serif',
+        '& p, & li': {
+            margin: 0,
+            fontSize: 12,
+            color: theme.palette.maskColor.main,
+        },
+        '& p + p': {
+            marginTop: theme.spacing(0.5),
+        },
+        '& h1, & h2, & h3, & h4, & h5, & h6': {
+            fontSize: 14,
+            fontWeight: 500,
+            color: theme.palette.maskColor.main,
+        },
+        '& img': {
+            maxWidth: '100%',
+        },
+        '& a': {
+            color: theme.palette.maskColor.main,
+        },
     },
 }))
 
 interface PreviewCardProps {
     grantId: string
+    link: string
 }
 
 export function PreviewCard(props: PreviewCardProps) {
     const t = useGitcoinTrans()
-    const { classes, theme } = useStyles()
-    const { value: grant, error, loading, retry } = useGrant(props.grantId)
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { classes } = useStyles()
+    const { data, isLoading: loading, error, refetch } = useProject(props.grantId)
 
-    // #region the donation dialog
-    const [style, description] = useMemo((): [string, string | TrustedHTML] => {
-        if (!grant?.description_rich) return ['', grant?.description || '']
-        const ops = JSON.parse(grant.description_rich).ops as object[]
-        const converter = new QuillDeltaToHtmlConverter(ops)
-        return [grantDetailStyle, converter.convert()]
-    }, [grant?.description_rich, grant?.description])
+    const [currentTab, onChange, tabs] = useTabs('detail', 'pastRounds')
 
-    if (loading) return <LoadingStatus height={148} p={1} />
-    if (error) return <ReloadStatus height={120} message={t.go_wrong()} onRetry={retry} />
-    if (!grant) return null
+    if (loading)
+        return (
+            <article className={classes.card} data-hide-scrollbar>
+                <LoadingStatus height={148} p={1} />
+            </article>
+        )
+    if (error)
+        return (
+            <article className={classes.card} data-hide-scrollbar>
+                <ReloadStatus height={120} message={t.go_wrong()} onRetry={refetch} />
+            </article>
+        )
 
-    const tenant = grant.tenants[0]
-    const isSupportedTenant = intersection(grant.tenants, SUPPORTED_TENANTS).length > 0
+    const { project, applications } = data || {}
 
-    // Use handle_1 as Gitcoin does
-    const twitterProfile =
-        grant.twitter_handle_1 ? twitterDomainMigrate(`https://x.com/${grant.twitter_handle_1}`) : null
+    if (!project || !applications) return
 
-    const ChainIcon = TenantToChainIconMap[tenant]
+    const links = [
+        {
+            icon: <Icons.Global size={16} />,
+            url: project.metadata.website,
+        },
+        {
+            icon: <Icons.TwitterXRound size={16} variant="light" />,
+            url: project.metadata.projectTwitter,
+        },
+        {
+            icon: <Icons.GithubDark size={16} />,
+            url: project.metadata.projectGithub,
+        },
+        {
+            icon: <Icons.GithubDark size={16} />,
+            url: project.metadata.userGithub,
+        },
+    ].filter((x) => !!x.url)
+
+    const totalFundingReceived = applications.applications
+        .reduce((acc, application) => {
+            return acc + application.totalAmountDonatedInUsd
+        }, 0)
+        .toFixed()
+
+    const totalContributions = applications.applications
+        .reduce((acc, application) => {
+            return acc + application.totalDonationsCount
+        }, 0)
+        .toFixed()
+
+    const totalUniqueDonors = applications.applications
+        .reduce((acc, application) => {
+            return acc + application.uniqueDonorsCount
+        }, 0)
+        .toFixed()
+
+    const totalRoundsParticipated = applications.applications.length
+
+    const stats = [
+        {
+            title: t.funding_received(),
+            value: `$${totalFundingReceived}`,
+        },
+        {
+            title: t.contributions(),
+            value: totalContributions,
+        },
+        {
+            title: t.unique_contributors(),
+            value: totalUniqueDonors,
+        },
+        {
+            title: t.rounds(),
+            value: totalRoundsParticipated,
+        },
+    ]
+
+    const pastRounds = applications.applications.filter((x) => isBefore(x.round.donationsEndTime, new Date()))
+
     return (
-        <article className={classes.card}>
-            <div className={classes.header}>
-                {ChainIcon ?
-                    <ChainIcon className={classes.network} size={36} />
-                :   null}
-                <Stack flexGrow={1} overflow="auto">
-                    <Box display="flex" flexDirection="row" alignItems="center">
-                        <Typography variant="h1" className={classes.title} title={grant.title}>
-                            {grant.title}
-                        </Typography>
-                        <Button
-                            disableTouchRipple
-                            color="success"
-                            size="small"
-                            sx={{
-                                pointerEvents: 'none',
-                                borderRadius: '32px',
-                                backgroundColor:
-                                    grant.active ?
-                                        theme.palette.maskColor.success
-                                    :   alpha(theme.palette.maskColor.primary, 0.1),
-                            }}>
-                            {t.grant_status({ context: grant.active ? 'active' : 'closed' })}
-                        </Button>
-                    </Box>
-                    <div className={classes.metas}>
-                        <Typography color={theme.palette.maskColor.second} fontSize={14}>
-                            <GitcoinTrans.total_raised
-                                values={{
-                                    amount: `$${new BigNumber(grant.amount_received).toFixed(2)}`,
-                                }}
-                                components={{
-                                    bold: <Typography component="span" className={classes.bold} />,
-                                }}
-                            />
-                        </Typography>
-                        <div className={classes.admin}>
-                            <Typography color={theme.palette.maskColor.second}>
-                                <GitcoinTrans.admin
-                                    values={{ admin: grant.admin_profile.handle }}
-                                    components={{
-                                        bold: (
-                                            <Link
-                                                className={classes.bold}
-                                                target="_blank"
-                                                href={`https://gitcoin.co/profile/${grant.admin_profile.handle}`}
-                                            />
-                                        ),
-                                    }}
-                                />
-                            </Typography>
-                            {twitterProfile ?
-                                <Link className={classes.link} target="_blank" href={twitterProfile}>
-                                    <SocialIcon url={twitterProfile} size={16} />
-                                </Link>
-                            :   null}
-                            {grant.admin_profile.github_url ?
-                                <Link className={classes.link} href={grant.admin_profile.github_url} target="_blank">
-                                    <SocialIcon url={grant.admin_profile.github_url} size={16} />
-                                </Link>
-                            :   null}
-                            <Link className={classes.link} href={grant.reference_url}>
-                                <SocialIcon url={grant.reference_url} size={16} />
-                            </Link>
-                        </div>
-                    </div>
-                </Stack>
-            </div>
-            <Card variant="outlined" className={classes.main} elevation={0}>
-                <Typography className={classes.article} component="div">
-                    <div className={classes.banner}>
-                        <img src={grant.logo_url} />
-                    </div>
-                    <ShadowRootIsolation>
-                        <style>{style}</style>
-                        <PreviewCardRender __html={description} />
-                    </ShadowRootIsolation>
-                    <div className={classes.data}>
-                        <div className={classes.meta}>
-                            <Typography variant="body2" color="textSecondary">
-                                {t.last_updated()} {grant.last_update_natural}
-                            </Typography>
-                        </div>
-                    </div>
+        <article className={classes.card} data-hide-scrollbar>
+            <Box display="flex" gap={1.5} justifyContent="space-between" alignItems="center">
+                <Typography component="h1" className={classes.title}>
+                    {project.metadata.title}
                 </Typography>
-            </Card>
-            <Box sx={{ display: 'flex', width: '100%', gap: 1, mt: 1 }}>
-                <Box sx={{ flex: 1 }}>
-                    <Button
-                        fullWidth
-                        variant="roundedDark"
-                        className={classes.button}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={urlcat('https://gitcoin.co', grant.url)}
-                        startIcon={<Icons.Eye variant="dark" size={18} />}>
-                        {t.view_on()}
-                    </Button>
-                </Box>
-                {grant.active && isSupportedTenant ?
-                    <Box sx={{ flex: 1 }}>
-                        <ChainBoundary
-                            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                            expectedChainId={chainId}
-                            predicate={(pluginID) => pluginID === NetworkPluginID.PLUGIN_EVM}
-                            ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                            <Button
-                                fullWidth
-                                variant="roundedDark"
-                                onClick={() => {
-                                    DonateModal.open({ grant })
-                                }}
-                                startIcon={<Icons.Wallet size={18} />}>
-                                {t.donate()}
-                            </Button>
-                        </ChainBoundary>
+                <ActionButton
+                    component="a"
+                    href={props.link}
+                    size="small"
+                    variant="roundedContained"
+                    className={classes.button}>
+                    {t.view()}
+                </ActionButton>
+            </Box>
+
+            <img src={getIPFSImageUrl(project.metadata.bannerImg, 190)} className={classes.banner} />
+
+            <Box className={classes.links}>
+                {links.map((x, index) => (
+                    <Box className={classes.linkItem} key={index}>
+                        {x.icon}
+                        <Link className={classes.link} underline="none" href={x.url}>
+                            {x.url}
+                        </Link>
                     </Box>
-                :   null}
+                ))}
+                <Box className={classes.linkItem} key="created">
+                    <Icons.CalendarDark size={16} />
+                    <Typography className={classes.link}>
+                        {t.created_on({ created: format(project.metadata.createdAt, 'MMMM do, yyyy') })}
+                    </Typography>
+                </Box>
+            </Box>
+
+            <Box className={classes.stats}>
+                {stats.map((x, index) => (
+                    <Box key={index} className={classes.statsItem}>
+                        <Typography className={classes.statsValue}>{x.value}</Typography>
+                        <Typography className={classes.statsTitle}>{x.title}</Typography>
+                    </Box>
+                ))}
+            </Box>
+
+            <Box>
+                <TabContext value={currentTab}>
+                    <MaskTabList onChange={onChange}>
+                        <Tab label={t.project_details()} value={tabs.detail} />
+                        <Tab label={t.past_rounds()} value={tabs.pastRounds} />
+                    </MaskTabList>
+
+                    <TabPanel value={tabs.detail}>
+                        <Box>
+                            <Typography className={classes.subtitle}>{t.about()}</Typography>
+                            <Markdown defaultStyle={false} className={classes.markdown}>
+                                {project.metadata.description}
+                            </Markdown>
+                        </Box>
+                    </TabPanel>
+                    <TabPanel value={tabs.pastRounds}>
+                        <Box className={classes.rounds}>
+                            {pastRounds.map((x, index) => (
+                                <RoundItem key={index} round={x.round} />
+                            ))}
+                        </Box>
+                    </TabPanel>
+                </TabContext>
             </Box>
         </article>
     )
 }
 
-// Note: this extra component is used to make sure the useStyles call happens
-// under the ShadowRootIsolation context.
-function PreviewCardRender({ __html }: { __html: string | TrustedHTML }) {
-    const { classes, cx } = useStyles()
-    const safeHTML = useMemo(() => {
-        if (typeof __html === 'string') return purify(__html)
-        return __html
-    }, [__html])
-    // this is safe because purify has been called
-    // eslint-disable-next-line react/no-danger
-    return <div className={cx(classes.description, 'grant-detail')} dangerouslySetInnerHTML={{ __html: safeHTML }} />
+function RoundItem({ round }: { round: Round }) {
+    const { classes } = useStyles()
+
+    const roundType =
+        (
+            /* cspell:disable-next-line */
+            round.strategyName === 'allov1.Direct' ||
+            /* cspell:disable-next-line */
+            round.strategyName === 'allov2.DirectGrantsSimpleStrategy' ||
+            /* cspell:disable-next-line */
+            round.strategyName === 'allov2.DirectGrantsLiteStrategy'
+        ) ?
+            'Direct grants'
+        :   'Quadratic funding'
+
+    const startTime = format(round.applicationsStartTime, 'MMMM do, yyyy')
+
+    const endTime = format(round.applicationsEndTime, 'MMMM do, yyyy')
+
+    return (
+        <Box className={classes.round}>
+            <Typography className={classes.roundName}>{round.project.name}</Typography>
+            <Typography className={classes.roundName}>{round.roundMetadata.name}</Typography>
+            <Box display="flex" justifyContent="space-between" alignItems="flex-end">
+                <Typography className={classes.roundName}>
+                    {roundType === 'Quadratic funding' ?
+                        <span>
+                            {startTime} - {endTime}
+                        </span>
+                    :   <span>{startTime}</span>}
+                </Typography>
+                <Box
+                    className={classes.roundStatus}
+                    style={{
+                        background: roundType === 'Direct grants' ? 'rgba(255, 177, 0, 0.2)' : 'rgba(61, 194, 51, 0.2)',
+                    }}>
+                    {roundType}
+                </Box>
+            </Box>
+        </Box>
+    )
 }

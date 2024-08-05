@@ -214,6 +214,11 @@ export const GitHub = /*#__PURE__*/ __createIcon('GitHub', [
         u: () => new URL('./brands/GitHub.svg', import.meta.url).href,
     },
 ])
+export const GithubDark = /*#__PURE__*/ __createIcon('GithubDark', [
+    {
+        u: () => new URL('./brands/GithubDark.svg', import.meta.url).href,
+    },
+])
 export const GitHubGray = /*#__PURE__*/ __createIcon('GitHubGray', [
     {
         u: () => new URL('./brands/GitHubGray.svg', import.meta.url).href,
@@ -1061,6 +1066,11 @@ export const Cached = /*#__PURE__*/ __createIcon('Cached', [
                 }),
             }),
         s: true,
+    },
+])
+export const CalendarDark = /*#__PURE__*/ __createIcon('CalendarDark', [
+    {
+        u: () => new URL('./general/CalendarDark.svg', import.meta.url).href,
     },
 ])
 export const Candle = /*#__PURE__*/ __createIcon('candle', [
@@ -2071,6 +2081,11 @@ export const GearSettings = /*#__PURE__*/ __createIcon('GearSettings', [
 export const Gift = /*#__PURE__*/ __createIcon('Gift', [
     {
         u: () => new URL('./general/Gift.svg', import.meta.url).href,
+    },
+])
+export const Global = /*#__PURE__*/ __createIcon('Global', [
+    {
+        u: () => new URL('./general/Global.svg', import.meta.url).href,
     },
 ])
 export const Globe = /*#__PURE__*/ __createIcon('Globe', [
