@@ -18,7 +18,6 @@ import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
-const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
 const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
@@ -30,12 +29,6 @@ function getLensNames(nickname: string, bio: string, homepage: string) {
     const homepageNames = homepage.match(LENS_URL_RE)?.[1]
     const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '')
     return [...names, homepageNames].filter(Boolean) as string[]
-}
-
-function getSIDNames(userId: string, nickname: string, bio: string) {
-    return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)]
-        .flatMap((result) => result || [])
-        .map((x) => x.toLowerCase())
 }
 
 const resolveMaskXAddressType = createLookupTableResolver<BaseMaskX.SourceType, SocialAddressType>(
