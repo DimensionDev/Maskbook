@@ -115,10 +115,9 @@ export class ConnectionContext {
                 }
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
-                const params = this.providerType !== ProviderType.Clover ? config : omit(config, 'chainId')
                 this._requestArguments = {
                     method: this.method,
-                    params: [params],
+                    params: [config],
                 }
                 break
             default:
