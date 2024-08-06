@@ -27,7 +27,6 @@ export {
 } from './Web3/EVM/apis/ResolverAPI.js'
 export { EVMContract } from './Web3/EVM/apis/ContractAPI.js'
 export { EVMContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
-export { Signer } from './Web3/EVM/apis/SignerAPI.js'
 export { EVMWeb3 } from './Web3/EVM/apis/ConnectionAPI.js'
 export { EVMWeb3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'

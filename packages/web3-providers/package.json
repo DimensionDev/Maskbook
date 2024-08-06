@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@dimensiondev/metamask-extension-provider": "^3.0.6-20221105074301-8806fca",
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
@@ -46,8 +45,6 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
-    "@metamask/eth-sig-util": "^5.0.2",
-    "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",

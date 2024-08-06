@@ -1,7 +1,5 @@
 import { type ChainId, ProviderType, type Web3Provider } from '@masknet/web3-shared-evm'
 import { EVMNoneProvider } from './None.js'
-import { BrowserProvider } from './Browser.js'
-import { MetaMaskProvider } from './MetaMask.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
@@ -20,9 +18,9 @@ export function createEVMWalletProviders(
 ) {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.Browser]: new BrowserProvider(),
-        [ProviderType.MetaMask]: new MetaMaskProvider(),
-        [ProviderType.MaskWallet]: new MetaMaskProvider(),
+        [ProviderType.Browser]: new EVMNoneProvider(),
+        [ProviderType.MetaMask]: new EVMNoneProvider(),
+        [ProviderType.MaskWallet]: new EVMNoneProvider(),
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     } satisfies Record<ProviderType, EVMWalletProvider>
     EVMWalletProviders = p
