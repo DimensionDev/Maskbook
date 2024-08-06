@@ -1,7 +1,5 @@
 import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -127,12 +125,6 @@ export class RSS3 {
             result: RSS3BaseAPI.Web3Feed[]
             cursor?: string
         }>(url)
-        if (!res.result)
-            Telemetry.captureException(
-                ExceptionType.Error,
-                ExceptionID.FetchError,
-                new Error(`No feeds response from ${url}`),
-            )
         const { result = [], cursor } = res
         result.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`

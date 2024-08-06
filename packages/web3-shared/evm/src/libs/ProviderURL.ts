@@ -1,4 +1,3 @@
-import { getABTestSeed } from '@masknet/web3-telemetry/helpers'
 import { getRPCConstants } from '../constants/constants.js'
 import type { ChainId } from '../types/index.js'
 
@@ -7,7 +6,7 @@ export class ProviderURL {
         const { RPC_URLS, RPC_WEIGHTS } = getRPCConstants(chainId)
 
         if (!RPC_URLS || !RPC_WEIGHTS) throw new Error(`No RPC presets at chainId: ${chainId}.`)
-        return RPC_URLS[RPC_WEIGHTS[getABTestSeed() % RPC_URLS.length]]
+        return RPC_URLS[RPC_WEIGHTS[0]]
     }
 
     static fromOfficial(chainId: ChainId) {

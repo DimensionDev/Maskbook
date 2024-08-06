@@ -1,5 +1,3 @@
-import { captureFetchTransaction } from '@masknet/web3-telemetry/helpers'
-
 const { fetch: originalFetch } = globalThis
 
 export type Fetcher<T = Response> = (input: RequestInfo | URL, init?: RequestInit, next?: Fetcher) => Promise<T>
@@ -29,13 +27,5 @@ export async function fetch(input: RequestInfo | URL, init?: RequestInit, fetche
     } catch (error) {
         hasError = true
         throw error
-    } finally {
-        if (hasError) {
-            await captureFetchTransaction(new Request(input, init), response, {
-                status: 'failed',
-                startAt,
-                endAt: Date.now(),
-            })
-        }
     }
 }

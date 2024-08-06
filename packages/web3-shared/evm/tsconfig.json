@@ -10,7 +10,6 @@
     { "path": "../base/tsconfig.json" },
     { "path": "../../flags/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
-    { "path": "../../web3-telemetry/tsconfig.json" },
     { "path": "../../web3-shared/base/tsconfig.json" }
   ]
 }

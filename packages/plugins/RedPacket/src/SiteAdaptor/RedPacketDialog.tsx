@@ -15,8 +15,6 @@ import {
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
@@ -172,7 +170,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 claimRequirements,
                 publicKey,
             })
-            Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             handleClose()
         },
         [senderName, handleClose, compositionType],

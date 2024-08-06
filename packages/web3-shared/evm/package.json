@@ -17,7 +17,6 @@
     "@masknet/web3-constants": "workspace:^",
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "@masknet/web3-telemetry": "workspace:^",
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "punycode": "^2.3.0",

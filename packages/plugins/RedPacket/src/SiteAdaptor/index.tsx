@@ -3,8 +3,6 @@ import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-scr
 import { ApplicationEntry } from '@masknet/shared'
 import { EnhanceableSite, PluginID, getEnhanceableSiteType } from '@masknet/shared-base'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { Trans } from 'react-i18next'
@@ -123,7 +121,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 EntryComponentProps.onClick ?
                                     EntryComponentProps.onClick(() => openDialog('timeline'))
                                 :   openDialog()
-                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckOpen)
                             }}
                         />
                     )

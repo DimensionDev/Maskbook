@@ -90,9 +90,6 @@
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src/index.ts"],
       "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src/index.ts"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src/index.ts"],
-      "@masknet/web3-telemetry": ["./packages/web3-telemetry/src/entry.ts"],
-      "@masknet/web3-telemetry/helpers": ["./packages/web3-telemetry/src/entry-helpers.ts"],
-      "@masknet/web3-telemetry/types": ["./packages/web3-telemetry/src/entry-types.ts"],
       // @masknet/scripts: insert-here
 
       // Plugins
