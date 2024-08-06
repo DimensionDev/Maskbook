@@ -68,33 +68,3 @@ export function providerStorage<ChainId extends number, ProviderType extends str
         () => storage,
     )
 }
-export async function MaskWalletStorage() {
-    const baseHostedStorage = PersistentStorages.Web3.createSubScope(
-        // if you change this (don't, unless you have migration), please also be aware of packages/mask/background/services/wallet/services/sdk.ts
-        `${NetworkPluginID.PLUGIN_EVM}_${ProviderType.MaskWallet}_hosted`,
-        {
-            account: '',
-            chainId: getDefaultChainId(),
-            wallets: [],
-        },
-    ).storage
-
-    const eip4337Storage = InMemoryStorages.Web3.createSubScope(NetworkPluginID.PLUGIN_EVM, {}).createSubScope(
-        ProviderType.MaskWallet,
-        {
-            owner: {
-                account: '',
-                // empty string means EOA signer
-                identifier: '',
-            },
-        },
-    ).storage.owner
-
-    await Promise.all([
-        baseHostedStorage.account.initializedPromise,
-        baseHostedStorage.chainId.initializedPromise,
-        baseHostedStorage.wallets.initializedPromise,
-        eip4337Storage.initializedPromise,
-    ])
-    return { baseHostedStorage, eip4337Storage }
-}

@@ -2,8 +2,6 @@ import { type ChainId, ProviderType, type Web3Provider } from '@masknet/web3-sha
 import { EVMNoneProvider } from './None.js'
 import { EVMCustomEventProvider } from './CustomEvent.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import type { BaseHostedStorage } from './BaseHosted.js'
-import type { EIP4337ProviderStorage } from './BaseContractWallet.js'
 
 export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Create an instance that implement the wallet protocol. */
@@ -11,11 +9,7 @@ export interface EVMWalletProvider extends WalletAPI.Provider<ChainId, ProviderT
 }
 
 export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
-export function createEVMWalletProviders(
-    context: WalletAPI.IOContext,
-    hostStorage: BaseHostedStorage,
-    eip4337Storage: EIP4337ProviderStorage,
-) {
+export function createEVMWalletProviders() {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
         [ProviderType.Browser]: new EVMNoneProvider(),
