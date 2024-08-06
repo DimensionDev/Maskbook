@@ -8,7 +8,6 @@ export {
 } from './Manager/index.js'
 export { evm } from './Manager/registry.js'
 
-export { Twitter } from './Twitter/index.js'
 export { Multicall } from './Multicall/index.js'
 export { Lens } from './Lens/index.js'
 export { RedPacket } from './RedPacket/index.js'
