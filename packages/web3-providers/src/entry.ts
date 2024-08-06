@@ -28,7 +28,6 @@ export {
 export { EVMContract } from './Web3/EVM/apis/ContractAPI.js'
 export { EVMContractReadonly } from './Web3/EVM/apis/ContractReadonlyAPI.js'
 export { Signer } from './Web3/EVM/apis/SignerAPI.js'
-export { Web3Storage } from './Storage/apis/Storage.js'
 export { EVMWeb3 } from './Web3/EVM/apis/ConnectionAPI.js'
 export { EVMWeb3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'
@@ -58,12 +57,6 @@ export {
 
 // Chainbase
 export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
-
-// Zerion
-export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
-
-// RSS3
-export { RSS3 } from './RSS3/index.js'
 
 // Firefly
 

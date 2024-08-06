@@ -12,7 +12,6 @@ import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/
 import * as DeBankFungibleToken from /* webpackDefer: true */ '../../../DeBank/index.js'
 import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
 import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
-import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
 
 export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -33,7 +32,6 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken.ChainbaseFungibleToken,
                 [SourceType.DeBank]: DeBankFungibleToken.DeBankFungibleToken,
-                [SourceType.Zerion]: Zerion.Zerion,
                 [SourceType.Rabby]: Rabby.Rabby,
                 [SourceType.R2D2]: R2D2TokenList.R2D2TokenList,
                 [SourceType.CF]: Cloudflare.Cloudflare,
@@ -41,7 +39,6 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
             },
             [
                 DeBankFungibleToken.DeBankFungibleToken,
-                Zerion.Zerion,
                 ChainbaseFungibleToken.ChainbaseFungibleToken,
                 Rabby.Rabby,
                 R2D2TokenList.R2D2TokenList,

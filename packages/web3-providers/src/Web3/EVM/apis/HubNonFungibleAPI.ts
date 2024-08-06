@@ -13,7 +13,6 @@ import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
 import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
 import * as SimpleHashEVM from /* webpackDefer: true */ '../../../SimpleHash/index.js'
 import * as X2Y2 from /* webpackDefer: true */ '../../../X2Y2/index.js'
-import * as ZerionNonFungibleToken from /* webpackDefer: true */ '../../../Zerion/index.js'
 
 export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -28,7 +27,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
             {
                 [SourceType.X2Y2]: X2Y2.X2Y2,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken.ChainbaseNonFungibleToken,
-                [SourceType.Zerion]: ZerionNonFungibleToken.ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
                 [SourceType.OpenSea]: OpenSea.OpenSea,
                 [SourceType.Alchemy_EVM]: AlchemyEVM.AlchemyEVM,
@@ -42,7 +40,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                     X2Y2.X2Y2,
                     SimpleHashEVM.SimpleHashEVM,
                     NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
-                    ZerionNonFungibleToken.ZerionNonFungibleToken,
                     OpenSea.OpenSea,
                     AlchemyEVM.AlchemyEVM,
                     Gem.Gem,
@@ -52,7 +49,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
             :   [
                     SimpleHashEVM.SimpleHashEVM,
                     NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
-                    ZerionNonFungibleToken.ZerionNonFungibleToken,
                     AlchemyEVM.AlchemyEVM,
                     OpenSea.OpenSea,
                     Gem.Gem,

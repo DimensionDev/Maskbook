@@ -9,7 +9,6 @@ import type { EVMHubOptions } from '../types/index.js'
 import * as MetaSwap from /* webpackDefer: true */ '../../../MetaSwap/index.js'
 import * as AstarGas from /* webpackDefer: true */ '../../../Astar/index.js'
 import * as DeBank from /* webpackDefer: true */ '../../../DeBank/index.js'
-import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
 
 export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -44,7 +43,7 @@ export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> 
             chainId,
         })
         return attemptUntil(
-            [DeBank.DeBankHistory, Zerion.Zerion].map((x) => () => x.getTransactions(options.account, options)),
+            [DeBank.DeBankHistory].map((x) => () => x.getTransactions(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
