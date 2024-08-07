@@ -13,8 +13,6 @@ import { openWindow } from '@masknet/shared-base-ui'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
-        // maxHeight: 877,
-        // overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
     },
