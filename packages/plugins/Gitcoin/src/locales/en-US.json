@@ -39,5 +39,6 @@
     "rounds": "Rounds",
     "project_details": "Project details",
     "past_rounds": "Past rounds",
-    "about": "Abount"
+    "about": "Abount",
+    "no_past_rounds_found": "No past rounds found."
 }
