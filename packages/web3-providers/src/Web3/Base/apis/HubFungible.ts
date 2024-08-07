@@ -1,5 +1,4 @@
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import {
     attemptUntil,
     type FungibleAsset,
@@ -10,6 +9,7 @@ import { isEmpty } from 'lodash-es'
 import type { AuthorizationAPI, FungibleTokenAPI, PriceAPI, TokenIconAPI, TokenListAPI } from '../../../entry-types.js'
 import type { BaseHubOptions } from './HubOptions.js'
 import { AbstractBaseHubProvider } from './HubProvider.js'
+import { queryClient } from '../../../helpers/queryClient.js'
 
 export abstract class BaseHubFungible<ChainId, SchemaType> extends AbstractBaseHubProvider<ChainId> {
     protected abstract getProvidersFungible(

@@ -1,6 +1,5 @@
 export * from './useBuildInfo.js'
 export * from './useEverSeen.js'
-export * from './useLocationChange.js'
 export * from './useMatchXS.js'
 export * from './useObservableMapSet.js'
 export * from './useRowSize.js'

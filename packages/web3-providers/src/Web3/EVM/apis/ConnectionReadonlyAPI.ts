@@ -43,7 +43,6 @@ import {
     createNonFungibleTokenCollection,
     isGreaterThan,
 } from '@masknet/web3-shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
 import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
@@ -53,6 +52,7 @@ import type { EVMConnectionOptions } from '../types/index.js'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { EVMChainResolver } from './ResolverAPI.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
+import { queryClient } from '../../../helpers/queryClient.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)

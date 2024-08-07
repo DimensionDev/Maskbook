@@ -10,7 +10,6 @@ import {
 import { ChainId, SchemaType, WNATIVE, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
-import { queryClient } from '@masknet/shared-base-ui'
 import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
@@ -18,6 +17,7 @@ import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import { ETH_BLUR_TOKEN_ADDRESS, SIMPLE_HASH_URL, SPAM_SCORE } from './constants.js'
 import { fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { queryClient } from '../helpers/queryClient.js'
 import { SimpleHash } from '../types/SimpleHash.js'
 
 export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
