@@ -161,7 +161,7 @@ export class LidoProtocol implements SavingsProtocol {
                     spender: getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
                     // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
-                    nonce: '0x1',
+                    nonce: '0',
                     deadline: MAX_DEADLINE.toString(),
                 },
             }),
