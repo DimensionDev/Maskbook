@@ -56,7 +56,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             name: <Trans ns={PluginID.Gitcoin} i18nKey="name" />,
             icon: <Icons.Gitcoin size={36} />,
             marketListSortingPriority: 9,
-            tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
         },
     ],
     wrapperProps: {
