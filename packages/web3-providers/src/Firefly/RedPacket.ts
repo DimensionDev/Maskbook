@@ -10,7 +10,7 @@ import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
 import { FireflyRedPacketAPI } from '../entry-types.js'
 
-const SITE_URL = location.origin
+const SITE_URL = typeof location === 'undefined' ? '' : location.origin
 let apiRoot = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {

@@ -1,5 +1,4 @@
 import { NetworkPluginID, type StorageObject } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
 import { isSameAddress, type FungibleToken, type NonFungibleToken } from '@masknet/web3-shared-base'
 import {
     formatEthereumAddress,
@@ -12,6 +11,7 @@ import type { Subscription } from 'use-subscription'
 import { TokenState, type TokenStorage } from '../../Base/state/Token.js'
 import { EVMHub } from '../apis/HubAPI.js'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
+import { queryClient } from '../../../helpers/queryClient.js'
 
 export class EVMToken extends TokenState<ChainId, SchemaType> {
     private Hub = EVMHub
