@@ -10,6 +10,7 @@ import { format, isBefore } from 'date-fns'
 import { TabContext, TabPanel } from '@mui/lab'
 import type { Round } from '../apis/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
+import { DEFAULT_PROJECT_BANNER } from '../constants.js'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
@@ -83,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     round: {
         borderRadius: 12,
-        border: `1px solid ${theme.palette.maskColor.bottom}`,
+        border: `1px solid ${theme.palette.maskColor.line}`,
         padding: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
@@ -256,7 +257,14 @@ export function PreviewCard(props: PreviewCardProps) {
                 </ActionButton>
             </Box>
 
-            <img src={getIPFSImageUrl(project.metadata.bannerImg, 190)} className={classes.banner} />
+            <img
+                src={
+                    project.metadata.bannerImg ?
+                        getIPFSImageUrl(project.metadata.bannerImg, 190)
+                    :   DEFAULT_PROJECT_BANNER
+                }
+                className={classes.banner}
+            />
 
             <Box className={classes.links}>
                 {links.map((x, index) => (
