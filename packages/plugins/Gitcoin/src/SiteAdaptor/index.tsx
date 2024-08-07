@@ -49,7 +49,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     },
     ApplicationEntries: [
         {
-            hiddenInList: true,
+            hiddenInList: false,
             ApplicationEntryID: base.ID,
             category: 'dapp',
             description: <Trans ns={PluginID.Gitcoin} i18nKey="description" />,
