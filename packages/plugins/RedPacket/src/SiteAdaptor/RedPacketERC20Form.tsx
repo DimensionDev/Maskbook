@@ -92,7 +92,6 @@ interface RedPacketFormProps {
     setERC721DialogHeight?: (height: number) => void
     gasOption?: GasConfig
     expectedChainId: ChainId
-    isFirefly?: boolean
     origin?: RedPacketSettings
     onClose: () => void
     onNext: () => void
@@ -102,7 +101,7 @@ interface RedPacketFormProps {
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
-    const { origin, expectedChainId, isFirefly, gasOption, onChange, onNext, onGasOptionChange, onChainChange } = props
+    const { origin, expectedChainId, gasOption, onChange, onNext, onGasOptionChange, onChainChange } = props
     const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -360,7 +359,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     placeholder={t.blessing_words()}
                     value={message}
                     inputProps={{
-                        maxLength: isFirefly ? 40 : 100,
+                        maxLength: 40,
                     }}
                 />
             </Box>
@@ -386,7 +385,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={chainId}
                     actualPluginID={pluginID}
-                    disableSwitchAccount={isFirefly}>
+                    disableSwitchAccount>
                     <EthereumERC20TokenApprovedBoundary
                         amount={totalAmount.toFixed()}
                         balance={balance}
@@ -408,7 +407,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             <WalletConnectedBoundary
                                 noGasText={t.no_enough_gas_fees()}
                                 expectedChainId={chainId}
-                                hideRiskWarningConfirmed={isFirefly}>
+                                hideRiskWarningConfirmed>
                                 <ActionButton
                                     size="medium"
                                     className={classes.button}

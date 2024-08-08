@@ -20,7 +20,6 @@ import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 import { openComposition } from './openComposition.js'
@@ -30,7 +29,6 @@ import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
-import { RedPacketPast } from './RedPacketPast.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
@@ -77,7 +75,7 @@ interface RedPacketDialogProps {
     onClose: () => void
     isOpenFromApplicationBoard?: boolean
     source?: PluginID
-    fireflyContext?: FireflyContext
+    fireflyContext: FireflyContext
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
@@ -120,8 +118,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
     // #endregion
 
-    const isFirefly = !!props.fireflyContext
-
     const handleClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
         setSettings(undefined)
@@ -161,10 +157,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-            if (!isFirefly && senderName) {
-                payload.sender.name === senderName
-            }
-
             openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
                 payloadImage,
                 claimRequirements,
@@ -177,8 +169,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) {
-            if (isFirefly) setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
-            else setStep(CreateRedPacketPageStep.NewRedPacketPage)
+            setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
         }
         if (step === CreateRedPacketPageStep.ClaimRequirementsPage) {
             setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -189,16 +180,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
             }
         }
-    }, [step, props.source === PluginID.SmartPay, handleClose, isFirefly])
+    }, [step, props.source === PluginID.SmartPay, handleClose])
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const onNext = useCallback(() => {
         if (!isCreateStep) return
-        if (isFirefly) {
-            setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
-        } else {
-            setStep(CreateRedPacketPageStep.ConfirmPage)
-        }
-    }, [isCreateStep, isFirefly])
+        setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
+    }, [isCreateStep])
     const onDialogClose = useCallback(() => {
         if (openSelectNFTDialog) return setOpenSelectNFTDialog(false)
         if (openNFTConfirmDialog) return setOpenNFTConfirmDialog(false)
@@ -290,7 +277,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [])
 
     return (
-        <TabContext value={showHistory && isFirefly ? currentHistoryTab : currentTab}>
+        <TabContext value={showHistory ? currentHistoryTab : currentTab}>
             <InjectedDialog
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                 open={props.open}
@@ -298,7 +285,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 titleTail={titleTail}
                 titleTabs={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
-                        showHistory && isFirefly ?
+                        showHistory ?
                             <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
                                 <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
                                 <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
@@ -306,10 +293,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                                 <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
                                 <Tab
-                                    className={isFirefly ? classes.disabledTab : undefined}
+                                    className={classes.disabledTab}
                                     label={t.nfts()}
                                     value={tabs.collectibles}
-                                    disabled={isFirefly}
+                                    disabled
                                 />
                             </MaskTabList>
 
@@ -321,7 +308,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         step === CreateRedPacketPageStep.NewRedPacketPage &&
                         !openNFTConfirmDialog &&
                         !openSelectNFTDialog &&
-                        ((!showHistory && !showDetails) || !isFirefly)
+                        !showHistory &&
+                        !showDetails
                     ) ?
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
@@ -355,7 +343,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         expectedChainId={chainId}
                                         origin={settings}
                                         gasOption={gasOption}
-                                        isFirefly={isFirefly}
                                         onClose={handleClose}
                                         onNext={onNext}
                                         onChange={_onChange}
@@ -379,9 +366,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                             </div>
                             {showHistory && !showDetails ?
-                                isFirefly ?
-                                    <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
-                                :   <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={handleClose} />
+                                <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
                             :   null}
 
                             {showDetails ?
@@ -393,31 +378,19 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     :   null}
 
                     {step === CreateRedPacketPageStep.ConfirmPage && settings ?
-                        isFirefly && props.fireflyContext ?
-                            <FireflyRedpacketConfirmDialog
-                                onClose={handleClose}
-                                onCreated={handleCreated}
-                                fireflyContext={props.fireflyContext}
-                                fireflySettings={fireflyRpSettings}
-                                settings={settings}
-                            />
-                        :   <RedPacketConfirmDialog
-                                expectedChainId={chainId}
-                                onClose={handleClose}
-                                onBack={onBack}
-                                onCreated={handleCreated}
-                                settings={settings}
-                                gasOption={gasOption}
-                                onGasOptionChange={handleGasSettingChange}
-                            />
-
+                        <FireflyRedpacketConfirmDialog
+                            onClose={handleClose}
+                            onCreated={handleCreated}
+                            fireflyContext={props.fireflyContext}
+                            fireflySettings={fireflyRpSettings}
+                            settings={settings}
+                        />
                     :   null}
                     {step === CreateRedPacketPageStep.ClaimRequirementsPage ?
                         <>
                             <ClaimRequirementsDialog
                                 origin={fireflyRpSettings?.requirements}
                                 onNext={handleClaimRequirementsNext}
-                                isFirefly={isFirefly}
                             />
                             <ClaimRequirementsRuleDialog open={showClaimRule} onClose={() => setShowClaimRule(false)} />
                         </>

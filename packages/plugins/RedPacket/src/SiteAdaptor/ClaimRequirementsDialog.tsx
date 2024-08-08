@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
 import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
@@ -22,7 +22,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { Trans } from 'react-i18next'
 import { getEnumAsArray } from '@masknet/kit'
 
-const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         minHeight: 460,
@@ -34,14 +34,14 @@ const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) =>
         rowGap: theme.spacing(1),
     },
     icon: {
-        color: isFirefly ? 'var(--color-light-main)' : theme.palette.maskColor.main,
+        color: 'var(--color-light-main)',
         minWidth: 20,
         width: 20,
         height: 20,
         marginRight: theme.spacing(1),
     },
     title: {
-        color: isFirefly ? 'var(--color-light-main)' : theme.palette.maskColor.main,
+        color: 'var(--color-light-main)',
         fontSize: 16,
         fontWeight: 700,
         lineHeight: '22px',
@@ -88,7 +88,7 @@ const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) =>
     },
     collectionName: {
         fontSize: 15,
-        color: isFirefly ? 'var(--color-light-main)' : theme.palette.maskColor.main,
+        color: 'var(--color-light-main)',
         lineHeight: '20px',
         fontWeight: 700,
     },
@@ -104,7 +104,6 @@ const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) =>
 
 interface ClaimRequirementsDialogProps {
     onNext: (settings: FireflyRedpacketSettings) => void
-    isFirefly: boolean
     origin?: RequirementType[]
 }
 
@@ -128,10 +127,10 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
     const t = useRedPacketTrans()
     const [selectedRules, setSelectedRules] = useState(props.origin ?? [RequirementType.Follow])
     const [selectedCollection, setSelectedCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
-    const { classes } = useStyles({ isFirefly: props.isFirefly })
+    const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
-    const hasNFTHolder = useMemo(() => selectedRules.includes(RequirementType.NFTHolder), [selectedRules])
+    const hasNFTHolder = selectedRules.includes(RequirementType.NFTHolder)
 
     const handleClick = useCallback(() => {
         SelectNonFungibleContractModal.open({
@@ -156,9 +155,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
         })
     }, [chainId])
 
-    const disabled = useMemo(() => {
-        return selectedRules.includes(RequirementType.NFTHolder) && !selectedCollection
-    }, [selectedRules, selectedCollection])
+    const disabled = selectedRules.includes(RequirementType.NFTHolder) && !selectedCollection
 
     return (
         <>
