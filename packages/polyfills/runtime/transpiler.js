@@ -29,9 +29,12 @@ define({
         __metadata(key, value) {
             return ReflectMetadata.metadata(key, value)
         },
-        __decorate(decorators, target, key, desc) {
-            return ReflectMetadata.decorate(decorators, target, key, desc)
-        },
+        __decorate:
+            typeof navigator.brave === 'undefined' ?
+                (decorators, target, key, desc) => {
+                    return ReflectMetadata.decorate(decorators, target, key, desc)
+                }
+            :   undefined,
     }),
 
     // reflect-metadata
