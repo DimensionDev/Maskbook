@@ -142,16 +142,22 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                     </Typography>
                 </Box>
                 {time ?
-                    <Box className={classes.row}>
-                        <Typography className={classes.title}>{t.waiting_time()}</Typography>
-                        <Typography className={classes.value}>
-                            {t.waiting_time_value({
-                                value: add(differenceInDays(new Date(time), new Date()), 1).toString(),
+                    <>
+                        <Box className={classes.row}>
+                            <Typography className={classes.title}>{t.waiting_time()}</Typography>
+                            <Typography className={classes.value}>
+                                {t.waiting_time_value({
+                                    value: add(differenceInDays(new Date(time), new Date()), 1).toString(),
+                                })}
+                            </Typography>
+                        </Box>
+                        <Typography className={classes.tips}>
+                            {t.lido_withdraw_tips({
+                                days: add(differenceInDays(new Date(time), new Date()), 1).toString(),
                             })}
                         </Typography>
-                    </Box>
+                    </>
                 :   null}
-                <Typography className={classes.tips}>{t.lido_withdraw_tips()}</Typography>
             </DialogContent>
             <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
                 <PluginWalletStatusBar expectedChainId={chainId}>
