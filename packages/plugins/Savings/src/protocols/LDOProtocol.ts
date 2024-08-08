@@ -12,10 +12,12 @@ import {
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
 import type { LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js'
+import type { LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
 
 import { EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
 import LidoWithdrawABI from '@masknet/web3-contracts/abis/LidoWithdraw.json'
+import LidoStEthABI from '@masknet/web3-contracts/abis/LidoStETH.json'
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
@@ -104,6 +106,14 @@ export class LidoProtocol implements SavingsProtocol {
     }
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
+        const lidoStETHContract = createContract<LidoStETH>(
+            web3,
+            getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
+            LidoStEthABI as AbiItem[],
+        )
+
+        const nonces = await lidoStETHContract?.methods.nonces(account).call()
+
         const signature = await EVMWeb3.signMessage(
             'typedData',
             JSON.stringify({
@@ -161,7 +171,7 @@ export class LidoProtocol implements SavingsProtocol {
                     spender: getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
                     // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     value: value.toString(),
-                    nonce: '0',
+                    nonce: nonces,
                     deadline: MAX_DEADLINE.toString(),
                 },
             }),
