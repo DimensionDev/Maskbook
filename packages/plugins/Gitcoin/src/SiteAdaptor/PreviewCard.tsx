@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     round: {
         borderRadius: 12,
-        border: `1px solid ${theme.palette.maskColor.line}`,
+        background: theme.palette.maskColor.bg,
         padding: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
@@ -138,15 +138,18 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     tabContent: {
+        paddingTop: 16,
+        background: theme.palette.maskColor.white,
+        borderRadius: '0 0 12px 12px',
+    },
+    panel: {
         maxHeight: 326,
         overflow: 'auto',
+        paddingTop: 0,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-    },
-    panel: {
-        background: theme.palette.maskColor.white,
     },
 }))
 
@@ -268,12 +271,12 @@ export function PreviewCard(props: PreviewCardProps) {
 
             <Box className={classes.links}>
                 {links.map((x, index) => (
-                    <Box className={classes.linkItem} key={index}>
+                    <Typography className={classes.linkItem} key={index}>
                         {x.icon}
                         <Link className={classes.link} underline="none" href={x.url}>
                             {x.url}
                         </Link>
-                    </Box>
+                    </Typography>
                 ))}
                 <Box className={classes.linkItem} key="created">
                     <Icons.CalendarDark size={16} />
@@ -360,13 +363,13 @@ function RoundItem({ round }: { round: Round }) {
                         </span>
                     :   <span>{startTime}</span>}
                 </Typography>
-                <Box
+                <Typography
                     className={classes.roundStatus}
                     style={{
                         background: roundType === 'Direct grants' ? 'rgba(255, 177, 0, 0.2)' : 'rgba(61, 194, 51, 0.2)',
                     }}>
                     {roundType}
-                </Box>
+                </Typography>
             </Box>
         </Box>
     )

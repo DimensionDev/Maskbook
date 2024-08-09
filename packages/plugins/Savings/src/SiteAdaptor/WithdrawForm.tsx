@@ -49,6 +49,10 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         marginTop: theme.spacing(2),
     },
+    minimum: {
+        color: theme.palette.maskColor.danger,
+        margin: theme.spacing(1, 0),
+    },
 }))
 
 interface WithdrawFormDialogProps {
@@ -56,6 +60,8 @@ interface WithdrawFormDialogProps {
     chainId: ChainId
     protocol: SavingsProtocol
 }
+
+const MINIMUM_AMOUNT = '0.000000000000000001'
 
 export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormDialogProps) {
     const t = useSavingsTrans()
@@ -79,6 +85,8 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
     })
 
     const openShareTxDialog = useOpenShareTxDialog()
+
+    const isMinimum = !!amount && !isZero(amount) && new BigNumber(amount).lte(MINIMUM_AMOUNT)
 
     const [{ loading }, handleWithdraw] = useAsyncFn(async () => {
         if (!time) return
@@ -127,6 +135,11 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                     label={t.plugin_savings_withdraw()}
                     token={token}
                 />
+                {isMinimum ?
+                    <Typography className={classes.minimum}>
+                        {t.minimum_tips({ amount: MINIMUM_AMOUNT, symbol: token.symbol })}
+                    </Typography>
+                :   null}
                 <Typography className={classes.value}>
                     {' ≈ '}
                     <FormattedCurrency
@@ -161,8 +174,8 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
             </DialogContent>
             <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
                 <PluginWalletStatusBar expectedChainId={chainId}>
-                    <ActionButton loading={loading} fullWidth onClick={handleWithdraw}>
-                        {t.lido_withdraw_token({ symbol: token.symbol ?? '' })}
+                    <ActionButton disabled={isMinimum} loading={loading} fullWidth onClick={handleWithdraw}>
+                        {t.lido_withdraw_token({ symbol: protocol.bareToken.symbol ?? '' })}
                     </ActionButton>
                 </PluginWalletStatusBar>
             </DialogActions>
