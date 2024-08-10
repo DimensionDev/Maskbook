@@ -29,8 +29,6 @@ import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
 
 const require = createRequire(import.meta.url)
 const patchesDir = join(import.meta.dirname, '../../../patches')
-const templateContent = readFile(join(import.meta.dirname, './template.html'), 'utf8')
-const popupTemplateContent = readFile(join(import.meta.dirname, './popups.html'), 'utf8')
 
 export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
@@ -407,20 +405,16 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     delete entries.devtools
 
     baseConfig.plugins.push(
-        await addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html', perf: flags.profiling }),
-        await addHTMLEntry({ chunks: ['popups'], filename: 'popups.html', perf: flags.profiling }),
-        await addHTMLEntry({ chunks: ['swap'], filename: 'swap.html', perf: flags.profiling }),
-        await addHTMLEntry({
-            chunks: ['contentScript'],
-            filename: 'generated__content__script.html',
-            perf: flags.profiling,
-        }),
-        await addHTMLEntry({ chunks: ['background'], filename: 'background.html', gun: true, perf: flags.profiling }),
+        await addHTMLEntry(['dashboard'], 'dashboard.html', TemplateType.NoLoading, flags.profiling),
+        await addHTMLEntry(['popups'], 'popups.html', TemplateType.Loading, flags.profiling),
+        await addHTMLEntry(['swap'], 'swap.html', TemplateType.NoLoading, flags.profiling),
+        await addHTMLEntry(['contentScript'], 'contentScript.html', TemplateType.NoLoading, flags.profiling),
+        await addHTMLEntry(['background'], 'background.html', TemplateType.Background, flags.profiling),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(import.meta.dirname, '../devtools/panels/index.tsx'))
         baseConfig.plugins.push(
-            await addHTMLEntry({ chunks: ['devtools'], filename: 'devtools-background.html', perf: flags.profiling }),
+            await addHTMLEntry(['devtools'], 'devtools-background.html', TemplateType.NoLoading, flags.profiling),
         )
     }
     return baseConfig
@@ -433,19 +427,37 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     }
 }
 
-async function addHTMLEntry({
-    gun,
-    perf,
-    ...options
-}: HTMLPlugin.Options & {
-    gun?: boolean
-    perf: boolean
-}) {
-    let template = await (options.filename === 'popups.html' && !perf ? popupTemplateContent : templateContent)
-    if (gun) template = template.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
-    if (perf) template = template.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
+enum TemplateType {
+    Loading,
+    NoLoading,
+    Background,
+}
+const pages = {
+    loading: readFile(join(import.meta.dirname, './with-loading.html'), 'utf8'),
+    noLoading: readFile(join(import.meta.dirname, './with-no-loading.html'), 'utf8'),
+}
+
+async function addHTMLEntry(
+    chunks: string[],
+    filename: string,
+    template: TemplateType,
+    perf: boolean,
+    options?: HTMLPlugin.Options,
+) {
+    let content
+    if (template === TemplateType.Background) {
+        content = await pages.noLoading
+        content = content.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
+    } else if (template === TemplateType.NoLoading) {
+        content = await pages.noLoading
+    } else if (template === TemplateType.Loading) {
+        content = await pages.loading
+    } else throw new Error()
+    if (perf) content = content.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
     return new HTMLPlugin({
-        templateContent: template,
+        chunks,
+        filename,
+        templateContent: content,
         inject: 'body',
         scriptLoading: 'defer',
         minify: false,
