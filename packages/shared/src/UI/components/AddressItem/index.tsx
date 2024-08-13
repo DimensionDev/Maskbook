@@ -1,4 +1,3 @@
-import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Link, Typography, type TypographyProps } from '@mui/material'
@@ -76,10 +75,7 @@ export function AddressItem({
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={Utils.explorerResolver.addressLink(
-                        first(socialAccount.supportedChainIds) ?? Utils.getDefaultChainId(),
-                        socialAccount.address,
-                    )}
+                    href={`https://web3.bio/${socialAccount.address}`}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />
