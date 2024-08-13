@@ -173,7 +173,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         />
                         <CopyButton size={14} className={classes.linkIcon} text={address} />
                         <Link
-                            href={urlcat('https://web3.bio/:address', { address })}
+                            href={urlcat('https://web3.bio/:address', { address: address.toLowerCase() })}
                             target="_blank"
                             title={t.view_on_web3_bio()}
                             rel="noopener noreferrer"

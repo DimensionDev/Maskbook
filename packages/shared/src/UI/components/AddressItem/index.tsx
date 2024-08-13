@@ -75,7 +75,7 @@ export function AddressItem({
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}
-                    href={`https://web3.bio/${socialAccount.address}`}
+                    href={`https://web3.bio/${socialAccount.address.toLowerCase()}`}
                     target="_blank"
                     rel="noopener noreferrer">
                     <Icons.LinkOut size={20} className={linkIconClassName} />
