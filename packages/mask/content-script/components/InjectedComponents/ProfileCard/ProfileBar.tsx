@@ -15,7 +15,6 @@ import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
@@ -173,9 +172,9 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         />
                         <CopyButton size={14} className={classes.linkIcon} text={address} />
                         <Link
-                            href={urlcat('https://web3.bio/:address', { address: address.toLowerCase() })}
+                            href={Utils.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
-                            title={t.view_on_web3_bio()}
+                            title={t.view_on_explorer()}
                             rel="noopener noreferrer"
                             onClick={(event) => {
                                 event.stopPropagation()
