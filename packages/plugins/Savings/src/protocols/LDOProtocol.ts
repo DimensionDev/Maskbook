@@ -7,13 +7,20 @@ import {
     TransactionEventType,
     ZERO_ADDRESS,
     getLidoConstant,
+    splitSignature,
 } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido.js'
-import { Lido as LidoAPI } from '@masknet/web3-providers'
+import type { LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js'
+import type { LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
+
+import { EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
+import LidoWithdrawABI from '@masknet/web3-contracts/abis/LidoWithdraw.json'
+import LidoStEthABI from '@masknet/web3-contracts/abis/LidoStETH.json'
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
+const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 export class LidoProtocol implements SavingsProtocol {
     readonly type = ProtocolType.Lido
 
@@ -99,20 +106,104 @@ export class LidoProtocol implements SavingsProtocol {
     }
 
     public async withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber.Value) {
-        /*
-         * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
-         *
-         * Review: https://github.com/lidofinance/lido-dao when ETH 2.0 is implemented.
-         *
-         * For now, just redirect to swap plugin
-         *
-         * await contract.methods
-         *     .withdraw(inputTokenTradeAmount, '0x0000000000000000000000000000000000000000')
-         *     .send({
-         *         from: account,
-         *         gasLimit: 2100000,
-         *     })
-         */
-        return '0x'
+        const lidoStETHContract = createContract<LidoStETH>(
+            web3,
+            getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
+            LidoStEthABI as AbiItem[],
+        )
+
+        const nonces = await lidoStETHContract?.methods.nonces(account).call()
+
+        const signature = await EVMWeb3.signMessage(
+            'typedData',
+            JSON.stringify({
+                types: {
+                    EIP712Domain: [
+                        {
+                            name: 'name',
+                            type: 'string',
+                        },
+                        {
+                            name: 'version',
+                            type: 'string',
+                        },
+                        {
+                            name: 'chainId',
+                            type: 'uint256',
+                        },
+                        {
+                            name: 'verifyingContract',
+                            type: 'address',
+                        },
+                    ],
+                    Permit: [
+                        {
+                            name: 'owner',
+                            type: 'address',
+                        },
+                        {
+                            name: 'spender',
+                            type: 'address',
+                        },
+                        {
+                            name: 'value',
+                            type: 'uint256',
+                        },
+                        {
+                            name: 'nonce',
+                            type: 'uint256',
+                        },
+                        {
+                            name: 'deadline',
+                            type: 'uint256',
+                        },
+                    ],
+                },
+                primaryType: 'Permit',
+                domain: {
+                    name: 'Liquid staked Ether 2.0',
+                    version: '2',
+                    chainId,
+                    verifyingContract: getLidoConstant(chainId, 'LIDO_stETH_ADDRESS'),
+                },
+                message: {
+                    owner: account,
+                    spender: getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
+                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+                    value: value.toString(),
+                    nonce: nonces,
+                    deadline: MAX_DEADLINE.toString(),
+                },
+            }),
+        )
+
+        const { v, r, s } = splitSignature(signature)
+
+        const contract = createContract<LidoWithdraw>(
+            web3,
+            getLidoConstant(chainId, 'LIDO_WITHDRAW_ADDRESS'),
+            LidoWithdrawABI as AbiItem[],
+        )
+
+        const result = contract?.methods.requestWithdrawalsWithPermit([value], account, [
+            value,
+            MAX_DEADLINE.toString(),
+            v,
+            r,
+            s,
+        ])
+
+        const gas = await result?.estimateGas({ from: account })
+        return new Promise<string>((resolve, reject) => {
+            result
+                ?.send({
+                    from: account,
+                    gas,
+                })
+                .once(TransactionEventType.ERROR, reject)
+                .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
+                    resolve(receipt.transactionHash)
+                })
+        })
     }
 }

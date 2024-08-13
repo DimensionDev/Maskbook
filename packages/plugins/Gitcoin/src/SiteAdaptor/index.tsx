@@ -7,18 +7,19 @@ import { ThemeProvider } from '@mui/material'
 import { base } from '../base.js'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { PreviewCard } from './PreviewCard.js'
-import { Modals } from './modals/index.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
 
-const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
+const isGitcoin = (x: string): boolean => {
+    return /^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/.test(x)
+}
 
-function Renderer(props: { id: string }) {
+function Renderer(props: { id: string; link: string }) {
     usePluginWrapper(true)
 
     return (
         <ThemeProvider theme={MaskLightTheme}>
-            <PreviewCard grantId={props.id} />
+            <PreviewCard grantId={props.id} link={props.link} />
         </ThemeProvider>
     )
 }
@@ -26,39 +27,35 @@ function Renderer(props: { id: string }) {
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(_, context) {},
-    GlobalInjection() {
-        return <Modals />
-    },
     DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.isNone()) return null
             return parseURLs(x.value).find(isGitcoin)
         }, [props.message])
-        const id = link?.match(/\d+/)?.[0]
+        const id = link?.match(/0x[\dA-Fa-f]{64}/)?.[0]
         if (!id) return null
-        return <Renderer id={id} />
+        return <Renderer id={id} link={link} />
     },
     CompositionDialogMetadataBadgeRender: new Map([[PLUGIN_META_KEY, () => PLUGIN_NAME]]),
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGitcoin)
-        const id = link?.match(/\d+/)?.[0]
+        const id = link?.match(/0x[\dA-Fa-f]{64}/)?.[0]
 
         if (!id) return null
-        return <Renderer id={id} />
+        return <Renderer id={id} link={link} />
     },
     ApplicationEntries: [
         {
-            hiddenInList: true,
+            hiddenInList: false,
             ApplicationEntryID: base.ID,
             category: 'dapp',
             description: <Trans ns={PluginID.Gitcoin} i18nKey="description" />,
             name: <Trans ns={PluginID.Gitcoin} i18nKey="name" />,
             icon: <Icons.Gitcoin size={36} />,
             marketListSortingPriority: 9,
-            tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
         },
     ],
     wrapperProps: {
