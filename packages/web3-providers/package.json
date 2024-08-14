@@ -48,7 +48,7 @@
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",
-    "@solana/web3.js": "^1.91.2",
+    "@solana/web3.js": "^1.95.2",
     "bignumber.js": "9.1.2",
     "bn.js": "^4.12.0",
     "bs58": "^5.0.0",
