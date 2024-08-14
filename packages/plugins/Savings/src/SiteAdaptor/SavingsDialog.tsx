@@ -120,63 +120,79 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [currentTab, onChange, tabs] = useTabs(TabType.Deposit, TabType.Withdraw)
 
     return (
-        <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} chainId={ChainId.Mainnet}>
-            <ChainContextProvider chainId={chainId}>
-                <TabContext value={currentTab}>
-                    <InjectedDialog
-                        open={open}
-                        classes={{ paper: classes.dialogRoot }}
-                        title={t.plugin_savings()}
-                        onClose={() => {
-                            onClose?.()
-                            setSelectedProtocol(null)
-                        }}
-                        titleTabs={
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                                <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
-                                <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
-                            </MaskTabList>
-                        }>
-                        <DialogContent className={classes.content}>
-                            <div className={classes.abstractTabWrapper}>
-                                <NetworkTab
-                                    requireChains
-                                    chains={chains.filter(Boolean)}
-                                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                                />
-                            </div>
-                            <div className={classes.tableTabWrapper}>
-                                <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.deposit}>
-                                    <SavingsTable
-                                        loadingProtocols={loadingProtocols}
-                                        tab={TabType.Deposit}
-                                        protocols={protocols}
-                                        onDeposit={(protocol: SavingsProtocol) => {
-                                            setDepositDialogOpen(true)
-                                            setSelectedProtocol(protocol)
-                                        }}
+        <>
+            <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} chainId={ChainId.Mainnet}>
+                <ChainContextProvider chainId={chainId}>
+                    <TabContext value={currentTab}>
+                        <InjectedDialog
+                            open={open}
+                            classes={{ paper: classes.dialogRoot }}
+                            title={t.plugin_savings()}
+                            onClose={() => {
+                                onClose?.()
+                                setSelectedProtocol(null)
+                            }}
+                            titleTabs={
+                                <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                                    <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
+                                    <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
+                                </MaskTabList>
+                            }>
+                            <DialogContent className={classes.content}>
+                                <div className={classes.abstractTabWrapper}>
+                                    <NetworkTab
+                                        requireChains
+                                        chains={chains.filter(Boolean)}
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
                                     />
-                                </TabPanel>
-                                <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.withdraw}>
-                                    <SavingsTable
-                                        loadingProtocols={loadingProtocols}
-                                        tab={TabType.Withdraw}
-                                        protocols={protocols}
-                                        onWithdraw={(protocol: SavingsProtocol) => {
-                                            setWithDrawDialogOpen(true)
-                                            setSelectedProtocol(protocol)
-                                        }}
-                                    />
-                                </TabPanel>
-                            </div>
-                        </DialogContent>
+                                </div>
+                                <div className={classes.tableTabWrapper}>
+                                    <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.deposit}>
+                                        <SavingsTable
+                                            loadingProtocols={loadingProtocols}
+                                            tab={TabType.Deposit}
+                                            protocols={protocols}
+                                            onDeposit={(protocol: SavingsProtocol) => {
+                                                setDepositDialogOpen(true)
+                                                setSelectedProtocol(protocol)
+                                            }}
+                                        />
+                                    </TabPanel>
+                                    <TabPanel style={{ padding: '8px 0 0 0' }} value={tabs.withdraw}>
+                                        <SavingsTable
+                                            loadingProtocols={loadingProtocols}
+                                            tab={TabType.Withdraw}
+                                            protocols={protocols}
+                                            onWithdraw={(protocol: SavingsProtocol) => {
+                                                setWithDrawDialogOpen(true)
+                                                setSelectedProtocol(protocol)
+                                            }}
+                                        />
+                                    </TabPanel>
+                                </div>
+                            </DialogContent>
 
-                        <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
-                            <PluginWalletStatusBar />
-                        </DialogActions>
-                    </InjectedDialog>
-                </TabContext>
-            </ChainContextProvider>
+                            <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
+                                <PluginWalletStatusBar />
+                            </DialogActions>
+                        </InjectedDialog>
+                    </TabContext>
+                </ChainContextProvider>
+
+                {selectedProtocol && depositDialogOpen ?
+                    <RevokeChainContextProvider>
+                        <SavingsFormDialog
+                            tab={currentTab}
+                            chainId={chainId}
+                            protocol={selectedProtocol}
+                            onClose={() => {
+                                setSelectedProtocol(null)
+                                setDepositDialogOpen(false)
+                            }}
+                        />
+                    </RevokeChainContextProvider>
+                :   null}
+            </Web3ContextProvider>
             {selectedProtocol && withdrawDialogOpen ?
                 <WithdrawFormDialog
                     protocol={selectedProtocol}
@@ -187,19 +203,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                     chainId={chainId}
                 />
             :   null}
-            {selectedProtocol && depositDialogOpen ?
-                <RevokeChainContextProvider>
-                    <SavingsFormDialog
-                        tab={currentTab}
-                        chainId={chainId}
-                        protocol={selectedProtocol}
-                        onClose={() => {
-                            setSelectedProtocol(null)
-                            setDepositDialogOpen(false)
-                        }}
-                    />
-                </RevokeChainContextProvider>
-            :   null}
-        </Web3ContextProvider>
+        </>
     )
 }
