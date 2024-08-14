@@ -16,7 +16,7 @@
     "@masknet/flags": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@tanstack/react-query": "^5.29.2",
-    "react-use": "^17.4.0",
+    "react-use": "^17.5.1",
     "use-subscription": "^1.8.0",
     "uuid": "^9.0.0",
     "urlcat": "^3.1.0"

@@ -42,7 +42,7 @@
     "react-markdown": "^8.0.7",
     "react-qrcode-logo": "^2.9.0",
     "react-router-dom": "^6.14.2",
-    "react-use": "^17.4.0",
+    "react-use": "^17.5.1",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "unstated-next": "^1.1.0",
