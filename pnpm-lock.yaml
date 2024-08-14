@@ -802,8 +802,8 @@ importers:
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
       anchorme:
-        specifier: ^2.1.2
-        version: 2.1.2
+        specifier: ^3.0.8
+        version: 3.0.8
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -4872,10 +4872,6 @@ packages:
       require-from-string: 2.0.2
       uri-js: 4.4.1
     dev: true
-
-  /anchorme@2.1.2:
-    resolution: {integrity: sha512-2iPY3kxDDZvtRzauqKDb4v7a5sTF4GZ+esQTY8nGYvmhAtGTeFPMn4cRnvyWS1qmtPTP0Mv8hyLOp9l3ZzWMKg==}
-    dev: false
 
   /anchorme@3.0.8:
     resolution: {integrity: sha512-K61vxP907NA0Pv4z5v7xbiwosAjhdjCVUFGOFm1TEDFbKmK9/dRLT1jirFIQUuE5ni78Mv4D3Yr4rnQT1PJl9w==}

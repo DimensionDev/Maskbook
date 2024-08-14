@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@msgpack/msgpack": "^3.0.0-beta2",
-    "anchorme": "^2.1.2",
+    "anchorme": "^3.0.8",
     "lodash-es": "^4.17.21",
     "ts-results-es": "^4.0.0"
   },
