@@ -11,6 +11,14 @@
         "trusted-types default dompurify mask",
         "upgrade-insecure-requests"
     ],
+    "@sandbox": [
+        "allow-downloads",
+        "allow-forms",
+        "allow-modals",
+        "allow-popups",
+        "allow-popups-to-escape-sandbox",
+        "allow-scripts"
+    ],
     "default-src": "self",
     "style-src": "unsafe-inline",
 

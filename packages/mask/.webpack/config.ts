@@ -202,7 +202,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     diagnosticsVerbosity: 1,
                 })
             :   undefined,
-            new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
+            new WebExtensionPlugin({
+                background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker', classicLoader: false },
+            }),
             flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
                     shouldIgnorePath: (path) => {
@@ -400,16 +402,18 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         backgroundWorker: normalizeEntryDescription(
             join(import.meta.dirname, '../background/initialization/mv3-entry.ts'),
         ),
+        sandboxContainer: normalizeEntryDescription(join(import.meta.dirname, '../sandbox/index.ts')),
         devtools: undefined as EntryDescription | undefined,
     }) satisfies Record<string, EntryDescription | undefined>
     delete entries.devtools
 
     baseConfig.plugins.push(
-        await addHTMLEntry(['dashboard'], 'dashboard.html', TemplateType.NoLoading, flags.profiling),
+        await addHTMLEntry(['dashboard'], 'dashboard.html', TemplateType.SandboxedUI, flags.profiling),
         await addHTMLEntry(['popups'], 'popups.html', TemplateType.Loading, flags.profiling),
         await addHTMLEntry(['swap'], 'swap.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['contentScript'], 'contentScript.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['background'], 'background.html', TemplateType.Background, flags.profiling),
+        await addHTMLEntry(['sandboxContainer'], 'container.html', TemplateType.SandboxContainer, flags.profiling),
     )
     if (flags.devtools) {
         entries.devtools = normalizeEntryDescription(join(import.meta.dirname, '../devtools/panels/index.tsx'))
@@ -431,10 +435,14 @@ enum TemplateType {
     Loading,
     NoLoading,
     Background,
+    SandboxContainer,
+    SandboxedUI,
 }
 const pages = {
     loading: readFile(join(import.meta.dirname, './with-loading.html'), 'utf8'),
     noLoading: readFile(join(import.meta.dirname, './with-no-loading.html'), 'utf8'),
+    sandbox: readFile(join(import.meta.dirname, './container.html'), 'utf8'),
+    sandboxedUI: readFile(join(import.meta.dirname, './with-loading-sandboxed.html'), 'utf8'),
 }
 
 async function addHTMLEntry(
@@ -448,11 +456,11 @@ async function addHTMLEntry(
     if (template === TemplateType.Background) {
         content = await pages.noLoading
         content = content.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
-    } else if (template === TemplateType.NoLoading) {
-        content = await pages.noLoading
-    } else if (template === TemplateType.Loading) {
-        content = await pages.loading
-    } else throw new Error()
+    } else if (template === TemplateType.NoLoading) content = await pages.noLoading
+    else if (template === TemplateType.Loading) content = await pages.loading
+    else if (template === TemplateType.SandboxContainer) content = await pages.sandbox
+    else if (template === TemplateType.SandboxedUI) content = await pages.sandboxedUI
+    else throw new Error()
     if (perf) content = content.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
     return new HTMLPlugin({
         chunks,

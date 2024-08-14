@@ -83,7 +83,7 @@ export function isInPageEthereumInjected() {
 
 export function getExtensionId(): string | undefined {
     try {
-        if (Sniffings.is_chromium || Sniffings.is_opera || Sniffings.is_edge) {
+        if ('browser' in globalThis && (Sniffings.is_chromium || Sniffings.is_opera || Sniffings.is_edge)) {
             // @ts-expect-error this package should not access browser global. It makes this package non-portable.
             return browser.runtime.getURL('').match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
         }

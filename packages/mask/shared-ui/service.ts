@@ -22,9 +22,28 @@ import type {
     WalletService,
 } from '../background/services/types.js'
 import { setDebugObject } from '@masknet/shared-base'
+import type { EventBasedChannel } from 'async-call-rpc'
+import { createBridgedServiceChannel } from '../sandbox/client.js'
+
 assertNotEnvironment(Environment.ManifestBackground)
 
-const message = new WebExtensionMessage<any>({ domain: '$' })
+let message: WebExtensionMessage<any>
+
+function getChannel(name: string): EventBasedChannel {
+    if (typeof browser !== 'object') return createBridgedServiceChannel(name)
+    else {
+        message ??= new WebExtensionMessage<any>({ domain: '$' })
+        const channel = message.events[name].bind(Environment.ManifestBackground)
+        return {
+            on(listener) {
+                return channel.on((data) => listener(data))
+            },
+            send(data) {
+                return channel.send(data)
+            },
+        }
+    }
+}
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
@@ -50,7 +69,7 @@ export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> =
  * @param generator Is the service is a generator?
  */
 function add<T extends object>(key: string, generator = false): AsyncVersionOf<T> {
-    const channel = message.events[key].bind(Environment.ManifestBackground)
+    const channel = getChannel(key)
 
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {

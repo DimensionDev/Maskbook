@@ -11,3 +11,7 @@ export async function fetchSandboxedPluginManifest(addr: string): Promise<unknow
             .join('\n'),
     )
 }
+
+export async function getReactQueryCache() {
+    return browser.storage.local.get('react-query').then(({ 'react-query': data }) => data)
+}

@@ -27,6 +27,9 @@
             "use_dynamic_url": false
         }
     ],
+    "sandbox": {
+        "pages": ["dashboard.html"]
+    },
     "minimum_chrome_version": "102",
     "browser_specific_settings": {
         "gecko": {

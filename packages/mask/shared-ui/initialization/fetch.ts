@@ -30,6 +30,7 @@ function contentFetch(input: RequestInfo | URL, init?: RequestInit) {
 }
 
 const extensionOrigin = (() => {
+    if (typeof browser !== 'object') return null
     try {
         return new URL(browser.runtime.getURL('')).origin
     } catch {
@@ -52,6 +53,7 @@ function fetchingInsResource(target: URL) {
 
 function canAccessAsContent(url: string) {
     const target = new URL(url, location.href)
+    if (target.protocol !== 'https:') return false
     if (fetchingTwitterResource(target) || fetchingInsResource(target)) return true
 
     // eg: https://maskbook-backup-server-staging.s3.ap-east-1.amazonaws.com/backups/xxx.zip

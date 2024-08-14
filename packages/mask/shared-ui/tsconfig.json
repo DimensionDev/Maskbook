@@ -12,6 +12,7 @@
     { "path": "../../shared-base/tsconfig.json" },
     { "path": "../../typed-message/base/tsconfig.json" },
     { "path": "../../typed-message/react/tsconfig.json" },
-    { "path": "../../plugin-infra/tsconfig.json" }
+    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../sandbox/tsconfig.json" }
   ]
 }

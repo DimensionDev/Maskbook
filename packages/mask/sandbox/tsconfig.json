@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/sandbox/",
+    "tsBuildInfoFile": "../dist/sandbox.tsbuildinfo"
+  },
+  "include": ["./**/*"],
+  "references": []
+}

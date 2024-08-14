@@ -17,6 +17,7 @@ export function emitManifestFile(flags: NormalizedFlags, computedFlags: Computed
         mv2: Array.from(data['@mv2']).join('; ') + '; ',
         mv2dev: Array.from(data['@mv2dev']).join('; ') + '; ',
         mv3: Array.from(data['@mv3']).join('; ') + '; ',
+        sandbox: Array.from(data['@sandbox']).join(' '),
     }
     if (flags.csp && flags.mode === 'development') {
         let csp = ''
@@ -84,6 +85,7 @@ type CSP = {
     mv2: string
     mv2dev: string
     mv3: string
+    sandbox: string
 }
 type ManifestPresets =
     | [flags: ModifyAcceptFlags, base: ManifestV2, modify?: (manifest: ManifestV2) => void]
@@ -159,7 +161,7 @@ function editManifest(
             ;(manifest.web_accessible_resources as string[]).push('*.json', '*.js')
         }
     } else {
-        manifest.content_security_policy = { extension_pages: csp.mv3 }
+        manifest.content_security_policy = { extension_pages: csp.mv3, sandbox: `sandbox ${csp.sandbox}; ${csp.mv3}` }
     }
 }
 
