@@ -1,4 +1,5 @@
 import * as parser from /* webpackDefer: true */ 'anchorme'
+
 export function parseURLs(text: string, requireProtocol = true) {
     // CJS-ESM compatibility
     const lib = parser.default.default || parser.default
