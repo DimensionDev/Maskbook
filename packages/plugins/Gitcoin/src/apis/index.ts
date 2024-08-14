@@ -1,7 +1,7 @@
 // cSpell:disable
 import { fetchCachedJSON } from '@masknet/web3-providers/helpers'
 import { GITCOIN_API_GRANTS_V1 } from '../constants.js'
-import { first } from 'lodash-es'
+import { last } from 'lodash-es'
 
 const projectQuery = `
   query ($alloVersion: [String!]!, $projectId: String!) {
@@ -125,6 +125,7 @@ export interface GrantProject {
         userGithub: string
         description: string
     }
+    metadataCid: string
 }
 
 export async function fetchLegacyProjectIds(id: string) {
@@ -163,7 +164,7 @@ export async function fetchProjectById(id: string) {
         }),
     })
 
-    return first(projects.data.projects)
+    return last(projects.data.projects)
 }
 
 export async function fetchApplications(id: string) {

@@ -9,18 +9,13 @@ import { Icons } from '@masknet/icons'
 import { format, isBefore } from 'date-fns'
 import { TabContext, TabPanel } from '@mui/lab'
 import type { Round } from '../apis/index.js'
+import { openWindow } from '@masknet/shared-base-ui'
+import { DEFAULT_PROJECT_BANNER } from '../constants.js'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
-        maxHeight: 500,
-        overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
-
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
     },
     title: {
         color: theme.palette.maskColor.main,
@@ -39,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         rowGap: 12,
+        columnGap: 16,
     },
     linkItem: {
         display: 'flex',
@@ -88,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     round: {
         borderRadius: 12,
-        border: `1px solid ${theme.palette.maskColor.bottom}`,
+        background: theme.palette.maskColor.bg,
         padding: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
@@ -130,6 +126,31 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.main,
         },
     },
+    placeholder: {
+        minHeight: 326,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    placeholderTitle: {
+        textAlign: 'center',
+        color: theme.palette.maskColor.main,
+    },
+    tabContent: {
+        paddingTop: 16,
+        background: theme.palette.maskColor.white,
+        borderRadius: '0 0 12px 12px',
+    },
+    panel: {
+        maxHeight: 326,
+        overflow: 'auto',
+        paddingTop: 0,
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
 }))
 
 interface PreviewCardProps {
@@ -140,7 +161,7 @@ interface PreviewCardProps {
 export function PreviewCard(props: PreviewCardProps) {
     const t = useGitcoinTrans()
     const { classes } = useStyles()
-    const { data, isLoading: loading, error, refetch } = useProject(props.grantId)
+    const { value: data, loading, error, retry: refetch } = useProject(props.grantId)
 
     const [currentTab, onChange, tabs] = useTabs('detail', 'pastRounds')
 
@@ -229,7 +250,9 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Typography>
                 <ActionButton
                     component="a"
-                    href={props.link}
+                    onClick={() => {
+                        openWindow(props.link, '_blank', { referrer: false })
+                    }}
                     size="small"
                     variant="roundedContained"
                     className={classes.button}>
@@ -237,16 +260,23 @@ export function PreviewCard(props: PreviewCardProps) {
                 </ActionButton>
             </Box>
 
-            <img src={getIPFSImageUrl(project.metadata.bannerImg, 190)} className={classes.banner} />
+            <img
+                src={
+                    project.metadata.bannerImg ?
+                        getIPFSImageUrl(project.metadata.bannerImg, 190)
+                    :   DEFAULT_PROJECT_BANNER
+                }
+                className={classes.banner}
+            />
 
             <Box className={classes.links}>
                 {links.map((x, index) => (
-                    <Box className={classes.linkItem} key={index}>
+                    <Typography className={classes.linkItem} key={index}>
                         {x.icon}
                         <Link className={classes.link} underline="none" href={x.url}>
                             {x.url}
                         </Link>
-                    </Box>
+                    </Typography>
                 ))}
                 <Box className={classes.linkItem} key="created">
                     <Icons.CalendarDark size={16} />
@@ -272,21 +302,30 @@ export function PreviewCard(props: PreviewCardProps) {
                         <Tab label={t.past_rounds()} value={tabs.pastRounds} />
                     </MaskTabList>
 
-                    <TabPanel value={tabs.detail}>
-                        <Box>
-                            <Typography className={classes.subtitle}>{t.about()}</Typography>
-                            <Markdown defaultStyle={false} className={classes.markdown}>
-                                {project.metadata.description}
-                            </Markdown>
-                        </Box>
-                    </TabPanel>
-                    <TabPanel value={tabs.pastRounds}>
-                        <Box className={classes.rounds}>
-                            {pastRounds.map((x, index) => (
-                                <RoundItem key={index} round={x.round} />
-                            ))}
-                        </Box>
-                    </TabPanel>
+                    <Box className={classes.tabContent}>
+                        <TabPanel className={classes.panel} value={tabs.detail}>
+                            <Box>
+                                <Typography className={classes.subtitle}>{t.about()}</Typography>
+                                <Markdown defaultStyle={false} className={classes.markdown}>
+                                    {project.metadata.description}
+                                </Markdown>
+                            </Box>
+                        </TabPanel>
+                        <TabPanel className={classes.panel} value={tabs.pastRounds}>
+                            {pastRounds.length ?
+                                <Box className={classes.rounds}>
+                                    {pastRounds.map((x, index) => (
+                                        <RoundItem key={index} round={x.round} />
+                                    ))}
+                                </Box>
+                            :   <Box className={classes.placeholder}>
+                                    <Typography className={classes.placeholderTitle} style={{ textAlign: 'center' }}>
+                                        {t.no_past_rounds_found()}
+                                    </Typography>
+                                </Box>
+                            }
+                        </TabPanel>
+                    </Box>
                 </TabContext>
             </Box>
         </article>
@@ -310,7 +349,7 @@ function RoundItem({ round }: { round: Round }) {
 
     const startTime = format(round.applicationsStartTime, 'MMMM do, yyyy')
 
-    const endTime = format(round.applicationsEndTime, 'MMMM do, yyyy')
+    const endTime = format(round.donationsEndTime, 'MMMM do, yyyy')
 
     return (
         <Box className={classes.round}>
@@ -324,13 +363,13 @@ function RoundItem({ round }: { round: Round }) {
                         </span>
                     :   <span>{startTime}</span>}
                 </Typography>
-                <Box
+                <Typography
                     className={classes.roundStatus}
                     style={{
                         background: roundType === 'Direct grants' ? 'rgba(255, 177, 0, 0.2)' : 'rgba(61, 194, 51, 0.2)',
                     }}>
                     {roundType}
-                </Box>
+                </Typography>
             </Box>
         </Box>
     )
