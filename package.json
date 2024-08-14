@@ -90,8 +90,13 @@
   },
   "pnpm": {
     "overrides": {
+      "@emotion/styled": "$@emotion/styled",
+      "@emotion/react": "$@emotion/react",
       "@lifi/widget": "^2.10.1",
       "@lifi/wallet-management": "2.6.0",
+      "@mui/base": "$@mui/base",
+      "@mui/icons-material": "$@mui/icons-material",
+      "@mui/material": "$@mui/material",
       "@protobufjs/inquire": "1.1.0",
       "@splinetool/runtime": "0.9.342",
       "@tanstack/react-query": "^5.49.2",
