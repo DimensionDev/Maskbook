@@ -18,14 +18,4 @@ export class Lido {
 
         return result.requestInfo.finalizationAt
     }
-
-    static async getLidoWaitingTime(amount: string) {
-        const result = await fetchJSON<{
-            requestInfo: {
-                finalizationAt: string
-            }
-        }>(urlcat(LIDO_REQUEST_TIME_API, { amount }), { mode: 'cors' })
-
-        return result.requestInfo.finalizationAt
-    }
 }
