@@ -129,7 +129,7 @@
       "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
       "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
-      "react-use@17.4.0": "patches/react-use@17.4.0.patch"
+      "react-use@17.5.1": "patches/react-use@17.5.1.patch"
     }
   }
 }

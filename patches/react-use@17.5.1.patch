@@ -1,8 +1,8 @@
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 deleted file mode 100644
-index 9b28df0e8aa4734af2c7006fd077ff17e2281db5..0000000000000000000000000000000000000000
+index c4c78586f76400e2959e233e29713c895aad87f8..0000000000000000000000000000000000000000
 diff --git a/esm/useAsync.js b/esm/useAsync.js
-index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..95a7cb8cc6833790a5aef21a64ee0c5d299723cf 100644
+index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..de89fc982b7ffdebf0622e1bc0dfd9afe2853865 100644
 --- a/esm/useAsync.js
 +++ b/esm/useAsync.js
 @@ -6,7 +6,11 @@ export default function useAsync(fn, deps) {
@@ -10,31 +10,19 @@ index ddb0bb0370fc30090cf9a0ecc74bc039800a89ed..95a7cb8cc6833790a5aef21a64ee0c5d
      }), state = _a[0], callback = _a[1];
      useEffect(function () {
 -        callback();
-+        try {
++       try {
 +            callback();
-+        } catch (e) {
++       } catch(e) {
 +            // Do nothing
-+        }
++       }
      }, [callback]);
      return state;
  }
 diff --git a/esm/useAsyncFn.js b/esm/useAsyncFn.js
-index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc0d02bca4 100644
+index 01d7307bd106229f6d791d0c588589235f404d97..6dd2699c44098e7fdb861c28b5a52c094ee847a8 100644
 --- a/esm/useAsyncFn.js
 +++ b/esm/useAsyncFn.js
-@@ -13,15 +13,16 @@ export default function useAsyncFn(fn, deps, initialState) {
-             args[_i] = arguments[_i];
-         }
-         var callId = ++lastCallId.current;
--        if (!state.loading) {
--            set(function (prevState) { return (__assign(__assign({}, prevState), { loading: true })); });
--        }
-+        set(function (prevState) {
-+          if (prevState.loading) return prevState
-+          return (__assign(__assign({}, prevState), { loading: true })); 
-+        });
-         return fn.apply(void 0, args).then(function (value) {
-             isMounted() && callId === lastCallId.current && set({ value: value, loading: false });
+@@ -21,7 +21,7 @@ export default function useAsyncFn(fn, deps, initialState) {
              return value;
          }, function (error) {
              isMounted() && callId === lastCallId.current && set({ error: error, loading: false });
@@ -44,7 +32,7 @@ index 01d7307bd106229f6d791d0c588589235f404d97..89fce78d49b6332a1aa5dcd89e95ccbc
      }, deps);
      return [state, callback];
 diff --git a/lib/useAsync.js b/lib/useAsync.js
-index 7f189a49dea552b5b10d7380b982bfe84299a7a2..4d9d33acaad290b54a9ef6e7df0afdba56484972 100644
+index 7f189a49dea552b5b10d7380b982bfe84299a7a2..ff67796d006d0e3995d4713d9972fd73bc2a96d1 100644
 --- a/lib/useAsync.js
 +++ b/lib/useAsync.js
 @@ -9,7 +9,11 @@ function useAsync(fn, deps) {
@@ -54,14 +42,14 @@ index 7f189a49dea552b5b10d7380b982bfe84299a7a2..4d9d33acaad290b54a9ef6e7df0afdba
 -        callback();
 +        try {
 +            callback();
-+        } catch (e) {
++       } catch(e) {
 +            // Do nothing
-+        }
++       }
      }, [callback]);
      return state;
  }
 diff --git a/lib/useAsyncFn.js b/lib/useAsyncFn.js
-index e06fd819ccad625d709fa9907e946a9b8bc58543..6950e84a32ca630ec159834a87b4e21a36f4ef97 100644
+index e06fd819ccad625d709fa9907e946a9b8bc58543..929e55304b8aef35572046533306a6c35c75a81a 100644
 --- a/lib/useAsyncFn.js
 +++ b/lib/useAsyncFn.js
 @@ -15,15 +15,16 @@ function useAsyncFn(fn, deps, initialState) {
@@ -72,8 +60,8 @@ index e06fd819ccad625d709fa9907e946a9b8bc58543..6950e84a32ca630ec159834a87b4e21a
 -            set(function (prevState) { return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); });
 -        }
 +        set(function (prevState) {
-+          if (prevState.loading) return prevState
-+          return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); 
++            if (prevState.loading) return prevState
++            return (tslib_1.__assign(tslib_1.__assign({}, prevState), { loading: true })); 
 +        });
          return fn.apply(void 0, args).then(function (value) {
              isMounted() && callId === lastCallId.current && set({ value: value, loading: false });
