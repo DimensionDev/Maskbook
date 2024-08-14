@@ -9223,7 +9223,7 @@ packages:
   /i18next-translation-parser@1.0.1:
     resolution: {integrity: sha512-SdB8Z8Hlx73aymNz+70+zddBdZvZ/4ACs8WteQy+e+kRM4qe714zAylN+D1gzl75iyhj0IqPllrSmRlZXCQCvg==}
     dependencies:
-      html-parse-stringify2: github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c
+      html-parse-stringify2: git@github.com+locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c
     dev: true
 
   /i18next@23.2.11:
@@ -16255,8 +16255,8 @@ packages:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}
     dev: false
 
-  github.com/locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
+  git@github.com+locize/html-parse-stringify2/d463109433b2c49c74a081044f54b2a6a1ccad7c:
+    resolution: {commit: d463109433b2c49c74a081044f54b2a6a1ccad7c, repo: git@github.com:locize/html-parse-stringify2.git, type: git}
     name: html-parse-stringify2
     version: 2.0.1
     dependencies:
