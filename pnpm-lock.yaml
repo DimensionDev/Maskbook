@@ -5,8 +5,13 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@emotion/styled': 11.11.5
+  '@emotion/react': 11.11.4
   '@lifi/widget': ^2.10.1
   '@lifi/wallet-management': 2.6.0
+  '@mui/base': 5.0.0-beta.40
+  '@mui/icons-material': 5.15.21
+  '@mui/material': 5.15.20
   '@protobufjs/inquire': 1.1.0
   '@splinetool/runtime': 0.9.342
   '@tanstack/react-query': ^5.49.2
@@ -667,7 +672,7 @@ importers:
         version: 2.8.3
       tss-react:
         specifier: ^4.9.0
-        version: 4.9.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 4.9.0(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)
       url:
         specifier: ^0.11.3
         version: 0.11.3
@@ -3891,9 +3896,6 @@ packages:
   '@emotion/hash@0.9.1':
     resolution: {integrity: sha512-gJB6HLm5rYwSLI6PQa+X1t5CFGrv1J1TWG+sOyMCeKz2ojaj6Fnl/rZEspogG+cvqbt4AE/2eIyD2QfLKTBNlQ==}
 
-  '@emotion/is-prop-valid@1.2.1':
-    resolution: {integrity: sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw==}
-
   '@emotion/is-prop-valid@1.2.2':
     resolution: {integrity: sha512-uNsoYd37AFmaCdXlg6EYD1KaPOaRWRByMCYzbKUX4+hhMfrxdVSelShywL4JVaAeM/eHUOSprYBQls+/neX3pw==}
 
@@ -3902,15 +3904,6 @@ packages:
 
   '@emotion/memoize@0.8.1':
     resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
-
-  '@emotion/react@11.11.1':
-    resolution: {integrity: sha512-5mlW1DquU5HaxjLkfkGN1GA/fvVGdyHURRiX/0FHl2cfIfRxSOfmxEH5YS43edp0OldZrZ+dkBKbngxcNCdZvA==}
-    peerDependencies:
-      '@types/react': '*'
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@emotion/react@11.11.4':
     resolution: {integrity: sha512-t8AjMlF0gHpvvxk5mAtCqR4vmxiGHCeJBaQO6gncUSdklELOgtwjerNY2yuJNfwnc6vi16U/+uMF+afIawJ9iw==}
@@ -3933,20 +3926,10 @@ packages:
   '@emotion/sheet@1.2.2':
     resolution: {integrity: sha512-0QBtGvaqtWi+nx6doRwDdBIzhNdZrXUppvTM4dtZZWEGTXL/XE/yJxLMGlDT1Gt+UHH5IX1n+jkXyytE/av7OA==}
 
-  '@emotion/styled@11.11.0':
-    resolution: {integrity: sha512-hM5Nnvu9P3midq5aaXj4I+lnSfNi7Pmd4EWk1fOZ3pxookaQTNew6bp4JaCBYM4HVFZF9g7UjJmsUmC2JlxOng==}
-    peerDependencies:
-      '@emotion/react': ^11.0.0-rc.0
-      '@types/react': '*'
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
   '@emotion/styled@11.11.5':
     resolution: {integrity: sha512-/ZjjnaNKvuMPxcIiUkf/9SHoG4Q196DRl1w82hQ3WCsjo1IUR8uaGWrC6a87CrYAW0Kb/pK7hk8BnLgLRi9KoQ==}
     peerDependencies:
-      '@emotion/react': ^11.0.0-rc.0
+      '@emotion/react': 11.11.4
       '@types/react': '*'
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -4885,17 +4868,6 @@ packages:
     resolution: {integrity: sha512-3rDakgJZ77+RiQUuSK69t1F0m8BQKA8Vh5DCS5V0DWvNY67zob2JhhQrhCO0AKLGINTRSFd1tBaHcJTkhefoSw==}
     engines: {node: '>=18'}
 
-  '@mui/base@5.0.0-beta.38':
-    resolution: {integrity: sha512-AsjD6Y1X5A1qndxz8xCcR8LDqv31aiwlgWMPxFAX/kCKiIGKlK65yMeVZ62iQr/6LBz+9hSKLiD1i4TZdAHKcQ==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@types/react': npm:types-react@beta
-      react: 0.0.0-experimental-58af67a8f8-20240628
-      react-dom: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
   '@mui/base@5.0.0-beta.40':
     resolution: {integrity: sha512-I/lGHztkCzvwlXpjD2+SNmvNQvB4227xBXhISPjEaJUXGImOQ9f3D2Yj/T3KasSI/h0MLWy74X0J6clhPmsRbQ==}
     engines: {node: '>=12.0.0'}
@@ -4907,28 +4879,14 @@ packages:
       '@types/react':
         optional: true
 
-  '@mui/core-downloads-tracker@5.15.12':
-    resolution: {integrity: sha512-brRO+tMFLpGyjEYHrX97bzqeF6jZmKpqqe1rY0LyIHAwP6xRVzh++zSecOQorDOCaZJg4XkGT9xfD+RWOWxZBA==}
-
   '@mui/core-downloads-tracker@5.15.21':
     resolution: {integrity: sha512-dp9lXBaJZzJYeJfQY3Ow4Rb49QaCEdkl2KKYscdQHQm6bMJ+l4XPY3Cd9PCeeJTsHPIDJ60lzXbeRgs6sx/rpw==}
-
-  '@mui/icons-material@5.15.12':
-    resolution: {integrity: sha512-3BXiDlOd3AexZoEXa/VqpIpVIvosCzjLHsdMWzKMXbZdnBiJjmb9ECdqfjn5SpTClO49qvkKLhkTqdBH3fSFGw==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@mui/material': ^5.0.0
-      '@types/react': npm:types-react@beta
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@mui/icons-material@5.15.21':
     resolution: {integrity: sha512-yqkq1MbdkmX5ZHyvZTBuAaA6RkvoqkoAgwBSx9Oh0L0jAfj9T/Ih/NhMNjkl8PWVSonjfDUkKroBnjRyo/1M9Q==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@mui/material': ^5.0.0
+      '@mui/material': 5.15.20
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -4939,9 +4897,9 @@ packages:
     resolution: {integrity: sha512-BNQJ7fBBvL68WGVnzAhbtTmabSuJDXaILr9dz/3RNK4TgGXPgWCAr7qtJeUdc4p1t7c4Z1ifG8UwgqD+5hzMNg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@emotion/react': ^11.5.0
-      '@emotion/styled': ^11.3.0
-      '@mui/material': '>=5.15.0'
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
+      '@mui/material': 5.15.20
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
@@ -4957,26 +4915,9 @@ packages:
     resolution: {integrity: sha512-0bDVECGmrNjd3+bLdcLiwYZ0O4HP5j5WSQm5DV6iA/Z9kr8O6AnvZ1bv9ImQbbX7Gj3pX4o43EKwCutj3EQxQg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@emotion/react': ^11.5.0
-      '@emotion/styled': ^11.3.0
-      '@mui/material': '>=5.15.0'
-      '@types/react': npm:types-react@beta
-      react: 0.0.0-experimental-58af67a8f8-20240628
-      react-dom: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      '@emotion/react':
-        optional: true
-      '@emotion/styled':
-        optional: true
-      '@types/react':
-        optional: true
-
-  '@mui/material@5.15.12':
-    resolution: {integrity: sha512-vXJGg6KNKucsvbW6l7w9zafnpOp0CWc0Wx4mDykuABTpQ5QQBnZxP7+oB4yAS1hDZQ1WobbeIl0CjxK4EEahkA==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@emotion/react': ^11.5.0
-      '@emotion/styled': ^11.3.0
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
+      '@mui/material': 5.15.20
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
@@ -4992,8 +4933,8 @@ packages:
     resolution: {integrity: sha512-tVq3l4qoXx/NxUgIx/x3lZiPn/5xDbdTE8VrLczNpfblLYZzlrbxA7kb9mI8NoBF6+w9WE9IrxWnKK5KlPI2bg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@emotion/react': ^11.5.0
-      '@emotion/styled': ^11.3.0
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
@@ -5019,8 +4960,8 @@ packages:
     resolution: {integrity: sha512-RILkuVD8gY6PvjZjqnWhz8fu68dVkqhM5+jYWfB5yhlSQKg+2rHkmEwm75XIeAqI3qwOndK6zELK5H6Zxn4NHw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@emotion/react': ^11.4.1
-      '@emotion/styled': ^11.3.0
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@emotion/react':
@@ -5032,8 +4973,8 @@ packages:
     resolution: {integrity: sha512-LoMq4IlAAhxzL2VNUDBTQxAb4chnBe8JvRINVNDiMtHE2PiPOoHlhOPutSxEbaL5mkECPVWSv6p8JEV+uykwIA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@emotion/react': ^11.5.0
-      '@emotion/styled': ^11.3.0
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
       '@types/react': npm:types-react@beta
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -11990,9 +11931,9 @@ packages:
   notistack@2.0.8:
     resolution: {integrity: sha512-/IY14wkFp5qjPgKNvAdfL5Jp6q90+MjgKTPh4c81r/lW70KeuX6b9pE/4f8L4FG31cNudbN9siiFS5ql1aSLRw==}
     peerDependencies:
-      '@emotion/react': ^11.4.1
-      '@emotion/styled': ^11.3.0
-      '@mui/material': ^5.0.0
+      '@emotion/react': 11.11.4
+      '@emotion/styled': 11.11.5
+      '@mui/material': 5.15.20
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -14093,7 +14034,7 @@ packages:
   tss-react@4.9.0:
     resolution: {integrity: sha512-dgqNSR9J0+NxvdwzXoKo2HxGGu2sg0UikLnPumGNLa9CSPVcL6ZNu23CJwxPaMvRnQC8NRyNbUN3pBCS9AWwRA==}
     peerDependencies:
-      '@emotion/react': ^11.4.1
+      '@emotion/react': 11.11.4
       '@emotion/server': ^11.4.0
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -14103,9 +14044,9 @@ packages:
   tss-react@4.9.10:
     resolution: {integrity: sha512-uQj+r8mOKy0tv+/GAIzViVG81w/WeTCOF7tjsDyNjlicnWbxtssYwTvVjWT4lhWh5FSznDRy6RFp0BDdoLbxyg==}
     peerDependencies:
-      '@emotion/react': ^11.4.1
+      '@emotion/react': 11.11.4
       '@emotion/server': ^11.4.0
-      '@mui/material': ^5.0.0
+      '@mui/material': 5.15.20
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@emotion/server':
@@ -16489,10 +16430,6 @@ snapshots:
 
   '@emotion/hash@0.9.1': {}
 
-  '@emotion/is-prop-valid@1.2.1':
-    dependencies:
-      '@emotion/memoize': 0.8.1
-
   '@emotion/is-prop-valid@1.2.2':
     dependencies:
       '@emotion/memoize': 0.8.1
@@ -16500,20 +16437,6 @@ snapshots:
   '@emotion/memoize@0.8.0': {}
 
   '@emotion/memoize@0.8.1': {}
-
-  '@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@emotion/babel-plugin': 11.11.0
-      '@emotion/cache': 11.11.0
-      '@emotion/serialize': 1.1.4
-      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@0.0.0-experimental-58af67a8f8-20240628)
-      '@emotion/utils': 1.2.1
-      '@emotion/weak-memoize': 0.3.1
-      hoist-non-react-statics: 3.3.2
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      '@types/react': types-react@19.0.0-beta.1
 
   '@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
@@ -16548,19 +16471,6 @@ snapshots:
   '@emotion/sheet@1.2.0': {}
 
   '@emotion/sheet@1.2.2': {}
-
-  '@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@emotion/babel-plugin': 11.11.0
-      '@emotion/is-prop-valid': 1.2.1
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/serialize': 1.1.4
-      '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@0.0.0-experimental-58af67a8f8-20240628)
-      '@emotion/utils': 1.2.1
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      '@types/react': types-react@19.0.0-beta.1
 
   '@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
@@ -17881,17 +17791,17 @@ snapshots:
 
   '@lifi/widget@2.10.1(patch_hash=yx6spcm22hjuiramcuazqq3m6a)(@swc/core@1.6.6)(@types/node@20.14.9)(bufferutil@4.0.7)(encoding@0.1.13)(immer@10.1.1)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)(typescript@5.5.2)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@emotion/styled': 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@ethersproject/abstract-signer': 5.7.0
       '@ethersproject/address': 5.7.0
       '@ethersproject/experimental': 5.7.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       '@ethersproject/providers': 5.7.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       '@lifi/sdk': 2.5.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       '@lifi/wallet-management': 2.6.0(patch_hash=fzbrvh3qcafhmhte22ph3j2im4)(@swc/core@1.6.6)(@types/node@20.14.9)(bufferutil@4.0.7)(encoding@0.1.13)(immer@10.1.1)(types-react@19.0.0-beta.1)(typescript@5.5.2)(utf-8-validate@5.0.10)(zod@3.23.8)
-      '@mui/icons-material': 5.15.12(@mui/material@5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/lab': 5.0.0-alpha.167(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/material': 5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/icons-material': 5.15.21(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/lab': 5.0.0-alpha.167(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@tanstack/react-query': 5.49.2(react@0.0.0-experimental-58af67a8f8-20240628)
       '@tanstack/react-virtual': 3.1.3(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       big.js: 6.2.1
@@ -18270,20 +18180,6 @@ snapshots:
       outvariant: 1.4.2
       strict-event-emitter: 0.5.1
 
-  '@mui/base@5.0.0-beta.38(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@floating-ui/react-dom': 2.0.8(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      '@mui/types': 7.2.13(types-react@19.0.0-beta.1)
-      '@mui/utils': 5.15.12(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@popperjs/core': 2.11.8
-      clsx: 2.1.0
-      prop-types: 15.8.1
-      react: 0.0.0-experimental-58af67a8f8-20240628
-      react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
-    optionalDependencies:
-      '@types/react': types-react@19.0.0-beta.1
-
   '@mui/base@5.0.0-beta.40(patch_hash=ul3l3ci7q722m2edfcl6amgniu)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
@@ -18298,17 +18194,7 @@ snapshots:
     optionalDependencies:
       '@types/react': types-react@19.0.0-beta.1
 
-  '@mui/core-downloads-tracker@5.15.12': {}
-
   '@mui/core-downloads-tracker@5.15.21': {}
-
-  '@mui/icons-material@5.15.12(@mui/material@5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@mui/material': 5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      '@types/react': types-react@19.0.0-beta.1
 
   '@mui/icons-material@5.15.21(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
@@ -18318,12 +18204,12 @@ snapshots:
     optionalDependencies:
       '@types/react': types-react@19.0.0-beta.1
 
-  '@mui/lab@5.0.0-alpha.167(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
+  '@mui/lab@5.0.0-alpha.167(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
-      '@mui/base': 5.0.0-beta.38(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/material': 5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/system': 5.15.20(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/base': 5.0.0-beta.40(patch_hash=ul3l3ci7q722m2edfcl6amgniu)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/system': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/types': 7.2.13(types-react@19.0.0-beta.1)
       '@mui/utils': 5.15.12(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       clsx: 2.1.0
@@ -18331,8 +18217,8 @@ snapshots:
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
     optionalDependencies:
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@emotion/styled': 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@types/react': types-react@19.0.0-beta.1
 
   '@mui/lab@5.0.0-alpha.170(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
@@ -18350,27 +18236,6 @@ snapshots:
     optionalDependencies:
       '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@types/react': types-react@19.0.0-beta.1
-
-  '@mui/material@5.15.12(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@mui/base': 5.0.0-beta.38(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/core-downloads-tracker': 5.15.12
-      '@mui/system': 5.15.20(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/types': 7.2.13(types-react@19.0.0-beta.1)
-      '@mui/utils': 5.15.12(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@types/react-transition-group': 4.4.10
-      clsx: 2.1.0
-      csstype: 3.1.3
-      prop-types: 15.8.1
-      react: 0.0.0-experimental-58af67a8f8-20240628
-      react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
-      react-is: 18.2.0
-      react-transition-group: 4.4.5(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-    optionalDependencies:
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@types/react': types-react@19.0.0-beta.1
 
   '@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
@@ -18403,17 +18268,6 @@ snapshots:
     optionalDependencies:
       '@types/react': types-react@19.0.0-beta.1
 
-  '@mui/styled-engine@5.15.14(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@emotion/cache': 11.11.0
-      csstype: 3.1.3
-      prop-types: 15.8.1
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-
   '@mui/styled-engine@5.15.14(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)':
     dependencies:
       '@babel/runtime': 7.24.0
@@ -18424,22 +18278,6 @@ snapshots:
     optionalDependencies:
       '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-
-  '@mui/system@5.15.20(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@mui/private-theming': 5.15.20(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/styled-engine': 5.15.14(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)
-      '@mui/types': 7.2.14(types-react@19.0.0-beta.1)
-      '@mui/utils': 5.15.20(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      clsx: 2.1.0
-      csstype: 3.1.3
-      prop-types: 15.8.1
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@types/react': types-react@19.0.0-beta.1
 
   '@mui/system@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
@@ -30084,10 +29922,10 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tss-react@4.9.0(@emotion/react@11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628):
+  tss-react@4.9.0(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@emotion/cache': 11.10.3
-      '@emotion/react': 11.11.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@emotion/serialize': 1.1.0
       '@emotion/utils': 1.2.0
       react: 0.0.0-experimental-58af67a8f8-20240628
