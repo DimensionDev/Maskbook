@@ -199,7 +199,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.SpaceId:
             return `https://bscscan.com/address/${identifier}`
         case NextIDPlatform.Farcaster:
-            return `https://firefly.mask.social/profile/farcaster/${identifier}`
+            return `https://firefly.mask.social/profile/${identifier}?source=farcaster`
         case NextIDPlatform.Bit:
             return `https://bit.cc/${name}`
         case NextIDPlatform.Unstoppable:
