@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "react-router-dom": "^6.24.0",    
     "@ethersproject/providers": "^5.7.2",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

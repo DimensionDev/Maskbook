@@ -2087,6 +2087,9 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
+      react-router-dom:
+        specifier: ^6.24.0
+        version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -3933,6 +3936,9 @@ packages:
     resolution: {integrity: sha512-jT/qyKZ9rzLErtrjGgdkMBn2OP8wl0G3sQlBb3YPryvKHsjvINUhVaPFfP+fpBcOkmrVOVEEHQFJ7nbj2TH2gw==}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@emotion/utils@1.2.0':
     resolution: {integrity: sha512-sn3WH53Kzpw8oQ5mgMmIzzyAaH2ZqFEbozVVBSYp538E06OSE6ytOp7pRAjNQR+Q/orwqdQYJSe2m3hCOeznkw==}
@@ -12783,6 +12789,9 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -16472,7 +16481,7 @@ snapshots:
   '@emotion/unitless@0.8.1': {}
 
   '@emotion/use-insertion-effect-with-fallbacks@1.0.1(react@0.0.0-experimental-58af67a8f8-20240628)':
-    dependencies:
+    optionalDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   '@emotion/utils@1.2.0': {}
@@ -27891,6 +27900,7 @@ snapshots:
   react-router@6.24.0(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@remix-run/router': 1.17.0
+    optionalDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   react-transition-group@4.4.5(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
