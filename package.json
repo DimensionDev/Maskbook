@@ -92,8 +92,6 @@
     "overrides": {
       "@emotion/styled": "$@emotion/styled",
       "@emotion/react": "$@emotion/react",
-      "@lifi/widget": "^2.10.1",
-      "@lifi/wallet-management": "2.6.0",
       "@mui/base": "$@mui/base",
       "@mui/icons-material": "$@mui/icons-material",
       "@mui/material": "$@mui/material",
@@ -111,8 +109,6 @@
       "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770"
     },
     "override reason": {
-      "@lifi/widget": "Patching this",
-      "@lifi/wallet-management": "Patching this",
       "@protobufjs/inquire": "Patching this",
       "@splinetool/runtime": "Patching this",
       "@types/node": "Singleton package",
@@ -150,9 +146,7 @@
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "@mui/material@5.15.20": "patches/@mui__material@5.15.20.patch",
-      "@lifi/widget@2.10.1": "patches/@lifi__widget@2.10.1.patch",
       "@mui/base@5.0.0-beta.40": "patches/@mui__base@5.0.0-beta.40.patch",
-      "@lifi/wallet-management@2.6.0": "patches/@lifi__wallet-management@2.6.0.patch",
       "react-use@17.5.0": "patches/react-use@17.5.0.patch",
       "gulp@5.0.0": "patches/gulp@5.0.0.patch",
       "react-devtools-inline@5.3.0": "patches/react-devtools-inline@5.3.0.patch",
