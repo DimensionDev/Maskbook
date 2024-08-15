@@ -1,15 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
+import { PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
+import { memo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -43,9 +41,6 @@ const useStyles = makeStyles()((theme) => {
             '&:active': {
                 transform: 'scale(0.97)',
             },
-        },
-        disabled: {
-            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
