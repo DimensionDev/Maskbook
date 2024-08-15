@@ -476,8 +476,12 @@ export namespace RSS3BaseAPI {
         type?: string
     }
     export interface Web3FeedGeneric<T extends Tag, P extends keyof MetadataMap[T] = keyof MetadataMap[T]> {
-        timestamp: RFC3339Datetime
+        direction: 'in' | 'self' | 'out'
+        /** timestamp in seconds */
+        timestamp: number
+        id: HexString
         /**
+         * @deprecated
          * The identifier of the transaction. A unique identifier will be returned when a transaction hash is not available
          */
         hash: string
@@ -486,13 +490,19 @@ export namespace RSS3BaseAPI {
          */
         index?: number
         /**
+         * @deprecated
          * The transaction initiator.
          */
         address_from: string
+        /** from address */
+        from: HexString
         /**
+         * @deprecated
          * The transaction recipient.
          */
         address_to: string
+        /** to address */
+        to: HexString
         /**
          * The owner of this note in a bidirectional feed.
          */
@@ -513,6 +523,7 @@ export namespace RSS3BaseAPI {
         tag: T
         type: P
         actions: Array<ActionGeneric<T, P>>
+        total_actions: number
         address_status: AddressStatus[]
     }
 

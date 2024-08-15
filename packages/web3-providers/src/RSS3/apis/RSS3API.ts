@@ -1,5 +1,5 @@
 import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
-import urlcat, { query } from 'urlcat'
+import urlcat from 'urlcat'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
@@ -9,12 +9,15 @@ import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_E
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import { RSS3BaseAPI, type BaseHubOptions } from '../../entry-types.js'
+import { type RSS3BaseAPI, type BaseHubOptions } from '../../entry-types.js'
 
 interface RSS3Result<T> {
-    cursor?: string
+    // cursor?: string
     total: number
-    result: T[]
+    meta: {
+        cursor: string
+    }
+    data: T[]
 }
 
 const fetchFromRSS3 = <T>(url: string) => {
@@ -51,16 +54,17 @@ export class RSS3 {
         await rss3.files.sync()
         return value
     }
+    /** @deprecated */
     static async getDonations(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
             tag: TAG.donation,
             type: TYPE.donate,
             limit: size,
-            cursor: indicator?.id,
+            cursor: indicator?.id || undefined,
             include_poap: true,
         })
-        const { result: donations, cursor } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Donation>>(collectionURL)
+        const { data: donations, meta } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Donation>>(collectionURL)
         // A donation Feed contains multiple donation Actions. Let's flatten them.
         const result = donations.flatMap((donation) => {
             return donation.actions.map((action) => ({
@@ -68,8 +72,9 @@ export class RSS3 {
                 actions: [action],
             }))
         })
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, meta.cursor))
     }
+    /** @deprecated */
     static async getFootprints(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(RSS3_FEED_ENDPOINT, address, {
@@ -79,8 +84,8 @@ export class RSS3 {
             cursor: indicator?.id,
             include_poap: true,
         })
-        const { result, cursor } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
+        const { data, meta } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
+        return createPageable(data, createIndicator(indicator), createNextIndicator(indicator, meta.cursor))
     }
     /** get .csb handle info */
     static async getNameInfo(handle: string) {
@@ -89,28 +94,6 @@ export class RSS3 {
         return fetchFromRSS3<RSS3BaseAPI.NameInfo>(url)
     }
 
-    /**
-     * @deprecated
-     * Get feeds in tags of donation, collectible and transaction
-     */
-    static async getWeb3Feeds(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
-        if (!address) return createPageable([], createIndicator(indicator))
-        const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
-        const queryString = `tag=${tags.join('&tag=')}&${query({
-            limit: size,
-            cursor: indicator?.id ?? '',
-            include_poap: true,
-        })}`
-        const url = urlcat(RSS3_FEED_ENDPOINT, `/:address?${queryString}`, {
-            address,
-        })
-        const { result, cursor } = await fetchFromRSS3<{
-            result: RSS3BaseAPI.Activity[]
-            cursor?: string
-        }>(url)
-        result.forEach(normalizedFeed)
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
-    }
     static async getAllNotes(
         address: string,
         options: Partial<Record<string, string>> = {},
@@ -121,26 +104,23 @@ export class RSS3 {
             ...options,
             address,
             limit: size,
-            cursor: indicator?.id ?? '',
+            cursor: indicator?.id || undefined,
         })
-        const res = await fetchFromRSS3<{
-            result: RSS3BaseAPI.Web3Feed[]
-            cursor?: string
-        }>(url)
-        if (!res.result)
+        const res = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Web3Feed>>(url)
+        if (!res.data)
             Telemetry.captureException(
                 ExceptionType.Error,
                 ExceptionID.FetchError,
                 new Error(`No feeds response from ${url}`),
             )
-        const { result = [], cursor } = res
-        result.forEach(normalizedFeed)
+        const { data = [], meta } = res
+        data.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
         // which will fail the API, so we pass undefined if cursor is undefined
         return createPageable(
-            result,
+            data,
             createIndicator(indicator),
-            cursor ? createNextIndicator(indicator, cursor) : undefined,
+            meta.cursor ? createNextIndicator(indicator, meta.cursor) : undefined,
         )
     }
 
