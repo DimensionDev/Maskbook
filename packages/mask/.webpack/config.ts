@@ -167,11 +167,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                         :   undefined!,
                     ].filter(Boolean),
                 },
-                {
-                    test: /\.svg$/,
-                    include: /node_modules[\\/]@lifi[\\/]wallet-management/, // Only effective for @lifi/wallet-management
-                    loader: require.resolve('file-loader'),
-                },
                 // compress svg files
                 flags.mode === 'production' ?
                     {
