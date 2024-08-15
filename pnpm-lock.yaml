@@ -1351,42 +1351,21 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:^
         version: link:../../typed-message/base
-      '@masknet/web3-contracts':
-        specifier: workspace:^
-        version: link:../../web3-contracts
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-hooks-evm':
-        specifier: workspace:^
-        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
-      bignumber.js:
-        specifier: 9.1.2
-        version: 9.1.2
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
-      quill-delta-to-html:
-        specifier: ^0.12.1
-        version: 0.12.1
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
-      web3-utils:
-        specifier: 1.10.2
-        version: 1.10.2
 
   packages/plugins/GoPlusSecurity:
     dependencies:
@@ -12223,9 +12202,6 @@ packages:
   quick-lru@5.1.1:
     resolution: {integrity: sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==}
     engines: {node: '>=10'}
-
-  quill-delta-to-html@0.12.1:
-    resolution: {integrity: sha512-QhpeMk9+5ge3HYbL5A0Ewz3pXCsbemqGvIF/kw5D6D4V68AtcUp7yt9xNUkzOk/0IQz43hKy3IkzBzRhLIE+oA==}
 
   radix3@1.1.0:
     resolution: {integrity: sha512-pNsHDxbGORSvuSScqNJ+3Km6QAVqk8CfsCBIEoDgpqLrkD2f3QM4I7d1ozJJ172OmIcoUcerZaNWqtLkRXTV3A==}
@@ -26806,10 +26782,6 @@ snapshots:
   quick-format-unescaped@4.0.4: {}
 
   quick-lru@5.1.1: {}
-
-  quill-delta-to-html@0.12.1:
-    dependencies:
-      lodash.isequal: 4.5.0
 
   radix3@1.1.0: {}
 

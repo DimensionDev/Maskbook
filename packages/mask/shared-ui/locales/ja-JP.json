@@ -1146,7 +1146,6 @@
     "not_enough_data_to_present": "データが足りません。",
     "wallet_send": "送る",
     "wallet_receive": "受取",
-    "wallet_swap": "スワップ",
     "wallet_add_contact": "連絡先を追加する",
     "wallet_add_contact_successfully": "連絡先を追加しました。",
     "wallet_edit_contact": "連絡先を編集",
