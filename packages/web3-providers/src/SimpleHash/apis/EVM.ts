@@ -124,7 +124,9 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const response = await fetchFromSimpleHash<{ collections: SimpleHash.CollectionOverview[] }>(path)
         const overview = response.collections[0]
 
-        const floorPricePath = urlcat('/api/v0/nfts/floor_prices/collection/:id/opensea', {
+        const market = await this.getPreferMarketId(id)
+        const floorPricePath = urlcat('/api/v0/nfts/floor_prices/collection/:id/:market', {
+            market,
             id,
         })
 
@@ -191,14 +193,23 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
+    private async getPreferMarketId(collectionId: string): Promise<SimpleHash.MarketplaceId> {
+        const collection = await this.getSimpleHashCollection(collectionId)
+        const marketIds = collection?.floor_prices.map((x) => x.marketplace_id)
+        const market = marketIds?.includes('opensea') || !marketIds?.length ? 'opensea' : marketIds[0]
+        return market
+    }
+
     async getCoinPriceStats(collectionId: string, days: Days): Promise<TrendingAPI.Stat[]> {
         const range = resolveSimpleHashRange(days)
         const to_timeStamp = millisecondsToSeconds(Date.now())
         const isLoadAll = !range
         const from_timeStamp = isLoadAll ? SIMPLE_HASH_HISTORICAL_PRICE_START_TIME : to_timeStamp - range
         let cursor = '' as string | null
+        const market = await this.getPreferMarketId(collectionId)
         while (cursor !== null && !historicalPriceState.isLoaded(collectionId, secondsToMilliseconds(from_timeStamp))) {
-            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
+            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/:market', {
+                market,
                 collectionId,
                 to_timeStamp,
                 from_timeStamp,
@@ -234,8 +245,10 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getHighestFloorPrice(collectionId: string) {
         let cursor = '' as string | null
 
+        const market = await this.getPreferMarketId(collectionId)
         while (cursor !== null && !historicalPriceState.isLoaded(collectionId)) {
-            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/opensea', {
+            const path = urlcat('/api/v0/nfts/floor_prices/collection/:collectionId/:market', {
+                market,
                 collectionId,
                 cursor: cursor ? cursor : undefined,
             })

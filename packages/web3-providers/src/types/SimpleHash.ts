@@ -1,9 +1,11 @@
 import { type BigNumber } from 'bignumber.js'
 
 export namespace SimpleHash {
+    export type MarketplaceId = LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2' | 'cryptopunks'>
+    export type MarketplaceName = LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2' | 'Cryptopunks'>
     interface FloorPrice {
-        marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
-        marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+        marketplace_id: MarketplaceId
+        marketplace_name: MarketplaceName
         value: number
         payment_token: PaymentToken
     }
@@ -25,8 +27,8 @@ export namespace SimpleHash {
         spam_score: number | null
         discord_url: string
         floor_prices: Array<{
-            marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
-            marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
+            marketplace_id: MarketplaceId
+            marketplace_name: MarketplaceName
             value: number
             payment_token: PaymentToken
         }>

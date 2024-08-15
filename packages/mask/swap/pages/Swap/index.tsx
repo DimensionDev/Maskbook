@@ -20,11 +20,9 @@ import { Background } from '../../components/SwapBackground.js'
 import { Icons } from '@masknet/icons'
 import { Box, Typography, alpha } from '@mui/material'
 import { type ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { LiFiWidget, type WidgetConfig } from '@lifi/widget'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { Web3Provider } from '@ethersproject/providers'
 import { AccountManager } from '../../components/AccountManager.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 import { useLocation } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
@@ -178,56 +176,6 @@ export default function SwapPage() {
         [Provider, chainId, account],
     )
 
-    const widgetConfig = useMemo<WidgetConfig>(() => {
-        const search = new URLSearchParams(location.hash.replace('#/', ''))
-
-        const toChain = search.get('chainId')
-        const toToken = search.get('address')
-
-        return {
-            toChain: toChain ? Number(toChain) : undefined,
-            toToken: toToken ? toToken : undefined,
-            integrator: 'MaskNetwork',
-            variant: 'expandable',
-            theme: {
-                palette: {
-                    primary: { main: theme.palette.maskColor.main },
-                    secondary: { main: theme.palette.maskColor.primary },
-                },
-            },
-            chains: {
-                allow: TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM].supportedChainIds ?? [],
-            },
-            walletManagement: {
-                signer: account ? getSigner() : undefined,
-                switchChain:
-                    account ?
-                        async (chainId: ChainId) => {
-                            const providerType = Provider?.providerType?.getCurrentValue()
-                            await EVMWeb3.switchChain(chainId, { silent: providerType === ProviderType.MaskWallet })
-                            return getSigner(chainId)
-                        }
-                    :   undefined,
-                connect: async () => {
-                    if (providerType === ProviderType.None || !account) {
-                        const result = await SelectProviderModal.openAndWaitForClose({
-                            requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
-                        })
-
-                        if (!result) throw new Error('No wallet is connected.')
-                    }
-                    return getSigner()
-                },
-                disconnect: async () => {},
-            },
-            appearance: theme.palette.mode,
-            containerStyle: {
-                maxHeight: '100%',
-                overflow: 'auto',
-            },
-        }
-    }, [theme, providerType, getSigner, account, state])
-
     return (
         <SharedContextProvider>
             <ChainContextProvider chainId={chainId}>
@@ -264,9 +212,7 @@ export default function SwapPage() {
                         />
                     </header>
 
-                    <Box className={classes.container}>
-                        <LiFiWidget integrator="MaskNetwork" config={{ ...widgetConfig }} />
-                    </Box>
+                    <Box className={classes.container}></Box>
                     <Typography className={classes.powerBy}>
                         {t.powered_by()} <strong>LI.FI</strong>
                     </Typography>

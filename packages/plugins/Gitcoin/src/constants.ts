@@ -26,3 +26,5 @@ export const TenantToChainMap: Partial<Record<TenantTypes, ChainId[]>> = {
     // BINANCE: [ChainId.BSC],
     ETH: [ChainId.Mainnet, ChainId.Matic],
 }
+
+export const DEFAULT_PROJECT_BANNER = 'https://explorer.gitcoin.co/static/media/default_banner.07a00cbfbf763fccdb1d.jpg'

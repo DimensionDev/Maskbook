@@ -3,7 +3,7 @@ import { memoize } from 'lodash-es'
 
 export const injectedScriptURL = '/js/injected-script.js'
 export const maskSDK_URL = '/js/mask-sdk.js'
-const contentScriptURL = '/generated__content__script.html'
+const contentScriptURL = '/contentScript.html'
 
 export async function evaluateContentScript(tabId: number | undefined, frameId?: number) {
     if (browser.scripting) {
