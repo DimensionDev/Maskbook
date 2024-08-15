@@ -16,7 +16,6 @@ import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from
 
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
-import { Modals as LocalModals } from './modals/index.js'
 import Services from '#services'
 
 const GlobalCss = (
@@ -73,7 +72,6 @@ export default function Dashboard() {
                 <ReactQueryDevtools buttonPosition="bottom-right" />
             :   null}
             <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
-            <LocalModals />
             <Pages />
         </>,
     )
