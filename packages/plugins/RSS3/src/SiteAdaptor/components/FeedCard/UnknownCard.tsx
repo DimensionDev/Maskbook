@@ -25,9 +25,9 @@ export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
     const action = feed.actions[0]
 
     const user = useAddressLabel(feed.owner)
-    const targetUser = useAddressLabel(feed.address_to)
+    const targetUser = useAddressLabel(feed.to)
     const owner = useFeedOwner()
-    const isFromOwner = isSameAddress(owner.address, action.address_from)
+    const isFromOwner = isSameAddress(owner.address, action.from)
 
     const cardType = isFromOwner ? CardType.UnknownOut : CardType.UnknownIn
 

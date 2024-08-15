@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { range } from 'lodash-es'
-import { ElementAnchor, EmptyStatus, RetryHint } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
@@ -21,15 +21,15 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FeedPageProps {
     address?: string
-    tag?: RSS3BaseAPI.Tag.Donation | RSS3BaseAPI.Tag.Social
+    tags?: RSS3BaseAPI.Tag[]
 }
 
-export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps) {
+export const FeedsPage = memo(function FeedsPage({ address, tags }: FeedPageProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const { data: feeds, isPending: loadingFeeds, error, fetchNextPage } = useFeeds(address, tag)
+    const { data: feeds, isPending: loadingFeeds, error, fetchNextPage } = useFeeds(address, tags)
 
     const { data: reversedName, isPending: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
@@ -50,7 +50,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         return (
             <Box p={2} boxSizing="border-box">
                 <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
-                    <RetryHint retry={fetchNextPage} />
+                    <ReloadStatus onRetry={fetchNextPage} />
                 </Box>
             </Box>
         )
@@ -67,7 +67,7 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
         )
     }
     if (!feeds?.length && !loading) {
-        return <EmptyStatus height={260}>{t.no_data({ context: tag || 'activities' })}</EmptyStatus>
+        return <EmptyStatus height={260}>{t.no_data({ context: 'activities' })}</EmptyStatus>
     }
 
     return (

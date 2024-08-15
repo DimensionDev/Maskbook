@@ -21,7 +21,7 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
         priority,
         UI: {
             TabContent: ({ socialAccount }) => {
-                const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount?.address ?? '-', props.tags ?? '-'].join('_')
 
                 return (
                     <EVMWeb3ContextProvider>
@@ -53,7 +53,7 @@ const createSearchTabConfig = (
                     label: result.type === SearchResultType.Domain ? result.keyword : '',
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
-                const key = [socialAccount.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount.address ?? '-', props.tags ?? '-'].join('_')
 
                 return (
                     <Box style={{ minHeight: 300 }}>
@@ -76,48 +76,70 @@ const ActivitiesTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfi
 const ActivitiesTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
-const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
-)
-const DonationsTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
-)
-const DonationsTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
-)
+// const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+//     'Donation',
+//     {
+//         tags: RSS3BaseAPI.Tag.Donation,
+//     },
+//     3,
+// )
+// const DonationsTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+//     'Donation',
+//     {
+//         tags: RSS3BaseAPI.Tag.Donation,
+//     },
+//     3,
+// )
+// const DonationsTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
+//     'Donation',
+//     {
+//         tags: RSS3BaseAPI.Tag.Donation,
+//     },
+//     3,
+// )
 
 const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
 )
 const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
 )
 const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
+)
+
+const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Donation],
+    },
+    3,
+)
+const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Donation],
+    },
+    3,
+)
+const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Donation],
+    },
+    3,
 )
 
 const site: Plugin.SiteAdaptor.Definition = {
@@ -126,13 +148,9 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
-    ProfileTabs: [ActivitiesTabConfig, DonationTabConfig, SocialTabConfig],
-    ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
-    SearchResultTabs: [
-        ActivitiesTabConfigInSearchResult,
-        DonationsTabConfigInSearchResult,
-        SocialTabConfigInSearchResult,
-    ],
+    ProfileTabs: [ActivitiesTabConfig, SocialTabConfig, OthersTabConfig],
+    ProfileCardTabs: [ActivitiesTabConfigInProfileCard, SocialTabConfigInProfileCard, OthersTabConfigInProfileCard],
+    SearchResultTabs: [ActivitiesTabConfigInSearchResult, SocialTabConfigInSearchResult, OthersTabConfigInSearchResult],
 }
 
 export default site

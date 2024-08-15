@@ -1,5 +1,5 @@
 import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
-import urlcat from 'urlcat'
+import urlcat, { query } from 'urlcat'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
@@ -96,16 +96,19 @@ export class RSS3 {
 
     static async getAllNotes(
         address: string,
-        options: Partial<Record<string, string>> = {},
+        options: Partial<Record<string, string[]> & { tag: string[] }> = {},
         { indicator, size = 100 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const url = urlcat(RSS3_FEED_ENDPOINT, '/:address', {
-            ...options,
-            address,
-            limit: size,
-            cursor: indicator?.id || undefined,
-        })
+        const queryString = query(
+            {
+                ...options,
+                limit: size,
+                cursor: indicator?.id || undefined,
+            },
+            { arrayFormat: 'repeat' },
+        )
+        const url = `${RSS3_FEED_ENDPOINT}/${address}?${queryString}`
         const res = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Web3Feed>>(url)
         if (!res.data)
             Telemetry.captureException(

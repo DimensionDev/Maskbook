@@ -85,17 +85,17 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
-    const action = feed.actions.find((x) => x.address_from && x.address_to) || feed.actions[0]
+    const action = feed.actions.find((x) => x.from && x.to) || feed.actions[0]
     const metadata = action.metadata
 
     const owner = useFeedOwner()
-    const isFromOwner = isSameAddress(owner.address, action.address_from)
+    const isFromOwner = isSameAddress(owner.address, action.from)
 
     const cardType = cardTypeMap[feed.type] || (isFromOwner ? CardType.TokenOut : CardType.TokenIn)
     const context = contextMap[feed.type] || (isFromOwner ? 'send' : 'claim')
 
-    const from = useAddressLabel(action.address_from ?? '')
-    const to = useAddressLabel(action.address_to ?? '')
+    const from = useAddressLabel(action.from ?? '')
+    const to = useAddressLabel(action.to ?? '')
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
@@ -113,8 +113,8 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from} />,
-                            to: <Label title={action.address_to} />,
+                            from: <Label title={action.from} />,
+                            to: <Label title={action.to} />,
                             bold: <Label />,
                         }}
                     />
@@ -128,8 +128,8 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
                             context,
                         }}
                         components={{
-                            from: <Label title={action.address_from} />,
-                            to: <Label title={action.address_to} />,
+                            from: <Label title={action.from} />,
+                            to: <Label title={action.to} />,
                             bold: <Label />,
                         }}
                     />

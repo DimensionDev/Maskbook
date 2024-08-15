@@ -183,14 +183,14 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                             values={{
                                 user,
                                 collectible: verbose ? metadata!.name : 'an NFT',
-                                recipient: formatEthereumAddress(action.address_to ?? '', 4),
+                                recipient: formatEthereumAddress(action.to ?? '', 4),
                                 cost_value: formatValue(cost),
                                 cost_symbol: cost?.symbol ?? '',
                                 platform: feed.platform!,
                                 context: feed.platform ? 'platform' : 'no_platform',
                             }}
                             components={{
-                                recipient: <AddressLabel address={action.address_to} />,
+                                recipient: <AddressLabel address={action.to} />,
                                 bold: <Label />,
                                 collectible: verbose ? <Label /> : <span />,
                             }}
@@ -228,8 +228,8 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     standard && ['Native', 'ERC-20'].includes(standard) ?
                         (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
                     :   undefined
-                const isSending = isSameAddress(feed.owner, action.address_from)
-                const otherAddress = isSending ? action.address_to : action.address_from
+                const isSending = isSameAddress(feed.owner, action.from)
+                const otherAddress = isSending ? action.to : action.from
                 return {
                     cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,

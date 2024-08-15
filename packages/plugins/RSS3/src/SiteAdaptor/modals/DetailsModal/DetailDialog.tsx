@@ -72,7 +72,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
     const { classes } = useStyles()
     const links = feed.actions[0].related_urls
 
-    const address = feed.owner || feed.address_from || feed.actions[0].address_from || ''
+    const address = feed.owner || feed.from || feed.actions[0].from || ''
     const { data: reversedName } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 

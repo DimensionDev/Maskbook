@@ -64,7 +64,7 @@ export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFe
                     values={{
                         user,
                         collection: metadata?.collection!,
-                        contract: formatEthereumAddress(action.address_to!, 4),
+                        contract: formatEthereumAddress(action.to!, 4),
                         context: metadata?.action,
                     }}
                     components={{

@@ -157,7 +157,7 @@ function resolveDetailLink(
     const { profile_id, publication_id } = metadata
     if (!profile_id || !publication_id || !related_urls?.length) return null
 
-    const pubId = `0x${toHex(profile_id)}-0x${toHex(publication_id)}`
+    const pubId = `0x${toHex(profile_id)}-${publication_id}`
     return related_urls.find((x) => x.toLowerCase().endsWith(pubId))
 }
 
@@ -194,7 +194,8 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const media = metadata?.media?.[0]
     const [seen, ref] = useEverSeen()
     const enablePublicationId = seen && !!media?.mime_type.startsWith('video/')
-    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.hash : null)
+
+    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.id : null)
 
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false

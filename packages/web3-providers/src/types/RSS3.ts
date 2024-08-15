@@ -198,12 +198,15 @@ export namespace RSS3BaseAPI {
     }
     export interface PostMetadata {
         title?: string
-        body?: string
+        body: string
+        handle: string
+        author_url: string
         /** Not all platforms provide summary */
         summary?: string
         author: string[]
         created_at?: string
         target_url?: string
+        content_uri: string
         media: Array<{
             /** URL or IPFS */
             address: string
@@ -211,15 +214,17 @@ export namespace RSS3BaseAPI {
         }>
         type_on_platform: Type[]
         profile_id?: number
-        publication_id?: number
+        publication_id?: HexString
     }
-    interface CommentMetadata extends PostMetadata {
+    export interface CommentMetadata extends PostMetadata {
+        // TODO could the target be another CommentMetadata?
         target: PostMetadata
     }
-    interface ShareMetadata {
+    export interface ShareMetadata {
         type_on_platform: Type[]
         target: PostMetadata
         comment?: CommentMetadata
+        publication_id: HexString
     }
     interface ReviseMetadata extends PostMetadata {}
     interface ProfileMetadata {
@@ -338,10 +343,23 @@ export namespace RSS3BaseAPI {
         tag: T
         type: P
         index: number
-        /** It's different from transaction.address_from, the token payer */
-        address_from?: string
-        /** It's different from transaction.address_from, the token receiver */
-        address_to?: string
+        /**
+         * @deprecated
+         * It's different from transaction.address_from, the token payer */
+        // address_from?: string
+        /**
+         * from address
+         * It's different from transaction.from, the token payer */
+        from?: HexString
+        /**
+         * @deprecated
+         * It's different from transaction.address_to, the token receiver */
+        // address_to?: string
+        /**
+         * to address
+         * Not only ethereum address, but it could be ar address.
+         * It's different from transaction.to, the token receiver */
+        to?: string
         metadata?: MetadataMap[T][P]
         platform?: Platform
         related_urls?: string[]
@@ -480,11 +498,11 @@ export namespace RSS3BaseAPI {
         /** timestamp in seconds */
         timestamp: number
         id: HexString
-        /**
-         * @deprecated
-         * The identifier of the transaction. A unique identifier will be returned when a transaction hash is not available
-         */
-        hash: string
+        // /**
+        //  * @deprecated
+        //  * The identifier of the transaction. A unique identifier will be returned when a transaction hash is not available
+        //  */
+        // hash: string
         /**
          * The on-chain log index.
          */
@@ -493,14 +511,15 @@ export namespace RSS3BaseAPI {
          * @deprecated
          * The transaction initiator.
          */
-        address_from: string
-        /** from address */
+        // address_from: string
+        /**
+         * from address */
         from: HexString
         /**
          * @deprecated
          * The transaction recipient.
          */
-        address_to: string
+        // address_to: string
         /** to address */
         to: HexString
         /**

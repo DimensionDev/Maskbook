@@ -95,7 +95,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
 
                 return (
                     <CardFrame
-                        key={`${feed.hash}/${action.index}`}
+                        key={`${feed.id}/${action.index}`}
                         type={CardType.TokenLiquidity}
                         feed={feed}
                         className={cx(className, verbose ? classes.verbose : null)}
@@ -108,7 +108,7 @@ export function LiquidityCard({ feed, className, ...rest }: TokenFeedCardProps) 
                                     context: metadata?.action!,
                                 }}
                                 components={{
-                                    user: <Label title={action.address_from} />,
+                                    user: <Label title={action.from} />,
                                     platform: <Label />,
                                     bold: <Label />,
                                 }}

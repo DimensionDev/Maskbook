@@ -89,7 +89,7 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
                             user,
                             amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
                             symbol: metadata!.symbol!,
-                            contract: formatEthereumAddress(action.address_to!, 4),
+                            contract: formatEthereumAddress(action.to!, 4),
                             context: metadata!.action,
                         }}
                         components={{

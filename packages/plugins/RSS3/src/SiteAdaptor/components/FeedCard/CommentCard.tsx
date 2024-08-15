@@ -110,6 +110,48 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
 
     return (
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
+            {commentTarget ?
+                <>
+                    <Typography className={classes.summary}>
+                        <RSS3Trans.note
+                            values={{
+                                user: commentTarget.handle,
+                                platform: action.platform!,
+                                context: 'post',
+                            }}
+                            components={{
+                                bold: <Label />,
+                            }}
+                        />
+                    </Typography>
+                    <article className={cx(classes.target, verbose ? classes.verbose : null)}>
+                        {verbose ?
+                            <Typography className={classes.originalLabel}>{t.original()}</Typography>
+                        :   null}
+                        {commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
+                            <Image
+                                classes={{ container: classes.image, failed: classes.failedImage }}
+                                src={resolveResourceURL(commentTarget.media[0].address)}
+                                height={imageSize}
+                                width={imageSize}
+                            />
+                        :   null}
+                        {commentTarget?.title ?
+                            <Typography variant="h1" className={classes.title}>
+                                {commentTarget.title}
+                            </Typography>
+                        :   null}
+                        {verbose && commentTarget?.body ?
+                            <Markdown defaultStyle={false} className={mdClasses.markdown}>
+                                {commentTarget.body}
+                            </Markdown>
+                        :   <Typography className={classes.content}>
+                                <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
+                            </Typography>
+                        }
+                    </article>
+                </>
+            :   null}
             <Typography className={classes.summary}>
                 <RSS3Trans.note
                     values={{
@@ -125,34 +167,6 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
             <Typography className={classes.comment}>
                 <Linkify options={LinkifyOptions}>{metadata?.body}</Linkify>
             </Typography>
-            <article className={cx(classes.target, verbose ? classes.verbose : null)}>
-                {verbose ?
-                    <Typography className={classes.originalLabel}>{t.original()}</Typography>
-                :   null}
-                {commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
-                    <Image
-                        classes={{ container: classes.image, failed: classes.failedImage }}
-                        src={resolveResourceURL(commentTarget.media[0].address)}
-                        height={imageSize}
-                        width={imageSize}
-                    />
-                :   null}
-                <div>
-                    {commentTarget?.title ?
-                        <Typography variant="h1" className={classes.title}>
-                            {commentTarget.title}
-                        </Typography>
-                    :   null}
-                    {verbose && commentTarget?.body ?
-                        <Markdown defaultStyle={false} className={mdClasses.markdown}>
-                            {commentTarget.body}
-                        </Markdown>
-                    :   <Typography className={classes.content}>
-                            <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
-                        </Typography>
-                    }
-                </div>
-            </article>
         </CardFrame>
     )
 }

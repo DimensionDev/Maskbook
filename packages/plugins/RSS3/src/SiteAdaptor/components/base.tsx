@@ -118,7 +118,7 @@ export function CardFrame({
                 <ShadowRootTooltip
                     title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}
                     placement="right">
-                    <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp)}</Typography>
+                    <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp * 1000)}</Typography>
                 </ShadowRootTooltip>
                 {badge}
             </div>

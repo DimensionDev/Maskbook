@@ -192,7 +192,7 @@ const plural = (num: number, unit: string) => `${num} ${unit}${num !== 1 ? 's' :
 /**
  * A datetime formatter follows RSS3's
  */
-export function formatTimestamp(timestamp: string): string {
+export function formatTimestamp(timestamp: number): string {
     const date = new Date(timestamp)
     const ms = date.getTime()
     const distance = Date.now() - ms
