@@ -8,6 +8,7 @@ import { useMessages } from '@masknet/web3-hooks-base'
 
 const useStyle = makeStyles()((theme) => ({
     container: {
+        display: 'flex',
         padding: theme.spacing(2, 1.5),
         backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0,0.80)' : 'rgba(255, 255, 255, 0.80)',
         width: '100%',
@@ -22,6 +23,12 @@ const useStyle = makeStyles()((theme) => ({
         padding: 6,
         boxSizing: 'border-box',
     },
+    link: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     selected: {
         '& > button': {
             color: theme.palette.maskColor.highlight,
@@ -31,10 +38,10 @@ const useStyle = makeStyles()((theme) => ({
 }))
 
 const BottomNavLink = memo<LinkProps>(function BottomNavLink({ children, to }) {
-    const { classes } = useStyle()
+    const { classes, cx } = useStyle()
 
     return (
-        <NavLink to={to} className={({ isActive }) => (isActive ? classes.selected : undefined)}>
+        <NavLink to={to} className={({ isActive }) => (isActive ? cx(classes.link, classes.selected) : classes.link)}>
             {children}
         </NavLink>
     )

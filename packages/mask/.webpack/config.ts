@@ -389,6 +389,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
         popups: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
+        sidepanel: withReactDevTools(join(import.meta.dirname, '../popups/initialization/index.ts')),
         swap: withReactDevTools(join(import.meta.dirname, '../swap/initialization/index.ts')),
         contentScript: withReactDevTools(join(import.meta.dirname, '../content-script/index.ts')),
         background: normalizeEntryDescription(join(import.meta.dirname, '../background/initialization/mv2-entry.ts')),
@@ -402,6 +403,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
     baseConfig.plugins.push(
         await addHTMLEntry(['dashboard'], 'dashboard.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['popups'], 'popups.html', TemplateType.Loading, flags.profiling),
+        await addHTMLEntry(['sidepanel'], 'sidepanel.html', TemplateType.Loading, flags.profiling),
         await addHTMLEntry(['swap'], 'swap.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['contentScript'], 'contentScript.html', TemplateType.NoLoading, flags.profiling),
         await addHTMLEntry(['background'], 'background.html', TemplateType.Background, flags.profiling),

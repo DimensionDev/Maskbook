@@ -9,6 +9,7 @@ const extensionProtocol = location_?.protocol.includes('extension')
 export const Sniffings = {
     is_dashboard_page: extensionProtocol && location_?.href.includes('dashboard.html'),
     is_popup_page: extensionProtocol && location_?.href.includes('popups.html'),
+    is_side_panel: extensionProtocol && location_?.href.includes('sidepanel.html'),
     is_swap_page: extensionProtocol && location_?.href.includes('swap.html'),
 
     is_twitter_page:
