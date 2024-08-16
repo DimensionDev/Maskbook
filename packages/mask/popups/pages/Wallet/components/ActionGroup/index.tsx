@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: 112,
+            width: 'calc(50% - 16px)',
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
@@ -43,9 +43,6 @@ const useStyles = makeStyles()((theme) => {
             '&:active': {
                 transform: 'scale(0.97)',
             },
-        },
-        disabled: {
-            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
@@ -109,14 +106,6 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t.wallet_receive()}</Typography>
-            </button>
-            <button
-                disabled={disabledSwap}
-                type="button"
-                className={cx(classes.button, disabledSwap ? classes.disabled : undefined)}
-                onClick={handleSwap}>
-                <Icons.Cached size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>{t.wallet_swap()}</Typography>
             </button>
         </Box>
     )
