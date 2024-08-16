@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import type { HTMLProps, ReactNode } from 'react'
 import { format as formatDateTime } from 'date-fns'
-import { type CardType, cardTypeIconMap, formatTimestamp, getPlatformIcon } from './share.js'
+import { type CardType, formatTimestamp, getPlatformIcon } from './share.js'
 import { FeedDetailsModal } from '../modals/modals.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 
@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         display: 'flex',
+        gap: theme.spacing(1.5),
     },
     fee: {
         display: 'flex',
@@ -50,7 +51,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: theme.spacing(1.5),
     },
     timestamp: {
-        marginLeft: theme.spacing(1.5),
         fontSize: 14,
         fontWeight: 400,
         color: theme.palette.maskColor.third,
@@ -58,9 +58,6 @@ const useStyles = makeStyles()((theme) => ({
     body: {
         marginTop: theme.spacing(1.5),
         flexGrow: 1,
-    },
-    icon: {
-        marginLeft: theme.spacing(1.5),
     },
 }))
 
@@ -81,7 +78,6 @@ export function CardFrame({
     ...rest
 }: CardFrameProps) {
     const { classes, cx } = useStyles()
-    const CardIcon = cardTypeIconMap[type]
     const PrimaryPlatformIcon = getPlatformIcon(feed.network)
     const ProviderPlatformIcon = getPlatformIcon(feed.platform)
     const { map } = ScopedDomainsContainer.useContainer()
@@ -102,7 +98,6 @@ export function CardFrame({
             }}
             {...rest}>
             <div className={classes.header}>
-                <CardIcon width={36} height={18} />
                 {verbose && feed.fee ?
                     <div className={classes.fee}>
                         <Icons.Gas size={16} />
@@ -110,13 +105,13 @@ export function CardFrame({
                     </div>
                 :   null}
                 {ProviderPlatformIcon ?
-                    <ProviderPlatformIcon className={classes.icon} height={18} width="auto" />
+                    <ProviderPlatformIcon height={18} width="auto" />
                 :   null}
                 {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ?
-                    <PrimaryPlatformIcon className={classes.icon} height={18} width="auto" />
+                    <PrimaryPlatformIcon height={18} width="auto" />
                 :   null}
                 <ShadowRootTooltip
-                    title={formatDateTime(new Date(feed.timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                    title={formatDateTime(new Date(feed.timestamp * 1000), 'yyyy-MM-dd HH:mm:ss')}
                     placement="right">
                     <Typography className={classes.timestamp}>{formatTimestamp(feed.timestamp * 1000)}</Typography>
                 </ShadowRootTooltip>

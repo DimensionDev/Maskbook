@@ -1,12 +1,15 @@
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { Box } from '@mui/material'
-import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
+import { NetworkPluginID, type SocialAccount, SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
+import { Box } from '@mui/material'
+import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
+import { toggleFilter } from './emitter.js'
 import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
 
@@ -76,28 +79,6 @@ const ActivitiesTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfi
 const ActivitiesTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
 const ActivitiesTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
 
-// const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-//     'Donation',
-//     {
-//         tags: RSS3BaseAPI.Tag.Donation,
-//     },
-//     3,
-// )
-// const DonationsTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-//     'Donation',
-//     {
-//         tags: RSS3BaseAPI.Tag.Donation,
-//     },
-//     3,
-// )
-// const DonationsTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-//     'Donation',
-//     {
-//         tags: RSS3BaseAPI.Tag.Donation,
-//     },
-//     3,
-// )
-
 const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
@@ -148,6 +129,9 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
+    ProfileTabActions: memo(function FeedFilterButton() {
+        return <Icons.Filter size={24} onClick={toggleFilter} />
+    }),
     ProfileTabs: [ActivitiesTabConfig, SocialTabConfig, OthersTabConfig],
     ProfileCardTabs: [ActivitiesTabConfigInProfileCard, SocialTabConfigInProfileCard, OthersTabConfigInProfileCard],
     SearchResultTabs: [ActivitiesTabConfigInSearchResult, SocialTabConfigInSearchResult, OthersTabConfigInSearchResult],

@@ -44,11 +44,11 @@
     "carry_out_activity": "<bold>{{user}}</bold> carried out an activity to <bold>{{target}}</bold> on <bold>{{platform}}</bold>",
     "donation_donate": "<bold>{{user}}</bold> donated <bold>{{cost_value}} {{cost_symbol}}</bold>",
     "donation_donate_verbose": "<bold>{{user}}</bold> donated <bold>{{cost_value}} {{cost_symbol}}</bold> to <bold>{{project}}</bold>",
-    "note$post": "<bold>{{user}}</bold> posted a note on <bold>{{platform}}</bold>",
-    "note$mint": "<bold>{{user}}</bold> minted a note on <bold>{{platform}}</bold>",
-    "note$revise": "<bold>{{user}}</bold> revised a note on <bold>{{platform}}</bold>",
-    "note$comment": "<bold>{{user}}</bold> made a comment on <bold>{{platform}}</bold>",
-    "note$share": "<bold>{{user}}</bold> shared a note on <bold>{{platform}}</bold>",
+    "note$post": "<bold>{{user}}</bold> posted a note on {{platform}}",
+    "note$mint": "<bold>{{user}}</bold> minted a note on {{platform}}",
+    "note$revise": "<bold>{{user}}</bold> revised a note on {{platform}}",
+    "note$comment": "<bold>{{user}}</bold> made a comment on {{platform}}",
+    "note$share": "<bold>{{user}}</bold> shared a note on {{platform}}",
     "profile$create": "<user>{{user}}</user> created a profile on <platform>{{platform}}</platform>",
     "profile$update": "<user>{{user}}</user> updated a profile on <platform>{{platform}}</platform>",
     "profile_link$follow": "<user>{{user}}</user> followed <other>{{other}}</other> on <platform>{{platform}}</platform>",
@@ -60,5 +60,8 @@
     "details": "Details",
     "no_data$activities": "There’s no feed associated with this address.",
     "no_data$donation": "There’s no feed associated with this address.",
-    "no_data$social": "There’s no feed associated with this address."
+    "no_data$social": "There’s no feed associated with this address.",
+    "networks": "{{count}} Networks",
+    "related": "Related",
+    "direct": "Direct"
 }

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, memo } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-es'
+import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -14,7 +14,6 @@ import { addressSorter, useSocialAccountsBySettings } from '@masknet/shared'
 import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useLocationChange } from '@masknet/shared-base-ui'
 import {
-    EMPTY_LIST,
     PluginID,
     NetworkPluginID,
     type SocialIdentity,
@@ -105,6 +104,11 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.secondary,
             fontWeight: 700,
         },
+        actions: {
+            marginLeft: 'auto',
+            display: 'inline-flex',
+            alignItems: 'center',
+        },
     }
 })
 
@@ -154,20 +158,25 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
     }, [retrySocialAddress])
 
     const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
-    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return plugins
-            .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => {
-                const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
-                return isAllowed && shouldDisplay
-            })
-            .sort((a, z) => a.priority - z.priority)
+    const tabs = useMemo(() => {
+        const displayProfileTabs = getAvailablePlugins(activatedPlugins, (plugins) => {
+            return plugins
+                .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) || [])
+                .filter((x) => {
+                    const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
+                    const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAccount) ?? true
+                    return isAllowed && shouldDisplay
+                })
+                .sort((a, z) => a.priority - z.priority)
+        })
+        return displayProfileTabs.map((x) => ({
+            id: x.ID,
+            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+        }))
+    }, [activatedPlugins, translate])
+    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
+        return compact(plugins.map((x) => x.ProfileTabActions))
     })
-    const tabs = displayPlugins.map((x) => ({
-        id: x.ID,
-        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
-    }))
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
@@ -223,6 +232,11 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                                 classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
                                             />
                                         ))}
+                                        <span className={classes.actions}>
+                                            {tabActions.map((Action, i) => (
+                                                <Action key={i} />
+                                            ))}
+                                        </span>
                                     </MaskTabList>
                                 </TabContext>
                             </div>

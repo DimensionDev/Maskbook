@@ -1701,6 +1701,9 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
+      '@servie/events':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@types/uuid':
         specifier: ^9.0.3
         version: 9.0.3
@@ -26995,6 +26998,7 @@ time:
   /@rollup/plugin-node-resolve@15.2.3: '2023-10-08T19:23:54.853Z'
   /@rollup/plugin-replace@5.0.5: '2023-10-29T18:29:45.054Z'
   /@sentry/browser@8.0.0: '2024-05-13T15:36:42.087Z'
+  /@servie/events@3.0.0: '2021-04-13T22:43:08.067Z'
   /@types/web@0.0.143: '2024-04-15T04:20:47.209Z'
   /core-js-compat@3.37.0: '2024-04-16T19:50:53.630Z'
   /core-js@3.37.0: '2024-04-16T19:50:45.014Z'

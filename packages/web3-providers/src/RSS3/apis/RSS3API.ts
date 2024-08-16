@@ -96,7 +96,7 @@ export class RSS3 {
 
     static async getAllNotes(
         address: string,
-        options: Partial<Record<string, string[]> & { tag: string[] }> = {},
+        options: Partial<Record<string, string[] | string>> = {},
         { indicator, size = 100 }: BaseHubOptions<ChainId> = {},
     ) {
         if (!address) return createPageable([], createIndicator(indicator))
