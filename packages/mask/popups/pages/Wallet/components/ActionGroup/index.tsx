@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: 112,
+            width: 'calc(50% - 16px)',
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
