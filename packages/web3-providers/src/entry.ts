@@ -47,12 +47,7 @@ export { ENS } from './ENS/index.js'
 export { DeBankHistory } from './DeBank/index.js'
 
 // NFTScan
-export {
-    NFTScanTrending_EVM,
-    NFTScanTrending_Solana,
-    NFTScanNonFungibleTokenEVM,
-    NFTScanNonFungibleTokenSolana,
-} from './NFTScan/index.js'
+export { NFTScanNonFungibleTokenEVM, NFTScanNonFungibleTokenSolana } from './NFTScan/index.js'
 
 // Chainbase
 export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
