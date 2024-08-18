@@ -12,7 +12,9 @@ import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     verbose: {},
     image: {},

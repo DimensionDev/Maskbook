@@ -13,7 +13,9 @@ import { Label, formatValue } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'supply' | 'withdraw' | 'horizonCenter'>()((theme, _, refs) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     tokenIcon: {},
     // helper box to center token list in horizontal direction

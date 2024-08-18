@@ -58,9 +58,9 @@
     "propose": "<bold>{{user}}</bold> proposed",
     "original": "Original",
     "details": "Details",
-    "no_data$activities": "There’s no feed associated with this address.",
-    "no_data$donation": "There’s no feed associated with this address.",
-    "no_data$social": "There’s no feed associated with this address.",
+    "no_data$activities": "There's no feed associated with this address.",
+    "no_data$donation": "There's no feed associated with this address.",
+    "no_data$social": "There's no feed associated with this address.",
     "networks": "{{count}} Networks",
     "related": "Related",
     "direct": "Direct"

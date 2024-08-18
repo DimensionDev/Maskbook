@@ -23,7 +23,7 @@ const useStyles = makeStyles<void, 'summary'>()((theme, _, refs) => ({
     },
     summary: {
         fontSize: 14,
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',

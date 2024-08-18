@@ -21,6 +21,9 @@ const useStyles = makeStyles()((theme) => ({
     loading: {
         color: theme.palette.maskColor.main,
     },
+    skeleton: {
+        borderRadius: theme.spacing(1),
+    },
 }))
 
 export interface FeedPageProps {
@@ -73,8 +76,8 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedPageProps)
         return (
             <Box p={2} boxSizing="border-box">
                 {range(3).map((i) => (
-                    <Box mb={2} key={i}>
-                        <Skeleton animation="wave" variant="rectangular" height={125} />
+                    <Box mb={1} key={i}>
+                        <Skeleton animation="wave" variant="rectangular" height={120} className={classes.skeleton} />
                     </Box>
                 ))}
             </Box>

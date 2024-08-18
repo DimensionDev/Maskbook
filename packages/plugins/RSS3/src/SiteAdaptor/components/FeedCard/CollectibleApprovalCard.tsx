@@ -11,7 +11,9 @@ import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'verboseToken'>()((theme, _, refs) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     verboseToken: {},
     token: {

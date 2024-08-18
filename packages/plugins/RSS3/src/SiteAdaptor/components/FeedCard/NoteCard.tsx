@@ -19,7 +19,11 @@ const useStyles = makeStyles<
     'title' | 'image' | 'content' | 'info' | 'body' | 'center' | 'playButton' | 'failedImage'
 >()((theme, _, refs) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        height: 20,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
+        whiteSpace: 'pre-wrap',
     },
     title: {
         fontWeight: 700,

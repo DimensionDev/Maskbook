@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         display: 'flex',
+        alignItems: 'center',
         gap: theme.spacing(1.5),
     },
     fee: {

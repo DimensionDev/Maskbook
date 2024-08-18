@@ -9,12 +9,12 @@ import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_E
 import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import { type RSS3BaseAPI, type BaseHubOptions } from '../../entry-types.js'
+import type { RSS3BaseAPI, BaseHubOptions } from '../../entry-types.js'
 
 interface RSS3Result<T> {
     // cursor?: string
     total: number
-    meta: {
+    meta?: {
         cursor: string
     }
     data: T[]
@@ -28,6 +28,7 @@ const fetchFromRSS3 = <T>(url: string) => {
     })
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class RSS3 {
     static createRSS3(address: string, sign: (message: string) => Promise<string>): RSS3Next.default {
         return new RSS3Next.default({
@@ -72,7 +73,7 @@ export class RSS3 {
                 actions: [action],
             }))
         })
-        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, meta.cursor))
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, meta?.cursor))
     }
     /** @deprecated */
     static async getFootprints(address: string, { indicator, size = 100 }: BaseHubOptions<ChainId> = {}) {
@@ -85,7 +86,7 @@ export class RSS3 {
             include_poap: true,
         })
         const { data, meta } = await fetchFromRSS3<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
-        return createPageable(data, createIndicator(indicator), createNextIndicator(indicator, meta.cursor))
+        return createPageable(data, createIndicator(indicator), createNextIndicator(indicator, meta?.cursor))
     }
     /** get .csb handle info */
     static async getNameInfo(handle: string) {
@@ -123,7 +124,7 @@ export class RSS3 {
         return createPageable(
             data,
             createIndicator(indicator),
-            meta.cursor ? createNextIndicator(indicator, meta.cursor) : undefined,
+            meta?.cursor ? createNextIndicator(indicator, meta.cursor) : undefined,
         )
     }
 

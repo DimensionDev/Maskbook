@@ -24,7 +24,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 6px',
     },
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     content: {
         marginTop: theme.spacing(1.5),

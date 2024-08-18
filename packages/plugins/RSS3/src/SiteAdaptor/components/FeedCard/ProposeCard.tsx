@@ -9,7 +9,9 @@ import { Label } from './common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        color: theme.palette.maskColor.third,
+        color: theme.palette.maskColor.main,
+        display: 'flex',
+        alignItems: 'center',
     },
     title: {
         marginTop: theme.spacing(1),

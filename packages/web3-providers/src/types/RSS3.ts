@@ -430,6 +430,7 @@ export namespace RSS3BaseAPI {
         Governance = 'governance',
         Social = 'social',
         Transaction = 'transaction',
+        Metaverse = 'metaverse',
     }
 
     export enum Type {
