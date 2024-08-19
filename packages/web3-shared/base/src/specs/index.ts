@@ -611,6 +611,8 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     priceInToken?: PriceInToken<ChainId, SchemaType>
     /** source type */
     source?: SourceType
+    /** token count */
+    tokenCount: number
 }
 
 /**
