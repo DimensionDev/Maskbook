@@ -117,6 +117,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
                 value: x.value,
                 displayType: x.display_type,
             })) || [],
+        tokenCount: asset.token_count,
     }
 }
 
