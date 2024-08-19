@@ -59,8 +59,5 @@ export { FireflyConfig, FireflyRedPacket } from './Firefly/index.js'
 // FiatCurrencyRate
 export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
 
-// Calendar
-export { Calendar } from './Calendar/index.js'
-
 // NFT Spam
 export { NFTSpam } from './NFTSpam/index.js'

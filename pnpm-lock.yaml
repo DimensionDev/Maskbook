@@ -339,36 +339,6 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
 
-  packages/plugins/Calendar:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      date-fns:
-        specifier: ^2.30.0
-        version: 2.30.0
-
   packages/plugins/RedPacket:
     dependencies:
       '@masknet/icons':

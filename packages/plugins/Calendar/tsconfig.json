@@ -1,9 +1,0 @@
-{
-  "extends": "../tsconfig.used.json",
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist"
-  },
-  "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra/tsconfig.json" }, { "path": "../../shared/tsconfig.json" }]
-}
