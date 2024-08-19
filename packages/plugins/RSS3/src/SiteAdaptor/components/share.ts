@@ -123,6 +123,7 @@ const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platfo
     savm: null,
     stargate: null,
     planet: Icons.Planet,
+    'ens registrar': Icons.ENS,
     unknown: null,
 }
 

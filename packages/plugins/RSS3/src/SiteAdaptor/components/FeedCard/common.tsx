@@ -5,11 +5,11 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
 import type { ComponentProps } from 'react'
+import { UserAvatar } from './UserAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
         color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1),
         fontWeight: 700,
         marginRight: theme.spacing(1),
         whiteSpace: 'nowrap',
@@ -47,7 +47,8 @@ export function AddressLabel({
     ...rest
 }: AddressLabelProps) {
     const { classes, cx } = useStyles()
-    return address ?
+    const label =
+        address ?
             <ReversedAddress
                 address={address}
                 pluginID={pluginID}
@@ -57,6 +58,12 @@ export function AddressLabel({
                 {...rest}
             />
         :   <Label className={className} {...rest} />
+    return (
+        <>
+            <UserAvatar identity={address} style={{ marginRight: 6 }} />
+            {label}
+        </>
+    )
 }
 
 export const formatValue = (value?: { value: string; decimals: number } | null): string => {

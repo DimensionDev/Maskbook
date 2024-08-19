@@ -13,15 +13,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumBlockieProps extends withClasses<'icon'> {
+export interface EthereumBlockieProps extends withClasses<'icon'>, AvatarProps {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
-    const { address, name } = props
-    const { classes } = useStyles(undefined, { props })
+    const { address, name, ...rest } = props
+    const { classes, cx } = useStyles(undefined, { props })
     const [blockie, setBlockie] = useState('')
     const ref = useRef(null)
     const ob = useIntersection(ref, {})
@@ -32,7 +32,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
     }, [ob?.isIntersecting, address, !blockie])
 
     return (
-        <Avatar className={classes.icon} src={blockie} ref={ref}>
+        <Avatar className={cx(classes.icon)} src={blockie} ref={ref} {...rest}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )

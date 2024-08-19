@@ -4,12 +4,11 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import { RSS3Trans, useRSS3Trans } from '../../../locales/i18n_generated.js'
+import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, LinkifyOptions, htmlToPlain } from './common.js'
+import { AddressLabel, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
-import { UserAvatar } from './UserAvatar/index.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
@@ -58,7 +57,6 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
             display: 'block',
             [`.${refs.image}`]: {
                 width: '100%',
-                height: '100%',
                 borderRadius: 8,
                 marginTop: theme.spacing(1),
             },
@@ -67,6 +65,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
                 width: 100,
                 marginLeft: 'auto',
                 marginRight: 'auto',
+                marginTop: theme.spacing(1),
             },
             [`.${refs.content}`]: {
                 marginLeft: 0,
@@ -86,14 +85,16 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
     },
     content: {
         color: theme.palette.maskColor.second,
-        whiteSpace: 'pre-wrap',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 3,
         lineHeight: '18px',
         fontSize: 14,
         overflow: 'hidden',
         wordBreak: 'break-all',
+    },
+    collapse: {
+        whiteSpace: 'pre-wrap',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 3,
     },
 }))
 
@@ -117,41 +118,31 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { classes, cx } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
-    const t = useRSS3Trans()
-
     const action = feed.actions[0]
     const metadata = action.metadata
 
     const commentTarget = metadata?.target
-
-    // const imageSize = verbose ? '100%' : 64
 
     return (
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             {commentTarget ?
                 <div className={classes.quoted}>
                     <Typography className={classes.summary}>
-                        <UserAvatar identity={commentTarget.handle} />
-                        <span>
-                            <RSS3Trans.note
-                                values={{
-                                    user: commentTarget.handle,
-                                    platform: action.platform!,
-                                    context: 'post',
-                                }}
-                                components={{
-                                    bold: <Label />,
-                                }}
-                            />
-                        </span>
+                        <RSS3Trans.note
+                            values={{
+                                user: commentTarget.handle,
+                                platform: action.platform!,
+                                context: 'post',
+                            }}
+                            components={{
+                                user: <AddressLabel address={commentTarget.handle} />,
+                            }}
+                        />
                     </Typography>
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />
                         <article className={cx(classes.target, verbose ? classes.verbose : null)}>
-                            {verbose ?
-                                <Typography className={classes.originalLabel}>{t.original()}</Typography>
-                            :   null}
-                            {commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
+                            {!verbose && commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
                                 <Image
                                     classes={{ container: classes.image, failed: classes.failedImage }}
                                     src={resolveResourceURL(commentTarget.media[0].address)}
@@ -159,37 +150,43 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                                     height={90}
                                 />
                             :   null}
-                            {commentTarget?.title ?
-                                <Typography variant="h1" className={classes.title}>
-                                    {commentTarget.title}
-                                </Typography>
+                            <div>
+                                {commentTarget?.title ?
+                                    <Typography variant="h1" className={classes.title}>
+                                        {commentTarget.title}
+                                    </Typography>
+                                :   null}
+                                {verbose && commentTarget?.body ?
+                                    <Markdown className={cx(mdClasses.markdown, classes.content)}>
+                                        {commentTarget.body}
+                                    </Markdown>
+                                :   <Typography className={cx(classes.content, classes.collapse)}>
+                                        <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
+                                    </Typography>
+                                }
+                            </div>
+                            {verbose && commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
+                                <Image
+                                    classes={{ container: classes.image, failed: classes.failedImage }}
+                                    src={resolveResourceURL(commentTarget.media[0].address)}
+                                    width="100%"
+                                />
                             :   null}
-                            {verbose && commentTarget?.body ?
-                                <Markdown className={cx(mdClasses.markdown, classes.content)}>
-                                    {commentTarget.body}
-                                </Markdown>
-                            :   <Typography className={classes.content}>
-                                    <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
-                                </Typography>
-                            }
                         </article>
                     </div>
                 </div>
             :   null}
             <Typography className={classes.summary}>
-                <UserAvatar identity={metadata?.handle} />
-                <span>
-                    <RSS3Trans.note
-                        values={{
-                            user: metadata?.handle!,
-                            platform: action.platform!,
-                            context: 'comment',
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                </span>
+                <RSS3Trans.note
+                    values={{
+                        user: metadata?.handle!,
+                        platform: action.platform!,
+                        context: 'comment',
+                    }}
+                    components={{
+                        user: <AddressLabel address={feed.owner} />,
+                    }}
+                />
             </Typography>
             <Typography className={classes.comment}>
                 <Linkify options={LinkifyOptions}>{metadata?.body}</Linkify>

@@ -11,9 +11,8 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel, usePublicationId } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, LinkifyOptions, htmlToPlain } from './common.js'
+import { AddressLabel, LinkifyOptions, htmlToPlain } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
-import { UserAvatar } from './UserAvatar/index.js'
 
 const useStyles = makeStyles<
     void,
@@ -214,19 +213,16 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             className={cx(rest.verbose ? classes.verbose : null, className)}
             {...rest}>
             <Typography className={classes.summary}>
-                <UserAvatar identity={feed.owner} />
-                <span>
-                    <RSS3Trans.note
-                        values={{
-                            user,
-                            platform: action.platform!,
-                            context: type,
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                </span>
+                <RSS3Trans.note
+                    values={{
+                        user,
+                        platform: action.platform!,
+                        context: type,
+                    }}
+                    components={{
+                        user: <AddressLabel address={feed.owner} />,
+                    }}
+                />
             </Typography>
             <div className={classes.body} ref={ref}>
                 {media?.mime_type.startsWith('image/') || isImagePost ?

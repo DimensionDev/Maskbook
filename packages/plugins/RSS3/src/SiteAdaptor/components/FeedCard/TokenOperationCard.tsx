@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         overflow: 'auto',
         textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
+        whiteSpace: 'pre',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -77,31 +77,34 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
-            {feed.actions.map((action, index) => {
-                const metadata = action.metadata
-                const asset = metadata ? t.token_value({ value: formatValue(metadata), symbol: metadata.symbol }) : ''
-                return (
-                    <Typography className={classes.action} key={index}>
-                        <RSS3Trans.token_operation
-                            values={{
-                                from: action.from!,
-                                to: action.to!,
-                                value: formatValue(metadata),
-                                symbol: metadata!.symbol,
-                                exchange: action.platform!,
-                                context,
-                                asset,
-                            }}
-                            components={{
-                                from: <AddressLabel address={action.from} />,
-                                to: <AddressLabel address={action.to} />,
-                                bold: <Label />,
-                                asset: <Label />,
-                            }}
-                        />
-                    </Typography>
-                )
-            })}
+            <Box display="flex" flexDirection="column" gap={0.5}>
+                {feed.actions.map((action, index) => {
+                    const metadata = action.metadata
+                    const asset =
+                        metadata ? t.token_value({ value: formatValue(metadata), symbol: metadata.symbol }) : ''
+                    return (
+                        <Typography className={classes.action} key={index}>
+                            <RSS3Trans.token_operation
+                                values={{
+                                    from: action.from!,
+                                    to: action.to!,
+                                    value: formatValue(metadata),
+                                    symbol: metadata!.symbol,
+                                    exchange: action.platform!,
+                                    context,
+                                    asset,
+                                }}
+                                components={{
+                                    from: <AddressLabel address={action.from} />,
+                                    to: <AddressLabel address={action.to} />,
+                                    bold: <Label />,
+                                    asset: <Label />,
+                                }}
+                            />
+                        </Typography>
+                    )
+                })}
+            </Box>
         </CardFrame>
     )
 }

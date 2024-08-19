@@ -1,4 +1,3 @@
-import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isGreaterThan } from '@masknet/web3-shared-base'
@@ -8,36 +7,16 @@ import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { Label } from './common.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { AddressLabel, Label } from './common.js'
 
-const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
+const useStyles = makeStyles()((theme) => ({
     summary: {
         color: theme.palette.maskColor.third,
-    },
-    tokenIcon: {},
-    verboseToken: {},
-    token: {
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
-        marginTop: theme.spacing(1),
-        [`.${refs.tokenIcon}`]: {
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            overflow: 'hidden',
-        },
-        [`&.${refs.verboseToken}`]: {
-            height: 186,
-            justifyContent: 'center',
-        },
-    },
-    value: {
-        color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1.5),
-        fontSize: 14,
-        fontWeight: 700,
+        whiteSpace: 'pre',
+        gap: 6,
     },
 }))
 
@@ -57,8 +36,7 @@ interface TokenApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
  * - TokenApproval
  */
 export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps) {
-    const { verbose } = rest
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     const action = feed.actions[0]
     const metadata = action.metadata
@@ -67,43 +45,24 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
 
     const user = useAddressLabel(owner.address)
 
-    const amount = isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!
-
     return (
         <CardFrame type={CardType.TokenApproval} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                {verbose ?
-                    <RSS3Trans.token_approval_verbose
-                        values={{
-                            user,
-                            amount,
-                            symbol: metadata!.symbol!,
-                            context: metadata!.action,
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                :   <RSS3Trans.token_approval
-                        values={{
-                            user,
-                            amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
-                            symbol: metadata!.symbol!,
-                            contract: formatEthereumAddress(action.to!, 4),
-                            context: metadata!.action,
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                }
+                <RSS3Trans.token_approval
+                    values={{
+                        user,
+                        amount: isGreaterThan(metadata!.value, '1e+10') ? 'infinite' : metadata?.value_display!,
+                        symbol: metadata!.symbol!,
+                        contract: formatEthereumAddress(action.to!, 4),
+                        context: metadata!.action,
+                    }}
+                    components={{
+                        user: <AddressLabel address={owner.address} />,
+                        asset: <Label />,
+                        contract: <AddressLabel address={action.to!} />,
+                    }}
+                />
             </Typography>
-            {metadata ?
-                <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
-                    <Image classes={{ container: classes.tokenIcon }} src={metadata.image} height={40} width={40} />
-                    <Typography className={classes.value}>{`${amount} ${metadata.symbol}`}</Typography>
-                </div>
-            :   null}
         </CardFrame>
     )
 }

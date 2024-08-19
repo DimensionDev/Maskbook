@@ -1,6 +1,6 @@
 import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { isValidAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
 import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
@@ -128,7 +128,9 @@ export class RSS3 {
         )
     }
 
-    static async getProfiles(account: string) {
+    static async getProfiles(account: string | undefined) {
+        if (!account) return []
+        if (!account.includes('.') && !isValidAddress(account)) return []
         const url = urlcat(RSS3_ENDPOINT, '/datasets/domains/profiles', {
             account,
         })

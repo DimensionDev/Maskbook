@@ -120,7 +120,7 @@ export const FeedsPage = memo<FeedPageProps>(function FeedsPage(props) {
                     onClickAway={() => {
                         setOpen(false)
                     }}>
-                    <FeedFilters position="absolute" zIndex={50} top={0} left={0} right={0} />
+                    <FeedFilters position="sticky" zIndex={50} top={0} left={0} right={0} />
                 </ClickAwayListener>
             :   null}
             <FeedList {...props} />
