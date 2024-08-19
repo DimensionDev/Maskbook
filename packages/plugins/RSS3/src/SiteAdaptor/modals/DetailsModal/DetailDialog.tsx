@@ -11,6 +11,7 @@ import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
 import { hostIconMap, hostNameMap, type CardType } from '../../components/share.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
+import { TxDetails } from './TxDetails.js'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -99,6 +100,7 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                 <DialogContent className={classes.content}>
                     <div className={classes.details}>
                         <FeedCard className={classes.card} feed={feed} actionIndex={actionIndex} verbose />
+                        <TxDetails feed={feed} />
                         {links?.length ?
                             <div className={classes.links}>
                                 {links.map((link, index) => {

@@ -2,12 +2,12 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { BigNumber } from 'bignumber.js'
 import type { HTMLProps, ReactNode } from 'react'
 import { format as formatDateTime } from 'date-fns'
 import { type CardType, formatTimestamp, getPlatformIcon } from './share.js'
 import { FeedDetailsModal } from '../modals/modals.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { leftShift } from '@masknet/web3-shared-base'
 
 interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -102,7 +102,7 @@ export function CardFrame({
                 {verbose && feed.fee ?
                     <div className={classes.fee}>
                         <Icons.Gas size={16} />
-                        <Typography ml="4px">{new BigNumber(feed.fee).toFixed(6)}</Typography>
+                        <Typography ml="4px">{leftShift(feed.fee.amount, feed.fee.decimal).toFixed(6)}</Typography>
                     </div>
                 :   null}
                 {ProviderPlatformIcon ?

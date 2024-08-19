@@ -128,6 +128,12 @@ export class RSS3 {
         )
     }
 
+    static async getActivity(id: string) {
+        const url = urlcat(RSS3_FEED_ENDPOINT, '/tx/:id', { id })
+        const res = await fetchFromRSS3<RSS3Result<any>>(url)
+        return res
+    }
+
     static async getProfiles(handle: string) {
         const url = urlcat(RSS3_ENDPOINT, '/profiles/:handle', {
             handle,

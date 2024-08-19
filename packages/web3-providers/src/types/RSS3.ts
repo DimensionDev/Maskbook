@@ -337,6 +337,7 @@ export namespace RSS3BaseAPI {
             [Type.Propose]: ProposeMetadata
             [Type.Vote]: VoteMetadata
         }
+        [Tag.Metaverse]: {}
     }
 
     export interface ActionGeneric<T extends Tag, P extends keyof MetadataMap[T] = keyof MetadataMap[T]> {
@@ -344,17 +345,9 @@ export namespace RSS3BaseAPI {
         type: P
         index: number
         /**
-         * @deprecated
-         * It's different from transaction.address_from, the token payer */
-        // address_from?: string
-        /**
          * from address
          * It's different from transaction.from, the token payer */
         from?: HexString
-        /**
-         * @deprecated
-         * It's different from transaction.address_to, the token receiver */
-        // address_to?: string
         /**
          * to address
          * Not only ethereum address, but it could be ar address.
@@ -507,28 +500,12 @@ export namespace RSS3BaseAPI {
         /** timestamp in seconds */
         timestamp: number
         id: HexString
-        // /**
-        //  * @deprecated
-        //  * The identifier of the transaction. A unique identifier will be returned when a transaction hash is not available
-        //  */
-        // hash: string
         /**
          * The on-chain log index.
          */
         index?: number
-        /**
-         * @deprecated
-         * The transaction initiator.
-         */
-        // address_from: string
-        /**
-         * from address */
+        /** from address */
         from: HexString
-        /**
-         * @deprecated
-         * The transaction recipient.
-         */
-        // address_to: string
         /** to address */
         to: HexString
         /**
@@ -538,7 +515,10 @@ export namespace RSS3BaseAPI {
         /**
          * The fees paid for the transaction.
          */
-        fee?: number
+        fee?: {
+            amount: string
+            decimal: number
+        }
         network: Network
         /**
          * There are many platforms supported by PreGod, see the full list. When platform is unknown, the transaction's network is used.
@@ -553,6 +533,7 @@ export namespace RSS3BaseAPI {
         actions: Array<ActionGeneric<T, P>>
         total_actions: number
         address_status: AddressStatus[]
+        success: boolean
     }
 
     export type Web3Feed =

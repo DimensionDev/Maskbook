@@ -189,7 +189,7 @@ export function getCost(feed: RSS3BaseAPI.CollectibleTradeFeed): RSS3BaseAPI.Tra
 const ONE_MIN = 60 * 1000
 const ONE_HOUR = 60 * ONE_MIN
 const ONE_DAY = 24 * ONE_HOUR
-const ONE_WEEK = 7 * ONE_DAY
+export const ONE_WEEK = 7 * ONE_DAY
 
 const plural = (num: number, unit: string) => `${num} ${unit}${num !== 1 ? 's' : ''}`
 

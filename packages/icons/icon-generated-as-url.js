@@ -210,7 +210,6 @@ export function firefly_nft_url() { return new URL("./general/FireflyNFT.svg", i
 export function flag_url() { return new URL("./general/Flag.svg", import.meta.url).href }
 export function folder_url() { return new URL("./general/Folder.svg", import.meta.url).href }
 export function gas_url() { return new URL("./general/Gas.svg", import.meta.url).href }
-export function gas_station_url() { return new URL("./general/GasStation.svg", import.meta.url).href }
 export function gear_dark_url() { return new URL("./general/Gear.dark.svg", import.meta.url).href }
 export function gear_light_url() { return new URL("./general/Gear.light.svg", import.meta.url).href }
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url).href }

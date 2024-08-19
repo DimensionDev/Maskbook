@@ -63,5 +63,19 @@
     "no_data$social": "There's no feed associated with this address.",
     "networks": "{{count}} Networks",
     "related": "Related",
-    "direct": "Direct"
+    "direct": "Direct",
+    "transaction_details": "Transaction Details",
+    "hash": "Hash",
+    "status": "Status",
+    "timestamp": "Timestamp",
+    "network": "Network",
+    "platform": "Platform",
+    "category": "Category",
+    "from": "From",
+    "to": "To",
+    "action": "Action",
+    "asset": "Asset",
+    "successful": "Successful",
+    "failed": "Failed",
+    "tx_fee": "Tx Fee"
 }
