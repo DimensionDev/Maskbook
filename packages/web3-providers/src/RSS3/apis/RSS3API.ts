@@ -1,15 +1,15 @@
-import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
-import urlcat, { query } from 'urlcat'
+import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { ExceptionID, ExceptionType } from '@masknet/web3-telemetry/types'
-import { createIndicator, createNextIndicator, createPageable } from '@masknet/shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { queryClient } from '@masknet/shared-base-ui'
-import { RSS3_FEED_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap, RSS3_LEGACY_ENDPOINT } from '../constants.js'
-import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
-import { normalizedFeed } from '../helpers.js'
+import * as RSS3Next from /* webpackDefer: true */ 'rss3-next'
+import urlcat, { query } from 'urlcat'
+import type { BaseHubOptions, RSS3BaseAPI } from '../../entry-types.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import type { RSS3BaseAPI, BaseHubOptions } from '../../entry-types.js'
+import { NameServiceToChainMap, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT } from '../constants.js'
+import { normalizedFeed } from '../helpers.js'
+import { type RSS3NameServiceResponse, TAG, TYPE } from '../types.js'
 
 interface RSS3Result<T> {
     // cursor?: string
@@ -128,20 +128,14 @@ export class RSS3 {
         )
     }
 
-    static async getActivity(id: string) {
-        const url = urlcat(RSS3_FEED_ENDPOINT, '/tx/:id', { id })
-        const res = await fetchFromRSS3<RSS3Result<any>>(url)
-        return res
-    }
-
-    static async getProfiles(handle: string) {
-        const url = urlcat(RSS3_ENDPOINT, '/profiles/:handle', {
-            handle,
+    static async getProfiles(account: string) {
+        const url = urlcat(RSS3_ENDPOINT, '/datasets/domains/profiles', {
+            account,
         })
-        const response = await fetchFromRSS3<RSS3ProfilesResponse>(url)
 
-        if ('error' in response) return []
-        return response.result
+        const response = await fetchFromRSS3<RSS3BaseAPI.ProfilesResponse>(url)
+
+        return response
     }
 
     static async getNameService(handle: string) {

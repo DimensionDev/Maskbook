@@ -1,6 +1,6 @@
 {
     "token_operation$mint": "<to>{{to}}</to> minted <bold>{{value}} {{symbol}}</bold>",
-    "token_operation$send": "<from>{{from}}</from> sent to <to>{{to}}</to>",
+    "token_operation$send": "<from>{{from}}</from> sent <asset>{{asset}}</asset> to <to>{{to}}</to>",
     "token_operation$claim": "<to>{{to}}</to> claimed from <from>{{from}}</from>",
     "token_operation$burn": "<from>{{from}}</from> burned <bold>{{value}} {{symbol}}</bold>",
     "token_operation$deposit": "<from>{{from}}</from> deposited on <bold>{{exchange}}</bold>",

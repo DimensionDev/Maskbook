@@ -5,7 +5,6 @@ import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
 import { RSS3Trans, useRSS3Trans } from '../../../locales/i18n_generated.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label, LinkifyOptions, htmlToPlain } from './common.js'
@@ -19,6 +18,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre-wrap',
+        gap: 6,
     },
     comment: {
         color: theme.palette.maskColor.main,
@@ -122,7 +122,6 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const action = feed.actions[0]
     const metadata = action.metadata
 
-    const user = useAddressLabel(feed.owner)
     const commentTarget = metadata?.target
 
     // const imageSize = verbose ? '100%' : 64
@@ -132,17 +131,19 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
             {commentTarget ?
                 <div className={classes.quoted}>
                     <Typography className={classes.summary}>
-                        <UserAvatar platform={feed.platform} handle={commentTarget.handle} />
-                        <RSS3Trans.note
-                            values={{
-                                user: commentTarget.handle,
-                                platform: action.platform!,
-                                context: 'post',
-                            }}
-                            components={{
-                                bold: <Label />,
-                            }}
-                        />
+                        <UserAvatar identity={commentTarget.handle} />
+                        <span>
+                            <RSS3Trans.note
+                                values={{
+                                    user: commentTarget.handle,
+                                    platform: action.platform!,
+                                    context: 'post',
+                                }}
+                                components={{
+                                    bold: <Label />,
+                                }}
+                            />
+                        </span>
                     </Typography>
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />
@@ -164,7 +165,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                                 </Typography>
                             :   null}
                             {verbose && commentTarget?.body ?
-                                <Markdown defaultStyle={false} className={cx(mdClasses.markdown, classes.content)}>
+                                <Markdown className={cx(mdClasses.markdown, classes.content)}>
                                     {commentTarget.body}
                                 </Markdown>
                             :   <Typography className={classes.content}>
@@ -176,17 +177,19 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 </div>
             :   null}
             <Typography className={classes.summary}>
-                <UserAvatar platform={feed.platform} handle={metadata?.handle!} />
-                <RSS3Trans.note
-                    values={{
-                        user,
-                        platform: action.platform!,
-                        context: 'comment',
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
+                <UserAvatar identity={metadata?.handle} />
+                <span>
+                    <RSS3Trans.note
+                        values={{
+                            user: metadata?.handle!,
+                            platform: action.platform!,
+                            context: 'comment',
+                        }}
+                        components={{
+                            bold: <Label />,
+                        }}
+                    />
+                </span>
             </Typography>
             <Typography className={classes.comment}>
                 <Linkify options={LinkifyOptions}>{metadata?.body}</Linkify>

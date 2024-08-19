@@ -1,45 +1,26 @@
-import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { useRSS3Trans } from '../../../locales/index.js'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
+import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
-import { useAddressLabel } from '../../hooks/index.js'
-import { CardType } from '../share.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { formatValue, Label } from './common.js'
+import { CardType } from '../share.js'
+import { AddressLabel, formatValue, Label } from './common.js'
 
-const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
-    summary: {
+const useStyles = makeStyles()((theme) => ({
+    action: {
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-    },
-    tokenIcon: {},
-    verboseToken: {},
-    token: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: theme.spacing(1),
-        [`.${refs.tokenIcon}`]: {
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            overflow: 'hidden',
+        overflow: 'auto',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
         },
-        [`&.${refs.verboseToken}`]: {
-            height: 186,
-            justifyContent: 'center',
-        },
-    },
-    value: {
-        color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1.5),
-        fontSize: 14,
-        fontWeight: 700,
     },
 }))
 
@@ -83,12 +64,10 @@ const contextMap: Partial<
  * - TokenBurn
  */
 export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
-    const { verbose } = rest
     const t = useRSS3Trans()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     const action = feed.actions.find((x) => x.from && x.to) || feed.actions[0]
-    const metadata = action.metadata
 
     const owner = useFeedOwner()
     const isFromOwner = isSameAddress(owner.address, action.from)
@@ -96,58 +75,33 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     const cardType = cardTypeMap[feed.type] || (isFromOwner ? CardType.TokenOut : CardType.TokenIn)
     const context = contextMap[feed.type] || (isFromOwner ? 'send' : 'claim')
 
-    const from = useAddressLabel(action.from ?? '')
-    const to = useAddressLabel(action.to ?? '')
-
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
-            <Typography className={classes.summary}>
-                {verbose ?
-                    <RSS3Trans.token_operation_verbose
-                        values={{
-                            from,
-                            to,
-                            value: formatValue(metadata),
-                            symbol: metadata!.symbol,
-                            /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
-                            // @ts-ignore
-                            exchange: action.platform!,
-                            context,
-                        }}
-                        components={{
-                            from: <Label title={action.from} />,
-                            to: <Label title={action.to} />,
-                            bold: <Label />,
-                        }}
-                    />
-                :   <RSS3Trans.token_operation
-                        values={{
-                            from,
-                            to,
-                            value: formatValue(metadata),
-                            symbol: metadata!.symbol,
-                            exchange: action.platform!,
-                            context,
-                        }}
-                        components={{
-                            from: <Label title={action.from} />,
-                            to: <Label title={action.to} />,
-                            bold: <Label />,
-                        }}
-                    />
-                }
-            </Typography>
-            {metadata ?
-                <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
-                    <Image classes={{ container: classes.tokenIcon }} src={metadata.image} height={40} width={40} />
-                    <Typography className={classes.value}>
-                        {t.token_value({
-                            value: formatValue(metadata),
-                            symbol: metadata.symbol,
-                        })}
+            {feed.actions.map((action, index) => {
+                const metadata = action.metadata
+                const asset = metadata ? t.token_value({ value: formatValue(metadata), symbol: metadata.symbol }) : ''
+                return (
+                    <Typography className={classes.action} key={index}>
+                        <RSS3Trans.token_operation
+                            values={{
+                                from: action.from!,
+                                to: action.to!,
+                                value: formatValue(metadata),
+                                symbol: metadata!.symbol,
+                                exchange: action.platform!,
+                                context,
+                                asset,
+                            }}
+                            components={{
+                                from: <AddressLabel address={action.from} />,
+                                to: <AddressLabel address={action.to} />,
+                                bold: <Label />,
+                                asset: <Label />,
+                            }}
+                        />
                     </Typography>
-                </div>
-            :   null}
+                )
+            })}
         </CardFrame>
     )
 }

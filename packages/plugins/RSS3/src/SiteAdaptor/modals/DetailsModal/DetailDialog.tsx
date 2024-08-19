@@ -1,15 +1,13 @@
-import { Icons } from '@masknet/icons'
-import { InjectedDialog, Linking, type InjectedDialogProps } from '@masknet/shared'
-import { parseURL } from '@masknet/shared-base'
+import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
 import { EVMUtils } from '@masknet/web3-providers'
-import { DialogContent, Typography } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useMemo, type PropsWithChildren } from 'react'
 import { useRSS3Trans } from '../../../locales/index.js'
 import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
-import { hostIconMap, hostNameMap, type CardType } from '../../components/share.js'
+import { type CardType } from '../../components/share.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
 import { TxDetails } from './TxDetails.js'
 
@@ -39,27 +37,6 @@ const useStyles = makeStyles()((theme) => ({
     card: {
         flexGrow: 1,
     },
-    links: {
-        display: 'flex',
-        gap: theme.spacing(1.5),
-        marginTop: 'auto',
-        flexShrink: 0,
-        flexGrow: 0,
-        paddingTop: theme.spacing(2),
-    },
-    link: {
-        display: 'flex',
-        alignItems: 'center',
-        height: 24,
-        textDecoration: 'none',
-        color: theme.palette.maskColor.highlight,
-    },
-    linkLabel: {
-        fontSize: 18,
-        fontWeight: 700,
-        lineHeight: '22px',
-        marginLeft: theme.spacing(1),
-    },
 }))
 
 interface FeedDetailsDialogProps
@@ -71,7 +48,6 @@ interface FeedDetailsDialogProps
 export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
-    const links = feed.actions[0].related_urls
 
     const address = feed.owner || feed.from || feed.actions[0].from || ''
     const { data: reversedName } = useReverseAddress(undefined, address)
@@ -101,22 +77,6 @@ export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }:
                     <div className={classes.details}>
                         <FeedCard className={classes.card} feed={feed} actionIndex={actionIndex} verbose />
                         <TxDetails feed={feed} />
-                        {links?.length ?
-                            <div className={classes.links}>
-                                {links.map((link, index) => {
-                                    const url = parseURL(link)
-                                    if (!url || !['http:', 'https:'].includes(url.protocol)) return null
-                                    const Icon = hostIconMap[url.host] ?? Icons.SettingsLanguage
-                                    const name = hostNameMap[url.host] ?? url.host
-                                    return (
-                                        <Linking key={index} LinkProps={{ className: classes.link }} href={link}>
-                                            <Icon size={24} />
-                                            <Typography className={classes.linkLabel}>{name}</Typography>
-                                        </Linking>
-                                    )
-                                })}
-                            </div>
-                        :   null}
                     </div>
                 </DialogContent>
             </InjectedDialog>

@@ -1,9 +1,10 @@
 import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import type { ComponentProps } from 'react'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
+import type { ComponentProps } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -38,7 +39,13 @@ export function Label({ className, ...rest }: LabelProps) {
 interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
     address?: ReverseAddressProps['address']
 }
-export function AddressLabel({ address, pluginID, size, className, ...rest }: AddressLabelProps) {
+export function AddressLabel({
+    address,
+    pluginID = NetworkPluginID.PLUGIN_EVM,
+    size,
+    className,
+    ...rest
+}: AddressLabelProps) {
     const { classes, cx } = useStyles()
     return address ?
             <ReversedAddress

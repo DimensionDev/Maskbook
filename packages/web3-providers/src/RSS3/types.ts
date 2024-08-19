@@ -69,26 +69,7 @@ export enum TYPE {
     donate = 'donate',
 }
 
-export interface RSS3ProfileResult {
-    address: string
-    network: NETWORK
-    platform: PLATFORM
-    source: 'Lens'
-    /** @example vitalik.lens */
-    name: string
-    /** @example vitalik.lens */
-    handle: string
-    bio: string
-    url: string
-    /** Could be http url, or ipfs url */
-    profile_uri: string[]
-}
-
 type Response<T> = T | { error: string }
-export type RSS3ProfilesResponse = Response<{
-    total: number
-    result: RSS3ProfileResult[]
-}>
 
 export type RSS3NameServiceResponse = Response<{
     ens: string

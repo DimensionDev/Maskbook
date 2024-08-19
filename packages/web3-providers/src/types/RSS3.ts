@@ -415,6 +415,7 @@ export namespace RSS3BaseAPI {
         | 'Unknown'
         | 'VSL'
         | 'Planet' // Might not support anymore
+        | 'ENS Registrar'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -584,4 +585,32 @@ export namespace RSS3BaseAPI {
         cursor?: string
         list: Web3Feed[]
     }
+
+    export interface ProfileResult {
+        address: string
+        reverse_address: string
+        owner_address: string
+        name_hash: string
+        /** @example vitalik.lens */
+        name: string
+        /** @example vitalik.lens */
+        handle: string
+        handle_id: HexString
+        network: Network
+        timestamp: string
+        height: string
+        platform: Platform
+        expired_at: string
+        bio: string
+        url: string
+        /** Could be http url, or ipfs url */
+        profile_uri: string[]
+        banner_uri: string | null
+        social_uri: string | null
+        /** eg "2023-11-22T21:02:30.142663Z" */
+        created_at: string
+        /** eg "2023-11-22T21:02:30.142663Z" */
+        updated_at: string
+    }
+    export type ProfilesResponse = ProfileResult[]
 }

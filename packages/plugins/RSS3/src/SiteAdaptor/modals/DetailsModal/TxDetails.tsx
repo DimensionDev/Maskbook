@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         fontSize: 14,
         wordBreak: 'break-all',
-        lineHeight: '18px',
     },
     sep: {
         borderTop: `1px dashed ${theme.palette.maskColor.secondaryLine}`,
@@ -55,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: '10px',
     },
     tag: {
-        padding: 6,
+        padding: '4px 6px',
         borderRadius: 4,
         backgroundColor: theme.palette.maskColor.bg,
         fontSize: 13,
@@ -99,6 +98,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     <Typography className={classes.key}>{t.hash()}</Typography>
                     <Typography
                         className={classes.value}
+                        component="div"
                         style={{ display: 'block', color: theme.palette.maskColor.second, marginLeft: 4 }}>
                         {feed.id}
                         <CopyButton text={feed.id} size={20} />
@@ -128,7 +128,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 </Box>
                 <Box className={classes.field}>
                     <Typography className={classes.key}>{t.category()}</Typography>
-                    <Typography className={classes.value}>
+                    <Typography className={classes.value} component="div">
                         <div className={classes.tags}>
                             <span className={classes.tag}>{feed.tag}</span>
                             <span className={classes.tag}>{feed.type}</span>
@@ -139,7 +139,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
             <Box className={classes.sep} />
             <Box className={classes.field}>
                 <Typography className={classes.key}>{t.from()}</Typography>
-                <Typography className={classes.value} gap={10}>
+                <Typography className={classes.value} gap={10} component="div">
                     <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
                     {formatEthereumAddress(feed.from, 4)}
                     <CopyButton text={feed.from} size={20} />
@@ -147,7 +147,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
             </Box>
             <Box className={classes.field}>
                 <Typography className={classes.key}>{t.to()}</Typography>
-                <Typography className={classes.value} gap={10}>
+                <Typography className={classes.value} gap={10} component="div">
                     <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
                     {formatEthereumAddress(feed.to, 4)}
                     <CopyButton text={feed.to} size={20} />
@@ -157,9 +157,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
             <Box className={classes.field}>
                 <Typography className={classes.key}>{t.action()}</Typography>
                 <Typography className={classes.value}>
-                    {feed.actions.map((x) => {
+                    {feed.actions.map((x, i) => {
                         return (
-                            <span key={x.tag}>
+                            <span key={i}>
                                 {x.tag}-{x.type}
                             </span>
                         )

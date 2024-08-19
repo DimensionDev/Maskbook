@@ -5,6 +5,9 @@ export const useMarkdownStyles = makeStyles()((theme) => ({
     markdown: {
         wordBreak: 'break-all',
         overflow: 'auto',
+        color: 'inherit',
+        fontSize: 'inherit',
+        fontFamily: 'sans-serif',
         img: {
             maxWidth: '100%',
         },
@@ -13,6 +16,9 @@ export const useMarkdownStyles = makeStyles()((theme) => ({
         },
         pre: {
             overflow: 'auto',
+        },
+        p: {
+            color: theme.palette.text.secondary,
         },
     },
 }))
