@@ -1,20 +1,11 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useFeedOwner } from '../../contexts/index.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
+import { CollectibleApprovalAction } from '../FeedActions/CollectibleApprovalAction.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'verboseToken'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.main,
-        display: 'flex',
-        alignItems: 'center',
-    },
     verboseToken: {},
     token: {
         display: 'flex',
@@ -56,24 +47,9 @@ export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFe
     const action = feed.actions[0]
     const metadata = action.metadata
 
-    const owner = useFeedOwner()
-    const user = useAddressLabel(owner.address)
-
     return (
         <CardFrame type={CardType.CollectibleApproval} feed={feed} {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.collectible_approval
-                    values={{
-                        user,
-                        collection: metadata?.collection!,
-                        contract: formatEthereumAddress(action.to!, 4),
-                        context: metadata?.action,
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+            <CollectibleApprovalAction feed={feed} />
             {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Typography className={classes.value}>{metadata.collection}</Typography>

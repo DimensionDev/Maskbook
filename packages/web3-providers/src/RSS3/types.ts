@@ -14,6 +14,9 @@ export enum TAG {
     ETH = 'ETH',
 }
 
+/**
+ * @deprecated
+ */
 export enum NETWORK {
     ethereum = 'ethereum',
     ethereum_classic = 'ethereum_classic',
@@ -28,6 +31,10 @@ export enum NETWORK {
     avalanche = 'avalanche',
     crossbell = 'crossbell',
 }
+
+/**
+ * @deprecated
+ */
 export enum PLATFORM {
     mirror = 'mirror',
     lens = 'lens',

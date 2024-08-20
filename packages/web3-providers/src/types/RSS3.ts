@@ -185,7 +185,6 @@ export namespace RSS3BaseAPI {
     interface TokenApprovalMetadata extends ApprovalBaseMetadata {
         /** approve amount */
         value: string
-        value_display: string
         decimals: number
         standard: 'ERC-20'
         /** TODO */
@@ -554,7 +553,7 @@ export namespace RSS3BaseAPI {
 
     /** For feed cards */
     export type TokenOperationFeed =
-        | Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
+        | Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint | Type.Approval>
         | Web3FeedGeneric<Tag.Exchange, Type.Deposit | Type.Withdraw>
     export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>

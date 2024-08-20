@@ -3,20 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useRSS3Trans } from '../../../locales/index.js'
-import { useFeedOwner } from '../../contexts/index.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, formatValue } from './common.js'
+import { formatValue } from '../common.js'
+import { StakingAction } from '../FeedActions/StakingAction.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.main,
-        display: 'flex',
-        alignItems: 'center',
-    },
     tokenIcon: {},
     verboseToken: {},
     token: {
@@ -67,25 +60,11 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     const action = feed.actions.find((x) => x.type === Type.Staking)
     const metadata = action?.metadata
 
-    const owner = useFeedOwner()
-    const user = useAddressLabel(owner.address)
-
     const cardType = metadata?.action === 'stake' ? CardType.TokenStake : CardType.TokenUnstake
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.token_staking
-                    values={{
-                        user,
-                        symbol: metadata?.token?.symbol!,
-                        context: metadata?.action!,
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+            <StakingAction feed={feed} />
             {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <Image

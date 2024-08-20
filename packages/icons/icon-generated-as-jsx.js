@@ -25,6 +25,11 @@ export const Avalanche = /*#__PURE__*/ __createIcon('Avalanche', [
         u: () => new URL('./brands/Avalanche.svg', import.meta.url).href,
     },
 ])
+export const Base = /*#__PURE__*/ __createIcon('base', [
+    {
+        u: () => new URL('./brands/base.png', import.meta.url).href,
+    },
+])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [
     {
         u: () => new URL('./brands/BSC.svg', import.meta.url).href,
@@ -63,6 +68,11 @@ export const Crossbell = /*#__PURE__*/ __createIcon('Crossbell', [
 export const CrossSync = /*#__PURE__*/ __createIcon('CrossSync', [
     {
         u: () => new URL('./brands/CrossSync.svg', import.meta.url).href,
+    },
+])
+export const Curve = /*#__PURE__*/ __createIcon('Curve', [
+    {
+        u: () => new URL('./brands/Curve.png', import.meta.url).href,
     },
 ])
 export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
@@ -229,6 +239,11 @@ export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
         u: () => new URL('./brands/Gnosis.svg', import.meta.url).href,
     },
 ])
+export const Highlight = /*#__PURE__*/ __createIcon('Highlight', [
+    {
+        u: () => new URL('./brands/Highlight.svg', import.meta.url).href,
+    },
+])
 export const Instagram = /*#__PURE__*/ __createIcon('Instagram', [
     {
         u: () => new URL('./brands/Instagram.svg', import.meta.url).href,
@@ -254,6 +269,11 @@ export const IPFS = /*#__PURE__*/ __createIcon('IPFS', [
         u: () => new URL('./brands/IPFS.svg', import.meta.url).href,
     },
 ])
+export const Iqwiki = /*#__PURE__*/ __createIcon('Iqwiki', [
+    {
+        u: () => new URL('./brands/Iqwiki.svg', import.meta.url).href,
+    },
+])
 export const Keybase = /*#__PURE__*/ __createIcon('Keybase', [
     {
         u: () => new URL('./brands/Keybase.svg', import.meta.url).href,
@@ -272,6 +292,16 @@ export const Leaderboard = /*#__PURE__*/ __createIcon('Leaderboard', [
 export const Lens = /*#__PURE__*/ __createIcon('Lens', [
     {
         u: () => new URL('./brands/Lens.svg', import.meta.url).href,
+    },
+])
+export const Lido = /*#__PURE__*/ __createIcon('Lido', [
+    {
+        u: () => new URL('./brands/Lido.svg', import.meta.url).href,
+    },
+])
+export const Linea = /*#__PURE__*/ __createIcon('Linea', [
+    {
+        u: () => new URL('./brands/Linea.svg', import.meta.url).href,
     },
 ])
 export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
@@ -423,6 +453,11 @@ export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
         u: () => new URL('./brands/NFTScan.svg', import.meta.url).href,
     },
 ])
+export const OneInch = /*#__PURE__*/ __createIcon('OneInch', [
+    {
+        u: () => new URL('./brands/OneInch.png', import.meta.url).href,
+    },
+])
 export const OpenSea = /*#__PURE__*/ __createIcon('OpenSea', [
     {
         u: () => new URL('./brands/OpenSea.svg', import.meta.url).href,
@@ -493,6 +528,11 @@ export const RSS3 = /*#__PURE__*/ __createIcon('RSS3', [
         u: () => new URL('./brands/RSS3.svg', import.meta.url).href,
     },
 ])
+export const Savm = /*#__PURE__*/ __createIcon('Savm', [
+    {
+        u: () => new URL('./brands/Savm.svg', import.meta.url).href,
+    },
+])
 export const SimpleHash = /*#__PURE__*/ __createIcon('SimpleHash', [
     {
         u: () => new URL('./brands/SimpleHash.png', import.meta.url).href,
@@ -501,6 +541,11 @@ export const SimpleHash = /*#__PURE__*/ __createIcon('SimpleHash', [
 export const Solana = /*#__PURE__*/ __createIcon('Solana', [
     {
         u: () => new URL('./brands/Solana.svg', import.meta.url).href,
+    },
+])
+export const Stargate = /*#__PURE__*/ __createIcon('Stargate', [
+    {
+        u: () => new URL('./brands/Stargate.png', import.meta.url).href,
     },
 ])
 export const SushiSwap = /*#__PURE__*/ __createIcon('SushiSwap', [

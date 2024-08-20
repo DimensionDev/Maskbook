@@ -9,7 +9,7 @@ import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, formatValue } from './common.js'
+import { Label, formatValue } from '../common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'supply' | 'withdraw' | 'horizonCenter'>()((theme, _, refs) => ({
     summary: {

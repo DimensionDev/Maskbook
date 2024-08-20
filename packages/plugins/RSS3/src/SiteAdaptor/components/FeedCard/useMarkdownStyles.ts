@@ -20,5 +20,8 @@ export const useMarkdownStyles = makeStyles()((theme) => ({
         p: {
             color: theme.palette.text.secondary,
         },
+        '& p, & li': {
+            fontSize: 14,
+        },
     },
 }))

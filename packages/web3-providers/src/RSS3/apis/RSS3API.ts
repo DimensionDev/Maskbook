@@ -12,7 +12,6 @@ import { normalizedFeed } from '../helpers.js'
 import { type RSS3NameServiceResponse, TAG, TYPE } from '../types.js'
 
 interface RSS3Result<T> {
-    // cursor?: string
     total: number
     meta?: {
         cursor: string

@@ -523,11 +523,13 @@ function Content(props: ProfileTabContentProps) {
                                 {tabs.map((tab) => (
                                     <Tab key={tab.id} label={tab.label} value={tab.id} />
                                 ))}
-                                <span className={classes.actions}>
-                                    {tabActions.map((Action, i) => (
-                                        <Action key={i} />
-                                    ))}
-                                </span>
+                                {tabActions.length ?
+                                    <span className={classes.actions}>
+                                        {tabActions.map((Action, i) => (
+                                            <Action key={i} />
+                                        ))}
+                                    </span>
+                                :   null}
                             </MaskTabList>
                         </TabContext>
                     </div>

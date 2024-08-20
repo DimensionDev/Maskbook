@@ -7,7 +7,6 @@ import { useMemo, type PropsWithChildren } from 'react'
 import { useRSS3Trans } from '../../../locales/index.js'
 import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
-import { type CardType } from '../../components/share.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
 import { TxDetails } from './TxDetails.js'
 
@@ -41,11 +40,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
-        Pick<FeedCardProps, 'feed' | 'actionIndex'> {
-    type: CardType
-}
+        Pick<FeedCardProps, 'feed' | 'actionIndex'> {}
 
-export function FeedDetailsDialog({ type, feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
+export function FeedDetailsDialog({ feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
 

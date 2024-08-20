@@ -2,13 +2,14 @@ import { Icons } from '@masknet/icons'
 import { CopyButton, EthereumBlockie } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { Box, Typography } from '@mui/material'
+import { leftShift } from '@masknet/web3-shared-base'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
 import { useRSS3Trans } from '../../../locales/i18n_generated.js'
+import { FeedActions } from '../../components/FeedActions/index.js'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { leftShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     group: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     tags: {
         display: 'flex',
-        gap: '10px',
+        gap: 10,
     },
     tag: {
         padding: '4px 6px',
@@ -120,12 +121,14 @@ export function TxDetails({ feed }: TxDetailsProps) {
                         <span className={classes.tag}>{feed.network}</span>
                     </Typography>
                 </Box>
-                <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.platform()}</Typography>
-                    <Typography className={classes.value}>
-                        <span className={classes.tag}>{feed.platform}</span>
-                    </Typography>
-                </Box>
+                {feed.platform ?
+                    <Box className={classes.field}>
+                        <Typography className={classes.key}>{t.platform()}</Typography>
+                        <Typography className={classes.value}>
+                            <span className={classes.tag}>{feed.platform}</span>
+                        </Typography>
+                    </Box>
+                :   null}
                 <Box className={classes.field}>
                     <Typography className={classes.key}>{t.category()}</Typography>
                     <Typography className={classes.value} component="div">
@@ -139,36 +142,30 @@ export function TxDetails({ feed }: TxDetailsProps) {
             <Box className={classes.sep} />
             <Box className={classes.field}>
                 <Typography className={classes.key}>{t.from()}</Typography>
-                <Typography className={classes.value} gap={10} component="div">
-                    <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
-                    {formatEthereumAddress(feed.from, 4)}
-                    <CopyButton text={feed.from} size={20} />
-                </Typography>
+                <Tooltip title={feed.from}>
+                    <Typography className={classes.value} gap={10} component="div">
+                        <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
+                        {formatEthereumAddress(feed.from, 4)}
+                        <CopyButton text={feed.from} size={20} />
+                    </Typography>
+                </Tooltip>
             </Box>
             <Box className={classes.field}>
                 <Typography className={classes.key}>{t.to()}</Typography>
-                <Typography className={classes.value} gap={10} component="div">
-                    <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
-                    {formatEthereumAddress(feed.to, 4)}
-                    <CopyButton text={feed.to} size={20} />
-                </Typography>
+                <Tooltip title={feed.to}>
+                    <Typography className={classes.value} gap={10} component="div">
+                        <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
+                        {formatEthereumAddress(feed.to, 4)}
+                        <CopyButton text={feed.to} size={20} />
+                    </Typography>
+                </Tooltip>
             </Box>
             <Box className={classes.sep} />
-            <Box className={classes.field}>
-                <Typography className={classes.key}>{t.action()}</Typography>
-                <Typography className={classes.value}>
-                    {feed.actions.map((x, i) => {
-                        return (
-                            <span key={i}>
-                                {x.tag}-{x.type}
-                            </span>
-                        )
-                    })}
+            <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
+                <Typography className={classes.key}>{t.actions({ count: feed.actions.length })}</Typography>
+                <Typography className={classes.value} component="div">
+                    <FeedActions feed={feed} />
                 </Typography>
-            </Box>
-            <Box className={classes.field}>
-                <Typography className={classes.key}>{t.asset()}</Typography>
-                <Typography className={classes.value}>NFT</Typography>
             </Box>
             {feed.fee ?
                 <>
@@ -177,7 +174,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                         <Typography className={classes.key}>{t.tx_fee()}</Typography>
                         <Typography className={classes.value}>
                             {leftShift(feed.fee.amount, feed.fee.decimal).toFixed(6)}
-                            <Icons.Gas size={20} />
+                            <Icons.Gas size={16} />
                         </Typography>
                     </Box>
                 </>

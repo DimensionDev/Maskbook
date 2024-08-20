@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumBlockieProps extends withClasses<'icon'>, AvatarProps {
+export interface EthereumBlockieProps extends withClasses<'icon'>, Omit<AvatarProps, 'classes'> {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>

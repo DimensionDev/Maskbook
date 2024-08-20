@@ -4,19 +4,12 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
+import { ProfileLinkAction } from '../FeedActions/ProfileLinkAction.js'
 
 const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-    },
     body: {
         display: 'flex',
         flexDirection: 'row',
@@ -101,21 +94,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
             feed={feed}
             className={cx(className, rest.verbose ? classes.verbose : null)}
             {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.profile_link
-                    values={{
-                        user: formattedUser,
-                        other: formattedOther,
-                        platform: feed.platform!,
-                        context: feed.type,
-                    }}
-                    components={{
-                        user: <Label title={user} fontSize={14} />,
-                        other: <Label title={other} fontSize={14} />,
-                        platform: <Label fontSize={14} />,
-                    }}
-                />
-            </Typography>
+            <ProfileLinkAction feed={feed} />
             {metadata ?
                 <div className={cx(classes.body)}>
                     <div className={classes.user}>

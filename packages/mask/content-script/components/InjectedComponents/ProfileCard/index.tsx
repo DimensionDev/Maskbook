@@ -232,11 +232,13 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                                 classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
                                             />
                                         ))}
-                                        <span className={classes.actions}>
-                                            {tabActions.map((Action, i) => (
-                                                <Action key={i} />
-                                            ))}
-                                        </span>
+                                        {tabActions.length ?
+                                            <span className={classes.actions}>
+                                                {tabActions.map((Action, i) => (
+                                                    <Action key={i} />
+                                                ))}
+                                            </span>
+                                        :   null}
                                     </MaskTabList>
                                 </TabContext>
                             </div>

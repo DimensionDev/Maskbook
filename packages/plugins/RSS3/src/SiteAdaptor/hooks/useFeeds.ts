@@ -9,11 +9,7 @@ export function useFeeds(address: string | undefined, options?: Partial<Record<s
         queryFn:
             address ?
                 async ({ pageParam }) => {
-                    const res = await RSS3.getAllNotes(address, options, {
-                        indicator: pageParam,
-                        size: 20,
-                    })
-                    return res
+                    return RSS3.getAllNotes(address, options, { indicator: pageParam, size: 20 })
                 }
             :   skipToken,
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,

@@ -91,7 +91,9 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedPageProps)
         <FeedOwnerContext.Provider value={feedOwner}>
             {/* padding for profile card footer */}
             <Box paddingBottom="48px">
-                {feeds?.map((feed, index) => <FeedCard key={index} className={classes.feedCard} feed={feed} />)}
+                {feeds.map((feed, index) => (
+                    <FeedCard key={index} className={classes.feedCard} feed={feed} />
+                ))}
                 <ElementAnchor callback={() => fetchNextPage()}>
                     {loading ?
                         <LoadingBase className={classes.loading} />

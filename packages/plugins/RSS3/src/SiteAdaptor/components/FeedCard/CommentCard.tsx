@@ -7,7 +7,7 @@ import Linkify from 'linkify-react'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { AddressLabel, LinkifyOptions, htmlToPlain } from './common.js'
+import { AddressLabel, LinkifyOptions, htmlToPlain } from '../common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
@@ -57,7 +57,9 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
             display: 'block',
             [`.${refs.image}`]: {
                 width: '100%',
+                height: 'auto',
                 borderRadius: 8,
+                marginRight: 0,
                 marginTop: theme.spacing(1),
             },
             [`.${refs.image}.${refs.failedImage}`]: {
@@ -73,10 +75,6 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
                 display: 'block',
             },
         },
-    },
-    originalLabel: {
-        fontSize: 14,
-        color: theme.palette.maskColor.second,
     },
     title: {
         fontSize: '16px',

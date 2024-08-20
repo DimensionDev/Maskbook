@@ -1,4 +1,3 @@
-import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
@@ -7,7 +6,6 @@ import { format as formatDateTime } from 'date-fns'
 import { type CardType, formatTimestamp, getPlatformIcon } from './share.js'
 import { FeedDetailsModal } from '../modals/modals.js'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
-import { leftShift } from '@masknet/web3-shared-base'
 
 interface FeedCardBaseProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -36,20 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     header: {
         display: 'flex',
         alignItems: 'center',
-        gap: theme.spacing(1.5),
-    },
-    fee: {
-        display: 'flex',
-        fontWeight: 400,
-        fontSize: 12,
-        borderRadius: '4px',
-        backgroundColor: theme.palette.maskColor.bg,
-        color: theme.palette.maskColor.third,
-        height: 20,
-        padding: '0 4px',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: theme.spacing(1.5),
+        gap: theme.spacing(1),
     },
     timestamp: {
         fontSize: 14,
@@ -90,7 +75,6 @@ export function CardFrame({
                 onClick?.(event)
                 if (!verbose) {
                     FeedDetailsModal.open({
-                        type,
                         scopedDomainsMap: map,
                         feed,
                         actionIndex,
@@ -99,17 +83,11 @@ export function CardFrame({
             }}
             {...rest}>
             <div className={classes.header}>
-                {verbose && feed.fee ?
-                    <div className={classes.fee}>
-                        <Icons.Gas size={16} />
-                        <Typography ml="4px">{leftShift(feed.fee.amount, feed.fee.decimal).toFixed(6)}</Typography>
-                    </div>
+                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ?
+                    <PrimaryPlatformIcon height={18} width="auto" />
                 :   null}
                 {ProviderPlatformIcon ?
                     <ProviderPlatformIcon height={18} width="auto" />
-                :   null}
-                {PrimaryPlatformIcon && PrimaryPlatformIcon !== ProviderPlatformIcon ?
-                    <PrimaryPlatformIcon height={18} width="auto" />
                 :   null}
                 <ShadowRootTooltip
                     title={formatDateTime(new Date(feed.timestamp * 1000), 'yyyy-MM-dd HH:mm:ss')}

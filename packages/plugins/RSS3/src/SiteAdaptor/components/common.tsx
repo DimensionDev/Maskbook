@@ -6,19 +6,13 @@ import { Link, Typography } from '@mui/material'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
 import type { ComponentProps } from 'react'
 import { UserAvatar } from './UserAvatar/index.js'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
         color: theme.palette.maskColor.main,
         fontWeight: 700,
-        marginRight: theme.spacing(1),
         whiteSpace: 'nowrap',
-        '&:first-of-type': {
-            marginLeft: 0,
-        },
-        '&:last-of-type': {
-            marginRight: 0,
-        },
     },
     link: {
         color: theme.palette.maskColor.main,
@@ -88,4 +82,8 @@ export const LinkifyOptions: Opts = {
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
     return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
+}
+
+export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {
+    return feed.actions[1]?.platform === 'ENS Registrar'
 }

@@ -8,7 +8,7 @@ export interface Filters {
     isDirect: boolean
 }
 
-const filtersRef = new ValueRef<Filters>({ networks: Networks, isDirect: false })
+const filtersRef = new ValueRef<Filters>({ networks: Networks, isDirect: true })
 
 export function useFilters() {
     const filters = useValueRef(filtersRef)

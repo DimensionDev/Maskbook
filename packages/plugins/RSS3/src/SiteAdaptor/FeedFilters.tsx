@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         gap: 10,
         padding: theme.spacing(1.5),
-        backgroundColor: theme.palette.maskColor.bottom,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(8px)',
     },
