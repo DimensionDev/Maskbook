@@ -13,4 +13,4 @@ if (built) process.exit(0)
 await mkdir(new URL('./dist/', import.meta.url)).catch(() => '')
 await writeFile(versionFilePath, polyfillVersion)
 
-export default (await import('./config.js')).default
+export default (await import('./config.mjs')).default
