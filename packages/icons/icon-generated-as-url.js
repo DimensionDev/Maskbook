@@ -115,7 +115,7 @@ export function approve_url() { return new URL("./general/Approve.svg", import.m
 export function arrow_circle_url() { return new URL("./general/ArrowCircle.svg", import.meta.url).href }
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url).href }
 export function bordered_success_url() { return new URL("./general/BorderedSuccess.svg", import.meta.url).href }
-export function candle_url() { return new URL("./general/Candle.svg", import.meta.url).href }
+export function candle_url() { return new URL("./general/candle.svg", import.meta.url).href }
 export function check_url() { return new URL("./general/Check.svg", import.meta.url).href }
 export function checkbox_url() { return new URL("./general/Checkbox.svg", import.meta.url).href }
 export function checkbox_blank_url() { return new URL("./general/CheckboxBlank.svg", import.meta.url).href }
