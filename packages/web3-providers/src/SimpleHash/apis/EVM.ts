@@ -66,6 +66,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         tokenId: string,
         { chainId = ChainId.Mainnet, account }: BaseHubOptions<ChainId> = {},
+        skipScoreCheck = false,
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !tokenId || !isValidChainId(chainId)) return
@@ -75,7 +76,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             tokenId,
         })
         const response = await fetchFromSimpleHash<SimpleHash.Asset>(path)
-        const asset = createNonFungibleAsset(response)
+        const asset = createNonFungibleAsset(response, skipScoreCheck)
 
         if (asset?.schema === SchemaType.ERC1155 && account) {
             const pathToQueryOwner = urlcat('/api/v0/nfts/contracts', {
