@@ -215,6 +215,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getAssetsByCollection(
         address: string,
         { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
+        skipScoreCheck = false,
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_EVM, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
@@ -228,7 +229,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
 
-        const assets = response.nfts.map((x) => createNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createNonFungibleAsset(x, skipScoreCheck)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
