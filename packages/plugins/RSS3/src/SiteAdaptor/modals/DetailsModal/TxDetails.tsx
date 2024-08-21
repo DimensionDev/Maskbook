@@ -95,7 +95,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 {t.transaction_details()}
             </Typography>
             <div className={classes.group}>
-                <Box className={classes.field}>
+                <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
                     <Typography className={classes.key}>{t.hash()}</Typography>
                     <Typography
                         className={classes.value}
