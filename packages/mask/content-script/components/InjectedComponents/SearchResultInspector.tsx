@@ -44,6 +44,7 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
             marginLeft: 'auto',
             display: 'inline-flex',
             alignItems: 'center',
+            color: theme.palette.maskColor.main,
         },
     }),
 )
