@@ -3,31 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import { useMemo } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, LinkifyOptions, htmlToPlain } from './common.js'
+import { LinkifyOptions, htmlToPlain } from '../common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { VoteAction } from '../FeedActions/VoteAction.js'
 
-const useStyles = makeStyles<void, 'summary'>()((theme, _, refs) => ({
-    verbose: {
-        [`.${refs.summary}`]: {
-            whiteSpace: 'normal',
-            overflow: 'visible',
-            span: {
-                whiteSpace: 'normal',
-            },
-        },
-    },
-    summary: {
-        fontSize: 14,
-        color: theme.palette.maskColor.third,
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-    },
+const useStyles = makeStyles()((theme) => ({
     title: {
         marginTop: theme.spacing(1.5),
         color: theme.palette.maskColor.main,
@@ -62,42 +44,19 @@ interface VoteCardProps extends Omit<FeedCardProps, 'feed'> {
  * - NoteCreate
  * - NoteEdit
  */
-export function VoteCard({ feed, className, ...rest }: VoteCardProps) {
+export function VoteCard({ feed, ...rest }: VoteCardProps) {
     const { verbose } = rest
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { classes: mdClasses } = useMarkdownStyles()
 
     const action = feed.actions[0]
     const metadata = action.metadata
 
-    const user = useAddressLabel(feed.owner)
-    const option = useMemo(() => {
-        if (!metadata?.choice) return ''
-        const { choice, proposal } = metadata
-        const choices: number[] = /^\[.*?]$/.test(choice) ? JSON.parse(choice) : [Number.parseInt(choice, 10)]
-        return choices.map((no) => proposal.options[no - 1]).join(', ')
-    }, [metadata?.choice, metadata?.proposal])
-
     if (!metadata) return null
 
     return (
-        <CardFrame
-            type={CardType.GovernanceVote}
-            feed={feed}
-            className={cx(className, verbose ? classes.verbose : null)}
-            {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.vote
-                    values={{
-                        user,
-                        option,
-                        platform: action.platform!,
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+        <CardFrame type={CardType.GovernanceVote} feed={feed} {...rest}>
+            <VoteAction feed={feed} />
             {metadata.proposal ?
                 <>
                     <Typography className={classes.title}>{metadata.proposal.title}</Typography>

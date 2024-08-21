@@ -1,23 +1,18 @@
 import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import type { ComponentProps } from 'react'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
+import type { ComponentProps } from 'react'
+import { UserAvatar } from './UserAvatar/index.js'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
         color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1),
         fontWeight: 700,
-        marginRight: theme.spacing(1),
         whiteSpace: 'nowrap',
-        '&:first-of-type': {
-            marginLeft: 0,
-        },
-        '&:last-of-type': {
-            marginRight: 0,
-        },
     },
     link: {
         color: theme.palette.maskColor.main,
@@ -38,9 +33,16 @@ export function Label({ className, ...rest }: LabelProps) {
 interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
     address?: ReverseAddressProps['address']
 }
-export function AddressLabel({ address, pluginID, size, className, ...rest }: AddressLabelProps) {
+export function AddressLabel({
+    address,
+    pluginID = NetworkPluginID.PLUGIN_EVM,
+    size,
+    className,
+    ...rest
+}: AddressLabelProps) {
     const { classes, cx } = useStyles()
-    return address ?
+    const label =
+        address ?
             <ReversedAddress
                 address={address}
                 pluginID={pluginID}
@@ -50,6 +52,12 @@ export function AddressLabel({ address, pluginID, size, className, ...rest }: Ad
                 {...rest}
             />
         :   <Label className={className} {...rest} />
+    return (
+        <>
+            <UserAvatar identity={address} style={{ marginRight: 6 }} />
+            {label}
+        </>
+    )
 }
 
 export const formatValue = (value?: { value: string; decimals: number } | null): string => {
@@ -74,4 +82,8 @@ export const LinkifyOptions: Opts = {
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
     return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
+}
+
+export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {
+    return feed.actions[1]?.platform === 'ENS Registrar'
 }

@@ -4,16 +4,12 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/index.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType, getPlatformIcon } from '../share.js'
-import { Label, formatValue } from './common.js'
+import { formatValue } from '../common.js'
+import { TokenBridgeAction } from '../FeedActions/TokenBridgeAction.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
     tokenIcon: {},
     verboseToken: {},
     token: {
@@ -69,27 +65,11 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
     const action = feed.actions.filter((x) => x.tag === Tag.Transaction && x.type === Type.Bridge)[0]
     const metadata = action.metadata
 
-    const user = useAddressLabel(feed.owner)
     const FromNetworkIcon = getPlatformIcon(feed.network) || Icons.ETH
 
     return (
         <CardFrame type={CardType.TokenBridge} feed={feed} {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.token_bridge
-                    values={{
-                        user,
-                        amount: formatValue(metadata?.token),
-                        symbol: metadata!.token.symbol,
-                        source: feed.network,
-                        target: metadata!.target_network.name,
-                    }}
-                    components={{
-                        user: <Label title={feed.owner} />,
-                        platform: <Label title={feed.platform!} sx={{ textTransform: 'capitalize' }} />,
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+            <TokenBridgeAction feed={feed} />
             {metadata ?
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
                     <div className={classes.bridgePair}>

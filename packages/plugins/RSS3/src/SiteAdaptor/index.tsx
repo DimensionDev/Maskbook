@@ -1,12 +1,15 @@
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { Box } from '@mui/material'
-import { NetworkPluginID, type SocialAccount, type SocialIdentity, SocialAddressType } from '@masknet/shared-base'
+import { NetworkPluginID, type SocialAccount, SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
+import { Box } from '@mui/material'
+import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
+import { toggleFilter } from './emitter.js'
 import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
 
@@ -21,7 +24,7 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
         priority,
         UI: {
             TabContent: ({ socialAccount }) => {
-                const key = [socialAccount?.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount?.address ?? '-', props.tags ?? '-'].join('/')
 
                 return (
                     <EVMWeb3ContextProvider>
@@ -53,7 +56,7 @@ const createSearchTabConfig = (
                     label: result.type === SearchResultType.Domain ? result.keyword : '',
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
-                const key = [socialAccount.address ?? '-', props.tag ?? '-'].join('_')
+                const key = [socialAccount.address ?? '-', props.tags ?? '-'].join('_')
 
                 return (
                     <Box style={{ minHeight: 300 }}>
@@ -72,52 +75,61 @@ const createSearchTabConfig = (
     }
 }
 
-const ActivitiesTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
-const ActivitiesTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Activities', {}, 2)
-const ActivitiesTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig('Activities', {}, 2)
-
-const DonationTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
+const FinanceTags = [RSS3BaseAPI.Tag.Exchange, RSS3BaseAPI.Tag.Transaction]
+const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Finance', { tags: FinanceTags }, 2)
+const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+    'Finance',
+    { tags: FinanceTags },
+    2,
 )
-const DonationsTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
-)
-const DonationsTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-    'Donation',
-    {
-        tag: RSS3BaseAPI.Tag.Donation,
-    },
-    3,
+const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
+    'Finance',
+    { tags: FinanceTags },
+    2,
 )
 
 const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
 )
 const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
 )
 const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
     'Social',
     {
-        tag: RSS3BaseAPI.Tag.Social,
+        tags: [RSS3BaseAPI.Tag.Social],
     },
     1,
+)
+
+const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Metaverse],
+    },
+    3,
+)
+const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Metaverse],
+    },
+    3,
+)
+const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
+    'Others',
+    {
+        tags: [RSS3BaseAPI.Tag.Metaverse],
+    },
+    3,
 )
 
 const site: Plugin.SiteAdaptor.Definition = {
@@ -126,13 +138,12 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
-    ProfileTabs: [ActivitiesTabConfig, DonationTabConfig, SocialTabConfig],
-    ProfileCardTabs: [ActivitiesTabConfigInProfileCard, DonationsTabConfigInProfileCard, SocialTabConfigInProfileCard],
-    SearchResultTabs: [
-        ActivitiesTabConfigInSearchResult,
-        DonationsTabConfigInSearchResult,
-        SocialTabConfigInSearchResult,
-    ],
+    ProfileTabActions: memo(function FeedFilterButton() {
+        return <Icons.Filter size={24} onClick={toggleFilter} />
+    }),
+    ProfileTabs: [FinanceTabConfig, SocialTabConfig, OthersTabConfig],
+    ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard, OthersTabConfigInProfileCard],
+    SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult, OthersTabConfigInSearchResult],
 }
 
 export default site

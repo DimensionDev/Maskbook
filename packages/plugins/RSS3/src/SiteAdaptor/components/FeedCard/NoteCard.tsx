@@ -7,20 +7,17 @@ import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import Linkify from 'linkify-react'
 import { useCallback } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useAddressLabel, usePublicationId } from '../../hooks/index.js'
+import { usePublicationId } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label, LinkifyOptions, htmlToPlain } from './common.js'
+import { LinkifyOptions, htmlToPlain } from '../common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { NoteAction } from '../FeedActions/NoteAction.js'
 
 const useStyles = makeStyles<
     void,
     'title' | 'image' | 'content' | 'info' | 'body' | 'center' | 'playButton' | 'failedImage'
 >()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
     title: {
         fontWeight: 700,
         marginTop: theme.spacing(1),
@@ -98,8 +95,9 @@ const useStyles = makeStyles<
             overflow: 'unset',
         },
         [`.${refs.image}`]: {
-            width: 552,
+            width: '100%',
             marginTop: theme.spacing(1.5),
+            height: 'auto',
             [`& + .${refs.info}`]: {
                 marginTop: theme.spacing(1.5),
                 marginLeft: 0,
@@ -157,7 +155,7 @@ function resolveDetailLink(
     const { profile_id, publication_id } = metadata
     if (!profile_id || !publication_id || !related_urls?.length) return null
 
-    const pubId = `0x${toHex(profile_id)}-0x${toHex(publication_id)}`
+    const pubId = `0x${toHex(profile_id)}-${publication_id}`
     return related_urls.find((x) => x.toLowerCase().endsWith(pubId))
 }
 
@@ -178,7 +176,6 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
     const metadata = 'target' in action.metadata! ? action.metadata.target : action.metadata
 
-    const user = useAddressLabel(feed.owner)
     const type = action.type
 
     const imageSize = rest.verbose ? '100%' : 64
@@ -194,7 +191,8 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const media = metadata?.media?.[0]
     const [seen, ref] = useEverSeen()
     const enablePublicationId = seen && !!media?.mime_type.startsWith('video/')
-    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.hash : null)
+
+    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.id : null)
 
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
@@ -206,18 +204,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             feed={feed}
             className={cx(rest.verbose ? classes.verbose : null, className)}
             {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.note
-                    values={{
-                        user,
-                        platform: action.platform!,
-                        context: type,
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+            <NoteAction feed={feed} />
             <div className={classes.body} ref={ref}>
                 {media?.mime_type.startsWith('image/') || isImagePost ?
                     <Image

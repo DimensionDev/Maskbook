@@ -3,13 +3,11 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { type HTMLProps, memo, useState } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
 import { Slider } from '../Slider.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { formatValue, Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { DonationAction } from '../FeedActions/DonationAction.js'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -22,9 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.main,
         color: theme.palette.maskColor.bottom,
         padding: '0 6px',
-    },
-    summary: {
-        color: theme.palette.maskColor.third,
     },
     content: {
         marginTop: theme.spacing(1.5),
@@ -110,26 +105,13 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
     const action = availableActions[activeActionIndex]
     const metadata = action.metadata
 
-    const user = useAddressLabel(feed.owner)
     const actionSize = feed.actions.length
     const badge = actionSize > 1 ? <Typography className={classes.badge}>+{actionSize}</Typography> : null
 
     if (verbose) {
         return (
             <CardFrame type={CardType.DonationDonate} feed={feed} className={className} badge={badge} {...rest}>
-                <Typography className={classes.summary}>
-                    <RSS3Trans.donation_donate_verbose
-                        values={{
-                            user,
-                            cost_value: formatValue(metadata?.token),
-                            cost_symbol: metadata?.token?.symbol ?? 'Unknown Token',
-                            project: action.metadata?.title ?? 'Unknown Project',
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                </Typography>
+                <DonationAction feed={feed} verbose />
                 <Markdown className={mdClasses.markdown} defaultStyle={false}>
                     {metadata!.description}
                 </Markdown>
@@ -145,18 +127,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
             badge={badge}
             className={className}
             {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.donation_donate
-                    values={{
-                        user,
-                        cost_value: formatValue(metadata?.token),
-                        cost_symbol: metadata?.token?.symbol ?? 'Unknown Token',
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
-                />
-            </Typography>
+            <DonationAction feed={feed} />
             {availableActions.length > 1 ?
                 <Slider className={classes.content} onUpdate={setIndex}>
                     {availableActions.map((action, index) => (
