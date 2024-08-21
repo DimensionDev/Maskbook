@@ -37,7 +37,7 @@
     // Language and Environment
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "target": "ES2022",
+    "target": "ES2023",
     "useDefineForClassFields": true,
 
     // Projects

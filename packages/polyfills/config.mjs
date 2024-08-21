@@ -10,7 +10,7 @@ import { swc, minify } from 'rollup-plugin-swc3'
 const require = createRequire(import.meta.url)
 const compat = require('core-js-compat/compat')
 const { list } = compat({
-    targets: ['last 3 Chrome versions', 'last 3 Firefox versions', 'Safari 17'],
+    targets: ['Chrome 115', 'last 1 Firefox versions', 'last 1 Safari versions'],
     modules: ['core-js/stable'],
 })
 
