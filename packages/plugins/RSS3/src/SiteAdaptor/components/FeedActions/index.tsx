@@ -70,4 +70,4 @@ export const FeedActions = memo(({ feed, ...rest }: FeedCardProps) => {
     return <UnknownCard feed={feed} {...rest} />
 })
 
-FeedActions.displayName = 'FeedAction'
+FeedActions.displayName = 'FeedActions'

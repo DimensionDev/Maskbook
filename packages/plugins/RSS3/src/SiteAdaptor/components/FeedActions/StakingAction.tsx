@@ -5,13 +5,14 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { Label } from '../common.js'
+import { AddressLabel, Label } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
     },
 }))
 
@@ -48,6 +49,7 @@ export function StakingAction({ feed, ...rest }: StakingFeedActionProps) {
                     }}
                     components={{
                         bold: <Label />,
+                        user: <AddressLabel address={owner.address} />,
                     }}
                 />
             </Typography>

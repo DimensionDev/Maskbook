@@ -16,9 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-        gap: 6,
         overflow: 'auto',
         scrollbarWidth: 'none',
+        whiteSpace: 'pre',
     },
 }))
 

@@ -13,7 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre-wrap',
-        gap: 6,
     },
 }))
 

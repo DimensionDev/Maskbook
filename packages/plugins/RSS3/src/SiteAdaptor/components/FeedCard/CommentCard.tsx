@@ -17,7 +17,6 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre-wrap',
-        gap: 6,
     },
     comment: {
         color: theme.palette.maskColor.main,

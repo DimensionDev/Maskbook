@@ -34,6 +34,8 @@ type Type = RSS3BaseAPI.Type
 
 interface TokenFeedActionProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.TokenOperationFeed
+    /** If action is set, feed will be discarded */
+    action?: RSS3BaseAPI.TokenOperationFeed['actions'][number]
 }
 
 const contextMap: Partial<
@@ -57,15 +59,17 @@ const contextMap: Partial<
  * - TokenOut
  * - TokenBurn
  */
-export function TokenOperationAction({ feed, ...rest }: TokenFeedActionProps) {
+export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionProps) {
     const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const owner = useFeedOwner()
 
-    return (
-        <div {...rest} className={cx(rest.className, classes.actions)}>
-            {feed.actions.map((action, index) => {
+    const actions = action ? [action] : feed.actions
+
+    const content = (
+        <>
+            {actions.map((action, index) => {
                 const metadata = action.metadata
                 const asset = metadata ? t.token_value({ value: formatValue(metadata), symbol: metadata.symbol }) : ''
                 const isFromOwner = isSameAddress(owner.address, action.from)
@@ -88,7 +92,8 @@ export function TokenOperationAction({ feed, ...rest }: TokenFeedActionProps) {
                     )
                 }
 
-                const context = contextMap[feed.type] || 'send'
+                const type = action ? action.type : feed.type
+                const context = contextMap[type] || 'send'
                 return (
                     <Typography className={classes.action} key={index}>
                         <RSS3Trans.token_operation
@@ -111,6 +116,12 @@ export function TokenOperationAction({ feed, ...rest }: TokenFeedActionProps) {
                     </Typography>
                 )
             })}
+        </>
+    )
+
+    return (
+        <div {...rest} className={cx(rest.className, classes.actions)}>
+            {content}
         </div>
     )
 }

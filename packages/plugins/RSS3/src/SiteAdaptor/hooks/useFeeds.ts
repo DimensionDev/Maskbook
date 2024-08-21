@@ -4,6 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 
 export function useFeeds(address: string | undefined, options?: Partial<Record<string, string | string[]>>) {
     return useInfiniteQuery({
+        enabled: false,
         initialPageParam: undefined as any,
         queryKey: ['rss3-feeds', address, options],
         queryFn:

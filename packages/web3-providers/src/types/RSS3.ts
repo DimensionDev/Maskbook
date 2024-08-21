@@ -361,6 +361,7 @@ export namespace RSS3BaseAPI {
     export type CollectibleTransferAction = ActionGeneric<Tag.Collectible, Type.Transfer>
     export type CollectibleTradeAction = ActionGeneric<Tag.Collectible, Type.Trade>
     export type DonationDonateAction = ActionGeneric<Tag.Donation, Type.Donate>
+    export type TokenMintAction = ActionGeneric<Tag.Transaction, Type.Mint>
 
     export interface AddressStatus {
         update_at: RFC3339Datetime
@@ -557,7 +558,11 @@ export namespace RSS3BaseAPI {
         | Web3FeedGeneric<Tag.Exchange, Type.Deposit | Type.Withdraw>
     export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
-    export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+    export type LiquidityFeed =
+        | Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+        // There could be token mint actions mixed in TokenOperationFeed
+        // https://hoot.it/sujiyan.eth/activity/0x65d0ff9ddfd5e318702c770477631ac45991c68dec19d5e2b9f407dd555f4277
+        | Web3FeedGeneric<Tag.Transaction, Type.Mint>
     export type StakingFeed = Web3FeedGeneric<Tag.Exchange, Type.Staking>
     export type CollectibleFeed = Web3FeedGeneric<
         Tag.Collectible,

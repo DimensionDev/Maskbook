@@ -5,17 +5,19 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { Label } from '../common.js'
+import { Label, AddressLabel } from '../common.js'
+import { TokenOperationAction } from './TokenOperationAction.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
     },
 }))
 
-const { Tag } = RSS3BaseAPI
+const { Tag, Type } = RSS3BaseAPI
 
 interface TokenFeedActionProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.LiquidityFeed
@@ -35,12 +37,18 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
     const owner = useFeedOwner()
     const user = useAddressLabel(owner.address)
 
-    // You might see two transaction actions in a liquidity feed as well
-    const actions = feed.actions.filter((x) => x.tag === Tag.Exchange)
-
     return (
         <div {...rest}>
-            {actions.map((action, index) => {
+            {feed.actions.map((action, index) => {
+                if (action.tag === Tag.Transaction && action.type === Type.Mint) {
+                    return (
+                        <TokenOperationAction
+                            feed={feed as RSS3BaseAPI.TokenOperationFeed}
+                            action={action}
+                            key={index}
+                        />
+                    )
+                }
                 const metadata = action.metadata
 
                 return (
@@ -52,7 +60,7 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
                                 context: metadata?.action!,
                             }}
                             components={{
-                                user: <Label title={action.from} />,
+                                user: <AddressLabel address={action.from} />,
                                 platform: <Label />,
                                 bold: <Label />,
                             }}

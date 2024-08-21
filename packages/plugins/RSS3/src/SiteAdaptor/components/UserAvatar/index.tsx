@@ -37,6 +37,7 @@ export const UserAvatar = memo(function UserAvatar({ identity, size = 20, ...res
         queryKey: ['rss3-profiles', identity],
         queryFn: async () => {
             const profiles = await RSS3.getProfiles(identity)
+            if (!profiles.length) return null
             const isNotAddr = !identity?.startsWith('0x')
             const sorted = sortBy(profiles, (profile) => {
                 if (isNotAddr) return profile.platform === 'ENS Registrar' ? -1 : 0
