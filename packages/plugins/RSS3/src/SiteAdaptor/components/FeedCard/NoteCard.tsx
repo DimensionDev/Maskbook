@@ -190,7 +190,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
 
     const media = metadata?.media?.[0]
     const [seen, ref] = useEverSeen()
-    const enablePublicationId = seen && !!media?.mime_type.startsWith('video/')
+    const enablePublicationId = seen && !!media?.mime_type.startsWith('video/') && !!metadata?.publication_id
 
     const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.id : null)
 
@@ -220,8 +220,11 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                     <Link
                         className={classes.playButton}
                         href={
-                            resolveDetailLink(publicationId, metadata, action.related_urls) ||
-                            resolveResourceURL(media.address)
+                            resolveDetailLink(
+                                metadata?.publication_id || publicationId,
+                                metadata,
+                                action.related_urls,
+                            ) || resolveResourceURL(media.address)
                         }
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>

@@ -26,12 +26,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FeedPageProps {
+export interface FeedsPageProps {
     address?: string
     tags?: RSS3BaseAPI.Tag[]
 }
 
-export const FeedList = memo(function FeedList({ address, tags }: FeedPageProps) {
+export const FeedList = memo(function FeedList({ address, tags }: FeedsPageProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
@@ -104,7 +104,7 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedPageProps)
     )
 })
 
-export const FeedsPage = memo<FeedPageProps>(function FeedsPage(props) {
+export const FeedsPage = memo<FeedsPageProps>(function FeedsPage(props) {
     const [open, setOpen] = useState(false)
     useEffect(() => {
         const unsubscribe = emitter.on('toggle-filter', () => {
