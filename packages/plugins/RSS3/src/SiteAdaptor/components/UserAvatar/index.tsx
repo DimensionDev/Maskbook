@@ -2,7 +2,6 @@ import { EthereumBlockie, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { memo, type HTMLProps } from 'react'
@@ -47,8 +46,14 @@ export const UserAvatar = memo(function UserAvatar({ identity, size = 20, ...res
         },
     })
     const url = profile?.profile_uri?.[0]
-    if (!url && isValidAddress(identity)) {
-        return <EthereumBlockie address={identity} classes={{ icon: classes.blockie }} style={rest.style} />
+    if (!url) {
+        return (
+            <EthereumBlockie
+                address={identity || profile?.address || ''}
+                classes={{ icon: classes.blockie }}
+                style={rest.style}
+            />
+        )
     }
     return (
         <Image
