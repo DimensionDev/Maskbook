@@ -12,7 +12,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
     },
     summary: {
-        height: 20,
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',

@@ -8,7 +8,6 @@ import { AddressLabel } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        height: 20,
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
