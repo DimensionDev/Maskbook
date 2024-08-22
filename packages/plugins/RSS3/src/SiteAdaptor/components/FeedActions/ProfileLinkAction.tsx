@@ -13,6 +13,12 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -53,7 +59,7 @@ export function ProfileLinkAction({ feed, ...rest }: ProfileLinkActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.profile_link
                     values={{
                         user: formattedUser,

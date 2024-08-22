@@ -15,6 +15,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -43,8 +48,8 @@ export function TokenApprovalAction({ feed, action: act, ...rest }: TokenApprova
     const parsedAmount = leftShift(metadata!.value, metadata?.decimals)
     const uiAmount = isGreaterThan(parsedAmount, '1e+10') ? 'infinite' : parsedAmount.toFixed(2)
     const content = (
-        <Typography className={classes.summary}>
-            <RSS3Trans.token_approval
+        <Typography className={classes.summary} component="div">
+            <RSS3Trans.tokenApproval
                 values={{
                     user,
                     amount: uiAmount,

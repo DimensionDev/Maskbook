@@ -16,7 +16,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-        whiteSpace: 'pre-wrap',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -38,7 +43,7 @@ export function CommentAction({ feed, ...rest }: CommentActionProps) {
             {feed.actions.map((action, index) => {
                 const metadata = action.metadata
                 return (
-                    <Typography className={classes.summary} key={index}>
+                    <Typography className={classes.summary} key={index} component="div">
                         <RSS3Trans.note
                             values={{
                                 user: metadata?.handle!,

@@ -11,6 +11,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -37,8 +43,8 @@ export function TokenBridgeAction({ feed, ...rest }: TokenBridgeActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.token_bridge
+            <Typography className={classes.summary} component="div">
+                <RSS3Trans.tokenBridge
                     values={{
                         user,
                         amount: formatValue(metadata?.token),

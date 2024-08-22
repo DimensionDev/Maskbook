@@ -12,7 +12,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-        whiteSpace: 'pre-wrap',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -42,7 +47,7 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.note
                     values={{
                         user,

@@ -24,7 +24,7 @@ export function UnknownAction({ feed, ...rest }: TokenFeedActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.carry_out_activity
                     values={{
                         user,

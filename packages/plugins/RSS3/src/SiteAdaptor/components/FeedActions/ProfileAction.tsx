@@ -11,6 +11,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -34,7 +40,7 @@ export function ProfileAction({ feed, ...rest }: ProfileActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.profile
                     values={{
                         user,

@@ -122,7 +122,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'auto',
         display: 'inline-flex',
         alignItems: 'center',
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
 }))
 

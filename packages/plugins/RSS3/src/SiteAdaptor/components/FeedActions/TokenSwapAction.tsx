@@ -19,6 +19,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         scrollbarWidth: 'none',
         whiteSpace: 'pre',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -42,8 +45,8 @@ export function TokenSwapAction({ feed, ...rest }: TokenSwapActionProps) {
             {feed.actions.map((action, index) => {
                 const metadata = action.metadata
                 return (
-                    <Typography className={classes.summary} key={index}>
-                        <RSS3Trans.token_swap
+                    <Typography className={classes.summary} key={index} component="div">
+                        <RSS3Trans.tokenSwap
                             values={{
                                 user,
                                 from_value: formatValue(metadata?.from),
