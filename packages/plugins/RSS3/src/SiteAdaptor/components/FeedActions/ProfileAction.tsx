@@ -41,7 +41,6 @@ export function ProfileAction({ feed, ...rest }: ProfileActionProps) {
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.profile
                     values={{
                         user,
