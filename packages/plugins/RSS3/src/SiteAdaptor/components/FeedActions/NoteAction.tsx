@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const { Tag } = RSS3BaseAPI
+const { Tag, Type } = RSS3BaseAPI
 
 interface NoteActionProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.NoteFeed
@@ -54,7 +54,12 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
                         context: type,
                     }}
                     components={{
-                        user: <AccountLabel address={feed.owner} handle={action.metadata?.handle} />,
+                        user: (
+                            <AccountLabel
+                                address={feed.owner}
+                                handle={type === Type.Mint || type === Type.Share ? undefined : action.metadata?.handle}
+                            />
+                        ),
                     }}
                 />
             </Typography>
