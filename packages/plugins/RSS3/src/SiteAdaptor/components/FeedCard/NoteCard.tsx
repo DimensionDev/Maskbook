@@ -1,13 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { Image, Markdown } from '@masknet/shared'
-import { useEverSeen } from '@masknet/shared-base-ui'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import Linkify from 'linkify-react'
 import { useCallback } from 'react'
-import { usePublicationId } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { LinkifyOptions, htmlToPlain } from '../common.js'
@@ -144,18 +142,13 @@ const toHex = (num: number) => {
     return str.length % 2 === 0 ? str : str.padStart(str.length + 1, '0')
 }
 
-function resolveDetailLink(
-    publicationId?: string | null,
-    metadata?: RSS3BaseAPI.PostMetadata,
-    related_urls?: string[],
-) {
-    if (publicationId) return `https://lenstube.xyz/watch/${publicationId}`
+function resolveDetailLink(metadata?: RSS3BaseAPI.PostMetadata, related_urls?: string[]) {
     if (!metadata) return null
 
     const { profile_id, publication_id } = metadata
     if (!profile_id || !publication_id || !related_urls?.length) return null
 
-    const pubId = `0x${toHex(profile_id)}-${publication_id}`
+    const pubId = `${profile_id}-${publication_id}`
     return related_urls.find((x) => x.toLowerCase().endsWith(pubId))
 }
 
@@ -189,10 +182,6 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     )
 
     const media = metadata?.media?.[0]
-    const [seen, ref] = useEverSeen()
-    const enablePublicationId = seen && !!media?.mime_type.startsWith('video/') && !!metadata?.publication_id
-
-    const { data: publicationId, isPending } = usePublicationId(enablePublicationId ? feed.id : null)
 
     // Image post on Forcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
@@ -205,7 +194,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             className={cx(rest.verbose ? classes.verbose : null, className)}
             {...rest}>
             <NoteAction feed={feed} />
-            <div className={classes.body} ref={ref}>
+            <div className={classes.body}>
                 {media?.mime_type.startsWith('image/') || isImagePost ?
                     <Image
                         classes={{
@@ -219,18 +208,10 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
                 : media?.mime_type.startsWith('video/') ?
                     <Link
                         className={classes.playButton}
-                        href={
-                            resolveDetailLink(
-                                metadata?.publication_id || publicationId,
-                                metadata,
-                                action.related_urls,
-                            ) || resolveResourceURL(media.address)
-                        }
+                        href={resolveDetailLink(metadata, action.related_urls) || resolveResourceURL(media.address)}
                         target="_blank"
                         onClick={(evt) => evt.stopPropagation()}>
-                        {isPending ?
-                            <LoadingBase size={36} />
-                        :   <Icons.Play size={64} />}
+                        <Icons.Play size={64} />
                     </Link>
                 :   null}
                 <div className={cx(classes.info, metadata?.title || rest.verbose ? null : classes.center)}>

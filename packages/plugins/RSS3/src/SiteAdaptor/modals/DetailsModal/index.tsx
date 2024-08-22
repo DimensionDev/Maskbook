@@ -25,7 +25,13 @@ export const FeedDetailsModal = forwardRef<SingletonModalRefCreator<FeedDetailsM
     if (!open) return null
     return (
         <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
-            <FeedDetailsDialog open onClose={() => dispatch?.close()} {...dialogProps} feed={dialogProps?.feed!} />
+            <FeedDetailsDialog
+                key={dialogProps?.feed.id}
+                open
+                onClose={() => dispatch?.close()}
+                {...dialogProps}
+                feed={dialogProps?.feed!}
+            />
         </ScopedDomainsContainer.Provider>
     )
 })
