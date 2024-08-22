@@ -22,6 +22,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         color: theme.palette.maskColor.main,
         marginTop: theme.spacing(1),
         fontSize: 14,
+        wordBreak: 'break-all',
     },
     image: {},
     failedImage: {},
