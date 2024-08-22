@@ -7,7 +7,7 @@ import Linkify from 'linkify-react'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { AddressLabel, LinkifyOptions, htmlToPlain } from '../common.js'
+import { AccountLabel, LinkifyOptions, htmlToPlain } from '../common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
@@ -132,7 +132,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                                 context: 'post',
                             }}
                             components={{
-                                user: <AddressLabel address={commentTarget.handle} />,
+                                user: <AccountLabel address={commentTarget.handle} handle={commentTarget.handle} />,
                             }}
                         />
                     </Typography>
@@ -181,7 +181,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                         context: 'comment',
                     }}
                     components={{
-                        user: <AddressLabel address={feed.owner} />,
+                        user: <AccountLabel address={feed.owner} handle={metadata?.handle} />,
                     }}
                 />
             </Typography>

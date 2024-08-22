@@ -3,7 +3,7 @@ import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel } from '../common.js'
+import { AccountLabel } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -50,7 +50,7 @@ export function CommentAction({ feed, ...rest }: CommentActionProps) {
                                 context: 'comment',
                             }}
                             components={{
-                                user: <AddressLabel address={metadata?.handle} />,
+                                user: <AccountLabel address={metadata?.handle} />,
                             }}
                         />
                     </Typography>

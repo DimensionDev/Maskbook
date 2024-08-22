@@ -222,6 +222,7 @@ export namespace RSS3BaseAPI {
     export interface ShareMetadata {
         type_on_platform: Type[]
         target: PostMetadata
+        handle: string
         comment?: CommentMetadata
         publication_id: HexString
     }

@@ -5,7 +5,7 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { Label, AddressLabel } from '../common.js'
+import { Label, AccountLabel } from '../common.js'
 import { TokenOperationAction } from './TokenOperationAction.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,7 +65,7 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
                                 context: metadata?.action!,
                             }}
                             components={{
-                                user: <AddressLabel address={action.from} />,
+                                user: <AccountLabel address={action.from} />,
                                 platform: <Label />,
                                 bold: <Label />,
                             }}

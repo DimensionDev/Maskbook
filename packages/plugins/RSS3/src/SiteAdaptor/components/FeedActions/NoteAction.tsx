@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel } from '../common.js'
+import { AccountLabel } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -54,7 +54,7 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
                         context: type,
                     }}
                     components={{
-                        user: <AddressLabel address={feed.owner} />,
+                        user: <AccountLabel address={feed.owner} handle={action.metadata?.handle} />,
                     }}
                 />
             </Typography>
