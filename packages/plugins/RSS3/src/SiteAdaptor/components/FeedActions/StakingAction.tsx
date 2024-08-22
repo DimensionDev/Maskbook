@@ -13,6 +13,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -40,8 +45,8 @@ export function StakingAction({ feed, ...rest }: StakingFeedActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
-                <RSS3Trans.token_staking
+            <Typography className={classes.summary} component="div">
+                <RSS3Trans.tokenStaking
                     values={{
                         user,
                         symbol: metadata?.token?.symbol!,

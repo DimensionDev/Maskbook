@@ -14,6 +14,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -52,7 +57,7 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
                 const metadata = action.metadata
 
                 return (
-                    <Typography className={classes.summary} key={index}>
+                    <Typography className={classes.summary} key={index} component="div">
                         <RSS3Trans.liquidity
                             values={{
                                 user,

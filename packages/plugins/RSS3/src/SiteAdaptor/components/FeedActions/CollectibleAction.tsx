@@ -15,6 +15,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -158,7 +164,9 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>{summary}</Typography>
+            <Typography className={classes.summary} component="div">
+                {summary}
+            </Typography>
         </div>
     )
 }

@@ -13,6 +13,12 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -37,7 +43,7 @@ export function CollectibleApprovalAction({ feed, ...rest }: CollectibleApproval
 
     return (
         <div {...rest}>
-            <Typography className={classes.action}>
+            <Typography className={classes.action} component="div">
                 <RSS3Trans.collectible_approval
                     values={{
                         user,

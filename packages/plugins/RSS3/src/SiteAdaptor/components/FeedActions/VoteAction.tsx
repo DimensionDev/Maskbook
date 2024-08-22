@@ -11,9 +11,13 @@ const useStyles = makeStyles()((theme) => ({
     summary: {
         fontSize: 14,
         color: theme.palette.maskColor.main,
-        whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        overflow: 'hidden',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -46,7 +50,7 @@ export function VoteAction({ feed, ...rest }: VoteActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.vote
                     values={{
                         user,

@@ -124,7 +124,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             {commentTarget ?
                 <div className={classes.quoted}>
-                    <Typography className={classes.summary}>
+                    <Typography className={classes.summary} component="div">
                         <RSS3Trans.note
                             values={{
                                 user: commentTarget.handle,
@@ -173,7 +173,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                     </div>
                 </div>
             :   null}
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.note
                     values={{
                         user: metadata?.handle!,

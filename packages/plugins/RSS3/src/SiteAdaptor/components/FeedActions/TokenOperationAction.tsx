@@ -95,8 +95,8 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                 const type = action ? action.type : feed.type
                 const context = contextMap[type] || 'send'
                 return (
-                    <Typography className={classes.action} key={index}>
-                        <RSS3Trans.token_operation
+                    <Typography className={classes.action} key={index} component="div">
+                        <RSS3Trans.tokenOperation
                             values={{
                                 from: sender,
                                 to: receiver,

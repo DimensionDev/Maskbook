@@ -31,7 +31,7 @@ export function ProposeAction({ feed, ...rest }: ProposeActionProps) {
 
     return (
         <div {...rest}>
-            <Typography className={classes.summary}>
+            <Typography className={classes.summary} component="div">
                 <RSS3Trans.propose
                     values={{
                         user,
