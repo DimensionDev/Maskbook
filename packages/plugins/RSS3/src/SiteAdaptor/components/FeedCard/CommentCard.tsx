@@ -114,7 +114,6 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
  * Including:
  *
  * - NoteLink
- * - NoteLink
  */
 export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { verbose } = rest
