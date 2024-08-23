@@ -41,6 +41,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
     const {
         data: feeds,
         isPending: loadingFeeds,
+        isFetchingNextPage,
         error,
         fetchNextPage,
     } = useFeeds(address, {
@@ -52,7 +53,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
     const { data: reversedName, isPending: loadingENS } = useReverseAddress(undefined, address)
     const { getDomain } = ScopedDomainsContainer.useContainer()
 
-    const loading = loadingFeeds || loadingENS
+    const loading = isFetchingNextPage || loadingFeeds || loadingENS
 
     const name = address ? getDomain(address) || reversedName : reversedName
     const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
