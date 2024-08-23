@@ -165,7 +165,7 @@ const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
     feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Metaverse],
     },
-    priority: 3,
+    priority: 5,
 })
 const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
     slot: 'profile-card',
@@ -176,7 +176,7 @@ const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
         overflow: 'auto',
         listProps,
     },
-    priority: 3,
+    priority: 5,
 })
 const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
     slot: 'search',
@@ -187,7 +187,7 @@ const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
         overflow: 'auto',
         listProps,
     },
-    priority: 3,
+    priority: 5,
 })
 
 const site: Plugin.SiteAdaptor.Definition = {
