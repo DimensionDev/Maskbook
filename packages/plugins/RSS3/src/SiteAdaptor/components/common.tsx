@@ -30,19 +30,25 @@ export function Label({ className, ...rest }: LabelProps) {
     return <Typography className={cx(classes.label, className)} component="span" {...rest} />
 }
 
-interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
+interface AccountLabelProps extends Omit<ReverseAddressProps, 'address'> {
+    handle?: string
     address?: ReverseAddressProps['address']
 }
-export function AddressLabel({
+export function AccountLabel({
     address,
+    handle,
     pluginID = NetworkPluginID.PLUGIN_EVM,
     size,
     className,
     ...rest
-}: AddressLabelProps) {
+}: AccountLabelProps) {
     const { classes, cx } = useStyles()
     const label =
-        address ?
+        handle ?
+            <Label className={className} {...rest}>
+                {handle}
+            </Label>
+        : address ?
             <ReversedAddress
                 address={address}
                 pluginID={pluginID}

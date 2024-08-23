@@ -7,7 +7,7 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel, Label } from '../common.js'
+import { AccountLabel, Label } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -58,9 +58,9 @@ export function TokenApprovalAction({ feed, action: act, ...rest }: TokenApprova
                     context: metadata!.action,
                 }}
                 components={{
-                    user: <AddressLabel address={owner.address} />,
+                    user: <AccountLabel address={owner.address} />,
                     asset: <Label />,
-                    contract: <AddressLabel address={action.to!} />,
+                    contract: <AccountLabel address={action.to!} />,
                 }}
             />
         </Typography>

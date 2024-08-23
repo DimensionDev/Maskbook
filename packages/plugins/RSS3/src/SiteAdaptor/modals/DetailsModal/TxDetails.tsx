@@ -1,9 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, EthereumBlockie } from '@masknet/shared'
+import { CopyButton, EthereumBlockie, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { leftShift } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
@@ -145,7 +144,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 <Tooltip title={feed.from}>
                     <Typography className={classes.value} gap={10} component="div">
                         <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
-                        {formatEthereumAddress(feed.from, 4)}
+                        <ReversedAddress address={feed.from} fontWeight={400} />
                         <CopyButton text={feed.from} size={20} />
                     </Typography>
                 </Tooltip>
@@ -155,7 +154,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 <Tooltip title={feed.to}>
                     <Typography className={classes.value} gap={10} component="div">
                         <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
-                        {formatEthereumAddress(feed.to, 4)}
+                        <ReversedAddress address={feed.to} fontWeight={400} />
                         <CopyButton text={feed.to} size={20} />
                     </Typography>
                 </Tooltip>

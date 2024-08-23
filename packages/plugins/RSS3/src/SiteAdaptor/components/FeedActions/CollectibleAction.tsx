@@ -8,7 +8,7 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { getCost, getLastAction } from '../share.js'
-import { AddressLabel, formatValue, Label, isRegisteringENS } from '../common.js'
+import { AccountLabel, formatValue, Label, isRegisteringENS } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -85,7 +85,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                             context: feed.platform ? 'platform' : 'no_platform',
                         }}
                         components={{
-                            recipient: <AddressLabel address={action.to} />,
+                            recipient: <AccountLabel address={action.to} />,
                             bold: <Label />,
                             collectible: verbose ? <Label /> : <span />,
                         }}
@@ -135,7 +135,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                         }}
                         components={{
                             user: <Label />,
-                            other: <AddressLabel address={otherAddress} />,
+                            other: <AccountLabel address={otherAddress} />,
                             collectible: verbose ? <Label /> : <span />,
                             cost: <Label />,
                         }}

@@ -4,11 +4,10 @@ import { Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel } from '../common.js'
+import { AccountLabel } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
-        height: 20,
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
@@ -21,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const { Tag } = RSS3BaseAPI
+const { Tag, Type } = RSS3BaseAPI
 
 interface NoteActionProps extends Omit<FeedCardProps, 'feed'> {
     feed: RSS3BaseAPI.NoteFeed
@@ -55,7 +54,12 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
                         context: type,
                     }}
                     components={{
-                        user: <AddressLabel address={feed.owner} />,
+                        user: (
+                            <AccountLabel
+                                address={feed.owner}
+                                handle={type === Type.Mint || type === Type.Share ? undefined : action.metadata?.handle}
+                            />
+                        ),
                     }}
                 />
             </Typography>

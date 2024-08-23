@@ -6,7 +6,7 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel, formatValue, Label } from '../common.js'
+import { AccountLabel, formatValue, Label } from '../common.js'
 import { TokenApprovalAction } from './TokenApprovalAction.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -107,8 +107,8 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                                 asset,
                             }}
                             components={{
-                                from: <AddressLabel address={sender} />,
-                                to: <AddressLabel address={receiver} />,
+                                from: <AccountLabel address={sender} />,
+                                to: <AccountLabel address={receiver} />,
                                 bold: <Label />,
                                 asset: <Label />,
                             }}

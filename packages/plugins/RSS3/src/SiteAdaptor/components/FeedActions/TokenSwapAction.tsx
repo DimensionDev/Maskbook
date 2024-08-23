@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { AddressLabel, formatValue, Label } from '../common.js'
+import { AccountLabel, formatValue, Label } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -56,7 +56,7 @@ export function TokenSwapAction({ feed, ...rest }: TokenSwapActionProps) {
                                 platform: feed.platform!,
                             }}
                             components={{
-                                user: <AddressLabel address={action.from!} />,
+                                user: <AccountLabel address={action.from!} />,
                                 platform: <Label title={feed.platform} />,
                                 bold: <Label />,
                             }}

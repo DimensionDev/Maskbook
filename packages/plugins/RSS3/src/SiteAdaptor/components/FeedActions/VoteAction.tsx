@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
-import { Label } from '../common.js'
+import { AccountLabel, Label } from '../common.js'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -59,6 +59,7 @@ export function VoteAction({ feed, ...rest }: VoteActionProps) {
                     }}
                     components={{
                         bold: <Label />,
+                        user: <AccountLabel address={feed.owner} />,
                     }}
                 />
             </Typography>

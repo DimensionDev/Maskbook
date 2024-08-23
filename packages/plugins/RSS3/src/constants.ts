@@ -14,8 +14,8 @@ interface NetworkOption {
 export const NetworkOptions: NetworkOption[] = [
     { network: 'arbitrum', name: 'Arbitrum' },
     { network: 'arweave', name: 'Arweave' },
-    { network: 'avax', name: 'Arbitrum' },
-    { network: 'base', name: 'Arbitrum' },
+    { network: 'avax', name: 'Avax' },
+    { network: 'base', name: 'Base' },
     { network: 'binance-smart-chain', name: 'Binance Smart Chain' },
     { network: 'crossbell', name: 'Crossbell' },
     { network: 'ethereum', name: 'Ethereum' },

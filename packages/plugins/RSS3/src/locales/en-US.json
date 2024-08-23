@@ -51,7 +51,7 @@
     "profile_link$follow": "<user>{{user}}</user> followed <other>{{other}}</other> on <platform>{{platform}}</platform>",
     "profile_link$unfollow": "<user>{{user}}</user> unfollowed <other>{{other}}</other> on <platform>{{platform}}</platform>",
     "profile_proxy": "<user>{{user}}</user> appointed a proxy on <platform>{{platform}}</platform>",
-    "vote": "<bold>{{user}}</bold> voted for <bold>{{- option}}</bold> on <bold>{{- platform }}</bold>",
+    "vote": "<user>{{user}}</user> voted for <bold>{{- option}}</bold> on <bold>{{- platform }}</bold>",
     "propose": "<bold>{{user}}</bold> proposed",
     "original": "Original",
     "details": "Details",

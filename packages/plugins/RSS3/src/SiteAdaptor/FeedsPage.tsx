@@ -1,18 +1,19 @@
-import { memo, useEffect, useMemo, useState } from 'react'
-import { range } from 'lodash-es'
+import type { Plugin } from '@masknet/plugin-infra'
 import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { Box, ClickAwayListener, Skeleton } from '@mui/material'
+import { Box, ClickAwayListener, Skeleton, type BoxProps } from '@mui/material'
+import { range } from 'lodash-es'
+import { memo, useMemo } from 'react'
+import { Networks } from '../constants.js'
 import { useRSS3Trans } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
-import { useFeeds } from './hooks/useFeeds.js'
+import { useIsFiltersOpen } from './emitter.js'
 import { FeedFilters } from './FeedFilters.js'
 import { useFilters } from './filters.js'
-import { Networks } from '../constants.js'
-import { emitter } from './emitter.js'
+import { useFeeds } from './hooks/useFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
@@ -26,12 +27,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FeedsPageProps {
+export interface FeedListProps {
+    listProps?: BoxProps
     address?: string
     tags?: RSS3BaseAPI.Tag[]
 }
 
-export const FeedList = memo(function FeedList({ address, tags }: FeedsPageProps) {
+export const FeedList = memo(function FeedList({ address, tags, listProps }: FeedListProps) {
     const t = useRSS3Trans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
@@ -77,7 +79,7 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedsPageProps
             <Box p={2} boxSizing="border-box">
                 {range(3).map((i) => (
                     <Box mb={1} key={i}>
-                        <Skeleton animation="wave" variant="rectangular" height={120} className={classes.skeleton} />
+                        <Skeleton animation="wave" variant="rectangular" height={90} className={classes.skeleton} />
                     </Box>
                 ))}
             </Box>
@@ -90,7 +92,7 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedsPageProps
     return (
         <FeedOwnerContext.Provider value={feedOwner}>
             {/* padding for profile card footer */}
-            <Box paddingBottom="48px">
+            <Box paddingBottom="48px" {...listProps}>
                 {feeds.map((feed, index) => (
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
@@ -104,28 +106,25 @@ export const FeedList = memo(function FeedList({ address, tags }: FeedsPageProps
     )
 })
 
-export const FeedsPage = memo<FeedsPageProps>(function FeedsPage(props) {
-    const [open, setOpen] = useState(false)
-    useEffect(() => {
-        const unsubscribe = emitter.on('toggle-filter', () => {
-            setOpen((v) => !v)
-        })
-        return () => {
-            unsubscribe()
-        }
-    }, [])
+export interface FeedsPageProps extends FeedListProps, BoxProps {
+    listProps?: BoxProps
+    slot: Plugin.SiteAdaptor.ProfileTabSlot
+}
+
+export const FeedsPage = memo<FeedsPageProps>(function FeedsPage({ address, tags, listProps, slot, ...rest }) {
+    const [open, setOpen] = useIsFiltersOpen(slot)
 
     return (
-        <Box position="relative">
+        <Box position="relative" {...rest}>
             {open ?
                 <ClickAwayListener
                     onClickAway={() => {
                         setOpen(false)
                     }}>
-                    <FeedFilters position="sticky" zIndex={50} top={0} left={0} right={0} />
+                    <FeedFilters position="absolute" zIndex={50} top={0} left={0} right={0} />
                 </ClickAwayListener>
             :   null}
-            <FeedList {...props} />
+            <FeedList address={address} tags={tags} listProps={listProps} />
         </Box>
     )
 })

@@ -236,7 +236,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                         {tabActions.length ?
                                             <span className={classes.actions}>
                                                 {tabActions.map((Action, i) => (
-                                                    <Action key={i} />
+                                                    <Action key={i} slot="profile-card" />
                                                 ))}
                                             </span>
                                         :   null}
