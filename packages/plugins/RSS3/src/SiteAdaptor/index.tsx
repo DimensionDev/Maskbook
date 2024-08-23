@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { SearchResultType } from '@masknet/web3-shared-base'
-import { Box } from '@mui/material'
+import { Box, type BoxProps } from '@mui/material'
 import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
@@ -97,6 +97,14 @@ const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
     feedsPageProps: { tags: FinanceTags },
     priority: 2,
 })
+const listProps: BoxProps = {
+    style: {
+        height: '100%',
+        boxSizing: 'border-box',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+    },
+}
 const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
     slot: 'profile-card',
     label: 'Finance',
@@ -104,14 +112,7 @@ const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfi
         tags: FinanceTags,
         height: 392,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 2,
 })
@@ -122,14 +123,7 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = creat
         tags: FinanceTags,
         height: 478,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 2,
 })
@@ -149,14 +143,7 @@ const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
         tags: [RSS3BaseAPI.Tag.Social],
         height: 392,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 1,
 })
@@ -167,14 +154,7 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
         tags: [RSS3BaseAPI.Tag.Social],
         height: 478,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 1,
 })
@@ -194,14 +174,7 @@ const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
         tags: [RSS3BaseAPI.Tag.Metaverse],
         height: 392,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 3,
 })
@@ -212,14 +185,7 @@ const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
         tags: [RSS3BaseAPI.Tag.Metaverse],
         height: 478,
         overflow: 'auto',
-        listProps: {
-            style: {
-                height: '100%',
-                boxSizing: 'border-box',
-                overflow: 'auto',
-                scrollbarWidth: 'none',
-            },
-        },
+        listProps,
     },
     priority: 3,
 })
