@@ -79,12 +79,36 @@ const FinanceTags = [RSS3BaseAPI.Tag.Exchange, RSS3BaseAPI.Tag.Transaction]
 const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Finance', { tags: FinanceTags }, 2)
 const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
     'Finance',
-    { tags: FinanceTags },
+    {
+        tags: FinanceTags,
+        height: 392,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
+    },
     2,
 )
 const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
     'Finance',
-    { tags: FinanceTags },
+    {
+        tags: FinanceTags,
+        height: 478,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
+    },
     2,
 )
 
@@ -99,6 +123,16 @@ const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
     'Social',
     {
         tags: [RSS3BaseAPI.Tag.Social],
+        height: 392,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
     },
     1,
 )
@@ -106,6 +140,16 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
     'Social',
     {
         tags: [RSS3BaseAPI.Tag.Social],
+        height: 478,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
     },
     1,
 )
@@ -121,6 +165,16 @@ const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
     'Others',
     {
         tags: [RSS3BaseAPI.Tag.Metaverse],
+        height: 392,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
     },
     3,
 )
@@ -128,6 +182,16 @@ const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
     'Others',
     {
         tags: [RSS3BaseAPI.Tag.Metaverse],
+        height: 478,
+        overflow: 'auto',
+        listProps: {
+            style: {
+                height: '100%',
+                boxSizing: 'border-box',
+                overflow: 'auto',
+                scrollbarWidth: 'none',
+            },
+        },
     },
     3,
 )
