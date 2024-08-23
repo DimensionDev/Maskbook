@@ -1,11 +1,10 @@
 import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Stack, Typography, useTheme, Link } from '@mui/material'
+import { Stack, Typography, useTheme } from '@mui/material'
 import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { PluginTransFieldRender, useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { base } from '../base.js'
 
 const useStyles = makeStyles()((theme, props) => {
     return {
@@ -59,11 +58,6 @@ export function PluginHeader() {
                         </Typography>
                         <Icons.RSS3 size={24} />
                     </>
-                :   null}
-                {base.publisher?.link ?
-                    <Link href={base.publisher.link} underline="none" target="_blank" rel="noopener">
-                        <Icons.Provider size={18} style={{ marginLeft: 4 }} />
-                    </Link>
                 :   null}
             </Box>
         </Stack>

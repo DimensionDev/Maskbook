@@ -6,7 +6,6 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, ClickAwayListener, Skeleton, type BoxProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useMemo } from 'react'
-import { Networks } from '../constants.js'
 import { useRSS3Trans } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
@@ -46,7 +45,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
         fetchNextPage,
     } = useFeeds(address, {
         tag: tags,
-        network: networks.length === Networks.length ? undefined : networks,
+        network: networks,
         direction: isDirect ? 'out' : undefined,
     })
 

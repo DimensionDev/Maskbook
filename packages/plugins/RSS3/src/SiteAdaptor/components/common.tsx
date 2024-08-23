@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
-import type { ComponentProps } from 'react'
+import { useState, type ComponentProps } from 'react'
 import { UserAvatar } from './UserAvatar/index.js'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
@@ -43,6 +43,7 @@ export function AccountLabel({
     ...rest
 }: AccountLabelProps) {
     const { classes, cx } = useStyles()
+    const [reversed, setReversed] = useState('')
     const label =
         handle ?
             <Label className={className} {...rest}>
@@ -55,12 +56,13 @@ export function AccountLabel({
                 size={size}
                 className={cx(classes.label, className)}
                 component="span"
+                onReverse={setReversed}
                 {...rest}
             />
         :   <Label className={className} {...rest} />
     return (
         <>
-            <UserAvatar identity={address} style={{ marginRight: 6 }} />
+            <UserAvatar identity={reversed || address} style={{ marginRight: 6 }} />
             {label}
         </>
     )
