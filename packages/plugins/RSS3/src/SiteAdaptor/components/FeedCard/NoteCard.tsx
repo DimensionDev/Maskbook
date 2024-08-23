@@ -123,7 +123,7 @@ const useStyles = makeStyles<
 
 const { Tag, Type } = RSS3BaseAPI
 export function isNoteFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.NoteFeed {
-    return feed.tag === Tag.Social && [Type.Post, Type.Revise, Type.Mint, Type.Share].includes(feed.type)
+    return feed.tag === Tag.Social && [Type.Post, Type.Revise, Type.Mint].includes(feed.type)
 }
 
 interface NoteCardProps extends Omit<FeedCardProps, 'feed'> {
@@ -136,11 +136,6 @@ const cardTypeMap = {
     [Type.Revise]: CardType.NoteEdit,
     [Type.Share]: CardType.NoteLink,
 } as const
-
-const toHex = (num: number) => {
-    const str = num.toString(16)
-    return str.length % 2 === 0 ? str : str.padStart(str.length + 1, '0')
-}
 
 function resolveDetailLink(metadata?: RSS3BaseAPI.PostMetadata, related_urls?: string[]) {
     if (!metadata) return null
@@ -159,7 +154,6 @@ function resolveDetailLink(metadata?: RSS3BaseAPI.PostMetadata, related_urls?: s
  * - NoteMint
  * - NoteCreate
  * - NoteEdit
- * - NoteLink
  */
 export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const { classes, cx } = useStyles()

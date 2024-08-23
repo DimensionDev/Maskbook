@@ -12,11 +12,15 @@ import { useMarkdownStyles } from './useMarkdownStyles.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
-        height: 20,
         color: theme.palette.maskColor.main,
         display: 'flex',
         alignItems: 'center',
-        whiteSpace: 'pre-wrap',
+        whiteSpace: 'pre',
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     comment: {
         color: theme.palette.maskColor.main,
@@ -98,7 +102,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
 
 const { Tag, Type } = RSS3BaseAPI
 export function isCommentFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.CommentFeed {
-    return feed.tag === Tag.Social && feed.type === Type.Comment
+    return feed.tag === Tag.Social && (feed.type === Type.Comment || feed.type === Type.Share)
 }
 
 interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
@@ -110,6 +114,7 @@ interface CommentCardProps extends Omit<FeedCardProps, 'feed'> {
  * Including:
  *
  * - NoteLink
+ * - NoteLink
  */
 export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const { verbose } = rest
@@ -119,54 +124,54 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
     const action = feed.actions[0]
     const metadata = action.metadata
 
-    const commentTarget = metadata?.target
+    const target = metadata?.target
 
     return (
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
-            {commentTarget ?
+            {target ?
                 <div className={classes.quoted}>
                     <Typography className={classes.summary} component="div">
                         <RSS3Trans.note
                             values={{
-                                user: commentTarget.handle,
+                                user: target.handle,
                                 platform: action.platform!,
                                 context: 'post',
                             }}
                             components={{
-                                user: <AccountLabel address={commentTarget.handle} handle={commentTarget.handle} />,
+                                user: <AccountLabel address={target.handle} handle={target.handle} />,
                             }}
                         />
                     </Typography>
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />
                         <article className={cx(classes.target, verbose ? classes.verbose : null)}>
-                            {!verbose && commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
+                            {!verbose && target?.media?.[0].mime_type?.startsWith('image/') ?
                                 <Image
                                     classes={{ container: classes.image, failed: classes.failedImage }}
-                                    src={resolveResourceURL(commentTarget.media[0].address)}
+                                    src={resolveResourceURL(target.media[0].address)}
                                     width={120}
                                     height={90}
                                 />
                             :   null}
                             <div>
-                                {commentTarget?.title ?
+                                {target?.title ?
                                     <Typography variant="h1" className={classes.title}>
-                                        {commentTarget.title}
+                                        {target.title}
                                     </Typography>
                                 :   null}
-                                {verbose && commentTarget?.body ?
+                                {verbose && target?.body ?
                                     <Markdown className={cx(mdClasses.markdown, classes.content)}>
-                                        {commentTarget.body}
+                                        {target.body}
                                     </Markdown>
                                 :   <Typography className={cx(classes.content, classes.collapse)}>
-                                        <Linkify options={LinkifyOptions}>{htmlToPlain(commentTarget?.body)}</Linkify>
+                                        <Linkify options={LinkifyOptions}>{htmlToPlain(target?.body)}</Linkify>
                                     </Typography>
                                 }
                             </div>
-                            {verbose && commentTarget?.media?.[0].mime_type?.startsWith('image/') ?
+                            {verbose && target?.media?.[0].mime_type?.startsWith('image/') ?
                                 <Image
                                     classes={{ container: classes.image, failed: classes.failedImage }}
-                                    src={resolveResourceURL(commentTarget.media[0].address)}
+                                    src={resolveResourceURL(target.media[0].address)}
                                     width="100%"
                                 />
                             :   null}
@@ -179,7 +184,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                     values={{
                         user: metadata?.handle!,
                         platform: action.platform!,
-                        context: 'comment',
+                        context: action.type,
                     }}
                     components={{
                         user: <AccountLabel address={feed.owner} handle={metadata?.handle} />,
