@@ -2,8 +2,8 @@ import { EthereumBlockie, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3 } from '@masknet/web3-providers'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
-import { sortBy } from 'lodash-es'
 import { memo, type HTMLProps } from 'react'
 
 const useStyles = makeStyles<{ size: number }>()((theme, { size }) => ({
@@ -35,14 +35,10 @@ export const UserAvatar = memo(function UserAvatar({ identity, size = 20, ...res
     const { data: profile } = useQuery({
         queryKey: ['rss3-profiles', identity],
         queryFn: async () => {
+            if (!identity || isValidAddress(identity)) return null
             const profiles = await RSS3.getProfiles(identity)
             if (!profiles.length) return null
-            const suffix = identity?.includes('.') ? identity.split('.').pop() : undefined
-            const sorted = sortBy(profiles, (profile) => {
-                if (suffix) return profile.handle.endsWith(suffix) ? -1 : 0
-                return profile.profile_uri.filter(Boolean).length ? -1 : 0
-            })
-            return sorted[0]
+            return profiles.find((x) => x.handle === identity)
         },
     })
     const url = profile?.profile_uri?.[0]

@@ -1,4 +1,4 @@
-import { type ComponentProps, memo } from 'react'
+import { type ComponentProps, memo, useEffect } from 'react'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { Typography } from '@mui/material'
@@ -11,9 +11,10 @@ export interface ReverseAddressProps extends ComponentProps<typeof Typography> {
     size?: number
     // declare explicitly to avoid ts warning
     component?: string
+    onReverse?(domain: string): void
 }
 
-export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, ...rest }) => {
+export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, size = 4, onReverse, ...rest }) => {
     const { data: domain } = useReverseAddress(pluginID, address)
     const Utils = useWeb3Utils(pluginID)
 
@@ -26,6 +27,12 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
         </Typography>
     )
     const popperProps = useBoundedPopperProps()
+
+    useEffect(() => {
+        if (showDomain) {
+            onReverse?.(domain)
+        }
+    }, [showDomain, domain, onReverse])
 
     return hasEllipsis ?
             <ShadowRootTooltip
