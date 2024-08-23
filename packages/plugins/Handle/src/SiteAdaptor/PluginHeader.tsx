@@ -43,7 +43,7 @@ export function PluginHeader() {
                 </Typography>
             </Stack>
             <Box className={classes.provider}>
-                <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
+                <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
                     {t.plugin_provider_by()}
                 </Typography>
                 {publisher ?
@@ -51,7 +51,7 @@ export function PluginHeader() {
                         <Typography
                             variant="body1"
                             fontSize={14}
-                            fontWeight="500"
+                            fontWeight="700"
                             component="div"
                             color={MaskColorVar.textPluginColor}>
                             <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
