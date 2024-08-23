@@ -10,14 +10,14 @@ import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { toggleFilter } from './emitter.js'
-import { type FeedPageProps, FeedsPage } from './FeedsPage.js'
+import { type FeedsPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 1): Plugin.SiteAdaptor.ProfileTab => {
+const createProfileTabConfig = (label: string, props: FeedsPageProps, priority = 1): Plugin.SiteAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_${label}`,
         label,
@@ -41,7 +41,7 @@ const createProfileTabConfig = (label: string, props: FeedPageProps, priority = 
 
 const createSearchTabConfig = (
     label: string,
-    props: FeedPageProps,
+    props: FeedsPageProps,
     priority = 1,
 ): Plugin.SiteAdaptor.SearchResultTab => {
     return {

@@ -48,7 +48,6 @@
     "note$mint": "<bold>{{user}}</bold> minted a note on <bold>{{platform}}</bold>",
     "note$revise": "<bold>{{user}}</bold> revised a note on <bold>{{platform}}</bold>",
     "note$comment": "<bold>{{user}}</bold> made a comment on <bold>{{platform}}</bold>",
-    "note$share": "<bold>{{user}}</bold> shared a note on <bold>{{platform}}</bold>",
     "profile$create": "<user>{{user}}</user> created a profile on <platform>{{platform}}</platform>",
     "profile$update": "<user>{{user}}</user> updated a profile on <platform>{{platform}}</platform>",
     "profile_link$follow": "<user>{{user}}</user> followed <other>{{other}}</other> on <platform>{{platform}}</platform>",
