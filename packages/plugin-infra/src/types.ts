@@ -225,6 +225,7 @@ export namespace Plugin.Shared {
 export namespace Plugin.SiteAdaptor {
     export interface SiteAdaptorContext extends Shared.SharedUIContext {}
 
+    export type ProfileTabSlot = 'profile-page' | 'search' | 'profile-card'
     export interface Definition extends GeneralUI.Definition, Shared.DefinitionDeferred<SiteAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI
@@ -252,8 +253,11 @@ export namespace Plugin.SiteAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
-        /** actions ui injected in profile tabs */
-        ProfileTabActions?: ComponentType
+        /**
+         * actions ui injected in profile tabs
+         * slot is used to distinguish among different slots.
+         */
+        ProfileTabActions?: ComponentType<{ slot: ProfileTabSlot }>
         /** This UI will be rendered as tab on the setting dialog */
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */

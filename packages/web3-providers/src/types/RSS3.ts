@@ -222,6 +222,7 @@ export namespace RSS3BaseAPI {
     export interface ShareMetadata {
         type_on_platform: Type[]
         target: PostMetadata
+        handle: string
         comment?: CommentMetadata
         publication_id: HexString
     }
@@ -342,7 +343,6 @@ export namespace RSS3BaseAPI {
     export interface ActionGeneric<T extends Tag, P extends keyof MetadataMap[T] = keyof MetadataMap[T]> {
         tag: T
         type: P
-        index: number
         /**
          * from address
          * It's different from transaction.from, the token payer */

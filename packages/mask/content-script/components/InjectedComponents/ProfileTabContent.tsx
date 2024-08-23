@@ -527,7 +527,7 @@ function Content(props: ProfileTabContentProps) {
                                 {tabActions.length ?
                                     <span className={classes.actions}>
                                         {tabActions.map((Action, i) => (
-                                            <Action key={i} />
+                                            <Action key={i} slot="profile-page" />
                                         ))}
                                     </span>
                                 :   null}
