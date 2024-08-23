@@ -1,14 +1,24 @@
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 import { RSS3 } from '@masknet/web3-providers'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
-export function useFeeds(address: string | undefined, options?: Partial<Record<string, string | string[]>>) {
+interface Options {
+    tag: RSS3BaseAPI.Tag[]
+    network: RSS3BaseAPI.Network[]
+    direction: string
+}
+
+export function useFeeds(address: string | undefined, options?: Partial<Options>) {
     return useInfiniteQuery({
         initialPageParam: undefined as any,
         queryKey: ['rss3-feeds', address, options],
         queryFn:
             address ?
                 async ({ pageParam }) => {
+                    if (options?.network?.length === 0) {
+                        return createPageable([], createIndicator())
+                    }
                     return RSS3.getAllNotes(address, options, { indicator: pageParam, size: 20 })
                 }
             :   skipToken,
