@@ -26,7 +26,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         color: theme.palette.maskColor.main,
         marginTop: theme.spacing(1),
         fontSize: 14,
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
     },
     image: {},
     failedImage: {},
@@ -90,7 +90,7 @@ const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImag
         lineHeight: '18px',
         fontSize: 14,
         overflow: 'hidden',
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
     },
     collapse: {
         whiteSpace: 'pre-wrap',
