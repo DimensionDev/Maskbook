@@ -109,7 +109,6 @@ describe('resolveIPFS_URL', () => {
             },
             // the host part has a CID
             { give: `https://${cid}.ipfs.dweb.link`, expected: `https://ipfs.io/ipfs/${cid}` },
-            // { give: `https://${cid}.ipfs.dweb.link/460.png?ext=png`, expected: `https://ipfs.io/ipfs/${cid}/460.png`},
         ].map(({ give, expected }) => [
             { give, expected },
             { give: `https://cors-next.r2d2.to?${encodeURIComponent(give)}`, expected },
