@@ -2,9 +2,10 @@ import { Suspense } from 'react'
 import { StyledEngineProvider, type Theme } from '@mui/material'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { I18NextProviderHMR, LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
 import { compose, i18NextInstance } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { i18n } from '@lingui/core'
 
 export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
@@ -12,6 +13,7 @@ export function PageUIProvider(useTheme: () => Theme, children: React.ReactNode,
         (children) => <Suspense children={children} />,
         // Provide the minimal environment (i18n context) for CrashUI in page mode
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,
+        (children) => <LinguiProviderHMR i18n={i18n} children={children} />,
         (children) => StyledEngineProvider({ injectFirst: true, children }),
         (children) => <ErrorBoundary children={children} />,
         (children) => <MaskUIRoot useTheme={useTheme} fallback={fallback} children={children} />,

@@ -7,8 +7,14 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { Trans } from 'react-i18next'
-import { UserContext, useAppearance, useLanguage, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
+import {
+    UserContext,
+    useAppearance,
+    useLanguage,
+    useMaskSharedTrans,
+    MaskSharedTrans,
+} from '../../../shared-ui/index.js'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { useTitle } from '../../hooks/useTitle.js'
@@ -211,12 +217,13 @@ export const Component = memo(function SettingsPage() {
                                 classes={itemClasses}
                                 primary={t.popups_settings_supported_sites()}
                                 secondary={
-                                    <Trans
-                                        i18nKey="popups_settings_supported_website"
+                                    <MaskSharedTrans.popups_settings_supported_website
                                         components={{
                                             strong: <span style={{ color: theme.palette.maskColor.main }} />,
                                         }}
-                                        values={{ count: data?.filter((x) => x.allowInject && x.hasPermission).length }}
+                                        values={{
+                                            count: data?.filter((x) => x.allowInject && x.hasPermission).length || '',
+                                        }}
                                     />
                                 }
                             />
@@ -232,7 +239,7 @@ export const Component = memo(function SettingsPage() {
                         <Box className={classes.headerContent}>
                             <Typography className={classes.title}>{t.popups_settings_backup_and_recovery()}</Typography>
                             <Typography className={classes.titleDescription}>
-                                {t.popups_settings_data_correlation()}
+                                <Trans>Data correlation</Trans>
                             </Typography>
                         </Box>
                     </Box>

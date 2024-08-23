@@ -9,7 +9,7 @@ import {
     useSystemPreferencePalette,
     DialogStackingProvider,
 } from '@masknet/theme'
-import { I18NextProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
+import { I18NextProviderHMR, LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
@@ -17,6 +17,7 @@ import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
 import Services from '#services'
+import { i18n } from '@lingui/core'
 
 const GlobalCss = (
     <GlobalStyles
@@ -56,6 +57,7 @@ export default function Dashboard() {
     return compose(
         (children) => <RootWeb3ContextProvider enforceEVM children={children} />,
         (children) => <I18NextProviderHMR i18n={i18NextInstance} children={children} />,
+        (children) => <LinguiProviderHMR i18n={i18n} children={children} />,
         (children) => <StyledEngineProvider injectFirst children={children} />,
         (children) => <ThemeProvider theme={theme} children={children} />,
         (children) => <DialogStackingProvider children={children} />,

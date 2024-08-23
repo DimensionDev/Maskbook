@@ -15,8 +15,17 @@
       "default": "./dist/register.js"
     }
   },
+  "scripts": {
+    "lingui-extract": "../../../node_modules/.bin/lingui extract",
+    "lingui-compile": "../../../node_modules/.bin/lingui compile"
+  },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared-base": "workspace:^"
+  },
+  "lingui": {
+    "catalogs": [{ "path": "src/locale/{locale}", "include": ["src"] }],
+    "compileNamespace": "json",
+    "locales": ["en-US", "ja-JP", "ko-KR", "zh-CN", "zh-TW"]
   }
 }
