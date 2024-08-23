@@ -9,7 +9,7 @@ import { Box } from '@mui/material'
 import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
-import { toggleFilter } from './emitter.js'
+import { toggleFilter, useInsideFeedsTab, useIsTabActionEnabled } from './emitter.js'
 import { type FeedsPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
 
@@ -17,7 +17,19 @@ function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Hel
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-const createProfileTabConfig = (label: string, props: FeedsPageProps, priority = 1): Plugin.SiteAdaptor.ProfileTab => {
+interface ProfileTabConfigOptions {
+    slot: Plugin.SiteAdaptor.ProfileTabSlot
+    label: string
+    feedsPageProps: Omit<FeedsPageProps, 'slot'>
+    priority: number
+}
+
+const createProfileTabConfig = ({
+    label,
+    feedsPageProps: props,
+    priority = 1,
+    slot,
+}: ProfileTabConfigOptions): Plugin.SiteAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_${label}`,
         label,
@@ -25,10 +37,11 @@ const createProfileTabConfig = (label: string, props: FeedsPageProps, priority =
         UI: {
             TabContent: ({ socialAccount }) => {
                 const key = [socialAccount?.address ?? '-', props.tags ?? '-'].join('/')
+                useInsideFeedsTab(slot)
 
                 return (
                     <EVMWeb3ContextProvider>
-                        <FeedsPage key={key} address={socialAccount?.address} {...props} />
+                        <FeedsPage key={key} address={socialAccount?.address} slot={slot} {...props} />
                     </EVMWeb3ContextProvider>
                 )
             },
@@ -39,11 +52,12 @@ const createProfileTabConfig = (label: string, props: FeedsPageProps, priority =
     }
 }
 
-const createSearchTabConfig = (
-    label: string,
-    props: FeedsPageProps,
+const createSearchTabConfig = ({
+    slot,
+    label,
+    feedsPageProps: props,
     priority = 1,
-): Plugin.SiteAdaptor.SearchResultTab => {
+}: ProfileTabConfigOptions): Plugin.SiteAdaptor.SearchResultTab => {
     return {
         ID: `${PLUGIN_ID}_${label}`,
         label,
@@ -57,11 +71,12 @@ const createSearchTabConfig = (
                     supportedAddressTypes: [SocialAddressType.ENS],
                 }
                 const key = [socialAccount.address ?? '-', props.tags ?? '-'].join('_')
+                useInsideFeedsTab(slot)
 
                 return (
                     <Box style={{ minHeight: 300 }}>
                         <EVMWeb3ContextProvider>
-                            <FeedsPage key={key} address={socialAccount.address} {...props} />
+                            <FeedsPage key={key} address={socialAccount.address} slot={slot} {...props} />
                         </EVMWeb3ContextProvider>
                     </Box>
                 )
@@ -76,10 +91,16 @@ const createSearchTabConfig = (
 }
 
 const FinanceTags = [RSS3BaseAPI.Tag.Exchange, RSS3BaseAPI.Tag.Transaction]
-const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig('Finance', { tags: FinanceTags }, 2)
-const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Finance',
-    {
+const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-page',
+    label: 'Finance',
+    feedsPageProps: { tags: FinanceTags },
+    priority: 2,
+})
+const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-card',
+    label: 'Finance',
+    feedsPageProps: {
         tags: FinanceTags,
         height: 392,
         overflow: 'auto',
@@ -92,11 +113,12 @@ const FinanceTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfi
             },
         },
     },
-    2,
-)
-const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-    'Finance',
-    {
+    priority: 2,
+})
+const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
+    slot: 'search',
+    label: 'Finance',
+    feedsPageProps: {
         tags: FinanceTags,
         height: 478,
         overflow: 'auto',
@@ -109,19 +131,21 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = creat
             },
         },
     },
-    2,
-)
+    priority: 2,
+})
 
-const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Social',
-    {
+const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-page',
+    label: 'Social',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Social],
     },
-    1,
-)
-const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Social',
-    {
+    priority: 1,
+})
+const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-card',
+    label: 'Social',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Social],
         height: 392,
         overflow: 'auto',
@@ -134,11 +158,12 @@ const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
             },
         },
     },
-    1,
-)
-const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-    'Social',
-    {
+    priority: 1,
+})
+const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
+    slot: 'search',
+    label: 'Social',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Social],
         height: 478,
         overflow: 'auto',
@@ -151,19 +176,21 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
             },
         },
     },
-    1,
-)
+    priority: 1,
+})
 
-const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Others',
-    {
+const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-page',
+    label: 'Others',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Metaverse],
     },
-    3,
-)
-const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig(
-    'Others',
-    {
+    priority: 3,
+})
+const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+    slot: 'profile-card',
+    label: 'Others',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Metaverse],
         height: 392,
         overflow: 'auto',
@@ -176,11 +203,12 @@ const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfil
             },
         },
     },
-    3,
-)
-const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig(
-    'Others',
-    {
+    priority: 3,
+})
+const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
+    slot: 'search',
+    label: 'Others',
+    feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Metaverse],
         height: 478,
         overflow: 'auto',
@@ -193,8 +221,8 @@ const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
             },
         },
     },
-    3,
-)
+    priority: 3,
+})
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -202,8 +230,19 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
-    ProfileTabActions: memo(function FeedFilterButton() {
-        return <Icons.Filter size={24} onClick={toggleFilter} />
+    ProfileTabActions: memo(function FeedFilterButton({ slot }) {
+        const enabled = useIsTabActionEnabled(slot)
+        return (
+            <Icons.Filter
+                size={24}
+                onClick={() => {
+                    if (!enabled) return
+                    toggleFilter(slot)
+                }}
+                disabled={!enabled}
+                style={enabled ? undefined : { color: 'rgba(172, 180, 193, 1)', cursor: 'not-allowed' }}
+            />
+        )
     }),
     ProfileTabs: [FinanceTabConfig, SocialTabConfig, OthersTabConfig],
     ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard, OthersTabConfigInProfileCard],

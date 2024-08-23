@@ -1,19 +1,20 @@
-import { memo, useEffect, useMemo, useState } from 'react'
-import { range } from 'lodash-es'
+import type { Plugin } from '@masknet/plugin-infra'
 import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, ClickAwayListener, Skeleton } from '@mui/material'
+import type { BoxProps } from '@mui/system'
+import { range } from 'lodash-es'
+import { memo, useMemo } from 'react'
+import { Networks } from '../constants.js'
 import { useRSS3Trans } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
-import { useFeeds } from './hooks/useFeeds.js'
+import { useIsFiltersOpen } from './emitter.js'
 import { FeedFilters } from './FeedFilters.js'
 import { useFilters } from './filters.js'
-import { Networks } from '../constants.js'
-import { emitter } from './emitter.js'
-import type { BoxProps } from '@mui/system'
+import { useFeeds } from './hooks/useFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
@@ -108,18 +109,11 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
 
 export interface FeedsPageProps extends FeedListProps, BoxProps {
     listProps?: BoxProps
+    slot: Plugin.SiteAdaptor.ProfileTabSlot
 }
 
-export const FeedsPage = memo<FeedsPageProps>(function FeedsPage({ address, tags, listProps, ...rest }) {
-    const [open, setOpen] = useState(false)
-    useEffect(() => {
-        const unsubscribe = emitter.on('toggle-filter', () => {
-            setOpen((v) => !v)
-        })
-        return () => {
-            unsubscribe()
-        }
-    }, [])
+export const FeedsPage = memo<FeedsPageProps>(function FeedsPage({ address, tags, listProps, slot, ...rest }) {
+    const [open, setOpen] = useIsFiltersOpen(slot)
 
     return (
         <Box position="relative" {...rest}>

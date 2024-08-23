@@ -146,7 +146,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                                     {tabActions.length ?
                                         <span className={classes.actions}>
                                             {tabActions.map((Action, i) => (
-                                                <Action key={i} />
+                                                <Action key={i} slot="search" />
                                             ))}
                                         </span>
                                     :   null}
