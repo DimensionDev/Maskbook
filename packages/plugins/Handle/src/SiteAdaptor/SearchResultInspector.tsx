@@ -128,7 +128,11 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                             <div className={classes.walletValue}>
                                 <Typography className={classes.label}>{t.usd_value()}</Typography>
                                 <Typography className={classes.value}>
-                                    ${totalBalance.toLocaleString('en-US', { maximumSignificantDigits: 2 })}
+                                    $
+                                    {totalBalance.toLocaleString('en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2,
+                                    })}
                                 </Typography>
                             </div>
                         :   null}
