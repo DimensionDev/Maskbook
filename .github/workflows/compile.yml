@@ -46,6 +46,7 @@ jobs:
         with:
             registry: true
       - name: Restore Webpack cache
+        if: "!contains(github.event.pull_request.labels.*.name, 'no-ci-cache')"
         uses: actions/cache@v4
         with:
           path: packages/mask/node_modules/.cache/
