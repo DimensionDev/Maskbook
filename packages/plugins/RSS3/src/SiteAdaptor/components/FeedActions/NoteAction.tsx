@@ -1,3 +1,4 @@
+import { NameServiceID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
@@ -40,9 +41,15 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
 
     // You might see a collectible action on a note minting feed
     const action = feed.actions.filter((x) => x.tag === Tag.Social)[0]
-
-    const user = useAddressLabel(feed.owner)
     const type = action.type
+
+    const owner = useAddressLabel(
+        feed.owner,
+        NetworkPluginID.PLUGIN_EVM,
+        feed.platform === 'Lens' ? NameServiceID.Lens : undefined,
+    )
+    const user = action.metadata?.handle || owner
+    const handle = type === Type.Mint || type === Type.Share ? owner : action.metadata?.handle
 
     return (
         <div {...rest}>
@@ -54,12 +61,7 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
                         context: type,
                     }}
                     components={{
-                        user: (
-                            <AccountLabel
-                                address={feed.owner}
-                                handle={type === Type.Mint || type === Type.Share ? undefined : action.metadata?.handle}
-                            />
-                        ),
+                        user: <AccountLabel address={feed.owner} handle={handle} />,
                     }}
                 />
             </Typography>
