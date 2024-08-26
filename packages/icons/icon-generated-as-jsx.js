@@ -908,6 +908,23 @@ export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
         s: true,
     },
 ])
+export const ArrowUp2 = /*#__PURE__*/ __createIcon('ArrowUp2', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M20.0655 16.0665C19.7531 16.3789 19.2465 16.3789 18.9341 16.0665L12.4998 9.63215L6.06549 16.0665C5.75307 16.3789 5.24654 16.3789 4.93412 16.0665C4.6217 15.754 4.6217 15.2475 4.93412 14.9351L11.9341 7.9351C12.2465 7.62268 12.7531 7.62268 13.0655 7.9351L20.0655 14.9351C20.3779 15.2475 20.3779 15.754 20.0655 16.0665Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
     {
         j: () =>
