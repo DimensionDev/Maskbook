@@ -16,7 +16,8 @@ export function useFeeds(address: string | undefined, options?: Partial<Options>
         queryFn:
             address ?
                 async ({ pageParam }) => {
-                    if (options?.network?.length === 0) {
+                    // if network is omitted, it will be treated as all networks.
+                    if (options?.network && options.network.length === 0) {
                         return createPageable([], createIndicator())
                     }
                     return RSS3.getAllNotes(address, options, { indicator: pageParam, size: 20 })

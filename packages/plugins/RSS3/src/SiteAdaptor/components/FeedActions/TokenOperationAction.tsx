@@ -1,7 +1,9 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
+import { useState } from 'react'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
@@ -64,8 +66,12 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
     const { classes, cx } = useStyles()
 
     const owner = useFeedOwner()
+    const [expanded, setExpanded] = useState(false)
 
-    const actions = action ? [action] : feed.actions
+    const actions =
+        action ? [action]
+        : expanded ? feed.actions
+        : feed.actions.slice(0, 3)
 
     const content = (
         <>
@@ -116,6 +122,25 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                     </Typography>
                 )
             })}
+            {actions.length > 3 ?
+                <Button
+                    disableRipple
+                    variant="text"
+                    sx={{
+                        display: 'inline-block',
+                        alignSelf: 'flex-start',
+                        padding: 0,
+                        minWidth: 0,
+                    }}
+                    onClick={(evt) => {
+                        evt.stopPropagation()
+                        setExpanded((v) => !v)
+                    }}>
+                    {expanded ?
+                        <Icons.ArrowUp size={24} />
+                    :   <Icons.More size={24} />}
+                </Button>
+            :   null}
         </>
     )
 
