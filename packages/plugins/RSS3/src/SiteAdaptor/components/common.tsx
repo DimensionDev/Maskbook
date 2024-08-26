@@ -1,12 +1,12 @@
-import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { ReversedAddress, type ReverseAddressProps } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
 import { useState, type ComponentProps } from 'react'
 import { UserAvatar } from './UserAvatar/index.js'
-import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     label: {

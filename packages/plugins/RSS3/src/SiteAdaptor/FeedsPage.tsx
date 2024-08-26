@@ -3,7 +3,7 @@ import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { Box, ClickAwayListener, Skeleton, type BoxProps } from '@mui/material'
+import { Box, ClickAwayListener, Skeleton, Typography, type BoxProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useMemo } from 'react'
 import { useRSS3Trans } from '../locales/index.js'
@@ -13,6 +13,7 @@ import { useIsFiltersOpen } from './emitter.js'
 import { FeedFilters } from './FeedFilters.js'
 import { useFilters } from './filters.js'
 import { useFeeds } from './hooks/useFeeds.js'
+import { Networks } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
@@ -42,11 +43,18 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
         data: feeds,
         isPending: loadingFeeds,
         isFetchingNextPage,
+        hasNextPage,
         error,
         fetchNextPage,
     } = useFeeds(address, {
         tag: tags,
-        network: networks,
+        network:
+            // passing all networks returns different results from omitting
+            // network parameter (it's strange indeed). so we need to omit it
+            // when all networks are selected
+            networks.length === 0 ? []
+            : networks.length === Networks.length ? undefined
+            : networks,
         direction: isDirect ? 'out' : undefined,
     })
 
@@ -56,7 +64,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
     const loading = isFetchingNextPage || loadingFeeds || loadingENS
 
     const name = address ? getDomain(address) || reversedName : reversedName
-    const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
+    const feedOwner: FeedOwnerOptions | undefined = useMemo(() => {
         if (!address) return
         return {
             address,
@@ -96,11 +104,16 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
                 {feeds.map((feed, index) => (
                     <FeedCard key={index} className={classes.feedCard} feed={feed} />
                 ))}
-                <ElementAnchor callback={() => fetchNextPage()}>
-                    {loading ?
-                        <LoadingBase className={classes.loading} />
-                    :   null}
-                </ElementAnchor>
+                {hasNextPage ?
+                    <ElementAnchor callback={() => fetchNextPage()}>
+                        {loading ?
+                            <LoadingBase className={classes.loading} />
+                        :   null}
+                    </ElementAnchor>
+                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                        {t.no_more_data()}
+                    </Typography>
+                }
             </Box>
         </FeedOwnerContext.Provider>
     )

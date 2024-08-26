@@ -75,5 +75,6 @@
     "asset": "Asset",
     "successful": "Successful",
     "failed": "Failed",
-    "tx_fee": "Tx Fee"
+    "tx_fee": "Tx Fee",
+    "no_more_data": "No more data available."
 }
