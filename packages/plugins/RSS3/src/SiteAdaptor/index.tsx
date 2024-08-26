@@ -159,37 +159,6 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
     priority: 1,
 })
 
-const OthersTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
-    slot: 'profile-page',
-    label: 'Others',
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Metaverse],
-    },
-    priority: 5,
-})
-const OthersTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
-    slot: 'profile-card',
-    label: 'Others',
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Metaverse],
-        height: 392,
-        overflow: 'auto',
-        listProps,
-    },
-    priority: 5,
-})
-const OthersTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
-    slot: 'search',
-    label: 'Others',
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Metaverse],
-        height: 478,
-        overflow: 'auto',
-        listProps,
-    },
-    priority: 5,
-})
-
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(_, context) {},
@@ -210,9 +179,9 @@ const site: Plugin.SiteAdaptor.Definition = {
             />
         )
     }),
-    ProfileTabs: [FinanceTabConfig, SocialTabConfig, OthersTabConfig],
-    ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard, OthersTabConfigInProfileCard],
-    SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult, OthersTabConfigInSearchResult],
+    ProfileTabs: [FinanceTabConfig, SocialTabConfig],
+    ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard],
+    SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult],
 }
 
 export default site

@@ -122,7 +122,7 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                     </Typography>
                 )
             })}
-            {actions.length > 3 ?
+            {feed.actions.length > 3 && !action ?
                 <Button
                     disableRipple
                     variant="text"
@@ -137,7 +137,7 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                         setExpanded((v) => !v)
                     }}>
                     {expanded ?
-                        <Icons.ArrowUp size={24} />
+                        <Icons.ArrowUp2 size={24} />
                     :   <Icons.More size={24} />}
                 </Button>
             :   null}
