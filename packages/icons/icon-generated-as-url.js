@@ -139,6 +139,7 @@ export function arrow_downward_url() { return new URL("./general/ArrowDownward.s
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url).href }
 export function arrow_right_url() { return new URL("./general/ArrowRight.svg", import.meta.url).href }
 export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url).href }
+export function arrow_up_2_url() { return new URL("./general/ArrowUp2.svg", import.meta.url).href }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url).href }
 export function back_up_url() { return new URL("./general/BackUp.svg", import.meta.url).href }
 export function base_close_dark_url() { return new URL("./general/BaseClose.dark.svg", import.meta.url).href }
