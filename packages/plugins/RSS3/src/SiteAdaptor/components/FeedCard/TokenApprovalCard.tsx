@@ -13,6 +13,7 @@ interface TokenApprovalFeedCardProps extends Omit<FeedCardProps, 'feed'> {
 }
 
 /**
+ * @deprecated TokenApprovalAction now gets merged into TokenOperationCard
  * TokenApprovalCard.
  * Including:
  *

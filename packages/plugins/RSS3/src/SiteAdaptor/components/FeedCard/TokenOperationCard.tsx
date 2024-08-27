@@ -8,7 +8,8 @@ import { TokenOperationAction } from '../FeedActions/TokenOperationAction.js'
 const { Tag, Type } = RSS3BaseAPI
 type Type = RSS3BaseAPI.Type
 export function isTokenOperationFeed(feed: RSS3BaseAPI.Web3Feed): feed is RSS3BaseAPI.TokenOperationFeed {
-    const isTxTag = feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn, Type.Mint].includes(feed.type)
+    const isTxTag =
+        feed.tag === Tag.Transaction && [Type.Transfer, Type.Burn, Type.Mint, Type.Approval].includes(feed.type)
     const isExchangeTag = feed.tag === Tag.Exchange && [Type.Deposit, Type.Withdraw].includes(feed.type)
     return isTxTag || isExchangeTag
 }
