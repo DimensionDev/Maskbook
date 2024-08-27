@@ -12,7 +12,6 @@ import { isProfileLinkFeed, ProfileLinkCard } from './ProfileLinkCard.js'
 import { isProfileProxyFeed, ProfileProxyCard } from './ProfileProxy.js'
 import { isProposeFeed, ProposeCard } from './ProposeCard.js'
 import { isStakingFeed, StakingCard } from './StakingCard.js'
-import { isTokenApprovalFeed, TokenApprovalCard } from './TokenApprovalCard.js'
 import { isTokenBridgeFeed, TokenBridgeCard } from './TokenBridgeCard.js'
 import { isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.js'
 import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
@@ -43,8 +42,6 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isProposeFeed(feed)) return <ProposeCard feed={feed} {...rest} />
 
     if (isVoteFeed(feed)) return <VoteCard feed={feed} {...rest} />
-
-    if (isTokenApprovalFeed(feed)) return <TokenApprovalCard feed={feed} {...rest} />
 
     if (isCollectibleApprovalFeed(feed)) return <CollectibleApprovalCard feed={feed} {...rest} />
 
