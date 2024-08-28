@@ -1,10 +1,10 @@
 {
   "name": "mask-network",
   "type": "module",
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": ">=22.2.0",
-    "pnpm": ">=9.1.1",
+    "pnpm": ">=9.9.0",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
