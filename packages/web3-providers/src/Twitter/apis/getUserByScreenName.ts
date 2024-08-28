@@ -22,7 +22,9 @@ const features = {
 }
 
 async function createRequest(screenName: string) {
-    const url = urlcat(twitterDomainMigrate('https://x.com/i/api/graphql/sLVLhk0bGj3MVFEKTdax1w/UserByScreenName'), {
+    // cspell:disable-next-line
+    // Yka-W8dz7RaEuQNkroPkYw is queryId for UserByScreenName
+    const url = urlcat('https://x.com/i/api/graphql/Yka-W8dz7RaEuQNkroPkYw/UserByScreenName', {
         variables: JSON.stringify({
             screen_name: screenName,
             withSafetyModeUserFields: true,
@@ -34,7 +36,7 @@ async function createRequest(screenName: string) {
     return new Request(url, {
         headers: getHeaders({
             'content-type': 'application/json',
-            referer: twitterDomainMigrate(`https://twitter.com/${screenName}`),
+            referer: twitterDomainMigrate(`https://x.com/${screenName}`),
         }),
         credentials: 'include',
     })

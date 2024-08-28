@@ -7,7 +7,6 @@ import {
     getUserViaTwitterIdentity,
     getComputedUserSettings,
     getUserByScreenName,
-    getUserByScreenNameShow,
     staleUserByScreenName,
     staleUserByScreenNameShow,
     staleUserViaIdentity,
@@ -66,12 +65,9 @@ export class Twitter {
         if (!screenName) return null
         if (checkNFTAvatar) return getUserByScreenName(screenName)
         return attemptUntil<TwitterBaseAPI.User | null>(
-            [
-                () => getUserByScreenNameShow(screenName),
-                () => getUserByScreenName(screenName),
-                () => getUserViaTwitterIdentity(screenName),
-            ],
+            [() => getUserByScreenName(screenName), () => getUserViaTwitterIdentity(screenName)],
             null,
+            (v) => !v,
         )
     }
 
