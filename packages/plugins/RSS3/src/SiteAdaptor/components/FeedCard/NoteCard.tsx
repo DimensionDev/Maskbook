@@ -207,6 +207,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
             className={cx(rest.verbose ? classes.verbose : null, className)}
             {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.note
                     values={{
                         user,

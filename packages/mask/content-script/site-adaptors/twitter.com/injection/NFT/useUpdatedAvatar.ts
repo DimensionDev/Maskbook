@@ -25,14 +25,9 @@ export function useUpdatedAvatar(showAvatar: boolean, nftAvatar: AvatarNextID<Ne
             })
         }
 
-        const clean = () => {
-            linkParentDom.removeEventListener('click', handler, true)
-        }
-
         if (!nftAvatar) return
 
         linkParentDom.addEventListener('click', handler, true)
-
-        return clean
+        return () => linkParentDom.removeEventListener('click', handler, true)
     }, [nftAvatar, showAvatar])
 }

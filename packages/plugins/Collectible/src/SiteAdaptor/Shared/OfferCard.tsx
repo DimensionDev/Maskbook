@@ -61,6 +61,7 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
         if (offer.priceInToken?.token.logoURL)
             return <img width={20} height={20} src={offer.priceInToken?.token.logoURL} alt="" />
 
+        // eslint-disable-next-line react/naming-convention/component-name
         if (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={18} />
 
         return offer.priceInToken?.token.address ?

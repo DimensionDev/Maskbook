@@ -118,6 +118,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
         return (
             <CardFrame type={CardType.DonationDonate} feed={feed} className={className} badge={badge} {...rest}>
                 <Typography className={classes.summary}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <RSS3Trans.donation_donate_verbose
                         values={{
                             user,
@@ -146,6 +147,7 @@ export function DonationCard({ feed, actionIndex, className, ...rest }: Donation
             className={className}
             {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.donation_donate
                     values={{
                         user,

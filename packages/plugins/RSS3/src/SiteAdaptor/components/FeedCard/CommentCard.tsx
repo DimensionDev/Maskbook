@@ -111,6 +111,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
     return (
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.note
                     values={{
                         user,

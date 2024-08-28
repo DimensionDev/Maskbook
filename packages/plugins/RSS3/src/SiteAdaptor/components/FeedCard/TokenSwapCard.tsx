@@ -74,6 +74,7 @@ export function TokenSwapCard({ feed, ...rest }: TokenSwapCardProps) {
     return (
         <CardFrame type={CardType.TokenSwap} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.token_swap
                     values={{
                         user,

@@ -41,6 +41,7 @@ export const InEligibilityTips = memo(() => {
                 <Typography>{t.ineligibility_tips()}</Typography>
             </SmartPayBanner>
             <Typography className={classes.description}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <SmartPayTrans.eligibility_description
                     components={{
                         Link: <Link href="https://x.com/realMaskNetwork" rel="noopener noreferrer" target="_blank" />,
@@ -51,6 +52,7 @@ export const InEligibilityTips = memo(() => {
                 />
             </Typography>
             <Typography className={classes.description}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <SmartPayTrans.eligibility_query
                     components={{
                         Link: (

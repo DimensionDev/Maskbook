@@ -291,6 +291,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
                     <WalletIcon mainIcon={chain?.icon} size={16} />
                 </div>
             : activity.trade_symbol?.toUpperCase() === 'WETH' ?
+                // eslint-disable-next-line react/naming-convention/component-name
                 <Icons.WETH size={16} className={classes.tokenIcon} />
             :   <TokenIcon
                     logoURL={token?.logoURL || activity.trade_token?.logoURL}

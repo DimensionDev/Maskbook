@@ -136,6 +136,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                 </Typography>
                 {file.key ?
                     <Typography className={classes.meta}>
+                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                         <FileServiceTrans.file_key
                             components={{
                                 key: <Typography className={classes.metaValue} component="span" />,
