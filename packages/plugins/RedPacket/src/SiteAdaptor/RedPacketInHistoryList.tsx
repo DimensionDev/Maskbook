@@ -223,6 +223,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
+                                {/* eslint-disable-next-line react/naming-convention/component-name */}
                                 <RedPacketTrans.history_claimed
                                     components={{
                                         span: <span />,

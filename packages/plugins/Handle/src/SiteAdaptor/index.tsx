@@ -33,6 +33,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             marketListSortingPriority: 20,
             description: <Trans i18nKey="plugin_ens_description" />,
             name: <Trans i18nKey="plugin_ens_name" />,
+            // eslint-disable-next-line react/naming-convention/component-name
             icon: <Icons.ENS size={36} />,
         },
     ],

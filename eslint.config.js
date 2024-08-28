@@ -200,8 +200,11 @@ const avoidMistakeRules = {
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
     'unicorn/no-negation-in-equality-check': 'error', // !foo === bar
     'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
+    'react/web-api/no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
+    'react/web-api/no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
+    'react/web-api/no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
     'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
-    'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} />
+    // 'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
     'react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
     'react/no-nested-components': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks

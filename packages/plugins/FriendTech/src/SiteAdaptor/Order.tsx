@@ -130,6 +130,7 @@ export const Order = memo(function Order() {
                         component="div"
                         skeletonWidth={150}
                         loading={loadingPrice}>
+                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                         <Translate.sell_summary
                             values={{
                                 count,

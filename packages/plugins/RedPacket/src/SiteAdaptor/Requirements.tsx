@@ -193,6 +193,7 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.UserPlus className={classes.icon} size={16} />
                         <Typography className={classes.text}>
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <RedPacketTrans.follow_somebody_on_somewhere
                                 values={{
                                     handles: handles.join(', '),
@@ -254,6 +255,7 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />
                         <Typography className={classes.text}>
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <RedPacketTrans.nft_holder_of
                                 values={{
                                     names: collectionNames,

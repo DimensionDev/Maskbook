@@ -56,6 +56,7 @@ export function ProposeCard({ feed, ...rest }: ProposeCardProps) {
     return (
         <CardFrame type={CardType.GovernancePropose} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.propose
                     values={{
                         user,

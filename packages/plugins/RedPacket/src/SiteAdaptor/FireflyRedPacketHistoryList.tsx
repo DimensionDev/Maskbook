@@ -58,13 +58,16 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     if (!histories?.length)
         return (
             <EmptyStatus className={classes.placeholder}>
-                {historyType === FireflyRedPacketAPI.ActionType.Claim ?
-                    t.no_claim_history_data()
-                :   <RedPacketTrans.no_sent_history_data
-                        components={{
-                            div: <div />,
-                        }}
-                    />
+                {
+                    historyType === FireflyRedPacketAPI.ActionType.Claim ?
+                        t.no_claim_history_data()
+                        // eslint-disable-next-line react/naming-convention/component-name
+                    :   <RedPacketTrans.no_sent_history_data
+                            components={{
+                                div: <div />,
+                            }}
+                        />
+
                 }
             </EmptyStatus>
         )

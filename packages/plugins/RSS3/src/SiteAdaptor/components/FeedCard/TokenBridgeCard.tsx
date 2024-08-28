@@ -75,6 +75,7 @@ export function TokenBridgeCard({ feed, ...rest }: TokenBridgeCardProps) {
     return (
         <CardFrame type={CardType.TokenBridge} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.token_bridge
                     values={{
                         user,

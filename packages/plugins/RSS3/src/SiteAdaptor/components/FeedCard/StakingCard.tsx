@@ -73,6 +73,7 @@ export function StakingCard({ feed, ...rest }: StakingFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.token_staking
                     values={{
                         user,

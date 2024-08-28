@@ -70,9 +70,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
 }
 
 function Main<T>(props: { data: T; UI: Inject<any> }) {
-    const { data, UI } = props
-    if (isRawInjectHook(UI)) return <RawHookRender UI={UI} data={data} />
-    return <UI {...data} />
+    const { data, UI: Render } = props
+    if (isRawInjectHook(Render)) return <RawHookRender UI={Render} data={data} />
+    return <Render {...data} />
 }
 function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     const [ref, setRef] = useState<HTMLDivElement | null>()
