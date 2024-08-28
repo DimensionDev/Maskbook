@@ -6,10 +6,10 @@ import { debounce, type DebouncedFunc } from 'lodash-es'
 export const i18NextInstance = i18n.default || i18n
 if (process.env.NODE_ENV === 'development') {
     if (Reflect.get(globalThis, '__mask_shared_base__')) {
-        throw new Error('@masknet/shared-base initialized twice. Please check your code.')
+        console.error('@masknet/shared-base has been already initialized . Please check your code.')
+    } else {
+        Reflect.defineProperty(globalThis, '__mask_shared_base__', { value: true })
     }
-
-    Reflect.defineProperty(globalThis, '__mask_shared_base__', { value: true })
 }
 
 if (!i18NextInstance.isInitialized) {
