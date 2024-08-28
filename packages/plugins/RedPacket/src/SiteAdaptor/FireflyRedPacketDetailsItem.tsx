@@ -171,7 +171,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 })
 
 const platformIconMap = {
-    [FireflyRedPacketAPI.PlatformType.twitter]: <Icons.TwitterX size={18} />,
+    [FireflyRedPacketAPI.PlatformType.twitter]: <Icons.TwitterXRound variant="light" size={18} />,
     [FireflyRedPacketAPI.PlatformType.lens]: <Icons.Lens size={18} />,
     [FireflyRedPacketAPI.PlatformType.farcaster]: <Icons.Farcaster size={18} />,
 }
@@ -197,6 +197,11 @@ interface HistoryInfo {
     claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
     share_from?: string
     theme_id?: string
+    post_on?: Array<{
+        platform: FireflyRedPacketAPI.PlatformType
+        postId: string
+        handle?: string
+    }>
 }
 
 interface Props {
@@ -245,6 +250,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
         claim_strategy,
         share_from,
         theme_id,
+        post_on,
     } = history
     const t = useRedPacketTrans()
 
@@ -307,18 +313,13 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                                         />
                                     </div>
                                 :   null}
-                                {(
-                                    (postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload)
-                                        ?.params && isDetail
-                                ) ?
+                                {post_on?.length && isDetail ?
                                     <div className={classes.fullWidthBox}>
                                         <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
                                             {t.post_on()}
                                         </Typography>
                                         <div className={classes.icons}>
-                                            {(
-                                                postReactionStrategy?.payload as FireflyRedPacketAPI.PostReactionStrategyPayload
-                                            )?.params
+                                            {post_on
                                                 ?.sort((a, b) => {
                                                     if (a.platform === b.platform) return 0
                                                     if (a.platform === FireflyRedPacketAPI.PlatformType.lens) return 1
