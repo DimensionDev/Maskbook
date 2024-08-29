@@ -1,9 +1,9 @@
+import { twitterDomainMigrate } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 import { staleCached } from '../../helpers/fetchCached.js'
 import { fetchGlobal } from '../../helpers/fetchGlobal.js'
 import { getHeaders } from './getTokens.js'
-import { twitterDomainMigrate } from '@masknet/shared-base'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
