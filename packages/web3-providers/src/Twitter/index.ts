@@ -59,7 +59,6 @@ export class Twitter {
         checkNFTAvatar?: boolean,
     ): Promise<TwitterBaseAPI.User | null> {
         if (!screenName) return null
-        if (checkNFTAvatar) return getUserByScreenName(screenName)
         return getUserByScreenName(screenName)
     }
 
