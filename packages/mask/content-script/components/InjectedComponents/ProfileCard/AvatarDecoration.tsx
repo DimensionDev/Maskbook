@@ -10,6 +10,8 @@ interface Props {
 export function AvatarDecoration({ userId, className, size }: Props) {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', 'check-nft-avatar', userId],
+        staleTime: 60_000,
+        retry: 0,
         queryFn: () => {
             if (!userId) return null
             return Twitter.getUserByScreenName(userId, true)
