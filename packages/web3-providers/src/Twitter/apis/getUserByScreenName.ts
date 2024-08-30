@@ -1,9 +1,9 @@
+import { twitterDomainMigrate } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import type { TwitterBaseAPI } from '../../entry-types.js'
 import { staleCached } from '../../helpers/fetchCached.js'
 import { fetchGlobal } from '../../helpers/fetchGlobal.js'
 import { getHeaders } from './getTokens.js'
-import { twitterDomainMigrate } from '@masknet/shared-base'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
@@ -22,7 +22,9 @@ const features = {
 }
 
 async function createRequest(screenName: string) {
-    const url = urlcat(twitterDomainMigrate('https://x.com/i/api/graphql/sLVLhk0bGj3MVFEKTdax1w/UserByScreenName'), {
+    // cspell:disable-next-line
+    // Yka-W8dz7RaEuQNkroPkYw is queryId for UserByScreenName
+    const url = urlcat('https://x.com/i/api/graphql/Yka-W8dz7RaEuQNkroPkYw/UserByScreenName', {
         variables: JSON.stringify({
             screen_name: screenName,
             withSafetyModeUserFields: true,
@@ -34,7 +36,7 @@ async function createRequest(screenName: string) {
     return new Request(url, {
         headers: getHeaders({
             'content-type': 'application/json',
-            referer: twitterDomainMigrate(`https://twitter.com/${screenName}`),
+            referer: twitterDomainMigrate(`https://x.com/${screenName}`),
         }),
         credentials: 'include',
     })

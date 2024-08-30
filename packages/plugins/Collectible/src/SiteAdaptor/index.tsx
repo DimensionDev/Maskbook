@@ -157,7 +157,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             <Web3ContextProvider network={result.pluginID}>
                                 <UserAssetsProvider pluginID={result.pluginID} account={socialAccount.address}>
                                     <CollectionList
-                                        height={479}
+                                        height={478}
                                         gridProps={gridProps}
                                         disableWindowScroll
                                         onItemClick={inspectCollectible}

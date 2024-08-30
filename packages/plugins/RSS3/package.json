@@ -30,6 +30,7 @@
     "@types/uuid": "^9.0.3",
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
+    "@servie/events": "^3.0.0",
     "linkify-react": "^4.1.1",
     "linkifyjs": "^4.1.1",
     "uuid": "^9.0.0"

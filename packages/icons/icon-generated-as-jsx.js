@@ -25,6 +25,11 @@ export const Avalanche = /*#__PURE__*/ __createIcon('Avalanche', [
         u: () => new URL('./brands/Avalanche.svg', import.meta.url).href,
     },
 ])
+export const Base = /*#__PURE__*/ __createIcon('base', [
+    {
+        u: () => new URL('./brands/base.png', import.meta.url).href,
+    },
+])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [
     {
         u: () => new URL('./brands/BSC.svg', import.meta.url).href,
@@ -63,6 +68,11 @@ export const Crossbell = /*#__PURE__*/ __createIcon('Crossbell', [
 export const CrossSync = /*#__PURE__*/ __createIcon('CrossSync', [
     {
         u: () => new URL('./brands/CrossSync.svg', import.meta.url).href,
+    },
+])
+export const Curve = /*#__PURE__*/ __createIcon('Curve', [
+    {
+        u: () => new URL('./brands/Curve.png', import.meta.url).href,
     },
 ])
 export const CyberConnect = /*#__PURE__*/ __createIcon('CyberConnect', [
@@ -229,6 +239,11 @@ export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
         u: () => new URL('./brands/Gnosis.svg', import.meta.url).href,
     },
 ])
+export const Highlight = /*#__PURE__*/ __createIcon('Highlight', [
+    {
+        u: () => new URL('./brands/Highlight.svg', import.meta.url).href,
+    },
+])
 export const Instagram = /*#__PURE__*/ __createIcon('Instagram', [
     {
         u: () => new URL('./brands/Instagram.svg', import.meta.url).href,
@@ -254,6 +269,11 @@ export const IPFS = /*#__PURE__*/ __createIcon('IPFS', [
         u: () => new URL('./brands/IPFS.svg', import.meta.url).href,
     },
 ])
+export const Iqwiki = /*#__PURE__*/ __createIcon('Iqwiki', [
+    {
+        u: () => new URL('./brands/Iqwiki.svg', import.meta.url).href,
+    },
+])
 export const Keybase = /*#__PURE__*/ __createIcon('Keybase', [
     {
         u: () => new URL('./brands/Keybase.svg', import.meta.url).href,
@@ -272,6 +292,16 @@ export const Leaderboard = /*#__PURE__*/ __createIcon('Leaderboard', [
 export const Lens = /*#__PURE__*/ __createIcon('Lens', [
     {
         u: () => new URL('./brands/Lens.svg', import.meta.url).href,
+    },
+])
+export const Lido = /*#__PURE__*/ __createIcon('Lido', [
+    {
+        u: () => new URL('./brands/Lido.svg', import.meta.url).href,
+    },
+])
+export const Linea = /*#__PURE__*/ __createIcon('Linea', [
+    {
+        u: () => new URL('./brands/Linea.svg', import.meta.url).href,
     },
 ])
 export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
@@ -423,6 +453,11 @@ export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
         u: () => new URL('./brands/NFTScan.svg', import.meta.url).href,
     },
 ])
+export const OneInch = /*#__PURE__*/ __createIcon('OneInch', [
+    {
+        u: () => new URL('./brands/OneInch.png', import.meta.url).href,
+    },
+])
 export const OpenSea = /*#__PURE__*/ __createIcon('OpenSea', [
     {
         u: () => new URL('./brands/OpenSea.svg', import.meta.url).href,
@@ -493,6 +528,11 @@ export const RSS3 = /*#__PURE__*/ __createIcon('RSS3', [
         u: () => new URL('./brands/RSS3.svg', import.meta.url).href,
     },
 ])
+export const Savm = /*#__PURE__*/ __createIcon('Savm', [
+    {
+        u: () => new URL('./brands/Savm.svg', import.meta.url).href,
+    },
+])
 export const SimpleHash = /*#__PURE__*/ __createIcon('SimpleHash', [
     {
         u: () => new URL('./brands/SimpleHash.png', import.meta.url).href,
@@ -501,6 +541,11 @@ export const SimpleHash = /*#__PURE__*/ __createIcon('SimpleHash', [
 export const Solana = /*#__PURE__*/ __createIcon('Solana', [
     {
         u: () => new URL('./brands/Solana.svg', import.meta.url).href,
+    },
+])
+export const Stargate = /*#__PURE__*/ __createIcon('Stargate', [
+    {
+        u: () => new URL('./brands/Stargate.png', import.meta.url).href,
     },
 ])
 export const SushiSwap = /*#__PURE__*/ __createIcon('SushiSwap', [
@@ -873,6 +918,23 @@ export const ArrowUp = /*#__PURE__*/ __createIcon('ArrowUp', [
         s: true,
     },
 ])
+export const ArrowUp2 = /*#__PURE__*/ __createIcon('ArrowUp2', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M20.0655 16.0665C19.7531 16.3789 19.2465 16.3789 18.9341 16.0665L12.4998 9.63215L6.06549 16.0665C5.75307 16.3789 5.24654 16.3789 4.93412 16.0665C4.6217 15.754 4.6217 15.2475 4.93412 14.9351L11.9341 7.9351C12.2465 7.62268 12.7531 7.62268 13.0655 7.9351L20.0655 14.9351C20.3779 15.2475 20.3779 15.754 20.0655 16.0665Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const ArrowUpRound = /*#__PURE__*/ __createIcon('ArrowUpRound', [
     {
         j: () =>
@@ -998,6 +1060,23 @@ export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
 export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
     {
         u: () => new URL('./general/BestTrade.svg', import.meta.url).href,
+    },
+])
+export const Blocks = /*#__PURE__*/ __createIcon('Blocks', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 16 16',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M9.014 1.267c.378-.336.904-.434 1.473-.434h2.693c.569 0 1.095.098 1.473.434.393.35.514.852.514 1.387V5.68c0 .534-.12 1.037-.515 1.386-.379.336-.905.43-1.473.428h-2.692c-.568 0-1.094-.096-1.473-.431-.394-.35-.514-.853-.514-1.39v-3.02c0-.534.12-1.036.514-1.386Zm.664.748c-.085.075-.178.233-.178.639v3.02c0 .41.093.566.177.64.1.088.317.18.81.18h2.696c.49.003.707-.089.806-.177.085-.074.178-.23.178-.637V2.654c0-.406-.093-.564-.178-.64-.1-.088-.318-.18-.809-.18h-2.693c-.491 0-.709.092-.81.18Zm-.686 6.977c.379-.378.915-.492 1.495-.492h2.693c.58 0 1.116.114 1.494.492.379.379.493.915.493 1.495v2.693c0 .58-.114 1.116-.493 1.494-.378.379-.914.493-1.494.493h-2.693c-.58 0-1.116-.114-1.495-.493-.378-.378-.492-.914-.492-1.494v-2.693c0-.58.114-1.116.492-1.495ZM9.7 9.7c-.1.1-.199.308-.199.788v2.693c0 .48.1.687.2.787.1.1.307.2.787.2h2.693c.48 0 .687-.1.787-.2.1-.1.2-.307.2-.787v-2.693c0-.48-.1-.688-.2-.788-.1-.1-.307-.199-.787-.199h-2.693c-.48 0-.688.1-.788.2ZM1.347 1.267C1.725.931 2.251.833 2.82.833h2.693c.57 0 1.095.098 1.473.434.394.35.514.852.514 1.387V5.68c0 .534-.12 1.037-.514 1.386-.38.336-.905.43-1.474.428H2.82c-.567 0-1.093-.096-1.472-.431-.394-.35-.515-.853-.515-1.39v-3.02c0-.534.121-1.036.514-1.386Zm.664.748c-.085.075-.178.233-.178.639v3.02c0 .41.094.566.178.64.1.088.316.18.81.18h2.696c.49.003.707-.089.806-.177.084-.074.177-.23.177-.637V2.654c0-.406-.093-.564-.178-.64-.1-.088-.318-.18-.809-.18H2.82c-.49 0-.708.092-.809.18Zm-.685 6.977c.378-.378.914-.492 1.494-.492h2.693c.58 0 1.116.114 1.495.492.378.379.492.915.492 1.495v2.693c0 .58-.114 1.116-.492 1.494-.379.379-.914.493-1.495.493H2.82c-.58 0-1.116-.114-1.494-.493-.379-.378-.493-.914-.493-1.494v-2.693c0-.58.114-1.116.493-1.495Zm.707.707c-.1.1-.2.308-.2.788v2.693c0 .48.1.687.2.787.1.1.307.2.787.2h2.693c.48 0 .688-.1.788-.2.1-.1.2-.307.2-.787v-2.693c0-.48-.1-.688-.2-.788-.1-.1-.308-.199-.788-.199H2.82c-.48 0-.687.1-.787.2Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
     },
 ])
 export const BluePin = /*#__PURE__*/ __createIcon('BluePin', [
@@ -1946,7 +2025,6 @@ export const Filter = /*#__PURE__*/ __createIcon('Filter', [
         j: () =>
             /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
-                fill: 'none',
                 viewBox: '0 0 24 24',
                 children: /*#__PURE__*/ _jsx('path', {
                     fill: 'currentColor',
@@ -2035,30 +2113,24 @@ export const Folder = /*#__PURE__*/ __createIcon('Folder', [
 ])
 export const Gas = /*#__PURE__*/ __createIcon('Gas', [
     {
-        u: () => new URL('./general/Gas.svg', import.meta.url).href,
-    },
-])
-export const GasStation = /*#__PURE__*/ __createIcon('GasStation', [
-    {
         j: () =>
-            /*#__PURE__*/ _jsxs('svg', {
+            /*#__PURE__*/ _jsx('svg', {
                 xmlns: 'http://www.w3.org/2000/svg',
                 fill: 'none',
                 viewBox: '0 0 24 24',
-                children: [
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        fillRule: 'evenodd',
-                        d: 'M4.92 3.338c-.354.327-.62.85-.62 1.662v16.2h12.4V5c0-.811-.265-1.335-.62-1.662-.364-.336-.906-.538-1.58-.538h-8c-.674 0-1.215.202-1.58.538ZM3.836 2.162C4.556 1.498 5.514 1.2 6.5 1.2h8c.986 0 1.945.298 2.665.962.73.674 1.135 1.65 1.135 2.838v17a.8.8 0 0 1-.8.8h-14a.8.8 0 0 1-.8-.8V5c0-1.188.405-2.164 1.136-2.838Z',
-                        clipRule: 'evenodd',
-                    }),
-                    /*#__PURE__*/ _jsx('path', {
-                        fill: 'currentColor',
-                        fillRule: 'evenodd',
-                        d: 'M1.2 22a.8.8 0 0 1 .8-.8h17a.8.8 0 0 1 0 1.6H2a.8.8 0 0 1-.8-.8ZM6.53 4.811c.538-.47 1.226-.62 1.86-.62h4.23c.635 0 1.323.15 1.861.62.558.487.83 1.205.83 2.07v1.23c0 .864-.272 1.582-.83 2.069-.538.47-1.226.62-1.86.62H8.39c-.635 0-1.323-.15-1.862-.62-.558-.487-.829-1.205-.829-2.07V6.88c0-.864.271-1.582.83-2.069Zm1.05 1.206c-.127.11-.28.338-.28.863v1.23c0 .526.153.753.28.864.147.128.404.226.81.226h4.23c.405 0 .662-.098.808-.226.127-.11.281-.338.281-.864V6.88c0-.525-.154-.752-.28-.863-.147-.128-.404-.227-.81-.227H8.39c-.405 0-.662.1-.809.227Zm4.258 6.187a.8.8 0 0 1 0 1.131l-1.741 1.741h2.738a.8.8 0 0 1 .584 1.346l-3.134 3.355a.8.8 0 1 1-1.169-1.092l1.876-2.009H8.165A.8.8 0 0 1 7.6 15.31l3.107-3.107a.8.8 0 0 1 1.131 0Zm7.447-3.561a.8.8 0 0 1 1.073-.358l2 1A.8.8 0 0 1 22.8 10v6a.8.8 0 0 1-.798.8l-4.5.01a.8.8 0 0 1-.004-1.6l3.702-.008v-4.707l-1.558-.78a.8.8 0 0 1-.357-1.072Z',
-                        clipRule: 'evenodd',
-                    }),
-                ],
+                children: /*#__PURE__*/ _jsxs('g', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    clipRule: 'evenodd',
+                    children: [
+                        /*#__PURE__*/ _jsx('path', {
+                            d: 'M4.92 3.338c-.354.327-.62.85-.62 1.662v16.2h12.4V5c0-.811-.265-1.335-.62-1.662-.364-.336-.906-.538-1.58-.538h-8c-.674 0-1.215.202-1.58.538zM3.836 2.162C4.556 1.498 5.514 1.2 6.5 1.2h8c.986 0 1.945.298 2.665.962.73.674 1.135 1.65 1.135 2.838v17a.8.8 0 0 1-.8.8h-14a.8.8 0 0 1-.8-.8V5c0-1.188.405-2.164 1.136-2.838z',
+                        }),
+                        /*#__PURE__*/ _jsx('path', {
+                            d: 'M1.2 22a.8.8 0 0 1 .8-.8h17a.8.8 0 0 1 0 1.6H2a.8.8 0 0 1-.8-.8zM6.53 4.811c.538-.47 1.226-.62 1.86-.62h4.23c.635 0 1.323.15 1.861.62.558.487.83 1.205.83 2.07v1.23c0 .864-.272 1.582-.83 2.069-.538.47-1.226.62-1.86.62H8.39c-.635 0-1.323-.15-1.862-.62-.558-.487-.829-1.205-.829-2.07V6.88c0-.864.271-1.582.83-2.069zm1.05 1.206c-.127.11-.28.338-.28.863v1.23c0 .526.153.753.28.864.147.128.404.226.81.226h4.23c.405 0 .662-.098.808-.226.127-.11.281-.338.281-.864V6.88c0-.525-.154-.752-.28-.863-.147-.128-.404-.227-.81-.227H8.39c-.405 0-.662.1-.809.227zm4.258 6.187a.8.8 0 0 1 0 1.131l-1.741 1.741h2.738a.8.8 0 0 1 .584 1.346l-3.134 3.355a.8.8 0 1 1-1.169-1.092l1.876-2.009H8.165A.8.8 0 0 1 7.6 15.31l3.107-3.107a.8.8 0 0 1 1.131 0zm7.447-3.561a.8.8 0 0 1 1.073-.358l2 1A.8.8 0 0 1 22.8 10v6a.8.8 0 0 1-.798.8l-4.5.01a.8.8 0 0 1-.004-1.6l3.702-.008v-4.707l-1.558-.78a.8.8 0 0 1-.357-1.072z',
+                        }),
+                    ],
+                }),
             }),
         s: true,
     },
