@@ -217,6 +217,7 @@ export const Component = memo(function SettingsPage() {
                                 classes={itemClasses}
                                 primary={t.popups_settings_supported_sites()}
                                 secondary={
+                                    // eslint-disable-next-line react/naming-convention/component-name
                                     <MaskSharedTrans.popups_settings_supported_website
                                         components={{
                                             strong: <span style={{ color: theme.palette.maskColor.main }} />,

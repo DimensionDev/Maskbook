@@ -177,6 +177,9 @@ importers:
       '@eslint-react/eslint-plugin':
         specifier: ^1.12.2
         version: 1.12.2(eslint@9.8.0)(typescript@5.5.2)
+      '@eslint/compat':
+        specifier: ^1.1.1
+        version: 1.1.1
       '@lingui/cli':
         specifier: ^4.11.3
         version: 4.11.3(typescript@5.5.2)
@@ -272,7 +275,7 @@ importers:
         version: 5.3.2(@types/node@20.14.9)(terser@5.31.1)
       vitest:
         specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0)(terser@5.31.1)
+        version: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))(terser@5.31.1)
 
   packages/backup-format:
     dependencies:
@@ -3817,9 +3820,6 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
-    peerDependenciesMeta:
-      '@types/webextension-polyfill':
-        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -4284,6 +4284,10 @@ packages:
   '@eslint-react/var@1.12.2':
     resolution: {integrity: sha512-e22lkJpSfz4uEV8D5QnYkdS3hVvv0ckq1OzqdT+6Su7UWZBsQ/dHNPhaTEU7DZNp/eNQ44GgQ9O648PaKMCEEg==}
 
+  '@eslint/compat@1.1.1':
+    resolution: {integrity: sha512-lpHyRyplhGPL5mGEh6M9O5nnKk0Gz4bFI+Zu6tKlPpDUN7XshWvH9C/px4UVm87IAANE0W81CEsNGbS1KlzXpA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   '@eslint/config-array@0.17.1':
     resolution: {integrity: sha512-BlYOpej8AQ8Ev9xVqroV7a02JK3SkBAaN9GfMMH9W6Ch8FlQlkjGw4Ir7+FgYwfirivAf4t+GtzuAxqfukmISA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -4553,6 +4557,7 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -4560,6 +4565,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.2':
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/retry@0.3.0':
     resolution: {integrity: sha512-d2CGZR2o7fS6sWB7DG/3a95bGKQyHMACZ5aW8qGkkqQpUoZV6C0X7Pc7l4ZNMZkfNBf4VWNe9E1jRsf0G146Ew==}
@@ -5191,6 +5197,9 @@ packages:
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+    peerDependenciesMeta:
+      webpack:
+        optional: true
 
   '@nice-labs/git-rev@3.5.1':
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
@@ -13098,7 +13107,7 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       '@swc/core': 1.6.13
-      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
+      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0 || 4
 
   rollup-preserve-directives@1.1.1:
     resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==}
@@ -13348,6 +13357,7 @@ packages:
 
   shortid@2.2.16:
     resolution: {integrity: sha512-Ugt+GIZqvGXCIItnsL+lvFJOiN7RYqlGy7QE41O3YC1xbNSeDGIRO7xg2JJXIAj1cAGnOeC1r7/T9pgrtQbv4g==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -13878,6 +13888,7 @@ packages:
   through2-filter@3.1.0:
     resolution: {integrity: sha512-VhZsTsfrIJjyUi6GeecnwcOJlmoqgIdGFDjqnV5ape+F1DN8GejfPO66XyIhoinxmxGImiUTrq9RwpTN5yszGA==}
     engines: {node: '>= 6'}
+    deprecated: this package has been deprecated for breaking semver major
 
   through2@4.0.2:
     resolution: {integrity: sha512-iOqSav00cVxEEICeD7TjLB1sueEL+81Wpzp2bY17uZjZN0pWZPuo4suZ/61VujxmqSGFfgOcNuTZ85QJwNZQpw==}
@@ -16332,10 +16343,9 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
+      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.2
-    optionalDependencies:
-      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
@@ -16772,6 +16782,8 @@ snapshots:
       - eslint
       - supports-color
       - typescript
+
+  '@eslint/compat@1.1.1': {}
 
   '@eslint/config-array@0.17.1':
     dependencies:
@@ -18299,7 +18311,7 @@ snapshots:
     optional: true
 
   '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
-    dependencies:
+    optionalDependencies:
       webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
 
   '@nice-labs/git-rev@3.5.1': {}
@@ -19960,7 +19972,7 @@ snapshots:
       pathe: 1.1.1
       picocolors: 1.0.0
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0)(terser@5.31.1)
+      vitest: 1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))(terser@5.31.1)
 
   '@vitest/utils@1.6.0':
     dependencies:
@@ -29915,7 +29927,7 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.31.1
 
-  vitest@1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0)(terser@5.31.1):
+  vitest@1.6.0(@types/node@20.14.9)(@vitest/ui@1.6.0)(jsdom@20.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10))(terser@5.31.1):
     dependencies:
       '@vitest/expect': 1.6.0
       '@vitest/runner': 1.6.0
@@ -30833,4 +30845,5 @@ snapshots:
 
   zwitch@2.0.2: {}
 
-time: {}
+time:
+  '@types/web@0.0.150': '2024-06-26T04:08:07.551Z'
