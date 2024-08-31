@@ -7,7 +7,7 @@ pnpm-lock.yaml
 
 *generated*
 
-locale/*.json
+**/locale/*.json
 
 # VSCode personal settings
 .vscode/launch.json
