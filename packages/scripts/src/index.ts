@@ -28,5 +28,6 @@ export { buildContracts } from './projects/build-contracts.js'
 
 // Linter
 export { fixPluginsTSConfig } from './linter/plugin-projects.js'
-export { lintPackageJson as lintSideEffects } from './linter/package-json.js'
+export { lintPackageJson } from './linter/package-json.js'
 export { lintIndex } from './linter/index-lint.js'
+export { lintPo } from './linter/po-files.js'

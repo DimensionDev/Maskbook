@@ -38,6 +38,9 @@ jobs:
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
       - run: npx gulp lint-package-json
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: package.json'
       - run: npx gulp codegen
       - uses: EndBug/add-and-commit@v9
         with:
@@ -50,6 +53,10 @@ jobs:
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: packages/plugins/tsconfig.json'
+      - run: npx gulp lint-po
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'fix: po files'
   prettier:
     runs-on: ubuntu-latest
     permissions:
