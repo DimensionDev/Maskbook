@@ -13,6 +13,6 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: popups/pages/Settings/index.tsx:242
+#: popups/pages/Settings/index.tsx:243
 msgid "Data correlation"
 msgstr "データの相関値"
