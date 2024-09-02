@@ -522,7 +522,8 @@ const moduleSystemRules = {
     'no-useless-rename': 'error',
 
     // Avoid mistake
-    'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
+    // 'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
+    // TypeError: context.getDeclaredVariables is not a function
     'import/no-absolute-path': 'error',
     // 'import/no-cycle': 'warn',
     // 'import/no-extraneous-dependencies': 'error', // import from devDependencies might be a mistake
@@ -613,6 +614,27 @@ export default tseslint.config(
         files: ['packages/**/tests/**/*.ts'],
         rules: {
             'unicorn/consistent-function-scoping': 'off',
+        },
+    },
+    {
+        files: ['packages/**/*.ts', 'packages/**/*.tsx'],
+        ignores: [
+            'packages/shared/**/*',
+            'packages/shared-base-ui/**/*',
+            'packages/mask/**/*',
+            'packages/theme/**/*',
+            'packages/plugins/**/*',
+        ],
+        rules: {
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    paths: [
+                        { name: '@lingui/react', message: 'Non-UI packages must not reference @lingui/react.' },
+                        { name: '@lingui/marco', message: 'Non-UI packages must not reference @lingui/marco.' },
+                    ],
+                },
+            ],
         },
     },
 )

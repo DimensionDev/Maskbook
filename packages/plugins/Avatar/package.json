@@ -36,5 +36,15 @@
     "react-router-dom": "^6.24.0",
     "react-use": "^17.5.0",
     "use-subscription": "^1.8.0"
+  },
+  "lingui": {
+    "catalogs": [{ "path": "src/locale/{locale}", "include": ["src"] }],
+    "compileNamespace": "json",
+    "locales": ["en-US", "ja-JP", "ko-KR", "zh-CN", "zh-TW"],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
   }
 }

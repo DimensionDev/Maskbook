@@ -31,5 +31,15 @@
     "date-fns": "^3.6.0",
     "linkify-react": "^4.1.3",
     "linkifyjs": "^4.1.3"
+  },
+  "lingui": {
+    "catalogs": [{ "path": "src/locale/{locale}", "include": ["src"] }],
+    "compileNamespace": "json",
+    "locales": ["en-US", "ja-JP", "ko-KR", "zh-CN", "zh-TW"],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
   }
 }
