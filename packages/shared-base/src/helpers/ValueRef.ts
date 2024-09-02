@@ -1,7 +1,7 @@
 // All imports must be deferred. This file loads in the very early stage.
 
 // false positive. we're not using lodash.get
- 
+
 import * as lodash /* webpackDefer: true */ from 'lodash-es'
 import * as constants /* webpackDefer: true */ from '../constants.js'
 import * as stringify /* webpackDefer: true */ from 'json-stable-stringify'
