@@ -48,6 +48,7 @@ const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open
                 <Typography className={classes.title}>{t.setup_smart_pay_title()}</Typography>
                 <Box component="ul">
                     <Typography component="li" className={classes.content}>
+                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                         <SmartPayTrans.setup_smart_pay_one
                             components={{ strong: <strong className={classes.strong} /> }}
                         />

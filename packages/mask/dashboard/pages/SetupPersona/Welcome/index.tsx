@@ -109,6 +109,7 @@ export const Component = memo(function Welcome() {
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <DashboardTrans.welcome_new_agreement_policy
                         components={{
                             agreement: (

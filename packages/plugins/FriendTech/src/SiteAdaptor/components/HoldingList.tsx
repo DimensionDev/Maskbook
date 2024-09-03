@@ -65,6 +65,7 @@ export const HoldingList = memo(function HoldingList({ address, ...rest }: Props
             <div {...rest} className={cx(classes.container, rest.className)}>
                 <Box flexGrow={1} display="flex" alignItems="center" justifyContent="center">
                     <Typography color={theme.palette.maskColor.second} fontSize={14}>
+                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                         <Translate.no_keys
                             values={{ context: noKeysContext }}
                             context={noKeysContext}

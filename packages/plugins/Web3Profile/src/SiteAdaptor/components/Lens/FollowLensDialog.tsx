@@ -343,10 +343,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         </Typography>
                         <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <Web3ProfileTrans.followers
                                 components={{ strong: <strong /> }}
                                 values={{ followers: String(profile?.stats.followers ?? '0') }}
                             />
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <Web3ProfileTrans.following
                                 components={{ strong: <strong /> }}
                                 values={{ following: String(profile?.stats.following ?? '0') }}

@@ -86,6 +86,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             const confirmed = await ConfirmModal.openAndWaitForClose({
                 title: t.delete_file(),
                 message: (
+                    // eslint-disable-next-line react/naming-convention/component-name
                     <FileServiceTrans.delete_message
                         values={{
                             name: file.name,

@@ -100,39 +100,43 @@ export function TokenOperationCard({ feed, ...rest }: TokenFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                {verbose ?
-                    <RSS3Trans.token_operation_verbose
-                        values={{
-                            from,
-                            to,
-                            value: formatValue(metadata),
-                            symbol: metadata!.symbol,
-                            /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
-                            // @ts-ignore
-                            exchange: action.platform!,
-                            context,
-                        }}
-                        components={{
-                            from: <Label title={action.address_from} />,
-                            to: <Label title={action.address_to} />,
-                            bold: <Label />,
-                        }}
-                    />
-                :   <RSS3Trans.token_operation
-                        values={{
-                            from,
-                            to,
-                            value: formatValue(metadata),
-                            symbol: metadata!.symbol,
-                            exchange: action.platform!,
-                            context,
-                        }}
-                        components={{
-                            from: <Label title={action.address_from} />,
-                            to: <Label title={action.address_to} />,
-                            bold: <Label />,
-                        }}
-                    />
+                {
+                    verbose ?
+                        // eslint-disable-next-line react/naming-convention/component-name
+                        <RSS3Trans.token_operation_verbose
+                            values={{
+                                from,
+                                to,
+                                value: formatValue(metadata),
+                                symbol: metadata!.symbol,
+                                /* eslint-disable-next-line  @typescript-eslint/ban-ts-comment */
+                                // @ts-ignore
+                                exchange: action.platform!,
+                                context,
+                            }}
+                            components={{
+                                from: <Label title={action.address_from} />,
+                                to: <Label title={action.address_to} />,
+                                bold: <Label />,
+                            }}
+                        />
+                        // eslint-disable-next-line react/naming-convention/component-name
+                    :   <RSS3Trans.token_operation
+                            values={{
+                                from,
+                                to,
+                                value: formatValue(metadata),
+                                symbol: metadata!.symbol,
+                                exchange: action.platform!,
+                                context,
+                            }}
+                            components={{
+                                from: <Label title={action.address_from} />,
+                                to: <Label title={action.address_to} />,
+                                bold: <Label />,
+                            }}
+                        />
+
                 }
             </Typography>
             {metadata ?

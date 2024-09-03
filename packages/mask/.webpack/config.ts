@@ -151,7 +151,10 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                             refresh: flags.reactRefresh,
                                         },
                                     },
-                                    experimental: { keepImportAttributes: true },
+                                    experimental: {
+                                        keepImportAttributes: true,
+                                        plugins: [['@lingui/swc-plugin', {}]],
+                                    },
                                 },
                             } satisfies import('@swc/core').Options,
                         },

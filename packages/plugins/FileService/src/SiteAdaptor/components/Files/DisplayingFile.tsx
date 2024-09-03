@@ -65,6 +65,7 @@ export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: Displ
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ?
                 <Typography className={classes.meta}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <FileServiceTrans.file_key
                         components={{
                             key: <Typography className={classes.metaValue} component="span" />,

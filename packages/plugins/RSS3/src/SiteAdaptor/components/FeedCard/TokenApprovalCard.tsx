@@ -72,30 +72,34 @@ export function TokenApprovalCard({ feed, ...rest }: TokenApprovalFeedCardProps)
     return (
         <CardFrame type={CardType.TokenApproval} feed={feed} {...rest}>
             <Typography className={classes.summary}>
-                {verbose ?
-                    <RSS3Trans.token_approval_verbose
-                        values={{
-                            user,
-                            amount,
-                            symbol: metadata?.symbol || '',
-                            context: metadata?.action,
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
-                :   <RSS3Trans.token_approval
-                        values={{
-                            user,
-                            amount,
-                            symbol: metadata?.symbol || '',
-                            contract: formatEthereumAddress(action.address_to!, 4),
-                            context: metadata?.action,
-                        }}
-                        components={{
-                            bold: <Label />,
-                        }}
-                    />
+                {
+                    verbose ?
+                        // eslint-disable-next-line react/naming-convention/component-name
+                        <RSS3Trans.token_approval_verbose
+                            values={{
+                                user,
+                                amount,
+                                symbol: metadata?.symbol || '',
+                                context: metadata?.action,
+                            }}
+                            components={{
+                                bold: <Label />,
+                            }}
+                        />
+                        // eslint-disable-next-line react/naming-convention/component-name
+                    :   <RSS3Trans.token_approval
+                            values={{
+                                user,
+                                amount,
+                                symbol: metadata?.symbol || '',
+                                contract: formatEthereumAddress(action.address_to!, 4),
+                                context: metadata?.action,
+                            }}
+                            components={{
+                                bold: <Label />,
+                            }}
+                        />
+
                 }
             </Typography>
             {metadata ?

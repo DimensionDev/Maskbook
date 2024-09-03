@@ -120,6 +120,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             switch (activityStatus) {
                 case ActivityStatus.NOT_START:
                     return (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <ClaimTrans.start_time_tips
                             values={{ time: format(startTime, 'MM-dd-yyyy HH:mm') }}
                             components={{ strong: <strong className={classes.strong} /> }}
@@ -134,6 +135,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     const days = differenceInDays(endTime, now)
 
                     return (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <ClaimTrans.airdrop_in_progress_time_tips
                             values={{
                                 days: String(days ?? ''),
@@ -145,6 +147,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     )
                 case ActivityStatus.ENDED:
                     return (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <ClaimTrans.end_time_tips
                             values={{ time: format(endTime, 'MM-dd-yyyy HH:mm') }}
                             components={{ strong: <strong className={classes.strong} /> }}

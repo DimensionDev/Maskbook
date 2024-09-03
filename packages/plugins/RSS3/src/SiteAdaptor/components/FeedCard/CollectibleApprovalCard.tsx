@@ -60,6 +60,7 @@ export function CollectibleApprovalCard({ feed, ...rest }: CollectibleApprovalFe
     return (
         <CardFrame type={CardType.CollectibleApproval} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.collectible_approval
                     values={{
                         user,

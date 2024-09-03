@@ -155,6 +155,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleMint,
                     metadata,
                     summary: (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <RSS3Trans.collectible_mint
                             values={{
                                 user,
@@ -179,6 +180,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleOut,
                     metadata,
                     summary: (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <RSS3Trans.collectible_trade
                             values={{
                                 user,
@@ -203,6 +205,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                         cardType: CardType.CollectibleIn,
                         metadata: feed.actions[1].metadata,
                         summary: (
+                            // eslint-disable-next-line react/naming-convention/component-name
                             <RSS3Trans.collectible_register_ens
                                 values={{
                                     user,
@@ -234,6 +237,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,
                     summary: (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <RSS3Trans.collectible_operation
                             values={{
                                 user,
@@ -261,6 +265,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                     cardType: CardType.CollectibleBurn,
                     metadata,
                     summary: (
+                        // eslint-disable-next-line react/naming-convention/component-name
                         <RSS3Trans.collectible_burn
                             values={{
                                 user,

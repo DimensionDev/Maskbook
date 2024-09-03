@@ -365,6 +365,7 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                             {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography variant="body1" className={classes.claimFooterInfo}>
+                                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                                         <RedPacketTrans.history_claimed_firefly
                                             components={{
                                                 span: <span />,

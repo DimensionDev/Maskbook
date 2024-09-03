@@ -51,6 +51,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ?
                 <Typography className={classes.meta}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <FileServiceTrans.file_key
                         components={{
                             key: <Typography className={classes.metaValue} component="span" />,

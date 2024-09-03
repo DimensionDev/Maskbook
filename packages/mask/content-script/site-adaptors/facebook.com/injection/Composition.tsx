@@ -42,9 +42,9 @@ const composeBox: LiveSelector<Element> =
 export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
-    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<UI />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<CompositionUI />)
 }
-function UI() {
+function CompositionUI() {
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const onHintButtonClicked = useCallback(

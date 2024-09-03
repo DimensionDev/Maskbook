@@ -1,5 +1,6 @@
+import { i18n } from '@lingui/core'
 import { LanguageOptions } from '@masknet/public-api'
-import i18n from 'i18next'
+import i18next from 'i18next'
 import Detector from 'i18next-browser-languagedetector'
 import { debounce, type DebouncedFunc } from 'lodash-es'
 
@@ -13,8 +14,8 @@ if (process.env.NODE_ENV === 'development') {
     Reflect.defineProperty(globalThis, '__mask_shared_base__', { value: true })
 }
 
-if (!i18n.isInitialized) {
-    i18n.use(Detector).init({
+if (!i18next.isInitialized) {
+    i18next.use(Detector).init({
         keySeparator: false,
         interpolation: { escapeValue: true },
         contextSeparator: '$',
@@ -36,12 +37,23 @@ if (!i18n.isInitialized) {
         },
     })
 }
+
+// https://github.com/lingui/js-lingui/issues/2021 lingui does not support fallback
+const map: Record<string, string> = {
+    [LanguageOptions.enUS]: 'en',
+    [LanguageOptions.jaJP]: 'ja',
+    [LanguageOptions.koKR]: 'ko',
+    [LanguageOptions.zhCN]: 'zh-CN',
+    [LanguageOptions.zhTW]: 'zh',
+}
 export function updateLanguage(next: LanguageOptions) {
     if (next === LanguageOptions.__auto__) {
-        const result: string[] = i18n.services.languageDetector.detect()
-        i18n.changeLanguage(result[0] || LanguageOptions.enUS)
+        const result: string[] = i18next.services.languageDetector.detect()
+        i18next.changeLanguage(result[0] || LanguageOptions.enUS)
+        i18n.activate(map[result[0] || LanguageOptions.enUS])
     } else {
-        i18n.changeLanguage(next)
+        i18next.changeLanguage(next)
+        i18n.activate(map[next])
     }
 }
 
@@ -53,14 +65,16 @@ function getInterpolations(string: string) {
         .sort(undefined)
         .join('')
 }
+
+// TODO: support lingui
 export function queryRemoteI18NBundle(
     _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: Record<string, string>]>>,
 ) {
     const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
     const update = (updater[cache] ??= debounce(async () => {
-        const result = await updater(i18n.language)
+        const result = await updater(i18next.language)
         for (const [ns, lang, json] of result) {
-            const next = { ...i18n.getResourceBundle(lang, ns) }
+            const next = { ...i18next.getResourceBundle(lang, ns) }
             for (const key in json) {
                 const value = json[key]
                 if (typeof value !== 'string') continue
@@ -70,12 +84,12 @@ export function queryRemoteI18NBundle(
                     next[key] = value
                 }
             }
-            i18n.addResourceBundle(lang, ns, next, true, true)
+            i18next.addResourceBundle(lang, ns, next, true, true)
         }
     }, 1500))
     update()
-    i18n.on('languageChanged', update)
-    return () => i18n.off('languageChanged', update)
+    i18next.on('languageChanged', update)
+    return () => i18next.off('languageChanged', update)
 }
 
 export type { TOptions as TranslateOptions } from 'i18next'
