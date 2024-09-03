@@ -10,7 +10,15 @@ import { useMemo, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 import { useQuotes } from '../hooks/useQuotes.js'
-import { formatBalance, leftShift, minus, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import {
+    dividedBy,
+    formatBalance,
+    formatCompact,
+    leftShift,
+    minus,
+    multipliedBy,
+    rightShift,
+} from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -114,6 +122,17 @@ const useStyles = makeStyles()((theme) => ({
                 '0px 0px 20px rgba(0, 0, 0, 0.05)'
             :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
+    infoRow: {
+        display: 'flex',
+        width: '100%',
+        alignItems: 'center',
+        color: theme.palette.maskColor.main,
+        justifyContent: 'space-between',
+    },
+    rowName: {
+        flexGrow: 1,
+        marginRight: 'auto',
+    },
 }))
 
 const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
@@ -151,6 +170,7 @@ export function SwapView() {
         toTokenAddress: toToken?.address,
     })
     const quote = quotes?.[0]
+
     const toTokenAmount = quote?.toTokenAmount
     const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {
         if (!quote) return { fromTokenValue: null, toTokenValue: null, priceDiff: null }
@@ -168,6 +188,16 @@ export function SwapView() {
             priceDiff: priceDiff?.toFixed(2),
         }
     }, [quote, amount])
+
+    const [forwardCompare, setForwardCompare] = useState(true)
+    const [baseToken, targetToken] =
+        forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
+    const rate =
+        quote ?
+            forwardCompare && quote ?
+                dividedBy(quote.toTokenAmount, quote.fromTokenAmount)
+            :   dividedBy(quote.fromTokenAmount, quote.toTokenAmount)
+        :   null
 
     return (
         <div className={classes.view}>
@@ -294,6 +324,22 @@ export function SwapView() {
                         </Box>
                     </Box>
                 </Box>
+
+                {quote && baseToken && targetToken ?
+                    <Box className={classes.box}>
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.rowName}>
+                                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.tokenSymbol}
+                                <Icons.Cached
+                                    size={16}
+                                    color={theme.palette.maskColor.main}
+                                    onClick={() => setForwardCompare((v) => !v)}
+                                />
+                            </Typography>
+                            <Icons.ArrowDownRound size={24} />
+                        </div>
+                    </Box>
+                :   null}
             </Box>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
                 <Button fullWidth>Swap</Button>
