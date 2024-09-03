@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url('#Lido_svg__clip0_11436_40751')">
+        <circle cx="12" cy="12" r="12" fill="#000"/>
+        <path fill="#fff" fill-rule="evenodd" d="m12 3.5 4.03 6.27L12 12.103 7.97 9.77zM9.205 9.472 12 5.122l2.797 4.35L12 11.092 9.204 9.473Z" clip-rule="evenodd"/>
+        <path fill="#fff" d="m11.999 14.298-4.676-2.706-.126.197a5.64 5.64 0 0 0 .771 7.053 5.727 5.727 0 0 0 8.06 0 5.63 5.63 0 0 0 .772-7.053l-.126-.197z"/>
+    </g>
+    <defs>
+        <clipPath id="Lido_svg__clip0_11436_40751">
+            <path fill="#fff" d="M0 0h24v24H0z"/>
+        </clipPath>
+    </defs>
+</svg>

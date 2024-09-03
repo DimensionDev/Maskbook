@@ -27,7 +27,8 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "react-use": "^17.5.0",
     "urlcat": "^3.1.0",
-    "date-fns": "^3.6.0"
+    "date-fns": "^3.6.0",
+    "web3-utils": "1.10.2"
   },
   "lingui": {
     "catalogs": [

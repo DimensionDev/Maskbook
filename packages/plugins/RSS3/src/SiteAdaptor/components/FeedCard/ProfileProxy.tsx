@@ -3,16 +3,12 @@ import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
-import { Label } from './common.js'
+import { ProfileProxyAction } from '../FeedActions/ProfileProxy.js'
 
 const useStyles = makeStyles<void, 'body'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
     body: {
         display: 'flex',
         flexDirection: 'row',
@@ -78,19 +74,7 @@ export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardP
             feed={feed}
             className={cx(className, rest.verbose ? classes.verbose : null)}
             {...rest}>
-            <Typography className={classes.summary}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.profile_proxy
-                    values={{
-                        user,
-                        platform: feed.platform!,
-                    }}
-                    components={{
-                        user: <Label />,
-                        platform: <Label />,
-                    }}
-                />
-            </Typography>
+            <ProfileProxyAction feed={feed} />
             {metadata ?
                 <div className={cx(classes.body)}>
                     <div className={classes.user}>

@@ -121,3 +121,4 @@ common/autoinstallers/*/.npmrc
 # Disallow other package manager lock-file
 /package-lock.json
 /yarn.lock
+quick-lint-js.config

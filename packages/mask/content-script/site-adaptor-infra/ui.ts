@@ -12,7 +12,6 @@ import {
     DashboardRoutes,
     ECKeyIdentifier,
     i18NextInstance,
-    queryRemoteI18NBundle,
     type SetupGuideContext,
     SetupGuideStep,
     setDebugObject,
@@ -125,8 +124,6 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
-
-    signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const lastRecognizedSub = createSubscriptionFromValueRef(ui.collecting.identityProvider.recognized, signal)
     const currentVisitingSub = createSubscriptionFromValueRef(

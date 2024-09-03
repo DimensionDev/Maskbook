@@ -10,12 +10,12 @@ import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
 import { formatTokenBalance } from '../../../../../shared/index.js'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
-import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {

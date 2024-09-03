@@ -88,29 +88,6 @@ function resolveLastRecognizedIdentityInner(
     createWatcher(searchWatcherAvatarSelector())
 }
 
-function resolveLastRecognizedIdentityMobileInner(
-    ref: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
-    cancel: AbortSignal,
-) {
-    const onLocationChange = async () => {
-        const settings = await Twitter.getSettings()
-        const identifier = ProfileIdentifier.of(twitterBase.networkIdentifier, settings?.screen_name).unwrapOr(
-            undefined,
-        )
-
-        if (identifier && !ref.value.identifier) {
-            ref.value = {
-                ...ref.value,
-                identifier,
-                isOwner: true,
-            }
-        }
-    }
-
-    onLocationChange()
-    window.addEventListener('locationchange', onLocationChange, { signal: cancel })
-}
-
 function getFirstSlug() {
     const slugs: string[] = location.pathname.split('/').filter(Boolean)
     return first(slugs)
@@ -123,6 +100,8 @@ function resolveCurrentVisitingIdentityInner(
 ) {
     const update = async (twitterId: string) => {
         const user = await queryClient.fetchQuery({
+            retry: 0,
+            staleTime: 60_000,
             queryKey: ['twitter', 'profile', twitterId],
             queryFn: () => Twitter.getUserByScreenName(twitterId),
         })

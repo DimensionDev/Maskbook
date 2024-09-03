@@ -90,36 +90,41 @@ export const cardTypeIconMap: Record<CardType, IconComponent> = {
 const platformIconMap: Record<Lowercase<RSS3BaseAPI.Network | RSS3BaseAPI.Platform>, IconComponent | null> = {
     // Networks
     ethereum: Icons.ETH,
-    binance_smart_chain: Icons.BSC,
+    'binance-smart-chain': Icons.BSC,
     polygon: Icons.Polygon,
-    xdai: Icons.Gnosis,
+    // xdai: Icons.Gnosis,
     arbitrum: Icons.Arbitrum,
     optimism: Icons.Optimism,
-    fantom: Icons.Fantom,
-    avalanche: Icons.Avalanche,
-    zksync: Icons.ZkScan,
-    // Platforms
-    gitcoin: Icons.Gitcoin,
+    avax: Icons.Avalanche,
     mirror: Icons.Mirror,
-    snapshot: Icons.Snapshot,
     uniswap: Icons.Uniswap,
-    binance: Icons.BSC,
-    lens: Icons.Lens,
     farcaster: Icons.Farcaster,
     crossbell: Icons.Crossbell,
-    '0x': Icons.ZeroX,
-    'ens registrar': null,
-    crosssync: Icons.CrossSync,
-    metamask: Icons.MetaMask,
     opensea: Icons.OpenSea,
-    sushiswap: Icons.SushiSwap,
-    pancakeswap: Icons.PancakeSwap,
     aave: Icons.Aave,
-    'crossbell.io': Icons.Crossbell,
-    xlog: Icons.XLog,
-    'eip-1577': Icons.EIP1577,
-    planet: Icons.Planet,
     arweave: Icons.Arweave,
+    paragraph: Icons.Mirror,
+    highlight: Icons.Highlight,
+    iqwiki: Icons.Iqwiki,
+    kiwistand: null,
+    lens: Icons.DarkLens,
+    lido: Icons.Lido,
+    looksrare: Icons.LooksRare,
+    matters: null,
+    base: Icons.Base,
+    gnosis: Icons.Gnosis,
+    linea: Icons.Linea,
+    '1inch': Icons.OneInch,
+    aavegotchi: Icons.Aave,
+    vsl: Icons.RSS3,
+    rss3: Icons.RSS3,
+    ens: Icons.ENS,
+    curve: Icons.Curve,
+    savm: Icons.Savm,
+    stargate: Icons.Planet,
+    planet: Icons.Planet,
+    'ens registrar': Icons.ENS,
+    unknown: null,
 }
 
 export const getPlatformIcon = (platform?: RSS3BaseAPI.Network | RSS3BaseAPI.Platform) => {
@@ -185,14 +190,14 @@ export function getCost(feed: RSS3BaseAPI.CollectibleTradeFeed): RSS3BaseAPI.Tra
 const ONE_MIN = 60 * 1000
 const ONE_HOUR = 60 * ONE_MIN
 const ONE_DAY = 24 * ONE_HOUR
-const ONE_WEEK = 7 * ONE_DAY
+export const ONE_WEEK = 7 * ONE_DAY
 
 const plural = (num: number, unit: string) => `${num} ${unit}${num !== 1 ? 's' : ''}`
 
 /**
  * A datetime formatter follows RSS3's
  */
-export function formatTimestamp(timestamp: string): string {
+export function formatTimestamp(timestamp: number): string {
     const date = new Date(timestamp)
     const ms = date.getTime()
     const distance = Date.now() - ms

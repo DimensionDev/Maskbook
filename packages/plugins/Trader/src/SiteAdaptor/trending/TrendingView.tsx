@@ -284,7 +284,7 @@ export function TrendingView(props: TrendingViewProps) {
 
     const Component = (
         <TrendingViewDeck
-            isSwappable={isSwappable}
+            isSwappable={false}
             classes={{
                 body: classes.body,
                 content: classes.content,

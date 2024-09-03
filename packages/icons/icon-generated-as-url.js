@@ -3,6 +3,7 @@ export function algorand_url() { return new URL("./brands/Algorand.svg", import.
 export function arbitrum_url() { return new URL("./brands/Arbitrum.svg", import.meta.url).href }
 export function arweave_url() { return new URL("./brands/Arweave.png", import.meta.url).href }
 export function avalanche_url() { return new URL("./brands/Avalanche.svg", import.meta.url).href }
+export function base_url() { return new URL("./brands/base.png", import.meta.url).href }
 export function bsc_url() { return new URL("./brands/BSC.svg", import.meta.url).href }
 export function celo_url() { return new URL("./brands/Celo.svg", import.meta.url).href }
 export function coin_carp_url() { return new URL("./brands/CoinCarp.svg", import.meta.url).href }
@@ -11,6 +12,7 @@ export function coin_market_cap_url() { return new URL("./brands/CoinMarketCap.s
 export function cosmos_url() { return new URL("./brands/Cosmos.svg", import.meta.url).href }
 export function crossbell_url() { return new URL("./brands/Crossbell.svg", import.meta.url).href }
 export function cross_sync_url() { return new URL("./brands/CrossSync.svg", import.meta.url).href }
+export function curve_url() { return new URL("./brands/Curve.png", import.meta.url).href }
 export function cyber_connect_url() { return new URL("./brands/CyberConnect.svg", import.meta.url).href }
 export function danger_url() { return new URL("./brands/Danger.svg", import.meta.url).href }
 export function danger_outline_url() { return new URL("./brands/DangerOutline.svg", import.meta.url).href }
@@ -37,14 +39,18 @@ export function git_hub_url() { return new URL("./brands/GitHub.svg", import.met
 export function github_dark_url() { return new URL("./brands/GithubDark.svg", import.meta.url).href }
 export function git_hub_gray_url() { return new URL("./brands/GitHubGray.svg", import.meta.url).href }
 export function gnosis_url() { return new URL("./brands/Gnosis.svg", import.meta.url).href }
+export function highlight_url() { return new URL("./brands/Highlight.svg", import.meta.url).href }
 export function instagram_url() { return new URL("./brands/Instagram.svg", import.meta.url).href }
 export function instagram_round_colored_url() { return new URL("./brands/InstagramRoundColored.svg", import.meta.url).href }
 export function instagram_round_gray_url() { return new URL("./brands/InstagramRoundGray.svg", import.meta.url).href }
 export function ipfs_url() { return new URL("./brands/IPFS.svg", import.meta.url).href }
+export function iqwiki_url() { return new URL("./brands/Iqwiki.svg", import.meta.url).href }
 export function keybase_url() { return new URL("./brands/Keybase.svg", import.meta.url).href }
 export function kusama_url() { return new URL("./brands/Kusama.svg", import.meta.url).href }
 export function leaderboard_url() { return new URL("./brands/Leaderboard.png", import.meta.url).href }
 export function lens_url() { return new URL("./brands/Lens.svg", import.meta.url).href }
+export function lido_url() { return new URL("./brands/Lido.svg", import.meta.url).href }
+export function linea_url() { return new URL("./brands/Linea.svg", import.meta.url).href }
 export function link_3_url() { return new URL("./brands/Link3.svg", import.meta.url).href }
 export function looks_rare_url() { return new URL("./brands/LooksRare.svg", import.meta.url).href }
 export function mask_dark_url() { return new URL("./brands/Mask.dark.svg", import.meta.url).href }
@@ -74,6 +80,7 @@ export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.da
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
 export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url).href }
+export function one_inch_url() { return new URL("./brands/OneInch.png", import.meta.url).href }
 export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.meta.url).href }
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url).href }
 export function optimism_url() { return new URL("./brands/Optimism.svg", import.meta.url).href }
@@ -88,8 +95,10 @@ export function reddit_round_url() { return new URL("./brands/RedditRound.svg", 
 export function reddit_round_gray_url() { return new URL("./brands/RedditRoundGray.svg", import.meta.url).href }
 export function rsk_url() { return new URL("./brands/Rsk.svg", import.meta.url).href }
 export function rss_3_url() { return new URL("./brands/RSS3.svg", import.meta.url).href }
+export function savm_url() { return new URL("./brands/Savm.svg", import.meta.url).href }
 export function simple_hash_url() { return new URL("./brands/SimpleHash.png", import.meta.url).href }
 export function solana_url() { return new URL("./brands/Solana.svg", import.meta.url).href }
+export function stargate_url() { return new URL("./brands/Stargate.png", import.meta.url).href }
 export function sushi_swap_url() { return new URL("./brands/SushiSwap.png", import.meta.url).href }
 export function sybil_url() { return new URL("./brands/Sybil.png", import.meta.url).href }
 export function telegram_round_url() { return new URL("./brands/TelegramRound.svg", import.meta.url).href }
@@ -128,6 +137,7 @@ export function arrow_downward_url() { return new URL("./general/ArrowDownward.s
 export function arrow_drop_url() { return new URL("./general/ArrowDrop.svg", import.meta.url).href }
 export function arrow_right_url() { return new URL("./general/ArrowRight.svg", import.meta.url).href }
 export function arrow_up_url() { return new URL("./general/ArrowUp.svg", import.meta.url).href }
+export function arrow_up_2_url() { return new URL("./general/ArrowUp2.svg", import.meta.url).href }
 export function arrow_up_round_url() { return new URL("./general/ArrowUpRound.svg", import.meta.url).href }
 export function back_up_url() { return new URL("./general/BackUp.svg", import.meta.url).href }
 export function base_close_dark_url() { return new URL("./general/BaseClose.dark.svg", import.meta.url).href }
@@ -136,6 +146,7 @@ export function base_contacts_url() { return new URL("./general/BaseContacts.svg
 export function base_upload_url() { return new URL("./general/BaseUpload.svg", import.meta.url).href }
 export function base_user_url() { return new URL("./general/BaseUser.svg", import.meta.url).href }
 export function best_trade_url() { return new URL("./general/BestTrade.svg", import.meta.url).href }
+export function blocks_url() { return new URL("./general/Blocks.svg", import.meta.url).href }
 export function blue_pin_url() { return new URL("./general/BluePin.svg", import.meta.url).href }
 export function bordered_success_url() { return new URL("./general/BorderedSuccess.svg", import.meta.url).href }
 export function busy_wallet_nav_url() { return new URL("./general/BusyWalletNav.svg", import.meta.url).href }
@@ -207,7 +218,6 @@ export function firefly_nft_url() { return new URL("./general/FireflyNFT.svg", i
 export function flag_url() { return new URL("./general/Flag.svg", import.meta.url).href }
 export function folder_url() { return new URL("./general/Folder.svg", import.meta.url).href }
 export function gas_url() { return new URL("./general/Gas.svg", import.meta.url).href }
-export function gas_station_url() { return new URL("./general/GasStation.svg", import.meta.url).href }
 export function gear_dark_url() { return new URL("./general/Gear.dark.svg", import.meta.url).href }
 export function gear_light_url() { return new URL("./general/Gear.light.svg", import.meta.url).href }
 export function gear_settings_url() { return new URL("./general/GearSettings.svg", import.meta.url).href }

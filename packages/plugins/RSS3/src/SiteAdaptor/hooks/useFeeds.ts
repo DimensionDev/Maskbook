@@ -1,17 +1,28 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 import { RSS3 } from '@masknet/web3-providers'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
-export function useFeeds(address?: string, tag?: RSS3BaseAPI.Tag) {
+interface Options {
+    tag: RSS3BaseAPI.Tag[]
+    network: RSS3BaseAPI.Network[]
+    direction: string
+}
+
+export function useFeeds(address: string | undefined, options?: Partial<Options>) {
     return useInfiniteQuery({
-        enabled: !!address,
         initialPageParam: undefined as any,
-        queryKey: ['rss3-feeds', address, tag],
-        queryFn: async ({ pageParam }) => {
-            const res = await RSS3.getAllNotes(address!, { tag }, { indicator: pageParam, size: 20 })
-            return res
-        },
+        queryKey: ['rss3-feeds', address, options],
+        queryFn:
+            address ?
+                async ({ pageParam }) => {
+                    // if network is omitted, it will be treated as all networks.
+                    if (options?.network && options.network.length === 0) {
+                        return createPageable([], createIndicator())
+                    }
+                    return RSS3.getAllNotes(address, options, { indicator: pageParam, size: 20 })
+                }
+            :   skipToken,
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,
         select: (data) => data.pages.flatMap((page) => page.data) || EMPTY_LIST,
     })

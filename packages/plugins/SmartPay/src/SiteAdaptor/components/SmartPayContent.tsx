@@ -441,10 +441,10 @@ export const SmartPayContent = memo(() => {
                                                         {availableBalanceTooLow ?
                                                             <>
                                                                 (
-                                                                <Icons.GasStation size={18} sx={{ marginRight: 0.5 }} />
+                                                                <Icons.Gas size={18} sx={{ marginRight: 0.5 }} />
                                                                 {t.allow_mask_as_gas_token()})
                                                             </>
-                                                        :   <Icons.GasStation size={18} />}
+                                                        :   <Icons.Gas size={18} />}
                                                     </Typography>
                                                 </ShadowRootTooltip>
                                             :   null}
@@ -489,15 +489,7 @@ export const SmartPayContent = memo(() => {
                     onClick={handleLuckDropClick}>
                     {t.lucky_drop()}
                 </ActionButton>
-                <ActionButton
-                    loading={openSwapLoading}
-                    variant="roundedContained"
-                    startIcon={<Icons.SwapColorful />}
-                    fullWidth
-                    size="small"
-                    onClick={handleSwapClick}>
-                    {t.swap()}
-                </ActionButton>
+
                 <ActionButton
                     loading={openSendLoading}
                     variant="roundedContained"
