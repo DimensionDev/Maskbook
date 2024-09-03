@@ -79,42 +79,18 @@ export interface GetQuotesOptions {
     feePercent?: string
 }
 
-export type GetQuotesResponse = OKXResponse<
-    Array<{
-        chainId: string
-        dexRouterList: Array<{
-            router: string
+export interface OKXSwapQuote {
+    chainId: string
+    dexRouterList: Array<{
+        router: string
+        /** @example "100" */
+        routerPercent: string
+        subRouterList: Array<{
+            /** @example "Uniswap V3" */
+            dexName: string
             /** @example "100" */
-            routerPercent: string
-            subRouterList: Array<{
-                /** @example "Uniswap V3" */
-                dexName: string
-                /** @example "100" */
-                percent: string
-            }>
-            fromToken: {
-                /** @example "18" */
-                decimal: string
-                /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-                tokenContractAddress: string
-                /** @example "USDC" */
-                tokenSymbol: string
-                /** @example "0.9998542668416743" */
-                tokenUnitPrice: string
-            }
-            toToken: {
-                /** @example "18" */
-                decimal: string
-                /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-                tokenContractAddress: string
-                /** @example "USDC" */
-                tokenSymbol: string
-                /** @example "0.9998542668416743" */
-                tokenUnitPrice: string
-            }
+            percent: string
         }>
-        /** Gas fee estimate */
-        estimateGasFee: string
         fromToken: {
             /** @example "18" */
             decimal: string
@@ -125,14 +101,6 @@ export type GetQuotesResponse = OKXResponse<
             /** @example "0.9998542668416743" */
             tokenUnitPrice: string
         }
-        /** Amount of fromToken */
-        fromTokenAmount: string
-        quoteCompareList: Array<{
-            amountOut: string
-            dexLogo: string
-            dexName: string
-            tradeFee: string
-        }>
         toToken: {
             /** @example "18" */
             decimal: string
@@ -143,10 +111,42 @@ export type GetQuotesResponse = OKXResponse<
             /** @example "0.9998542668416743" */
             tokenUnitPrice: string
         }
-        /** Amount of toToken */
-        toTokenAmount: string
     }>
->
+    /** Gas fee estimate */
+    estimateGasFee: string
+    fromToken: {
+        /** @example "18" */
+        decimal: string
+        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
+        tokenContractAddress: string
+        /** @example "USDC" */
+        tokenSymbol: string
+        /** @example "0.9998542668416743" */
+        tokenUnitPrice: string
+    }
+    /** Amount of fromToken */
+    fromTokenAmount: string
+    quoteCompareList: Array<{
+        amountOut: string
+        dexLogo: string
+        dexName: string
+        tradeFee: string
+    }>
+    toToken: {
+        /** @example "18" */
+        decimal: string
+        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
+        tokenContractAddress: string
+        /** @example "USDC" */
+        tokenSymbol: string
+        /** @example "0.9998542668416743" */
+        tokenUnitPrice: string
+    }
+    /** Amount of toToken */
+    toTokenAmount: string
+}
+
+export type GetQuotesResponse = OKXResponse<OKXSwapQuote[]>
 
 export type SwapOptions = {
     /** Chain ID */

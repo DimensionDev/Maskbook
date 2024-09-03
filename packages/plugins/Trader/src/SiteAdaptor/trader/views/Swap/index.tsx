@@ -1,24 +1,19 @@
-import { makeStyles } from '@masknet/theme'
-import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
-import { Box, Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
+import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { base } from '../../../base.js'
-import { useMemo, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSupportedChains } from '../hooks/useSupportedChains.js'
-import { useQuotes } from '../hooks/useQuotes.js'
-import {
-    dividedBy,
-    formatBalance,
-    formatCompact,
-    leftShift,
-    minus,
-    multipliedBy,
-    rightShift,
-} from '@masknet/web3-shared-base'
+import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
+import { formatBalance, leftShift, minus, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography } from '@mui/material'
+import { useMemo, useState } from 'react'
+import { base } from '../../../../base.js'
+import { useQuotes } from '../../hooks/useQuotes.js'
+import { useSupportedChains } from '../../hooks/useSupportedChains.js'
+import { Quote } from './Quote.js'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -122,21 +117,11 @@ const useStyles = makeStyles()((theme) => ({
                 '0px 0px 20px rgba(0, 0, 0, 0.05)'
             :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
-    infoRow: {
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        color: theme.palette.maskColor.main,
-        justifyContent: 'space-between',
-    },
-    rowName: {
-        flexGrow: 1,
-        marginRight: 'auto',
-    },
 }))
 
 const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 export function SwapView() {
+    const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -188,16 +173,6 @@ export function SwapView() {
             priceDiff: priceDiff?.toFixed(2),
         }
     }, [quote, amount])
-
-    const [forwardCompare, setForwardCompare] = useState(true)
-    const [baseToken, targetToken] =
-        forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
-    const rate =
-        quote ?
-            forwardCompare && quote ?
-                dividedBy(quote.toTokenAmount, quote.fromTokenAmount)
-            :   dividedBy(quote.fromTokenAmount, quote.toTokenAmount)
-        :   null
 
     return (
         <div className={classes.view}>
@@ -325,24 +300,18 @@ export function SwapView() {
                     </Box>
                 </Box>
 
-                {quote && baseToken && targetToken ?
-                    <Box className={classes.box}>
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.rowName}>
-                                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.tokenSymbol}
-                                <Icons.Cached
-                                    size={16}
-                                    color={theme.palette.maskColor.main}
-                                    onClick={() => setForwardCompare((v) => !v)}
-                                />
-                            </Typography>
-                            <Icons.ArrowDownRound size={24} />
-                        </div>
-                    </Box>
+                {quote ?
+                    <Quote className={classes.box} quote={quote} />
                 :   null}
             </Box>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <Button fullWidth>Swap</Button>
+                <Button
+                    fullWidth
+                    onClick={() => {
+                        navigate(RoutePaths.Confirm)
+                    }}>
+                    Swap
+                </Button>
             </PluginWalletStatusBar>
         </div>
     )
