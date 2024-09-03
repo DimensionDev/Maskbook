@@ -44,6 +44,7 @@ export * from './GoPlusLabs/types.js'
 export * from './Web3/Router/types/index.js'
 export * from './RedPacket/types.js'
 export * from './AvatarStore/types.js'
+export * from './OKX/types.js'
 
 export type { BaseConnectionOptions } from './Web3/Base/apis/ConnectionOptions.js'
 export type { BaseHubOptions } from './Web3/Base/apis/HubOptions.js'

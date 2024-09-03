@@ -1,14 +1,16 @@
 import { makeStyles } from '@masknet/theme'
 import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../../../base.js'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
+import { useQuotes } from '../hooks/useQuotes.js'
+import { formatBalance, leftShift, minus, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -26,11 +28,28 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
     },
     box: {
+        position: 'relative',
         border: `1px solid ${theme.palette.maskColor.line}`,
         padding: theme.spacing(1.5),
         borderRadius: 12,
         display: 'flex',
         gap: theme.spacing(1),
+    },
+    swapButton: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        left: '50%',
+        top: -22,
+        transform: 'rotate(90deg)',
+        width: 32,
+        height: 32,
+        border: `1px solid ${theme.palette.maskColor.line}`,
+        borderRadius: '50%',
+        color: theme.palette.maskColor.main,
+        backgroundColor: theme.palette.maskColor.bottom,
+        cursor: 'pointer',
     },
     token: {
         display: 'flex',
@@ -99,11 +118,11 @@ const useStyles = makeStyles()((theme) => ({
 
 const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 export function SwapView() {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
-    console.log({ chainId })
+    const [amount, setAmount] = useState('')
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [fromToken = nativeToken, setFromToken] = useState<Web3Helper.FungibleTokenAll | null>()
     const [toToken, setToToken] = useState<Web3Helper.FungibleTokenAll | null>()
@@ -111,7 +130,7 @@ export function SwapView() {
     const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
     const chainQuery = useSupportedChains()
 
-    const pickToken = async (currentToken?: Web3Helper.FungibleTokenAll | null) => {
+    const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
         const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
         return SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
@@ -121,9 +140,34 @@ export function SwapView() {
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chains: supportedChains?.map((x) => Number.parseInt(x.chainId, 10)),
             okxOnly: true,
-            lockChainId: !!fromToken?.chainId,
+            lockChainId: side === 'to' && !!fromToken?.chainId,
         })
     }
+
+    const { data: quotes } = useQuotes({
+        chainId: chainId.toString(),
+        amount: amount && fromToken?.decimals ? rightShift(amount, fromToken.decimals).toString() : '',
+        fromTokenAddress: fromToken?.address,
+        toTokenAddress: toToken?.address,
+    })
+    const quote = quotes?.[0]
+    const toTokenAmount = quote?.toTokenAmount
+    const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {
+        if (!quote) return { fromTokenValue: null, toTokenValue: null, priceDiff: null }
+        const { fromToken, toToken, toTokenAmount } = quote
+        const fromTokenValue = amount && fromToken ? multipliedBy(amount, quote.fromToken.tokenUnitPrice) : null
+        const toTokenValue =
+            quote ?
+                multipliedBy(leftShift(toTokenAmount, Number.parseInt(toToken.decimal, 10)), toToken.tokenUnitPrice)
+            :   null
+        const priceDiff =
+            fromTokenValue && toTokenValue ? minus(fromTokenValue, toTokenValue).div(fromTokenValue).times(100) : null
+        return {
+            fromTokenValue: fromTokenValue?.toFixed(2),
+            toTokenValue: toTokenValue?.toFixed(2),
+            priceDiff: priceDiff?.toFixed(2),
+        }
+    }, [quote, amount])
 
     return (
         <div className={classes.view}>
@@ -137,7 +181,7 @@ export function SwapView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(fromToken)
+                                    const picked = await pickToken(fromToken, 'from')
                                     if (picked) setFromToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
@@ -170,12 +214,29 @@ export function SwapView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
-                            <input className={classes.tokenInput} autoFocus />
-                            <Typography className={classes.tokenValue}>$10M</Typography>
+                            <input
+                                className={classes.tokenInput}
+                                autoFocus
+                                value={amount}
+                                onChange={(e) => {
+                                    setAmount(e.currentTarget.value)
+                                }}
+                            />
+                            {fromTokenValue ?
+                                <Typography className={classes.tokenValue}>${fromTokenValue}</Typography>
+                            :   null}
                         </Box>
                     </Box>
                 </Box>
                 <Box className={classes.box}>
+                    <Box
+                        className={classes.swapButton}
+                        onClick={() => {
+                            setFromToken(toToken)
+                            setToToken(fromToken)
+                        }}>
+                        <Icons.BiArrow size={16} color={theme.palette.maskColor.main} />
+                    </Box>
                     <Box display="flex" flexDirection="column" gap={1}>
                         <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
                             To
@@ -184,7 +245,7 @@ export function SwapView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(toToken)
+                                    const picked = await pickToken(toToken, 'to')
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
@@ -217,16 +278,26 @@ export function SwapView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
-                            <input className={classes.tokenInput} />
-                            <Typography className={classes.tokenValue}>
-                                $10M
-                                <span className={classes.lost}>(-10.00%)</span>
-                            </Typography>
+                            <input
+                                className={classes.tokenInput}
+                                disabled
+                                value={toTokenAmount ? formatBalance(toTokenAmount, toToken?.decimals) : ''}
+                            />
+                            {toTokenValue ?
+                                <Typography className={classes.tokenValue}>
+                                    ${toTokenValue}
+                                    {priceDiff ?
+                                        <span className={classes.lost}>({priceDiff}%)</span>
+                                    :   null}
+                                </Typography>
+                            :   null}
                         </Box>
                     </Box>
                 </Box>
             </Box>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM} />
+            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+                <Button fullWidth>Swap</Button>
+            </PluginWalletStatusBar>
         </div>
     )
 }

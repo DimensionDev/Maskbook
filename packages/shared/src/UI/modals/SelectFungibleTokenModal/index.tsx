@@ -1,9 +1,9 @@
-import { forwardRef, useState } from 'react'
 import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { forwardRef, useState } from 'react'
+import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
 import { useOKXTokenList } from './useOKXTokenList.js'
 
 export interface SelectFungibleTokenModalOpenProps
@@ -28,6 +28,7 @@ export const SelectFungibleTokenModal = forwardRef<
     const [selectedChainId, setSelectedChainId] = useState<Web3Helper.ChainIdAll>()
     const [selectedTokens, setSelectedTokens] = useState<string[]>()
     const [chains, setChains] = useState<ChainId[]>()
+    const [lockChainId, setLockChainId] = useState<boolean>()
     const { data: tokens } = useOKXTokenList(chainId as ChainId, okxOnly)
 
     const [open, dispatch] = useSingletonModal(ref, {
@@ -44,6 +45,7 @@ export const SelectFungibleTokenModal = forwardRef<
             setSelectedChainId(props.chainId)
             setSelectedTokens(props.selectedTokens)
             setChains(props.chains)
+            setLockChainId(props.lockChainId)
         },
     })
 
@@ -54,6 +56,7 @@ export const SelectFungibleTokenModal = forwardRef<
             enableManage={enableManage}
             pluginID={pluginID}
             chainId={chainId}
+            lockChainId={lockChainId}
             keyword={keyword}
             whitelist={whitelist}
             title={title}

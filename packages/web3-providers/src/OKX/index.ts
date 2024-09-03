@@ -4,6 +4,7 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import type {
     ApproveTransactionResponse,
     GetLiquidityResponse,
+    GetQuotesOptions,
     GetQuotesResponse,
     GetTokensResponse,
     SupportedChainResponse,
@@ -12,6 +13,7 @@ import type {
 } from './types.js'
 import { TokenType, type FungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
+import { convertNativeAddress } from './helper.js'
 
 export class OKX {
     /**
@@ -24,6 +26,7 @@ export class OKX {
     }
 
     static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | undefined> {
+        if (!chainId) return
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/all-tokens', {
             chainId,
         })
@@ -60,14 +63,14 @@ export class OKX {
         return fetchJSON<ApproveTransactionResponse>(url)
     }
 
-    static async getQuotes(chainId: string, fromTokenAddress: string, toTokenAddress: string, amount: string) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quotes', {
-            chainId,
-            fromTokenAddress,
-            toTokenAddress,
-            amount,
+    static async getQuotes(options: GetQuotesOptions) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quote', {
+            ...options,
+            fromTokenAddress: convertNativeAddress(options.fromTokenAddress),
+            toTokenAddress: convertNativeAddress(options.toTokenAddress),
         })
-        return fetchJSON<GetQuotesResponse>(url)
+        const res = await fetchJSON<GetQuotesResponse>(url)
+        return 'data' in res ? res.data : undefined
     }
 
     /**

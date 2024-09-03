@@ -54,18 +54,67 @@ export type ApproveTransactionResponse = OKXResponse<{
      */
     gasPrice: string
 }>
-export type GetQuotesResponse = OKXResponse<{
+
+export interface GetQuotesOptions {
+    /** Chain ID (e.g., 1 for Ethereum) */
     chainId: string
-    dexRouterList: Array<{
-        router: string
-        /** @example "100" */
-        routerPercent: string
-        subRouterList: Array<{
-            /** @example "Uniswap V3" */
-            dexName: string
+    /** The input amount of a token to be sold (in minimal divisible units) */
+    amount: string
+    /** The contract address of a token to be sold */
+    fromTokenAddress: string
+    /** The contract address of a token to be bought */
+    toTokenAddress: string
+    /** DexId of the liquidity pool for limited quotes, multiple combinations separated by comma */
+    dexIds?: string
+    /**
+     * The percentage (between 0 - 1.0) of the price impact allowed
+     * @default 0.9
+     */
+    priceImpactProtectionPercentage?: string
+    /**
+     * The percentage of fromTokenAmount to be sent to the referrer's address
+     * @min 0
+     * @max 3
+     */
+    feePercent?: string
+}
+
+export type GetQuotesResponse = OKXResponse<
+    Array<{
+        chainId: string
+        dexRouterList: Array<{
+            router: string
             /** @example "100" */
-            percent: string
+            routerPercent: string
+            subRouterList: Array<{
+                /** @example "Uniswap V3" */
+                dexName: string
+                /** @example "100" */
+                percent: string
+            }>
+            fromToken: {
+                /** @example "18" */
+                decimal: string
+                /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
+                tokenContractAddress: string
+                /** @example "USDC" */
+                tokenSymbol: string
+                /** @example "0.9998542668416743" */
+                tokenUnitPrice: string
+            }
+            toToken: {
+                /** @example "18" */
+                decimal: string
+                /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
+                tokenContractAddress: string
+                /** @example "USDC" */
+                tokenSymbol: string
+                /** @example "0.9998542668416743" */
+                tokenUnitPrice: string
+            }
         }>
+        /** Gas fee estimate */
+        estimateGasFee: string
         fromToken: {
             /** @example "18" */
             decimal: string
@@ -76,6 +125,14 @@ export type GetQuotesResponse = OKXResponse<{
             /** @example "0.9998542668416743" */
             tokenUnitPrice: string
         }
+        /** Amount of fromToken */
+        fromTokenAmount: string
+        quoteCompareList: Array<{
+            amountOut: string
+            dexLogo: string
+            dexName: string
+            tradeFee: string
+        }>
         toToken: {
             /** @example "18" */
             decimal: string
@@ -86,40 +143,10 @@ export type GetQuotesResponse = OKXResponse<{
             /** @example "0.9998542668416743" */
             tokenUnitPrice: string
         }
+        /** Amount of toToken */
+        toTokenAmount: string
     }>
-    /** Gas fee estimate */
-    estimateGasFee: string
-    fromToken: {
-        /** @example "18" */
-        decimal: string
-        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-        tokenContractAddress: string
-        /** @example "USDC" */
-        tokenSymbol: string
-        /** @example "0.9998542668416743" */
-        tokenUnitPrice: string
-    }
-    /** Amount of fromToken */
-    fromTokenAmount: string
-    quoteCompareList: Array<{
-        amountOut: string
-        dexLogo: string
-        dexName: string
-        tradeFee: string
-    }>
-    toToken: {
-        /** @example "18" */
-        decimal: string
-        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-        tokenContractAddress: string
-        /** @example "USDC" */
-        tokenSymbol: string
-        /** @example "0.9998542668416743" */
-        tokenUnitPrice: string
-    }
-    /** Amount of toToken */
-    toTokenAmount: string
-}>
+>
 
 export type SwapOptions = {
     /** Chain ID */

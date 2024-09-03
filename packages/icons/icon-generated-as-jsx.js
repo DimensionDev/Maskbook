@@ -918,7 +918,7 @@ export const ArrowUp2 = /*#__PURE__*/ __createIcon('ArrowUp2', [
                 children: /*#__PURE__*/ _jsx('path', {
                     fill: 'currentColor',
                     fillRule: 'evenodd',
-                    d: 'M20.066 16.067a.8.8 0 0 1-1.132 0L12.5 9.632l-6.435 6.435a.8.8 0 0 1-1.13-1.132l7-7a.8.8 0 0 1 1.13 0l7 7a.8.8 0 0 1 0 1.132',
+                    d: 'M20.066 16.067a.8.8 0 0 1-1.132 0L12.5 9.632l-6.435 6.435a.8.8 0 0 1-1.13-1.132l7-7a.8.8 0 0 1 1.13 0l7 7a.8.8 0 0 1 0 1.132Z',
                     clipRule: 'evenodd',
                 }),
             }),
@@ -1050,6 +1050,37 @@ export const BaseUser = /*#__PURE__*/ __createIcon('BaseUser', [
 export const BestTrade = /*#__PURE__*/ __createIcon('BestTrade', [
     {
         u: () => new URL('./general/BestTrade.svg', import.meta.url).href,
+    },
+])
+export const BiArrow = /*#__PURE__*/ __createIcon('BiArrow', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M16.715 2.444a.8.8 0 0 1 1.131 0l3.72 3.72a.8.8 0 0 1 0 1.132l-3.72 3.72a.8.8 0 1 1-1.131-1.132l3.154-3.154-3.154-3.154a.8.8 0 0 1 0-1.132Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M2.2 6.73a.8.8 0 0 1 .8-.8h18a.8.8 0 0 1 0 1.6H3a.8.8 0 0 1-.8-.8Zm5.086 6.254a.8.8 0 0 1 0 1.132L4.132 17.27l3.154 3.154a.8.8 0 0 1-1.132 1.132l-3.72-3.72a.8.8 0 0 1 0-1.132l3.72-3.72a.8.8 0 0 1 1.132 0Z',
+                        clipRule: 'evenodd',
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        fill: 'currentColor',
+                        fillRule: 'evenodd',
+                        d: 'M2.2 17.27a.8.8 0 0 1 .8-.8h18a.8.8 0 0 1 0 1.6H3a.8.8 0 0 1-.8-.8Z',
+                        clipRule: 'evenodd',
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const Blocks = /*#__PURE__*/ __createIcon('Blocks', [
