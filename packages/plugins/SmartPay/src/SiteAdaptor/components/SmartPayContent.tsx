@@ -441,10 +441,10 @@ export const SmartPayContent = memo(() => {
                                                         {availableBalanceTooLow ?
                                                             <>
                                                                 (
-                                                                <Icons.GasStation size={18} sx={{ marginRight: 0.5 }} />
+                                                                <Icons.Gas size={18} sx={{ marginRight: 0.5 }} />
                                                                 {t.allow_mask_as_gas_token()})
                                                             </>
-                                                        :   <Icons.GasStation size={18} />}
+                                                        :   <Icons.Gas size={18} />}
                                                     </Typography>
                                                 </ShadowRootTooltip>
                                             :   null}

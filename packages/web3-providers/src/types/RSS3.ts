@@ -185,7 +185,6 @@ export namespace RSS3BaseAPI {
     interface TokenApprovalMetadata extends ApprovalBaseMetadata {
         /** approve amount */
         value: string
-        value_display: string
         decimals: number
         standard: 'ERC-20'
         /** TODO */
@@ -198,12 +197,15 @@ export namespace RSS3BaseAPI {
     }
     export interface PostMetadata {
         title?: string
-        body?: string
+        body: string
+        handle: string
+        author_url: string
         /** Not all platforms provide summary */
         summary?: string
         author: string[]
         created_at?: string
         target_url?: string
+        content_uri: string
         media: Array<{
             /** URL or IPFS */
             address: string
@@ -211,15 +213,18 @@ export namespace RSS3BaseAPI {
         }>
         type_on_platform: Type[]
         profile_id?: number
-        publication_id?: number
+        publication_id?: HexString
     }
-    interface CommentMetadata extends PostMetadata {
+    export interface CommentMetadata extends PostMetadata {
+        // TODO could the target be another CommentMetadata?
         target: PostMetadata
     }
-    interface ShareMetadata {
+    export interface ShareMetadata {
         type_on_platform: Type[]
         target: PostMetadata
+        handle: string
         comment?: CommentMetadata
+        publication_id: HexString
     }
     interface ReviseMetadata extends PostMetadata {}
     interface ProfileMetadata {
@@ -332,18 +337,23 @@ export namespace RSS3BaseAPI {
             [Type.Propose]: ProposeMetadata
             [Type.Vote]: VoteMetadata
         }
+        [Tag.Metaverse]: object
     }
 
     export interface ActionGeneric<T extends Tag, P extends keyof MetadataMap[T] = keyof MetadataMap[T]> {
         tag: T
         type: P
-        index: number
-        /** It's different from transaction.address_from, the token payer */
-        address_from?: string
-        /** It's different from transaction.address_from, the token receiver */
-        address_to?: string
+        /**
+         * from address
+         * It's different from transaction.from, the token payer */
+        from?: HexString
+        /**
+         * to address
+         * Not only ethereum address, but it could be ar address.
+         * It's different from transaction.to, the token receiver */
+        to?: string
         metadata?: MetadataMap[T][P]
-        platform?: Platform
+        platform?: LiteralUnion<Platform>
         related_urls?: string[]
     }
 
@@ -351,51 +361,61 @@ export namespace RSS3BaseAPI {
     export type CollectibleTransferAction = ActionGeneric<Tag.Collectible, Type.Transfer>
     export type CollectibleTradeAction = ActionGeneric<Tag.Collectible, Type.Trade>
     export type DonationDonateAction = ActionGeneric<Tag.Donation, Type.Donate>
+    export type TokenMintAction = ActionGeneric<Tag.Transaction, Type.Mint>
 
     export interface AddressStatus {
         update_at: RFC3339Datetime
         address: string
     }
 
+    /**
+     * https://docs.rss3.io/api-reference#/model/network
+     */
     export type Network =
-        | 'ethereum'
-        // Discard
-        // | 'ethereum_classic'
-        | 'binance_smart_chain'
-        | 'polygon'
-        | 'zksync'
-        | 'xdai'
-        // Ignore this, since it's now supported runtime network
-        // | 'arweave'
         | 'arbitrum'
-        | 'optimism'
-        | 'fantom'
-        | 'avalanche'
-        | 'crossbell'
-        | 'EIP-1577'
-
-    export type Platform =
         | 'arweave'
-        | 'binance'
-        | 'ENS Registrar'
-        | '0x'
-        | 'CrossSync'
+        | 'avax'
+        | 'base'
+        | 'binance-smart-chain'
+        | 'crossbell'
+        | 'ethereum'
+        | 'farcaster'
+        | 'gnosis'
+        | 'linea'
+        | 'optimism'
+        | 'polygon'
+        | 'vsl'
+
+    /**
+     * https://docs.rss3.io/api-reference#/model/platform
+     */
+    export type Platform =
+        | '1inch'
+        | 'AAVE'
+        | 'Aavegotchi'
         | 'Crossbell'
-        | 'Gitcoin'
+        | 'Curve'
+        | 'ENS'
+        | 'Farcaster'
+        | 'Highlight'
+        | 'IQWiki'
+        | 'KiwiStand'
         | 'Lens'
-        | 'MetaMask'
+        | 'Lido'
+        | 'LooksRare'
+        | 'Matters'
         | 'Mirror'
         | 'OpenSea'
-        | 'Snapshot'
-        | 'SushiSwap'
+        | 'Optimism'
+        | 'Paragraph'
+        | 'RSS3'
+        | 'SAVM'
+        | 'Stargate'
         | 'Uniswap'
-        | 'crossbell.io'
-        | 'xLog'
-        | 'Farcaster'
-        | 'Planet'
-        | 'PancakeSwap'
-        | 'Aave'
-        | 'AAVE'
+        | 'Unknown'
+        | 'VSL'
+        | 'Planet' // Might not support anymore
+        | 'ENS Registrar'
 
     export enum Tag {
         Collectible = 'collectible',
@@ -404,6 +424,7 @@ export namespace RSS3BaseAPI {
         Governance = 'governance',
         Social = 'social',
         Transaction = 'transaction',
+        Metaverse = 'metaverse',
     }
 
     export enum Type {
@@ -476,23 +497,18 @@ export namespace RSS3BaseAPI {
         type?: string
     }
     export interface Web3FeedGeneric<T extends Tag, P extends keyof MetadataMap[T] = keyof MetadataMap[T]> {
-        timestamp: RFC3339Datetime
-        /**
-         * The identifier of the transaction. A unique identifier will be returned when a transaction hash is not available
-         */
-        hash: string
+        direction: 'in' | 'self' | 'out'
+        /** timestamp in seconds */
+        timestamp: number
+        id: HexString
         /**
          * The on-chain log index.
          */
         index?: number
-        /**
-         * The transaction initiator.
-         */
-        address_from: string
-        /**
-         * The transaction recipient.
-         */
-        address_to: string
+        /** from address */
+        from: HexString
+        /** to address */
+        to: HexString
         /**
          * The owner of this note in a bidirectional feed.
          */
@@ -500,20 +516,25 @@ export namespace RSS3BaseAPI {
         /**
          * The fees paid for the transaction.
          */
-        fee?: number
+        fee?: {
+            amount: string
+            decimal: number
+        }
         network: Network
         /**
          * There are many platforms supported by PreGod, see the full list. When platform is unknown, the transaction's network is used.
-         * TODO declare a platform map
+         * https://docs.rss3.io/api-reference#/model/platform
          */
-        platform?: Platform
+        platform: Platform
         /**
          *An array of actions generated by the transaction.
          */
         tag: T
         type: P
         actions: Array<ActionGeneric<T, P>>
+        total_actions: number
         address_status: AddressStatus[]
+        success: boolean
     }
 
     export type Web3Feed =
@@ -533,11 +554,15 @@ export namespace RSS3BaseAPI {
 
     /** For feed cards */
     export type TokenOperationFeed =
-        | Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint>
+        | Web3FeedGeneric<Tag.Transaction, Type.Transfer | Type.Burn | Type.Mint | Type.Approval>
         | Web3FeedGeneric<Tag.Exchange, Type.Deposit | Type.Withdraw>
     export type TokenBridgeFeed = Web3FeedGeneric<Tag.Transaction, Type.Bridge>
     export type TokenSwapFeed = Web3FeedGeneric<Tag.Exchange, Type.Swap>
-    export type LiquidityFeed = Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+    export type LiquidityFeed =
+        | Web3FeedGeneric<Tag.Exchange, Type.Liquidity>
+        // There could be token mint actions mixed in TokenOperationFeed
+        // https://hoot.it/sujiyan.eth/activity/0x65d0ff9ddfd5e318702c770477631ac45991c68dec19d5e2b9f407dd555f4277
+        | Web3FeedGeneric<Tag.Transaction, Type.Mint>
     export type StakingFeed = Web3FeedGeneric<Tag.Exchange, Type.Staking>
     export type CollectibleFeed = Web3FeedGeneric<
         Tag.Collectible,
@@ -564,4 +589,32 @@ export namespace RSS3BaseAPI {
         cursor?: string
         list: Web3Feed[]
     }
+
+    export interface ProfileResult {
+        address: string
+        reverse_address: string
+        owner_address: string
+        name_hash: string
+        /** @example vitalik.lens */
+        name: string
+        /** @example vitalik.lens */
+        handle: string
+        handle_id: HexString
+        network: Network
+        timestamp: string
+        height: string
+        platform: Platform
+        expired_at: string
+        bio: string
+        url: string
+        /** Could be http url, or ipfs url */
+        profile_uri: string[]
+        banner_uri: string | null
+        social_uri: string | null
+        /** eg "2023-11-22T21:02:30.142663Z" */
+        created_at: string
+        /** eg "2023-11-22T21:02:30.142663Z" */
+        updated_at: string
+    }
+    export type ProfilesResponse = ProfileResult[]
 }

@@ -1,23 +1,18 @@
-import { type ReverseAddressProps, ReversedAddress } from '@masknet/shared'
+import { ReversedAddress, type ReverseAddressProps } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import type { ComponentProps } from 'react'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
+import { useState, type ComponentProps } from 'react'
+import { UserAvatar } from './UserAvatar/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
         color: theme.palette.maskColor.main,
-        marginLeft: theme.spacing(1),
         fontWeight: 700,
-        marginRight: theme.spacing(1),
         whiteSpace: 'nowrap',
-        '&:first-of-type': {
-            marginLeft: 0,
-        },
-        '&:last-of-type': {
-            marginRight: 0,
-        },
     },
     link: {
         color: theme.palette.maskColor.main,
@@ -35,21 +30,42 @@ export function Label({ className, ...rest }: LabelProps) {
     return <Typography className={cx(classes.label, className)} component="span" {...rest} />
 }
 
-interface AddressLabelProps extends Omit<ReverseAddressProps, 'address'> {
+interface AccountLabelProps extends Omit<ReverseAddressProps, 'address'> {
+    handle?: string
     address?: ReverseAddressProps['address']
 }
-export function AddressLabel({ address, pluginID, size, className, ...rest }: AddressLabelProps) {
+export function AccountLabel({
+    address,
+    handle,
+    pluginID = NetworkPluginID.PLUGIN_EVM,
+    size,
+    className,
+    ...rest
+}: AccountLabelProps) {
     const { classes, cx } = useStyles()
-    return address ?
+    const [reversed, setReversed] = useState('')
+    const label =
+        handle ?
+            <Label className={className} {...rest}>
+                {handle}
+            </Label>
+        : address ?
             <ReversedAddress
                 address={address}
                 pluginID={pluginID}
                 size={size}
                 className={cx(classes.label, className)}
                 component="span"
+                onReverse={setReversed}
                 {...rest}
             />
         :   <Label className={className} {...rest} />
+    return (
+        <>
+            <UserAvatar identity={reversed || address} style={{ marginRight: 6 }} />
+            {label}
+        </>
+    )
 }
 
 export const formatValue = (value?: { value: string; decimals: number } | null): string => {
@@ -74,4 +90,8 @@ export const LinkifyOptions: Opts = {
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
     return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
+}
+
+export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {
+    return feed.actions[1]?.platform === 'ENS Registrar'
 }

@@ -257,3 +257,16 @@ export type GasPriceResponse = [
         estimated_seconds: number
     },
 ]
+
+export interface UserTotalBalance {
+    total_usd_value: number
+    chain_list: Array<{
+        id: string
+        community_id: number
+        name: string
+        native_token_id: string
+        logo_url: string
+        wrapped_token_id: string
+        usd_value: number
+    }>
+}

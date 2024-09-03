@@ -12,7 +12,7 @@ import {
 import { I18NextProviderHMR, LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes, i18NextInstance, queryRemoteI18NBundle, compose } from '@masknet/shared-base'
+import { DashboardRoutes, i18NextInstance, compose } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
@@ -38,8 +38,6 @@ const PersonaContextIO = {
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
 export default function Dashboard() {
-    useEffect(() => queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
-
     // #region theme
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()

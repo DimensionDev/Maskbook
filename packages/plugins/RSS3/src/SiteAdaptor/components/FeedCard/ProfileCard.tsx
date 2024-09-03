@@ -3,17 +3,12 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
+import { ProfileAction } from '../FeedActions/ProfileAction.js'
 import { CardType } from '../share.js'
 import { LensAvatar } from './LensAvatar.js'
-import { Label } from './common.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
     verbose: {},
     image: {},
     center: {},
@@ -83,8 +78,6 @@ export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
     const { verbose } = rest
     const { classes, cx } = useStyles()
 
-    const user = useAddressLabel(feed.owner)
-
     const action = feed.actions[0]
     const metadata = action.metadata
 
@@ -95,20 +88,7 @@ export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
             type={metadata?.action === 'update' ? CardType.ProfileUpdate : CardType.ProfileCreate}
             feed={feed}
             {...rest}>
-            <Typography className={classes.summary}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.profile
-                    values={{
-                        user,
-                        platform: metadata?.platform || '',
-                        context: metadata?.action,
-                    }}
-                    components={{
-                        user: <Label />,
-                        platform: <Label />,
-                    }}
-                />
-            </Typography>
+            <ProfileAction feed={feed} />
             {metadata ?
                 <div
                     className={cx(classes.body, {
