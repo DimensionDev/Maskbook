@@ -3802,6 +3802,9 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
+    peerDependenciesMeta:
+      '@types/webextension-polyfill':
+        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -5179,9 +5182,6 @@ packages:
     engines: {node: '>= 12'}
     peerDependencies:
       webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
-    peerDependenciesMeta:
-      webpack:
-        optional: true
 
   '@nice-labs/git-rev@3.5.1':
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
@@ -13084,7 +13084,7 @@ packages:
     engines: {node: '>=12'}
     peerDependencies:
       '@swc/core': 1.6.13
-      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0 || 4
+      rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
 
   rollup-preserve-directives@1.1.1:
     resolution: {integrity: sha512-+eQafbuEfDPfxQ9hQPlwaROfin4yiVRxap8hnrvvvcSGoukv1tTiYpAW9mvm3uR8J+fe4xd8FdVd5rz9q7jZ+Q==}
@@ -16328,9 +16328,10 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
@@ -18296,7 +18297,7 @@ snapshots:
     optional: true
 
   '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
-    optionalDependencies:
+    dependencies:
       webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
 
   '@nice-labs/git-rev@3.5.1': {}
@@ -19153,6 +19154,11 @@ snapshots:
   '@tsconfig/node14@1.0.3': {}
 
   '@tsconfig/node16@1.0.3': {}
+
+  '@tybys/wasm-util@0.9.0':
+    dependencies:
+      tslib: 2.6.3
+    optional: true
 
   '@typechain/web3-v1@6.0.7(typechain@8.3.2(typescript@5.5.2))(typescript@5.5.2)(web3-core@4.5.0(bufferutil@4.0.7)(encoding@0.1.13)(utf-8-validate@5.0.10))(web3-eth-contract@4.5.0(bufferutil@4.0.7)(encoding@0.1.13)(typescript@5.5.2)(utf-8-validate@5.0.10)(zod@3.23.8))(web3@1.10.2(bufferutil@4.0.7)(encoding@0.1.13)(utf-8-validate@5.0.10))':
     dependencies:
