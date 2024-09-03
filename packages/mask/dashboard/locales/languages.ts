@@ -30,12 +30,4 @@ if (import.meta.webpackHot) {
                 }),
             ),
     )
-    // @ts-ignore
-    import.meta.webpackHot.accept([], () =>
-        globalThis.dispatchEvent?.(
-            new CustomEvent('MASK_I18N_HMR_LINGUI', {
-                detail: {},
-            }),
-        ),
-    )
 }

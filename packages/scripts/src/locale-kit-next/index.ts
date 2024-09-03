@@ -78,7 +78,8 @@ export async function syncLanguages() {
                     linguiImportPath.push(`../locale/${language}.json`)
                     linguiBinding.push(`'${familyName}': lingui_${language.replace('-', '_')}`)
                 }
-                code += `// @ts-ignore
+                code +=
+                    `// @ts-ignore
                         if (import.meta.webpackHot) {
                             // @ts-ignore
                             import.meta.webpackHot.accept(
@@ -87,15 +88,17 @@ export async function syncLanguages() {
                                     detail: ['${namespace}', { ${binding.join(', ')} }]
                                 }))
                             )
-                            // @ts-ignore
-                            import.meta.webpackHot.accept(
-                                ${JSON.stringify(linguiImportPath)},
-                                () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
-                                    detail: { ${linguiBinding.join(', ')} }
-                                }))
-                            )
-                        }
-                        `
+                            ` +
+                    (linguiBinding.length ?
+                        `// @ts-ignore
+                        import.meta.webpackHot.accept(
+                            ${JSON.stringify(linguiImportPath)},
+                            () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                                detail: { ${linguiBinding.join(', ')} }
+                            }))
+                        )`
+                    :   '') +
+                    '}'
             }
             code = await prettier(code)
             await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })
