@@ -10,15 +10,15 @@ function addI18NBundle(i18Next: i18n, lingui: I18n, namespace: string, langs: I1
 
     try {
         // not enable hmr for MV3
-        // TODO: hmr for lingui
         if (process.env.NODE_ENV === 'development' && !('importScripts' in globalThis)) {
             globalThis.addEventListener('MASK_I18N_HMR', (e) => {
                 const [ns, langs] = (e as CustomEvent).detail
                 if (namespace !== ns) return
-
-                for (const lang of Object.keys(langs)) {
-                    i18Next.addResourceBundle(lang, namespace, removeEmptyString(langs[lang]))
-                }
+                addI18NBundleSingle(i18Next, lingui, namespace, langs)
+            })
+            globalThis.addEventListener('MASK_I18N_HMR_LINGUI', (e) => {
+                const langs = (e as CustomEvent).detail
+                addI18NBundleSingle(i18Next, lingui, namespace, langs)
             })
         }
     } catch {

@@ -67,10 +67,16 @@ export async function syncLanguages() {
 
             {
                 const allImportPath: string[] = []
+                const linguiImportPath: string[] = []
                 const binding: string[] = []
+                const linguiBinding: string[] = []
                 for (const [language, familyName] of languages) {
                     allImportPath.push(`./${language}.json`)
                     binding.push(`'${familyName}': ${language.replace('-', '_')}`)
+                }
+                for (const [language, familyName] of linguiLanguages) {
+                    linguiImportPath.push(`../locale/${language}.json`)
+                    linguiBinding.push(`'${familyName}': lingui_${language.replace('-', '_')}`)
                 }
                 code += `// @ts-ignore
                         if (import.meta.webpackHot) {
@@ -79,6 +85,13 @@ export async function syncLanguages() {
                                 ${JSON.stringify(allImportPath)},
                                 () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR', {
                                     detail: ['${namespace}', { ${binding.join(', ')} }]
+                                }))
+                            )
+                            // @ts-ignore
+                            import.meta.webpackHot.accept(
+                                ${JSON.stringify(linguiImportPath)},
+                                () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                                    detail: { ${linguiBinding.join(', ')} }
                                 }))
                             )
                         }

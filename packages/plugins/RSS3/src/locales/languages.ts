@@ -40,4 +40,26 @@ if (import.meta.webpackHot) {
                 }),
             ),
     )
+    // @ts-ignore
+    import.meta.webpackHot.accept(
+        [
+            '../locale/en-US.json',
+            '../locale/ja-JP.json',
+            '../locale/ko-KR.json',
+            '../locale/zh-CN.json',
+            '../locale/zh-TW.json',
+        ],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                    detail: {
+                        en: lingui_en_US,
+                        ja: lingui_ja_JP,
+                        ko: lingui_ko_KR,
+                        'zh-CN': lingui_zh_CN,
+                        zh: lingui_zh_TW,
+                    },
+                }),
+            ),
+    )
 }
