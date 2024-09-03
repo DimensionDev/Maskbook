@@ -13,14 +13,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EthereumBlockieProps extends withClasses<'icon'> {
+export interface EthereumBlockieProps extends withClasses<'icon'>, Omit<AvatarProps, 'classes'> {
     name?: string
     address: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function EthereumBlockie(props: EthereumBlockieProps) {
-    const { address, name } = props
+    const { address, name, ...rest } = props
     const { classes } = useStyles(undefined, { props })
     const [blockie, setBlockie] = useState('')
     const ref = useRef<HTMLElement>(null)
@@ -30,7 +30,7 @@ export function EthereumBlockie(props: EthereumBlockieProps) {
     }
 
     return (
-        <Avatar className={classes.icon} src={blockie} ref={ref as any}>
+        <Avatar className={classes.icon} src={blockie} ref={ref as any} {...rest}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )

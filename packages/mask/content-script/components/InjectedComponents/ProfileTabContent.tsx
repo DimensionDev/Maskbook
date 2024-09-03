@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-es'
+import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Link, Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -118,6 +118,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 20,
         minWidth: 254,
     },
+    actions: {
+        marginLeft: 'auto',
+        display: 'inline-flex',
+        alignItems: 'center',
+    },
 }))
 
 interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -186,21 +191,27 @@ function Content(props: ProfileTabContentProps) {
     }, [retrySocialAccounts])
 
     const activatedPlugins = useActivatedPluginsSiteAdaptor('any')
-    const displayPlugins = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return plugins
-            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => {
-                const shouldDisplay =
-                    x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
-                return x.pluginID !== PluginID.NextID && shouldDisplay
-            })
-            .sort((a, z) => a.priority - z.priority)
-    })
+    const tabs = useMemo(() => {
+        const displayProfileTabs = getAvailablePlugins(activatedPlugins, (plugins) => {
+            return plugins
+                .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) || [])
+                .filter((x) => {
+                    const shouldDisplay =
+                        x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
+                    return x.pluginID !== PluginID.NextID && shouldDisplay
+                })
+                .sort((a, z) => a.priority - z.priority)
+        })
 
-    const tabs = displayPlugins.map((x) => ({
-        id: x.ID,
-        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
-    }))
+        return displayProfileTabs.map((x) => ({
+            id: x.ID,
+            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+        }))
+    }, [activatedPlugins, translate])
+
+    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
+        return compact(plugins.map((x) => x.ProfileTabActions))
+    })
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
@@ -512,6 +523,13 @@ function Content(props: ProfileTabContentProps) {
                                 {tabs.map((tab) => (
                                     <Tab key={tab.id} label={tab.label} value={tab.id} />
                                 ))}
+                                {tabActions.length ?
+                                    <span className={classes.actions}>
+                                        {tabActions.map((Action, i) => (
+                                            <Action key={i} />
+                                        ))}
+                                    </span>
+                                :   null}
                             </MaskTabList>
                         </TabContext>
                     </div>

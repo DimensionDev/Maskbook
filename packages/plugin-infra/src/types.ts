@@ -18,7 +18,7 @@ import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
 import type { CompositionType } from './entry-content-script.js'
-import type { JSX } from 'react'
+import type { JSX, ComponentType } from 'react'
 
 export declare namespace Plugin {
     /**
@@ -252,6 +252,8 @@ export namespace Plugin.SiteAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
+        /** actions ui injected in profile tabs */
+        ProfileTabActions?: ComponentType
         /** This UI will be rendered as tab on the setting dialog */
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */

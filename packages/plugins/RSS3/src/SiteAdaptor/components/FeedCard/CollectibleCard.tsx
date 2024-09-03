@@ -2,19 +2,14 @@ import { Image } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress, resolveResourceURL } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { CardType, getCost, getLastAction } from '../share.js'
-import { AddressLabel, formatValue, Label } from './common.js'
+import { CardType, getLastAction } from '../share.js'
+import { CollectibleAction } from '../FeedActions/CollectibleAction.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'info' | 'center' | 'failedImage'>()((theme, _, refs) => ({
-    summary: {
-        color: theme.palette.maskColor.third,
-    },
     verbose: {},
     image: {
         img: {
@@ -144,7 +139,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
 
     const user = useAddressLabel(feed.owner)
 
-    const { metadata, cardType, summary } = useMemo(() => {
+    const { metadata, cardType } = useMemo(() => {
         let action
         let metadata
         switch (feed.type) {
@@ -154,133 +149,37 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
                 return {
                     cardType: CardType.CollectibleMint,
                     metadata,
-                    summary: (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <RSS3Trans.collectible_mint
-                            values={{
-                                user,
-                                collectible: verbose ? metadata!.name : 'an NFT',
-                                cost_value: formatValue(metadata?.cost),
-                                cost_symbol: metadata?.cost?.symbol ?? '',
-                                context: metadata?.cost ? 'cost' : 'no_cost',
-                            }}
-                            components={{
-                                user: <Label />,
-                                cost: <Label />,
-                                collectible: verbose ? <Label /> : <span />,
-                            }}
-                        />
-                    ),
                 }
             case Type.Trade:
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTradeFeed)
                 metadata = action.metadata
-                const cost = getCost(feed as RSS3BaseAPI.CollectibleTradeFeed)
                 return {
                     cardType: CardType.CollectibleOut,
                     metadata,
-                    summary: (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <RSS3Trans.collectible_trade
-                            values={{
-                                user,
-                                collectible: verbose ? metadata!.name : 'an NFT',
-                                recipient: formatEthereumAddress(action.address_to ?? '', 4),
-                                cost_value: formatValue(cost),
-                                cost_symbol: cost?.symbol ?? '',
-                                platform: feed.platform!,
-                                context: feed.platform ? 'platform' : 'no_platform',
-                            }}
-                            components={{
-                                recipient: <AddressLabel address={action.address_to} />,
-                                bold: <Label />,
-                                collectible: verbose ? <Label /> : <span />,
-                            }}
-                        />
-                    ),
                 }
             case Type.Transfer:
                 if (isRegisteringENS(feed)) {
                     return {
                         cardType: CardType.CollectibleIn,
                         metadata: feed.actions[1].metadata,
-                        summary: (
-                            // eslint-disable-next-line react/naming-convention/component-name
-                            <RSS3Trans.collectible_register_ens
-                                values={{
-                                    user,
-                                    ens: verbose ? feed.actions[1].metadata!.name : 'an ENS',
-                                    cost_value: formatValue(
-                                        (feed.actions[0] as RSS3BaseAPI.CollectibleTransferAction).metadata,
-                                    ),
-                                    cost_symbol: feed.actions[0].metadata?.symbol ?? '',
-                                }}
-                                components={{
-                                    user: <Label />,
-                                    cost: <Label />,
-                                    ens: verbose ? <Label /> : <span />,
-                                }}
-                            />
-                        ),
                     }
                 }
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTransferFeed)
                 metadata = action.metadata
-                const standard = feed.actions[0].metadata?.standard
-                const costMetadata: RSS3BaseAPI.TransactionMetadata | undefined =
-                    standard && ['Native', 'ERC-20'].includes(standard) ?
-                        (feed.actions[0].metadata as RSS3BaseAPI.TransactionMetadata)
-                    :   undefined
-                const isSending = isSameAddress(feed.owner, action.address_from)
-                const otherAddress = isSending ? action.address_to : action.address_from
+                const isSending = isSameAddress(feed.owner, action.from)
                 return {
                     cardType: isSending ? CardType.CollectibleOut : CardType.CollectibleIn,
                     metadata,
-                    summary: (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <RSS3Trans.collectible_operation
-                            values={{
-                                user,
-                                collectible: verbose ? metadata!.name : 'an NFT',
-                                other: formatEthereumAddress(otherAddress ?? '', 4),
-                                context:
-                                    isSending ? 'send'
-                                    : costMetadata ? 'claim_cost'
-                                    : 'claim',
-                                cost_value: formatValue(costMetadata),
-                                cost_symbol: costMetadata ? costMetadata.symbol : '',
-                            }}
-                            components={{
-                                user: <Label />,
-                                other: <AddressLabel address={otherAddress} />,
-                                collectible: verbose ? <Label /> : <span />,
-                                cost: <Label />,
-                            }}
-                        />
-                    ),
                 }
             case Type.Burn:
                 metadata = getLastAction(feed as RSS3BaseAPI.CollectibleBurnFeed).metadata
                 return {
                     cardType: CardType.CollectibleBurn,
                     metadata,
-                    summary: (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <RSS3Trans.collectible_burn
-                            values={{
-                                user,
-                                collectible: verbose ? metadata!.name : 'an NFT',
-                            }}
-                            components={{
-                                user: <Label />,
-                                collectible: verbose ? <Label /> : <span />,
-                            }}
-                        />
-                    ),
                 }
         }
 
-        return { summary: '', cardType: CardType.CollectibleIn }
+        return { cardType: CardType.CollectibleIn }
     }, [feed, user])
 
     const imageWidth = verbose ? '100%' : 64
@@ -290,7 +189,7 @@ export function CollectibleCard({ feed, ...rest }: CollectibleCardProps) {
 
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
-            <Typography className={classes.summary}>{summary}</Typography>
+            <CollectibleAction feed={feed} />
             {metadata ?
                 <div
                     className={cx(classes.body, {

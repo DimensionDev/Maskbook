@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { memo } from 'react'
 import type { FeedCardProps } from '../base.js'
 import { CollectibleApprovalCard, isCollectibleApprovalFeed } from './CollectibleApprovalCard.js'
@@ -10,13 +11,12 @@ import { isProfileFeed, ProfileCard } from './ProfileCard.js'
 import { isProfileLinkFeed, ProfileLinkCard } from './ProfileLinkCard.js'
 import { isProfileProxyFeed, ProfileProxyCard } from './ProfileProxy.js'
 import { isProposeFeed, ProposeCard } from './ProposeCard.js'
-import { isTokenApprovalFeed, TokenApprovalCard } from './TokenApprovalCard.js'
+import { isStakingFeed, StakingCard } from './StakingCard.js'
 import { isTokenBridgeFeed, TokenBridgeCard } from './TokenBridgeCard.js'
 import { isTokenOperationFeed, TokenOperationCard } from './TokenOperationCard.js'
 import { isTokenSwapFeed, TokenSwapCard } from './TokenSwapCard.js'
-import { isVoteFeed, VoteCard } from './VoteCard.js'
 import { UnknownCard } from './UnknownCard.js'
-import { StakingCard, isStakingFeed } from './StakingCard.js'
+import { isVoteFeed, VoteCard } from './VoteCard.js'
 
 export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
     if (isTokenOperationFeed(feed)) return <TokenOperationCard feed={feed} {...rest} />
@@ -43,15 +43,17 @@ export const FeedCard = memo(({ feed, ...rest }: FeedCardProps) => {
 
     if (isVoteFeed(feed)) return <VoteCard feed={feed} {...rest} />
 
-    if (isTokenApprovalFeed(feed)) return <TokenApprovalCard feed={feed} {...rest} />
-
     if (isCollectibleApprovalFeed(feed)) return <CollectibleApprovalCard feed={feed} {...rest} />
 
     if (isTokenBridgeFeed(feed)) return <TokenBridgeCard feed={feed} {...rest} />
 
     if (isProfileProxyFeed(feed)) return <ProfileProxyCard feed={feed} {...rest} />
 
-    return <UnknownCard feed={feed} {...rest} />
+    return (
+        <ErrorBoundary>
+            <UnknownCard feed={feed} {...rest} />
+        </ErrorBoundary>
+    )
 })
 
 FeedCard.displayName = 'FeedCard'
