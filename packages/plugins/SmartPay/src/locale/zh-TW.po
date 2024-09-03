@@ -17,3 +17,4 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 992\n"
+
