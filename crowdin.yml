@@ -6,3 +6,7 @@ files:
     translation: /packages/**/locales/%locale%.json
     update_option: 'update_as_unapproved'
     skip_untranslated_strings: true
+  - source: /packages/**/locale/en-US.po
+    translation: /packages/**/locale/%locale%.po
+    update_option: 'update_as_unapproved'
+    skip_untranslated_strings: true
