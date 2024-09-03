@@ -18,7 +18,6 @@ import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
 import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
 
-import { noop } from 'lodash-es'
 import * as modals from './modals.js'
 import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
 import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
@@ -50,18 +49,6 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
             <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
         </RootWeb3ContextProvider>
-    )
-})
-
-export const SwapPageModals = memo(function SwapPageModals() {
-    return (
-        <>
-            <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
-            <SelectProviderModal createWallet={noop} ref={modals.SelectProviderModal.register} />
-            <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
-            <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
-            <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
-        </>
     )
 })
 
