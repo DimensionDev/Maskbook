@@ -33,8 +33,11 @@ task(runLinguiExtract, 'lingui-extract', 'Run lingui extract on all workspace pa
 
 export async function runLinguiCompile() {
     const folders = await getLinguiEnabledPackages()
-    return awaitChildProcess(
+    await awaitChildProcess(
         shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only --parallel ${folders.map((x) => '--filter ' + x).join(' ')} exec lingui compile`,
+    )
+    return awaitChildProcess(
+        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only --parallel ${folders.map((x) => '--filter ' + x).join(' ')} exec prettier --write './**/*.json'`,
     )
 }
 task(runLinguiCompile, 'lingui-compile', 'Run lingui compile on all workspace packages')

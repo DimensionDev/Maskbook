@@ -20,9 +20,22 @@
     "@masknet/shared-base": "workspace:^"
   },
   "lingui": {
-    "catalogs": [{ "path": "src/locale/{locale}", "include": ["src"] }],
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ],
     "compileNamespace": "json",
-    "locales": ["en-US", "ja-JP", "ko-KR", "zh-CN", "zh-TW"],
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
     "fallbackLocales": {
       "zh-CN": "zh-TW",
       "zh-TW": "zh-CN",
