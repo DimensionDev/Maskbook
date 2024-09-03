@@ -75,6 +75,7 @@ export { ENS } from './ENS/index.js'
 
 // Debank
 export { DeBankHistory, CHAIN_ID_TO_DEBANK_CHAIN_MAP } from './DeBank/index.js'
+export { OKX } from './OKX/index.js'
 
 // NFTScan
 export {

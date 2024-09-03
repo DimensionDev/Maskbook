@@ -45,6 +45,8 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     whitelist?: string[]
     blacklist?: string[]
     tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    /** Extend tokens inside, add trusted tokens */
+    extendTokens?: boolean
     selectedChainId?: Web3Helper.ChainIdAll
     selectedTokens?: string[]
     disableSearch?: boolean
@@ -78,6 +80,7 @@ const useStyles = makeStyles()({
 export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
     const {
         tokens = EMPTY_LIST,
+        extendTokens = true,
         whitelist: includeTokens,
         blacklist: excludeTokens = EMPTY_LIST,
         onSelect,
@@ -113,17 +116,22 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const nativeToken = useMemo(() => Utils.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
-        const allFungibleTokens = uniqBy(
-            [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
-            (x) => x.address.toLowerCase(),
-        )
+        const allFungibleTokens =
+            extendTokens ?
+                uniqBy(
+                    [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
+                    (x) => x.address.toLowerCase(),
+                )
+            :   tokens
 
-        const blockedTokenAddresses = blockedFungibleTokens.map((x) => x.address)
+        const blockedTokenAddresses = new Map(blockedFungibleTokens.map((x) => [x.address, true]))
+        const includeMap = includeTokens ? new Map(includeTokens.map((x) => [x, true])) : null
+        const excludeMap = excludeTokens.length ? new Map(excludeTokens.map((x) => [x, true])) : null
         return allFungibleTokens.filter((token) => {
-            const checkSameAddress = (addr: string) => addr.toLowerCase() === token.address.toLowerCase()
-            const isIncluded = !includeTokens || includeTokens.some(checkSameAddress)
-            const isExcluded = excludeTokens.length ? excludeTokens.some(checkSameAddress) : false
-            const isBlocked = blockedTokenAddresses.some(checkSameAddress)
+            const addr = token.address.toLowerCase()
+            const isIncluded = !includeMap || includeMap.has(addr)
+            const isExcluded = excludeMap ? excludeMap.has(addr) : false
+            const isBlocked = blockedTokenAddresses.has(addr)
 
             return isIncluded && !isExcluded && !isBlocked
         })
@@ -346,6 +354,25 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         [onSelect],
     )
 
+    const data = useMemo(() => {
+        return (
+            isAddressNotContract ? EMPTY_LIST
+            : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress) ?
+                // balance field work for case: user search someone token by contract and whitelist is empty.
+                [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
+            : mode === TokenListMode.List ? sortedFungibleTokensForList
+            : sortedFungibleTokensForManage
+        )
+    }, [
+        isAddressNotContract,
+        searchedToken,
+        searchedTokenAddress,
+        tokenBalance,
+        isCustomToken,
+        sortedFungibleTokensForList,
+        sortedFungibleTokensForManage,
+    ])
+
     return (
         <Stack className={classes.channel}>
             <SearchableList<
@@ -356,15 +383,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             >
                 onSelect={handleSelect}
                 onSearch={setKeyword}
-                data={
-                    isAddressNotContract ? EMPTY_LIST
-                    : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress) ?
-                        // balance field work for case: user search someone token by contract and whitelist is empty.
-                        [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
-                    : mode === TokenListMode.List ?
-                        sortedFungibleTokensForList
-                    :   sortedFungibleTokensForManage
-                }
+                data={data}
                 searchKey={SEARCH_KEYS}
                 disableSearch={!!props.disableSearch}
                 itemKey="address"

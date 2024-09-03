@@ -1,29 +1,22 @@
-import { useState } from 'react'
-import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
+import { forwardRef, useState } from 'react'
+import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
+import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useOKXTokenList } from './useOKXTokenList.js'
 
-export interface SelectFungibleTokenModalOpenProps {
-    enableManage?: boolean
-    pluginID?: NetworkPluginID
-    chainId?: Web3Helper.ChainIdAll
-    keyword?: string
-    whitelist?: string[]
-    title?: string
-    blacklist?: string[]
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    disableSearchBar?: boolean
-    disableNativeToken?: boolean
-    selectedTokens?: string[]
+export interface SelectFungibleTokenModalOpenProps
+    extends Omit<SelectFungibleTokenDialogProps, 'onClose' | 'open' | 'extendTokens'> {
+    okxOnly?: boolean
 }
 
 export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
-export function SelectFungibleTokenModal({
-    ref,
-}: SingletonModalProps<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>) {
+export const SelectFungibleTokenModal = forwardRef<
+    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
+>((props, ref) => {
+    const [okxOnly, setOKXOnly] = useState<boolean>()
     const [enableManage, setEnableManage] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -31,24 +24,26 @@ export function SelectFungibleTokenModal({
     const [whitelist, setWhitelist] = useState<string[]>()
     const [title, setTitle] = useState<string>()
     const [blacklist, setBlacklist] = useState<string[]>()
-    const [tokens, setTokens] = useState<Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [disableSearchBar, setDisableSearchBar] = useState<boolean>()
     const [selectedChainId, setSelectedChainId] = useState<Web3Helper.ChainIdAll>()
     const [selectedTokens, setSelectedTokens] = useState<string[]>()
+    const [chains, setChains] = useState<ChainId[]>()
+    const { data: tokens } = useOKXTokenList(chainId as ChainId, okxOnly)
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setEnableManage(props.enableManage)
+            setOKXOnly(props.okxOnly)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
             setKeyword(props.keyword)
             setWhitelist(props.whitelist)
             setTitle(props.title)
             setBlacklist(props.blacklist)
-            setTokens(props.tokens)
             setDisableSearchBar(props.disableNativeToken)
             setSelectedChainId(props.chainId)
             setSelectedTokens(props.selectedTokens)
+            setChains(props.chains)
         },
     })
 
@@ -64,11 +59,13 @@ export function SelectFungibleTokenModal({
             title={title}
             blacklist={blacklist}
             tokens={tokens}
+            extendTokens={okxOnly ? false : undefined}
             disableSearchBar={disableSearchBar}
             selectedChainId={selectedChainId}
             selectedTokens={selectedTokens}
+            chains={chains}
             onClose={(token) => dispatch?.close(token)}
-            setChainId={setChainId}
+            onChainChange={setChainId}
         />
     )
-}
+})

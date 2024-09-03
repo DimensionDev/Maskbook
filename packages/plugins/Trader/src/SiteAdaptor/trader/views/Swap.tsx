@@ -1,9 +1,14 @@
 import { makeStyles } from '@masknet/theme'
-import { NetworkIcon, PluginWalletStatusBar, TokenIcon } from '@masknet/shared'
+import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useNetworks } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { base } from '../../../base.js'
+import { useState } from 'react'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -31,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(1),
+        cursor: 'pointer',
     },
     icon: {
         position: 'relative',
@@ -91,10 +97,33 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 export function SwapView() {
     const { classes } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
-    const network = networks.find((x) => x.chainId === 1)
+    const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    console.log({ chainId })
+    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const [fromToken = nativeToken, setFromToken] = useState<Web3Helper.FungibleTokenAll | null>()
+    const [toToken, setToToken] = useState<Web3Helper.FungibleTokenAll | null>()
+    const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
+    const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
+    const chainQuery = useSupportedChains()
+
+    const pickToken = async (currentToken?: Web3Helper.FungibleTokenAll | null) => {
+        const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
+        return SelectFungibleTokenModal.openAndWaitForClose({
+            disableNativeToken: false,
+            selectedTokens: currentToken ? [currentToken.address] : [],
+            // Only from token can decide the chain
+            chainId: fromToken?.chainId || chainId,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            chains: supportedChains?.map((x) => Number.parseInt(x.chainId, 10)),
+            okxOnly: true,
+            lockChainId: !!fromToken?.chainId,
+        })
+    }
 
     return (
         <div className={classes.view}>
@@ -105,23 +134,34 @@ export function SwapView() {
                             From
                         </Typography>
                         <Box display="flex" flexDirection="row">
-                            <Box className={classes.token}>
+                            <Box
+                                className={classes.token}
+                                onClick={async () => {
+                                    const picked = await pickToken(fromToken)
+                                    if (picked) setFromToken(picked)
+                                }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon className={classes.tokenIcon} chainId={1} address="0xxx" logoURL="0xx" />
-                                    <NetworkIcon
-                                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                                        className={classes.badgeIcon}
-                                        chainId={1}
-                                        size={12}
-                                        network={network}
+                                    <TokenIcon
+                                        className={classes.tokenIcon}
+                                        chainId={fromToken?.chainId}
+                                        address={fromToken?.address || ''}
+                                        logoURL={fromToken?.logoURL}
                                     />
+                                    {fromToken ?
+                                        <NetworkIcon
+                                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                                            className={classes.badgeIcon}
+                                            chainId={fromToken?.chainId}
+                                            size={12}
+                                        />
+                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
-                                        ETH
+                                        {fromToken?.name ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on Ethereum
+                                        on {fromNetwork?.name ?? '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -130,7 +170,7 @@ export function SwapView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
-                            <input className={classes.tokenInput} />
+                            <input className={classes.tokenInput} autoFocus />
                             <Typography className={classes.tokenValue}>$10M</Typography>
                         </Box>
                     </Box>
@@ -141,23 +181,34 @@ export function SwapView() {
                             To
                         </Typography>
                         <Box display="flex" flexDirection="row">
-                            <Box className={classes.token}>
+                            <Box
+                                className={classes.token}
+                                onClick={async () => {
+                                    const picked = await pickToken(toToken)
+                                    if (picked) setToToken(picked)
+                                }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon className={classes.tokenIcon} chainId={1} address="0xxx" logoURL="0xx" />
-                                    <NetworkIcon
-                                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                                        className={classes.badgeIcon}
-                                        chainId={1}
-                                        size={12}
-                                        network={network}
+                                    <TokenIcon
+                                        className={classes.tokenIcon}
+                                        chainId={toToken?.chainId}
+                                        address={toToken?.address || ''}
+                                        logoURL={toToken?.logoURL}
                                     />
+                                    {toToken ?
+                                        <NetworkIcon
+                                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                                            className={classes.badgeIcon}
+                                            chainId={toToken.chainId}
+                                            size={12}
+                                        />
+                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
-                                        ETH
+                                        {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on Ethereum
+                                        on {toNetwork?.name ?? '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
