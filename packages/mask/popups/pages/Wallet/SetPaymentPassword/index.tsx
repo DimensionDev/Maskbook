@@ -86,8 +86,10 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     },
     setPasswordButtonWrapper: {
         position: 'absolute',
-        width: 368,
+        width: 'auto',
         bottom: 16,
+        left: 16,
+        right: 16,
         marginTop: 12,
     },
     bottomAction: {
@@ -96,6 +98,8 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
         background: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
         marginTop: 'auto',
+        paddingLeft: 16,
+        paddingRight: 16,
         backdropFilter: 'blur(8px)',
     },
     confirmButton: {
@@ -341,12 +345,7 @@ export const Component = memo(function SetPaymentPassword() {
 
             {isCreating ?
                 <div className={classes.bottomAction}>
-                    <ActionButton
-                        fullWidth
-                        onClick={onSubmit}
-                        loading={loading}
-                        width={368}
-                        className={classes.confirmButton}>
+                    <ActionButton fullWidth onClick={onSubmit} loading={loading} className={classes.confirmButton}>
                         {t.confirm()}
                     </ActionButton>
                 </div>

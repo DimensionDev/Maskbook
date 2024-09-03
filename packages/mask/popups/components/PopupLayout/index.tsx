@@ -1,6 +1,6 @@
 import { memo, lazy, Suspense } from 'react'
 import { matchPath, Outlet, useLocation } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { GlobalStyles, Paper } from '@mui/material'
 import { Navigator } from '../Navigator/index.js'
@@ -10,9 +10,13 @@ const GlobalCss = (
     <GlobalStyles
         styles={{
             body: {
-                width: 400,
-                minWidth: 400,
-                minHeight: 600,
+                ...(Sniffings.is_side_panel ?
+                    {}
+                :   {
+                        width: 400,
+                        minWidth: 400,
+                        minHeight: 600,
+                    }),
                 overflowX: 'hidden',
                 margin: '0 auto !important',
                 maxWidth: '100%',

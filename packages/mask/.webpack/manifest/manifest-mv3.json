@@ -2,7 +2,7 @@
     "name": "Mask Network",
     "version": "0",
     "manifest_version": 3,
-    "permissions": ["storage", "webNavigation", "activeTab", "scripting"],
+    "permissions": ["storage", "webNavigation", "activeTab", "scripting", "sidePanel"],
     "optional_permissions": ["notifications", "clipboardRead"],
     "optional_host_permissions": ["<all_urls>"],
     "background": { "service_worker": "/manifest-v3.entry.js" },
@@ -13,6 +13,7 @@
         "256": "assets/256x256.png"
     },
     "action": { "default_popup": "popups.html" },
+    "side_panel": { "default_path": "sidepanel.html" },
     "homepage_url": "https://mask.io",
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
     "web_accessible_resources": [
