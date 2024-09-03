@@ -21,4 +21,3 @@ msgstr ""
 #: popups/pages/Settings/index.tsx:243
 msgid "Data correlation"
 msgstr "データの相関値"
-
