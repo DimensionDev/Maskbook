@@ -1,7 +1,7 @@
 import { task } from '../utils/task.js'
 import { readFile } from 'fs/promises'
 import { ROOT_PATH } from '../utils/paths.js'
-import ts, { SyntaxKind } from 'typescript'
+import ts from 'typescript'
 
 const pattern = 'packages/**/index.ts'
 export async function lintIndex() {

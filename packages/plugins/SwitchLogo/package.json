@@ -1,27 +1,50 @@
 {
-    "name": "@masknet/plugin-switch-logo",
-    "private": true,
-    "sideEffects": [
-        "./src/register.ts"
-    ],
-    "type": "module",
-    "exports": {
-        ".": {
-            "mask-src": "./src/index.ts",
-            "default": "./dist/index.js"
-        },
-        "./register": {
-            "mask-src": "./src/register.ts",
-            "default": "./dist/register.js"
-        }
+  "name": "@masknet/plugin-switch-logo",
+  "private": true,
+  "sideEffects": [
+    "./src/register.ts"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "mask-src": "./src/index.ts",
+      "default": "./dist/index.js"
     },
-    "dependencies": {
-        "@masknet/icons": "workspace:^",
-        "@masknet/plugin-infra": "workspace:^",
-        "@masknet/shared": "workspace:^",
-        "@masknet/shared-base": "workspace:^",
-        "@masknet/shared-base-ui": "workspace:^",
-        "@masknet/theme": "workspace:^",
-        "@masknet/web3-telemetry": "workspace:^"
+    "./register": {
+      "mask-src": "./src/register.ts",
+      "default": "./dist/register.js"
     }
+  },
+  "dependencies": {
+    "@masknet/icons": "workspace:^",
+    "@masknet/plugin-infra": "workspace:^",
+    "@masknet/shared": "workspace:^",
+    "@masknet/shared-base": "workspace:^",
+    "@masknet/shared-base-ui": "workspace:^",
+    "@masknet/theme": "workspace:^",
+    "@masknet/web3-telemetry": "workspace:^"
+  },
+  "lingui": {
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ],
+    "compileNamespace": "json",
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
+  }
 }

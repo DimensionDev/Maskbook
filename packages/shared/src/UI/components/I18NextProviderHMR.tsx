@@ -16,7 +16,7 @@ function I18NextProviderDev({ i18n, defaultNS, children }: React.PropsWithChildr
     // Force trigger a re-render to apply HMR
     if (ns === 'HMR') defaultNS = Math.random() + ''
     useEffect(() => {
-        // by intension. we need it to be rendered with the random defaultNS to trigger updates
+        // intended behavior. we need it to be rendered with the random defaultNS to trigger updates
         // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
         if (ns === 'HMR') setNS('')
     }, [ns])

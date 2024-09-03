@@ -26,6 +26,7 @@
         "https://unpkg.com/@splinetool/modelling-wasm@0.9.342/build/process.wasm",
 
         "wss://relay.walletconnect.com",
+        "wss://relay.walletconnect.org",
         "wss://api-v4.zerion.io",
 
         "https://mask-flags.r2d2.to/",

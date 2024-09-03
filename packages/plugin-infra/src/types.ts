@@ -201,7 +201,17 @@ export namespace Plugin.Shared {
     export type I18NLanguage = string
     export type I18NKey = string
     export type I18NValue = string
-    export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+    export type I18NResource =
+        | I18NLanguageResourcePair
+        | LinguiI18NResource
+        | Array<I18NLanguageResourcePair | LinguiI18NResource>
+    export type I18NLanguageResourcePair = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+    export type LinguiI18NResource = Record<
+        I18NLanguage,
+        {
+            messages: Record<I18NKey, I18NValue>
+        }
+    >
 
     export interface Contribution {
         /** This plugin can recognize and react to the following metadata keys. */

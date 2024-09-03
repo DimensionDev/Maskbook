@@ -10,6 +10,9 @@ import ImportPlugin from 'eslint-plugin-i'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
+// @ts-expect-error
+import LinguiPlugin from 'eslint-plugin-lingui'
+import { fixupPluginRules } from '@eslint/compat'
 
 const deferPackages = [
     'wallet.ts',
@@ -36,6 +39,13 @@ const avoidMistakeRules = {
     // Libraries
     '@tanstack/query/stable-query-client': 'error',
     '@tanstack/query/no-rest-destructuring': 'error',
+    '@lingui/no-expression-in-message': 'error',
+    '@lingui/no-single-tag-to-translate': 'error',
+    // '@lingui/no-single-variables-to-translate': 'error', // we're mixing two i18n frameworks, a lot of false positive reports
+    // https://github.com/lingui/eslint-plugin/issues/46
+    // '@lingui/no-unlocalized-strings': 'error',
+    '@lingui/no-trans-inside-trans': 'error',
+    '@lingui/t-call-in-function': 'error',
 
     // Code quality
     'no-invalid-regexp': 'error', // RegEx
@@ -512,7 +522,8 @@ const moduleSystemRules = {
     'no-useless-rename': 'error',
 
     // Avoid mistake
-    'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
+    // 'import/first': 'warn', // ES import always runs first even if you inserted some statements inside.
+    // TypeError: context.getDeclaredVariables is not a function
     'import/no-absolute-path': 'error',
     // 'import/no-cycle': 'warn',
     // 'import/no-extraneous-dependencies': 'error', // import from devDependencies might be a mistake
@@ -542,6 +553,7 @@ const plugins = {
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
     '@tanstack/query': ReactQueryPlugin,
+    '@lingui': fixupPluginRules(LinguiPlugin),
 }
 export default tseslint.config(
     {
@@ -602,6 +614,32 @@ export default tseslint.config(
         files: ['packages/**/tests/**/*.ts'],
         rules: {
             'unicorn/consistent-function-scoping': 'off',
+        },
+    },
+    {
+        files: ['packages/**/*.ts', 'packages/**/*.tsx'],
+        ignores: [
+            'packages/shared/**/*',
+            'packages/shared-base-ui/**/*',
+            'packages/mask/content-script/*',
+            'packages/mask/dashboard/*',
+            'packages/mask/popups/*',
+            'packages/mask/shared/*',
+            'packages/mask/shared-ui/*',
+            'packages/mask/swap/*',
+            'packages/theme/**/*',
+            'packages/plugins/**/*',
+        ],
+        rules: {
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    paths: [
+                        { name: '@lingui/react', message: 'Non-UI packages must not reference @lingui/react.' },
+                        { name: '@lingui/marco', message: 'Non-UI packages must not reference @lingui/marco.' },
+                    ],
+                },
+            ],
         },
     },
 )

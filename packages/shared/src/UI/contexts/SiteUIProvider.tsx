@@ -7,6 +7,8 @@ import { compose, i18NextInstance } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { I18NextProviderHMR } from '../components/I18NextProviderHMR.js'
 import { createPortal } from 'react-dom'
+import { LinguiProviderHMR } from '../components/LinguiI18NProviderHMR.js'
+import { i18n } from '@lingui/core'
 
 export function SiteUIProvider(children: React.ReactNode) {
     return compose(
@@ -25,7 +27,9 @@ function MaskUIRoot({ children }: React.PropsWithChildren) {
                     createPortal(<ReactQueryDevtools buttonPosition="bottom-right" />, document.body)
                 :   null}
                 <RootWeb3ContextProvider>
-                    <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
+                    <LinguiProviderHMR i18n={i18n}>
+                        <I18NextProviderHMR i18n={i18NextInstance}>{children}</I18NextProviderHMR>
+                    </LinguiProviderHMR>
                 </RootWeb3ContextProvider>
             </QueryClientProvider>
         </DialogStackingProvider>
