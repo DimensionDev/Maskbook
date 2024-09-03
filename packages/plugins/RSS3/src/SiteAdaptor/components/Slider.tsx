@@ -52,7 +52,7 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
         const offsetWidth = containerRef.current.offsetWidth
         setStyle({
             width: offsetWidth * count,
-            transform: `RSS3Trans(${-offsetWidth * index}px, 0)`,
+            transform: `translate(${-offsetWidth * index}px, 0)`,
         })
     }, [count, index])
 
