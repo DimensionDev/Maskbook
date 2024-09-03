@@ -96,6 +96,7 @@ export function ProfileCard({ feed, ...rest }: ProfileCardProps) {
             feed={feed}
             {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.profile
                     values={{
                         user,

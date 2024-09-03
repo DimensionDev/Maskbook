@@ -34,6 +34,7 @@ export function UnknownCard({ feed, ...rest }: TokenFeedCardProps) {
     return (
         <CardFrame type={cardType} feed={feed} {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.carry_out_activity
                     values={{
                         user,

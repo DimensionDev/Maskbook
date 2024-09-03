@@ -11,6 +11,7 @@ import {
     PersistentStorages,
 } from '@masknet/shared-base'
 import { Flags } from '@masknet/flags'
+import { i18n } from '@lingui/core'
 
 export function createSharedContext(pluginID: string, signal: AbortSignal): Plugin.Shared.SharedContext {
     return {
@@ -54,7 +55,7 @@ export function createPluginHost<Definition, Context>(
         disabled,
         minimalMode,
         addI18NResource(plugin, resource) {
-            createI18NBundle(plugin, resource)(i18NextInstance)
+            createI18NBundle(plugin, resource)(i18NextInstance, i18n)
         },
         createContext,
         permission,

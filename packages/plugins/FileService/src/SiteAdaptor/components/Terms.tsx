@@ -95,9 +95,11 @@ export function Terms() {
                     {t.what_is_web3_file_service()}
                 </Typography>
                 <Typography variant="body2" className={classes.introduction}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <FileServiceTrans.introduction multiple components={{ br: <br /> }} />
                 </Typography>
                 <Typography variant="body2" className={classes.footNote}>
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <FileServiceTrans.foot_note
                         components={{
                             terms: (

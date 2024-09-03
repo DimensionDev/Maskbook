@@ -10,7 +10,7 @@ export default defineConfig({
     },
     plugins: [
         //
-        swc({ tsconfig: '../../tsconfig.json' }),
+        swc({ tsconfig: '../../tsconfig.json', jsc: { target: 'es2022' } }),
         minify({ mangle: false, compress: false }),
     ],
 })

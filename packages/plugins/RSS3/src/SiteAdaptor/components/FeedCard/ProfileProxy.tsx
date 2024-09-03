@@ -79,6 +79,7 @@ export function ProfileProxyCard({ feed, className, ...rest }: ProfileProxyCardP
             className={cx(className, rest.verbose ? classes.verbose : null)}
             {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.profile_proxy
                     values={{
                         user,

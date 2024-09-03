@@ -110,6 +110,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
     const description = useMemo(() => {
         if (user.cloudBackupMethod === BackupAccountType.Email && user.email)
             return (
+                // eslint-disable-next-line react/naming-convention/component-name
                 <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.email }}
@@ -117,6 +118,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
             )
         if (user.cloudBackupMethod === BackupAccountType.Phone && user.phone)
             return (
+                // eslint-disable-next-line react/naming-convention/component-name
                 <DashboardTrans.cloud_backup_backup_exists
                     components={{ strong: <strong /> }}
                     values={{ account: user.phone }}

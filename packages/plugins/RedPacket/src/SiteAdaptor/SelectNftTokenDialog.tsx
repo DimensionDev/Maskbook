@@ -409,6 +409,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <QuestionMarkIcon className={classes.questionMarkIcon} />
                         </ShadowRootTooltip>
                         <Typography>
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <RedPacketTrans.nft_select_amount
                                 components={{ span: <span className={classes.selectedTokenAmount} /> }}
                                 values={{ count: tokenDetailedSelectedList.length }}
@@ -469,6 +470,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                         </Typography>
                                     </div>
                                     <Typography>
+                                        {/* eslint-disable-next-line react/naming-convention/component-name */}
                                         <RedPacketTrans.nft_shift_select_tip
                                             components={{
                                                 text: <span style={{ color: theme.palette.maskColor.primary }} />,

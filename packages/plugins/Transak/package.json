@@ -26,5 +26,28 @@
     "@types/json-stable-stringify": "^1.0.36",
     "json-stable-stringify": "^1.1.1",
     "react-use": "^17.5.0"
+  },
+  "lingui": {
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ],
+    "compileNamespace": "json",
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
   }
 }

@@ -247,6 +247,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
+                                {/* eslint-disable-next-line react/naming-convention/component-name */}
                                 <RedPacketTrans.history_nft_claimed
                                     components={{
                                         span: <span />,

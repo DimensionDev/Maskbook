@@ -104,6 +104,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                     </Box>
                     <Box flexGrow={1} ml={2}>
                         <Typography fontWeight={700} color={theme.palette.maskColor.main} fontSize={14}>
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <Translate.key_trade
                                 values={{
                                     trader: activity.trader.name,

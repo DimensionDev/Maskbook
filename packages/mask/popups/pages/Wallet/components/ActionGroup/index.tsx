@@ -1,15 +1,13 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes, NetworkPluginID } from '@masknet/shared-base'
-import { openWindow } from '@masknet/shared-base-ui'
+import { PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
+import { memo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
-import { TRADER_WEB3_CONFIG } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -24,7 +22,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: 112,
+            width: 'calc(50% - 16px)',
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
@@ -43,9 +41,6 @@ const useStyles = makeStyles()((theme) => {
             '&:active': {
                 transform: 'scale(0.97)',
             },
-        },
-        disabled: {
-            visibility: 'hidden',
         },
         label: {
             color: theme.palette.maskColor.main,
@@ -67,15 +62,6 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
-    const chainIdList = TRADER_WEB3_CONFIG[NetworkPluginID.PLUGIN_EVM].supportedChainIds ?? []
-
-    const disabledSwap = useMemo(() => !chainIdList.includes(chainId), [chainId, chainIdList])
-
-    const handleSwap = useCallback(() => {
-        if (disabledSwap) return
-        const url = urlcat('swap.html/#/', { chainId, address: asset?.address })
-        openWindow(browser.runtime.getURL(url), 'SWAP_DIALOG')
-    }, [asset, disabledSwap])
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -109,14 +95,6 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t.wallet_receive()}</Typography>
-            </button>
-            <button
-                disabled={disabledSwap}
-                type="button"
-                className={cx(classes.button, disabledSwap ? classes.disabled : undefined)}
-                onClick={handleSwap}>
-                <Icons.Cached size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>{t.wallet_swap()}</Typography>
             </button>
         </Box>
     )

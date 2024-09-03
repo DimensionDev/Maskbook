@@ -19,7 +19,6 @@ const config: KnipConfig = {
                 'background/initialization/mv3-entry.ts',
                 'dashboard/initialization/index.ts',
                 'popups/initialization/index.ts',
-                'swap/initialization/index.ts',
                 'content-script/index.ts',
                 'web-workers/wallet.ts',
                 'devtools/content-script/index.ts',

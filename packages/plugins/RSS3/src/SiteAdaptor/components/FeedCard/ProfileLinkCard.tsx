@@ -102,6 +102,7 @@ export function ProfileLinkCard({ feed, className, ...rest }: ProfileLinkCardPro
             className={cx(className, rest.verbose ? classes.verbose : null)}
             {...rest}>
             <Typography className={classes.summary}>
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.profile_link
                     values={{
                         user: formattedUser,

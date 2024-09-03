@@ -172,5 +172,33 @@
   },
   "peerDependencies": {
     "tss-react": "^4.9.0"
+  },
+  "lingui": {
+    "catalogs": [
+      {
+        "path": "./shared-ui/locale/{locale}",
+        "include": [
+          "./content-script/",
+          "./dashboard/",
+          "./popups/",
+          "./shared/",
+          "./shared-ui/",
+          "./swap/"
+        ]
+      }
+    ],
+    "compileNamespace": "json",
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
   }
 }

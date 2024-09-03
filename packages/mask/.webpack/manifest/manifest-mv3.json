@@ -27,7 +27,7 @@
             "use_dynamic_url": false
         }
     ],
-    "minimum_chrome_version": "102",
+    "minimum_chrome_version": "115",
     "browser_specific_settings": {
         "gecko": {
             "id": "{0e57e2ae-3e13-4d5d-9243-6159219852a6}"

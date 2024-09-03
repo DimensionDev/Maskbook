@@ -1,7 +1,10 @@
 import { readdir, writeFile, readFile } from 'fs/promises'
-import { dirname } from 'path'
+import { dirname, join } from 'path'
 import { upperFirst } from 'lodash-es'
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
+import { exists } from 'fs-extra'
+import { relative } from 'path/posix'
+import { fileURLToPath } from 'url'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
@@ -18,10 +21,21 @@ export async function syncLanguages() {
         const { namespace } = generator
 
         const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
+        const linguiDir =
+            input.includes('packages/mask') ?
+                new URL('../../../mask/shared-ui/locale/', import.meta.url)
+            :   new URL(join(dirname(input), '../locale') + '/', ROOT_PATH)
+        const relativeToInput = relative(fileURLToPath(inputDir), fileURLToPath(linguiDir))
 
         const languages = getLanguageFamilyName(
             (await readdir(inputDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
         )
+        const linguiLanguages =
+            (await exists(linguiDir)) ?
+                getLanguageFamilyName(
+                    (await readdir(linguiDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
+                )
+            :   new Map<string, string>()
 
         {
             let code = header
@@ -35,26 +49,43 @@ export async function syncLanguages() {
             for (const [language] of languages) {
                 code += `import ${language.replace('-', '_')} from './${language}.json'\n`
             }
+            for (const [language] of linguiLanguages) {
+                code += `import lingui_${language.replace('-', '_')} from '${relativeToInput}/${language}.json'\n`
+            }
             code += `export const languages = {\n`
             for (const [language, familyName] of languages) {
                 code += `    '${familyName}': ${language.replace('-', '_')},\n`
             }
             code += `}\n`
+            if (linguiLanguages.size) {
+                code += `export const linguiLanguages = {\n`
+                for (const [language, familyName] of linguiLanguages) {
+                    code += `    '${familyName}': lingui_${language.replace('-', '_')},\n`
+                }
+                code += `}\n`
+            }
             // Non-plugin i18n files
             if (!namespace.includes('.')) {
                 const target = `@masknet/shared-base`
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
+                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages]' : 'languages'})\n`
             }
 
             {
                 const allImportPath: string[] = []
+                const linguiImportPath: string[] = []
                 const binding: string[] = []
+                const linguiBinding: string[] = []
                 for (const [language, familyName] of languages) {
                     allImportPath.push(`./${language}.json`)
                     binding.push(`'${familyName}': ${language.replace('-', '_')}`)
                 }
-                code += `// @ts-ignore
+                for (const [language, familyName] of linguiLanguages) {
+                    linguiImportPath.push(`${relativeToInput}/${language}.json`)
+                    linguiBinding.push(`'${familyName}': lingui_${language.replace('-', '_')}`)
+                }
+                code +=
+                    `// @ts-ignore
                         if (import.meta.webpackHot) {
                             // @ts-ignore
                             import.meta.webpackHot.accept(
@@ -63,8 +94,17 @@ export async function syncLanguages() {
                                     detail: ['${namespace}', { ${binding.join(', ')} }]
                                 }))
                             )
-                        }
-                        `
+                            ` +
+                    (linguiBinding.length ?
+                        `// @ts-ignore
+                        import.meta.webpackHot.accept(
+                            ${JSON.stringify(linguiImportPath)},
+                            () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                                detail: { ${linguiBinding.join(', ')} }
+                            }))
+                        )`
+                    :   '') +
+                    '}'
             }
             code = await prettier(code)
             await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })

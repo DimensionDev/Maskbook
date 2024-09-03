@@ -22,5 +22,28 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^"
+  },
+  "lingui": {
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ],
+    "compileNamespace": "json",
+    "locales": [
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "zh-CN",
+      "zh-TW"
+    ],
+    "fallbackLocales": {
+      "zh-CN": "zh-TW",
+      "zh-TW": "zh-CN",
+      "default": "en-US"
+    }
   }
 }
