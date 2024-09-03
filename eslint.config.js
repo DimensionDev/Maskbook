@@ -621,7 +621,12 @@ export default tseslint.config(
         ignores: [
             'packages/shared/**/*',
             'packages/shared-base-ui/**/*',
-            'packages/mask/**/*',
+            'packages/mask/content-script/*',
+            'packages/mask/dashboard/*',
+            'packages/mask/popups/*',
+            'packages/mask/shared/*',
+            'packages/mask/shared-ui/*',
+            'packages/mask/swap/*',
             'packages/theme/**/*',
             'packages/plugins/**/*',
         ],

@@ -3,6 +3,8 @@ import { dirname, join } from 'path'
 import { upperFirst } from 'lodash-es'
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
 import { exists } from 'fs-extra'
+import { relative } from 'path/posix'
+import { fileURLToPath } from 'url'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
@@ -19,7 +21,11 @@ export async function syncLanguages() {
         const { namespace } = generator
 
         const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
-        const linguiDir = new URL(join(dirname(input), '../locale') + '/', ROOT_PATH)
+        const linguiDir =
+            input.includes('packages/mask') ?
+                new URL('../../../mask/shared-ui/locale/', import.meta.url)
+            :   new URL(join(dirname(input), '../locale') + '/', ROOT_PATH)
+        const relativeToInput = relative(fileURLToPath(inputDir), fileURLToPath(linguiDir))
 
         const languages = getLanguageFamilyName(
             (await readdir(inputDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
@@ -44,7 +50,7 @@ export async function syncLanguages() {
                 code += `import ${language.replace('-', '_')} from './${language}.json'\n`
             }
             for (const [language] of linguiLanguages) {
-                code += `import lingui_${language.replace('-', '_')} from '../locale/${language}.json'\n`
+                code += `import lingui_${language.replace('-', '_')} from '${relativeToInput}/${language}.json'\n`
             }
             code += `export const languages = {\n`
             for (const [language, familyName] of languages) {
@@ -75,7 +81,7 @@ export async function syncLanguages() {
                     binding.push(`'${familyName}': ${language.replace('-', '_')}`)
                 }
                 for (const [language, familyName] of linguiLanguages) {
-                    linguiImportPath.push(`../locale/${language}.json`)
+                    linguiImportPath.push(`${relativeToInput}/${language}.json`)
                     linguiBinding.push(`'${familyName}': lingui_${language.replace('-', '_')}`)
                 }
                 code +=

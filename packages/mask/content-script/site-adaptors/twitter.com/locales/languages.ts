@@ -8,6 +8,11 @@ import ko_KR from './ko-KR.json'
 import qya_AA from './qya-AA.json'
 import zh_CN from './zh-CN.json'
 import zh_TW from './zh-TW.json'
+import lingui_en_US from '../../../../shared-ui/locale/en-US.json'
+import lingui_ja_JP from '../../../../shared-ui/locale/ja-JP.json'
+import lingui_ko_KR from '../../../../shared-ui/locale/ko-KR.json'
+import lingui_zh_CN from '../../../../shared-ui/locale/zh-CN.json'
+import lingui_zh_TW from '../../../../shared-ui/locale/zh-TW.json'
 export const languages = {
     en: en_US,
     ja: ja_JP,
@@ -16,8 +21,15 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
+export const linguiLanguages = {
+    en: lingui_en_US,
+    ja: lingui_ja_JP,
+    ko: lingui_ko_KR,
+    'zh-CN': lingui_zh_CN,
+    zh: lingui_zh_TW,
+}
 import { createI18NBundle } from '@masknet/shared-base'
-export const addDO_NOT_USEI18N = createI18NBundle('DO_NOT_USE', languages)
+export const addDO_NOT_USEI18N = createI18NBundle('DO_NOT_USE', [languages, linguiLanguages])
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
@@ -27,6 +39,28 @@ if (import.meta.webpackHot) {
             globalThis.dispatchEvent?.(
                 new CustomEvent('MASK_I18N_HMR', {
                     detail: ['DO_NOT_USE', { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW }],
+                }),
+            ),
+    )
+    // @ts-ignore
+    import.meta.webpackHot.accept(
+        [
+            '../../../../shared-ui/locale/en-US.json',
+            '../../../../shared-ui/locale/ja-JP.json',
+            '../../../../shared-ui/locale/ko-KR.json',
+            '../../../../shared-ui/locale/zh-CN.json',
+            '../../../../shared-ui/locale/zh-TW.json',
+        ],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                    detail: {
+                        en: lingui_en_US,
+                        ja: lingui_ja_JP,
+                        ko: lingui_ko_KR,
+                        'zh-CN': lingui_zh_CN,
+                        zh: lingui_zh_TW,
+                    },
                 }),
             ),
     )
