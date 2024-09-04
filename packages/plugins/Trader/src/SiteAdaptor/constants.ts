@@ -4,4 +4,5 @@ export const enum RoutePaths {
     Confirm = '/confirm',
     Exit = '/exit',
     SelectLiquidity = '/select-liquidity',
+    Slippage = '/slippage',
 }

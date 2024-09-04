@@ -1,14 +1,14 @@
 import { Icons } from '@masknet/icons'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useState } from 'react'
-import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
-import { useSwap } from '../../contexts/index.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { Link, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../constants.js'
-import { useNavigate } from 'react-router-dom'
+import { useSwap } from '../../contexts/index.js'
+import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -37,6 +37,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
+        color: theme.palette.maskColor.main,
+        textDecoration: 'none',
     },
     rotate: {
         transform: 'rotate(180deg)',
@@ -50,7 +52,7 @@ interface QuoteProps extends BoxProps {
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
     const navigate = useNavigate()
-    const { chainId, disabledDexIds, expand, setExpand } = useSwap()
+    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage } = useSwap()
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
         forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
@@ -103,15 +105,20 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             Slippage
                             <Icons.Questions size={16} />
                         </Typography>
-                        <Typography className={classes.rowValue}>
-                            0.5%
+                        <Typography
+                            component={Link}
+                            className={cx(classes.rowValue, classes.link)}
+                            to={RoutePaths.Slippage}>
+                            {isAutoSlippage ? '0.05%' : `${slippage}%`}
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Select liquidity</Typography>
                         <Typography
+                            component={Link}
                             className={cx(classes.rowValue, classes.link)}
+                            to={RoutePaths.SelectLiquidity}
                             onClick={() => {
                                 navigate(RoutePaths.SelectLiquidity)
                             }}>

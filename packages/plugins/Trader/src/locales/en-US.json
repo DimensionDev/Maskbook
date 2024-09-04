@@ -138,5 +138,9 @@
     "available_balance": "Available Balance",
     "wallet_balance": "Balance",
     "edit": "Edit",
-    "history": "History"
+    "exchange": "Exchange",
+    "history": "History",
+    "confirm_swap": "Confirm Swap",
+    "select_liquidity": "Select Liquidity",
+    "slippage": "Slippage"
 }

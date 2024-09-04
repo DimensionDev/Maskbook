@@ -1,6 +1,6 @@
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect } from 'react'
-import { matchPath, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTraderTrans } from '../../locales/i18n_generated.js'
 import { RoutePaths } from '../constants.js'
 
@@ -9,8 +9,16 @@ export function RouterDialog(props: InjectedDialogProps) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
-    const matchHistory = matchPath(RoutePaths.History, pathname)
-    const title = matchHistory ? t.history() : t.plugin_trader_tab_exchange()
+    const titleMap: Record<RoutePaths, string | null> = {
+        [RoutePaths.Swap]: t.exchange(),
+        [RoutePaths.History]: t.history(),
+        [RoutePaths.Confirm]: t.confirm_swap(),
+        [RoutePaths.SelectLiquidity]: t.select_liquidity(),
+        [RoutePaths.Slippage]: t.slippage(),
+        [RoutePaths.Exit]: null,
+    }
+
+    const title = titleMap[pathname as RoutePaths] ?? t.exchange()
 
     useLayoutEffect(() => {
         if (pathname === RoutePaths.Exit) {

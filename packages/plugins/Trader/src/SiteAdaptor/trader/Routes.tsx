@@ -1,9 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { RoutePaths } from '../constants.js'
-import { SwapView } from './views/Swap/index.js'
-import { HistoryView } from './views/History.js'
 import { Confirm } from './views/Confirm.js'
+import { HistoryView } from './views/History.js'
 import { SelectLiquidity } from './views/SelectLiquidity.js'
+import { Slippage } from './views/Slippage.js'
+import { SwapView } from './views/Swap/index.js'
 
 export function ExchangeRoutes() {
     return (
@@ -12,6 +13,7 @@ export function ExchangeRoutes() {
             <Route path={RoutePaths.History} element={<HistoryView />} />
             <Route path={RoutePaths.Confirm} element={<Confirm />} />
             <Route path={RoutePaths.SelectLiquidity} element={<SelectLiquidity />} />
+            <Route path={RoutePaths.Slippage} element={<Slippage />} />
             {/* If router is embedded inside a dialog, */}
             {/* which should know it's time to close itself once we enter Exit */}
             <Route path={RoutePaths.Exit} element={null} />

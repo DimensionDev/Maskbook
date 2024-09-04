@@ -36,6 +36,12 @@ interface Options {
     setDisabledDexIds: Dispatch<SetStateAction<string[]>>
     expand: boolean
     setExpand: Dispatch<SetStateAction<boolean>>
+    slippage: string
+    setSlippage: Dispatch<SetStateAction<string>>
+    isAutoSlippage: boolean
+    setIsAutoSlippage: Dispatch<SetStateAction<boolean>>
+    mevProtection: boolean
+    setMevProtection: Dispatch<SetStateAction<boolean>>
 }
 
 const SwapContext = createContext<Options>(null!)
@@ -71,6 +77,12 @@ export function SwapProvider({ children }: PropsWithChildren) {
     const [quote = defaultQuote, setQuote] = useState<OKXSwapQuote>()
     const quoteErrorMessage = quoteRes?.msg
 
+    // slippage
+    const [isAutoSlippage, setIsAutoSlippage] = useState(true)
+    const [slippage, setSlippage] = useState('')
+    const [mevProtection, setMevProtection] = useState(true)
+
+    // misc, ui
     const [expand, setExpand] = useState(false)
 
     const value = useMemo(
@@ -89,8 +101,27 @@ export function SwapProvider({ children }: PropsWithChildren) {
             setDisabledDexIds,
             expand,
             setExpand,
+            isAutoSlippage,
+            setIsAutoSlippage,
+            slippage,
+            setSlippage,
+            mevProtection,
+            setMevProtection,
         }),
-        [chainId, quote, fromToken, toToken, inputAmount, quoteErrorMessage, disabledDexIds, expand],
+        [
+            chainId,
+            quote,
+            fromToken,
+            toToken,
+            inputAmount,
+            quoteErrorMessage,
+            disabledDexIds,
+            expand,
+            isAutoSlippage,
+            slippage,
+            setSlippage,
+            mevProtection,
+        ],
     )
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>
 }
