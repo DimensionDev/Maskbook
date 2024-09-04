@@ -4,16 +4,19 @@ import { Icons } from '@masknet/icons'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useState } from 'react'
-import { PluginID } from '@masknet/shared-base'
-import { Trans } from 'react-i18next'
 import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
+import { useCrossChainBridgeTrans } from '../locales/i18n_generated.js'
 
+function Name() {
+    const t = useCrossChainBridgeTrans()
+    return t.__plugin_name()
+}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.CrossBridge size={36} />
-            const name = <Trans ns={PluginID.CrossChainBridge} i18nKey="__plugin_name" />
+            const name = <Name />
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,

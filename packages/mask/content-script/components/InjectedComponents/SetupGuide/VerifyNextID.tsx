@@ -21,10 +21,9 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
@@ -285,10 +284,13 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                     </Box>
                     {!nextIdPlatform || verified || verifiedSuccess ?
                         <Typography className={classes.text}>
-                            <Trans
-                                i18nKey={nextIdPlatform ? 'send_post_successfully' : 'connect_successfully'}
-                                components={{ br: <br /> }}
-                            />
+                            {
+                                nextIdPlatform ?
+                                    // eslint-disable-next-line react/naming-convention/component-name
+                                    <MaskSharedTrans.send_post_successfully components={{ br: <br /> }} />
+                                    // eslint-disable-next-line react/naming-convention/component-name
+                                :   <MaskSharedTrans.connect_successfully components={{ br: <br /> }} />
+                            }
                         </Typography>
                     : creatingPostContent ?
                         <>

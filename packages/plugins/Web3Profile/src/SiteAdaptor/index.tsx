@@ -15,7 +15,12 @@ import { FarcasterBadge } from './components/Farcaster/FarcasterBadge.js'
 import { LensBadge } from './components/Lens/LensBadge.js'
 import { NextIdLensToFireflyLens } from './components/Lens/LensPopup.js'
 import { setupStorage } from './context.js'
+import { useWeb3ProfileTrans } from '../locales/i18n_generated.js'
 
+function Name() {
+    const t = useWeb3ProfileTrans()
+    return t.web3_profile()
+}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     async init(signal, context) {
@@ -26,7 +31,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Web3Profile size={36} />
-            const name = <Trans ns={PluginID.Web3Profile} i18nKey="web3_profile" />
+            const name = <Name />
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {

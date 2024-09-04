@@ -161,7 +161,6 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = create
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(_, context) {},
     GlobalInjection() {
         return <Modals />
     },

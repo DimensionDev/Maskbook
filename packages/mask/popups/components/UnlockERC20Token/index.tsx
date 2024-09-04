@@ -1,5 +1,4 @@
 import { memo, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import { Box, Button, Link, TextField, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NUMERIC_INPUT_REGEXP_PATTERN, NetworkPluginID } from '@masknet/shared-base'
@@ -10,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -168,14 +167,15 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     return (
         <Box>
             <Typography className={classes.title}>
-                <Trans
-                    i18nKey="popups_wallet_unlock_erc20_title"
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
+                <MaskSharedTrans.popups_wallet_unlock_erc20_title
                     components={{ br: <br /> }}
-                    values={{ symbol: token?.symbol }}
+                    values={{ symbol: token?.symbol || '' }}
                 />
             </Typography>
             <Typography className={classes.tips}>
-                <Trans i18nKey="popups_wallet_unlock_erc20_tips" components={{ br: <br /> }} />
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
+                <MaskSharedTrans.popups_wallet_unlock_erc20_tips components={{ br: <br /> }} />
             </Typography>
             <Box className={classes.tokenInfo}>
                 <TokenIcon

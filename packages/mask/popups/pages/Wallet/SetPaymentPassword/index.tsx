@@ -15,12 +15,11 @@ import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { Trans } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
@@ -293,7 +292,7 @@ export const Component = memo(function SetPaymentPassword() {
                             fontSize={14}
                             textAlign="center"
                             fontWeight={700}>
-                            <Trans i18nKey="popups_wallet_term_of_service_agree_part_1" />
+                            {t.popups_wallet_term_of_service_agree_part_1()}
                         </Typography>
 
                         <Typography
@@ -301,8 +300,8 @@ export const Component = memo(function SetPaymentPassword() {
                             fontSize={14}
                             textAlign="center"
                             fontWeight={700}>
-                            <Trans
-                                i18nKey="popups_wallet_term_of_service_agree_part_2"
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
+                            <MaskSharedTrans.popups_wallet_term_of_service_agree_part_2
                                 components={{
                                     agreement: (
                                         <a

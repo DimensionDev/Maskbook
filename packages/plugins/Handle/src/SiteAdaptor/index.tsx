@@ -9,7 +9,6 @@ import { base } from '../base.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     SearchResultInspector: {
         ID: PluginID.Handle,
         UI: {

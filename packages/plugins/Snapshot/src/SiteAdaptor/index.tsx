@@ -5,12 +5,12 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PostInspector } from './PostInspector.js'
 import { SearchResultType, type DAOResult } from '@masknet/web3-shared-base'
-import { Trans } from 'react-i18next'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ProfileView } from './ProfileView.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useSnapshotTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,7 +50,6 @@ export function Renderer({ url }: { url: string }) {
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     DecryptedInspector(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
@@ -71,9 +70,9 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_snapshot_description" ns={PluginID.Snapshot} />,
+            description: <Desc />,
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
-            name: <Trans i18nKey="plugin_snapshot_info_dao" ns={PluginID.Snapshot} />,
+            name: <Name />,
             marketListSortingPriority: 8,
             icon: <Icons.Snapshot size={36} />,
         },
@@ -96,6 +95,14 @@ const site: Plugin.SiteAdaptor.Definition = {
             },
         },
     },
+}
+function Desc() {
+    const t = useSnapshotTrans()
+    return t.plugin_snapshot_description()
+}
+function Name() {
+    const t = useSnapshotTrans()
+    return t.plugin_snapshot_info_dao()
 }
 
 export default site

@@ -1,5 +1,5 @@
 import { truncate } from 'lodash-es'
-import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { formatFileSize } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -7,7 +7,6 @@ import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskLightTheme } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
 import { getFileInfoMetadata } from '../helpers.js'
@@ -20,6 +19,7 @@ import { FileServiceInjection } from './FileServiceInjection.js'
 import { Modals } from './modals/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { useFileServiceTrans } from '../locales/i18n_generated.js'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SiteAdaptor.BadgeDescriptor
 
@@ -58,7 +58,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
         label: (
             <>
                 <Icons.FileService size={16} />
-                <Trans ns={PluginID.FileService} i18nKey="name" />
+                <Name />
             </>
         ),
         onClick: ({ compositionType, metadata }) => {
@@ -70,7 +70,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.FileService size={36} />
-            const name = <Trans ns={PluginID.FileService} i18nKey="__plugin_name" />
+            const name = <Name2 />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -94,7 +94,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 3,
                 icon,
                 category: 'dapp',
-                description: <Trans ns={PluginID.FileService} i18nKey="__plugin_description" />,
+                description: <Desc />,
                 name,
                 iconFilterColor,
                 tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
@@ -106,6 +106,18 @@ const definition: Plugin.SiteAdaptor.Definition = {
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(255, 177, 16, 0.2) 100%), #FFFFFF;',
     },
+}
+function Name() {
+    const t = useFileServiceTrans()
+    return t.name()
+}
+function Name2() {
+    const t = useFileServiceTrans()
+    return t.__plugin_name()
+}
+function Desc() {
+    const t = useFileServiceTrans()
+    return t.__plugin_description()
 }
 
 export default definition

@@ -1,17 +1,15 @@
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { uniq } from 'lodash-es'
-import { Trans } from 'react-i18next'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils.js'
 import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/shared-base'
+import { useArtBlocksTrans } from '../locales/i18n_generated.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
@@ -28,11 +26,19 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 15,
-            description: <Trans i18nKey="plugin_artblocks_description" ns={PluginID.ArtBlocks} />,
-            name: <Trans i18nKey="plugin_artblocks_name" ns={PluginID.ArtBlocks} />,
+            description: <Desc />,
+            name: <Name />,
             icon: <Icons.ArtBlocks size={36} />,
         },
     ],
+}
+function Name() {
+    const t = useArtBlocksTrans()
+    return t.plugin_artblocks_name()
+}
+function Desc() {
+    const t = useArtBlocksTrans()
+    return t.plugin_artblocks_description()
 }
 
 function Renderer(

@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect } from 'react'
-import { Trans } from 'react-i18next'
 import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -9,6 +8,7 @@ import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
+import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 
 interface SmartPayEntryProps {
     disabled: boolean
@@ -83,8 +83,12 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         <ApplicationEntry
             {...props}
             icon={<Icons.SmartPay size={36} />}
-            title={<Trans ns={PluginID.SmartPay} i18nKey="__plugin_name" />}
+            title={<Name />}
             onClick={() => (props.onClick ? props.onClick() : handleClick())}
         />
     )
 })
+function Name() {
+    const t = useSmartPayTrans()
+    return t.__plugin_name()
+}

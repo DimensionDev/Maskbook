@@ -8,7 +8,6 @@ import type { ScamResult } from '@scamsniffer/detector'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
 import { useMemo } from 'react'
-import { Trans } from 'react-i18next'
 import urlcat from 'urlcat'
 import { base } from '../base.js'
 import { API_KEY, PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
@@ -32,7 +31,6 @@ interface CheckResult {
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const author = usePostInfoDetails.author()
@@ -105,8 +103,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 19,
                 icon,
                 category: 'dapp',
-                description: <Trans i18nKey="__plugin_description" defaults={PLUGIN_DESCRIPTION} ns={base.ID} />,
-                name: <Trans i18nKey="__plugin_name" defaults={PLUGIN_NAME} ns={base.ID} />,
+                description: PLUGIN_DESCRIPTION,
+                name: PLUGIN_NAME,
                 tutorialLink: 'https://scamsniffer.io/?utm_source=mask-setting',
             }
         })(),

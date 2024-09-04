@@ -15,11 +15,10 @@ import { makeStyles } from '@masknet/theme'
 import { useCallback, useMemo, useState } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
-import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Trans } from 'react-i18next'
 import { getEnumAsArray } from '@masknet/kit'
 
 const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
@@ -117,11 +116,31 @@ export const REQUIREMENT_ICON_MAP: Record<RequirementType, GeneratedIcon> = {
 }
 
 export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactNode> = {
-    [RequirementType.Follow]: <Trans ns={PluginID.RedPacket} i18nKey="follow_me" />,
-    [RequirementType.Like]: <Trans ns={PluginID.RedPacket} i18nKey="like" />,
-    [RequirementType.Repost]: <Trans ns={PluginID.RedPacket} i18nKey="repost" />,
-    [RequirementType.Comment]: <Trans ns={PluginID.RedPacket} i18nKey="comment" />,
-    [RequirementType.NFTHolder]: <Trans ns={PluginID.RedPacket} i18nKey="nft_holder" />,
+    [RequirementType.Follow]: <Follow />,
+    [RequirementType.Like]: <Like />,
+    [RequirementType.Repost]: <Repost />,
+    [RequirementType.Comment]: <Comment />,
+    [RequirementType.NFTHolder]: <NFTHolder />,
+}
+function Follow() {
+    const t = useRedPacketTrans()
+    return t.follow_me()
+}
+function Like() {
+    const t = useRedPacketTrans()
+    return t.like()
+}
+function Repost() {
+    const t = useRedPacketTrans()
+    return t.repost()
+}
+function Comment() {
+    const t = useRedPacketTrans()
+    return t.comment()
+}
+function NFTHolder() {
+    const t = useRedPacketTrans()
+    return t.nft_holder()
 }
 
 export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {

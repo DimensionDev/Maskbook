@@ -1,4 +1,3 @@
-import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -6,8 +5,17 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
-import { PluginID, twitterDomainMigrate } from '@masknet/shared-base'
+import { twitterDomainMigrate } from '@masknet/shared-base'
+import { usePetsTrans } from '../locales/i18n_generated.js'
 
+function Name() {
+    const t = usePetsTrans()
+    return t.plugin_pets_name()
+}
+function Desc() {
+    const t = usePetsTrans()
+    return t.plugin_pets_description()
+}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init() {},
@@ -15,7 +23,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Pets size={36} />
-            const name = <Trans i18nKey="plugin_pets_name" ns={PluginID.Pets} />
+            const name = <Name />
             const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
                 ApplicationEntryID: base.ID,
@@ -39,7 +47,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 13,
                 icon,
-                description: <Trans i18nKey="plugin_pets_description" ns={PluginID.Pets} />,
+                description: <Desc />,
                 name,
                 tutorialLink: twitterDomainMigrate('https://x.com/NonFFriend'),
                 iconFilterColor,

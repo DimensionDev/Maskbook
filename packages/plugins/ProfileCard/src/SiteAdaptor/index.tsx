@@ -6,16 +6,26 @@ import { base } from '../base.js'
 import { EnhanceableSite_RSS3_NFT_SITE_KEY_map } from '@masknet/shared'
 import { PLUGIN_ID } from '../constants.js'
 import { AvatarBadge } from './AvatarBadge/AvatarBadge.js'
+import { useProfileCardTrans } from '../locales/i18n_generated.js'
+
+function Desc() {
+    const t = useProfileCardTrans()
+    return t.description()
+}
+function Name() {
+    const t = useProfileCardTrans()
+    return t.name()
+}
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     ApplicationEntries: [
         {
             category: 'dapp',
-            description: <Trans i18nKey="description" ns={base.ID} />,
+            description: <Desc />,
             ApplicationEntryID: base.ID,
             icon: <Icons.Web3ProfileCard />,
-            name: <Trans i18nKey="name" ns={base.ID} />,
+            name: <Name />,
             features: [
                 {
                     name: <Trans i18nKey="plugin_avatar_feature_general_user_name" />,

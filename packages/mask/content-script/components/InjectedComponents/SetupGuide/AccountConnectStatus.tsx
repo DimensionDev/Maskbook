@@ -4,9 +4,8 @@ import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
-import { Trans } from 'react-i18next'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans, MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -91,10 +90,10 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
         return (
             <Frame {...rest}>
                 <Typography className={classes.text}>
-                    <Trans
-                        i18nKey="connected_already"
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                    <MaskSharedTrans.connected_already
                         values={{
-                            account: currentUserId,
+                            account: currentUserId!,
                         }}
                         components={{
                             bold: <b />,
@@ -117,8 +116,8 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
             <Frame {...rest}>
                 <Typography className={classes.text}>{t.not_current_account()}</Typography>
                 <Typography className={classes.text} mt="1.5em">
-                    <Trans
-                        i18nKey="request_to_switch_account"
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                    <MaskSharedTrans.request_to_switch_account
                         values={{
                             account: expectAccount,
                         }}

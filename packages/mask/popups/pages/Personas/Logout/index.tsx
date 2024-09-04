@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
 import { useContainer } from '@masknet/shared-base-ui'
@@ -292,16 +291,10 @@ const LogoutUI = memo<LogoutUIProps>(
                         {t.popups_log_out_tips()}
                         {currentPersona && manageWallets.length ?
                             <Typography mt={2}>
-                                <Trans
-                                    i18nKey={
-                                        manageWallets.length > 1 ?
-                                            'popups_log_out_with_smart_pay_tips_other'
-                                        :   'popups_log_out_with_smart_pay_tips_one'
-                                    }
-                                    values={{
-                                        persona: currentPersona.nickname,
-                                    }}
-                                />
+                                {t.popups_log_out_with_smart_pay_tips({
+                                    persona: currentPersona.nickname || '',
+                                    count: manageWallets.length,
+                                })}
                             </Typography>
                         :   null}
                     </Typography>

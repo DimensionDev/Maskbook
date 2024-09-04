@@ -8,8 +8,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { Trans } from 'react-i18next'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletRemoveModal } from '../../../modals/modal-controls.js'
@@ -113,8 +112,8 @@ export const Component = memo(function WalletSettings() {
                                     title: t.remove_wallet_title(),
                                     message: (
                                         <Typography className={classes.confirmMessage}>
-                                            <Trans
-                                                i18nKey="remove_wallet_message"
+                                            {/* eslint-disable-next-line react/naming-convention/component-name */}
+                                            <MaskSharedTrans.remove_wallet_message
                                                 values={{
                                                     wallet: currentWallet,
                                                     other_wallets,

@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedTrans } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedTrans, SharedTrans } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -108,9 +107,8 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     className={classes.article}
                     variant="body2"
                     children={
-                        <Trans
-                            ns="shared"
-                            i18nKey="wallet_risk_warning_content"
+                        // eslint-disable-next-line react/naming-convention/component-name
+                        <SharedTrans.wallet_risk_warning_content
                             components={{
                                 br: <br />,
                             }}

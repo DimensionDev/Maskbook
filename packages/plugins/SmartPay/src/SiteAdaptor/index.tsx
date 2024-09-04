@@ -1,9 +1,7 @@
 import { first } from 'lodash-es'
 import { useAsync } from 'react-use'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
 import { EVMWeb3ContextProvider, useWallets } from '@masknet/web3-hooks-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { base } from '../base.js'
@@ -12,6 +10,7 @@ import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { SmartPayDialog } from './components/SmartPayDialog.js'
 import { InjectReceiveDialog } from './components/ReceiveDialog.js'
 import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
+import { useSmartPayTrans } from '../locales/i18n_generated.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -40,11 +39,15 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 2,
             marketListSortingPriority: 2,
-            name: <Trans ns={PluginID.SmartPay} i18nKey="__plugin_name" />,
+            name: <Name />,
             icon: <Icons.SmartPay size={36} />,
             category: 'other',
         },
     ],
+}
+function Name() {
+    const t = useSmartPayTrans()
+    return t.__plugin_name()
 }
 
 export default site

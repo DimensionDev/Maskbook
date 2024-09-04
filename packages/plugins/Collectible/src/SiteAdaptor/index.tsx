@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
 import { CollectionList, UserAssetsProvider } from '@masknet/shared'
-import { CrossIsolationMessages, NetworkPluginID, PluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
+import { CrossIsolationMessages, NetworkPluginID, SocialAddressType, parseURLs } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -11,12 +11,12 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box } from '@mui/material'
 import { useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
+import { useCollectibleTrans } from '../locales/index.js'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
     return useCallback(
@@ -180,8 +180,8 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="plugin_collectibles_description" ns={PluginID.Collectible} />,
-            name: <Trans i18nKey="plugin_collectibles_name" ns={PluginID.Collectible} />,
+            description: <Desc />,
+            name: <Name />,
             icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
@@ -191,6 +191,14 @@ const site: Plugin.SiteAdaptor.Definition = {
         title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
+}
+function Desc() {
+    const t = useCollectibleTrans()
+    return t.plugin_collectibles_description()
+}
+function Name() {
+    const t = useCollectibleTrans()
+    return t.plugin_collectibles_name()
 }
 
 export default site

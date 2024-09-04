@@ -1,11 +1,10 @@
 import { memo } from 'react'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -90,7 +89,8 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                     <Box className={classes.mask} onClick={toggle}>
                         <Icons.EyeOff size={24} />
                         <Typography className={classes.tips}>
-                            <Trans i18nKey="popups_wallet_backup_mnemonic_view_tips" components={{ br: <br /> }} />
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
+                            <MaskSharedTrans.popups_wallet_backup_mnemonic_view_tips components={{ br: <br /> }} />
                         </Typography>
                     </Box>
                 :   null}

@@ -24,8 +24,7 @@ import {
     List,
 } from '@mui/material'
 import { useMemo, useCallback, memo } from 'react'
-import { Trans } from 'react-i18next'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { LoadingBase } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -137,8 +136,8 @@ export const WalletList = memo<WalletListProps>(function WalletList({
             <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                 <Icons.EmptySimple size={36} />
                 <Typography fontSize={14} color={theme.palette.maskColor.second} mt={1.5} textAlign="center">
-                    <Trans
-                        i18nKey="popups_empty_wallet_proofs_tips"
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                    <MaskSharedTrans.popups_empty_wallet_proofs_tips
                         components={{
                             strong: (
                                 <strong

@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty, noop } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
@@ -20,7 +19,7 @@ import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/we
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
-import { useSharedTrans } from '../../../index.js'
+import { useSharedTrans, SharedTrans } from '../../../index.js'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -193,8 +192,8 @@ export const Prior1559GasSetting = memo(
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
                                 <Typography>{formatWeiToGwei(gasPrice || 0).toString()} Gwei</Typography>
                                 <Typography className={classes.gasUSD}>
-                                    <Trans
-                                        i18nKey="popups_wallet_gas_fee_settings_usd"
+                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                                    <SharedTrans.popups_wallet_gas_fee_settings_usd
                                         values={{
                                             usd: formatWeiToEther(gasPrice)
                                                 .times(nativeTokenPrice)
@@ -220,8 +219,8 @@ export const Prior1559GasSetting = memo(
                     <Typography className={classes.label}>
                         {t.popups_wallet_gas_price()}
                         <Typography component="span" className={classes.price}>
-                            <Trans
-                                i18nKey="popups_wallet_gas_fee_settings_usd"
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
+                            <SharedTrans.popups_wallet_gas_fee_settings_usd
                                 values={{
                                     usd: formatGweiToEther(gasPrice || 0)
                                         .times(nativeTokenPrice)

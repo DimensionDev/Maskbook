@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { base } from '../base.js'
@@ -11,6 +9,7 @@ import { PluginClaimMessage } from '../message.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
+import { useClaimTrans } from '../locales/i18n_generated.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -55,12 +54,17 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 8,
             icon: <Icons.MarketsClaim size={36} />,
-            name: <Trans ns={PluginID.Claim} i18nKey="__plugin_name" />,
+            name: <Name />,
             iconFilterColor: 'rgba(240, 51, 51, 0.3)',
             category: 'dapp',
             entryWalletConnectedNotRequired: true,
         },
     ],
+}
+
+function Name() {
+    const t = useClaimTrans()
+    return t.__plugin_name()
 }
 
 export default site

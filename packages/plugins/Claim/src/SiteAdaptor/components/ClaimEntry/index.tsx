@@ -1,10 +1,9 @@
 import { memo, useCallback } from 'react'
-import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
-import { PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginClaimMessage } from '../../../message.js'
+import { useClaimTrans } from '../../../locales/index.js'
 
 interface ClaimEntryProps {
     disabled: boolean
@@ -24,8 +23,12 @@ export const ClaimEntry = memo<ClaimEntryProps>((props) => {
         <ApplicationEntry
             {...props}
             icon={<Icons.MarketsClaim size={36} />}
-            title={<Trans ns={PluginID.Claim} i18nKey="__plugin_name" />}
+            title={<Name />}
             onClick={() => (props.onClick ? props.onClick(handleClick) : handleClick())}
         />
     )
 })
+function Name() {
+    const t = useClaimTrans()
+    return t.__plugin_name()
+}

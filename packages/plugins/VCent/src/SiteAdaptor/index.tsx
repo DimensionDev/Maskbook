@@ -1,4 +1,3 @@
-import { Trans } from 'react-i18next'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
@@ -6,17 +5,25 @@ import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
+import { useVCentTrans } from '../locales/i18n_generated.js'
 
+function Name() {
+    const t = useVCentTrans()
+    return t.name()
+}
+function Desc() {
+    const t = useVCentTrans()
+    return t.description()
+}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     PostInspector: Component,
     ApplicationEntries: [
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Trans i18nKey="description" ns={base.ID} />,
-            name: <Trans i18nKey="name" ns={base.ID} />,
+            description: <Name />,
+            name: <Desc />,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
             icon: <Icons.Valuables size={36} />,
@@ -30,7 +37,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 variant="light"
             />
         ),
-        title: <Trans i18nKey="name" ns={base.ID} />,
+        title: <Name />,
     },
 }
 

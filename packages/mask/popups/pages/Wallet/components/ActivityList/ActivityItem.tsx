@@ -33,9 +33,8 @@ import {
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo, type JSX } from 'react'
-import { Trans } from 'react-i18next'
 import { formatTokenBalance } from '../../../../../shared/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
@@ -260,10 +259,10 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                                 {t.failed()}
                             </Typography>
                         :   null}
-                        <Trans
-                            i18nKey="other_address"
+                        {/* eslint-disable-next-line react/naming-convention/component-name */}
+                        <MaskSharedTrans.other_address
                             context={isOut ? 'to' : 'from'}
-                            value={{
+                            values={{
                                 address: isOut ? toAddress : fromAddress,
                             }}
                             components={{

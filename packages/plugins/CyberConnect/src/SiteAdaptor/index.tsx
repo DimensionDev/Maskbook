@@ -7,7 +7,7 @@ import { useMemo, type JSX } from 'react'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile.js'
-import { Trans } from 'react-i18next'
+import { useCyberConnectTrans } from '../locales/i18n_generated.js'
 
 const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.me\/.+\/(0x[\dA-Fa-f]{40}|\w+.eth)/)
 
@@ -21,9 +21,16 @@ function Renderer({ url }: { url: string }) {
     )
 }
 
+function Name() {
+    const t = useCyberConnectTrans()
+    return t.__plugin_name()
+}
+function Desc() {
+    const t = useCyberConnectTrans()
+    return t.__plugin_description()
+}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init(signal) {},
     DecryptedInspector: function Component(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
@@ -43,14 +50,8 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 17,
-            description: (
-                <Trans
-                    i18nKey="__plugin_description"
-                    defaults="Decentralized social graph protocol for user-centric Web3."
-                    ns={base.ID}
-                />
-            ),
-            name: <Trans i18nKey="__plugin_name" fallback="CyberConnect" ns={base.ID} />,
+            description: <Desc />,
+            name: <Name />,
             icon: <Icons.CyberConnect size={36} />,
             tutorialLink: 'https://cyberconnect.me/',
         },

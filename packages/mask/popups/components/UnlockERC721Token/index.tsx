@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react'
-import { Trans } from 'react-i18next'
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -15,7 +14,7 @@ import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { TokenType, isSameAddress } from '@masknet/web3-shared-base'
@@ -161,14 +160,15 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
     return (
         <Box>
             <Typography className={classes.title}>
-                <Trans
-                    i18nKey="popups_wallet_unlock_erc721_title"
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
+                <MaskSharedTrans.popups_wallet_unlock_erc721_title
                     components={{ br: <br /> }}
-                    values={{ symbol: contract?.symbol }}
+                    values={{ symbol: contract?.symbol || '' }}
                 />
             </Typography>
             <Typography className={classes.tips}>
-                <Trans i18nKey="popups_wallet_unlock_erc721_tips" components={{ br: <br /> }} />
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
+                <MaskSharedTrans.popups_wallet_unlock_erc721_tips components={{ br: <br /> }} />
             </Typography>
             <Box className={classes.tokenInfo}>
                 {contract?.address ?

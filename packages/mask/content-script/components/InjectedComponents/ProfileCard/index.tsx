@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState, memo } from 'react'
-import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { compact, first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
@@ -29,7 +28,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { useMaskSharedTrans, MaskSharedTrans } from '../../../../shared-ui/index.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity?: SocialIdentity
@@ -250,8 +249,8 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                         <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                         <Typography className={classes.cardName}>{t.web3_profile_card_name()}</Typography>
                         <Typography variant="body1" className={classes.powered}>
-                            <Trans
-                                i18nKey="powered_by_whom"
+                            {/* eslint-disable-next-line react/naming-convention/component-name */}
+                            <MaskSharedTrans.powered_by_whom
                                 values={{ whom: 'RSS3' }}
                                 components={{
                                     span: (

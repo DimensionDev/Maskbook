@@ -3,12 +3,18 @@ import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 import { onConfirm } from './components/CheckSecurityConfirmDialog.js'
+import { useGoPlusLabsTrans } from '../locales/i18n_generated.js'
+
+function Name() {
+    const t = useGoPlusLabsTrans()
+    return t.__plugin_name()
+}
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -19,7 +25,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
-            const name = <Trans ns={PluginID.GoPlusSecurity} i18nKey="__plugin_name" />
+            const name = <Name />
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {

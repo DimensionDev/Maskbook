@@ -1,12 +1,11 @@
 import { memo, useCallback } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
 import { useAsync, useCopyToClipboard } from 'react-use'
-import { Trans } from 'react-i18next'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -50,8 +49,8 @@ export const Component = memo(function ExportPrivateKey() {
                     </Typography>
                 :   null}
                 <Typography>
-                    <Trans
-                        i18nKey="popups_export_private_key_tips"
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                    <MaskSharedTrans.popups_export_private_key_tips
                         components={{
                             a: (
                                 <Link

@@ -2,9 +2,8 @@ import Services from '#services'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
-import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 
@@ -99,8 +98,8 @@ export const Component = memo(function ResetWallet() {
                 </Box>
                 <Typography className={classes.description}>{t.popups_wallet_reset_wallet_description_1()}</Typography>
                 <Typography className={classes.description}>
-                    <Trans
-                        i18nKey="popups_wallet_reset_wallet_description_2"
+                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                    <MaskSharedTrans.popups_wallet_reset_wallet_description_2
                         components={{ strong: <strong className={classes.strong} /> }}
                     />
                 </Typography>

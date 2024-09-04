@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import {
     Card,
     CardActions,
@@ -27,7 +26,7 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { useArtBlocksTrans } from '../locales/index.js'
+import { ArtBlocksTrans, useArtBlocksTrans } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -152,8 +151,8 @@ export function PurchaseDialog(props: ActionBarProps) {
                             }
                             label={
                                 <Typography variant="body2">
-                                    <Trans
-                                        i18nKey="plugin_artblocks_legal_text"
+                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                                    <ArtBlocksTrans.plugin_artblocks_legal_text
                                         components={{
                                             terms: (
                                                 <Link

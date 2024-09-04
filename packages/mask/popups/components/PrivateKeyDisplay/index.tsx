@@ -4,12 +4,11 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography, alpha } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
 import { useToggle } from '@react-hookz/web'
-import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -146,8 +145,8 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                             <Box className={classes.mask} onClick={toggle}>
                                 <Icons.EyeOff size={24} />
                                 <Typography className={classes.tips}>
-                                    <Trans
-                                        i18nKey="popups_wallet_backup_private_key_view_tips"
+                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
+                                    <MaskSharedTrans.popups_wallet_backup_private_key_view_tips
                                         components={{ br: <br /> }}
                                     />
                                 </Typography>

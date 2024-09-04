@@ -23,10 +23,9 @@ import { useTheme } from '@mui/material'
 import { useUpdateEffect } from '@react-hookz/web'
 import { useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans, requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
@@ -195,8 +194,8 @@ export const Component = memo(() => {
                             title: t.popups_disconnect_persona(),
                             confirmVariant: 'warning',
                             message: (
-                                <Trans
-                                    i18nKey="popups_persona_disconnect_tips"
+                                // eslint-disable-next-line react/naming-convention/component-name
+                                <MaskSharedTrans.popups_persona_disconnect_tips
                                     components={{
                                         strong: (
                                             <strong
@@ -205,8 +204,8 @@ export const Component = memo(() => {
                                         ),
                                     }}
                                     values={{
-                                        identity: selectedAccount?.identifier.userId,
-                                        personaName: currentPersona.nickname,
+                                        identity: selectedAccount?.identifier.userId || '',
+                                        personaName: currentPersona.nickname || '',
                                     }}
                                 />
                             ),
