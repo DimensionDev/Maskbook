@@ -4,16 +4,17 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
-import { formatBalance, leftShift, minus, multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { formatBalance, leftShift, minus, multipliedBy } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { base } from '../../../../base.js'
-import { useQuotes } from '../../hooks/useQuotes.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { Quote } from './Quote.js'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../constants.js'
+import { Warning } from '../../../components/Warning.js'
+import { useSwap } from '../../contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -126,10 +127,18 @@ export function SwapView() {
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
-    const [amount, setAmount] = useState('')
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const [fromToken = nativeToken, setFromToken] = useState<Web3Helper.FungibleTokenAll | null>()
-    const [toToken, setToToken] = useState<Web3Helper.FungibleTokenAll | null>()
+    const {
+        fromToken = nativeToken,
+        setFromToken,
+        toToken,
+        setToToken,
+        inputAmount,
+        setInputAmount,
+        quote,
+        quoteErrorMessage,
+    } = useSwap()
+
     const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
     const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
     const chainQuery = useSupportedChains()
@@ -148,19 +157,12 @@ export function SwapView() {
         })
     }
 
-    const { data: quotes } = useQuotes({
-        chainId: chainId.toString(),
-        amount: amount && fromToken?.decimals ? rightShift(amount, fromToken.decimals).toString() : '',
-        fromTokenAddress: fromToken?.address,
-        toTokenAddress: toToken?.address,
-    })
-    const quote = quotes?.[0]
-
     const toTokenAmount = quote?.toTokenAmount
     const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {
         if (!quote) return { fromTokenValue: null, toTokenValue: null, priceDiff: null }
         const { fromToken, toToken, toTokenAmount } = quote
-        const fromTokenValue = amount && fromToken ? multipliedBy(amount, quote.fromToken.tokenUnitPrice) : null
+        const fromTokenValue =
+            inputAmount && fromToken ? multipliedBy(inputAmount, quote.fromToken.tokenUnitPrice) : null
         const toTokenValue =
             quote ?
                 multipliedBy(leftShift(toTokenAmount, Number.parseInt(toToken.decimal, 10)), toToken.tokenUnitPrice)
@@ -172,7 +174,7 @@ export function SwapView() {
             toTokenValue: toTokenValue?.toFixed(2),
             priceDiff: priceDiff?.toFixed(2),
         }
-    }, [quote, amount])
+    }, [quote, inputAmount])
 
     return (
         <div className={classes.view}>
@@ -222,9 +224,9 @@ export function SwapView() {
                             <input
                                 className={classes.tokenInput}
                                 autoFocus
-                                value={amount}
+                                value={inputAmount}
                                 onChange={(e) => {
-                                    setAmount(e.currentTarget.value)
+                                    setInputAmount(e.currentTarget.value)
                                 }}
                             />
                             {fromTokenValue ?
@@ -299,6 +301,10 @@ export function SwapView() {
                         </Box>
                     </Box>
                 </Box>
+
+                {quoteErrorMessage ?
+                    <Warning title="This swap isn’t supported" description={quoteErrorMessage} />
+                :   null}
 
                 {quote ?
                     <Quote className={classes.box} quote={quote} />

@@ -3,6 +3,7 @@ import { RoutePaths } from '../constants.js'
 import { SwapView } from './views/Swap/index.js'
 import { HistoryView } from './views/History.js'
 import { Confirm } from './views/Confirm.js'
+import { SelectLiquidity } from './views/SelectLiquidity.js'
 
 export function ExchangeRoutes() {
     return (
@@ -10,6 +11,7 @@ export function ExchangeRoutes() {
             <Route path={RoutePaths.Swap} element={<SwapView />} />
             <Route path={RoutePaths.History} element={<HistoryView />} />
             <Route path={RoutePaths.Confirm} element={<Confirm />} />
+            <Route path={RoutePaths.SelectLiquidity} element={<SelectLiquidity />} />
             {/* If router is embedded inside a dialog, */}
             {/* which should know it's time to close itself once we enter Exit */}
             <Route path={RoutePaths.Exit} element={null} />

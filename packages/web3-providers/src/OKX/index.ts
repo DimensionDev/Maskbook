@@ -22,7 +22,7 @@ export class OKX {
     static async getSupportedChains() {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/supported/chain')
         const res = await fetchJSON<SupportedChainResponse>(url)
-        return 'data' in res ? res.data : undefined
+        return res.code === '0' ? res.data : undefined
     }
 
     static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | undefined> {
@@ -31,8 +31,9 @@ export class OKX {
             chainId,
         })
         const res = await fetchJSON<GetTokensResponse>(url)
-        const tokens = 'data' in res ? res.data : undefined
-        return tokens?.map((x) => {
+        if (res.code !== '0') return
+        const tokens = res.data
+        return tokens.map((x) => {
             return {
                 id: x.tokenContractAddress,
                 chainId,
@@ -51,7 +52,18 @@ export class OKX {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/get-liquidity', {
             chainId,
         })
-        return fetchJSON<GetLiquidityResponse>(url)
+        // cspell: disable-next-line
+        // XXX Suspect this is private API of OKX, according to `pri(vate)api`, which provides dex logo
+        const privateUrl = urlcat('https://www.okx.com/priapi/v1/dx/trade/multi/liquidityList', { chainId })
+        const [res, resWithLogo] = await Promise.all([
+            fetchJSON<GetLiquidityResponse>(url),
+            fetchJSON<GetLiquidityResponse>(privateUrl),
+        ])
+        const dexLogoMap = new Map(resWithLogo.data.map((x) => [x.id, x.logo]))
+        return {
+            ...res,
+            data: res.data.map((dex) => ({ ...dex, logo: dexLogoMap.get(dex.id) })),
+        }
     }
 
     static async approveTransaction(chainId: string, tokenAddress: string, amount: string) {
@@ -69,8 +81,7 @@ export class OKX {
             fromTokenAddress: convertNativeAddress(options.fromTokenAddress),
             toTokenAddress: convertNativeAddress(options.toTokenAddress),
         })
-        const res = await fetchJSON<GetQuotesResponse>(url)
-        return 'data' in res ? res.data : undefined
+        return fetchJSON<GetQuotesResponse>(url)
     }
 
     /**

@@ -1,11 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { memo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from '../../constants.js'
+import { useSwap } from '../contexts/index.js'
+import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,6 +58,9 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         fontSize: 14,
     },
+    link: {
+        cursor: 'pointer',
+    },
     warning: {
         display: 'flex',
         alignItems: 'center',
@@ -65,14 +71,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
-    quote?: OKXSwapQuote
-}
+export const Confirm = memo(function Confirm() {
+    const { classes, cx, theme } = useStyles()
+    const navigate = useNavigate()
+    const { fromToken, toToken, quote, chainId, disabledDexIds } = useSwap()
 
-export const Confirm = memo(function Confirm({ quote }: Props) {
-    const { classes, theme } = useStyles()
-    const [fromToken, setFromToken] = useState<Web3Helper.FungibleTokenAll | null>()
-    const [toToken, setToToken] = useState<Web3Helper.FungibleTokenAll | null>()
+    const { data: liquidityRes } = useLiquidityResources(chainId)
+    const liquidityList = liquidityRes?.code === '0' ? liquidityRes.data : EMPTY_LIST
+    const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -157,8 +163,12 @@ export const Confirm = memo(function Confirm({ quote }: Props) {
             </div>
             <div className={classes.infoRow}>
                 <Typography className={classes.rowName}>Select liquidity</Typography>
-                <Typography className={classes.rowValue}>
-                    71/71
+                <Typography
+                    className={cx(classes.rowValue, classes.link)}
+                    onClick={() => {
+                        navigate(RoutePaths.SelectLiquidity)
+                    }}>
+                    {dexIdsCount}/liquidityList.length
                     <Icons.ArrowRight size={20} />
                 </Typography>
             </div>

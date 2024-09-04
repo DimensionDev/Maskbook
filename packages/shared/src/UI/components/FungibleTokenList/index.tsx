@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { uniqBy } from 'lodash-es'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
-import { SearchableList, makeStyles, type MaskFixedSizeListProps, type MaskTextFieldProps } from '@masknet/theme'
+import { SearchableList, makeStyles, type MaskSearchableListProps, type MaskTextFieldProps } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { AddressType } from '@masknet/web3-shared-evm'
 import {
@@ -39,29 +39,27 @@ export * from './type.js'
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID>
-    extends withClasses<'channel' | 'bar' | 'listBox' | 'searchInput'> {
+    extends withClasses<'channel' | 'bar' | 'listBox' | 'searchInput'>,
+        Pick<MaskSearchableListProps<never>, 'disableSearch' | 'loading' | 'FixedSizeListProps'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
     tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    /** Extend tokens inside, add trusted tokens */
+    /** Extend tokens inside by adding trusted tokens and so on */
     extendTokens?: boolean
     selectedChainId?: Web3Helper.ChainIdAll
     selectedTokens?: string[]
-    disableSearch?: boolean
 
     onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
 
     onSearchError?(error: boolean): void
 
-    FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
     enableManage?: boolean
     isHiddenChainIcon?: boolean
 
     setMode?(mode: TokenListMode): void
-
     mode?: TokenListMode
 }
 
@@ -385,7 +383,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 onSearch={setKeyword}
                 data={data}
                 searchKey={SEARCH_KEYS}
-                disableSearch={!!props.disableSearch}
+                disableSearch={props.disableSearch}
+                loading={props.loading}
                 itemKey="address"
                 itemRender={itemRender}
                 FixedSizeListProps={FixedSizeListProps}

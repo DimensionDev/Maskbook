@@ -2085,13 +2085,16 @@ importers:
         specifier: workspace:^
         version: link:../../web3-telemetry
       date-fns:
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^2.30.0
+        version: 2.30.0
+      fuse.js:
+        specifier: ^7.0.0
+        version: 7.0.0
       react-router-dom:
         specifier: ^6.24.0
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
-        specifier: ^17.5.0
+        specifier: ^17.4.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/Transak:
@@ -3936,9 +3939,6 @@ packages:
     resolution: {integrity: sha512-jT/qyKZ9rzLErtrjGgdkMBn2OP8wl0G3sQlBb3YPryvKHsjvINUhVaPFfP+fpBcOkmrVOVEEHQFJ7nbj2TH2gw==}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      react:
-        optional: true
 
   '@emotion/utils@1.2.0':
     resolution: {integrity: sha512-sn3WH53Kzpw8oQ5mgMmIzzyAaH2ZqFEbozVVBSYp538E06OSE6ytOp7pRAjNQR+Q/orwqdQYJSe2m3hCOeznkw==}
@@ -16481,7 +16481,7 @@ snapshots:
   '@emotion/unitless@0.8.1': {}
 
   '@emotion/use-insertion-effect-with-fallbacks@1.0.1(react@0.0.0-experimental-58af67a8f8-20240628)':
-    optionalDependencies:
+    dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   '@emotion/utils@1.2.0': {}

@@ -7,6 +7,7 @@ import { matchPath, MemoryRouter, useLocation, useNavigate } from 'react-router-
 import { RouterDialog } from '../components/RouterDialog.js'
 import { RoutePaths } from '../constants.js'
 import { ExchangeRoutes } from './Routes.js'
+import { SwapProvider } from './contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -82,7 +83,9 @@ const initialEntries = [RoutePaths.Exit, RoutePaths.Swap]
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(props) {
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
-            <Dialog {...props} />
+            <SwapProvider>
+                <Dialog {...props} />
+            </SwapProvider>
         </MemoryRouter>
     )
 })

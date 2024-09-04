@@ -29,7 +29,7 @@ export const SelectFungibleTokenModal = forwardRef<
     const [selectedTokens, setSelectedTokens] = useState<string[]>()
     const [chains, setChains] = useState<ChainId[]>()
     const [lockChainId, setLockChainId] = useState<boolean>()
-    const { data: tokens } = useOKXTokenList(chainId as ChainId, okxOnly)
+    const { data: tokens, isPending } = useOKXTokenList(chainId as ChainId, okxOnly)
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -63,6 +63,7 @@ export const SelectFungibleTokenModal = forwardRef<
             blacklist={blacklist}
             tokens={tokens}
             extendTokens={okxOnly ? false : undefined}
+            loading={okxOnly ? isPending : false}
             disableSearchBar={disableSearchBar}
             selectedChainId={selectedChainId}
             selectedTokens={selectedTokens}

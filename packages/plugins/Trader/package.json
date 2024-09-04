@@ -16,7 +16,6 @@
     }
   },
   "dependencies": {
-    "react-router-dom": "^6.24.0",    
     "@ethersproject/providers": "^5.7.2",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
@@ -32,8 +31,10 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
-    "date-fns": "^3.6.0",
-    "react-use": "^17.5.0"
+    "date-fns": "^2.30.0",
+    "fuse.js": "^7.0.0",
+    "react-router-dom": "^6.24.0",
+    "react-use": "^17.4.0"
   },
   "lingui": {
     "catalogs": [

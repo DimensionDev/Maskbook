@@ -1,14 +1,9 @@
 /** https://www.okx.com/web3/build/docs/waas/okx-waas-standard */
-type OKXResponse<T> =
-    | {
-          code: 0
-          msg: 'success'
-          data: T
-      }
-    | {
-          code: 1
-          msg: string
-      }
+type OKXResponse<T> = {
+    code: string
+    msg: string
+    data: T
+}
 
 export type SupportedChainResponse = OKXResponse<
     Array<{
@@ -34,12 +29,16 @@ export type GetTokensResponse = OKXResponse<
     }>
 >
 
-export type GetLiquidityResponse = OKXResponse<{
-    /** @example "1" */
-    id: string
-    /** @example "Uniswap V2" */
-    name: string
-}>
+export type GetLiquidityResponse = OKXResponse<
+    Array<{
+        /** @example "1" */
+        id: string
+        /** @example "Uniswap V2" */
+        name: string
+        /** Official API does provides logo */
+        logo: string
+    }>
+>
 
 export type ApproveTransactionResponse = OKXResponse<{
     /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */

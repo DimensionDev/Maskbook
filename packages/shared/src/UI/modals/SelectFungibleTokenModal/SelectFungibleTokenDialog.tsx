@@ -56,7 +56,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID>
     extends Pick<
         FungibleTokenListProps<T>,
-        'extendTokens' | 'pluginID' | 'enableManage' | 'selectedTokens' | 'blacklist' | 'whitelist'
+        'extendTokens' | 'pluginID' | 'enableManage' | 'selectedTokens' | 'blacklist' | 'whitelist' | 'loading'
     > {
     open: boolean
     chainId?: Web3Helper.Definition[T]['ChainId']
@@ -80,6 +80,7 @@ export function SelectFungibleTokenDialog({
     chainId,
     lockChainId = false,
     disableSearchBar,
+    loading,
     disableNativeToken,
     tokens,
     extendTokens,
@@ -152,6 +153,7 @@ export function SelectFungibleTokenDialog({
                             disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                         }
                         disableSearch={disableSearchBar}
+                        loading={loading}
                         selectedChainId={selectedChainId}
                         selectedTokens={selectedTokens}
                         onSelect={onClose}

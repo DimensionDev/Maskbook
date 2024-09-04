@@ -3,4 +3,5 @@ export const enum RoutePaths {
     History = '/history',
     Confirm = '/confirm',
     Exit = '/exit',
+    SelectLiquidity = '/select-liquidity',
 }
