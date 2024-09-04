@@ -180,6 +180,7 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 </div>
             :   null}
             <Typography className={classes.summary} component="div">
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.note
                     values={{
                         user: metadata?.handle ?? 'unknown',

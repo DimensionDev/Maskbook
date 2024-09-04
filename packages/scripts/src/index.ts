@@ -15,6 +15,7 @@ export { buildCloudflare } from './cloudflare/index.js'
 export { clean, createPackageInteractive, syncDevelop, changesetRelease } from './commands/index.js'
 export { syncLanguages } from './locale-kit-next/index.js'
 export { runLinguiExtract, runLinguiCompile } from './locale-kit-next/run-lingui.js'
+export { migrate } from './locale-kit-next/migrate.js'
 export { reorderSpellcheck } from './spellcheck/index.js'
 
 // Sub-projects build commands

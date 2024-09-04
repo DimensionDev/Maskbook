@@ -49,6 +49,7 @@ export function StakingAction({ feed, ...rest }: StakingFeedActionProps) {
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
+                {/* eslint-disable-next-line react/naming-convention/component-name */}
                 <RSS3Trans.tokenStaking
                     values={{
                         user,
