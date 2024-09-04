@@ -5,4 +5,6 @@ export const enum RoutePaths {
     Exit = '/exit',
     SelectLiquidity = '/select-liquidity',
     Slippage = '/slippage',
+    QuoteRoute = '/quote-route',
+    TradingRoute = '/trading-route',
 }

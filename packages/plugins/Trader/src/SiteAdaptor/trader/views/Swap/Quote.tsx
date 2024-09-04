@@ -131,7 +131,10 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             Quote route
                             <Icons.Questions size={16} />
                         </Typography>
-                        <Typography className={classes.rowValue}>
+                        <Typography
+                            className={cx(classes.rowValue, classes.link)}
+                            component={Link}
+                            to={RoutePaths.QuoteRoute}>
                             🎉 1.24
                             <Icons.ArrowRight size={20} />
                         </Typography>

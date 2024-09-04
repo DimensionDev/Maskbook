@@ -142,5 +142,7 @@
     "history": "History",
     "confirm_swap": "Confirm Swap",
     "select_liquidity": "Select Liquidity",
-    "slippage": "Slippage"
+    "slippage": "Slippage",
+    "quote_route": "Quote Route",
+    "trading_route": "Trading Route"
 }

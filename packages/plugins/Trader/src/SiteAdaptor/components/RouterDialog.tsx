@@ -15,6 +15,8 @@ export function RouterDialog(props: InjectedDialogProps) {
         [RoutePaths.Confirm]: t.confirm_swap(),
         [RoutePaths.SelectLiquidity]: t.select_liquidity(),
         [RoutePaths.Slippage]: t.slippage(),
+        [RoutePaths.QuoteRoute]: t.quote_route(),
+        [RoutePaths.TradingRoute]: t.trading_route(),
         [RoutePaths.Exit]: null,
     }
 

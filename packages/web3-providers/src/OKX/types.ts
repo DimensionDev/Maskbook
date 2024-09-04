@@ -78,6 +78,17 @@ export interface GetQuotesOptions {
     feePercent?: string
 }
 
+interface SwapToken {
+    /** @example "18" */
+    decimal: string
+    /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
+    tokenContractAddress: string
+    /** @example "USDC" */
+    tokenSymbol: string
+    /** @example "0.9998542668416743" */
+    tokenUnitPrice: string
+}
+
 export interface OKXSwapQuote {
     chainId: string
     dexRouterList: Array<{
@@ -85,44 +96,21 @@ export interface OKXSwapQuote {
         /** @example "100" */
         routerPercent: string
         subRouterList: Array<{
-            /** @example "Uniswap V3" */
-            dexName: string
-            /** @example "100" */
-            percent: string
+            dexProtocol: {
+                /** @example "Uniswap V3" */
+                dexName: string
+                /** @example "100" */
+                percent: string
+            }
+            fromToken: SwapToken
+            toToken: SwapToken
         }>
-        fromToken: {
-            /** @example "18" */
-            decimal: string
-            /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-            tokenContractAddress: string
-            /** @example "USDC" */
-            tokenSymbol: string
-            /** @example "0.9998542668416743" */
-            tokenUnitPrice: string
-        }
-        toToken: {
-            /** @example "18" */
-            decimal: string
-            /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-            tokenContractAddress: string
-            /** @example "USDC" */
-            tokenSymbol: string
-            /** @example "0.9998542668416743" */
-            tokenUnitPrice: string
-        }
+        fromToken: SwapToken
+        toToken: SwapToken
     }>
     /** Gas fee estimate */
     estimateGasFee: string
-    fromToken: {
-        /** @example "18" */
-        decimal: string
-        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-        tokenContractAddress: string
-        /** @example "USDC" */
-        tokenSymbol: string
-        /** @example "0.9998542668416743" */
-        tokenUnitPrice: string
-    }
+    fromToken: SwapToken
     /** Amount of fromToken */
     fromTokenAmount: string
     quoteCompareList: Array<{
@@ -131,16 +119,7 @@ export interface OKXSwapQuote {
         dexName: string
         tradeFee: string
     }>
-    toToken: {
-        /** @example "18" */
-        decimal: string
-        /** @example "0x382bb369d343125bfb2117af9c149795c6c65c50" */
-        tokenContractAddress: string
-        /** @example "USDC" */
-        tokenSymbol: string
-        /** @example "0.9998542668416743" */
-        tokenUnitPrice: string
-    }
+    toToken: SwapToken
     /** Amount of toToken */
     toTokenAmount: string
 }
