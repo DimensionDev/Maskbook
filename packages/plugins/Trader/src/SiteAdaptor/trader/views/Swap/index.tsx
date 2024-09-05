@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../constants.js'
 import { Warning } from '../../../components/Warning.js'
 import { useSwap } from '../../contexts/index.js'
+import { useSwappable } from '../../hooks/useSwappable.js'
+import { useTraderTrans } from '../../../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -46,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         left: '50%',
         top: -22,
-        transform: 'rotate(90deg)',
+        transform: 'translateX(-50%) rotate(90deg)',
         width: 32,
         height: 32,
         border: `1px solid ${theme.palette.maskColor.line}`,
@@ -122,6 +124,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 export function SwapView() {
+    const t = useTraderTrans()
     const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -175,6 +178,8 @@ export function SwapView() {
             priceDiff: priceDiff?.toFixed(2),
         }
     }, [quote, inputAmount])
+
+    const [isSwappable, errorMessage] = useSwappable()
 
     return (
         <div className={classes.view}>
@@ -313,10 +318,11 @@ export function SwapView() {
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
                 <Button
                     fullWidth
+                    disabled={!isSwappable}
                     onClick={() => {
                         navigate(RoutePaths.Confirm)
                     }}>
-                    Swap
+                    {errorMessage ?? t.swap()}
                 </Button>
             </PluginWalletStatusBar>
         </div>

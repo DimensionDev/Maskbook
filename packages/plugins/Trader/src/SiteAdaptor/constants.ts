@@ -7,4 +7,5 @@ export const enum RoutePaths {
     Slippage = '/slippage',
     QuoteRoute = '/quote-route',
     TradingRoute = '/trading-route',
+    NetworkFee = '/network-fee',
 }

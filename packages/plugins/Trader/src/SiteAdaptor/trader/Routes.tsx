@@ -7,6 +7,7 @@ import { SelectLiquidity } from './views/SelectLiquidity.js'
 import { Slippage } from './views/Slippage.js'
 import { SwapView } from './views/Swap/index.js'
 import { TradingRoute } from './views/TradingRoute.js'
+import { NetworkFee } from './views/NetworkFee.js'
 
 export function ExchangeRoutes() {
     return (
@@ -18,6 +19,7 @@ export function ExchangeRoutes() {
             <Route path={RoutePaths.Slippage} element={<Slippage />} />
             <Route path={RoutePaths.QuoteRoute} element={<QuoteRoute />} />
             <Route path={RoutePaths.TradingRoute} element={<TradingRoute />} />
+            <Route path={RoutePaths.NetworkFee} element={<NetworkFee />} />
             {/* If router is embedded inside a dialog, */}
             {/* which should know it's time to close itself once we enter Exit */}
             <Route path={RoutePaths.Exit} element={null} />

@@ -1,14 +1,15 @@
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { dividedBy, formatCompact } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Warning } from '../../components/Warning.js'
 import { RoutePaths } from '../../constants.js'
 import { useSwap } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -60,14 +61,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
-    },
-    warning: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(1.5),
-        borderRadius: 12,
-        backgroundColor: 'rgba(255, 177, 0, 0.1)',
-        color: theme.palette.maskColor.warn,
     },
 }))
 
@@ -148,8 +141,14 @@ export const Confirm = memo(function Confirm() {
                 <Typography className={classes.rowValue}>{rateNode}</Typography>
             </div>
             <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>Est Network fee</Typography>
-                <Typography className={classes.rowValue}>$2.46</Typography>
+                <Typography className={classes.rowName}>Network fee</Typography>
+                <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
+                    <Box display="flex" flexDirection="column">
+                        <Typography>0.007155 MATIC ≈ $0.004434 </Typography>
+                        <Typography>Average</Typography>
+                    </Box>
+                    <Icons.ArrowRight size={16} />
+                </Link>
             </div>
             <div className={classes.infoRow}>
                 <Typography className={classes.rowName}>
@@ -190,10 +189,7 @@ export const Confirm = memo(function Confirm() {
                 <Typography className={classes.rowValue}>OKX</Typography>
             </div>
 
-            <Typography className={classes.warning}>
-                <Icons.WarningTriangle />
-                Quote expired. Update to receive a new quote.
-            </Typography>
+            <Warning description="Quote expired. Update to receive a new quote." />
         </div>
     )
 })

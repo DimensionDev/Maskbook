@@ -144,5 +144,8 @@
     "select_liquidity": "Select Liquidity",
     "slippage": "Slippage",
     "quote_route": "Quote Route",
-    "trading_route": "Trading Route"
+    "trading_route": "Trading Route",
+    "network_fee": "Network Fee",
+    "enter_an_amount": "Enter an Amount",
+    "insufficient_balance": "Insufficient {{- symbol }} Balance"
 }

@@ -40,7 +40,8 @@ export function isZeroAddress(address?: string): address is '0x00000000000000000
 const nativeTokenSet = new Set(ChainIdList.map((chainId) => getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS')))
 
 export function isNativeTokenAddress(address?: string): address is string {
-    return !!(address && nativeTokenSet.has(address))
+    if (!address) return false
+    return nativeTokenSet.has(address) || address.toLowerCase() === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 }
 
 const {

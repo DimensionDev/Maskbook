@@ -147,6 +147,7 @@ export function base_upload_url() { return new URL("./general/BaseUpload.svg", i
 export function base_user_url() { return new URL("./general/BaseUser.svg", import.meta.url).href }
 export function best_trade_url() { return new URL("./general/BestTrade.svg", import.meta.url).href }
 export function bi_arrow_url() { return new URL("./general/BiArrow.svg", import.meta.url).href }
+export function bike_url() { return new URL("./general/Bike.svg", import.meta.url).href }
 export function blocks_url() { return new URL("./general/Blocks.svg", import.meta.url).href }
 export function blue_pin_url() { return new URL("./general/BluePin.svg", import.meta.url).href }
 export function bordered_success_url() { return new URL("./general/BorderedSuccess.svg", import.meta.url).href }
@@ -155,6 +156,7 @@ export function buy_url() { return new URL("./general/Buy.svg", import.meta.url)
 export function cached_url() { return new URL("./general/Cached.svg", import.meta.url).href }
 export function calendar_dark_url() { return new URL("./general/CalendarDark.svg", import.meta.url).href }
 export function candle_url() { return new URL("./general/candle.svg", import.meta.url).href }
+export function car_url() { return new URL("./general/Car.svg", import.meta.url).href }
 export function card_url() { return new URL("./general/Card.svg", import.meta.url).href }
 export function check_url() { return new URL("./general/Check.svg", import.meta.url).href }
 export function checkbox_url() { return new URL("./general/Checkbox.svg", import.meta.url).href }
@@ -303,6 +305,7 @@ export function retweet_light_url() { return new URL("./general/Retweet.light.sv
 export function right_url() { return new URL("./general/Right.svg", import.meta.url).href }
 export function right_arrow_url() { return new URL("./general/RightArrow.svg", import.meta.url).href }
 export function risk_url() { return new URL("./general/Risk.svg", import.meta.url).href }
+export function rocket_url() { return new URL("./general/Rocket.svg", import.meta.url).href }
 export function search_url() { return new URL("./general/Search.svg", import.meta.url).href }
 export function security_risk_url() { return new URL("./general/SecurityRisk.svg", import.meta.url).href }
 export function security_warning_url() { return new URL("./general/SecurityWarning.svg", import.meta.url).href }

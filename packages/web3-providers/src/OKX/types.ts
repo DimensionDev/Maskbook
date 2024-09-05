@@ -108,7 +108,7 @@ export interface OKXSwapQuote {
         fromToken: SwapToken
         toToken: SwapToken
     }>
-    /** Gas fee estimate */
+    /** It's gas limit actually */
     estimateGasFee: string
     fromToken: SwapToken
     /** Amount of fromToken */
@@ -170,7 +170,7 @@ export type SwapResponse = {
             fromTokenAmount: string
             /** the output amount of a token to be received */
             toTokenAmount: string
-            /** Gas fee estimate */
+            /** It's gas limit actually */
             estimateGasFee: string
             /** The list of DEX routers */
             dexRouterList: Array<{

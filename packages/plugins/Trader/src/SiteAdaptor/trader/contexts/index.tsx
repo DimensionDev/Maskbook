@@ -16,6 +16,7 @@ import {
 import { base } from '../../../base.js'
 import { useQuotes } from '../hooks/useQuotes.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { useUsdtToken } from '../hooks/useUsdtToken.js'
 
 interface Options {
     chainId: ChainId
@@ -42,6 +43,8 @@ interface Options {
     setIsAutoSlippage: Dispatch<SetStateAction<boolean>>
     mevProtection: boolean
     setMevProtection: Dispatch<SetStateAction<boolean>>
+    networkFee: string
+    setNetworkFee: Dispatch<SetStateAction<string>>
 }
 
 const SwapContext = createContext<Options>(null!)
@@ -52,8 +55,9 @@ export function SwapProvider({ children }: PropsWithChildren) {
     const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
+    const usdtToken = useUsdtToken(chainId)
     const [fromToken = nativeToken, setFromToken] = useState<Web3Helper.FungibleTokenAll>()
-    const [toToken, setToToken] = useState<Web3Helper.FungibleTokenAll>()
+    const [toToken = usdtToken, setToToken] = useState<Web3Helper.FungibleTokenAll>()
 
     const [inputAmount, setInputAmount] = useState('')
 
@@ -85,6 +89,9 @@ export function SwapProvider({ children }: PropsWithChildren) {
     // misc, ui
     const [expand, setExpand] = useState(false)
 
+    // Network fee
+    const [networkFee, setNetworkFee] = useState('2') // Default to 'standard' fee
+
     const value = useMemo(
         () => ({
             chainId,
@@ -107,6 +114,8 @@ export function SwapProvider({ children }: PropsWithChildren) {
             setSlippage,
             mevProtection,
             setMevProtection,
+            networkFee,
+            setNetworkFee,
         }),
         [
             chainId,
@@ -121,6 +130,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
             slippage,
             setSlippage,
             mevProtection,
+            networkFee,
         ],
     )
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>

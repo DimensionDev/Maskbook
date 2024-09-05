@@ -2069,6 +2069,9 @@ importers:
       '@masknet/web3-hooks-base':
         specifier: workspace:^
         version: link:../../web3-hooks/base
+      '@masknet/web3-hooks-evm':
+        specifier: workspace:^
+        version: link:../../web3-hooks/evm
       '@masknet/web3-providers':
         specifier: workspace:^
         version: link:../../web3-providers
@@ -12789,9 +12792,6 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
-    peerDependenciesMeta:
-      react:
-        optional: true
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -27900,7 +27900,6 @@ snapshots:
   react-router@6.24.0(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@remix-run/router': 1.17.0
-    optionalDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   react-transition-group@4.4.5(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
@@ -30836,5 +30835,3 @@ snapshots:
   zod@3.23.8: {}
 
   zwitch@2.0.2: {}
-
-time: {}

@@ -18,6 +18,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         [RoutePaths.QuoteRoute]: t.quote_route(),
         [RoutePaths.TradingRoute]: t.trading_route(),
         [RoutePaths.Exit]: null,
+        [RoutePaths.NetworkFee]: t.network_fee(),
     }
 
     const title = titleMap[pathname as RoutePaths] ?? t.exchange()

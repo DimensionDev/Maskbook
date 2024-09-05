@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { forwardRef, useState } from 'react'
 import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
-import { useOKXTokenList } from './useOKXTokenList.js'
+import { useOKXTokenList } from '@masknet/web3-hooks-evm'
 
 export interface SelectFungibleTokenModalOpenProps
     extends Omit<SelectFungibleTokenDialogProps, 'onClose' | 'open' | 'extendTokens'> {

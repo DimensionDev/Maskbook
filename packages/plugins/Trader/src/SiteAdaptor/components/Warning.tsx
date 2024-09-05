@@ -37,7 +37,9 @@ export const Warning = memo(function Warning({ title, description, ...rest }: Wa
         <div className={cx(classes.container)} {...rest}>
             <Icons.WarningTriangle size={20} />
             <div>
-                <Typography className={classes.title}>{title}</Typography>
+                {title ?
+                    <Typography className={classes.title}>{title}</Typography>
+                :   null}
                 <Typography className={classes.description}>{description}</Typography>
             </div>
         </div>
