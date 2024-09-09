@@ -26,6 +26,7 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
         enabled,
         queryKey: ['fungible-token', 'balance', pluginID, account, address, options],
         queryFn: async () => {
+            console.log({ address })
             if (!address) return '0'
             return Web3.getFungibleTokenBalance(address, undefined, options)
         },

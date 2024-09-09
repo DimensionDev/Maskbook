@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
+        boxSizing: 'border-box',
         padding: theme.spacing(2),
     },
     pair: {
@@ -25,6 +26,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     token: {
         display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(0.5),
+    },
+    tokenTitle: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 400,
     },
     tokenIcon: {
         height: 30,
@@ -36,11 +44,38 @@ const useStyles = makeStyles()((theme) => ({
     },
     tokenValue: {
         display: 'flex',
+        lineHeight: '18px',
+        flexDirection: 'column',
+    },
+    value: {
+        fontSize: 14,
+        fontWeight: 700,
+    },
+    fromToken: {
+        fontSize: 13,
+        fontWeight: 400,
+        lineHeight: '18px',
+    },
+    network: {
+        fontSize: 13,
+        color: theme.palette.maskColor.second,
+        lineHeight: '18px',
+    },
+    toToken: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 400,
+        color: theme.palette.maskColor.success,
+    },
+    infoList: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
     },
     infoRow: {
         display: 'flex',
         width: '100%',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         color: theme.palette.maskColor.main,
         justifyContent: 'space-between',
     },
@@ -56,11 +91,15 @@ const useStyles = makeStyles()((theme) => ({
     rowValue: {
         display: 'flex',
         alignItems: 'center',
+        lineHeight: '18px',
         gap: theme.spacing(0.5),
         fontSize: 14,
     },
     link: {
         cursor: 'pointer',
+        textDecoration: 'none',
+        textAlign: 'right',
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -70,7 +109,7 @@ export const Confirm = memo(function Confirm() {
     const { fromToken, toToken, quote, chainId, disabledDexIds } = useSwap()
 
     const { data: liquidityRes } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === '0' ? liquidityRes.data : EMPTY_LIST
+    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -99,7 +138,7 @@ export const Confirm = memo(function Confirm() {
         <div className={classes.container}>
             <div className={classes.pair}>
                 <div className={classes.token}>
-                    <Typography>From</Typography>
+                    <Typography className={classes.tokenTitle}>From</Typography>
                     <div className={classes.tokenInfo}>
                         <TokenIcon
                             className={classes.tokenIcon}
@@ -108,13 +147,13 @@ export const Confirm = memo(function Confirm() {
                             logoURL={fromToken?.logoURL}
                         />
                         <div className={classes.tokenValue}>
-                            <Typography>-0.99293 USDC.e3</Typography>
-                            <Typography>Polygon</Typography>
+                            <Typography className={cx(classes.fromToken, classes.value)}>-0.99293 USDC.e3</Typography>
+                            <Typography className={classes.network}>Polygon</Typography>
                         </div>
                     </div>
                 </div>
                 <div className={classes.token}>
-                    <Typography>To</Typography>
+                    <Typography className={classes.tokenTitle}>To</Typography>
                     <div className={classes.tokenInfo}>
                         <TokenIcon
                             className={classes.tokenIcon}
@@ -123,73 +162,74 @@ export const Confirm = memo(function Confirm() {
                             logoURL={toToken?.logoURL}
                         />
                         <div className={classes.tokenValue}>
-                            <Typography>-0.99293 USDC.e3</Typography>
-                            <Typography>Polygon</Typography>
+                            <Typography className={cx(classes.toToken, classes.value)}>-0.99293 USDC.e3</Typography>
+                            <Typography className={classes.network}>Polygon</Typography>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>Trading mode</Typography>
-                <Typography className={classes.rowValue}>Aggregator</Typography>
+            <div className={classes.infoList}>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>Trading mode</Typography>
+                    <Typography className={classes.rowValue}>Aggregator</Typography>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>
+                        Rate
+                        <Icons.Questions size={16} />
+                    </Typography>
+                    <Typography className={classes.rowValue}>{rateNode}</Typography>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>Network fee</Typography>
+                    <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
+                        <Box display="flex" flexDirection="column">
+                            <Typography>0.007155 MATIC ≈ $0.004434 </Typography>
+                            <Typography>Average</Typography>
+                        </Box>
+                        <Icons.ArrowRight size={16} />
+                    </Link>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>
+                        Slippage
+                        <Icons.Questions size={16} />
+                    </Typography>
+                    <Typography className={classes.rowValue}>
+                        0.5%
+                        <Icons.ArrowRight size={20} />
+                    </Typography>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>Select liquidity</Typography>
+                    <Typography
+                        className={cx(classes.rowValue, classes.link)}
+                        onClick={() => {
+                            navigate(RoutePaths.SelectLiquidity)
+                        }}>
+                        {dexIdsCount}/liquidityList.length
+                        <Icons.ArrowRight size={20} />
+                    </Typography>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>
+                        Quote route
+                        <Icons.Questions size={16} />
+                    </Typography>
+                    <Typography className={classes.rowValue}>
+                        🎉1.24
+                        <Icons.ArrowRight />
+                    </Typography>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.rowName}>
+                        Powered by
+                        <Icons.Questions size={16} />
+                    </Typography>
+                    <Typography className={classes.rowValue}>OKX</Typography>
+                </div>
+                <Warning description="Quote expired. Update to receive a new quote." />
             </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>
-                    Rate
-                    <Icons.Questions size={16} />
-                </Typography>
-                <Typography className={classes.rowValue}>{rateNode}</Typography>
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>Network fee</Typography>
-                <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
-                    <Box display="flex" flexDirection="column">
-                        <Typography>0.007155 MATIC ≈ $0.004434 </Typography>
-                        <Typography>Average</Typography>
-                    </Box>
-                    <Icons.ArrowRight size={16} />
-                </Link>
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>
-                    Slippage
-                    <Icons.Questions size={16} />
-                </Typography>
-                <Typography className={classes.rowValue}>
-                    0.5%
-                    <Icons.ArrowRight size={20} />
-                </Typography>
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>Select liquidity</Typography>
-                <Typography
-                    className={cx(classes.rowValue, classes.link)}
-                    onClick={() => {
-                        navigate(RoutePaths.SelectLiquidity)
-                    }}>
-                    {dexIdsCount}/liquidityList.length
-                    <Icons.ArrowRight size={20} />
-                </Typography>
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>
-                    Quote route
-                    <Icons.Questions size={16} />
-                </Typography>
-                <Typography className={classes.rowValue}>
-                    🎉1.24
-                    <Icons.ArrowRight />
-                </Typography>
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>
-                    Powered by
-                    <Icons.Questions size={16} />
-                </Typography>
-                <Typography className={classes.rowValue}>OKX</Typography>
-            </div>
-
-            <Warning description="Quote expired. Update to receive a new quote." />
         </div>
     )
 })

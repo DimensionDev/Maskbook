@@ -1188,6 +1188,23 @@ export const CalendarDark = /*#__PURE__*/ __createIcon('CalendarDark', [
         u: () => new URL('./general/CalendarDark.svg', import.meta.url).href,
     },
 ])
+export const CallSend = /*#__PURE__*/ __createIcon('CallSend', [
+    {
+        j: () =>
+            /*#__PURE__*/ _jsx('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: /*#__PURE__*/ _jsx('path', {
+                    fill: 'currentColor',
+                    fillRule: 'evenodd',
+                    d: 'M12.53 4.33a.75.75 0 0 0-1.06 0L5.4 10.4a.75.75 0 0 0 1.06 1.06l4.79-4.79v12.47a.75.75 0 0 0 1.5 0V6.67l4.79 4.79a.75.75 0 1 0 1.06-1.06l-6.07-6.07Z',
+                    clipRule: 'evenodd',
+                }),
+            }),
+        s: true,
+    },
+])
 export const Candle = /*#__PURE__*/ __createIcon('candle', [
     {
         u: () => new URL('./general/candle.svg', import.meta.url).href,
@@ -2996,7 +3013,31 @@ export const Questions = /*#__PURE__*/ __createIcon('Questions', [
 ])
 export const RadioButtonChecked = /*#__PURE__*/ __createIcon('RadioButtonChecked', [
     {
-        u: () => new URL('./general/RadioButtonChecked.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 20 20',
+                children: [
+                    /*#__PURE__*/ _jsx('circle', {
+                        cx: '10',
+                        cy: '10',
+                        r: '10',
+                        style: {
+                            '--default-color': '#1C68F3',
+                            fill: 'var(--icon-color, var(--default-color, currentColor))',
+                        },
+                    }),
+                    /*#__PURE__*/ _jsx('path', {
+                        stroke: '#fff',
+                        strokeLinecap: 'round',
+                        strokeLinejoin: 'round',
+                        strokeWidth: '1.5',
+                        d: 'm5.166 10.63 3.333 3.5 6.667-7',
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const RadioButtonUnChecked = /*#__PURE__*/ __createIcon('RadioButtonUnChecked', [

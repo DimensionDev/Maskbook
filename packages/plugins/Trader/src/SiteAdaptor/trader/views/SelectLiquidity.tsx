@@ -103,7 +103,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
     const [pendingDisabledDexIds, setPendingDisabledDexIds] = useState<string[]>(disabledDexIds)
     const [keyword, setKeyword] = useState('')
     const { data: liquidityRes, isLoading } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === '0' ? liquidityRes.data : EMPTY_LIST
+    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
     const isSelectedAll = pendingDisabledDexIds.length === 0
 
     const fuse = useMemo(() => {
@@ -211,7 +211,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                         }}
                         checked={isSelectedAll}
                         icon={<Icons.RadioButtonUnChecked size={18} />}
-                        checkedIcon={<Icons.RadioButtonChecked size={18} />}
+                        checkedIcon={<Icons.RadioButtonChecked size={18} color={theme.palette.maskColor.main} />}
                     />
                     <Typography>Select all</Typography>
                 </label>

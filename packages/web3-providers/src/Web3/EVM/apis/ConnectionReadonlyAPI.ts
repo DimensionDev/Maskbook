@@ -472,6 +472,7 @@ export class EVMConnectionReadonlyAPI
 
     async getNativeTokenBalance(initial?: EVMConnectionOptions): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
+        console.log('getNativeTokenBalance', options)
         if (!isValidAddress(options.account)) return '0'
         return this.getBalance(options.account, options)
     }
@@ -483,6 +484,7 @@ export class EVMConnectionReadonlyAPI
     ): Promise<string> {
         const options = this.ConnectionOptions.fill(initial)
 
+        console.log('getFungibleTokenBalance', { address })
         // Native
         if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
 

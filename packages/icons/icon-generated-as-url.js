@@ -155,6 +155,7 @@ export function busy_wallet_nav_url() { return new URL("./general/BusyWalletNav.
 export function buy_url() { return new URL("./general/Buy.svg", import.meta.url).href }
 export function cached_url() { return new URL("./general/Cached.svg", import.meta.url).href }
 export function calendar_dark_url() { return new URL("./general/CalendarDark.svg", import.meta.url).href }
+export function call_send_url() { return new URL("./general/CallSend.svg", import.meta.url).href }
 export function candle_url() { return new URL("./general/candle.svg", import.meta.url).href }
 export function car_url() { return new URL("./general/Car.svg", import.meta.url).href }
 export function card_url() { return new URL("./general/Card.svg", import.meta.url).href }

@@ -77,7 +77,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
         toTokenAddress: toToken?.address,
         dexIds: dexIds?.length ? dexIds.join(',') : undefined,
     })
-    const defaultQuote = quoteRes?.code === '0' ? quoteRes.data[0] : undefined
+    const defaultQuote = quoteRes?.code === 0 ? quoteRes.data[0] : undefined
     const [quote = defaultQuote, setQuote] = useState<OKXSwapQuote>()
     const quoteErrorMessage = quoteRes?.msg
 

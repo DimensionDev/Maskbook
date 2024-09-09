@@ -9,6 +9,7 @@ export function useSwappable(): [result: boolean, message?: string] {
     const t = useTraderTrans()
     const { inputAmount, chainId, fromToken, quote } = useSwap()
     const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, { chainId })
+    console.log({ address: fromToken?.address, balance, chainId })
     useGasConfig(chainId)
     if (!inputAmount) return [false, t.enter_an_amount()]
 

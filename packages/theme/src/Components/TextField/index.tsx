@@ -123,7 +123,6 @@ export function MaskTextField(props: MaskTextFieldProps) {
                     }}
                 />
             :   <InputBase
-                    ref={ref}
                     className={classes.field}
                     {...omit(InputProps, 'disableUnderline')}
                     {...omit(

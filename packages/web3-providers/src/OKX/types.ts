@@ -1,6 +1,10 @@
 /** https://www.okx.com/web3/build/docs/waas/okx-waas-standard */
 type OKXResponse<T> = {
-    code: string
+    /**
+     * the server returns string, but we will convert to number after request
+     * to align to OKX private api
+     */
+    code: number
     msg: string
     data: T
 }
@@ -161,9 +165,8 @@ export type SwapOptions = {
     computeUnitLimit?: string
 }
 
-export type SwapResponse = {
-    code: string
-    data: Array<{
+export type SwapResponse = OKXResponse<
+    Array<{
         routerResult: {
             chainId: string
             /** the input amount of a token to be sold */
@@ -233,5 +236,4 @@ export type SwapResponse = {
             data: string
         }
     }>
-    msg: string
-}
+>

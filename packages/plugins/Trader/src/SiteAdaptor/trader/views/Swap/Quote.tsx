@@ -63,7 +63,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
             :   dividedBy(quote.fromTokenAmount, quote.toTokenAmount)
         :   null
     const { data: liquidityRes } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === '0' ? liquidityRes.data : EMPTY_LIST
+    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const rateNode = (
