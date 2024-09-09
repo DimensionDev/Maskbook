@@ -692,9 +692,9 @@ export const BorderedSuccess = /*#__PURE__*/ __createIcon('BorderedSuccess', [
         u: () => new URL('./general/BorderedSuccess.svg', import.meta.url).href,
     },
 ])
-export const Candle = /*#__PURE__*/ __createIcon('Candle', [
+export const Candle = /*#__PURE__*/ __createIcon('candle', [
     {
-        u: () => new URL('./general/Candle.svg', import.meta.url).href,
+        u: () => new URL('./general/candle.svg', import.meta.url).href,
     },
 ])
 export const Check = /*#__PURE__*/ __createIcon('Check', [

@@ -77,6 +77,7 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: BaseHubOptions<ChainId>,
+            skipScoreCheck?: boolean
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         /** Get non-fungible assets owned by the given account. */
         getAssets?: (
@@ -87,6 +88,7 @@ export namespace NonFungibleTokenAPI {
         getAssetsByCollection?: (
             address: string,
             options?: BaseHubOptions<ChainId>,
+            skipScoreCheck?: boolean,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>> | undefined>
         /** Get non-fungible assets of the given collection and owner. */
         getAssetsByCollectionAndOwner?: (

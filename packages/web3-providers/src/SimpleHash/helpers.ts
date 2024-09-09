@@ -34,13 +34,13 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     })
 }
 
-export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsset<ChainId, SchemaType> | undefined {
+export function createNonFungibleAsset(asset: SimpleHash.Asset, skipScoreCheck?: boolean): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
 
     const spam_score = asset.collection.spam_score
-    if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE)) return
+    if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE && !skipScoreCheck)) return
     const schema = ['ERC721', 'CRYPTOPUNKS'].includes(asset.contract.type) ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
@@ -117,6 +117,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
                 value: x.value,
                 displayType: x.display_type,
             })) || [],
+        tokenCount: asset.token_count,
     }
 }
 
