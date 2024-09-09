@@ -12,3 +12,15 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:236
+msgid "<0>Powered by<1/></0><2>OKX</2>"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:244
+msgid "Quote expired. Update to receive a new quote."
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:253
+msgid "Swap"
+msgstr ""

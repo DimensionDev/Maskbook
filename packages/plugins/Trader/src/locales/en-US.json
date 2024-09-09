@@ -137,15 +137,5 @@
     "powered_by": "Powered by",
     "available_balance": "Available Balance",
     "wallet_balance": "Balance",
-    "edit": "Edit",
-    "exchange": "Exchange",
-    "history": "History",
-    "confirm_swap": "Confirm Swap",
-    "select_liquidity": "Select Liquidity",
-    "slippage": "Slippage",
-    "quote_route": "Quote Route",
-    "trading_route": "Trading Route",
-    "network_fee": "Network Fee",
-    "enter_an_amount": "Enter an Amount",
-    "insufficient_balance": "Insufficient {{- symbol }} Balance"
+    "edit": "Edit"
 }

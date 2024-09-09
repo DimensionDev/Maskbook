@@ -21,7 +21,7 @@ export enum ApproveStateType {
 export function useERC20TokenApproveCallback(
     address: string,
     amount: string,
-    spender: string,
+    spender?: string,
     callback?: () => void,
     tokenChainId?: ChainId,
 ) {

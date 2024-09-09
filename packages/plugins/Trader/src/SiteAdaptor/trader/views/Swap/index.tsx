@@ -3,12 +3,18 @@ import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNativeToken, useNetworks } from '@masknet/web3-hooks-base'
-import { formatBalance, leftShift, minus, multipliedBy } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { useNetworks } from '@masknet/web3-hooks-base'
+import {
+    formatBalance,
+    isGreaterThan,
+    isLessThan,
+    isZero,
+    leftShift,
+    minus,
+    multipliedBy,
+} from '@masknet/web3-shared-base'
 import { Box, Button, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { base } from '../../../../base.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { Quote } from './Quote.js'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +22,8 @@ import { RoutePaths } from '../../../constants.js'
 import { Warning } from '../../../components/Warning.js'
 import { useSwap } from '../../contexts/index.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
-import { useTraderTrans } from '../../../../locales/i18n_generated.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { t, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -109,8 +116,7 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         bottom: 0,
     },
-    lost: {
-        color: theme.palette.maskColor.danger,
+    diff: {
         marginLeft: theme.spacing(0.5),
     },
     footer: {
@@ -122,17 +128,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 export function SwapView() {
-    const t = useTraderTrans()
     const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
-    const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const {
-        fromToken = nativeToken,
+        chainId,
+        setChainId,
+        fromToken,
         setFromToken,
         toToken,
         setToToken,
@@ -140,6 +143,7 @@ export function SwapView() {
         setInputAmount,
         quote,
         quoteErrorMessage,
+        slippage,
     } = useSwap()
 
     const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
@@ -171,13 +175,14 @@ export function SwapView() {
                 multipliedBy(leftShift(toTokenAmount, Number.parseInt(toToken.decimal, 10)), toToken.tokenUnitPrice)
             :   null
         const priceDiff =
-            fromTokenValue && toTokenValue ? minus(fromTokenValue, toTokenValue).div(fromTokenValue).times(100) : null
+            fromTokenValue && toTokenValue ? minus(toTokenValue, fromTokenValue).div(fromTokenValue).times(100) : null
         return {
             fromTokenValue: fromTokenValue?.toFixed(2),
             toTokenValue: toTokenValue?.toFixed(2),
-            priceDiff: priceDiff?.toFixed(2),
+            priceDiff,
         }
     }, [quote, inputAmount])
+    const isOverSlippage = priceDiff && isLessThan(priceDiff, 0) && priceDiff.abs().isGreaterThan(slippage)
 
     const [isSwappable, errorMessage] = useSwappable()
 
@@ -187,14 +192,18 @@ export function SwapView() {
                 <Box className={classes.box}>
                     <Box display="flex" flexDirection="column" gap={1}>
                         <Typography lineHeight="18px" fontWeight="700" fontSize="14px">
-                            From
+                            <Trans>From</Trans>
                         </Typography>
                         <Box display="flex" flexDirection="row">
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
                                     const picked = await pickToken(fromToken, 'from')
-                                    if (picked) setFromToken(picked)
+                                    if (picked) {
+                                        setChainId(picked.chainId as ChainId)
+                                        setFromToken(picked)
+                                        if (toToken?.chainId !== picked.chainId) setToToken(undefined)
+                                    }
                                 }}>
                                 <Box className={classes.icon}>
                                     <TokenIcon
@@ -298,8 +307,18 @@ export function SwapView() {
                             {toTokenValue ?
                                 <Typography className={classes.tokenValue}>
                                     ${toTokenValue}
-                                    {priceDiff ?
-                                        <span className={classes.lost}>({priceDiff}%)</span>
+                                    {priceDiff && !isZero(priceDiff) ?
+                                        <Typography
+                                            component="span"
+                                            className={classes.diff}
+                                            color={
+                                                isGreaterThan(priceDiff, 0) ?
+                                                    theme.palette.maskColor.success
+                                                :   theme.palette.maskColor.danger
+                                            }>
+                                            ({isGreaterThan(priceDiff, 0) ? '+' : ''}
+                                            {priceDiff.toFixed(2)}%)
+                                        </Typography>
                                     :   null}
                                 </Typography>
                             :   null}
@@ -308,7 +327,7 @@ export function SwapView() {
                 </Box>
 
                 {quoteErrorMessage ?
-                    <Warning title="This swap isn’t supported" description={quoteErrorMessage} />
+                    <Warning title={t`This swap isn’t supported`} description={quoteErrorMessage} />
                 :   null}
 
                 {quote ?
@@ -318,11 +337,12 @@ export function SwapView() {
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
                 <Button
                     fullWidth
+                    color={isOverSlippage ? 'error' : undefined}
                     disabled={!isSwappable}
                     onClick={() => {
                         navigate(RoutePaths.Confirm)
                     }}>
-                    {errorMessage ?? t.swap()}
+                    {errorMessage ?? (isOverSlippage ? t`Swap anyway` : t`Swap`)}
                 </Button>
             </PluginWalletStatusBar>
         </div>

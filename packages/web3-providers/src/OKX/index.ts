@@ -91,11 +91,15 @@ export class OKX {
 
     /**
      * Perform a token swap.
-     * @param  params - The swap options.
+     * @param  options - The swap options.
      * @returns The response from the swap API.
      */
-    static async swap(params: SwapOptions): Promise<SwapResponse> {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/swap', params)
+    static async getSwap(options: SwapOptions): Promise<SwapResponse> {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/swap', {
+            ...options,
+            fromTokenAddress: convertNativeAddress(options.fromTokenAddress),
+            toTokenAddress: convertNativeAddress(options.toTokenAddress),
+        })
         return fetchFromOKX<SwapResponse>(url)
     }
 }

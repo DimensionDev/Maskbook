@@ -1,27 +1,27 @@
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useTraderTrans } from '../../locales/i18n_generated.js'
 import { RoutePaths } from '../constants.js'
+import { t } from '@lingui/macro'
 
 export function RouterDialog(props: InjectedDialogProps) {
-    const t = useTraderTrans()
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
     const titleMap: Record<RoutePaths, string | null> = {
-        [RoutePaths.Swap]: t.exchange(),
-        [RoutePaths.History]: t.history(),
-        [RoutePaths.Confirm]: t.confirm_swap(),
-        [RoutePaths.SelectLiquidity]: t.select_liquidity(),
-        [RoutePaths.Slippage]: t.slippage(),
-        [RoutePaths.QuoteRoute]: t.quote_route(),
-        [RoutePaths.TradingRoute]: t.trading_route(),
+        [RoutePaths.Swap]: t`Exchange`,
+        [RoutePaths.History]: t`History`,
+        [RoutePaths.Confirm]: t`Confirm swap`,
+        [RoutePaths.SelectLiquidity]: t`Select Liquidity`,
+        [RoutePaths.Slippage]: t`Slippage`,
+        [RoutePaths.QuoteRoute]: t`Quote Route`,
+        [RoutePaths.TradingRoute]: t`Trading Route`,
         [RoutePaths.Exit]: null,
-        [RoutePaths.NetworkFee]: t.network_fee(),
+        [RoutePaths.NetworkFee]: t`Network fee`,
+        [RoutePaths.Transaction]: t`Transaction Details`,
     }
 
-    const title = titleMap[pathname as RoutePaths] ?? t.exchange()
+    const title = titleMap[pathname as RoutePaths] ?? t`Exchange`
 
     useLayoutEffect(() => {
         if (pathname === RoutePaths.Exit) {

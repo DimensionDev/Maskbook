@@ -1,10 +1,16 @@
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskTextField, ShadowRootTooltip } from '@masknet/theme'
+import { ProgressiveText } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, MaskTextField } from '@masknet/theme'
+import { useChainIdSupport } from '@masknet/web3-hooks-base'
+import { GasOptionType } from '@masknet/web3-shared-base'
+import { formatWeiToGwei, GasEditor, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useSwap } from '../contexts/index.js'
 import { Warning } from '../../components/Warning.js'
+import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
@@ -24,6 +30,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     },
     option: {
         display: 'flex',
+        alignItems: 'center',
         gap: theme.spacing(0.5),
         padding: theme.spacing(1.5),
     },
@@ -59,7 +66,8 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         gap: theme.spacing(0.5),
         fontSize: 14,
         lineHeight: '18px',
-        fontWeight: 700,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
     },
     boxMain: {
         marginRight: 'auto',
@@ -75,122 +83,140 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         lineHeight: '18px',
         borderTop: `1px solid ${theme.palette.maskColor.line}`,
     },
-    infoRow: {
-        display: 'flex',
-        width: '100%',
-        alignItems: 'center',
-        color: theme.palette.maskColor.main,
-        justifyContent: 'space-between',
-    },
-    rowName: {
-        fontSize: 14,
-        display: 'flex',
-        gap: theme.spacing(0.5),
-        alignItems: 'center',
-        flexGrow: 1,
-        marginRight: 'auto',
-    },
-    rowValue: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: theme.spacing(0.5),
-        fontSize: 14,
-    },
 }))
 
 export const NetworkFee = memo(function NetworkFee() {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
+    const { chainId } = useSwap()
     const navigate = useNavigate()
-    const { networkFee, setNetworkFee } = useSwap()
-    const [pendingNetworkFee, setPendingNetworkFee] = useState(networkFee)
-    const [selectedOption, setSelectedOption] = useState('standard')
+
+    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
+    const { gas, gasConfig, setGasConfig, gasOptions, isLoadingGasOptions: isLoading } = useGasManagement()
+    const [pendingGasConfig, setPendingGasConfig] = useState<GasConfig>(gasConfig)
+    const gasOptionType = pendingGasConfig.gasOptionType
+    // const { data: gasOptions, isLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
+    console.log({ gasOptions })
+
     const customBoxRef = useRef<HTMLDivElement>(null)
-
-    const options = [
-        { type: 'slow', label: 'Slow' },
-        { type: 'average', label: 'Average' },
-        { type: 'fast', label: 'Fast' },
-    ]
-
     return (
         <div className={classes.container}>
             <div
-                className={cx(classes.box, classes.option, selectedOption === 'slow' ? classes.active : null)}
+                className={cx(
+                    classes.box,
+                    classes.option,
+                    gasOptionType === GasOptionType.SLOW ? classes.active : null,
+                )}
                 onClick={() => {
-                    setSelectedOption('slow')
-                    setPendingNetworkFee('slow')
+                    const config = GasEditor.fromGasOption(chainId, gasOptions?.slow, GasOptionType.SLOW).getGasConfig()
+                    setGasConfig(config)
+                    setPendingGasConfig(config)
+                    navigate(-1)
                 }}>
-                <Icons.Bike size={30} />
+                <Icons.Bike size={30} color={theme.palette.maskColor.danger} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
-                        Slot
+                        <Trans>Slow</Trans>
                     </Typography>
-                    <Typography className={classes.boxSubtitle} variant="h3">
-                        30.01Gwei
-                    </Typography>
+                    <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
+                        {gasOptions?.slow ?
+                            `${formatWeiToGwei(gasOptions.slow.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                        :   '--'}
+                    </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <Typography className={classes.estimatedTime}>1min</Typography>
+                    <ProgressiveText className={classes.estimatedTime}>
+                        {gasOptions?.slow ? `${gasOptions.slow.estimatedSeconds}sec` : '--'}
+                    </ProgressiveText>
                     <Typography className={classes.estimatedValue} variant="subtitle1">
                         0.0064603 MATIC≈ $0.004434
                     </Typography>
                 </div>
             </div>
             <div
-                className={cx(classes.box, classes.option, selectedOption === 'average' ? classes.active : null)}
+                className={cx(
+                    classes.box,
+                    classes.option,
+                    gasOptionType === GasOptionType.NORMAL ? classes.active : null,
+                )}
                 onClick={() => {
-                    setSelectedOption('average')
-                    setPendingNetworkFee('saverage')
+                    const config = GasEditor.fromGasOption(
+                        chainId,
+                        gasOptions?.normal,
+                        GasOptionType.NORMAL,
+                    ).getGasConfig()
+                    setGasConfig(config)
+                    setPendingGasConfig(config)
+                    navigate(-1)
                 }}>
-                <Icons.Car size={30} />
+                <Icons.Car size={30} color={theme.palette.maskColor.main} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
-                        Slot
+                        <Trans>Average</Trans>
                     </Typography>
-                    <Typography className={classes.boxSubtitle} variant="h3">
-                        30.01Gwei
-                    </Typography>
+                    <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
+                        {gasOptions?.normal ?
+                            `${formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                        :   '--'}
+                    </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <Typography className={classes.estimatedTime}>30secs</Typography>
+                    <ProgressiveText className={classes.estimatedTime}>
+                        {gasOptions?.normal ? `${gasOptions.normal.estimatedSeconds}sec` : '--'}
+                    </ProgressiveText>
                     <Typography className={classes.estimatedValue} variant="subtitle1">
                         0.0064603 MATIC≈ $0.004434
                     </Typography>
                 </div>
             </div>
             <div
-                className={cx(classes.box, classes.option, selectedOption === 'fast' ? classes.active : null)}
+                className={cx(
+                    classes.box,
+                    classes.option,
+                    gasOptionType === GasOptionType.FAST ? classes.active : null,
+                )}
                 onClick={() => {
-                    setSelectedOption('fast')
-                    setPendingNetworkFee('fast')
+                    const config = GasEditor.fromGasOption(chainId, gasOptions?.fast, GasOptionType.FAST).getGasConfig()
+                    setGasConfig(config)
+                    setPendingGasConfig(config)
+                    navigate(-1)
                 }}>
-                <Icons.Rocket size={30} />
+                <Icons.Rocket size={30} color={theme.palette.maskColor.success} />
                 <div className={classes.boxMain}>
                     <Typography className={classes.boxTitle} variant="h2">
-                        Slot
+                        <Trans>Fast</Trans>
                     </Typography>
-                    <Typography className={classes.boxSubtitle} variant="h3">
-                        30.01Gwei
-                    </Typography>
+                    <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
+                        {gasOptions?.fast ?
+                            `${formatWeiToGwei(gasOptions.fast.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                        :   '--'}
+                    </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <Typography className={classes.estimatedTime}>10s</Typography>
+                    <ProgressiveText className={classes.estimatedTime}>
+                        {gasOptions?.fast ? `${gasOptions.fast.estimatedSeconds}sec` : '--'}
+                    </ProgressiveText>
+
                     <Typography className={classes.estimatedValue} variant="subtitle1">
                         0.0064603 MATIC≈ $0.004434
                     </Typography>
                 </div>
             </div>
-            <div className={cx(classes.box, selectedOption === 'custom' ? classes.active : null)} ref={customBoxRef}>
+            <div
+                className={cx(classes.box, gasOptionType === GasOptionType.CUSTOM ? classes.active : null)}
+                ref={customBoxRef}>
                 <div
                     className={classes.option}
                     onClick={async () => {
-                        setSelectedOption('custom')
-                        setPendingNetworkFee('custom')
-                        Promise.resolve().then(() => {
-                            customBoxRef.current?.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start',
-                            })
+                        const config = GasEditor.fromGasOption(
+                            chainId,
+                            gasOptions?.fast,
+                            GasOptionType.CUSTOM,
+                        ).getGasConfig()
+                        setPendingGasConfig(config)
+                        await Promise.resolve()
+                        customBoxRef.current?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
                         })
                     }}>
                     <Icons.Gear size={30} />
@@ -209,52 +235,70 @@ export const NetworkFee = memo(function NetworkFee() {
                         </Typography>
                     </div>
                 </div>
-                {selectedOption === 'custom' ?
+                {gasOptionType === GasOptionType.CUSTOM ?
                     <div className={classes.boxContent}>
-                        <Box display="flex" alignItems="center">
-                            <Typography>Max base fee</Typography>
-                            <Typography>Base fee required: 0.01 Gwei</Typography>
-                        </Box>
-                        <MaskTextField
-                            placeholder="0.1-50"
-                            type="number"
-                            onChange={(e) => {}}
-                            InputProps={{
-                                endAdornment: <Typography>Gwei</Typography>,
-                            }}
+                        {isSupport1559 ?
+                            <>
+                                <Box display="flex" alignItems="center">
+                                    <Typography>
+                                        <Trans>Max base fee</Trans>
+                                    </Typography>
+                                    <Typography>
+                                        <Trans>Base fee required: 0.01 Gwei</Trans>
+                                    </Typography>
+                                </Box>
+                                <MaskTextField
+                                    placeholder="0.1-50"
+                                    type="number"
+                                    onChange={(e) => {}}
+                                    InputProps={{
+                                        endAdornment: <Typography>Gwei</Typography>,
+                                    }}
+                                />
+                                <Typography>
+                                    <Trans>Priority fee</Trans>
+                                </Typography>
+                                <MaskTextField
+                                    placeholder="0.1-50"
+                                    type="number"
+                                    onChange={(e) => {}}
+                                    InputProps={{
+                                        endAdornment: <Typography>Gwei</Typography>,
+                                    }}
+                                />
+                            </>
+                        :   <>
+                                <Box display="flex" alignItems="center">
+                                    <Typography>
+                                        <Trans>Max base fee</Trans>
+                                    </Typography>
+                                    <Typography>
+                                        <Trans>Base fee required: 0.01 Gwei</Trans>
+                                    </Typography>
+                                </Box>
+                                <MaskTextField
+                                    placeholder="0.1-50"
+                                    type="number"
+                                    value={'0'}
+                                    onChange={(e) => {}}
+                                    InputProps={{
+                                        endAdornment: <Typography>Gwei</Typography>,
+                                    }}
+                                />
+                            </>
+                        }
+                        <Typography>
+                            <Trans>Gas Limit</Trans>
+                        </Typography>
+                        <MaskTextField placeholder="0.1-50" type="number" disabled value={gas} />
+                        <Warning
+                            description={t`The custom amount entered may be higher than the required network fee.`}
                         />
-                        <Typography>Priority fee</Typography>
-                        <MaskTextField
-                            placeholder="0.1-50"
-                            type="number"
-                            onChange={(e) => {}}
-                            InputProps={{
-                                endAdornment: <Typography>Gwei</Typography>,
-                            }}
-                        />
-                        <Typography>Gas Limit</Typography>
-                        <MaskTextField placeholder="0.1-50" type="number" onChange={(e) => {}} />
-                        <Warning description="The custom amount entered may be higher than the required network fee." />
                         <Button variant="roundedContained" fullWidth>
-                            Confirm
+                            <Trans>Confirm</Trans>
                         </Button>
                     </div>
                 :   null}
-            </div>
-            <div className={classes.infoRow}>
-                <Typography className={classes.rowName}>
-                    Estimated confirmation time
-                    <ShadowRootTooltip title="Estimated time for the transaction to be confirmed on the blockchain">
-                        <Icons.Questions size={16} />
-                    </ShadowRootTooltip>
-                </Typography>
-                <Typography className={classes.rowValue}>
-                    {selectedOption === 'slow' ?
-                        '> 10 min'
-                    : selectedOption === 'standard' ?
-                        '5-10 min'
-                    :   '< 5 min'}
-                </Typography>
             </div>
         </div>
     )

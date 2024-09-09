@@ -443,6 +443,11 @@ export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
         u: () => new URL('./brands/NFTScan.svg', import.meta.url).href,
     },
 ])
+export const Okx = /*#__PURE__*/ __createIcon('okx', [
+    {
+        u: () => new URL('./brands/okx.svg', import.meta.url).href,
+    },
+])
 export const OneInch = /*#__PURE__*/ __createIcon('OneInch', [
     {
         u: () => new URL('./brands/OneInch.png', import.meta.url).href,

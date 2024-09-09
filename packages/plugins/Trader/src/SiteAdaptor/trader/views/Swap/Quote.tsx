@@ -2,13 +2,14 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { OKXSwapQuote } from '@masknet/web3-providers/types'
-import { dividedBy, formatCompact } from '@masknet/web3-shared-base'
+import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../constants.js'
+import { DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useSwap } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -56,12 +57,15 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
         forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
-    const rate =
-        quote ?
-            forwardCompare && quote ?
-                dividedBy(quote.toTokenAmount, quote.fromTokenAmount)
-            :   dividedBy(quote.fromTokenAmount, quote.toTokenAmount)
-        :   null
+
+    const rate = useMemo(() => {
+        if (!quote) return null
+        const { fromTokenAmount, toTokenAmount, fromToken, toToken } = quote
+        const fromAmount = leftShift(fromTokenAmount || 0, +fromToken.decimal)
+        const toAmount = leftShift(toTokenAmount || 0, +toToken.decimal)
+        if (fromAmount.isZero() || toAmount.isZero()) return null
+        return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
+    }, [quote])
     const { data: liquidityRes } = useLiquidityResources(chainId)
     const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
@@ -90,10 +94,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography className={classes.rowValue}>Aggregator</Typography>
                     </div>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>
-                            Rate
-                            <Icons.Questions size={16} />
-                        </Typography>
+                        <Typography className={classes.rowName}>Rate</Typography>
                         <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
                     <div className={classes.infoRow}>
@@ -102,14 +103,14 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            Slippage
+                            <Trans>Slippage</Trans>
                             <Icons.Questions size={16} />
                         </Typography>
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
                             to={RoutePaths.Slippage}>
-                            {isAutoSlippage ? '0.05%' : `${slippage}%`}
+                            {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>
@@ -128,23 +129,12 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            Quote route
-                            <Icons.Questions size={16} />
+                            <Trans>Powered by</Trans>
                         </Typography>
-                        <Typography
-                            className={cx(classes.rowValue, classes.link)}
-                            component={Link}
-                            to={RoutePaths.QuoteRoute}>
-                            🎉 1.24
-                            <Icons.ArrowRight size={20} />
+                        <Typography className={classes.rowValue}>
+                            OKX
+                            <Icons.Okx size={18} />
                         </Typography>
-                    </div>
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>
-                            Powered by
-                            <Icons.Questions size={16} />
-                        </Typography>
-                        <Typography className={classes.rowValue}>OKX</Typography>
                     </div>
                 </>
             :   null}

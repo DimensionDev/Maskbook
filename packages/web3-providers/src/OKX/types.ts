@@ -165,6 +165,17 @@ export type SwapOptions = {
     computeUnitLimit?: string
 }
 
+export interface OkxTx {
+    from: string
+    gas: string
+    gasPrice: string
+    maxPriorityFeePerGas: string
+    to: string
+    value: string
+    minReceiveAmount: string
+    data: string
+}
+
 export type SwapResponse = OKXResponse<
     Array<{
         routerResult: {
@@ -225,15 +236,6 @@ export type SwapResponse = OKXResponse<
                 receiveAmount: string
             }>
         }
-        tx: {
-            from: string
-            gas: string
-            gasPrice: string
-            maxPriorityFeePerGas: string
-            to: string
-            value: string
-            minReceiveAmount: string
-            data: string
-        }
+        tx: OkxTx
     }>
 >

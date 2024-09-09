@@ -1,6 +1,5 @@
-import { Icons } from '@masknet/icons'
-import { makeStyles, MaskTextField, ShadowRootTooltip } from '@masknet/theme'
-import { alpha, Button, Switch, Typography } from '@mui/material'
+import { makeStyles, MaskTextField } from '@masknet/theme'
+import { alpha, Button, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSwap } from '../contexts/index.js'
@@ -102,13 +101,11 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
 export const Slippage = memo(function Slippage() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const { isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, mevProtection, setMevProtection, quote } =
-        useSwap()
+    const { isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, quote } = useSwap()
     const [pendingIsAutoSlippage, setPendingIsAutoSlippage] = useState(isAutoSlippage)
     const [pendingSlippage, setPendingSlippage] = useState(slippage)
-    const [pendingMevProtection, setPendingMevProtection] = useState(mevProtection)
 
-    const inputRef = useRef<HTMLInputElement>()
+    const inputRef = useRef<HTMLInputElement>(null)
 
     return (
         <div className={classes.container}>
@@ -143,11 +140,11 @@ export const Slippage = memo(function Slippage() {
                         <MaskTextField
                             placeholder="0.1-50"
                             type="number"
+                            inputRef={inputRef}
                             InputProps={{
                                 inputProps: {
                                     min: 0.1,
                                     max: 50,
-                                    ref: inputRef,
                                 },
                             }}
                             value={pendingSlippage}
@@ -160,26 +157,6 @@ export const Slippage = memo(function Slippage() {
                             }}
                         />
                     </div>
-                </div>
-                <div className={classes.infoRow}>
-                    <Typography className={classes.rowName}>
-                        MEV protection
-                        <ShadowRootTooltip
-                            placement="top"
-                            title="Text: An MEV attack is when attackers place an order at a lower price just moments before you buy an asset and sell it after your order is executed to earn the difference and make your buy price higher.
-To prevent MEV attacks, you can turn on MEV protection in your OKX Wallet. This will send transactions to trustworthy third-party nodes, such as Flashbots, to ensure that the order of transactions doesn't change and your transactions are protected.
-At the moment, MEV protection only supports the Ethereum network. Your decision to manually turn it on or off only applies to the current transaction. A new transaction will reset your MEV setting.">
-                            <Icons.Questions size={16} />
-                        </ShadowRootTooltip>
-                    </Typography>
-                    <Typography className={classes.rowValue}>
-                        <Switch
-                            checked={pendingMevProtection}
-                            onChange={() => {
-                                setPendingMevProtection((v) => !v)
-                            }}
-                        />
-                    </Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.rowName}>Minimum received</Typography>
@@ -196,7 +173,6 @@ At the moment, MEV protection only supports the Ethereum network. Your decision 
                     onClick={() => {
                         setIsAutoSlippage(pendingIsAutoSlippage)
                         setSlippage(pendingSlippage)
-                        setMevProtection(pendingMevProtection)
                         navigate(-1)
                     }}>
                     Confirm

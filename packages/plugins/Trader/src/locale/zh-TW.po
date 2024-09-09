@@ -17,3 +17,15 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1000\n"
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:236
+msgid "<0>Powered by<1/></0><2>OKX</2>"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:244
+msgid "Quote expired. Update to receive a new quote."
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Confirm.tsx:253
+msgid "Swap"
+msgstr ""

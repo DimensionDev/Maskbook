@@ -1,10 +1,10 @@
-import { type NetworkPluginID, type SingletonModalRefCreator } from '@masknet/shared-base'
+import { type NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { forwardRef, useState } from 'react'
-import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useState } from 'react'
+import { SelectFungibleTokenDialog, type SelectFungibleTokenDialogProps } from './SelectFungibleTokenDialog.js'
 
 export interface SelectFungibleTokenModalOpenProps
     extends Omit<SelectFungibleTokenDialogProps, 'onClose' | 'open' | 'extendTokens'> {
@@ -13,9 +13,9 @@ export interface SelectFungibleTokenModalOpenProps
 
 export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
 
-export const SelectFungibleTokenModal = forwardRef<
-    SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
->((props, ref) => {
+export function SelectFungibleTokenModal({
+    ref,
+}: SingletonModalProps<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>) {
     const [okxOnly, setOKXOnly] = useState<boolean>()
     const [enableManage, setEnableManage] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
@@ -72,4 +72,4 @@ export const SelectFungibleTokenModal = forwardRef<
             onChainChange={setChainId}
         />
     )
-})
+}
