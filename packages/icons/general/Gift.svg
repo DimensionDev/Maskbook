@@ -1,89 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16">
-    <path fill="#4B4B4B" fill-rule="evenodd" d="M15.573 7.27a.664.664 0 0 0 .05-.255V5.69a.663.663 0 0 0-.662-.662H1.04a.663.663 0 0 0-.663.662v1.326a.663.663 0 0 0 .663.664h.663v7.291a.663.663 0 0 0 .663.663h11.27a.663.663 0 0 0 .663-.662V7.679h.662a.662.662 0 0 0 .612-.41Z" clip-rule="evenodd"/>
-    <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" d="M11.598 2.6c-.507.507-2.935 1.1-2.935 1.1s.597-2.427 1.1-2.934A1.298 1.298 0 1 1 11.599 2.6Zm-7.195 0c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6v0Z"/>
+    <path fill="#4B4B4B" fill-rule="evenodd" d="M15.573 7.27a.7.7 0 0 0 .05-.255V5.69a.663.663 0 0 0-.662-.662H1.04a.663.663 0 0 0-.663.662v1.326a.663.663 0 0 0 .663.664h.663v7.291a.663.663 0 0 0 .663.663h11.27a.663.663 0 0 0 .663-.662V7.679h.662a.66.66 0 0 0 .612-.41Z" clip-rule="evenodd"/>
+    <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" d="M11.598 2.6c-.507.507-2.935 1.1-2.935 1.1s.597-2.427 1.1-2.934A1.298 1.298 0 1 1 11.599 2.6Zm-7.195 0c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6"/>
     <path fill="#F93737" d="M14.298 14.97a.663.663 0 0 1-.663.663H2.365a.664.664 0 0 1-.663-.662V7.677h12.596v7.292Z"/>
-    <path fill="#CD1B1B" d="M14.298 7.678H1.702v1.88h12.596v-1.88Z"/>
-    <path fill="#CD1B1B" d="M15.624 7.015a.664.664 0 0 1-.663.664H1.04a.663.663 0 0 1-.663-.664V5.69a.663.663 0 0 1 .663-.662h13.92a.662.662 0 0 1 .663.662v1.327Z"/>
+    <path fill="#CD1B1B" d="M14.298 7.678H1.702v1.88h12.596z"/>
+    <path fill="#CD1B1B" d="M15.624 7.015a.664.664 0 0 1-.663.664H1.04a.663.663 0 0 1-.663-.664V5.69a.663.663 0 0 1 .663-.662h13.92a.66.66 0 0 1 .663.662v1.327Z"/>
     <path fill="#F93737" d="M15.624 6.2v-.51a.663.663 0 0 0-.663-.663H1.04a.663.663 0 0 0-.663.662v.512h15.247Z"/>
-    <path fill="#D8922C" d="M10.32 5.027H5.68v2.652h4.64V5.027Z"/>
-    <path fill="#FFB952" d="M10.32 5.027H5.68V6.2h4.64V5.027Zm0 2.651H5.68v7.955h4.64V7.678Z"/>
-    <path fill="#D8922C" d="M10.32 7.678H5.68v1.88h4.64v-1.88Z"/>
-    <path stroke="url('#RedPacket_svg__paint0_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M15.624 7.015a.664.664 0 0 1-.663.664H1.04a.663.663 0 0 1-.663-.664V5.69a.663.663 0 0 1 .663-.662h13.92a.662.662 0 0 1 .663.662v1.327Z"/>
-    <path stroke="url('#RedPacket_svg__paint1_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M14.298 14.97a.663.663 0 0 1-.663.663H2.365a.664.664 0 0 1-.663-.662V7.677h12.596v7.292Z"/>
-    <path stroke="url('#RedPacket_svg__paint2_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M5.68 5.027v10.606"/>
-    <path stroke="url('#RedPacket_svg__paint3_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M10.32 15.633V5.027"/>
-    <path stroke="url('#RedPacket_svg__paint4_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M11.598 2.6c-.507.507-2.935 1.1-2.935 1.1s.597-2.427 1.1-2.934A1.298 1.298 0 1 1 11.599 2.6Z"/>
-    <path stroke="url('#RedPacket_svg__paint5_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M4.403 2.6c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6v0Z"/>
-    <path stroke="url('#RedPacket_svg__paint6_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M4.403 2.6c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6v0Z"/>
-    <g filter="url('#RedPacket_svg__filter0_d_11296_11650')">
+    <path fill="#D8922C" d="M10.32 5.027H5.68v2.652h4.64z"/>
+    <path fill="#FFB952" d="M10.32 5.027H5.68V6.2h4.64zm0 2.651H5.68v7.955h4.64z"/>
+    <path fill="#D8922C" d="M10.32 7.678H5.68v1.88h4.64z"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint0_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M15.624 7.015a.664.664 0 0 1-.663.664H1.04a.663.663 0 0 1-.663-.664V5.69a.663.663 0 0 1 .663-.662h13.92a.66.66 0 0 1 .663.662v1.327Z"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint1_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M14.298 14.97a.663.663 0 0 1-.663.663H2.365a.664.664 0 0 1-.663-.662V7.677h12.596v7.292Z"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint2_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M5.68 5.027v10.606"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint3_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M10.32 15.633V5.027"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint4_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M11.598 2.6c-.507.507-2.935 1.1-2.935 1.1s.597-2.427 1.1-2.934A1.298 1.298 0 1 1 11.599 2.6Z"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint5_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M4.403 2.6c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6"/>
+    <path stroke="url('#Gift_svg__RedPacket_svg__paint6_linear_11296_11650')" stroke-linecap="round" stroke-linejoin="round" stroke-width=".611" d="M4.403 2.6c.507.507 2.935 1.1 2.935 1.1S6.74 1.274 6.237.768A1.297 1.297 0 0 0 4.403 2.6"/>
+    <g filter="url('#Gift_svg__RedPacket_svg__filter0_d_11296_11650')">
         <rect width="6.111" height="6.111" x="5.277" y="4.361" fill="#FFB952" rx="3.056"/>
         <rect width="5.778" height="5.778" x="5.444" y="4.528" stroke="#EFA437" stroke-width=".333" rx="2.889"/>
-        <rect width="5.778" height="5.778" x="5.444" y="4.528" stroke="url('#RedPacket_svg__paint7_linear_11296_11650')" stroke-width=".333" rx="2.889"/>
-        <path fill="#fff" fill-opacity=".4" d="M8.333 5.923v1.104l.933.417-.933-1.521Z"/>
-        <path fill="#fff" d="m8.333 5.923-.934 1.522.934-.418V5.923Z"/>
-        <path fill="#fff" fill-opacity=".4" d="M8.333 8.16v.75l.934-1.292-.934.542Z"/>
-        <path fill="#fff" d="M8.333 8.91v-.75l-.934-.542.934 1.292Z"/>
+        <rect width="5.778" height="5.778" x="5.444" y="4.528" stroke="url('#Gift_svg__RedPacket_svg__paint7_linear_11296_11650')" stroke-width=".333" rx="2.889"/>
+        <path fill="#fff" fill-opacity=".4" d="M8.333 5.923v1.104l.933.417z"/>
+        <path fill="#fff" d="m8.333 5.923-.934 1.522.934-.418z"/>
+        <path fill="#fff" fill-opacity=".4" d="M8.333 8.16v.75l.934-1.292z"/>
+        <path fill="#fff" d="M8.333 8.91v-.75l-.934-.542z"/>
         <path fill="#fff" fill-opacity=".1" d="m8.333 7.986.933-.542-.933-.417v.96Z"/>
         <path fill="#fff" fill-opacity=".4" d="m7.4 7.444.933.542v-.959l-.934.417Z"/>
     </g>
-    <defs>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint0_linear_11296_11650" x1="8" x2="8" y1="4.958" y2="8.031" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint1_linear_11296_11650" x1="8" x2="8" y1="7.472" y2="16.691" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint2_linear_11296_11650" x1="6.181" x2="6.181" y1="4.751" y2="17.043" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint3_linear_11296_11650" x1="10.82" x2="10.82" y1="4.751" y2="17.043" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint4_linear_11296_11650" x1="10.338" x2="10.338" y1=".263" y2="4.146" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#F0C241"/>
-            <stop offset=".385" stop-color="#FFE378"/>
-            <stop offset=".714" stop-color="#FFD04E"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint5_linear_11296_11650" x1="5.689" x2="5.689" y1=".319" y2="4.139" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint6_linear_11296_11650" x1="5.689" x2="5.689" y1=".319" y2="4.139" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#F0C241"/>
-            <stop offset=".385" stop-color="#FFE378"/>
-            <stop offset=".714" stop-color="#FFD04E"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <linearGradient id="Gift_svg__RedPacket_svg__paint7_linear_11296_11650" x1="8.333" x2="8.333" y1="4.202" y2="11.285" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFDF86"/>
-            <stop offset=".385" stop-color="#FFF3C7"/>
-            <stop offset=".714" stop-color="#FFDF86"/>
-            <stop offset="1" stop-color="#D57E42"/>
-        </linearGradient>
-        <filter id="Gift_svg__RedPacket_svg__filter0_d_11296_11650" width="8.111" height="8.778" x="4.277" y="4.361" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-            <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-            <feOffset dy="1.667"/>
-            <feGaussianBlur stdDeviation=".5"/>
-            <feComposite in2="hardAlpha" operator="out"/>
-            <feColorMatrix values="0 0 0 0 0.519857 0 0 0 0 0.324628 0 0 0 0 0.120657 0 0 0 0.5 0"/>
-            <feBlend in2="BackgroundImageFix" mode="multiply" result="effect1_dropShadow_11296_11650"/>
-            <feBlend in="SourceGraphic" in2="effect1_dropShadow_11296_11650" result="shape"/>
-        </filter>
-    </defs>
 </svg>

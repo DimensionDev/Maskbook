@@ -2,6 +2,6 @@
     <path fill="#f5f5f5" d="M0 4.306a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4z"/>
     <path fill="#1c68f3" d="M9.077 4.306H6.769l2.885 5-2.885 5h2.308l2.885-5z"/>
     <path fill="#000" d="M14.654 4.306h1.923v10h-1.923z"/>
-    <path fill="#000" fill-rule="evenodd" d="M17.539 4.306v10h2.692a5 5 0 0 0 0-10zm1.923 8.077h.769a3.077 3.077 0 0 0 0-6.154h-.77v6.154z" clip-rule="evenodd"/>
+    <path fill="#000" fill-rule="evenodd" d="M17.539 4.306v10h2.692a5 5 0 0 0 0-10zm1.923 8.077h.769a3.077 3.077 0 0 0 0-6.154h-.77z" clip-rule="evenodd"/>
     <path fill="#1c68f3" d="M11.769 12.383h1.923v1.923h-1.923z"/>
 </svg>
