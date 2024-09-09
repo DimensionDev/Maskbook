@@ -8,5 +8,5 @@
         <stop offset=".906" stop-color="#684232"/>
         <stop offset="1" stop-color="#2d1c13"/>
     </radialGradient>
-    <path fill="url(#Zora_svg__a)" d="M23.703 12c0-6.075-4.925-11-11-11s-11 4.925-11 11 4.925 11 11 11 11-4.925 11-11z"/>
+    <path fill="url(#Zora_svg__a)" d="M23.703 12c0-6.075-4.925-11-11-11s-11 4.925-11 11 4.925 11 11 11 11-4.925 11-11"/>
 </svg>

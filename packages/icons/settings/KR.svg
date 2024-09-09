@@ -2,7 +2,7 @@
     <path fill="#F5F8FB" d="M0 0h16v12H0z"/>
     <circle cx="8" cy="6" r="3" fill="#DC251C"/>
     <mask id="KR_svg__mask_flags_kr" width="6" height="5" x="5" y="5" maskUnits="userSpaceOnUse" style="mask-type:alpha">
-        <path fill="#C4C4C4" d="M11 9.5v-3c-1.001-1.752-3.003-.31-3.003-.31S5.999 7.498 5 5.5v4h6Z"/>
+        <path fill="#C4C4C4" d="M11 9.5v-3c-1.001-1.752-3.003-.31-3.003-.31S5.999 7.498 5 5.5v4z"/>
     </mask>
     <g mask="url('#KR_svg__mask_flags_kr')">
         <circle cx="8" cy="6" r="3" fill="#41479B"/>
