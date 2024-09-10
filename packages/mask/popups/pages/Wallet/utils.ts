@@ -1,7 +1,5 @@
 import { mapKeys } from 'lodash-es'
-import type { BigNumber } from 'bignumber.js'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import type { AbiItem } from 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { toFixed, type RecentTransaction } from '@masknet/web3-shared-base'
@@ -14,6 +12,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ReplaceType, type GasSetting } from './type.js'
 import { GasSettingModal } from '../../modals/modal-controls.js'
+import type { Bytes } from 'web3-types'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -55,11 +54,12 @@ export async function modifyTransaction(
 
 // The Debank transaction history api does not return the input data,
 //  so can not do the decoding within its scope.
-export function parseReceiverFromERC20TransferInput(input?: string) {
+export function parseReceiverFromERC20TransferInput(input?: Bytes | undefined): string {
     if (!input) return ''
     try {
-        const decodedInputParams = decodeFunctionParams(ERC20_ABI as AbiItem[], input, 'transfer')
-        return decodedInputParams[0] as string
+        if (typeof input !== 'string') input = web3_utils.toHex(input)
+        const decodedInputParams = decodeFunctionParams(ERC20_ABI, input, 'transfer')
+        return String(decodedInputParams[0])
     } catch {
         return ''
     }
@@ -67,11 +67,12 @@ export function parseReceiverFromERC20TransferInput(input?: string) {
 
 // The Debank transaction history api does not return the input data and approved token info,
 //  so can not do the decoding within its scope.
-export function parseAmountFromERC20ApproveInput(input?: string) {
+export function parseAmountFromERC20ApproveInput(input?: Bytes | undefined) {
     if (!input) return
     try {
-        const decodedInputParam = decodeFunctionParams(ERC20_ABI as AbiItem[], input, 'approve')
-        const result = (decodedInputParam[1] as BigNumber).toString()
+        if (typeof input !== 'string') input = web3_utils.toHex(input)
+        const decodedInputParam = decodeFunctionParams(ERC20_ABI, input, 'approve')
+        const result = (decodedInputParam[1] as bigint).toString()
         return MaxUint256 === result ? 'Infinite' : result
     } catch {
         return

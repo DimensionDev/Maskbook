@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es'
-import type { JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcResponse, JsonRpcResponseWithError } from 'web3-types'
 import type { RecognizableError } from '@masknet/web3-shared-base'
 
 // https://www.jsonrpc.org/specification#error_object
@@ -32,7 +32,8 @@ export class ErrorEditor {
         }
 
         {
-            const responseError = this.response?.error as unknown
+            const responseError =
+                this.response && 'error' in this.response ? (this.response?.error as unknown) : undefined
             if (responseError instanceof Error) return responseError
             if (responseError && typeof (responseError as Error).message === 'string')
                 return new Error((responseError as Error).message)
@@ -47,7 +48,7 @@ export class ErrorEditor {
      * At least an error exists.
      */
     get presence() {
-        return !isNil(this.unknownError) || !isNil(this.response?.error)
+        return !isNil(this.unknownError) || !isNil((this.response as JsonRpcResponseWithError | undefined)?.error)
     }
 
     /**

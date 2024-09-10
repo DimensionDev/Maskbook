@@ -1,18 +1,18 @@
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcRequest, JsonRpcResponseWithError, JsonRpcResponseWithResult } from 'web3-types'
 import { RequestID } from '@masknet/web3-shared-evm'
 import { fetchSquashedJSON } from './fetchJSON.js'
 
 async function resolveRequestKey(request: Request) {
     try {
-        const body: JsonRpcPayload = await request.json()
+        const body: JsonRpcRequest = await request.json()
         return RequestID.fromPayload(request.url, body).ID ?? ''
     } catch {
         return ''
     }
 }
 
-export async function fetchJsonRpcResponse(url: string, payload: JsonRpcPayload, init?: RequestInit) {
-    return fetchSquashedJSON<JsonRpcResponse>(
+export async function fetchJsonRpcResponse(url: string, payload: JsonRpcRequest, init?: RequestInit) {
+    return fetchSquashedJSON<JsonRpcResponseWithResult<any> | JsonRpcResponseWithError<any>>(
         url,
         {
             ...init,

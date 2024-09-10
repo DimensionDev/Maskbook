@@ -34,7 +34,7 @@
     "bignumber.js": "9.1.2",
     "date-fns": "^3.6.0",
     "use-subscription": "^1.8.0",
-    "web3-utils": "1.10.2"
+    "web3-utils": "4.3.0"
   },
   "lingui": {
     "catalogs": [

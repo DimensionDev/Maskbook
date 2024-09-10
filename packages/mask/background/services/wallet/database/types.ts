@@ -1,8 +1,8 @@
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import type { EIP2255Permission } from '@masknet/sdk'
 import type { LegacyWalletRecord } from '@masknet/shared-base'
 
-export interface RequestPayload extends JsonRpcPayload {
+export interface RequestPayload extends JsonRpcRequest {
     owner?: string
     identifier?: string
     paymentToken?: string

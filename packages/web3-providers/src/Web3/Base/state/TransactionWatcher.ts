@@ -1,6 +1,6 @@
 import type { Subscription } from 'use-subscription'
 import { Emitter } from '@servie/events'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { mergeSubscription, type NetworkPluginID } from '@masknet/shared-base'
 import {
     type TransactionChecker,
@@ -96,7 +96,7 @@ export abstract class TransactionWatcherState<ChainId extends PropertyKey, Trans
         })
     }
 
-    async notifyError(error: RecognizableError, request: JsonRpcPayload) {
+    async notifyError(error: RecognizableError, request: JsonRpcRequest) {
         this.emitter.emit('error', error, request)
     }
 

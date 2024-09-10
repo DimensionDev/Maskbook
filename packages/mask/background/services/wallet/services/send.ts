@@ -1,4 +1,4 @@
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { ECKeyIdentifier, type SignType } from '@masknet/shared-base'
 import { EVMRequestReadonly, SmartPayAccount, EVMWeb3Readonly } from '@masknet/web3-providers'
 import {
@@ -17,7 +17,7 @@ import { signWithPersona } from '../../identity/persona/sign.js'
 /**
  * The entrance of all RPC requests to MaskWallet.
  */
-export async function send(payload: JsonRpcPayload, options?: TransactionOptions) {
+export async function send(payload: JsonRpcRequest, options?: TransactionOptions) {
     const { owner, paymentToken, providerURL } = options ?? {}
     const {
         pid = 0,

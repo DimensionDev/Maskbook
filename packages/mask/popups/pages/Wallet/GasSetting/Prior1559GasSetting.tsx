@@ -223,7 +223,7 @@ export const Prior1559GasSetting = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             if (!value) return
             const config = value.payload.params!.map((param) => ({
-                ...param,
+                ...(param as object),
                 gas: web3_utils.toHex(new BigNumber(data.gasLimit).toString()),
                 gasPrice: web3_utils.toHex(formatGweiToWei(data.gasPrice).toString()),
             }))

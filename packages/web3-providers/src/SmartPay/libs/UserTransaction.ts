@@ -24,6 +24,7 @@ import {
     type Web3,
     abiCoder,
 } from '@masknet/web3-shared-evm'
+import type { AbiFunctionFragment } from 'web3-types'
 
 const USER_OP_TYPE = {
     userOp: {
@@ -61,7 +62,7 @@ const DEFAULT_USER_OPERATION: Required<UserOperation> = {
     signature: '0x',
 }
 
-const CALL_WALLET_TYPE: AbiItem = {
+const CALL_WALLET_TYPE: AbiFunctionFragment = {
     name: 'execFromEntryPoint',
     type: 'function',
     inputs: [
@@ -220,7 +221,7 @@ export class UserTransaction {
             try {
                 const block = await web3.eth.getBlock('latest')
                 this.userOperation.maxFeePerGas = toFixed(
-                    new BigNumber(block.baseFeePerGas ?? 0).plus(
+                    new BigNumber(Number(block.baseFeePerGas ?? 0)).plus(
                         maxPriorityFeePerGas ?? DEFAULT_USER_OPERATION.maxPriorityFeePerGas,
                     ),
                 )
@@ -246,7 +247,7 @@ export class UserTransaction {
                 Math.max(
                     web3_utils
                         .hexToBytes(this.packAll)
-                        .map<number>((x) => (x === 0 ? 4 : 16))
+                        .map((x) => (x === 0 ? 4 : 16))
                         .reduce((sum, x) => sum + x),
                     Number.parseInt(DEFAULT_USER_OPERATION.preVerificationGas, 10),
                 ),
@@ -348,7 +349,10 @@ export class UserTransaction {
     static toTransaction(chainId: ChainId, userOperation: UserOperation): Transaction {
         const parameters =
             !isEmptyHex(userOperation.callData) ?
-                (abiCoder.decodeParameters(CALL_WALLET_TYPE.inputs ?? [], userOperation.callData.slice(10)) as {
+                (abiCoder.decodeParameters(
+                    [...(CALL_WALLET_TYPE.inputs ?? [])],
+                    userOperation.callData.slice(10),
+                ) as unknown as {
                     dest: string
                     value: string
                     func: string

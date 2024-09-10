@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { JsonRpcRequest } from 'web3-types'
 import { Link } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import {
@@ -37,7 +37,7 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const [errorInfo, setErrorInfo] = useState<
         | {
               error: RecognizableError
-              request: JsonRpcPayload
+              request: JsonRpcRequest
           }
         | undefined
     >()

@@ -19,7 +19,7 @@
     "date-fns": "^3.6.0",
     "millify": "^6.1.0",
     "urlcat": "^3.1.0",
-    "web3-core-helpers": "1.10.3"
+    "web3-types": "1.7.0"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.2"

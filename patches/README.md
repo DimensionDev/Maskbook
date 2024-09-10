@@ -12,7 +12,6 @@
 ## ESM-CJS compatibility
 
 - gulp: cannot be used with swc-node.
-- web3: <https://github.com/web3/web3.js/issues/5543>
 - @types/react-avatar-editor: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63075>
 - @project-serum/sol-wallet-adapter: <https://github.com/project-serum/sol-wallet-adapter/issues/53>
 - @types/react-highlight-words: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63096>

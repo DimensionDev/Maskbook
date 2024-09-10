@@ -50,7 +50,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
             providerType: ProviderType.MaskWallet,
         })
 
-        await Message!.approveRequestWithResult(props.currentRequest.ID, { result: null, jsonrpc: '2.0', id: 0 })
+        await Message!.approveRequestWithResult(props.currentRequest.ID, { result: null!, jsonrpc: '2.0', id: 0 })
         // After a chain switch, old requests should be dropped according to https://eips.ethereum.org/EIPS/eip-3326
         await Message!.rejectRequests({ keepChainUnrelated: true, keepNonceUnrelated: true })
     })

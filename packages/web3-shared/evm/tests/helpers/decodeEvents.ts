@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import { decodeEvents } from '../../src/helpers/decodeEvents.js'
-import type { AbiItem } from 'web3-utils'
-import { type Log } from 'web3-core'
+import type { Log } from 'web3-types'
 
 describe('decodeEvents', () => {
     it('should return expected result for RedPacket events log', () => {
@@ -17,7 +16,7 @@ describe('decodeEvents', () => {
             transactionHash: '0x9a9e084717d1f63be9d552ffe4f1edbcad2ade10c064b72c1872b67856dfd278',
             transactionIndex: 0x58,
         }
-        const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
+        const eventParams = decodeEvents(REDPACKET_ABI, [log]) as unknown as {
             CreationSuccess: {
                 returnValues: {
                     id: string
@@ -41,28 +40,28 @@ describe('decodeEvents', () => {
                 ],
               },
               "removed": false,
-              "returnValues": Result {
-                "0": "100000000000000",
+              "returnValues": {
+                "0": 100000000000000n,
                 "1": "0x79db2b3db406f16477c48ac4dedc681995686bd3976bae159e9b3337429c4c6c",
                 "2": "Unknown User",
                 "3": "",
                 "4": "0x790116d0685eB197B886DAcAD9C247f785987A4a",
-                "5": "1686116399",
+                "5": 1686116399n,
                 "6": "0xf4d2888d29D722226FafA5d9B24F9164c092421E",
-                "7": "2",
+                "7": 2n,
                 "8": true,
-                "9": "86400",
+                "9": 86400n,
                 "__length__": 10,
-                "creation_time": "1686116399",
+                "creation_time": 1686116399n,
                 "creator": "0x790116d0685eB197B886DAcAD9C247f785987A4a",
-                "duration": "86400",
+                "duration": 86400n,
                 "id": "0x79db2b3db406f16477c48ac4dedc681995686bd3976bae159e9b3337429c4c6c",
                 "ifrandom": true,
                 "message": "",
                 "name": "Unknown User",
-                "number": "2",
+                "number": 2n,
                 "token_address": "0xf4d2888d29D722226FafA5d9B24F9164c092421E",
-                "total": "100000000000000",
+                "total": 100000000000000n,
               },
               "signature": "0x86af556fd7cfab9462285ad44f2d5913527c539ff549f74731ca9997ca534018",
               "topics": [

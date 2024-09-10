@@ -1,4 +1,4 @@
-import type { TransactionReceipt } from 'web3-core'
+import type { TransactionReceipt } from 'web3-types'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     EthereumMethodType,

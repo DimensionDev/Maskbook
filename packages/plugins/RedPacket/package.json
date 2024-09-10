@@ -35,8 +35,8 @@
     "date-fns": "^3.6.0",
     "react-use": "^17.5.0",
     "urlcat": "^3.1.0",
-    "web3-core": "1.10.4",
-    "web3-utils": "1.10.2"
+    "web3-utils": "4.3.0",
+    "web3-types": "1.7.0"
   },
   "lingui": {
     "catalogs": [

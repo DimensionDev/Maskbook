@@ -53,8 +53,8 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "use-subscription": "^1.8.0",
-    "web3-core-helpers": "1.10.3",
-    "web3-utils": "1.10.2",
+    "web3-utils": "4.3.0",
+    "web3-types": "1.7.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

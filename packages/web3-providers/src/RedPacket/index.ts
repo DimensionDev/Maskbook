@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
 import { mapKeys, sortBy } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
@@ -19,9 +18,11 @@ import {
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import type { BaseHubOptions, RedPacketBaseAPI } from '../entry-types.js'
 
-function toNumber(val: any) {
-    if (typeof val.toNumber === 'function') return val.toNumber()
-    return typeof val === 'string' ? Number.parseInt(val, 10) : val
+function toNumber(val: unknown) {
+    if (typeof val === 'string') return Number.parseInt(val, 10)
+    if (typeof val === 'number' || typeof val === 'bigint') return val
+    if (typeof val === 'object' && val && 'toNumber' in val && typeof val.toNumber === 'function') return val.toNumber()
+    throw new Error('Unknown toNumber type ' + typeof val)
 }
 
 class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
@@ -133,10 +134,10 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
             if (!tx.input) return []
             try {
                 const decodedInputParam = decodeFunctionParams(
-                    NFT_REDPACKET_ABI as AbiItem[],
+                    NFT_REDPACKET_ABI,
                     tx.input,
                     'create_red_packet',
-                ) as CreateNFTRedpacketParam
+                ) as unknown as CreateNFTRedpacketParam
 
                 const redpacketPayload: NftRedPacketJSONPayload = {
                     contract_address: tx.to,
@@ -178,17 +179,17 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         return transactions.flatMap((tx) => {
             try {
                 const decodedInputParam = decodeFunctionParams(
-                    REDPACKET_ABI as AbiItem[],
+                    REDPACKET_ABI,
                     tx.input ?? '',
                     'create_red_packet',
-                )
+                ) as any
 
                 const redpacketPayload: RedPacketJSONPayloadFromChain = {
                     contract_address: tx.to,
                     txid: tx.hash ?? '',
                     chainId: tx.chainId,
                     shares: toNumber(decodedInputParam._number),
-                    is_random: decodedInputParam._ifrandom,
+                    is_random: !!decodedInputParam._ifrandom,
                     total: decodedInputParam._total_tokens.toString(),
                     duration: toNumber(decodedInputParam._duration) * 1000,
                     block_number: Number(tx.blockNumber),

@@ -9,6 +9,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { EIP2255RequestedPermission } from '@masknet/sdk'
 import Services from '#services'
 import { useTitle } from 'react-use'
+import type { JsonRpcResponseWithResult } from 'web3-types'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -41,7 +42,11 @@ export function PermissionRequest(props: InteractionItemProps) {
             props.currentRequest.origin!,
             selectedWallet,
         )
-        await Message!.approveRequestWithResult(props.currentRequest.ID, { result, jsonrpc: '2.0', id: 0 })
+        await Message!.approveRequestWithResult(props.currentRequest.ID, {
+            result: result as any,
+            jsonrpc: '2.0',
+            id: 0,
+        } satisfies JsonRpcResponseWithResult)
     })
 
     return (

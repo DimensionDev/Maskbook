@@ -13,8 +13,10 @@ export class Create2Factory {
 
     private getDeployAddress(initCode: string, salt: number): string {
         const saltByte32 = web3_utils.padLeft(web3_utils.toHex(salt), 64)
-        const items = ['0xff', formatEthereumAddress(this.address), saltByte32, web3_utils.keccak256(initCode)].flatMap(
-            (x) => web3_utils.hexToBytes(x),
+        const items = new Uint8Array(
+            ['0xff', formatEthereumAddress(this.address), saltByte32, web3_utils.keccak256(initCode)].flatMap((x) => [
+                ...web3_utils.hexToBytes(x),
+            ]),
         )
         return formatEthereumAddress(
             web3_utils.bytesToHex(web3_utils.hexToBytes(web3_utils.keccak256(web3_utils.bytesToHex(items))).slice(12)),

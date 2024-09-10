@@ -29,8 +29,10 @@ class ContractRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaT
         })
 
         return logs
+            .filter((x) => typeof x !== 'string')
+            .filter((x) => !!x.data)
             .map((log) => {
-                const result = abiCoder.decodeLog(creationSuccessTopicInputs, log.data, [
+                const result = abiCoder.decodeLog(creationSuccessTopicInputs, log.data!, [
                     CREATE_LUCKY_DROP_TOPIC,
                 ]) as unknown as {
                     creation_time: string // 10

@@ -31,7 +31,7 @@
     "date-fns": "^3.6.0",
     "merkletreejs": "^0.3.11",
     "react-use": "^17.5.0",
-    "web3-utils": "1.10.2"
+    "web3-utils": "4.3.0"
   },
   "lingui": {
     "catalogs": [

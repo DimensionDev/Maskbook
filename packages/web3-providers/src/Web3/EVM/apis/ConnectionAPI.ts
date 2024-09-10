@@ -145,10 +145,9 @@ export class ConnectionAPI
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
-        return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.approve(recipient, web3_utils.toHex(amount)),
-            options.overrides,
-        )
+        return new ContractTransaction(this.Contract.getERC20Contract(address, options))
+            .send((x) => x?.methods.approve(recipient, web3_utils.toHex(amount)), options.overrides)
+            .then(web3_utils.toHex)
     }
 
     override async approveAllNonFungibleTokens(
@@ -164,10 +163,9 @@ export class ConnectionAPI
         if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
-        return new ContractTransaction(this.Contract.getERC721Contract(address, options)).send(
-            (x) => x?.methods.setApprovalForAll(recipient, approved),
-            options.overrides,
-        )
+        return new ContractTransaction(this.Contract.getERC721Contract(address, options))
+            .send((x) => x?.methods.setApprovalForAll(recipient, approved), options.overrides)
+            .then(web3_utils.toHex)
     }
 
     override async transferFungibleToken(
@@ -197,10 +195,9 @@ export class ConnectionAPI
         }
 
         // ERC20
-        return new ContractTransaction(this.Contract.getERC20Contract(address, options)).send(
-            (x) => x?.methods.transfer(recipient, web3_utils.toHex(amount)),
-            options.overrides,
-        )
+        return new ContractTransaction(this.Contract.getERC20Contract(address, options))
+            .send((x) => x?.methods.transfer(recipient, web3_utils.toHex(amount)), options.overrides)
+            .then(web3_utils.toHex)
     }
 
     override async transferNonFungibleToken(
@@ -216,17 +213,18 @@ export class ConnectionAPI
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            return new ContractTransaction(this.Contract.getERC1155Contract(address, options)).send(
-                (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
-                options.overrides,
-            )
+            return new ContractTransaction(this.Contract.getERC1155Contract(address, options))
+                .send(
+                    (x) => x?.methods.safeTransferFrom(options.account, recipient, tokenId, amount ?? '', '0x'),
+                    options.overrides,
+                )
+                .then(web3_utils.toHex)
         }
 
         // ERC721
-        return new ContractTransaction(this.Contract.getERC721Contract(address, options)).send(
-            (x) => x?.methods.transferFrom(options.account, recipient, tokenId),
-            options.overrides,
-        )
+        return new ContractTransaction(this.Contract.getERC721Contract(address, options))
+            .send((x) => x?.methods.transferFrom(options.account, recipient, tokenId), options.overrides)
+            .then(web3_utils.toHex)
     }
 
     override signMessage(

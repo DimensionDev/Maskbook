@@ -1,5 +1,5 @@
 import { nth } from 'lodash-es'
-import type { FeeHistoryResult } from 'web3-eth'
+import type { FeeHistoryBase } from 'web3-types'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
 import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
 import { EVMWeb3Readonly } from './ConnectionReadonlyAPI.js'
@@ -21,7 +21,7 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
         return Math.round(sum / arr.length)
     }
 
-    private formatFeeHistory(result: FeeHistoryResult) {
+    private formatFeeHistory(result: FeeHistoryBase<bigint>) {
         let index = 0
         const blockNumber = Number(result.oldestBlock)
         const blocks = []
@@ -29,11 +29,9 @@ class GasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
         while (index < GasOptionAPI.HISTORICAL_BLOCKS) {
             blocks.push({
                 number: blockNumber + index,
-                baseFeePerGas: Number.parseInt(nth(result.baseFeePerGas, index) ?? '0', 16),
+                baseFeePerGas: Number(result.baseFeePerGas),
                 gasUsedRatio: nth(result.gasUsedRatio, index) || 0,
-                priorityFeePerGas:
-                    nth(result.reward, index)?.map((x) => Number.parseInt(x, 16)) ??
-                    Array.from<number>({ length: 3 }).fill(0),
+                priorityFeePerGas: nth(result.reward, index)?.map(Number) ?? Array.from<number>({ length: 3 }).fill(0),
             })
             index += 1
         }

@@ -156,7 +156,7 @@ export class Multicall {
         callDatas: Array<Parameters<T['methods'][K]>>,
         gasLimit = DEFAULT_GAS_LIMIT,
     ) {
-        return callDatas.map<MulticallBaseAPI.Call>((data, i) => [
+        return callDatas.map<MulticallBaseAPI.Call>((data: unknown[], i) => [
             contract.options.address,
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,
@@ -172,7 +172,7 @@ export class Multicall {
         return contracts.map<MulticallBaseAPI.Call>((contract, i) => [
             contract.options.address,
             gasLimit,
-            contract.methods[names[i]](...callData).encodeABI() as string,
+            contract.methods[names[i]](...(callData as unknown[])).encodeABI() as string,
         ])
     }
 }

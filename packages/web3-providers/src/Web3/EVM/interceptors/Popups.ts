@@ -26,6 +26,7 @@ import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { MaskWalletProviderInstance } from '../providers/index.js'
+import type { JsonRpcResponseWithResult } from 'web3-types'
 
 export class Popups implements Middleware<ConnectionContext> {
     private get networks() {
@@ -171,7 +172,7 @@ export class Popups implements Middleware<ConnectionContext> {
             if (editor.presence || !response) {
                 context.abort(editor.error)
             } else {
-                context.write(response.result)
+                context.write((response as JsonRpcResponseWithResult).result)
             }
         } catch (error) {
             context.abort(error)

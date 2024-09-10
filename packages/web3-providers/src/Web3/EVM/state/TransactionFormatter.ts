@@ -77,7 +77,7 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
                         type: TransactionDescriptorType.INTERACTION,
                         methods: abis.map((x) => ({
                             name: x.name,
-                            parameters: abiCoder.decodeParameters(x.parameters, functionParameters ?? ''),
+                            parameters: abiCoder.decodeParameters(x.parameters, functionParameters ?? '') as any,
                         })),
                     }
                 } catch {

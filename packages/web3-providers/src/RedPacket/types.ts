@@ -1,6 +1,5 @@
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
-import type { BigNumber } from 'bignumber.js'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
@@ -109,24 +108,24 @@ export interface RedPacketNftRecordInDatabase extends RedPacketNftRecord {
 }
 
 export type CreateRedpacketParam = {
-    _duration: BigNumber
+    _duration: bigint
     _ifrandom: boolean
     _message: string
     _name: string
-    _number: BigNumber
+    _number: bigint
     _public_key: string
     _seed: string
     _token_addr: string
-    _token_type: BigNumber
-    _total_tokens: BigNumber
+    _token_type: bigint
+    _total_tokens: bigint
 }
 
 export type CreateNFTRedpacketParam = {
     _public_key: string
-    _duration: BigNumber
+    _duration: bigint
     _seed: string
     _message: string
     _name: string
     _token_addr: string
-    _erc721_token_ids: BigNumber[]
+    _erc721_token_ids: bigint[]
 }

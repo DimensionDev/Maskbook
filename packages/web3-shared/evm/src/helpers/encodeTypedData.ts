@@ -59,22 +59,23 @@ export function encodeTypedData(
     types: Record<string, TypedDataField[]>,
     message: Record<string, any>,
 ): string {
-    const coder = new web3_eth_abi.AbiCoder()
     const domainSeparator: string = web3_utils.sha3(
-        coder.encodeParameters(
+        web3_eth_abi.encodeParameters(
             Object.keys(domain).map(() => 'string'),
             Object.values(domain),
         ),
     )!
 
     const messageHash: string = web3_utils.sha3(
-        coder.encodeParameters(findTypes(types, 'Message'), Object.values(message)),
+        web3_eth_abi.encodeParameters(findTypes(types, 'Message'), Object.values(message)),
     )!
 
     const payload: string = web3_utils.soliditySha3(
         '0x1901',
         domainSeparator,
-        web3_utils.sha3(coder.encodeParameters(['bytes32', 'bytes32'], [typeHash(types, 'Message'), messageHash]))!,
+        web3_utils.sha3(
+            web3_eth_abi.encodeParameters(['bytes32', 'bytes32'], [typeHash(types, 'Message'), messageHash]),
+        )!,
     )!
 
     return payload

@@ -10,7 +10,7 @@ import type {
     PersonaInformation,
     ImportSource,
 } from '@masknet/shared-base'
-import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { JsonRpcRequest, JsonRpcResponse } from 'web3-types'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
@@ -74,7 +74,7 @@ export namespace WalletAPI {
     ) => Promise<string>
     export interface MessageIOContext {
         /** Send request to native API, for a risky request will be added into the waiting queue. */
-        send(payload: JsonRpcPayload, options: TransactionOptions): Promise<JsonRpcResponse>
+        send(payload: JsonRpcRequest, options: TransactionOptions): Promise<JsonRpcResponse>
         /** Open popup window */
         openPopupWindow<T extends PopupRoutes>(
             route: T,

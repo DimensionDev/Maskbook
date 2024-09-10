@@ -4,7 +4,7 @@
 
 import type BN from 'bn.js'
 import type { ContractOptions } from 'web3-eth-contract'
-import type { EventLog } from 'web3-core'
+import type { EventLog } from 'web3-types'
 import type { EventEmitter } from 'events'
 import type {
     Callback,
