@@ -1,9 +1,10 @@
 import { makeStyles, MaskTextField } from '@masknet/theme'
+import { leftShift } from '@masknet/web3-shared-base'
 import { alpha, Button, Typography } from '@mui/material'
+import { isNumber } from 'lodash-es'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSwap } from '../contexts/index.js'
-import { isNumber } from 'lodash-es'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
@@ -160,10 +161,12 @@ export const Slippage = memo(function Slippage() {
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.rowName}>Minimum received</Typography>
-                    <Typography className={classes.rowValue}>
-                        2.46
-                        {quote?.toToken.tokenSymbol}
-                    </Typography>
+                    {quote ?
+                        <Typography className={classes.rowValue}>
+                            {leftShift(quote.toTokenAmount, +quote.toToken.decimal).toFixed(4)}
+                            {quote.toToken.tokenSymbol}
+                        </Typography>
+                    :   null}
                 </div>
             </div>
             <div className={classes.footer}>

@@ -112,6 +112,7 @@ export class GasEditor {
             gasPrice: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
             maxFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
             maxPriorityFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxPriorityFeePerGas ?? 0, 0),
+            gasOptionType,
         })
     }
 }

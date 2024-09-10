@@ -43,7 +43,7 @@ export function GasManager({ children }: PropsWithChildren) {
     const gasCost = useMemo(() => {
         if (!price) return ''
         return multipliedBy(formatWeiToEther(gasFee), price ?? 0).toFixed(2)
-    }, [gas, gasConfig.gasPrice, price])
+    }, [gasFee, price])
 
     const value = useMemo(
         () => ({

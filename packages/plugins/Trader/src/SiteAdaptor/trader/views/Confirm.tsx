@@ -211,9 +211,9 @@ export const Confirm = memo(function Confirm() {
     }, [fromTokenAmount, toToken, fromToken, toToken])
 
     const rateNode =
-        baseToken && targetToken ?
+        baseToken && targetToken && rate ?
             <>
-                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.tokenSymbol}
+                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate.toNumber())} {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
                     color={theme.palette.maskColor.main}

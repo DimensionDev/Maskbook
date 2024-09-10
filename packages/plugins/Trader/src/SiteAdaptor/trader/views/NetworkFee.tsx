@@ -5,12 +5,13 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTextField } from '@masknet/theme'
 import { useChainIdSupport } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToGwei, GasEditor, type GasConfig } from '@masknet/web3-shared-evm'
+import { formatWeiToGwei, GasEditor, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { GasCost } from '../../components/GasCost.js'
 import { Warning } from '../../components/Warning.js'
 import { useGasManagement, useSwap } from '../contexts/index.js'
-import { useNavigate } from 'react-router-dom'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
@@ -69,6 +70,9 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },
+    gwei: {
+        lineHeight: '20px',
+    },
     boxMain: {
         marginRight: 'auto',
     },
@@ -94,10 +98,16 @@ export const NetworkFee = memo(function NetworkFee() {
     const { gas, gasConfig, setGasConfig, gasOptions, isLoadingGasOptions: isLoading } = useGasManagement()
     const [pendingGasConfig, setPendingGasConfig] = useState<GasConfig>(gasConfig)
     const gasOptionType = pendingGasConfig.gasOptionType
-    // const { data: gasOptions, isLoading } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
-    console.log({ gasOptions })
 
     const customBoxRef = useRef<HTMLDivElement>(null)
+    const disabled = (() => {
+        if (gasOptionType !== GasOptionType.CUSTOM) return false
+        if (isSupport1559) {
+            const { maxPriorityFeePerGas, gasPrice } = pendingGasConfig as EIP1559GasConfig
+            return !maxPriorityFeePerGas || !gasPrice
+        }
+        return !pendingGasConfig.gasPrice
+    })()
     return (
         <div className={classes.container}>
             <div
@@ -127,9 +137,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     <ProgressiveText className={classes.estimatedTime}>
                         {gasOptions?.slow ? `${gasOptions.slow.estimatedSeconds}sec` : '--'}
                     </ProgressiveText>
-                    <Typography className={classes.estimatedValue} variant="subtitle1">
-                        0.0064603 MATIC≈ $0.004434
-                    </Typography>
+                    <GasCost
+                        className={classes.estimatedValue}
+                        variant="subtitle1"
+                        gasLimit={gas}
+                        gasPrice={gasOptions?.slow.suggestedMaxFeePerGas}
+                    />
                 </div>
             </div>
             <div
@@ -163,9 +176,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     <ProgressiveText className={classes.estimatedTime}>
                         {gasOptions?.normal ? `${gasOptions.normal.estimatedSeconds}sec` : '--'}
                     </ProgressiveText>
-                    <Typography className={classes.estimatedValue} variant="subtitle1">
-                        0.0064603 MATIC≈ $0.004434
-                    </Typography>
+                    <GasCost
+                        className={classes.estimatedValue}
+                        variant="subtitle1"
+                        gasLimit={gas}
+                        gasPrice={gasOptions?.normal.suggestedMaxFeePerGas}
+                    />
                 </div>
             </div>
             <div
@@ -195,10 +211,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     <ProgressiveText className={classes.estimatedTime}>
                         {gasOptions?.fast ? `${gasOptions.fast.estimatedSeconds}sec` : '--'}
                     </ProgressiveText>
-
-                    <Typography className={classes.estimatedValue} variant="subtitle1">
-                        0.0064603 MATIC≈ $0.004434
-                    </Typography>
+                    <GasCost
+                        className={classes.estimatedValue}
+                        variant="subtitle1"
+                        gasLimit={gas}
+                        gasPrice={gasOptions?.fast.suggestedMaxFeePerGas}
+                    />
                 </div>
             </div>
             <div
@@ -250,9 +268,14 @@ export const NetworkFee = memo(function NetworkFee() {
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
-                                    onChange={(e) => {}}
+                                    onChange={(e) => {
+                                        setPendingGasConfig((config) => ({
+                                            ...config,
+                                            baseFeePerGas: e.target.value,
+                                        }))
+                                    }}
                                     InputProps={{
-                                        endAdornment: <Typography>Gwei</Typography>,
+                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
                                     }}
                                 />
                                 <Typography>
@@ -261,9 +284,14 @@ export const NetworkFee = memo(function NetworkFee() {
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
-                                    onChange={(e) => {}}
+                                    onChange={(e) => {
+                                        setPendingGasConfig((config) => ({
+                                            ...config,
+                                            maxFeePerGas: e.target.value,
+                                        }))
+                                    }}
                                     InputProps={{
-                                        endAdornment: <Typography>Gwei</Typography>,
+                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
                                     }}
                                 />
                             </>
@@ -279,10 +307,15 @@ export const NetworkFee = memo(function NetworkFee() {
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
-                                    value={'0'}
-                                    onChange={(e) => {}}
+                                    value={pendingGasConfig.gasPrice}
+                                    onChange={(e) => {
+                                        setPendingGasConfig((config) => ({
+                                            ...config,
+                                            gasPrice: e.target.value,
+                                        }))
+                                    }}
                                     InputProps={{
-                                        endAdornment: <Typography>Gwei</Typography>,
+                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
                                     }}
                                 />
                             </>
@@ -294,7 +327,13 @@ export const NetworkFee = memo(function NetworkFee() {
                         <Warning
                             description={t`The custom amount entered may be higher than the required network fee.`}
                         />
-                        <Button variant="roundedContained" fullWidth>
+                        <Button
+                            variant="roundedContained"
+                            fullWidth
+                            disabled={disabled}
+                            onClick={() => {
+                                setGasConfig(pendingGasConfig)
+                            }}>
                             <Trans>Confirm</Trans>
                         </Button>
                     </div>
