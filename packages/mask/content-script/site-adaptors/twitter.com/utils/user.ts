@@ -2,6 +2,7 @@ import { isNull } from 'lodash-es'
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import { twitterBase } from '../base.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 /**
  * @link https://help.x.com/en/managing-your-account/twitter-username-rules
@@ -17,7 +18,11 @@ export function usernameValidator(name: string) {
 }
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
-    const user = await Twitter.getUserByScreenName(twitterId)
+    const user = await queryClient.fetchQuery({
+        queryKey: ['twitter', 'profile', twitterId],
+        queryFn: () => Twitter.getUserByScreenName(twitterId),
+        retry: 0,
+    })
     if (!user) return
 
     return {
