@@ -99,9 +99,10 @@ function resolveCurrentVisitingIdentityInner(
     cancel: AbortSignal,
 ) {
     const update = async (twitterId: string) => {
+        twitterId = twitterId.toLowerCase()
         const user = await queryClient.fetchQuery({
             retry: 0,
-            staleTime: 60_000,
+            staleTime: 300_000,
             queryKey: ['twitter', 'profile', twitterId],
             queryFn: () => Twitter.getUserByScreenName(twitterId),
         })

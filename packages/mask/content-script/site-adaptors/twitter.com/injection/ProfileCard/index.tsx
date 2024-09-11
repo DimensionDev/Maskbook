@@ -40,7 +40,7 @@ function ProfileCardHolder() {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
             setAddress(event.address ?? '')
-            setTwitterId(event.userId)
+            setTwitterId(event.userId.toLowerCase())
             setBadgeBounding(event.anchorBounding)
             setAnchorEl(event.anchorEl)
         })
@@ -48,6 +48,7 @@ function ProfileCardHolder() {
 
     const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
+        staleTime: 300_000,
         queryFn: () => Twitter.getUserByScreenName(twitterId),
         select: (user: TwitterBaseAPI.User | null) => {
             if (!user) return null

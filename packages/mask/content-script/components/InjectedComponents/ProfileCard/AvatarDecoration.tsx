@@ -8,22 +8,23 @@ interface Props {
     userId?: string
 }
 export function AvatarDecoration({ userId, className, size }: Props) {
+    const identity = userId?.toLowerCase()
     const { data: user } = useQuery({
-        queryKey: ['twitter', 'profile', userId],
-        staleTime: 60_000,
+        queryKey: ['twitter', 'profile', identity],
         retry: 0,
+        staleTime: 300_000,
         queryFn: () => {
-            if (!userId) return null
-            return Twitter.getUserByScreenName(userId)
+            if (!identity) return null
+            return Twitter.getUserByScreenName(identity)
         },
     })
 
-    if (!userId || !user) return null
+    if (!identity || !user) return null
 
     return (
         <NFTBadgeTimeline
             classes={{ root: className }}
-            userId={userId}
+            userId={identity}
             avatarId={Twitter.getAvatarId(user.avatarURL)}
             height={size}
             width={size}
