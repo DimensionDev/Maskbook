@@ -19,7 +19,9 @@
     "@masknet/typed-message": "workspace:^",
     "@masknet/typed-message-react": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
-    "@types/use-subscription": "^1.0.0",
     "use-subscription": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.2"
   }
 }

@@ -46,14 +46,14 @@
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
     "unstated-next": "^1.1.0",
-    "use-subscription": "^1.8.0",
+    "use-subscription": "^1.8.2",
     "web3-core-helpers": "1.10.2",
     "web3-utils": "1.10.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.2",
-    "@types/use-subscription": "^1.0.0",
+    "@types/use-subscription": "^1.0.2",
     "@types/json-stable-stringify": "^1.0.34"
   }
 }
