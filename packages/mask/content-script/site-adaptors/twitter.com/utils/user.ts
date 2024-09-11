@@ -1,8 +1,8 @@
-import { isNull } from 'lodash-es'
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
-import { Twitter } from '@masknet/web3-providers'
-import { twitterBase } from '../base.js'
 import { queryClient } from '@masknet/shared-base-ui'
+import { Twitter } from '@masknet/web3-providers'
+import { isNull } from 'lodash-es'
+import { twitterBase } from '../base.js'
 
 /**
  * @link https://help.x.com/en/managing-your-account/twitter-username-rules
@@ -18,10 +18,12 @@ export function usernameValidator(name: string) {
 }
 
 export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
+    twitterId = twitterId.toLowerCase()
     const user = await queryClient.fetchQuery({
         queryKey: ['twitter', 'profile', twitterId],
         queryFn: () => Twitter.getUserByScreenName(twitterId),
         retry: 0,
+        staleTime: 300_000,
     })
     if (!user) return
 
