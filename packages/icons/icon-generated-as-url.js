@@ -180,7 +180,6 @@ export function warning_triangle_url() { return new URL("./general/WarningTriang
 export function web_black_dark_url() { return new URL("./general/WebBlack.dark.svg", import.meta.url).href }
 export function web_black_light_url() { return new URL("./general/WebBlack.light.svg", import.meta.url).href }
 export function avatar_url() { return new URL("./plugins/Avatar.svg", import.meta.url).href }
-export function calendar_url() { return new URL("./plugins/Calendar.svg", import.meta.url).href }
 export function collectibles_url() { return new URL("./plugins/Collectibles.svg", import.meta.url).href }
 export function ens_url() { return new URL("./plugins/ENS.png", import.meta.url).href }
 export function setting_info_dark_url() { return new URL("./plugins/SettingInfo.dark.svg", import.meta.url).href }

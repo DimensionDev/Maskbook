@@ -1585,11 +1585,6 @@ export const Avatar = /*#__PURE__*/ __createIcon('Avatar', [
         s: true,
     },
 ])
-export const Calendar = /*#__PURE__*/ __createIcon('Calendar', [
-    {
-        u: () => new URL('./plugins/Calendar.svg', import.meta.url).href,
-    },
-])
 export const Collectibles = /*#__PURE__*/ __createIcon('Collectibles', [
     {
         u: () => new URL('./plugins/Collectibles.svg', import.meta.url).href,
