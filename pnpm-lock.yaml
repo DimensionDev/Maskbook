@@ -326,9 +326,6 @@ importers:
       '@servie/events':
         specifier: ^3.0.0
         version: 3.0.0
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
       async-call-rpc:
         specifier: ^6.4.0
         version: 6.4.0
@@ -336,8 +333,12 @@ importers:
         specifier: ^17.5.1
         version: 17.5.1(patch_hash=jdgfodh3ixpexpgf3fwrwvcmtq)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
       use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^1.8.2
+        version: 1.8.2(react@0.0.0-experimental-8039e6d0b-20231026)
+    devDependencies:
+      '@types/use-subscription':
+        specifier: ^1.0.2
+        version: 1.0.2
 
   packages/plugins/Calendar:
     dependencies:
@@ -642,8 +643,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^1.8.2
+        version: 1.8.2(react@0.0.0-experimental-8039e6d0b-20231026)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -661,8 +662,8 @@ importers:
         specifier: ^1.5.2
         version: 1.5.2
       '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2
+        version: 1.0.2
 
   packages/shared-base:
     dependencies:
@@ -717,10 +718,6 @@ importers:
       typeson-registry:
         specifier: ^8.0.0
         version: 8.0.0
-    devDependencies:
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
 
   packages/shared-base-ui:
     dependencies:
@@ -740,15 +737,15 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=5r5xyq4zgcnqugwsrx4lxq2i4e)
       use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^1.8.2
+        version: 1.8.2(react@0.0.0-experimental-8039e6d0b-20231026)
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
     devDependencies:
       '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2
+        version: 1.0.2
       '@types/uuid':
         specifier: ^9.0.3
         version: 9.0.3
@@ -849,12 +846,13 @@ importers:
       '@masknet/web3-shared-base':
         specifier: workspace:^
         version: link:../web3-shared/base
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
+    devDependencies:
+      '@types/use-subscription':
+        specifier: ^1.0.2
+        version: 1.0.2
 
   packages/web3-constants: {}
 
@@ -934,12 +932,12 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       use-subscription:
-        specifier: ^1.8.0
-        version: 1.8.0(react@0.0.0-experimental-8039e6d0b-20231026)
+        specifier: ^1.8.2
+        version: 1.8.2(react@0.0.0-experimental-8039e6d0b-20231026)
     devDependencies:
       '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2
+        version: 1.0.2
 
   packages/web3-hooks/evm:
     dependencies:
@@ -1079,9 +1077,6 @@ importers:
       '@types/bs58':
         specifier: ^4.0.1
         version: 4.0.1
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@types/uuid':
         specifier: ^9.0.3
         version: 9.0.3
@@ -1112,10 +1107,6 @@ importers:
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
-    devDependencies:
-      '@types/use-subscription':
-        specifier: ^1.0.0
-        version: 1.0.0
 
   packages/web3-shared/evm:
     dependencies:
@@ -4406,8 +4397,9 @@ packages:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: false
 
-  /@types/use-subscription@1.0.0:
-    resolution: {integrity: sha512-0WWZ5GUDKMXUY/1zy4Ur5/zsC0s/B+JjXfHdkvx6JgDNZzZV5eW+KKhDqsTGyqX56uh99gwGwbsKbVwkcVIKQA==}
+  /@types/use-subscription@1.0.2:
+    resolution: {integrity: sha512-k6CBZX+wR2Ad6/dIrznyyf8foRNVIvMvbwC/aKE2SZ691OpuNfqUkixMCD+e0dH/iEOHlvVZbg7TuRBdraBeEQ==}
+    dev: true
 
   /@types/uuid@8.3.4:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
@@ -15107,8 +15099,31 @@ packages:
       use-sync-external-store: 1.2.0(react@0.0.0-experimental-8039e6d0b-20231026)
     dev: false
 
+  /use-subscription@1.8.2(react@0.0.0-experimental-8039e6d0b-20231026):
+    resolution: {integrity: sha512-yC2ShScvQ1lAGRp5Y6pz1MqBIU81REfJ/sQIe16BCgKK9mRlZCnU90uY0alKsN6e/Next0vXTsvH3HbAfdH68w==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 0.0.0-experimental-8039e6d0b-20231026
+      use-sync-external-store: 1.2.2(react@0.0.0-experimental-8039e6d0b-20231026)
+    dev: false
+
   /use-sync-external-store@1.2.0(react@0.0.0-experimental-8039e6d0b-20231026):
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      react: 0.0.0-experimental-8039e6d0b-20231026
+    dev: false
+
+  /use-sync-external-store@1.2.2(react@0.0.0-experimental-8039e6d0b-20231026):
+    resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 0.0.0-experimental-8039e6d0b-20231026
     peerDependenciesMeta:
@@ -16267,7 +16282,9 @@ time:
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
   /@react-hookz/web@23.1.0: '2023-06-30T06:39:12.288Z'
   /@solana/web3.js@1.95.2: '2024-07-26T13:49:00.799Z'
+  /@types/use-subscription@1.0.2: '2023-11-07T18:34:22.454Z'
   /@types/web@0.0.143: '2024-04-15T04:20:47.209Z'
   /anchorme@3.0.8: '2024-04-08T09:26:57.773Z'
   /date-fns@2.30.0: '2023-04-30T02:49:47.228Z'
   /react-use@17.5.1: '2024-07-20T13:41:18.645Z'
+  /use-subscription@1.8.2: '2024-04-26T16:44:39.268Z'

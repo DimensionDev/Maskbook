@@ -64,9 +64,11 @@
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@servie/events": "^3.0.0",
-    "@types/use-subscription": "^1.0.0",
     "async-call-rpc": "^6.4.0",
     "react-use": "^17.5.1",
-    "use-subscription": "^1.8.0"
+    "use-subscription": "^1.8.2"
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.2"
   }
 }
