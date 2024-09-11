@@ -37,7 +37,8 @@
     "fuse.js": "^7.0.0",
     "react-router-dom": "^6.24.0",
     "react-use": "^17.4.0",
-    "urlcat": "^3.1.0"
+    "urlcat": "^3.1.0",
+    "use-subscription": "^1.8.0"
   },
   "lingui": {
     "catalogs": [
@@ -61,5 +62,8 @@
       "zh-TW": "zh-CN",
       "default": "en-US"
     }
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.2"
   }
 }

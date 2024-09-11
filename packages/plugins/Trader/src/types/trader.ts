@@ -20,3 +20,23 @@ export enum TokenPanel {
     Input = 0,
     Output = 1,
 }
+
+interface SwapToken {
+    chainId: number
+    decimals: number
+    contractAddress: string
+    symbol: string
+    logo: string | undefined
+}
+export interface OkxSwapTransaction {
+    hash: string
+    chainId: number
+    fromToken: SwapToken
+    fromTokenAmount: string | undefined
+    toToken: SwapToken
+    toTokenAmount: string | undefined
+    datetime: number
+    transactionFee: string
+    dexContractAddress: string
+    estimatedTime: number
+}

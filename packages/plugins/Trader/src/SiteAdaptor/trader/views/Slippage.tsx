@@ -116,7 +116,7 @@ export const Slippage = memo(function Slippage() {
                     onClick={() => {
                         setPendingIsAutoSlippage(true)
                     }}>
-                    <Typography className={classes.boxTitle}>Auto (0.05%)</Typography>
+                    <Typography className={classes.boxTitle}>Auto (0.5%)</Typography>
                     <Typography className={classes.boxContent}>
                         Slippage is automatically adjusted based on the chosen token to increase the chance of a
                         successful transaction.

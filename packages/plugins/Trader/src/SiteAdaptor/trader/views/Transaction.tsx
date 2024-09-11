@@ -1,17 +1,20 @@
-import { t, Trans } from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { Spinner, TokenIcon } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { CopyButton, EmptyStatus, Spinner, TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { dividedBy, formatCompact } from '@masknet/web3-shared-base'
+import { useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { EVMExplorerResolver } from '@masknet/web3-providers'
+import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Typography } from '@mui/material'
+import { skipToken, useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import { memo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Warning } from '../../components/Warning.js'
+import { Link, useSearchParams } from 'react-router-dom'
+import { Countdown } from '../../components/Countdown.js'
 import { RoutePaths } from '../../constants.js'
-import { useSwap } from '../contexts/index.js'
-import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
-import { useSwappable } from '../hooks/useSwappable.js'
+import { useTransaction } from '../../storage.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -156,33 +159,50 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         maxHeight: 40,
     },
+    button: {
+        display: 'flex',
+        alignItems: 'center',
+    },
 }))
 
 export const Transaction = memo(function Transaction() {
     const { classes, cx, theme } = useStyles()
-    const navigate = useNavigate()
-    const { fromToken, toToken, quote, chainId, disabledDexIds } = useSwap()
-    const isLoading = true
-    const [status, setStatus] = useState<'success' | 'failed'>('success')
+    const [params] = useSearchParams()
+    const hash = params.get('hash')
+    const rawChainId = params.get('chainId')
+    const chainId = rawChainId ? +rawChainId : undefined
 
-    const { data: liquidityRes } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
-    const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
+
+    const transaction = useTransaction(hash)
+    const { fromToken, toToken, fromTokenAmount, toTokenAmount } = transaction || {}
 
     const [forwardCompare, setForwardCompare] = useState(true)
+
+    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: status } = useQuery({
+        queryKey: ['transaction-status', chainId, hash],
+        queryFn: hash ? () => Web3.getTransactionStatus(hash) : skipToken,
+    })
+
+    if (!transaction)
+        return (
+            <Box className={classes.container} alignItems="center">
+                <EmptyStatus />
+            </Box>
+        )
+
     const [baseToken, targetToken] =
-        forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
+        forwardCompare ? [transaction.fromToken, transaction.toToken] : [transaction.toToken, transaction.fromToken]
     const rate =
-        quote ?
-            forwardCompare && quote ?
-                dividedBy(quote.toTokenAmount, quote.fromTokenAmount)
-            :   dividedBy(quote.fromTokenAmount, quote.toTokenAmount)
-        :   null
+        forwardCompare && transaction ?
+            dividedBy(transaction.toTokenAmount!, transaction.fromTokenAmount ?? '1')
+        :   dividedBy(transaction.fromTokenAmount!, transaction.toTokenAmount!)
 
     const rateNode =
         baseToken && targetToken ?
             <>
-                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.tokenSymbol}
+                1 {baseToken.symbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.symbol}
                 <Icons.Cached
                     size={16}
                     color={theme.palette.maskColor.main}
@@ -191,23 +211,30 @@ export const Transaction = memo(function Transaction() {
             </>
         :   null
 
-    const [isSwappable, errorMessage] = useSwappable()
-
     return (
         <div className={classes.container}>
             <div className={classes.content}>
-                {isLoading ?
-                    <div className={classes.header}>
-                        <Spinner className={classes.spinner} variant="loading" />
-                        <Typography className={classes.title}>Swapping</Typography>
-                        <Typography component="div" className={classes.subtitle}>
-                            Your transaction should be done in{' '}
-                            <Typography className={classes.countdown} component="span">
-                                08:09
+                {status === TransactionStatusType.NOT_DEPEND ?
+                    <>
+                        <div className={classes.header}>
+                            <Spinner className={classes.spinner} variant="loading" />
+                            <Typography className={classes.title}>Swapping</Typography>
+                            <Typography component="div" className={classes.subtitle}>
+                                Your transaction should be done in{' '}
+                                <Countdown
+                                    className={classes.countdown}
+                                    component="span"
+                                    endtime={transaction.datetime + transaction.estimatedTime}
+                                />
                             </Typography>
+                        </div>
+                        <Typography className={cx(classes.box, classes.note)}>
+                            <Trans>
+                                The swap is in progress. You can check its status in History after exiting this page.
+                            </Trans>
                         </Typography>
-                    </div>
-                : status === 'success' ?
+                    </>
+                : status === TransactionStatusType.SUCCEED ?
                     <div className={classes.header}>
                         <Icons.FillSuccess size={72} />
                         <Typography className={classes.title}>
@@ -215,15 +242,12 @@ export const Transaction = memo(function Transaction() {
                         </Typography>
                     </div>
                 :   <div className={classes.header}>
-                        <Icons.BaseClose color={theme.palette.maskColor.danger} size={72} />
+                        <Icons.ColorfulClose color={theme.palette.maskColor.danger} size={72} />
                         <Typography className={classes.title} color={theme.palette.maskColor.danger}>
                             <Trans>Failed</Trans>
                         </Typography>
                     </div>
                 }
-                <Typography className={cx(classes.box, classes.note)}>
-                    <Trans>The swap is in progress. You can check its status in History after exiting this page.</Trans>
-                </Typography>
                 <div className={classes.box}>
                     <div className={classes.token}>
                         <Typography className={classes.tokenTitle}>
@@ -233,14 +257,16 @@ export const Transaction = memo(function Transaction() {
                             <TokenIcon
                                 className={classes.tokenIcon}
                                 chainId={fromToken?.chainId}
-                                address={fromToken?.address || ''}
-                                logoURL={fromToken?.logoURL}
+                                address={fromToken?.contractAddress || ''}
+                                logoURL={fromToken?.logo}
                             />
                             <div className={classes.tokenValue}>
                                 <Typography className={cx(classes.fromToken, classes.value)}>
-                                    -0.99293 USDC.e3
+                                    {fromTokenAmount && fromToken ?
+                                        `-${formatBalance(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
+                                    :   '--'}
                                 </Typography>
-                                <Typography className={classes.network}>Polygon</Typography>
+                                <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
                             </div>
                         </div>
                     </div>
@@ -252,12 +278,16 @@ export const Transaction = memo(function Transaction() {
                             <TokenIcon
                                 className={classes.tokenIcon}
                                 chainId={toToken?.chainId}
-                                address={toToken?.address || ''}
-                                logoURL={toToken?.logoURL}
+                                address={toToken?.contractAddress || ''}
+                                logoURL={toToken?.logo}
                             />
                             <div className={classes.tokenValue}>
-                                <Typography className={cx(classes.toToken, classes.value)}>-0.99293 USDC.e3</Typography>
-                                <Typography className={classes.network}>Polygon</Typography>
+                                <Typography className={cx(classes.toToken, classes.value)}>
+                                    {toTokenAmount && toToken ?
+                                        `-${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
+                                    :   '--'}
+                                </Typography>
+                                <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
                             </div>
                         </div>
                     </div>
@@ -265,18 +295,20 @@ export const Transaction = memo(function Transaction() {
                 <div className={classes.infoList}>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Trading mode</Trans>
+                            <Trans>Transaction type</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            <Trans>Aggregator</Trans>
+                            <Trans>Swap</Trans>
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Rate</Trans>
+                            <Trans>Date</Trans>
                             <Icons.Questions size={16} />
                         </Typography>
-                        <Typography className={classes.rowValue}>{rateNode}</Typography>
+                        <Typography className={classes.rowValue}>
+                            {transaction.datetime ? format(transaction.datetime, 'MM/dd/yyyy, hh:mm:ss') : '--'}
+                        </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Network fee</Typography>
@@ -292,52 +324,30 @@ export const Transaction = memo(function Transaction() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Slippage</Trans>
+                            <Trans>Rate</Trans>
                             <Icons.Questions size={16} />
                         </Typography>
-                        <Typography className={classes.rowValue}>
-                            0.5%
-                            <Icons.ArrowRight size={20} />
-                        </Typography>
-                    </div>
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Select liquidity</Typography>
-                        <Typography
-                            className={cx(classes.rowValue, classes.link)}
-                            onClick={() => {
-                                navigate(RoutePaths.SelectLiquidity)
-                            }}>
-                            {dexIdsCount}/{liquidityList.length}
-                            <Icons.ArrowRight size={20} />
-                        </Typography>
+                        <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Quote route</Trans>
-                            <Icons.Questions size={16} />
+                            <Trans>Sending address</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            🎉1.24
-                            <Icons.ArrowRight />
+                            {formatEthereumAddress(transaction.dexContractAddress, 4)}
+                            <CopyButton text={transaction.dexContractAddress} size={16} />
                         </Typography>
                     </div>
-                    <div className={classes.infoRow}>
-                        <Trans>
-                            <Typography className={classes.rowName}>
-                                Powered by
-                                <Icons.Questions size={16} />
-                            </Typography>
-                            <Typography className={classes.rowValue}>OKX</Typography>
-                        </Trans>
-                    </div>
-                    <Warning description={t`Quote expired. Update to receive a new quote.`} />
                 </div>
             </div>
             <div className={classes.footer}>
                 <Button
+                    className={classes.button}
                     fullWidth
                     onClick={() => {
-                        //
+                        if (!chainId || !hash) return
+                        const url = EVMExplorerResolver.transactionLink(chainId, hash)
+                        if (url) window.open(url)
                     }}>
                     <Icons.Connect />
                     <Trans>Check on Explorer</Trans>

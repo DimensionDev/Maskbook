@@ -2105,6 +2105,13 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+      use-subscription:
+        specifier: ^1.8.0
+        version: 1.8.0(react@0.0.0-experimental-58af67a8f8-20240628)
+    devDependencies:
+      '@types/use-subscription':
+        specifier: ^1.0.2
+        version: 1.0.2
 
   packages/plugins/Transak:
     dependencies:
@@ -2972,6 +2979,9 @@ importers:
       urlcat:
         specifier: ^3.1.0
         version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -3003,6 +3013,9 @@ importers:
       '@types/use-subscription':
         specifier: ^1.0.2
         version: 1.0.2
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
 
   packages/web3-shared/base:
     dependencies:
@@ -3820,9 +3833,6 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
-    peerDependenciesMeta:
-      '@types/webextension-polyfill':
-        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -3948,6 +3958,9 @@ packages:
     resolution: {integrity: sha512-jT/qyKZ9rzLErtrjGgdkMBn2OP8wl0G3sQlBb3YPryvKHsjvINUhVaPFfP+fpBcOkmrVOVEEHQFJ7nbj2TH2gw==}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   '@emotion/utils@1.2.0':
     resolution: {integrity: sha512-sn3WH53Kzpw8oQ5mgMmIzzyAaH2ZqFEbozVVBSYp538E06OSE6ytOp7pRAjNQR+Q/orwqdQYJSe2m3hCOeznkw==}
@@ -6453,6 +6466,9 @@ packages:
 
   '@types/use-subscription@1.0.2':
     resolution: {integrity: sha512-k6CBZX+wR2Ad6/dIrznyyf8foRNVIvMvbwC/aKE2SZ691OpuNfqUkixMCD+e0dH/iEOHlvVZbg7TuRBdraBeEQ==}
+
+  '@types/uuid@10.0.0':
+    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/vinyl-fs@2.4.12':
     resolution: {integrity: sha512-LgBpYIWuuGsihnlF+OOWWz4ovwCYlT03gd3DuLwex50cYZLmX3yrW+sFF9ndtmh7zcZpS6Ri47PrIu+fV+sbXw==}
@@ -12796,6 +12812,9 @@ packages:
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -16339,10 +16358,9 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
+      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.2
-    optionalDependencies:
-      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
@@ -16485,7 +16503,7 @@ snapshots:
   '@emotion/unitless@0.8.1': {}
 
   '@emotion/use-insertion-effect-with-fallbacks@1.0.1(react@0.0.0-experimental-58af67a8f8-20240628)':
-    dependencies:
+    optionalDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   '@emotion/utils@1.2.0': {}
@@ -19684,6 +19702,8 @@ snapshots:
   '@types/unist@3.0.2': {}
 
   '@types/use-subscription@1.0.2': {}
+
+  '@types/uuid@10.0.0': {}
 
   '@types/vinyl-fs@2.4.12':
     dependencies:
@@ -27902,6 +27922,7 @@ snapshots:
   react-router@6.24.0(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@remix-run/router': 1.17.0
+    optionalDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   react-transition-group@4.4.5(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):

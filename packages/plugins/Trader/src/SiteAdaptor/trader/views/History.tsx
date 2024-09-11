@@ -1,9 +1,16 @@
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useSwap } from '../contexts/index.js'
 import { Icons } from '@masknet/icons'
-import { range } from 'lodash-es'
+import { useSwapHistory } from '../../storage.js'
+import { useNetworks } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { Link } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { RoutePaths } from '../../constants.js'
+import { format } from 'date-fns'
+import { formatAmount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -73,6 +80,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 13,
         fontWeight: 400,
         lineHeight: '18px',
+        color: theme.palette.maskColor.main,
     },
     records: {
         display: 'flex',
@@ -83,47 +91,73 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(1),
+        textDecoration: 'none',
     },
 }))
 
 export function HistoryView() {
     const { classes, theme } = useStyles()
-    const { fromToken, toToken } = useSwap()
+    const history = useSwapHistory()
+    const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     return (
         <div className={classes.container}>
-            <div className={classes.group}>
-                <div className={classes.groupHeader}>
-                    <Typography className={classes.date}>07/23/2024</Typography>
-                    <Typography className={classes.time}>3:59 PM</Typography>
-                </div>
-                <div className={classes.records}>
-                    {range(8).map((i) => (
-                        <div className={classes.record} key={i}>
-                            <div className={classes.tokenIcons}>
-                                <TokenIcon address={fromToken?.address ?? ''} size={30} />
-                                <TokenIcon className={classes.toTokenIcon} address={toToken?.address ?? ''} size={30} />
-                            </div>
-                            <div>
-                                <div className={classes.direction}>
-                                    <Typography className={classes.symbol}>USDC</Typography>
-                                    <Icons.CallSend
-                                        className={classes.directionIcon}
-                                        size={16}
-                                        color={theme.palette.text.secondary}
-                                    />
-                                    <Typography className={classes.symbol}>USDC</Typography>
-                                </div>
-                                <Typography className={classes.network}>Polygon</Typography>
-                            </div>
-                            <div className={classes.result}>
-                                <Typography className={classes.received}>+0.999 USDT</Typography>
-                                <Typography className={classes.sent}>-1USDC</Typography>
-                            </div>
-                            <Icons.ArrowRight size={16} color={theme.palette.maskColor.main} />
+            {history.map((tx) => {
+                const { fromToken, toToken, chainId, fromTokenAmount, toTokenAmount } = tx
+                const network = networks.find((x) => x.chainId === chainId)
+                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId: tx.chainId })
+                return (
+                    <div className={classes.group} key={tx.hash}>
+                        <div className={classes.groupHeader}>
+                            <Typography className={classes.date}>{format(tx.datetime, 'MM/dd/yyyy')}</Typography>
+                            <Typography className={classes.time}>{format(tx.datetime, 'hh:mm aa')}</Typography>
                         </div>
-                    ))}
-                </div>
-            </div>
+                        <div className={classes.records}>
+                            <Link className={classes.record} key={tx.hash} to={url}>
+                                <div className={classes.tokenIcons}>
+                                    <TokenIcon
+                                        chainId={fromToken.chainId}
+                                        address={fromToken.contractAddress}
+                                        logoURL={fromToken.logo}
+                                        size={30}
+                                    />
+                                    <TokenIcon
+                                        className={classes.toTokenIcon}
+                                        chainId={toToken.chainId}
+                                        address={toToken.contractAddress}
+                                        logoURL={toToken.logo}
+                                        size={30}
+                                    />
+                                </div>
+                                <div>
+                                    <div className={classes.direction}>
+                                        <Typography className={classes.symbol}>{fromToken.symbol}</Typography>
+                                        <Icons.CallSend
+                                            className={classes.directionIcon}
+                                            size={16}
+                                            color={theme.palette.text.secondary}
+                                        />
+                                        <Typography className={classes.symbol}>{toToken.symbol}</Typography>
+                                    </div>
+                                    <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
+                                </div>
+                                <div className={classes.result}>
+                                    <Typography className={classes.received}>
+                                        {toTokenAmount ?
+                                            `+${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
+                                        :   '--'}
+                                    </Typography>
+                                    <Typography className={classes.sent}>
+                                        {fromTokenAmount ?
+                                            `-${formatAmount(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
+                                        :   '--'}
+                                    </Typography>
+                                </div>
+                                <Icons.ArrowRight size={16} color={theme.palette.maskColor.main} />
+                            </Link>
+                        </div>
+                    </div>
+                )
+            })}
         </div>
     )
 }

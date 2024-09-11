@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { useAccount, useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type { GetQuotesResponse, OKXSwapQuote } from '@masknet/web3-providers/types'
 import { rightShift } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -19,8 +19,10 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
 import { useUsdtToken } from '../hooks/useUsdtToken.js'
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import { useWalletId } from '../../storage.js'
 
 interface Options {
+    walletId: string | undefined
     chainId: ChainId
     setChainId: Dispatch<SetStateAction<ChainId>>
     nativeToken: Web3Helper.FungibleTokenAll | undefined
@@ -60,6 +62,8 @@ export function SwapProvider({ children }: PropsWithChildren) {
     const defaultChainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const walletId = useWalletId(address)
 
     const usdtToken = useUsdtToken(chainId)
     const [fromToken = nativeToken, setFromToken] = useState<Web3Helper.FungibleTokenAll>()
@@ -108,6 +112,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
 
     const value = useMemo(
         () => ({
+            walletId,
             chainId,
             setChainId,
             quote,
@@ -134,6 +139,7 @@ export function SwapProvider({ children }: PropsWithChildren) {
             gas: quote?.estimateGasFee,
         }),
         [
+            walletId,
             chainId,
             quote,
             isQuoteStale,

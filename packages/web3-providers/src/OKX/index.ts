@@ -14,10 +14,11 @@ import type {
 import { TokenType, type FungibleToken } from '@masknet/web3-shared-base'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { convertNativeAddress, normalizeCode } from './helper.js'
+import { v4 as uuid } from 'uuid'
 
 /** request okx official API, and normalize the code */
-function fetchFromOKX<T extends { code: number }>(url: string) {
-    return fetchJSON<T>(url).then(normalizeCode)
+function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
+    return fetchJSON<T>(input, init).then(normalizeCode)
 }
 
 export class OKX {
@@ -101,5 +102,25 @@ export class OKX {
             toTokenAddress: convertNativeAddress(options.toTokenAddress),
         })
         return fetchFromOKX<SwapResponse>(url)
+    }
+    /**
+     * @see https://www.okx.com/web3/build/docs/waas/api-wallet-create-wallet
+     */
+    static async createWallet(address: string): Promise<string | null> {
+        const chains = (await OKX.getSupportedChains()) || []
+        const walletId = uuid()
+        const addresses = chains.map((chain) => ({ address, chainId: chain.chainId.toString() }))
+        const res = await fetchFromOKX(`${OKX_HOST}/api/v5/waas/wallet/create-wallet`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                addresses,
+                walletId,
+            }),
+        })
+        return res.code === 0 ? walletId : null
     }
 }

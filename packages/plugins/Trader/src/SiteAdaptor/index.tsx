@@ -15,6 +15,7 @@ import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
+import { setupStorage, type StorageOptions } from './storage.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -23,7 +24,9 @@ function openDialog() {
 }
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init() {},
+    init(_, context) {
+        setupStorage(context.createKVStorage<StorageOptions>('persistent', { walletBindings: {}, transactions: [] }))
+    },
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {

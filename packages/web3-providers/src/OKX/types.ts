@@ -11,7 +11,7 @@ type OKXResponse<T> = {
 
 export type SupportedChainResponse = OKXResponse<
     Array<{
-        chainId: string
+        chainId: number
         chainName: string
         /** would be empty string for non-ethereum chains */
         dexTokenApproveAddress: string
