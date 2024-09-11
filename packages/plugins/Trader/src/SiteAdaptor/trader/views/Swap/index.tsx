@@ -158,7 +158,7 @@ export function SwapView() {
             // Only from token can decide the chain
             chainId: fromToken?.chainId || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
-            chains: supportedChains?.map((x) => Number.parseInt(x.chainId, 10)),
+            chains: supportedChains?.map((x) => x.chainId),
             okxOnly: true,
             lockChainId: side === 'to' && !!fromToken?.chainId,
         })

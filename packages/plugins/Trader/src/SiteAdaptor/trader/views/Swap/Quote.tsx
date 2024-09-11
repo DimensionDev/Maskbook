@@ -119,11 +119,19 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={RoutePaths.SelectLiquidity}
-                            onClick={() => {
-                                navigate(RoutePaths.SelectLiquidity)
-                            }}>
+                            to={RoutePaths.SelectLiquidity}>
                             {dexIdsCount}/{liquidityList.length}
+                            <Icons.ArrowRight size={20} />
+                        </Typography>
+                    </div>
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.rowName}>
+                            <Trans>Quote route</Trans>
+                        </Typography>
+                        <Typography
+                            component={Link}
+                            className={cx(classes.rowValue, classes.link)}
+                            to={RoutePaths.QuoteRoute}>
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>

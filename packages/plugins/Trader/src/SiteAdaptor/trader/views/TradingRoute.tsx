@@ -10,16 +10,27 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        padding: theme.spacing(0, 2),
+        padding: theme.spacing(2),
         boxSizing: 'border-box',
         gap: theme.spacing(1),
+    },
+    route: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
     },
     tokenIcon: {
         height: 30,
         width: 30,
     },
+    arrow: {
+        transform: 'rotate(-90deg)',
+        color: theme.palette.maskColor.second,
+    },
     token: {
         backgroundColor: theme.palette.maskColor.bg,
+        display: 'flex',
+        alignItems: 'center',
         padding: theme.spacing('8px', '6px'),
         borderRadius: theme.spacing(1.5),
         fontSize: 14,
@@ -27,12 +38,16 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
     pool: {
+        flexGrow: 1,
         backgroundColor: theme.palette.maskColor.bg,
         padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1.5),
         fontSize: 13,
         fontWeight: 400,
         color: theme.palette.maskColor.main,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
 }))
 
@@ -49,26 +64,30 @@ export const TradingRoute = memo(function TradingRoute() {
                 return (
                     <Fragment key={route.router}>
                         {route.subRouterList.map((subRoute, index) => {
+                            const fromPool = subRoute.dexProtocol[0]
+                            const toPool = subRoute.dexProtocol[1] || fromPool
                             return (
-                                <div key={`${route.router}/${index}`}>
-                                    <div className={classes.token}>
+                                <div key={`${route.router}/${index}`} className={classes.route}>
+                                    <Typography className={classes.token} component="div">
                                         <TokenIcon
                                             className={classes.tokenIcon}
                                             chainId={chainId}
                                             address={subRoute.fromToken.tokenContractAddress}
                                         />
-                                        {subRoute.dexProtocol.percent}%
+                                        {fromPool.percent}%
+                                    </Typography>
+                                    <Icons.ArrowDrop className={classes.arrow} size={20} />
+                                    <Typography className={classes.pool}>{fromPool.dexName}</Typography>
+                                    <Icons.ArrowDrop className={classes.arrow} size={20} />
+                                    <Typography className={classes.pool}>{toPool.dexName}</Typography>
+                                    <Icons.ArrowDrop className={classes.arrow} size={20} />
+                                    <div className={classes.token}>
+                                        <TokenIcon
+                                            className={classes.tokenIcon}
+                                            chainId={chainId}
+                                            address={subRoute.toToken.tokenContractAddress}
+                                        />
                                     </div>
-                                    <Icons.ArrowDrop size={20} />
-                                    <Typography className={classes.pool}>{subRoute.dexProtocol.dexName}</Typography>
-                                    <Icons.ArrowDrop size={20} />
-                                    <Typography className={classes.pool}>{subRoute.dexProtocol.dexName}</Typography>
-                                    <Icons.ArrowDrop size={20} />
-                                    <TokenIcon
-                                        className={classes.tokenIcon}
-                                        chainId={chainId}
-                                        address={subRoute.toToken.tokenContractAddress}
-                                    />
                                 </div>
                             )
                         })}

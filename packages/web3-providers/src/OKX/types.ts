@@ -100,12 +100,12 @@ export interface OKXSwapQuote {
         /** @example "100" */
         routerPercent: string
         subRouterList: Array<{
-            dexProtocol: {
+            dexProtocol: Array<{
                 /** @example "Uniswap V3" */
                 dexName: string
                 /** @example "100" */
                 percent: string
-            }
+            }>
             fromToken: SwapToken
             toToken: SwapToken
         }>
