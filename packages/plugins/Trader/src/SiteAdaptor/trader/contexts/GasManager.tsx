@@ -16,7 +16,7 @@ import {
 import { useSwap } from './SwapProvider.js'
 
 interface Options {
-    gas: string | undefined
+    gasLimit: string | undefined
     gasFee: BigNumber
     gasCost: string
     gasConfig: GasConfig
@@ -28,7 +28,7 @@ interface Options {
 const GasManagerContext = createContext<Options>(null!)
 export function GasManager({ children }: PropsWithChildren) {
     const { quote, chainId, fromToken, toToken } = useSwap()
-    const gas = quote?.estimateGasFee ?? '1'
+    const gasLimit = quote?.estimateGasFee ?? '1'
     const { gasConfig, setGasConfig, gasOptions, isLoadingGasOptions } = useGasConfig(chainId)
     const { data: price } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -39,7 +39,7 @@ export function GasManager({ children }: PropsWithChildren) {
         setGasConfig(undefined)
     }, [fromTokenAddr, toTokenAddr, chainId])
 
-    const gasFee = useMemo(() => multipliedBy(gas, gasConfig.gasPrice ?? '1'), [gas, gasConfig.gasPrice])
+    const gasFee = useMemo(() => multipliedBy(gasLimit, gasConfig.gasPrice ?? '1'), [gasLimit, gasConfig.gasPrice])
     const gasCost = useMemo(() => {
         if (!price) return ''
         return multipliedBy(formatWeiToEther(gasFee), price ?? 0).toFixed(2)
@@ -47,7 +47,7 @@ export function GasManager({ children }: PropsWithChildren) {
 
     const value = useMemo(
         () => ({
-            gas,
+            gasLimit,
             gasFee,
             gasCost,
             gasConfig,
@@ -55,7 +55,7 @@ export function GasManager({ children }: PropsWithChildren) {
             gasOptions,
             isLoadingGasOptions,
         }),
-        [gas, gasConfig, gasOptions, isLoadingGasOptions, gasFee, gasCost],
+        [gasLimit, gasConfig, gasOptions, isLoadingGasOptions, gasFee, gasCost],
     )
     return <GasManagerContext.Provider value={value}>{children}</GasManagerContext.Provider>
 }

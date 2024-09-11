@@ -20,6 +20,7 @@ import { useQuotes } from '../hooks/useQuotes.js'
 import { useUsdtToken } from '../hooks/useUsdtToken.js'
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { useWalletId } from '../../storage.js'
+import { t } from '@lingui/macro'
 
 interface Options {
     walletId: string | undefined
@@ -48,8 +49,6 @@ interface Options {
     setSlippage: Dispatch<SetStateAction<string>>
     isAutoSlippage: boolean
     setIsAutoSlippage: Dispatch<SetStateAction<boolean>>
-    networkFee: string
-    setNetworkFee: Dispatch<SetStateAction<string>>
     /** Gas Limit */
     gas: string | undefined
 }
@@ -98,7 +97,11 @@ export function SwapProvider({ children }: PropsWithChildren) {
         dexIds: dexIds?.length ? dexIds.join(',') : undefined,
     })
     const quote = quoteRes?.code === 0 ? quoteRes.data[0] : undefined
-    const quoteErrorMessage = quoteRes?.msg
+    const quoteErrorMessage =
+        quoteRes?.msg ??
+        (quoteRes?.code === 0 && !quoteRes.data.length ?
+            t`Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead.`
+        :   '')
 
     // slippage
     const [isAutoSlippage, setIsAutoSlippage] = useState(true)
@@ -106,9 +109,6 @@ export function SwapProvider({ children }: PropsWithChildren) {
 
     // misc, ui
     const [expand, setExpand] = useState(false)
-
-    // Network fee
-    const [networkFee, setNetworkFee] = useState('2') // Default to 'standard' fee
 
     const value = useMemo(
         () => ({
@@ -134,8 +134,6 @@ export function SwapProvider({ children }: PropsWithChildren) {
             setIsAutoSlippage,
             slippage: slippage || DEFAULT_SLIPPAGE,
             setSlippage,
-            networkFee,
-            setNetworkFee,
             gas: quote?.estimateGasFee,
         }),
         [
@@ -154,7 +152,6 @@ export function SwapProvider({ children }: PropsWithChildren) {
             isAutoSlippage,
             slippage,
             setSlippage,
-            networkFee,
         ],
     )
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>

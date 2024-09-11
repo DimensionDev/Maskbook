@@ -1,17 +1,17 @@
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
+import { EmptyStatus } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import type { OKXSwapQuote } from '@masknet/web3-providers/types'
+import { multipliedBy } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { useSwap } from '../contexts/index.js'
 import { RoutePaths } from '../../constants.js'
-import { BigNumber } from 'bignumber.js'
-import { t } from '@lingui/macro'
-import { EmptyStatus } from '@masknet/shared'
-import { useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { multipliedBy } from '@masknet/web3-shared-base'
-import type { OKXSwapQuote } from '@masknet/web3-providers/types'
+import { useSwap } from '../contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -126,7 +126,9 @@ export const QuoteRoute = memo(function QuoteRoute() {
     return (
         <div className={classes.container}>
             <Box className={classes.infoRow} py={0.5}>
-                <Typography className={classes.rowName}>Dex/Est received ({quote?.toToken.tokenSymbol})</Typography>
+                <Typography className={classes.rowName}>
+                    <Trans>Dex/Est received ({quote?.toToken.tokenSymbol})</Trans>
+                </Typography>
                 <Typography className={classes.rowValue}>
                     Rank
                     <ShadowRootTooltip
@@ -145,8 +147,9 @@ export const QuoteRoute = memo(function QuoteRoute() {
                         <Typography className={classes.boxTitle}>
                             <img src={compare.dexLogo} width={16} height={16} />
                             {compare.dexName}
-                            {isBest ?
-                                <ShadowRootTooltip title="xxx">
+                            {compare.dexName.toLowerCase().includes('okx') ?
+                                <ShadowRootTooltip
+                                    title={t`OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly.`}>
                                     <Icons.Questions size={16} />
                                 </ShadowRootTooltip>
                             :   null}

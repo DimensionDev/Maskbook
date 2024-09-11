@@ -188,7 +188,7 @@ export const Confirm = memo(function Confirm() {
         slippage: isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage,
         userWalletAddress: address,
     })
-    const { gasFee, gasCost, gasConfig, gasOptions } = useGasManagement()
+    const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
     const [expand, setExpand] = useState(false)
     const transaction = swap?.data[0]?.tx
@@ -232,11 +232,15 @@ export const Confirm = memo(function Confirm() {
             data: transaction?.data,
             to: transaction.to,
             from: address,
-            gasPrice: transaction.gasPrice,
+            value: transaction.value,
+            gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
             gas: transaction.gas,
-            maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
+            maxPriorityFeePerGas:
+                'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
+                    gasConfig.maxFeePerGas
+                :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, address])
+    }, [transaction, address, gasConfig])
 
     const spender = transaction?.to
     const [{ allowance }, { loading: isApproving, loadingApprove }, approve] = useERC20TokenApproveCallback(
@@ -403,9 +407,14 @@ export const Confirm = memo(function Confirm() {
                             if (!hash) {
                                 showSnackbar(t`Transaction rejected`, {
                                     title: t`Swap`,
+                                    variant: 'error',
                                 })
                                 return
                             }
+                            showSnackbar(t`Transaction submitted.`, {
+                                title: t`Swap`,
+                                variant: 'error',
+                            })
                             const estimatedSeconds =
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
@@ -433,6 +442,8 @@ export const Confirm = memo(function Confirm() {
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: transaction.to,
                                 estimatedTime: (estimatedSeconds ?? 10) * 1000,
+                                gasLimit: gasLimit || gasConfig.gas || '1',
+                                gasPrice: gasConfig.gasPrice || '0',
                             })
                             if (notEnoughAllowance) {
                                 await approve()
@@ -441,7 +452,8 @@ export const Confirm = memo(function Confirm() {
                             navigate(url)
                         }}>
                         {errorMessage ??
-                            (loadingApprove ? t`Checking Approve`
+                            (isSending ? t`Sending`
+                            : loadingApprove ? t`Checking Approve`
                             : isApproving ? t`Approving`
                             : t`Confirm Swap`)}
                     </ActionButton>

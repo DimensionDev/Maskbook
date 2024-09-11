@@ -37,6 +37,8 @@ export interface OkxSwapTransaction {
     toTokenAmount: string | undefined
     datetime: number
     transactionFee: string
+    gasLimit: string
+    gasPrice: string
     dexContractAddress: string
     estimatedTime: number
 }

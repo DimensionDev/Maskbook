@@ -7,7 +7,7 @@ import { useChainIdSupport } from '@masknet/web3-hooks-base'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { formatWeiToGwei, GasEditor, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useRef, useState } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GasCost } from '../../components/GasCost.js'
 import { Warning } from '../../components/Warning.js'
@@ -25,6 +25,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         borderRadius: theme.spacing(1.5),
         border: `1px solid ${theme.palette.maskColor.secondaryMain}`,
         cursor: 'pointer',
+        transition: 'border 0.2s ease',
         [`&.${refs.active}`]: {
             border: `1px solid ${theme.palette.maskColor.main}`,
         },
@@ -89,16 +90,26 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     },
 }))
 
+function formatTimeCost(seconds: number | undefined) {
+    if (!seconds) return '--'
+    if (seconds < 60) return t`${seconds}sec`
+    const mins = seconds / 60
+    return t`${mins}min`
+}
+
 export const NetworkFee = memo(function NetworkFee() {
     const { classes, cx, theme } = useStyles()
     const { chainId } = useSwap()
     const navigate = useNavigate()
 
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
-    const { gas, gasConfig, setGasConfig, gasOptions, isLoadingGasOptions: isLoading } = useGasManagement()
+    const { gasLimit, gasConfig, setGasConfig, gasOptions, isLoadingGasOptions: isLoading } = useGasManagement()
     const [pendingGasConfig, setPendingGasConfig] = useState<GasConfig>(gasConfig)
     const gasOptionType = pendingGasConfig.gasOptionType
-
+    const normalGasConfig = useMemo(() => {
+        return GasEditor.fromGasOption(chainId, gasOptions?.custom, GasOptionType.CUSTOM).getGasConfig()
+    }, [chainId, gasOptions?.normal])
+    const [customGasConfig = normalGasConfig, setCustomGasConfig] = useState<GasConfig>()
     const customBoxRef = useRef<HTMLDivElement>(null)
     const disabled = (() => {
         if (gasOptionType !== GasOptionType.CUSTOM) return false
@@ -108,6 +119,11 @@ export const NetworkFee = memo(function NetworkFee() {
         }
         return !pendingGasConfig.gasPrice
     })()
+
+    const slowTimeCost = formatTimeCost(gasOptions?.slow.estimatedSeconds)
+    const normalTimeCost = formatTimeCost(gasOptions?.normal.estimatedSeconds)
+    const fastTimeCost = formatTimeCost(gasOptions?.fast.estimatedSeconds)
+    const customTimeCost = formatTimeCost(gasOptions?.custom.estimatedSeconds)
     return (
         <div className={classes.container}>
             <div
@@ -134,13 +150,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <ProgressiveText className={classes.estimatedTime}>
-                        {gasOptions?.slow ? `${gasOptions.slow.estimatedSeconds}sec` : '--'}
-                    </ProgressiveText>
+                    <ProgressiveText className={classes.estimatedTime}>{slowTimeCost}</ProgressiveText>
                     <GasCost
                         className={classes.estimatedValue}
                         variant="subtitle1"
-                        gasLimit={gas}
+                        chainId={chainId}
+                        gasLimit={gasLimit}
                         gasPrice={gasOptions?.slow.suggestedMaxFeePerGas}
                     />
                 </div>
@@ -173,13 +188,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <ProgressiveText className={classes.estimatedTime}>
-                        {gasOptions?.normal ? `${gasOptions.normal.estimatedSeconds}sec` : '--'}
-                    </ProgressiveText>
+                    <ProgressiveText className={classes.estimatedTime}>{normalTimeCost}</ProgressiveText>
                     <GasCost
                         className={classes.estimatedValue}
                         variant="subtitle1"
-                        gasLimit={gas}
+                        chainId={chainId}
+                        gasLimit={gasLimit}
                         gasPrice={gasOptions?.normal.suggestedMaxFeePerGas}
                     />
                 </div>
@@ -208,13 +222,12 @@ export const NetworkFee = memo(function NetworkFee() {
                     </ProgressiveText>
                 </div>
                 <div className={classes.boxTail}>
-                    <ProgressiveText className={classes.estimatedTime}>
-                        {gasOptions?.fast ? `${gasOptions.fast.estimatedSeconds}sec` : '--'}
-                    </ProgressiveText>
+                    <ProgressiveText className={classes.estimatedTime}>{fastTimeCost}</ProgressiveText>
                     <GasCost
                         className={classes.estimatedValue}
                         variant="subtitle1"
-                        gasLimit={gas}
+                        chainId={chainId}
+                        gasLimit={gasLimit}
                         gasPrice={gasOptions?.fast.suggestedMaxFeePerGas}
                     />
                 </div>
@@ -227,7 +240,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     onClick={async () => {
                         const config = GasEditor.fromGasOption(
                             chainId,
-                            gasOptions?.fast,
+                            gasOptions?.custom,
                             GasOptionType.CUSTOM,
                         ).getGasConfig()
                         setPendingGasConfig(config)
@@ -240,17 +253,21 @@ export const NetworkFee = memo(function NetworkFee() {
                     <Icons.Gear size={30} />
                     <div className={classes.boxMain}>
                         <Typography className={classes.boxTitle} variant="h2">
-                            Custom
+                            <Trans>Custom</Trans>
                         </Typography>
                         <Typography className={classes.boxSubtitle} variant="h3">
-                            30.01Gwei
+                            {formatWeiToGwei(customGasConfig.gasPrice ?? '0').toFixed()}Gwei
                         </Typography>
                     </div>
                     <div className={classes.boxTail}>
-                        <Typography className={classes.estimatedTime}>1</Typography>
-                        <Typography className={classes.estimatedValue} variant="subtitle1">
-                            0.0064603 MATIC≈ $0.004434
-                        </Typography>
+                        <Typography className={classes.estimatedTime}>{customTimeCost}</Typography>
+                        <GasCost
+                            className={classes.estimatedValue}
+                            variant="subtitle1"
+                            chainId={chainId}
+                            gasLimit={gasLimit}
+                            gasPrice={customGasConfig.gasPrice}
+                        />
                     </div>
                 </div>
                 {gasOptionType === GasOptionType.CUSTOM ?
@@ -323,7 +340,7 @@ export const NetworkFee = memo(function NetworkFee() {
                         <Typography>
                             <Trans>Gas Limit</Trans>
                         </Typography>
-                        <MaskTextField placeholder="0.1-50" type="number" disabled value={gas} />
+                        <MaskTextField placeholder="0.1-50" type="number" disabled value={gasLimit} />
                         <Warning
                             description={t`The custom amount entered may be higher than the required network fee.`}
                         />

@@ -161,6 +161,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 }}
                 placement={recommendFeature ? 'bottom' : 'top'}
                 arrow
+                disableInteractive
                 title={<Typography>{tooltipHint}</Typography>}>
                 {jsx}
             </ShadowRootTooltip>

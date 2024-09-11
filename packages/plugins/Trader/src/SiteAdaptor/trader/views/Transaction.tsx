@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, Spinner, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -11,10 +11,10 @@ import { alpha, Box, Button, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { memo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { Countdown } from '../../components/Countdown.js'
-import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
+import { GasCost } from '../../components/GasCost.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -88,6 +88,13 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         flexDirection: 'column',
     },
+    tip: {
+        fontSize: 13,
+        lineHeight: '18px',
+        padding: theme.spacing(0.5),
+        borderRadius: theme.spacing(0.5),
+        backgroundColor: theme.palette.maskColor.bottom,
+    },
     value: {
         fontSize: 14,
         fontWeight: 700,
@@ -135,12 +142,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         gap: theme.spacing(0.5),
         fontSize: 14,
-    },
-    link: {
-        cursor: 'pointer',
-        textDecoration: 'none',
-        textAlign: 'right',
-        color: theme.palette.maskColor.main,
     },
     footer: {
         flexShrink: 0,
@@ -211,6 +212,8 @@ export const Transaction = memo(function Transaction() {
             </>
         :   null
 
+    const txUrl = chainId && hash ? EVMExplorerResolver.transactionLink(chainId, hash) : null
+
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -267,6 +270,11 @@ export const Transaction = memo(function Transaction() {
                                     :   '--'}
                                 </Typography>
                                 <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
+                                {status === TransactionStatusType.NOT_DEPEND ?
+                                    <Typography className={classes.tip}>
+                                        <Trans>Transaction in progress. Thank you for your patience.</Trans>
+                                    </Typography>
+                                :   null}
                             </div>
                         </div>
                     </div>
@@ -282,13 +290,19 @@ export const Transaction = memo(function Transaction() {
                                 logoURL={toToken?.logo}
                             />
                             <div className={classes.tokenValue}>
-                                <Typography className={cx(classes.toToken, classes.value)}>
+                                <Typography className={cx(classes.toToken, classes.value)} alignItems="center">
+                                    <LoadingBase size={16} />
                                     {toTokenAmount && toToken ?
                                         `-${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
                                     :   '--'}
                                 </Typography>
                                 <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
                             </div>
+                            {txUrl ?
+                                <a href={txUrl} target="_blank">
+                                    <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
+                                </a>
+                            :   null}
                         </div>
                     </div>
                 </div>
@@ -312,15 +326,12 @@ export const Transaction = memo(function Transaction() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Network fee</Typography>
-                        <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
-                            <Box display="flex" flexDirection="column">
-                                <Typography>0.007155 MATIC ≈ $0.004434 </Typography>
-                                <Typography>
-                                    <Trans>Average</Trans>
-                                </Typography>
-                            </Box>
-                            <Icons.ArrowRight size={16} />
-                        </Link>
+                        <GasCost
+                            className={classes.rowValue}
+                            chainId={transaction.chainId}
+                            gasLimit={transaction.transactionFee}
+                            gasPrice={transaction.gasPrice}
+                        />
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
@@ -340,19 +351,19 @@ export const Transaction = memo(function Transaction() {
                     </div>
                 </div>
             </div>
-            <div className={classes.footer}>
-                <Button
-                    className={classes.button}
-                    fullWidth
-                    onClick={() => {
-                        if (!chainId || !hash) return
-                        const url = EVMExplorerResolver.transactionLink(chainId, hash)
-                        if (url) window.open(url)
-                    }}>
-                    <Icons.Connect />
-                    <Trans>Check on Explorer</Trans>
-                </Button>
-            </div>
+            {txUrl ?
+                <div className={classes.footer}>
+                    <Button
+                        className={classes.button}
+                        fullWidth
+                        onClick={() => {
+                            window.open(txUrl)
+                        }}>
+                        <Icons.Connect />
+                        <Trans>Check on Explorer</Trans>
+                    </Button>
+                </div>
+            :   null}
         </div>
     )
 })

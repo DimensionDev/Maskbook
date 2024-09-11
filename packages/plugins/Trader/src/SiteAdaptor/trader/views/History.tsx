@@ -10,12 +10,13 @@ import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { format } from 'date-fns'
-import { formatAmount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: theme.spacing(2),
         gap: theme.spacing(1.5),
+        display: 'flex',
+        flexDirection: 'column',
     },
     group: {
         display: 'flex',
@@ -81,6 +82,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
+        textAlign: 'right',
     },
     records: {
         display: 'flex',
@@ -148,7 +150,7 @@ export function HistoryView() {
                                     </Typography>
                                     <Typography className={classes.sent}>
                                         {fromTokenAmount ?
-                                            `-${formatAmount(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
+                                            `-${formatBalance(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
                                         :   '--'}
                                     </Typography>
                                 </div>

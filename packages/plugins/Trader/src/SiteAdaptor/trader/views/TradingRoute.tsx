@@ -33,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         padding: theme.spacing('8px', '6px'),
         borderRadius: theme.spacing(1.5),
+        gap: theme.spacing(0.5),
         fontSize: 14,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
