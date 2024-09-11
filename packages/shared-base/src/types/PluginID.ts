@@ -24,5 +24,4 @@ export enum PluginID {
     Web3ProfileCard = 'io.mask.web3-profile-card',
     SmartPay = 'com.mask.smart-pay',
     WalletService = 'com.mask.WalletService',
-    Calendar = 'io.mask.calendar',
 }

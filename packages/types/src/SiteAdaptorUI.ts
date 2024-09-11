@@ -106,7 +106,6 @@ export namespace SiteAdaptorUI {
             nameWidget?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
             switchLogo?(signal: AbortSignal): void
-            calendar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
