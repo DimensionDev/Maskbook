@@ -42,8 +42,8 @@ jobs:
         with:
           message: 'fix: package.json'
       - run: npx gulp codegen
-      - run: pnpm run lingui-extract
-      - run: pnpm run lingui-compile
+      - run: pnpm run lingui:extract
+      - run: pnpm run lingui:compile
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: run codegen'

@@ -26,7 +26,7 @@ function openDialog() {
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init(_, context) {
-        setupStorage(context.createKVStorage<StorageOptions>('persistent', { walletBindings: {}, transactions: [] }))
+        setupStorage(context.createKVStorage<StorageOptions>('persistent', { transactions: [] }))
     },
     SearchResultInspector: {
         ID: PluginID.Trader,

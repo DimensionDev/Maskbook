@@ -5,7 +5,7 @@ import type { OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useSwap } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
@@ -52,7 +52,6 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const navigate = useNavigate()
     const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage } = useSwap()
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =

@@ -104,6 +104,7 @@ export class OKX {
         return fetchFromOKX<SwapResponse>(url)
     }
     /**
+     * @deprecated Unuesd since API always responses "Invalid Request uri"
      * @see https://www.okx.com/web3/build/docs/waas/api-wallet-create-wallet
      */
     static async createWallet(address: string): Promise<string | null> {
