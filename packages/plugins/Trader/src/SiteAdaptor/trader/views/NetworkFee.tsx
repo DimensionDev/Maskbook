@@ -4,16 +4,23 @@ import { ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskTextField } from '@masknet/theme'
 import { useChainIdSupport } from '@masknet/web3-hooks-base'
-import { GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToGwei, GasEditor, type EIP1559GasConfig, type GasConfig } from '@masknet/web3-shared-evm'
+import { GasOptionType, isGreaterThan, minus, multipliedBy, plus } from '@masknet/web3-shared-base'
+import {
+    formatGweiToWei,
+    formatWeiToGwei,
+    GasEditor,
+    type EIP1559GasConfig,
+    type GasConfig,
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GasCost } from '../../components/GasCost.js'
 import { Warning } from '../../components/Warning.js'
 import { useGasManagement, useSwap } from '../contexts/index.js'
 
-const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
+const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, _, refs) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
@@ -24,7 +31,6 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     box: {
         borderRadius: theme.spacing(1.5),
         border: `1px solid ${theme.palette.maskColor.secondaryMain}`,
-        cursor: 'pointer',
         transition: 'border 0.2s ease',
         [`&.${refs.active}`]: {
             border: `1px solid ${theme.palette.maskColor.main}`,
@@ -35,6 +41,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         alignItems: 'center',
         gap: theme.spacing(0.5),
         padding: theme.spacing(1.5),
+        cursor: 'pointer',
     },
     active: {},
     boxTitle: {
@@ -56,11 +63,19 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
     },
+    gasWarning: {},
+    gasOk: {},
     estimatedValue: {
         fontWeight: 400,
         fontSize: 13,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
+        [`&.${refs.gasWarning}`]: {
+            color: theme.palette.maskColor.warn,
+        },
+        [`&.${refs.gasOk}`]: {
+            color: theme.palette.maskColor.success,
+        },
     },
     boxSubtitle: {
         display: 'flex',
@@ -88,6 +103,17 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
         lineHeight: '18px',
         borderTop: `1px solid ${theme.palette.maskColor.line}`,
     },
+    fieldName: {
+        fontSize: 14,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
+    fieldNote: {
+        fontSize: 13,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
+        marginLeft: theme.spacing(1.5),
+    },
 }))
 
 function formatTimeCost(seconds: number | undefined) {
@@ -97,6 +123,9 @@ function formatTimeCost(seconds: number | undefined) {
     return t`${mins}min`
 }
 
+const MIN_BASE_FEE = '0.01'
+const gweiToWei = (gwei: BigNumber.Value | undefined) => formatGweiToWei(gwei ?? '0').toFixed(0)
+const weiToGwei = (wei: BigNumber.Value | undefined) => formatWeiToGwei(wei ?? '0').toFixed(0)
 export const NetworkFee = memo(function NetworkFee() {
     const { classes, cx, theme } = useStyles()
     const { chainId } = useSwap()
@@ -106,24 +135,63 @@ export const NetworkFee = memo(function NetworkFee() {
     const { gasLimit, gasConfig, setGasConfig, gasOptions, isLoadingGasOptions: isLoading } = useGasManagement()
     const [pendingGasConfig, setPendingGasConfig] = useState<GasConfig>(gasConfig)
     const gasOptionType = pendingGasConfig.gasOptionType
-    const normalGasConfig = useMemo(() => {
-        return GasEditor.fromGasOption(chainId, gasOptions?.custom, GasOptionType.CUSTOM).getGasConfig()
-    }, [chainId, gasOptions?.normal])
-    const [customGasConfig = normalGasConfig, setCustomGasConfig] = useState<GasConfig>()
+    const isCustom = gasConfig.gasOptionType === GasOptionType.CUSTOM
+
+    const { defaultGasPrice, defaultBaseFee, defaultPriorityFee } = useMemo(() => {
+        const defaultGasPrice = gasConfig.gasPrice
+        const defaultPriorityFee = isSupport1559 ? (gasConfig as EIP1559GasConfig).maxPriorityFeePerGas : '0'
+        const defaultBaseFee = minus((gasConfig as EIP1559GasConfig).maxFeePerGas ?? '0', defaultPriorityFee)
+        return {
+            defaultGasPrice,
+            defaultBaseFee,
+            defaultPriorityFee,
+        }
+    }, [isCustom, isSupport1559, gasConfig])
+
+    const [baseFee = defaultBaseFee, setBaseFee] = useState<string>()
+    const [priorityFee = defaultPriorityFee, setPriorityFee] = useState<string>()
+    const [gasPrice = defaultGasPrice, setGasPrice] = useState<string>()
+    const customFeePrice = useMemo(
+        () => (isSupport1559 ? plus(baseFee ?? '0', priorityFee ?? '0') : new BigNumber(gasPrice ?? '0')),
+        [isSupport1559, baseFee, priorityFee],
+    )
+    const isTooHigh = isGreaterThan(customFeePrice, multipliedBy(gasOptions?.fast.suggestedMaxFeePerGas ?? '0', 2))
+
     const customBoxRef = useRef<HTMLDivElement>(null)
     const disabled = (() => {
         if (gasOptionType !== GasOptionType.CUSTOM) return false
         if (isSupport1559) {
-            const { maxPriorityFeePerGas, gasPrice } = pendingGasConfig as EIP1559GasConfig
-            return !maxPriorityFeePerGas || !gasPrice
+            return !baseFee || !priorityFee
         }
         return !pendingGasConfig.gasPrice
     })()
 
-    const slowTimeCost = formatTimeCost(gasOptions?.slow.estimatedSeconds)
-    const normalTimeCost = formatTimeCost(gasOptions?.normal.estimatedSeconds)
-    const fastTimeCost = formatTimeCost(gasOptions?.fast.estimatedSeconds)
-    const customTimeCost = formatTimeCost(gasOptions?.custom.estimatedSeconds)
+    const { slowTimeCost, normalTimeCost, fastTimeCost, customTimeCost } = useMemo(() => {
+        if (!gasOptions) {
+            return {
+                slowTimeCost: '--',
+                normalTimeCost: '--',
+                fastTimeCost: '--',
+                customTimeCost: '--',
+            }
+        }
+        const { slow, normal, fast } = gasOptions
+        const slowTimeCost = formatTimeCost(slow.estimatedSeconds)
+        const normalTimeCost = formatTimeCost(normal.estimatedSeconds)
+        const fastTimeCost = formatTimeCost(fast.estimatedSeconds)
+        const customTimeCost =
+            isGreaterThan(customFeePrice, fast.suggestedMaxFeePerGas ?? '0') ? `< ${fastTimeCost}`
+            : isGreaterThan(customFeePrice, normal.suggestedMaxFeePerGas ?? '0') ? `< ${normalTimeCost}`
+            : isGreaterThan(customFeePrice, slow.suggestedMaxFeePerGas ?? '0') ? `< ${slowTimeCost}`
+            : `> ${slowTimeCost}`
+        return {
+            slowTimeCost,
+            normalTimeCost,
+            fastTimeCost,
+            customTimeCost,
+        }
+    }, [gasOptions, customFeePrice])
+
     return (
         <div className={classes.container}>
             <div
@@ -145,7 +213,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     </Typography>
                     <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
                         {gasOptions?.slow ?
-                            `${formatWeiToGwei(gasOptions.slow.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                            `${formatWeiToGwei(gasOptions.slow.suggestedMaxFeePerGas).toFixed(2)} Gwei`
                         :   '--'}
                     </ProgressiveText>
                 </div>
@@ -183,7 +251,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     </Typography>
                     <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
                         {gasOptions?.normal ?
-                            `${formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                            `${formatWeiToGwei(gasOptions.normal.suggestedMaxFeePerGas).toFixed(2)} Gwei`
                         :   '--'}
                     </ProgressiveText>
                 </div>
@@ -217,7 +285,7 @@ export const NetworkFee = memo(function NetworkFee() {
                     </Typography>
                     <ProgressiveText loading={isLoading} className={classes.boxSubtitle} variant="h3">
                         {gasOptions?.fast ?
-                            `${formatWeiToGwei(gasOptions.fast.suggestedMaxFeePerGas).toFixed(2)}Gwei`
+                            `${formatWeiToGwei(gasOptions.fast.suggestedMaxFeePerGas).toFixed(2)} Gwei`
                         :   '--'}
                     </ProgressiveText>
                 </div>
@@ -256,17 +324,17 @@ export const NetworkFee = memo(function NetworkFee() {
                             <Trans>Custom</Trans>
                         </Typography>
                         <Typography className={classes.boxSubtitle} variant="h3">
-                            {formatWeiToGwei(customGasConfig.gasPrice ?? '0').toFixed()}Gwei
+                            {formatWeiToGwei(customFeePrice ?? '0').toFixed()} Gwei
                         </Typography>
                     </div>
                     <div className={classes.boxTail}>
                         <Typography className={classes.estimatedTime}>{customTimeCost}</Typography>
                         <GasCost
-                            className={classes.estimatedValue}
+                            className={cx(classes.estimatedValue, isTooHigh ? classes.gasWarning : classes.gasOk)}
                             variant="subtitle1"
                             chainId={chainId}
                             gasLimit={gasLimit}
-                            gasPrice={customGasConfig.gasPrice}
+                            gasPrice={gasPrice}
                         />
                     </div>
                 </div>
@@ -275,37 +343,33 @@ export const NetworkFee = memo(function NetworkFee() {
                         {isSupport1559 ?
                             <>
                                 <Box display="flex" alignItems="center">
-                                    <Typography>
+                                    <Typography className={classes.fieldName}>
                                         <Trans>Max base fee</Trans>
                                     </Typography>
-                                    <Typography>
-                                        <Trans>Base fee required: 0.01 Gwei</Trans>
+                                    <Typography className={classes.fieldNote}>
+                                        <Trans>Base fee required: {MIN_BASE_FEE} Gwei</Trans>
                                     </Typography>
                                 </Box>
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
+                                    value={weiToGwei(baseFee)}
                                     onChange={(e) => {
-                                        setPendingGasConfig((config) => ({
-                                            ...config,
-                                            baseFeePerGas: e.target.value,
-                                        }))
+                                        setBaseFee(gweiToWei(e.target.value))
                                     }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
                                     }}
                                 />
-                                <Typography>
+                                <Typography className={classes.fieldName}>
                                     <Trans>Priority fee</Trans>
                                 </Typography>
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
+                                    value={weiToGwei(priorityFee)}
                                     onChange={(e) => {
-                                        setPendingGasConfig((config) => ({
-                                            ...config,
-                                            maxFeePerGas: e.target.value,
-                                        }))
+                                        setPriorityFee(gweiToWei(e.target.value))
                                     }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
@@ -314,22 +378,16 @@ export const NetworkFee = memo(function NetworkFee() {
                             </>
                         :   <>
                                 <Box display="flex" alignItems="center">
-                                    <Typography>
-                                        <Trans>Max base fee</Trans>
-                                    </Typography>
-                                    <Typography>
-                                        <Trans>Base fee required: 0.01 Gwei</Trans>
+                                    <Typography className={classes.fieldName}>
+                                        <Trans>Gas Price</Trans>
                                     </Typography>
                                 </Box>
                                 <MaskTextField
                                     placeholder="0.1-50"
                                     type="number"
-                                    value={pendingGasConfig.gasPrice}
+                                    value={weiToGwei(gasPrice)}
                                     onChange={(e) => {
-                                        setPendingGasConfig((config) => ({
-                                            ...config,
-                                            gasPrice: e.target.value,
-                                        }))
+                                        setGasPrice(weiToGwei(e.target.value))
                                     }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
@@ -340,16 +398,34 @@ export const NetworkFee = memo(function NetworkFee() {
                         <Typography>
                             <Trans>Gas Limit</Trans>
                         </Typography>
-                        <MaskTextField placeholder="0.1-50" type="number" disabled value={gasLimit} />
-                        <Warning
-                            description={t`The custom amount entered may be higher than the required network fee.`}
-                        />
+                        <MaskTextField placeholder="25000" type="number" disabled value={gasLimit} />
+                        {isTooHigh ?
+                            <Warning
+                                description={t`The custom amount entered may be higher than the required network fee.`}
+                            />
+                        :   null}
                         <Button
                             variant="roundedContained"
                             fullWidth
                             disabled={disabled}
                             onClick={() => {
-                                setGasConfig(pendingGasConfig)
+                                if (isSupport1559) {
+                                    const maxFeePerGas = plus(baseFee ?? '0', priorityFee ?? '0').toFixed()
+                                    setGasConfig({
+                                        gas: gasLimit!,
+                                        maxFeePerGas,
+                                        gasPrice: maxFeePerGas,
+                                        maxPriorityFeePerGas: priorityFee,
+                                        gasOptionType: GasOptionType.CUSTOM,
+                                    })
+                                } else {
+                                    setGasConfig({
+                                        gas: gasLimit!,
+                                        gasPrice: gasPrice ?? '0',
+                                        gasOptionType: GasOptionType.CUSTOM,
+                                    })
+                                }
+                                navigate(-1)
                             }}>
                             <Trans>Confirm</Trans>
                         </Button>

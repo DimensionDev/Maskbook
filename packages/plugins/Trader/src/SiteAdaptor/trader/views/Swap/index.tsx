@@ -287,7 +287,7 @@ export function SwapView() {
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
-                                        {toToken?.symbol ?? '--'}
+                                        {toToken?.name ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
                                         on {toNetwork?.name ?? '--'}

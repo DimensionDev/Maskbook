@@ -41,7 +41,7 @@ const nativeTokenSet = new Set(ChainIdList.map((chainId) => getTokenConstant(cha
 
 export function isNativeTokenAddress(address?: string): address is string {
     if (!address) return false
-    return nativeTokenSet.has(address) || address.toLowerCase() === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    return nativeTokenSet.has(address)
 }
 
 const {

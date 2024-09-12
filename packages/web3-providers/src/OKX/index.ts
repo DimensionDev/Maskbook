@@ -1,6 +1,10 @@
+import { TokenType, type FungibleToken } from '@masknet/web3-shared-base'
+import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { OKX_HOST } from './constant.js'
+import { v4 as uuid } from 'uuid'
 import { fetchJSON } from '../helpers/fetchJSON.js'
+import { OKX_HOST } from './constant.js'
+import { normalizeCode, toOkxNativeAddress } from './helper.js'
 import type {
     ApproveTransactionResponse,
     GetLiquidityResponse,
@@ -11,10 +15,6 @@ import type {
     SwapOptions,
     SwapResponse,
 } from './types.js'
-import { TokenType, type FungibleToken } from '@masknet/web3-shared-base'
-import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
-import { convertNativeAddress, normalizeCode } from './helper.js'
-import { v4 as uuid } from 'uuid'
 
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
@@ -47,7 +47,7 @@ export class OKX {
                 symbol: x.tokenSymbol,
                 decimals: Number.parseInt(x.decimals, 10),
                 logoURL: x.tokenLogoUrl,
-                address: x.tokenContractAddress,
+                address: toOkxNativeAddress(x.tokenContractAddress),
                 type: TokenType.Fungible,
                 schema: SchemaType.ERC20,
             } satisfies FungibleToken<ChainId, SchemaType>
@@ -84,8 +84,8 @@ export class OKX {
     static async getQuotes(options: GetQuotesOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/quote', {
             ...options,
-            fromTokenAddress: convertNativeAddress(options.fromTokenAddress),
-            toTokenAddress: convertNativeAddress(options.toTokenAddress),
+            fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
+            toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
         })
         return fetchFromOKX<GetQuotesResponse>(url)
     }
@@ -98,8 +98,8 @@ export class OKX {
     static async getSwap(options: SwapOptions): Promise<SwapResponse> {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/swap', {
             ...options,
-            fromTokenAddress: convertNativeAddress(options.fromTokenAddress),
-            toTokenAddress: convertNativeAddress(options.toTokenAddress),
+            fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
+            toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
         })
         return fetchFromOKX<SwapResponse>(url)
     }

@@ -5,10 +5,11 @@ import { useMemo } from 'react'
 export function useUsdtToken(chainId: ChainId) {
     const { data: tokens } = useOKXTokenList(chainId)
     return useMemo(() => {
+        if (!tokens) return
         const matches = tokens
-            ?.filter((x) => x.symbol.toLowerCase().includes('usdt'))
+            .filter((x) => x.symbol.toLowerCase().includes('usdt'))
             .sort((x) => (x.symbol.toLowerCase() === 'usdt' ? -1 : 0))
 
-        return matches?.[0]
+        return matches[0]
     }, [tokens])
 }

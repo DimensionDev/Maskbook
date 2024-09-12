@@ -243,11 +243,8 @@ export const Confirm = memo(function Confirm() {
     }, [transaction, address, gasConfig])
 
     const spender = transaction?.to
-    const [{ allowance }, { loading: isApproving, loadingApprove }, approve] = useERC20TokenApproveCallback(
-        address,
-        amount,
-        spender,
-    )
+    const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
+        useERC20TokenApproveCallback(address, amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isSwappable || loading
@@ -453,7 +450,7 @@ export const Confirm = memo(function Confirm() {
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
-                            : loadingApprove ? t`Checking Approve`
+                            : loadingAllowance ? t`Checking Approve`
                             : isApproving ? t`Approving`
                             : t`Confirm Swap`)}
                     </ActionButton>

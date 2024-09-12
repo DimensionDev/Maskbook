@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { multipliedBy, type GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToEther, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
+import { formatWeiToEther, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
 import { type BigNumber } from 'bignumber.js'
 import {
     createContext,
@@ -39,7 +39,11 @@ export function GasManager({ children }: PropsWithChildren) {
         setGasConfig(undefined)
     }, [fromTokenAddr, toTokenAddr, chainId])
 
-    const gasFee = useMemo(() => multipliedBy(gasLimit, gasConfig.gasPrice ?? '1'), [gasLimit, gasConfig.gasPrice])
+    const gasFee = useMemo(() => {
+        const price = gasConfig.gasPrice ?? (gasConfig as EIP1559GasConfig).maxFeePerGas ?? '1'
+        return multipliedBy(gasLimit, price)
+    }, [gasLimit, gasConfig.gasPrice])
+
     const gasCost = useMemo(() => {
         if (!price) return ''
         return multipliedBy(formatWeiToEther(gasFee), price ?? 0).toFixed(2)

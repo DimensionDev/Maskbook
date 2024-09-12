@@ -1,7 +1,12 @@
 import { isZeroAddress } from '@masknet/web3-shared-evm'
 
-export function convertNativeAddress(address: string) {
+export function toOkxNativeAddress(address: string) {
     if (isZeroAddress(address)) return '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+    return address
+}
+
+export function fromOkxNativeAddress(address: string) {
+    if (address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') return '0x0000000000000000000000000000000000000000'
     return address
 }
 
