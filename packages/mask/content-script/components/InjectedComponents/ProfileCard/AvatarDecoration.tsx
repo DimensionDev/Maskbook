@@ -13,6 +13,7 @@ export function AvatarDecoration({ userId, className, size }: Props) {
         queryKey: ['twitter', 'profile', identity],
         retry: 0,
         staleTime: 300_000,
+        refetchOnWindowFocus: false,
         queryFn: () => {
             if (!identity) return null
             return Twitter.getUserByScreenName(identity)

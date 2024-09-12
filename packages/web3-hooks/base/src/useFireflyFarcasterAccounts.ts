@@ -7,6 +7,7 @@ export function useFireflyFarcasterAccounts(identity?: string) {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
         staleTime: 300_000,
+        refetchOnWindowFocus: false,
         queryFn: identity ? () => Twitter.getUserByScreenName(identity) : skipToken,
     })
     const id = user?.userId.toLowerCase()

@@ -130,6 +130,7 @@ export const ProfileCard = memo(function ProfileCard({
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
         staleTime: 300_000,
+        refetchOnWindowFocus: false,
         queryFn: () => Twitter.getUserByScreenName(identity),
     })
     const nickname = user?.nickname || profile.name || profile.identity
