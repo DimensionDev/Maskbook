@@ -1,8 +1,7 @@
 import { CrossIsolationMessages, ProfileIdentifier, stopPropagation, type SocialIdentity } from '@masknet/shared-base'
 import { AnchorProvider } from '@masknet/shared-base-ui'
 import { ShadowRootPopper, makeStyles } from '@masknet/theme'
-import { Twitter } from '@masknet/web3-providers'
-import type { TwitterBaseAPI } from '@masknet/web3-providers/types'
+import { FireflyTwitter } from '@masknet/web3-providers'
 import { Fade } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -40,7 +39,7 @@ function ProfileCardHolder() {
         return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
             setAddress(event.address ?? '')
-            setTwitterId(event.userId.toLowerCase())
+            setTwitterId(event.userId)
             setBadgeBounding(event.anchorBounding)
             setAnchorEl(event.anchorEl)
         })
@@ -50,15 +49,16 @@ function ProfileCardHolder() {
         queryKey: ['twitter', 'profile', twitterId],
         staleTime: 3600_000,
         refetchOnWindowFocus: false,
-        queryFn: () => Twitter.getUserByScreenName(twitterId),
-        select: (user: TwitterBaseAPI.User | null) => {
+        queryFn: () => FireflyTwitter.getUserInfo(twitterId),
+        select: (user) => {
             if (!user) return null
+            const legacy = user.legacy
             return {
-                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
-                nickname: user.nickname,
-                avatar: user.avatarURL,
-                bio: user.bio,
-                homepage: user.homepage,
+                identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, legacy.screen_name).unwrapOr(undefined),
+                nickname: legacy.name,
+                avatar: legacy.profile_image_url_https,
+                bio: legacy.description,
+                homepage: legacy.entities.url?.urls?.[0]?.expanded_url,
             } as SocialIdentity
         },
     })
