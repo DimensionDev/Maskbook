@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { PlatformAvatar, WalletSettingsCard } from '@masknet/shared'
 import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Twitter } from '@masknet/web3-providers'
+import { FireflyTwitter } from '@masknet/web3-providers'
 import {
     Card,
     CardContent,
@@ -126,16 +126,17 @@ export const ProfileCard = memo(function ProfileCard({
     const { classes, cx } = useStyles()
     const t = useWeb3ProfileTrans()
     const [expanded, setExpanded] = useState(initialExpanded)
-    const identity = profile.identity.toLowerCase()
+    const identity = profile.identity
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
-        staleTime: 300_000,
-        queryFn: () => Twitter.getUserByScreenName(identity),
+        staleTime: 3600_000,
+        refetchOnWindowFocus: false,
+        queryFn: () => FireflyTwitter.getUserInfo(identity),
     })
-    const nickname = user?.nickname || profile.name || profile.identity
+    const nickname = user?.legacy.name || profile.name || profile.identity
     // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
-    const handle = user?.screenName || profile.identity
-    const avatarUrl = user?.avatarURL || avatar
+    const handle = user?.legacy.screen_name || profile.identity
+    const avatarUrl = user?.legacy.profile_image_url_https || avatar
     const handleSwitch = useCallback(
         (address: string) => {
             onToggle?.(profile.identity, address)

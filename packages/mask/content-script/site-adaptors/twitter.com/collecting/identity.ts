@@ -5,7 +5,7 @@ import { delay } from '@masknet/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import type { SiteAdaptorUI } from '@masknet/types'
-import { Twitter } from '@masknet/web3-providers'
+import { FireflyTwitter } from '@masknet/web3-providers'
 import { creator } from '../../../site-adaptor-infra/index.js'
 import { twitterBase } from '../base.js'
 import {
@@ -98,29 +98,29 @@ function resolveCurrentVisitingIdentityInner(
     ownerRef: SiteAdaptorUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const update = async (twitterId: string) => {
-        twitterId = twitterId.toLowerCase()
+    const update = async (screenName: string) => {
         const user = await queryClient.fetchQuery({
             retry: 0,
-            staleTime: 300_000,
-            queryKey: ['twitter', 'profile', twitterId],
-            queryFn: () => Twitter.getUserByScreenName(twitterId),
+            staleTime: 3600_000,
+            queryKey: ['twitter', 'profile', screenName],
+            queryFn: () => FireflyTwitter.getUserInfo(screenName),
         })
         if (process.env.NODE_ENV === 'development') {
-            console.assert(user, `Can't get get user by screen name ${twitterId}`)
+            console.assert(user, `Can't get get user by screen name ${screenName}`)
         }
         if (!user) return
 
-        const handle = user.screenName
+        const legacy = user.legacy
+        const handle = legacy.screen_name
         const ownerHandle = ownerRef.value.identifier?.userId
         const isOwner = !!ownerHandle && handle.toLowerCase() === ownerHandle.toLowerCase()
-        const avatar = user.avatarURL
-        const bio = user.bio
-        const homepage = user.homepage
+        const avatar = legacy.profile_image_url_https
+        const bio = legacy.profile_image_url_https
+        const homepage = legacy.entities.url?.urls?.[0]?.expanded_url
 
         ref.value = {
             identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-            nickname: user.nickname,
+            nickname: legacy.name,
             avatar,
             bio,
             homepage,
