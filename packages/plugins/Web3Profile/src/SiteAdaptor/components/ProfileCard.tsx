@@ -129,7 +129,7 @@ export const ProfileCard = memo(function ProfileCard({
     const identity = profile.identity.toLowerCase()
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
-        staleTime: 300_000,
+        staleTime: 3600_000,
         refetchOnWindowFocus: false,
         queryFn: () => Twitter.getUserByScreenName(identity),
     })

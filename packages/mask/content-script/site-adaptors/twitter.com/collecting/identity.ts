@@ -102,7 +102,7 @@ function resolveCurrentVisitingIdentityInner(
         twitterId = twitterId.toLowerCase()
         const user = await queryClient.fetchQuery({
             retry: 0,
-            staleTime: 300_000,
+            staleTime: 3600_000,
             queryKey: ['twitter', 'profile', twitterId],
             queryFn: () => Twitter.getUserByScreenName(twitterId),
         })

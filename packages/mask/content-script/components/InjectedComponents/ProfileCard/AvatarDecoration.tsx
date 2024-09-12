@@ -12,7 +12,7 @@ export function AvatarDecoration({ userId, className, size }: Props) {
     const { data: user } = useQuery({
         queryKey: ['twitter', 'profile', identity],
         retry: 0,
-        staleTime: 300_000,
+        staleTime: 3600_000,
         refetchOnWindowFocus: false,
         queryFn: () => {
             if (!identity) return null

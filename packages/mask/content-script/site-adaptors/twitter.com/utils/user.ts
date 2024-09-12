@@ -23,7 +23,7 @@ export async function getUserIdentity(twitterId: string): Promise<SocialIdentity
         queryKey: ['twitter', 'profile', twitterId],
         queryFn: () => Twitter.getUserByScreenName(twitterId),
         retry: 0,
-        staleTime: 300_000,
+        staleTime: 3600_000,
     })
     if (!user) return
 

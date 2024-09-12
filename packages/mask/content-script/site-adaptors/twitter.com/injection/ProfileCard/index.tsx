@@ -48,7 +48,7 @@ function ProfileCardHolder() {
 
     const { data: identity } = useQuery({
         queryKey: ['twitter', 'profile', twitterId],
-        staleTime: 300_000,
+        staleTime: 3600_000,
         refetchOnWindowFocus: false,
         queryFn: () => Twitter.getUserByScreenName(twitterId),
         select: (user: TwitterBaseAPI.User | null) => {
