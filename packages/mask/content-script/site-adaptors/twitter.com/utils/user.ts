@@ -1,6 +1,6 @@
 import { ProfileIdentifier, type SocialIdentity } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { Twitter } from '@masknet/web3-providers'
+import { FireflyTwitter } from '@masknet/web3-providers'
 import { isNull } from 'lodash-es'
 import { twitterBase } from '../base.js'
 
@@ -17,22 +17,22 @@ export function usernameValidator(name: string) {
     return true
 }
 
-export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
-    twitterId = twitterId.toLowerCase()
+export async function getUserIdentity(screenName: string): Promise<SocialIdentity | undefined> {
     const user = await queryClient.fetchQuery({
-        queryKey: ['twitter', 'profile', twitterId],
-        queryFn: () => Twitter.getUserByScreenName(twitterId),
+        queryKey: ['twitter', 'profile', screenName],
+        queryFn: () => FireflyTwitter.getUserInfo(screenName),
         retry: 0,
-        staleTime: 300_000,
+        staleTime: 3600_000,
     })
     if (!user) return
 
+    const legacy = user.legacy
     return {
-        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, user.screenName).unwrapOr(undefined),
-        nickname: user.nickname,
-        avatar: user.avatarURL,
-        bio: user.bio,
-        homepage: user.homepage,
+        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, screenName).unwrapOr(undefined),
+        nickname: legacy.name,
+        avatar: legacy.profile_image_url_https,
+        bio: legacy.description,
+        homepage: legacy.entities.url?.urls?.[0]?.expanded_url,
     }
 }
 

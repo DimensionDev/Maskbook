@@ -1,4 +1,4 @@
-import { Twitter } from '@masknet/web3-providers'
+import { FireflyTwitter, Twitter } from '@masknet/web3-providers'
 import { NFTBadgeTimeline } from '@masknet/plugin-avatar'
 import { useQuery } from '@tanstack/react-query'
 
@@ -8,24 +8,24 @@ interface Props {
     userId?: string
 }
 export function AvatarDecoration({ userId, className, size }: Props) {
-    const identity = userId?.toLowerCase()
     const { data: user } = useQuery({
-        queryKey: ['twitter', 'profile', identity],
+        queryKey: ['twitter', 'profile', userId],
         retry: 0,
-        staleTime: 300_000,
+        staleTime: 3600_000,
+        refetchOnWindowFocus: false,
         queryFn: () => {
-            if (!identity) return null
-            return Twitter.getUserByScreenName(identity)
+            if (!userId) return null
+            return FireflyTwitter.getUserInfo(userId)
         },
     })
 
-    if (!identity || !user) return null
+    if (!userId || !user) return null
 
     return (
         <NFTBadgeTimeline
             classes={{ root: className }}
-            userId={identity}
-            avatarId={Twitter.getAvatarId(user.avatarURL)}
+            userId={userId}
+            avatarId={Twitter.getAvatarId(user.legacy.profile_image_url_https)}
             height={size}
             width={size}
         />

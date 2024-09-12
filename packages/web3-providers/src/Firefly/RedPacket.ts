@@ -9,7 +9,7 @@ import {
 } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../entry-helpers.js'
-import { FireflyRedPacketAPI } from '../entry-types.js'
+import { FireflyRedPacketAPI, type FireflyResponse } from '../entry-types.js'
 
 const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
@@ -226,7 +226,7 @@ export class FireflyRedPacket {
         txHash: string,
     ) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/finishClaiming')
-        return fetchFireflyJSON<FireflyRedPacketAPI.Response<string>>(url, {
+        return fetchFireflyJSON<FireflyResponse<string>>(url, {
             method: 'POST',
             body: JSON.stringify({
                 rpid,
