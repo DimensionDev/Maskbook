@@ -18,7 +18,7 @@ import {
     leftShift,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary, EmptyStatus, LoadingStatus, TokenIcon } from '@masknet/shared'
-import { useApprovalTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -150,7 +150,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const t = useApprovalTrans()
 
     const {
         data: spenders,
@@ -169,7 +168,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     if (!spenders || spenders.length === 0)
         return (
             <EmptyStatus iconSize={36} className={classes.statusBox}>
-                {t.no_approved_contract_records()}
+                <Trans>No approved contract records.</Trans>
             </EmptyStatus>
         )
 
@@ -197,8 +196,6 @@ interface ApprovalTokenItemProps {
 
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const { networkDescriptor, spender, chainId, retry } = props
-
-    const t = useApprovalTrans()
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
@@ -234,7 +231,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         </Typography>
                     </div>
                     <div className={classes.contractInfo}>
-                        <Typography className={classes.secondaryText}>{t.contract()}</Typography>
+                        <Typography className={classes.secondaryText}>
+                            <Trans>Contract</Trans>
+                        </Typography>
                         {!spender.logo ?
                             null
                         : typeof spender.logo === 'string' ?
@@ -252,7 +251,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                         </Link>
                     </div>
                     <div>
-                        <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
+                        <Typography className={classes.secondaryText}>
+                            <Trans>Approved Amount</Trans>
+                        </Typography>
                         {amount ?
                             <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
                         :   null}
@@ -265,22 +266,24 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     classes={{ switchButton: classes.button }}
                     ActionButtonPromiseProps={{
                         fullWidth: false,
-                        init: t.revoke(),
+                        init: <Trans>Revoke</Trans>,
                         startIcon: null,
                         failIcon: null,
                         waitingIcon: null,
                         className: classes.button,
                         failedButtonStyle: classes.button,
-                        waiting: t.revoking(),
-                        complete: t.revoke(),
-                        failed: t.revoke(),
+                        waiting: <Trans>Revoking</Trans>,
+                        complete: <Trans>Revoke</Trans>,
+                        failed: <Trans>Revoke</Trans>,
                     }}>
                     <ActionButton
                         onClick={() => approveCallback(true, true)}
                         disabled={transactionState.loadingApprove}
                         loading={transactionState.loadingApprove}
                         className={classes.button}>
-                        {transactionState.loadingApprove ? t.revoking() : t.revoke()}
+                        {transactionState.loadingApprove ?
+                            <Trans>Revoking</Trans>
+                        :   <Trans>Revoke</Trans>}
                     </ActionButton>
                 </ChainBoundary>
             </ListItem>

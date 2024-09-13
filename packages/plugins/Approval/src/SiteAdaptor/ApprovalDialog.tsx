@@ -7,10 +7,10 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { useApprovalTrans } from '../locales/index.js'
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 import { useMemo } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     dialogRoot: {
@@ -76,7 +76,6 @@ enum Tabs {
 }
 
 export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
-    const t = useApprovalTrans()
     const { classes } = useStyles()
 
     const [currentTab, onChange] = useTabs<Tabs>(Tabs.tokens, Tabs.collectibles)
@@ -85,13 +84,13 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
         <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
-                title={t.plugin_name()}
+                title={<Trans>Approval</Trans>}
                 onClose={onClose}
                 classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange}>
-                        <Tab label={t.tokens()} value={Tabs.tokens} />
-                        <Tab label={t.collectibles()} value={Tabs.collectibles} />
+                        <Tab label={<Trans>Tokens</Trans>} value={Tabs.tokens} />
+                        <Tab label={<Trans>Collectibles</Trans>} value={Tabs.collectibles} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>

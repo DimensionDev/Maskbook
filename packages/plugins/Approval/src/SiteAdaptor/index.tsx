@@ -9,7 +9,8 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
-import { useApprovalTrans } from '../locales/i18n_generated.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -55,8 +56,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     ],
 }
 function Name() {
-    const t = useApprovalTrans()
-    return t.plugin_name()
+    const { _ } = useLingui()
+    return _(msg`Approval`)
 }
 
 export default site

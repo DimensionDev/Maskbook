@@ -12,3 +12,52 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:87
+#: src/SiteAdaptor/index.tsx:60
+msgid "Approval"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:255
+msgid "Approved Amount"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:93
+msgid "Collectibles"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:276
+msgid "Collection Approval"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:256
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:235
+msgid "Contract"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:177
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:171
+msgid "No approved contract records."
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:291
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:298
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:299
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:308
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:269
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:276
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:277
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:286
+msgid "Revoke"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:297
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:307
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:275
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:285
+msgid "Revoking"
+msgstr ""
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:92
+msgid "Tokens"
+msgstr ""

@@ -20,8 +20,8 @@ import {
     type NonFungibleContractSpender,
     type NonFungibleCollection,
 } from '@masknet/web3-shared-base'
-import { useApprovalTrans } from '../locales/index.js'
 import { useQuery } from '@tanstack/react-query'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -152,7 +152,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 )
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
-    const t = useApprovalTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: spenders, isPending } = useQuery({
         queryKey: ['non-fungible-tokens', 'spenders', chainId, account],
@@ -175,7 +174,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     if (!spenders || spenders.length === 0)
         return (
             <EmptyStatus iconSize={36} className={classes.statusBox}>
-                {t.no_approved_contract_records()}
+                <Trans>No approved contract records.</Trans>
             </EmptyStatus>
         )
 
@@ -203,7 +202,6 @@ interface ApprovalNFTItemProps {
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     const { networkDescriptor, spender, chainId, collection } = props
-    const t = useApprovalTrans()
     const [cancelled, setCancelled] = useState(false)
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
@@ -254,7 +252,9 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             </Typography>
                         </div>
                         <div className={classes.contractInfo}>
-                            <Typography className={classes.secondaryText}>{t.contract()}</Typography>
+                            <Typography className={classes.secondaryText}>
+                                <Trans>Contract</Trans>
+                            </Typography>
                             {!spender.logo ?
                                 null
                             : typeof spender.logo === 'string' ?
@@ -272,7 +272,9 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             </Link>
                         </div>
                         <div>
-                            <Typography className={classes.secondaryText}>{t.collection_approval()}</Typography>
+                            <Typography className={classes.secondaryText}>
+                                <Trans>Collection Approval</Trans>
+                            </Typography>
                             <Typography className={classes.primaryText}>
                                 {collection?.balance ?? spender.amount}
                             </Typography>
@@ -286,22 +288,24 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         classes={{ switchButton: classes.button }}
                         ActionButtonPromiseProps={{
                             fullWidth: false,
-                            init: t.revoke(),
+                            init: <Trans>Revoke</Trans>,
                             startIcon: null,
                             failIcon: null,
                             waitingIcon: null,
                             className: classes.button,
                             failedButtonStyle: classes.button,
-                            waiting: t.revoking(),
-                            complete: t.revoke(),
-                            failed: t.revoke(),
+                            waiting: <Trans>Revoking</Trans>,
+                            complete: <Trans>Revoke</Trans>,
+                            failed: <Trans>Revoke</Trans>,
                         }}>
                         <ActionButton
                             onClick={approveCallback}
                             disabled={approveState.loading}
                             loading={approveState.loading}
                             className={classes.button}>
-                            {approveState.loading ? t.revoking() : t.revoke()}
+                            {approveState.loading ?
+                                <Trans>Revoking</Trans>
+                            :   <Trans>Revoke</Trans>}
                         </ActionButton>
                     </ChainBoundary>
                 </ListItem>
