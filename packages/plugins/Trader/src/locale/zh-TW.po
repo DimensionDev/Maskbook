@@ -143,7 +143,7 @@ msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:360
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:140
+#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:139
 msgid "Powered by"
 msgstr ""
 
@@ -155,7 +155,7 @@ msgstr ""
 msgid "Quote expired. Update to receive a new quote."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:129
+#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:128
 msgid "Quote route"
 msgstr ""
 
@@ -185,7 +185,7 @@ msgid "Sending address"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:16
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:106
+#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:105
 msgid "Slippage"
 msgstr ""
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Swap anyway"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/SwapProvider.tsx:103
+#: src/SiteAdaptor/trader/contexts/SwapProvider.tsx:99
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
 
