@@ -69,6 +69,7 @@ const useStyles = makeStyles()({
     },
     bar: {
         position: 'absolute',
+        flexShrink: 0,
         bottom: 0,
         left: 0,
         right: 0,
@@ -390,9 +391,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}
             />
-            {mode === TokenListMode.List && enableManage ?
+            {mode === TokenListMode.List && enableManage && !props.loading ?
                 <Box className={classes.bar}>
-                    <ManageTokenListBar onClick={() => setMode?.(TokenListMode.Manage)} />
+                    <ManageTokenListBar onEdit={() => setMode?.(TokenListMode.Manage)} />
                 </Box>
             :   null}
         </Stack>

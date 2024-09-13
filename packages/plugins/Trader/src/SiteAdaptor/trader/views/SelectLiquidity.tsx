@@ -102,8 +102,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
     const { chainId, disabledDexIds, setDisabledDexIds } = useSwap()
     const [pendingDisabledDexIds, setPendingDisabledDexIds] = useState<string[]>(disabledDexIds)
     const [keyword, setKeyword] = useState('')
-    const { data: liquidityRes, isLoading } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
+    const { data: liquidityList = EMPTY_LIST, isLoading } = useLiquidityResources(chainId)
     const isSelectedAll = pendingDisabledDexIds.length === 0
 
     const fuse = useMemo(() => {
@@ -171,11 +170,10 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                                                 icon={<Icons.CheckboxBlank size={20} />}
                                                 checkedIcon={
                                                     <Icons.Checkbox
-                                                        color={
-                                                            theme.palette.mode === 'light' ?
-                                                                theme.palette.maskColor.main
-                                                            :   undefined
-                                                        }
+                                                        sx={{
+                                                            '--stroke-color': theme.palette.maskColor.bottom,
+                                                        }}
+                                                        color={theme.palette.maskColor.main}
                                                         size={20}
                                                     />
                                                 }
@@ -210,8 +208,14 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                             setPendingDisabledDexIds(isSelectedAll ? liquidityList.map((x) => x.id) : EMPTY_LIST)
                         }}
                         checked={isSelectedAll}
-                        icon={<Icons.RadioButtonUnChecked size={18} />}
-                        checkedIcon={<Icons.RadioButtonChecked size={18} color={theme.palette.maskColor.main} />}
+                        icon={<Icons.RadioButtonUnChecked size={18} color={theme.palette.maskColor.main} />}
+                        checkedIcon={
+                            <Icons.RadioButtonChecked
+                                size={18}
+                                color={theme.palette.maskColor.main}
+                                sx={{ '--stroke-color': theme.palette.maskColor.bottom }}
+                            />
+                        }
                     />
                     <Typography>Select all</Typography>
                 </label>

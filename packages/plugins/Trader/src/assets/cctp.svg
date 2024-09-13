@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+    <g id="cctp_svg__Group 14061">
+        <path id="cctp_svg__Vector" fill="url(#cctp_svg__paint0_linear_11500_2882)" d="m16.817 4.538-.389-.682a.4.4 0 0 0-.63-.084l-.892.892a.4.4 0 0 0-.05.506 7 7 0 0 1 1.066 4.872 7.005 7.005 0 0 1-10.205 5.15l1.51-1.51a5.001 5.001 0 0 0 6.271-6.856.4.4 0 0 0-.644-.11l-.903.898a.4.4 0 0 0-.107.375l.078.324a3 3 0 0 1-4.406 3.291l-.399-.228a.4.4 0 0 0-.481.065l-3.689 3.688a.4.4 0 0 0 .04.6l.543.417A8.92 8.92 0 0 0 9.001 18a9.008 9.008 0 0 0 7.816-13.462"/>
+        <path id="cctp_svg__Vector_2" fill="url(#cctp_svg__paint1_linear_11500_2882)" d="M14.47 1.855A8.9 8.9 0 0 0 9 0a9.007 9.007 0 0 0-7.818 13.466l.388.681a.4.4 0 0 0 .63.085l.892-.891a.4.4 0 0 0 .05-.505 7.003 7.003 0 0 1 9.139-10.02l-1.512 1.51a5 5 0 0 0-6.771 4.676 5 5 0 0 0 .5 2.179.4.4 0 0 0 .645.11l.904-.905a.4.4 0 0 0 .107-.374l-.078-.325a2.999 2.999 0 0 1 4.407-3.29l.398.228a.4.4 0 0 0 .481-.065l3.688-3.688a.402.402 0 0 0-.039-.6z"/>
+    </g>
+    <defs>
+        <linearGradient id="cctp_svg__paint0_linear_11500_2882" x1="5.825" x2="18.496" y1="18.576" y2="5.905" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#B090F5"/>
+            <stop offset="1" stop-color="#5FBFFF"/>
+        </linearGradient>
+        <linearGradient id="cctp_svg__paint1_linear_11500_2882" x1="-.498" x2="12.174" y1="12.098" y2="-.573" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#68D7FA"/>
+            <stop offset="1" stop-color="#7EF1B3"/>
+        </linearGradient>
+    </defs>
+</svg>

@@ -1,7 +1,8 @@
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworks } from '@masknet/web3-hooks-base'
 import {
@@ -13,17 +14,17 @@ import {
     minus,
     multipliedBy,
 } from '@masknet/web3-shared-base'
-import { Box, Button, Typography } from '@mui/material'
-import { useMemo } from 'react'
-import { useSupportedChains } from '../../hooks/useSupportedChains.js'
-import { Quote } from './Quote.js'
-import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../constants.js'
-import { Warning } from '../../../components/Warning.js'
-import { useSwap } from '../../contexts/index.js'
-import { useSwappable } from '../../hooks/useSwappable.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { t, Trans } from '@lingui/macro'
+import { Box, Typography } from '@mui/material'
+import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Warning } from '../../../components/Warning.js'
+import { RoutePaths } from '../../../constants.js'
+import { useSwap } from '../../contexts/index.js'
+import { useSupportedChains } from '../../hooks/useSupportedChains.js'
+import { useSwappable } from '../../hooks/useSwappable.js'
+import { Quote } from './Quote.js'
+import { useBridgable } from '../../hooks/useBridgable.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -39,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 0,
         flexGrow: 1,
         overflow: 'auto',
+        scrollbarWidth: 'none',
     },
     box: {
         position: 'relative',
@@ -128,11 +130,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function SwapView() {
+export function TradeView() {
     const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const {
+        mode,
         chainId,
         setChainId,
         fromToken,
@@ -141,10 +144,18 @@ export function SwapView() {
         setToToken,
         inputAmount,
         setInputAmount,
-        quote,
-        quoteErrorMessage,
+        quote: swapQuote,
+        swapQuoteErrorMessage,
+        bridgeQuote,
+        bridgeQuoteErrorMessage,
         slippage,
+        isQuoteLoading,
+        isBridgeQuoteLoading,
     } = useSwap()
+    const isSwap = mode === 'swap'
+    const quote = isSwap ? swapQuote : bridgeQuote
+    const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
+    const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
     const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
     const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
@@ -152,28 +163,27 @@ export function SwapView() {
 
     const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
         const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
+        const isSwap = mode === 'swap'
         return SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
             selectedTokens: currentToken ? [currentToken.address] : [],
             // Only from token can decide the chain
-            chainId: fromToken?.chainId || chainId,
+            chainId: (isSwap ? fromToken?.chainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chains: supportedChains?.map((x) => x.chainId),
             okxOnly: true,
-            lockChainId: side === 'to' && !!fromToken?.chainId,
+            lockChainId: isSwap && side === 'to' && !!fromToken?.chainId,
         })
     }
 
-    const toTokenAmount = quote?.toTokenAmount
+    const toTokenAmount = isSwap ? quote?.toTokenAmount : bridgeQuote?.toTokenAmount
     const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {
         if (!quote) return { fromTokenValue: null, toTokenValue: null, priceDiff: null }
         const { fromToken, toToken, toTokenAmount } = quote
         const fromTokenValue =
-            inputAmount && fromToken ? multipliedBy(inputAmount, quote.fromToken.tokenUnitPrice) : null
+            inputAmount && fromToken ? multipliedBy(inputAmount, quote.fromToken.tokenUnitPrice ?? '0') : null
         const toTokenValue =
-            quote ?
-                multipliedBy(leftShift(toTokenAmount, Number.parseInt(toToken.decimal, 10)), toToken.tokenUnitPrice)
-            :   null
+            quote ? multipliedBy(leftShift(toTokenAmount, toToken.decimals), toToken.tokenUnitPrice ?? '0') : null
         const priceDiff =
             fromTokenValue && toTokenValue ? minus(toTokenValue, fromTokenValue).div(fromTokenValue).times(100) : null
         return {
@@ -184,8 +194,12 @@ export function SwapView() {
     }, [quote, inputAmount])
     const isOverSlippage = priceDiff && isLessThan(priceDiff, 0) && priceDiff.abs().isGreaterThan(slippage)
 
-    const [isSwappable, errorMessage] = useSwappable()
+    const [isSwappable, swapErrorMessage] = useSwappable()
+    const [isBridgable, bridgeErrorMessage] = useBridgable()
+    const errorMessage = isSwap ? swapErrorMessage : bridgeErrorMessage
 
+    const isTradable = isSwap ? !isSwappable : !isBridgable
+    const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
     return (
         <div className={classes.view}>
             <Box className={classes.container}>
@@ -223,7 +237,7 @@ export function SwapView() {
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
-                                        {fromToken?.name ?? '--'}
+                                        {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
                                         on {fromNetwork?.name ?? '--'}
@@ -287,7 +301,7 @@ export function SwapView() {
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
-                                        {toToken?.name ?? '--'}
+                                        {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
                                         on {toNetwork?.name ?? '--'}
@@ -327,7 +341,7 @@ export function SwapView() {
                 </Box>
 
                 {quoteErrorMessage ?
-                    <Warning title={t`This swap isn’t supported`} description={quoteErrorMessage} />
+                    <Warning title={quoteErrorTitle} description={quoteErrorMessage} />
                 :   null}
 
                 {quote ?
@@ -335,15 +349,16 @@ export function SwapView() {
                 :   null}
             </Box>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
-                <Button
+                <ActionButton
+                    loading={isLoading}
                     fullWidth
                     color={isOverSlippage ? 'error' : undefined}
-                    disabled={!isSwappable}
+                    disabled={isTradable}
                     onClick={() => {
-                        navigate(RoutePaths.Confirm)
+                        navigate(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm)
                     }}>
                     {errorMessage ?? (isOverSlippage ? t`Swap anyway` : t`Swap`)}
-                </Button>
+                </ActionButton>
             </PluginWalletStatusBar>
         </div>
     )

@@ -1,9 +1,9 @@
-import { Trans } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, Spinner, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useAccount, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -114,6 +114,8 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 400,
         color: theme.palette.maskColor.success,
+        display: 'flex',
+        alignItems: 'center',
     },
     infoList: {
         display: 'flex',
@@ -172,10 +174,11 @@ export const Transaction = memo(function Transaction() {
     const hash = params.get('hash')
     const rawChainId = params.get('chainId')
     const chainId = rawChainId ? +rawChainId : undefined
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
 
-    const transaction = useTransaction(hash)
+    const transaction = useTransaction(account, hash)
     const { fromToken, toToken, fromTokenAmount, toTokenAmount } = transaction || {}
 
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -188,7 +191,7 @@ export const Transaction = memo(function Transaction() {
 
     if (!transaction)
         return (
-            <Box className={classes.container} alignItems="center">
+            <Box className={classes.container} alignItems="center" justifyContent="center">
                 <EmptyStatus />
             </Box>
         )
@@ -227,7 +230,7 @@ export const Transaction = memo(function Transaction() {
                                 <Countdown
                                     className={classes.countdown}
                                     component="span"
-                                    endtime={transaction.datetime + transaction.estimatedTime}
+                                    endtime={transaction.timestamp + transaction.estimatedTime}
                                 />
                             </Typography>
                         </div>
@@ -291,7 +294,9 @@ export const Transaction = memo(function Transaction() {
                             />
                             <div className={classes.tokenValue}>
                                 <Typography className={cx(classes.toToken, classes.value)} alignItems="center">
-                                    <LoadingBase size={16} />
+                                    {status === TransactionStatusType.NOT_DEPEND ?
+                                        <LoadingBase size={16} />
+                                    :   null}
                                     {toTokenAmount && toToken ?
                                         `-${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
                                     :   '--'}
@@ -312,7 +317,7 @@ export const Transaction = memo(function Transaction() {
                             <Trans>Transaction type</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            <Trans>Swap</Trans>
+                            {transaction.kind === 'swap' ? t`Swap` : t`Cross-chain Swap`}
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
@@ -321,14 +326,14 @@ export const Transaction = memo(function Transaction() {
                             <Icons.Questions size={16} />
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {transaction.datetime ? format(transaction.datetime, 'MM/dd/yyyy, hh:mm:ss') : '--'}
+                            {transaction.timestamp ? format(transaction.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Network fee</Typography>
                         <GasCost
                             className={classes.rowValue}
-                            chainId={transaction.chainId}
+                            chainId={transaction.kind === 'swap' ? transaction.chainId : transaction.fromChainId}
                             gasLimit={transaction.transactionFee}
                             gasPrice={transaction.gasPrice}
                         />

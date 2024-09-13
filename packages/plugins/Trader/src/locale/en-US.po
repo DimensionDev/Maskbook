@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:333
+#: src/SiteAdaptor/trader/views/Confirm.tsx:335
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr ""
 
@@ -29,11 +29,11 @@ msgstr ""
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:309
+#: src/SiteAdaptor/trader/views/Confirm.tsx:311
 msgid "Aggregator"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:454
+#: src/SiteAdaptor/trader/views/Confirm.tsx:456
 msgid "Approving"
 msgstr ""
 
@@ -45,11 +45,15 @@ msgstr ""
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:87
+msgid "Bridge"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx:363
 msgid "Check on Explorer"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:453
+#: src/SiteAdaptor/trader/views/Confirm.tsx:455
 msgid "Checking Approve"
 msgstr ""
 
@@ -65,7 +69,7 @@ msgstr ""
 msgid "Confirm swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:455
+#: src/SiteAdaptor/trader/views/Confirm.tsx:457
 msgid "Confirm Swap"
 msgstr ""
 
@@ -73,7 +77,7 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:369
+#: src/SiteAdaptor/trader/views/Confirm.tsx:371
 msgid "Data"
 msgstr ""
 
@@ -102,8 +106,8 @@ msgstr ""
 msgid "Fast"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:261
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:195
+#: src/SiteAdaptor/trader/views/Confirm.tsx:263
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:197
 #: src/SiteAdaptor/trader/views/Transaction.tsx:257
 msgid "From"
 msgstr ""
@@ -129,7 +133,7 @@ msgid "Max base fee"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:20
-#: src/SiteAdaptor/trader/views/Confirm.tsx:320
+#: src/SiteAdaptor/trader/views/Confirm.tsx:322
 msgid "Network fee"
 msgstr ""
 
@@ -137,8 +141,8 @@ msgstr ""
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:360
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:139
+#: src/SiteAdaptor/trader/views/Confirm.tsx:362
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:139
 msgid "Powered by"
 msgstr ""
 
@@ -146,11 +150,11 @@ msgstr ""
 msgid "Priority fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:384
+#: src/SiteAdaptor/trader/views/Confirm.tsx:386
 msgid "Quote expired. Update to receive a new quote."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:128
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:128
 msgid "Quote route"
 msgstr ""
 
@@ -158,12 +162,12 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:314
+#: src/SiteAdaptor/trader/views/Confirm.tsx:316
 #: src/SiteAdaptor/trader/views/Transaction.tsx:338
 msgid "Rate"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:347
+#: src/SiteAdaptor/trader/views/Confirm.tsx:349
 msgid "Select liquidity"
 msgstr ""
 
@@ -171,7 +175,7 @@ msgstr ""
 msgid "Select Liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:452
+#: src/SiteAdaptor/trader/views/Confirm.tsx:454
 msgid "Sending"
 msgstr ""
 
@@ -180,7 +184,7 @@ msgid "Sending address"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:16
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:105
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:105
 msgid "Slippage"
 msgstr ""
 
@@ -188,18 +192,19 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:406
-#: src/SiteAdaptor/trader/views/Confirm.tsx:412
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:345
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:86
+#: src/SiteAdaptor/trader/views/Confirm.tsx:408
+#: src/SiteAdaptor/trader/views/Confirm.tsx:414
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:347
 #: src/SiteAdaptor/trader/views/Transaction.tsx:315
 msgid "Swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:345
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:347
 msgid "Swap anyway"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/SwapProvider.tsx:99
+#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:128
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
 
@@ -211,7 +216,7 @@ msgstr ""
 msgid "The swap is in progress. You can check its status in History after exiting this page."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:323
+#: src/SiteAdaptor/trader/views/Confirm.tsx:325
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr ""
 
@@ -219,16 +224,16 @@ msgstr ""
 msgid "This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:330
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:332
 msgid "This swap isn’t supported"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:283
+#: src/SiteAdaptor/trader/views/Confirm.tsx:285
 #: src/SiteAdaptor/trader/views/Transaction.tsx:283
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:306
+#: src/SiteAdaptor/trader/views/Confirm.tsx:308
 msgid "Trading mode"
 msgstr ""
 
@@ -244,11 +249,11 @@ msgstr ""
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:405
+#: src/SiteAdaptor/trader/views/Confirm.tsx:407
 msgid "Transaction rejected"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:411
+#: src/SiteAdaptor/trader/views/Confirm.tsx:413
 msgid "Transaction submitted."
 msgstr ""
 
@@ -256,6 +261,6 @@ msgstr ""
 msgid "Transaction type"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:395
+#: src/SiteAdaptor/trader/views/Confirm.tsx:397
 msgid "Update Quote"
 msgstr ""
