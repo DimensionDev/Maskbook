@@ -1,17 +1,18 @@
-import { WalletIcon, useSharedTrans } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 import { NetworkPluginID, getSiteType, pluginIDsSettings, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useProviderDescriptor } from '@masknet/web3-hooks-base'
-import { getUtils, getConnection } from '@masknet/web3-providers'
+import { getConnection, getUtils } from '@masknet/web3-providers'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
 import { useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { useSharedTrans } from '../../../locales/i18n_generated.js'
+import { Spinner } from '../../components/Spinner.js'
+import { WalletIcon } from '../../components/WalletIcon/index.js'
 import { InjectedDialog } from '../../contexts/index.js'
-import { Spinner } from './Spinner.js'
-import { Icons } from '@masknet/icons'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

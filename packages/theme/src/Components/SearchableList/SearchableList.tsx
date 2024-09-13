@@ -7,6 +7,7 @@ import { makeStyles } from '../../UIHelper/index.js'
 import { MaskTextField, type MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult.js'
+import { LoadingBase } from '../LoadingBase/index.js'
 
 export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'searchInput'> {
     /** The list data should be render */
@@ -27,6 +28,7 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'sea
     SearchFieldProps?: MaskTextFieldProps
     /** Show search bar */
     disableSearch?: boolean
+    loading?: boolean
 }
 
 /**
@@ -45,6 +47,8 @@ export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'sea
  *           itemRender={ListItem}
  *      />
  * )
+ * @todo
+ * Move to `shared` package, so that we can use LoadingStatus and EmptyStatus inside.
  */
 export function SearchableList<T extends object>({
     itemKey,
@@ -52,6 +56,7 @@ export function SearchableList<T extends object>({
     onSelect,
     onSearch,
     disableSearch,
+    loading,
     searchKey,
     itemRender,
     FixedSizeListProps,
@@ -64,20 +69,23 @@ export function SearchableList<T extends object>({
     const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
-    // #region create searched data
-    const readyToRenderData = useMemo(() => {
-        if (!keyword) return data
-
-        const fuse = new Fuse(data, {
+    const fuse = useMemo(() => {
+        return new Fuse(data, {
             shouldSort: true,
             isCaseSensitive: false,
             threshold: 0.45,
             minMatchCharLength: 1,
             keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
         })
+    }, [searchKey, data])
+
+    // #region create searched data
+    const readyToRenderData = useMemo(() => {
+        if (!keyword) return data
+
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, JSON.stringify(data)])
+    }, [keyword, fuse, data])
     // #endregion
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,7 +148,18 @@ export function SearchableList<T extends object>({
                     :   null}
                 </Box>
             )}
-            {readyToRenderData.length === 0 && (
+            {loading ?
+                <Stack
+                    height={windowHeight}
+                    justifyContent="center"
+                    alignItems="center"
+                    width="100%"
+                    alignContent="center"
+                    marginTop="18px"
+                    marginBottom="48px">
+                    <LoadingBase />
+                </Stack>
+            : readyToRenderData.length === 0 ?
                 <Stack
                     height={windowHeight}
                     justifyContent="center"
@@ -149,14 +168,12 @@ export function SearchableList<T extends object>({
                     marginBottom="48px">
                     <EmptyResult />
                 </Stack>
-            )}
-            {readyToRenderData.length !== 0 && (
-                <div className={classes.listBox}>
+            :   <div className={classes.listBox}>
                     <FixedSizeList
                         className={classes.list}
                         width="100%"
                         height={windowHeight}
-                        overscanCount={25}
+                        overscanCount={15}
                         itemSize={itemSize ?? 100}
                         itemData={{
                             dataSet: readyToRenderData,
@@ -168,7 +185,7 @@ export function SearchableList<T extends object>({
                         {itemRender}
                     </FixedSizeList>
                 </div>
-            )}
+            }
         </div>
     )
 }

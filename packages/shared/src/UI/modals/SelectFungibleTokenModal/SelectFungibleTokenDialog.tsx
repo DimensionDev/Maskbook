@@ -9,7 +9,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
+import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
@@ -53,31 +53,38 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
     },
 }))
 
-interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
+export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID>
+    extends Pick<
+        FungibleTokenListProps<T>,
+        'extendTokens' | 'pluginID' | 'enableManage' | 'selectedTokens' | 'blacklist' | 'whitelist' | 'loading'
+    > {
     open: boolean
-    enableManage?: boolean
-    pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
+    /** Do not allow to select other chains */
+    lockChainId?: boolean
     keyword?: string
-    whitelist?: string[]
     title?: string
-    blacklist?: string[]
     tokens?: Array<FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>
+    /** ChainIds of allowed chains */
+    chains?: ChainId[]
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedChainId?: Web3Helper.Definition[T]['ChainId']
-    selectedTokens?: string[]
     onClose(token: Web3Helper.FungibleTokenAll | null): void
-    setChainId(chainId: Web3Helper.Definition[T]['ChainId']): void
+    onChainChange?(chainId: Web3Helper.Definition[T]['ChainId']): void
 }
 
 export function SelectFungibleTokenDialog({
     open,
     pluginID,
     chainId,
+    lockChainId = false,
     disableSearchBar,
+    loading,
     disableNativeToken,
     tokens,
+    extendTokens,
+    chains,
     whitelist,
     blacklist = EMPTY_LIST,
     selectedChainId,
@@ -85,7 +92,7 @@ export function SelectFungibleTokenDialog({
     title,
     enableManage = true,
     onClose,
-    setChainId,
+    onChainChange,
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -95,6 +102,10 @@ export function SelectFungibleTokenDialog({
     const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+    const networks = useMemo(() => {
+        if (!chains) return allNetworks
+        return allNetworks.filter((network) => chains.includes(network.chainId))
+    }, [chains, allNetworks])
 
     const rowSize = useRowSize()
 
@@ -119,26 +130,30 @@ export function SelectFungibleTokenDialog({
             }>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>
-                    <SelectNetworkSidebar
-                        className={classes.sidebarContainer}
-                        hideAllButton
-                        chainId={chainId}
-                        onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
-                        networks={allNetworks}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                    />
+                    {!lockChainId ?
+                        <SelectNetworkSidebar
+                            className={classes.sidebarContainer}
+                            hideAllButton
+                            chainId={chainId}
+                            onChainChange={(chainId) => onChainChange?.(chainId ?? ChainId.Mainnet)}
+                            networks={networks}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
+                        />
+                    :   null}
                     <FungibleTokenList
                         mode={mode}
                         setMode={setMode}
                         pluginID={currentPluginID}
                         chainId={chainId}
                         tokens={tokens ?? EMPTY_LIST}
+                        extendTokens={extendTokens}
                         whitelist={whitelist}
                         enableManage={enableManage}
                         blacklist={
                             disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                         }
                         disableSearch={disableSearchBar}
+                        loading={loading}
                         selectedChainId={selectedChainId}
                         selectedTokens={selectedTokens}
                         onSelect={onClose}

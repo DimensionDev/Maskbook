@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => {
 
 interface GasOptionSelectorProps {
     chainId: ChainId
-    options?: Record<GasOptionType, GasOption>
+    options?: Record<GasOptionType, GasOption> | null
     onChange?: (option: Partial<Transaction>) => void
 }
 

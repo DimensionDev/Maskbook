@@ -26,13 +26,19 @@
     "@masknet/theme": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
+    "@masknet/web3-hooks-evm": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
-    "date-fns": "^3.6.0",
-    "react-use": "^17.5.0"
+    "bignumber.js": "9.1.2",
+    "date-fns": "^2.30.0",
+    "fuse.js": "^7.0.0",
+    "react-router-dom": "^6.24.0",
+    "react-use": "^17.4.0",
+    "urlcat": "^3.1.0",
+    "use-subscription": "^1.8.0"
   },
   "lingui": {
     "catalogs": [
@@ -56,5 +62,8 @@
       "zh-TW": "zh-CN",
       "default": "en-US"
     }
+  },
+  "devDependencies": {
+    "@types/use-subscription": "^1.0.2"
   }
 }

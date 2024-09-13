@@ -27,8 +27,8 @@
     "test": "vitest --pool=forks",
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "npx gulp clean",
-    "lingui-compile": "npx gulp lingui-compile",
-    "lingui-extract": "npx gulp lingui-extract"
+    "lingui:compile": "npx gulp lingui-compile",
+    "lingui:extract": "npx gulp lingui-extract"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20240322092738-f9180f3",

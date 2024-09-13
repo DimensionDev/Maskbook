@@ -24,7 +24,7 @@ export function ExchangeInjection() {
     if (!open) return null
     return (
         <EVMWeb3ContextProvider>
-            <ExchangeDialog open={open} onClose={handleClose} toAddress={address} toChainId={chainId} />
+            <ExchangeDialog onClose={handleClose} toAddress={address} toChainId={chainId} />
         </EVMWeb3ContextProvider>
     )
 }

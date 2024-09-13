@@ -540,6 +540,7 @@ const moduleSystemRules = {
             deferPackages,
         },
     ],
+    '@lingui/no-expression-in-message': 'off',
 }
 
 /** @type {any} */

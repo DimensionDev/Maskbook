@@ -1,21 +1,22 @@
-import { Trans } from 'react-i18next'
-import type { Plugin } from '@masknet/plugin-infra'
-import { TrendingView } from './trending/TrendingView.js'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra'
+import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
-import { SearchResultType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { EVMUtils } from '@masknet/web3-providers'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Trans } from 'react-i18next'
 import { base } from '../base.js'
+import { useTraderTrans } from '../locales/i18n_generated.js'
+import { enhanceTag } from './cashTag.js'
+import { setupStorage, type StorageOptions } from './storage.js'
+import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
-import { enhanceTag } from './cashTag.js'
-import { ExchangeInjection } from './trader/ExchangeInjection.js'
-import { useTraderTrans } from '../locales/i18n_generated.js'
+import { TrendingView } from './trending/TrendingView.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -24,7 +25,9 @@ function openDialog() {
 }
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
-    init() {},
+    init(_, context) {
+        setupStorage(context.createKVStorage<StorageOptions>('persistent', { transactions: [] }))
+    },
     SearchResultInspector: {
         ID: PluginID.Trader,
         UI: {

@@ -94,23 +94,25 @@ export class GasEditor {
         })
     }
 
-    static fromGasOption(chainId: ChainId, gasOption?: GasOption) {
+    static fromGasOption(chainId: ChainId, gasOption?: GasOption, gasOptionType?: GasOptionType) {
         return new GasEditor(chainId, {
             gasPrice: toFixed(gasOption?.suggestedMaxFeePerGas ?? 0, 0),
             maxFeePerGas: toFixed(gasOption?.suggestedMaxFeePerGas ?? 0, 0),
             maxPriorityFeePerGas: toFixed(gasOption?.suggestedMaxPriorityFeePerGas ?? 0, 0),
+            gasOptionType,
         })
     }
 
     static fromGasOptions(
         chainId: ChainId,
-        gasOptions?: Record<GasOptionType, GasOption>,
+        gasOptions?: Record<GasOptionType, GasOption> | null,
         gasOptionType = GasOptionType.NORMAL,
     ) {
         return new GasEditor(chainId, {
             gasPrice: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
             maxFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxFeePerGas ?? 0, 0),
             maxPriorityFeePerGas: toFixed(gasOptions?.[gasOptionType].suggestedMaxPriorityFeePerGas ?? 0, 0),
+            gasOptionType,
         })
     }
 }
