@@ -2,22 +2,19 @@ import { useState } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { Web3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
-import { msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Approval size={36} />
-            const name = <Name />
             const iconFilterColor = 'rgba(251, 176, 59, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -29,7 +26,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                         <>
                             <ApplicationEntry
                                 {...EntryComponentProps}
-                                title={<PluginTransFieldRender field={name} pluginID={base.ID} />}
+                                title={<Trans>Approval</Trans>}
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 onClick={() => {
@@ -49,15 +46,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                 },
                 appBoardSortingDefaultPriority: 11,
                 icon,
-                name,
+                name: <Trans>Approval</Trans>,
                 iconFilterColor,
             }
         })(),
     ],
-}
-function Name() {
-    const { _ } = useLingui()
-    return _(msg`Approval`)
 }
 
 export default site

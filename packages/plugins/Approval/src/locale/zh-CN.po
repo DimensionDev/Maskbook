@@ -19,7 +19,8 @@ msgstr ""
 "X-Crowdin-File-ID: 946\n"
 
 #: src/SiteAdaptor/ApprovalDialog.tsx:87
-#: src/SiteAdaptor/index.tsx:60
+#: src/SiteAdaptor/index.tsx:29
+#: src/SiteAdaptor/index.tsx:49
 msgid "Approval"
 msgstr "授权"
 
