@@ -1,1 +1,13 @@
-{ "messages": {} }
+{
+    "messages": {
+        "yb/fjw": "授权",
+        "YjX+AG": "授权数额",
+        "QowPFh": "NFT",
+        "kCAzy/": "NFT 系列授权",
+        "ks5OGD": "合约",
+        "W5OcTk": "暂无授权合约记录。",
+        "GXsAby": "撤销",
+        "0/eoR6": "撤销中",
+        "6RDwJM": "代币"
+    }
+}
