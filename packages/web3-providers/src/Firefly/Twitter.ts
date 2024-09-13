@@ -5,6 +5,7 @@ import { type FireflyTwitterAPI } from '../types/Firefly.js'
 
 export class FireflyTwitter {
     static async getUserInfo(screenName: string) {
+        if (!screenName) return null
         const url = urlcat(FIREFLY_BASE_URL, '/v1/twitter/userinfo', {
             screenName,
         })
