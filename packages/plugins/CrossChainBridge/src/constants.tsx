@@ -2,7 +2,7 @@ import { PluginID } from '@masknet/shared-base'
 import {
     CBridgeIcon,
     ArbitrumOneBridgeIcon,
-    BobaBridgeIcon,
+    OrbiterFinanceIcon,
     PolygonBridgeIcon,
     RainbowBridgeIcon,
 } from './SiteAdaptor/MaskIcon.js'
@@ -28,11 +28,11 @@ export function getCrossChainBridge(t: Record<string, () => string>) {
             link: 'https://bridge.arbitrum.io/',
         },
         {
-            name: 'BOBA Bridge',
-            ID: `${PLUGIN_ID}_boba_bridge`,
+            name: 'Orbiter Finance',
+            ID: `${PLUGIN_ID}_orbiter_finance`,
             isOfficial: true,
-            icon: <BobaBridgeIcon />,
-            link: 'https://gateway.boba.network/',
+            icon: <OrbiterFinanceIcon />,
+            link: 'https://www.orbiter.finance/',
         },
         {
             name: 'Polygon Bridge',

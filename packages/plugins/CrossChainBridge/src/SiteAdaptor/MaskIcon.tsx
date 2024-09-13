@@ -8,16 +8,18 @@ export function ArbitrumOneBridgeIcon({ size = 36 }) {
         />
     )
 }
-export function BobaBridgeIcon({ size = 36 }) {
+
+export function OrbiterFinanceIcon({ size = 36 }) {
     return (
         <img
             style={{ alignSelf: 'center' }}
             width={size}
             height={size}
-            src={new URL('./assets/boba-bridge.png', import.meta.url).toString()}
+            src={new URL('./assets/orbiter-finance.png', import.meta.url).toString()}
         />
     )
 }
+
 export function CBridgeIcon({ size = 36 }) {
     return (
         <img
