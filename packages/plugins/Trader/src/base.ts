@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants/index.js'
-import { languages } from './locales/languages.js'
+import { languages, linguiLanguages } from './locales/languages.js'
 import { TRADER_WEB3_CONFIG } from './config.js'
 
 export const base = {
@@ -19,5 +19,5 @@ export const base = {
         target: 'stable',
         web3: TRADER_WEB3_CONFIG,
     },
-    i18n: languages,
+    i18n: [languages, linguiLanguages],
 } satisfies Plugin.Shared.Definition
