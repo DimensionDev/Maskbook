@@ -4,7 +4,7 @@ import { PLUGIN_ID } from './constants/index.js'
 import { languages, linguiLanguages } from './locales/languages.js'
 import { TRADER_WEB3_CONFIG } from './config.js'
 
-export const base: Plugin.Shared.Definition = {
+export const base = {
     ID: PLUGIN_ID,
     name: { fallback: 'Trader' },
     description: { fallback: 'View trending of cryptocurrencies, swap ERC20 tokens in various DEX markets.' },
@@ -20,4 +20,4 @@ export const base: Plugin.Shared.Definition = {
         web3: TRADER_WEB3_CONFIG,
     },
     i18n: [languages, linguiLanguages],
-}
+} satisfies Plugin.Shared.Definition
