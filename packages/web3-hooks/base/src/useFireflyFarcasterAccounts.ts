@@ -1,22 +1,28 @@
 import { skipToken, useQuery } from '@tanstack/react-query'
-import { FireflyConfig, Twitter } from '@masknet/web3-providers'
+import { FireflyConfig, FireflyTwitter } from '@masknet/web3-providers'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-export function useFireflyFarcasterAccounts(userId?: string) {
+export function useFireflyFarcasterAccounts(identity?: string) {
     const { data: user } = useQuery({
-        queryKey: ['twitter', 'profile', userId],
-        queryFn: userId ? () => Twitter.getUserByScreenName(userId) : skipToken,
+        queryKey: ['twitter', 'profile', identity],
+        staleTime: 3600_000,
+        refetchOnWindowFocus: false,
+        queryFn: identity ? () => FireflyTwitter.getUserInfo(identity) : skipToken,
     })
+    const id = user?.rest_id
+
     return useQuery({
-        queryKey: ['union-profile', 'by-twitter-id', userId],
+        queryKey: ['union-profile', 'by-twitter-id', id],
         retry: 0,
         staleTime: 60_000,
-        queryFn: async () => {
-            if (!user?.userId) return
-            const unionProfile = await FireflyConfig.getUnionProfile({
-                twitterId: user?.userId,
-            })
-            return unionProfile.farcasterProfiles ?? EMPTY_LIST
-        },
+        queryFn:
+            id ?
+                async () => {
+                    const unionProfile = await FireflyConfig.getUnionProfile({
+                        twitterId: id,
+                    })
+                    return unionProfile.farcasterProfiles ?? EMPTY_LIST
+                }
+            :   skipToken,
     })
 }

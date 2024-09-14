@@ -96,7 +96,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                 return [token[1], aTokens?.find((f) => f[0].toUpperCase() === `a${token[0]}`.toUpperCase())?.[1]]
             })
         },
-        staleTime: 300_000,
+        staleTime: 3600_000,
     })
 
     const { value: detailedAaveTokens = EMPTY_LIST, loading: loadingAAveDetails } = useFungibleTokens(

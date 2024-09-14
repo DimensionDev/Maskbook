@@ -54,6 +54,9 @@ export class Twitter {
         return updateProfileImage(screenName, media_id_str)
     }
 
+    /**
+     * @deprecated User FireflyTwitter instead
+     */
     static async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
         if (!screenName) return null
         return getUserByScreenName(screenName)
