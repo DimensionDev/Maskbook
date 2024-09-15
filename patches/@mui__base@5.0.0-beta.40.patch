@@ -38,10 +38,10 @@ index f8abfb89d9371bd5f7cb7850be7aec1a4d82bb44..130ac2a14ed73a9b3a02e78cce5cd787
      if (!insideDOM && (disableReactTree || !insideReactTree)) {
        onClickAway(event);
      }
++    }
 +    // If useCapture is true, `childrenPropsHandler` created by `createHandleSynthetic` will fire after `handleClickAway`, `syntheticEventRef.current` (or `insideReactTree`) will always be false at the first checking
 +    if (useCapture) setTimeout(check);
 +    else check();
-+    }
    });
 +  
  
