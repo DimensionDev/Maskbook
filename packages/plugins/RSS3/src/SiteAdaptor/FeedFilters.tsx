@@ -67,6 +67,7 @@ export const FeedFilters = memo(
                 </Box>
                 <Box className={classes.networks}>
                     {NetworkOptions.map((op) => {
+                        if (op.hidden) return null
                         const checked = networks.includes(op.network)
                         return (
                             <Typography

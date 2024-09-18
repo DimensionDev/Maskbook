@@ -9,6 +9,7 @@ export const PLUGIN_NAME = 'RSS3'
 interface NetworkOption {
     network: RSS3BaseAPI.Network
     name: string
+    hidden?: boolean
 }
 
 export const NetworkOptions: NetworkOption[] = [
@@ -16,10 +17,10 @@ export const NetworkOptions: NetworkOption[] = [
     { network: 'arweave', name: 'Arweave' },
     { network: 'avax', name: 'Avax' },
     { network: 'base', name: 'Base' },
-    { network: 'binance-smart-chain', name: 'Binance Smart Chain' },
+    { network: 'binance-smart-chain', name: 'BNB Chain' },
     { network: 'crossbell', name: 'Crossbell' },
     { network: 'ethereum', name: 'Ethereum' },
-    { network: 'farcaster', name: 'Farcaster' },
+    { network: 'farcaster', name: 'Farcaster', hidden: true },
     { network: 'gnosis', name: 'Gnosis' },
     { network: 'linea', name: 'Linea' },
     { network: 'optimism', name: 'Optimism' },
