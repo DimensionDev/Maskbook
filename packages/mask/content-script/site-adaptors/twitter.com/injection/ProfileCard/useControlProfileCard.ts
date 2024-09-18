@@ -13,7 +13,7 @@ const LEAVE_DURATION = 500
 
 export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null>): Result {
     const hoverRef = useRef(false)
-    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(null)
+    const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
     const skipClick = useRef(false)
 
     const [active, setActive] = useState(false)
@@ -23,7 +23,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
     hasDialogRef.current = stack.length > 0
 
     const hideProfileCard = useCallback((byClick?: boolean) => {
-        if (hoverRef.current || hasDialogRef.current || !closeTimerRef.current) return
+        if (hoverRef.current || hasDialogRef.current) return
         clearTimeout(closeTimerRef.current)
         closeTimerRef.current = setTimeout(() => {
             // Discard the click that would open from external
@@ -36,7 +36,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
     }, [])
 
     const showProfileCard = useCallback((placement: PopperPlacementType) => {
-        closeTimerRef.current && clearTimeout(closeTimerRef.current)
+        clearTimeout(closeTimerRef.current)
         setActive(true)
         setPlacement(placement)
     }, [])
@@ -49,7 +49,7 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
 
         const enter = () => {
             hoverRef.current = true
-            closeTimerRef.current && clearTimeout(closeTimerRef.current)
+            clearTimeout(closeTimerRef.current)
         }
         const leave = () => {
             hoverRef.current = false
