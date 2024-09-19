@@ -11,7 +11,7 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "@types/webextension-polyfill": "^0.10.7",
+    "@types/webextension-polyfill": "^0.12.1",
     "core-js": "3.37.1",
     "tslib": "^2.6.3"
   },
