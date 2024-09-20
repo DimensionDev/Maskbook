@@ -17,3 +17,105 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ArtBlocks/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 948\n"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Artblocks"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:30
+msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:129
+msgid "Blockchain:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:124
+msgid "Chain"
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:70
+msgid "Collection"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:30
+msgid "Completed"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:135
+msgid "Contract:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+msgid "Created by"
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:71
+msgid "Details"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:78
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:81
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:89
+msgid "Infos"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
+msgid "Insufficient balance"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:116
+msgid "Library:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:109
+msgid "License:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:102
+msgid "Minted:"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:31
+msgid "Paused"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:113
+msgid "Please check ToS document"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:136
+msgid "Price per mint"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:93
+msgid "Price:"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:32
+#: src/SiteAdaptor/PurchaseDialog.tsx:126
+#: src/SiteAdaptor/PurchaseDialog.tsx:131
+msgid "Purchase"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:126
+msgid "Purchasing...."
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:65
+msgid "Something went wrong!"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+msgid "This project is no more active"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:80
+msgid "Website"
+msgstr ""
