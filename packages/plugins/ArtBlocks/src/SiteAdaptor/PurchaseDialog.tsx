@@ -109,10 +109,10 @@ export function PurchaseDialog(props: ActionBarProps) {
     const validationMessage = useMemo(() => {
         const balance_ = leftShift(balance ?? '0', token?.decimals)
 
-        if (balance_.isZero() || price.isGreaterThan(balance_)) return _(msg`Insufficient balance`)
-        if (!ToS_Checked) return _(msg`Please check ToS document`)
+        if (balance_.isZero() || price.isGreaterThan(balance_)) return <Trans>Insufficient balance</Trans>
+        if (!ToS_Checked) return <Trans>Please check ToS document</Trans>
 
-        return ''
+        return undefined
     }, [price, balance, token?.decimals, ToS_Checked])
 
     const actionButton = (
