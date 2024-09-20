@@ -29,7 +29,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             description: (
                 <Trans>
                     Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated
-                    version of the content is created by an algorithm and sent to your Ethereum account
+                    version of the content is created by an algorithm and sent to your Ethereum account.
                 </Trans>
             ),
             name: <Trans>Artblocks</Trans>,

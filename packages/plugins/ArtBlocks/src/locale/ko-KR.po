@@ -18,11 +18,11 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ArtBlocks/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 948\n"
 
-#: src/SiteAdaptor/index.tsx:38
+#: src/SiteAdaptor/index.tsx:35
 msgid "Artblocks"
 msgstr "Artblocks"
 
-#: src/SiteAdaptor/index.tsx:43
+#: src/SiteAdaptor/index.tsx:30
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr "Artblocks는 마음에 드는 스타일을 골라 작업비를 지불하고 무작위로 생성된 콘텐츠 버전이 알고리즘에 의해 생성돼 이더리움 계정으로 전송를 지원하는 겁니다."
 

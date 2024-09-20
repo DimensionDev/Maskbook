@@ -13,11 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/index.tsx:38
+#: src/SiteAdaptor/index.tsx:35
 msgid "Artblocks"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:43
+#: src/SiteAdaptor/index.tsx:30
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr ""
 
