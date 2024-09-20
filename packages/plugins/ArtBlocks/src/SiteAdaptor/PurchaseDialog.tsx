@@ -26,7 +26,9 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { ArtBlocksTrans, useArtBlocksTrans } from '../locales/index.js'
+import { ArtBlocksTrans } from '../locales/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +50,7 @@ interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const t = useArtBlocksTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
 
@@ -72,16 +74,12 @@ export function PurchaseDialog(props: ActionBarProps) {
 
     const shareText = [
         Sniffings.is_twitter_page || Sniffings.is_facebook_page ?
-            t.plugin_artblocks_share({
-                name: project.name,
-                price: price.toFixed(),
-                symbol: token?.symbol || '',
-            })
-        :   t.plugin_artblocks_share_no_official_account({
-                name: project.name,
-                price: price.toFixed(),
-                symbol: token?.symbol || '',
-            }),
+            _(
+                msg`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Install @realMaskNetwork to get yours.`,
+            )
+        :   _(
+                msg`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Welcome to join.`,
+            ),
         '#mask_io #artblocks_io #nft',
         postLink,
     ].join('\n')
@@ -111,8 +109,8 @@ export function PurchaseDialog(props: ActionBarProps) {
     const validationMessage = useMemo(() => {
         const balance_ = leftShift(balance ?? '0', token?.decimals)
 
-        if (balance_.isZero() || price.isGreaterThan(balance_)) return t.plugin_collectible_insufficient_balance()
-        if (!ToS_Checked) return t.plugin_artblocks_check_tos_document()
+        if (balance_.isZero() || price.isGreaterThan(balance_)) return _(msg`Insufficient balance`)
+        if (!ToS_Checked) return _(msg`Please check ToS document`)
 
         return ''
     }, [price, balance, token?.decimals, ToS_Checked])
@@ -125,17 +123,17 @@ export function PurchaseDialog(props: ActionBarProps) {
             color="primary"
             onClick={purchase}
             fullWidth>
-            {validationMessage || (isPurchasing ? t.plugin_artblocks_purchasing() : t.plugin_artblocks_purchase())}
+            {validationMessage || (isPurchasing ? <Trans>Purchasing....</Trans> : <Trans>Purchase</Trans>)}
         </ActionButton>
     )
 
     return (
-        <InjectedDialog title={t.plugin_artblocks_purchase()} open={open} onClose={onClose}>
+        <InjectedDialog title={<Trans>Purchase</Trans>} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
                         <FungibleTokenInput
-                            label={t.plugin_artblocks_price_per_mint()}
+                            label={_(msg`Price per mint`)}
                             amount={price.toString()}
                             balance={balance ?? '0'}
                             token={token as FungibleToken<ChainId, SchemaType>}

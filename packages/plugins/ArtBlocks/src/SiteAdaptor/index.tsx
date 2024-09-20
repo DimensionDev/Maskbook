@@ -6,7 +6,8 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { useArtBlocksTrans } from '../locales/i18n_generated.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -33,12 +34,14 @@ const site: Plugin.SiteAdaptor.Definition = {
     ],
 }
 function Name() {
-    const t = useArtBlocksTrans()
-    return t.plugin_artblocks_name()
+    const { _ } = useLingui()
+    return _(msg`Artblocks`)
 }
 function Desc() {
-    const t = useArtBlocksTrans()
-    return t.plugin_artblocks_description()
+    const { _ } = useLingui()
+    return _(
+        msg`Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.`,
+    )
 }
 
 function Renderer(
