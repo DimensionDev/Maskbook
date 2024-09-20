@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useMemo, memo, type PropsWithChildren } from 'react'
 import { isUndefined, omitBy } from 'lodash-es'
 import { usePersistSubscription, useValueRef } from '@masknet/shared-base-ui'
-import { compose, Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings, PopupRoutes } from '@masknet/shared-base'
+import { Sniffings, NetworkPluginID, getSiteType, pluginIDsSettings, PopupRoutes } from '@masknet/shared-base'
 import { MaskWalletProvider } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -115,10 +115,10 @@ export function Web3ContextProvider<T extends NetworkPluginID = NetworkPluginID>
     children,
     ...rest
 }: PropsWithChildren<{ network: T } & ChainContextGetter<T>>) {
-    return compose(
-        (children) => <NetworkContextProvider initialNetwork={network} children={children} />,
-        (children) => <ChainContextProvider {...rest} children={children} />,
-        <>{children}</>,
+    return (
+        <NetworkContextProvider initialNetwork={network}>
+            <ChainContextProvider {...rest}>{children}</ChainContextProvider>
+        </NetworkContextProvider>
     )
 }
 

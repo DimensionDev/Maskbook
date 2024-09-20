@@ -13,7 +13,7 @@ let globalContainer: HTMLElement
  * This container is prepared for all the Modals.
  */
 let portalContainer: ShadowRoot
-export type WrapJSX = ((jsx: React.ReactNode) => JSX.Element) | undefined
+export type WrapJSX = ((jsx: React.ReactNode) => React.ReactNode) | undefined
 /** @internal */
 export const shadowEnvironmentMountingRoots = new ObservableMap<any, JSX.Element>()
 
