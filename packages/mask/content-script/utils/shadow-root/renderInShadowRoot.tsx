@@ -6,7 +6,7 @@ import {
     usePortalShadowRoot,
 } from '@masknet/theme'
 import { Flags } from '@masknet/flags'
-import { SiteUIProvider } from '@masknet/shared'
+import { ContentScriptGlobalProvider } from './ContentScriptGlobalProvider.js'
 import { ShadowRootAttachPointRoot } from './ShadowRootAttachPointRoot.js'
 
 const captureEvents: Array<keyof HTMLElementEventMap> = [
@@ -23,7 +23,11 @@ const captureEvents: Array<keyof HTMLElementEventMap> = [
     'change',
 ]
 export function setupReactShadowRootEnvironment() {
-    const shadow = setupReactShadowRootEnvironmentUpper(Flags.shadowRootInit, captureEvents, SiteUIProvider)
+    const shadow = setupReactShadowRootEnvironmentUpper(
+        Flags.shadowRootInit,
+        captureEvents,
+        ContentScriptGlobalProvider,
+    )
     // Inject variable for Portals
     attachReactTreeWithContainer(shadow, { key: 'css-vars' }).render(<CSSVariableInjector />)
 }
