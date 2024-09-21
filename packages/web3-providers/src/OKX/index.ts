@@ -31,13 +31,13 @@ export class OKX {
         return res.code === 0 ? res.data : undefined
     }
 
-    static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | undefined> {
-        if (!chainId) return
+    static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
+        if (!chainId) return null
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/all-tokens', {
             chainId,
         })
         const res = await fetchFromOKX<GetTokensResponse>(url)
-        if (res.code !== 0) return
+        if (res.code !== 0) return null
         const tokens = res.data
         return tokens.map((x) => {
             return {
