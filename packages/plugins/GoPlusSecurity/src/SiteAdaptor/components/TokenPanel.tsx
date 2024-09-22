@@ -6,8 +6,8 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
-import { useGoPlusLabsTrans } from '../../locales/index.js'
 import type { RefAttributes } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -38,7 +38,6 @@ interface TokenPanelProps extends RefAttributes<HTMLDivElement> {
 }
 
 export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelProps) {
-    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 
@@ -46,14 +45,18 @@ export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelPro
         <Stack ref={ref} className={classes.card} spacing={2}>
             <Stack height={128} justifyContent="space-between" flex={1}>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_info_token_name()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Token Name</Trans>
+                    </Typography>
                     <Typography className={classes.cardValue}>
                         {tokenSecurity.token_symbol}
                         {tokenSecurity.token_name ? `(${tokenSecurity.token_name})` : null}{' '}
                     </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_info_token_contract_address()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Token Contract Address</Trans>
+                    </Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
                             {tokenSecurity.contract ?
@@ -72,7 +75,9 @@ export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelPro
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_info_contract_creator()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Contract Creator</Trans>
+                    </Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
                             {tokenSecurity.creator_address ?
@@ -96,7 +101,9 @@ export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelPro
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_info_contract_owner()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Contract Owner</Trans>
+                    </Typography>
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.625}>
                         <Typography className={classes.cardValue}>
                             {tokenSecurity.owner_address ?
@@ -118,13 +125,17 @@ export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelPro
                     </Stack>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_info_total_supply()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Total Supply</Trans>
+                    </Typography>
                     <Typography className={classes.cardValue}>
                         {tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER}
                     </Typography>
                 </Stack>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
+                    <Typography className={classes.subtitle}>
+                        <Trans>Market Cap</Trans>
+                    </Typography>
                     <Typography className={classes.cardValue}>
                         {tokenMarketCap ? formatMarketCap(tokenMarketCap) : DEFAULT_PLACEHOLDER}
                     </Typography>

@@ -1,4 +1,4 @@
-import { Trans } from 'react-i18next'
+import { Trans as ReactI18NextTrans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
@@ -9,12 +9,7 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 import { onConfirm } from './components/CheckSecurityConfirmDialog.js'
-import { useGoPlusLabsTrans } from '../locales/i18n_generated.js'
-
-function Name() {
-    const t = useGoPlusLabsTrans()
-    return t.__plugin_name()
-}
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -25,7 +20,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
-            const name = <Name />
+            const name = <Trans>Check Security</Trans>
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
@@ -49,7 +44,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 12,
                 category: 'dapp',
                 marketListSortingPriority: 16,
-                description: <Trans i18nKey="plugin_goPlusSecurity_description" />,
+                description: <ReactI18NextTrans i18nKey="plugin_goPlusSecurity_description" />,
             }
         })(),
     ],

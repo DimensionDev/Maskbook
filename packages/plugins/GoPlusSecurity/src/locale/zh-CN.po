@@ -17,3 +17,170 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 970\n"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:196
+msgid "{0} Attention factor"
+msgstr "{0} 个需要关注的因素"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:195
+msgid "{0} Attention factors"
+msgstr "{0} 个需要关注的因素"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:186
+msgid "{0} Risky factor"
+msgstr "{0} 个有风险的因素"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:185
+msgid "{0} Risky factors"
+msgstr "{0} 个有风险的因素"
+
+#: src/SiteAdaptor/components/NotFound.tsx:15
+msgid "1. Make sure network is working;"
+msgstr "1. 确保网络正常运作；"
+
+#: src/SiteAdaptor/components/NotFound.tsx:18
+msgid "2. Make sure the chain network or token address is correct;"
+msgstr "2. 确认网络 和 Token 地址是否正确；"
+
+#: src/SiteAdaptor/components/NotFound.tsx:21
+msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
+msgstr "3. Token 地址现在没有被覆盖，可能需要超过60秒才能再次获取合约信息。请稍后再试。"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:74
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:135
+msgid "Cancel"
+msgstr "取消"
+
+#: src/SiteAdaptor/CheckSecurityDialog.tsx:75
+#: src/SiteAdaptor/index.tsx:23
+msgid "Check Security"
+msgstr "安全检查"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:106
+msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
+msgstr "点击确认按钮意味着您同意承担潜在的风险并选择继续进行交易。"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:47
+msgid "Close [Check Security]?"
+msgstr "关闭[检查安全]？"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:71
+msgid "Confirm"
+msgstr "确定"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:93
+#: src/UI/TokenSecurityBoundary.tsx:45
+msgid "Confirm swap risk"
+msgstr "确认兑换风险"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:79
+msgid "Contract Creator"
+msgstr "合约创建者"
+
+#: src/SiteAdaptor/CheckSecurityDialog.tsx:56
+msgid "Contract Not Found"
+msgstr "未找到合约"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:105
+msgid "Contract Owner"
+msgstr "合同所有者"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:116
+msgid "Copy Address"
+msgstr "复制地址"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:103
+msgid "Dear Users,"
+msgstr "尊敬的用户，"
+
+#: src/SiteAdaptor/components/Footer.tsx:24
+msgid "Go+"
+msgstr "Go+"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:139
+msgid "High Risk"
+msgstr "高风险"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:55
+msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
+msgstr "如果您决定关闭 [检查安全] 应用，关闭后与任何有潜在风险的合约或地址进行互动时将无法看到相关安全提示。"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:137
+msgid "Market Cap"
+msgstr "市值"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:140
+msgid "Medium Risk"
+msgstr "中等风险"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:159
+msgid "More Details"
+msgstr "详细信息"
+
+#: src/SiteAdaptor/components/DefaultPlaceholder.tsx:13
+msgid "Note: Scams detections might not be 100% guaranteed."
+msgstr "注意：扫描检测可能无法保证100%准确。"
+
+#: src/SiteAdaptor/components/SearchBox.tsx:115
+msgid "Please enter token contract address."
+msgstr "请输入合约地址。"
+
+#: src/SiteAdaptor/components/Footer.tsx:17
+msgid "Powered by"
+msgstr "Powered by"
+
+#: src/SiteAdaptor/components/NotFound.tsx:9
+msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
+msgstr "找不到结果。它可能是由于网络错误、链上数据异常或 Token地址不存在。请检查以下情况："
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:98
+msgid "Risk Warning"
+msgstr "风险提示"
+
+#: src/SiteAdaptor/components/SearchBox.tsx:138
+msgid "Search"
+msgstr "搜索"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:177
+msgid "Security Detection"
+msgstr "安全检测"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:138
+msgid "Swap Anyway"
+msgstr "仍要兑换"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:50
+msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
+msgstr "[检查安全] 提供迅速、可靠和方便的 Web3 安全服务。"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:209
+msgid "This token has no risky or attention factors."
+msgstr "此 Token 没有风险或关注因素。"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:58
+msgid "Token Contract Address"
+msgstr "Token 合约地址"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:150
+msgid "Token info"
+msgstr "Token 信息"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:49
+msgid "Token Name"
+msgstr "Token 名称"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx:129
+msgid "Total Supply"
+msgstr "总供应量"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx:107
+msgid "Unnamed"
+msgstr "未命名的"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:126
+msgid "View on Explorer"
+msgstr "在区块链浏览器查看"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
+msgid "We recommend new Web3 users to keep [Check Security] open."
+msgstr ""
