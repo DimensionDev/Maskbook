@@ -10,14 +10,13 @@ import { Alert, PersonaAction, usePersonasFromNextID } from '@masknet/shared'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useAllPersonas, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentPersona, queryPersonaAvatar } from '@masknet/plugin-infra/dom/context'
-import { useAvatarTrans } from '../locales/index.js'
 import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
+import { Trans } from '@lingui/macro'
 
 export function PersonaPage() {
-    const t = useAvatarTrans()
     const navigate = useNavigate()
     const [visible, setVisible] = useState(true)
     const { setProofs, setTokenInfo, setProof, isPending, binding } = useAvatarManagement()
@@ -73,7 +72,10 @@ export function PersonaPage() {
                     </Stack>
                 :   <>
                         <Alert open={visible} onClose={() => setVisible(false)}>
-                            {t.persona_hint()}
+                            <Trans>
+                                Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3
+                                vibe.
+                            </Trans>
                         </Alert>
                         {bindingProofs
                             .filter((x) => x.identity.toLowerCase() === userId?.toLowerCase())

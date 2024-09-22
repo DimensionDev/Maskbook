@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps, Button } from '@mui/material'
 import { memo } from 'react'
 import { useSharedTrans } from '../../../index.js'
+import type { ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -26,8 +27,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends BoxProps {
-    message?: string
-    actionLabel?: string
+    message?: ReactNode
+    actionLabel?: ReactNode
     onRetry?(): void
 }
 

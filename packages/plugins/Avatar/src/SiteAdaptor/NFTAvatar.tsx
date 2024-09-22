@@ -20,9 +20,9 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
-import { useAvatarTrans } from '../locales/i18n_generated.js'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import { NFTImage } from './NFTImage.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -96,7 +96,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const { account, chainId } = useChainContext()
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken>()
     const [customCollectibles, setCustomCollectibles] = useState<AllChainsNonFungibleToken[]>([])
-    const t = useAvatarTrans()
     const {
         data: collectibles = EMPTY_LIST,
         hasNextPage,
@@ -164,18 +163,18 @@ export function NFTAvatar(props: NFTAvatarProps) {
         <Box className={classes.root}>
             <Box className={classes.title}>
                 <Typography variant="body1" color="textPrimary">
-                    {t.nft_list_title()}
+                    <Trans>NFT Avatar Setting</Trans>
                 </Typography>
                 {account ?
                     <Typography variant="body1" color="textPrimary" className={classes.account}>
-                        {t.nft_wallet_label()}: <ReversedAddress address={account} size={4} />
+                        <Trans>Wallet</Trans>: <ReversedAddress address={account} size={4} />
                         {!hideWallet ?
                             <Button
                                 variant="text"
                                 onClick={() => SelectProviderModal.open()}
                                 size="small"
                                 className={classes.changeButton}>
-                                {t.nft_wallet_change()}
+                                <Trans>Change</Trans>
                             </Button>
                         :   null}
                     </Typography>
@@ -193,8 +192,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </List>
                     : loadError || (!collectibles.length && !customCollectibles.length) ?
                         <ReloadStatus
-                            message={t.dashboard_no_collectible_found()}
-                            actionLabel={t.retry()}
+                            message={<Trans>No collectible found.</Trans>}
+                            actionLabel={<Trans>Retry</Trans>}
                             onRetry={fetchNextPage}
                         />
                     :   <List className={classes.list}>
@@ -225,11 +224,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
                 <Box className={classes.buttons}>
                     <Button variant="outlined" size="small" onClick={handleAddCollectibles}>
-                        {t.add_collectible()}
+                        <Trans>Add Collectibles</Trans>
                     </Button>
 
                     <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
-                        {t.set_avatar_title()}
+                        <Trans>Set NFT Avatar</Trans>
                     </Button>
                 </Box>
             </ChainBoundary>
