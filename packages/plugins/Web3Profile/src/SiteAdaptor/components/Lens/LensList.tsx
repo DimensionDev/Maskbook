@@ -107,7 +107,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
             const currentProfileId = (await Lens.queryDefaultProfileByAddress(wallet))?.id
             if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
-                return first(profiles)?.id
+                return first(profiles)?.id || null
             }
             return currentProfileId
         },

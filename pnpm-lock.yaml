@@ -33,12 +33,6 @@ patchedDependencies:
   '@cyberlab/cyberconnect@4.2.2':
     hash: 7wgc4b53ygfwefhtjbh3dydjgy
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
-  '@mui/base@5.0.0-beta.40':
-    hash: khy4nkm7ps55hmmohappevcufm
-    path: patches/@mui__base@5.0.0-beta.40.patch
-  '@mui/material@5.15.20':
-    hash: ktcq2ditmsc4btqbu444dfhaw4
-    path: patches/@mui__material@5.15.20.patch
   '@project-serum/sol-wallet-adapter@0.2.6':
     hash: dl5wqnnaxjm7biesxtvdpr7gpe
     path: patches/@project-serum__sol-wallet-adapter@0.2.6.patch
@@ -115,16 +109,16 @@ importers:
         version: 0.4.0
       '@mui/base':
         specifier: 5.0.0-beta.40
-        version: 5.0.0-beta.40(patch_hash=khy4nkm7ps55hmmohappevcufm)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+        version: 5.0.0-beta.40(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/icons-material':
         specifier: 5.15.21
-        version: 5.15.21(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+        version: 5.15.21(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/lab':
         specifier: 5.0.0-alpha.170
-        version: 5.0.0-alpha.170(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+        version: 5.0.0-alpha.170(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/material':
         specifier: 5.15.20
-        version: 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+        version: 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/system':
         specifier: 5.15.20
         version: 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
@@ -2650,7 +2644,7 @@ importers:
         version: 7.0.0
       notistack:
         specifier: 2.0.8
-        version: 2.0.8(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 2.0.8(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2662,7 +2656,7 @@ importers:
         version: 1.6.0
       tss-react:
         specifier: ^4.9.10
-        version: 4.9.10(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 4.9.10(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)
     devDependencies:
       '@types/react-window':
         specifier: ^1.8.8
@@ -18109,7 +18103,7 @@ snapshots:
       outvariant: 1.4.2
       strict-event-emitter: 0.5.1
 
-  '@mui/base@5.0.0-beta.40(patch_hash=khy4nkm7ps55hmmohappevcufm)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
+  '@mui/base@5.0.0-beta.40(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
       '@floating-ui/react-dom': 2.0.8(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -18125,19 +18119,19 @@ snapshots:
 
   '@mui/core-downloads-tracker@5.15.21': {}
 
-  '@mui/icons-material@5.15.21(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
+  '@mui/icons-material@5.15.21(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
-      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       react: 0.0.0-experimental-58af67a8f8-20240628
     optionalDependencies:
       '@types/react': types-react@19.0.0-beta.1
 
-  '@mui/lab@5.0.0-alpha.170(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
+  '@mui/lab@5.0.0-alpha.170(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
-      '@mui/base': 5.0.0-beta.40(patch_hash=khy4nkm7ps55hmmohappevcufm)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
-      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/base': 5.0.0-beta.40(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/system': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/types': 7.2.14(types-react@19.0.0-beta.1)
       '@mui/utils': 5.15.20(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
@@ -18150,10 +18144,10 @@ snapshots:
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@types/react': types-react@19.0.0-beta.1
 
-  '@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
+  '@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)':
     dependencies:
       '@babel/runtime': 7.24.0
-      '@mui/base': 5.0.0-beta.40(patch_hash=khy4nkm7ps55hmmohappevcufm)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/base': 5.0.0-beta.40(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/core-downloads-tracker': 5.15.21
       '@mui/system': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@mui/types': 7.2.14(types-react@19.0.0-beta.1)
@@ -27048,9 +27042,9 @@ snapshots:
 
   normalize-url@8.0.0: {}
 
-  notistack@2.0.8(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
+  notistack@2.0.8(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
-      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       clsx: 1.2.1
       hoist-non-react-statics: 3.3.2
       react: 0.0.0-experimental-58af67a8f8-20240628
@@ -29403,7 +29397,7 @@ snapshots:
       '@emotion/utils': 1.2.0
       react: 0.0.0-experimental-58af67a8f8-20240628
 
-  tss-react@4.9.10(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628):
+  tss-react@4.9.10(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@emotion/cache': 11.11.0
       '@emotion/react': 11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
@@ -29411,7 +29405,7 @@ snapshots:
       '@emotion/utils': 1.2.1
       react: 0.0.0-experimental-58af67a8f8-20240628
     optionalDependencies:
-      '@mui/material': 5.15.20(patch_hash=ktcq2ditmsc4btqbu444dfhaw4)(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
+      '@mui/material': 5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
 
   tsutils@3.21.0(typescript@5.5.2):
     dependencies:
