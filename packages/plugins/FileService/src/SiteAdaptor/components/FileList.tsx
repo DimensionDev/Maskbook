@@ -16,6 +16,8 @@ import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/modals.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -56,6 +58,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 }
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
+    const { _ } = useLingui()
     const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
@@ -84,7 +87,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
     const handleDelete = useCallback(
         async (file: FileInfo) => {
             const confirmed = await ConfirmModal.openAndWaitForClose({
-                title: t.delete_file(),
+                title: _(msg`Delete File`),
                 message: (
                     // eslint-disable-next-line react/naming-convention/component-name
                     <FileServiceTrans.delete_message
@@ -102,8 +105,13 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                         }}
                     />
                 ),
-                description: t.delete_description(),
-                confirmLabel: t.delete(),
+                description: (
+                    <Trans>
+                        Users can only delete local links of these files. Files on the decentralized storage protocols
+                        cannot be deleted.
+                    </Trans>
+                ),
+                confirmLabel: _(msg`Delete`),
             })
             if (confirmed) await deleteFile(file)
         },
@@ -114,7 +122,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
         async (file: FileInfo) => {
             const name = await RenameModal.openAndWaitForClose({
                 currentName: file.name,
-                message: t.rename_validation(),
+                message: <Trans>File name must between 3 to 20 characters.</Trans>,
             })
             if (!name) return
 

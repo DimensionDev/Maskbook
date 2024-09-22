@@ -7,10 +7,10 @@ import { useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
-import { useFileServiceTrans } from '../../locales/index.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
+import { Trans } from '@lingui/macro'
 
 const Tabs: typeof MuiTabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',
@@ -144,7 +144,6 @@ interface Props {
 }
 
 export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props) {
-    const t = useFileServiceTrans()
     const { classes } = useStyles()
     const [tab, setTab] = useState(ProviderTabs.All)
     const navigate = useNavigate()
@@ -219,7 +218,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                         }}
                     />
                     <Button className={classes.button} onClick={() => setSearching(false)}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </Button>
                 </div>
             :   <div className={classes.header}>
@@ -260,13 +259,15 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
                     <div className={classes.emptyBox}>
                         <Icons.EmptySimple size={36} />
                         <Typography className={classes.emptyMessage}>
-                            {files.length ? t.empty() : t.no_uploaded_files()}
+                            {files.length ?
+                                <Trans>No results found</Trans>
+                            :   <Trans>You haven't uploaded any files yet.</Trans>}
                         </Typography>
                     </div>
                     {files.length ? null : (
                         <div className={classes.actions}>
                             <Button fullWidth onClick={() => navigate(RoutePaths.UploadFile)}>
-                                {t.upload_file()}
+                                <Trans>Upload File</Trans>
                             </Button>
                         </div>
                     )}
@@ -275,7 +276,7 @@ export function FileBrowser({ selectMode, selectedFileIds = EMPTY_LIST }: Props)
             {selectMode && files.length ?
                 <div className={classes.actions}>
                     <Button fullWidth disabled={!selectedIds.length} onClick={() => attachToPost(selectedFiles)}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </Button>
                 </div>
             :   null}

@@ -1,1 +1,28 @@
-{ "messages": {} }
+{
+    "messages": {
+        "bnuQy5": ["已选择 ", ["0"], " 个文件"],
+        "e1vdXO": "Arweave",
+        "RLBjfU": ["Attached File: ", ["name"], " (", ["size"], ")"],
+        "dEgA5A": "取消",
+        "7VpPHA": "确定",
+        "Udf/Es": "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。",
+        "cnGeoo": "删除",
+        "/KseE7": "删除文件",
+        "mzI/c+": "下载",
+        "Rm3JCH": "文件名必须介于 3 到 20 个字符之间。",
+        "tG9G+b": "文件服务",
+        "XrH+JC": "IPFS",
+        "tuOw4x": "加密它",
+        "AxPAXW": "未找到结果",
+        "VHShJf": "请点击浏览文件按钮选择要上传的文件。",
+        "2wxgft": "重命名",
+        "qNiGUh": "大小",
+        "IQ3gAw": "上传文件",
+        "re2nOO": "已上传的文件",
+        "6hagY3": "使用 Meson CDN",
+        "7PPwVf": "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。",
+        "Gia1VG": "插件：檔案服務",
+        "4JCJIV": "什么是 Web3 文件服务？",
+        "9uYu7e": "您尚未上传任何文件。"
+    }
+}

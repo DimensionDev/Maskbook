@@ -17,3 +17,106 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
+
+#: src/SiteAdaptor/components/FileChip.tsx:57
+msgid "{0} files selected"
+msgstr "{0} 파일 선택됨"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:90
+msgid "Arweave"
+msgstr "Arweave"
+
+#: src/SiteAdaptor/components/FileChip.tsx:33
+msgid "Attached File: {name} ({size})"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:221
+#: src/SiteAdaptor/components/Terms.tsx:127
+msgid "Cancel"
+msgstr "취소"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:279
+#: src/SiteAdaptor/components/Terms.tsx:130
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:104
+msgid "Confirm"
+msgstr "확인"
+
+#: src/SiteAdaptor/index.tsx:98
+msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
+msgstr "탈중앙화 영구적 파일 저장. Arweave Network를 통해 파일을 업로드하고 Mask 친구에게 공유합니다."
+
+#: src/SiteAdaptor/components/FileList.tsx:114
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:130
+msgid "Delete"
+msgstr "삭제"
+
+#: src/SiteAdaptor/components/FileList.tsx:90
+msgid "Delete File"
+msgstr "파일 삭제"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:111
+msgid "Download"
+msgstr "다운로드"
+
+#: src/SiteAdaptor/components/FileList.tsx:125
+msgid "File name must between 3 to 20 characters."
+msgstr "파일 이름은 3~20 글자 이내로 입력해주세요."
+
+#: src/SiteAdaptor/index.tsx:61
+msgid "File Service"
+msgstr "파일 서비스"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:94
+msgid "IPFS"
+msgstr "IPFS"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:159
+msgid "Make It Encrypted"
+msgstr "암호화하기"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:263
+msgid "No results found"
+msgstr "검색 결과가 없습니다."
+
+#: src/SiteAdaptor/components/UploadFile.tsx:171
+msgid "Please click Browse Files button to select files to upload."
+msgstr "파일 브러우저 버튼을 클릭하여 업로드할 파일을 선택하세요."
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:121
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:84
+msgid "Rename"
+msgstr "이름 변경"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:138
+msgid "size"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:270
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+msgid "Upload File"
+msgstr "파일 업로드"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:164
+msgid "Uploaded files"
+msgstr "파일 업로드"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:119
+msgid "Use Meson CDN"
+msgstr "Meson CDN를 이용하기"
+
+#: src/SiteAdaptor/components/FileList.tsx:109
+msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
+msgstr "사용자는 이러한 파일의 로컬 링크만 삭제할 수 있습니다. 탈중앙화 스토리지 프로토콜의 파일은 삭제할 수 없습니다."
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+#: src/SiteAdaptor/index.tsx:73
+msgid "Web3 File Service"
+msgstr "웹3 파일 서비스"
+
+#: src/SiteAdaptor/components/Terms.tsx:95
+msgid "What is Web3 File Service?"
+msgstr "웹2 파일 서비스가 무엇입니까?"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:264
+msgid "You haven't uploaded any files yet."
+msgstr "업로드된 파일이 없습니다."

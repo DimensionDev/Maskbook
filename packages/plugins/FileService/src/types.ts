@@ -5,11 +5,6 @@ export enum Provider {
     IPFS = 'ipfs',
 }
 
-export interface ProviderConfig {
-    name: string
-    provider: Provider
-}
-
 export interface LandingPageMetadata {
     key: string | null | undefined
     name: string
